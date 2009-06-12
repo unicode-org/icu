@@ -979,13 +979,13 @@ public:
         status = U_ZERO_ERROR;
         formatter = NumberFormat::createInstance(Locale::getEnglish(),status);
         if(U_FAILURE(status)) {
-            error("Error on NumberFormat::createInstance()");
+            error("Error on NumberFormat::createInstance().");
             goto cleanupAndReturn;
         }
         
         percentFormatter = NumberFormat::createPercentInstance(Locale::getFrench(),status);
         if(U_FAILURE(status))             {
-            error("Error on NumberFormat::createPercentInstance()");
+            error("Error on NumberFormat::createPercentInstance().");
             goto cleanupAndReturn;
         }
         
@@ -1147,7 +1147,7 @@ void MultithreadTest::TestThreadedIntl()
             } else if (haveDisplayedInfo[i] == FALSE) {
                 logln("Thread # %d is complete..", i);
                 if(tests[i].getError(theErr)) {
-                    errln(UnicodeString("#") + i + ": " + theErr);
+                    dataerrln(UnicodeString("#") + i + ": " + theErr);
                     SimpleThread::errorFunc();
                 }
                 haveDisplayedInfo[i] = TRUE;
@@ -1302,7 +1302,7 @@ void MultithreadTest::TestCollators()
 
             if (testFile == 0) {
                 *(buffer+bufLen) = 0;
-                dataerrln("[DATA] could not open any of the conformance test files, tried opening base %s", buffer);
+                dataerrln("could not open any of the conformance test files, tried opening base %s", buffer);
                 return;        
             } else {
                 infoln(
@@ -1338,13 +1338,13 @@ void MultithreadTest::TestCollators()
     }
     fclose(testFile);
     if(U_FAILURE(status)) {
-      dataerrln("[DATA] Couldn't read the test file!");
+      dataerrln("Couldn't read the test file!");
       return;
     }
 
     UCollator *coll = ucol_open("root", &status);
     if(U_FAILURE(status)) {
-        errln("Couldn't open UCA collator");
+        errcheckln(status, "Couldn't open UCA collator");
         return;
     }
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);

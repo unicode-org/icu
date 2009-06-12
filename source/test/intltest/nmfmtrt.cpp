@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -43,10 +43,14 @@ void NumberFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const
 }
 
 UBool 
-NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
+NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg, UBool possibleDataError)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        if (possibleDataError) {
+            dataerrln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        } else {
+            errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        }
         return TRUE;
     }
 
@@ -90,19 +94,19 @@ NumberFormatRoundTripTest::start()
     logln("Default Locale");
 
     fmt = NumberFormat::createInstance(status);
-    if (!failure(status, "NumberFormat::createInstance")){
+    if (!failure(status, "NumberFormat::createInstance", TRUE)){
         test(fmt);
     }
     delete fmt;
 
     fmt = NumberFormat::createCurrencyInstance(status);
-    if (!failure(status, "NumberFormat::createCurrencyInstance")){
+    if (!failure(status, "NumberFormat::createCurrencyInstance", TRUE)){
         test(fmt);
     }
     delete fmt;
 
     fmt = NumberFormat::createPercentInstance(status);
-    if (!failure(status, "NumberFormat::createPercentInstance")){
+    if (!failure(status, "NumberFormat::createPercentInstance", TRUE)){
         test(fmt);
     }
     delete fmt;

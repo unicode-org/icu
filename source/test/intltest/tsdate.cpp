@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -112,7 +112,7 @@ void IntlTestDateFormat::testFormat(/* char* par */)
 {
     if (fFormat == 0)
     {
-        errln("FAIL: DateFormat creation failed");
+        dataerrln("FAIL: DateFormat creation failed");
         return;
     }
 
@@ -263,7 +263,7 @@ void IntlTestDateFormat::testAvailableLocales(/* char* par */)
         }
         logln(all);
     }
-    else errln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
+    else dataerrln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
 }
 
 void IntlTestDateFormat::monsterTest(/*char *par*/)

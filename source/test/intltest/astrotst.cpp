@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2008, International Business Machines Corporation and
+ * Copyright (c) 1996-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -50,7 +50,7 @@ void AstroTest::initAstro(UErrorCode &status) {
   if(U_FAILURE(status)) return;
 
   if((astro != NULL) || (gc != NULL)) {
-    errln("Err: initAstro() called twice!");
+    dataerrln("Err: initAstro() called twice!");
     closeAstro(status);
     if(U_SUCCESS(status)) {
       status = U_INTERNAL_PROGRAM_ERROR;
@@ -279,7 +279,7 @@ void AstroTest::TestSunriseTimes(void) {
   DateFormat *df_d  = DateFormat::createDateInstance(DateFormat::MEDIUM,Locale::getUS());
   DateFormat *df_dt = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::MEDIUM, Locale::getUS());
   if(!df_t || !df_d || !df_dt) {
-    errln("couldn't create dateformats.");
+    dataerrln("couldn't create dateformats.");
     return;
   }
   df_t->adoptTimeZone(tz->clone());
@@ -373,7 +373,10 @@ void AstroTest::TestSunriseTimes(void) {
 void AstroTest::TestBasics(void) {
   UErrorCode status = U_ZERO_ERROR;
   initAstro(status);
-  ASSERT_OK(status);
+  if (U_FAILURE(status)) {
+    dataerrln("Got error: %s", u_errorName(status));
+    return;
+  }
 
   // Check that our JD computation is the same as the book's (p. 88)
   GregorianCalendar *cal3 = new GregorianCalendar(TimeZone::getGMT()->clone(), Locale::getUS(), status);

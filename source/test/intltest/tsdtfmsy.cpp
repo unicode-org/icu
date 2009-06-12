@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -135,19 +135,22 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     DateFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        errcheckln(status, "ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols fr2(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        errcheckln(status, "ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        errcheckln(status, "ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        return;
     }
 
     if(en == fr || ! (en != fr) ) {

@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -43,7 +43,7 @@ UBool
 DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         return TRUE;
     }
 
@@ -321,7 +321,7 @@ DateFormatMiscTests::test4117335()
     UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::getJapan(), status);
     if(U_FAILURE(status)) {
-      errln("Failure creating DateFormatSymbols, %s", u_errorName(status));
+      errcheckln(status, "Failure creating DateFormatSymbols, %s", u_errorName(status));
       delete symbols;
       return;
     }

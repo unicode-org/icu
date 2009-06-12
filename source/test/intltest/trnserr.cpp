@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2007, International Business Machines
+ * Copyright (c) 2001-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  *********************************************************************
  *   This test program is intended for testing error conditions of the 
@@ -63,7 +63,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
 
     Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
     if(t==0 || U_FAILURE(status)){
-        errln("FAIL: construction of Latin-Greek");
+        dataerrln("FAIL: construction of Latin-Greek - %s", u_errorName(status));
         return;
     }
     pos.contextLimit = 0;

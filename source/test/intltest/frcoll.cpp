@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,7 +29,7 @@ CollationFrenchTest::CollationFrenchTest()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::getFrance(), status);
     if(!myCollation || U_FAILURE(status)) {
-        errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+        errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
         myCollation = NULL;
@@ -201,7 +201,7 @@ void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char*
     if (exec) logln("TestSuite CollationFrenchTest: ");
 
     if((!myCollation) && exec) {
-        errln(__FILE__ " cannot test - failed to create collator.");
+        dataerrln(__FILE__ " cannot test - failed to create collator.");
         name = "some test";
         return;
     }

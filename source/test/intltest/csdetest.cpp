@@ -452,7 +452,7 @@ void CharsetDetectionTest::C1BytesTest()
     match = ucsdet_detect(csd, &status);
 
     if (match == NULL) {
-        errln("English test with C1 bytes got no matches.");
+        errcheckln(status, "English test with C1 bytes got no matches. - %s", u_errorName(status));
         goto bail;
     }
 
@@ -496,7 +496,11 @@ void CharsetDetectionTest::DetectionTest()
     }
 
     UXMLParser  *parser = UXMLParser::createParser(status);
-    if (!assertSuccess("UXMLParser::createParser",status)) return;
+    if (U_FAILURE(status)) {
+        dataerrln("FAIL: UXMLParser::createParser (%s)", u_errorName(status));
+        return;
+    }
+
     UXMLElement *root   = parser->parseFile(testFilePath, status);
     if (!assertSuccess( "parseFile",status)) return;
 
@@ -582,6 +586,9 @@ void CharsetDetectionTest::IBM424Test()
     char *bytes_r = extractBytes(s2, "IBM424", brLength);
     
     UCharsetDetector *csd = ucsdet_open(&status);
+    if (U_FAILURE(status)) {
+        errln("Error opening charset detector. - %s", u_errorName(status));
+    }
     const UCharsetMatch *match;
     const char *name;
 
@@ -589,26 +596,26 @@ void CharsetDetectionTest::IBM424Test()
     match = ucsdet_detect(csd, &status);
 
     if (match == NULL) {
-        errln("Encoding detection failure for IBM424_rtl: got no matches.\n");
+        errcheckln(status, "Encoding detection failure for IBM424_rtl: got no matches. - %s", u_errorName(status));
         goto bail;
     }
 
     name  = ucsdet_getName(match, &status);
     if (strcmp(name, "IBM424_rtl") != 0) {
-        errln("Encoding detection failure for IBM424_rtl: got %s\n", name);
+        errln("Encoding detection failure for IBM424_rtl: got %s", name);
     }
     
     ucsdet_setText(csd, bytes_r, brLength, &status);
     match = ucsdet_detect(csd, &status);
 
     if (match == NULL) {
-        errln("Encoding detection failure for IBM424_ltr: got no matches.\n");
+        errln("Encoding detection failure for IBM424_ltr: got no matches.");
         goto bail;
     }
 
     name  = ucsdet_getName(match, &status);
     if (strcmp(name, "IBM424_ltr") != 0) {
-        errln("Encoding detection failure for IBM424_ltr: got %s\n", name);
+        errln("Encoding detection failure for IBM424_ltr: got %s", name);
     }
 
 bail:
@@ -663,6 +670,9 @@ void CharsetDetectionTest::IBM420Test()
     char *bytes_r = extractBytes(s2, "IBM420", brLength);
     
     UCharsetDetector *csd = ucsdet_open(&status);
+    if (U_FAILURE(status)) {
+        errln("Error opening charset detector. - %s", u_errorName(status));
+    }
     const UCharsetMatch *match;
     const char *name;
 
@@ -670,7 +680,7 @@ void CharsetDetectionTest::IBM420Test()
     match = ucsdet_detect(csd, &status);
 
     if (match == NULL) {
-        errln("Encoding detection failure for IBM420_rtl: got no matches.\n");
+        errcheckln(status, "Encoding detection failure for IBM420_rtl: got no matches. - %s", u_errorName(status));
         goto bail;
     }
 

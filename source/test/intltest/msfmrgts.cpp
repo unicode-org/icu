@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -57,10 +57,14 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const ch
 }
 
 UBool 
-MessageFormatRegressionTest::failure(UErrorCode status, const char* msg)
+MessageFormatRegressionTest::failure(UErrorCode status, const char* msg, UBool possibleDataError)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        if (possibleDataError) {
+            dataerrln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        } else {
+            errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        }
         return TRUE;
     }
 
@@ -174,6 +178,8 @@ void MessageFormatRegressionTest::Test4031438()
 
     MessageFormat *messageFormatter = new MessageFormat("", status);
     failure(status, "new MessageFormat");
+    
+    const UBool possibleDataError = TRUE;
 
     //try {
         logln("Apply with pattern : " + pattern1);
@@ -187,7 +193,7 @@ void MessageFormatRegressionTest::Test4031438()
         FieldPosition pos(FieldPosition::DONT_CARE);
         tempBuffer = messageFormatter->format(params, 1, tempBuffer, pos, status);
         if(tempBuffer != "Impossible {1} has occurred -- status code is 7 and message is {2}." || failure(status, "MessageFormat::format"))
-            errln("Tests arguments < substitution failed");
+            dataerrln("Tests arguments < substitution failed");
         logln("Formatted with 7 : " + tempBuffer);
         ParsePosition pp(0);
         int32_t count = 0;
@@ -248,11 +254,11 @@ void MessageFormatRegressionTest::Test4031438()
         logln("Formatted with null : " + tempBuffer);*/
         logln("Apply with pattern : " + pattern2);
         messageFormatter->applyPattern(pattern2, status);
-        failure(status, "messageFormatter->applyPattern");
+        failure(status, "messageFormatter->applyPattern", possibleDataError);
         tempBuffer.remove();
         tempBuffer = messageFormatter->format(params, 1, tempBuffer, pos, status);
         if (tempBuffer != "Double ' Quotes 7 test and quoted {1} test plus other {2} stuff.")
-            errln("quote format test (w/ params) failed.");
+            dataerrln("quote format test (w/ params) failed. - %s", u_errorName(status));
         logln("Formatted with params : " + tempBuffer);
         
         /*tempBuffer = messageFormatter->format(null);
@@ -475,7 +481,7 @@ void MessageFormatRegressionTest::Test4116444()
     for (int i = 0; i < 3; i++) {
         UnicodeString pattern = patterns[i];
         mf->applyPattern(pattern, status);
-        failure(status, "mf->applyPattern");
+        failure(status, "mf->applyPattern", TRUE);
 
         //try {
         int32_t count = 0;    
@@ -725,6 +731,7 @@ void MessageFormatRegressionTest::Test4118592()
 void MessageFormatRegressionTest::Test4118594()
 {
     UErrorCode status = U_ZERO_ERROR;
+    const UBool possibleDataError = TRUE;
     MessageFormat *mf = new MessageFormat("{0}, {0}, {0}", status);
     failure(status, "new MessageFormat");
     UnicodeString forParsing("x, y, z");
@@ -739,19 +746,19 @@ void MessageFormatRegressionTest::Test4118594()
     if (objs[0].getString(str) != "z")
         errln("argument0: \"" + objs[0].getString(str) + "\"");
     mf->applyPattern("{0,number,#.##}, {0,number,#.#}", status);
-    failure(status, "mf->applyPattern");
+    failure(status, "mf->applyPattern", possibleDataError);
     //Object[] oldobjs = {new Double(3.1415)};
     Formattable oldobjs [] = {Formattable(3.1415)};
     UnicodeString result;
     FieldPosition pos(FieldPosition::DONT_CARE);
     result = mf->format( oldobjs, 1, result, pos, status );
-    failure(status, "mf->format");
+    failure(status, "mf->format", possibleDataError);
     pat.remove();
     logln("pattern: \"" + mf->toPattern(pat) + "\"");
     logln("text for parsing: \"" + result + "\"");
     // result now equals "3.14, 3.1"
     if (result != "3.14, 3.1")
-        errln("result = " + result);
+        dataerrln("result = " + result + " - " + u_errorName(status));
     //Object[] newobjs = mf.parse(result, new ParsePosition(0));
     int32_t count1 = 0;
     pp.setIndex(0);
@@ -776,6 +783,7 @@ void MessageFormatRegressionTest::Test4105380()
     UnicodeString patternText1("The disk \"{1}\" contains {0}.");
     UnicodeString patternText2("There are {0} on the disk \"{1}\"");
     UErrorCode status = U_ZERO_ERROR;
+    const UBool possibleDataError = TRUE;
     MessageFormat *form1 = new MessageFormat(patternText1, status);
     failure(status, "new MessageFormat");
     MessageFormat *form2 = new MessageFormat(patternText2, status);
@@ -799,10 +807,10 @@ void MessageFormatRegressionTest::Test4105380()
 
     UnicodeString result;
     logln(form1->format(testArgs, 2, result, bogus, status));
-    failure(status, "form1->format");
+    failure(status, "form1->format", possibleDataError);
     result.remove();
     logln(form2->format(testArgs, 2, result, bogus, status));
-    failure(status, "form1->format");
+    failure(status, "form1->format", possibleDataError);
 
     delete form1;
     delete form2;
@@ -875,16 +883,17 @@ void MessageFormatRegressionTest::Test4142938()
         };
         FieldPosition pos(FieldPosition::DONT_CARE);
         out = mf->format(objs, 1, out, pos, status);
-        failure(status, "mf->format");
-        if (SUFFIX[i] == "") {
-            if (out != PREFIX[i])
-                errln((UnicodeString)"" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"");
-        }
-        else {
-            if (!out.startsWith(PREFIX[i]) ||
-                !out.endsWith(SUFFIX[i]))
-                errln((UnicodeString)"" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"...\"" +
-                      SUFFIX[i] + "\"");
+        if (!failure(status, "mf->format", TRUE)) {
+            if (SUFFIX[i] == "") {
+                if (out != PREFIX[i])
+                    errln((UnicodeString)"" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"");
+            }
+            else {
+                if (!out.startsWith(PREFIX[i]) ||
+                    !out.endsWith(SUFFIX[i]))
+                    errln((UnicodeString)"" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"...\"" +
+                          SUFFIX[i] + "\"");
+            }
         }
     }
 

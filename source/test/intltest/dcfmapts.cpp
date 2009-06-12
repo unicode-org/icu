@@ -65,7 +65,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 
     DecimalFormat def(status);
     if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+        errcheckln(status, "ERROR: Could not create DecimalFormat (default) - %s", u_errorName(status));
         return;
     }
 
@@ -381,7 +381,7 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
     };
     DecimalFormat pat(status);
     if(U_FAILURE(status)) {
-      errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+      errcheckln(status, "ERROR: Could not create DecimalFormat (default) - %s", u_errorName(status));
       return;
     }
     uint16_t mode;
@@ -426,7 +426,7 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat pat(UnicodeString("#,##0.00"),status);
     if(U_FAILURE(status)) {
-      errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+      errcheckln(status, "ERROR: Could not create DecimalFormat (default) - %s", u_errorName(status));
       return;
     }
 

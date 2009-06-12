@@ -64,7 +64,7 @@ void DataDrivenFormatTest::runIndexedTest(int32_t index, UBool exec,
             name = "";
         }
     } else {
-        dataerrln("[DATA] format/DataDriven*Test data (format.res) not initialized!");
+        dataerrln("format/DataDriven*Test data (format.res) not initialized!");
         name = "";
     }
 
@@ -99,7 +99,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
     SimpleDateFormat basicFmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
             status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Couldn't create basic SimpleDateFormat: %s\n",
+        errcheckln(status, "FAIL: Couldn't create basic SimpleDateFormat: %s\n",
                 u_errorName(status));
         return;
     }

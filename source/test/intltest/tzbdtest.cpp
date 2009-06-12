@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -97,7 +97,7 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingDate(UDate d, const char* startMo
         mindelta <= INTERVAL &&
         maxdelta >= 0 &&
         maxdelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
-    else errln(UnicodeString("FAIL: Expected boundary at ") + expectedBoundary);
+    else dataerrln(UnicodeString("FAIL: Expected boundary at ") + expectedBoundary);
 }
  
 // -------------------------------------
@@ -120,12 +120,12 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInD
     UDate min = d;
     UDate max = min + SIX_MONTHS;
     if (tz->inDaylightTime(d, status) != startsInDST) {
-        errln("FAIL: " + tz->getID(str) + " inDaylightTime(" + dateToString(d) + ") != " + (startsInDST ? "true" : "false"));
+        dataerrln("FAIL: " + tz->getID(str) + " inDaylightTime(" + dateToString(d) + ") != " + (startsInDST ? "true" : "false"));
         startsInDST = !startsInDST;
     }
     if (failure(status, "TimeZone::inDaylightTime")) return;
     if (tz->inDaylightTime(max, status) == startsInDST) {
-        errln("FAIL: " + tz->getID(str) + " inDaylightTime(" + dateToString(max) + ") != " + (startsInDST ? "false" : "true"));
+        dataerrln("FAIL: " + tz->getID(str) + " inDaylightTime(" + dateToString(max) + ") != " + (startsInDST ? "false" : "true"));
         return;
     }
     if (failure(status, "TimeZone::inDaylightTime")) return;
@@ -194,17 +194,17 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
     if (time_zone->inDaylightTime(d, status) == expInDaylightTime)
         logln(UnicodeString("PASS: inDaylightTime = ") + (time_zone->inDaylightTime(d, status)?"true":"false"));
     else 
-        errln(UnicodeString("FAIL: inDaylightTime = ") + (time_zone->inDaylightTime(d, status)?"true":"false"));
+        dataerrln(UnicodeString("FAIL: inDaylightTime = ") + (time_zone->inDaylightTime(d, status)?"true":"false"));
     if (failure(status, "TimeZone::inDaylightTime")) 
         return;
     if (time_zone->useDaylightTime() == expUseDaylightTime)
         logln(UnicodeString("PASS: useDaylightTime = ") + (time_zone->useDaylightTime()?"true":"false"));
     else 
-        errln(UnicodeString("FAIL: useDaylightTime = ") + (time_zone->useDaylightTime()?"true":"false"));
+        dataerrln(UnicodeString("FAIL: useDaylightTime = ") + (time_zone->useDaylightTime()?"true":"false"));
     if (time_zone->getRawOffset() == expZoneOffset) 
         logln(UnicodeString("PASS: getRawOffset() = ") + (expZoneOffset / ONE_HOUR));
     else
-        errln(UnicodeString("FAIL: getRawOffset() = ") + (time_zone->getRawOffset() / ONE_HOUR) + ";  expected " + (expZoneOffset / ONE_HOUR));
+        dataerrln(UnicodeString("FAIL: getRawOffset() = ") + (time_zone->getRawOffset() / ONE_HOUR) + ";  expected " + (expZoneOffset / ONE_HOUR));
     
     GregorianCalendar *gc = new GregorianCalendar(time_zone->clone(), status);
     gc->setTime(d, status);
@@ -216,7 +216,7 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
         status);
     if (failure(status, "GregorianCalendar::get")) return;
     if (offset == expDSTOffset) logln(UnicodeString("PASS: getOffset() = ") + (offset / ONE_HOUR));
-    else errln(UnicodeString("FAIL: getOffset() = ") + (offset / ONE_HOUR) + "; expected " + (expDSTOffset / ONE_HOUR));
+    else dataerrln(UnicodeString("FAIL: getOffset() = ") + (offset / ONE_HOUR) + "; expected " + (expDSTOffset / ONE_HOUR));
     delete gc;
 }
  
@@ -242,7 +242,7 @@ void TimeZoneBoundaryTest::verifyMapping(Calendar& cal, int year, int month, int
         logln(UnicodeString("Ok: ") + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
                 e + " (" + ed + ")");
     } else {
-        errln(UnicodeString("FAIL: ") + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
+        dataerrln(UnicodeString("FAIL: ") + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
                 e + " (" + (e * H) + ")" +
                 ", expected " + epochHours + " (" + ed + ")");
     }
@@ -257,7 +257,7 @@ void TimeZoneBoundaryTest::verifyMapping(Calendar& cal, int year, int month, int
                 cal.get(UCAL_DATE, status) + " " +
                 cal.get(UCAL_MILLISECOND, status)/H);
     } else {
-        errln(UnicodeString("FAIL: ") + epochHours + " (" + ed + ") => " +
+        dataerrln(UnicodeString("FAIL: ") + epochHours + " (" + ed + ") => " +
                 cal.get(UCAL_YEAR, status) + "/" +
                 (cal.get(UCAL_MONTH, status)+1) + "/" +
                 cal.get(UCAL_DATE, status) + " " +
@@ -478,7 +478,7 @@ TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZ
         errln("FAIL: useDaylightTime false but 2 changes seen");
     }
     if (changes != expectedChanges) {
-        errln(UnicodeString("FAIL: ") + changes + " changes seen; expected " + expectedChanges);
+        dataerrln(UnicodeString("FAIL: ") + changes + " changes seen; expected " + expectedChanges);
     }
 }
  

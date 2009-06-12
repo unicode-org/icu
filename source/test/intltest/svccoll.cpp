@@ -42,7 +42,7 @@ void CollationServiceTest::TestRegister()
     Collator* frcol = Collator::createInstance(FR, status);
     Collator* uscol = Collator::createInstance(US, status);
     if(U_FAILURE(status)) {
-        errln("Failed to create collators with %s", u_errorName(status));
+        errcheckln(status, "Failed to create collators with %s", u_errorName(status));
         delete frcol;
         delete uscol;
         return;
@@ -357,7 +357,7 @@ void CollationServiceTest::TestRegisterFactory(void)
     Collator* gecol = Collator::createInstance(Locale::getGermany(), status);
     Collator* jpcol = Collator::createInstance(Locale::getJapan(), status);
     if(U_FAILURE(status)) {
-      errln("Failed to create collators with %s", u_errorName(status));
+      errcheckln(status, "Failed to create collators with %s", u_errorName(status));
       delete frcol;
       delete gecol;
       delete jpcol;
@@ -560,7 +560,7 @@ void CollationServiceTest::TestSeparateTree() {
     delete iter;
 
     iter = Collator::getKeywordValues(KW[0], ec);
-    if (!assertTrue("getKeywordValues != NULL", iter!=NULL)) return;
+    if (!assertTrue("getKeywordValues != NULL", iter!=NULL, FALSE, TRUE)) return;
     if (!assertSuccess("getKeywordValues", ec)) return;
     checkStringEnumeration("getKeywordValues", *iter, KWVAL, KWVAL_COUNT);
     delete iter;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -35,7 +35,7 @@ CollationDummyTest::CollationDummyTest()
     }
     myCollation = new RuleBasedCollator(ruleset, status);
     if(U_FAILURE(status)){
-        errln("ERROR: in creation of rule based collator from ruleset");
+        errcheckln(status, "ERROR: in creation of rule based collator from ruleset - %s", u_errorName(status));
         delete myCollation;
         myCollation = 0;
     }
@@ -204,7 +204,7 @@ void CollationDummyTest::runIndexedTest( int32_t index, UBool exec, const char* 
           default: name = ""; break;
       }
     } else {
-      errln("Collator couldn't be instantiated!");
+      dataerrln("Collator couldn't be instantiated!");
       name = "";
     }
 }

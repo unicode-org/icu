@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -80,7 +80,7 @@ UBool IdnaConfTest::ReadAndConvertFile(){
     delete [] absolute_name;
 
     if (f == NULL){
-        dataerrln("[DATA] fopen error on %s", name);
+        dataerrln("fopen error on %s", name);
         return FALSE;
     }
 
@@ -241,8 +241,9 @@ void IdnaConfTest::Call(){
         }
         if (passfail == 0){
             if (U_FAILURE(status)){
-                id.append(" should pass, but failed.");
-                errln(id);
+                id.append(" should pass, but failed. - ");
+                id.append(u_errorName(status));
+                errcheckln(status, id);
             } else{
                 if (namezone.compare(result, -1) == 0){
                     // expected

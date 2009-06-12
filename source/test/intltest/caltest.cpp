@@ -408,7 +408,7 @@ CalendarTest::TestGenericAPI()
     const Locale* loc = Calendar::getAvailableLocales(count);
     if (count < 1 || loc == 0)
     {
-        errln("FAIL: getAvailableLocales failed");
+        dataerrln("FAIL: getAvailableLocales failed");
     }
     else
     {
@@ -1112,7 +1112,11 @@ CalendarTest::TestSecondsZero121()
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     UnicodeString s;
     dateToString(d, s);
-    if (s.indexOf(":00 ") < 0) errln("Expected to see :00 in " + s);
+    if (s.indexOf("DATE_FORMAT_FAILURE") >= 0) {
+        dataerrln("Got: \"DATE_FORMAT_FAILURE\".");
+    } else if (s.indexOf(":00 ") < 0) {
+        errln("Expected to see :00 in " + s);
+    }
     delete cal;
 }
  
@@ -1309,7 +1313,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     Calendar *cal=Calendar::createInstance(Locale::getGermany(), status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
-    if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
+    if (U_FAILURE(status)) { errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status)); return; }
 
     // ICU no longer use localized date-time pattern characters by default.
     // So we set pattern chars using 'J' instead of 'Y'.
@@ -1548,7 +1552,7 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
-        errln(msg); \
+        errcheckln(status, msg); \
         return; \
     }
 

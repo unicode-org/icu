@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************
@@ -46,7 +46,7 @@ void CompoundTransliteratorTest::TestConstruction(){
    Transliterator* t3=Transliterator::createInstance(names[2], UTRANS_FORWARD, parseError, status);
    Transliterator* t4=Transliterator::createInstance(names[3], UTRANS_FORWARD, parseError, status);
    if(U_FAILURE(status)){
-       errln("Transliterator construction failed");
+       dataerrln("Transliterator construction failed - %s", u_errorName(status));
        return;
    }
 
@@ -117,7 +117,7 @@ void CompoundTransliteratorTest::TestCloneEqual(){
     UParseError parseError;
     CompoundTransliterator  *ct1=new CompoundTransliterator("Greek-Latin;Latin-Devanagari",parseError,status);
     if(U_FAILURE(status)){
-        errln("construction failed");
+        dataerrln("construction failed - %s", u_errorName(status));
         delete ct1;
         return;
     }
@@ -194,7 +194,7 @@ void CompoundTransliteratorTest::TestGetCount(){
     CompoundTransliterator *ct2=new CompoundTransliterator("Any-Hex;Hex-Any;Cyrillic-Latin;Latin-Cyrillic", parseError, status);
     CompoundTransliterator *ct3=(CompoundTransliterator*)ct1;
     if (U_FAILURE(status)) {
-        errln("FAILED: CompoundTransliterator constructor failed");
+        dataerrln("FAILED: CompoundTransliterator constructor failed - %s", u_errorName(status));
         return;
     }
     CompoundTransliterator *ct4=new CompoundTransliterator("Latin-Devanagari", parseError, status);
@@ -241,7 +241,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     UParseError parseError;
     CompoundTransliterator *ct1=new CompoundTransliterator(ID, parseError, status);
     if(U_FAILURE(status)){
-        errln("CompoundTransliterator construction failed");
+        dataerrln("CompoundTransliterator construction failed - %s", u_errorName(status));
         return;
     }
     int32_t count=ct1->getCount();
@@ -390,7 +390,7 @@ void CompoundTransliteratorTest::TestTransliterate(){
 
         CompoundTransliterator *ct2=new CompoundTransliterator(Data[i+0], parseError, status);
         if(U_FAILURE(status)){
-            errln("CompoundTransliterator construction failed for " + Data[i+0]);
+            dataerrln("CompoundTransliterator construction failed for " + Data[i+0] + " - " + u_errorName(status));
         } else {
             expect(*ct2, Data[i+1], Data[i+2]);
         }

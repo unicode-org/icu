@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -474,7 +474,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
     UnicodeSet okAnyway("[^[:Letter:]]", status);
 
     if (U_FAILURE(status)) {
-        parent->errln("FAIL: Initializing UnicodeSet with [:Other:] or [^[:Letter:]]");
+        parent->dataerrln("FAIL: Initializing UnicodeSet with [:Other:] or [^[:Letter:]] - Error: %s", u_errorName(status));
         return;
     }
 
@@ -1027,7 +1027,7 @@ void TransliteratorRoundTripTest::TestHangul() {
 
 
 #define ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-     errln("error at file %s, line %d, status = %s", __FILE__, __LINE__, \
+     errcheckln(status, "error at file %s, line %d, status = %s", __FILE__, __LINE__, \
          u_errorName(status)); \
          return;}}
     
@@ -1286,7 +1286,7 @@ void TransliteratorRoundTripTest::TestHebrew() {
     UErrorCode error = U_ZERO_ERROR;
     LegalHebrew* legal = new LegalHebrew(error);
     if(U_FAILURE(error)){
-        errln("Could not construct LegalHebrew object. Error: %s", u_errorName(error));
+        dataerrln("Could not construct LegalHebrew object. Error: %s", u_errorName(error));
         return;
     }
     RTTest test("Latin-Hebrew");
@@ -1391,7 +1391,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
                 errln("FAIL: could not create the Inverse:-( \n");
             }
         }else {
-            errln("FAIL: could not create the transliterator. Error: %s\n", u_errorName(status));
+            dataerrln("FAIL: could not create the transliterator. Error: %s\n", u_errorName(status));
         }
 
     }

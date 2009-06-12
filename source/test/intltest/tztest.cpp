@@ -140,7 +140,7 @@ TimeZoneTest::TestGenericAPI()
     UErrorCode status = U_ZERO_ERROR;
     const char* tzver = TimeZone::getTZDataVersion(status);
     if (U_FAILURE(status)) {
-        errln("FAIL: getTZDataVersion failed");
+        errcheckln(status, "FAIL: getTZDataVersion failed - %s", u_errorName(status));
     } else if (uprv_strlen(tzver) != 5 /* 4 digits + 1 letter */) {
         errln((UnicodeString)"FAIL: getTZDataVersion returned " + tzver);
     } else {
@@ -313,7 +313,7 @@ TimeZoneTest::TestPRTOffset()
       double foundOffset = tz->getRawOffset();
       int32_t foundHour = (int32_t)foundOffset / millisPerHour;
       if (expectedOffset != foundOffset) {
-        errln("FAIL: Offset for PRT should be %d, found %d", expectedHour, foundHour);
+        dataerrln("FAIL: Offset for PRT should be %d, found %d", expectedHour, foundHour);
       } else {
         logln("PASS: Offset for PRT should be %d, found %d", expectedHour, foundHour);
       }
@@ -334,17 +334,17 @@ TimeZoneTest::TestVariousAPI518()
     UDate d = date(97, UCAL_APRIL, 30);
     UnicodeString str;
     logln("The timezone is " + time_zone->getID(str));
-    if (!time_zone->inDaylightTime(d, status)) errln("FAIL: inDaylightTime returned FALSE");
+    if (!time_zone->inDaylightTime(d, status)) dataerrln("FAIL: inDaylightTime returned FALSE");
     if (U_FAILURE(status)) { errln("FAIL: TimeZone::inDaylightTime failed"); return; }
-    if (!time_zone->useDaylightTime()) errln("FAIL: useDaylightTime returned FALSE");
-    if (time_zone->getRawOffset() != - 8 * millisPerHour) errln("FAIL: getRawOffset returned wrong value");
+    if (!time_zone->useDaylightTime()) dataerrln("FAIL: useDaylightTime returned FALSE");
+    if (time_zone->getRawOffset() != - 8 * millisPerHour) dataerrln("FAIL: getRawOffset returned wrong value");
     GregorianCalendar *gc = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("FAIL: Couldn't create GregorianCalendar"); return; }
     gc->setTime(d, status);
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::setTime failed"); return; }
     if (time_zone->getOffset(gc->AD, gc->get(UCAL_YEAR, status), gc->get(UCAL_MONTH, status),
         gc->get(UCAL_DATE, status), (uint8_t)gc->get(UCAL_DAY_OF_WEEK, status), 0, status) != - 7 * millisPerHour)
-        errln("FAIL: getOffset returned wrong value");
+        dataerrln("FAIL: getOffset returned wrong value");
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::set failed"); return; }
     delete gc;
     delete time_zone;
@@ -973,7 +973,7 @@ void TimeZoneTest::TestCustomParse()
             // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
             // ICU creates custom zones with IDs of the form "GMT+02:00"
             else if (exp != kUnparseable && (ioffset != exp || itsID != expectedID)) {
-                errln("Expected offset of " + formatOffset(exp, temp) +
+                dataerrln("Expected offset of " + formatOffset(exp, temp) +
                       ", id " + expectedID +
                       ", for " + id +
                       ", got offset of " + offset +
@@ -1177,7 +1177,7 @@ TimeZoneTest::TestDisplayName()
     zone->getDisplayName(Locale::getEnglish(), name);
     logln("PST->" + name);
     if (name.compare("Pacific Standard Time") != 0)
-        errln("Fail: Expected \"Pacific Standard Time\" but got " + name);
+        dataerrln("Fail: Expected \"Pacific Standard Time\" but got " + name);
 
     //*****************************************************************
     // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
@@ -1205,7 +1205,7 @@ TimeZoneTest::TestDisplayName()
                                    kData[i].style,
                                    Locale::getEnglish(), name);
         if (name.compare(kData[i].expect) != 0)
-            errln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
+            dataerrln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
         logln("PST [with options]->" + name);
     }
     for (i=0; kData[i].expect[0] != '\0'; i++)
@@ -1214,7 +1214,7 @@ TimeZoneTest::TestDisplayName()
         name = zone->getDisplayName(kData[i].useDst,
                                    kData[i].style, name);
         if (name.compare(kData[i].expect) != 0)
-            errln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
+            dataerrln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
         logln("PST [with options]->" + name);
     }
 
@@ -1241,7 +1241,7 @@ TimeZoneTest::TestDisplayName()
     name = zone2->getDisplayName(Locale::getEnglish(),name);
     logln("Modified PST->" + name);
     if (name.compare("Pacific Standard Time") != 0)
-        errln("Fail: Expected \"Pacific Standard Time\"");
+        dataerrln("Fail: Expected \"Pacific Standard Time\"");
 
     // Make sure we get the default display format for Locales
     // with no display name data.
@@ -1261,7 +1261,7 @@ TimeZoneTest::TestDisplayName()
     ResourceBundle enRB(NULL,
                             Locale::getEnglish(), status);
     if(U_FAILURE(status))
-        errln("Couldn't get ResourceBundle for en");
+        errcheckln(status, "Couldn't get ResourceBundle for en - %s", u_errorName(status));
 
     ResourceBundle mtRB(NULL,
                          mt_MT, status);
@@ -1273,7 +1273,7 @@ TimeZoneTest::TestDisplayName()
     if (noZH) {
         logln("Warning: Not testing the mt_MT behavior because resource is absent");
         if (name != "Pacific Standard Time")
-            errln("Fail: Expected Pacific Standard Time");
+            dataerrln("Fail: Expected Pacific Standard Time");
     }
 
 
@@ -1281,10 +1281,10 @@ TimeZoneTest::TestDisplayName()
              name.compare("GMT-8:00") &&
              name.compare("GMT-0800") &&
              name.compare("GMT-800")) {
-      errln(UnicodeString("Fail: Expected GMT-08:00 or something similar for PST in mt_MT but got ") + name );
-        errln("************************************************************");
-        errln("THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED");
-        errln("************************************************************");
+      dataerrln(UnicodeString("Fail: Expected GMT-08:00 or something similar for PST in mt_MT but got ") + name );
+        dataerrln("************************************************************");
+        dataerrln("THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED");
+        dataerrln("************************************************************");
     }
 
     // Now try a non-existent zone
@@ -1297,7 +1297,7 @@ TimeZoneTest::TestDisplayName()
         name.compare("GMT+1:30") &&
         name.compare("GMT+0130") &&
         name.compare("GMT+130"))
-        errln("Fail: Expected GMT+01:30 or something similar");
+        dataerrln("Fail: Expected GMT+01:30 or something similar");
     name.truncate(0);
     zone2->getDisplayName(name);
     logln("GMT+90min->" + name);
@@ -1305,7 +1305,7 @@ TimeZoneTest::TestDisplayName()
         name.compare("GMT+1:30") &&
         name.compare("GMT+0130") &&
         name.compare("GMT+130"))
-        errln("Fail: Expected GMT+01:30 or something similar");
+        dataerrln("Fail: Expected GMT+01:30 or something similar");
     // clean up
     delete zone;
     delete zone2;
@@ -1448,7 +1448,7 @@ void TimeZoneTest::TestFractionalDST() {
     UnicodeString id;
     int32_t expected = 1800000;
 	if (expected != dst_icu) {
-	    errln(UnicodeString("java reports dst savings of ") + expected +
+	    dataerrln(UnicodeString("java reports dst savings of ") + expected +
 	        " but icu reports " + dst_icu + 
 	        " for tz " + tz_icu->getID(id));
 	} else {
@@ -1473,7 +1473,7 @@ void TimeZoneTest::TestCountries() {
     int32_t i;
 
     if (s == NULL || n <= 0) {
-        errln("FAIL: TimeZone::createEnumeration() returned nothing");
+        dataerrln("FAIL: TimeZone::createEnumeration() returned nothing");
         return;
     }
     for (i=0; i<n; ++i) {
@@ -1565,7 +1565,7 @@ void TimeZoneTest::TestHistorical() {
         if (tz == 0) {
             errln("FAIL: Cannot create %s", id);
         } else if (tz->getID(s) != UnicodeString(id)) {
-            errln((UnicodeString)"FAIL: createTimeZone(" + id + ") => " + s);
+            dataerrln((UnicodeString)"FAIL: createTimeZone(" + id + ") => " + s);
         } else {
             UErrorCode ec = U_ZERO_ERROR;
             int32_t raw, dst;
@@ -1592,7 +1592,7 @@ void TimeZoneTest::TestHistorical() {
 void TimeZoneTest::TestEquivalentIDs() {
     int32_t n = TimeZone::countEquivalentIDs("PST");
     if (n < 2) {
-        errln((UnicodeString)"FAIL: countEquivalentIDs(PST) = " + n);
+        dataerrln((UnicodeString)"FAIL: countEquivalentIDs(PST) = " + n);
     } else {
         UBool sawLA = FALSE;
         for (int32_t i=0; i<n; ++i) {
@@ -1850,11 +1850,11 @@ void TimeZoneTest::TestCanonicalID() {
             continue;
         }
         if (canonicalID != data[i].expected) {
-            errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
+            dataerrln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
                 + "\") returned " + canonicalID + " - expected: " + data[i].expected);
         }
         if (isSystemID != data[i].isSystem) {
-            errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
+            dataerrln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
                 + "\") set " + isSystemID + " to isSystemID");
         }
     }
@@ -1932,16 +1932,17 @@ void TimeZoneTest::TestDisplayNamesMeta() {
             displayName.extract(name, 100, NULL, status);
             if (isReferenceYear) {
                 sawAnError = TRUE;
-                errln("Incorrect time zone display name.  zone = \"%s\",\n"
+                dataerrln("Incorrect time zone display name.  zone = \"%s\",\n"
                       "   locale = \"%s\",   style = %s,  Summertime = %d\n"
                       "   Expected \"%s\", "
-                      "   Got \"%s\"\n", zoneDisplayTestData[testNum].zoneName,
+                      "   Got \"%s\"\n   Error: %s", zoneDisplayTestData[testNum].zoneName,
                                          zoneDisplayTestData[testNum].localeName,
                                          zoneDisplayTestData[testNum].style==TimeZone::SHORT ?
                                             "SHORT" : "LONG",
                                          zoneDisplayTestData[testNum].summerTime,
                                          zoneDisplayTestData[testNum].expectedDisplayName,
-                                         name);
+                                         name,
+                                         u_errorName(status));
             } else {
                 logln("Incorrect time zone display name.  zone = \"%s\",\n"
                       "   locale = \"%s\",   style = %s,  Summertime = %d\n"
@@ -1958,7 +1959,7 @@ void TimeZoneTest::TestDisplayNamesMeta() {
         delete zone;
     }
     if (sawAnError) {
-        errln("Note: Errors could be the result of changes to zoneStrings locale data");
+        dataerrln("***Note: Errors could be the result of changes to zoneStrings locale data");
     }
 }
 
