@@ -811,6 +811,21 @@ conversion:table(nofallback) {
           :intvector{ 4, 6 },
           :int{1}, :int{0}, "", ".", :bin{""}
         }
+        // Code Coverage for BOCU-1
+        {
+          "BOCU-1",
+          :bin{ 91fbc555fd6349 },
+          "\u0041\ud841\ud888\udc81",
+          :intvector{ 0, 1, 4, 4 },
+          :int{1}, :int{0}, "", ".", :bin{""}
+        }
+        {
+          "BOCU-1",
+          :bin{ fbee284ff0fe189bb821f05926 },
+          "\ufeff\ufe70\udbff\udfff\u0061",
+          :intvector{},
+          :int{1}, :int{0}, "", ".", :bin{""}
+        }
       }
     }
 
@@ -1571,6 +1586,22 @@ conversion:table(nofallback) {
         { "EUC-JP", "\u0061\u4edd\u5bec\ud801\udc01\ud801\u0061\u00a2", :bin{ 61a1b88ff4aef4fef4fe618ee0 }, :intvector{ 0, 1, 1, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7 }, :int{1}, :int{0}, "", "", "" }
         { "EUC-TW", "\u0061\u2295\u5BF2\ud801\udc01\ud801\u0061\u8706\u008a", :bin{ 61a2d38ea2dce561e6ca8a }, :intvector{ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8 }, :int{1}, :int{0}, "", "0", "" }
         { "EUC-TW", "\u0061\u2295\u5BF2\ud801\udc01\ud801\u0061\u8706\u008a", :bin{ 61a2d38ea2dce5fdfefdfe61e6ca8a }, :intvector{ 0, 1, 1, 2, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7, 8 }, :int{1}, :int{0}, "", "", "" }
+        
+        // Code Coverage for BOCU-1
+        {
+          "BOCU-1",
+          "\u0041\ud841\ud888\udc81",
+          :bin{ 91fbc555fd6349 },
+          :intvector{ 0, 1, 1, 1, 2, 2, 2 },
+          :int{1}, :int{0}, "", ".", ""
+        }
+        {
+          "BOCU-1",
+          "\ufeff\ufe70\udbff\udfff\u0061",
+          :bin{ fbee284ff0fe189bb821f05926 },
+          :intvector{},
+          :int{1}, :int{0}, "", ".", ""
+        }
       }
     }
 
