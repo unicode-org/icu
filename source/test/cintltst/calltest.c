@@ -44,8 +44,8 @@ void addAllTests(TestNode** root)
 {
     addCnvSelTest(root);
     addUDataTest(root);
-    addHeapMutexTest(root);
     addPUtilTest(root);
+    addHeapMutexTest(root);
     addUTF16Test(root);
     addUTF8Test(root);
     addUtility(root);
