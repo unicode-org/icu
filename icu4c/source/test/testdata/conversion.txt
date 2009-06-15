@@ -821,8 +821,8 @@ conversion:table(nofallback) {
         }
         {
           "BOCU-1",
-          :bin{ fbee284ff0fe189bb821f05926 },
-          "\ufeff\ufe70\udbff\udfff\u0061",
+          :bin{ fbeda44ff0fe189bb821f05926 },
+          "\ufe88\ufe70\udbff\udfff\u0061",
           :intvector{},
           :int{1}, :int{0}, "", ".", :bin{""}
         }
@@ -1597,8 +1597,8 @@ conversion:table(nofallback) {
         }
         {
           "BOCU-1",
-          "\ufeff\ufe70\udbff\udfff\u0061",
-          :bin{ fbee284ff0fe189bb821f05926 },
+          "\ufe88\ufe70\udbff\udfff\u0061",
+          :bin{ fbeda44ff0fe189bb821f05926 },
           :intvector{},
           :int{1}, :int{0}, "", ".", ""
         }
