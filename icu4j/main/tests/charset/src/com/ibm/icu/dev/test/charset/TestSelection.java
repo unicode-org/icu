@@ -176,20 +176,20 @@ public class TestSelection extends TestFmwk {
     public void TestCharsetSelectorCodeCoverage() {
         Vector emptyList = new Vector();
         UnicodeSet nonEmptySet = new UnicodeSet();
-        
+
         nonEmptySet.add(0x0001, 0x0FFF);
-        
+
         CharsetSelector sel = null;
-        
+
         sel = new CharsetSelector(emptyList, nonEmptySet, CharsetICU.ROUNDTRIP_SET);
-        
+
         /* Test bogus mappingType */
         try {
             sel = new CharsetSelector(null, null, -1);
+            errln("IllegalArgumentException should have been thrown by CharsetSelector when given a bogus mappingType, but got - " + sel.toString());
         } catch (IllegalArgumentException e) {
-            return;
+            logln("IllegalArgumentException was thrown by CharsetSelector with a bogus mappingType.");
         }
-        errln("IllegalArgumentException should have been thrown by CharsetSelector when given a bogus mappingType.");
     }
     
     private String[] texts = {
