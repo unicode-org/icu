@@ -253,8 +253,6 @@ icu4j/perf-tests/data/collation/TestNames_SerbianSH.txt -text
 icu4j/perf-tests/data/collation/TestNames_SerbianSR.txt -text
 icu4j/perf-tests/data/collation/TestNames_Simplified_Chinese.txt -text
 icu4j/perf-tests/data/collation/TestNames_Thai.txt -text
-icu4j/richedit/classes/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
-icu4j/richedit/classes/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 icu4j/tools/build/icu4j28.api.gz -text
 icu4j/tools/build/icu4j30.api.gz -text
 icu4j/tools/build/icu4j32.api.gz -text
