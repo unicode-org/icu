@@ -270,8 +270,6 @@ icu4j/tools/build/icu4j400.api.gz -text
 icu4j/tools/build/icu4j401.api.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/manifest.stub -text
-icu4j/tzu/icu.gif -text
-icu4j/tzu/manifest.stub -text
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text
