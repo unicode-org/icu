@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.rbbi;
 //            which is common between ICU4C and ICU4J.  The remaining test data should also be moved,
 //            or simply retired if it is no longer interesting.
 import com.ibm.icu.dev.test.*;
+import com.ibm.icu.text.DictionaryBasedBreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.util.ULocale;
@@ -565,6 +566,17 @@ public class RBBITest extends TestFmwk
            if (position != expectedLineResult[index++]) {
                errln("Incorrect break given by thai line break iterator. Expected: " + expectedLineResult[index-1] + " Got: " + position);
            }
+       }
+       // Improve code coverage
+       if (brk.preceding(expectedLineResult[1]) != expectedLineResult[0]) {
+           errln("Incorrect preceding position.");
+       }
+       if (brk.following(expectedLineResult[1]) != expectedLineResult[2]) {
+           errln("Incorrect following position.");
+       }
+       int []fillInArray = new int[2];
+       if (((DictionaryBasedBreakIterator)brk).getRuleStatusVec(fillInArray) != 1 || fillInArray[0] != 0) {
+           errln("Error: Since getRuleStatusVec is not supported in DictionaryBasedBreakIterator, it should return 1 and fillInArray[0] == 0.");
        }
    }
   
