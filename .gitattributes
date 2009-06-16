@@ -1190,9 +1190,18 @@ icu4j/demos/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/ht
 icu4j/demos/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
 icu4j/demos/src/com/ibm/icu/dev/demo/impl/package.html svneol=native#text/html
 icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/package.html svneol=native#text/html
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Arabic-Latin.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Greek-Latin.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Han-Latin.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Hebrew-Latin.txt svneol=native#text/plain
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Instructions.html svneol=native#text/html
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/Test_Thai-Latin.txt svneol=native#text/plain
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/package.html svneol=native#text/html
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Han_Pinyin.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_English.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_OnRomaji.txt svneol=native#text/plain
+icu4j/demos/src/com/ibm/icu/dev/demo/translit/thai_test.txt svneol=native#text/plain
 icu4j/icu-eclipse/misc/ICUConfig.properties -text
 icu4j/icu-eclipse/misc/about_icu.html svneol=native#text/html
 icu4j/icu-eclipse/misc/about_icu_base.html svneol=native#text/html
@@ -1200,18 +1209,15 @@ icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/charset/manifest.stub -text
-icu4j/main/classes/charset/src/com/ibm/icu/charset/CharsetSelector.java -text
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
-icu4j/main/classes/core/src/com/ibm/icu/impl/PVecToTrieCompactHandler.java -text
-icu4j/main/classes/core/src/com/ibm/icu/impl/PropsVectors.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
+icu4j/main/classes/core/src/com/ibm/icu/impl/duration/impl/data/index.txt svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/math/package.html svneol=native#text/html
-icu4j/main/classes/core/src/com/ibm/icu/text/NumberingSystem.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/main/classes/localespi/.classpath -text
@@ -1230,27 +1236,58 @@ icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.LocaleNameProvi
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/main/classes/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/main/shared/.project -text
+icu4j/main/shared/data/Transliterator_Han_Latin_Definition.txt svneol=native#text/plain
+icu4j/main/shared/data/Transliterator_Han_Latin_EDICT.txt svneol=native#text/plain
 icu4j/main/shared/data/icudata.jar -text svneol=unset#application/java-archive
 icu4j/main/shared/data/testdata.jar -text
 icu4j/main/shared/licenses/license.html svneol=native#text/html
+icu4j/main/shared/licenses/unicode-license.txt svneol=native#text/plain
 icu4j/main/tests/charset/.classpath -text
 icu4j/main/tests/charset/.project -text
 icu4j/main/tests/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/charset/manifest.stub -text
-icu4j/main/tests/charset/src/com/ibm/icu/dev/test/charset/TestSelection.java -text
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
 icu4j/main/tests/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/core/manifest.stub -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/riwords.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/ucdterms.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/RegressionTest.java -text svneol=unset#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/RegressionTest.java svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_ar_EG.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_en.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_es.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_fr.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_he_IL.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_hi.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_it.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_ja.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_ko.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_ru.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_th.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans_SG.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneAliases.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text svneol=unset#application/octet-stream
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
@@ -1384,6 +1421,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.VTimeZone.dat -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
@@ -1393,28 +1431,29 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/test/package.html svneol=native#t
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text
-icu4j/perf-tests/data/collation/TestNames_Asian.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Chinese.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Japanese.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Japanese_h.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Japanese_k.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Korean.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Latin.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Russian.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_SerbianSH.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_SerbianSR.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Simplified_Chinese.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/collation/TestNames_Thai.txt -text svneol=unset#application/octet-stream
-icu4j/perf-tests/data/conversion/arabic.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/english.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/french.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/greek.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/hebrew.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/hindi.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/japanese.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/korean.txt svneol=native#text/html%3B+charset%3DUTF-8
-icu4j/perf-tests/data/conversion/s-chinese.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Chinese.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Japanese.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Japanese_h.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Japanese_k.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Korean.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Latin.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Russian.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_SerbianSH.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_SerbianSR.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Simplified_Chinese.txt svneol=native#text/plain
+icu4j/perf-tests/data/collation/TestNames_Thai.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/arabic.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/english.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/french.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/greek.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/hebrew.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/hindi.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/japanese.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/korean.txt svneol=native#text/plain
+icu4j/perf-tests/data/conversion/s-chinese.txt svneol=native#text/plain
 icu4j/readme.html svneol=native#text/html
+icu4j/tools/build/README.txt svneol=native#text/plain
 icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j30.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j32.api.gz -text svneol=unset#application/gzip
@@ -1431,6 +1470,8 @@ icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/manifest.stub -text
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
+icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/indicExceptions.txt svneol=native#text/plain
+icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/rbtTemplate.txt svneol=native#text/plain
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text
