@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Main-Class: com.ibm.richtext.test.unit.TestAll
+Specification-Title: ICU for Java RichEdit Tests
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java RichEdit Tests
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@
+
+Name: com/ibm/richtext/test
