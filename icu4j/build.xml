@@ -65,8 +65,6 @@
         <ant dir="${icu4j.core-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.charset-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.localespi-tests.dir}" target="clean" inheritAll="false"/>
-        <ant dir="${icu4j.richedit.dir}" target="clean" inheritAll="false"/>
-        <ant dir="${icu4j.richedit-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.build-tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>

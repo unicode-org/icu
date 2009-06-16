@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
 Main-Class: com.ibm.richtext.demo.EditDemo
+
+Name: com/ibm/richtext
 Specification-Title: ICU for Java RichEdit
 Specification-Version: @SPECVERSION@
 Specification-Vendor: ICU
@@ -9,4 +11,3 @@ Implementation-Vendor: IBM Corporation
 Implementation-Vendor-Id: com.ibm
 Copyright-Info: @COPYRIGHT@
 
-Name: com/ibm/richtext
