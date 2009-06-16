@@ -5358,22 +5358,24 @@ public class TestCharset extends TestFmwk {
     /* Increase code coverage for CharsetICU and CharsetProviderICU*/
     public void TestCharsetICUCodeCoverage() {
         CharsetProviderICU provider = new CharsetProviderICU();
-        
+
         if (provider.charsetForName("UTF16", null) != null) {
             errln("charsetForName should have returned a null");
         }
-        
-        if (provider.getJavaCanonicalName(null) != null) {
+
+        if (CharsetProviderICU.getJavaCanonicalName(null) != null) {
             errln("getJavaCanonicalName should have returned a null when null is given to it.");
         }
-        
+
         try {
             Charset testCharset = CharsetICU.forNameICU("bogus");
-        } catch (Exception ex) {
+            errln("UnsupportedCharsetException should be thrown for charset \"bogus\" - but got charset " + testCharset.name());
+        } catch (UnsupportedCharsetException ex) {
+            logln("UnsupportedCharsetException was thrown for CharsetICU.forNameICU(\"bogus\")");
         }
-        
+
         Charset charset = provider.charsetForName("UTF16");
-        
+
         try {
             ((CharsetICU)charset).getUnicodeSet(null, 0);
         } catch (IllegalArgumentException ex) {
