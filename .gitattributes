@@ -1442,10 +1442,6 @@ icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/manifest.stub -text
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
-icu4j/tzu/icu.css svneol=native#text/css
-icu4j/tzu/icu.gif -text
-icu4j/tzu/manifest.stub -text
-icu4j/tzu/readme.html svneol=native#text/html
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text
