@@ -1,4 +1,0 @@
-# Copyright (C) 2007-2009, International Business Machines Corporation and
-# others. All Rights Reserved.
-
-src/com/ibm/icu/dev/test/perf/NormalizerPerformanceTest.java
