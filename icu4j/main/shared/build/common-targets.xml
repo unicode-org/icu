@@ -139,25 +139,6 @@
         <ant dir="${icu4j.localespi-tests.dir}" inheritAll="false"/>
     </target>
 
-    <!-- richedit -->
-    <path id="javac.classpathref.richedit">
-        <pathelement location="${icu4j.core.jar}"/>
-    </path>
-
-    <target name="_all.richedit" depends="_all.core">
-        <ant dir="${icu4j.richedit.dir}" inheritAll = "false"/>
-    </target>
-
-    <!-- richedit-tests -->
-    <path id="javac.classpathref.richedit-tests">
-        <pathelement location="${icu4j.richedit.jar}"/>
-        <pathelement location="${icu4j.test-framework.jar}"/>
-    </path>
-
-    <target name="_all.richedit-tests" depends="_all.richedit, _all.test-framework">
-        <ant dir="${icu4j.richedit.dir}" inheritAll = "false"/>
-    </target>
-
     <!-- build-tools -->
     <path id="javac.classpathref.build-tools"/>
 

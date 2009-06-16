@@ -1425,7 +1425,6 @@ icu4j/richedit/classes/src/com/ibm/richtext/textapps/resources/unicode.hebrew.re
 icu4j/richedit/classes/src/com/ibm/richtext/textformat/package.html svneol=native#text/html
 icu4j/richedit/classes/src/com/ibm/richtext/textlayout/attributes/package.html svneol=native#text/html
 icu4j/richedit/classes/src/com/ibm/richtext/textpanel/package.html svneol=native#text/html
-icu4j/richedit/tests/manifest.stub -text
 icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j30.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j32.api.gz -text svneol=unset#application/gzip
