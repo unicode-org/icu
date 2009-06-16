@@ -1415,16 +1415,6 @@ icu4j/perf-tests/data/conversion/japanese.txt svneol=native#text/html%3B+charset
 icu4j/perf-tests/data/conversion/korean.txt svneol=native#text/html%3B+charset%3DUTF-8
 icu4j/perf-tests/data/conversion/s-chinese.txt svneol=native#text/html%3B+charset%3DUTF-8
 icu4j/readme.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/demo/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/print/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/styledtext/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/swingui/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
-icu4j/richedit/classes/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
-icu4j/richedit/classes/src/com/ibm/richtext/textformat/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/textlayout/attributes/package.html svneol=native#text/html
-icu4j/richedit/classes/src/com/ibm/richtext/textpanel/package.html svneol=native#text/html
 icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j30.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j32.api.gz -text svneol=unset#application/gzip
