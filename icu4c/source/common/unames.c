@@ -50,7 +50,7 @@ static const char DATA_TYPE[] = "icu";
  * For details see ICU tickets 6331 and 6008.
 typedef struct {
     uint16_t groupMSB,
-             offsetHigh, offsetLow; /* avoid padding * /
+             offsetHigh, offsetLow; / * avoid padding * /
 } Group;
  */
 enum {

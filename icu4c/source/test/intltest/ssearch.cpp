@@ -190,7 +190,7 @@ void SSearchTest::searchTest()
         //    Default is tertiary if the XML attribute is missing from the test case.
         //
         const UnicodeString *strength = testCase->getAttribute("strength");
-        UColAttributeValue collatorStrength;
+        UColAttributeValue collatorStrength = UCOL_PRIMARY;
         if      (strength==NULL)          { collatorStrength = UCOL_TERTIARY;}
         else if (*strength=="PRIMARY")    { collatorStrength = UCOL_PRIMARY;}
         else if (*strength=="SECONDARY")  { collatorStrength = UCOL_SECONDARY;}
@@ -312,9 +312,9 @@ void SSearchTest::searchTest()
         //
         foundMatch= usearch_search(uss, 0, &foundStart, &foundLimit, &status);
         TEST_ASSERT_SUCCESS(status);
-        if (foundMatch && expectedMatchStart<0 ||
-            foundStart != expectedMatchStart   ||
-            foundLimit != expectedMatchLimit) {
+        if ((foundMatch && expectedMatchStart<0) ||
+            (foundStart != expectedMatchStart)   ||
+            (foundLimit != expectedMatchLimit)) {
                 TEST_ASSERT(FALSE);   //  ouput generic error position
                 infoln("Found, expected match start = %d, %d \n"
                        "Found, expected match limit = %d, %d",
@@ -343,9 +343,9 @@ void SSearchTest::searchTest()
         //
         foundMatch= usearch_searchBackwards(uss, target.length(), &foundStart, &foundLimit, &status);
         TEST_ASSERT_SUCCESS(status);
-        if (foundMatch && expectedMatchStart<0 ||
-            foundStart != expectedMatchStart   ||
-            foundLimit != expectedMatchLimit) {
+        if ((foundMatch && expectedMatchStart<0) ||
+            (foundStart != expectedMatchStart)   ||
+            (foundLimit != expectedMatchLimit)) {
                 TEST_ASSERT(FALSE);   //  ouput generic error position
                 infoln("Found, expected backwards match start = %d, %d \n"
                        "Found, expected backwards match limit = %d, %d",
@@ -363,8 +363,8 @@ void SSearchTest::searchTest()
 
 struct UdhrTestCase
 {
-    char *locale;
-    char *file;
+    const char *locale;
+    const char *file;
 };
 
 void SSearchTest::udhrTest()
@@ -538,7 +538,7 @@ void SSearchTest::bmSearchTest()
         //    Default is tertiary if the XML attribute is missing from the test case.
         //
         const UnicodeString *strength = testCase->getAttribute("strength");
-        UColAttributeValue collatorStrength;
+        UColAttributeValue collatorStrength = UCOL_PRIMARY;
         if      (strength==NULL)          { collatorStrength = UCOL_TERTIARY;}
         else if (*strength=="PRIMARY")    { collatorStrength = UCOL_PRIMARY;}
         else if (*strength=="SECONDARY")  { collatorStrength = UCOL_SECONDARY;}
@@ -658,9 +658,9 @@ void SSearchTest::bmSearchTest()
         //
         foundMatch = bms_search(bms, 0, &foundStart, &foundLimit);
       //TEST_ASSERT_SUCCESS(status);
-        if (foundMatch && expectedMatchStart < 0 ||
-            foundStart != expectedMatchStart   ||
-            foundLimit != expectedMatchLimit) {
+        if ((foundMatch && expectedMatchStart < 0) ||
+            (foundStart != expectedMatchStart)     ||
+            (foundLimit != expectedMatchLimit)) {
                 TEST_ASSERT(FALSE);   //  ouput generic error position
                 infoln("Found, expected match start = %d, %d \n"
                        "Found, expected match limit = %d, %d",
@@ -709,7 +709,7 @@ private:
 };
 
 OrderList::OrderList()
-  : list(NULL), listSize(0), listMax(16)
+  : list(NULL),  listMax(16), listSize(0)
 {
     list = new Order[listMax];
 }
@@ -1040,6 +1040,7 @@ void SSearchTest::offsetTest()
     delete col;
 }
 
+#if 0
 static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 {
     for(int32_t i = 0; i < string.length(); i += 1) {
@@ -1070,6 +1071,7 @@ static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 
     return buffer;
 }
+#endif
 
 #if 1
 
@@ -1253,7 +1255,7 @@ void SSearchTest::boyerMooreTest()
         goto close_patterns;
     }
 
-    for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
+    for (uint32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
 
         longPattern->setTargetString(&target, status);
@@ -1315,7 +1317,7 @@ void SSearchTest::bmsTest()
         goto close_patterns;
     }
 
-    for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
+    for (uint32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
 
         bms_setTargetString(longPattern, target.getBuffer(), target.length(), &status);
@@ -1559,7 +1561,7 @@ const char *cPattern = "maketh houndes ete hem";
          //j = (j + i)%5;
     }
 
-    printf("%d\n", pm-longishText, j);
+    printf("%d, %d\n", pm-longishText, j);
 #ifndef TEST_BOYER_MOORE
     usearch_close(uss);
 #else
@@ -1784,6 +1786,7 @@ static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyC
 //      TODO:  refine what is an acceptable boundary.  For the moment,
 //             choose the next position not within a combining sequence.
 //
+#if 0
 static int32_t nextBoundaryAfter(const UnicodeString &string, int32_t startIndex) {
     const UChar *text = string.getBuffer();
     int32_t textLen   = string.length();
@@ -1825,7 +1828,9 @@ static int32_t nextBoundaryAfter(const UnicodeString &string, int32_t startIndex
 
     return indexOfLastCharChecked;
 }
+#endif
 
+#if 0
 static UBool isInCombiningSequence(const UnicodeString &string, int32_t index) {
     const UChar *text = string.getBuffer();
     int32_t textLen   = string.length();
@@ -1850,6 +1855,7 @@ static UBool isInCombiningSequence(const UnicodeString &string, int32_t index) {
 
     return !(gcProperty==U_GCB_CONTROL || gcProperty==U_GCB_LF || gcProperty==U_GCB_CR);
 }
+#endif
 
 static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t offset, const UnicodeString &pattern, int32_t &matchStart, int32_t &matchEnd)
 {
@@ -2108,7 +2114,7 @@ void SSearchTest::monkeyTest(char *params)
         &contractionMonkey,
         &expansionMonkey};
     int32_t monkeyCount = sizeof(monkeys) / sizeof(monkeys[0]);
-    int32_t nonMatchCount = 0;
+    // int32_t nonMatchCount = 0;
 
     UCollationStrength strengths[] = {UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY};
     const char *strengthNames[] = {"primary", "secondary", "tertiary"};
@@ -2163,7 +2169,7 @@ void SSearchTest::monkeyTest(char *params)
         // TODO: alterntaes are only equal at primary strength. Is this OK?
         for(int32_t t = 0; t < loopCount; t += 1) {
             uint32_t seed = m_seed;
-            int32_t  nmc = 0;
+            // int32_t  nmc = 0;
 
             generateTestCase(coll, monkeys, monkeyCount, pattern, altPattern);
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
@@ -2245,7 +2251,7 @@ void SSearchTest::bmMonkeyTest(char *params)
         &contractionMonkey,
         &expansionMonkey};
     int32_t monkeyCount = sizeof(monkeys) / sizeof(monkeys[0]);
-    int32_t nonMatchCount = 0;
+    // int32_t nonMatchCount = 0;
 
     UCollationStrength strengths[] = {UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY};
     const char *strengthNames[] = {"primary", "secondary", "tertiary"};
@@ -2302,7 +2308,7 @@ void SSearchTest::bmMonkeyTest(char *params)
         // TODO: alterntaes are only equal at primary strength. Is this OK?
         for(int32_t t = 0; t < loopCount; t += 1) {
             uint32_t seed = m_seed;
-            int32_t  nmc = 0;
+            // int32_t  nmc = 0;
 
             generateTestCase(coll, monkeys, monkeyCount, pattern, altPattern);
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);

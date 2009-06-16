@@ -1379,7 +1379,7 @@ ZoneStringFormat::find(const UnicodeString &text, int32_t start, int32_t types,
     if (U_SUCCESS(status)) {
         int32_t numMatches = handler.countMatches();
         for (int32_t i = 0; i < numMatches; i++) {
-            int32_t tmpMatchLen;
+            int32_t tmpMatchLen = 0; // init. output only param to silence gcc
             const ZoneStringInfo *tmp = handler.getMatch(i, tmpMatchLen);
             if ((types & tmp->fType) != 0) {
                 if (result == NULL || matchLength < tmpMatchLen) {
