@@ -1833,7 +1833,7 @@ IntlTestRBNF::TestAllLocales()
                     + "ERROR could not instantiate -> " + u_errorName(status));
                 continue;
             }
-            for (int numidx = 0; numidx < sizeof(numbers)/sizeof(double); numidx++) {
+            for (unsigned int numidx = 0; numidx < sizeof(numbers)/sizeof(double); numidx++) {
                 double n = numbers[numidx];
                 UnicodeString str;
                 f->format(n, str);
