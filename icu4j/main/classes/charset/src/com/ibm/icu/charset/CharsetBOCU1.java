@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -815,8 +815,7 @@ class CharsetBOCU1 extends CharsetICU {
             
             /* conversion "loop" similar to _SCSUToUnicodeWithOffsets() */
             if(count>0 && byteIndex>0 && target.position()<target.limit()) {
-                //labelType = getTrail;
-                labelType = getTrail(source, target, offsets);
+                labelType = getTrail;
             }
             
             while(LabelLoop){
@@ -849,7 +848,7 @@ class CharsetBOCU1 extends CharsetICU {
                 count = diff;
             }
             while(count>0) {
-                if(BOCU1_START_NEG_2 <=(c=source.get(source.position())) && c< BOCU1_START_POS_2) {
+                if(BOCU1_START_NEG_2 <=(c=source.get(source.position())&UConverterConstants.UNSIGNED_BYTE_MASK) && c< BOCU1_START_POS_2) {
                     c = prev + (c-BOCU1_MIDDLE);
                     if(c<0x3000) {
                         target.put((char)c);
@@ -965,10 +964,10 @@ class CharsetBOCU1 extends CharsetICU {
                         ++nextSourceIndex;
                         c = decodeBocu1TrailByte(1, source.get());
                         if(c<0 || ((c = prev + diff + c)&UConverterConstants.UNSIGNED_INT_MASK)>0x10ffff) {
-                            bytes[0]= source.get(-2);
-                            bytes[1]= source.get(-1);
+                            bytes[0]= source.get(source.position()-2);
+                            bytes[1]= source.get(source.position()-1);
                             byteIndex = 2;
-                            cr = CoderResult.malformedForLength(1);
+                            cr = CoderResult.malformedForLength(2);
                             break;
                         }
                     } else if(c == BOCU1_RESET) {
