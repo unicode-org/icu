@@ -811,7 +811,8 @@ conversion:table(nofallback) {
           :intvector{ 4, 6 },
           :int{1}, :int{0}, "", ".", :bin{""}
         }
-        // Code Coverage for BOCU-1
+        
+        // Improve Code Coverage for BOCU-1
         {
           "BOCU-1",
           :bin{ 91fbc555fd6349 },
@@ -825,6 +826,13 @@ conversion:table(nofallback) {
           "\ufe88\ufe70\udbff\udfff\u0061",
           :intvector{},
           :int{1}, :int{0}, "", ".", :bin{""}
+        }
+        {
+          "BOCU-1",
+          :bin{ 5b4bccf9 },
+          "\u000b",
+          :intvector{},
+          :int{1}, :int{0}, "", "0", :bin{""}
         }
       }
     }
