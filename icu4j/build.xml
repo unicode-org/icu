@@ -87,6 +87,8 @@
     <target name="tests" depends="info, core-tests, charset-tests, localespi-tests" description="Build ICU4J API test classes"/>
     <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
 
+    <target name="secure" depends="main, jar, tests" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
+ 
     <target name="check" description="Run the standard ICU4J test suite">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n"/>
