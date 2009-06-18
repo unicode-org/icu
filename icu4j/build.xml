@@ -19,12 +19,6 @@
 
     <property name="doc.dir" value="doc"/>
 
-    <property name="module.dir" value="${out.dir}/module"/>
-    <property name="module.bin.dir" value="${module.dir}/bin"/>
-    <property name="module.tests.dir" value="${module.dir}/tests"/>
-    <property name="module.jar.dir" value="${module.dir}/lib"/>
-    <property name="module.jar.file" value="icu4j-module.jar"/>
-
     <property environment="env"/>
 
     <!-- Java version check -->
@@ -255,6 +249,54 @@
         </javadoc>
     </target>
 
+    <!-- Code coverage target -->
+    <property name="clover.out.dir" value="${out.dir}/clover"/>
+    <property name="clover.jar" location="${env.CLOVER_DIR}/clover.jar"/>
+    <taskdef resource="cloverlib.xml" classpath="${clover.jar}" onerror="ignore"/>
+
+    <target name="codeCoverage" depends="clean" description="Generate code coverage report with clover">
+        <!-- Set up clover -->
+        <mkdir dir="${clover.out.dir}"/>
+        <clover-setup initstring="${clover.out.dir}/clover.db">
+            <files>
+                <exclude name="**/dev/**/*.java"/>
+            </files>
+            <methodContext name="API" regexp="(.* )?public .*"/>
+        </clover-setup>
+
+        <!-- Build components with clover instrumentation -->
+        <ant dir="${icu4j.core.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
+        <ant dir="${icu4j.charset.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
+        <ant dir="${icu4j.test-framework.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
+        <ant dir="${icu4j.core-tests.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
+        <ant dir="${icu4j.charset-tests.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
+
+        <!-- Run the test suites -->
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.charset.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement path="${icu4j.charset-tests.jar}"/>
+                <pathelement path="${clover.jar}"/>
+            </classpath>
+        </java>
+
+        <!-- Generate HTML coverage report -->
+        <clover-html-report outdir="${clover.out.dir}/html" title="ICU4J Code Coverage"/>
+    </target>
 
     <!-- Release management targets -->
     <target name="checktags" depends="info, build-tools" description="Check API tags before release">
@@ -461,10 +503,15 @@
 
 
     <!-- ICU4J modularization targets -->
+    <property name="module.dir" value="${out.dir}/module"/>
+    <property name="module.bin.dir" value="${module.dir}/bin"/>
+    <property name="module.tests.dir" value="${module.dir}/tests"/>
+    <property name="module.jar.dir" value="${module.dir}/lib"/>
+    <property name="module.jar" value="${module.jar.dir}/icu4j-module.jar"/>
 
     <target name="moduleJar" description="Create a ICU4J module jar file">
         <mkdir dir="${module.jar.dir}"/>
-        <jar jarfile="${module.jar.dir}/${module.jar.file}"
+        <jar jarfile="${module.jar}"
                 compress="true"
                 basedir="${module.bin.dir}">
             <manifest>
@@ -482,7 +529,7 @@
                 </section>
             </manifest>
         </jar>
-        <copy file="${module.jar.dir}/${module.jar.file}" tofile="icu4j.jar"/>
+        <copy file="${module.jar}" tofile="icu4j.jar"/>
     </target>
 
     <target name="moduleCheck" description="Run tests for a ICU4J module jar">
@@ -490,7 +537,7 @@
             <arg value="-nothrow"/>
             <arg value="-nodata"/>
             <classpath>
-                <pathelement path="${module.jar.dir}/${module.jar.file}"/>
+                <pathelement path="${module.jar}"/>
                 <pathelement location="${module.tests.dir}"/>
             </classpath>
         </java>
