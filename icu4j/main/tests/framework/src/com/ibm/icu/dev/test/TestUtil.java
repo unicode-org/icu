@@ -17,37 +17,7 @@ public final class TestUtil {
     /**
      * Path to test data in icu4jtest.jar
      */
-    public static final String LOCAL_DATA_PATH = "/com/ibm/icu/dev/data/";
-
-    /**
-     * Standard path to the test data in the file system.
-     */
-    public static final String DATA_PATH = "/src" + LOCAL_DATA_PATH;
-
-    /**
-     * Property for user-defined data path.
-     */
-    public static final String DATA_PATH_PROPERTY = "ICUDataPath";
-
-    /**
-     * Property for modular build.
-     */
-    public static final String DATA_MODULAR_BUILD_PROPERTY = "ICUModularBuild";
-
-    /**
-     * Compute a full data path using the ICUDataPath, if defined, or the user.dir, if we
-     * are allowed access to it.
-     */
-    private static final String dataPath(String fileName) {
-        String s = System.getProperty(DATA_PATH_PROPERTY);
-        if (s == null) {
-            // assume user.dir is directly above src directory
-            // data path must end in '/' or '\', fileName should not start with one
-            s = System.getProperty("user.dir"); // protected property
-            s = s + DATA_PATH;
-        }
-        return s + fileName;
-    }
+    public static final String DATA_PATH = "/com/ibm/icu/dev/data/";
 
     /**
      * Return an input stream on the data file at path 'name' rooted at the data path
@@ -55,16 +25,12 @@ public final class TestUtil {
     public static final InputStream getDataStream(String name) throws IOException {
         InputStream is = null;
         try {
-            is = new FileInputStream(dataPath(name));
-        } catch (Throwable e) {
-            try {
-                is = TestUtil.class.getResourceAsStream(LOCAL_DATA_PATH + name);
-            } catch (Throwable t) {
-                IOException ex =
-                    new IOException("data resource '" + name + "' not found");
-                ex.initCause(t);
-                throw ex;
-            }
+            is = TestUtil.class.getResourceAsStream(DATA_PATH + name);
+        } catch (Throwable t) {
+            IOException ex =
+                new IOException("data resource '" + name + "' not found");
+            ex.initCause(t);
+            throw ex;
         }
         return is;
     }
