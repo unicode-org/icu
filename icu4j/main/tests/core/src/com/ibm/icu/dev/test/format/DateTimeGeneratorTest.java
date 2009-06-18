@@ -29,7 +29,14 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 public class DateTimeGeneratorTest extends TestFmwk {
-    public static boolean GENERATE_TEST_DATA = System.getProperty("GENERATE_TEST_DATA") != null;
+    public static boolean GENERATE_TEST_DATA;
+    static {
+        try {
+            GENERATE_TEST_DATA = System.getProperty("GENERATE_TEST_DATA") != null;
+        } catch (SecurityException e) {
+            GENERATE_TEST_DATA = false;
+        }
+    };
     public static int RANDOM_COUNT = 1000;
     public static boolean DEBUG = false;
     
