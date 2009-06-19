@@ -513,15 +513,15 @@ class CharsetSCSU extends CharsetICU{
                         LabelLoop = false;
                         return label;
                     }
-                    b = source.get();
+                    b = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
                     ++nextSourceIndex;
                     switch(state){
                     case readCommand:
-                        if((byte)(b -UC0)>(Urs - UC0)){
+                        if((short)((b -UC0)&UConverterConstants.UNSIGNED_BYTE_MASK)>(Urs - UC0)){
                             byteOne = b;
                             toUBytesArray[0] = (byte)b;
                             toULength = 1;
-                            state = quotePairOne;
+                            state = quotePairTwo;
                         }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) <= UC7){
                             dynamicWindow = (byte)(b - UC0);
                             sourceIndex = nextSourceIndex;
@@ -1026,7 +1026,7 @@ class CharsetSCSU extends CharsetICU{
                     } else if(c<0xe000 && !AfterGetTrailUnicode){
                         label = GetTrailUnicode;
                         return label;
-                    } else {
+                    } else if (!AfterGetTrailUnicode){
                         /*quote to avoid SCSU tags*/
                         c|=UQU<<16;
                         length = 3;
