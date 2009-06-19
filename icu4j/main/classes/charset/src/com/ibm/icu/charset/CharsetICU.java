@@ -108,6 +108,17 @@ public abstract class CharsetICU extends Charset{
     private static final HashMap<String, String> algorithmicCharsets = new HashMap<String, String>();
     static{
         algorithmicCharsets.put("LMBCS-1",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-2",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-3",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-4",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-5",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-6",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-8",               "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-11",              "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-16",              "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-17",              "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-18",              "com.ibm.icu.charset.CharsetLMBCS");
+        algorithmicCharsets.put("LMBCS-19",              "com.ibm.icu.charset.CharsetLMBCS");
         algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
         algorithmicCharsets.put("SCSU",                  "com.ibm.icu.charset.CharsetSCSU" ); 
         algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );
