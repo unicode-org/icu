@@ -5383,4 +5383,57 @@ public class TestCharset extends TestFmwk {
         }
         errln("IllegalArgumentException should have been thrown.");
     }
+    
+    public void TestCharsetLMBCS() {
+        String []lmbcsNames = {
+                "LMBCS-1",
+                "LMBCS-2",
+                "LMBCS-3",
+                "LMBCS-4",
+                "LMBCS-5",
+                "LMBCS-6",
+                "LMBCS-8",
+                "LMBCS-11",
+                "LMBCS-16",
+                "LMBCS-17",
+                "LMBCS-18",
+                "LMBCS-19"
+        };
+        
+        char[] src = {
+                0x0192, 0x0041, 0x0061, 0x00D0, 0x00F6, 0x0100, 0x0174, 0x02E4, 0x03F5, 0x03FB,
+                0x05D3, 0x05D4, 0x05EA, 0x0684, 0x0685, 0x1801, 0x11B3, 0x11E8, 0x1F9A, 0x2EB4,
+                0x3157, 0x3336, 0x3304, 0xD881, 0xDC88
+        };
+        CharBuffer cbInput = CharBuffer.wrap(src);
+        
+        CharsetProviderICU provider = new CharsetProviderICU();
+        
+        for (int i = 0; i < lmbcsNames.length; i++) {
+            Charset charset = provider.charsetForName(lmbcsNames[i]);
+            if (charset == null) {
+                errln("Unable to create LMBCS charset: " + lmbcsNames[i]);
+                return;
+            }
+            CharsetEncoder encoder = charset.newEncoder();
+            CharsetDecoder decoder = charset.newDecoder();
+            
+            try {
+                cbInput.position(0);
+                ByteBuffer bbTmp = encoder.encode(cbInput);
+                CharBuffer cbOutput = decoder.decode(bbTmp);
+                
+                if (!equals(cbInput, cbOutput)) {
+                    errln("Roundtrip test failed for charset: " + lmbcsNames[i]);
+                }
+            } catch (Exception ex) {
+                if (i >= 8) {
+                    /* Expected exceptions */
+                    continue;
+                }
+                errln("Exception thrown: " + ex + " while using charset: " + lmbcsNames[i]);
+            }
+            
+        }
+    }
 }
