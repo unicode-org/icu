@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2008, International Business Machines Corporation and
+#  * Copyright (c) 2002-2009, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
@@ -118,10 +118,9 @@ sub main(){
     $icupkg = $icuBinDir."/icupkg -tb";
     $tempDir = $cwd."/temp";
     $version =~ s/\.//;
-    $icu4jImpl = "com/ibm/icu/impl/data/";
-    $icu4jDataDir = $icu4jImpl."icudt".$version."b";
-    $icu4jDevDataDir = "com/ibm/icu/dev/data/";
-    $icu4jTestDataDir = "$icu4jDevDataDir/testdata";
+    $icu4jMainDataDir = "main/shared/data";
+    $icu4jDataDir = $icu4jMainDataDir."/icudt".$version."b";
+    $icu4jTestDataDir = "$icu4jMainDataDir/testdata";
     
     $icuDataDir =$icuBuildDir."/icudt".$version.checkPlatformEndianess();
     
@@ -134,7 +133,7 @@ sub main(){
     
     convertTestData($icuTestDataDir, $icupkg, $tempDir, $icu4jTestDataDir, $verbose);
     createJar("\"$jarDir/jar\"", "testdata.jar", $tempDir, $icu4jTestDataDir, $verbose);
-    copyData($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir, $verbose);
+    copyData($icu4jDir, $icu4jMainDataDir, $tempDir, $verbose);
 }
 
 #-----------------------------------------------------------------------
@@ -156,7 +155,7 @@ sub buildICU{
         cmd("make uni-core-data", $verbose);
         if(chdir($icuTestDataSrcDir)){
             print("Invoking make in directory $icuTestDataSrcDir\n");
-            cmd("make JAVA_OUT_DIR=\"$icu4jDir/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
+            cmd("make JAVA_OUT_DIR=\"$icu4jDir/main/tests/core/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
         }else{
 	    die "Could not cd to $icuTestDataSrcDir\n";
         }
@@ -166,7 +165,7 @@ sub buildICU{
         chdir($icuSrcDataDir);
         cmd("gmake uni-core-data", $verbose);
         chdir($icuTestDataDir."../../");
-        cmd("gmake JAVA_OUT_DIR=\"$icu4jDir/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
+        cmd("gmake JAVA_OUT_DIR=\"$icu4jDir/main/tests/core/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
     }elsif($platform eq "MSWin32"){
         #devenv.com $projectFileName \/build $configurationName > \"$cLogFile\" 2>&1
         cmd("devenv.com allinone/allinone.sln /useenv /build Debug", $verbose);
@@ -248,13 +247,12 @@ sub checkPlatformEndianess {
 }
 #-----------------------------------------------------------------------
 sub copyData{
-    local($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir) =@_;
-    print("INFO: Copying $tempDir/icudata.jar to $icu4jDir/src/$icu4jImpl\n");
-    mkpath("$icu4jDir/src/$icu4jImpl");
-    copy("$tempDir/icudata.jar", "$icu4jDir/src/$icu4jImpl"); 
-    print("INFO: Copying $tempDir/testdata.jar $icu4jDir/src/$icu4jDevDataDir\n");
-    mkpath("$icu4jDir/src/$icu4jDevDataDir");
-    copy("$tempDir/testdata.jar","$icu4jDir/src/$icu4jDevDataDir");
+    local($icu4jDir, $icu4jMainDataDir, $tempDir) =@_;
+    print("INFO: Copying $tempDir/icudata.jar to $icu4jDir/$icu4jMainDataDir\n");
+    mkpath("$icu4jDir/$icu4jMainDataDir");
+    copy("$tempDir/icudata.jar", "$icu4jDir/$icu4jMainDataDir"); 
+    print("INFO: Copying $tempDir/testdata.jar $icu4jDir/$icu4jMainDataDir\n");
+    copy("$tempDir/testdata.jar","$icu4jDir/$icu4jMainDataDir");
 }
 #-----------------------------------------------------------------------
 sub convertData{
