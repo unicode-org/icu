@@ -834,6 +834,14 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "", "0", :bin{""}
         }
+        //Improve code coverage for SCSU
+        {
+          "SCSU",
+          :bin{ 0fd899dc7fd888dc99e041424361 },
+          "\ud899\udc7f\ud888\udc99\u0041\u0042\u0043\u0061",
+          :intvector{},
+          :int{1}, :int{0}, "", "0", :bin{""}
+        }
       }
     }
 
@@ -1609,6 +1617,14 @@ conversion:table(nofallback) {
           :bin{ fbeda44ff0fe189bb821f05926 },
           :intvector{},
           :int{1}, :int{0}, "", ".", ""
+        }
+        // Improve code coverage for SCSU
+        {
+          "SCSU",
+          "\ud899\udc7f\ud977\ud888\udc99\ud888\u0041",
+          :bin{ 0fd899dc7fd888dc99e041 },
+          :intvector{},
+          :int{1}, :int{0}, "", "0", ""
         }
       }
     }
