@@ -118,9 +118,11 @@ sub main(){
     $icupkg = $icuBinDir."/icupkg -tb";
     $tempDir = $cwd."/temp";
     $version =~ s/\.//;
+    $icu4jImpl = "com/ibm/icu/impl/data/";
+    $icu4jDataDir = $icu4jImpl."icudt".$version."b";
+    $icu4jDevDataDir = "com/ibm/icu/dev/data/";
+    $icu4jTestDataDir = "$icu4jDevDataDir/testdata";
     $icu4jMainDataDir = "main/shared/data";
-    $icu4jDataDir = $icu4jMainDataDir."/icudt".$version."b";
-    $icu4jTestDataDir = "$icu4jMainDataDir/testdata";
     
     $icuDataDir =$icuBuildDir."/icudt".$version.checkPlatformEndianess();
     
