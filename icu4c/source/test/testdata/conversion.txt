@@ -857,6 +857,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "", ".", :bin{""}
         }
+        {
+          "SCSU",
+          :bin{ 1b9a1b541bb2411bfd1b0041 },
+          "",
+          :intvector{},
+          :int{1}, :int{0}, "", ".", :bin{""}
+        }
       }
     }
 
