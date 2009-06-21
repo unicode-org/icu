@@ -58,7 +58,7 @@ class CharsetSCSU extends CharsetICU{
     /* values between reservedStart and fixedThreshold are reserved */
     private static final int reservedStart=0xA8;
     /* use table of predefined fixed offsets for values from fixedThreshold */
-    private static final int fixedThreshold=0xF;
+    private static final int fixedThreshold=0xF9;
     //};
     
     protected byte[] fromUSubstitution = new byte[]{(byte)0x0E,(byte)0xFF, (byte)0xFD};
@@ -325,7 +325,6 @@ class CharsetSCSU extends CharsetICU{
                                     charErrorBufferLength = 1;
                                     label = EndLoop;
                                     cr = CoderResult.OVERFLOW;
-                                    LabelLoop = false;
                                     return label;
                                 }
                             }
@@ -488,7 +487,7 @@ class CharsetSCSU extends CharsetICU{
                             return label;
                         }else if(b<gapThreshold){
                             data.toUDynamicOffsets[dynamicWindow] = b<<7L;
-                        }else if((byte)(b - gapThreshold)<(reservedStart - gapThreshold)){
+                        }else if(((b - gapThreshold)&UConverterConstants.UNSIGNED_BYTE_MASK)<(reservedStart - gapThreshold)){
                             data.toUDynamicOffsets[dynamicWindow] = (b<<7L) + gapOffset;
                         }else if(b>=fixedThreshold){
                             data.toUDynamicOffsets[dynamicWindow] = fixedOffsets[b-fixedThreshold];

@@ -5320,17 +5320,18 @@ public class TestCharset extends TestFmwk {
         }
         // Test overflow buffer
         {
-            byte[] testOverflow = {
-                    0x41,(byte) 0xdf, 0x12,(byte) 0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x1b, 0x03,
-                    (byte)0xdf, 0x1c,(byte) 0x88,(byte) 0x80, 0x0b, (byte)0xbf,(byte) 0xff,(byte) 0xff
-            };
-            decode.reset();
-            try {
-                smBufDecode(decode, "SCSU overflow test", ByteBuffer.wrap(testOverflow), CharBuffer.allocate(8), true, true);
-                errln("Buffer overflow exception should have been thrown.");
-            } catch (BufferOverflowException ex) {
-            } catch (Exception ex) {
-                errln("Buffer overflow exception should have been thrown.");
+            ByteBuffer overflowTest = ByteBuffer.wrap(allFeaturesSCSU);
+            int sizes[] = { 8, 2, 11 };
+            for (int i = 0; i < sizes.length; i++) {
+                try {
+                    decode.reset();
+                    overflowTest.position(0);
+                    smBufDecode(decode, "SCSU overflow test", overflowTest, CharBuffer.allocate(sizes[i]), true, false);
+                    errln("Buffer overflow exception should have been thrown.");
+                } catch (BufferOverflowException ex) {
+                } catch (Exception ex) {
+                    errln("Buffer overflow exception should have been thrown.");
+                }
             }
             
         }
