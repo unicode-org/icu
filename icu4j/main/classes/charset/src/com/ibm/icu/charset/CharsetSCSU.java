@@ -1158,48 +1158,31 @@ class CharsetSCSU extends CharsetICU{
             /*write the output character byte from c and length*/
             /*from the first if in the loop we know that targetCapacity>0*/
             if(length<=targetCapacity){
-                if(offsets==null){
-                    switch(length){
-                    /*each branch falls through the next one*/
-                        case 4:
-                            target.put((byte)(c>>24));
-                        case 3:
-                            target.put((byte)(c>>16));
-                        case 2:
-                            target.put((byte)(c>>8));
-                        case 1:
-                            target.put((byte)c);
-                        default:
-                            /*will never occur*/
-                            break;
-                    }
-                }else {
-                    switch(length){
-                        /*each branch falls through to the next one*/
-                        case 4:
-                            target.put((byte)(c>>24));
-                            if(offsets!=null){
-                                offsets.put(sourceIndex);
-                            }
-                        case 3:
-                            target.put((byte)(c>>16));
-                            if(offsets!=null){
-                                offsets.put(sourceIndex);
-                            }
-                        case 2:
-                            target.put((byte)(c>>8));
-                            if(offsets!=null){
-                                offsets.put(sourceIndex);
-                            }
-                        case 1:
-                            target.put((byte)c);
-                            if(offsets!=null){
-                                offsets.put(sourceIndex);
-                            }
-                        default:
-                            /*will never occur*/
-                            break;
-                    }
+                switch(length){
+                /*each branch falls through the next one*/
+                    case 4:
+                        target.put((byte)(c>>24));
+                        if(offsets!=null){
+                            offsets.put(sourceIndex);
+                        }
+                    case 3:
+                        target.put((byte)(c>>16));
+                        if(offsets!=null){
+                            offsets.put(sourceIndex);
+                        }
+                    case 2:
+                        target.put((byte)(c>>8));
+                        if(offsets!=null){
+                            offsets.put(sourceIndex);
+                        }
+                    case 1:
+                        target.put((byte)c);
+                        if(offsets!=null){
+                            offsets.put(sourceIndex);
+                        }
+                    default:
+                        /*will never occur*/
+                        break;
                 }
                 targetCapacity-=length;
                 
