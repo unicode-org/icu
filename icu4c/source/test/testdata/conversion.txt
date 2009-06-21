@@ -834,6 +834,14 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "", "0", :bin{""}
         }
+        {
+          "BOCU-1",
+          :bin{ fe0053c6 },
+          "\u0003\u0076",
+          :intvector{},
+          :int{1}, :int{0}, "", "0", :bin{""}
+        }
+
         //Improve code coverage for SCSU
         {
           "SCSU",
@@ -841,6 +849,13 @@ conversion:table(nofallback) {
           "\ud899\udc7f\ud888\udc99\u0041\u0042\u0043\u0061",
           :intvector{},
           :int{1}, :int{0}, "", "0", :bin{""}
+        }
+        {
+          "SCSU",
+          :bin{ 41df1281035f10df1b03df1c88800bbfffff },
+          "\u0041\u00df\u0401\u015f\u00df\u01df\uf000\udbff\udfff",
+          :intvector{},
+          :int{1}, :int{0}, "", ".", :bin{""}
         }
       }
     }
