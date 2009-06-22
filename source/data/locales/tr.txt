@@ -441,15 +441,15 @@ tr{
             "Bolivya Mvdolu",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Yeni Brezilya Kruzeirosu (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brezilya Kruzadosu",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brezilya Kruzeirosu (1990-1993)",
         }
         BRL{
@@ -457,11 +457,11 @@ tr{
             "Brezilya Reali",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Yeni Brezilya Kruzadosu",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brezilya Kruzeirosu",
         }
         BSD{
@@ -741,7 +741,7 @@ tr{
             "Yeni İsrail Şekeli",
         }
         INR{
-            "₨",
+            "Rs",
             "Hindistan Rupisi",
         }
         IQD{
@@ -789,7 +789,7 @@ tr{
             "Komorlar Frangı",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Kuzey Kore Wonu",
         }
         KRW{
@@ -917,11 +917,11 @@ tr{
             "Mauritius Rupisi",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldiv Adaları Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malavi Kvaçası",
         }
         MXN{
@@ -1061,7 +1061,7 @@ tr{
             "Rus Rublesi (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruanda Frangı",
         }
         SAR{
@@ -1237,7 +1237,7 @@ tr{
             "Özbekistan Somu",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuela Bolivarı",
         }
         VEF{
@@ -2100,7 +2100,7 @@ tr{
         TARASK{"Taraskievica Yazım Kuralları"}
         VALENCIA{"Valensiyaca"}
     }
-    Version{"1.124"}
+    Version{"1.126"}
     calendar{
         chinese{
             availableFormats{

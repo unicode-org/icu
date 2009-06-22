@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/lt.xml
  */
 lt{
-    Version{"1.25"}
+    Version{"1.26"}
     collations{
         standard{
             Sequence{
@@ -20,7 +20,7 @@ lt{
                 "&[before 1]T<š<<<Š"
                 "&[before 1]Ʒ<ž<<<Ž"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

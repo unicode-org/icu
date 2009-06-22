@@ -540,7 +540,7 @@ is{
             "Sikill",
         }
         INR{
-            "₨",
+            "Rs",
             "Indversk rúpía",
         }
         IQD{
@@ -572,7 +572,7 @@ is{
             "Kómoreyskur franki",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Norðurkóreskt vonn",
         }
         KRW{
@@ -748,7 +748,7 @@ is{
             "Rússnesk rúbla (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rwandan Franc",
         }
         SAR{
@@ -872,7 +872,7 @@ is{
             "Bandaríkjadalur (sama dag)",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuelan Bolivar",
         }
         VUV{
@@ -1504,7 +1504,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.98"}
+    Version{"1.100"}
     calendar{
         gregorian{
             AmPmMarkers{

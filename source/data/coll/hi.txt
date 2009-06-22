@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/hi.xml
  */
 hi{
-    Version{"1.25"}
+    Version{"1.26"}
     collations{
         direct{
             Sequence{
@@ -19,11 +19,11 @@ hi{
                 "<ी<ु<ू<ृ<ॄ<ॅ<ॆ<े<ै<ॉ<ॊ<ो<ौ<्<ॐ<॑<॒<॓<॔<क़<ख़<ग़<ज़<ड़<ढ़<फ़<य़<ॠ<ॡ<ॢ"
                 "<ॣ<।<॥<०<१<२<३<४<५<६<७<८<९<॰"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
         standard{
             Sequence{" [normalization on ]&[before 1]0<ॐ<।<॥<॰&ह<़<ँ<ं<ः<॑<॒<॓<॔&ऽ<्"}
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

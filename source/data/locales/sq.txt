@@ -192,7 +192,7 @@ sq{
             "Paund Sterlina Britanike",
         }
         INR{
-            "₨",
+            "Rs",
             "Rupee indiane",
         }
         JPY{
@@ -256,7 +256,7 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur ose i pavlefshëm"}
     }
-    Version{"1.79"}
+    Version{"1.81"}
     calendar{
         gregorian{
             AmPmMarkers{

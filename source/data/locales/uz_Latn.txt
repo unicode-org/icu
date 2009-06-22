@@ -42,7 +42,7 @@ uz_Latn{
             "Ingliz funt sterlingi",
         }
         INR{
-            "₨",
+            "Rs",
             "Hind rupiyasi",
         }
         JPY{
@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.21"}
+    Version{"1.23"}
     calendar{
         gregorian{
             dayNames{

@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/ru.xml
  */
 ru{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         standard{
             Sequence{"[suppressContractions [Ѐ-ЗК-зк-џ] ]"}
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

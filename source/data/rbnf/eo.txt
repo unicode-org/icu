@@ -12,7 +12,14 @@
 eo{
     RBNFRules{
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: minus >>;",
+            "x.x: << komo >>;",
             "0: nulo;",
             "1: unu;",
             "2: du;",
@@ -38,16 +45,9 @@ eo{
             "1000000000000000: biliardo[ >>];",
             "2000000000000000: << biliardoj[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: minus >>;",
-            "x.x: << komo >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
             "%spellout-ordinal:",
             "0: =%spellout-cardinal=a;",
         }
     }
-    Version{"1.5"}
+    Version{"1.6"}
 }

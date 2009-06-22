@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ur.xml
  */
 ur{
-    Version{"1.3"}
+    Version{"1.4"}
     collations{
         default{"standard"}
         standard{
@@ -20,7 +20,7 @@ ur{
                 "&ِ<<ُ<<ٰ<<ٖ<<ٗ<<ً<<ٍ<<ٌ<<ٔ<<ّ<<٘<<ٓ"
                 "&ؐ<<<ؑ<<<ؒ<<<ؓ<<<ؔ<<<َ"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

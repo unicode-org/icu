@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pa_Arab_PK{
-    Version{"1.13"}
+    Version{"1.14"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

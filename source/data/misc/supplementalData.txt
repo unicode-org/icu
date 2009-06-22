@@ -10945,7 +10945,6 @@ supplementalData:table(nofallback){
             "meta:Chile_AQ"{"Antarctica/Palmer"}
             "meta:China_001"{"Asia/Shanghai"}
             "meta:China_MO"{"Asia/Macau"}
-            "meta:China_TW"{"Asia/Taipei"}
             "meta:Choibalsan_001"{"Asia/Choibalsan"}
             "meta:Christmas_001"{"Indian/Christmas"}
             "meta:Cocos_001"{"Indian/Cocos"}
@@ -11122,6 +11121,7 @@ supplementalData:table(nofallback){
             "meta:Sverdlovsk_001"{"Asia/Yekaterinburg"}
             "meta:Syowa_001"{"Antarctica/Syowa"}
             "meta:Tahiti_001"{"Pacific/Tahiti"}
+            "meta:Taipei_001"{"Asia/Taipei"}
             "meta:Tajikistan_001"{"Asia/Dushanbe"}
             "meta:Tashkent_001"{"Asia/Tashkent"}
             "meta:Tbilisi_001"{"Asia/Tbilisi"}
@@ -11187,7 +11187,7 @@ supplementalData:table(nofallback){
             "GTB Standard Time"{"Europe/Istanbul"}
             "Georgian Standard Time"{"Etc/GMT-3"}
             "Greenland Standard Time"{"America/Godthab"}
-            "Greenwich Standard Time"{"Africa/Reykjavik"}
+            "Greenwich Standard Time"{"Atlantic/Reykjavik"}
             "Hawaiian Standard Time"{"Pacific/Honolulu"}
             "India Standard Time"{"Asia/Calcutta"}
             "Iran Standard Time"{"Asia/Tehran"}

@@ -683,7 +683,7 @@ static const char* testCases[][2]= {
     {"es_ES_PREEURO", "\\u20A7\\u00A01.150" },
     {"eu_ES_PREEURO", "1.150\\u00A0\\u20A7" }, 
     {"gl_ES_PREEURO", "1.150\\u00A0\\u20A7" },
-    {"it_IT_PREEURO", "\\u20A4\\u00A01.150" },
+    {"it_IT_PREEURO", "IT\\u20A4\\u00A01.150" },
     {"pt_PT_PREEURO", "1,150$50\\u00A0Esc."},
     {"en_US@currency=JPY", "\\u00A51,150"}
 };
@@ -2891,7 +2891,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         // test locale without currency information
         {"ti_ET", "-1.23", "USD", "-US$1.23", "-USD1.23", "-1.23 USD"},
         // test choice format
-        {"es_AR", "1", "INR", "\\u20a8\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
+        {"es_AR", "1", "INR", "Rs\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
     };
     
     for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
@@ -3308,7 +3308,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Brunei Dollar1.00",
         "Brunei dollar1.00",
         "Brunei dollars1.00",
-        "Bs.1.00",
+        "Bs1.00",
         "Bs.F.1.00",
         "Bulgarian Hard Lev1.00",
         "Bulgarian Lev1.00",
@@ -4396,7 +4396,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Pts1.00",
         "\\u20aa1.00",
         "\\u20ac1.00",
-        "\\u20a81.00",
+        "Rs1.00",
         "\\u20a61.00",
         "\\u20ae1.00",
         "IT\\u20a41.00",

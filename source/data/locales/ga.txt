@@ -414,15 +414,15 @@ ga{
             "Mvdol Bolavach",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Cruzeiro Novo Brasaíleach (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Cruzado Brasaíleach",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Cruzeiro Brasaíleach (1990-1993)",
         }
         BRL{
@@ -430,11 +430,11 @@ ga{
             "Real Brasaíleach",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Cruzado Novo Brasaíleach",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Cruzeiro Brasaíleach",
         }
         BSD{
@@ -586,7 +586,7 @@ ga{
             "Franc Francach",
         }
         GBP{
-            "GB£",
+            "£",
             "Punt Steirling",
         }
         GEK{
@@ -670,7 +670,7 @@ ga{
             "Rupiah Indinéiseach",
         }
         IEP{
-            "£",
+            "IR£",
             "Punt Éireannach",
         }
         ILP{
@@ -682,7 +682,7 @@ ga{
             "Sheqel Nua Iosraelach",
         }
         INR{
-            "₨",
+            "Rs",
             "Rúipí India",
         }
         IQD{
@@ -730,7 +730,7 @@ ga{
             "Franc Chomóra",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Won na Cóiré Thuaidh",
         }
         KRW{
@@ -850,11 +850,11 @@ ga{
             "Rúipí Oileán Mhuirís",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldive Islands Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Kwacha na Maláive",
         }
         MXN{
@@ -978,7 +978,7 @@ ga{
             "Rúbal Rúiseach (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Franc Ruanda",
         }
         SAR{
@@ -1138,7 +1138,7 @@ ga{
             "Sum na hÚisbéiceastáine",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolivar Veiniséala",
         }
         VND{
@@ -1407,7 +1407,7 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.75"}
+    Version{"1.78"}
     calendar{
         gregorian{
             AmPmMarkers{

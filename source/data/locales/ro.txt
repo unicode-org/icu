@@ -394,7 +394,7 @@ ro{
             "mvdol bolivian",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "cruzeiro brazilian (1990–1993)",
         }
         BRL{
@@ -402,7 +402,7 @@ ro{
             "real brazilian",
         }
         BRR{
-            "CR$",
+            "BRR",
             "cruzeiro brazilian",
         }
         BSD{
@@ -626,7 +626,7 @@ ro{
             "șechel israelian nou",
         }
         INR{
-            "₨",
+            "Rs",
             "rupie indiană",
         }
         IQD{
@@ -674,7 +674,7 @@ ro{
             "franc comorian",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "won nord-coreean",
         }
         KRW{
@@ -886,7 +886,7 @@ ro{
             "rublă rusească",
         }
         RWF{
-            "RF",
+            "RWF",
             "franc Rwanda",
         }
         SAR{
@@ -1034,7 +1034,7 @@ ro{
             "sum Uzbekistan",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "bolivar Venezuela",
         }
         VND{
@@ -2157,7 +2157,7 @@ ro{
             traditional{"sortare tradițională"}
         }
     }
-    Version{"1.114"}
+    Version{"1.116"}
     calendar{
         buddhist{
             DateTimePatterns{

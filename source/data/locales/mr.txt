@@ -815,20 +815,6 @@ mr{
     LocaleScript{
         "Deva",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "०",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##,##0.###",
         "¤ #,##,##0.00",
@@ -967,7 +953,7 @@ mr{
         Zyyy{"सामान्य"}
         Zzzz{"अज्ञात वा अवैध लिपी"}
     }
-    Version{"1.83"}
+    Version{"1.86"}
     calendar{
         gregorian{
             AmPmMarkers{

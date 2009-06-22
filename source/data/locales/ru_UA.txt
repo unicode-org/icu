@@ -27,7 +27,7 @@ ru_UA{
         mh{"маршальский"}
         tlh{"клингон"}
     }
-    Version{"1.56"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{

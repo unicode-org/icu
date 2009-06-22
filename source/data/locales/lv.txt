@@ -577,7 +577,7 @@ lv{
             "Izraēlas šekelis",
         }
         INR{
-            "₨",
+            "Rs",
             "Indijas rūpija",
         }
         IQD{
@@ -617,7 +617,7 @@ lv{
             "Kirgizstānas soms",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Ziemeļkorejas vona",
         }
         KRW{
@@ -721,11 +721,11 @@ lv{
             "Maurīcijas rūpija",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldīvijas rūfija",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malāvijas kvača",
         }
         MXN{
@@ -821,7 +821,7 @@ lv{
             "Krievijas rublis",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruandas franks",
         }
         SAR{
@@ -949,7 +949,7 @@ lv{
             "Uzbekistānas sums",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venecuēlas bolivārs",
         }
         VEF{
@@ -1555,7 +1555,7 @@ lv{
         "E",
         "‰",
         "∞",
-        "nav skaitlis",
+        "nav skaitlis",
         "+",
     }
     NumberPatterns{
@@ -1658,7 +1658,7 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.94"}
+    Version{"1.97"}
     calendar{
         gregorian{
             DateTimePatterns{

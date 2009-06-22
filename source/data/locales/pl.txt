@@ -438,15 +438,15 @@ pl{
             "mvdol boliwijski",
         }
         BRB{
-            "NCr",
+            "BRB",
             "cruzeiro novo brazylijskie (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "cruzado brazylijskie",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "cruzeiro brazylijskie (1990-1993)",
         }
         BRL{
@@ -454,11 +454,11 @@ pl{
             "real brazylijski",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "nowe cruzado brazylijskie",
         }
         BRR{
-            "CR$",
+            "BRR",
             "cruzeiro brazylijskie",
         }
         BSD{
@@ -718,7 +718,7 @@ pl{
             "nowy szekel izraelski",
         }
         INR{
-            "₨",
+            "Rs",
             "rupia indyjska",
         }
         IQD{
@@ -766,7 +766,7 @@ pl{
             "frank komoryjski",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "won północnokoreański",
         }
         KRW{
@@ -886,11 +886,11 @@ pl{
             "rupia Mauritius",
         }
         MVR{
-            "Rf",
+            "MVR",
             "rufiyaa malediwska",
         }
         MWK{
-            "MK",
+            "MWK",
             "kwacha malawska",
         }
         MXN{
@@ -1026,7 +1026,7 @@ pl{
             "rubel rosyjski (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "frank ruandyjski",
         }
         SAR{
@@ -1190,7 +1190,7 @@ pl{
             "som uzbecki",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "boliwar wenezuelski",
         }
         VEF{
@@ -2222,7 +2222,7 @@ pl{
         TARASK{"ortografia taraszkiewicka"}
         VALENCIA{"walencki"}
     }
-    Version{"1.120"}
+    Version{"1.122"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ml.xml
  */
 ml{
-    Version{"1.13"}
+    Version{"1.14"}
     collations{
         standard{
             Sequence{
@@ -29,7 +29,7 @@ ml{
                 "&മ്<<ം"
                 "&ന്<<<ൻ്"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

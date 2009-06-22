@@ -12,7 +12,14 @@
 hy{
     RBNFRules{
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: \u0570\u0561\u0576\u0561\u056E >>;",
+            "x.x: << \u057D\u057F\u0578\u0580\u0561\u056F\u0565\u056C >>;",
             "0: \u0566\u0580\u0578;",
             "1: \u0574\u0565\u056F;",
             "2: \u0565\u0580\u056F\u0578\u0582;",
@@ -39,14 +46,7 @@ hy{
             "1000000000000: << \u0562\u056B\u056C\u056B\u0585\u0576[ >>];",
             "1000000000000000: << \u0562\u056B\u056C\u056B\u0561\u0580[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: \u0570\u0561\u0576\u0561\u056E >>;",
-            "x.x: << \u057D\u057F\u0578\u0580\u0561\u056F\u0565\u056C >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
         }
     }
-    Version{"1.4"}
+    Version{"1.5"}
 }

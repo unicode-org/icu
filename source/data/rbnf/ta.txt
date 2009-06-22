@@ -13,11 +13,18 @@ ta{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "0: =#,##,##0=.;",
             "-x: \u2212>>;",
+            "0: =#,##,##0=.;",
         }
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: --- >>;",
+            "x.x: << ... >>;",
             "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;",
             "1: \u0B92\u0BA9\u0BCD\u0BB1\u0BC1;",
             "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;",
@@ -59,14 +66,7 @@ ta{
             "100000: << \u0BB2\u0B9F\u0BCD\u0B9A\u0BAE\u0BCD[ >>];",
             "10000000: << \u0B95\u0BCB\u0B9F\u0BBF[ >>];",
             "1000000000000000000: =#,##,##0=;",
-            "-x: --- >>;",
-            "x.x: << ... >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.2"}
 }

@@ -13,11 +13,18 @@ vi{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "0: th\u1EE9 =#,##0=;",
             "-x: \u2212>>;",
+            "0: th\u1EE9 =#,##0=;",
         }
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: tr\u1EEB >>;",
+            "x.x: << ph\u1EA9y >>;",
             "0: kh\u00F4ng;",
             "1: m\u1ED9t;",
             "2: hai;",
@@ -35,17 +42,10 @@ vi{
             "1000000: << tri\u1EC7u[ >>];",
             "1000000000: << t\u1EF7[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: tr\u1EEB >>;",
-            "x.x: << ph\u1EA9y >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
             "%spellout-ordinal:",
-            "0: th\u1EE9 =%spellout-cardinal=;",
             "x.x: =#,##0.#=;",
+            "0: th\u1EE9 =%spellout-cardinal=;",
         }
     }
-    Version{"1.4"}
+    Version{"1.5"}
 }

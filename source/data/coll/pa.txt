@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/pa.xml
  */
 pa{
-    Version{"1.29"}
+    Version{"1.30"}
     collations{
         standard{
             Sequence{" [normalization on ]"}
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }
