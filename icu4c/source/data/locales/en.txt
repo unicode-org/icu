@@ -466,15 +466,15 @@ en{
             "Bolivian Mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brazilian Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brazilian Cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brazilian Cruzeiro (1990-1993)",
         }
         BRL{
@@ -482,15 +482,15 @@ en{
             "Brazilian Real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brazilian Cruzado Novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brazilian Cruzeiro",
         }
         BRZ{
-            "₢",
+            "BRZ",
             "Old Brazilian Cruzeiro",
         }
         BSD{
@@ -782,7 +782,7 @@ en{
             "Israeli New Sheqel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indian Rupee",
         }
         IQD{
@@ -834,7 +834,7 @@ en{
             "Comorian Franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "North Korean Won",
         }
         KRH{
@@ -986,11 +986,11 @@ en{
             "Maldivian Rupee",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldivian Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawian Kwacha",
         }
         MXN{
@@ -1130,7 +1130,7 @@ en{
             "Russian Ruble (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rwandan Franc",
         }
         SAR{
@@ -1310,7 +1310,7 @@ en{
             "Uzbekistan Som",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuelan Bolívar",
         }
         VEF{
@@ -2915,6 +2915,7 @@ en{
         mdf{"Moksha"}
         mdr{"Mandar"}
         men{"Mende"}
+        mfe{"Morisyen"}
         mg{"Malagasy"}
         mga{"Middle Irish"}
         mh{"Marshallese"}
@@ -3358,7 +3359,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"1.228"}
+    Version{"1.234"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3899,6 +3900,7 @@ en{
             ls{"Baku Time"}
         }
         "meta:Bangladesh"{
+            ld{"Bangladesh Summer Time"}
             ls{"Bangladesh Time"}
         }
         "meta:Bering"{
@@ -4360,6 +4362,14 @@ en{
         }
         "meta:Tahiti"{
             ls{"Tahiti Time"}
+        }
+        "meta:Taipei"{
+            ld{"Taipei Daylight Time"}
+            lg{"Taipei Time"}
+            ls{"Taipei Standard Time"}
+            sd{"CDT (Taipei)"}
+            sg{"CT (Taipei)"}
+            ss{"CST (Taipei)"}
         }
         "meta:Tajikistan"{
             ls{"Tajikistan Time"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    AuxExemplarCharacters{"[f j w z]"}
+    AuxExemplarCharacters{"[]"}
     Countries{
         001{"Thế giới"}
         002{"Châu Phi"}
@@ -396,7 +396,7 @@ vi{
             "Sêken Ixraen",
         }
         INR{
-            "₨",
+            "Rs",
             "Rupi Ấn Độ",
         }
         IQD{
@@ -536,7 +536,7 @@ vi{
             "Đô-la Mỹ",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bôliva Vênêduêla",
         }
         VND{
@@ -609,7 +609,6 @@ vi{
         hy{"Tiếng Ác-mê-ni"}
         ia{"Tiếng Khoa Học Quốc Tế"}
         id{"Tiếng In-đô-nê-xia"}
-        ie{"Tiếng Khoa học quốc tế"}
         is{"Tiếng Ai-xơ-len"}
         it{"Tiếng Ý"}
         ja{"Tiếng Nhật"}
@@ -708,7 +707,7 @@ vi{
             gregorian{"gregorian"}
         }
     }
-    Version{"1.82"}
+    Version{"1.86"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 az_Latn_AZ{
-    Version{"1.25"}
+    Version{"1.26"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

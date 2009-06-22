@@ -437,15 +437,15 @@ da{
             "Boliviansk mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brasiliansk cruzeiro novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brasiliansk cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brasiliansk cruzeiro (1990-1993)",
         }
         BRL{
@@ -453,11 +453,11 @@ da{
             "Brasiliansk real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brasiliansk cruzado novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brasiliansk cruzeiro",
         }
         BSD{
@@ -737,7 +737,7 @@ da{
             "Ny israelsk shekel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indisk rupee",
         }
         IQD{
@@ -785,7 +785,7 @@ da{
             "Comorisk franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Nordkoreansk won",
         }
         KRW{
@@ -913,11 +913,11 @@ da{
             "Mauritisk rupee",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldivisk rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawisk kwacha",
         }
         MXN{
@@ -1053,7 +1053,7 @@ da{
             "Russisk rubel (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rwandisk franc",
         }
         SAR{
@@ -1229,7 +1229,7 @@ da{
             "Usbekisk sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuelansk bolivar",
         }
         VEF{
@@ -2632,7 +2632,7 @@ da{
         POSIX{"computer"}
         REVISED{"revideret retskrivning"}
     }
-    Version{"1.122"}
+    Version{"1.124"}
     calendar{
         buddhist{
             DateTimePatterns{

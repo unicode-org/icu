@@ -436,15 +436,15 @@ az{
             "Boliviya mvdolı",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Braziliya kruzeyro novası",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Braziliya kruzadosu",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Braziliya kruzeyrosu (1990-1993)",
         }
         BRL{
@@ -452,11 +452,11 @@ az{
             "Braziliya realı",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Braziliya kruzado novası",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Braziliya kruzeyrosu",
         }
         BSD{
@@ -724,7 +724,7 @@ az{
             "İzrail yeni şekeli",
         }
         INR{
-            "₨",
+            "Rs",
             "Hindistan rupisi",
         }
         IQD{
@@ -772,7 +772,7 @@ az{
             "Komoro frankı",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Şimal koreya vonu",
         }
         KRW{
@@ -896,11 +896,11 @@ az{
             "Mavritis rupiyi",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldiv Adaları rufiyi",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malavi kvaçası",
         }
         MXN{
@@ -1032,7 +1032,7 @@ az{
             "Rusiya rublu (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rvanda frankı",
         }
         SAR{
@@ -1180,7 +1180,7 @@ az{
             "özbəkistan sumu",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "venesuela bolivarı",
         }
         VEF{
@@ -2689,7 +2689,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"1.75"}
+    Version{"1.77"}
     calendar{
         gregorian{
             DateTimePatterns{

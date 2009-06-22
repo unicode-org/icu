@@ -32,7 +32,7 @@ cy{
             "Punt Sterling Prydain",
         }
         INR{
-            "₨",
+            "Rs",
             "Rwpî India",
         }
         JPY{
@@ -149,7 +149,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.63"}
+    Version{"1.66"}
     calendar{
         gregorian{
             AmPmMarkers{

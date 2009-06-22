@@ -974,7 +974,7 @@ te{
         1996{"1996 ఙర్మన వర్ణక్రమం"}
         REVISED{"సవరించబడిన వర్ణక్రమం"}
     }
-    Version{"1.79"}
+    Version{"1.81"}
     calendar{
         gregorian{
             AmPmMarkers{

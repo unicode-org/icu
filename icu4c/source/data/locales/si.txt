@@ -46,7 +46,7 @@ si{
             gregorian{"දිනදසුන"}
         }
     }
-    Version{"1.6"}
+    Version{"1.7"}
     calendar{
         gregorian{
             AmPmMarkers{

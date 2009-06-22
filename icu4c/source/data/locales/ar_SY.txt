@@ -16,7 +16,7 @@ ar_SY{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.49"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

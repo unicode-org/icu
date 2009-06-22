@@ -10,10 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gsw.xml
  */
 gsw{
-    AuxExemplarCharacters{
-        "[á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü ū ÿ"
-        "]"
-    }
+    AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ß ú ù ŭ û ū ÿ]"}
     Countries{
         001{"Wält"}
         002{"Afrika"}
@@ -441,15 +438,15 @@ gsw{
             "Bolivianische Mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brasilianische Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brasilianische Cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brasilianische Cruzeiro (1990-1993)",
         }
         BRL{
@@ -457,11 +454,11 @@ gsw{
             "Brasilianische Real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brasilianische Cruzado Novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brasilianische Cruzeiro",
         }
         BSD{
@@ -741,7 +738,7 @@ gsw{
             "Schekel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indischi Rupie",
         }
         IQD{
@@ -757,7 +754,7 @@ gsw{
             "Iisländischi Chroone",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italiänischi Lira",
         }
         JMD{
@@ -789,7 +786,7 @@ gsw{
             "Komore-Franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Nordkoreanische Won",
         }
         KRW{
@@ -917,11 +914,11 @@ gsw{
             "Maurizius-Rupie",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawi-Kwacha",
         }
         MXN{
@@ -1061,7 +1058,7 @@ gsw{
             "Russische Rubel (alt)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruanda-Franc",
         }
         SAR{
@@ -1233,7 +1230,7 @@ gsw{
             "Usbeekischtan-Sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolivar",
         }
         VEF{
@@ -2869,7 +2866,7 @@ gsw{
         SOLBA{"Solbica-Mundart"}
         TARASK{"Taraskievica-Rächtschriibig"}
     }
-    Version{"1.15"}
+    Version{"1.19"}
     calendar{
         buddhist{
             AmPmMarkers{

@@ -13,14 +13,18 @@ th{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "0: \u0E17\u0E35\u0E48\u200B=#,##0=;",
             "-x: \u0E17\u0E35\u0E48\u2212>#,##0>;",
+            "0: \u0E17\u0E35\u0E48\u200B=#,##0=;",
         }
         SpelloutRules{
-            "%%alt-ones:",
-            "1: \u0E40\u0E2D\u0E47\u0E14;",
-            "2: =%spellout-cardinal=;",
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: \u0E25\u0E1A\u200B>>;",
+            "x.x: <<\u200B\u0E08\u0E38\u0E14\u200B>>>;",
             "0: \u0E28\u0E39\u0E19\u0E22\u0E4C;",
             "1: \u0E2B\u0E19\u0E36\u0E48\u0E07;",
             "2: \u0E2A\u0E2D\u0E07;",
@@ -40,17 +44,13 @@ th{
             "100000: <<\u200B\u0E41\u0E2A\u0E19[\u200B>>];",
             "1000000: <<\u200B\u0E25\u0E49\u0E32\u0E19[\u200B>>];",
             "1000000000000000000: =#,##0=;",
-            "-x: \u0E25\u0E1A\u200B>>;",
-            "x.x: <<\u200B\u0E08\u0E38\u0E14\u200B>>>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
+            "%%alt-ones:",
+            "1: \u0E40\u0E2D\u0E47\u0E14;",
+            "2: =%spellout-cardinal=;",
             "%spellout-ordinal:",
-            "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
             "x.x: =#,##0.#=;",
+            "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
         }
     }
-    Version{"1.4"}
+    Version{"1.5"}
 }

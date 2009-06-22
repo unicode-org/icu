@@ -299,7 +299,7 @@ or{
     }
     Currencies{
         INR{
-            "₨",
+            "Rs",
             "ଟଙକା",
         }
     }
@@ -970,7 +970,7 @@ or{
         Zyyy{"ସାଧାରଣ"}
         Zzzz{"ଅଞ୍ଜାତ କିମ୍ବା ଅବୈଧ ସ୍କ୍ରୀପ୍ଟ"}
     }
-    Version{"1.56"}
+    Version{"1.59"}
     calendar{
         gregorian{
             AmPmMarkers{

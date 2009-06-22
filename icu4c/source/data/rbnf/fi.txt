@@ -12,7 +12,17 @@
 fi{
     RBNFRules{
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "-x: miinus >>;",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "1100/100: <<\u00ADsataa[\u00AD>>];",
+            "10000: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: miinus >>;",
+            "x.x: << pilkku >>;",
             "0: nolla;",
             "1: yksi;",
             "2: kaksi;",
@@ -39,17 +49,7 @@ fi{
             "1000000000000000: << biljardi[ >>];",
             "2000000000000000: << biljardin[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: miinus >>;",
-            "x.x: << pilkku >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "1100/100: <<\u00ADsataa[\u00AD>>];",
-            "10000: =%spellout-numbering=;",
-            "-x: miinus >>;",
-            "x.x: =#,###0.#=;",
         }
     }
-    Version{"1.4"}
+    Version{"1.5"}
 }

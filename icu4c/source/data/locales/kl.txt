@@ -46,7 +46,7 @@ kl{
         "#,##0%",
         "#E0",
     }
-    Version{"1.52"}
+    Version{"1.54"}
     calendar{
         gregorian{
             dayNames{

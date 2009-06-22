@@ -438,15 +438,15 @@ hu{
             "Bolíviai mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brazi cruzeiro novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brazi cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brazil cruzeiro (1990-1993)",
         }
         BRL{
@@ -454,11 +454,11 @@ hu{
             "Brazil real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brazil cruzado novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brazil cruzeiro",
         }
         BSD{
@@ -738,7 +738,7 @@ hu{
             "Izraeli új sékel",
         }
         INR{
-            "₨",
+            "Rs",
             "indiai rúpia",
         }
         IQD{
@@ -786,7 +786,7 @@ hu{
             "Comorei frank",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Észak-koreai won",
         }
         KRW{
@@ -914,11 +914,11 @@ hu{
             "Mauritiusi rúpia",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldív-szigeteki rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawi kwacha",
         }
         MXN{
@@ -1058,7 +1058,7 @@ hu{
             "Orosz rubel (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruandai frank",
         }
         SAR{
@@ -1234,7 +1234,7 @@ hu{
             "Üzbegisztáni szum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuelai bolívar",
         }
         VEF{
@@ -2306,7 +2306,7 @@ hu{
         TARASK{"Taraskijevica helyesírás"}
         VALENCIA{"Valencia"}
     }
-    Version{"1.120"}
+    Version{"1.122"}
     calendar{
         buddhist{
             eras{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/da.xml
  */
 da{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         standard{
             Sequence{
@@ -22,7 +22,7 @@ da{
                 "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å<<<"
                 "aa<<<Aa<<<AA"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

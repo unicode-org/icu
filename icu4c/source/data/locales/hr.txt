@@ -438,15 +438,15 @@ hr{
             "bolivijski mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "brazilski novi cruzeiro (1967.-1986.)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "brazilski cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "brazilski cruzeiro (1990.-1993.)",
         }
         BRL{
@@ -454,11 +454,11 @@ hr{
             "brazilski real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "brazilski novi cruzado",
         }
         BRR{
-            "CR$",
+            "BRR",
             "brazilski cruzeiro",
         }
         BSD{
@@ -742,7 +742,7 @@ hr{
             "novi izraelski šekel",
         }
         INR{
-            "₨",
+            "Rs",
             "indijska rupija",
         }
         IQD{
@@ -794,7 +794,7 @@ hr{
             "komorski franak",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "sjevernokorejski won",
         }
         KRW{
@@ -922,11 +922,11 @@ hr{
             "mauricijska rupija",
         }
         MVR{
-            "Rf",
+            "MVR",
             "maldivijska rufija",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawi Kwacha",
         }
         MXN{
@@ -1066,7 +1066,7 @@ hr{
             "ruska rublja (1991.-1998.)",
         }
         RWF{
-            "RF",
+            "RWF",
             "ruandski franak",
         }
         SAR{
@@ -1242,7 +1242,7 @@ hr{
             "uzbekistanski som",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "venezuelanski bolivar",
         }
         VEF{
@@ -3721,7 +3721,7 @@ hr{
         TARASK{"taraskievica pravopis"}
         VALENCIA{"valencijski"}
     }
-    Version{"1.108"}
+    Version{"1.111"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -3730,7 +3730,7 @@ hr{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d. MMMM y. G",
-                "d. MMMM y. BE",
+                "d. MMMM y. G",
                 "d.MMM.y. G",
                 "d.M.yyyy.",
                 "{1} {0}",

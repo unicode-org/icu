@@ -440,15 +440,15 @@ es{
             "MVDOL boliviano",
         }
         BRB{
-            "NCr",
+            "BRB",
             "nuevo cruceiro brasileño (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "cruzado brasileño",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "cruceiro brasileño (1990-1993)",
         }
         BRL{
@@ -456,11 +456,11 @@ es{
             "real brasileño",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "nuevo cruzado brasileño",
         }
         BRR{
-            "CR$",
+            "BRR",
             "cruceiro brasileño",
         }
         BSD{
@@ -736,7 +736,7 @@ es{
             "nuevo sheqel israelí",
         }
         INR{
-            "₨",
+            "Rs",
             "rupia india",
         }
         IQD{
@@ -784,7 +784,7 @@ es{
             "franco comorense",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "won norcoreano",
         }
         KRW{
@@ -912,11 +912,11 @@ es{
             "rupia mauriciana",
         }
         MVR{
-            "Rf",
+            "MVR",
             "rufiyaa de Maldivas",
         }
         MWK{
-            "MK",
+            "MWK",
             "kwacha de Malawi",
         }
         MXN{
@@ -1056,7 +1056,7 @@ es{
             "rublo ruso (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "franco ruandés",
         }
         SAR{
@@ -1232,7 +1232,7 @@ es{
             "sum uzbeko",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "bolívar venezolano",
         }
         VEF{
@@ -2779,7 +2779,7 @@ es{
         REVISED{"Ortografía revisada"}
         VALENCIA{"Valenciano"}
     }
-    Version{"1.126"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{

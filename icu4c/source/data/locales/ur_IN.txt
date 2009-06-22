@@ -16,7 +16,7 @@ ur_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.15"}
+    Version{"1.16"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

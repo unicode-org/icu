@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/sk.xml
  */
 sk{
-    Version{"1.27"}
+    Version{"1.28"}
     collations{
         standard{
             Sequence{
@@ -24,7 +24,7 @@ sk{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž<ż<<<Ż"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

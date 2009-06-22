@@ -35,7 +35,7 @@ es_CL{
             phonebook{"orden de directorio telefónico"}
         }
     }
-    Version{"1.62"}
+    Version{"1.64"}
     calendar{
         gregorian{
             DateTimePatterns{

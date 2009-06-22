@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 so_SO{
-    Version{"1.47"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

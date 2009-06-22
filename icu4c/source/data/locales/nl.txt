@@ -438,15 +438,15 @@ nl{
             "Boliviaanse mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Braziliaanse cruzeiro novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Braziliaanse cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Braziliaanse cruzeiro (1990-1993)",
         }
         BRL{
@@ -454,11 +454,11 @@ nl{
             "Braziliaanse real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Braziliaanse cruzado novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Braziliaanse cruzeiro",
         }
         BSD{
@@ -738,7 +738,7 @@ nl{
             "Israëlische nieuwe shekel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indiase rupee",
         }
         IQD{
@@ -786,7 +786,7 @@ nl{
             "Comorese franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Noord-Koreaanse won",
         }
         KRW{
@@ -914,11 +914,11 @@ nl{
             "Mauritiaanse rupee",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldivische rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawische kwacha",
         }
         MXN{
@@ -1058,7 +1058,7 @@ nl{
             "Russische roebel (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rwandese franc",
         }
         SAR{
@@ -1234,7 +1234,7 @@ nl{
             "Oezbekistaanse sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezolaanse bolivar",
         }
         VEF{
@@ -2131,7 +2131,7 @@ nl{
         TARASK{"Taraskievica-spelling"}
         VALENCIA{"Valenciaans"}
     }
-    Version{"1.122"}
+    Version{"1.124"}
     calendar{
         gregorian{
             AmPmMarkers{

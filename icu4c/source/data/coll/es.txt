@@ -10,15 +10,15 @@
  *  ICU <specials> source: <path>/xml/collation/es.xml
  */
 es{
-    Version{"1.25"}
+    Version{"1.26"}
     collations{
         standard{
             Sequence{"&N<ñ<<<Ñ&ae<<æ<<<Æ"}
-            Version{"1.6"}
+            Version{"1.7"}
         }
         traditional{
             Sequence{"&N<ñ<<<Ñ&C<ch<<<Ch<<<CH&l<ll<<<Ll<<<LL"}
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }

@@ -10,6 +10,6 @@
  *  ICU <specials> source: <path>/xml/collation/fa_AF.xml
  */
 fa_AF{
-    Version{"1.18"}
+    Version{"1.19"}
     collations:alias{"ps/collations"}
 }

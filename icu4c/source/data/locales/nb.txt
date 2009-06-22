@@ -461,11 +461,11 @@ nb{
             "brasilianske realer",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "brasilianske cruzado novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "brasilianske cruzeiro",
         }
         BRZ{
@@ -813,7 +813,7 @@ nb{
             "komoriske franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "nordkoreanske won",
         }
         KRW{
@@ -941,11 +941,11 @@ nb{
             "mauritiske rupier",
         }
         MVR{
-            "Rf",
+            "MVR",
             "maldiviske rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "malawiske kwacha",
         }
         MXN{
@@ -1261,7 +1261,7 @@ nb{
             "usbekiske sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "venezuelanske bolivar",
         }
         VEF{
@@ -2893,7 +2893,7 @@ nb{
         SOLBA{"stolvizza- og solbicadialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.118"}
+    Version{"1.120"}
     calendar{
         buddhist{
             DateTimePatterns{

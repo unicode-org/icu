@@ -147,7 +147,7 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"1.64"}
+    Version{"1.68"}
     calendar{
         gregorian{
             AmPmMarkers{

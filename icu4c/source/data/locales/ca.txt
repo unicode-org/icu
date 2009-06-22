@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    AuxExemplarCharacters{"[á ă â å ä ã ā æ-è ĕ ê ë ē ì ĭ î ï ī ñ º ò ŏ ô ö ø ō œ ß ù ŭ û ū ÿ]"}
+    AuxExemplarCharacters{"[á ă â å ä ã ā æ ĕ ê ë ē ì ĭ î ī ñ º ŏ ô ö ø ō œ ß ù ŭ û ū ÿ]"}
     Countries{
         001{"Món"}
         002{"Àfrica"}
@@ -437,15 +437,15 @@ ca{
             "MVDOL bolivià",
         }
         BRB{
-            "NCr",
+            "BRB",
             "cruzeiro novo brasiler (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "cruzado brasiler",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "cruzeiro brasiler (1990-1993)",
         }
         BRL{
@@ -453,11 +453,11 @@ ca{
             "real brasiler",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "cruzado novo brasiler",
         }
         BRR{
-            "CR$",
+            "BRR",
             "cruzeiro brasiler",
         }
         BSD{
@@ -749,7 +749,7 @@ ca{
             "nou xéquel israelià",
         }
         INR{
-            "₨",
+            "Rs",
             "rupia índia",
         }
         IQD{
@@ -801,7 +801,7 @@ ca{
             "franc de les Comores",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "won nord-coreà",
         }
         KRW{
@@ -929,11 +929,11 @@ ca{
             "rupia de Maurici",
         }
         MVR{
-            "Rf",
+            "MVR",
             "rupia de les Maldives",
         }
         MWK{
-            "MK",
+            "MWK",
             "kwacha malawià",
         }
         MXN{
@@ -1073,7 +1073,7 @@ ca{
             "ruble rus (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "franc rwandès",
         }
         SAR{
@@ -1249,7 +1249,7 @@ ca{
             "som uzbek",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "bolívar veneçolà",
         }
         VEF{
@@ -3199,7 +3199,7 @@ ca{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valencià"}
     }
-    Version{"1.106"}
+    Version{"1.109"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/hr.xml
  */
 hr{
-    Version{"1.25"}
+    Version{"1.26"}
     collations{
         standard{
             Sequence{
@@ -21,7 +21,7 @@ hr{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"1.6"}
+            Version{"1.7"}
         }
     }
 }
