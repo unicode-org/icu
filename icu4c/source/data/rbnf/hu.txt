@@ -12,7 +12,17 @@
 hu{
     RBNFRules{
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "-x: minusz >>;",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "1100/100: <<\u00ADsz\u00E1z[\u00AD>>];",
+            "10000: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: minusz >>;",
+            "x.x: << vessz\u0151 >>;",
             "0: nulla;",
             "1: egy;",
             "2: kett\u0151;",
@@ -41,17 +51,7 @@ hu{
             "1000000000000: << billi\u00F3[ >>];",
             "1000000000000000: << billi\u00E1rd[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: minusz >>;",
-            "x.x: << vessz\u0151 >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "1100/100: <<\u00ADsz\u00E1z[\u00AD>>];",
-            "10000: =%spellout-numbering=;",
-            "-x: minusz >>;",
-            "x.x: =#,###0.#=;",
         }
     }
-    Version{"1.4"}
+    Version{"1.5"}
 }

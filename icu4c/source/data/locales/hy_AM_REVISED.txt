@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 hy_AM_REVISED{
-    Version{"1.47"}
+    Version{"1.48"}
     calendar{
         gregorian{
             AmPmMarkers{

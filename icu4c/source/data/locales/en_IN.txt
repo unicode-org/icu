@@ -13,7 +13,7 @@ en_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

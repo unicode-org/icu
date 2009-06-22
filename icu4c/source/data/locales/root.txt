@@ -16,10 +16,6 @@ root{
             "Af",
             "AFN",
         }
-        ALL{
-            "ALL",
-            "ALL",
-        }
         ANG{
             "NAf.",
             "ANG",
@@ -96,33 +92,9 @@ root{
             "$b.",
             "BOP",
         }
-        BRB{
-            "NCr",
-            "BRB",
-        }
-        BRC{
-            "Cz$",
-            "BRC",
-        }
-        BRE{
-            "Cr$",
-            "BRE",
-        }
         BRL{
             "R$",
             "BRL",
-        }
-        BRN{
-            "NCz$",
-            "BRN",
-        }
-        BRR{
-            "CR$",
-            "BRR",
-        }
-        BRZ{
-            "₢",
-            "BRZ",
         }
         BSD{
             "BS$",
@@ -325,7 +297,7 @@ root{
             "ILS",
         }
         INR{
-            "₨",
+            "Rs",
             "INR",
         }
         ISK{
@@ -355,10 +327,6 @@ root{
         KMF{
             "CF",
             "KMF",
-        }
-        KPW{
-            "KP₩",
-            "KPW",
         }
         KRW{
             "₩",
@@ -431,14 +399,6 @@ root{
         MUR{
             "MURs",
             "MUR",
-        }
-        MVR{
-            "Rf",
-            "MVR",
-        }
-        MWK{
-            "MK",
-            "MWK",
         }
         MXP{
             "MX$",
@@ -535,10 +495,6 @@ root{
         RSD{
             "din.",
             "RSD",
-        }
-        RWF{
-            "RF",
-            "RWF",
         }
         SAR{
             "SR",
@@ -656,10 +612,6 @@ root{
             "$U",
             "UYU",
         }
-        VEB{
-            "Bs.",
-            "VEB",
-        }
         VEF{
             "Bs.F.",
             "VEF",
@@ -749,7 +701,7 @@ root{
         297,
         210,
     }
-    Version{"1.186"}
+    Version{"1.192"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2393,6 +2345,7 @@ root{
             ss{"BAKT"}
         }
         "meta:Bangladesh"{
+            sd{"BDST"}
             ss{"BDT"}
         }
         "meta:Bering"{
@@ -2820,6 +2773,10 @@ root{
         }
         "meta:Tahiti"{
             ss{"TAHT"}
+        }
+        "meta:Taipei"{
+            sd{"CDT (TW)"}
+            ss{"CST (TW)"}
         }
         "meta:Tajikistan"{
             ss{"TJT"}

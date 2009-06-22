@@ -150,7 +150,7 @@ so{
         Zxxx{"Aan la qorin"}
         Zzzz{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"1.66"}
+    Version{"1.68"}
     calendar{
         gregorian{
             AmPmMarkers{

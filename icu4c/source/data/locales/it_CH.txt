@@ -27,7 +27,7 @@ it_CH{
         "#,##0%",
         "#E0",
     }
-    Version{"1.59"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{

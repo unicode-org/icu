@@ -283,7 +283,7 @@ am{
     LocaleScript{
         "Ethi",
     }
-    Version{"1.86"}
+    Version{"1.88"}
     calendar{
         gregorian{
             DateTimePatterns{

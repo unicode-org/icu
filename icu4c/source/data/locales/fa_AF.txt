@@ -192,13 +192,13 @@ fa_AF{
     NumberElements{
         "٫",
         "٬",
-        "؛",
+        ";",
         "٪",
         "۰",
         "#",
         "−",
-        "×۱۰^",
-        "؉",
+        "E",
+        "‰",
         "∞",
         "NaN",
         "+",
@@ -212,7 +212,7 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"1.63"}
+    Version{"1.66"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

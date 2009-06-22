@@ -233,7 +233,7 @@ eu{
             "GBP",
         }
         INR{
-            "₨",
+            "Rs",
             "INR",
         }
         JPY{
@@ -573,7 +573,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"1.76"}
+    Version{"1.78"}
     calendar{
         buddhist{
             eras{

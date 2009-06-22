@@ -432,15 +432,15 @@ cs{
             "Mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Cruzeiro (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Cruzeiro (1990-1993)",
         }
         BRL{
@@ -448,11 +448,11 @@ cs{
             "Real brazilský",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Cruzado nové",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Cruzeiro real",
         }
         BSD{
@@ -704,7 +704,7 @@ cs{
             "Šekel nový izraelský",
         }
         INR{
-            "₨",
+            "Rs",
             "Rupie indická",
         }
         IQD{
@@ -752,7 +752,7 @@ cs{
             "Frank komorský",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Won severokorejský",
         }
         KRW{
@@ -880,11 +880,11 @@ cs{
             "Rupie mauricijská",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Kwacha malawská",
         }
         MXN{
@@ -1016,7 +1016,7 @@ cs{
             "Rubl ruský (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Frank rwandský",
         }
         SAR{
@@ -1180,7 +1180,7 @@ cs{
             "Sum uzbecký",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolivar",
         }
         VND{
@@ -1606,7 +1606,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.130"}
+    Version{"1.132"}
     calendar{
         gregorian{
             AmPmMarkers{

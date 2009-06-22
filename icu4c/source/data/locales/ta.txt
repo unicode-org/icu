@@ -942,7 +942,7 @@ ta{
         Zyyy{"சாதரண"}
         Zzzz{"தெரியாத அல்லது செல்லாத ஸ்கிரிப்ட்"}
     }
-    Version{"1.81"}
+    Version{"1.83"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -10,10 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    AuxExemplarCharacters{
-        "[á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü ū ÿ"
-        "]"
-    }
+    AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
     Countries{
         001{"Welt"}
         002{"Afrika"}
@@ -441,15 +438,15 @@ de{
             "Mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brasilianischer Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brasilianischer Cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brasilianischer Cruzeiro (1990-1993)",
         }
         BRL{
@@ -457,11 +454,11 @@ de{
             "Real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brasilianischer Cruzado Novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brasilianischer Cruzeiro",
         }
         BSD{
@@ -741,7 +738,7 @@ de{
             "Schekel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indische Rupie",
         }
         IQD{
@@ -757,7 +754,7 @@ de{
             "Isländische Krone",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italienische Lira",
         }
         JMD{
@@ -789,7 +786,7 @@ de{
             "Komoren Franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Nordkoreanischer Won",
         }
         KRW{
@@ -917,11 +914,11 @@ de{
             "Mauritius-Rupie",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawi Kwacha",
         }
         MXN{
@@ -1061,7 +1058,7 @@ de{
             "Russischer Rubel (alt)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruanda-Franc",
         }
         SAR{
@@ -1237,7 +1234,7 @@ de{
             "Usbekistan Sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolivar",
         }
         VEF{
@@ -2907,7 +2904,7 @@ de{
         TARASK{"Taraskievica-Orthographie"}
         VALENCIA{"Valencianisch"}
     }
-    Version{"1.133"}
+    Version{"1.137"}
     calendar{
         buddhist{
             AmPmMarkers{

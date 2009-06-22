@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 as_IN{
-    Version{"1.38"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

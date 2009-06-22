@@ -327,7 +327,7 @@ ne{
             "बेलायती पाउण्ड स्टर्लिङ",
         }
         INR{
-            "₨",
+            "Rs",
             "भारती रूपिँया",
         }
         JPY{
@@ -549,7 +549,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"1.33"}
+    Version{"1.35"}
     calendar{
         buddhist{
             AmPmMarkers{

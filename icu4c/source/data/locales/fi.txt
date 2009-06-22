@@ -3242,7 +3242,7 @@ fi{
         VALENCIA{"katalaanin valencian murre"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"1.135"}
+    Version{"1.137"}
     calendar{
         gregorian{
             AmPmMarkers{

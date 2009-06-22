@@ -13,11 +13,21 @@ am{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "0: =#,##0=\u129B;",
             "-x: \u2212>>;",
+            "0: =#,##0=\u129B;",
         }
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "-x: --- >>;",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "1100/100: << \u1218\u1276[ >>];",
+            "10000: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: --- >>;",
+            "x.x: << ... >>;",
             "0: \u1263\u12F6;",
             "1: \u12A0\u1295\u12F5;",
             "2: \u1201\u1208\u1275;",
@@ -48,21 +58,11 @@ am{
             "1000000000000: << bilion[ >>];",
             "1000000000000000: << biliard[ >>];",
             "1000000000000000000: =#,##0=;",
-            "-x: --- >>;",
-            "x.x: << ... >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "1100/100: << \u1218\u1276[ >>];",
-            "10000: =%spellout-numbering=;",
-            "-x: --- >>;",
-            "x.x: =#,###0.#=;",
             "%spellout-ordinal:",
-            "0: =%spellout-numbering=\u129B;",
             "-x: --- >>;",
             "x.x: =#,##0.#=;",
+            "0: =%spellout-numbering=\u129B;",
         }
     }
-    Version{"1.1"}
+    Version{"1.2"}
 }

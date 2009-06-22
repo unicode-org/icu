@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    AuxExemplarCharacters{"[ă å ä ā æ-è ĕ ë ē ì ĭ î ï ī ñ ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
+    AuxExemplarCharacters{"[ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
     Countries{
         001{"Mundo"}
         002{"África"}
@@ -437,15 +437,15 @@ pt{
             "Mvdol boliviano",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Cruzeiro novo brasileiro (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Cruzado brasileiro",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Cruzeiro brasileiro (1990-1993)",
         }
         BRL{
@@ -453,11 +453,11 @@ pt{
             "Real brasileiro",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Cruzado novo brasileiro",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Cruzeiro brasileiro",
         }
         BSD{
@@ -741,7 +741,7 @@ pt{
             "Sheqel Novo israelita",
         }
         INR{
-            "₨",
+            "Rs",
             "Rúpia indiana",
         }
         IQD{
@@ -793,7 +793,7 @@ pt{
             "Franco de Comores",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Won norte-coreano",
         }
         KRW{
@@ -921,11 +921,11 @@ pt{
             "Rupia de Maurício",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Rupias das Ilhas Maldivas",
         }
         MWK{
-            "MK",
+            "MWK",
             "Cuacha do Maláui",
         }
         MXN{
@@ -1065,7 +1065,7 @@ pt{
             "Rublo russo (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Franco ruandês",
         }
         SAR{
@@ -1241,7 +1241,7 @@ pt{
             "Sum do Usbequistão",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolívar venezuelano",
         }
         VEF{
@@ -2136,7 +2136,7 @@ pt{
         }
         RON{
             one{"Leu da Romênia"}
-            other{"Lei da Romênia"}
+            other{"Leus da Romênia"}
         }
         RSD{
             one{"Dinar sérvio"}
@@ -3191,7 +3191,7 @@ pt{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valenciano"}
     }
-    Version{"1.122"}
+    Version{"1.126"}
     calendar{
         buddhist{
             DateTimePatterns{

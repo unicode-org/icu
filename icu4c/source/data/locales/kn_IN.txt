@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 kn_IN{
-    Version{"1.57"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

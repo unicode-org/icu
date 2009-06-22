@@ -27,7 +27,7 @@ ti{
         "#,##0%",
         "#E0",
     }
-    Version{"1.68"}
+    Version{"1.70"}
     calendar{
         gregorian{
             AmPmMarkers{

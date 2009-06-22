@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    AuxExemplarCharacters{"[伏 侶 兌 兹 别 勳 卑 占 叶 堤 墎 奥 孜 峇 巽 彝 彞 敍 楔 渾 燦 狄 琳 瑚 甫 礁 简 芒 苗 茨 蚩 蜀 隴]"}
+    AuxExemplarCharacters{"[伏 侶 兌 兹 别 勳 卑 占 叶 堤 墎 奥 孜 峇 巽 彝 楔 渾 燦 狄 琳 瑚 甫 礁 芒 苗 茨 蚩 蜀 隴]"}
     Countries{
         014{"東非"}
         018{"非洲南部"}
@@ -378,15 +378,15 @@ zh_Hant{
             "玻利維亞幕多",
         }
         BRB{
-            "NCr",
+            "BRB",
             "巴西克魯薩多農瓦（1967-1986）",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "巴西克魯賽羅 (1986-1989)",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "巴西克魯賽羅 (1990-1993)",
         }
         BRL{
@@ -394,11 +394,11 @@ zh_Hant{
             "巴西里拉",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "巴西克如爾達農瓦",
         }
         BRR{
-            "CR$",
+            "BRR",
             "巴西克魯賽羅",
         }
         BSD{
@@ -642,7 +642,7 @@ zh_Hant{
             "以色列新謝克爾",
         }
         INR{
-            "₨",
+            "Rs",
             "印度盧比",
         }
         IQD{
@@ -690,7 +690,7 @@ zh_Hant{
             "科摩羅法郎",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "北韓圜",
         }
         KRW{
@@ -810,11 +810,11 @@ zh_Hant{
             "模里西斯盧布",
         }
         MVR{
-            "Rf",
+            "MVR",
             "馬爾地夫海島盧非亞",
         }
         MWK{
-            "MK",
+            "MWK",
             "馬拉維克瓦查",
         }
         MXN{
@@ -934,7 +934,7 @@ zh_Hant{
             "俄羅斯盧布 (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "盧安達法郎",
         }
         SAR{
@@ -1098,7 +1098,7 @@ zh_Hant{
             "烏茲別克索姆",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "委內瑞拉玻利瓦",
         }
         VEF{
@@ -1842,7 +1842,7 @@ zh_Hant{
         REVISED{"已修訂的拼字學"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.132"}
+    Version{"1.141"}
     calendar{
         chinese{
             AmPmMarkers{
@@ -1906,26 +1906,6 @@ zh_Hant{
                         "週五",
                         "週六",
                     }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
                 }
             }
             eras{
@@ -1937,17 +1917,10 @@ zh_Hant{
             fields{
                 day{
                     relative{
-                        "-1"{"昨天"}
-                        "-2"{"前天"}
                         "-3"{"大前天"}
-                        "0"{"今天"}
-                        "1"{"明天"}
                         "2"{"後天"}
                         "3"{"大後天"}
                     }
-                }
-                dayperiod{
-                    dn{"上午/下午"}
                 }
                 era{
                     dn{"年代"}
@@ -2043,20 +2016,6 @@ zh_Hant{
                         "10",
                         "11",
                         "12",
-                    }
-                    wide{
-                        "一月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
                     }
                 }
             }
@@ -2801,6 +2760,9 @@ zh_Hant{
             sd{"ACST（艾克）"}
             ss{"ACT（艾克）"}
         }
+        "meta:Afghanistan"{
+            ls{"阿富汗時間"}
+        }
         "meta:Africa_Central"{
             ls{"中非時間"}
         }
@@ -2808,6 +2770,7 @@ zh_Hant{
             ls{"東非時間"}
         }
         "meta:Africa_Southern"{
+            lg{"南非時間"}
             ls{"南非標準時間"}
         }
         "meta:Africa_Western"{
@@ -2822,8 +2785,6 @@ zh_Hant{
             ld{"阿拉斯加夏令時間"}
             lg{"阿拉斯加時間"}
             ls{"阿拉斯加標準時間"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"阿拉斯加-夏威夷夏令時間"}
@@ -2858,6 +2819,10 @@ zh_Hant{
             lg{"太平洋時間"}
             ls{"太平洋標準時間"}
         }
+        "meta:Anadyr"{
+            ld{"阿那底河夏令時間"}
+            ls{"阿那底河標準時間"}
+        }
         "meta:Aqtau"{
             ld{"阿克陶夏令時間"}
             ls{"阿克陶時間"}
@@ -2874,16 +2839,16 @@ zh_Hant{
             ld{"阿拉伯夏令時間"}
             lg{"阿拉伯時間"}
             ls{"阿拉伯標準時間"}
-            sd{"ADT (阿拉伯)"}
+            sd{"ADT ( 阿拉伯 )"}
             sg{"AT（阿拉伯）"}
             ss{"AST（阿拉伯）"}
         }
         "meta:Argentina"{
+            ld{"阿根廷夏令時間"}
             ls{"阿根廷時間"}
         }
         "meta:Argentina_Western"{
             ld{"阿根廷西部夏令時間"}
-            lg{"阿根廷西部時間"}
             ls{"阿根廷西部時間"}
         }
         "meta:Armenia"{
@@ -2893,6 +2858,7 @@ zh_Hant{
             ss{"AMT（亞美尼亞）"}
         }
         "meta:Ashkhabad"{
+            ld{"阿什哈巴德夏令時間"}
             ls{"阿什哈巴德時間"}
         }
         "meta:Atlantic"{
@@ -2904,6 +2870,11 @@ zh_Hant{
             ld{"澳洲中部夏令時間"}
             lg{"澳洲中部時間"}
             ls{"澳洲中部標準時間"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"澳洲中西部夏令時間"}
+            lg{"澳洲中西部時間"}
+            ls{"澳洲中西部標準時間"}
         }
         "meta:Australia_Eastern"{
             ld{"澳洲東部夏令時間"}
@@ -2919,37 +2890,53 @@ zh_Hant{
             ld{"亞塞拜然夏令時間"}
             ls{"亞塞拜然時間"}
         }
+        "meta:Azores"{
+            ld{"亞速爾群島夏令時間"}
+            ls{"亞速爾群島時間"}
+        }
         "meta:Baku"{
             ld{"巴庫夏令時間"}
             ls{"巴庫時間"}
-            sd{"BAKST"}
-            ss{"BAKT"}
         }
         "meta:Bangladesh"{
-            ls{"孟加拉時間"}
-            ss{"BDT"}
+            ld{"孟加拉夏令時間"}
+            lg{"孟加拉時間"}
+            ls{"孟加拉標準時間"}
         }
         "meta:Bering"{
+            ld{"白令夏令時間"}
+            lg{"白令時間"}
+            ls{"白令標準時間"}
             sd{"BDT（白令）"}
             sg{"BT（白令）"}
             ss{"BST（白令）"}
         }
         "meta:Bhutan"{
             ls{"不丹時間"}
-            ss{"BTT"}
+        }
+        "meta:Bolivia"{
+            ls{"玻利維亞時間"}
         }
         "meta:Borneo"{
             ld{"婆羅洲夏令時間"}
             ls{"婆羅洲時間"}
         }
         "meta:Brasilia"{
-            lg{"巴西利亞時間"}
+            ld{"巴西利亞夏令時間"}
+            ls{"巴西利亞時間"}
+        }
+        "meta:Brunei"{
+            ls{"汶萊時間"}
+        }
+        "meta:Chamorro"{
+            ls{"關島-北馬里亞納群島時間"}
         }
         "meta:Changbai"{
             ls{"長白山時間"}
         }
         "meta:Chile"{
-            lg{"智利時間"}
+            ld{"智利夏令時間"}
+            ls{"智利時間"}
         }
         "meta:China"{
             ld{"中國夏令時間"}
@@ -2963,9 +2950,14 @@ zh_Hant{
             ld{"喬巴山夏令時間"}
             ls{"喬巴山時間"}
         }
+        "meta:Colombia"{
+            ld{"哥倫比亞夏令時間"}
+            ls{"哥倫比亞時間"}
+        }
         "meta:Cuba"{
-            sd{"CDT（古巴）"}
-            ss{"CST（古巴）"}
+            ld{"古巴夏令時間"}
+            lg{"古巴時間"}
+            ls{"古巴標準時間"}
         }
         "meta:Dacca"{
             ls{"達卡時間"}
@@ -2975,8 +2967,6 @@ zh_Hant{
             ls{"杜尚別時間"}
         }
         "meta:Dutch_Guiana"{
-            ld{"荷屬圭亞那夏令時間"}
-            lg{"荷屬圭亞那時間"}
             ls{"荷屬圭亞那時間"}
         }
         "meta:East_Timor"{
@@ -2986,10 +2976,19 @@ zh_Hant{
             ls{"厄瓜多時間"}
         }
         "meta:Europe_Central"{
+            ld{"中歐夏令時間"}
             ls{"中歐標準時間"}
         }
         "meta:Europe_Eastern"{
+            ld{"東歐夏令時間"}
             ls{"東歐標準時間"}
+        }
+        "meta:Europe_Western"{
+            ld{"西歐夏令時間"}
+            ls{"西歐時間"}
+        }
+        "meta:French_Guiana"{
+            ls{"法屬圭亞那時間"}
         }
         "meta:Frunze"{
             ld{"伏龍芝夏令時間"}
@@ -2998,21 +2997,65 @@ zh_Hant{
         "meta:GMT"{
             ls{"格林威治標準時間"}
         }
+        "meta:Galapagos"{
+            ls{"加拉帕戈群島時間"}
+        }
         "meta:Georgia"{
             ld{"喬治亞夏令時間"}
             ls{"喬治亞時間"}
         }
+        "meta:Greenland_Central"{
+            ld{"格陵蘭中部夏令時間"}
+            ls{"格陵蘭中部時間"}
+        }
         "meta:Greenland_Eastern"{
-            lg{"格陵蘭東部時間"}
+            ld{"格陵蘭東部夏令時間"}
+            ls{"格陵蘭東部時間"}
         }
         "meta:Greenland_Western"{
-            lg{"格陵蘭西部時間"}
+            ld{"格陵蘭西部夏令時間"}
+            ls{"格陵蘭西部時間"}
+        }
+        "meta:Guam"{
+            ls{"關島標準時間"}
+            ss{"GST (關島)"}
         }
         "meta:Gulf"{
-            sg{"GT"}
+            ls{"波斯灣海域標準時間"}
+        }
+        "meta:Guyana"{
+            ls{"蓋亞納時間"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ls{"夏威夷-阿留申標準時間"}
+        }
+        "meta:Hong_Kong"{
+            ld{"香港夏令時間"}
+            ls{"香港時間"}
+        }
+        "meta:Hovd"{
+            ld{"科布多夏令時間"}
+            ls{"科布多時間"}
         }
         "meta:India"{
             ls{"印度標準時間"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"印尼中部時間"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"印尼東部時間"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"印尼西部時間"}
+        }
+        "meta:Iran"{
+            ld{"伊朗夏令時間"}
+            ls{"伊朗標準時間"}
+        }
+        "meta:Irkutsk"{
+            ld{"伊爾庫次克夏令時間"}
+            ls{"伊爾庫次克時間"}
         }
         "meta:Israel"{
             ld{"以色列夏令時間"}
@@ -3022,6 +3065,7 @@ zh_Hant{
         }
         "meta:Japan"{
             ld{"日本夏令時間"}
+            lg{"日本時間"}
             ls{"日本標準時間"}
             sg{"JT"}
         }
@@ -3039,18 +3083,44 @@ zh_Hant{
             lg{"西哈薩克時間"}
             ls{"西哈薩克標準時間"}
         }
+        "meta:Kizilorda"{
+            ld{"吉力羅達夏令時間"}
+            ls{"吉力羅達時間"}
+        }
         "meta:Korea"{
             ld{"韓國夏令時間"}
             lg{"韓國時間"}
             ls{"韓國標準時間"}
             sg{"KT"}
         }
+        "meta:Kuybyshev"{
+            ld{"古比雪夫夏令時間"}
+            ls{"古比雪夫時間"}
+        }
+        "meta:Kwajalein"{
+            ls{"瓜加林環礁時間"}
+        }
         "meta:Kyrgystan"{
             ls{"吉爾吉斯時間"}
+        }
+        "meta:Lanka"{
+            ls{"蘭卡時間"}
+        }
+        "meta:Long_Shu"{
+            ls{"隴蜀時間"}
+        }
+        "meta:Lord_Howe"{
+            ld{"豪勳爵島夏令時間"}
+            lg{"豪勳爵島時間"}
+            ls{"豪勳爵島標準時間"}
         }
         "meta:Macau"{
             ld{"澳門夏令時間"}
             ls{"澳門時間"}
+        }
+        "meta:Magadan"{
+            ld{"馬加丹夏令時間"}
+            ls{"馬加丹時間"}
         }
         "meta:Malaya"{
             ls{"馬來亞時間"}
@@ -3058,23 +3128,81 @@ zh_Hant{
         "meta:Malaysia"{
             ls{"馬來西亞時間"}
         }
+        "meta:Marshall_Islands"{
+            ls{"馬紹爾群島時間"}
+        }
         "meta:Mongolia"{
             ld{"烏蘭巴托夏令時間"}
             ls{"烏蘭巴托時間"}
+        }
+        "meta:Moscow"{
+            ld{"莫斯科夏令時間"}
+            lg{"莫斯科時間"}
+            ls{"莫斯科標準時間"}
+        }
+        "meta:Myanmar"{
+            ls{"緬甸時間"}
+        }
+        "meta:Nepal"{
+            ls{"尼泊爾時間"}
+        }
+        "meta:New_Zealand"{
+            ld{"紐西蘭夏令時間"}
+            lg{"紐西蘭時間"}
+            ls{"紐西蘭標準時間"}
         }
         "meta:Newfoundland"{
             ld{"紐芬蘭夏令時間"}
             lg{"紐芬蘭時間"}
             ls{"紐芬蘭標準時間"}
         }
+        "meta:Noronha"{
+            ld{"諾倫哈夏令時間"}
+            ls{"諾倫哈時間"}
+        }
+        "meta:North_Mariana"{
+            ls{"北馬里亞納群島時間"}
+        }
+        "meta:Novosibirsk"{
+            ld{"新西伯利亞夏令時間"}
+            ls{"新西伯利亞時間"}
+        }
+        "meta:Omsk"{
+            ld{"鄂木斯克夏令時間"}
+            ls{"鄂木斯克時間"}
+        }
         "meta:Pakistan"{
             ld{"巴基斯坦夏令時間"}
             ls{"巴基斯坦時間"}
+        }
+        "meta:Paraguay"{
+            ld{"巴拉圭夏令時間"}
+            ls{"巴拉圭時間"}
+        }
+        "meta:Peru"{
+            ld{"秘魯夏令時間"}
+            ls{"秘魯時間"}
+        }
+        "meta:Philippines"{
+            ld{"菲律賓夏令時間"}
+            ls{"菲律賓時間"}
         }
         "meta:Pierre_Miquelon"{
             ld{"聖彼德與密啟崙夏令時間"}
             lg{"聖彼德與密啟崙時間"}
             ls{"聖彼德與密啟崙標準時間"}
+        }
+        "meta:Qyzylorda"{
+            ld{"克孜勒奧爾達夏令時間"}
+            ls{"克孜勒奧爾達時間"}
+        }
+        "meta:Sakhalin"{
+            ld{"庫頁島夏令時間"}
+            ls{"庫頁島時間"}
+        }
+        "meta:Samara"{
+            ld{"薩馬拉夏令時間"}
+            ls{"薩馬拉時間"}
         }
         "meta:Samarkand"{
             ld{"撒馬爾罕夏令時間"}
@@ -3082,13 +3210,30 @@ zh_Hant{
             sd{"SAMST（撒馬爾罕）"}
             ss{"SAMT（撒馬爾罕）"}
         }
+        "meta:Samoa"{
+            ls{"薩摩亞標準時間"}
+        }
+        "meta:Shevchenko"{
+            ld{"舍甫琴科夏令時間"}
+            ls{"舍甫琴科時間"}
+        }
+        "meta:Singapore"{
+            ls{"新加坡標準時間"}
+        }
         "meta:Suriname"{
-            lg{"蘇利南時間"}
             ls{"蘇利南時間"}
         }
         "meta:Sverdlovsk"{
             ld{"斯維爾德洛夫斯克夏令時間"}
             ls{"斯維爾德洛夫斯克時間"}
+        }
+        "meta:Taipei"{
+            ld{"中原夏令時間"}
+            lg{"中原時間"}
+            ls{"中原標準時間"}
+            sd{"CDT（中原）"}
+            sg{"CT（中原）"}
+            ss{"CST（中原）"}
         }
         "meta:Tajikistan"{
             ls{"塔吉克時間"}
@@ -3097,9 +3242,25 @@ zh_Hant{
             ld{"塔什干夏令時間"}
             ls{"塔什干時間"}
         }
+        "meta:Tbilisi"{
+            ld{"第比利斯夏令時間"}
+            ls{"第比利斯時間"}
+        }
+        "meta:Turkey"{
+            ld{"土耳其夏令時間"}
+            ls{"土耳其時間"}
+        }
         "meta:Turkmenistan"{
             ld{"土庫曼夏令時間"}
             ls{"土庫曼時間"}
+        }
+        "meta:Uralsk"{
+            ld{"烏拉斯克夏令時間"}
+            ls{"烏拉斯克時間"}
+        }
+        "meta:Uruguay"{
+            ld{"烏拉圭夏令時間"}
+            ls{"烏拉圭時間"}
         }
         "meta:Urumqi"{
             ls{"烏魯木齊時間"}
@@ -3107,6 +3268,17 @@ zh_Hant{
         "meta:Uzbekistan"{
             ld{"烏茲別克夏令時間"}
             ls{"烏茲別克時間"}
+        }
+        "meta:Venezuela"{
+            ls{"委內瑞拉時間"}
+        }
+        "meta:Vladivostok"{
+            ld{"海參崴夏令時間"}
+            ls{"海參崴時間"}
+        }
+        "meta:Yakutsk"{
+            ld{"雅庫次克夏令時間"}
+            ls{"雅庫次克時間"}
         }
         "meta:Yekaterinburg"{
             ld{"凱薩琳堡夏令時間"}

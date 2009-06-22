@@ -13,11 +13,18 @@ id{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "0: ke=#,##0=;",
             "-x: ke\u2212>#,##0>;",
+            "0: ke=#,##0=;",
         }
         SpelloutRules{
+            "%spellout-numbering-year:",
+            "x.x: =#,###0.#=;",
+            "0: =%spellout-numbering=;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
             "%spellout-cardinal:",
+            "-x: minus >>;",
+            "x.x: << titik >>;",
             "0: kosong;",
             "1: satu;",
             "2: dua;",
@@ -41,17 +48,10 @@ id{
             "1000000000000: << bilyun[ >>];",
             "1000000000000000: << bilyar[ >>];",
             "1000000000000000000: =#,##0.#=;",
-            "-x: minus >>;",
-            "x.x: << titik >>;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-numbering-year:",
-            "0: =%spellout-numbering=;",
-            "x.x: =#,###0.#=;",
             "%spellout-ordinal:",
-            "0: ke=%spellout-cardinal=;",
             "x.x: =#,##0.#=;",
+            "0: ke=%spellout-cardinal=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.2"}
 }

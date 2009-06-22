@@ -257,7 +257,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"1.76"}
+    Version{"1.78"}
     calendar{
         gregorian{
             AmPmMarkers{

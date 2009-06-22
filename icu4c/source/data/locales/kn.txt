@@ -807,20 +807,6 @@ kn{
     LocaleScript{
         "Knda",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "೦",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##,##0.###",
         "¤ #,##,##0.00",
@@ -959,7 +945,7 @@ kn{
         Zyyy{"ಸಾಮಾನ್ಯ"}
         Zzzz{"ಅಜ್ಞಾತ ಅಥವ ಅಮಾನ್ಯವಾದ ಲಿಪಿ"}
     }
-    Version{"1.71"}
+    Version{"1.74"}
     calendar{
         gregorian{
             AmPmMarkers{

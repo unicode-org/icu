@@ -311,7 +311,7 @@ be{
             "англійскі фунт",
         }
         INR{
-            "₨",
+            "Rs",
             "індыйская рупія",
         }
         JPY{
@@ -536,7 +536,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.91"}
+    Version{"1.93"}
     calendar{
         buddhist{
             DateTimePatterns{

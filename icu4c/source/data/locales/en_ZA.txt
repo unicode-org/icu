@@ -31,7 +31,7 @@ en_ZA{
         "#,##0%",
         "#E0",
     }
-    Version{"1.60"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimePatterns{
