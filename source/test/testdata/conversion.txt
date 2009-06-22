@@ -864,6 +864,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "", ".", :bin{""}
         }
+        {
+          "SCSU",
+          :bin{ 0f6441b413a733f2 },
+          "\u6441\ub413\ua733",
+          :intvector{},
+          :int{1}, :int{0}, "illegal", ".", :bin{ f2 }
+        }
       }
     }
 
