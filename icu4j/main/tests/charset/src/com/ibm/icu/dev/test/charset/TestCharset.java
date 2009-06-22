@@ -5157,6 +5157,17 @@ public class TestCharset extends TestFmwk {
                 if(!roundTripResult.equals(encoderBuffer)){
                     errln("Error occured while encoding "+ charset.name());
                 }
+                // Test overflow for code coverage reasons
+                if (i == 0) {
+                    ByteBuffer test = encoderResult;
+                    test.position(0);
+                    CharBuffer smallBuffer = CharBuffer.allocate(11);
+                    decode.reset();
+                    CoderResult status = decode.decode(test, smallBuffer, true);
+                    if (status != CoderResult.OVERFLOW) {
+                        errln("Overflow buffer error should have been thrown.");
+                    }
+                }
             }catch(Exception e){
                 errln("Exception while converting SCSU thrown: " + e);
             }
