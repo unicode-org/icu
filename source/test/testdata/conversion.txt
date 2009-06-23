@@ -871,6 +871,22 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "illegal", ".", :bin{ f2 }
         }
+
+        //Improve code coverage for MBCS
+        {
+          "*test5",
+          :bin{ 0506 },
+          "\ufffd\x06",
+          :intvector{},
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+        {
+          "ibm-1390,swaplfnl",
+          :bin{ 430e4395ecc140400fc1e115 },
+          "\uff63\u30C8\u30C8\u309A\u3000\x41\u20ac\x0a",
+          :intvector{ 0, 2, 4, 4, 6, 9, 10, 11 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
       }
     }
 
