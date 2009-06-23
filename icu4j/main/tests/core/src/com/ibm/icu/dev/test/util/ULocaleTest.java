@@ -28,6 +28,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IllformedLocaleException;
+import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
@@ -3714,7 +3715,7 @@ public class ULocaleTest extends TestFmwk {
         VersionInfo testCurrent;
         VersionInfo cldrVersion;
  
-        cldrVersion = ULocale.getCLDRVersion();
+        cldrVersion = LocaleData.getCLDRVersion();
         
         this.logln("uloc_getCLDRVersion() returned: '"+cldrVersion+"'");
         
