@@ -335,4 +335,22 @@ public final class LocaleData {
       String  localeSeparator = locDispBundle.getStringWithFallback(SEPARATOR);
       return localeSeparator;
     }
+    
+    private static VersionInfo gCLDRVersion = null;
+    
+    /**
+     * Returns the current CLDR version
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static VersionInfo getCLDRVersion() {
+        // fetching this data should be idempotent.
+        if(gCLDRVersion == null) {
+            // from ZoneMeta.java
+            UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle cldrVersionBundle = supplementalDataBundle.get("cldrVersion");
+            gCLDRVersion = VersionInfo.getInstance(cldrVersionBundle.getString());
+        }
+        return gCLDRVersion;
+    }
 }
