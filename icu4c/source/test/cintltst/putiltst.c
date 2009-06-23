@@ -305,15 +305,15 @@ static void TestCompareVersions()
     u_versionFromString(v2, v2str);
 	got = memcmp(v1, v2, sizeof(UVersionInfo));
 	invgot = memcmp(v2, v1, sizeof(UVersionInfo)); /* Opposite */
-    if(got==op) {
+    if((got < 0 && op < 0) || (got > 0 && op > 0)) {
         log_verbose("%d: %s %s %s, OK\n", (j/3), v1str, opstr, v2str);
     } else {
-        log_err("%d: %s %s %s: wanted %d got %d\n", (j/3), v1str, opstr, v2str, op, got);
+        log_err("%d: %s %s %s: wanted values of the same sign, %d got %d\n", (j/3), v1str, opstr, v2str, op, got);
     }
-    if(invgot==invop) {
+    if((invgot > 0 && invop > 0) || (invgot < 0 && invop < 0)) {
         log_verbose("%d: %s (%d) %s, OK (inverse)\n", (j/3), v2str, invop, v1str);
     } else {
-        log_err("%d: %s (%d) %s: wanted %d got %d\n", (j/3), v2str, invop, v1str, invop, invgot);
+        log_err("%d: %s (%d) %s: wanted values of the same sign, %d got %d\n", (j/3), v2str, invop, v1str, invop, invgot);
     }
    }
 }
