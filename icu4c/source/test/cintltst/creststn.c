@@ -3012,12 +3012,12 @@ void TestCLDRVersion() {
 
   u_versionToString(testExpect,tmp);
   log_verbose("(data) ExpectCLDRVersionAtLeast { %s }\n", tmp); 
-  if(u_compareVersions(cldrVersion, testExpect) < 0) {
+  if(memcmp(cldrVersion, testExpect, sizeof(UVersionInfo)) < 0) {
     log_data_err("CLDR version is too old, expect at least %s.", tmp);
   }
   u_versionToString(testCurrent,tmp);
   log_verbose("(data) CurrentCLDRVersion { %s }\n", tmp); 
-  switch(u_compareVersions(cldrVersion, testCurrent)) {
+  switch(memcmp(cldrVersion, testCurrent, sizeof(UVersionInfo))) {
     case 0: break; /* OK- current. */
     case -1: log_info("CLDR version is behind 'current' (for testdata/root.txt) %s. Some things may fail.\n", tmp); break;
     case 1: log_info("CLDR version is ahead of 'current' (for testdata/root.txt) %s. Some things may fail.\n", tmp); break;

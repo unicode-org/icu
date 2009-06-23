@@ -286,7 +286,7 @@ static void TestCompareVersions()
    int32_t op, invop, got, invgot; 
    UVersionInfo v1, v2;
    int32_t j;
-   log_verbose("Testing u_compareVersions()\n");
+   log_verbose("Testing memcmp()\n");
    for(j=0;testCases[j]!=NULL;j+=3) {
     v1str = testCases[j+0];
     opstr = testCases[j+1];
@@ -303,8 +303,8 @@ static void TestCompareVersions()
     invop = 0-op; /* inverse operation: with v1 and v2 switched */
     u_versionFromString(v1, v1str);
     u_versionFromString(v2, v2str);
-    got = u_compareVersions(v1,v2);
-    invgot = u_compareVersions(v2,v1); /* oppsite */
+	got = memcmp(v1, v2, sizeof(UVersionInfo));
+	invgot = memcmp(v2, v1, sizeof(UVersionInfo)); /* Opposite */
     if(got==op) {
         log_verbose("%d: %s %s %s, OK\n", (j/3), v1str, opstr, v2str);
     } else {
