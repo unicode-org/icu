@@ -138,6 +138,8 @@ icu4c/source/samples/cal/cal.vcproj.*.*.user
 icu4c/source/samples/cal/icucal
 icu4c/source/samples/cal/icucal.exe
 icu4c/source/samples/cal/release
+icu4c/source/samples/cal/x64
+icu4c/source/samples/cal/x86
 icu4c/source/samples/case/Debug
 icu4c/source/samples/case/case.vcproj.*.*.user
 icu4c/source/samples/case/release
@@ -160,6 +162,8 @@ icu4c/source/samples/date/date.vcproj.*.*.user
 icu4c/source/samples/date/icudate
 icu4c/source/samples/date/icudate.exe
 icu4c/source/samples/date/release
+icu4c/source/samples/date/x64
+icu4c/source/samples/date/x86
 icu4c/source/samples/datefmt/Debug
 icu4c/source/samples/datefmt/datefmt.vcproj.*.*.user
 icu4c/source/samples/datefmt/release
