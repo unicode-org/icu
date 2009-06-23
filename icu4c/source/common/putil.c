@@ -1850,21 +1850,6 @@ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
     }
 }
 
-U_CAPI int32_t U_EXPORT2
-u_compareVersions(UVersionInfo v1, UVersionInfo v2) {
-    int n;
-    if(v1==NULL||v2==NULL) return 0;
-    for(n=0;n<U_MAX_VERSION_LENGTH;n++) {
-      if(v1[n]<v2[n]) {
-        return -1;
-      } else if(v1[n]>v2[n]) {
-        return  1;
-      }
-    }
-    return 0; /* no difference */
-}
-
-
 U_CAPI void U_EXPORT2
 u_versionToString(UVersionInfo versionArray, char *versionString) {
     uint16_t count, part;
