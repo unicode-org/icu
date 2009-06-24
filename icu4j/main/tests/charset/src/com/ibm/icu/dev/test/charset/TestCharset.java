@@ -5532,4 +5532,39 @@ public class TestCharset extends TestFmwk {
             
         }
     }
+    
+    /*
+     * This is a port of ICU4C TestAmbiguousConverter in cintltst.
+     * Since there is no concept of ambiguous converters in ICU4J
+     * this test is merely for code coverage reasons.
+     */
+    public void TestAmbiguousConverter() {
+        byte [] inBytes = {
+                0x61, 0x5b, 0x5c
+        };
+        ByteBuffer src = ByteBuffer.wrap(inBytes);
+        CharBuffer trgt = CharBuffer.allocate(20);
+        
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProviderICU provider = new CharsetProviderICU();
+        String[] names = CharsetProviderICU.getAllNames();
+        
+        for (int i = 0; i < names.length; i++) {
+            Charset charset = provider.charsetForName(names[i]);
+            if (charset == null) {
+                /* We don't care about any failures because not all converters are available. */
+                continue;
+            }
+            CharsetDecoder decoder = charset.newDecoder();
+            
+            src.position(0);
+            trgt.clear();
+            
+            result = decoder.decode(src, trgt, true);
+            if (result.isError()) {
+                /* We don't care about any failures. */
+                continue;
+            }
+        }
+    }
 }
