@@ -186,6 +186,38 @@ abstract class CECalendar extends Calendar {
         return LIMITS[field][limitType];
     }
 
+    // (The following method is not called because all existing subclasses
+    // override it.
+    ///CLOVER:OFF
+    /**
+     * Return the number of days in the given month of the given extended
+     * year of this calendar system.  Subclasses should override this
+     * method if they can provide a more correct or more efficient
+     * implementation than the default implementation in Calendar.
+     * @new ICU 4.4
+     */
+    protected int handleGetMonthLength(int extendedYear, int month)
+    {
+
+        // The Ethiopian and Coptic calendars have 13 months, 12 of 30 days each and 
+        // an intercalary month at the end of the year of 5 or 6 days, depending whether 
+        // the year is a leap year or not. The Leap Year follows the same rules as the 
+        // Julian Calendar so that the extra month always has six days in the year before 
+        // a Julian Leap Year.        
+        if ((month + 1) % 13 != 0)
+        {
+            // not intercalary month
+            return 30;
+        }
+        else
+        {
+            // intercalary month 5 days + possible leap day
+            return ((extendedYear % 4) / 3) + 5;
+        }
+
+    }
+    ///CLOVER:ON
+
     //-------------------------------------------------------------------------
     // Calendar framework
     //-------------------------------------------------------------------------

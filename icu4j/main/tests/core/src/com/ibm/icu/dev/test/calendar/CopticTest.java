@@ -211,6 +211,35 @@ public class CopticTest extends CalendarTest
         doTheoreticalLimitsTest(coptic, true);
     }
 
+    /**
+     * Test for track ticket 6379 - proper reporting of
+     * maximum month lengths
+     */
+    public void Test6379()
+    {
+        int i;
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        CopticCalendar coptic = new CopticCalendar();
+
+        // first twelve months have 30 days      
+        for (i = 0; i < 12; i++)
+        {
+            coptic.set(Calendar.MONTH, i);
+            if (30 != coptic.getActualMaximum(Calendar.DAY_OF_MONTH))
+            {
+                errln("30 days not returned for month " + (i + 1));
+            }
+        }
+
+        // test month 13
+        coptic.set(Calendar.MONTH, i);
+        if (5 != coptic.getActualMaximum(Calendar.DAY_OF_MONTH))
+        {
+            errln("5 days not returned for month " + (i + 1));
+        }
+    }    
+
     public void TestCoverage() {
 
         {
