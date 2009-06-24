@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 kok_IN{
-    Version{"1.52"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

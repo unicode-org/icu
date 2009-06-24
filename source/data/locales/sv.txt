@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    AuxExemplarCharacters{"[á à â ã ā ç é ë í-ï ī ñ ó ú w ÿ ü æ ø]"}
+    AuxExemplarCharacters{"[á â ã ā ç ë í-ï ī ñ ó ú ÿ ü æ ø]"}
     Countries{
         001{"världen"}
         002{"Afrika"}
@@ -3182,7 +3182,7 @@ sv{
         TARASK{"Taraskievika-stavning"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.148"}
+    Version{"1.151"}
     calendar{
         gregorian{
             AmPmMarkers{

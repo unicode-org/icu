@@ -371,7 +371,7 @@ it{
         }
         AZM{
             "AZM",
-            "Manat Azero",
+            "Manat Azero (1993-2006)",
         }
         AZN{
             "man.",
@@ -442,15 +442,15 @@ it{
             "Mvdol Boliviano",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Cruzeiro Novo Brasiliano (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Cruzado Brasiliano",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Cruzeiro Brasiliano (1990-1993)",
         }
         BRL{
@@ -458,11 +458,11 @@ it{
             "Real Brasiliano",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Cruzado Novo Brasiliano",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Cruzeiro Brasiliano",
         }
         BSD{
@@ -730,7 +730,7 @@ it{
             "Nuovo sheqel israeliano",
         }
         INR{
-            "₨",
+            "Rs",
             "Rupia Indiana",
         }
         IQD{
@@ -746,7 +746,7 @@ it{
             "Corona Islandese",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Lira Italiana",
             {
                 /**
@@ -786,7 +786,7 @@ it{
             "Franco Comoriano",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Won Nordcoreano",
         }
         KRW{
@@ -914,11 +914,11 @@ it{
             "Rupia Mauriziana",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Rufiyaa delle Maldive",
         }
         MWK{
-            "MK",
+            "MWK",
             "Kwacha Malawiano",
         }
         MXN{
@@ -941,13 +941,9 @@ it{
             "MZE",
             "Escudo del Mozambico",
         }
-        MZM{
-            "Mt",
-            "Metical del Mozambico",
-        }
         MZN{
             "MTn",
-            "metical del Mozambico",
+            "Metical del Mozambico",
         }
         NAD{
             "N$",
@@ -1058,7 +1054,7 @@ it{
             "Rublo della CSI",
         }
         RWF{
-            "RF",
+            "RWF",
             "Franco Ruandese",
         }
         SAR{
@@ -1080,10 +1076,6 @@ it{
         SDG{
             "SDG",
             "Sterlina sudanese",
-        }
-        SDP{
-            "SDP",
-            "Sterlina Sudanese",
         }
         SEK{
             "Skr",
@@ -1234,7 +1226,7 @@ it{
             "Sum dell’Uzbekistan",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolivar Venezuelano",
         }
         VEF{
@@ -1288,10 +1280,6 @@ it{
         XDR{
             "XDR",
             "Diritti Speciali di Incasso",
-        }
-        XEU{
-            "XEU",
-            "Unità Monetaria Europea",
         }
         XFO{
             "XFO",
@@ -2074,7 +2062,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.119"}
+    Version{"1.124"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2330,7 +2318,7 @@ it{
                         "aprile",
                         "maggio",
                         "giugno",
-                        "Luglio",
+                        "luglio",
                         "agosto",
                         "settembre",
                         "ottobre",
@@ -2361,11 +2349,11 @@ it{
                         "Maggio",
                         "Giugno",
                         "Luglio",
-                        "agosto",
-                        "settembre",
-                        "ottobre",
-                        "novembre",
-                        "dicembre",
+                        "Agosto",
+                        "Settembre",
+                        "Ottobre",
+                        "Novembre",
+                        "Dicembre",
                     }
                 }
             }

@@ -7,10 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    AuxExemplarCharacters{
-        "[ª á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ º ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü"
-        " ū ÿ]"
-    }
+    AuxExemplarCharacters{"[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
     Countries{
         009{"Oceânia"}
         035{"Sudeste Asiático"}
@@ -67,7 +64,6 @@ pt_PT{
         TJ{"Tajiquistão"}
         TM{"Turquemenistão"}
         UM{"Ilhas Minor Outlying (E.U.A)"}
-        VC{"The main pump fixing screws with the correct strength class"}
         VI{"Ilhas Virgin E.U.A."}
         VN{"Vietname"}
         YE{"Iémen"}
@@ -111,7 +107,7 @@ pt_PT{
             "Dólar das Ilhas Caimão",
         }
         MWK{
-            "MK",
+            "MWK",
             "Cuacha do Malawi",
         }
         MXP{
@@ -265,7 +261,7 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.81"}
+    Version{"1.85"}
     calendar{
         buddhist{
             DateTimePatterns{

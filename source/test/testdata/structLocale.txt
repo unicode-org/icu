@@ -4154,6 +4154,7 @@ structLocale:table(nofallback){
         mdf{""}
         mdr{""}
         men{""}
+        mfe{""}
         mg{""}
         mga{""}
         mh{""}
@@ -15132,6 +15133,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "meta:Tahiti"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
+        "meta:Taipei"{
             ld{""}
             lg{""}
             ls{""}

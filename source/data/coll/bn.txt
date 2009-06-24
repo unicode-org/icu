@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/collation/bn.xml
  */
 bn{
-    Version{"1.6"}
+    Version{"1.7"}
 }

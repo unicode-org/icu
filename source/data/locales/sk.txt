@@ -10,10 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    AuxExemplarCharacters{
-        "[á à ă â å ā æ ä ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ö ø ō œ ô ß ú ù ŭ û ü ū ÿ"
-        "]"
-    }
+    AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -426,15 +423,15 @@ sk{
             "Bolivíjske mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Bolivíjske Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Bolivíjske cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Bolivíjske cruzeiro (1990-1993)",
         }
         BRL{
@@ -442,11 +439,11 @@ sk{
             "Bolivíjsky real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brazílske Cruzado Novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brazílske cruzeiro",
         }
         BSD{
@@ -698,7 +695,7 @@ sk{
             "Izraelský šekel",
         }
         INR{
-            "₨",
+            "Rs",
             "Indijská rupia",
         }
         IQD{
@@ -746,7 +743,7 @@ sk{
             "Comoro frank",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Severokórejský won",
         }
         KRW{
@@ -866,11 +863,11 @@ sk{
             "Mauritská rupia",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldivská rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malavská kwacha",
         }
         MXN{
@@ -994,7 +991,7 @@ sk{
             "Ruský rubeľ (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Rwandský frank",
         }
         SAR{
@@ -1154,7 +1151,7 @@ sk{
             "Uzbekistanský sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuelský bolivar",
         }
         VND{
@@ -1567,7 +1564,6 @@ sk{
         Beng{"bengálsky"}
         Brai{"Braillovo písmo"}
         Cyrl{"Cyrilika"}
-        Cyrs{"cyrilika"}
         Egyp{"egyptské hieroglyfy"}
         Ethi{"etiópsky"}
         Glag{"hlaholika"}
@@ -1609,7 +1605,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.97"}
+    Version{"1.101"}
     calendar{
         gregorian{
             AmPmMarkers{

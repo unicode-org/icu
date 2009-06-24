@@ -802,7 +802,7 @@ nn{
             "komorisk franc",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "nordkoreansk won",
         }
         KRW{
@@ -930,11 +930,11 @@ nn{
             "mauritansk rupi",
         }
         MVR{
-            "Rf",
+            "MVR",
             "maldivisk rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "malawisk kwacha",
         }
         MXN{
@@ -1074,7 +1074,7 @@ nn{
             "russisk rubel (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "rwandisk franc",
         }
         SAR{
@@ -1250,7 +1250,7 @@ nn{
             "usbekisk sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "venezuelansk bolivar",
         }
         VEF{
@@ -2936,7 +2936,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.98"}
+    Version{"1.100"}
     calendar{
         gregorian{
             AmPmMarkers{

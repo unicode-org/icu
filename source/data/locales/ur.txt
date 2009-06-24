@@ -108,7 +108,7 @@ ur{
             "اسرائیلی شیکل",
         }
         INR{
-            "₨",
+            "Rs",
             "انڈین روپیہ",
         }
         JPY{
@@ -200,7 +200,7 @@ ur{
             "امریکی ڈالر",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "وینزویلا بولیور",
         }
         ZAR{
@@ -296,27 +296,13 @@ ur{
     LocaleScript{
         "Arab",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"1.66"}
     calendar{
         gregorian{
             DateTimePatterns{

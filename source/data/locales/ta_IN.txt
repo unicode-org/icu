@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ta_IN{
-    Version{"1.56"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

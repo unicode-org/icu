@@ -64,27 +64,13 @@ pa{
     LocaleScript{
         "Guru",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "੦",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##,##0.###",
         "¤ #,##,##0.00",
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.74"}
+    Version{"1.76"}
     calendar{
         gregorian{
             AmPmMarkers{

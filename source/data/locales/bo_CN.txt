@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 bo_CN{
-    Version{"1.10"}
+    Version{"1.11"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

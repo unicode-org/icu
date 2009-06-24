@@ -23,7 +23,7 @@ en_TT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

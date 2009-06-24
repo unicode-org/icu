@@ -331,15 +331,15 @@ gl{
             "MVDOL boliviano",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Cruzeiro novo brasileiro (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Cruzado brasileiro",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Cruzeiro brasileiro (1990-1993)",
         }
         BRL{
@@ -347,11 +347,11 @@ gl{
             "Real brasileiro",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Cruzado novo brasileiro",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Cruzeiro brasileiro",
         }
         CAD{
@@ -475,7 +475,7 @@ gl{
             "Libra irlandesa",
         }
         INR{
-            "₨",
+            "Rs",
             "Rupia india",
         }
         ISK{
@@ -603,7 +603,7 @@ gl{
             "Peso uruguaio",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Bolívar venezolano",
         }
         VEF{
@@ -1003,7 +1003,7 @@ gl{
             traditional{"orde tradicional"}
         }
     }
-    Version{"1.66"}
+    Version{"1.68"}
     calendar{
         gregorian{
             AmPmMarkers{

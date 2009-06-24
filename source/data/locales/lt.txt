@@ -432,15 +432,15 @@ lt{
             "Bolivijos mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "Brazilijos naujasis kruzeiras",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brazilijos kruzadas",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "Brazilijos kruzeiras (1990-1993)",
         }
         BRL{
@@ -448,11 +448,11 @@ lt{
             "Brazilijos realas",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "Brazilijos naujasis kruzadas",
         }
         BRR{
-            "CR$",
+            "BRR",
             "Brazilijos kruzeiras",
         }
         BSD{
@@ -684,7 +684,7 @@ lt{
             "Izraelio šekelis",
         }
         INR{
-            "₨",
+            "Rs",
             "Indijos rupija",
         }
         IQD{
@@ -728,7 +728,7 @@ lt{
             "Komoro frankas",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Šiaurės Korėjos vonas",
         }
         KRW{
@@ -856,11 +856,11 @@ lt{
             "Mauricijaus rupija",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldyvų salų rufija",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malavio kvača",
         }
         MXN{
@@ -996,7 +996,7 @@ lt{
             "Rusijos rublis (1991-1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruandos frankas",
         }
         SAR{
@@ -1168,7 +1168,7 @@ lt{
             "Uzbekistano sumas",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venesuelos bolivaras",
         }
         VEF{
@@ -2245,7 +2245,7 @@ lt{
     Variants{
         POSIX{"Kompiuteris"}
     }
-    Version{"1.109"}
+    Version{"1.111"}
     calendar{
         buddhist{
             AmPmMarkers{

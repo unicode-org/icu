@@ -27,7 +27,7 @@ fr_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{

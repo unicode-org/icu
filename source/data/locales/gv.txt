@@ -26,7 +26,7 @@ gv{
         "#,##0%",
         "#E0",
     }
-    Version{"1.58"}
+    Version{"1.60"}
     calendar{
         gregorian{
             AmPmMarkers{

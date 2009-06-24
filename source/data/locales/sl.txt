@@ -441,15 +441,15 @@ sl{
             "bolivijski mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "brazilski novi kruzeiro (1967–1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "brazilski kruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "stari brazilski kruzeiro (1990–1993)",
         }
         BRL{
@@ -457,11 +457,11 @@ sl{
             "brazilski real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "novi brazilski kruzado",
         }
         BRR{
-            "CR$",
+            "BRR",
             "brazilski kruzeiro",
         }
         BSD{
@@ -737,7 +737,7 @@ sl{
             "izraelski šekel",
         }
         INR{
-            "₨",
+            "Rs",
             "indijska rupija",
         }
         IQD{
@@ -785,7 +785,7 @@ sl{
             "komorski frank",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "severnokorejski von",
         }
         KRW{
@@ -913,11 +913,11 @@ sl{
             "mavricijska rupija",
         }
         MVR{
-            "Rf",
+            "MVR",
             "maldivska rufija",
         }
         MWK{
-            "MK",
+            "MWK",
             "malavijska kvača",
         }
         MXN{
@@ -1057,7 +1057,7 @@ sl{
             "ruski rubelj (1991–1998)",
         }
         RWF{
-            "RF",
+            "RWF",
             "ruandski frank",
         }
         SAR{
@@ -1229,7 +1229,7 @@ sl{
             "uzbeški sum",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "venezuelski bolivar",
         }
         VEF{
@@ -1887,7 +1887,7 @@ sl{
         "%",
         "0",
         "#",
-        "–",
+        "-",
         "e",
         "‰",
         "∞",
@@ -2082,7 +2082,7 @@ sl{
         TARASK{"Taraškievičeva beloruska slovnica"}
         VALENCIA{"valencijski pravopis"}
     }
-    Version{"1.111"}
+    Version{"1.114"}
     calendar{
         gregorian{
             AmPmMarkers{

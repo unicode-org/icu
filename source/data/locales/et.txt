@@ -431,7 +431,7 @@ et{
             "Boliivia peeso",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "Brasiilia krusado",
         }
         BRL{
@@ -626,7 +626,7 @@ et{
             "Iisraeli uus seekel",
         }
         INR{
-            "₨",
+            "Rs",
             "India ruupia",
         }
         IQD{
@@ -666,7 +666,7 @@ et{
             "Kambodža riaal",
         }
         KPW{
-            "KP₩",
+            "KPW",
             "Põhja-Korea vonn",
         }
         KRW{
@@ -734,11 +734,11 @@ et{
             "Mauritiuse ruupia",
         }
         MVR{
-            "Rf",
+            "MVR",
             "Maldiivide ruupia",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawi kvatša",
         }
         MXN{
@@ -858,7 +858,7 @@ et{
             "Venemaa rubla, 1991-1998",
         }
         RWF{
-            "RF",
+            "RWF",
             "Ruanda frank",
         }
         SAR{
@@ -998,7 +998,7 @@ et{
             "Usbekistani somm",
         }
         VEB{
-            "Bs.",
+            "VEB",
             "Venezuela boliivar",
         }
         VND{
@@ -1731,7 +1731,7 @@ et{
         ROZAJ{"Resia murre"}
         SAAHO{"saho murre"}
     }
-    Version{"1.93"}
+    Version{"1.95"}
     calendar{
         gregorian{
             DateTimePatterns{
