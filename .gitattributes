@@ -50,7 +50,6 @@ README text !eol
 
 /.classpath -text
 /.project -text
-/eclipseFragment.txt -text
 eclipseProjectMisc/initSrc.launch -text
 eclipseProjectMisc/normSrc.launch -text
 localespi/.classpath -text
@@ -69,27 +68,10 @@ localespi/src/META-INF/services/java.util.spi.CurrencyNameProvider -text
 localespi/src/META-INF/services/java.util.spi.LocaleNameProvider -text
 localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
-/preprocessor.txt -text
-src/com/ibm/icu/charset/CharsetSelector.java -text
 src/com/ibm/icu/dev/data/rbbi/english.dict -text
 src/com/ibm/icu/dev/data/testdata.jar -text
 src/com/ibm/icu/dev/data/thai6.ucs -text
 src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
-src/com/ibm/icu/dev/test/charset/TestSelection.java -text
-src/com/ibm/icu/dev/test/duration/RegressionTest.java -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_h.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_k.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Korean.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Russian.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text
-src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text
-src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text
 src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
@@ -235,10 +217,7 @@ src/com/ibm/icu/dev/tool/docs/icu4j381.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j400.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j401.api.gz -text
 src/com/ibm/icu/dev/tool/tzu/icu.gif -text
-src/com/ibm/icu/impl/PVecToTrieCompactHandler.java -text
-src/com/ibm/icu/impl/PropsVectors.java -text
 src/com/ibm/icu/impl/data/icudata.jar -text
-src/com/ibm/icu/text/NumberingSystem.java -text
 src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 
