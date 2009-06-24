@@ -887,6 +887,13 @@ conversion:table(nofallback) {
           :intvector{ 0, 2, 4, 4, 6, 9, 10, 11 },
           :int{1}, :int{0}, "", "?", :bin{""}
         }
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 1b242b4d1b4f66791b242b4d1b4f216a },
+          "\u3667",
+          :intvector{ 14 },
+          :int{1}, :int{0}, "", "0", :bin{""}
+        }
       }
     }
 
