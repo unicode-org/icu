@@ -702,7 +702,6 @@ public class TestConversion extends ModuleTest {
                     }
                 }
                 iStep += step;
-                oStep += step;
 
             }
 
