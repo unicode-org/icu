@@ -894,6 +894,20 @@ conversion:table(nofallback) {
           :intvector{ 14 },
           :int{1}, :int{0}, "", "0", :bin{""}
         }
+        {
+          "*test1bmp",
+          :bin{ 060a05 },
+          "\u0066\ufffd\u0065",
+          :intvector{ 0, 2, 2 },
+          :int{0}, :int{1}, "", "?", :bin{""}
+        }
+        {
+          "*test1bmp",
+          :bin{ 060708 },
+          "\u0066",
+          :intvector{},
+          :int{1}, :int{0}, "invalid", ".", :bin{ 07 }
+        }
       }
     }
 
