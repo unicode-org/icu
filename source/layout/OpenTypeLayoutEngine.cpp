@@ -24,6 +24,8 @@
 
 #include "GDEFMarkFilter.h"
 
+#include "KernTable.h"
+
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
@@ -369,6 +371,10 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
                 fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, success, fFontInstance,
                                 fFeatureMap, fFeatureMapCount, fFeatureOrder);
             }
+        } else if ( fTypoFlags & 0x1 ) {
+            static const le_uint32 kernTableTag = LE_KERN_TABLE_TAG;
+            KernTable kt(fFontInstance, getFontTable(kernTableTag));
+            kt.process(glyphStorage);
         }
 
         float xAdjust = 0, yAdjust = 0;
