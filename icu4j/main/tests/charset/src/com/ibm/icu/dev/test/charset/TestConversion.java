@@ -409,9 +409,7 @@ public class TestConversion extends ModuleTest {
     private void TestToUnicode(DataMap testcase, int caseNr) {
         // create Conversion case to store the test case data
         ConversionCase cc = new ConversionCase();
-        if (caseNr == 138) {
-            caseNr = 138;
-        }
+        
         try {
             // retrieve test case data
             cc.caseNr = caseNr;
