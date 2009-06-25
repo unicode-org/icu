@@ -5268,7 +5268,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"1.7"}
+    cldrVersion{"1.7.1"}
     languageData{
         aa{
             primary{
