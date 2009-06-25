@@ -508,8 +508,14 @@ public class SimpleDateFormat extends DateFormat {
             calendar = Calendar.getInstance(locale);
         }
         if (numberFormat == null) {
-            // Use a NumberFormat optimized for date formatting
-            numberFormat = new DateNumberFormat(locale);
+            NumberingSystem ns = NumberingSystem.getInstance(locale);
+            if ( ns.isAlgorithmic() ) {
+                numberFormat = NumberFormat.getInstance(locale);
+            } else {
+                char digit0 = ns.getDescription().charAt(0);
+                // Use a NumberFormat optimized for date formatting
+                numberFormat = new DateNumberFormat(locale, digit0);
+            }
         }
         // Note: deferring calendar calculation until when we really need it.
         // Instead, we just record time of construction for backward compatibility.

@@ -218,8 +218,14 @@ public class OlsonTimeZone extends BasicTimeZone {
                     // set DST saving amount and start year
                     stz.setDSTSavings(sav);
                 } else {
-                    // We should not get here...
-                    bDst = false;
+                    // This could only happen if last rule is DST
+                    // and the rule used forever.  For example, Asia/Dhaka
+                    // in tzdata2009i stays in DST forever.
+
+                    // Hack - set DST starting at midnight on Jan 1st,
+                    // ending 23:59:59.999 on Dec 31st
+                    stz.setStartRule(0, 1, 0);
+                    stz.setEndRule(11, 31, Grego.MILLIS_PER_DAY - 1);
                 }
             }
 
