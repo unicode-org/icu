@@ -5531,6 +5531,31 @@ public class TestCharset extends TestFmwk {
             }
             
         }
+        
+        // Test malformed
+        CoderResult malformedResult = CoderResult.UNDERFLOW;
+        byte[] malformedBytes = {
+                (byte)0x61, (byte)0x01, (byte)0x29, (byte)0x81, (byte)0xa0, (byte)0x0f
+        };
+        ByteBuffer malformedSrc = ByteBuffer.wrap(malformedBytes);
+        CharBuffer malformedTrgt = CharBuffer.allocate(10);
+        int[] malformedLimits = {
+                2, 6
+        };
+        CharsetDecoder malformedDecoderTest = provider.charsetForName("LMBCS-1").newDecoder();
+        for (int n = 0; n < malformedLimits.length; n++) {
+            malformedDecoderTest.reset();
+            
+            malformedSrc.position(0);
+            malformedSrc.limit(malformedLimits[n]);
+            
+            malformedTrgt.clear();
+            
+            malformedResult = malformedDecoderTest.decode(malformedSrc,malformedTrgt, true);
+            if (!malformedResult.isMalformed()) {
+                errln("Malformed error should have resulted.");
+            }
+        }
     }
     
     /*

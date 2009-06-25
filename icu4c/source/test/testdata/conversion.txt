@@ -908,6 +908,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{1}, :int{0}, "invalid", ".", :bin{ 07 }
         }
+        {
+          "*test5",
+          :bin{ 010304 },
+          "\u0034\ufffd",
+          :intvector{},
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
       }
     }
 
