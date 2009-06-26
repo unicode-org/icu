@@ -103,6 +103,13 @@
         </antcall>
     </target>
 
+    <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
+        <antcall target="_runCheck">
+            <param name="runcheck.arg" value="-n -e10 Core/Format/DateFormat/TimeZoneFormatTest"/>
+            <param name="runcheck.jvmarg" value="-DTimeZoneRoundTripAll=true"/>
+        </antcall>
+    </target>
+
     <target name="secureCheck" description="Run the secure (applet-like) ICU4J test suite">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n -w"/>
