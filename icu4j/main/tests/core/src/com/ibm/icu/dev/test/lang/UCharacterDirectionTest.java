@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ public class UCharacterDirectionTest extends TestFmwk
     // constructor -----------------------------------------------------------
     
     /**
-    * Private constructor to prevent initialisation
+    * Private constructor to prevent initialization
     */
     public UCharacterDirectionTest()
     {
@@ -66,8 +66,13 @@ public class UCharacterDirectionTest extends TestFmwk
                          "Non-Spacing Mark",
                          "Boundary Neutral",
                          "Unassigned"};
+        
         for (int i = UCharacterDirection.LEFT_TO_RIGHT; 
-                 i < UCharacterDirection.CHAR_DIRECTION_COUNT; i ++) {
+                 i <= UCharacterDirection.CHAR_DIRECTION_COUNT; i++) {
+            
+            // Placed <= because we need to consider 'Unassigned'
+            // because it's out of bounds
+            
              if (!UCharacterDirection.toString(i).equals(name[i])) {
                 errln("Error toString for direction " + i + " expected " +
                       name[i]);

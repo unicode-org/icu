@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -120,7 +120,7 @@ public final class UCharacterProperty
     /**
     * Gets the property value at the index.
     * This is optimized.
-    * Note this is alittle different from CharTrie the index m_trieData_
+    * Note this is a little different from CharTrie the index m_trieData_
     * is never negative.
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point

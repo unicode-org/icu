@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and   *
+* Copyright (C) 1996-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -70,12 +70,17 @@ class UCharacterNameIterator implements ValueIterator
                             return true;
                         }
                     }
-
+                    /* JOHNVU:
+                    // The following code was comment out for "return false"
+                    // because it can never be reached due to:
+                    // 1) It has already been checked earlier
+                    // 2) When m_current_ is updated earlier, it returns true
+                    // 3) No updates on m_limit_
                     if (m_current_ >= m_limit_) {
                         // after iterateGroup fails, current codepoint may be
                         // greater than limit
                         return false;
-                    }
+                    }*/
 
                     element.integer = m_current_;
                     element.value   = m_name_.getAlgorithmName(m_algorithmIndex_,
