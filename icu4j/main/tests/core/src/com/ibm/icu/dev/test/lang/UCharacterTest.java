@@ -2424,4 +2424,90 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
+    
+    public void TestGetInstance(){
+        // Testing values for invalid and valid ID
+        int[] invalid_test = {-1,-10,-100};
+        for(int i=0; i< invalid_test.length; i++){
+            if(UCharacter.UnicodeBlock.INVALID_CODE != UCharacter.UnicodeBlock.getInstance(invalid_test[i])){
+                errln("UCharacter.UnicodeBlock.getInstance(invalid_test[i]) was " +
+                        "suppose to return UCharacter.UnicodeBlock.INVALID_CODE. Got " +
+                        UCharacter.UnicodeBlock.getInstance(invalid_test[i]) + ". Expected " +
+                        UCharacter.UnicodeBlock.INVALID_CODE);
+            }
+        }
+    }
+    
+    public void TestOf(){
+        if(UCharacter.UnicodeBlock.INVALID_CODE != UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1)){
+            errln("UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) was " +
+                    "suppose to return UCharacter.UnicodeBlock.INVALID_CODE. Got " +
+                    UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) + ". Expected " +
+                    UCharacter.UnicodeBlock.INVALID_CODE);
+        }
+    }
+    
+    // The method idOf can only be accessed through getIntPropertyValue
+    public void TestIDOf(){
+        int[] invalid_test = {-2, -1, UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
+        
+        for(int i=0; i < invalid_test.length; i++){
+            int result = UCharacter.getIntPropertyValue(invalid_test[i], UProperty.BLOCK);
+            if(result != -1){
+                errln("UCharacter.UnicodeBlock.idOf() was suppose to return -1. Got " + result);
+            }
+        }
+        
+        int[] valid_test = {0, 1, UTF16.CODEPOINT_MAX_VALUE, UTF16.CODEPOINT_MAX_VALUE-1};
+        
+        for(int i=0; i < valid_test.length; i++){
+            int result = UCharacter.getIntPropertyValue(valid_test[i], UProperty.BLOCK);
+            if(result == -1){
+                errln("UCharacter.UnicodeBlock.idOf() was not suppose to return -1. Got " + result);
+            }
+        }
+    }
+    
+    /*public void TestForName(){
+        UCharacter.UnicodeBlock.forName("");
+    }*/
+    
+    public void TestGetNumericValue(){
+        // The following tests the else statement when
+        //      if(numericType<NumericType.COUNT) is false
+        // The following values were obtained by testing all values from
+        //      UTF16.CODEPOINT_MIN_VALUE to UTF16.CODEPOINT_MAX_VALUE inclusively
+        //      to obtain the value to go through the else statement.
+        int[] valid_values =
+            {3058,3442,4988,8558,8559,8574,8575,8576,8577,8578,8583,8584,19975,
+             20159,20191,20740,20806,21315,33836,38433,65819,65820,65821,65822,
+             65823,65824,65825,65826,65827,65828,65829,65830,65831,65832,65833,
+             65834,65835,65836,65837,65838,65839,65840,65841,65842,65843,65861,
+             65862,65863,65868,65869,65870,65875,65876,65877,65878,65899,65900,
+             65901,65902,65903,65904,65905,65906,66378,68167};
+        
+        int[] results =
+            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,-1,-1,-1,0,1,2,3,4,5,6,7,8,9,-1,-1,-1,-1,-1,-1,-1};
+        
+        if(valid_values.length != results.length){
+            errln("The valid_values array and the results array need to be "+
+                    "the same length.");
+        } else {
+            for(int i = 0; i < valid_values.length; i++){
+                try{
+                    if(UCharacter.getNumericValue(i) != results[i]){
+                        errln("UCharacter.getNumericValue(i) returned a " +
+                                "different value from the expected result. " +
+                                "Got " + UCharacter.getNumericValue(i) +
+                                "Expected" + results[i]);
+                    }
+                } catch(Exception e){
+                    errln("UCharacter.getNumericValue(int) returned an exception " +
+                            "with the parameter value");
+                }
+            }
+        }
+    }
 }

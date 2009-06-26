@@ -2057,11 +2057,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             DOMINO_TILES,
         };
 
+        /* Clover Code Coverage is turned off becuase the COUNT and BLOCKS_.length
+         * are both static final and can't be externally changed by another file.*/
+        ///CLOVER:OFF
         static {
             if (COUNT!=BLOCKS_.length) {
                 throw new java.lang.IllegalStateException("UnicodeBlock fields are inconsistent!");
             }
         }
+        ///CLOVER:ON
+        
         /**
          * Identification code for this UnicodeBlock
          */
@@ -3073,14 +3078,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // slightly pruned version of getUnicodeNumericValue(), plus getEuropeanDigit()
         int props = PROPERTY_.getProperty(ch);
         int numericType = getNumericType(props);
-
+        
         if(numericType==0) {
             return getEuropeanDigit(ch);
         }
         if(numericType==UCharacterProperty.NT_FRACTION || numericType>=UCharacterProperty.NT_COUNT) {
             return -2;
         }
-
+        
         int numericValue = UCharacterProperty.getUnsignedValue(props);
 
         if(numericType<NumericType.COUNT) {

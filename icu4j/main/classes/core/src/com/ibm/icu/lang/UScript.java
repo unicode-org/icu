@@ -13,7 +13,6 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 
 /**
  * A class to reflect UTR #24: Script Names
@@ -735,12 +734,20 @@ public final class UScript {
      */
     private static int[] findCodeFromLocale(ULocale locale) {
         ICUResourceBundle rb;
+        
+        /* JOHNVU:
+        // The following was comment out becuase the MissingResourceException
+        // seems to never be called because the "getBundleInstance" seems to
+        // correct this to ICUResourceBundle.FROM_DEFAULT if such invalid locale enters in.
         try {
             rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         }
         catch (MissingResourceException e) {
             return null;
         }
+        */
+        
+        rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         
         // if rb is not a strict fallback of the requested locale, return null
         //if(!LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1999-2008, International Business Machines Corporation and    *
+* Copyright (C) 1999-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -300,6 +300,25 @@ public class TestUScriptRun extends TestFmwk
             errln("scriptRun.reset(6, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
             logln("PASS: scriptRun.reset failed as expected");
+        }
+        
+        try {
+            scriptRun.reset(dummy, 0, dummy.length);
+            scriptRun.reset();
+        } catch(IllegalArgumentException iae){
+            errln("scriptRun.reset() produced an IllegalArgumentException!");
+        }
+        
+        try {
+            scriptRun.reset((char[]) null);
+        } catch(IllegalArgumentException iae){
+            errln("scriptRun.reset((char[])null) produced an IllegalArgumentException!");
+        }
+        
+        try {
+            scriptRun.reset((String) null);
+        } catch(IllegalArgumentException iae){
+            errln("scriptRun.reset((String)null) produced an IllegalArgumentException!");
         }
     }
     
