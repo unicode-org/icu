@@ -7,22 +7,24 @@
   <meta name="COPYRIGHT" content="Copyright 2000-2009, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
+h4.doc { text-decoration: underline }
   </style>
 </head>
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.2</h3>
+<h3>Read Me for ICU4J 4.2.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-May 8, 2009<br>
+July 1, 2009<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
 or functionality. -->
 
-<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds
-implementations of inherited API and introduces new API or functionality. 
+<p><b>Note:</b> This is an update release of ICU4J 4.2.  This release contains
+several bug fixes and updated data, but does not introduce any new APIs or
+functionalities.
 </p>
 
 <p>For the most recent release, see the <a
@@ -137,6 +139,25 @@ new features in this release.  The list of API changes since the previous ICU4J 
 is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-2/APIChangeReport.html">here</a>.
 </p>
+
+<h4 class="doc">Summary of changes in 4.2.1 (July 1, 2009)</h4>
+<p><b>Locale data update</b></p>
+<p>ICU4J 4.2.1 updates the CLDR version to
+<a href="http://cldr.unicode.org/index/downloads/cldr-1-7-1">1.7.1</a>.</p>
+
+<p><b>Time zone data update</b></p>
+<p>ICU4J 4.2.1 updates the time zone data to version
+<a href="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/2009j/">2009j</a>
+from the Olson tz database.</p>
+
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes (not a complete list)
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6918">#6918</a> Date formatting should honor @numbers</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7014">#7014</a> TimeZone.getTimeZone("Asia/Amman") returns GMT with tzdata 2009i</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7017">#7017</a> ICU4J time zone test failure with tzdata2009i</li>
+</ul>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
