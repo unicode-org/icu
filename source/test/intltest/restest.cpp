@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -202,7 +202,7 @@ ResourceBundleTest::TestResourceBundles()
     loadTestData(status);
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return;
     }
 
@@ -235,7 +235,7 @@ ResourceBundleTest::TestConstruction()
     const char* testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
-        dataerrln("[DATA] Could not load testdata.dat " + UnicodeString(testdatapath) +  ", " + UnicodeString(u_errorName(err)));
+        dataerrln("Could not load testdata.dat " + UnicodeString(testdatapath) +  ", " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -319,7 +319,7 @@ ResourceBundleTest::testTag(const char* frag,
     testdatapath=loadTestData(status);
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return FALSE;
     }
 
@@ -534,7 +534,7 @@ ResourceBundleTest::TestGetSize(void)
     
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s\n", u_errorName(status));
+        dataerrln("Could not load testdata.dat %s\n", u_errorName(status));
         return;
     }
     
@@ -588,7 +588,7 @@ ResourceBundleTest::TestGetLocaleByType(void)
     
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s\n", u_errorName(status));
+        dataerrln("Could not load testdata.dat %s\n", u_errorName(status));
         return;
     }
     

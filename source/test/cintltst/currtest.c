@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2005-2008, International Business Machines Corporation and
+ * Copyright (c) 2005-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -163,7 +163,7 @@ static void TestFractionDigitOverride(void) {
     const char expectedSecond[] = "123,46\\u00A0Ft";
     const char expectedThird[] = "123,456\\u00A0Ft";
     if (U_FAILURE(status)) {
-       log_err("Error: unum_open returned %s\n", myErrorName(status));
+       log_data_err("Error: unum_open returned %s (Are you missing data?)\n", myErrorName(status));
        return;
     }
     /* Make sure that you can format normal fraction digits. */
@@ -203,7 +203,7 @@ static void TestPrefixSuffix(void) {
 	status = U_ZERO_ERROR;
 	parser = unum_open(UNUM_CURRENCY, NULL, -1, "en_US", NULL, &status);
     if (U_FAILURE(status)) {
-       log_err("Error: unum_open returned %s\n", u_errorName(status));
+       log_data_err("Error: unum_open returned %s (Are you missing data?)\n", u_errorName(status));
        return;
     }
 

@@ -157,11 +157,15 @@ void TestGetSetAttr(void) {
   UColAttributeValue value;
   uint32_t i = 0, j = 0;
 
+  if (coll == NULL) {
+    log_err_status(status, "Unable to open collator. %s\n", u_errorName(status));
+    return;
+  } 
   for(i = 0; i<sizeof(attrs)/sizeof(attrs[0]); i++) {
     currAttr = attrs[i].att;
     ucol_setAttribute(coll, currAttr, UCOL_DEFAULT, &status);
     if(U_FAILURE(status)) {
-      log_err("ucol_setAttribute with the default value returned error: %s\n", u_errorName(status));
+      log_err_status(status, "ucol_setAttribute with the default value returned error: %s\n", u_errorName(status));
       break;
     }
     value = ucol_getAttribute(coll, currAttr, &status);
@@ -189,7 +193,6 @@ void TestGetSetAttr(void) {
       log_err("ucol_setAttribute with the default valuereturned error: %s\n", u_errorName(status));
       break;
     }
-
   }
   status = U_ZERO_ERROR;
   value = ucol_getAttribute(coll, UCOL_ATTRIBUTE_COUNT, &status);
@@ -302,7 +305,7 @@ void TestProperty()
     log_verbose("Test ucol_strcoll : \n");
     col = ucol_open("en_US", &status);
     if (U_FAILURE(status)) {
-        log_err("Default Collator creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "Default Collator creation failed.: %s\n", myErrorName(status));
         return;
     }
 
@@ -460,7 +463,7 @@ void TestRuleBasedColl()
 
     col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
-        log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
     }
     else
@@ -572,7 +575,7 @@ void TestCompare()
     status=U_ZERO_ERROR;
     col = ucol_open("en_US", &status);
     if(U_FAILURE(status)) {
-        log_err("ucal_open() collation creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "ucal_open() collation creation failed.: %s\n", myErrorName(status));
         return;
     }
     test1=(UChar*)malloc(sizeof(UChar) * 6);
@@ -619,7 +622,7 @@ void TestDecomposition() {
     vi_VN = ucol_open("vi_VN", &status);
 
     if (U_FAILURE(status)) {
-        log_err("ERROR: collation creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: collation creation failed.: %s\n", myErrorName(status));
         return;
     }
 
@@ -1052,7 +1055,7 @@ void TestSortKey()
     /* col = ucol_open(NULL, &status); */
     col = ucol_open("en_US", &status);
     if (U_FAILURE(status)) {
-        log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: Default collation creation failed.: %s\n", myErrorName(status));
         return;
     }
 
@@ -1179,7 +1182,7 @@ void TestHashCode()
     log_verbose("testing getHashCode begins...\n");
     col = ucol_open("en_US", &status);
     if (U_FAILURE(status)) {
-        log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: Default collation creation failed.: %s\n", myErrorName(status));
         return;
     }
     test1=(UChar*)malloc(sizeof(UChar) * 6);
@@ -1235,7 +1238,7 @@ void TestElemIter()
     col = ucol_open("en_US", &status);
     ucol_setAttribute(col, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
     if (U_FAILURE(status)) {
-        log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: Default collation creation failed.: %s\n", myErrorName(status));
         return;
     }
 
@@ -1380,7 +1383,7 @@ void TestGetLocale() {
     status = U_ZERO_ERROR;
     coll = ucol_open(testStruct[i].requestedLocale, &status);
     if(U_FAILURE(status)) {
-      log_err("Failed to open collator for %s with %s\n", testStruct[i].requestedLocale, u_errorName(status));
+      log_err_status(status, "Failed to open collator for %s with %s\n", testStruct[i].requestedLocale, u_errorName(status));
       ucol_close(coll);
       continue;
     }
@@ -1691,98 +1694,98 @@ static void TestAttribute()
     UCollator *coll = ucol_open(NULL, &error);
 
     if (U_FAILURE(error)) {
-        log_err("Creation of default collator failed");
+        log_err_status(error, "Creation of default collator failed\n");
         return;
     }
 
     ucol_setAttribute(coll, UCOL_FRENCH_COLLATION, UCOL_OFF, &error);
     if (ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &error) != UCOL_OFF ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the french collation failed");
+        log_err_status(error, "Setting and retrieving of the french collation failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_FRENCH_COLLATION, UCOL_ON, &error);
     if (ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &error) != UCOL_ON ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the french collation failed");
+        log_err_status(error, "Setting and retrieving of the french collation failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &error);
     if (ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, &error) != UCOL_SHIFTED ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the alternate handling failed");
+        log_err_status(error, "Setting and retrieving of the alternate handling failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &error);
     if (ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, &error) != UCOL_NON_IGNORABLE ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the alternate handling failed");
+        log_err_status(error, "Setting and retrieving of the alternate handling failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_LOWER_FIRST, &error);
     if (ucol_getAttribute(coll, UCOL_CASE_FIRST, &error) != UCOL_LOWER_FIRST ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the case first attribute failed");
+        log_err_status(error, "Setting and retrieving of the case first attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_UPPER_FIRST, &error);
     if (ucol_getAttribute(coll, UCOL_CASE_FIRST, &error) != UCOL_UPPER_FIRST ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the case first attribute failed");
+        log_err_status(error, "Setting and retrieving of the case first attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &error);
     if (ucol_getAttribute(coll, UCOL_CASE_LEVEL, &error) != UCOL_ON ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the case level attribute failed");
+        log_err_status(error, "Setting and retrieving of the case level attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &error);
     if (ucol_getAttribute(coll, UCOL_CASE_LEVEL, &error) != UCOL_OFF ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the case level attribute failed");
+        log_err_status(error, "Setting and retrieving of the case level attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &error);
     if (ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, &error) != UCOL_ON ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the normalization on/off attribute failed");
+        log_err_status(error, "Setting and retrieving of the normalization on/off attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &error);
     if (ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, &error) != UCOL_OFF ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the normalization on/off attribute failed");
+        log_err_status(error, "Setting and retrieving of the normalization on/off attribute failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &error);
     if (ucol_getAttribute(coll, UCOL_STRENGTH, &error) != UCOL_PRIMARY ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the collation strength failed");
+        log_err_status(error, "Setting and retrieving of the collation strength failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_SECONDARY, &error);
     if (ucol_getAttribute(coll, UCOL_STRENGTH, &error) != UCOL_SECONDARY ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the collation strength failed");
+        log_err_status(error, "Setting and retrieving of the collation strength failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &error);
     if (ucol_getAttribute(coll, UCOL_STRENGTH, &error) != UCOL_TERTIARY ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the collation strength failed");
+        log_err_status(error, "Setting and retrieving of the collation strength failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_QUATERNARY, &error);
     if (ucol_getAttribute(coll, UCOL_STRENGTH, &error) != UCOL_QUATERNARY ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the collation strength failed");
+        log_err_status(error, "Setting and retrieving of the collation strength failed\n");
     }
 
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &error);
     if (ucol_getAttribute(coll, UCOL_STRENGTH, &error) != UCOL_IDENTICAL ||
         U_FAILURE(error)) {
-        log_err("Setting and retrieving of the collation strength failed");
+        log_err_status(error, "Setting and retrieving of the collation strength failed\n");
     }
 
     ucol_close(coll);
@@ -1823,7 +1826,7 @@ void TestGetTailoredSet() {
       }
       uset_close(set);
     } else {
-      log_err("Couldn't open collator with rules %s\n", setTest[i].rules);
+      log_err_status(status, "Couldn't open collator with rules %s\n", setTest[i].rules);
     }
     ucol_close(coll);
   }
@@ -2003,8 +2006,9 @@ static void TestShortString(void)
 
         coll = ucol_openFromShortString(testCases[i].input, FALSE, &parseError, &status);
         if(status != testCases[i].expectedStatus) {
-            log_err("Got status '%s' that is different from expected '%s' for '%s'\n",
+            log_err_status(status, "Got status '%s' that is different from expected '%s' for '%s'\n",
                 u_errorName(status), u_errorName(testCases[i].expectedStatus), testCases[i].input);
+            continue;
         }
 
         if(U_SUCCESS(status)) {
@@ -2138,6 +2142,10 @@ TestGetContractionsAndUnsafes(void)
     for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
         log_verbose("Testing locale: %s\n", tests[i].locale);
         coll = ucol_open(tests[i].locale, &status);
+        if (coll == NULL || U_FAILURE(status)) {
+            log_err_status(status, "Unable to open collator for locale %s ==> %s\n", tests[i].locale, u_errorName(status));
+            continue;
+        }
         ucol_getContractionsAndExpansions(coll, conts, exp, TRUE, &status);
         doSetsTest(tests[i].locale, conts, set, tests[i].inConts, tests[i].outConts, &status);
         setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
@@ -2242,6 +2250,10 @@ static void TestDefault(void) {
     /* Tests for code coverage. */
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = ucol_open("es@collation=pinyin", &status);
+    if (coll == NULL || status == U_FILE_ACCESS_ERROR) {
+        log_data_err("Unable to open collator es@collation=pinyin\n");
+        return;
+    }
     if (status != U_USING_DEFAULT_WARNING) {
         /* What do you mean that you know about using pinyin collation in Spanish!? This should be in the zh locale. */
         log_err("es@collation=pinyin should return U_USING_DEFAULT_WARNING, but returned %s\n", u_errorName(status));
@@ -2308,7 +2320,7 @@ static void TestGetKeywordValuesForLocale(void) {
 
         keywordValues = ucol_getKeywordValuesForLocale("collation", locale, TRUE, &status);
         if (keywordValues == NULL || U_FAILURE(status)) {
-            log_err("Error getting keyword values: %s\n", u_errorName(status));
+            log_err_status(status, "Error getting keyword values: %s\n", u_errorName(status));
             break;
         }
         size = uenum_count(keywordValues, &status);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -240,7 +240,7 @@ TestCaseTitle(void) {
     errorCode=U_ZERO_ERROR;
     titleIterChars=ubrk_open(UBRK_CHARACTER, "", beforeTitle, sizeof(beforeTitle)/U_SIZEOF_UCHAR, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error: ubrk_open(UBRK_CHARACTER)->%s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "error: ubrk_open(UBRK_CHARACTER)->%s\n", u_errorName(errorCode));
         return;
     }
 
@@ -344,7 +344,7 @@ TestCaseDutchTitle(void) {
     errorCode=U_ZERO_ERROR;
     titleIterWord=ubrk_open(UBRK_WORD, "", beforeTitle, sizeof(beforeTitle)/U_SIZEOF_UCHAR, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error: ubrk_open(UBRK_WORD)->%s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "error: ubrk_open(UBRK_WORD)->%s\n", u_errorName(errorCode));
         return;
     }
 
@@ -895,18 +895,19 @@ TestUCaseMapToTitle(void) {
         0!=u_memcmp(buffer, titleWord, length) ||
         buffer[length]!=0
     ) {
-        log_err("ucasemap_toTitle(default iterator)=%ld failed - %s\n", (long)length, u_errorName(errorCode));
+        log_err_status(errorCode, "ucasemap_toTitle(default iterator)=%ld failed - %s\n", (long)length, u_errorName(errorCode));
     }
-
-    iter=ucasemap_getBreakIterator(csm);
-    if(iter==NULL) {
-        log_err("ucasemap_getBreakIterator() returns NULL after titlecasing\n");
+    if (U_SUCCESS(errorCode)) {
+        iter=ucasemap_getBreakIterator(csm);
+        if(iter==NULL) {
+            log_err("ucasemap_getBreakIterator() returns NULL after titlecasing\n");
+        }
     }
 
     /* Try U_TITLECASE_NO_BREAK_ADJUSTMENT. */
     ucasemap_setOptions(csm, U_TITLECASE_NO_BREAK_ADJUSTMENT, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error: ucasemap_setOptions(U_TITLECASE_NO_BREAK_ADJUSTMENT) failed - %s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "error: ucasemap_setOptions(U_TITLECASE_NO_BREAK_ADJUSTMENT) failed - %s\n", u_errorName(errorCode));
         return;
     }
 

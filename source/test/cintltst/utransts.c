@@ -271,7 +271,7 @@ static void TestOpenInverse(){
         status = U_ZERO_ERROR;
         t1=utrans_open(TransID[i], UTRANS_FORWARD,NULL,0,NULL, &status);
         if(t1 == NULL || U_FAILURE(status)){
-            log_err("FAIL: in instantiation for id=%s\n", TransID[i]);
+            log_data_err("FAIL: in instantiation for id=%s -> %s (Are you missing data?)\n", TransID[i], u_errorName(status));
             continue;
         }
         inverse1=utrans_openInverse(t1, &status);
@@ -299,7 +299,7 @@ static void TestClone(){
    
     t1=utrans_open("Latin-Devanagari", UTRANS_FORWARD, NULL,0,NULL,&status);
     if(U_FAILURE(status)){
-        log_err("FAIL: construction\n");
+        log_data_err("FAIL: construction -> %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     t2=utrans_open("Latin-Greek", UTRANS_FORWARD, NULL,0,NULL,&status);
@@ -585,7 +585,7 @@ static void _expectRules(const char* crules,
                              &parseErr, &status);
     if (U_FAILURE(status)) {
         utrans_close(trans);
-        log_err("FAIL: utrans_openRules(%s) failed, error=%s\n",
+        log_data_err("FAIL: utrans_openRules(%s) failed, error=%s (Are you missing data?)\n",
                 crules, u_errorName(status));
         return;
     }

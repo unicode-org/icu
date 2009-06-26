@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -261,7 +261,7 @@ void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char*
           default: name = ""; break;
       }
     } else {
-      errln("Class collator not instantiated");
+      dataerrln("Class collator not instantiated");
       name = "";
     }
 }

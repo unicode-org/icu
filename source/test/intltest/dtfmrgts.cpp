@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -224,7 +224,10 @@ void DateFormatRegressionTest::Test4056591(void)
 
     //try {
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::getUS(), status);
-        failure(status, "new SimpleDateFormat");
+        if (failure(status, "new SimpleDateFormat")) {
+            delete fmt;
+            return;
+        }
         UDate start = date(1809-1900, UCAL_DECEMBER, 25);
         fmt->set2DigitYearStart(start, status);
         failure(status, "fmt->setTwoDigitStartDate");
@@ -388,7 +391,7 @@ void DateFormatRegressionTest::Test4061287(void)
     
     SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("dd/MM/yyyy"), status);
     if(U_FAILURE(status)) {
-      errln("Couldn't create SimpleDateFormat, error: %s", u_errorName(status));
+      errcheckln(status, "Couldn't create SimpleDateFormat, error: %s", u_errorName(status));
       delete df;
       return;
     }
@@ -566,7 +569,7 @@ void DateFormatRegressionTest::Test4073003(void)
     UErrorCode ec = U_ZERO_ERROR;
     SimpleDateFormat fmt("dd/MM/yy", Locale::getUK(), ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: SimpleDateFormat constructor");
+        errcheckln(ec, "FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
         return;
     }
         UnicodeString tests [] = { 
@@ -605,7 +608,7 @@ void DateFormatRegressionTest::Test4089106(void)
         UErrorCode status = U_ZERO_ERROR;
         SimpleDateFormat *f = new SimpleDateFormat(status);
         if(U_FAILURE(status)) {
-          errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+          errcheckln(status, "Couldn't create SimpleDateFormat, error %s", u_errorName(status));
           delete f;
           delete def;
           delete z;
@@ -767,7 +770,7 @@ void DateFormatRegressionTest::Test4103341(void)
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *simple = new SimpleDateFormat(UnicodeString("MM/dd/yyyy HH:mm"), status);
     if(U_FAILURE(status)) {
-      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      errcheckln(status, "Couldn't create SimpleDateFormat, error %s", u_errorName(status));
       delete simple;
       return;
     }
@@ -792,7 +795,7 @@ void DateFormatRegressionTest::Test4104136(void)
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat(status); 
     if(U_FAILURE(status)) {
-      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      errcheckln(status, "Couldn't create SimpleDateFormat, error %s", u_errorName(status));
       delete sdf;
       return;
     }
@@ -857,7 +860,7 @@ void DateFormatRegressionTest::Test4104522(void)
     
     SimpleDateFormat *sdf = new SimpleDateFormat(status);
     if(U_FAILURE(status)) {
-      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      errcheckln(status, "Couldn't create SimpleDateFormat, error %s", u_errorName(status));
       delete sdf;
       return;
     }
@@ -900,7 +903,7 @@ void DateFormatRegressionTest::Test4106807(void)
         new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss %"), status)
     };
     if(U_FAILURE(status)) {
-      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      errcheckln(status, "Couldn't create SimpleDateFormat, error %s", u_errorName(status));
       delete sdfs[0];
       delete sdfs[1];
       delete sdfs[2];
@@ -1077,7 +1080,7 @@ DateFormatRegressionTest::Test4162071(void)
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat df(format, Locale::getUS(), status);
     if(U_FAILURE(status)) {
-        errln("Couldn't create SimpleDateFormat");
+        errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status));
         return;
     }
     
@@ -1103,7 +1106,7 @@ void DateFormatRegressionTest::Test4182066(void) {
     SimpleDateFormat fmt("MM/dd/yy", Locale::getUS(), status);
     SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::getUS(), status);
     if (U_FAILURE(status)) {
-        errln("Couldn't create SimpleDateFormat");
+        errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status));
         return;
     }
 
@@ -1188,7 +1191,7 @@ DateFormatRegressionTest::Test4210209(void) {
     DateFormat& fmt = *(DateFormat*)&sfmt; // Yuck: See j25
     DateFormat& disp = *(DateFormat*)&sdisp; // Yuck: See j25
     if (U_FAILURE(status)) {
-        errln("Couldn't create SimpleDateFormat");
+        errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status));
         return;
     }
     Calendar* calx = (Calendar*)fmt.getCalendar(); // cast away const!

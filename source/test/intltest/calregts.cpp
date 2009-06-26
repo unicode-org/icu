@@ -113,7 +113,7 @@ UBool
 CalendarRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         return TRUE;
     }
 
@@ -435,7 +435,7 @@ void CalendarRegressionTest::test4061476()
     Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone("GMT"), 
                                     Locale::getUK(),status);
     if(U_FAILURE(status)) {
-      errln("Error creating Calendar: %s", u_errorName(status));
+      errcheckln(status, "Error creating Calendar: %s", u_errorName(status));
       delete cal;
       delete fmt;
       return;
@@ -466,7 +466,7 @@ void CalendarRegressionTest::test4070502()
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = new GregorianCalendar(status);
     if(status == U_USING_FALLBACK_WARNING) {
-      errln("Error creating Calendar: %s", u_errorName(status));
+      dataerrln("Error creating Calendar: %s", u_errorName(status));
       delete cal;
       return;
     }
@@ -706,7 +706,7 @@ void CalendarRegressionTest::test4086724()
         date = new SimpleDateFormat(UnicodeString("dd MMM yyy (zzzz) 'is in week' ww"),status); 
         Calendar *cal = Calendar::createInstance(status); 
         if(U_FAILURE(status)) {
-          errln("Error creating Calendar: %s", u_errorName(status));
+          errcheckln(status, "Error creating Calendar: %s", u_errorName(status));
           delete cal;
           delete newZone;
           delete date;
@@ -910,7 +910,7 @@ void CalendarRegressionTest::test4103271()
     UnicodeString output, testDesc, str, str2; 
     GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
     if(U_FAILURE(status)) {
-      errln("Error creating calendar: %s", u_errorName(status));
+      errcheckln(status, "Error creating calendar: %s", u_errorName(status));
       delete testCal;
       return;
     }
@@ -1171,7 +1171,7 @@ void CalendarRegressionTest::test4106136()
             for (int32_t j=0; j<3; ++j) {
                 UnicodeString temp;
                 if (n[j] == 0)
-                    errln(UnicodeString("Fail: No locales for ") + locales[i].getName());
+                    dataerrln(UnicodeString("Fail: No locales for ") + locales[i].getName());
             }
         }
     //}
@@ -1488,7 +1488,7 @@ void CalendarRegressionTest::test4145158()
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *calendar = new GregorianCalendar(status);
     if(status == U_USING_FALLBACK_WARNING || U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       delete calendar;
       return;
     }
@@ -1558,7 +1558,7 @@ void CalendarRegressionTest::test4147269()
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *calendar = new GregorianCalendar(status);
     if(status == U_USING_FALLBACK_WARNING || U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       delete calendar;
       return;
     }
@@ -1815,7 +1815,7 @@ CalendarRegressionTest::Test4167060()
     DateFormat *format = new SimpleDateFormat(UnicodeString("EEE MMM dd HH:mm:ss zzz yyyy G"),
         Locale::getUS(), status);
     if(U_FAILURE(status)) {
-        errln("Couldn't create SimpleDateFormat");
+        errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status));
         return;
     }
 
@@ -1906,7 +1906,7 @@ void CalendarRegressionTest::Test4197699() {
                          Locale::getUS(), status);
     fmt.setCalendar(cal);
     if (U_FAILURE(status)) {
-        errln("Couldn't initialize test");
+        errcheckln(status, "Couldn't initialize test - %s", u_errorName(status));
         return;
     }
 
@@ -1968,7 +1968,7 @@ void CalendarRegressionTest::TestJ81() {
     GregorianCalendar cal(TimeZone::createTimeZone("GMT"), Locale::getUS(), status);
     SimpleDateFormat fmt("HH:mm 'w'w 'd'D E d MMM yyyy", Locale::getUS(), status);
     if (U_FAILURE(status)) {
-        errln("Error: Cannot create calendar or format");
+        errcheckln(status, "Error: Cannot create calendar or format - %s", u_errorName(status));
         return;
     }
     fmt.setCalendar(cal);
@@ -2184,7 +2184,7 @@ void CalendarRegressionTest::TestJ438(void) {
     int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(DATA[0]));
     Calendar* pcal = Calendar::createInstance(Locale::getUS(), ec);
     if(U_FAILURE(ec)) {
-      errln("Error creating calendar %s", u_errorName(ec));
+      errcheckln(ec, "Error creating calendar %s", u_errorName(ec));
       delete pcal;
       return;
     }
@@ -2605,7 +2605,7 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
     }
 
     if (U_FAILURE(ec)) {
-        errln("FAIL: %s", u_errorName(ec));
+        errcheckln(ec, "FAIL: %s", u_errorName(ec));
     }
 
     delete tz;

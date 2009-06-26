@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -150,7 +150,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 {
     if (U_FAILURE(fStatus))
     { 
-        errln((UnicodeString)"**** FAIL: createXxxInstance failed.");
+        dataerrln((UnicodeString)"**** FAIL: createXxxInstance failed. - " + u_errorName(fStatus));
         if (fFormat != 0)
             errln("**** FAIL: Non-null format returned by createXxxInstance upon failure.");
         delete fFormat;
@@ -401,7 +401,7 @@ void IntlTestNumberFormat::testAvailableLocales(/* char* par */)
         logln(all);
     }
     else
-        errln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
+        dataerrln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
 }
 
 void IntlTestNumberFormat::monsterTest(/* char* par */)

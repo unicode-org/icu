@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2006, International Business Machines Corporation and
+ * Copyright (c) 2003-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -47,7 +47,7 @@ static int32_t gMutexFailures = 0;
 
 #define TEST_STATUS(status, expected) \
 if (status != expected) { \
-log_err("FAIL at  %s:%d. Actual status = \"%s\";  Expected status = \"%s\"\n", \
+log_err_status(status, "FAIL at  %s:%d. Actual status = \"%s\";  Expected status = \"%s\"\n", \
   __FILE__, __LINE__, u_errorName(status), u_errorName(expected)); gMutexFailures++; }
 
 

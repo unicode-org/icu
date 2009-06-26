@@ -77,7 +77,7 @@ static void TestPatterns(void)
         u_uastrcpy(upat, pat[i]);
         fmt= unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
         if (U_FAILURE(status)) {
-            log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
+            log_err_status(status, "FAIL: Number format constructor failed for pattern %s -> %s\n", pat[i], u_errorName(status));
             continue;
         }
         lneed=0;
@@ -130,7 +130,7 @@ static void TestQuotes(void)
     u_uastrcpy(pat, "a'fo''o'b#");
     fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
     if(U_FAILURE(status)){
-        log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
+        log_err_status(status, "Error in number format costruction using pattern \"a'fo''o'b#\" -> %s\n", u_errorName(status));
     }
     lneed=0;
     lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
@@ -140,7 +140,7 @@ static void TestQuotes(void)
         unum_format(fmt, 123, str, lneed+1,  NULL, &status);
     }
     if(U_FAILURE(status) || !str) {
-        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        log_err_status(status, "Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
         return;
     }
     log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
@@ -254,7 +254,7 @@ static void TestExponential(void)
         u_uastrcpy(upat, pat[p]);
         fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
         if (U_FAILURE(status)) {
-            log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]");
+            log_err_status(status, "FAIL: Bad status returned by Number format construction with pattern %s -> %s\n", pat[p], u_errorName(status));
             continue;
         }
         lneed= u_strlen(upat) + 1;
@@ -350,7 +350,7 @@ static void TestCurrencySign(void)
     pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
     fmt = unum_open(UNUM_IGNORE,pattern, u_strlen(pattern), "en_US",NULL, &status);
     if(U_FAILURE(status)){
-        log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
+        log_err_status(status, "Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" -> %s\n", u_errorName(status));
     }
     lneed=0;
     lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
@@ -360,7 +360,7 @@ static void TestCurrencySign(void)
         unum_formatDouble(fmt, 1234.56, str, lneed+1, NULL, &status);
     }
     if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        log_err_status(status, "Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
     }
     lneed=0;
     lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
@@ -376,7 +376,7 @@ static void TestCurrencySign(void)
         u_uastrcpy(res, "$1,234.56");
         if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
     } else {
-        log_err("Error formatting\n");
+        log_err_status(status, "Error formatting -> %s\n", u_errorName(status));
     }
     free(str);
     free(res);
@@ -390,7 +390,7 @@ static void TestCurrencySign(void)
         unum_formatDouble(fmt, -1234.56, str, lneed+1, NULL, &status);
     }
     if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        log_err_status(status, "Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
     }
     if(str) {
         res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
@@ -424,7 +424,7 @@ static void TestCurrency(void)
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
 
         if(U_FAILURE(status)){
-            log_err("Error in the construction of number format with style currency:\n%s\n",
+            log_data_err("Error in the construction of number format with style currency: %s (Are you missing data?)\n",
                 myErrorName(status));
         } else {
             lneed=0;
@@ -482,13 +482,13 @@ static void TestCurrencyPreEuro(void)
         char curID[256] = {0};
         uloc_canonicalize(locale[i], curID, 256, &status);
         if(U_FAILURE(status)){
-            log_err("Could not canonicalize %s. Error: %s \n", locale[i], u_errorName(status));
+            log_data_err("Could not canonicalize %s. Error: %s (Are you missing data?)\n", locale[i], u_errorName(status));
             continue;
         }
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,curID,NULL, &status);
 
         if(U_FAILURE(status)){
-            log_err("Error in the construction of number format with style currency:\n%s\n",
+            log_data_err("Error in the construction of number format with style currency: %s (Are you missing data?)\n",
                 myErrorName(status));
         } else {
             lneed=0;
@@ -554,7 +554,7 @@ static void TestCurrencyObject(void)
         UChar isoCode[16]={0};
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
         if(U_FAILURE(status)){
-            log_err("Error in the construction of number format with style currency:\n%s\n",
+            log_data_err("Error in the construction of number format with style currency: %s (Are you missing data?)\n",
                 myErrorName(status));
         } else {
             if (*currency[i]) {
@@ -618,7 +618,7 @@ static void TestRounding487(void)
     nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
 
     if(U_FAILURE(status)){
-        log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
+        log_data_err("FAIL: failure in the construction of number format: %s (Are you missing data?)\n", myErrorName(status));
     } else {
         roundingTest(nnf, 0.00159999, 4, "0.0016");
         roundingTest(nnf, 0.00995, 4, "0.01");
@@ -683,7 +683,7 @@ static void TestDoubleAttribute(void)
     def=unum_open(style, NULL,0,NULL,NULL, &status);
 
     if (U_FAILURE(status)) {
-        log_err("Fail: error creating a default number formatter\n");
+        log_data_err("Fail: error creating a default number formatter -> %s (Are you missing data?)\n", u_errorName(status));
     } else {
         attr=UNUM_ROUNDING_INCREMENT;
         dvalue=unum_getDoubleAttribute(def, attr);
@@ -718,7 +718,10 @@ static void TestSecondaryGrouping(void) {
 
     u_uastrcpy(buffer, "#,##,###");
     f = unum_open(UNUM_IGNORE,buffer, -1, "en_US",NULL, &status);
-    CHECK(status, "DecimalFormat ct");
+    if (U_FAILURE(status)) {
+        log_data_err("Error DecimalFormat ct -> %s (Are you missing data?)\n", u_errorName(status));
+        return;
+    }
 
     pos.field = 0;
     unum_format(f, (int32_t)123456789L, resultBuffer, 512 , &pos, &status);
@@ -897,7 +900,7 @@ static void TestGetKeywordValuesForLocale(void) {
     
     UEnumeration *ALL = ucurr_getKeywordValuesForLocale("currency", uloc_getDefault(), FALSE, &status);
     if (ALL == NULL) {
-        log_err("ERROR getting keyword value for default locale.\n");
+        log_err_status(status, "ERROR getting keyword value for default locale. -> %s\n", u_errorName(status));
         return;
     }
     
@@ -978,7 +981,7 @@ static void TestRounding5350(void)
     nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
 
     if(U_FAILURE(status)){
-        log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
+        log_data_err("FAIL: failure in the construction of number format: %s (Are you missing data?)\n", myErrorName(status));
         return;
     }
 

@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -88,7 +88,7 @@ void CollationFinnishTest::runIndexedTest( int32_t index, UBool exec, const char
     if (exec) logln("TestSuite CollationFinnishTest: ");
 
     if((!myCollation) && exec) {
-      errln(__FILE__ " cannot test - failed to create collator.");
+      dataerrln(__FILE__ " cannot test - failed to create collator.");
       name = "some test";
       return;
     }

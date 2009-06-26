@@ -263,7 +263,7 @@ static void FunkyATest(void)
     UCollator  *myCollation;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing some A letters, for some reason\n");
@@ -1319,7 +1319,7 @@ static void TestCollations(void) {
     UCollator *UCA = ucol_open("", &status);
     UColAttributeValue oldStrength = ucol_getAttribute(UCA, UCOL_STRENGTH, &status);
     if (U_FAILURE(status)) {
-        log_err("Could not open UCA collator %s\n", u_errorName(status));
+        log_err_status(status, "Could not open UCA collator %s\n", u_errorName(status));
         return;
     }
     ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
@@ -1445,13 +1445,13 @@ static void IsTailoredTest(void) {
         ucol_close(coll);
     }
     else {
-        log_err("Can't tailor rules");
+        log_err_status(status, "Can't tailor rules\n");
     }
     /* Code coverage */
     status = U_ZERO_ERROR;
     coll = ucol_open("ja", &status);
     if(!ucol_isTailored(coll, 0x4E9C, &status)) {
-        log_err("0x4E9C should be tailored - it is reported as not\n");
+        log_err_status(status, "0x4E9C should be tailored - it is reported as not\n");
     }
     ucol_close(coll);
 }
@@ -1625,11 +1625,8 @@ static void TestComposeDecompose(void) {
     noOfLoc = uloc_countAvailable();
 
     coll = ucol_open("", &status);
-    if(status == U_FILE_ACCESS_ERROR) {
-        log_data_err("Is your data around?\n");
-        return;
-    } else if(U_FAILURE(status)) {
-        log_err("Error opening collator\n");
+    if (U_FAILURE(status)) {
+        log_data_err("Error opening collator -> %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     charsToTestSize = uset_size(charsToTest);
@@ -2105,7 +2102,7 @@ static void TestCase(void)
     myCollation = ucol_open("en_US", &status);
 
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing different case settings\n");
@@ -2519,7 +2516,7 @@ static void TestCompressOverlap(void) {
     coll = ucol_open("", &status);
 
     if (U_FAILURE(status)) {
-        log_err("Collator can't be created\n");
+        log_err_status(status, "Collator can't be created -> %s\n", u_errorName(status));
         return;
     }
     while (count < 149) {
@@ -2666,7 +2663,7 @@ static void TestContraction(void) {
         rlen = u_unescape(testrules[i], rule, 32);
         coll = ucol_openRules(rule, rlen, UCOL_ON, UCOL_TERTIARY,NULL, &status);
         if (U_FAILURE(status)) {
-            log_err("Collator creation failed %s\n", testrules[i]);
+            log_err_status(status, "Collator creation failed %s -> %s\n", testrules[i], u_errorName(status));
             return;
         }
         iter1 = ucol_openElements(coll, testdata[i], 2, &status);
@@ -2792,7 +2789,7 @@ static void TestExpansion(void) {
         rlen = u_unescape(testrules[i], rule, 32);
         coll = ucol_openRules(rule, rlen, UCOL_ON, UCOL_TERTIARY,NULL, &status);
         if (U_FAILURE(status)) {
-            log_err("Collator creation failed %s\n", testrules[i]);
+            log_err_status(status, "Collator creation failed %s -> %s\n", testrules[i], u_errorName(status));
             return;
         }
 
@@ -3158,7 +3155,7 @@ static void TestNonChars(void) {
   if(U_SUCCESS(status)) {
     genericOrderingTestWithResult(coll, test, 35, UCOL_EQUAL);
   } else {
-    log_err("Unable to open collator\n");
+    log_err_status(status, "Unable to open collator\n");
   }
 
   ucol_close(coll);
@@ -3851,7 +3848,7 @@ static void TestHebrewUCA(void) {
 
   UCollator *coll = ucol_open("", &status);
   if (U_FAILURE(status)) {
-      log_err("Could not open UCA collation %s\n", u_errorName(status));
+      log_err_status(status, "Could not open UCA collation %s\n", u_errorName(status));
       return;
   }
   /*ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);*/
@@ -4116,7 +4113,7 @@ static void NullRule(void) {
     }
     coll = ucol_openRules(r, 0, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
     if(U_FAILURE(status)) {
-        log_err("Empty rules should have produced a valid collator\n");
+        log_err_status(status, "Empty rules should have produced a valid collator -> %s\n", u_errorName(status));
     } else {
         ucol_close(coll);
     }
@@ -4218,7 +4215,7 @@ static void TestNumericCollation(void)
     /* Open our collator. */
     UCollator* coll = ucol_open("root", &status);
     if (U_FAILURE(status)){
-        log_err("ERROR: in using ucol_open()\n %s\n",
+        log_err_status(status, "ERROR: in using ucol_open() -> %s\n",
               myErrorName(status));
         return;
     }
@@ -4304,7 +4301,7 @@ static void TestImplicitGeneration(void) {
 
     UCollator *coll = ucol_open("root", &status);
     if(U_FAILURE(status)) {
-        log_err("Couldn't open UCA\n");
+        log_err_status(status, "Couldn't open UCA -> %s\n", u_errorName(status));
         return;
     }
 
@@ -4417,35 +4414,48 @@ static void TestSeparateTrees(void) {
 
 #if !UCONFIG_NO_SERVICE
     e = ucol_openAvailableLocales(&ec);
-    assertSuccess("ucol_openAvailableLocales", &ec);
-    assertTrue("ucol_openAvailableLocales!=0", e!=0);
-    n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
-    /* Don't need to check n because we check list */
-    uenum_close(e);
+    if (e != NULL) {
+        assertSuccess("ucol_openAvailableLocales", &ec);
+        assertTrue("ucol_openAvailableLocales!=0", e!=0);
+        n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
+        /* Don't need to check n because we check list */
+        uenum_close(e);
+    } else {
+        log_data_err("Error calling ucol_openAvailableLocales() -> %s (Are you missing data?)\n", u_errorName(ec));
+    }
 #endif
 
     e = ucol_getKeywords(&ec);
-    assertSuccess("ucol_getKeywords", &ec);
-    assertTrue("ucol_getKeywords!=0", e!=0);
-    n = checkUEnumeration("ucol_getKeywords", e, KW, LEN(KW));
-    /* Don't need to check n because we check list */
-    uenum_close(e);
+    if (e != NULL) {
+        assertSuccess("ucol_getKeywords", &ec);
+        assertTrue("ucol_getKeywords!=0", e!=0);
+        n = checkUEnumeration("ucol_getKeywords", e, KW, LEN(KW));
+        /* Don't need to check n because we check list */
+        uenum_close(e);
+    } else {
+        log_data_err("Error calling ucol_getKeywords() -> %s (Are you missing data?)\n", u_errorName(ec));
+    }
 
     e = ucol_getKeywordValues(KW[0], &ec);
-    assertSuccess("ucol_getKeywordValues", &ec);
-    assertTrue("ucol_getKeywordValues!=0", e!=0);
-    n = checkUEnumeration("ucol_getKeywordValues", e, KWVAL, LEN(KWVAL));
-    /* Don't need to check n because we check list */
-    uenum_close(e);
+    if (e != NULL) {
+        assertSuccess("ucol_getKeywordValues", &ec);
+        assertTrue("ucol_getKeywordValues!=0", e!=0);
+        n = checkUEnumeration("ucol_getKeywordValues", e, KWVAL, LEN(KWVAL));
+        /* Don't need to check n because we check list */
+        uenum_close(e);
+    } else {
+        log_data_err("Error calling ucol_getKeywordValues() -> %s (Are you missing data?)\n", u_errorName(ec));
+    }
 
     /* Try setting a warning before calling ucol_getKeywordValues */
     ec = U_USING_FALLBACK_WARNING;
     e = ucol_getKeywordValues(KW[0], &ec);
-    assertSuccess("ucol_getKeywordValues [with warning code set]", &ec);
-    assertTrue("ucol_getKeywordValues!=0 [with warning code set]", e!=0);
-    n = checkUEnumeration("ucol_getKeywordValues [with warning code set]", e, KWVAL, LEN(KWVAL));
-    /* Don't need to check n because we check list */
-    uenum_close(e);
+    if (assertSuccess("ucol_getKeywordValues [with warning code set]", &ec)) {
+        assertTrue("ucol_getKeywordValues!=0 [with warning code set]", e!=0);
+        n = checkUEnumeration("ucol_getKeywordValues [with warning code set]", e, KWVAL, LEN(KWVAL));
+        /* Don't need to check n because we check list */
+        uenum_close(e);
+    }
 
     /*
 U_DRAFT int32_t U_EXPORT2
@@ -4456,17 +4466,19 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
 */
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr",
                                      &isAvailable, &ec);
-    assertSuccess("getFunctionalEquivalent", &ec);
-    assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
-    assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
-               isAvailable == TRUE);
+    if (assertSuccess("getFunctionalEquivalent", &ec)) {
+        assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
+        assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
+                   isAvailable == TRUE);
+    }
 
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr_FR",
                                      &isAvailable, &ec);
-    assertSuccess("getFunctionalEquivalent", &ec);
-    assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
-    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
-               isAvailable == TRUE);
+    if (assertSuccess("getFunctionalEquivalent", &ec)) {
+        assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
+        assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
+                   isAvailable == TRUE);
+    }
 }
 
 /* supercedes TestJ784 */
@@ -4563,7 +4575,7 @@ static void TestBeforeTightening(void) {
         rlen = u_unescape(tests[i].rules, rlz, RULE_BUFFER_LEN);
         coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
         if(status != tests[i].expectedStatus) {
-            log_err("Opening a collator with rules %s returned error code %s, expected %s\n",
+            log_err_status(status, "Opening a collator with rules %s returned error code %s, expected %s\n",
                 tests[i].rules, u_errorName(status), u_errorName(tests[i].expectedStatus));
         }
         ucol_close(coll);
@@ -4696,7 +4708,7 @@ static void TestTailorNULL( void ) {
     coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
 
     if(U_FAILURE(status)) {
-        log_err("Could not open default collator!\n");
+        log_err_status(status, "Could not open default collator! -> %s\n", u_errorName(status));
     } else {
         res = ucol_strcoll(coll, &a, 1, &null, 1);
 
@@ -4724,7 +4736,7 @@ TestThaiSortKey(void)
   uint8_t expectedKey[256] = { 0x01, 0xe0, 0x4e, 0x01, 0x05, 0x00 };
   UCollator *coll = ucol_open("th", &status);
   if(U_FAILURE(status)) {
-    log_err("Could not open a collator, exiting (%s)\n", u_errorName(status));
+    log_err_status(status, "Could not open a collator, exiting (%s)\n", u_errorName(status));
     return;
   }
 
@@ -4777,7 +4789,7 @@ TestJ5223(void)
   static UCollator *coll = NULL;
   coll = ucol_open("root", &status);
   if(U_FAILURE(status)) {
-    log_err("Couldn't open UCA\n");
+    log_err_status(status, "Couldn't open UCA -> %s\n", u_errorName(status));
     return;
   }
   ucol_setStrength(coll, UCOL_PRIMARY);
@@ -4885,7 +4897,7 @@ TestVI5913(void)
     /* Test Vietnamese sort. */
     coll = ucol_open("vi", &status);
     if(U_FAILURE(status)) {
-        log_err("Couldn't open collator %d\n", &status);
+        log_err_status(status, "Couldn't open collator -> %s\n", u_errorName(status));
         return;
     }
     log_verbose("\n\nVI collation:");
@@ -5050,7 +5062,7 @@ TestTailor6179(void)
     ruleLen = u_strlen(rule1);
     coll = ucol_openRules(rule1, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
     if (U_FAILURE(status)) {
-        log_err("Tailoring test: &[last primary ignorable] failed!");
+        log_err_status(status, "Tailoring test: &[last primary ignorable] failed! -> %s\n", u_errorName(status));
         return;
     }
     tLen = u_strlen(tData1[0]);
@@ -5136,7 +5148,7 @@ TestUCAPrecontext(void)
     log_verbose("\n\nEN collation:");
     coll = ucol_open("en", &status);
     if (U_FAILURE(status)) {
-        log_err("Tailoring test: &z <<a|- failed!");
+        log_err_status(status, "Tailoring test: &z <<a|- failed! -> %s\n", u_errorName(status));
         return;
     }
     for (j=0; j<11; j++) {
@@ -5240,7 +5252,7 @@ TestOutOfBuffer5468(void)
 
     coll = ucol_open("root", &status);
     if(U_FAILURE(status)) {
-      log_err("Couldn't open UCA\n");
+      log_err_status(status, "Couldn't open UCA -> %s\n", u_errorName(status));
       return;
     }
     ucol_setStrength(coll, UCOL_PRIMARY);
@@ -5275,7 +5287,7 @@ TestSortKeyConsistency(void)
     ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
     if (U_FAILURE(icuRC))
     {
-        log_err("ucol_openFromShortString failed\n");
+        log_err_status(icuRC, "ucol_openFromShortString failed -> %s\n", u_errorName(icuRC));
         return;
     }
 
@@ -5340,7 +5352,7 @@ static void TestCroatianSortKey(void) {
 
     ucol = ucol_openFromShortString(collString, FALSE, NULL, &status);
     if (U_FAILURE(status)) {
-        log_err("ucol_openFromShortString error in Craotian test.\n");
+        log_err_status(status, "ucol_openFromShortString error in Craotian test. -> %s\n", u_errorName(status));
         return;
     }
 
@@ -5385,7 +5397,7 @@ static void TestHiragana(void) {
     ucol = ucol_openFromShortString("LJA_AN_CX_EX_FX_HO_NX_S4", FALSE, NULL,
             &status);
     if (U_FAILURE(status)) {
-        log_err("Error status: %s; Unable to open collator from short string.", u_errorName(status));
+        log_err_status(status, "Error status: %s; Unable to open collator from short string.\n", u_errorName(status));
         return;
     }
 

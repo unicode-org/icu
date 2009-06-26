@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -28,7 +28,7 @@ public:
     void Test4109023(void);
 
 protected:
-    UBool failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=FALSE);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

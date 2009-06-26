@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -376,14 +376,14 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
         break; // won't happen
     }
     if(result!=output) {
-        errln("error: UnicodeString.%s() got a wrong result for a test case from casing.res", name);
+        dataerrln("error: UnicodeString.%s() got a wrong result for a test case from casing.res", name);
     }
 #if !UCONFIG_NO_BREAK_ITERATION
     if(whichCase==TEST_TITLE && options==0) {
         result=input;
         result.toTitle((BreakIterator *)iter, locale);
         if(result!=output) {
-            errln("error: UnicodeString.toTitle(options=0) got a wrong result for a test case from casing.res");
+            dataerrln("error: UnicodeString.toTitle(options=0) got a wrong result for a test case from casing.res");
         }
     }
 #endif
@@ -445,7 +445,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
     result.releaseBuffer(U_SUCCESS(errorCode) ? resultLength : 0);
 
     if(U_FAILURE(errorCode)) {
-        errln("error: %s() got an error for a test case from casing.res - %s", name, u_errorName(errorCode));
+        errcheckln(errorCode, "error: %s() got an error for a test case from casing.res - %s", name, u_errorName(errorCode));
     } else if(result!=output) {
         errln("error: %s() got a wrong result for a test case from casing.res", name);
         errln("expected \"" + output + "\" got \"" + result + "\"" );
@@ -514,7 +514,7 @@ StringCaseTest::TestCasing() {
                 }
 
                 if(U_FAILURE(status)) {
-                    errln("error: TestCasing() setup failed for %s test case from casing.res: %s", dataNames[whichCase],  u_errorName(status));
+                    dataerrln("error: TestCasing() setup failed for %s test case from casing.res: %s", dataNames[whichCase],  u_errorName(status));
                     status = U_ZERO_ERROR;
                 } else {
                     TestCasingImpl(input, output, whichCase, iter, cLocaleID, options);
@@ -537,7 +537,7 @@ StringCaseTest::TestCasing() {
     input=UNICODE_STRING_SIMPLE("sTrA\\u00dfE").unescape();
     (result=input).toTitle(NULL);
     if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
-        errln("UnicodeString::toTitle(NULL) failed");
+        dataerrln("UnicodeString::toTitle(NULL) failed.");
     }
 #endif
 }

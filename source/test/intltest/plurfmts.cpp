@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2007-2008, International Business Machines Corporation and
+ * Copyright (c) 2007-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -97,7 +97,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
         }
     }
     else {
-         errln("ERROR: PluralFormat constructor failed!");
+         dataerrln("ERROR: PluralFormat constructor failed! - [0]%s [1]%s", u_errorName(status[0]), u_errorName(status[1]));
     }
     plFmt[2]= new PluralFormat(locale, status[1]);
     if ( U_SUCCESS(status[1]) ) {
@@ -110,7 +110,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
         delete plFmt[1];
     }
     else {
-         errln("ERROR: PluralFormat constructor failed!");
+         dataerrln("ERROR: PluralFormat constructor failed! - %s", u_errorName(status[1]));
     }
     delete plFmt[0];
     delete plFmt[2];
@@ -444,7 +444,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     UErrorCode status = U_ZERO_ERROR;
     PluralFormat plFmt(ulocale, testPattern, status);
     if (U_FAILURE(status)) {
-        errln("Failed to apply pattern to fr locale");
+        dataerrln("Failed to apply pattern to fr locale - %s", u_errorName(status));
     }
     else {
         status = U_ZERO_ERROR;
@@ -531,7 +531,7 @@ PluralFormatTest::helperTestRusults(const char** localeArray,
         status = U_ZERO_ERROR;
         PluralFormat plFmt(ulocale, testPattern, status);
         if (U_FAILURE(status)) {
-            errln("Failed to apply pattern to locale:"+UnicodeString(localeArray[i]));
+            dataerrln("Failed to apply pattern to locale:"+UnicodeString(localeArray[i]) + " - " + u_errorName(status));
             continue;
         }
         for (int32_t n=0; n<PLURAL_TEST_ARRAY_SIZE; ++n) {

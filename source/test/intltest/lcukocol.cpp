@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved. 
  ********************************************************************/
 
@@ -36,7 +36,7 @@ LotusCollationKoreanTest::LotusCollationKoreanTest()
     if(U_SUCCESS(status)) {
       myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     } else {
-      errln("Couldn't instantiate the collator with %s", u_errorName(status));
+      errcheckln(status, "Couldn't instantiate the collator with %s", u_errorName(status));
       delete myCollation;
       myCollation = 0;
     }
@@ -80,7 +80,7 @@ void LotusCollationKoreanTest::runIndexedTest( int32_t index, UBool exec, const 
           default: name = ""; break;
       }
     } else {
-      errln("Class collator not instantiated");
+      dataerrln("Class collator not instantiated");
       name = "";
     }
 }

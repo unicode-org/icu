@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -24,11 +24,15 @@
 DateFormat*         CalendarTimeZoneTest::fgDateFormat = 0;
 Calendar*           CalendarTimeZoneTest::fgCalendar   = 0;
 
-UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg)
+UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg, UBool possibleDataError)
 {
     if (U_FAILURE(status))
     {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        if (possibleDataError) {
+            dataerrln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        } else {
+            errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        }
         return TRUE;
     }
     return FALSE;
@@ -57,7 +61,7 @@ DateFormat*   CalendarTimeZoneTest::getDateFormat()
         {
             delete theFormat;
             theFormat = 0;
-            errln("FAIL: Could not create SimpleDateFormat");
+            errcheckln(status, "FAIL: Could not create SimpleDateFormat - %s", u_errorName(status));
         }
     }
 

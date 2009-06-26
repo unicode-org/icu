@@ -497,7 +497,7 @@ static void TestUDataFileAccess(){
     u_setDataDirectory(icuDataDir);
     u_init(&status);
     if(U_FAILURE(status)){
-        log_err("%s\n", u_errorName(status));
+        log_err_status(status, "%s\n", u_errorName(status));
     }
     free(icuDataDir);
     ctest_resetICU();

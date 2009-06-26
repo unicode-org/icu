@@ -768,7 +768,7 @@ static void TestStringPrepProfiles(void) {
             profileName = profile_test_case[i];
             sprep = usprep_openByType(getTypeFromProfileName(profileName), &status);
             if (U_FAILURE(status)) {
-                log_err("Unable to open String Prep Profile with: %s\n", profileName);
+                log_data_err("Unable to open String Prep Profile with: %s\n", profileName);
                 break;
             }
             

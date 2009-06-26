@@ -341,7 +341,7 @@ void TransliteratorTest::TestSimpleRules(void) {
         UTRANS_FORWARD, parseError,
         status);
     if (U_FAILURE(status)) {
-        errln("FAIL: RBT constructor failed");
+        dataerrln("FAIL: RBT constructor failed - %s", u_errorName(status));
         return;
     }
     expect(*t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
@@ -600,7 +600,7 @@ void TransliteratorTest::TestCompoundKana(void) {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* t = Transliterator::createInstance("Latin-Hiragana;Hiragana-Latin", UTRANS_FORWARD, parseError, status);
     if (t == 0) {
-        errln("FAIL: construction of Latin-Hiragana;Hiragana-Latin failed");
+        dataerrln("FAIL: construction of Latin-Hiragana;Hiragana-Latin failed - %s", u_errorName(status));
     } else {
         expect(*t, "aaaaa", "aaaaa");
         delete t;
@@ -761,7 +761,7 @@ void TransliteratorTest::TestJ277(void) {
     UParseError parseError;
     Transliterator *gl = Transliterator::createInstance("Greek-Latin; NFD; [:M:]Remove; NFC", UTRANS_FORWARD, parseError, status);
     if (gl == NULL) {
-        errln("FAIL: createInstance(Greek-Latin) returned NULL");
+        dataerrln("FAIL: createInstance(Greek-Latin) returned NULL - %s", u_errorName(status));
         return;
     }
 
@@ -1074,7 +1074,7 @@ void TransliteratorTest::TestHiraganaKatakana(void) {
     Transliterator* hk = Transliterator::createInstance("Hiragana-Katakana", UTRANS_FORWARD, parseError, status);
     Transliterator* kh = Transliterator::createInstance("Katakana-Hiragana", UTRANS_FORWARD, parseError, status);
     if (hk == 0 || kh == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         delete hk;
         delete kh;
         return;
@@ -1148,7 +1148,7 @@ void TransliteratorTest::TestInterIndic(void) {
     UParseError parseError;
     Transliterator* dg = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
     if (dg == 0) {
-        errln("FAIL: createInstance(" + ID + ") returned NULL");
+        dataerrln("FAIL: createInstance(" + ID + ") returned NULL - " + u_errorName(status));
         return;
     }
     UnicodeString id = dg->getID();
@@ -1313,8 +1313,8 @@ void TransliteratorTest::TestLiberalizedID(void) {
     for (int32_t i=0; i<DATA_length; i+=3) {
         Transliterator *t = Transliterator::createInstance(DATA[i], UTRANS_FORWARD, parseError, status);
         if (t == 0) {
-            errln(UnicodeString("FAIL: ") + DATA[i+2] +
-                  " cannot create ID \"" + DATA[i] + "\"");
+            dataerrln(UnicodeString("FAIL: ") + DATA[i+2] +
+                  " cannot create ID \"" + DATA[i] + "\" - " + u_errorName(status));
         } else {
             UnicodeString exp;
             if (DATA[i+1]) {
@@ -1378,7 +1378,7 @@ void TransliteratorTest::TestCreateInstance(){
             logln((UnicodeString)"Ok: createInstance(" +
                   id + "," + DATA[i+1] + ") => " + newID);
         } else {
-            errln((UnicodeString)"FAIL: createInstance(" +
+            dataerrln((UnicodeString)"FAIL: createInstance(" +
                   id + "," + DATA[i+1] + ") => " + newID +
                   ", expected " + expID);
         }
@@ -1533,7 +1533,7 @@ void TransliteratorTest::TestCompoundRBT(void) {
     // Now test toRules
     t = Transliterator::createInstance("Greek-Latin; Latin-Cyrillic", UTRANS_FORWARD, parseError, status);
     if (t == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         return;
     }
     UnicodeString exp("::Greek-Latin;\n::Latin-Cyrillic;");
@@ -1621,7 +1621,7 @@ void TransliteratorTest::TestCompoundFilter(void) {
     Transliterator *t = Transliterator::createInstance
         ("Greek-Latin; Latin-Greek; Lower", UTRANS_FORWARD, parseError, status);
     if (t == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         return;
     }
     t->adoptFilter(new UnicodeSet("[^A]", status));
@@ -1732,7 +1732,7 @@ void TransliteratorTest::TestToRules(void) {
             Transliterator *t = Transliterator::createFromRules("ID",
                                                                 UnicodeString(DATA[d+1], -1, US_INV), UTRANS_FORWARD, parseError, status);
             if (t == 0) {
-                errln("FAIL: createFromRules failed");
+                dataerrln("FAIL: createFromRules failed - %s", u_errorName(status));
                 return;
             }
             UnicodeString rules, escapedRules;
@@ -2074,7 +2074,7 @@ void TransliteratorTest::TestCompoundInverse(void) {
     Transliterator *t = Transliterator::createInstance
         ("Greek-Latin; Title()", UTRANS_REVERSE,parseError, status);
     if (t == 0) {
-        errln("FAIL: createInstance");
+        dataerrln("FAIL: createInstance - %s", u_errorName(status));
         return;
     }
     UnicodeString exp("(Title);Latin-Greek");
@@ -2225,7 +2225,7 @@ void TransliteratorTest::TestAliasInverseID() {
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance(ID, UTRANS_FORWARD, pe, ec);
     if (t == 0 || U_FAILURE(ec)) {
-        errln("FAIL: createInstance");
+        dataerrln("FAIL: createInstance - %s", u_errorName(ec));
         return;
     }
     Transliterator *u = t->createInverse(ec);
@@ -2253,7 +2253,7 @@ void TransliteratorTest::TestCompoundInverseID() {
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance(ID, UTRANS_FORWARD, pe, ec);
     if (t == 0 || U_FAILURE(ec)) {
-        errln("FAIL: createInstance");
+        dataerrln("FAIL: createInstance - %s", u_errorName(ec));
         return;
     }
     Transliterator *u = t->createInverse(ec);
@@ -2355,7 +2355,7 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             }
             delete t;
         } else {
-            errln((UnicodeString)"FAIL: " + id + " => " + transID + ", " +
+            dataerrln((UnicodeString)"FAIL: " + id + " => " + transID + ", " +
                   u_errorName(ec));
         }
     }
@@ -2378,7 +2378,7 @@ void TransliteratorTest::TestNewEngine() {
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance("Latin-Hiragana", UTRANS_FORWARD, pe, ec);
     if (t == 0 || U_FAILURE(ec)) {
-        errln("FAIL: createInstance Latin-Hiragana");
+        dataerrln("FAIL: createInstance Latin-Hiragana - %s", u_errorName(ec));
         return;
     }
     // Katakana should be untouched
@@ -2637,8 +2637,8 @@ void TransliteratorTest::TestDevanagariLatinRT(){
     Transliterator* latinToDev=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     Transliterator* devToLatin=Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, parseError, status);
     if(U_FAILURE(status)){
-        errln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
-        errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+        dataerrln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
+        dataerrln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
         return;
     }
     UnicodeString gotResult;
@@ -2685,8 +2685,8 @@ void TransliteratorTest::TestTeluguLatinRT(){
     Transliterator* latinToDev=Transliterator::createInstance("Latin-Telugu", UTRANS_FORWARD, parseError, status);
     Transliterator* devToLatin=Transliterator::createInstance("Telugu-Latin", UTRANS_FORWARD, parseError, status);
     if(U_FAILURE(status)){
-        errln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
-        errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+        dataerrln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
+        dataerrln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
         return;
     }
     UnicodeString gotResult;
@@ -2745,8 +2745,8 @@ void TransliteratorTest::TestSanskritLatinRT(){
     Transliterator* latinToDev=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     Transliterator* devToLatin=Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, parseError, status);
     if(U_FAILURE(status)){
-        errln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
-        errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+        dataerrln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
+        dataerrln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
         return;
     }
     UnicodeString gotResult;
@@ -2814,8 +2814,8 @@ void TransliteratorTest::TestCompoundLatinRT(){
     Transliterator* latinToTelToLatin=Transliterator::createInstance("Latin-Telugu;Telugu-Latin", UTRANS_FORWARD, parseError, status);
 
     if(U_FAILURE(status)){
-        errln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
-        errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+        dataerrln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
+        dataerrln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
         return;
     }
     UnicodeString gotResult;
@@ -2848,7 +2848,7 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
     UnicodeSetIterator nvIter(non_vowel);
     Transliterator* trans = Transliterator::createInstance("Devanagari-Gurmukhi",UTRANS_FORWARD, parseError, status);
     if(U_FAILURE(status)) {
-      errln("Error creating transliterator %s", u_errorName(status));
+      dataerrln("Error creating transliterator %s", u_errorName(status));
       delete trans;
       return;
     }
@@ -2880,7 +2880,7 @@ void TransliteratorTest::TestLocaleInstantiation(void) {
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance("ru_RU-Latin", UTRANS_FORWARD, pe, ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: createInstance(ru_RU-Latin)");
+        dataerrln("FAIL: createInstance(ru_RU-Latin) - %s", u_errorName(ec));
         delete t;
         return;
     }
@@ -2932,7 +2932,7 @@ void TransliteratorTest::TestLocaleResource() {
         UErrorCode ec = U_ZERO_ERROR;
         Transliterator *t = Transliterator::createInstance(DATA[i], UTRANS_FORWARD, pe, ec);
         if (U_FAILURE(ec)) {
-            errln((UnicodeString)"FAIL: createInstance(" + DATA[i] + ")");
+            dataerrln((UnicodeString)"FAIL: createInstance(" + DATA[i] + ") - " + u_errorName(ec));
             delete t;
             continue;
         }
@@ -3084,7 +3084,7 @@ void TransliteratorTest::TestIDForms() {
             if (!expValid) {
                 logln((UnicodeString)"Ok: getInstance(" + ID +") => " + u_errorName(ec));
             } else {
-                errln((UnicodeString)"FAIL: Couldn't create " + ID);
+                dataerrln((UnicodeString)"FAIL: Couldn't create " + ID + " - " + u_errorName(ec));
             }
             delete t;
             continue;
@@ -3173,7 +3173,7 @@ void TransliteratorTest::TestToRulesMark() {
     if (U_FAILURE(ec)) {
         delete t2;
         delete t3;
-        errln((UnicodeString)"FAIL: createFromRules => " + u_errorName(ec));
+        dataerrln((UnicodeString)"FAIL: createFromRules => " + u_errorName(ec));
         return;
     }
     
@@ -3290,7 +3290,7 @@ void TransliteratorTest::TestDisplayName() {
         UnicodeString name;
         Transliterator::getDisplayName(DATA[i], US, name);
         if (name != DATA[i+1]) {
-            errln((UnicodeString)"FAIL: " + DATA[i] + ".getDisplayName() => " +
+            dataerrln((UnicodeString)"FAIL: " + DATA[i] + ".getDisplayName() => " +
                   name + ", expected " + DATA[i+1]);
         } else {
             logln((UnicodeString)"Ok: " + DATA[i] + ".getDisplayName() => " + name);
@@ -3300,12 +3300,12 @@ void TransliteratorTest::TestDisplayName() {
         Transliterator *t = Transliterator::createInstance(DATA[i], UTRANS_REVERSE, pe, ec);
         if (U_FAILURE(ec)) {
             delete t;
-            errln("FAIL: createInstance failed");
+            dataerrln("FAIL: createInstance failed - %s", u_errorName(ec));
             continue;
         }
         name = Transliterator::getDisplayName(t->getID(), US, name);
         if (name != DATA[i+2]) {
-            errln((UnicodeString)"FAIL: " + t->getID() + ".getDisplayName() => " +
+            dataerrln((UnicodeString)"FAIL: " + t->getID() + ".getDisplayName() => " +
                   name + ", expected " + DATA[i+2]);
         } else {
             logln((UnicodeString)"Ok: " + t->getID() + ".getDisplayName() => " + name);
@@ -3388,7 +3388,7 @@ void TransliteratorTest::TestSpecialCases(void) {
         Transliterator *t = Transliterator::createFromRules(registerRules[0+i], 
             registerRules[i+1], UTRANS_FORWARD, pos, status);
         if (U_FAILURE(status)) {
-            errln("Fails: Unable to create the transliterator from rules.");
+            dataerrln("Fails: Unable to create the transliterator from rules. - %s", u_errorName(status));
         } else {
             Transliterator::registerInstance(t);
         }
@@ -3399,7 +3399,7 @@ void TransliteratorTest::TestSpecialCases(void) {
         const UnicodeString& name = testCases[i];
         Transliterator *t = Transliterator::createInstance(name, UTRANS_FORWARD, pe, ec);
         if (U_FAILURE(ec)) {
-            errln((UnicodeString)"FAIL: Couldn't create " + name);
+            dataerrln((UnicodeString)"FAIL: Couldn't create " + name + " - " + u_errorName(ec));
             delete t;
             continue;
         }
@@ -3626,7 +3626,7 @@ void TransliteratorTest::TestFunction() {
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createFromRules("Test", rule, UTRANS_FORWARD, pe, ec);
     if (t == NULL) {
-        errln("FAIL: createFromRules failed");
+        dataerrln("FAIL: createFromRules failed - %s", u_errorName(ec));
         return;
     }
     
@@ -3761,7 +3761,7 @@ void TransliteratorTest::TestUserFunction() {
                                         UNICODE_STRING_SIMPLE("'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';"),
                                         UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
-        errln((UnicodeString)"FAIL: createFromRules gif " + u_errorName(ec));
+        dataerrln((UnicodeString)"FAIL: createFromRules gif " + u_errorName(ec));
         return;
     }
     _TUFReg("Any-gif", t, 0);
@@ -3840,7 +3840,7 @@ void TransliteratorTest::TestAnyX(void) {
     Transliterator* anyLatin =
         Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
     if (anyLatin==0) {
-        errln("FAIL: createInstance returned NULL");
+        dataerrln("FAIL: createInstance returned NULL - %s", u_errorName(status));
         delete anyLatin;
         return;
     }
@@ -3861,7 +3861,7 @@ void TransliteratorTest::TestAny(void) {
     //       function call parameters going on in this test.
     UnicodeSet alphabetic("[:alphabetic:]", status);
     if (U_FAILURE(status)) {
-        errln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
     alphabetic.freeze();
@@ -4004,7 +4004,7 @@ void TransliteratorTest::TestAllCodepoints(){
         }
         const char* myId = uscript_getName(code);
         if(!myId) {
-          errln("Valid script code returned NULL name. Check your data!");
+          dataerrln("Valid script code returned NULL name. Check your data!");
           return;
         }
         uprv_strcpy(id,myId);
@@ -4043,7 +4043,7 @@ void TransliteratorTest::TestAllCodepoints(){
   UErrorCode ec = U_ZERO_ERROR; \
   Transliterator* t = Transliterator::createInstance(id, UTRANS_FORWARD, ec); \
   if (U_FAILURE(ec)) { \
-    errln("FAIL: Couldn't create " id); \
+    dataerrln("FAIL: Couldn't create %s - %s", id, u_errorName(ec)); \
   } else { \
     if (t->getDynamicClassID() != cls::getStaticClassID()) { \
       errln("FAIL: " #cls " dynamic and static class ID mismatch"); \
@@ -4477,7 +4477,7 @@ void TransliteratorTest::TestRegisterAlias() {
     err = U_ZERO_ERROR;
     t1 = Transliterator::createInstance(realID, UTRANS_FORWARD, err);
     if (U_FAILURE(err)) {
-        errln("Failed to instantiate transliterator with real ID");
+        dataerrln("Failed to instantiate transliterator with real ID - %s", u_errorName(err));
         Transliterator::unregister(realID);
         return;
     }
@@ -4531,7 +4531,7 @@ void TransliteratorTest::TestHalfwidthFullwidth(void) {
     Transliterator* hf = Transliterator::createInstance("Halfwidth-Fullwidth", UTRANS_FORWARD, parseError, status);
     Transliterator* fh = Transliterator::createInstance("Fullwidth-Halfwidth", UTRANS_FORWARD, parseError, status);
     if (hf == 0 || fh == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         delete hf;
         delete fh;
         return;
@@ -4580,7 +4580,7 @@ void TransliteratorTest::TestThai(void) {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* tr = Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
     if (tr == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         return;
     }
     if (U_FAILURE(status)) {
@@ -4662,7 +4662,7 @@ void TransliteratorTest::expectT(const UnicodeString& id,
     UParseError pe;
     Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, pe, ec);
     if (U_FAILURE(ec)) {
-        errln((UnicodeString)"FAIL: Could not create " + id);
+        errln((UnicodeString)"FAIL: Could not create " + id + " -  " + u_errorName(ec));
         delete t;
         return;
     }
@@ -4673,7 +4673,7 @@ void TransliteratorTest::expectT(const UnicodeString& id,
 void TransliteratorTest::reportParseError(const UnicodeString& message,
                                           const UParseError& parseError,
                                           const UErrorCode& status) {
-    errln(message +
+    dataerrln(message +
           /*", parse error " + parseError.code +*/
           ", line " + parseError.line +
           ", offset " + parseError.offset +
@@ -4821,7 +4821,7 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));
     } else {
-        errln(UnicodeString("FAIL: (")+tag+") "
+        dataerrln(UnicodeString("FAIL: (")+tag+") "
               + prettify(summary)
               + ", expected " + prettify(expectedResult));
     }
