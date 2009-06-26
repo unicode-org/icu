@@ -3188,7 +3188,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
             mant=numericValue>>LARGE_MANT_SHIFT;
             exp=numericValue&LARGE_EXP_MASK;
-            if(mant==0) {
+            if(mant==0) { 
                 mant=1;
                 exp+=LARGE_EXP_OFFSET_EXTRA;
             } else if(mant>9) {
@@ -3215,7 +3215,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 numValue*=10.;
                 break;
             case 0:
-            default:
+            default: if(exp!=0)
                 break;
             }
 
@@ -5338,7 +5338,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return String.valueOf(getUnicodeNumericValue(codepoint));
         }
         // otherwise must be string property
-        switch (propertyEnum) {
+        switch (propertyEnum) { 
         case UProperty.AGE: return getAge(codepoint).toString();
         case UProperty.ISO_COMMENT: return getISOComment(codepoint);
         case UProperty.BIDI_MIRRORING_GLYPH: return UTF16.valueOf(getMirror(codepoint));
@@ -5456,10 +5456,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return (PROPERTY_.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
             case UProperty.WORD_BREAK:
                 return (PROPERTY_.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
+            ///CLOVER:OFF
+            //Default is never reached because all the values between
+            //UProperty.INT_START and UProperty.INT_LIMIT are covered
             default:
                 return -1; // undefined
             }
-
+            ///CLOVER:ON
         }
         return -1; // undefined
     }
@@ -5745,7 +5748,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
         char c2 = text[--index];
         if (isLowSurrogate(c2)) {
-            if (index > limit) {
+            if (index > limit) { 
                 char c1 = text[--index];
                 if (isHighSurrogate(c1)) {
                     return toCodePoint(c1, c2);
@@ -6348,7 +6351,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // ch >= 0xff21
         if (ch <= 0xff3a) {
             return ch + 10 - 0xff21;
-        } 
+        }
         // ch >= 0xff41 && ch <= 0xff5a
         return ch + 10 - 0xff41;
     }

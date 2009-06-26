@@ -17,6 +17,7 @@ import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -1483,6 +1484,31 @@ public final class UCharacterTest extends TestFmwk
                       "." + ages[i + 4]);
             }
         }
+        
+        int[] valid_tests = {
+                UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
+                UCharacter.MAX_VALUE-1, UCharacter.MAX_VALUE};
+        int[] invalid_tests = {
+                UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
+                UCharacter.MAX_VALUE+1, UCharacter.MAX_VALUE+2};
+        
+        for(int i=0; i< valid_tests.length; i++){
+            try{
+                UCharacter.getAge(valid_tests[i]);
+            } catch(Exception e){
+                errln("UCharacter.getAge(int) was not suppose to have " +
+                        "an exception. Value passed: " + valid_tests[i]);
+            }
+        }
+            
+        for(int i=0; i< invalid_tests.length; i++){
+            try{
+                UCharacter.getAge(invalid_tests[i]);
+                errln("UCharacter.getAge(int) was suppose to have " +
+                        "an exception. Value passed: " + invalid_tests[i]);
+            } catch(Exception e){
+            }
+        }
     }
 
     /**
@@ -2447,7 +2473,7 @@ public final class UCharacterTest extends TestFmwk
         }
     }
     
-    // The method idOf can only be accessed through getIntPropertyValue
+    // The idOf method can only be accessed through getIntPropertyValue
     public void TestIDOf(){
         int[] invalid_test = {-2, -1, UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
         
@@ -2468,10 +2494,12 @@ public final class UCharacterTest extends TestFmwk
         }
     }
     
-    /*public void TestForName(){
-        UCharacter.UnicodeBlock.forName("");
-    }*/
+    // TODO: Need to test the forName method when b == null - is that possible?
+    public void TestForName(){
+        //UCharacter.UnicodeBlock.forName("");
+    }
     
+    // The following tests through the else part of the getNumericValue method
     public void TestGetNumericValue(){
         // The following tests the else statement when
         //      if(numericType<NumericType.COUNT) is false
@@ -2506,6 +2534,457 @@ public final class UCharacterTest extends TestFmwk
                 } catch(Exception e){
                     errln("UCharacter.getNumericValue(int) returned an exception " +
                             "with the parameter value");
+                }
+            }
+        }
+    }
+    
+    // The following tests covers if(mant==0), else if(mant > 9), and default
+    public void TestGetUnicodeNumericValue(){
+        /*  The code coverage for if(mant==0), else if(mant > 9), and default
+         *  could not be covered even with input values from UTF16.CODEPOINT_MIN_VALUE
+         *  to UTF16.CODEPOINT_MAX_VALUE. I also tested from UTF16.CODEPOINT_MAX_VALUE to
+         *  Integer.MAX_VALUE and didn't recieve any code coverage there too.
+         *  Therefore, the code could either be dead code or meaningless. 
+         */
+        //for(int i=UTF16.CODEPOINT_MAX_VALUE; i<Integer.MAX_VALUE; i++)
+        //    UCharacter.getUnicodeNumericValue(i);
+    }
+    
+    public void TestToString(){
+        int[] valid_tests = {
+                UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
+                UCharacter.MAX_VALUE-1, UCharacter.MAX_VALUE};
+        int[] invalid_tests = {
+                UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
+                UCharacter.MAX_VALUE+1, UCharacter.MAX_VALUE+2};
+        
+        for(int i=0; i< valid_tests.length; i++){
+            if(UCharacter.toString(valid_tests[i]) == null){
+                errln("UCharacter.toString(int) was not suppose to return " +
+                "null because it was given a valid parameter. Value passed: " +
+                valid_tests[i] + ". Got null.");
+            }
+        }
+        
+        for(int i=0; i< invalid_tests.length; i++){
+            if(UCharacter.toString(invalid_tests[i]) != null){
+                errln("UCharacter.toString(int) was suppose to return " +
+                "null because it was given an invalid parameter. Value passed: " +
+                invalid_tests[i] + ". Got: " + UCharacter.toString(invalid_tests[i]));
+            }
+        }
+    }
+    
+    public void TestGetCombiningClass(){
+        int[] valid_tests = {
+                UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
+                UCharacter.MAX_VALUE-1, UCharacter.MAX_VALUE};
+        int[] invalid_tests = {
+                UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
+                UCharacter.MAX_VALUE+1, UCharacter.MAX_VALUE+2};
+        
+        for(int i=0; i< valid_tests.length; i++){
+            try{
+                UCharacter.getCombiningClass(valid_tests[i]);
+            } catch(Exception e){
+                errln("UCharacter.getCombiningClass(int) was not suppose to have " +
+                        "an exception. Value passed: " + valid_tests[i]);
+            }
+        }
+            
+        for(int i=0; i< invalid_tests.length; i++){
+            try{
+                UCharacter.getCombiningClass(invalid_tests[i]);
+                errln("UCharacter.getCombiningClass(int) was suppose to have " +
+                        "an exception. Value passed: " + invalid_tests[i]);
+            } catch(Exception e){
+            }
+        }
+    }
+    
+    public void TestGetName(){
+        String[] data = {"a","z","ç","ö","î","æ","ó","€"};
+        String[] results = {
+                "LATIN SMALL LETTER A","LATIN SMALL LETTER Z",
+                "LATIN SMALL LETTER C WITH CEDILLA",
+                "LATIN SMALL LETTER O WITH DIAERESIS",
+                "LATIN SMALL LETTER I WITH CIRCUMFLEX",
+                "LATIN SMALL LETTER AE",
+                "LATIN SMALL LETTER O WITH ACUTE","EURO SIGN"};
+        if(data.length != results.length){
+            errln("The data array and the results array need to be "+
+                    "the same length.");
+        } else {
+            for(int i=0; i < data.length; i++){
+                if(UCharacter.getName(data[i], "").compareTo(results[i]) != 0){
+                    errln("UCharacter.getName(String, String) was suppose " +
+                            "to have the same result for the data in the parameter. " +
+                            "Value passed: " + data[i] + ". Got: " +
+                            UCharacter.getName(data[i], "") + ". Expected: " +
+                            results[i]);
+                }
+            }
+        }
+    }
+    
+    public void TestGetISOComment(){
+        int[] invalid_tests = {
+                UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
+                UCharacter.MAX_VALUE+1, UCharacter.MAX_VALUE+2};
+        
+        for(int i=0; i< invalid_tests.length; i++){
+            if(UCharacter.getISOComment(invalid_tests[i]) != null){
+                errln("UCharacter.getISOComment(int) was suppose to return " +
+                "null because it was given an invalid parameter. Value passed: " +
+                invalid_tests[i] + ". Got: " + UCharacter.getISOComment(invalid_tests[i]));
+            }
+        }
+    }
+    
+    public void TestSetLimit(){
+        
+    }
+    
+    public void TestNextCaseMapCP(){
+        
+    }
+    
+    public void TestReset(){
+        
+    }
+    
+    public void TestToTitleCase(){
+        // Three functions
+        // UCharacter.toTitleCase(str, breakiter)
+        // UCharacter.toTitleCase(locale, str, titleIter)
+        // UCharacter.toTitleCase(locale, str, titleIter, options)
+    }
+    
+    public void TestToUpperCase(){
+        //UCharacter.toUpperCase(locale, str)
+    }
+    
+    public void TestToLowerCase(){
+        //UCharacter.toLowerCase(locale, str)
+    }
+    
+    public void TestGetHanNumericValue(){
+        //UCharacter.getHanNumericValue(ch)
+    }
+    
+    public void TestHasBinaryProperty(){
+        //UCharacter.hasBinaryProperty(ch, property)
+    }
+    
+    public void TestGetIntPropertyValue(){
+        /* Testing UCharacter.getIntPropertyValue(ch, type) */
+        // Testing when "if (type < UProperty.BINARY_START)" is true
+        int[] negative_cases = {-100,-50,-10,-5,-2,-1};
+        for(int i=0; i<negative_cases.length; i++){
+            if(UCharacter.getIntPropertyValue(0, negative_cases[i]) != 0){
+                errln("UCharacter.getIntPropertyValue(ch, type) was suppose to return 0 " +
+                        "when passing a negative value of " + negative_cases[i]);
+
+            }
+        }
+        
+        // Testing when "if(ch<NormalizerImpl.JAMO_L_BASE)" is true
+        for(int i=NormalizerImpl.JAMO_L_BASE-5; i<NormalizerImpl.JAMO_L_BASE; i++){
+            if(UCharacter.getIntPropertyValue(i, UProperty.HANGUL_SYLLABLE_TYPE) != 0){
+                errln("UCharacter.getIntPropertyValue(ch, type) was suppose to return 0 " +
+                        "when passing ch: " + i + "and type of Property.HANGUL_SYLLABLE_TYPE");
+
+            }
+        }
+        
+        // Testing when "else if((ch-=NormalizerImpl.HANGUL_BASE)<0)" is true
+        for(int i=NormalizerImpl.HANGUL_BASE-5; i<NormalizerImpl.HANGUL_BASE; i++){
+            if(UCharacter.getIntPropertyValue(i, UProperty.HANGUL_SYLLABLE_TYPE) != 0){
+                errln("UCharacter.getIntPropertyValue(ch, type) was suppose to return 0 " +
+                        "when passing ch: " + i + "and type of Property.HANGUL_SYLLABLE_TYPE");
+
+            }
+        }
+    }
+    
+    public void TestGetStringPropertyValue(){
+        /* Testing UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) */
+        // Tests  "if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||
+        // (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT))"
+        // when true
+        // The following tests the switch statement for all possible cases
+        // and tests when "if (propertyEnum == UProperty.NUMERIC_VALUE)" is true
+        int[] enumCases = {
+                UProperty.BINARY_START, UProperty.BINARY_START+1,
+                UProperty.BINARY_LIMIT-2, UProperty.BINARY_LIMIT-1,
+                UProperty.INT_START, UProperty.INT_START+1,
+                UProperty.INT_LIMIT-1, UProperty.INT_LIMIT-1,
+                UProperty.NUMERIC_VALUE,
+                UProperty.AGE, UProperty.ISO_COMMENT, UProperty.BIDI_MIRRORING_GLYPH,
+                UProperty.CASE_FOLDING, UProperty.LOWERCASE_MAPPING, UProperty.NAME,
+                UProperty.SIMPLE_CASE_FOLDING, UProperty.SIMPLE_LOWERCASE_MAPPING,
+                UProperty.SIMPLE_TITLECASE_MAPPING, UProperty.SIMPLE_UPPERCASE_MAPPING,
+                UProperty.TITLECASE_MAPPING, UProperty.UNICODE_1_NAME,
+                UProperty.UPPERCASE_MAPPING};
+        
+        for(int i=0; i<enumCases.length; i++){
+            try{
+                UCharacter.getStringPropertyValue(enumCases[i],10,0);
+            } catch(Exception e){
+                errln("UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) " +
+                        "was not suppose to return an exception for values passed: " + 
+                        "Enum case: " + enumCases[i] + ", codepoint: 10, nameChoice: 0");
+            }
+        }
+    }
+    
+    public void TestGetIntPropertyMaxValue(){
+        /* Testing UCharacter.getIntPropertyMaxValue(type) */
+        // Testing when "else if (type < UProperty.INT_START)" is true
+        int[] cases = {UProperty.BINARY_LIMIT, UProperty.BINARY_LIMIT+1,
+                UProperty.INT_START-2, UProperty.INT_START-1};
+        for(int i=0; i<cases.length; i++){
+            if(UCharacter.getIntPropertyMaxValue(cases[i]) != -1){
+                errln("UCharacter.getIntPropertyMaxValue was suppose to return -1 " +
+                        "but got " + UCharacter.getIntPropertyMaxValue(cases[i]));
+            }
+        }
+        
+        // Testing when the case statment reaches "default"
+        // With the current algorithm, this is not possible. The values
+        // between UProperty.INT_START to UProperty.INT_LIMIT are covered.
+    }
+    
+    public void TestCodePointAt(){
+        /* Testing UCharacter.codePointAt(seq, index) */
+        // Testing when "if (index < seq.length())" is false
+        //      Having problems with isHighSurrogate since the output to the
+        //      console won't display the type of characters.
+        
+        /* Testing UCharacter.codePointAt(text, index) */
+        // Testing when "if (index < text.length)" is false
+        //      Having problems with isHighSurrogate since the output to the
+        //      console won't display the type of characters.
+        
+        /* Testing UCharacter.codePointAt(text, index, limit) */
+        // Testing when "if (index >= limit || limit > text.length)" is true
+        char[] empty_text = {};
+        char[] one_char_text = {'a'};
+        char[] reg_text = {'d','u','m','m','y'};
+        int[] limitCases = {2,3,5,10,25};
+        
+        // When index >= limit
+        for(int i=0; i < limitCases.length; i++){
+            try{
+                UCharacter.codePointAt(reg_text, 100, limitCases[i]);
+                errln("UCharacter.codePointAt was suppose to return an exception " +
+                        "but got " + UCharacter.codePointAt(reg_text, 100, limitCases[i]) +
+                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        100 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+        }
+        
+        // When limit > text.length
+        for(int i=0; i < limitCases.length; i++){
+            try{
+                UCharacter.codePointAt(empty_text, 0, limitCases[i]);
+                errln("UCharacter.codePointAt was suppose to return an exception " +
+                        "but got " + UCharacter.codePointAt(empty_text, 0, limitCases[i]) +
+                        ". The following passed parameters were Text: " + empty_text.toString() + ", Start: " + 
+                        0 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+            
+            try{
+                UCharacter.codePointCount(one_char_text, 0, limitCases[i]);
+                errln("UCharacter.codePointCount was suppose to return an exception " +
+                        "but got " + UCharacter.codePointCount(one_char_text, 0, limitCases[i]) +
+                        ". The following passed parameters were Text: " + one_char_text.toString() + ", Start: " + 
+                        0 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+        }
+
+        // Testing when "if (index < limit)" is false
+        //      Having problems with isHighSurrogate since the output to the
+        //      console won't display the type of characters.
+    }
+    
+    public void TestCodePointBefore(){
+        /* Testing UCharacter.codePointBefore(seq, index) */
+        /* Testing UCharacter.codePointBefore(text, index) */
+        // Testing when "if (index > 0)" is false
+        //      Having problems with isLowSurrogate since the output to the
+        //      console won't display the type of characters.
+        
+        
+        /* Testing UCharacter.codePointBefore(text, index, limit) */
+        char[] dummy = {'d','u','m','m','y'};
+        // Testing when "if (index <= limit || limit < 0)" is true
+        int[] negative_cases = {-100,-10,-5,-2,-1};
+        int[] index_cases = {0,1,2,5,10,100};
+        
+        for(int i=0; i < negative_cases.length; i++){
+            try{
+                UCharacter.codePointCount(dummy, 10000, negative_cases[i]);
+                errln("UCharacter.codePointBefore(text, index, limit) was suppose to return an exception " +
+                        "when the parameter limit of " + negative_cases[i] + " is a negative number.");
+            } catch(Exception e) {}
+        }
+        
+        for(int i=0; i < index_cases.length; i++){
+            try{
+                UCharacter.codePointCount(dummy, index_cases[i], 101);
+                errln("UCharacter.codePointBefore(text, index, limit) was suppose to return an exception " +
+                        "when the parameter index of " + index_cases[i] + " is a negative number.");
+            } catch(Exception e) {}
+        }
+        
+        // Testing when "if (index > limit)" is false
+        //      Having problems with isLowSurrogate since the output to the
+        //      console won't display the type of characters.
+    }
+    
+    public void TestToChars(){
+        int[] positive_cases = {1,2,5,10,100};
+        char[] dst = {'a'};
+        
+        /* Testing UCharacter.toChars(cp, dst, dstIndex) */
+        for(int i=0; i < positive_cases.length; i++){
+            // Testing negative values when cp < 0 for if (cp >= 0)
+            try{
+                UCharacter.toChars(-1*positive_cases[i],dst,0);
+                errln("UCharacter.toChars(int,char[],int) was suppose to return an exception " +
+                        "when the parameter " + (-1*positive_cases[i]) + " is a negative number.");
+            } catch(Exception e){
+            }
+            
+            // Testing when "if (cp < MIN_SUPPLEMENTARY_CODE_POINT)" is true
+            if(UCharacter.toChars(UCharacter.MIN_SUPPLEMENTARY_CODE_POINT-positive_cases[i], dst, 0) != 1){
+                errln("UCharacter.toChars(int,char[],int) was suppose to return a value of 1. Got: " +
+                        UCharacter.toChars(UCharacter.MIN_SUPPLEMENTARY_CODE_POINT-positive_cases[i], dst, 0));
+            }
+            
+            // Testing when "if (cp < MIN_SUPPLEMENTARY_CODE_POINT)" is false and
+            //     when "if (cp <= MAX_CODE_POINT)" is false
+            try{
+                UCharacter.toChars(UCharacter.MAX_CODE_POINT+positive_cases[i],dst,0);
+                errln("UCharacter.toChars(int,char[],int) was suppose to return an exception " +
+                        "when the parameter " + (UCharacter.MAX_CODE_POINT+positive_cases[i]) +
+                        " is a large number.");
+            } catch(Exception e){
+            }
+        }
+        
+        
+        /* Testing UCharacter.toChars(cp)*/
+        for(int i=0; i<positive_cases.length; i++){
+            // Testing negative values when cp < 0 for if (cp >= 0)
+            try{
+                UCharacter.toChars(-1*positive_cases[i]);
+                errln("UCharacter.toChars(cint) was suppose to return an exception " +
+                        "when the parameter " + positive_cases[i] + " is a negative number.");
+            } catch(Exception e){
+            }
+            
+            // Testing when "if (cp < MIN_SUPPLEMENTARY_CODE_POINT)" is true
+            if(UCharacter.toChars(UCharacter.MIN_SUPPLEMENTARY_CODE_POINT-positive_cases[i]).length <= 0){
+                errln("UCharacter.toChars(int) was suppose to return some result result when the parameter " +
+                        (UCharacter.MIN_SUPPLEMENTARY_CODE_POINT-positive_cases[i]) + "is passed.");
+            }
+            
+            // Testing when "if (cp < MIN_SUPPLEMENTARY_CODE_POINT)" is false and
+            //     when "if (cp <= MAX_CODE_POINT)" is false
+            try{
+                UCharacter.toChars(UCharacter.MAX_CODE_POINT+positive_cases[i]);
+                errln("UCharacter.toChars(int) was suppose to return an exception " +
+                        "when the parameter " + positive_cases[i] + " is a large number.");
+            } catch(Exception e){
+            }
+        }
+    }
+    
+    public void TestCodePointCount(){
+        // The following tests the first if statement to make it true:
+        //  if (start < 0 || limit < start || limit > text.length)
+        //  which will throw an exception.
+        char[] empty_text = {};
+        char[] one_char_text = {'a'};
+        char[] reg_text = {'d','u','m','m','y'};
+        int[] invalid_startCases = {-1,-2,-5,-10,-100};
+        int[] limitCases = {2,3,5,10,25};
+        
+        // When start < 0
+        for(int i=0; i < invalid_startCases.length; i++){
+            try{
+                UCharacter.codePointCount(reg_text, invalid_startCases[i], 1);
+                errln("UCharacter.codePointCount was suppose to return an exception " +
+                        "but got " + UCharacter.codePointCount(reg_text, invalid_startCases[i], 1) +
+                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        invalid_startCases[i] + ", Limit: " + 1 + ".");
+            } catch(Exception e){
+            }
+        }
+
+        // When limit < start
+        for(int i=0; i < limitCases.length; i++){
+            try{
+                UCharacter.codePointCount(reg_text, 100, limitCases[i]);
+                errln("UCharacter.codePointCount was suppose to return an exception " +
+                        "but got " + UCharacter.codePointCount(reg_text, 100, limitCases[i]) +
+                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        100 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+        }
+        
+        // When limit > text.length
+        for(int i=0; i < limitCases.length; i++){
+            try{
+                UCharacter.codePointCount(empty_text, 0, limitCases[i]);
+                errln("UCharacter.codePointCount was suppose to return an exception " +
+                        "but got " + UCharacter.codePointCount(empty_text, 0, limitCases[i]) +
+                        ". The following passed parameters were Text: " + empty_text.toString() + ", Start: " + 
+                        0 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+            
+            try{
+                UCharacter.codePointCount(one_char_text, 0, limitCases[i]);
+                errln("UCharacter.codePointCount was suppose to return an exception " +
+                        "but got " + UCharacter.codePointCount(one_char_text, 0, limitCases[i]) +
+                        ". The following passed parameters were Text: " + one_char_text.toString() + ", Start: " + 
+                        0 + ", Limit: " + limitCases[i] + ".");
+            } catch(Exception e){
+            }
+        }
+    }
+    
+    public void TestGetEuropeanDigit(){
+        //Get to getEuropeanDigit by going through digit(int,int)
+        //  to test the case when all the "if" statements is false
+        //The number retrieved from 0xFF41 to 0xFF5A is due to
+        //  exhaustive testing from UTF16.CODEPOINT_MIN_VALUE to
+        //  UTF16.CODEPOINT_MAX_VALUE return a value of -1.
+        
+        int[] radixResult = {10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+        int[] radixCase1 = {0,1,5,10};
+        int[] radixCase2 = {100,250,500,1000};
+        
+        for(int i=0xFF41; i<=0xFF5A; i++){
+            for(int j=0; j < radixCase1.length; j++){
+                if(UCharacter.digit(i, radixCase1[j]) != -1){
+                    errln("UCharacter.digit(int,int) was suppose to return -1 for radix " + radixCase1[j]
+                            + ". Value passed: " + i + ". Got: " + UCharacter.digit(i, radixCase1[j]));
+                }
+            }
+            for(int j=0; j < radixCase2.length; j++){
+                if(UCharacter.digit(i, radixCase2[j]) != radixResult[i-0xFF41]){
+                    errln("UCharacter.digit(int,int) was suppose to return " +
+                            radixResult[i-0xFF41] + " for radix " + radixCase2[j] +
+                            ". Value passed: " + i + ". Got: " + UCharacter.digit(i, radixCase2[j]));
                 }
             }
         }

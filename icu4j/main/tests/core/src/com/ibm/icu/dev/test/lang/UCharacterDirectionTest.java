@@ -67,12 +67,10 @@ public class UCharacterDirectionTest extends TestFmwk
                          "Boundary Neutral",
                          "Unassigned"};
         
-        for (int i = UCharacterDirection.LEFT_TO_RIGHT; 
-                 i <= UCharacterDirection.CHAR_DIRECTION_COUNT; i++) {
-            
+        for (int i = UCharacterDirection.LEFT_TO_RIGHT;
             // Placed <= because we need to consider 'Unassigned'
-            // because it's out of bounds
-            
+            // when it goes out of bounds of UCharacterDirection
+            i <= UCharacterDirection.CHAR_DIRECTION_COUNT; i++) {
              if (!UCharacterDirection.toString(i).equals(name[i])) {
                 errln("Error toString for direction " + i + " expected " +
                       name[i]);
