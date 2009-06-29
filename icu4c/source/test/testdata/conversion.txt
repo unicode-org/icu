@@ -936,6 +936,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{0}, :int{0}, "", ".", :bin{""}
         }
+        {
+          "ibm-16684",
+          :bin{ 0e },
+          "",
+          :intvector{},
+          :int{0}, :int{0}, "illegal", ".", :bin{ 0e }
+        }
       }
     }
 
