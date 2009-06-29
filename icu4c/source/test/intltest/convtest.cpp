@@ -1015,7 +1015,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             // otherwise do nothing to make sure that flushing resets
             ucnv_resetToUnicode(cnv);
         }
-        if (resultOffsets[resultLength] != -1) {
+        if (cc.offsets != NULL && resultOffsets[resultLength] != -1) {
             errln("toUnicode[%d](%s) Conversion wrote too much to offsets at index %d",
                 cc.caseNr, cc.charset, resultLength);
         }

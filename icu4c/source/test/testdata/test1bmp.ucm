@@ -1,5 +1,5 @@
 # *******************************************************************************
-# * Copyright (C) 2007, International Business Machines
+# * Copyright (C) 2007-2009, International Business Machines
 # * Corporation and others.  All Rights Reserved.
 # *******************************************************************************
 #
@@ -14,7 +14,7 @@
 <mb_cur_min>        1
 <uconv_class>       "MBCS"
 <subchar>           \xff
-<icu:state>         0, 5-9, ff
+<icu:state>         0, 5-9, c:0.s, ff
 
 CHARMAP
 

@@ -2323,7 +2323,7 @@ class CharsetMBCS extends CharsetICU {
             }
 
             /* conversion loop */
-            while (targetCapacity > 0) {
+            while (targetCapacity > 0 && sourceArrayIndex < source.limit()) {
                 entry = stateTable[0][source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK];
                 /* MBCS_ENTRY_IS_FINAL(entry) */
 
