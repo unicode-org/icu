@@ -929,6 +929,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{0}, :int{0}, "", ".", :bin{""}
         }
+        {
+          "*test5",
+          :bin{ 0906 },
+          "\udbc8\udf45\u0006",
+          :intvector{},
+          :int{0}, :int{0}, "", ".", :bin{""}
+        }
       }
     }
 
