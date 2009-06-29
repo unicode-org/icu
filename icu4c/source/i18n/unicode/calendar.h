@@ -173,6 +173,12 @@ public:
      */
     enum EDateFields {
 #ifndef U_HIDE_DEPRECATED_API
+/*
+ * ERA may be defined on other platforms. To avoid any potential problems undefined it here.
+ */
+#ifdef ERA
+#undef ERA
+#endif
         ERA,                  // Example: 0..1
         YEAR,                 // Example: 1..big number
         MONTH,                // Example: 0..11
@@ -192,11 +198,11 @@ public:
         DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
         YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year
         DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
-		
-		EXTENDED_YEAR,
-		JULIAN_DAY,
-		MILLISECONDS_IN_DAY,
-		IS_LEAP_MONTH,
+        
+        EXTENDED_YEAR,
+        JULIAN_DAY,
+        MILLISECONDS_IN_DAY,
+        IS_LEAP_MONTH,
 
         FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
 #endif /* U_HIDE_DEPRECATED_API */
