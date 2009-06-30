@@ -2057,15 +2057,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             DOMINO_TILES,
         };
 
-        /* Clover Code Coverage is turned off becuase the COUNT and BLOCKS_.length
-         * are both static final and can't be externally changed by another file.*/
-        ///CLOVER:OFF
         static {
             if (COUNT!=BLOCKS_.length) {
                 throw new java.lang.IllegalStateException("UnicodeBlock fields are inconsistent!");
             }
         }
-        ///CLOVER:ON
         
         /**
          * Identification code for this UnicodeBlock
@@ -3098,6 +3094,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
             mant=numericValue>>LARGE_MANT_SHIFT;
             exp=numericValue&LARGE_EXP_MASK;
+            /* Values were tested for "int ch" from -20000000 to 20000000 and
+             * none of the values ever reached the "if(mant==0)" or
+             * "else if(mant>9)"
+             */
             if(mant==0) {
                 mant=1;
                 exp+=LARGE_EXP_OFFSET_EXTRA;
@@ -3128,6 +3128,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 numValue*=10.;
                 break;
             case 0:
+            /* Values were tested for "int ch" from -20000000 to 20000000 and
+             * none of the values ever reached the "default" case
+             */
             default:
                 break;
             }
@@ -4388,6 +4391,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
 
         // implement UCaseProps.ContextIterator
+        // The following code is not used anywhere in this private class
         public void reset(int direction) {
             if(direction>0) {
                 /* reset for forward iteration */
@@ -5234,89 +5238,89 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return 0; // undefined
         } 
         else if (type < UProperty.INT_LIMIT) {
-            //int result = 0;
             switch (type) {
-            case UProperty.BIDI_CLASS:
-                return getDirection(ch);
-            case UProperty.BLOCK:
-                return UnicodeBlock.idOf(ch);
-            case UProperty.CANONICAL_COMBINING_CLASS:
-                return getCombiningClass(ch);
-            case UProperty.DECOMPOSITION_TYPE:
-                return PROPERTY_.getAdditional(ch, 2) 
-            & DECOMPOSITION_TYPE_MASK_;
-            case UProperty.EAST_ASIAN_WIDTH:
-                return (PROPERTY_.getAdditional(ch, 0)
-            & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
-            case UProperty.GENERAL_CATEGORY:
-                return getType(ch);
-            case UProperty.JOINING_GROUP:
-                return gBdp.getJoiningGroup(ch);
-            case UProperty.JOINING_TYPE:
-                return gBdp.getJoiningType(ch);
-            case UProperty.LINE_BREAK:
-                return (int)(PROPERTY_.getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
-            case UProperty.NUMERIC_TYPE:
-                type=getNumericType(PROPERTY_.getProperty(ch));
-                if(type>NumericType.NUMERIC) {
-                    /* keep internal variants of NumericType.NUMERIC from becoming visible */
-                    type=NumericType.NUMERIC;
-                }
-                return type;
-            case UProperty.SCRIPT:
-                return UScript.getScript(ch);
-            case UProperty.HANGUL_SYLLABLE_TYPE:
-        /* purely algorithmic; hardcode known characters, check for assigned new ones */ 
-        if(ch<NormalizerImpl.JAMO_L_BASE) { 
-            /* NA */ 
-        } else if(ch<=0x11ff) { 
-            /* Jamo range */ 
-            if(ch<=0x115f) { 
-            /* Jamo L range, HANGUL CHOSEONG ... */ 
-            if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                return HangulSyllableType.LEADING_JAMO; 
-            } 
-            } else if(ch<=0x11a7) { 
-            /* Jamo V range, HANGUL JUNGSEONG ... */ 
-            if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                return HangulSyllableType.VOWEL_JAMO; 
-            } 
-            } else { 
-            /* Jamo T range */ 
-            if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                return HangulSyllableType.TRAILING_JAMO; 
-            } 
-            } 
-        } else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
-            /* NA */ 
-        } else if(ch<NormalizerImpl.HANGUL_COUNT) { 
-            /* Hangul syllable */ 
-            return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
-        } 
-        return 0; /* NA */ 
+                case UProperty.BIDI_CLASS:
+                    return getDirection(ch);
+                case UProperty.BLOCK:
+                    return UnicodeBlock.idOf(ch);
+                case UProperty.CANONICAL_COMBINING_CLASS:
+                    return getCombiningClass(ch);
+                case UProperty.DECOMPOSITION_TYPE:
+                    return PROPERTY_.getAdditional(ch, 2) 
+                & DECOMPOSITION_TYPE_MASK_;
+                case UProperty.EAST_ASIAN_WIDTH:
+                    return (PROPERTY_.getAdditional(ch, 0)
+                & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
+                case UProperty.GENERAL_CATEGORY:
+                    return getType(ch);
+                case UProperty.JOINING_GROUP:
+                    return gBdp.getJoiningGroup(ch);
+                case UProperty.JOINING_TYPE:
+                    return gBdp.getJoiningType(ch);
+                case UProperty.LINE_BREAK:
+                    return (int)(PROPERTY_.getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
+                case UProperty.NUMERIC_TYPE:
+                    type=getNumericType(PROPERTY_.getProperty(ch));
+                    if(type>NumericType.NUMERIC) {
+                        /* keep internal variants of NumericType.NUMERIC from becoming visible */
+                        type=NumericType.NUMERIC;
+                    }
+                    return type;
+                case UProperty.SCRIPT:
+                    return UScript.getScript(ch);
+                case UProperty.HANGUL_SYLLABLE_TYPE:
+                    /* purely algorithmic; hardcode known characters, check for assigned new ones */ 
+                    if(ch<NormalizerImpl.JAMO_L_BASE) { 
+                        /* NA */ 
+                    } else if(ch<=0x11ff) { 
+                        /* Jamo range */ 
+                        if(ch<=0x115f) { 
+                            /* Jamo L range, HANGUL CHOSEONG ... */ 
+                            if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                                return HangulSyllableType.LEADING_JAMO; 
+                            } 
+                        } else if(ch<=0x11a7) { 
+                            /* Jamo V range, HANGUL JUNGSEONG ... */ 
+                            if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                                return HangulSyllableType.VOWEL_JAMO; 
+                            } 
+                        } else { 
+                            /* Jamo T range */ 
+                            if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                                return HangulSyllableType.TRAILING_JAMO; 
+                            } 
+                        } 
+                    } else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
+                        /* NA */ 
+                    } else if(ch<NormalizerImpl.HANGUL_COUNT) { 
+                        /* Hangul syllable */ 
+                        return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
+                    } 
+                    return 0; /* NA */ 
 
-            case UProperty.NFD_QUICK_CHECK:
-            case UProperty.NFKD_QUICK_CHECK:
-            case UProperty.NFC_QUICK_CHECK:
-            case UProperty.NFKC_QUICK_CHECK:
-                return NormalizerImpl.quickCheck(ch, (type-UProperty.NFD_QUICK_CHECK)+2); // 2=UNORM_NFD
-            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-                return NormalizerImpl.getFCD16(ch)>>8;
-            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                return NormalizerImpl.getFCD16(ch)&0xff;
-            case UProperty.GRAPHEME_CLUSTER_BREAK:
-                return (int)(PROPERTY_.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
-            case UProperty.SENTENCE_BREAK:
-                return (int)(PROPERTY_.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
-            case UProperty.WORD_BREAK:
-                return (int)(PROPERTY_.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
-            default:
-               
-        return 0; /* undefined */
+                case UProperty.NFD_QUICK_CHECK:
+                case UProperty.NFKD_QUICK_CHECK:
+                case UProperty.NFC_QUICK_CHECK:
+                case UProperty.NFKC_QUICK_CHECK:
+                    return NormalizerImpl.quickCheck(ch, (type-UProperty.NFD_QUICK_CHECK)+2); // 2=UNORM_NFD
+                case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
+                    return NormalizerImpl.getFCD16(ch)>>8;
+                case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
+                    return NormalizerImpl.getFCD16(ch)&0xff;
+                case UProperty.GRAPHEME_CLUSTER_BREAK:
+                    return (int)(PROPERTY_.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
+                case UProperty.SENTENCE_BREAK:
+                    return (int)(PROPERTY_.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
+                case UProperty.WORD_BREAK:
+                    return (int)(PROPERTY_.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
+                /* Values were tested for variable type from Integer.MIN_VALUE
+                 * to UProperty.INT_LIMIT and none would not reach the default case.
+                 */
+                default: return 0; /* undefined */
+                }
+            } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
+                return UCharacterProperty.getMask(getType(ch));
             }
-        } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
-            return UCharacterProperty.getMask(getType(ch));
-        }
         return 0; // undefined
     }
     /**
@@ -5456,13 +5460,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return (PROPERTY_.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
             case UProperty.WORD_BREAK:
                 return (PROPERTY_.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
-            ///CLOVER:OFF
-            //Default is never reached because all the values between
-            //UProperty.INT_START and UProperty.INT_LIMIT are covered
-            default:
-                return -1; // undefined
+            /* Values were tested for variable type from Integer.MIN_VALUE
+             * to UProperty.INT_LIMIT and none would not reach the default case.
+             */
+            default: return -1; // undefined
             }
-            ///CLOVER:ON
         }
         return -1; // undefined
     }

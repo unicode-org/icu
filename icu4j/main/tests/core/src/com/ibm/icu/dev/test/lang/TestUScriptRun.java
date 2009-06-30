@@ -416,6 +416,15 @@ public class TestUScriptRun extends TestFmwk
             } catch (IllegalArgumentException iae) {
                 errln("scriptRun.reset(paddedTestString.toCharArray(), startOffset, count) produced an IllegalArgumentException!");
             }
+            
+            /* Tests "public final void reset()" */
+            // Tests when "while (stackIsNotEmpty())" is true
+            try{
+                UScriptRun usr = new UScriptRun((String)null);
+                usr.reset();
+            } catch (Exception e){
+                errln("scriptRun.reset() was not suppose to produce an exception.");
+            }
         }
     }
 }

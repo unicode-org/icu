@@ -17,11 +17,11 @@ import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.UCharacterName;
@@ -31,6 +31,7 @@ import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import java.io.BufferedReader;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
 * Testing class for UCharacter
@@ -2450,7 +2451,11 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static UnicodeBlock getInstance(int id)
+     */
     public void TestGetInstance(){
         // Testing values for invalid and valid ID
         int[] invalid_test = {-1,-10,-100};
@@ -2463,7 +2468,11 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static UnicodeBlock of(int ch)
+     */
     public void TestOf(){
         if(UCharacter.UnicodeBlock.INVALID_CODE != UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1)){
             errln("UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) was " +
@@ -2472,8 +2481,11 @@ public final class UCharacterTest extends TestFmwk
                     UCharacter.UnicodeBlock.INVALID_CODE);
         }
     }
-    
-    // The idOf method can only be accessed through getIntPropertyValue
+
+    /*
+     * The following method tests
+     *      static int idOf(int ch)
+     */
     public void TestIDOf(){
         int[] invalid_test = {-2, -1, UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
         
@@ -2494,12 +2506,19 @@ public final class UCharacterTest extends TestFmwk
         }
     }
     
-    // TODO: Need to test the forName method when b == null - is that possible?
+    /*
+     * The following method tests
+     *      public static final UnicodeBlock forName(String blockName)
+     */
     public void TestForName(){
         //UCharacter.UnicodeBlock.forName("");
+        //Tests when "if (b == null)" is true
     }
     
-    // The following tests through the else part of the getNumericValue method
+    /*
+     * The following method tests
+     *      public static int getNumericValue(int ch)
+     */
     public void TestGetNumericValue(){
         // The following tests the else statement when
         //      if(numericType<NumericType.COUNT) is false
@@ -2515,9 +2534,12 @@ public final class UCharacterTest extends TestFmwk
              65901,65902,65903,65904,65905,65906,66378,68167};
         
         int[] results =
-            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-             -1,-1,-1,-1,0,1,2,3,4,5,6,7,8,9,-1,-1,-1,-1,-1,-1,-1};
+            {1000,1000,10000,500,1000,500,1000,1000,5000,10000,50000,100000,
+             10000,100000000,1000,100000000,-2,1000,10000,1000,300,400,500,
+             600,700,800,900,1000,2000,3000,4000,5000,6000,7000,8000,9000,
+             10000,20000,30000,40000,50000,60000,70000,80000,90000,500,5000,
+             50000,500,1000,5000,500,1000,10000,50000,300,500,500,500,500,500,
+             1000,5000,900,1000};
         
         if(valid_values.length != results.length){
             errln("The valid_values array and the results array need to be "+
@@ -2525,10 +2547,10 @@ public final class UCharacterTest extends TestFmwk
         } else {
             for(int i = 0; i < valid_values.length; i++){
                 try{
-                    if(UCharacter.getNumericValue(i) != results[i]){
+                    if(UCharacter.getNumericValue(valid_values[i]) != results[i]){
                         errln("UCharacter.getNumericValue(i) returned a " +
                                 "different value from the expected result. " +
-                                "Got " + UCharacter.getNumericValue(i) +
+                                "Got " + UCharacter.getNumericValue(valid_values[i]) +
                                 "Expected" + results[i]);
                     }
                 } catch(Exception e){
@@ -2538,7 +2560,11 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static double getUnicodeNumericValue(int ch)
+     */
     // The following tests covers if(mant==0), else if(mant > 9), and default
     public void TestGetUnicodeNumericValue(){
         /*  The code coverage for if(mant==0), else if(mant > 9), and default
@@ -2547,10 +2573,12 @@ public final class UCharacterTest extends TestFmwk
          *  Integer.MAX_VALUE and didn't recieve any code coverage there too.
          *  Therefore, the code could either be dead code or meaningless. 
          */
-        //for(int i=UTF16.CODEPOINT_MAX_VALUE; i<Integer.MAX_VALUE; i++)
-        //    UCharacter.getUnicodeNumericValue(i);
     }
-    
+
+    /*
+     * The following method tests
+     *      public static String toString(int ch)
+     */
     public void TestToString(){
         int[] valid_tests = {
                 UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
@@ -2575,7 +2603,11 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static int getCombiningClass(int ch)
+     */
     public void TestGetCombiningClass(){
         int[] valid_tests = {
                 UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
@@ -2602,16 +2634,15 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static String getName(int ch)
+     */
     public void TestGetName(){
-        /*String[] data = {"a","z","�����","�","�����","�"};
-        String[] results = {
-                "LATIN SMALL LETTER A","LATIN SMALL LETTER Z",
-                "LATIN SMALL LETTER C WITH CEDILLA",
-                "LATIN SMALL LETTER O WITH DIAERESIS",
-                "LATIN SMALL LETTER I WITH CIRCUMFLEX",
-                "LATIN SMALL LETTER AE",
-                "LATIN SMALL LETTER O WITH ACUTE","EURO SIGN"};
+        // Need to test on other "one characters" for the getName() method
+        String[] data = {"a","z"};
+        String[] results = {"LATIN SMALL LETTER A","LATIN SMALL LETTER Z"};
         if(data.length != results.length){
             errln("The data array and the results array need to be "+
                     "the same length.");
@@ -2625,9 +2656,13 @@ public final class UCharacterTest extends TestFmwk
                             results[i]);
                 }
             }
-        }*/
+        }
     }
     
+    /*
+     * The following method tests
+     *      public static String getISOComment(int ch)
+     */
     public void TestGetISOComment(){
         int[] invalid_tests = {
                 UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
@@ -2641,42 +2676,198 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public void setLimit(int lim)
+     */
     public void TestSetLimit(){
-        
+        // TODO: Tests when "if(0<=lim && lim<=s.length())" is false
     }
-    
+
+    /*
+     * The following method tests
+     *      public int nextCaseMapCP()
+     */
     public void TestNextCaseMapCP(){
-        
+        // TODO: Tests when "if(UTF16.LEAD_SURROGATE_MIN_VALUE<=c || c<=UTF16.TRAIL_SURROGATE_MAX_VALUE)" is false
+        /* TODO: Tests when "if( c<=UTF16.LEAD_SURROGATE_MAX_VALUE && cpLimit<limit &&
+         * UTF16.TRAIL_SURROGATE_MIN_VALUE<=(c2=s.charAt(cpLimit)) && c2<=UTF16.TRAIL_SURROGATE_MAX_VALUE)" is false
+         */
     }
-    
+
+    /*
+     * The following method tests
+     *      public void reset(int direction)
+     */
     public void TestReset(){
-        
+        // The method reset() is never called by another function
+        // TODO: Tests when "else if(direction<0)" is false
     }
-    
+
+    /*
+     * The following method tests
+     *      public static String toTitleCase(Locale locale, String str, BreakIterator breakiter)
+     */
     public void TestToTitleCase(){
-        // Three functions
-        // UCharacter.toTitleCase(str, breakiter)
-        // UCharacter.toTitleCase(locale, str, titleIter)
-        // UCharacter.toTitleCase(locale, str, titleIter, options)
+        //Calls the function "toTitleCase(Locale locale, String str, BreakIterator breakiter)"
+        String[] locale={"en","fr","zh","ko","ja","it","de",""};
+        try{
+            for(int i=0; i<locale.length; i++){
+                UCharacter.toTitleCase(new Locale(locale[i]), "", null);
+            }
+        }catch(Exception e){
+            errln("UCharacter.toTitleCase(Locale locale, String str, " +
+                    "BreakIterator breakiter) was not suppose to return an exception");
+        }
+        
+        // Calls the function "String toTitleCase(ULocale locale, String str, BreakIterator titleIter, int options)"
+        // Tests when "if (locale == null)" is true
+        try{
+            UCharacter.toTitleCase(null, "", null, 0);
+        } catch(Exception e){
+            errln("UCharacter.toTitleCase(ULocale locale, String str, " +
+                    "BreakIterator titleIter, int options) was not suppose to return an exception");
+        }
+        
+        // TODO: Tests when "if(index==BreakIterator.DONE || index>srcLength)" is true
+        // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c))" is false
+        // TODO: Tests when "if(prev<titleStart)" is false
+        // TODO: Tests when "if(c<=0xffff)" is false
+        // TODO: Tests when "if(c<=0xffff)" is false
+        // TODO: Tests when "if(titleLimit<index)" is false
+        // TODO: Tests when "else if((nc=iter.nextCaseMapCP())>=0)" is false
     }
-    
+    /*
+     * The following method tests
+     *      public static String toUpperCase(ULocale locale, String str)
+     */
     public void TestToUpperCase(){
-        //UCharacter.toUpperCase(locale, str)
+        // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0)" is false
     }
-    
+
+    /*
+     * The following method tests
+     *      public static String toLowerCase(ULocale locale, String str)
+     */
     public void TestToLowerCase(){
-        //UCharacter.toLowerCase(locale, str)
+        // Test when locale is null
+        String[] cases = {"","a","A","z","Z","Dummy","DUMMY","dummy","a z","A Z",
+                "'","\"","0","9","0a","a0","*","~!@#$%^&*()_+"};
+        for(int i=0; i<cases.length; i++){
+            try{
+                UCharacter.toLowerCase((ULocale) null, cases[i]);
+            } catch(Exception e){
+                errln("UCharacter.toLowerCase was not suppose to return an " +
+                        "exception for input of null and string: " + cases[i]);
+            }
+        }
+        // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0)" is false
     }
-    
+
+    /*
+     * The following method tests
+     *      public static int getHanNumericValue(int ch)
+     */
     public void TestGetHanNumericValue(){
-        //UCharacter.getHanNumericValue(ch)
+        int[] valid = {
+                0x3007, //IDEOGRAPHIC_NUMBER_ZERO_
+                0x96f6, //CJK_IDEOGRAPH_COMPLEX_ZERO_
+                0x4e00, //CJK_IDEOGRAPH_FIRST_
+                0x58f9, //CJK_IDEOGRAPH_COMPLEX_ONE_
+                0x4e8c, //CJK_IDEOGRAPH_SECOND_
+                0x8cb3, //CJK_IDEOGRAPH_COMPLEX_TWO_
+                0x4e09, //CJK_IDEOGRAPH_THIRD_
+                0x53c3, //CJK_IDEOGRAPH_COMPLEX_THREE_
+                0x56d8, //CJK_IDEOGRAPH_FOURTH_
+                0x8086, //CJK_IDEOGRAPH_COMPLEX_FOUR_
+                0x4e94, //CJK_IDEOGRAPH_FIFTH_
+                0x4f0d, //CJK_IDEOGRAPH_COMPLEX_FIVE_
+                0x516d, //CJK_IDEOGRAPH_SIXTH_
+                0x9678, //CJK_IDEOGRAPH_COMPLEX_SIX_
+                0x4e03, //CJK_IDEOGRAPH_SEVENTH_
+                0x67d2, //CJK_IDEOGRAPH_COMPLEX_SEVEN_
+                0x516b, //CJK_IDEOGRAPH_EIGHTH_
+                0x634c, //CJK_IDEOGRAPH_COMPLEX_EIGHT_
+                0x4e5d, //CJK_IDEOGRAPH_NINETH_
+                0x7396, //CJK_IDEOGRAPH_COMPLEX_NINE_
+                0x5341, //CJK_IDEOGRAPH_TEN_
+                0x62fe, //CJK_IDEOGRAPH_COMPLEX_TEN_
+                0x767e, //CJK_IDEOGRAPH_HUNDRED_
+                0x4f70, //CJK_IDEOGRAPH_COMPLEX_HUNDRED_
+                0x5343, //CJK_IDEOGRAPH_THOUSAND_
+                0x4edf, //CJK_IDEOGRAPH_COMPLEX_THOUSAND_
+                0x824c, //CJK_IDEOGRAPH_TEN_THOUSAND_
+                0x5104, //CJK_IDEOGRAPH_HUNDRED_MILLION_
+        };
+        
+        int[] invalid = {-5,-2,-1,0};
+        
+        int[] results = {0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,100,100,
+                1000,1000,10000,100000000};
+        
+        if(valid.length != results.length){
+            errln("The arrays valid and results are suppose to be the same length " +
+                    "to test getHanNumericValue(int ch).");
+        } else{
+            for(int i=0; i<valid.length; i++){
+                if(UCharacter.getHanNumericValue(valid[i]) != results[i]){
+                    errln("UCharacter.getHanNumericValue does not return the " + 
+                            "same result as expected. Passed value: " + valid[i] +
+                            ". Got: " + UCharacter.getHanNumericValue(valid[i]) +
+                            ". Expected: " + results[i]);
+                }
+            }
+        }
+        
+        for(int i=0; i<invalid.length; i++){
+            if(UCharacter.getHanNumericValue(invalid[i]) != -1){
+                errln("UCharacter.getHanNumericValue does not return the " + 
+                        "same result as expected. Passed value: " + invalid[i] +
+                        ". Got: " + UCharacter.getHanNumericValue(invalid[i]) +
+                        ". Expected: -1");
+            }
+        }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static boolean hasBinaryProperty(int ch, int property) 
+     */
     public void TestHasBinaryProperty(){
-        //UCharacter.hasBinaryProperty(ch, property)
+        // Testing when "if (ch < MIN_VALUE || ch > MAX_VALUE)" is true
+        int[] invalid = {
+                UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
+                UCharacter.MAX_VALUE+1, UCharacter.MAX_VALUE+2};
+        int[] valid = {
+                UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
+                UCharacter.MAX_VALUE, UCharacter.MAX_VALUE-1};
+        
+        for(int i=0; i<invalid.length; i++){
+            try{
+                UCharacter.hasBinaryProperty(invalid[i], 1);
+                errln("UCharacter.hasBinaryProperty(ch, property) was suppose to " +
+                        "give an exception for an invalid input. Value passed: " +
+                        invalid[i]);
+                
+            } catch(Exception e){}
+        }
+        
+        for(int i=0; i<valid.length; i++){
+            try{
+                UCharacter.hasBinaryProperty(valid[i], 1);
+            } catch(Exception e){
+                errln("UCharacter.hasBinaryProperty(ch, property) was not suppose to " +
+                        "give an exception for an valid input. Value passed: " +
+                        invalid[i]);
+            }
+        }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static int getIntPropertyValue(int ch, int type)
+     */
     public void TestGetIntPropertyValue(){
         /* Testing UCharacter.getIntPropertyValue(ch, type) */
         // Testing when "if (type < UProperty.BINARY_START)" is true
@@ -2707,7 +2898,11 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice)
+     */
     public void TestGetStringPropertyValue(){
         /* Testing UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) */
         // Tests  "if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||
@@ -2737,8 +2932,23 @@ public final class UCharacterTest extends TestFmwk
                         "Enum case: " + enumCases[i] + ", codepoint: 10, nameChoice: 0");
             }
         }
+
+        // Testing when "throw new IllegalArgumentException("Illegal Property Enum");"
+        int[] illegalEnum = {Integer.MIN_VALUE, -50, -10, -5, -2, -1};
+        for(int i=0; i<illegalEnum.length; i++){
+            try{
+                UCharacter.getStringPropertyValue(illegalEnum[i],10,0);
+                errln("UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) " +
+                        "was suppose to return an exception for values passed: " + 
+                        "Enum case: " + illegalEnum[i] + ", codepoint: 10, nameChoice: 0");
+            } catch(Exception e){}
+        }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static int getIntPropertyMaxValue(int type)
+     */
     public void TestGetIntPropertyMaxValue(){
         /* Testing UCharacter.getIntPropertyMaxValue(type) */
         // Testing when "else if (type < UProperty.INT_START)" is true
@@ -2751,19 +2961,24 @@ public final class UCharacterTest extends TestFmwk
             }
         }
         
-        // Testing when the case statment reaches "default"
-        // With the current algorithm, this is not possible. The values
-        // between UProperty.INT_START to UProperty.INT_LIMIT are covered.
+        // TODO: Testing when the case statment reaches "default"
+        // After testing between values of UProperty.INT_START and
+        // UProperty.INT_LIMIT are covered, none of the values reaches default.
     }
     
+    /*
+     * The following method tests
+     *      public static final int codePointAt(CharSequence seq, int index)
+     *      public static final int codePointAt(char[] text, int index, int limit)
+     */
     public void TestCodePointAt(){
         /* Testing UCharacter.codePointAt(seq, index) */
-        // Testing when "if (index < seq.length())" is false
+        // TODO: Testing when "if (index < seq.length())" is false
         //      Having problems with isHighSurrogate since the output to the
         //      console won't display the type of characters.
         
         /* Testing UCharacter.codePointAt(text, index) */
-        // Testing when "if (index < text.length)" is false
+        // TODO: Testing when "if (index < text.length)" is false
         //      Having problems with isHighSurrogate since the output to the
         //      console won't display the type of characters.
         
@@ -2807,15 +3022,21 @@ public final class UCharacterTest extends TestFmwk
             }
         }
 
-        // Testing when "if (index < limit)" is false
+        // TODO: Testing when "if (index < limit)" is false
         //      Having problems with isHighSurrogate since the output to the
         //      console won't display the type of characters.
     }
-    
+
+    /*
+     * The following method tests
+     *      public static final int codePointBefore(CharSequence seq, int index)
+     *      public static final int codePointBefore(char[] text, int index)
+     *      public static final int codePointBefore(char[] text, int index, int limit)
+     */
     public void TestCodePointBefore(){
         /* Testing UCharacter.codePointBefore(seq, index) */
         /* Testing UCharacter.codePointBefore(text, index) */
-        // Testing when "if (index > 0)" is false
+        // TODO: Testing when "if (index > 0)" is false
         //      Having problems with isLowSurrogate since the output to the
         //      console won't display the type of characters.
         
@@ -2828,7 +3049,7 @@ public final class UCharacterTest extends TestFmwk
         
         for(int i=0; i < negative_cases.length; i++){
             try{
-                UCharacter.codePointCount(dummy, 10000, negative_cases[i]);
+                UCharacter.codePointBefore(dummy, 10000, negative_cases[i]);
                 errln("UCharacter.codePointBefore(text, index, limit) was suppose to return an exception " +
                         "when the parameter limit of " + negative_cases[i] + " is a negative number.");
             } catch(Exception e) {}
@@ -2836,17 +3057,22 @@ public final class UCharacterTest extends TestFmwk
         
         for(int i=0; i < index_cases.length; i++){
             try{
-                UCharacter.codePointCount(dummy, index_cases[i], 101);
+                UCharacter.codePointBefore(dummy, index_cases[i], 101);
                 errln("UCharacter.codePointBefore(text, index, limit) was suppose to return an exception " +
                         "when the parameter index of " + index_cases[i] + " is a negative number.");
             } catch(Exception e) {}
         }
         
-        // Testing when "if (index > limit)" is false
+        // TODO: Testing when "if (index > limit)" is false
         //      Having problems with isLowSurrogate since the output to the
         //      console won't display the type of characters.
     }
-    
+
+    /*
+     * The following method tests
+     *      public static final int toChars(int cp, char[] dst, int dstIndex)
+     *      public static final char[] toChars(int cp)
+     */
     public void TestToChars(){
         int[] positive_cases = {1,2,5,10,100};
         char[] dst = {'a'};
@@ -2905,7 +3131,12 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-    
+
+    /*
+     * The following method tests
+     *      public static int codePointCount(CharSequence text, int start, int limit)
+     *      public static int codePointCount(char[] text, int start, int limit)
+     */
     public void TestCodePointCount(){
         // The following tests the first if statement to make it true:
         //  if (start < 0 || limit < start || limit > text.length)
@@ -2962,14 +3193,20 @@ public final class UCharacterTest extends TestFmwk
         }
     }
     
+    /*
+     * The following method tests
+     *      private static int getEuropeanDigit(int ch)
+     * The method needs to use the method "digit" in order to access the
+     * getEuropeanDigit method.
+     */
     public void TestGetEuropeanDigit(){
-        //Get to getEuropeanDigit by going through digit(int,int)
-        //  to test the case when all the "if" statements is false
         //The number retrieved from 0xFF41 to 0xFF5A is due to
         //  exhaustive testing from UTF16.CODEPOINT_MIN_VALUE to
         //  UTF16.CODEPOINT_MAX_VALUE return a value of -1.
         
-        int[] radixResult = {10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+        int[] radixResult = {
+                10,11,12,13,14,15,16,17,18,19,20,21,22,
+                23,24,25,26,27,28,29,30,31,32,33,34,35};
         int[] radixCase1 = {0,1,5,10};
         int[] radixCase2 = {100,250,500,1000};
         
