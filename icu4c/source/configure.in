@@ -422,6 +422,13 @@ if test $threads = true; then
       ;;
     esac
     ;;
+  *-*-solaris*)
+    case "${icu_cv_host_frag}" in
+      mh-solaris)
+           LIBS="${LIBS} -mt"
+      ;;
+    esac
+    ;;
   esac
 fi
 
