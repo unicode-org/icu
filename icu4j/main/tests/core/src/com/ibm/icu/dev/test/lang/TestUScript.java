@@ -407,9 +407,4 @@ public class TestUScript extends TestFmwk {
             }
         }
     }
-    
-    /* Tests the method "int[] findCodeFromLocale(ULocale locale)" */
-    public void TestFindFromLocale(){
-        // Tests when "if (w < result.length)" is true
-    }
  }
