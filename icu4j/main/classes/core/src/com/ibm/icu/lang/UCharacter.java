@@ -2058,6 +2058,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         };
 
         static {
+            // The following will only be true if COUNT or the array BLOCKS_
+            // is every changed to be inconsistent
             if (COUNT!=BLOCKS_.length) {
                 throw new java.lang.IllegalStateException("UnicodeBlock fields are inconsistent!");
             }
@@ -3094,14 +3096,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
             mant=numericValue>>LARGE_MANT_SHIFT;
             exp=numericValue&LARGE_EXP_MASK;
-            /* Values were tested for "int ch" from -20000000 to 20000000 and
+            /* Values were tested for "int ch" from -100000000 to 100000000 and
              * none of the values ever reached the "if(mant==0)" or
              * "else if(mant>9)"
              */
             if(mant==0) {
                 mant=1;
                 exp+=LARGE_EXP_OFFSET_EXTRA;
-            } else if(mant>9) {
+            } else if(mant>9) { 
                 return -2; /* reserved mantissa value */
             } else {
                 exp+=LARGE_EXP_OFFSET;
@@ -3128,10 +3130,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 numValue*=10.;
                 break;
             case 0:
-            /* Values were tested for "int ch" from -20000000 to 20000000 and
+            /* Values were tested for "int ch" from -100000000 to 100000000 and
              * none of the values ever reached the "default" case
              */
-            default:
+            default: if(exp!=0) 
                 break;
             }
             if(numValue<=Integer.MAX_VALUE) {
