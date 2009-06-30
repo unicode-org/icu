@@ -6009,6 +6009,13 @@ $as_echo "$ac_cv_func_pthread_mutex_lock" >&6; }
       ;;
     esac
     ;;
+  *-*-solaris*)
+    case "${icu_cv_host_frag}" in
+      mh-solaris)
+           LIBS="${LIBS} -mt"
+      ;;
+    esac
+    ;;
   esac
 fi
 
