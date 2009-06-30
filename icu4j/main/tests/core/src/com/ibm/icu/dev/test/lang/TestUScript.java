@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -406,5 +406,10 @@ public class TestUScript extends TestFmwk {
                 errln("UScript.getCode did not return expected code for script"+ expectedShort[i]+". EXPECTED: "+ (UScript.BALINESE+i)+" GOT: %i\n"+ ret[0] );
             }
         }
+    }
+    
+    /* Tests the method "int[] findCodeFromLocale(ULocale locale)" */
+    public void TestFindFromLocale(){
+        // Tests when "if (w < result.length)" is true
     }
  }
