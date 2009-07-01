@@ -1182,8 +1182,6 @@ icu4c/source/tools/genpname/SyntheticPropertyAliases.txt svneol=native#text/plai
 icu4c/source/tools/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 icu4c/source/tools/tzcode/readme.txt svneol=native#text/plain
 icu4c/unicode-license.txt svneol=native#text/plain
-icu4j/.classpath -text
-icu4j/.project -text
 icu4j/APIChangeReport.html svneol=native#text/html
 icu4j/build.properties -text
 icu4j/build.xml svneol=native#text/xml
