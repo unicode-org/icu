@@ -66,7 +66,7 @@ U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
 #ifdef U_WINDOWS
     /* anticipate problems with "short" pathnames */
-    static WIN32_FIND_DATA info;
+    static WIN32_FIND_DATAA info;
     HANDLE file=FindFirstFileA(pathname, &info);
     if(file!=INVALID_HANDLE_VALUE) {
         if(info.cAlternateFileName[0]!=0) {
