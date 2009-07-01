@@ -735,7 +735,10 @@ file.</p>
 <p>After doing a build it is a good idea to run all the icu4j tests by
 typing<br>
 <tt>"ant check"</tt> or
-"java -classpath classes com.ibm.icu.dev.test.TestAll -nothrow".</p>
+"java -classpath classes com.ibm.icu.dev.test.TestAll -nothrow".<br>
+<b>Note:</b> If you get a OutOfMemoryError when you are running <tt>"ant check"</tt>, you can <br>
+set the heap size of the jvm by setting the environment variable JVM_OPTIONS<br>
+to the appropriate java options.</p>
 
 <p><b>Eclipse users:</b> See the ICU4J site for information on<a
  href="http://www.icu-project.org/docs/eclipse_howto/eclipse_howto.html">

@@ -88,39 +88,42 @@
     <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
 
     <target name="secure" depends="main, jar, tests" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
- 
+    
+    <!-- Check to see if JVM_OPTIONS enviroment variable is set. This can be use to set the heap size. -->
+    <property name="env.JVM_OPTIONS" value=""/>
+    <property name="jvm_options" value="${env.JVM_OPTIONS}"/>
     <target name="check" description="Run the standard ICU4J test suite">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n"/>
-            <param name="runcheck.jvmarg" value=""/>
+            <param name="runcheck.jvmarg" value="${jvm_options}"/>
         </antcall>
     </target>
 
     <target name="exhaustiveCheck" description="Run the standard ICU4J test suite in exhaustive mode">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n -e10"/>
-            <param name="runcheck.jvmarg" value=""/>
+            <param name="runcheck.jvmarg" value="${jvm_options}"/>
         </antcall>
     </target>
 
     <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n -e10 Core/Format/DateFormat/TimeZoneFormatTest"/>
-            <param name="runcheck.jvmarg" value="-DTimeZoneRoundTripAll=true"/>
+            <param name="runcheck.jvmarg" value="${jvm_options} -DTimeZoneRoundTripAll=true"/>
         </antcall>
     </target>
 
     <target name="secureCheck" description="Run the secure (applet-like) ICU4J test suite">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n -w"/>
-            <param name="runcheck.jvmarg" value="-Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy"/>
+            <param name="runcheck.jvmarg" value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy"/>
         </antcall>
     </target>
 
     <target name="jdktzCheck" description="Run the standard ICU4J test suite with JDK TimeZone">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n"/>
-            <param name="runcheck.jvmarg" value="-Dcom.ibm.icu.util.TimeZone.DefaultTimeZoneType=JDK"/>
+            <param name="runcheck.jvmarg" value="${jvm_options} -Dcom.ibm.icu.util.TimeZone.DefaultTimeZoneType=JDK"/>
         </antcall>
     </target>
 

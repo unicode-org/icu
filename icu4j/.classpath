@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="demos/src"/>
+	<classpathentry kind="src" path="icu-eclipse/plugins/com.ibm.icu.base.tests/src"/>
+	<classpathentry kind="src" path="icu-eclipse/plugins/com.ibm.icu.base/src"/>
+	<classpathentry kind="src" path="icu-eclipse/plugins/com.ibm.icu.tests/src"/>
+	<classpathentry kind="src" path="main/classes/charset/src"/>
+	<classpathentry kind="src" path="main/classes/core/src"/>
+	<classpathentry kind="src" path="main/classes/localespi/src"/>
+	<classpathentry kind="src" path="main/tests/charset/src"/>
+	<classpathentry kind="src" path="main/tests/core/src"/>
+	<classpathentry kind="src" path="main/tests/framework/src"/>
+	<classpathentry kind="src" path="main/tests/localespi/src"/>
+	<classpathentry kind="src" path="perf-tests/src"/>
+	<classpathentry kind="src" path="tools/build/src"/>
+	<classpathentry kind="src" path="tools/misc/src"/>
+	<classpathentry exported="true" kind="lib" path="demos/out/lib/icu4jdemos.jar"/>
+	<classpathentry exported="true" kind="lib" path="icu4j-charsets.jar"/>
+	<classpathentry exported="true" kind="lib" path="icu4j-localespi.jar"/>
+	<classpathentry exported="true" kind="lib" path="icu4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/classes/charset/out/lib/icu4j-charsets.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/classes/core/out/lib/icu4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/classes/localespi/out/lib/icu4j-localespi.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/shared/data/icudata.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/shared/data/testdata.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/tests/charset/out/lib/icu4j-charset-tests.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/tests/core/out/lib/icu4j-core-tests.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/tests/framework/out/lib/icu4j-test-framework.jar"/>
+	<classpathentry exported="true" kind="lib" path="main/tests/localespi/out/lib/icu4j-localespi-tests.jar"/>
+	<classpathentry exported="true" kind="lib" path="tools/build/out/lib/icu4j-build-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="tools/misc/out/lib/icu4j-tools.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="tools/misc/out/bin"/>
+</classpath>
