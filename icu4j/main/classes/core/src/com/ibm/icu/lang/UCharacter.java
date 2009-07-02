@@ -5677,9 +5677,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.0
      */
     public static final int codePointAt(char[] text, int index, int limit) {
-    if (index >= limit || limit > text.length) {
-        throw new IndexOutOfBoundsException();
-    }
+        if (index >= limit || limit > text.length) {
+            throw new IndexOutOfBoundsException();
+        }
         char c1 = text[index++];
         if (isHighSurrogate(c1)) {
             if (index < limit) {
@@ -5747,9 +5747,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.0
      */
     public static final int codePointBefore(char[] text, int index, int limit) {
-    if (index <= limit || limit < 0) {
-        throw new IndexOutOfBoundsException();
-    }
+        if (index <= limit || limit < 0) {
+            throw new IndexOutOfBoundsException();
+        }
         char c2 = text[--index];
         if (isLowSurrogate(c2)) {
             if (index > limit) { 
@@ -6393,6 +6393,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                               (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
                               + (ch & 0x1f)];
             } catch (ArrayIndexOutOfBoundsException e) {
+                // TODO: Tested all the values from 0 ... UTF16.LEAD_SURROGATE_MIN_VALUE 
+                // and UTF16.LEAD_SURROGATE_MAX_VALUE ... UTF16.SUPPLEMENTARY_MIN_VALUE
+                // but it never results into the catch section of the try-catch
                 return PROPERTY_INITIAL_VALUE_;
             }
         }

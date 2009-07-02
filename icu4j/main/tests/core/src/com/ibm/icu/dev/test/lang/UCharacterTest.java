@@ -2972,16 +2972,37 @@ public final class UCharacterTest extends TestFmwk
      *      public static final int codePointAt(char[] text, int index, int limit)
      */
     public void TestCodePointAt(){
-        /* Testing UCharacter.codePointAt(seq, index) */
-        // TODO: Testing when "if (index < seq.length())" is false
-        //      Having problems with isHighSurrogate since the output to the
-        //      console won't display the type of characters.
         
-        /* Testing UCharacter.codePointAt(text, index) */
-        // TODO: Testing when "if (index < text.length)" is false
-        //      Having problems with isHighSurrogate since the output to the
-        //      console won't display the type of characters.
-        
+        // {LEAD_SURROGATE_MIN_VALUE,
+        //  LEAD_SURROGATE_MAX_VALUE, LEAD_SURROGATE_MAX_VALUE-1
+        String[] cases = {"\uD800","\uDBFF","\uDBFE"};
+        int[] result = {55296,56319,56318};
+        for(int i=0; i < cases.length; i++){
+            /* Testing UCharacter.codePointAt(seq, index) */
+            // Testing when "if (index < seq.length())" is false
+            if(UCharacter.codePointAt((CharSequence) cases[i], 0) != result[i])
+                errln("UCharacter.codePointAt(CharSequence ...) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointAt((CharSequence) cases[i], 0));
+            
+            /* Testing UCharacter.codePointAt(text, index) */
+            // Testing when "if (index < text.length)" is false
+            if(UCharacter.codePointAt(cases[i].toCharArray(), 0) != result[i])
+                errln("UCharacter.codePointAt(char[] ...) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointAt(cases[i].toCharArray(), 0));
+            
+            /* Testing UCharacter.codePointAt(text, index, limit) */
+            // Testing when "if (index < limit)" is false
+            if(UCharacter.codePointAt(cases[i].toCharArray(), 0, 1) != result[i])
+                errln("UCharacter.codePointAt(char[], int, int) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointAt(cases[i].toCharArray(), 0, 1));
+        }
+
         /* Testing UCharacter.codePointAt(text, index, limit) */
         // Testing when "if (index >= limit || limit > text.length)" is true
         char[] empty_text = {};
@@ -3021,10 +3042,6 @@ public final class UCharacterTest extends TestFmwk
             } catch(Exception e){
             }
         }
-
-        // TODO: Testing when "if (index < limit)" is false
-        //      Having problems with isHighSurrogate since the output to the
-        //      console won't display the type of characters.
     }
 
     /*
@@ -3034,12 +3051,35 @@ public final class UCharacterTest extends TestFmwk
      *      public static final int codePointBefore(char[] text, int index, int limit)
      */
     public void TestCodePointBefore(){
-        /* Testing UCharacter.codePointBefore(seq, index) */
-        /* Testing UCharacter.codePointBefore(text, index) */
-        // TODO: Testing when "if (index > 0)" is false
-        //      Having problems with isLowSurrogate since the output to the
-        //      console won't display the type of characters.
-        
+        // {TRAIL_SURROGATE_MIN_VALUE,
+        //  TRAIL_SURROGATE_MAX_VALUE, TRAIL_SURROGATE_MAX_VALUE -1
+        String[] cases = {"\uD800","\uDBFF","\uDBFE"};
+        int[] result = {55296,56319,56318};
+        for(int i=0; i < cases.length; i++){
+            /* Testing UCharacter.codePointBefore(seq, index) */
+            // Testing when "if (index > 0)" is false
+            if(UCharacter.codePointBefore((CharSequence) cases[i], 1) != result[i])
+                errln("UCharacter.codePointBefore(CharSequence ...) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointBefore((CharSequence) cases[i], 1));
+            
+            /* Testing UCharacter.codePointBefore(text, index) */
+            // Testing when "if (index > 0)" is false
+            if(UCharacter.codePointBefore(cases[i].toCharArray(), 1) != result[i])
+                errln("UCharacter.codePointBefore(char[] ...) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointBefore(cases[i].toCharArray(), 1));
+            
+            /* Testing UCharacter.codePointBefore(text, index, limit) */
+            // Testing when "if (index > limit)" is false
+            if(UCharacter.codePointBefore(cases[i].toCharArray(), 1, 0) != result[i])
+                errln("UCharacter.codePointBefore(char[], int, int) did not return as expected. " +
+                        "Passed value: " + cases[i] + ". Expected: " +
+                        result[i] + ". Got: " +
+                        UCharacter.codePointBefore(cases[i].toCharArray(), 1, 0));
+        }
         
         /* Testing UCharacter.codePointBefore(text, index, limit) */
         char[] dummy = {'d','u','m','m','y'};
@@ -3062,10 +3102,6 @@ public final class UCharacterTest extends TestFmwk
                         "when the parameter index of " + index_cases[i] + " is a negative number.");
             } catch(Exception e) {}
         }
-        
-        // TODO: Testing when "if (index > limit)" is false
-        //      Having problems with isLowSurrogate since the output to the
-        //      console won't display the type of characters.
     }
 
     /*
@@ -3225,5 +3261,18 @@ public final class UCharacterTest extends TestFmwk
                 }
             }
         }
+    }
+    
+    /* Tests the method
+     *      private static final int getProperty(int ch)
+     * from public static int getType(int ch)
+     */
+    public void TestGetProperty(){
+        int[] cases = {UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
+        for(int i=0; i < cases.length; i++)
+            if(UCharacter.getType(cases[i]) != 0)
+                errln("UCharacter.getType for testing UCharacter.getProperty "
+                        + "did not return 0 for passed value of " + cases[i] +
+                        " but got " + UCharacter.getType(cases[i]));
     }
 }
