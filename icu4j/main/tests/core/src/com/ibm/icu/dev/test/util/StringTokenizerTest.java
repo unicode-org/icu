@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.StringTokenizer;
+import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -57,6 +58,12 @@ public final class StringTokenizerTest extends TestFmwk
                 errln("Constructor with default delimiter gives wrong results");
             }
         }
+        
+        UnicodeSet delimiterset1 = new UnicodeSet("[" + delimiter + "]", true);
+        StringTokenizer stdelimiterset1 = new StringTokenizer(str, delimiterset1);
+        if(!(stdelimiterset1.nextElement().equals(str)))
+            errln("Constructor with a UnicodeSet to ignoreWhiteSpace is " +
+                    "to return the same string.");
         
         String expected1[] = {"this", "\t", "is", "\n", "a", "\r", "string", "\f",
                             "testing", "\t", "StringTokenizer", "\n",
@@ -538,5 +545,508 @@ public final class StringTokenizerTest extends TestFmwk
             e.printStackTrace();
         }
     }
+    
+    /* Tests the method
+     *      public StringBuffer _generatePattern(StringBuffer result, boolean escapeUnprintable)
+     */
+    public void Test_GeneratePattern(){
+        UnicodeSet us = new UnicodeSet();
+        StringBuffer sb = new StringBuffer();
+        try{
+            us._generatePattern(sb, true);
+            us._generatePattern(sb, false);
+            us._generatePattern(sb.append(1), true);
+            us._generatePattern(sb.append(1.0), true);
+            us._generatePattern(sb.reverse(), true);
+        } catch(Exception e){
+            errln("UnicodeSet._generatePattern is not suppose to return an exception.");
+        }
+        
+        try{
+            us._generatePattern(null, true);
+            errln("UnicodeSet._generatePattern is suppose to return an exception.");
+        } catch(Exception e){}
+    }
+    
+    /* Tests the method
+     *      public int matches(Replaceable text, int[] offset, int limit, boolean incremental)
+     */
+    public void TestMatches(){
+        // Tests when "return incremental ? U_PARTIAL_MATCH : U_MATCH;" is true and false
+        ReplaceableString rs = new ReplaceableString("dummy");
+        UnicodeSet us = new UnicodeSet(0,100000); // Create a large Unicode set
+        us.add("dummy");
+        
+        int[] offset = {0};
+        int limit = 0;
+        
+        if(us.matches(null, offset, limit, true) != UnicodeSet.U_PARTIAL_MATCH){
+            errln("UnicodeSet.matches is suppose to return " + UnicodeSet.U_PARTIAL_MATCH +
+                    " but got " + us.matches(null, offset, limit, true));
+        }
+        
+        if(us.matches(null, offset, limit, false) != UnicodeSet.U_MATCH){
+            errln("UnicodeSet.matches is suppose to return " + UnicodeSet.U_MATCH +
+                    " but got " + us.matches(null, offset, limit, false));
+        }
+        
+        // Tests when "int maxLen = forward ? limit-offset[0] : offset[0]-limit;" is true and false
+        try{
+            offset[0] = 0; // Takes the letter "d"
+            us.matches(rs, offset, 1, true);
+            offset[0] = 4; // Takes the letter "y"
+            us.matches(rs, offset, 1, true);
+        } catch(Exception e) {
+            errln("UnicodeSet.matches is not suppose to return an exception");
+        }
+        
+        // TODO: Tests when "if (forward && length < highWaterLength)" is true
+    }
+    
+    /* Tests the method
+     *      private static int matchRest (Replaceable text, int start, int limit, String s)
+     * from public int matches(Replaceable text, ...
+     */
+    public void TestMatchRest(){
+        // TODO: Tests when "if (maxLen > slen) maxLen = slen;" is true and false
+    }
+    
+    /* Tests the method
+     *      public int matchesAt(CharSequence text, int offset)
+     */
+    public void TestMatchesAt(){
+        UnicodeSet us = new UnicodeSet();           // Empty set
+        us.matchesAt((CharSequence)"dummy", 0);
+        us.add("dummy");                            // Add an item
+        
+        us.matchesAt((CharSequence)"dummy", 0);
+        us.add("dummy2");                           // Add another item
+        
+        us.matchesAt((CharSequence)"yummy", 0);     //charAt(0) >
+        us.matchesAt((CharSequence)"amy", 0);       //charAt(0) <
+        
+        UnicodeSet us1 = new UnicodeSet(0,100000);  // Increase the set
+        us1.matchesAt((CharSequence)"dummy", 0);
+    }
+    
+    /* Tests the method
+     *      public int indexOf(int c)
+     */
+    public void TestIndexOf(){
+        // Tests when "if (c < MIN_VALUE || c > MAX_VALUE)" is true
+        UnicodeSet us = new UnicodeSet();
+        int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+        int[] valid = {UnicodeSet.MIN_VALUE, UnicodeSet.MIN_VALUE+1, 
+                UnicodeSet.MAX_VALUE, UnicodeSet.MAX_VALUE-1};
+        
+        for(int i=0; i < invalid.length; i++){
+            try{
+                us.indexOf(invalid[i]);
+                errln("UnicodeSet.indexOf is suppose to return an exception " +
+                        "for a value of " + invalid[i]);
+            } catch(Exception e){}
+        }
+        
+        for(int i=0; i < valid.length; i++){
+            try{
+                us.indexOf(valid[i]);
+            } catch(Exception e){
+                errln("UnicodeSet.indexOf is not suppose to return an exception " +
+                        "for a value of " + valid[i]);
+            }
+        }
+    }
+    
+    /* Tests the method
+     *      public int charAt(int index)
+     */
+    public void TestCharAt(){
+        UnicodeSet us = new UnicodeSet();
+        
+        // Test when "if (index >= 0)" is false
+        int[] invalid = {-100,-10,-5,-2,-1};
+        for(int i=0; i < invalid.length; i++){
+            if(us.charAt(invalid[i]) != -1){
+                errln("UnicodeSet.charAt(int index) was suppose to return -1 "
+                        + "for an invalid input of " + invalid[i]);
+            }
+        }
+    }
+    
+    /* Tests the method
+     *      private UnicodeSet add_unchecked(int start, int end)
+     * from public UnicodeSet add(int start, int end)
+     */
+     public void TestAdd_int_int(){
+         UnicodeSet us = new UnicodeSet();
+         int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                 UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+         
+         // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+         for(int i=0; i < invalid.length; i++){
+             try{
+                 us.add(invalid[i], UnicodeSet.MAX_VALUE);
+                 errln("UnicodeSet.add(int start, int end) was suppose to give "
+                         + "an exception for an start invalid input of "
+                         + invalid[i]);
+             } catch (Exception e){}
+         }
+         
+         // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+         for(int i=0; i < invalid.length; i++){
+             try{
+                 us.add(UnicodeSet.MIN_VALUE, invalid[i]);
+                 errln("UnicodeSet.add(int start, int end) was suppose to give "
+                         + "an exception for an end invalid input of "
+                         + invalid[i]);
+             } catch (Exception e){}
+         }
+         
+         // Tests when "else if (start == end)" is false
+         if(!(us.add(UnicodeSet.MIN_VALUE+1, UnicodeSet.MIN_VALUE).equals(us)))
+             errln("UnicodeSet.add(int start, int end) was suppose to return "
+                     + "the same object because start of value " + (UnicodeSet.MIN_VALUE+1)
+                     + " is greater than end of value " + UnicodeSet.MIN_VALUE);
+         
+         if(!(us.add(UnicodeSet.MAX_VALUE, UnicodeSet.MAX_VALUE-1).equals(us)))
+             errln("UnicodeSet.add(int start, int end) was suppose to return "
+                     + "the same object because start of value " + UnicodeSet.MAX_VALUE
+                     + " is greater than end of value " + (UnicodeSet.MAX_VALUE-1));
+     }
+     
+     /* Tests the method
+      *     private final UnicodeSet add_unchecked(int c)
+      * from public final UnicodeSet add(int c)
+      */
+     public void TestAdd_int(){
+         UnicodeSet us = new UnicodeSet();
+         int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                 UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+         
+         // Tests when "if (c < MIN_VALUE || c > MAX_VALUE)" is true
+         for(int i=0; i < invalid.length; i++){
+             try{
+                 us.add(invalid[i]);
+                 errln("UnicodeSet.add(int c) was suppose to give "
+                         + "an exception for an start invalid input of "
+                         + invalid[i]);
+             } catch (Exception e){}
+         }
+         
+         // Tests when "if (c == MAX_VALUE)" is true
+         // TODO: Check comment in UnicodeSet.java
+     }
+     
+     /* Tests the method
+      *     private static int getSingleCP(String s)
+      * from public final boolean contains(String s)
+      */
+     public void TestGetSingleCP(){
+         UnicodeSet us = new UnicodeSet();
+         // Tests when "if (s.length() < 1)" is true
+         try{
+             us.contains("");
+             errln("UnicodeSet.getSingleCP is suppose to give an exception for " +
+                     "an empty string.");
+         } catch (Exception e){}
+         
+         try{
+             us.contains((String)null);
+             errln("UnicodeSet.getSingleCP is suppose to give an exception for " +
+             "a null string.");
+         } catch (Exception e){}
+         
+         // Tests when "if (cp > 0xFFFF)" is true
+         String[] cases = {"\uD811\uDC00","\uD811\uDC11","\uD811\uDC22"}; 
+         for(int i=0; i<cases.length; i++){
+             try{
+                 us.contains(cases[i]);
+             } catch (Exception e){
+                 errln("UnicodeSet.getSingleCP is not suppose to give an exception for " +
+                     "a null string.");
+             }
+         }
+     }
+     
+     /* Tests the method
+      *     public final UnicodeSet removeAllStrings()
+      */
+     public void TestRemoveAllString(){
+         // Tests when "if (strings.size() != 0)" is false
+         UnicodeSet us = new UnicodeSet();
+         try{
+             us.removeAllStrings();
+         } catch(Exception e){
+             errln("UnicodeSet.removeAllString() was not suppose to given an " +
+                     "exception for a strings size of 0");
+         }
+     }
+     
+     /* Tests the method
+      *     public UnicodeSet retain(int start, int end)
+      */
+      public void TestRetain_int_int(){
+          UnicodeSet us = new UnicodeSet();
+          int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                  UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+          
+          // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+          for(int i=0; i < invalid.length; i++){
+              try{
+                  us.retain(invalid[i], UnicodeSet.MAX_VALUE);
+                  errln("UnicodeSet.retain(int start, int end) was suppose to give "
+                          + "an exception for an start invalid input of "
+                          + invalid[i]);
+              } catch (Exception e){}
+          }
+          
+          // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+          for(int i=0; i < invalid.length; i++){
+              try{
+                  us.retain(UnicodeSet.MIN_VALUE, invalid[i]);
+                  errln("UnicodeSet.retain(int start, int end) was suppose to give "
+                          + "an exception for an end invalid input of "
+                          + invalid[i]);
+              } catch (Exception e){}
+          }
+          
+          // Tests when "if (start <= end)" is false
+          try{
+              us.retain(UnicodeSet.MIN_VALUE+1, UnicodeSet.MIN_VALUE);
+          } catch(Exception e){
+              errln("UnicodeSet.retain(int start, int end) was not suppose to give "
+                      + "an exception.");
+          }
+          
+          try{
+              us.retain(UnicodeSet.MAX_VALUE, UnicodeSet.MAX_VALUE-1);
+          } catch(Exception e){
+              errln("UnicodeSet.retain(int start, int end) was not suppose to give "
+                      + "an exception.");
+          }
+      }
+      
+      /* Tests the method
+       *        public final UnicodeSet retain(String s)
+       */
+      public void TestRetain_String(){
+          // Tests when "if (isIn && size() == 1)" is true
+          UnicodeSet us = new UnicodeSet();
+          us.add("dummy");
+          if(!(us.retain("dummy").equals(us))){
+              errln("UnicodeSet.retain(String s) was suppose to return the " +
+                      "same UnicodeSet since the string was found in the original.");
+          }
+      }
+      
+      /* Tests the method
+       *     public UnicodeSet remove(int start, int end)
+       */
+       public void TestRemove(){
+           UnicodeSet us = new UnicodeSet();
+           int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                   UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+           
+           // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+           for(int i=0; i < invalid.length; i++){
+               try{
+                   us.remove(invalid[i], UnicodeSet.MAX_VALUE);
+                   errln("UnicodeSet.remove(int start, int end) was suppose to give "
+                           + "an exception for an start invalid input of "
+                           + invalid[i]);
+               } catch (Exception e){}
+           }
+           
+           // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+           for(int i=0; i < invalid.length; i++){
+               try{
+                   us.remove(UnicodeSet.MIN_VALUE, invalid[i]);
+                   errln("UnicodeSet.remove(int start, int end) was suppose to give "
+                           + "an exception for an end invalid input of "
+                           + invalid[i]);
+               } catch (Exception e){}
+           }
+           
+           // Tests when "if (start <= end)" is false
+           try{
+               us.remove(UnicodeSet.MIN_VALUE+1, UnicodeSet.MIN_VALUE);
+           } catch(Exception e){
+               errln("UnicodeSet.remove(int start, int end) was not suppose to give "
+                       + "an exception.");
+           }
+           
+           try{
+               us.remove(UnicodeSet.MAX_VALUE, UnicodeSet.MAX_VALUE-1);
+           } catch(Exception e){
+               errln("UnicodeSet.remove(int start, int end) was not suppose to give "
+                       + "an exception.");
+           }
+       }
+       
+       /* Tests the method
+        *     public UnicodeSet complement(int start, int end)
+        */
+        public void TestComplement_int_int(){
+            UnicodeSet us = new UnicodeSet();
+            int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                    UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+            
+            // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+            for(int i=0; i < invalid.length; i++){
+                try{
+                    us.complement(invalid[i], UnicodeSet.MAX_VALUE);
+                    errln("UnicodeSet.complement(int start, int end) was suppose to give "
+                            + "an exception for an start invalid input of "
+                            + invalid[i]);
+                } catch (Exception e){}
+            }
+            
+            // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+            for(int i=0; i < invalid.length; i++){
+                try{
+                    us.complement(UnicodeSet.MIN_VALUE, invalid[i]);
+                    errln("UnicodeSet.complement(int start, int end) was suppose to give "
+                            + "an exception for an end invalid input of "
+                            + invalid[i]);
+                } catch (Exception e){}
+            }
+            
+            // Tests when "if (start <= end)" is false
+            try{
+                us.complement(UnicodeSet.MIN_VALUE+1, UnicodeSet.MIN_VALUE);
+            } catch(Exception e){
+                errln("UnicodeSet.complement(int start, int end) was not suppose to give "
+                        + "an exception.");
+            }
+            
+            try{
+                us.complement(UnicodeSet.MAX_VALUE, UnicodeSet.MAX_VALUE-1);
+            } catch(Exception e){
+                errln("UnicodeSet.complement(int start, int end) was not suppose to give "
+                        + "an exception.");
+            }
+        }
+        
+        /* Tests the method
+         *      public final UnicodeSet complement(String s)
+         */
+        public void TestComplement_String(){
+            // Tests when "if (cp < 0)" is false
+            UnicodeSet us = new UnicodeSet();
+            us.add("dummy");
+            try{
+                us.complement("dummy");
+            } catch (Exception e){
+                errln("UnicodeSet.complement(String s) was not suppose to give "
+                        + "an exception for 'dummy'.");
+            }
+            
+            // Tests when "if (strings.contains(s))" is true
+            us = new UnicodeSet();
+            us.add("\uDC11");
+            try{
+                us.complement("\uDC11");
+            } catch (Exception e){
+                errln("UnicodeSet.complement(String s) was not suppose to give "
+                        + "an exception for '\uDC11'.");
+            }
+        }
+        
+        /* Tests the method
+         *      public boolean contains(int c)
+         */
+        public void TestContains_int(){
+            UnicodeSet us = new UnicodeSet();
+            int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                    UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+            
+            // Tests when "if (c < MIN_VALUE || c > MAX_VALUE)" is true
+            for(int i=0; i < invalid.length; i++){
+                try{
+                    us.contains(invalid[i]);
+                    errln("UnicodeSet.contains(int c) was suppose to give "
+                            + "an exception for an start invalid input of "
+                            + invalid[i]);
+                } catch (Exception e){}
+            }
+        }
+        
+        /* Tests the method
+         *     public boolean contains(int start, int end)
+         */
+         public void TestContains_int_int(){
+             UnicodeSet us = new UnicodeSet();
+             int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                     UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+             
+             // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+             for(int i=0; i < invalid.length; i++){
+                 try{
+                     us.contains(invalid[i], UnicodeSet.MAX_VALUE);
+                     errln("UnicodeSet.contains(int start, int end) was suppose to give "
+                             + "an exception for an start invalid input of "
+                             + invalid[i]);
+                 } catch (Exception e){}
+             }
+             
+             // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+             for(int i=0; i < invalid.length; i++){
+                 try{
+                     us.contains(UnicodeSet.MIN_VALUE, invalid[i]);
+                     errln("UnicodeSet.contains(int start, int end) was suppose to give "
+                             + "an exception for an end invalid input of "
+                             + invalid[i]);
+                 } catch (Exception e){}
+             }
+         }
+         
+         /* Tests the method
+          *     public String getRegexEquivalent()
+          */
+         public void TestGetRegexEquivalent(){
+             UnicodeSet us = new UnicodeSet();
+             String res = us.getRegexEquivalent();
+             if(!(res.equals("[]")))
+                 errln("UnicodeSet.getRegexEquivalent is suppose to return '[]' " +
+                         "but got " + res);
+         }
+         
+         /* Tests the method
+          *     public boolean containsNone(int start, int end)
+          */
+          public void TestContainsNone(){
+              UnicodeSet us = new UnicodeSet();
+              int[] invalid = {UnicodeSet.MIN_VALUE-1, UnicodeSet.MIN_VALUE-2,
+                      UnicodeSet.MAX_VALUE+1, UnicodeSet.MAX_VALUE+2};
+              
+              // Tests when "if (start < MIN_VALUE || start > MAX_VALUE)" is true
+              for(int i=0; i < invalid.length; i++){
+                  try{
+                      us.containsNone(invalid[i], UnicodeSet.MAX_VALUE);
+                      errln("UnicodeSet.containsNoneint start, int end) was suppose to give "
+                              + "an exception for an start invalid input of "
+                              + invalid[i]);
+                  } catch (Exception e){}
+              }
+              
+              // Tests when "if (end < MIN_VALUE || end > MAX_VALUE)" is true
+              for(int i=0; i < invalid.length; i++){
+                  try{
+                      us.containsNone(UnicodeSet.MIN_VALUE, invalid[i]);
+                      errln("UnicodeSet.containsNone(int start, int end) was suppose to give "
+                              + "an exception for an end invalid input of "
+                              + invalid[i]);
+                  } catch (Exception e){}
+              }
+              
+              // Tests when "if (start < list[++i])" is false
+              try{
+                  us.add(0);
+                  us.containsNone(1, 2); // 1 > 0
+              } catch (Exception e){
+                  errln("UnicodeSet.containsNone(int start, int end) was not suppose to give " +
+                          "an exception.");
+              }
+          }
 }
-

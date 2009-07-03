@@ -20,7 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -462,6 +462,9 @@ public class TestCharsetDetector extends TestFmwk
             m = det.detect();
             charsetMatch = m.getName();
             CheckAssert(charsetMatch.equals("windows-1256"));
+            
+            // Tests "public String getLanguage()"
+            CheckAssert(m.getLanguage().endsWith("ar"));
         }
 
         {
@@ -501,6 +504,9 @@ public class TestCharsetDetector extends TestFmwk
             m = det.detect();
             charsetMatch = m.getName();
             CheckAssert(charsetMatch.equals("IBM420_rtl"));
+            
+         // Tests "public String getLanguage()"
+            CheckAssert(m.getLanguage().endsWith("ar"));
         }
 
         {
@@ -567,16 +573,19 @@ public class TestCharsetDetector extends TestFmwk
         CharsetMatch m = _test1255(s);
         String charsetMatch = m.getName();
         CheckAssert(charsetMatch.equals("ISO-8859-8"));
+        CheckAssert(m.getLanguage().equals("he"));
         
         m = _testIBM424_he_rtl(s);
         charsetMatch = m.getName();
         CheckAssert(charsetMatch.equals("IBM424_rtl"));
+        CheckAssert(m.getLanguage().equals("he"));
         
         m = _testIBM424_he_ltr(s);
         charsetMatch = m.getName();
         CheckAssert(charsetMatch.equals("IBM424_ltr"));
+        CheckAssert(m.getLanguage().equals("he"));
     }
-
+    
     private CharsetMatch _test1255(String s) throws Exception {
         byte [] bytes = s.getBytes("ISO-8859-8");
         CharsetDetector det = new CharsetDetector();

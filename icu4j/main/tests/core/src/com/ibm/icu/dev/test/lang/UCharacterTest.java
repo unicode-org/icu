@@ -3275,4 +3275,41 @@ public final class UCharacterTest extends TestFmwk
                         + "did not return 0 for passed value of " + cases[i] +
                         " but got " + UCharacter.getType(cases[i]));
     }
+    
+    /* Tests the class
+     *      abstract public static class XSymbolTable implements SymbolTable
+     */
+    public void TestXSymbolTable(){
+        class MyXSymbolTable extends UnicodeSet.XSymbolTable {}
+        MyXSymbolTable st = new MyXSymbolTable();
+        
+        // Tests "public UnicodeMatcher lookupMatcher(int i)"
+        if(st.lookupMatcher(0) != null)
+            errln("XSymbolTable.lookupMatcher(int i) was suppose to return null.");
+        
+        // Tests "public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result)"
+        if(st.applyPropertyAlias("", "", new UnicodeSet()) != false)
+            errln("XSymbolTable.applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) was suppose to return false.");
+
+        // Tests "public char[] lookup(String s)"
+        if(st.lookup("") != null)
+            errln("XSymbolTable.lookup(String s) was suppose to return null.");
+        
+        // Tests "public String parseReference(String text, ParsePosition pos, int limit)"
+        if(st.parseReference("", null, 0) != null)
+            errln("XSymbolTable.parseReference(String text, ParsePosition pos, int limit) was suppose to return null.");
+    }
+    
+    /* Tests the method
+     *      public boolean isFrozen()
+     */
+    public void TestIsFrozen(){
+        UnicodeSet us = new UnicodeSet();
+        if(us.isFrozen() != false)
+            errln("Unicode.isFrozen() was suppose to return false.");
+        
+        us.freeze();
+        if(us.isFrozen() != true)
+            errln("Unicode.isFrozen() was suppose to return true.");
+    }
 }

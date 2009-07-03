@@ -7,9 +7,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.math.BigInteger;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
+import java.text.*;
 import java.util.Locale;
 import java.util.Random;
 
@@ -1089,6 +1087,134 @@ public class RbnfTest extends TestFmwk {
         + "    1,000,000: , =%default=;"
         + "%%lenient-parse:\n"
         + "    & ' ' , ',' ;\n";
+    
+    /* Tests the method
+     *      public boolean equals(Object that)
+     */
+    public void TestEquals(){
+        // Tests when "if (!(that instanceof RuleBasedNumberFormat))" is true
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
+        if( rbnf.equals(new String("dummy")) != false ||
+            rbnf.equals(new Character('a')) != false ||
+            rbnf.equals(new Object()) != false ||
+            rbnf.equals(-1) != false ||
+            rbnf.equals(0) != false ||
+            rbnf.equals(1) != false ||
+            rbnf.equals(-1.0) != false ||
+            rbnf.equals(0.0) != false ||
+            rbnf.equals(1.0) != false){
+            errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
+                    "be false for an invalid object.");
+        }
+        
+        // Tests when
+        // "if (!locale.equals(that2.locale) || lenientParse != that2.lenientParse)"
+        // is true
+        RuleBasedNumberFormat rbnf1 = new RuleBasedNumberFormat("dummy", new Locale("en"));
+        RuleBasedNumberFormat rbnf2 = new RuleBasedNumberFormat("dummy", new Locale("jp"));
+        RuleBasedNumberFormat rbnf3 = new RuleBasedNumberFormat("dummy", new Locale("sp"));
+        RuleBasedNumberFormat rbnf4 = new RuleBasedNumberFormat("dummy", new Locale("fr"));
+        
+        if(rbnf1.equals(rbnf2) != false || rbnf1.equals(rbnf3) != false ||
+                rbnf1.equals(rbnf4) != false || rbnf2.equals(rbnf3) != false ||
+                rbnf2.equals(rbnf4) != false || rbnf3.equals(rbnf4) != false){
+            errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
+            "be false for an invalid object.");
+        }
+        
+        if(rbnf1.equals(rbnf1) == false){
+            errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
+            "be false for an invalid object.");
+        }
+        
+        if(rbnf2.equals(rbnf2) == false){
+            errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
+            "be false for an invalid object.");
+        }
+        
+        if(rbnf3.equals(rbnf3) == false){
+            errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
+            "be false for an invalid object.");
+        }
+        
+        if(rbnf4.equals(rbnf4) == false){
+            errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
+            "be false for an invalid object.");
+        }
+        
+        RuleBasedNumberFormat rbnf5 = new RuleBasedNumberFormat("dummy", new Locale("en"));
+        RuleBasedNumberFormat rbnf6 = new RuleBasedNumberFormat("dummy", new Locale("en"));
+        
+        if(rbnf5.equals(rbnf6) == false){
+            errln("RuleBasedNumberFormat.equals(Object that) was not suppose to " +
+            "be false for an invalid object.");
+        }
+        rbnf6.setLenientParseMode(true);
+        
+        if(rbnf5.equals(rbnf6) != false){
+            errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
+            "be false for an invalid object.");
+        }
 
+        // Tests when "if (!ruleSets[i].equals(that2.ruleSets[i]))" is true
+        RuleBasedNumberFormat rbnf7 = new RuleBasedNumberFormat("not_dummy", new Locale("en"));
+        if(rbnf5.equals(rbnf7) != false){
+            errln("RuleBasedNumberFormat.equals(Object that) was suppose to " +
+            "be false for an invalid object.");
+        }
+    }
+    
+    /* Tests the method
+     *      public ULocale[] getRuleSetDisplayNameLocales()
+     */
+    public void TestGetRuleDisplayNameLocales(){
+        // Tests when "if (ruleSetDisplayNames != null" is false
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
+        rbnf.getRuleSetDisplayNameLocales();
+        if(rbnf.getRuleSetDisplayNameLocales() != null){
+            errln("RuleBasedNumberFormat.getRuleDisplayNameLocales() was suppose to " +
+            "return null.");
+        }
+    }
+    
+    /* Tests the method
+     *      private String[] getNameListForLocale(ULocale loc)
+     *      public String[] getRuleSetDisplayNames(ULocale loc)
+     */
+    public void TestGetNameListForLocale(){
+        // Tests when "if (names != null)" is false and
+        //  "if (loc != null && ruleSetDisplayNames != null)" is false
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
+        rbnf.getRuleSetDisplayNames(null);
+        try{
+            rbnf.getRuleSetDisplayNames(null);
+        } catch(Exception e){
+            errln("RuleBasedNumberFormat.getRuleSetDisplayNames(ULocale loc) " +
+                    "was not suppose to have an exception.");
+        }
+    }
+
+    /* Tests the method
+     *      public String getRuleSetDisplayName(String ruleSetName, ULocale loc)
+     */
+    public void TestGetRulesSetDisplayName(){
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
+        //rbnf.getRuleSetDisplayName("dummy", new ULocale("en_US"));
+        
+        // Tests when "if (names != null) " is true
+
+        // Tests when the method throws an exception
+        try{
+            rbnf.getRuleSetDisplayName("", new ULocale("en_US"));
+            errln("RuleBasedNumberFormat.getRuleSetDisplayName(String ruleSetName, ULocale loc) " +
+                "was suppose to have an exception.");
+        } catch(Exception e){}
+        
+        try{
+            rbnf.getRuleSetDisplayName("dummy", new ULocale("en_US"));
+            errln("RuleBasedNumberFormat.getRuleSetDisplayName(String ruleSetName, ULocale loc) " +
+                "was suppose to have an exception.");
+        } catch(Exception e){}
+    }
 }
 

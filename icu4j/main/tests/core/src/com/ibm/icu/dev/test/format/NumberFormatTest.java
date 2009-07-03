@@ -2230,4 +2230,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         format2.setCurrency(euro);
         assertEquals("Reset with currency symbol", format1, format2);
     }
+    
+    /* Testing the method
+     *      public StringBuffer format(Object number, ...)
+     */
+    public void TestFormat(){
+        //NumberFormat nf = NumberFormat.getInstance();
+        //nf.format(new Long("0"), null, null);
+    }
 }

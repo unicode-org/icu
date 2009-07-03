@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -73,7 +73,7 @@ public class DecompressionTest extends TestFmwk {
     }
 
 
-    public void testDecompression() throws Exception {
+    public void TestDecompression() throws Exception {
         String result;
 
         // compressed segment breaking on a define window sequence
@@ -118,6 +118,57 @@ public class DecompressionTest extends TestFmwk {
             errln("Decompression test failed");
             return;
         }
+    }
+    
+    /* Testing the method
+     *      public int decompress(*** 
+     */
+    public void TestDecompress(){
+        char[] charBufferBlank = {};
+        char[] charBuffer1 = {'a'};
+        char[] charValid = {'d','u','m','m','y'};
+        
+        // Test when "if(charBuffer.length < 2 || (charBufferLimit - charBufferStart) < 2)" is true
+        //      The following tests when "charBuffer.length < 2"
+        UnicodeDecompressor ud = new UnicodeDecompressor();
+        try{
+            ud.decompress(null, 0, 0, null, null, 4, 0);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        try{
+            ud.decompress(null, 0, 0, null, charBufferBlank, 4, 0);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        try{
+            ud.decompress(null, 0, 0, null, charBuffer1, 4, 0);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        //      The following tests when "(charBufferLimit - charBufferStart) < 2"
+        try{
+            ud.decompress(null, 0, 0, null, charValid, 0, 0);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        try{
+            ud.decompress(null, 0, 0, null, charValid, 1, 0);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        try{
+            ud.decompress(null, 0, 0, null, charValid, 1, 1);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        try{
+            ud.decompress(null, 0, 0, null, charValid, 0, 1);
+            errln("UnicodeDecompressor.decompress was suppose to return an exception.");
+        } catch(Exception e){}
+        
+        
+        
     }
 
 }
