@@ -202,10 +202,6 @@ static UBool U_CALLCONV usprep_cleanup(void){
 }
 U_CDECL_END
 
-static void 
-usprep_init() {
-    umtx_init(&usprepMutex);
-}
 
 /** Initializes the cache for resources */
 static void 
@@ -429,8 +425,6 @@ usprep_open(const char* path,
     if(status == NULL || U_FAILURE(*status)){
         return NULL;
     }
-    /* initialize the mutex */
-    usprep_init();
        
     /* initialize the profile struct members */
     return usprep_getProfile(path,name,status);

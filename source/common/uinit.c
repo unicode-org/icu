@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2007, International Business Machines                   *
+* Copyright (C) 2001-2009, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -62,8 +62,6 @@ u_cleanup(void)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     UTRACE_ENTRY_OC(UTRACE_U_INIT);
-    /* Make sure the global mutexes are initialized. */
-    umtx_init(NULL);
     umtx_lock(&gICUInitMutex);
     if (gICUInitialized || U_FAILURE(*status)) {
         umtx_unlock(&gICUInitMutex);
