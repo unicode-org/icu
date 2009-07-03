@@ -490,8 +490,6 @@ CollDataCache::CollDataCache(UErrorCode &status)
         return;
     }
 
-    umtx_init(&lock);
-
     cache = uhash_open(uhash_hashChars, uhash_compareChars, uhash_compareLong, &status);
 
     if (U_FAILURE(status)) {
