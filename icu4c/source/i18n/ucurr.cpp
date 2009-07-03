@@ -207,7 +207,6 @@ static UBool U_CALLCONV currency_cleanup(void);
 U_CDECL_END
 struct CReg;
 
-/* Remember to call umtx_init(&gCRegLock) before using it! */
 static UMTX gCRegLock = 0;
 static CReg* gCRegHead = 0;
 
@@ -234,7 +233,6 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
         if (status && U_SUCCESS(*status) && _iso && _id) {
             CReg* n = new CReg(_iso, _id);
             if (n) {
-                umtx_init(&gCRegLock);
                 umtx_lock(&gCRegLock);
                 if (!gCRegHead) {
                     /* register for the first time */
@@ -252,7 +250,6 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
 
     static UBool unreg(UCurrRegistryKey key) {
         UBool found = FALSE;
-        umtx_init(&gCRegLock);
         umtx_lock(&gCRegLock);
 
         CReg** p = &gCRegHead;
@@ -272,7 +269,6 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
 
     static const UChar* get(const char* id) {
         const UChar* result = NULL;
-        umtx_init(&gCRegLock);
         umtx_lock(&gCRegLock);
         CReg* p = gCRegHead;
 

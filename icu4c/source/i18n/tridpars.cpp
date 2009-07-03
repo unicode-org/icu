@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2008, International Business Machines Corporation
+*   Copyright (c) 2002-2009, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -654,7 +654,6 @@ void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
         bidirectional = FALSE;
     }
 
-    umtx_init(&LOCK);
     Mutex lock(&LOCK);
 
     UnicodeString *tempus = new UnicodeString(inverseTarget);  // Used for null pointer check before usage.
@@ -856,7 +855,6 @@ TransliteratorIDParser::specsToSpecialInverse(const Specs& specs, UErrorCode &st
 
     UnicodeString* inverseTarget;
 
-    umtx_init(&LOCK);
     umtx_lock(&LOCK);
     inverseTarget = (UnicodeString*) SPECIAL_INVERSES->get(specs.target);
     umtx_unlock(&LOCK);
@@ -911,7 +909,6 @@ void TransliteratorIDParser::init(UErrorCode &status) {
     }
     special_inverses->setValueDeleter(uhash_deleteUnicodeString);
 
-    umtx_init(&LOCK);
     umtx_lock(&LOCK);
     if (SPECIAL_INVERSES == NULL) {
         SPECIAL_INVERSES = special_inverses;

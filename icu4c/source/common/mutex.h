@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -35,14 +35,6 @@ U_NAMESPACE_BEGIN
 // 
 // UMTX myMutex;
 // 
-// int InitializeMyMutex()
-// {
-//    umtx_init( &myMutex );
-//    return 0;
-// }
-// 
-// static int initializeMyMutex = InitializeMyMutex();
-//
 // void Function(int arg1, int arg2)
 // {
 //    static Object* foo;     // Shared read-write object
