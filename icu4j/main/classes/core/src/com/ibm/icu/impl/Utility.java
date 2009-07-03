@@ -1484,6 +1484,7 @@ public final class Utility {
      * newline and linefeed characters are considered unprintable.
      */
     public static boolean isUnprintable(int c) {
+        //0x20 = 32 and 0x7E = 126
         return !(c >= 0x20 && c <= 0x7E);
     }
 

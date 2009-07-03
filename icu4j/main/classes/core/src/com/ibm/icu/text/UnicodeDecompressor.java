@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -100,9 +100,8 @@ public final class UnicodeDecompressor implements SCSU
      * @see #reset
      * @stable ICU 2.4
      */
-    public UnicodeDecompressor()
-    {
-    reset();              // initialize to defaults
+    public UnicodeDecompressor(){
+        reset();              // initialize to defaults
     }
 
     /**
@@ -112,10 +111,9 @@ public final class UnicodeDecompressor implements SCSU
      * @see #decompress(byte [], int, int)
      * @stable ICU 2.4
      */
-    public static String decompress(byte [] buffer)
-    {
-    char [] buf = decompress(buffer, 0, buffer.length);
-    return new String(buf);
+    public static String decompress(byte [] buffer){
+        char [] buf = decompress(buffer, 0, buffer.length);
+        return new String(buf);
     }
 
     /**
@@ -127,24 +125,21 @@ public final class UnicodeDecompressor implements SCSU
      * @see #decompress(byte [])
      * @stable ICU 2.4
      */
-    public static char [] decompress(byte [] buffer,
-                     int start,
-                     int limit)
-    {
-    UnicodeDecompressor comp = new UnicodeDecompressor();
-
-    // use a buffer we know will never overflow
-    // in the worst case, each byte will decompress
-    // to a surrogate pair (buffer must be at least 2 chars)
-    int len = Math.max(2, 2 * (limit - start));
-    char [] temp = new char [len];
-
-    int charCount = comp.decompress(buffer, start, limit, null, 
-                    temp, 0, len);
-
-    char [] result = new char [charCount];
-    System.arraycopy(temp, 0, result, 0, charCount);
-    return result;
+    public static char [] decompress(byte [] buffer, int start, int limit) {
+        UnicodeDecompressor comp = new UnicodeDecompressor();
+    
+        // use a buffer we know will never overflow
+        // in the worst case, each byte will decompress
+        // to a surrogate pair (buffer must be at least 2 chars)
+        int len = Math.max(2, 2 * (limit - start));
+        char [] temp = new char [len];
+    
+        int charCount = comp.decompress(buffer, start, limit, null, 
+                        temp, 0, len);
+    
+        char [] result = new char [charCount];
+        System.arraycopy(temp, 0, result, 0, charCount);
+        return result;
     }
     
     /**
@@ -557,6 +552,6 @@ public final class UnicodeDecompressor implements SCSU
 
         fCurrentWindow  = 0;                // Make current window Latin-1
         fMode           = SINGLEBYTEMODE;   // Always start in single-byte mode
-    fBufferLength   = 0;                // Empty buffer
+        fBufferLength   = 0;                // Empty buffer
     }
 }

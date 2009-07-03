@@ -541,6 +541,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * character to the given <code>StringBuffer</code>.
      */
     private static void _appendToPat(StringBuffer buf, int c, boolean escapeUnprintable) {
+        // "Utility.isUnprintable(c)" seems redundant since the the call
+        //      "Utility.escapeUnprintable(buf, c)" does it again inside the if statement
         if (escapeUnprintable && Utility.isUnprintable(c)) {
             // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
             // unprintable
@@ -789,7 +791,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             // about them here.  If we ever allow zero-length strings
             // we much check for them here.
             if (contains(UnicodeMatcher.ETHER)) {
-                return incremental ? U_PARTIAL_MATCH : U_MATCH;
+                return incremental ? U_PARTIAL_MATCH : U_MATCH; 
             } else {
                 return U_MISMATCH;
             }
@@ -825,7 +827,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     // Strings are sorted, so we can optimize in the
                     // forward direction.
                     if (forward && c > firstChar) break;
-                    if (c != firstChar) continue;
+                    if (c != firstChar) continue; 
 
                     int length = matchRest(text, offset[0], limit, trial);
 
@@ -836,7 +838,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                             return U_PARTIAL_MATCH;
                         }
                     }
-
+                    
                     if (length == trial.length()) {
                         // We have successfully matched the whole string.
                         if (length > highWaterLength) {
@@ -922,6 +924,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 if (firstStringChar < firstChar) continue;
                 if (firstStringChar > firstChar) break strings;
             }
+
             // now keep checking string until we get the longest one
             for (;;) {
                 int tempLen = matchesAt(text, offset, trial);
@@ -931,12 +934,12 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 trial = (String) it.next();
             }
         }
+        
         if (lastLen < 2) {
             int cp = UTF16.charAt(text, offset);
-            if (contains(cp)) {
-                lastLen = UTF16.getCharCount(cp);
-            }
+            if (contains(cp)) lastLen = UTF16.getCharCount(cp);
         }
+        
         return offset+lastLen;
     }
 
@@ -1113,12 +1116,15 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         //                             list[i]
 
         // i == 0 means c is before the first range
-
+        // TODO: Is the "list[i]-1" a typo? Even if you pass MAX_VALUE into
+        //      add_unchecked, the maximum value that "c" will be compared to
+        //      is "MAX_VALUE-1" meaning that "if (c == MAX_VALUE)" will
+        //      never be reached according to this logic.
         if (c == list[i]-1) {
             // c is before start of next range
             list[i] = c;
             // if we touched the HIGH mark, then add a new one
-            if (c == MAX_VALUE) {
+            if (c == MAX_VALUE) { 
                 ensureCapacity(len+1);
                 list[len++] = HIGH;
             }
@@ -1208,7 +1214,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         if (s.length() == 1) return s.charAt(0);
 
         // at this point, len = 2
-        int cp = UTF16.charAt(s, 0);
+        int cp = UTF16.charAt(s, 0); 
         if (cp > 0xFFFF) { // is surrogate pair
             return cp;
         }
@@ -1351,7 +1357,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @stable ICU 2.0
      */
     public final UnicodeSet retain(String s) {
-        int cp = getSingleCP(s);
+        int cp = getSingleCP(s); 
         if (cp < 0) {
             boolean isIn = strings.contains(s);
             if (isIn && size() == 1) {
@@ -2687,7 +2693,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
 
     private void ensureCapacity(int newLen) {
         if (newLen <= list.length) return;
-        int[] temp = new int[newLen + GROW_EXTRA];
+        int[] temp = new int[newLen + GROW_EXTRA]; 
         System.arraycopy(list, 0, temp, 0, len);
         list = temp;
     }
@@ -2722,6 +2728,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         int i = 0, j = 0, k = 0;
         int a = list[i++];
         int b;
+        // TODO: Based on the call hierarchy, polarity of 1 or 2 is never used
+        //      so the following if statement will not be called.
         if (polarity == 1 || polarity == 2) {
             b = LOW;
             if (other[j] == LOW) { // skip base if already LOW
