@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.LocaleUtility;
@@ -25,14 +26,10 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.MeasureFormat;
-import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.*;
+import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.*;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -2235,7 +2232,293 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      *      public StringBuffer format(Object number, ...)
      */
     public void TestFormat(){
-        //NumberFormat nf = NumberFormat.getInstance();
-        //nf.format(new Long("0"), null, null);
+        NumberFormat nf = NumberFormat.getInstance();
+        StringBuffer sb = new StringBuffer("dummy");
+        FieldPosition fp = new FieldPosition(0);
+        
+        // Tests when "if (number instanceof Long)" is true
+        try{
+            nf.format(new Long("0"), sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "return an exception for a Long object. Error: " + e);
+        }
+        
+        // Tests when "else if (number instanceof BigInteger)" is true
+        try{
+            nf.format(new BigInteger("0"), sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "return an exception for a BigInteger object. Error: " + e);
+        }
+        
+        // Tests when "else if (number instanceof java.math.BigDecimal)" is true
+        try{
+            nf.format(new java.math.BigDecimal("0"), sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "return an exception for a java.math.BigDecimal object. Error: " + e);
+        }
+        
+        // Tests when "else if (number instanceof com.ibm.icu.math.BigDecimal)" is true
+        try{
+            nf.format(new java.math.BigDecimal("0"), sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "return an exception for a java.math.BigDecimal object. Error: " + e);
+        }
+        
+        // Tests when "else if (number instanceof CurrencyAmount)" is true
+        try{
+            nf.format(new CurrencyAmount((double)0.00, Currency.getInstance(new Locale("en_US"))), sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "return an exception for a CurrencyAmount object. Error: " + e);
+        }
+        
+        // Tests when "else if (number instanceof Number)" is true
+        try{
+            nf.format((Number)0.0, sb, fp);
+        } catch(Exception e){
+            errln("NumberFormat.format(Object number, ...) was not suppose to " +
+                    "to return an exception for a Number object. Error: " + e);
+        }
+        
+        // Tests when "else" is true
+        try{
+            nf.format(new Object(), sb, fp);
+            errln("NumberFormat.format(Object number, ...) was suppose to " +
+                    "return an exception for an invalid object.");
+        } catch(Exception e){}
+        
+        try{
+            nf.format(new String("dummy"), sb, fp);
+            errln("NumberFormat.format(Object number, ...) was suppose to " +
+                    "return an exception for an invalid object.");
+        } catch(Exception e){}
+    }
+    
+    /* Tests the method
+     *      CurrencyAmount parseCurrency(String text, ParsePosition pos)
+     */
+    public void TestParseCurrency(){
+        //TODO: Tests the method entirely
+    }
+    
+    /* Tests the method
+     *      public final static NumberFormat getInstance(int style)
+     *      public static NumberFormat getInstance(Locale inLocale, int style)
+     *      public static NumberFormat getInstance(ULocale desiredLocale, int choice)
+     */
+    public void TestGetInstance(){        
+        // Tests "public final static NumberFormat getInstance(int style)"
+
+        int[] invalid_cases = {
+                NumberFormat.NUMBERSTYLE-1, NumberFormat.NUMBERSTYLE-2,
+                NumberFormat.PLURALCURRENCYSTYLE+1, NumberFormat.PLURALCURRENCYSTYLE+2
+        };
+        
+        for(int i=NumberFormat.NUMBERSTYLE; i<NumberFormat.PLURALCURRENCYSTYLE; i++){
+            try{
+                NumberFormat.getInstance(i);
+            } catch(Exception e){
+                errln("NumberFormat.getInstance(int style) was not suppose to " +
+                        "return an exception for passing value of " + i);
+            }
+        }
+        
+        for(int i=0; i<invalid_cases.length; i++){
+            try{
+                NumberFormat.getInstance(invalid_cases[i]);
+                errln("NumberFormat.getInstance(int style) was suppose to " +
+                        "return an exception for passing value of " + invalid_cases[i]);
+            } catch(Exception e){}
+        }
+        
+        // Tests "public static NumberFormat getInstance(Locale inLocale, int style)"
+        String[] localeCases = {"en_US", "fr_FR", "de_DE", "jp_JP"};
+        
+        for(int i=NumberFormat.NUMBERSTYLE; i<NumberFormat.PLURALCURRENCYSTYLE; i++){
+            for(int j=0; j<localeCases.length; j++){
+                try{
+                    NumberFormat.getInstance(new Locale(localeCases[j]), i);
+                } catch(Exception e){
+                    errln("NumberFormat.getInstance(Locale inLocale, int style) was not suppose to " +
+                            "return an exception for passing value of " + localeCases[j] + ", " + i);
+                }
+            }
+        }
+        
+        // Tests "public static NumberFormat getInstance(ULocale desiredLocale, int choice)"
+        // Tests when "if (choice < NUMBERSTYLE || choice > PLURALCURRENCYSTYLE)" is true
+        for(int i=0; i<invalid_cases.length; i++){
+            try{
+                NumberFormat.getInstance((ULocale)null, invalid_cases[i]);
+                errln("NumberFormat.getInstance(ULocale inLocale, int choice) was not suppose to " +
+                        "return an exception for passing value of " + invalid_cases[i]);
+            } catch(Exception e){}
+        }
+    }
+    
+    /* Tests the class
+     *       public static abstract class NumberFormatFactory
+     */
+    public void TestNumberFormatFactory(){
+        /* The following class allows the method
+         *      public NumberFormat createFormat(Locale loc, int formatType)
+         * to be tested.
+         */
+        class TestFactory extends NumberFormatFactory {
+            public Set<String> getSupportedLocaleNames() {
+                return null;
+            }
+            
+            public NumberFormat createFormat(ULocale loc, int formatType) {
+                return null;
+            }
+        }
+
+        /* The following class allows the method
+         *      public NumberFormat createFormat(ULocale loc, int formatType)
+         * to be tested.
+         */
+        class TestFactory1 extends NumberFormatFactory {
+            public Set<String> getSupportedLocaleNames() {
+                return null;
+            }
+            
+            public NumberFormat createFormat(Locale loc, int formatType) {
+                return null;
+            }
+        }
+        
+        TestFactory tf = new TestFactory();
+        TestFactory1 tf1 = new TestFactory1();
+        
+        /* Tests the method
+         *      public boolean visible()
+         */
+        if(tf.visible() != true){
+            errln("NumberFormatFactor.visible() was suppose to return true.");
+        }
+        
+        /* Tests the method
+         *      public NumberFormat createFormat(Locale loc, int formatType)
+         */
+        if(tf.createFormat(new Locale(""), 0) != null){
+            errln("NumberFormatFactor.createFormat(Locale loc, int formatType) " +
+                    "was suppose to return null");
+        }
+        
+        /* Tests the method
+         *      public NumberFormat createFormat(ULocale loc, int formatType)
+         */
+        if(tf1.createFormat(new ULocale(""), 0) != null){
+            errln("NumberFormatFactor.createFormat(ULocale loc, int formatType) " +
+                    "was suppose to return null");
+        }
+    }
+    
+    /* Tests the class
+     *       public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory
+     */
+    public void TestSimpleNumberFormatFactory(){
+        @SuppressWarnings("unused")
+        class TestSimpleNumberFormatFactory extends SimpleNumberFormatFactory {
+            /* Tests the method
+             *      public SimpleNumberFormatFactory(Locale locale)
+             */
+            TestSimpleNumberFormatFactory() {
+                super(new Locale(""));
+            }
+        }
+    }
+    
+    /* Tests the method
+     *      public static ULocale[] getAvailableULocales()
+     */
+    public void TestGetAvailableULocales(){
+        // TODO: Tests when "if (shim == null)" is true
+    }
+    
+    /* Tests the method
+     *      public static boolean unregister(Object registryKey)
+     */
+    public void TestUnregister(){
+        // TODO: Tests when "if (shim == null)" is true
+    }
+    
+    /* Tests the method
+     *      public void setMinimumIntegerDigits(int newValue)
+     */
+    public void TestSetMinimumIntegerDigits(){
+        NumberFormat nf = NumberFormat.getInstance();
+        // For valid array, it is displayed as {min value, max value}
+        // Tests when "if (minimumIntegerDigits > maximumIntegerDigits)" is true
+        int[][] cases = {{-1,0},{0,1},{1,0},{2,0},{2,1},{10,0}};
+        int[] expectedMax = {0,1,1,2,2,10};
+        if(cases.length != expectedMax.length){
+            errln("Can't continue test case method TestSetMinimumIntegerDigits " +
+                    "since the test case arrays are unequal.");
+        } else{
+            for(int i=0; i<cases.length; i++){
+                nf.setMaximumIntegerDigits(cases[i][1]);
+                nf.setMinimumIntegerDigits(cases[i][0]);
+                if(nf.getMaximumIntegerDigits() != expectedMax[i]){
+                    errln("NumberFormat.setMinimumIntegerDigits(int newValue " +
+                            "did not return an expected result for parameter " +
+                            cases[i][1] + " and " + cases[i][0] + " and expected "
+                            + expectedMax[i] + " but got " + nf.getMaximumIntegerDigits());
+                }
+            }
+        }
+    }
+    
+    /* Tests the method
+     *      protected Currency getEffectiveCurrency()
+     */
+    public void TestGetEffectiveCurrency(){
+        // TODO: Tests the method
+    }
+    
+    /* Tests the method
+     *      public int getRoundingMode()
+     *      public void setRoundingMode(int roundingMode)
+     */
+    public void TestRoundingMode(){
+        @SuppressWarnings("serial")
+        class TestRoundingMode extends NumberFormat{
+            public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Number parse(String text, ParsePosition parsePosition) {
+                return null;
+            }
+        }
+        TestRoundingMode tgrm = new TestRoundingMode();
+        
+        // Tests the function 'public void setRoundingMode(int roundingMode)'
+        try{
+            tgrm.setRoundingMode(0);
+            errln("NumberFormat.setRoundingMode(int) was suppose to return an exception");
+        } catch(Exception e){}
+        
+        // Tests the function 'public int getRoundingMode()'
+        try{
+            tgrm.getRoundingMode();
+            errln("NumberFormat.getRoundingMode() was suppose to return an exception");
+        } catch(Exception e){}
     }
 }

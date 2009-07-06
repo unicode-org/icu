@@ -762,11 +762,9 @@ public abstract class NumberFormat extends UFormat {
          * @return true if the factory is visible.
          * @stable ICU 2.6
          */
-        ///CLOVER:OFF
         public boolean visible() {
             return true;
         }
-        ///CLOVER:ON
 
         /**
          * Returns an immutable collection of the locale names directly 
@@ -897,15 +895,15 @@ public abstract class NumberFormat extends UFormat {
                 Class<?> cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
                 shim = (NumberFormatShim)cls.newInstance();
             }
+            ///CLOVER:OFF
             catch (MissingResourceException e){
                 throw e;
             }
             catch (Exception e) {
-                ///CLOVER:OFF
                // e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-                ///CLOVER:ON
             }
+            ///CLOVER:ON
         }
         return shim;
     }
@@ -931,7 +929,7 @@ public abstract class NumberFormat extends UFormat {
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
             return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
-        }
+        } 
         return getShim().getAvailableULocales();
     }
 
