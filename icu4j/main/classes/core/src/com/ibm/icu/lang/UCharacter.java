@@ -2060,9 +2060,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         static {
             // The following will only be true if COUNT or the array BLOCKS_
             // is every changed to be inconsistent
+            ///CLOVER:OFF
             if (COUNT!=BLOCKS_.length) {
                 throw new java.lang.IllegalStateException("UnicodeBlock fields are inconsistent!");
             }
+            ///CLOVER:ON
         }
         
         /**
@@ -3933,9 +3935,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String getName(int ch)
     {
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
     
@@ -3973,9 +3978,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String getName1_0(int ch)
     {
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getName(ch, 
                              UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
@@ -3998,11 +4006,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return a name for the argument codepoint
      * @stable ICU 2.6
      */
-    public static String getExtendedName(int ch) 
-    {
+    public static String getExtendedName(int ch) {
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getName(ch, UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
     
@@ -4021,9 +4031,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         if (ch < UCharacter.MIN_VALUE || ch > UCharacter.MAX_VALUE) {
             return null;
         }
+        
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
-        }    
+        }
+        ///CLOVER:ON
         String result = NAME_.getGroupName(ch, 
                                            UCharacterNameChoice.ISO_COMMENT_);
         return result;
@@ -4039,11 +4053,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return code point or -1 if name is not found
      * @stable ICU 2.1
      */
-    public static int getCharFromName(String name)
-    {     
+    public static int getCharFromName(String name){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getCharFromName(
                      UCharacterNameChoice.UNICODE_CHAR_NAME, name);
     }
@@ -4058,11 +4074,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return code point or -1 if name is not found
      * @stable ICU 2.1
      */
-    public static int getCharFromName1_0(String name)
-    {
+    public static int getCharFromName1_0(String name){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getCharFromName(
                      UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
     }
@@ -4086,11 +4104,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *         found.
      * @stable ICU 2.6
      */
-    public static int getCharFromExtendedName(String name)
-    {
+    public static int getCharFromExtendedName(String name){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return NAME_.getCharFromName(
                      UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
@@ -5021,11 +5041,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return an iterator 
      * @stable ICU 2.6
      */
-    public static ValueIterator getNameIterator()
-    {
+    public static ValueIterator getNameIterator(){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
+        ///CLOVER:ON
         return new UCharacterNameIterator(NAME_,
                       UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
@@ -5049,11 +5071,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return an iterator 
      * @stable ICU 2.6
      */
-    public static ValueIterator getName1_0Iterator()
-    {
+    public static ValueIterator getName1_0Iterator(){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
+        ///CLOVER:ON
         return new UCharacterNameIterator(NAME_,
                       UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
@@ -5077,11 +5101,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return an iterator 
      * @stable ICU 2.6
      */
-    public static ValueIterator getExtendedNameIterator()
-    {
+    public static ValueIterator getExtendedNameIterator(){
+        ///CLOVER:OFF
+        // NAME_ is always initialized when the class is initialized
         if(NAME_==null){
             throw new MissingResourceException("Could not load unames.icu","","");
         }
+        ///CLOVER:ON
         return new UCharacterNameIterator(NAME_,
                       UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
@@ -5318,7 +5344,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 /* Values were tested for variable type from Integer.MIN_VALUE
                  * to UProperty.INT_LIMIT and none would not reach the default case.
                  */
+                ///CLOVER:OFF
                 default: return 0; /* undefined */
+                ///CLOVER:ON
                 }
             } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
                 return UCharacterProperty.getMask(getType(ch));
@@ -5380,11 +5408,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #getIntPropertyValue
      * @stable ICU 2.4
      */
-    public static int getIntPropertyMinValue(int type)
-    {
+    public static int getIntPropertyMinValue(int type){
 
-        return 0; // undefined; and: all other properties have a minimum value 
-    // of 0
+        return 0; // undefined; and: all other properties have a minimum value of 0
     }
 
     
@@ -5425,47 +5451,49 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         } 
         else if (type < UProperty.INT_LIMIT) {
             switch (type) {
-            case UProperty.BIDI_CLASS:
-            case UProperty.JOINING_GROUP:
-            case UProperty.JOINING_TYPE:
-                return gBdp.getMaxValue(type);
-            case UProperty.BLOCK:
-                return (PROPERTY_.getMaxValues(0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
-            case UProperty.CANONICAL_COMBINING_CLASS:
-            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                return 0xff; // TODO do we need to be more precise, 
-                             // getting the actual maximum?
-            case UProperty.DECOMPOSITION_TYPE:
-                return PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
-            case UProperty.EAST_ASIAN_WIDTH:
-                return (PROPERTY_.getMaxValues(0) & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
-            case UProperty.GENERAL_CATEGORY:
-                return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
-            case UProperty.LINE_BREAK:
-                return (PROPERTY_.getMaxValues(LB_VWORD) & LB_MASK) >> LB_SHIFT;
-            case UProperty.NUMERIC_TYPE:
-                return NumericType.COUNT - 1;
-            case UProperty.SCRIPT:
-                return PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
-            case UProperty.HANGUL_SYLLABLE_TYPE:
-                return HangulSyllableType.COUNT-1;
-            case UProperty.NFD_QUICK_CHECK:
-            case UProperty.NFKD_QUICK_CHECK:
-                return 1; // YES -- these are never "maybe", only "no" or "yes"
-            case UProperty.NFC_QUICK_CHECK:
-            case UProperty.NFKC_QUICK_CHECK:
-                return 2; // MAYBE
-            case UProperty.GRAPHEME_CLUSTER_BREAK:
-                return (PROPERTY_.getMaxValues(2) & GCB_MASK) >> GCB_SHIFT;
-            case UProperty.SENTENCE_BREAK:
-                return (PROPERTY_.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
-            case UProperty.WORD_BREAK:
-                return (PROPERTY_.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
-            /* Values were tested for variable type from Integer.MIN_VALUE
-             * to UProperty.INT_LIMIT and none would not reach the default case.
-             */
-            default: return -1; // undefined
+                case UProperty.BIDI_CLASS:
+                case UProperty.JOINING_GROUP:
+                case UProperty.JOINING_TYPE:
+                    return gBdp.getMaxValue(type);
+                case UProperty.BLOCK:
+                    return (PROPERTY_.getMaxValues(0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
+                case UProperty.CANONICAL_COMBINING_CLASS:
+                case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
+                case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
+                    return 0xff; // TODO do we need to be more precise, 
+                                 // getting the actual maximum?
+                case UProperty.DECOMPOSITION_TYPE:
+                    return PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
+                case UProperty.EAST_ASIAN_WIDTH:
+                    return (PROPERTY_.getMaxValues(0) & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
+                case UProperty.GENERAL_CATEGORY:
+                    return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
+                case UProperty.LINE_BREAK:
+                    return (PROPERTY_.getMaxValues(LB_VWORD) & LB_MASK) >> LB_SHIFT;
+                case UProperty.NUMERIC_TYPE:
+                    return NumericType.COUNT - 1;
+                case UProperty.SCRIPT:
+                    return PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
+                case UProperty.HANGUL_SYLLABLE_TYPE:
+                    return HangulSyllableType.COUNT-1;
+                case UProperty.NFD_QUICK_CHECK:
+                case UProperty.NFKD_QUICK_CHECK:
+                    return 1; // YES -- these are never "maybe", only "no" or "yes"
+                case UProperty.NFC_QUICK_CHECK:
+                case UProperty.NFKC_QUICK_CHECK:
+                    return 2; // MAYBE
+                case UProperty.GRAPHEME_CLUSTER_BREAK:
+                    return (PROPERTY_.getMaxValues(2) & GCB_MASK) >> GCB_SHIFT;
+                case UProperty.SENTENCE_BREAK:
+                    return (PROPERTY_.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
+                case UProperty.WORD_BREAK:
+                    return (PROPERTY_.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
+                /* Values were tested for variable type from Integer.MIN_VALUE
+                 * to UProperty.INT_LIMIT and none would not reach the default case.
+                 */
+                ///CLOVER:OFF
+                default: return -1; // undefined
+                ///CLOVER:ON
             }
         }
         return -1; // undefined
@@ -6005,12 +6033,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             PNAMES_ = new UPropertyAliases();
             NAME_ = UCharacterName.getInstance();
         } catch (IOException e) {
+            ///CLOVER:OFF
             // e.printStackTrace();
+            // This part of code is initialize as part of the class
             throw new MissingResourceException(e.getMessage(),"","");
             //throw new RuntimeException(e.getMessage());
             // DONOT throw an exception
             // we might be building ICU modularly wothout names.icu and
             // pnames.icu
+            ///CLOVER:ON
         }
     }
         
@@ -6040,9 +6071,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
             PROPERTY_INITIAL_VALUE_ = PROPERTY_.m_trieInitialValue_;
         }
-        catch (Exception e)
-        {
+        catch (Exception e){
+            ///CLOVER:OFF
+            // This part of code is initialize as part of the class
             throw new MissingResourceException(e.getMessage(),"","");
+            ///CLOVER:ON
         }
 
         /*
@@ -6074,7 +6107,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         try {
             csp=UCaseProps.getSingleton();
         } catch(IOException e) {
+            ///CLOVER:OFF
+            // This part of code is initialize as part of the class
             csp=UCaseProps.getDummy();
+            ///CLOVER:ON
         }
         gCsp=csp;
 
@@ -6082,7 +6118,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         try {
             bdp=UBiDiProps.getSingleton();
         } catch(IOException e) {
+            ///CLOVER:OFF
+            // This part of code is initialize as part of the class
             bdp=UBiDiProps.getDummy();
+            ///CLOVER:ON
         }
         gBdp=bdp;
     }
@@ -6396,7 +6435,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 // TODO: Tested all the values from 0 ... UTF16.LEAD_SURROGATE_MIN_VALUE 
                 // and UTF16.LEAD_SURROGATE_MAX_VALUE ... UTF16.SUPPLEMENTARY_MIN_VALUE
                 // but it never results into the catch section of the try-catch
+                ///CLOVER:OFF
                 return PROPERTY_INITIAL_VALUE_;
+                ///CLOVER:ON
             }
         }
         if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {

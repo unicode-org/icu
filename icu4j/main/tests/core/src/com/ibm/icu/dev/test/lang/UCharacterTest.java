@@ -3053,8 +3053,8 @@ public final class UCharacterTest extends TestFmwk
     public void TestCodePointBefore(){
         // {TRAIL_SURROGATE_MIN_VALUE,
         //  TRAIL_SURROGATE_MAX_VALUE, TRAIL_SURROGATE_MAX_VALUE -1
-        String[] cases = {"\uD800","\uDBFF","\uDBFE"};
-        int[] result = {55296,56319,56318};
+        String[] cases = {"\uDC00","\uDFFF","\uDDFE"};
+        int[] result = {56320,57343,56830};
         for(int i=0; i < cases.length; i++){
             /* Testing UCharacter.codePointBefore(seq, index) */
             // Testing when "if (index > 0)" is false

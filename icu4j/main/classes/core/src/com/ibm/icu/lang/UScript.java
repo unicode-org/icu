@@ -743,7 +743,9 @@ public final class UScript {
              * corrects this by setting to ICUResourceBundle.FROM_DEFAULT
              * when such an invalid locale is passed.
              */
+            ///CLOVER:OFF
             return null;
+            ///CLOVER:ON
         }
         
         rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
