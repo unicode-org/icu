@@ -7,7 +7,9 @@
 package com.ibm.icu.dev.test.format;
 
 import java.math.BigInteger;
-import java.text.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.Random;
 
