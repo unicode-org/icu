@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,7 +15,6 @@ package com.ibm.icu.dev.test.util;
 import java.util.HashMap;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
@@ -129,28 +128,6 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
     //            pass = false;
     //        }
     //        this.logln("DateFormat(format) old:"+d1+"   new:"+d2);
-        }
-        ULocale.setDefault(defLoc);
-    }
-    
-    public void TestCollation() {
-        ULocale defLoc = ULocale.getDefault();
-        ULocale.setDefault(_DEFAULT_LOCALE);
-        for (int i=0; i<_LOCALE_NUMBER; i++) {
-            ULocale oldLoc = _LOCALES[i][0];
-            ULocale newLoc = _LOCALES[i][1];
-            if(availableMap.get(_LOCALES[i][1])==null){
-                logln(_LOCALES[i][1]+" is not available. Skipping!");
-                continue;
-            }
-            Collator c1 = Collator.getInstance(oldLoc);
-            Collator c2 = Collator.getInstance(newLoc);
-            
-            if (!c1.equals(c2)) {
-                errln("CollationTest: c1!=c2: newLoc= "+newLoc +" oldLoc= "+oldLoc);
-            }
- 
-            logln("Collation old:"+oldLoc+"   new:"+newLoc);
         }
         ULocale.setDefault(defLoc);
     }

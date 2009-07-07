@@ -34,7 +34,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.Collator;
+// dlf collation is no longer in core, so this test either can't be in core, or can't test it
+// import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -106,7 +107,7 @@ public class TestCLDRVsICU extends TestFmwk {
         Set s = new TreeSet();
         addLocales(NumberFormat.getAvailableULocales(), s);
         addLocales(DateFormat.getAvailableULocales(), s);
-        addLocales(Collator.getAvailableULocales(), s);
+//        addLocales(Collator.getAvailableULocales(), s);
 
         // filter, to make tracking down bugs easier
 
@@ -267,34 +268,35 @@ public class TestCLDRVsICU extends TestFmwk {
     }
 
     {
-        addHandler("collation", new Handler() {
-            public void handleResult(ULocale currentLocale, String value) {
-                Collator col = Collator.getInstance(currentLocale);
-                String lastLine = "";
-                int count = 0;
-                for (int pos = 0; pos < value.length();) {
-                    int nextPos = value.indexOf('\n', pos);
-                    if (nextPos < 0)
-                        nextPos = value.length();
-                    String line = value.substring(pos, nextPos);
-                    line = remove(line, controlsAndSpace); // HACK for SAX
-                    if (line.trim().length() != 0) { // HACK for SAX
-                        int comp = col.compare(lastLine, line);
-                        if (comp > 0) {
-                            failures++;
-                            errln("\tLine " + (count + 1) + "\tFailure: "
-                                    + showString(lastLine) + " should be leq "
-                                    + showString(line));
-                        } else if (DEBUG) {
-                            logln("OK: " + line);
-                        }
-                        lastLine = line;
-                    }
-                    pos = nextPos + 1;
-                    count++;
-                }
-            }
-        });
+        // TODO (dougfelt) move this test
+        // addHandler("collation", new Handler() {
+        //     public void handleResult(ULocale currentLocale, String value) {
+        //         Collator col = Collator.getInstance(currentLocale);
+        //         String lastLine = "";
+        //         int count = 0;
+        //         for (int pos = 0; pos < value.length();) {
+        //             int nextPos = value.indexOf('\n', pos);
+        //             if (nextPos < 0)
+        //                 nextPos = value.length();
+        //             String line = value.substring(pos, nextPos);
+        //             line = remove(line, controlsAndSpace); // HACK for SAX
+        //             if (line.trim().length() != 0) { // HACK for SAX
+        //                 int comp = col.compare(lastLine, line);
+        //                 if (comp > 0) {
+        //                     failures++;
+        //                     errln("\tLine " + (count + 1) + "\tFailure: "
+        //                             + showString(lastLine) + " should be leq "
+        //                             + showString(line));
+        //                 } else if (DEBUG) {
+        //                     logln("OK: " + line);
+        //                 }
+        //                 lastLine = line;
+        //             }
+        //             pos = nextPos + 1;
+        //             count++;
+        //         }
+        //     }
+        // });
 
         // ============ Handler for Numbers ============ 
         addHandler("number", new Handler() {

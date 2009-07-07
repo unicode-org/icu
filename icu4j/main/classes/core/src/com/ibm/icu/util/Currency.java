@@ -356,7 +356,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales();
         } else {
             return shim.getAvailableLocales();
         }
@@ -370,7 +370,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales();
         } else {
             return shim.getAvailableULocales();
         }

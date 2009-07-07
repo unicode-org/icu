@@ -17,6 +17,10 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
+/**
+ * This does not test lenient parse mode, since testing the default implementation
+ * introduces a dependency on collation.  See RbnfLenientScannerTest.
+ */
 public class RbnfTest extends TestFmwk {
     public static void main(String[] args) {
         RbnfTest test = new RbnfTest();
@@ -317,19 +321,6 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
-
-        formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "FOurhundred     thiRTY six", "436" },
-            // test spaces before fifty-7 causing lenient parse match of "fifty-" to " fifty"
-            // leaving "-7" for remaining parse, resulting in 2643 as the parse result.
-            { "fifty-7", "57" },
-            { " fifty-7", "57" },
-            { "  fifty-7", "57" },
-            { "2 thousand six HUNDRED   fifty-7", "2,657" },
-            { "fifteen hundred and zero", "1,500" }
-        };
-        doLenientParseTest(formatter, lpTestData);
     }
 
     /**
@@ -384,12 +375,6 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
-
-        formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "2-51-33", "10,293" }
-        };
-        doLenientParseTest(formatter, lpTestData);
     }
 
     /**
@@ -465,13 +450,6 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
-
-        formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "trente-et-un", "31" },
-            { "un cent quatre vingt dix huit", "198" }
-        };
-        doLenientParseTest(formatter, lpTestData);
     }
 
     /**
@@ -576,12 +554,6 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
-
-        formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
-        };
-        doLenientParseTest(formatter, lpTestData);
     }
 
     /**
@@ -607,14 +579,6 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
-
-        /*
-          formatter.setLenientParseMode(true);
-          String[][] lpTestData = {
-          { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
-          };
-          doLenientParseTest(formatter, lpTestData);
-        */
     }
 
     public void TestFractionalRuleSet() {
@@ -929,11 +893,6 @@ public class RbnfTest extends TestFmwk {
                             fmt.setLenientParseMode(false);
                             Number num = fmt.parse(s);
                             logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
-
-                            // lenient parse
-                            fmt.setLenientParseMode(true);
-                            num = fmt.parse(s);
-                            logln(loc.getName() + names[j] + "success parse (lenient): " + s + " -> " + num);
                         } catch (ParseException pe) {
                             String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
                             logln(msg);
@@ -987,30 +946,6 @@ public class RbnfTest extends TestFmwk {
             errln("Test failed with exception: " + e.toString());
         }
     }
-
-    void doLenientParseTest(RuleBasedNumberFormat formatter,
-                            String[][] testData) {
-        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
-
-        try {
-            for (int i = 0; i < testData.length; i++) {
-                String words = testData[i][0];
-                String expectedNumber = testData[i][1];
-                String actualNumber = decFmt.format(formatter.parse(words));
-
-                if (!actualNumber.equals(expectedNumber)) {
-                    errln("Lenient-parse spot check failed: for "
-                          + words + ", expected " + expectedNumber
-                          + ", but got " + actualNumber);
-                }
-            }
-        }
-        catch (Throwable e) {
-            errln("Test failed with exception: " + e.toString());
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * Spellout rules for U.K. English.  
@@ -1219,4 +1154,3 @@ public class RbnfTest extends TestFmwk {
         } catch(Exception e){}
     }
 }
-

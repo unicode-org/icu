@@ -125,6 +125,8 @@ public class RBNFParseTest extends TestFmwk {
     public void TestLenientParse() throws Exception {
         RuleBasedNumberFormat rbnf_en, rbnf_fr;
 
+        // TODO: this still passes, but setLenientParseMode should have no effect now.
+        // Did it ever test what it was supposed to?
         rbnf_en = new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
         rbnf_en.setLenientParseMode(true);
         rbnf_fr = new RuleBasedNumberFormat(Locale.FRENCH, RuleBasedNumberFormat.SPELLOUT);

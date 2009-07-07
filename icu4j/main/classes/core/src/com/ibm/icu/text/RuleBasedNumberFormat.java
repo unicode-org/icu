@@ -541,7 +541,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the collator is actually created the first time the client does a parse
      * with lenient-parse mode turned on.
      */
-    private transient Collator collator = null;
+  //    private transient Collator collator = null;
+    private transient RbnfLenientScannerProvider scannerProvider = null;
 
     /**
      * The DecimalFormatSymbols object that any DecimalFormat objects this
@@ -1237,34 +1238,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Turns lenient parse mode on and off.
      *
-     * When in lenient parse mode, the formatter uses a Collator for parsing the text.
-     * Only primary differences are treated as significant.  This means that case
-     * differences, accent differences, alternate spellings of the same letter
-     * (e.g., ae and a-umlaut in German), ignorable characters, etc. are ignored in
-     * matching the text.  In many cases, numerals will be accepted in place of words
-     * or phrases as well.
-     *
-     * For example, all of the following will correctly parse as 255 in English in
-     * lenient-parse mode:
-     * <br>"two hundred fifty-five"
-     * <br>"two hundred fifty five"
-     * <br>"TWO HUNDRED FIFTY-FIVE"
-     * <br>"twohundredfiftyfive"
-     * <br>"2 hundred fifty-5"
-     *
-     * The Collator used is determined by the locale that was
-     * passed to this object on construction.  The description passed to this object
-     * on construction may supply additional collation rules that are appended to the
-     * end of the default collator for the locale, enabling additional equivalences
-     * (such as adding more ignorable characters or permitting spelled-out version of
-     * symbols; see the demo program for examples).
-     *
-     * It's important to emphasize that even strict parsing is relatively lenient: it
-     * will accept some text that it won't produce as output.  In English, for example,
-     * it will correctly parse "two hundred zero" and "fifteen hundred".
+     * When in lenient parse mode, the formatter uses an RbnfLenientScanner
+     * for parsing the text.  Lenient parsing is only in effect if a scanner
+     * is set.
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
-     * @see RuleBasedCollator
      * @stable ICU 2.0
      */
     public void setLenientParseMode(boolean enabled) {
@@ -1272,9 +1250,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // if we're leaving lenient-parse mode, throw away the collator
         // we've been using
-        if (!enabled) {
-            collator = null;
-        }
+        // if (!enabled) {
+          //            collator = null;
+        // }
     }
 
     /**
@@ -1286,6 +1264,27 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     public boolean lenientParseEnabled() {
         return lenientParse;
+    }
+
+    /**
+     * Sets the provider for the lenient scanner.  If this has not been set, {@link #setLenientParseMode}
+     * has no effect.  This is necessary to decouple collation from format code.
+     * @param scannerProvider the provider
+     * @see #setLenientParseMode
+     * @see #getLenientScannerProvider
+     * @draft ICU 4.4
+     */
+    public void setLenientScannerProvider(RbnfLenientScannerProvider scannerProvider) {
+        this.scannerProvider = scannerProvider;
+    }
+
+    /**
+     * Returns the lenient scanner provider, or null if none is set.
+     * @see #setLenientScannerProvider
+     * @draft ICU 4.4
+     */
+    public RbnfLenientScannerProvider getLenientScannerProvider() {
+        return scannerProvider;
     }
 
     /**
@@ -1357,34 +1356,41 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return The collator to use for lenient parsing, or null if lenient parsing
      * is turned off.
      */
-    Collator getCollator() {
-        // lazy-evaulate the collator
-        if (collator == null && lenientParse) {
-            try {
-                // create a default collator based on the formatter's locale,
-                // then pull out that collator's rules, append any additional
-                // rules specified in the description, and create a _new_
-                // collator based on the combinaiton of those rules
-                RuleBasedCollator temp = (RuleBasedCollator)Collator.getInstance(locale);
-                String rules = temp.getRules() + (lenientParseRules == null ? "" : lenientParseRules);
-
-                collator = new RuleBasedCollator(rules);
-                collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-            }
-            catch (Exception e) {
-                // If we get here, it means we have a malformed set of
-                // collation rules, which hopefully won't happen
-                if(DEBUG){
-                    e.printStackTrace();
-                }
-                collator = null;
-            }
+    RbnfLenientScanner getLenientScanner() {
+        if (lenientParse && scannerProvider != null) {
+            return scannerProvider.get(locale, lenientParseRules);
         }
-
-        // if lenient-parse mode is off, this will be null
-        // (see setLenientParseMode())
-        return collator;
+        return null;
     }
+
+    // Collator getCollator() {
+    //     // lazy-evaulate the collator
+    //     if (collator == null && lenientParse) {
+    //         try {
+    //             // create a default collator based on the formatter's locale,
+    //             // then pull out that collator's rules, append any additional
+    //             // rules specified in the description, and create a _new_
+    //             // collator based on the combinaiton of those rules
+    //             RuleBasedCollator temp = (RuleBasedCollator)Collator.getInstance(locale);
+    //             String rules = temp.getRules() + (lenientParseRules == null ? "" : lenientParseRules);
+
+    //             collator = new RuleBasedCollator(rules);
+    //             collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+    //         }
+    //         catch (Exception e) {
+    //             // If we get here, it means we have a malformed set of
+    //             // collation rules, which hopefully won't happen
+    //             if(DEBUG){
+    //                 e.printStackTrace();
+    //             }
+    //             collator = null;
+    //         }
+    //     }
+
+    //     // if lenient-parse mode is off, this will be null
+    //     // (see setLenientParseMode())
+    //     return collator;
+    // }
 
     /**
      * Returns the DecimalFormatSymbols object that should be used by all DecimalFormat

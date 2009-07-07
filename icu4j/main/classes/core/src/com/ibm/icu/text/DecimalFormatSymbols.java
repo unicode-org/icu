@@ -128,7 +128,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
-        return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableLocales();
     }
 
     /**
@@ -145,7 +145,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableULocales();
     }
 
     

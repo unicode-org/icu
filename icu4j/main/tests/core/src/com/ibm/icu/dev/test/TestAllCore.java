@@ -21,8 +21,6 @@ public class TestAllCore extends TestGroup {
                   "com.ibm.icu.dev.test.compression.TestAll",
                   "com.ibm.icu.dev.test.rbbi.TestAll",
                   "com.ibm.icu.dev.test.translit.TestAll",
-                  "com.ibm.icu.dev.test.search.SearchTest", // not a group
-                  "com.ibm.icu.dev.test.collator.TestAll",
                   "com.ibm.icu.dev.test.shaping.ArabicShapingRegTest",
                   "com.ibm.icu.dev.test.calendar.TestAll",
                   "com.ibm.icu.dev.test.timezone.TestAll",

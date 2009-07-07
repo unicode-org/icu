@@ -11,6 +11,7 @@
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <property name="icu4j.jar.file" value="icu4j.jar"/>
+    <property name="icu4j-collate.jar.file" value="icu4j-collate.jar"/>
     <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
     <property name="icu4j-localespi.jar.file" value="icu4j-localespi.jar"/>
     <property name="icu4jdocs.jar.file" value="icu4jdocs.jar"/>
@@ -59,10 +60,12 @@
 
     <target name="clean" description="Clean up build outputs">
         <ant dir="${icu4j.core.dir}" target="clean" inheritAll="false"/>
+        <ant dir="${icu4j.collate.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.charset.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.localespi.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.test-framework.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.core-tests.dir}" target="clean" inheritAll="false"/>
+        <ant dir="${icu4j.collate-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.charset-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.localespi-tests.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.build-tools.dir}" target="clean" inheritAll="false"/>
@@ -70,6 +73,7 @@
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
 
         <delete file="${icu4j.jar.file}"/>
+        <delete file="${icu4j-collate.jar.file}"/>
         <delete file="${icu4j-charsets.jar.file}"/>
         <delete file="${icu4j-localespi.jar.file}"/>
         <delete file="${icu4jdemos.jar.file}"/>
@@ -83,7 +87,7 @@
 
     <!-- meta build targets -->
     <target name="all" depends="info, main, tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
-    <target name="main" depends="info, core, charset, localespi" description="Build ICU4J API classes"/>
+    <target name="main" depends="info, core, collate, charset, localespi" description="Build ICU4J API classes"/>
     <target name="tests" depends="info, core-tests, charset-tests, localespi-tests" description="Build ICU4J API test classes"/>
     <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
 
@@ -127,7 +131,7 @@
         </antcall>
     </target>
 
-    <target name="_runCheck" depends="info, core, charset, core-tests, charset-tests">
+    <target name="_runCheck" depends="info, core, collate, charset, core-tests, collate-tests, charset-tests">
         <echo message="JVM argument:   ${runcheck.jvmarg}"/>
         <echo message="Test argument:   ${runcheck.arg}"/>
 
@@ -136,10 +140,36 @@
             <jvmarg line="${runcheck.jvmarg}"/>
             <classpath>
                 <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.collate.jar}"/>
                 <pathelement path="${icu4j.charset.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
                 <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement path="${icu4j.collate-tests.jar}"/>
                 <pathelement path="${icu4j.charset-tests.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="coreCheck" depends="info, core, core-tests" description="Run only the core tests">
+        <java classname="com.ibm.icu.dev.test.TestAllCore" fork="yes" failonerror="true">
+            <arg line="-n"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.charset.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.core-tests.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="collateCheck" depends="info, core, collate, collate-tests" description="Run the only collation tests">
+        <java classname="com.ibm.icu.dev.test.TestAllCollate" fork="yes" failonerror="true">
+            <arg line="-n"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.collate.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.collate-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -162,6 +192,7 @@
     <!-- jar targets -->
     <target name="jar" depends="main" description="Build ICU4J API jar files">
         <copy file="${icu4j.core.jar}" tofile="${icu4j.jar.file}"/>
+        <copy file="${icu4j.collate.jar}" tofile="${icu4j-collate.jar.file}"/>
         <copy file="${icu4j.charset.jar}" tofile="${icu4j-charsets.jar.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}"/>
     </target>
@@ -192,6 +223,10 @@
         <ant dir="${icu4j.core.dir}" inheritAll="false"/>
     </target>
 
+    <target name="collate" depends="core" description="Build collation classes">
+        <ant dir="${icu4j.collate.dir}" inheritAll="false"/>
+    </target>
+
     <target name="charset" depends="core" description="Build charset classes">
         <ant dir="${icu4j.charset.dir}" inheritAll="false"/>
     </target>
@@ -210,6 +245,10 @@
 
     <target name="core-tests" depends="core, test-framework" description="Build core tests">
         <ant dir="${icu4j.core-tests.dir}" inheritAll="false"/>
+    </target>
+
+    <target name="collate-tests" depends="collate, test-framework" description="Build core tests">
+        <ant dir="${icu4j.collate-tests.dir}" inheritAll="false"/>
     </target>
 
     <target name="charset-tests" depends="charset, test-framework" description="Build charset tests">
@@ -280,6 +319,9 @@
         <ant dir="${icu4j.core.dir}" inheritAll="false" inheritRefs="true">
             <property name="build.compiler" value="${build.compiler}"/>
         </ant>
+        <ant dir="${icu4j.collate.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
         <ant dir="${icu4j.charset.dir}" inheritAll="false" inheritRefs="true">
             <property name="build.compiler" value="${build.compiler}"/>
         </ant>
@@ -319,6 +361,9 @@
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/**"/>
+            </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>
             </packageset>
@@ -334,6 +379,9 @@
                 <include name="com/ibm/icu/math/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/**"/>
             </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ant.AntLaunchConfigurationType">
+<booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="false"/>
+<listAttribute key="org.eclipse.debug.collate.MAPPED_RESOURCE_PATHS">
+<listEntry value="/icu4j-collate/build.xml"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.collate.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="icu4j-collate"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<mapAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTIES">
+<mapEntry key="eclipse.running" value="true"/>
+<mapEntry key="eclipse.pdebuild.templates" value="/D:/eclipse-SDK-3.4.2-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20081217/templates/"/>
+<mapEntry key="eclipse.home" value="D:\eclipse-SDK-3.4.2-win32\eclipse"/>
+<mapEntry key="eclipse.pdebuild.scripts" value="/D:/eclipse-SDK-3.4.2-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20081217/scripts/"/>
+<mapEntry key="eclipse.pdebuild.home" value="/D:/eclipse-SDK-3.4.2-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20081217/./"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTY_FILES" value="${workspace_loc:/icu4j-shared/build/locations-eclipse.properties},"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/icu4j-collate/build.xml}"/>
+<stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
+</launchConfiguration>

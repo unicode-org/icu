@@ -20,7 +20,9 @@ import java.util.jar.JarEntry;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -167,17 +169,12 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle==null){
             errln("could not create the resource bundle");
         }
-        bundle = (UResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
-        if(bundle==null){
-            errln("could not load the stream");
-        }
+
         bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
         if(!bundle.getULocale().equals(ULocale.getDefault())){
             errln("UResourceBundle did not load the default bundle when bundle was not found. Default: " + ULocale.getDefault() + 
                         ", Bundle locale: " + bundle.getULocale());
         }
-
-
     }
 
     public void TestBasicTypes(){
@@ -653,27 +650,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         */
         ICUResourceBundle bundle = null;
         String key = null;
-        try{
-            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
 
-            if(!bundle.getULocale().equals("de")){
-                errln("did not get the expected bundle");
-            }
-            key = bundle.getStringWithFallback("collations/collation/default");
-            if(!key.equals("phonebook")){
-                errln("Did not get the expected result from getStringWithFallback method.");
-            }
-
-        }catch(MissingResourceException ex){
-            logln("got the expected exception");
-        }
-
-
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
-        key = bundle.getStringWithFallback("collations/default");
-        if(!key.equals("standard")){
-            errln("Did not get the expected result from getStringWithFallback method.");
-        }
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_FR");
         ICUResourceBundle b1 = bundle.getWithFallback("calendar");
         String defaultCal = b1.getStringWithFallback("default");
@@ -691,40 +668,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
 
-    private static final String COLLATION_RESNAME = "collations";
-    private static final String COLLATION_KEYWORD = "collation";
     private static final String DEFAULT_NAME = "default";
     private static final String STANDARD_NAME = "standard";
     private static final String CALENDAR_RESNAME = "calendar";
     private static final String CALENDAR_KEYWORD = "calendar";
-
-    public void TestKeywordValues(){
-        String kwVals[];
-        boolean foundStandard = false;
-        int n;
-
-        logln("Testing getting collation values:");
-        kwVals = ICUResourceBundle.getKeywordValues(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
-        for(n=0;n<kwVals.length;n++) {
-            logln(new Integer(n).toString() + ": " + kwVals[n]);
-            if(DEFAULT_NAME.equals(kwVals[n])) {
-                errln("getKeywordValues for collation returned 'default' in the list.");
-            } else if(STANDARD_NAME.equals(kwVals[n])) {
-                if(foundStandard == false) {
-                    foundStandard = true;
-                    logln("found 'standard'");
-                } else {
-                    errln("Error - 'standard' is in the keyword list twice!");
-                }
-            }
-        }
-
-        if(foundStandard == false) {
-            errln("Error - 'standard' was not in the collation tree as a keyword.");
-        } else {
-            logln("'standard' was found as a collation keyword.");
-        }
-    }
 
     public void TestLocaleDisplayNames() {
         ULocale[] locales = ULocale.getAvailableLocales();
@@ -761,52 +708,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     public void TestFunctionalEquivalent(){
-       String[] collCases = {
-       //  avail   locale                               equiv
-           "f",     "de_US_CALIFORNIA",                 "de",
-           "f",     "zh_TW@collation=stroke",           "zh@collation=stroke", /* alias of zh_Hant_TW */
-           "t",     "zh_Hant_TW@collation=stroke",      "zh@collation=stroke",
-           "f",     "de_CN@collation=pinyin",           "de",
-           "t",     "zh@collation=pinyin",              "zh",
-           "f",     "zh_CN@collation=pinyin",           "zh", /* alias of zh_Hans_CN */
-           "t",     "zh_Hans_CN@collation=pinyin",      "zh",
-           "f",     "zh_HK@collation=pinyin",           "zh", /* alias of zh_Hant_HK */
-           "t",     "zh_Hant_HK@collation=pinyin",      "zh",
-           "f",     "zh_HK@collation=stroke",           "zh@collation=stroke", /* alias of zh_Hant_HK */
-           "t",     "zh_Hant_HK@collation=stroke",      "zh@collation=stroke",
-           "f",     "zh_HK",                            "zh@collation=stroke", /* alias of zh_Hant_HK */
-           "t",     "zh_Hant_HK",                       "zh@collation=stroke",
-           "f",     "zh_MO",                            "zh@collation=stroke", /* alias of zh_Hant_MO */
-           "t",     "zh_Hant_MO",                       "zh@collation=stroke",
-           "f",     "zh_TW_STROKE",                     "zh@collation=stroke",
-           "f",     "zh_TW_STROKE@collation=big5han",   "zh@collation=big5han",
-           "f",     "de_CN@calendar=japanese",          "de",
-           "t",     "de@calendar=japanese",             "de",
-           "f",     "zh_TW@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hant_TW */
-           "t",     "zh_Hant_TW@collation=big5han",     "zh@collation=big5han",
-           "f",     "zh_TW@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hant_TW */
-           "t",     "zh_Hant_TW@collation=gb2312han",   "zh@collation=gb2312han",
-           "f",     "zh_CN@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hans_CN */
-           "t",     "zh_Hans_CN@collation=big5han",     "zh@collation=big5han",
-           "f",     "zh_CN@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hans_CN */
-           "t",     "zh_Hans_CN@collation=gb2312han",   "zh@collation=gb2312han",
-           "t",     "zh@collation=big5han",             "zh@collation=big5han",
-           "t",     "zh@collation=gb2312han",           "zh@collation=gb2312han",
-           "t",     "hi_IN@collation=direct",           "hi@collation=direct",
-           "t",     "hi@collation=standard",            "hi",
-           "t",     "hi@collation=direct",              "hi@collation=direct",
-           "f",     "hi_AU@collation=direct;currency=CHF;calendar=buddhist",    "hi@collation=direct",
-           "f",     "hi_AU@collation=standard;currency=CHF;calendar=buddhist",  "hi",
-           "t",     "de_DE@collation=pinyin",           "de", /* bug 4582 tests */
-           "f",     "de_DE_BONN@collation=pinyin",      "de",
-           "t",     "nl",                               "root",
-           "t",     "nl_NL",                            "root",
-           "f",     "nl_NL_EEXT",                       "root",
-           "t",     "nl@collation=stroke",              "root",
-           "t",     "nl_NL@collation=stroke",           "root",
-           "f",     "nl_NL_EEXT@collation=stroke",      "root",
-       };
-
        String[] calCases = {
        //  avail    locale                              equiv
            "t",     "en_US_POSIX",                      "en_US@calendar=gregorian",
@@ -819,17 +720,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
            "f",     "th_TH_Bangkok",                    "th@calendar=buddhist",
        };
 
-       logln("Testing functional equivalents for collation...");
-       getFunctionalEquivalentTestCases(ICUResourceBundle.ICU_COLLATION_BASE_NAME,
-               COLLATION_RESNAME, COLLATION_KEYWORD, true, collCases);
-
-       logln("Testing functional equivalents for calenadr...");
+       logln("Testing functional equivalents for calendar...");
        getFunctionalEquivalentTestCases(ICUResourceBundle.ICU_BASE_NAME,
+                                        Calendar.class.getClassLoader(),
                CALENDAR_RESNAME, CALENDAR_KEYWORD, false, calCases);
 
        logln("Testing error conditions:");
        try {
-           ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
+           ClassLoader cl = BreakIterator.class.getClassLoader();
+           ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_BRKITR_BASE_NAME, cl, "calendar",
               "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1], true);
            errln("Err: expected MissingResourceException");
        } catch ( MissingResourceException t ) {
@@ -837,7 +736,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
        }
     }
 
-    private void getFunctionalEquivalentTestCases(String path, String resName, String keyword,
+    private void getFunctionalEquivalentTestCases(String path, ClassLoader cl, String resName, String keyword,
             boolean truncate, String[] testCases) {
         //String F_STR = "f";
         String T_STR = "t";
@@ -852,7 +751,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" +
                     inLocale.toString() + "\t\t" + expectLocale.toString());
 
-            ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(path, resName, keyword, inLocale, isAvail, truncate);
+            ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(path, cl, resName, keyword, inLocale, isAvail, truncate);
             boolean gotAvail = isAvail[0];
 
             if((gotAvail != expectAvail) || !equivLocale.equals(expectLocale)) {
@@ -1103,4 +1002,3 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
 }
-

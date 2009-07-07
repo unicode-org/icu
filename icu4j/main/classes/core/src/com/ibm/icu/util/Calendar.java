@@ -1736,7 +1736,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static Locale[] getAvailableLocales()
     {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales();
         }
         return getShim().getAvailableLocales();
     }
@@ -1750,7 +1750,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static ULocale[] getAvailableULocales()
     {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales();
         }
         return getShim().getAvailableULocales();
     }
@@ -5595,4 +5595,3 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     // -------- END ULocale boilerplate --------
 }
-

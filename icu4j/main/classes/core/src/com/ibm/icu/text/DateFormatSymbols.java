@@ -227,7 +227,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
-        return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableLocales();
     }
 
     /**
@@ -244,7 +244,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableULocales();
     }
     
     /**
@@ -1610,8 +1610,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     private static String getCalendarType(ULocale locale) {
         String calType = locale.getKeywordValue("calendar");
         if (calType == null) {
+            ClassLoader cl = DateFormatSymbols.class.getClassLoader();
             locale = ICUResourceBundle.getFunctionalEquivalent(
-                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", locale, null, false);
+                ICUResourceBundle.ICU_BASE_NAME, cl, "calendar", "calendar", locale, null, false);
             calType = locale.getKeywordValue("calendar");
         }
         return calType;

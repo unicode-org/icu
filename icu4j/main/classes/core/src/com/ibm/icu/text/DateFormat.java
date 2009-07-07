@@ -1086,7 +1086,7 @@ public abstract class DateFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales()
     {
-        return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableLocales();
     }
 
     /**
@@ -1097,7 +1097,7 @@ public abstract class DateFormat extends UFormat {
      */
     public static ULocale[] getAvailableULocales()
     {
-        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableULocales();
     }
 
     /**

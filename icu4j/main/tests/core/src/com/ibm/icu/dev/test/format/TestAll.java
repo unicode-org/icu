@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,7 +28,6 @@ public class TestAll extends TestGroup {
                   "TestAll$MessageFormat",
                   "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
-                  "com.ibm.icu.dev.test.format.GlobalizationPreferencesTest",
                   "DataDrivenFormatTest"
               },
               "Formatting Tests");
@@ -39,7 +38,7 @@ public class TestAll extends TestGroup {
             super(new String[] {
                 "RbnfTest",
                 "RbnfRoundTripTest",
-        "RBNFParseTest",
+                "RBNFParseTest",
             });
         }
     }
@@ -118,4 +117,3 @@ public class TestAll extends TestGroup {
 
     public static final String CLASS_TARGET_NAME = "Format";
 }
-

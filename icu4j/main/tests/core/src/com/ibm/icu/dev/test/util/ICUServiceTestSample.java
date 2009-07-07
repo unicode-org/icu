@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,9 +8,9 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
 
+import java.text.Collator; // don't need ICU for this example
 import java.util.EventListener;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,8 +30,6 @@ public class ICUServiceTestSample {
         catch (InterruptedException e) {
         }
         System.out.println("done");
-        if(client==null){
-        }
     }
 
     /**
@@ -211,7 +209,7 @@ public class ICUServiceTestSample {
          * sort the display names, and null for the matchID.
          */
         public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
-            Collator col = Collator.getInstance(locale);
+            Collator col = Collator.getInstance(locale.toLocale());
             return service.getDisplayNames(locale, col, null);
         }
     }

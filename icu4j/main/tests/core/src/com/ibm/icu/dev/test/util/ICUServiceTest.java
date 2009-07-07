@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,9 +21,10 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
 
+// use java collator to remove test dependency on ICU collator
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -72,7 +73,7 @@ public class ICUServiceTest extends TestFmwk
      */
     public SortedMap getDisplayNames(ICUService service) {
         ULocale locale = ULocale.getDefault();
-        Collator col = Collator.getInstance(locale);
+        Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, null);
     }
 
@@ -82,7 +83,7 @@ public class ICUServiceTest extends TestFmwk
      * sort the display names, and null for the matchID.
      */
     public SortedMap getDisplayNames(ICUService service, ULocale locale) {
-        Collator col = Collator.getInstance(locale);
+        Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, null);
     }
     /**
@@ -91,7 +92,7 @@ public class ICUServiceTest extends TestFmwk
      * sort the display names.
      */
     public SortedMap getDisplayNames(ICUService service, ULocale locale, String matchID) {
-        Collator col = Collator.getInstance(locale);
+        Collator col = Collator.getInstance(locale.toLocale());
         return service.getDisplayNames(locale, col, matchID);
     }
 
