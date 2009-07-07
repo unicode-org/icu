@@ -549,14 +549,14 @@ public class ICULocaleService extends ICUService {
          */
         protected Set<String> getSupportedIDs() {
             // note: "root" is one of the ids, but "" is not.  Must convert ULocale.ROOT.
-            return ICUResourceBundle.getFullLocaleNameSet(bundleName); 
+            return ICUResourceBundle.getFullLocaleNameSet(bundleName, loader()); 
         }
 
         /**
          * Override of superclass method.
          */
         public void updateVisibleIDs(Map<String, Factory> result) {
-            Set<String> visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName); // only visible ids
+          Set<String> visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName, loader()); // only visible ids
             for (String id : visibleIDs) {
                 result.put(id, this);
             }
@@ -567,7 +567,11 @@ public class ICULocaleService extends ICUService {
          * for the locale, ignoring kind, and service.
          */
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
-            return ICUResourceBundle.getBundleInstance(bundleName, loc);
+            return ICUResourceBundle.getBundleInstance(bundleName, loc, loader());
+        }
+
+        protected ClassLoader loader() {
+            return getClass().getClassLoader();
         }
 
         public String toString() {

@@ -1210,6 +1210,7 @@ icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/charset/manifest.stub -text
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
+icu4j/main/classes/collate/collate-build.launch -text
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
@@ -1246,16 +1247,17 @@ icu4j/main/tests/charset/.classpath -text
 icu4j/main/tests/charset/.project -text
 icu4j/main/tests/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/charset/manifest.stub -text
+icu4j/main/tests/collate/collate-tests-build.launch -text
+icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt svneol=native#text/plain
+icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt svneol=native#text/plain
+icu4j/main/tests/collate/src/com/ibm/icu/dev/data/riwords.txt svneol=native#text/plain
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
 icu4j/main/tests/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/core/manifest.stub -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt svneol=native#text/plain
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/riwords.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain

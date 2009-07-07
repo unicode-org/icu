@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1050,75 +1050,80 @@ final class NFRule {
             return 0;
         }
 
+        RbnfLenientScanner scanner = formatter.getLenientScanner();
+        if (scanner != null) {
+          return scanner.prefixLength(str, prefix);
+        }
+
         // go through all this grief if we're in lenient-parse mode
-        if (formatter.lenientParseEnabled()) {
-            // get the formatter's collator and use it to create two
-            // collation element iterators, one over the target string
-            // and another over the prefix (right now, we'll throw an
-            // exception if the collator we get back from the formatter
-            // isn't a RuleBasedCollator, because RuleBasedCollator defines
-            // the CollationElementIteratoer protocol.  Hopefully, this
-            // will change someday.)
-            //
-            // Previous code was matching "fifty-" against " fifty" and leaving
-            // the number " fifty-7" to parse as 43 (50 - 7).
-            // Also it seems that if we consume the entire prefix, that's ok even
-            // if we've consumed the entire string, so I switched the logic to
-            // reflect this.
-            RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
-            CollationElementIterator strIter = collator.getCollationElementIterator(str);
-            CollationElementIterator prefixIter = collator.getCollationElementIterator(prefix);
+        // if (formatter.lenientParseEnabled()) {
+        //     // get the formatter's collator and use it to create two
+        //     // collation element iterators, one over the target string
+        //     // and another over the prefix (right now, we'll throw an
+        //     // exception if the collator we get back from the formatter
+        //     // isn't a RuleBasedCollator, because RuleBasedCollator defines
+        //     // the CollationElementIteratoer protocol.  Hopefully, this
+        //     // will change someday.)
+        //     //
+        //     // Previous code was matching "fifty-" against " fifty" and leaving
+        //     // the number " fifty-7" to parse as 43 (50 - 7).
+        //     // Also it seems that if we consume the entire prefix, that's ok even
+        //     // if we've consumed the entire string, so I switched the logic to
+        //     // reflect this.
+        //     RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
+        //     CollationElementIterator strIter = collator.getCollationElementIterator(str);
+        //     CollationElementIterator prefixIter = collator.getCollationElementIterator(prefix);
 
-            // match collation elements between the strings
-            int oStr = strIter.next();
-            int oPrefix = prefixIter.next();
+        //     // match collation elements between the strings
+        //     int oStr = strIter.next();
+        //     int oPrefix = prefixIter.next();
 
-            while (oPrefix != CollationElementIterator.NULLORDER) {
-                // skip over ignorable characters in the target string
-                while (CollationElementIterator.primaryOrder(oStr) == 0 && oStr !=
-                       CollationElementIterator.NULLORDER) {
-                    oStr = strIter.next();
-                }
+        //     while (oPrefix != CollationElementIterator.NULLORDER) {
+        //         // skip over ignorable characters in the target string
+        //         while (CollationElementIterator.primaryOrder(oStr) == 0 && oStr !=
+        //                CollationElementIterator.NULLORDER) {
+        //             oStr = strIter.next();
+        //         }
 
-                // skip over ignorable characters in the prefix
-                while (CollationElementIterator.primaryOrder(oPrefix) == 0 && oPrefix !=
-                       CollationElementIterator.NULLORDER) {
-                    oPrefix = prefixIter.next();
-                }
+        //         // skip over ignorable characters in the prefix
+        //         while (CollationElementIterator.primaryOrder(oPrefix) == 0 && oPrefix !=
+        //                CollationElementIterator.NULLORDER) {
+        //             oPrefix = prefixIter.next();
+        //         }
 
-                // if skipping over ignorables brought to the end of
-                // the prefix, we DID match: drop out of the loop
-                if (oPrefix == CollationElementIterator.NULLORDER) {
-                    break;
-                }
+        //         // if skipping over ignorables brought to the end of
+        //         // the prefix, we DID match: drop out of the loop
+        //         if (oPrefix == CollationElementIterator.NULLORDER) {
+        //             break;
+        //         }
 
-                // if skipping over ignorables brought us to the end
-                // of the target string, we didn't match and return 0
-                if (oStr == CollationElementIterator.NULLORDER) {
-                    return 0;
-                }
+        //         // if skipping over ignorables brought us to the end
+        //         // of the target string, we didn't match and return 0
+        //         if (oStr == CollationElementIterator.NULLORDER) {
+        //             return 0;
+        //         }
 
-                // match collation elements from the two strings
-                // (considering only primary differences).  If we
-                // get a mismatch, dump out and return 0
-                if (CollationElementIterator.primaryOrder(oStr) != CollationElementIterator.
-                    primaryOrder(oPrefix)) {
-                    return 0;
-                }
-                // otherwise, advance to the next character in each string
-                // and loop (we drop out of the loop when we exhaust
-                // collation elements in the prefix)
+        //         // match collation elements from the two strings
+        //         // (considering only primary differences).  If we
+        //         // get a mismatch, dump out and return 0
+        //         if (CollationElementIterator.primaryOrder(oStr) != CollationElementIterator.
+        //             primaryOrder(oPrefix)) {
+        //             return 0;
+        //         }
+        //         // otherwise, advance to the next character in each string
+        //         // and loop (we drop out of the loop when we exhaust
+        //         // collation elements in the prefix)
 
-                oStr = strIter.next();
-                oPrefix = prefixIter.next();
-            }
+        //         oStr = strIter.next();
+        //         oPrefix = prefixIter.next();
+        //     }
 
-            // we are not compatible with jdk 1.1 any longer
-            int result = strIter.getOffset();
-            if (oStr != CollationElementIterator.NULLORDER) {
-                --result;
-            }
-            return result;
+        //     // we are not compatible with jdk 1.1 any longer
+        //     int result = strIter.getOffset();
+        //     if (oStr != CollationElementIterator.NULLORDER) {
+        //         --result;
+        //     }
+        //     return result;
 
             /*
               //----------------------------------------------------------------
@@ -1162,13 +1167,13 @@ final class NFRule {
 
             // If lenient parsing is turned off, forget all that crap above.
             // Just use String.startsWith() and be done with it.
-        } else {
+        //        } else {
             if (str.startsWith(prefix)) {
                 return prefix.length();
             } else {
                 return 0;
             }
-        }
+        // }
     }
 
     /*
@@ -1206,41 +1211,45 @@ final class NFRule {
     private int[] findText(String str, String key, int startingAt) {
         // if lenient parsing is turned off, this is easy: just call
         // String.indexOf() and we're done
-        if (!formatter.lenientParseEnabled()) {
+        RbnfLenientScanner scanner = formatter.getLenientScanner();
+//        if (!formatter.lenientParseEnabled()) {
+        if (scanner == null) {
             return new int[] { str.indexOf(key, startingAt), key.length() };
 
             // but if lenient parsing is turned ON, we've got some work
             // ahead of us
         } else {
-            //----------------------------------------------------------------
-            // JDK 1.1 HACK (take out of 1.2-specific code)
+            return scanner.findText(str, key, startingAt);
 
-            // in JDK 1.2, CollationElementIterator provides us with an
-            // API to map between character offsets and collation elements
-            // and we can do this by marching through the string comparing
-            // collation elements.  We can't do that in JDK 1.1.  Insted,
-            // we have to go through this horrible slow mess:
-            int p = startingAt;
-            int keyLen = 0;
+            // //----------------------------------------------------------------
+            // // JDK 1.1 HACK (take out of 1.2-specific code)
 
-            // basically just isolate smaller and smaller substrings of
-            // the target string (each running to the end of the string,
-            // and with the first one running from startingAt to the end)
-            // and then use prefixLength() to see if the search key is at
-            // the beginning of each substring.  This is excruciatingly
-            // slow, but it will locate the key and tell use how long the
-            // matching text was.
-            while (p < str.length() && keyLen == 0) {
-                keyLen = prefixLength(str.substring(p), key);
-                if (keyLen != 0) {
-                    return new int[] { p, keyLen };
-                }
-                ++p;
-            }
-            // if we make it to here, we didn't find it.  Return -1 for the
-            // location.  The length should be ignored, but set it to 0,
-            // which should be "safe"
-            return new int[] { -1, 0 };
+            // // in JDK 1.2, CollationElementIterator provides us with an
+            // // API to map between character offsets and collation elements
+            // // and we can do this by marching through the string comparing
+            // // collation elements.  We can't do that in JDK 1.1.  Insted,
+            // // we have to go through this horrible slow mess:
+            // int p = startingAt;
+            // int keyLen = 0;
+
+            // // basically just isolate smaller and smaller substrings of
+            // // the target string (each running to the end of the string,
+            // // and with the first one running from startingAt to the end)
+            // // and then use prefixLength() to see if the search key is at
+            // // the beginning of each substring.  This is excruciatingly
+            // // slow, but it will locate the key and tell use how long the
+            // // matching text was.
+            // while (p < str.length() && keyLen == 0) {
+            //     keyLen = prefixLength(str.substring(p), key);
+            //     if (keyLen != 0) {
+            //         return new int[] { p, keyLen };
+            //     }
+            //     ++p;
+            // }
+            // // if we make it to here, we didn't find it.  Return -1 for the
+            // // location.  The length should be ignored, but set it to 0,
+            // // which should be "safe"
+            // return new int[] { -1, 0 };
 
             //----------------------------------------------------------------
             // JDK 1.2 version of this routine
@@ -1308,24 +1317,32 @@ final class NFRule {
         if (str.length() == 0) {
             return true;
         }
+        RbnfLenientScanner scanner = formatter.getLenientScanner();
+        if (scanner != null) {
+          return scanner.allIgnorable(str);
+        }
+        return false;
 
         // if lenient parsing is turned on, walk through the string with
         // a collation element iterator and make sure each collation
         // element is 0 (ignorable) at the primary level
-        if (formatter.lenientParseEnabled()) {
-            RuleBasedCollator collator = (RuleBasedCollator)(formatter.getCollator());
-            CollationElementIterator iter = collator.getCollationElementIterator(str);
+        //        if (formatter.lenientParseEnabled()) {
+          // {dlf}
+        //return false;
+            // RuleBasedCollator collator = (RuleBasedCollator)(formatter.getCollator());
+            // CollationElementIterator iter = collator.getCollationElementIterator(str);
 
-            int o = iter.next();
-            while (o != CollationElementIterator.NULLORDER
-                   && CollationElementIterator.primaryOrder(o) == 0) {
-                o = iter.next();
-            }
-            return o == CollationElementIterator.NULLORDER;
+            // int o = iter.next();
+            // while (o != CollationElementIterator.NULLORDER
+            //        && CollationElementIterator.primaryOrder(o) == 0) {
+            //     o = iter.next();
+            // }
+            // return o == CollationElementIterator.NULLORDER;
+
             // if lenient parsing is turned off, there is no such thing as
             // an ignorable character: return true only if the string is empty
-        } else {
-            return false;
-        }
+        // } else {
+        //     return false;
+        // }
     }
 }

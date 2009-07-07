@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,11 +12,12 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import java.text.Collator;
+import java.text.RuleBasedCollator;
+
 import com.ibm.icu.dev.test.util.CollectionUtilities.MultiComparator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -39,10 +40,13 @@ public class PrettyPrinter {
     private Transliterator quoter = null;
     
     private Comparator ordering;
-    private Comparator spaceComp = Collator.getInstance(ULocale.ROOT);
+    private Comparator spaceComp;
     {
-        setOrdering(Collator.getInstance(ULocale.ROOT));
-        ((RuleBasedCollator)spaceComp).setStrength(RuleBasedCollator.PRIMARY);
+        Collator col = Collator.getInstance(ULocale.ROOT.toLocale());
+        col.setStrength(Collator.PRIMARY);
+        spaceComp = col;
+
+        setOrdering(Collator.getInstance(ULocale.ROOT.toLocale()));
     }
     
     public Transliterator getQuoter() {

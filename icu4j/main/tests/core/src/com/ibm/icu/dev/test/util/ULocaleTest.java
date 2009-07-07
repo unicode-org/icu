@@ -20,7 +20,6 @@ import java.util.TreeMap;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -110,21 +109,6 @@ public class ULocaleTest extends TestFmwk {
                     }
                     public boolean unregister(Object key) {
                         return BreakIterator.unregister(key);
-                    }
-                });
-    }
-
-    public void TestCollator() {
-        checkService("ja_JP_YOKOHAMA", new ServiceFacade() {
-                public Object create(ULocale req) {
-                    return Collator.getInstance(req);
-                }
-            }, null, new Registrar() {
-                    public Object register(ULocale loc, Object prototype) {
-                        return Collator.registerInstance((Collator) prototype, loc);
-                    }
-                    public boolean unregister(Object key) {
-                        return Collator.unregister(key);
                     }
                 });
     }

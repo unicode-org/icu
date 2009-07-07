@@ -26,14 +26,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 //          if (service.isDefault()) {
 //              return new RuleBasedCollator(locale);
 //          }
+
         try {
             ULocale[] actualLoc = new ULocale[1];
             Collator coll = (Collator)service.get(locale, actualLoc);
             if (coll == null) {
-                ///CLOVER:OFF
-                //Can't really change coll after it's been initialized
                 throw new MissingResourceException("Could not locate Collator data", "", "");
-                ///CLOVER:ON
             }
             coll = (Collator) coll.clone();
             coll.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
@@ -55,7 +53,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             CollatorFactory delegate;
 
             CFactory(CollatorFactory fctry) {
-                super(fctry.visible()); 
+                super(fctry.visible());
                 this.delegate = fctry;
             }
 
@@ -63,7 +61,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 Object coll = delegate.createCollator(loc);
                 return coll;
             }
-                
+
             public String getDisplayName(String id, ULocale displayLocale) {
                 ULocale objectLocale = new ULocale(id);
                 return delegate.getDisplayName(objectLocale, displayLocale);
@@ -83,17 +81,25 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     Locale[] getAvailableLocales() {
         // TODO rewrite this to just wrap getAvailableULocales later
+        Locale[] result;
         if (service.isDefault()) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
+            ClassLoader cl = getClass().getClassLoader();
+            result = ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+        } else {
+            result = service.getAvailableLocales();
         }
-        return service.getAvailableLocales();
+        return result;
     }
 
     ULocale[] getAvailableULocales() {
+        ULocale[] result;
         if (service.isDefault()) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
+            ClassLoader cl = getClass().getClassLoader();
+            result = ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+        } else {
+            result = service.getAvailableULocales();
         }
-        return service.getAvailableULocales();
+        return result;
     }
 
     String getDisplayName(ULocale objectLocale, ULocale displayLocale) {

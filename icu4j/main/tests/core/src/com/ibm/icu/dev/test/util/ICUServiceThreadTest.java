@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,9 +12,10 @@ import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
 
+// use java collator to remove test dependency on ICU collator
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +32,7 @@ import java.util.Set;
 import java.util.SortedMap;
 
 public class ICUServiceThreadTest extends TestFmwk
-{    
+{
     private static final boolean PRINTSTATS = false;
 
     public static void main(String[] args) throws Exception {
@@ -42,7 +43,7 @@ public class ICUServiceThreadTest extends TestFmwk
         // getvisibleids
         // getdisplayname(locale)
         // factories
-    
+
         // registerFactory
         // unregisterFactory
 
@@ -83,15 +84,15 @@ public class ICUServiceThreadTest extends TestFmwk
     public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
         Collator col;
         try {
-            col = Collator.getInstance(locale);
-        } 
+            col = Collator.getInstance(locale.toLocale());
+        }
         catch (MissingResourceException e) {
             // if no collator resources, we can't collate
             col = null;
         }
         return service.getDisplayNames(locale, col, null);
     }
-    private static final Random r = new Random(); // this is a multi thread test, can't 'unrandomize' 
+    private static final Random r = new Random(); // this is a multi thread test, can't 'unrandomize'
 
     private static String getCLV() {
         String c = countries[r.nextInt(countries.length)];
@@ -219,7 +220,7 @@ public class ICUServiceThreadTest extends TestFmwk
 
         UnregisterFactoryThread(String name, ICUService service, long delay, TestLog log) {
             super("UNREG " + name, service, delay, log);
-        
+
             r = new Random();
             factories = service.factories();
         }
@@ -243,7 +244,7 @@ public class ICUServiceThreadTest extends TestFmwk
 
         UnregisterFactoryListThread(String name, ICUService service, long delay, Factory[] factories, TestLog log) {
             super("UNREG " + name, service, delay, log);
-        
+
             this.factories = factories;
         }
 
@@ -297,11 +298,11 @@ public class ICUServiceThreadTest extends TestFmwk
                 // below on IBM JRE5 for AIX 64bit.  For some reason, converting
                 // int to String out of this statement resolves the issue.
 
-                //log.logln(" iter: " + n + 
+                //log.logln(" iter: " + n +
                 String num = Integer.toString(n);
-                log.logln(" iter: " + num + 
-                          " dname: " + dname + 
-                          " id: " + id + 
+                log.logln(" iter: " + num +
+                          " dname: " + dname +
+                          " id: " + id +
                           " result: " + result);
             }
         }
@@ -400,8 +401,8 @@ public class ICUServiceThreadTest extends TestFmwk
         };
         for(int i = 0; i < localeNames.length; ++i) {
             String locale = localeNames[i];
-            new GetDisplayThread("[" + locale + "]",  
-                                 stableService(), 
+            new GetDisplayThread("[" + locale + "]",
+                                 stableService(),
                                  0,
                                  new ULocale(locale),
                                  this).start();
@@ -422,7 +423,7 @@ public class ICUServiceThreadTest extends TestFmwk
         runThreads();
         if (PRINTSTATS) System.out.println(service.stats());
     }
-    
+
     public void Test04_WitheringService() {
         ICUService service = new ICULocaleService();
 
@@ -443,7 +444,7 @@ public class ICUServiceThreadTest extends TestFmwk
         runThreads(2000);
         if (PRINTSTATS) System.out.println(service.stats());
     }
-    
+
     // "all hell breaks loose"
     // one register and one unregister thread, delay 500ms
     // two display threads with different locales, delay 500ms;
@@ -466,8 +467,8 @@ public class ICUServiceThreadTest extends TestFmwk
         };
         for(int i = 0; i < localeNames.length; ++i) {
             String locale = localeNames[i];
-            new GetDisplayThread("[" + locale + "]",  
-                                 stableService(), 
+            new GetDisplayThread("[" + locale + "]",
+                                 stableService(),
                                  500,
                                  new ULocale(locale),
                                  this).start();

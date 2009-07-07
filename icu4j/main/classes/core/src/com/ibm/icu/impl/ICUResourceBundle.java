@@ -151,6 +151,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @internal ICU 3.0
      */
     public static final ULocale getFunctionalEquivalent(String baseName,
+                                                        ClassLoader loader,
             String resName, String keyword, ULocale locID,
             boolean isAvailable[], boolean omitDefault) {
         String kwVal = locID.getKeywordValue(keyword);
@@ -175,7 +176,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
         if (isAvailable != null) {
             isAvailable[0] = false;
-            ULocale[] availableULocales = getAvailEntry(baseName).getULocaleList();
+            ULocale[] availableULocales = getAvailEntry(baseName, loader).getULocaleList();
             for (int i = 0; i < availableULocales.length; i++) {
                 if (parent.equals(availableULocales[i])) {
                     isAvailable[0] = true;
@@ -362,8 +363,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
-    public static Set<String> getAvailableLocaleNameSet(String bundlePrefix) {
-        return getAvailEntry(bundlePrefix).getLocaleNameSet();
+    public static Set<String> getAvailableLocaleNameSet(String bundlePrefix, ClassLoader loader) {
+        return getAvailEntry(bundlePrefix, loader).getLocaleNameSet();
     }
 
     /**
@@ -371,7 +372,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * resource bundles.
      */
     public static Set<String> getFullLocaleNameSet() {
-        return getFullLocaleNameSet(ICU_BASE_NAME);
+        return getFullLocaleNameSet(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
@@ -380,8 +381,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
-    public static Set<String> getFullLocaleNameSet(String bundlePrefix) {
-        return getAvailEntry(bundlePrefix).getFullLocaleNameSet();
+    public static Set<String> getFullLocaleNameSet(String bundlePrefix, ClassLoader loader) {
+        return getAvailEntry(bundlePrefix, loader).getFullLocaleNameSet();
     }
 
     /**
@@ -389,15 +390,15 @@ public  class ICUResourceBundle extends UResourceBundle {
      * bundles.
      */
     public static Set<String> getAvailableLocaleNameSet() {
-        return getAvailableLocaleNameSet(ICU_BASE_NAME);
+        return getAvailableLocaleNameSet(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
      * Get the set of Locales installed in the specified bundles.
      * @return the list of available locales
      */
-    public static final ULocale[] getAvailableULocales(String baseName) {
-        return getAvailEntry(baseName).getULocaleList();
+    public static final ULocale[] getAvailableULocales(String baseName, ClassLoader loader) {
+        return getAvailEntry(baseName, loader).getULocaleList();
     }
 
     /**
@@ -405,15 +406,15 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the list of available locales
      */
     public static final ULocale[] getAvailableULocales() {
-        return getAvailableULocales(ICU_BASE_NAME);
+        return getAvailableULocales(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
      * Get the set of Locales installed in the specified bundles.
      * @return the list of available locales
      */
-    public static final Locale[] getAvailableLocales(String baseName) {
-        return getAvailEntry(baseName).getLocaleList();
+    public static final Locale[] getAvailableLocales(String baseName, ClassLoader loader) {
+        return getAvailEntry(baseName, loader).getLocaleList();
     }
 
    /**
@@ -421,7 +422,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the list of available locales
      */
     public static final Locale[] getAvailableLocales() {
-        return getAvailEntry(ICU_BASE_NAME).getLocaleList();
+        return getAvailEntry(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER).getLocaleList();
     }
 
     /**
@@ -488,8 +489,8 @@ public  class ICUResourceBundle extends UResourceBundle {
         return locales;
     }
 
-    private static final Locale[] createLocaleList(String baseName) {
-        ULocale[] ulocales = getAvailEntry(baseName).getULocaleList();
+    private static final Locale[] createLocaleList(String baseName, ClassLoader loader) {
+        ULocale[] ulocales = getAvailEntry(baseName, loader).getULocaleList();
         return getLocaleList(ulocales);
     }
 
@@ -539,19 +540,28 @@ public  class ICUResourceBundle extends UResourceBundle {
                         // swallow it
                     }
 
-                    URL url = root.getResource(bn);
-                    URLHandler handler = URLHandler.get(url);
-                    if (handler != null) {
+                    try {
+                        Enumeration<URL> urls = root.getResources(bn);
                         final List<String> lst = new ArrayList<String>();
-                        URLVisitor v = new URLVisitor() {
-                            public void visit(String s) {
-                                if (s.endsWith(".res") && !"res_index.res".equals(s)) {
-                                    lst.add(s.substring(0, s.length() - 4)); // strip '.res'
-                                }
+                        while (urls.hasMoreElements()) {
+                            URL url = urls.nextElement();
+                            URLHandler handler = URLHandler.get(url);
+                            if (handler != null) {
+                                URLVisitor v = new URLVisitor() {
+                                        public void visit(String s) {
+                                            if (s.endsWith(".res") && !"res_index.res".equals(s)) {
+                                                lst.add(s.substring(0, s.length() - 4)); // strip '.res'
+                                            }
+                                        }
+                                    };
+                                handler.guide(v, false);
+                            } else {
+                                System.out.println("handler for " + url + " is null");
                             }
-                        };
-                        handler.guide(v, false);
+                        }
                         return lst;
+                    } catch (IOException e) {
+                        System.out.println("ouch: " + e.getMessage());
                     }
 
                     return null;
@@ -561,8 +571,8 @@ public  class ICUResourceBundle extends UResourceBundle {
         return list;
     }
 
-    private static Set<String> createFullLocaleNameSet(String baseName) {
-        List<String> list = createFullLocaleNameArray(baseName,ICU_DATA_CLASS_LOADER);
+    private static Set<String> createFullLocaleNameSet(String baseName, ClassLoader loader) {
+        List<String> list = createFullLocaleNameArray(baseName, loader);
         HashSet<String> set = new HashSet<String>();
         if(list == null){
             throw new MissingResourceException("Could not find "+  ICU_RESOURCE_INDEX, "", "");
@@ -571,9 +581,9 @@ public  class ICUResourceBundle extends UResourceBundle {
         return Collections.unmodifiableSet(set);
     }
 
-    private static Set<String> createLocaleNameSet(String baseName) {
+    private static Set<String> createLocaleNameSet(String baseName, ClassLoader loader) {
         try {
-            String[] locales = createLocaleNameArray(baseName, ICU_DATA_CLASS_LOADER);
+            String[] locales = createLocaleNameArray(baseName, loader);
 
             HashSet<String> set = new HashSet<String>();
             set.addAll(Arrays.asList(locales));
@@ -593,36 +603,38 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     private static final class AvailEntry {
         private String prefix;
+        private ClassLoader loader;
         private ULocale[] ulocales;
         private Locale[] locales;
         private Set<String> nameSet;
         private Set<String> fullNameSet;
 
-        AvailEntry(String prefix) {
+        AvailEntry(String prefix, ClassLoader loader) {
             this.prefix = prefix;
+            this.loader = loader;
         }
 
         ULocale[] getULocaleList() {
             if (ulocales == null) {
-                ulocales = createULocaleList(prefix, ICU_DATA_CLASS_LOADER);
+                ulocales = createULocaleList(prefix, loader);
             }
             return ulocales;
         }
         Locale[] getLocaleList() {
             if (locales == null) {
-                locales = createLocaleList(prefix);
+              locales = createLocaleList(prefix, loader);
             }
             return locales;
         }
         Set<String> getLocaleNameSet() {
             if (nameSet == null) {
-                nameSet = createLocaleNameSet(prefix);
+              nameSet = createLocaleNameSet(prefix, loader);
             }
             return nameSet;
         }
         Set<String> getFullLocaleNameSet() {
             if (fullNameSet == null) {
-                fullNameSet = createFullLocaleNameSet(prefix);
+              fullNameSet = createFullLocaleNameSet(prefix, loader);
             }
             return fullNameSet;
         }
@@ -633,7 +645,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * The cached objects are AvailEntries. The cache is held by a SoftReference
      * so it can be GC'd.
      */
-    private static AvailEntry getAvailEntry(String key) {
+  private static AvailEntry getAvailEntry(String key, ClassLoader loader) {
         AvailEntry ae = null;
         Map<String, AvailEntry> lcache = null;
         if (GET_AVAILABLE_CACHE != null) {
@@ -644,7 +656,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
 
         if (ae == null) {
-            ae = new AvailEntry(key);
+          ae = new AvailEntry(key, loader);
             if (lcache == null) {
                 lcache = new HashMap<String, AvailEntry>();
                 lcache.put(key, ae);

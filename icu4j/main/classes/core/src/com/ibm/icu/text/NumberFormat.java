@@ -915,7 +915,7 @@ public abstract class NumberFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales();
         }
         return getShim().getAvailableLocales();
     }
@@ -928,7 +928,7 @@ public abstract class NumberFormat extends UFormat {
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales();
         } 
         return getShim().getAvailableULocales();
     }

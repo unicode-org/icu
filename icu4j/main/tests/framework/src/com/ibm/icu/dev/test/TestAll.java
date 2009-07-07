@@ -20,6 +20,7 @@ public class TestAll extends TestGroup {
     public TestAll() {
         super(
               new String[] {
+                  "com.ibm.icu.dev.test.TestAllCollate",
                   "com.ibm.icu.dev.test.TestAllCore",
                   "com.ibm.icu.dev.test.charset.TestAll",
               },

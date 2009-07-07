@@ -29,6 +29,7 @@
     <target name="copy-data" description="Extract pre-built ICU core data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
             <patternset>
+	        <exclude name="**/coll/*"/>
                 <exclude name="**/*.cnv"/>
                 <exclude name="**/convalias.icu"/>
             </patternset>

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -45,7 +45,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
     public Locale[] getAvailableLocales() {
         if (service == null) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales();
         } else {
             return service.getAvailableLocales();
         }
@@ -53,7 +53,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
     public ULocale[] getAvailableULocales() {
         if (service == null) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales();
         } else {
             return service.getAvailableULocales();
         }

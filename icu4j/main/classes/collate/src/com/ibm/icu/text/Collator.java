@@ -329,7 +329,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
 
     /**
      * A factory used with registerFactory to register multiple collators and provide
-     * display names for them.  If standard locale display names are sufficient, 
+     * display names for them.  If standard locale display names are sufficient,
      * Collator instances may be registered instead.
      * <p><b>Note:</b> as of ICU4J 3.2, the default API for CollatorFactory uses
      * ULocale instead of Locale.  Instead of overriding createCollator(Locale),
@@ -411,7 +411,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         }
 
         /**
-         * Return an unmodifiable collection of the locale names directly 
+         * Return an unmodifiable collection of the locale names directly
          * supported by this factory.
          *
          * @return the set of supported locale IDs.
@@ -436,7 +436,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         abstract ULocale[] getAvailableULocales();
         abstract String getDisplayName(ULocale ol, ULocale dl);
     }
-    
+
     private static ServiceShim shim;
     private static ServiceShim getShim() {
         // Note: this instantiation is safe on loose-memory-model configurations
@@ -549,7 +549,8 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public static Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
+            ClassLoader cl = Collator.class.getClassLoader();
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
         }
         return shim.getAvailableLocales();
     }
@@ -564,11 +565,12 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
+            ClassLoader cl = Collator.class.getClassLoader();
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
         }
         return shim.getAvailableULocales();
     }
-    
+
     /**
      * The list of keywords for this service.  This must be kept in sync with
      * the resource data.
@@ -600,7 +602,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public static final String[] getKeywords() {
         return KEYWORDS;
     }
-    
+
     /**
      * Given a keyword, return an array of all values for
      * that keyword that are currently in use.
@@ -693,7 +695,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @param locID The requested locale
      * @param isAvailable If non-null, isAvailable[0] will receive and
      * output boolean that indicates whether the requested locale was
-     * 'available' to the collation service. If non-null, isAvailable 
+     * 'available' to the collation service. If non-null, isAvailable
      * must have length >= 1.
      * @return the locale
      * @stable ICU 3.0
@@ -701,10 +703,11 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public static final ULocale getFunctionalEquivalent(String keyword,
                                                         ULocale locID,
                                                         boolean isAvailable[]) {
-        return ICUResourceBundle.getFunctionalEquivalent(
-                                                         BASE, RESOURCE, keyword, locID, isAvailable, true);
+        ClassLoader cl = Collator.class.getClassLoader();
+        return ICUResourceBundle.getFunctionalEquivalent(BASE, cl, RESOURCE,
+                                                         keyword, locID, isAvailable, true);
     }
-    
+
     /**
      * Return the functionally equivalent locale for the given
      * requested locale, with respect to given keyword, for the
@@ -720,7 +723,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
                                                         ULocale locID) {
         return getFunctionalEquivalent(keyword, locID, null);
     }
-    
+
     /**
      * Get the name of the collator for the objectLocale, localized for the displayLocale.
      * @param objectLocale the locale of the collator
@@ -729,7 +732,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @stable ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
-        return getShim().getDisplayName(ULocale.forLocale(objectLocale), 
+        return getShim().getDisplayName(ULocale.forLocale(objectLocale),
                                         ULocale.forLocale(displayLocale));
     }
 
@@ -889,64 +892,64 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @stable ICU 2.8
      */
     public abstract CollationKey getCollationKey(String source);
-    
+
     /**
      * Gets the simpler form of a CollationKey for the String source following
-     * the rules of this Collator and stores the result into the user provided 
-     * argument key. 
-     * If key has a internal byte array of length that's too small for the 
-     * result, the internal byte array will be grown to the exact required 
+     * the rules of this Collator and stores the result into the user provided
+     * argument key.
+     * If key has a internal byte array of length that's too small for the
+     * result, the internal byte array will be grown to the exact required
      * size.
-     * @param source the text String to be transformed into a RawCollationKey  
-     * @return If key is null, a new instance of RawCollationKey will be 
-     *         created and returned, otherwise the user provided key will be 
+     * @param source the text String to be transformed into a RawCollationKey
+     * @return If key is null, a new instance of RawCollationKey will be
+     *         created and returned, otherwise the user provided key will be
      *         returned.
      * @see #compare(String, String)
-     * @see #getCollationKey 
+     * @see #getCollationKey
      * @see RawCollationKey
      * @stable ICU 2.8
      */
-    public abstract RawCollationKey getRawCollationKey(String source, 
+    public abstract RawCollationKey getRawCollationKey(String source,
                                                        RawCollationKey key);
 
-    /** 
+    /**
      * <p>
-     * Variable top is a two byte primary value which causes all the codepoints 
-     * with primary values that are less or equal than the variable top to be 
+     * Variable top is a two byte primary value which causes all the codepoints
+     * with primary values that are less or equal than the variable top to be
      * shifted when alternate handling is set to SHIFTED.
      * </p>
      * <p>
      * Sets the variable top to a collation element value of a string supplied.
-     * </p> 
-     * @param varTop one or more (if contraction) characters to which the 
+     * </p>
+     * @param varTop one or more (if contraction) characters to which the
      *               variable top should be set
      * @return a int value containing the value of the variable top in upper 16
      *         bits. Lower 16 bits are undefined.
-     * @exception IllegalArgumentException is thrown if varTop argument is not 
-     *            a valid variable top element. A variable top element is 
+     * @exception IllegalArgumentException is thrown if varTop argument is not
+     *            a valid variable top element. A variable top element is
      *            invalid when it is a contraction that does not exist in the
-     *            Collation order or when the PRIMARY strength collation 
+     *            Collation order or when the PRIMARY strength collation
      *            element for the variable top has more than two bytes
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @stable ICU 2.6
      */
     public abstract int setVariableTop(String varTop);
-    
-    /** 
-     * Gets the variable top value of a Collator. 
+
+    /**
+     * Gets the variable top value of a Collator.
      * Lower 16 bits are undefined and should be ignored.
      * @return the variable top value of a Collator.
      * @see #setVariableTop
      * @stable ICU 2.6
      */
     public abstract int getVariableTop();
-    
-    /** 
+
+    /**
      * Sets the variable top to a collation element value supplied.
-     * Variable top is set to the upper 16 bits. 
+     * Variable top is set to the upper 16 bits.
      * Lower 16 bits are ignored.
-     * @param varTop Collation element value, as returned by setVariableTop or 
+     * @param varTop Collation element value, as returned by setVariableTop or
      *               getVariableTop
      * @see #getVariableTop
      * @see #setVariableTop
@@ -954,20 +957,20 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public abstract void setVariableTop(int varTop);
 
-    /** 
+    /**
      * Get the version of this collator object.
      * @return the version object associated with this collator
      * @stable ICU 2.8
      */
     public abstract VersionInfo getVersion();
-        
-    /** 
+
+    /**
      * Get the UCA version of this collator object.
      * @return the version object associated with this collator
      * @stable ICU 2.8
      */
     public abstract VersionInfo getUCAVersion();
-        
+
     // protected constructor -------------------------------------------------
 
     /**
@@ -977,7 +980,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     protected Collator()
     {
     }
-    
+
     // package private methods -----------------------------------------------
 
     // private data members --------------------------------------------------
@@ -991,11 +994,11 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * Decomposition mode
      */
     private int m_decomposition_ = CANONICAL_DECOMPOSITION;
-    
+
     private static final boolean DEBUG = ICUDebug.enabled("collator");
-    
+
     // private methods -------------------------------------------------------
-    
+
     // end registry stuff
 
     // -------- BEGIN ULocale boilerplate --------
