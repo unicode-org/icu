@@ -166,9 +166,6 @@ public class DecompressionTest extends TestFmwk {
             ud.decompress(null, 0, 0, null, charValid, 0, 1);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
-        
-        
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,10 @@ package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.DictionaryBasedBreakIterator;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;
@@ -23,7 +27,6 @@ public class BreakIteratorTest extends TestFmwk
     public static void main(String[] args) throws Exception {
         new BreakIteratorTest().run(args);
     }
-
     public BreakIteratorTest()
     {
 
@@ -842,5 +845,41 @@ public class BreakIteratorTest extends TestFmwk
             errln("ERR: Failed to create an instance type: " + type + " / locale: " + loc + " / exception: " + e.getMessage());
         }
     }
-}
+    
+    /* Tests the constructors
+     *      public DictionaryBasedBreakIterator(String rules, ...
+     *      public DictionaryBasedBreakIterator(InputStream compiledRules, ...
+     */
+    public void TestDictionaryBasedBreakIterator() throws IOException{
+        // The following class allows the testing of the constructor
+        //      public DictionaryBasedBreakIterator(String rules, ...
+        class TestDictionaryBasedBreakIterator extends DictionaryBasedBreakIterator{
+            public TestDictionaryBasedBreakIterator() throws IOException{
+                super("",null);
+            }
+        }
+        try{
+            @SuppressWarnings("unused")
+            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator();
+            errln("DictionaryBasedBreakIterator constructor is suppose to return an " +
+                    "exception for an empty string.");
+        } catch(Exception e){}
 
+        // The following class allows the testing of the constructor
+        //      public DictionaryBasedBreakIterator(InputStream compiledRules, ...
+        class TestDictionaryBasedBreakIterator1 extends DictionaryBasedBreakIterator{
+            public TestDictionaryBasedBreakIterator1() throws IOException{
+                super((InputStream)null,null);
+            }
+            
+        }
+        try{
+            @SuppressWarnings("unused")
+            TestDictionaryBasedBreakIterator1 td1 = new TestDictionaryBasedBreakIterator1();
+            errln("DictionaryBasedBreakIterator constructor is suppose to return an " +
+            "exception for an null input stream.");
+        } catch(Exception e){}
+        
+        
+    }
+}
