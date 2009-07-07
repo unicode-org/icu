@@ -26,12 +26,14 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 //          if (service.isDefault()) {
 //              return new RuleBasedCollator(locale);
 //          }
-
         try {
             ULocale[] actualLoc = new ULocale[1];
             Collator coll = (Collator)service.get(locale, actualLoc);
             if (coll == null) {
+                ///CLOVER:OFF
+                //Can't really change coll after it's been initialized
                 throw new MissingResourceException("Could not locate Collator data", "", "");
+                ///CLOVER:ON
             }
             coll = (Collator) coll.clone();
             coll.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
