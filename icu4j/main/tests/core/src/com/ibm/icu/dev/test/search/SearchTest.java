@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -885,6 +885,17 @@ public class SearchTest extends TestFmwk {
         if (!assertEqualWithStringSearch(strsrch, COLLATOR[0])) {
            errln("Error searching collator test");
         }
+        
+        /* Tests the method
+         *      public void setCollator(RuleBasedCollator collator) 
+         */
+        // Tests when "if (collator == null)" is true
+        try{
+            StringSearch ss = new StringSearch(CONTRACTIONRULE, CONTRACTIONRULE);
+            ss.setCollator(null);
+            errln("StringSearch.setCollator(RuleBasedCollator collator) was " +
+                    "suppose to return an exception for a null RuleBasedCollator");
+        } catch(Exception e){}
     }
 
     public void TestCollatorCanonical() {
@@ -1648,6 +1659,22 @@ public class SearchTest extends TestFmwk {
         if (strsrch != null) {
             strsrch = null;
         }
+        
+        /* Tests the method
+         *      public void setPattern(String pattern) 
+         */
+        // Tests when "if (pattern == null || pattern.length() <= 0)" is true
+        StringSearch ss = new StringSearch(IGNORABLERULE, IGNORABLERULE);
+        try{
+            ss.setPattern(null);
+            errln("StringSearch.setPattern(String pattern) is suppose to " +
+                    "return an exception for a null parameter.");
+        } catch(Exception e){}
+        try{
+            ss.setPattern("");
+            errln("StringSearch.setPattern(String pattern) is suppose to " +
+                    "return an exception for an empty string parameter.");
+        } catch(Exception e){}
     }
 
     public void TestPatternCanonical() {

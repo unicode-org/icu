@@ -22,6 +22,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.ULocale;
@@ -1023,5 +1024,108 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (Exception e) {
             errln("FAIL: Exception - " + e.getClass().getName());
         }
+    }
+    
+    /* Tests the method
+     *      public boolean equals(Object a)
+     */
+    public void TestDateIntervalInfoEquals(){
+        // Tests when "if ( a instanceof PatternInfo )" is false
+        DateIntervalInfo diia = new DateIntervalInfo();
+        if(diia.equals("dummy") != false){
+            errln("DateIntervalInfo.equals(Object a) was suppose to return " +
+                    "false for a String object.");
+        }
+        if(diia.equals(0) != false){
+            errln("DateIntervalInfo.equals(Object a) was suppose to return " +
+                    "false for an Integer object.");
+        }
+        if(diia.equals(0.0) != false){
+            errln("DateIntervalInfo.equals(Object a) was suppose to return " +
+                    "false for an Integer object.");
+        }
+        if(diia.equals(new Object()) != false){
+            errln("DateIntervalInfo.equals(Object a) was suppose to return " +
+                    "false for an Integer object.");
+        }
+    }
+    
+    /* Tests the method
+     *      public Object cloneAsThawed()
+     */
+    public void TestCloseAsThawed(){
+        DateIntervalInfo dii = new DateIntervalInfo();
+        try{
+            dii.cloneAsThawed();
+        } catch(Exception e){
+            errln("DateIntervalInfo.closeAsThawed() was not suppose to return " +
+                    "an exception.");
+        }
+    }
+    
+    /* Tests the method
+     *      public boolean isFrozen()
+     */
+    public void TestIsFrozen(){
+        DateIntervalInfo dii = new DateIntervalInfo();
+        if(dii.isFrozen() != false){
+            errln("DateIntervalInfo.isFrozen() is suppose to return false.");
+        }
+        dii.freeze();
+        
+        if(dii.isFrozen() != true){
+            errln("DateIntervalInfo.isFrozen() is suppose to return true.");
+        }
+    }
+    
+    /* Tests the method
+     *      public boolean clone()
+     */
+    public void TestClone(){
+        DateIntervalInfo dii = new DateIntervalInfo(new ULocale("en_US"));
+        DateIntervalInfo dii_clone = (DateIntervalInfo) dii.clone();
+        dii_clone.freeze();
+        
+        // Tests when "if ( frozen )" is true
+        if(!dii.equals(dii_clone)){
+            errln("DateIntervalInfo.clone() is suppose to return true for " +
+                    "an original DateIntervalInfo object and a clone of the " +
+                    "original DateIntervalInfo object.");
+        }
+    }
+    
+    /* Tests the method
+     *      public void setFallbackIntervalPattern(String fallbackPattern)
+     */
+    public void TestSetFallbackIntervalPattern(){
+        DateIntervalInfo dii = new DateIntervalInfo(new ULocale("en_US"));
+        // Tests when "if ( frozen )" is true
+        try{
+            dii.freeze();
+            dii.setFallbackIntervalPattern("");
+            errln("DateIntervalInfo.setFallbackIntervalPattern(String fallbackPattern) " +
+                    "was suppose to return an exception for a frozen object.");
+        } catch (Exception e){}
+        
+        // Tests when "if ( firstPatternIndex == -1 || secondPatternIndex == -1 )" is true
+        dii = (DateIntervalInfo) dii.cloneAsThawed();
+        try{
+            dii.setFallbackIntervalPattern("");
+            errln("DateIntervalInfo.setFallbackIntervalPattern(String fallbackPattern) " +
+                    "was suppose to return an exception for a string object of ''.");
+        } catch(Exception e){}
+        
+        try{
+            dii.setFallbackIntervalPattern("0");
+            errln("DateIntervalInfo.setFallbackIntervalPattern(String fallbackPattern) " +
+                    "was suppose to return an exception for a string object of 0.");
+        } catch(Exception e){}
+        
+        // Tests when "if ( firstPatternIndex > secondPatternIndex )" is true
+        dii.setFallbackIntervalPattern("{1}{0}");
+        if(dii.getDefaultOrder() != true)
+            errln("DateIntervalInfo.setFallbackIntervalPattern(String fallbackPattern) " +
+                    "was suppose to change the variable 'fFirstDateInPtnIsLaterDate' " +
+                    "to true.");
     }
 }

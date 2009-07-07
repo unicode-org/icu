@@ -764,7 +764,9 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             other.frozen = false;
             return other;
         } catch ( CloneNotSupportedException e ) {
+            ///CLOVER:OFF
             throw new  IllegalStateException("clone is not supported");
+            ///CLOVER:ON
         }
     }
 
