@@ -1032,19 +1032,19 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestDateIntervalInfoEquals(){
         // Tests when "if ( a instanceof PatternInfo )" is false
         DateIntervalInfo diia = new DateIntervalInfo();
-        if(!diia.equals("dummy")){
+        if(diia.equals("dummy")){
             errln("DateIntervalInfo.equals(Object a) was suppose to return " +
                     "false for a String object.");
         }
-        if(!diia.equals(0)){
+        if(diia.equals(0)){
             errln("DateIntervalInfo.equals(Object a) was suppose to return " +
                     "false for an Integer object.");
         }
-        if(!diia.equals(0.0)){
+        if(diia.equals(0.0)){
             errln("DateIntervalInfo.equals(Object a) was suppose to return " +
                     "false for an Integer object.");
         }
-        if(!diia.equals(new Object())){
+        if(diia.equals(new Object())){
             errln("DateIntervalInfo.equals(Object a) was suppose to return " +
                     "false for an Integer object.");
         }
@@ -1191,19 +1191,19 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestPattternInfoEquals(){
         // Tests when "if ( a instanceof PatternInfo )" is false
         PatternInfo pi = new PatternInfo("","", false);
-        if(!pi.equals(new Object())){
+        if(pi.equals(new Object())){
             errln("PatternInfo.equals(Object) is suppose to return false " +
                     "when it is not an instance of PatternInfo.");
         }
-        if(!pi.equals("")){
+        if(pi.equals("")){
             errln("PatternInfo.equals(Object) is suppose to return false " +
                     "when it is not an instance of PatternInfo.");
         }
-        if(!pi.equals(0)){
+        if(pi.equals(0)){
             errln("PatternInfo.equals(Object) is suppose to return false " +
                     "when it is not an instance of PatternInfo.");
         }
-        if(!pi.equals(0.0)){
+        if(pi.equals(0.0)){
             errln("PatternInfo.equals(Object) is suppose to return false " +
                     "when it is not an instance of PatternInfo.");
         }
