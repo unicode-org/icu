@@ -3,6 +3,7 @@
 	<name>icu4j-localespi</name>
 	<comment></comment>
 	<projects>
+		<project>icu4j-collate</project>
 		<project>icu4j-core</project>
 		<project>icu4j-shared</project>
 	</projects>

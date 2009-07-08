@@ -16,10 +16,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="icu4j-charset-tests"/>
 <mapAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTIES">
 <mapEntry key="eclipse.running" value="true"/>
-<mapEntry key="eclipse.pdebuild.templates" value="/C:/eclipse-SDK-3.4.1-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/templates/"/>
-<mapEntry key="eclipse.home" value="C:\eclipse-SDK-3.4.1-win32\eclipse"/>
-<mapEntry key="eclipse.pdebuild.home" value="/C:/eclipse-SDK-3.4.1-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/./"/>
-<mapEntry key="eclipse.pdebuild.scripts" value="/C:/eclipse-SDK-3.4.1-win32/eclipse/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/"/>
+<mapEntry key="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
 </mapAttribute>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTY_FILES" value="${workspace_loc:/icu4j-shared/build/locations-eclipse.properties},"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/icu4j-charset-tests/build.xml}"/>

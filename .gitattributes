@@ -1210,6 +1210,10 @@ icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/charset/manifest.stub -text
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
+icu4j/main/classes/collate/.classpath -text
+icu4j/main/classes/collate/.project -text
+icu4j/main/classes/collate/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/classes/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/collate/collate-build.launch -text
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
@@ -1247,6 +1251,10 @@ icu4j/main/tests/charset/.classpath -text
 icu4j/main/tests/charset/.project -text
 icu4j/main/tests/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/charset/manifest.stub -text
+icu4j/main/tests/collate/.classpath -text
+icu4j/main/tests/collate/.project -text
+icu4j/main/tests/collate/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/tests/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/collate/collate-tests-build.launch -text
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt svneol=native#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt svneol=native#text/plain
