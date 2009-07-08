@@ -37,7 +37,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Test format
      */
-    public void testFormat() {
+    public void TestFormat() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/skeleton/interval_data
         String[] DATA = {
@@ -662,7 +662,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* 
      * Test format using user defined DateIntervalInfo
      */
-    public void testFormatUserDII() {
+    public void TestFormatUserDII() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/interval_data
         String[] DATA = {
@@ -758,7 +758,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* 
      * Test format using user defined DateIntervalInfo
      */
-    public void testFormatCLDR() {
+    public void TestFormatCLDR() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/interval_data
         String[] DATA = {
@@ -843,7 +843,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Stress test
      */
-    public void testStress() {
+    public void TestStress() {
         if (getInclusion() <= 5) {
             logln("INFO: Skipping test");
             return;
@@ -1127,5 +1127,85 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("DateIntervalInfo.setFallbackIntervalPattern(String fallbackPattern) " +
                     "was suppose to change the variable 'fFirstDateInPtnIsLaterDate' " +
                     "to true.");
+    }
+    
+    /* Tests the method
+     *      public PatternInfo getIntervalPattern(String skeleton, int field)
+     */
+    public void TestGetIntervalPattern(){
+        // Tests when "if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MINUTE;
+        DateIntervalInfo dii = new DateIntervalInfo();
+        try{
+            dii.getIntervalPattern("", Calendar.MINUTE+1);
+            errln("DateIntervalInfo.getIntervalPattern(String,int) was suppose " +
+                    "to return an exception for the 'int field' parameter " +
+                    "when it exceeds MINIMUM_SUPPORTED_CALENDAR_FIELD.");
+        } catch(Exception e){}
+    }
+    
+    /* Tests the method
+     *      public void setIntervalPattern(String skeleton, int lrgDiffCalUnit, String intervalPattern)
+     */
+    public void TestSetIntervalPattern(){
+        DateIntervalInfo dii = new DateIntervalInfo();
+        // Tests when "if ( frozen )" is true
+        try{
+            dii.freeze();
+            dii.setIntervalPattern("", 0, "");
+            errln("DateIntervalInfo.setIntervalPattern(String,int,String) " +
+                    "was suppose to return an exception when the " +
+                    "DateIntervalInfo object is frozen.");
+        } catch(Exception e){}
+        
+        // Tests when "if ( lrgDiffCalUnit > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MINUTE;
+        try{
+            dii = (DateIntervalInfo) dii.cloneAsThawed();
+            dii.setIntervalPattern("", Calendar.MINUTE+1, "");
+            errln("DateIntervalInfo.setIntervalPattern(String,int,String) " +
+                    "was suppose to return an exception when the " +
+                    "variable 'lrgDiffCalUnit' is greater than " + 
+                    "MINIMUM_SUPPORTED_CALENDAR_FIELD.");
+        } catch(Exception e){}
+    }
+    
+    /* Tests the method
+     *      public int hashCode()
+     */
+    public void TestHashCode(){
+        // Tests when
+        //      "int hash = fIntervalPatternFirstPart != null ? fIntervalPatternFirstPart.hashCode() : 0;"
+        // is false
+        PatternInfo dp = new PatternInfo(null, null, false);
+        if(dp.hashCode() != 0){
+            errln("PatternInfo.hashCode() was suppose to return 0 for a null " +
+                    "paramter in the constructor.");
+        }
+    }
+    
+    /* Tests the method
+     *      public boolean equals(Object a)
+     * in PatternInfo
+     */
+    public void TestPattternInfoEquals(){
+        // Tests when "if ( a instanceof PatternInfo )" is false
+        PatternInfo pi = new PatternInfo("","", false);
+        if(pi.equals(new Object()) != false){
+            errln("PatternInfo.equals(Object) is suppose to return false " +
+                    "when it is not an instance of PatternInfo.");
+        }
+        if(pi.equals("") != false){
+            errln("PatternInfo.equals(Object) is suppose to return false " +
+                    "when it is not an instance of PatternInfo.");
+        }
+        if(pi.equals(0) != false){
+            errln("PatternInfo.equals(Object) is suppose to return false " +
+                    "when it is not an instance of PatternInfo.");
+        }
+        if(pi.equals(0.0) != false){
+            errln("PatternInfo.equals(Object) is suppose to return false " +
+                    "when it is not an instance of PatternInfo.");
+        }
     }
 }

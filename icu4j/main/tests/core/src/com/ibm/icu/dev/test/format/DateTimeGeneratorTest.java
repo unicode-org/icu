@@ -8,10 +8,16 @@
 package com.ibm.icu.dev.test.format;
 
 import java.text.ParsePosition;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.PatternTokenizer;
@@ -21,6 +27,7 @@ import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.DateTimePatternGenerator.FormatParser;
 import com.ibm.icu.text.DateTimePatternGenerator.VariableField;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
@@ -579,5 +586,356 @@ public class DateTimeGeneratorTest extends TestFmwk {
       }
       return result;
     }
+      /* Tests the method
+       *        public static DateTimePatternGenerator getInstance()
+       */
+      public void TestGetInstance(){
+          try{
+              DateTimePatternGenerator.getInstance();
+          } catch(Exception e){
+              errln("DateTimePatternGenerator.getInstance() was not suppose to " +
+                      "return an exception.");
+          }
+      }
+      
+      /* Tests the method
+       *        public String getSkeleton(String pattern)
+       */
+      public void TestGetSkeleton(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          String[] cases = {"MMDD","MMMDD","MMM-DD","DD/MMM","ddM"};
+          String[] results = {"MMDD","MMMDD","MMMDD","MMMDD","Mdd"};
+          for(int i=0; i<cases.length; i++){
+              if(!dtpg.getSkeleton(cases[i]).equals(results[i])){
+                  errln("DateTimePatternGenerator.getSkeleton(String) did " +
+                          "return the expected result when passing " + cases[i] +
+                          " and expected " + results[i] + " but got " +
+                          dtpg.getSkeleton(cases[i]));
+              }
+          }
+      }
+      
+      /* Tests the method
+       *        public String getBaseSkeleton(String pattern)
+       */
+      public void TestGetBaseSkeleton(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          String[] cases = {"MMDD","MMMDD","MMM-DD","DD/MMM","ddM"};
+          String[] results = {"MD","MMMD","MMMD","MMMD","Md"};
+          for(int i=0; i<cases.length; i++){
+              if(!dtpg.getBaseSkeleton(cases[i]).equals(results[i])){
+                  errln("DateTimePatternGenerator.getSkeleton(String) did " +
+                          "return the expected result when passing " + cases[i] +
+                          " and expected " + results[i] + " but got " +
+                          dtpg.getBaseSkeleton(cases[i]));
+              }
+          }
+      }
+      
+      /* Tests the method
+       *        public Map<String, String> getSkeletons(Map<String, String> result)
+       */
+      public void TestGetSkeletons(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          // Tests when "if (result == null)" is true
+          try{
+              dtpg.getSkeletons(null);
+          } catch(Exception e){
+              errln("DateTimePatternGenerator.getSkeletons(Map) was suppose to " +
+                      "return a new LinkedHashMap for a null parameter.");
+          }
+          
+          // Tests when "if (result == null)" is false
+          Map<String,String> mm = new LinkedHashMap<String, String>();
+          try{
+              dtpg.getSkeletons(mm);
+          } catch(Exception e){
+              errln("DateTimePatternGenerator.getSkeletons(Map) was suppose to " +
+                      "return a new LinkedHashMap for a LinkedHashMap parameter.");
+          }
+      }
+      
+      /* Tests the method
+       *        public Set<String> getBaseSkeletons(Set<String> result)
+       */
+      public void TestGetBaseSkeletons(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          // Tests when "if (result == null)" is true
+          try{
+              dtpg.getBaseSkeletons(null);
+          } catch(Exception e){
+              errln("DateTimePatternGenerator.getBaseSkeletons(Map) was suppose to " +
+                      "return a new LinkedHashMap for a null parameter.");
+          }
+          
+          // Tests when "if (result == null)" is false
+          Set<String> mm = new HashSet<String>();
+          try{
+              dtpg.getBaseSkeletons(mm);
+          } catch(Exception e){
+              errln("DateTimePatternGenerator.getBaseSkeletons(Map) was suppose to " +
+                      "return a new LinkedHashMap for a HashSet parameter.");
+          }
+      }
+      
+      /* Tests the method
+       *        public String getDecimal()
+       */
+      public void TestGetDecimal(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          if(!dtpg.getDecimal().equals(".")){
+              errln("DateTimePatternGenerator.getDecimal() was to return '.' " +
+                      "when the object gets a new instance.");
+          }
+          
+          String[] cases = {",","-","","*","&","a","0"};
+          for(int i=0; i<cases.length; i++){
+              dtpg.setDecimal(cases[i]);
+              if(!dtpg.getDecimal().equals(cases[i])){
+                  errln("DateTimePatternGenerator.getDecimal() was to return " + cases[i] +
+                          "when setting decimal with " + cases[i]);
+              }
+          }
+      }
+      
+      /* Tests the method
+       *        public Collection<String> getRedundants(Collection<String> output)
+       */
+      public void TestGetRedundants(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          
+          // Tests when "if (output == null)" is true
+          try{
+              dtpg.getRedundants(null);
+          } catch(Exception e){
+              errln("DateTimeGenerator.getRedundants was not suppose to return " +
+                      "an exception when passing a null parameter.");
+          }
+          
+          // Tests when "if (output == null)" is false
+          try{
+              Collection<String> out = new LinkedHashSet<String>();
+              dtpg.getRedundants(out);
+          } catch(Exception e){
+              errln("DateTimeGenerator.getRedundants was not suppose to return " +
+                  "an exception when passing a new LinkedHashSet<String>() parameter.");
+          }
+          
+      }
+      
+      /* Tests the method
+       *        public String getAppendItemFormat(int field)
+       */
+      public void TestGetAppendItemFormat(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          String[] cases = {"d","u","m","m","y"};
+          for(int i=0; i<cases.length; i++){
+              dtpg.setAppendItemFormat(i, cases[i]);
+              if(!dtpg.getAppendItemFormat(i).equals(cases[i])){
+                  errln("DateTimePatternGeneratorgetAppendItemFormat(int field) " +
+                          "did not return as expected. Value set at " + i + " was " +
+                          cases[i] + " but got back " + dtpg.getAppendItemFormat(i));
+              }
+          }
+      }
+      
+      /* Tests the method
+       *    public String getAppendItemName(int field)
+       */
+      public void TestGetAppendItemName(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          String[] cases = {"d","u","m","m","y"};
+          for(int i=0; i<cases.length; i++){
+              dtpg.setAppendItemName(i, cases[i]);
+              if(!dtpg.getAppendItemName(i).equals(cases[i])){
+                  errln("DateTimePatternGenerator.getAppendItemFormat(int field) " +
+                          "did not return as expected. Value set at " + i + " was " +
+                          cases[i] + " but got back " + dtpg.getAppendItemName(i));
+              }
+          }
+      }
+      
+      /* Tests the method
+       *    public static boolean isSingleField(String skeleton)
+       */
+      @SuppressWarnings("static-access")
+    public void TestIsSingleField(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          String[] cases = {" ", "m","mm","md","mmd","mmdd"};
+          boolean[] results = {true,true,true,false,false,false};
+          for(int i=0; i<cases.length; i++){
+              if(dtpg.isSingleField(cases[i]) != results[i]){
+                  errln("DateTimePatternGenerator.isSingleField(String skeleton) " +
+                          "did not return as expected. Value passed was " + cases[i] +
+                          " but got back " + dtpg.isSingleField(cases[i]));
+              }
+          }
+      }
+      
+      /* Tests the method
+       *    public Object freeze()
+       *    public Object cloneAsThawed()
+       */
+      public void TestFreezeAndCloneAsThawed(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          
+          if(dtpg.isFrozen() != false){
+              errln("DateTimePatternGenerator.isFrozen() is suppose to return false " +
+                      "for a DateTimePatternGenerator object that was just " +
+                      "created.");
+          }
+          
+          dtpg.freeze();
+          if(dtpg.isFrozen() != true){
+              errln("DateTimePatternGenerator.isFrozen() is suppose to return true " +
+                      "for a DateTimePatternGenerator object that was just " +
+                      "created and freeze.");
+          }
+          
+          DateTimePatternGenerator dtpg2 = (DateTimePatternGenerator) dtpg.cloneAsThawed();
+          if(dtpg.isFrozen() != false){
+              errln("DateTimePatternGenerator.isFrozen() is suppose to return false " +
+                      "for a DateTimePatternGenerator object that was just " +
+                      "clone as thawed.");
+          }
+          if(dtpg2.isFrozen() != false){
+              errln("DateTimePatternGenerator.isFrozen() is suppose to return false " +
+                      "for a second DateTimePatternGenerator object that was just " +
+                      "clone as thawed.");
+          }
+      }
+      
+      /* Tests the method
+       *    public Object clone()
+       */
+      public void TestClone(){
+          DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
+          DateTimePatternGenerator dtpg2 = (DateTimePatternGenerator) dtpg.clone();
+          dtpg = (DateTimePatternGenerator) dtpg2.clone();
+      }
+      
+      /* Tests the constructor
+       *    public VariableField(String string)
+       */
+      @SuppressWarnings("unused")
+      public void TestVariableField_String(){
+          String[] cases = {"d","mm","aa"};
+          String[] invalid = {null,"","dummy"};
+          for(int i=0; i<cases.length; i++){
+              try{
+                  VariableField vf = new VariableField(cases[i]);
+              } catch(Exception e){
+                  errln("VariableField constructor was not suppose to return " +
+                  "an exception when created when passing " + cases[i]);
+              }
+          }
+          for(int i=0; i<invalid.length; i++){
+              try{
+                VariableField vf = new VariableField(invalid[i]);
+                  errln("VariableField constructor was suppose to return " +
+                          "an exception when created when passing " + invalid[i]);
+              } catch(Exception e){}
+          }
+      }
+      
+      /* Tests the method
+       *    public FormatParser set(String string, boolean strict)
+       */
+      public void TestSet(){
+          FormatParser fp = new FormatParser();
+          //Tests when "if (string.length() == 0)" is true
+          try{
+              fp.set("",true);
+          }catch(Exception e){
+              errln("FormatParser.set(String,boolean) was not suppose to " +
+                      "return an exception.");
+          }
+      }
+      
+      /* Tests the method
+       *    public String toString()
+       */
+      public void TestToString(){
+          FormatParser fp = new FormatParser();
+          if(!fp.toString().equals("")){
+              errln("FormatParser.toString() was suppose to return an " +
+                      "empty string for a new FormatParser object.");
+          }
+          
+          String[] cases = {"m","d","y","mm","mmm","mm dd","mm':'dd","mm-dd-yyyy"};
+          String[] results = {"m","d","y","mm","mmm","mm dd","mm:dd","mm-dd-yyyy"};
+          for(int i=0; i<cases.length; i++){
+              fp.set(cases[i]);
+              if(!fp.toString().equals(results[i])){
+                  errln("FormatParser.toString() was suppose to return " + results[i] + 
+                  " after setting the object. Got: " + fp.toString());
+              }
+          }
+      }
+      
+      /* Tests the method
+       *    public boolean hasDateAndTimeFields()
+       */
+      public void TestHasDateAndTimeFields(){
+          FormatParser fp = new FormatParser();
+          if(fp.hasDateAndTimeFields() != false){
+              errln("FormatParser.hasDateAndTimeFields() was suppose to return " +
+                      "false when a new object is created.");
+          }
+          
+          String[] cases = {"MMDDYY", "HHMMSS", "", "MM/DD/YYYY HH:MM:SS",
+                  "MMDDYY HHMMSS", "HHMMSS MMDDYYYY", "HMS MDY"};
+          boolean[] results = {false,true,false,true,true,true,true};
+          for(int i=0; i<cases.length; i++){
+              fp.set(cases[i]);
+              if(fp.hasDateAndTimeFields() != results[i]){
+                  errln("FormatParser.hasDateAndTimeFields() was suppose to " +
+                          "return " + results[i] + " but returned " +
+                          fp.hasDateAndTimeFields() + " for parameter " + 
+                          cases[i] + " that is set to FormatParser.");
+              }
+          }
+      }
+      
+      /* Tests the method
+       *    private void checkFrozen()
+       * from public void setDateTimeFormat(String dateTimeFormat)
+       */
+      public void TestCheckFrozen(){
+          // Tests when "if (isFrozen())" is true
+          DateTimePatternGenerator dt = DateTimePatternGenerator.getInstance();
+          try{
+              dt.freeze();
+              dt.setDateTimeFormat("MMDDYYYY");
+              errln("DateTimePatternGenerator.checkFrozen() was suppose to " +
+                      "return an exception when trying to setDateTimeFormat " +
+                      "for a frozen object.");
+          } catch(Exception e){}
+          dt = (DateTimePatternGenerator) dt.cloneAsThawed();
+      }
+      
+      /* Tests the method
+       *    public String getFields(String pattern)
+       */
+      public void TestGetFields(){
+          DateTimePatternGenerator dt = DateTimePatternGenerator.getInstance();
+          String[] cases = {"MMDDYY", "HHMMSS", "", "MM/DD/YYYY HH:MM:SS",
+                  "MMDDYY HHMMSS", "HHMMSS MMDDYYYY", "HMS MDY"};
+          String[] results = {"{Month:N}{Day_Of_Year:N}{Year:N}",
+                  "{Hour:N}{Month:N}{Fractional_Second:N}","",
+                  "{Month:N}/{Day_Of_Year:N}/{Year:N} {Hour:N}:{Month:N}:{Fractional_Second:N}",
+                  "{Month:N}{Day_Of_Year:N}{Year:N} {Hour:N}{Month:N}{Fractional_Second:N}",
+                  "{Hour:N}{Month:N}{Fractional_Second:N} {Month:N}{Day_Of_Year:N}{Year:N}",
+                  "{Hour:N}{Month:N}{Fractional_Second:N} {Month:N}{Day_Of_Year:N}{Year:N}"};
+          for(int i=0; i<cases.length; i++){
+              try{
+                  if(!dt.getFields(cases[i]).equals(results[i]));
+              } catch(Exception e){
+                  errln("DateTimePatternGenerator.getFields(String) did not " +
+                          "not return an expected result when passing " + cases[i] +
+                          ". Got " + dt.getFields(cases[i]) + " but expected " +
+                          results[i]);
+              }
+          }
+      }
 }
-//eof

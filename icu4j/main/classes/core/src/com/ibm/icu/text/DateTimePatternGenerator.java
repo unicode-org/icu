@@ -625,6 +625,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                     output.add(pattern);
                 }
             }
+            ///CLOVER:OFF
+            //The following would never be called since the parameter is false
             if (false) { // ordered
                 DateTimePatternGenerator results = new DateTimePatternGenerator();
                 PatternInfo pinfo = new PatternInfo();
@@ -642,6 +644,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                     }
                 }
             }
+            ///CLOVER:ON
             return output;
         }
     }
@@ -886,7 +889,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             result.frozen = false;
             return result;
         } catch (CloneNotSupportedException e) {
+            ///CLOVER:OFF
             throw new IllegalArgumentException("Internal Error");
+            ///CLOVER:ON
         }
     }
 

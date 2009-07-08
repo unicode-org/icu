@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -14,7 +14,7 @@ import com.ibm.icu.text.ArabicShapingException;
  * Interactive test for Arabic shaping.
  * Invoke from a command line passing args and strings.  Use '-help' to see description of arguments.
  */
-public class ArabicShapingTest {
+public class ArabicShapingTest{
     private static final int COPY = 0;
     private static final int INPLACE = 1;
     private static final int STRING = 2;

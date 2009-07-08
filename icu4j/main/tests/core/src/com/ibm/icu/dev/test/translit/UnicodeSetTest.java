@@ -14,13 +14,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
-// import com.ibm.icu.dev.test.util.PrettyPrinter;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;

@@ -447,11 +447,6 @@ public class SimpleDateFormat extends DateFormat {
         this(pattern, (DateFormatSymbols)formatData.clone(), (Calendar)calendar.clone(), null, locale, useFastFormat,override);
     }
 
-    SimpleDateFormat(String pattern, DateFormatSymbols formatData, Calendar calendar, ULocale locale,
-                     boolean useFastFormat) {
-        this(pattern, (DateFormatSymbols)formatData.clone(), (Calendar)calendar.clone(), null, locale, useFastFormat,null);
-    }
-
     /*
      * The constructor called from all other SimpleDateFormat constructors
      */
