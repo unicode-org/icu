@@ -331,6 +331,9 @@
         <ant dir="${icu4j.core-tests.dir}" inheritAll="false" inheritRefs="true">
             <property name="build.compiler" value="${build.compiler}"/>
         </ant>
+        <ant dir="${icu4j.collate-tests.dir}" inheritAll="false" inheritRefs="true">
+            <property name="build.compiler" value="${build.compiler}"/>
+        </ant>
         <ant dir="${icu4j.charset-tests.dir}" inheritAll="false" inheritRefs="true">
             <property name="build.compiler" value="${build.compiler}"/>
         </ant>
@@ -340,9 +343,11 @@
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.collate.jar}"/>
                 <pathelement path="${icu4j.charset.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
                 <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement path="${icu4j.collate-tests.jar}"/>
                 <pathelement path="${icu4j.charset-tests.jar}"/>
                 <pathelement path="${clover.jar}"/>
             </classpath>
