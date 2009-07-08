@@ -32,6 +32,22 @@ public class RbnfLenientScannerTest extends TestFmwk {
     }
 
     /**
+     * Ensure that the default provider is instantiated and used if none is set
+     * and lenient parse is on.
+     */
+    public void TestDefaultProvider() {
+        RuleBasedNumberFormat formatter
+            = new RuleBasedNumberFormat(Locale.US,
+                                        RuleBasedNumberFormat.SPELLOUT);
+        formatter.setLenientScannerProvider(null);
+        formatter.setLenientParseMode(true);
+        String[][] lpTestData = {
+            { "2 thousand six HUNDRED   fifty-7", "2,657" },
+        };
+        doLenientParseTest(formatter, lpTestData);
+    }
+
+    /**
      * Perform a simple spot check on the English spellout rules
      */
     public void TestEnglishSpellout() {
