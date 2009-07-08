@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,6 +24,7 @@ import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.CollationKey.BoundMode;
 
 import java.util.Set;
 import java.util.Arrays;
@@ -2485,6 +2486,96 @@ public class CollationMiscTest extends TestFmwk {
                 logln("String:"+cases[j]+"   Key:"+  prettify(key));
             }
         }   
+    }
+    
+    /*
+     * Tests the method public boolean equals(Object target) in CollationKey
+     */
+    public void TestCollationKeyEquals() {
+        CollationKey ck = new CollationKey("", (byte[]) null);
+
+        // Tests when "if (!(target instanceof CollationKey))" is true
+        if (ck.equals(new Object())) {
+            errln("CollationKey.equals() was not suppose to return false "
+                    + "since it is comparing to a non Collation Key object.");
+        }
+        if (ck.equals("")) {
+            errln("CollationKey.equals() was not suppose to return false "
+                    + "since it is comparing to a non Collation Key object.");
+        }
+        if (ck.equals(0)) {
+            errln("CollationKey.equals() was not suppose to return false "
+                    + "since it is comparing to a non Collation Key object.");
+        }
+        if (ck.equals(0.0)) {
+            errln("CollationKey.equals() was not suppose to return false "
+                    + "since it is comparing to a non Collation Key object.");
+        }
+
+        // Tests when "if (target == null)" is true
+        if (ck.equals((CollationKey) null)) {
+            errln("CollationKey.equals() was not suppose to return false "
+                    + "since it is comparing to a null Collation Key object.");
+        }
+    }
+
+    /*
+     * Tests the method public int hashCode() in CollationKey
+     */
+    public void TestCollationKeyHashCode() {
+        CollationKey ck = new CollationKey("", (byte[]) null);
+
+        // Tests when "if (m_key_ == null)" is true
+        if (ck.hashCode() != 1) {
+            errln("CollationKey.hashCode() was suppose to return 1 "
+                    + "when m_key is null due a null parameter in the " + "constructor.");
+        }
+    }
+
+    /*
+     * Tests the method public CollationKey getBound(int boundType, int noOfLevels)
+     */
+    public void TestGetBound() {
+        CollationKey ck = new CollationKey("", (byte[]) null);
+
+        // Tests when "if (noOfLevels > Collator.PRIMARY)" is false
+        // Tests when "default: " is true for "switch (boundType)"
+        try {
+            ck.getBound(BoundMode.COUNT, -1);
+            errln("CollationKey.getBound(int,int) was suppose to return an "
+                    + "exception for an invalid boundType value.");
+        } catch (Exception e) {
+        }
+
+        // Tests when "if (noOfLevels > 0)"
+        byte b[] = {};
+        CollationKey ck1 = new CollationKey("", b);
+        try {
+            ck1.getBound(0, 1);
+            errln("CollationKey.getBound(int,int) was suppose to return an "
+                    + "exception a value of noOfLevels that exceeds expected.");
+        } catch (Exception e) {
+        }
+    }
+
+    /*
+     * Tests the method public CollationKey merge(CollationKey source)
+     */
+    public void TestMerge() {
+        byte b[] = {};
+        CollationKey ck = new CollationKey("", b);
+
+        // Tests when "if (source == null || source.getLength() == 0)" is true
+        try {
+            ck.merge(null);
+            errln("Collationkey.merge(CollationKey) was suppose to return " + "an exception for a null parameter.");
+        } catch (Exception e) {
+        }
+        try {
+            ck.merge(ck);
+            errln("Collationkey.merge(CollationKey) was suppose to return " + "an exception for a null parameter.");
+        } catch (Exception e) {
+        }
     }
 }
 

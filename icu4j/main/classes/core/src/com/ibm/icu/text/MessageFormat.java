@@ -2228,8 +2228,10 @@ public class MessageFormat extends UFormat {
                     break;
                 }
                 break;
+            ///CLOVER:OFF
             default: // Never happens.
                 break;
+            ///CLOVER:ON
             }
             buf.append(c);
         }
