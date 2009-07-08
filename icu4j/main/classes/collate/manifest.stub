@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 
-Name: com/ibm/icu/text--collat
+Name: com/ibm/icu/text
 Specification-Title: ICU for Java Collation
 Specification-Version: @SPECVERSION@
 Specification-Vendor: ICU

@@ -22,11 +22,11 @@
 
     <target name="compile" depends="@compile" description="Compile java source files"/>
 
-    <target name="copy" depends="@copy, copy-test-data" description="Copy non-java runtime files to the project's binary directory"/>
+    <target name="copy" depends="@copy, copy-collate-test-data" description="Copy non-java runtime files to the project's binary directory"/>
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="copy-test-data" description="Extract pre-built ICU collation test data files and copy them to the project's binary directory">
+    <target name="copy-collate-test-data" description="Extract pre-built ICU collation test data files and copy them to the project's binary directory">
         <unjar src="${icu4j.testdata.jar}" dest="${bin.dir}">
             <patternset>
                 <include name="**/DataDrivenCollationTest.res"/>
