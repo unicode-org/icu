@@ -2107,7 +2107,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    public void testErrorChecking() {
+    public void TestErrorChecking() {
         try {
             DateFormat.getDateTimeInstance(-1, -1, Locale.US);
             errln("Expected exception for getDateTimeInstance(-1, -1, Locale)");
@@ -3620,6 +3620,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         } catch (ParseException pe) {
             errln("FAIL: Parse failure");
+        }
+    }
+    
+    /* Tests the constructor
+     *      public SimpleDateFormat(String pattern, String override, ULocale loc)
+     */
+    public void TestSimpleDateFormatConstructor_String_String_ULocale(){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("","",null);
+            sdf = (SimpleDateFormat) sdf.clone();
+        } catch(Exception e){
+            errln("SimpleDateFormat(String pattern, String override, ULocale loc) " +
+                    "was not suppose to return an exception when constructing a new " +
+                    "SimpleDateFormat object.");
         }
     }
 }

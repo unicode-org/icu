@@ -121,7 +121,6 @@ public final class ArabicShaping {
                 ((options & LAMALEF_MASK)==LAMALEF_RESIZE )||
                  ((options & LAMALEF_MASK)==LAMALEF_AUTO)  ||
                  ((options & LAMALEF_MASK)==LAMALEF_NEAR))){
-           
            throw new IllegalArgumentException("Wrong Lam Alef argument");
        }
        /* Validate Tashkeel (Tashkeel replacement options should be enabled in shaping mode only)*/

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -331,7 +331,7 @@ public class ArabicShapingRegTest extends TestFmwk {
                        IllegalArgumentException.class),
     };
 
-    public void testStandard() {
+    public void TestStandard() {
         for (int i = 0; i < standardTests.length; ++i) {
             TestData test = standardTests[i];
 
@@ -360,7 +360,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
-    public void testPreflight() {
+    public void TestPreflight() {
         for (int i = 0; i < preflightTests.length; ++i) {
             TestData test = preflightTests[i];
 
@@ -387,7 +387,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
-    public void testError() {
+    public void TestError() {
         for (int i = 0; i < errorTests.length; ++i) {
             TestData test = errorTests[i];
 
@@ -415,7 +415,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
-    public void testEquals()
+    public void TestEquals()
     {
         ArabicShaping as1 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
         ArabicShaping as2 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
@@ -497,6 +497,133 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
         catch (Exception e) {
             System.out.println(e);
+        }
+    }
+    
+    /* Tests the method
+     *      public int shape(char[] source, int sourceStart, int sourceLength,
+     *      char[] dest, int destStart, int destSize) throws ArabicShapingException)
+     */
+    public void TestShape(){
+        // Tests when
+        //      if (sourceStart < 0 || sourceLength < 0 || sourceStart + sourceLength > source.length)
+        // Is true
+        ArabicShaping as = new ArabicShaping(0);
+        char[] source = {'d','u','m','m','y'};
+        char[] dest = {'d','u','m','m','y'};
+        int[] negNum = {-1,-2,-5,-10,-100};
+        
+        
+        for(int i=0; i<negNum.length; i++){
+            try{
+                // Checks when "sourceStart < 0"
+                as.shape(source, negNum[i], 0, dest, 0, 0);
+                errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                        "suppose to return an exception when 'sourceStart < 0'.");
+            } catch(Exception e){}
+            
+            try{
+                // Checks when "sourceLength < 0"
+                as.shape(source, 0, negNum[i], dest, 0, 0);
+                errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                        "suppose to return an exception when 'sourceLength < 0'.");
+            } catch(Exception e){}
+        }
+        
+        // Checks when "sourceStart + sourceLength > source.length"
+        try{
+            as.shape(source, 3, 3, dest, 0, 0);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when 'sourceStart + sourceLength > source.length'.");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 2, 4, dest, 0, 0);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when 'sourceStart + sourceLength > source.length'.");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 1, 5, dest, 0, 0);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when 'sourceStart + sourceLength > source.length'.");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 0, 6, dest, 0, 0);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when 'sourceStart + sourceLength > source.length'.");
+        } catch(Exception e){}
+        
+        // Checks when "if (dest == null && destSize != 0)" is true
+        try{
+            as.shape(source, 2, 2, null, 0, 1);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when 'dest == null && destSize != 0'.");
+        } catch(Exception e){}
+        
+        // Checks when
+        // if ((destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length))
+        for(int i=0; i<negNum.length; i++){
+            try{
+                as.shape(source, 2, 2, dest, negNum[i], 1);
+                errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                        "suppose to return an exception when " +
+                        "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+            } catch(Exception e){}
+            
+            try{
+                as.shape(source, 2, 2, dest, 0, negNum[i]);
+                errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                        "suppose to return an exception when " +
+                        "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+            } catch(Exception e){}
+        }
+        
+        // Checks when "destStart + destSize > dest.length"
+        try{
+            as.shape(source, 2, 2, dest, 3, 3);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when " +
+                    "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 2, 2, dest, 2, 4);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when " +
+                    "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 2, 2, dest, 1, 5);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when " +
+                    "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+        } catch(Exception e){}
+        try{
+            as.shape(source, 2, 2, dest, 0, 6);
+            errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                    "suppose to return an exception when " +
+                    "(destSize != 0) && (destStart < 0 || destSize < 0 || destStart + destSize > dest.length).");
+        } catch(Exception e){}
+        
+        // Tests when "throw new IllegalArgumentException("Wrong Tashkeel argument")"
+        int[] invalid_Tashkeel = {-1000, -500, -100}; 
+        for(int i=0; i < invalid_Tashkeel.length; i++){
+            ArabicShaping arabicShape = new ArabicShaping(invalid_Tashkeel[i]);
+            try {
+                arabicShape.shape(source,0,0,dest,0,1);
+                errln("ArabicShaping.shape(char[],int,int,char[],int,int) was " +
+                        "suppose to return an exception for 'Wrong Tashkeel argument' for " +
+                        "an option value of " + invalid_Tashkeel[i]);
+            } catch (Exception e) {}
+        }
+    }
+    
+    /* Tests the method
+     *      public static int flipArray(char [] dest, int start, int e, int w)
+     */
+    public void TestFlipArray(){
+        // Tests when "if (w > start)" is false
+        char[] dest = {'d','e','s','t'};
+        if(ArabicShaping.flipArray(dest,2,10,1) != 10){
+            errln("ArabicShaping.flipArray(char[],int,int,int) was suppose to return 10.");
         }
     }
 }

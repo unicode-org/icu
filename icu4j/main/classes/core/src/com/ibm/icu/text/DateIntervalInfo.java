@@ -351,11 +351,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Initialize DateIntervalInfo from calendar data
      * @param calData  calendar data
      */
-    private void setup(ULocale locale) {
-        if ( locale == null ) {
-            return;
-        }
-    
+    private void setup(ULocale locale) {   
         int DEFAULT_HASH_SIZE = 19;
         fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>(DEFAULT_HASH_SIZE);
         // initialize to guard if there is no interval date format defined in 
@@ -942,5 +938,4 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     public int hashCode() {
         return fIntervalPatterns.hashCode();
     }
-    
 }// end class DateIntervalInfo
