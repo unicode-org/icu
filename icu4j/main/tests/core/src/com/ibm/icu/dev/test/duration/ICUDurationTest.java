@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test.duration;
 
+import java.text.FieldPosition;
 import java.util.Date;
 import java.util.MissingResourceException;
 
@@ -235,5 +236,29 @@ public class ICUDurationTest extends TestFmwk {
         if (df == null) {
             errln("FAIL: null DurationFormat returned.");
         }
+    }
+    
+    /* Tests the class
+     *      DurationFormat
+     */
+    public void TestDurationFormat(){
+        @SuppressWarnings("serial")
+        class TestDurationFormat extends DurationFormat {
+            public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {return null;}
+            public String formatDurationFrom(long duration, long referenceDate) {return null;}
+            public String formatDurationFromNow(long duration) {return null;}
+            public String formatDurationFromNowTo(Date targetDate) {return null;}
+            public TestDurationFormat() {super();}
+            
+        }
+        
+        // Tests the constructor and the following method
+        //      public Object parseObject(String source, ParsePosition pos)
+        try{
+            TestDurationFormat tdf = new TestDurationFormat();
+            tdf.parseObject("",null);
+            errln("DurationFormat.parseObjet(String,ParsePosition) was " +
+                    "to return an exception for an unsupported operation.");
+        } catch(Exception e){}
     }
 }
