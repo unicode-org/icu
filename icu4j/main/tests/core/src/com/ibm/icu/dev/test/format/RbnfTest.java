@@ -1153,4 +1153,17 @@ public class RbnfTest extends TestFmwk {
                 "was suppose to have an exception.");
         } catch(Exception e){}
     }
+    
+    /* Test the method
+     *      public void process(StringBuffer buf, NFRuleSet ruleSet)
+     */
+    public void TestChineseProcess(){
+        String ruleWithChinese =
+            "%acounting:\n"
+            + "    0 seconds; 1 second; =0= seconds;\n"
+            + "%%post-process:com.ibm.icu.text.RBNFChinesePostProcessor\n";
+        RuleBasedNumberFormat rbnf =  new RuleBasedNumberFormat(ruleWithChinese, ULocale.CHINESE);
+        String[] ruleNames = rbnf.getRuleSetNames();
+        rbnf.format(0.0,ruleNames[0]);
+    }
 }

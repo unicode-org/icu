@@ -126,7 +126,8 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             this.registerFactory(new CollatorFactory());
             markDefault();
         }
-
+        ///CLOVER:OFF
+        // The following method can not be reached by testing
         protected Object handleDefault(Key key, String[] actualIDReturn) {
             if (actualIDReturn != null) {
                 actualIDReturn[0] = "root";
@@ -138,6 +139,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 return null;
             }
         }
+        ///CLOVER:ON
     }
     private static ICULocaleService service = new CService();
 }
