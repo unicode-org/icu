@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2005, International Business Machines                   *
+* Copyright (C) 2001-2009, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -24,38 +24,22 @@
  */
  
 /**
- *  Initialize ICU. The description further below applies to ICU 2.6 to ICU 3.4.
- *  Starting with ICU 3.4, u_init() needs not be called any more for
- *  ensuring thread safety, but it can give an indication for whether ICU
- *  can load its data. In ICU 3.4, it will try to load the converter alias table
- *  (cnvalias.icu) and give an error code if that fails.
- *  This may change in the future.
- *  <p>
- *  For ensuring the availability of necessary data, an application should
- *  open the service objects (converters, collators, etc.) that it will use
- *  and check for error codes there.
- *  <p>
- *  Documentation for ICU 2.6 to ICU 3.4:
- *  <p>
- *  This function loads and initializes data items
- *  that are required internally by various ICU functions.  Use of this explicit
- *  initialization is required in multi-threaded applications; in 
- *  single threaded apps, use is optional, but incurs little additional
- *  cost, and is thus recommended.
- *  <p>
- *  In multi-threaded applications, u_init() should be called  in the
- *  main thread before starting additional threads, or, alternatively
- *  it can be called in each individual thread once, before other ICU
- *  functions are called in that thread.  In this second scenario, the
- *  application must guarantee that the first call to u_init() happen
- *  without contention, in a single thread only.
- *  <p>
- *  If <code>u_setMemoryFunctions()</code> or 
- *  <code>u_setMutexFunctions</code> are needed (uncommon), they must be
- *  called _before_ <code>u_init()</code>.
- *  <p>
- *  Extra, repeated, or otherwise unneeded calls to u_init() do no harm,
- *  other than taking a small amount of time.
+ *  Initialize ICU.
+ *
+ *  Use of this function is optional.  It is OK to simply use ICU
+ *  services and functions without first having initialized
+ *  ICU by calling u_init().
+ *
+ *  u_init() will attempt to load some part of ICU's data, and is
+ *  useful as a test for configuration or installation problems that
+ *  leave the ICU data inaccessible.  A successful invocation of u_init()
+ *  does not, however, guarantee that all ICU data is accessible.
+ *
+ *  Multiple calls to u_init() cause no harm, aside from the small amount
+ *  of time required.
+ *
+ *  In old versions of ICU, u_init() was required in multi-threaded applications
+ *  to ensure the thread safety of ICU.  u_init() is no longer needed for this purpose.
  *
  * @param status An ICU UErrorCode parameter. It must not be <code>NULL</code>.
  *    An Error will be returned if some required part of ICU data can not

@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_imp.h
@@ -53,8 +53,7 @@ u_strcmpFold(const UChar *s1, int32_t length1,
  * Are the Unicode properties loaded?
  * This must be used before internal functions are called that do
  * not perform this check.
- * Generate a debug assertion failure if data is not loaded, to flag the fact
- *   that u_init() wasn't called first, before trying to access character properties.
+ * Generate a debug assertion failure if data is not loaded.
  * @internal
  */
 U_CFUNC UBool

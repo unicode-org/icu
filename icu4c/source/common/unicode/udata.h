@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -373,8 +373,8 @@ typedef enum UDataFileAccess {
 
 /**
  * This function may be called to control how ICU loads data. It must be called
- * before any ICU data is loaded, including application data loaded with ures/ResourceBundle or
- * udata APIs. It should be called before u_init.  This function is not multithread safe.  
+ * before any ICU data is loaded, including application data loaded with 
+ * ures/ResourceBundle or udata APIs. This function is not multithread safe.  
  * The results of calling it while other threads are loading data are undefined.
  * @param access The type of file access to be used
  * @param status Error code.

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -378,7 +378,6 @@ BreakIterator::createInstance(const Locale& loc, int32_t kind, UErrorCode& statu
         return NULL;
     }
 
-    u_init(&status);
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
         Locale actualLoc("");
