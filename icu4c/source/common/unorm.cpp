@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2008, International Business Machines
+* Copyright (c) 1996-2009, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -290,6 +290,10 @@ loadNormData(UErrorCode &errorCode) {
      * - they are not usually used in execution paths that are
      *   as performance-sensitive as others
      *   (e.g., IDNA takes more time than unorm_quickCheck() anyway)
+     *
+     *  TODO:  Remove code in support for non-hardcoded data.  u_init() is now advertised
+     *         as not being required for thread safety, and we can't reasonably
+     *         revert to requiring it.
      */
     if(haveNormData==0) {
         UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 }, _auxTrie={ 0,0,0,0,0,0,0 };

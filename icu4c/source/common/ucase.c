@@ -1523,6 +1523,10 @@ getCaseProps() {
  * do not have a service object and also do not have an error code parameter.
  * Other API implementations get the singleton themselves
  * (with mutexing), store it in the service object, and report errors.
+ *
+ * TODO:  Remove this support for non-hardcoded data.  u_init() is publicly
+ *        advertised as not being required for thread safety, we cannot
+ *        revert to unsafe data loading.
  */
 #if !UCASE_HARDCODE_DATA
 #define GET_CASE_PROPS() (gCsp!=NULL ? gCsp : getCaseProps())
