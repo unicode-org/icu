@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2008 International Business Machines Corporation   *
+*   Copyright (C) 2002-2009 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -30,8 +30,8 @@ U_NAMESPACE_BEGIN
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
     UErrorCode status = U_ZERO_ERROR;
-    u_init(&status);
-    // Init all of this instances data.
+
+    // Init all of this instance's data.
     init();
 
     // Lazy init of all shared global sets.

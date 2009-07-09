@@ -92,6 +92,11 @@ u_init(UErrorCode *status) {
      * initialization had occurred).
      */
 
+    /* TODO:  Completely remove this section.  u_init() is now publicly being 
+     *        advertised as never being required for thread safety, and we cannot
+     *        bring back this requirement.
+     */
+
     /* Char Properties */
     uprv_haveProperties(status);
 

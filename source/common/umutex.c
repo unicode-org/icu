@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -504,8 +504,8 @@ u_setMutexFunctions(const void *context, UMtxInitFn *i, UMtxFn *d, UMtxFn *l, UM
     pMutexUnlockFn  = u;
     gMutexContext   = context;
     gGlobalMutex    = NULL;         /* For POSIX, the global mutex will be pre-initialized */
-                                    /*   Undo that, force re-initialization when u_init()  */
-                                    /*   happens.                                          */
+                                    /*   Undo that, force re-initialization on first use   */
+                                    /*   of the global mutex.                              */
 }
 
 
