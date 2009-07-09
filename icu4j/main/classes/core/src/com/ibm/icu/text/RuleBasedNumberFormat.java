@@ -1380,7 +1380,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     RbnfLenientScanner getLenientScanner() {
         if (lenientParse) {
-            return getLenientScannerProvider().get(locale, lenientParseRules);
+            RbnfLenientScannerProvider provider = getLenientScannerProvider();
+            if (provider != null) {
+                return provider.get(locale, lenientParseRules);
+            }
         }
         return null;
     }
