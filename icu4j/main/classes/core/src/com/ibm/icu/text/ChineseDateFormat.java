@@ -135,10 +135,11 @@ public class ChineseDateFormat extends SimpleDateFormat {
 
     /**
      * {@inheritDoc}
+     * 
      * @stable ICU 2.0
      */
-    protected int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean allowNegative, boolean[] ambiguousYear, Calendar cal) {
+    protected int subParse(String text, int start, char ch, int count, boolean obeyCount, boolean allowNegative,
+            boolean[] ambiguousYear, Calendar cal) {
         if (ch != 'G' && ch != 'l' && ch != 'y') {
             return super.subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal);
         }
@@ -151,39 +152,37 @@ public class ChineseDateFormat extends SimpleDateFormat {
         switch (ch) {
         case 'G': // 'G' - ERA
         case 'y': // 'y' - YEAR, but without the 2-digit Y2K adjustment
-            {
-                Number number = null;
-                if (obeyCount) {
-                    if ((start+count) > text.length()) {
-                        return -start;
-                    }
-                    number = numberFormat.parse(text.substring(0, start+count), pos);
-                } else {
-                    number = numberFormat.parse(text, pos);
-                }
-                if (number == null) {
+        {
+            Number number = null;
+            if (obeyCount) {
+                if ((start + count) > text.length()) {
                     return -start;
                 }
-                int value = number.intValue();
-                cal.set(ch == 'G' ? Calendar.ERA : Calendar.YEAR, value);
-                return pos.getIndex();
+                number = numberFormat.parse(text.substring(0, start + count), pos);
+            } else {
+                number = numberFormat.parse(text, pos);
             }
+            if (number == null) {
+                return -start;
+            }
+            int value = number.intValue();
+            cal.set(ch == 'G' ? Calendar.ERA : Calendar.YEAR, value);
+            return pos.getIndex();
+        }
         case 'l': // 'l' - IS_LEAP_MONTH
-            {
-                ChineseDateFormatSymbols symbols =
-                    (ChineseDateFormatSymbols) getSymbols();
-                int result = matchString(text, start, ChineseCalendar.IS_LEAP_MONTH,
-                                         symbols.isLeapMonth, cal);
-                // Treat the absence of any matching string as setting
-                // IS_LEAP_MONTH to false.
-                if (result<0) {
-                    cal.set(ChineseCalendar.IS_LEAP_MONTH, 0);
-                    result = start;
-                }
-                return result;
+        {
+            ChineseDateFormatSymbols symbols = (ChineseDateFormatSymbols) getSymbols();
+            int result = matchString(text, start, ChineseCalendar.IS_LEAP_MONTH, symbols.isLeapMonth, cal);
+            // Treat the absence of any matching string as setting
+            // IS_LEAP_MONTH to false.
+            if (result < 0) {
+                cal.set(ChineseCalendar.IS_LEAP_MONTH, 0);
+                result = start;
             }
-        default:
+            return result;
+        }
             ///CLOVER:OFF
+        default:
             return 0; // This can never happen
             ///CLOVER:ON
         }

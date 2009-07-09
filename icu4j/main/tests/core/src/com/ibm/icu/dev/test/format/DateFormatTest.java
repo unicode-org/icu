@@ -31,6 +31,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.ChineseDateFormat.Field;
 import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
@@ -3623,17 +3624,31 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
-    /* Tests the constructor
-     *      public SimpleDateFormat(String pattern, String override, ULocale loc)
+    /*
+     * Tests the constructor public SimpleDateFormat(String pattern, String override, ULocale loc)
      */
-    public void TestSimpleDateFormatConstructor_String_String_ULocale(){
-        try{
-            SimpleDateFormat sdf = new SimpleDateFormat("","",null);
+    public void TestSimpleDateFormatConstructor_String_String_ULocale() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("", "", null);
             sdf = (SimpleDateFormat) sdf.clone();
-        } catch(Exception e){
-            errln("SimpleDateFormat(String pattern, String override, ULocale loc) " +
-                    "was not suppose to return an exception when constructing a new " +
-                    "SimpleDateFormat object.");
+        } catch (Exception e) {
+            errln("SimpleDateFormat(String pattern, String override, ULocale loc) "
+                    + "was not suppose to return an exception when constructing a new " + "SimpleDateFormat object.");
+        }
+    }
+
+    /*
+     * Tests the method public static DateFormat.Field ofCalendarField(int calendarField)
+     */
+    public void TestOfCalendarField() {
+        // Tests when if (calendarField == ChineseCalendar.IS_LEAP_MONTH) is false
+        int[] cases = { ChineseCalendar.IS_LEAP_MONTH - 1, ChineseCalendar.IS_LEAP_MONTH + 1 };
+        for (int i = 0; i < cases.length; i++) {
+            try {
+                Field.ofCalendarField(cases[i]);
+            } catch (Exception e) {
+                errln("Field.ofCalendarField(int) is not suppose to " + "return an exception for parameter " + cases[i]);
+            }
         }
     }
 }

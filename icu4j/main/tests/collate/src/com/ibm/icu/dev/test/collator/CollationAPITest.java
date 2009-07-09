@@ -15,8 +15,10 @@ package com.ibm.icu.dev.test.collator;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationElementIterator;
@@ -26,6 +28,7 @@ import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
@@ -1179,5 +1182,135 @@ public class CollationAPITest extends TestFmwk {
         logln(msg + " " + c.compare(bigone, littleone) +
                            " s: " + c.getStrength() +
                            " u: " + c.isUpperCaseFirst());
+    }
+    
+    /*
+     * Tests the method public void setStrength(int newStrength)
+     */
+    public void TestSetStrength() {
+        // Tests when if ((newStrength != PRIMARY) && ... ) is true
+        int[] cases = { -1, 4, 5 };
+        for (int i = 0; i < cases.length; i++) {
+            try {
+                // Assuming -1 is not one of the values
+                Collator c = Collator.getInstance();
+                c.setStrength(cases[i]);
+                errln("Collator.setStrength(int) is suppose to return "
+                        + "an exception for an invalid newStrength value of " + cases[i]);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    /*
+     * Tests the method public void setDecomposition(int decomposition)
+     */
+    public void TestSetDecomposition() {
+        // Tests when if ((decomposition != NO_DECOMPOSITION) && ...) is true
+        int[] cases = { 0, 1, 14, 15, 18, 19 };
+        for (int i = 0; i < cases.length; i++) {
+            try {
+                // Assuming -1 is not one of the values
+                Collator c = Collator.getInstance();
+                c.setDecomposition(cases[i]);
+                errln("Collator.setDecomposition(int) is suppose to return "
+                        + "an exception for an invalid decomposition value of " + cases[i]);
+            } catch (Exception e) {
+            }
+        }
+    }
+    
+    /*
+     * Tests the class CollatorFactory
+     */
+    public void TestCreateCollator() {
+        // The following class override public Collator createCollator(Locale loc)
+        class TestCreateCollator extends CollatorFactory {
+            public Set<String> getSupportedLocaleIDs() {
+                return new HashSet<String>();
+            }
+
+            public TestCreateCollator() {
+                super();
+            }
+
+            public Collator createCollator(ULocale c) {
+                return null;
+            }
+        }
+        // The following class override public Collator createCollator(ULocale loc)
+        class TestCreateCollator1 extends CollatorFactory {
+            public Set<String> getSupportedLocaleIDs() {
+                return new HashSet<String>();
+            }
+
+            public TestCreateCollator1() {
+                super();
+            }
+
+            public Collator createCollator(Locale c) {
+                return null;
+            }
+            public boolean visible(){
+                return false;
+            }
+        }
+
+        /*
+         * Tests the method public Collator createCollator(Locale loc) using TestCreateCollator1 class
+         */
+        try {
+            TestCreateCollator tcc = new TestCreateCollator();
+            tcc.createCollator(new Locale("en_US"));
+        } catch (Exception e) {
+            errln("Collator.createCollator(Locale) was not suppose to " + "return an exception.");
+        }
+
+        /*
+         * Tests the method public Collator createCollator(ULocale loc) using TestCreateCollator1 class
+         */
+        try {
+            TestCreateCollator1 tcc = new TestCreateCollator1();
+            tcc.createCollator(new ULocale("en_US"));
+        } catch (Exception e) {
+            errln("Collator.createCollator(ULocale) was not suppose to " + "return an exception.");
+        }
+        
+        /*
+         * Tests the method gpublic String getDisplayName(Locale objectLocale, Locale displayLocale) using TestCreateCollator1 class
+         */
+        try {
+            TestCreateCollator tcc = new TestCreateCollator();
+            tcc.getDisplayName(new Locale("en_US"), new Locale("jp_JP"));
+        } catch (Exception e) {
+            errln("Collator.getDisplayName(Locale,Locale) was not suppose to return an exception.");
+        }
+        
+        /*
+         * Tests the method public String getDisplayName(ULocale objectLocale, ULocale displayLocale) using TestCreateCollator1 class
+         */
+        try {
+            TestCreateCollator1 tcc = new TestCreateCollator1();
+            tcc.getDisplayName(new ULocale("en_US"), new ULocale("jp_JP"));
+        } catch (Exception e) {
+            errln("Collator.getDisplayName(ULocale,ULocale) was not suppose to return an exception.");
+        }
+    }
+    /* Tests the method
+     * public static final String[] getKeywordValues(String keyword)
+     */
+    @SuppressWarnings("static-access")
+    public void TestGetKeywordValues(){
+        // Tests when "if (!keyword.equals(KEYWORDS[0]))" is true
+        String[] cases = {"","dummy"};
+        for(int i=0; i<cases.length; i++){
+            try{
+                Collator c = Collator.getInstance();
+                @SuppressWarnings("unused")
+                String[] s = c.getKeywordValues(cases[i]);
+                errln("Collator.getKeywordValues(String) is suppose to return " +
+                        "an exception for an invalid keyword.");
+            } catch(Exception e){}
+        }
     }
 }
