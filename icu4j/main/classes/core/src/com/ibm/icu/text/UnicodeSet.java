@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.text.ParsePosition;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 import java.util.TreeSet;
@@ -260,7 +261,7 @@ import com.ibm.icu.util.VersionInfo;
  * @stable ICU 2.0
  * @see UnicodeSetIterator
  */
-public class UnicodeSet extends UnicodeFilter implements Freezable {
+public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Comparable<UnicodeSet>, Freezable {
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -1041,6 +1042,18 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @stable ICU 2.0
      */
     public UnicodeSet add(int start, int end) {
+        checkFrozen();
+        return add_unchecked(start, end);
+    }
+    
+    /**
+     * Adds all characters in range (uses preferred naming convention).
+     * @param start
+     * @param end
+     * @return
+     * @draft ICU 4.2
+     */
+    public UnicodeSet addAll(int start, int end) {
         checkFrozen();
         return add_unchecked(start, end);
     }
@@ -2666,25 +2679,35 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Add the contents of the UnicodeSet (as strings) into a collection.
      * @param target collection to add into
+     * @return 
      * @stable ICU 2.8
      */
-    public void addAllTo(Collection<String> target) {
-        UnicodeSetIterator it = new UnicodeSetIterator(this);
-        while (it.next()) {
-            target.add(it.getString());
-        }
+    public <U extends Collection<String>> U addAllTo(U target) {
+        return addAllTo(this, target);
     }
 
     /**
      * Add the contents of the collection (as strings) into this UnicodeSet.
      * @param source the collection to add
+     * @return 
      * @stable ICU 2.8
      */
-    public void addAll(Collection<?> source) {
+    public UnicodeSet add(Collection<?> source) {
+        return addAll(source);
+    }
+    
+    /**
+     * Add the contents of the UnicodeSet (as strings) into a collection. Uses standard naming convention.
+     * @param target collection to add into
+     * @return 
+     * @draft ICU 4.2
+     */
+    public UnicodeSet addAll(Collection<?> source) {
         checkFrozen();
         for (Object o : source) {
             add(o.toString());
         }
+        return this;
     }
 
     //----------------------------------------------------------------
@@ -3742,7 +3765,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @return this
      * @stable ICU 3.8
      */
-    public Object freeze() {
+    public UnicodeSet freeze() {
         frozen = true;
         return this;
     }
@@ -3763,6 +3786,293 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         if (frozen) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
+    }
+    
+    // ************************
+    // Additional methods for integration with Generics and Collections
+    // ************************
+    
+    /**
+     * Returns a string iterator. Uses the same order of iteration as {@link UnicodeSetIterator}.
+     * @see java.util.Set#iterator()
+     * @draft ICU 4.2
+     */
+    public Iterator<String> iterator() {
+        return new UnicodeSetIterator2(this);
+    }
+
+    // Cover for string iteration. 
+    private static class UnicodeSetIterator2 implements Iterator<String> {
+        // Invariants:
+        // sourceList != null then sourceList[item] is a valid character
+        // sourceList == null then delegates to stringIterator
+        private int[] sourceList;
+        private int len;
+        private int item;
+        private int current;
+        private int limit;
+        private TreeSet<String> sourceStrings;
+        private Iterator<String> stringIterator;
+        private char[] buffer;
+
+        UnicodeSetIterator2(UnicodeSet source) {
+            // set according to invariants
+            len = source.len - 1;
+            if (item >= len) {
+                stringIterator = source.strings.iterator();
+                sourceList = null;
+            } else {
+                sourceStrings = source.strings;
+                sourceList = source.list;
+                current = sourceList[item++];
+                limit = sourceList[item++];
+            }
+        }
+
+        /* (non-Javadoc)
+         * @see java.util.Iterator#hasNext()
+         */
+        public boolean hasNext() {
+            return sourceList != null || stringIterator.hasNext();
+        }
+
+        /* (non-Javadoc)
+         * @see java.util.Iterator#next()
+         */
+        public String next() {
+            if (sourceList == null) {
+                return stringIterator.next();
+            }
+            int codepoint = current++;
+            // we have the codepoint we need, but we may need to adjust the state
+            if (current >= limit) {
+                if (item >= len) {
+                    stringIterator = sourceStrings.iterator();
+                    sourceList = null;
+                } else {
+                    current = sourceList[item++];
+                    limit = sourceList[item++];
+                }
+            }
+            // Now return. Single code point is easy
+            if (codepoint <= 0xFFFF) {
+                return String.valueOf((char)codepoint);
+            }
+            // But Java lacks a valueOfCodePoint, so we handle ourselves for speed
+            // allocate a buffer the first time, to make conversion faster.
+            if (buffer == null) {
+                buffer = new char[2];
+            }
+            // compute ourselves, to save tests and calls
+            int offset = codepoint - Character.MIN_SUPPLEMENTARY_CODE_POINT;
+            buffer[0] = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
+            buffer[1] = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
+            return String.valueOf(buffer);
+        }
+
+        /* (non-Javadoc)
+         * @see java.util.Iterator#remove()
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }  
+    }
+
+    /**
+     * @see containsAll(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public boolean containsAll(Collection<String> collection) {
+        for (String o : collection) {
+            if (!contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see #containsNone(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public boolean containsNone(Collection<String> collection) {
+        for (String o : collection) {
+            if (contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see #containsAll(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public final boolean containsSome(Collection<String> collection) {
+        return !containsNone(collection);
+    }
+
+    /**
+     * @see #addAll(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public UnicodeSet addAll(String... collection) {
+        checkFrozen();
+        for (String str : collection) {
+            add(str);
+        }
+        return this;
+    }
+
+
+    /**
+     * @see #removeAll(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public UnicodeSet removeAll(Collection<String> collection) {
+        checkFrozen();
+        for (String o : collection) {
+            remove(o);
+        }
+        return this;
+    }
+
+    /**
+     * @see #retainAll(com.ibm.icu.text.UnicodeSet)
+     * @draft ICU 4.2
+     */
+    public UnicodeSet retainAll(Collection<String> collection) {
+        checkFrozen();
+        // TODO optimize
+        UnicodeSet toRetain = new UnicodeSet();
+        toRetain.addAll(collection);
+        retainAll(toRetain);
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * @draft ICU 4.2
+     */
+    public int compareTo(UnicodeSet o) {
+        int result;
+        for (int i = 0; ; ++i) {
+            if (0 != (result = list[i] - o.list[i])) {
+                // if either list ran out, compare to the last string
+                if (list[i] == HIGH) {
+                    if (strings.isEmpty()) return 1;
+                    String item = strings.first();
+                    return compare(item, o.list[i]);
+                }
+                if (o.list[i] == HIGH) {
+                    if (o.strings.isEmpty()) return -1;
+                    String item = o.strings.first();
+                    return -compare(item, list[i]);
+                }
+                // otherwise return the result if even index, or the reversal if not
+                return (i & 1) == 0 ? result : -result;
+            }
+            if (list[i] == HIGH) {
+                break;
+            }
+        }
+        return compare(strings, o.strings);
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * @draft ICU 4.2
+     */
+    public int compareTo(Iterable<String> other) {
+        return compare(this, other);
+    }
+
+    /**
+     * Utility to compare a string to a code point.
+     * Same results as turning the code point into a string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString())
+     * and comparing, but much faster (no object creation). 
+     * Note that this (=String) order is UTF-16 order -- *not* code point order.
+     * @draft ICU 4.2
+     */
+    public static int compare(String string, int codePoint) {
+        if (codePoint < Character.MIN_CODE_POINT || codePoint > Character.MAX_CODE_POINT) {
+            throw new IllegalArgumentException();
+        }
+        int stringLength = string.length();
+        if (stringLength == 0) {
+            return -1;
+        }
+        char firstChar = string.charAt(0);
+        int offset = codePoint - Character.MIN_SUPPLEMENTARY_CODE_POINT;
+        
+        if (offset < 0) { // BMP codePoint
+            int result = firstChar - codePoint;
+            if (result != 0) {
+                return result;
+            }
+            return stringLength - 1;
+        } 
+        // non BMP
+        char lead = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
+        int result = firstChar - lead;
+        if (result != 0) {
+            return result;
+        }
+        if (stringLength > 1) {
+            char trail = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
+            result = string.charAt(1) - trail;
+            if (result != 0) {
+                return result;
+            }
+        }
+        return stringLength - 2;
+    }
+    
+    /**
+     * Utility to compare a string to a code point.
+     * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
+     * Actually, there is one difference; a null compares as less.
+     * @draft ICU 4.2
+     */
+    public static int compare(int codepoint, String a) {
+        return -compare(a, codepoint);
+    }
+
+    /**
+     * Utility to compare two collections of iterables. Warning: the ordering in iterables is important. For Collections that are ordered,
+     * like Lists, that is expected. However, Sets in Java violate Leibniz's law when it comes to iteration.
+     * That means that sets can't be compared directly with this method, unless they are TreeSets without
+     * (or with the same) comparator. Unfortunately, it is impossible to reliably detect in Java whether subclass of
+     * Collection satisfies the right criteria, so it is left to the user to avoid those circumstances.
+     * @draft ICU 4.2
+     */
+    public static <T extends Comparable<T>> int compare(Iterable<T> collection1, Iterable<T> collection2) {
+        Iterator<T> first = collection1.iterator();
+        Iterator<T> other = collection2.iterator();
+        while (true) {
+            if (!first.hasNext()) {
+                return other.hasNext() ? -1 : 0;
+            } else if (!other.hasNext()) {
+                return 1;
+            }
+            T item1 = first.next();
+            T item2 = other.next();
+            int result = item1.compareTo(item2);
+            if (result != 0) {
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Utility for adding the contents of an iterable to a collection.
+     * @draft ICU 4.2
+     */
+    public static <T, U extends Collection<T>> U addAllTo(Iterable<T> source, U target) {
+        for (T item : source) {
+            target.add(item);
+        }
+        return target;
     }
 }
 //eof
