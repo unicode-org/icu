@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -180,5 +180,54 @@ public class PluralRulesTest extends TestFmwk {
         localeSet.addAll(Arrays.asList(locales));
 
         assertEquals("locales are unique in list", locales.length, localeSet.size());
+    }
+    
+    /*
+     * Test the method public static PluralRules parseDescription(String description)
+     */
+    public void TestParseDescription() {
+        try {
+            if (PluralRules.DEFAULT != PluralRules.parseDescription("")) {
+                errln("PluralRules.parseDescription(String) was suppose "
+                        + "to return PluralRules.DEFAULT when String is of " + "length 0.");
+            }
+        } catch (ParseException e) {
+            errln("PluralRules.parseDescription(String) was not suppose " + "to return an exception.");
+        }
+    }
+
+    /*
+     * Tests the method public static PluralRules createRules(String description)
+     */
+    public void TestCreateRules() {
+        try {
+            if (PluralRules.createRules(null) != null) {
+                errln("PluralRules.createRules(String) was suppose to "
+                        + "return null for an invalid String descrtiption.");
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    /*
+     * Tests the method public int hashCode()
+     */
+    public void TestHashCode() {
+        PluralRules pr = PluralRules.DEFAULT;
+        if (106069776 != pr.hashCode()) {
+            errln("PluralRules.hashCode() was suppose to return 106069776 " + "when PluralRules.DEFAULT.");
+        }
+    }
+
+    /*
+     * Tests the method public boolean equals(PluralRules rhs)
+     */
+    public void TestEquals() {
+        PluralRules pr = PluralRules.DEFAULT;
+
+        // Tests when if (rhs == null) is true
+        if (pr.equals((PluralRules) null)) {
+            errln("PluralRules.equals(PluralRules) was suppose to return false " + "when passing null.");
+        }
     }
 }

@@ -124,7 +124,11 @@ class TransliteratorRegistry {
                     }
                 }
             }catch(MissingResourceException e){
+                ///CLOVER:OFF
+                // The constructor is called from multiple private methods
+                //  that protects an invalid scriptName
                 scriptName = null;
+                ///CLOVER:ON
             }
             // assert(spec != top);
             reset();
