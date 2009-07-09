@@ -87,6 +87,10 @@ icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.CurrencyNamePro
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.LocaleNameProvider -text
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/main/classes/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
+icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -text
+icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
 icu4j/main/shared/data/icudata.jar -text
 icu4j/main/shared/data/testdata.jar -text
@@ -244,6 +248,11 @@ icu4j/main/tests/framework/manifest.stub -text
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text
+icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -text
+icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/tests/translit/translit-tests-build.launch -text
+icu4j/main/tests/translit/translit-tests.launch -text
 icu4j/tools/build/icu4j28.api.gz -text
 icu4j/tools/build/icu4j30.api.gz -text
 icu4j/tools/build/icu4j32.api.gz -text

@@ -26,7 +26,6 @@ public class TestAll extends TestGroup {
                 "ReplaceableTest",
                 "RoundTripTest",
                 "TransliteratorTest",
-                "UnicodeSetTest",
                 "RegexUtilitiesTest",
                 "UnicodeMapTest",
         });

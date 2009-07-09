@@ -4,7 +4,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.translit;
+package com.ibm.icu.dev.test.lang;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;

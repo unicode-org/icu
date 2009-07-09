@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,10 @@ import javax.swing.ListCellRenderer;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.Collator;
+
+// remove dependency on ICU collator, restore if we actually need it
+// import com.ibm.icu.text.Collator;
+import java.text.Collator;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
 
@@ -716,5 +719,3 @@ class LabelComparator implements Comparator {
         return this.equals(obj1);
     }
 }
-
-

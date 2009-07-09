@@ -108,6 +108,16 @@
         <ant dir="${icu4j.localespi.dir}" inheritAll="false"/>
     </target>
 
+    <!-- translit -->
+    <path id="javac.classpathref.translit">
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.translit.jar}"/>
+    </path>
+
+    <target name="_all.translit" depends="_all.core">
+        <ant dir="${icu4j.translit.dir}" inheritAll="false"/>
+    </target>
+
     <!-- test-framework -->
     <path id="javac.classpathref.test-framework">
         <pathelement location="${icu4j.core.jar}"/>
@@ -159,6 +169,17 @@
 
     <target name="_all.localespi-tests" depends="_all.core, _all.collate, _all.localespi, _all.test-framework">
         <ant dir="${icu4j.localespi-tests.dir}" inheritAll="false"/>
+    </target>
+
+    <!-- translit-tests -->
+    <path id="javac.classpathref.translit-tests">
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.translit.jar}"/>
+        <pathelement location="${icu4j.test-framework.jar}"/>
+    </path>
+
+    <target name="_all.translit-tests" depends="_all.core, _all.translit, _all.test-framework">
+        <ant dir="${icu4j.translit-tests.dir}" inheritAll="false"/>
     </target>
 
     <!-- build-tools -->
