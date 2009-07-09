@@ -463,12 +463,12 @@ main(int argc, char* argv[]) {
 }
 
 static int runCommand(const char* command) { 
-	printf("pkgdata: %s\n", command); 
-	int result = system(command); 
-	if (result != 0) { 
-		printf("-- return status = %d\n", result); 
-	} 
-	return result; 
+    printf("pkgdata: %s\n", command); 
+    int result = system(command); 
+    if (result != 0) { 
+        printf("-- return status = %d\n", result); 
+    }
+    return result; 
 } 
 
 #define LN_CMD "ln -s"
@@ -859,17 +859,17 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
                 targetDir,
                 libFileNames[LIB_FILE_VERSION_TMP]);
 
-		result = runCommand(cmd); 
-		if (result != 0) { 
-			return result; 
-		} 
-
-		sprintf(cmd, "%s %s%s", 
-			pkgDataFlags[RANLIB], 
-			targetDir, 
-			libFileNames[LIB_FILE_VERSION]);
-
-		result = runCommand(cmd); 
+        result = runCommand(cmd); 
+        if (result != 0) { 
+            return result; 
+        } 
+        
+        sprintf(cmd, "%s %s%s", 
+            pkgDataFlags[RANLIB], 
+            targetDir, 
+            libFileNames[LIB_FILE_VERSION]);
+        
+        result = runCommand(cmd); 
         if (result != 0) {
             return result;
         }
@@ -928,21 +928,20 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                 pkgDataFlags[A_EXT],
                 objectFile);
 
-		result = runCommand(cmd); 
-		if (result == 0) 
-		{
+        result = runCommand(cmd); 
+        if (result == 0) {
 #ifdef OS400 
-		sprintf(cmd, "QSH CMD('%s %s%s.%s')", 
+            sprintf(cmd, "QSH CMD('%s %s%s.%s')", 
 #else 
-		sprintf(cmd, "%s %s%s.%s", 
+            sprintf(cmd, "%s %s%s.%s", 
 #endif 
-			pkgDataFlags[RANLIB], 
-			targetDir, 
-			libFileNames[LIB_FILE], 
-			pkgDataFlags[A_EXT]); 
-
-			result = runCommand(cmd); 
-		}
+                    pkgDataFlags[RANLIB], 
+                    targetDir, 
+                    libFileNames[LIB_FILE], 
+                    pkgDataFlags[A_EXT]); 
+        
+            result = runCommand(cmd); 
+        }
     } else /* if (mode == MODE_DLL) */ {
 #ifdef U_CYGWIN
         sprintf(cmd, "%s%s%s %s -o %s%s %s %s%s %s %s",
