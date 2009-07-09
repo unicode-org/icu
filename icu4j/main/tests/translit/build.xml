@@ -4,7 +4,7 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
-<project name="core" default="build" basedir=".">
+<project name="translit-tests" default="build" basedir=".">
     <property file="build-local.properties"/>
     <property file="build.properties"/>
     <import file="${shared.dir}/build/common-targets.xml"/>
@@ -12,7 +12,7 @@
     <path id="javac.classpathref">
         <path refid="javac.classpathref.${ant.project.name}"/>
     </path>
-    <property name="jar.file" value="${icu4j.core.jar}"/>
+    <property name="jar.file" value="${icu4j.translit-tests.jar}"/>
 
     <target name="build" depends="compile, copy, jar" description="Build the project"/>
 
@@ -22,19 +22,15 @@
 
     <target name="compile" depends="@compile" description="Compile java source files"/>
 
-    <target name="copy" depends="@copy, copy-data" description="Copy non-java runtime files to the project's binary directory"/>
+    <target name="copy" depends="@copy, copy-translit-test-data" description="Copy non-java runtime files to the project's binary directory"/>
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="copy-data" description="Extract pre-built ICU core data files and copy them to the project's binary directory">
-        <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
-            <patternset>
-	        <exclude name="**/coll/*"/>
-                <exclude name="**/*.cnv"/>
-                <exclude name="**/convalias.icu"/>
-	        <exclude name="**/translit/*"/>
-            </patternset>
-        </unjar>
+    <target name="copy-translit-test-data" description="Extract pre-built ICU collation test data files and copy them to the project's binary directory">
+        <copy todir="${bin.dir}">
+            <fileset dir="${icu4j.translit-tests.dir}/src">
+                <include name="com/ibm/icu/dev/test/translit/langtagRegex.txt"/>
+            </fileset>
+        </copy>
     </target>
-
 </project>

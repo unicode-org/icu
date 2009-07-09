@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -14,7 +14,8 @@ import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.Transliterator;
+// disable tests that have dependency on Transliterator for now
+// import com.ibm.icu.text.Transliterator;
 
 /**
  * @author ram
@@ -29,7 +30,7 @@ public class NamePrepTransform {
     private UnicodeSet labelSeparatorSet;
     private UnicodeSet prohibitedSet;
     private UnicodeSet unassignedSet;
-    private Transliterator mapTransform;
+  // private Transliterator mapTransform;
     public static final int NONE = 0;
     public static final int ALLOW_UNASSIGNED = 1;
     
@@ -38,7 +39,8 @@ public class NamePrepTransform {
         ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", NamePrepTransform.class.getClassLoader(), true);
         String  mapRules      = bundle.getString("MapNoNormalization");
         mapRules             += bundle.getString("MapNFKC");
-        mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);
+        // disable
+        // mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);
         labelSeparatorSet     = new UnicodeSet(bundle.getString("LabelSeparatorSet"));
         prohibitedSet         = new UnicodeSet(bundle.getString("ProhibitedSet"));
         unassignedSet         = new UnicodeSet(bundle.getString("UnassignedSet"));
@@ -98,7 +100,9 @@ public class NamePrepTransform {
                                 throws StringPrepParseException{
         // map 
         boolean allowUnassigned =  ((options & ALLOW_UNASSIGNED)>0);
-        String caseMapOut = transform.mapTransform.transliterate(src);    
+        // disable test
+        // String caseMapOut = transform.mapTransform.transliterate(src);    
+        String caseMapOut = src;
         UCharacterIterator iter = UCharacterIterator.getInstance(caseMapOut);
         int ch;
         while((ch=iter.nextCodePoint())!=UCharacterIterator.DONE){                          

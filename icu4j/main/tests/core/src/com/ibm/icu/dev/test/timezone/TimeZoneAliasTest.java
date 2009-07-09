@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -21,7 +22,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.util.BagFormatter;
+// remove dependency on this for now
+// import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
 
 
@@ -115,18 +117,24 @@ public class TimeZoneAliasTest extends TestFmwk {
     
     /** Utility; ought to be someplace common
      */
-    /*
-    static String join(Collection c, String separator) {
-        StringBuffer result = new StringBuffer();
-        boolean isFirst = true;
-        for (Iterator it = c.iterator(); it.hasNext(); ) {
-            if (!isFirst) result.append(separator);
-            else isFirst = false;
-            result.append(it.next().toString());
+    // remove dependency on bagformatter for now
+    static class CollectionJoiner {
+        private String separator;
+        CollectionJoiner(String separator) {
+            this.separator = separator;
         }
-        return result.toString();
+        String join(Collection c) {
+            StringBuffer result = new StringBuffer();
+            boolean isFirst = true;
+            for (Iterator it = c.iterator(); it.hasNext(); ) {
+                if (!isFirst) result.append(separator);
+                else isFirst = false;
+                result.append(it.next().toString());
+            }
+            return result.toString();
+        }
     }
-    */
+
         
     /**
      * The guts is in this subclass. It sucks in all the data from the zones,
@@ -140,7 +148,8 @@ public class TimeZoneAliasTest extends TestFmwk {
      */
     static class Zone implements Comparable {
         // class fields
-        static private final BagFormatter bf = new BagFormatter().setSeparator(", ");
+      // static private final BagFormatter bf = new BagFormatter().setSeparator(", ");
+        private static final CollectionJoiner bf = new CollectionJoiner(", ");
         static private final DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
         static private final NumberFormat nf = NumberFormat.getInstance(Locale.US);
         static private final long HOUR = 1000*60*60;

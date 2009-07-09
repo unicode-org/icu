@@ -771,11 +771,13 @@ icu4j/main/classes/charset/out
 icu4j/main/classes/collate/out
 icu4j/main/classes/core/out
 icu4j/main/classes/localespi/out
+icu4j/main/classes/translit/out
 icu4j/main/tests/charset/out
 icu4j/main/tests/collate/out
 icu4j/main/tests/core/out
 icu4j/main/tests/framework/out
 icu4j/main/tests/localespi/out
+icu4j/main/tests/translit/out
 icu4j/out
 icu4j/tools/build/out
 icu4j/tools/misc/out

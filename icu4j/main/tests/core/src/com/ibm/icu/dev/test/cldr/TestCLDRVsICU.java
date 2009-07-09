@@ -39,7 +39,8 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.text.Transliterator;
+// dlf transliterator is also not in core
+// import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
@@ -141,7 +142,30 @@ public class TestCLDRVsICU extends TestFmwk {
         SAX.parse(f, DEFAULT_HANDLER);
     }
 
-    static Transliterator toUnicode = Transliterator.getInstance("any-hex");
+  // static Transliterator toUnicode = Transliterator.getInstance("any-hex");
+
+    private static class ToHex {
+        public String transliterate(String in) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < in.length(); ++i) {
+                char c = in.charAt(i);
+                sb.append("\\u");
+                if (c < 1000) {
+                    sb.append('0');
+                    if (c < 100) {
+                        sb.append('0');
+                        if (c < 10) {
+                            sb.append('0');
+                        }
+                    }
+                }
+                sb.append(Integer.toHexString((int)c));
+            }
+            return sb.toString();
+        }
+    }
+    private static final ToHex toUnicode = new ToHex();
+
     static public String showString(String in) {
         return "\u00AB" + in + "\u00BB (" + toUnicode.transliterate(in) + ")";
     }

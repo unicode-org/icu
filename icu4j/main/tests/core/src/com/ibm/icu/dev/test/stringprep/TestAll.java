@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -15,24 +15,23 @@ import com.ibm.icu.dev.test.TestFmwk.TestGroup;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class TestAll extends TestGroup {
-   
+
     public static void main(String[] args) throws Exception {
         new TestAll().run(args);
     }
 
     public TestAll() {
         super(
-                  new String[] { 
-                      "TestIDNA", 
-                      "TestStringPrep",
-                      "TestIDNARef",
-                      "IDNAConformanceTest",
-                  },
-                  "StringPrep and IDNA test"
-              );
+            new String[] {
+                // disable these tests while translit is not available
+                // "TestIDNA",
+                // "TestStringPrep",
+                // "TestIDNARef",
+                "IDNAConformanceTest",
+            },
+            "StringPrep and IDNA test"
+            );
     }
 
     public static final String CLASS_TARGET_NAME = "StringPrep";
-   
-
 }

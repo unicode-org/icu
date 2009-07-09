@@ -11,22 +11,22 @@ import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 /**
  * Top level test used to run all other tests as a batch.
  */
-public class TestAll extends TestGroup {
+public class TestAllTranslit extends TestGroup {
 
     public static void main(String[] args) {
-        new TestAll().run(args);
+        new TestAllTranslit().run(args);
     }
 
-    public TestAll() {
+    public TestAllTranslit() {
         super(
               new String[] {
-                  "com.ibm.icu.dev.test.TestAllCore",
-                  "com.ibm.icu.dev.test.TestAllCollate",
-                  "com.ibm.icu.dev.test.TestAllTranslit",
-                  "com.ibm.icu.dev.test.charset.TestAll",
+                  "com.ibm.icu.dev.test.translit.TestAll",
+                  // funky tests of test code
+                  // "com.ibm.icu.dev.test.util.TestBNF",
+                  // "com.ibm.icu.dev.test.util.TestBagFormatter",
               },
-              "All tests in ICU");
+              "All tests in ICU translit");
     }
 
-    public static final String CLASS_TARGET_NAME  = "ICU";
+    public static final String CLASS_TARGET_NAME  = "Translit";
 }

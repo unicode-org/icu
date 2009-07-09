@@ -1240,6 +1240,10 @@ icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.CurrencyNamePro
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.LocaleNameProvider -text
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/main/classes/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
+icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -text
+icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
 icu4j/main/shared/data/Transliterator_Han_Latin_Definition.txt svneol=native#text/plain
 icu4j/main/shared/data/Transliterator_Han_Latin_EDICT.txt svneol=native#text/plain
@@ -1431,8 +1435,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.0/com.ibm.icu.util.VTimeZone.dat -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
@@ -1441,6 +1443,13 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/test/package.html svneol=native#t
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text
+icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -text
+icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
+icu4j/main/tests/translit/translit-tests-build.launch -text
+icu4j/main/tests/translit/translit-tests.launch -text svneol=unset#text/plain
 icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain
 icu4j/perf-tests/data/collation/TestNames_Chinese.txt svneol=native#text/plain
 icu4j/perf-tests/data/collation/TestNames_Japanese.txt svneol=native#text/plain
