@@ -39,6 +39,8 @@ import com.ibm.icu.util.CompactByteArray;
      * @internal 
      * @deprecated This API is ICU internal only.
      */
+    ///CLOVER:OFF
+    //The main method looks like it was useful once but now seems worthless. It is not used by any method or class.
     public static void main(String args[])
             throws FileNotFoundException, UnsupportedEncodingException, IOException {
         String filename = args[0];
@@ -57,11 +59,13 @@ import com.ibm.icu.util.CompactByteArray;
             out.close();
         }
     }
+    ///CLOVER:ON
 
     /** 
      * @internal 
      * @deprecated This API is ICU internal only.
      */
+    ///CLOVER:OFF
     /* public */ void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
         if (state == 0xFFFF) {
@@ -87,6 +91,7 @@ import com.ibm.icu.util.CompactByteArray;
             }
         }
     }
+    ///CLOVER:ON
 
     /**
      * A map used to go from column numbers to characters.  Used only

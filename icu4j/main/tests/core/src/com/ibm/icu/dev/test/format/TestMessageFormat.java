@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -468,6 +469,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("format", compareStrGer, result.toString());
     }
 
+    @SuppressWarnings("static-access")
     public void TestFormat()
     {
         final Object ft_arr[] =
@@ -498,6 +500,14 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             result,
             fp);
         assertEquals("format", compareStr, result.toString());
+        
+        Map<String,Object> map = new Hashtable<String,Object>();
+        try{
+            msg.format("", map);
+        } catch(Exception e){
+            errln("MessageFormat.format(String,Map) was not suppose to return " +
+                    "an exception.");
+        }
     }
 
     public void TestParse()
@@ -1356,18 +1366,23 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     // Test case for formatToCharacterIterator
     public void TestFormatToCharacterIterator() {
         MessageFormat[] msgfmts = {
-            new MessageFormat("The {3,ordinal} folder ''{0}'' contains {2,number} file(s), created at {1,time} on {1,date}."),
-            new MessageFormat("The {arg3,ordinal} folder ''{arg0}'' contains {arg2,number} file(s), created at {arg1,time} on {arg1,date}."), // same as above, but named args
-            new MessageFormat("The folder contains {0}.")
-        };
+                new MessageFormat(
+                        "The {3,ordinal} folder ''{0}'' contains {2,number} file(s), created at {1,time} on {1,date}."),
+                new MessageFormat(
+                        "The {arg3,ordinal} folder ''{arg0}'' contains {arg2,number} file(s), created at {arg1,time} on {arg1,date}."), // same
+                                                                                                                                        // as
+                                                                                                                                        // above,
+                                                                                                                                        // but
+                                                                                                                                        // named
+                                                                                                                                        // args
+                new MessageFormat("The folder contains {0}.") };
 
-        double filelimits[] = {0,1,2};
-        String filepart[] = {"no files","one file","{0,number} files"};
+        double filelimits[] = { 0, 1, 2 };
+        String filepart[] = { "no files", "one file", "{0,number} files" };
         ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
         msgfmts[2].setFormat(0, fileform);
 
-        
-        Object[] args0 = new Object[] {"tmp", new Date(1184777888000L), new Integer(15), new Integer(2)};
+        Object[] args0 = new Object[] { "tmp", new Date(1184777888000L), new Integer(15), new Integer(2) };
 
         HashMap args1 = new HashMap();
         args1.put("arg0", "tmp");
@@ -1375,25 +1390,17 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         args1.put("arg2", new Integer(15));
         args1.put("arg3", new Integer(2));
 
-        Object[] args2 = new Object[] {new Integer(34)};
+        Object[] args2 = new Object[] { new Integer(34) };
 
-        Object[] args = {
-            args0,
-            args1,
-            args2
-        };
-        
+        Object[] args = { args0, args1, args2 };
+
         String[] expectedStrings = {
-            "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
-            "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
-            "The folder contains 34 files."
-        };
+                "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+                "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+                "The folder contains 34 files." };
 
-        AttributedString[] expectedAttributedStrings = {
-            new AttributedString(expectedStrings[0]),
-            new AttributedString(expectedStrings[1]),
-            new AttributedString(expectedStrings[2])
-        };
+        AttributedString[] expectedAttributedStrings = { new AttributedString(expectedStrings[0]),
+                new AttributedString(expectedStrings[1]), new AttributedString(expectedStrings[2]) };
 
         // Add expected attributes to the expectedAttributedStrings[0]
         expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(3), 4, 7);
@@ -1441,7 +1448,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
             Iterator attrIterator = attrSet.iterator();
             while (attrIterator.hasNext()) {
-                AttributedCharacterIterator.Attribute attr = (AttributedCharacterIterator.Attribute)attrIterator.next();
+                AttributedCharacterIterator.Attribute attr = (AttributedCharacterIterator.Attribute) attrIterator
+                        .next();
                 if (!expectedAttrSet.contains(attr)) {
                     errln("FAIL: The attribute " + attr + " is not expected.");
                 }
@@ -1470,7 +1478,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                         // Check all attributes at the index
                         Iterator entryIterator = attrsExp.entrySet().iterator();
                         while (entryIterator.hasNext()) {
-                            Map.Entry entry = (Map.Entry)entryIterator.next();
+                            Map.Entry entry = (Map.Entry) entryIterator.next();
                             if (attrs.containsKey(entry.getKey())) {
                                 Object value = attrs.get(entry.getKey());
                                 assertEquals("Attribute value at index " + index, entry.getValue(), value);
@@ -1484,6 +1492,26 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 }
                 assertEquals("AttributedString contents", expectedStrings[i], buf.toString());
             }
+        }
+
+        // Tests when "if (arguments == null)" is true
+        try {
+            MessageFormat mf = new MessageFormat("");
+            mf.formatToCharacterIterator(null);
+            errln("MessageFormat.formatToCharacterIterator(Object) was suppose "
+                    + "to return an exception when null is passed.");
+        } catch (Exception e) {
+        }
+    }
+    
+    /*
+     * Tests the method public Format getFormatByArgumentName(String argumentName)
+     */
+    public void TestGetFormatByArgumentName() {
+        MessageFormat mf = new MessageFormat("");
+        if (mf.getFormatByArgumentName("") != null) {
+            errln("MessageFormat.getFormatByArgumentName(String) was suppose "
+                    + "to return an null if argumentName was not found.");
         }
     }
 }

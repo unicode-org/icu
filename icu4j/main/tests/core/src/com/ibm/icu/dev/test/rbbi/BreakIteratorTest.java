@@ -869,7 +869,7 @@ public class BreakIteratorTest extends TestFmwk
         //      public DictionaryBasedBreakIterator(InputStream compiledRules, ...
         class TestDictionaryBasedBreakIterator1 extends DictionaryBasedBreakIterator{
             public TestDictionaryBasedBreakIterator1() throws IOException{
-                super((InputStream)null,null);
+                super((InputStream)null,(InputStream)null);
             }
             
         }

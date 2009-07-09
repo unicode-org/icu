@@ -450,7 +450,9 @@ public abstract class Collator implements Comparator<Object>, Cloneable
             }
             catch (MissingResourceException e)
             {
+                ///CLOVER:OFF
                 throw e;
+                ///CLOVER:ON
             }
             catch (Exception e) {
                 ///CLOVER:OFF
@@ -1051,11 +1053,14 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
+        ///CLOVER:OFF
+        // The following would not happen since the method is called
+        //  by other protected functions that checks and makes sure that
+        //  valid and actual are not null before passing
         if ((valid == null) != (actual == null)) {
-            ///CLOVER:OFF
             throw new IllegalArgumentException();
-            ///CLOVER:ON
         }
+        ///CLOVER:ON
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
         this.validLocale = valid;
