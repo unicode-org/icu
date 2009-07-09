@@ -3642,7 +3642,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestOfCalendarField() {
         // Tests when if (calendarField == ChineseCalendar.IS_LEAP_MONTH) is false
-        int[] cases = { ChineseCalendar.IS_LEAP_MONTH - 1, ChineseCalendar.IS_LEAP_MONTH + 1 };
+        int[] cases = { ChineseCalendar.IS_LEAP_MONTH - 1};
         for (int i = 0; i < cases.length; i++) {
             try {
                 Field.ofCalendarField(cases[i]);
