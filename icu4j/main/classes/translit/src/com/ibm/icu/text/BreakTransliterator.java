@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -32,13 +32,19 @@ final class BreakTransliterator extends Transliterator {
         this(ID, filter, null, " ");
     }
 
+    ///CLOVER:OFF
+    // The following method is not called by anything and can't be reached
     public String getInsertion() {
         return insertion;
     }
+    ///CLOVER:ON
 
+    ///CLOVER:OFF
+    // The following method is not called by anything and can't be reached
     public void setInsertion(String insertion) {
         this.insertion = insertion;
     }
+    ///CLOVER:ON
 
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
@@ -47,9 +53,12 @@ final class BreakTransliterator extends Transliterator {
         return bi;
     }
 
+    ///CLOVER:OFF
+    // The following method is not called by anything and can't be reached
     public void setBreakIterator(BreakIterator bi) {
         this.bi = bi;
     }
+    ///CLOVER:ON
 
     static final int LETTER_OR_MARK_MASK =
           (1<<Character.UPPERCASE_LETTER)

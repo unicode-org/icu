@@ -3692,29 +3692,40 @@ the ::BEGIN/::END stuff)
         assertEquals(message + " " + expected, source, back.transform(expected));
     }
 
-    /* Tests the method
-     * public Enumeration<String> getAvailableTargets(String source)
+    /*
+     * Tests the method public Enumeration<String> getAvailableTargets(String source)
      */
-    public void TestGetAvailableTargets(){
+    public void TestGetAvailableTargets() {
         try {
             // Tests when if (targets == null) is true
             Transliterator.getAvailableTargets("");
-        } catch(Exception e){
-            errln("TransliteratorRegistry.getAvailableTargets(String) was not " +
-                    "supposed to return an exception.");
+        } catch (Exception e) {
+            errln("TransliteratorRegistry.getAvailableTargets(String) was not " + "supposed to return an exception.");
         }
     }
 
-    /* Tests the method
-     * public Enumeration<String> getAvailableVariants(String source, String target)
+    /*
+     * Tests the method public Enumeration<String> getAvailableVariants(String source, String target)
      */
-    public void TestGetAvailableVariants(){
+    public void TestGetAvailableVariants() {
         try {
             // Tests when if (targets == null) is true
-            Transliterator.getAvailableVariants("","");
+            Transliterator.getAvailableVariants("", "");
+        } catch (Exception e) {
+            errln("TransliteratorRegistry.getAvailableVariants(String) was not " + "supposed to return an exception.");
+        }
+    }
+
+    /*
+     * Tests the mehtod String nextLine() in RuleBody
+     */
+    public void TestNextLine() {
+        // Tests when "if (s != null && s.length() > 0 && s.charAt(s.length() - 1) == '\\') is true
+        try{
+            Transliterator.createFromRules("gif", "\\", Transliterator.FORWARD);
         } catch(Exception e){
-            errln("TransliteratorRegistry.getAvailableVariants(String) was not " +
-                    "supposed to return an exception.");
+            errln("TransliteratorParser.nextLine() was not suppose to return an " +
+                    "exception for a rule of '\\'");
         }
     }
 }

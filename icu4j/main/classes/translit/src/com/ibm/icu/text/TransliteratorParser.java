@@ -294,7 +294,6 @@ class TransliteratorParser {
             if (s != null &&
                 s.length() > 0 &&
                 s.charAt(s.length() - 1) == '\\') {
-
                 StringBuffer b = new StringBuffer(s);
                 do {
                     b.deleteCharAt(b.length()-1);
@@ -305,7 +304,6 @@ class TransliteratorParser {
                     b.append(s);
                 } while (s.length() > 0 &&
                          s.charAt(s.length() - 1) == '\\');
-
                 s = b.toString();
             }
             return s;
@@ -462,9 +460,12 @@ class TransliteratorParser {
                 }
                 // HALF_ENDERS is all chars that end a rule half: "<>=;"
                 if (HALF_ENDERS.indexOf(c) >= 0) {
+                    ///CLOVER:OFF
+                    // isSegment is always false
                     if (isSegment) {
                         syntaxError("Unclosed segment", rule, start);
                     }
+                    ///CLOVER:ON
                     break main;
                 }
                 if (anchorEnd) {
@@ -678,11 +679,14 @@ class TransliteratorParser {
                     //  $v+     matches  xyxyxy if $v == xy
                     //  (seg)+  matches  segsegseg
                     {
+                        ///CLOVER:OFF
+                        // isSegment is always false
                         if (isSegment && buf.length() == bufStart) {
                             // The */+ immediately follows '('
                             syntaxError("Misplaced quantifier", rule, start);
                             break;
-                        } 
+                        }
+                        ///CLOVER:ON
  
                         int qstart, qlimit;
                         // The */+ follows an isolated character or quote
