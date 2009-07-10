@@ -943,7 +943,7 @@ static int32_t
 _appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UErrorCode* status) {
     char buf[ULOC_SCRIPT_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len, i;
+    int32_t len;
     int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
@@ -966,10 +966,6 @@ _appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
             }
             return 0;
         } else {
-            /* to lowercase */
-            for (i = 0; i < len; i++) {
-                buf[i] = uprv_tolower(buf[i]);
-            }
             if (reslen < capacity) {
                 *(appendAt + reslen) = SEP;
             }
@@ -989,7 +985,7 @@ static int32_t
 _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UErrorCode* status) {
     char buf[ULOC_COUNTRY_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len, i;
+    int32_t len;
     int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
@@ -1012,10 +1008,6 @@ _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
             }
             return 0;
         } else {
-            /* to lowercase */
-            for (i = 0; i < len; i++) {
-                buf[i] = uprv_tolower(buf[i]);
-            }
             if (reslen < capacity) {
                 *(appendAt + reslen) = SEP;
             }
@@ -1072,7 +1064,8 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     }
                     /* ignore empty variant */
                 } else {
-                    /* to lowercase */
+                    /* ICU uses upper case letters for variants, but
+                       the canonical format is lowercase in BCP47 */
                     for (i = 0; *(pVar + i) != 0; i++) {
                         *(pVar + i) = uprv_tolower(*(pVar + i));
                     }
@@ -1578,7 +1571,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     int32_t subtagLen;
     int32_t extlangIdx;
     ExtensionListEntry *pExtension;
-    char *pExtValueSubtagEnd;
+    char *pExtValueSubtag, *pExtValueSubtagEnd;
     int32_t i;
     UBool isLDMLExtension, reqLDMLType;
 
@@ -1603,11 +1596,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     uprv_memcpy(tagBuf, tag, tagLen);
     *(tagBuf + tagLen) = 0;
 
-    /* to lower case */
-    for (i = 0; i < tagLen; i++) {
-        tagBuf[i] = uprv_tolower(tagBuf[i]);
-    }
-
     /* create a ULanguageTag */
     t = (ULanguageTag*)uprv_malloc(sizeof(ULanguageTag));
     _initializeULanguageTag(t);
@@ -1625,7 +1613,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
 
     /* check if the tag is grandfathered */
     for (i = 0; GRANDFATHERED[i] != NULL; i += 2) {
-        if (uprv_strcmp(GRANDFATHERED[i], tagBuf) == 0) {
+        if (T_CString_stricmp(GRANDFATHERED[i], tagBuf) == 0) {
             /* a grandfathered tag is always longer than its preferred mapping */
             uprv_strcpy(t->buf, GRANDFATHERED[i + 1]);
             t->language = t->buf;
@@ -1649,6 +1637,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     pNext = pLastGoodPosition = tagBuf;
     extlangIdx = 0;
     pExtension = NULL;
+    pExtValueSubtag = NULL;
     pExtValueSubtagEnd = NULL;
     isLDMLExtension = FALSE;
     reqLDMLType = FALSE;
@@ -1677,7 +1666,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         if (next & LANG) {
             if (_isLanguageSubtag(pSubtag, subtagLen)) {
                 *pSep = 0;  /* terminate */
-                t->language = pSubtag;
+                t->language = T_CString_toLowerCase(pSubtag);
 
                 pLastGoodPosition = pSep;
                 next = EXTL | SCRT | REGN | VART | EXTS | PRIV;
@@ -1687,7 +1676,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         if (next & EXTL) {
             if (_isExtlangSubtag(pSubtag, subtagLen)) {
                 *pSep = 0;
-                t->extlang[extlangIdx++] = pSubtag;
+                t->extlang[extlangIdx++] = T_CString_toLowerCase(pSubtag);
 
                 pLastGoodPosition = pSep;
                 if (extlangIdx < 3) {
@@ -1700,7 +1689,16 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         }
         if (next & SCRT) {
             if (_isScriptSubtag(pSubtag, subtagLen)) {
+                char *p = pSubtag;
+
                 *pSep = 0;
+
+                /* to title case */
+                *p++ = uprv_toupper(*p);
+                while (*p) {
+                    *p++ = uprv_tolower(*p);
+                }
+
                 t->script = pSubtag;
 
                 pLastGoodPosition = pSep;
@@ -1711,7 +1709,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         if (next & REGN) {
             if (_isRegionSubtag(pSubtag, subtagLen)) {
                 *pSep = 0;
-                t->region = pSubtag;
+                t->region = T_CString_toUpperCase(pSubtag);
 
                 pLastGoodPosition = pSep;
                 next = VART | EXTS | PRIV;
@@ -1729,7 +1727,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     goto error;
                 }
                 *pSep = 0;
-                var->variant = pSubtag;
+                var->variant = T_CString_toUpperCase(pSubtag);
                 isAdded = _addVariantToList(&(t->variants), var);
                 if (!isAdded) {
                     /* duplicated variant entry */
@@ -1744,14 +1742,16 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         if (next & EXTS) {
             if (_isExtensionSingleton(pSubtag, subtagLen)) {
                 if (pExtension != NULL) {
-                    if (pExtValueSubtagEnd == NULL) {
+                    if (pExtValueSubtag == NULL || pExtValueSubtagEnd == NULL) {
                         /* the previous extension is incomplete */
                         uprv_free(pExtension);
+                        pExtension = NULL;
                         break;
                     }
 
                     /* terminate the previous extension value */
                     *pExtValueSubtagEnd = 0;
+                    pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
 
                     /* insert the extension to the list */
                     if (_addExtensionToList(&(t->extensions), pExtension, FALSE)) {
@@ -1770,7 +1770,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     }
                 }
 
-                isLDMLExtension = (*pSubtag == LDMLEXT);
+                isLDMLExtension = (uprv_tolower(*pSubtag) == LDMLEXT);
 
                 /* create a new extension */
                 pExtension = uprv_malloc(sizeof(ExtensionListEntry));
@@ -1779,13 +1779,14 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     goto error;
                 }
                 *pSep = 0;
-                pExtension->key = pSubtag;
+                pExtension->key = T_CString_toLowerCase(pSubtag);
                 pExtension->value = NULL;   /* will be set later */
 
                 /*
-                 * reset the end location of extension value
+                 * reset the start and the end location of extension value
                  * subtags for this extension
                  */
+                pExtValueSubtag = NULL;
                 pExtValueSubtagEnd = NULL;
 
                 next = EXTV;
@@ -1821,38 +1822,38 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     next = EXTS | EXTV | PRIV;
                 }
 
-                if (pExtension->value == NULL) {
+                if (pExtValueSubtag == NULL) {
                     /* if the start postion of this extension's value is not yet,
                        this one is the first value subtag */
-                    pExtension->value = pSubtag;
+                    pExtValueSubtag = pSubtag;
                 }
                 continue;
             }
         }
         if (next & PRIV) {
-            if (*pSubtag == PRIVATEUSE) {
+            if (uprv_tolower(*pSubtag) == PRIVATEUSE) {
                 char *pPrivuseVal;
 
                 if (pExtension != NULL) {
                     /* Process the last extension */
-                    if (pExtValueSubtagEnd == NULL) {
+                    if (pExtValueSubtag == NULL || pExtValueSubtagEnd == NULL) {
                         /* the previous extension is incomplete */
                         uprv_free(pExtension);
+                        pExtension = NULL;
                         break;
                     } else {
                         /* terminate the previous extension value */
                         *pExtValueSubtagEnd = 0;
+                        pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
 
                         /* insert the extension to the list */
                         if (_addExtensionToList(&(t->extensions), pExtension, FALSE)) {
                             pLastGoodPosition = pExtValueSubtagEnd;
                             pExtension = NULL;
-                            pExtValueSubtagEnd = NULL;
                         } else {
                         /* stop parsing here */
                             uprv_free(pExtension);
                             pExtension = NULL;
-                            pExtValueSubtagEnd = NULL;
                             break;
                         }
                     }
@@ -1892,7 +1893,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 }
                 if (pLastGoodPosition - pPrivuseVal > 0) {
                     *pLastGoodPosition = 0;
-                    t->privateuse = pPrivuseVal;
+                    t->privateuse = T_CString_toLowerCase(pPrivuseVal);
                 }
                 /* No more subtags, exiting the parse loop */
                 break;
@@ -1905,12 +1906,13 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
 
     if (pExtension != NULL) {
         /* Process the last extension */
-        if (pExtValueSubtagEnd == NULL) {
+        if (pExtValueSubtag == NULL || pExtValueSubtagEnd == NULL) {
             /* the previous extension is incomplete */
             uprv_free(pExtension);
         } else {
             /* terminate the previous extension value */
             *pExtValueSubtagEnd = 0;
+            pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
             /* insert the extension to the list */
             if (_addExtensionToList(&(t->extensions), pExtension, FALSE)) {
                 pLastGoodPosition = pExtValueSubtagEnd;
