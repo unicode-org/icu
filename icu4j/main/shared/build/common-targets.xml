@@ -193,21 +193,23 @@
     <path id="javac.classpathref.tools">
         <pathelement location="${icu4j.core.jar}"/>
         <pathelement location="${icu4j.collate.jar}"/>
+        <pathelement location="${icu4j.translit.jar}"/>
         <pathelement location="${icu4j.test-framework.jar}"/>
         <pathelement location="${icu4j.core-tests.jar}"/>
     </path>
 
-    <target name="_all.tools" depends="_all.core, _all.collate, _all.test-framework, _all.core-tests">
+    <target name="_all.tools" depends="_all.core, _all.collate, _all.translit, _all.test-framework, _all.core-tests">
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
 
     <!-- demos -->
     <path id="javac.classpathref.demos">
         <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.translit.jar}"/>
         <pathelement location="${icu4j.charset.jar}"/>
     </path>
 
-    <target name="_all.demos" depends="_all.core, _all.charset">
+    <target name="_all.demos" depends="_all.core, _all.translit, _all.charset">
         <ant dir="${icu4j.demos.dir}" inheritAll="false"/>
     </target>
 
