@@ -34,7 +34,8 @@ public final class LanguageTag {
 
     // Map contains grandfathered tags and its preferred mappings from
     // http://www.ietf.org/internet-drafts/draft-ietf-ltru-4645bis-09.txt
-    private static final HashMap<String,String> GRANDFATHERED = new HashMap<String,String>();
+    private static final HashMap<AsciiUtil.CaseInsensitiveKey, String[]> GRANDFATHERED =
+        new HashMap<AsciiUtil.CaseInsensitiveKey, String[]>();
 
     static {
         final String[][] entries = {
@@ -67,7 +68,7 @@ public final class LanguageTag {
             {"zh-xiang",    "hsn"},
         };
         for (String[] e : entries) {
-            GRANDFATHERED.put(e[0], e[1]);
+            GRANDFATHERED.put(new AsciiUtil.CaseInsensitiveKey(e[0]), e);
         }
     }
 
@@ -109,16 +110,15 @@ public final class LanguageTag {
                     + langtag + "' ends with " + SEP, erridx);
         }
 
-        String tag = AsciiUtil.toLowerString(langtag);
-        LanguageTag t = new LanguageTag(tag);
+        LanguageTag t = new LanguageTag(langtag);
 
         // Check if the tag is grandfathered
-        if (GRANDFATHERED.containsKey(tag)) {
-            t._grandfathered = tag;
+        String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(langtag));
+        if (gfmap != null) {
+            t._grandfathered = gfmap[0];
             // Preferred mapping
-            String preferred = GRANDFATHERED.get(tag);
-            if (preferred.length() > 0) {
-                t._language = preferred;
+            if (gfmap[1].length() > 0) {
+                t._language = gfmap[1];
             }
             return t;
         }
@@ -130,7 +130,7 @@ public final class LanguageTag {
         //                 *("-" extension)
         //                 ["-" privateuse]
 
-        String[] subtags = tag.split(SEP);
+        String[] subtags = langtag.split(SEP);
         int idx = 0;
         int extlangIdx = 0;
         String extSingleton = null;
@@ -145,7 +145,7 @@ public final class LanguageTag {
             }
             if ((next & LANG) != 0) {
                 if (isLanguageSubtag(subtags[idx])) {
-                    t._language = subtags[idx++];
+                    t._language = AsciiUtil.toLowerString(subtags[idx++]);
                     next = EXTL | SCRT | REGN | VART | EXTS | PRIV;
                     continue;
                 }
@@ -155,7 +155,7 @@ public final class LanguageTag {
                     if (extlangIdx == 0) {
                         t._extlang = new String[3];
                     }
-                    t._extlang[extlangIdx++] = subtags[idx++];
+                    t._extlang[extlangIdx++] = AsciiUtil.toLowerString(subtags[idx++]);
                     if (extlangIdx < 3) {
                         next = EXTL | SCRT | REGN | VART | EXTS | PRIV;
                     } else {
@@ -166,14 +166,14 @@ public final class LanguageTag {
             }
             if ((next & SCRT) != 0) {
                 if (isScriptSubtag(subtags[idx])) {
-                    t._script = subtags[idx++];
+                    t._script = AsciiUtil.toTitleString(subtags[idx++]);
                     next = REGN | VART | EXTS | PRIV;
                     continue;
                 }
             }
             if ((next & REGN) != 0) {
                 if (isRegionSubtag(subtags[idx])) {
-                    t._region = subtags[idx++];
+                    t._region = AsciiUtil.toUpperString(subtags[idx++]);
                     next = VART | EXTS | PRIV;
                     continue;
                 }
@@ -183,7 +183,7 @@ public final class LanguageTag {
                     if (t._variants == null) {
                         t._variants = new TreeSet<String>();
                     }
-                    t._variants.add(subtags[idx++]);
+                    t._variants.add(AsciiUtil.toLowerString(subtags[idx++]));
                     next = VART | EXTS | PRIV;
                     continue;
                 }
@@ -193,7 +193,7 @@ public final class LanguageTag {
                     if (extSingleton != null) {
                         if (extBuf == null) {
                             errorMsg = "The specified tag '"
-                                        + tag + "' contains an incomplete extension: "
+                                        + langtag + "' contains an incomplete extension: "
                                         + extSingleton;
                             break PARSE;
                         }
@@ -204,7 +204,7 @@ public final class LanguageTag {
                         Extension e = new Extension(extSingleton.charAt(0), extBuf.toString());
                         t._extensions.add(e);
                     }
-                    extSingleton = subtags[idx++];
+                    extSingleton = AsciiUtil.toLowerString(subtags[idx++]);
                     extBuf = null; // Clear the extension value buffer
                     next = EXTV;
                     continue;
@@ -213,10 +213,10 @@ public final class LanguageTag {
             if ((next & EXTV) != 0) {
                 if (isExtensionSubtag(subtags[idx])) {
                     if (extBuf == null) {
-                        extBuf = new StringBuilder(subtags[idx++]);
+                        extBuf = new StringBuilder(AsciiUtil.toLowerString(subtags[idx++]));
                     } else {
                         extBuf.append(SEP);
-                        extBuf.append(subtags[idx++]);
+                        extBuf.append(AsciiUtil.toLowerString(subtags[idx++]));
                     }
                     next = EXTS | EXTV | PRIV;
                     continue;
@@ -239,7 +239,7 @@ public final class LanguageTag {
                         } else {
                             puBuf.append(SEP);
                         }
-                        puBuf.append(subtags[idx]);
+                        puBuf.append(AsciiUtil.toLowerString(subtags[idx]));
                     }
                     t._privateuse = puBuf.toString();
                     if (t._privateuse.length() == 0) {
@@ -471,24 +471,24 @@ public final class LanguageTag {
         String script = base.getScript();
         if (script.length() > 0 && isScriptSubtag(script)) {
             buf.append(SEP);
-            buf.append(AsciiUtil.toLowerString(script));
+            buf.append(script);
         }
 
         // region
         String region = base.getRegion();
         if (region.length() > 0 && isRegionSubtag(region)) {
             buf.append(SEP);
-            buf.append(AsciiUtil.toLowerString(region));
+            buf.append(region);
         }
 
         // variant
-        String variant = base.getVariant();
+        String variant = AsciiUtil.toLowerString(base.getVariant());
         if (variant.length() > 0) {
             String[] variants = variant.split("_");
             TreeSet<String> validVars = new TreeSet<String>();
             for (String var : variants) {
                 if (isVariantSubtag(var)) {
-                    validVars.add(AsciiUtil.toLowerString(var));
+                    validVars.add(var);
                 }
             }
             if (validVars.size() > 0) {

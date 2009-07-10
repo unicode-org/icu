@@ -112,12 +112,7 @@ public final class BaseLocale {
 
         if (scriptLen > 0) {
             // script - the first letter to upper case, the rest to lower case
-            StringBuilder buf = new StringBuilder();
-            buf.append(AsciiUtil.toUpper(_script.charAt(0)));
-            for (int i = 1; i < _script.length(); i++) {
-                buf.append(AsciiUtil.toLower(_script.charAt(i)));
-            }
-            _script = buf.toString().intern();
+            _script = AsciiUtil.toTitleString(_script).intern();
 
             id.append(SEPCHAR);
             id.append(_script);
@@ -132,8 +127,12 @@ public final class BaseLocale {
         }
 
         if (variantLen > 0) {
-            // variant is case sensitive in JDK
-            _variant = _variant.intern();
+            // variant in JDK conventionally use upper case letters,
+            // but it was actually case sensitive.  We normalize
+            // variant to upper case here, which might be breaking
+            // change.  But at least it works well for all variants
+            // defined by JDK.
+            _variant = AsciiUtil.toUpperString(_variant).intern();
 
             if (regionLen == 0) {
                 id.append(SEPCHAR);
