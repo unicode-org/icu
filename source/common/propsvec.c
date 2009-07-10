@@ -276,11 +276,13 @@ upvec_setValue(UPropsVectors *pv,
 U_CAPI uint32_t U_EXPORT2
 upvec_getValue(const UPropsVectors *pv, UChar32 c, int32_t column) {
     uint32_t *row;
+    UPropsVectors *ncpv;
 
     if(pv->isCompacted || c<0 || c>UPVEC_MAX_CP || column<0 || column>=(pv->columns-2)) {
         return 0;
     }
-    row=_findRow((UPropsVectors *)pv, c);
+    ncpv=(UPropsVectors *)pv;
+    row=_findRow(ncpv, c);
     return row[2+column];
 }
 

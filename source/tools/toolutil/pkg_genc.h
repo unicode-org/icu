@@ -10,7 +10,7 @@
 #include "unicode/utypes.h"
 
 U_INTERNAL void U_EXPORT2
-printAssemblyHeadersToStdErr();
+printAssemblyHeadersToStdErr(void);
 
 U_INTERNAL UBool U_EXPORT2
 checkAssemblyHeaderName(const char* optAssembly);
