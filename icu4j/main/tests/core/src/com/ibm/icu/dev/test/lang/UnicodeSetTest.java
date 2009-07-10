@@ -26,6 +26,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
@@ -1614,6 +1615,88 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("compare iterable test", sortedTest1, sortedTest2);
     }
 
+    public void TestRangeConstructor() {
+        UnicodeSet w = new UnicodeSet().addAll(3,5);
+        UnicodeSet s = new UnicodeSet(3,5);
+        assertEquals("new constructor", w, s);
+
+        w = new UnicodeSet().addAll(3,5).addAll(7,7);
+        UnicodeSet t = new UnicodeSet(3,5, 7,7);
+        assertEquals("new constructor", w, t);
+        // check to make sure right exceptions are thrown
+        Class expected = IllegalArgumentException.class;
+        Class actual;
+        
+        try {
+            actual = null;
+            UnicodeSet u = new UnicodeSet(5);
+        } catch (IllegalArgumentException e) {
+            actual = e.getClass();
+        }
+        assertEquals("exception if odd", expected, actual);
+        
+        try {
+            actual = null;
+            UnicodeSet u = new UnicodeSet(3, 2, 7, 9);
+        } catch (IllegalArgumentException e) {
+            actual = e.getClass();
+        }
+        assertEquals("exception for start/end problem", expected, actual);
+        
+        try {
+            actual = null;
+            UnicodeSet u = new UnicodeSet(3, 5, 6, 9);
+        } catch (IllegalArgumentException e) {
+            actual = e.getClass();
+        }
+        assertEquals("exception for end/start problem", expected, actual);
+        
+        CheckRangeSpeed(10000, new UnicodeSet("[:whitespace:]"));
+        CheckRangeSpeed(1000, new UnicodeSet("[:letter:]"));
+    }
+
+    /**
+     * @param iterations
+     * @param testSet
+     */
+    private void CheckRangeSpeed(int iterations, UnicodeSet testSet) {
+        testSet.complement().complement();
+        String testPattern = testSet.toString();
+        // fill a set of pairs from the pattern
+        int[] pairs = new int[testSet.getRangeCount()*2];
+        int j = 0;
+        for (UnicodeSetIterator it = new UnicodeSetIterator(testSet); it.nextRange();) {
+            pairs[j++] = it.codepoint;
+            pairs[j++] = it.codepointEnd;
+        }
+        UnicodeSet fromRange = new UnicodeSet(testSet);
+        assertEquals("from range vs pattern", testSet, fromRange);
+
+        double start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            fromRange = new UnicodeSet(testSet);
+        }
+        double middle = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            new UnicodeSet(testPattern);
+        }
+        double end = System.currentTimeMillis();
+
+        double rangeConstructorTime = (middle - start)/iterations;
+        double patternConstructorTime = (end - middle)/iterations;
+        String message = "Range constructor:\t" + rangeConstructorTime + ";\tPattern constructor:\t" + patternConstructorTime + "\t\t"
+        + percent.format(rangeConstructorTime/patternConstructorTime-1);
+        if (rangeConstructorTime < 2*patternConstructorTime) {
+            logln(message);
+        } else {
+            errln(message);
+        }
+    }
+    
+    NumberFormat percent = NumberFormat.getPercentInstance();
+    {
+        percent.setMaximumFractionDigits(2);
+    }
     // ****************************************
     // UTILITIES
     // ****************************************

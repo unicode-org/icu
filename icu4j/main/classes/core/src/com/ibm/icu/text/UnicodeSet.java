@@ -348,6 +348,40 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         this();
         complement(start, end);
     }
+    
+    /**
+     * Quickly constructs a set from a set of ranges <s0, e0, s1, e1, s2, e2, ..., sn, en>.
+     * There must be an even number of integers, and they must be all greater than zero, all less than or equal to Character.MAX_CODE_POINT.
+     * In each pair (..., si, ei, ...) it must be true that si <= ei
+     * Between adjacent pairs (...ei, sj...), it must be true that ei+1 < sj
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
+     * draft ICU 4.2
+     */
+    public UnicodeSet(int... pairs) {
+        if ((pairs.length & 1) != 0) {
+            throw new IllegalArgumentException("Must have even number of integers");
+        }
+        list = new int[pairs.length + 1]; // don't allocate extra space, because it is likely that this is a fixed set.
+        len = list.length;
+        int last = -1; // used to ensure that the results are monotonically increasing.
+        int i = 0;
+        while (i < pairs.length) {
+            // start of pair
+            int start = pairs[i];
+            if (last >= start) {
+                throw new IllegalArgumentException("Must be monotonically increasing.");
+            }
+            list[i++] = last = start;
+            // end of pair
+            int end = pairs[i] + 1;
+            if (last >= end) {
+                throw new IllegalArgumentException("Must be monotonically increasing.");
+            }
+            list[i++] = last = end;
+        }
+        list[i] = HIGH; // terminate
+    }
 
     /**
      * Constructs a set from the given pattern.  See the class description
