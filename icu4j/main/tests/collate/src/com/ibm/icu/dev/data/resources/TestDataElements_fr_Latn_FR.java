@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005, International Business Machines Corporation and    *
+  * Copyright (C) 2005-2009, International Business Machines Corporation and    *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -9,7 +9,7 @@ package com.ibm.icu.dev.data.resources;
 
 import java.util.ListResourceBundle;
 
-public class TestDataElments_fr_Latn_FR extends ListResourceBundle {
+public class TestDataElements_fr_Latn_FR extends ListResourceBundle {
 
     private static Object[][] data = new Object[][] { 
         {
