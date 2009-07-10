@@ -1192,24 +1192,24 @@ public class RbnfTest extends TestFmwk {
             + "%%empty:\n"
             + "    0:;"
             + "%accounting:\n"
-            + "    zeroth; first; second; third; fourth; fifth; sixth; seventh;\n"
-            + "        eighth; ninth;\n"
-            + "    tenth; eleventh; twelfth; thirteenth; fourteenth;\n"
-            + "        fifteenth; sixteenth; seventeenth; eighteenth;\n"
-            + "        nineteenth;\n"
-            + "    twentieth; twenty->>;\n"
-            + "    30: thirtieth; thirty->>;\n"
-            + "    40: fortieth; forty->>;\n"
-            + "    50: fiftieth; fifty->>;\n"
-            + "    60: sixtieth; sixty->>;\n"
-            + "    70: seventieth; seventy->>;\n"
-            + "    80: eightieth; eighty->>;\n"
-            + "    90: ninetieth; ninety->>;\n"
-            + "    100: <%simplified< hundredth; <%simplified< hundred >>;\n"
-            + "    1000: <%simplified< thousandth; <%simplified< thousand >>;\n"
-            + "    1,000,000: <%simplified< millionth; <%simplified< million >>;\n"
-            + "    1,000,000,000,000: <%simplified< billionth;\n"
-            + "        <%simplified< billion >>;\n"
+            + "    \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c;\n"
+            + "        \u842c; \u842c;\n"
+            + "    \u842c; \u842c; \u842c; \u842c; \u842c;\n"
+            + "        \u842c; \u842c; \u842c; \u842c;\n"
+            + "        \u842c;\n"
+            + "    twentieth; \u96f6|>>;\n"
+            + "    30: \u96f6; \u96f6|>>;\n"
+            + "    40: \u96f6; \u96f6|>>;\n"
+            + "    50: \u96f6; \u96f6|>>;\n"
+            + "    60: \u96f6; \u96f6|>>;\n"
+            + "    70: \u96f6; \u96f6|>>;\n"
+            + "    80: \u96f6; \u96f6|>>;\n"
+            + "    90: \u96f6; \u96f6|>>;\n"
+            + "    100: <%simplified< \u96f6; <%simplified< \u96f6 >>;\n"
+            + "    1000: <%simplified< \u96f6; <%simplified< \u96f6 >>;\n"
+            + "    1,000,000: <%simplified< \u96f6; <%simplified< \u96f6 >>;\n"
+            + "    1,000,000,000,000: <%simplified< \u96f6;\n"
+            + "        <%simplified< \u96f6 >>;\n"
             + "    1,000,000,000,000,000: =#,##0=;"
             + "%default:\n"
             + "    -x: minus >>;\n"
@@ -1230,7 +1230,7 @@ public class RbnfTest extends TestFmwk {
             + "    1000: , <%default< thousand, >%default>;\n"
             + "    1,000,000: , =%default=;"
             + "%traditional:\n"
-            + "    -x: \u842c >>;\n"
+            + "    -x: \u3007| >>;\n"
             + "    x.x: << \u9ede >>;\n"
             + "    \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c;\n"
             + "    \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c;\n"
@@ -1264,13 +1264,13 @@ public class RbnfTest extends TestFmwk {
         RuleBasedNumberFormat rbnf =  new RuleBasedNumberFormat(ruleWithChinese, ULocale.CHINESE);
         String[] ruleNames = rbnf.getRuleSetNames();
         try{
-            // Test will "null" rules
+            // Test with "null" rules
             rbnf.format(0.0,null);
             errln("This was suppose to return an exception for a null format");
         } catch(Exception e){}
         for(int i=0; i<ruleNames.length; i++){
             try{
-                rbnf.format(123450.6789,ruleNames[i]);
+                rbnf.format(-123450.6789,ruleNames[i]);
             } catch(Exception e){
                 errln("RBNFChinesePostProcessor was not suppose to return an exception " +
                         "when being formatted with parameters 0.0 and " + ruleNames[i]);
