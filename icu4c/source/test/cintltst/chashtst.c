@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -47,26 +47,26 @@ void addHashtableTest(TestNode** root);
  *********************************************************************/
 
 static UBool
-_compareChars(void* a, void* b) {
+_compareChars(const void* a, const void* b) {
     UHashTok s, t;
-    s.pointer = a;
-    t.pointer = b;
+    s.pointer = (void *)a;
+    t.pointer = (void *)b;
     return uhash_compareChars(s, t);
 }
 
 static UBool
-_compareIChars(void* a, void* b) {
+_compareIChars(const void* a, const void* b) {
     UHashTok s, t;
-    s.pointer = a;
-    t.pointer = b;
+    s.pointer = (void *)a;
+    t.pointer = (void *)b;
     return uhash_compareIChars(s, t);
 }
 
 static UBool
-_compareUChars(void* a, void* b) {
+_compareUChars(const void* a, const void* b) {
     UHashTok s, t;
-    s.pointer = a;
-    t.pointer = b;
+    s.pointer = (void *)a;
+    t.pointer = (void *)b;
     return uhash_compareUChars(s, t);
 }
 

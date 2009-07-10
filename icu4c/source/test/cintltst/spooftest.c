@@ -63,29 +63,6 @@ log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE
 }
 
 
-static void test_assert_string(const char *expected, const UChar *actual, UBool nulTerm, const char *file, int line) {
-     char     buf_inside_macro[120];
-     int32_t  len = (int32_t)strlen(expected);
-     UBool    success;
-     if (nulTerm) {
-         u_austrncpy(buf_inside_macro, (actual), len+1);
-         buf_inside_macro[len+2] = 0;
-         success = (strcmp((expected), buf_inside_macro) == 0);
-     } else {
-         u_austrncpy(buf_inside_macro, (actual), len);
-         buf_inside_macro[len+1] = 0;
-         success = (strncmp((expected), buf_inside_macro, len) == 0);
-     }
-     if (success == FALSE) {
-         log_err("Failure at file %s, line %d, expected \"%s\", got \"%s\"\n",
-             file, line, (expected), buf_inside_macro);
-     }
-}
-
-#define TEST_ASSERT_STRING(expected, actual, nulTerm) test_assert_string(expected, actual, nulTerm, __FILE__, __LINE__)
-
-
-
 static void TestUSpoofCAPI(void);
 
 void addUSpoofTest(TestNode** root);

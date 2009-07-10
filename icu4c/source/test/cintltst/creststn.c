@@ -37,8 +37,6 @@
 static int32_t pass;
 static int32_t fail;
 
-static void TestCLDRVersion();
-
 
 /*****************************************************************************/
 /**
@@ -182,6 +180,7 @@ static void TestGetFunctionalEquivalent(void);
 static void TestCLDRStyleAliases(void);
 static void TestFallbackCodes(void);
 static void TestGetUTF8String(void);
+static void TestCLDRVersion(void);
 
 /***************************************************************************************/
 
@@ -2956,7 +2955,7 @@ TestGetUTF8String() {
     ures_close(res);
 }
 
-void TestCLDRVersion() {
+static void TestCLDRVersion(void) {
   UVersionInfo zeroVersion;
   UVersionInfo testExpect;
   UVersionInfo testCurrent;
@@ -2983,9 +2982,6 @@ void TestCLDRVersion() {
   {
     UResourceBundle *res;
     const char *testdatapath;
-    char buffer8[16];
-    const char *s8;
-    int32_t length8;
 
     status = U_ZERO_ERROR;
     testdatapath = loadTestData(&status);

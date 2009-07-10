@@ -30,6 +30,7 @@
 #define TDSRCPATH  ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING
 
 static void TestSelector(void);
+void addCnvSelTest(TestNode** root);  /* Declaration required to suppress compiler warnings. */
 
 void addCnvSelTest(TestNode** root)
 {

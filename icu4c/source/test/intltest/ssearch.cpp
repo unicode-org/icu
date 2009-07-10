@@ -1561,7 +1561,7 @@ const char *cPattern = "maketh houndes ete hem";
          //j = (j + i)%5;
     }
 
-    printf("%d, %d\n", pm-longishText, j);
+    printf("%ld, %d\n", pm-longishText, j);
 #ifndef TEST_BOYER_MOORE
     usearch_close(uss);
 #else

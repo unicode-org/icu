@@ -2605,7 +2605,7 @@ typedef struct OrientationStructTag {
     ULayoutType line;
 } OrientationStruct;
 
-const char* ULayoutTypeToString(ULayoutType type)
+static const char* ULayoutTypeToString(ULayoutType type)
 {
     switch(type)
     {
@@ -5205,7 +5205,7 @@ static void TestLikelySubtags()
         const char* const minimal = basic_maximize_data[i][0];
         const char* const maximal = basic_maximize_data[i][1];
 
-        const int32_t length =
+        /* const int32_t length = */
             uloc_addLikelySubtags(
                 minimal,
                 buffer,
@@ -5231,7 +5231,7 @@ static void TestLikelySubtags()
         const char* const maximal = basic_minimize_data[i][0];
         const char* const minimal = basic_minimize_data[i][1];
 
-        const int32_t length =
+        /* const int32_t length = */
             uloc_minimizeSubtags(
                 maximal,
                 buffer,
@@ -5258,7 +5258,7 @@ static void TestLikelySubtags()
         const char* const minimal = full_data[i][0];
         const char* const maximal = full_data[i][1];
 
-        const int32_t length =
+        /* const int32_t length = */
             uloc_addLikelySubtags(
                 minimal,
                 buffer,
@@ -5286,7 +5286,7 @@ static void TestLikelySubtags()
 
         if (strlen(maximal) > 0) {
 
-            const int32_t length =
+            /* const int32_t length = */
                 uloc_minimizeSubtags(
                     maximal,
                     buffer,

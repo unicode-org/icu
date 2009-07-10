@@ -800,12 +800,12 @@ U_CDECL_BEGIN
  * @param val2  the other value in comparison
  * @return      TRUE if 2 values are the same, FALSE otherwise
  */
-static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2);
+UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
 
 U_CDECL_END
 
 UBool 
-U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) {
+U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const MessageFormat** pattern1 = (const MessageFormat**)val1.pointer;
     const MessageFormat** pattern2 = (const MessageFormat**)val2.pointer;
     return *pattern1[0] == *pattern2[0] && *pattern1[1] == *pattern2[1];
@@ -822,7 +822,7 @@ TimeUnitFormat::initHash(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(hashTableValueComparator);
+    hTable->setValueCompartor(tmutfmtHashTableValueComparator);
     return hTable;
 }
 

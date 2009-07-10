@@ -798,7 +798,8 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e) {
     U_ASSERT(hash != NULL);
     U_ASSERT(e != NULL);
     if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
-        return _uhash_internalRemoveElement(hash, (UHashElement*) e).pointer;
+        UHashElement *nce = (UHashElement *)e;
+        return _uhash_internalRemoveElement(hash, nce).pointer;
     }
     return NULL;
 }
