@@ -260,6 +260,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
          * 
          * @stable ICU 3.8
          */
+        ///CLOVER:OFF
         protected Object readResolve() throws InvalidObjectException {
             if (this.getClass() != ChineseDateFormat.Field.class) {
                 throw new InvalidObjectException("A subclass of ChineseDateFormat.Field must implement readResolve.");
@@ -270,5 +271,6 @@ public class ChineseDateFormat extends SimpleDateFormat {
                 throw new InvalidObjectException("Unknown attribute name.");
             }
         }
+        ///CLOVER:ON
     }
 }
