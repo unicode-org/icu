@@ -60,8 +60,7 @@ public final class AsciiUtil {
         if (idx == s.length()) {
             return s;
         }
-//        StringBuilder buf = new StringBuilder(s.substring(0, idx));
-        StringBuffer buf = new StringBuffer(s.substring(0, idx));
+        StringBuilder buf = new StringBuilder(s.substring(0, idx));
         for (; idx < s.length(); idx++) {
             buf.append(toLower(s.charAt(idx)));
         }
@@ -79,10 +78,33 @@ public final class AsciiUtil {
         if (idx == s.length()) {
             return s;
         }
-//        StringBuilder buf = new StringBuilder(s.substring(0, idx));
-        StringBuffer buf = new StringBuffer(s.substring(0, idx));
+        StringBuilder buf = new StringBuilder(s.substring(0, idx));
         for (; idx < s.length(); idx++) {
             buf.append(toUpper(s.charAt(idx)));
+        }
+        return buf.toString();
+    }
+
+    public static String toTitleString(String s) {
+        int idx = 0;
+        char c = s.charAt(idx);
+        if (!(c >= 'a' && c <= 'z')) {
+            for (idx = 1; idx < s.length(); idx++) {
+                if (c >= 'A' && c <= 'Z') {
+                    break;
+                }
+            }
+        }
+        if (idx == s.length()) {
+            return s;
+        }
+        StringBuilder buf = new StringBuilder(s.substring(0, idx));
+        if (idx == 0) {
+            buf.append(toUpper(s.charAt(idx)));
+            idx++;
+        }
+        for (; idx < s.length(); idx++) {
+            buf.append(toLower(s.charAt(idx)));
         }
         return buf.toString();
     }
@@ -130,5 +152,26 @@ public final class AsciiUtil {
             }
         }
         return b;
+    }
+
+    public static class CaseInsensitiveKey {
+        private String _key;
+        private int _hash;
+
+        public CaseInsensitiveKey(String key) {
+            _key = key;
+            _hash = AsciiUtil.toLowerString(key).hashCode();
+        }
+
+        public boolean equals(Object o) {
+            if (o instanceof CaseInsensitiveKey) {
+                return AsciiUtil.caseIgnoreMatch(_key, ((CaseInsensitiveKey)o)._key);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return _hash;
+        }
     }
 }
