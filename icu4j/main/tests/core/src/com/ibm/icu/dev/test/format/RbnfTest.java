@@ -1191,7 +1191,7 @@ public class RbnfTest extends TestFmwk {
             + "    11: =%simplified= hundred>%%empty>;\n"
             + "%%empty:\n"
             + "    0:;"
-            + "%ordinal:\n"
+            + "%accounting:\n"
             + "    zeroth; first; second; third; fourth; fifth; sixth; seventh;\n"
             + "        eighth; ninth;\n"
             + "    tenth; eleventh; twelfth; thirteenth; fourteenth;\n"
@@ -1229,20 +1229,52 @@ public class RbnfTest extends TestFmwk {
             + "    100: , =%default=;\n"
             + "    1000: , <%default< thousand, >%default>;\n"
             + "    1,000,000: , =%default=;"
+            + "%traditional:\n"
+            + "    -x: \u842c >>;\n"
+            + "    x.x: << \u9ede >>;\n"
+            + "    \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c;\n"
+            + "    \u842c; \u842c; \u842c; \u842c; \u842c; \u842c; \u842c;\n"
+            + "        \u842c; \u842c; \u842c;\n"
+            + "    20: \u842c[->>];\n"
+            + "    30: \u842c[->>];\n"
+            + "    40: \u842c[->>];\n"
+            + "    50: \u842c[->>];\n"
+            + "    60: \u842c[->>];\n"
+            + "    70: \u842c[->>];\n"
+            + "    80: \u842c[->>];\n"
+            + "    90: \u842c[->>];\n"
+            + "    100: << \u842c[ >>];\n"
+            + "    1000: << \u842c[ >>];\n"
+            + "    1,000,000: << \u842c[ >>];\n"
+            + "    1,000,000,000,000: << \u842c[ >>];\n"
+            + "    1,000,000,000,000,000: =#,##0=;\n"
             + "%time:\n"
             + "    =0= sec.;\n"
             + "    60: =%%min-sec=;\n"
             + "    3600: =%%hr-min-sec=;\n"
             + "%%min-sec:\n"
-            + "    0: :=00=;\n"
+            + "    0: *=00=;\n"
             + "    60/60: <0<>>;\n"
             + "%%hr-min-sec:\n"
-            + "    0: :=00=;\n"
+            + "    0: *=00=;\n"
             + "    60/60: <00<>>;\n"
             + "    3600/60: <#,##0<:>>>;\n"
             + "%%post-process:com.ibm.icu.text.RBNFChinesePostProcessor\n";
+        
         RuleBasedNumberFormat rbnf =  new RuleBasedNumberFormat(ruleWithChinese, ULocale.CHINESE);
         String[] ruleNames = rbnf.getRuleSetNames();
-        rbnf.format(0.0,ruleNames[0]);
+        try{
+            // Test will "null" rules
+            rbnf.format(0.0,null);
+            errln("This was suppose to return an exception for a null format");
+        } catch(Exception e){}
+        for(int i=0; i<ruleNames.length; i++){
+            try{
+                rbnf.format(123450.6789,ruleNames[i]);
+            } catch(Exception e){
+                errln("RBNFChinesePostProcessor was not suppose to return an exception " +
+                        "when being formatted with parameters 0.0 and " + ruleNames[i]);
+            }
+        }
     }
 }

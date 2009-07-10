@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -456,8 +456,10 @@ final class BidiLine {
             }
             visualStart += length;
         }
+        ///CLOVER:OFF
         /* we should never get here */
         throw new IllegalStateException("Internal ICU error in getRunFromLogicalIndex");
+        ///CLOVER:ON
     }
 
     /*
