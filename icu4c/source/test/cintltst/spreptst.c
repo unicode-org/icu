@@ -751,7 +751,7 @@ UStringPrepProfileType getTypeFromProfileName(const char* profileName) {
 }
 static void TestStringPrepProfiles(void) {
     UErrorCode status = U_ZERO_ERROR;
-    char *profileName;
+    const char *profileName = NULL;
     UChar src[SPREP_PROFILE_TEST_MAX_LENGTH];
     UChar expected[SPREP_PROFILE_TEST_MAX_LENGTH];
     UChar result[SPREP_PROFILE_TEST_MAX_LENGTH];

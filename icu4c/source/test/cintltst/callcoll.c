@@ -503,7 +503,10 @@ backAndForth(UCollationElements *iter)
 
     /* synwee : changed */
     while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER) {
-      int32_t offset = ucol_getOffset(iter);
+#if TEST_OFFSETS
+      int32_t offset = 
+#endif
+        ucol_getOffset(iter);
 
       index -= 1;
       if (o != orders[index].order) {

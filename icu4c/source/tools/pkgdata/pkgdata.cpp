@@ -215,7 +215,7 @@ enum {
 };
 static char libFileNames[LIB_FILENAMES_SIZE][256];
 
-static void pkg_checkFlag(UPKGOptions *o);
+static UPKGOptions  *pkg_checkFlag(UPKGOptions *o);
 
 const char options_help[][320]={
     "Set the data name",
@@ -1271,7 +1271,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
 }
 #endif
 
-static void pkg_checkFlag(UPKGOptions *o) {
+static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
 #ifdef U_AIX
     /* AIX needs a map file. */
     char *flag = NULL;
@@ -1372,6 +1372,9 @@ static void pkg_checkFlag(UPKGOptions *o) {
         }
     }
 #endif
+    // Don't really need a return value, just need to stop compiler warnings about
+    // the unused parameter 'o' on platforms where it is not otherwise used.
+    return o;   
 }
 
 static void loadLists(UPKGOptions *o, UErrorCode *status)

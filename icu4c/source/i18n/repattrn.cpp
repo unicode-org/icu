@@ -29,8 +29,6 @@ U_NAMESPACE_BEGIN
 //
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
-    UErrorCode status = U_ZERO_ERROR;
-
     // Init all of this instance's data.
     init();
 

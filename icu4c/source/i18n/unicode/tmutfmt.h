@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
+ * Copyright (C) 2009, Google, International Business Machines Corporation and *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -38,7 +38,7 @@ U_CDECL_BEGIN
 /**
  * @internal ICU 4.2
  */
-static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2) ;
 
 U_CDECL_END
 
@@ -228,7 +228,7 @@ private:
     PluralRules*  fPluralRules;
     EStyle           fStyle;
 
-    friend UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2);
+    friend UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
     
     void create(const Locale& locale, EStyle style, UErrorCode& status);
 
