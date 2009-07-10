@@ -11,7 +11,7 @@ package com.ibm.icu.text;
  * A post-processor for Chinese text.
  */
 final class RBNFChinesePostProcessor implements RBNFPostProcessor {
-    private NFRuleSet lastRuleSet;
+    //private NFRuleSet lastRuleSet;
     private boolean longForm;
     private int format;
 
@@ -33,7 +33,8 @@ final class RBNFChinesePostProcessor implements RBNFPostProcessor {
     public void process(StringBuffer buf, NFRuleSet ruleSet) {
         // markers depend on what rule set we are using
 
-        if (ruleSet != lastRuleSet) {
+        // Commented by johnvu on the if statement since lastRuleSet is never initialized
+        //if (ruleSet != lastRuleSet) {
             String name = ruleSet.getName();
             for (int i = 0; i < rulesetNames.length; ++i) {
                 if (rulesetNames[i].equals(name)) {
@@ -42,7 +43,7 @@ final class RBNFChinesePostProcessor implements RBNFPostProcessor {
                     break;
                 }
             }
-        }
+        //}
 
         if (longForm) {
             for (int i = buf.indexOf("*"); i != -1; i = buf.indexOf("*", i)) {
