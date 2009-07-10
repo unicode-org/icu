@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -220,6 +220,9 @@ public final class UTF16Test extends TestFmwk
         UTF16.charAt(replaceable, 13) != 0x10002) {
         errln("FAIL Getting character from replaceable error" );
           }
+          
+          StringBuffer strbuffer = new StringBuffer("0xD805");
+          UTF16.charAt((CharSequence)strbuffer, 0);
     }
 
     /**

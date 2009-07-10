@@ -83,9 +83,14 @@ abstract class NFSubstitution {
         case '<':
             // throw an exception if the rule is a negative number
             // rule
+            ///CLOVER:OFF
+            // If you look at the call hierarchy of this method, the rule would
+            // never be directly modified by the user and therefore makes the
+            // following pointless unless the user changes the ruleset.
             if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
                 throw new IllegalArgumentException("<< not allowed in negative-number rule");
             }
+            ///CLOVER:ON
 
             // if the rule is a fraction rule, return an
             // IntegralPartSubstitution
@@ -126,9 +131,14 @@ abstract class NFSubstitution {
 
             // if the rule set owning the rule is a fraction rule set,
             // throw an exception
+            ///CLOVER:OFF
+            // If you look at the call hierarchy of this method, the rule would
+            // never be directly modified by the user and therefore makes the
+            // following pointless unless the user changes the ruleset.
             else if (ruleSet.isFractionSet()) {
                 throw new IllegalArgumentException(">> not allowed in fraction rule set");
             }
+            ///CLOVER:ON
 
             // otherwise, return a ModulusSubstitution
             else {
@@ -142,8 +152,13 @@ abstract class NFSubstitution {
             return new SameValueSubstitution(pos, ruleSet, formatter, description);
 
             // and if it's anything else, throw an exception
+            ///CLOVER:OFF
+            // If you look at the call hierarchy of this method, the rule would
+            // never be directly modified by the user and therefore makes the
+            // following pointless unless the user changes the ruleset.
         default:
             throw new IllegalArgumentException("Illegal substitution character");
+            ///CLOVER:ON
         }
     }
 

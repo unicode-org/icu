@@ -616,4 +616,19 @@ public class TestCharsetDetector extends TestFmwk
         CharsetMatch m = det.detect();
         return m;
     }
+    
+    /*
+     * Test the method int match(CharsetDetector det) in CharsetRecog_UTF_16_LE
+     */
+    public void TestCharsetRecog_UTF_16_LE_Match() {
+        byte[] in = { Byte.MIN_VALUE, Byte.MIN_VALUE, Byte.MIN_VALUE, Byte.MIN_VALUE };
+        CharsetDetector cd = new CharsetDetector();
+        // Tests when if (input.length>=4 && input[2] == 0x00 && input[3] == 0x00) is true inside the
+        // match(CharsetDetector) method of CharsetRecog_UTF_16_LE
+        try {
+            cd.setText(in);
+        } catch (Exception e) {
+            errln("CharsetRecog_UTF_16_LE.match(CharsetDetector) was not suppose to return an exception.");
+        }
+    }
 }
