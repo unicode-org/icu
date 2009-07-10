@@ -321,11 +321,14 @@
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
-            <packageset dir="${icu4j.charset.dir}/src">
-                <include name="com/ibm/icu/charset/**"/>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
             </packageset>
             <packageset dir="${icu4j.translit.dir}/src">
                 <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.charset.dir}/src">
+                <include name="com/ibm/icu/charset/**"/>
             </packageset>
         </javadoc>
     </target>
