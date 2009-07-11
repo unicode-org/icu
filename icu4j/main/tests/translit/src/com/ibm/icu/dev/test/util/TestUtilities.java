@@ -100,7 +100,7 @@ public class TestUtilities extends TestFmwk {
         logln("Getting Scripts");
         UnicodeMap scripts = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
         UnicodeMap.Composer composer = new UnicodeMap.Composer() {
-            public Object compose(int codePoint, Object a, Object b) {
+            public Object compose(int codepoint, String string, Object a, Object b) {
                 return a.toString() + "_" + b.toString();
             }
         };
@@ -112,7 +112,7 @@ public class TestUtilities extends TestFmwk {
             Object comp = composed.getValue(i);
             Object gc = map1.getValue(i);
             Object sc = scripts.getValue(i);
-            if (!comp.equals(composer.compose(i, gc, sc))) {
+            if (!comp.equals(composer.compose(i, null, gc, sc))) {
                 errln("Failed compose at: " + i);
             }
             if (!last.equals(comp)) {
@@ -228,7 +228,7 @@ public class TestUtilities extends TestFmwk {
 
     private void checkNext(int limit) {
         logln("Comparing nextRange");
-        UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
+        UnicodeMapIterator mi = new UnicodeMapIterator(map1);
         Map localMap = new TreeMap();
         while (mi.nextRange()) {
             logln(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);

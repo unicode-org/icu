@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.text.ParsePosition;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.MissingResourceException;
@@ -3899,8 +3900,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
             // compute ourselves, to save tests and calls
             int offset = codepoint - Character.MIN_SUPPLEMENTARY_CODE_POINT;
-            buffer[0] = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
-            buffer[1] = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
+            buffer[0] = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
+            buffer[1] = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
             return String.valueOf(buffer);
         }
 
@@ -4107,6 +4108,31 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             target.add(item);
         }
         return target;
+    }
+
+    /**
+     * For iterating through the strings in the set. Example:
+     * <pre>
+     * for (String key : myUnicodeSet.strings()) {
+     *   doSomethingWith(key);
+     * }
+     * </pre>
+     * @return
+     */
+    public Iterable<String> strings() {
+        return Collections.unmodifiableSortedSet(strings);
+    }
+    
+    /**
+     * Return the value of the first code point, if the string is exactly one code point. Otherwise return Integer.MAX_VALUE.
+     */
+    public static int getSingleCodePoint(String s) {
+        int length = s.length();
+        if (length < 1 || length > 2) {
+            return Integer.MAX_VALUE;
+        }
+        int result = s.codePointAt(0);
+        return (result < 0x10000) == (length == 1) ? result : Integer.MAX_VALUE;
     }
 }
 //eof

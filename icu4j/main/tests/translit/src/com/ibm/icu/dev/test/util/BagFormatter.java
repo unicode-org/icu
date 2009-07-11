@@ -1126,8 +1126,9 @@ public class BagFormatter {
     /**
      * @param fixName The fixName to set.
      */
-    public void setFixName(Transliterator fixName) {
+    public BagFormatter setFixName(Transliterator fixName) {
         this.fixName = fixName;
+        return this;
     }
 
     public Tabber getTabber() {

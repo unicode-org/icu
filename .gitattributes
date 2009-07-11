@@ -1448,6 +1448,8 @@ icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/ImmutableEntry.java svneol=native#text/plain
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/UnicodeMapIterator.java svneol=native#text/plain
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/main/tests/translit/translit-tests.launch -text svneol=unset#text/plain
 icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain

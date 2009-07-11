@@ -6,26 +6,25 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.Freezable;
+
 /**
  * Class for mapping Unicode characters to values
  * Much smaller storage than using HashMap, and much faster and more compact than
@@ -33,11 +32,11 @@ import com.ibm.icu.util.Freezable;
  * @author Davis
  */
 
-public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
+public final class UnicodeMap<T> implements Cloneable, Freezable, Iterable<String> {
     /**
      * For serialization
      */
-    private static final long serialVersionUID = -6540936876295804105L;
+    //private static final long serialVersionUID = -6540936876295804105L;
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
@@ -45,31 +44,35 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     private int length;
     // two parallel arrays to save memory. Wish Java had structs.
     private int[] transitions;
-    private Object[] values;
-    
-    private LinkedHashSet availableValues = new LinkedHashSet();
+    /* package private */ T[] values;
+
+    private LinkedHashSet<T> availableValues = new LinkedHashSet<T>();
     private transient boolean staleAvailableValues;
 
     private transient boolean errorOnReset;
     private transient boolean locked;
     private int lastIndex;
-    
+    private Map<String,T> stringMap;
+
     { clear(); }
-    
-    public UnicodeMap clear() {
-        if (locked) throw new UnsupportedOperationException("Attempt to modify locked object");
+
+    public UnicodeMap<T> clear() {
+        if (locked) {
+            throw new UnsupportedOperationException("Attempt to modify locked object");
+        }
         length = 2;
         transitions = new int[] {0,0x110000,0,0,0,0,0,0,0,0};
-        values = new Object[10];
-        
+        values = (T[]) new Object[10];
+
         availableValues.clear();
         staleAvailableValues = false;
 
         errorOnReset = false;
         lastIndex = 0;
+        stringMap = null;
         return this;
     }
-    
+
     /* Boilerplate */
     public boolean equals(Object other) {
         if (other == null) return false;
@@ -85,55 +88,50 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
             return false;
         }
     }
-    
-    public int getHashCode(Object o) {
-        return o.hashCode();
-        //equator.getHashCode
-    }
-    
+
     public static boolean areEqual(Object a , Object b) {
         if (a == b) return true;
         if (a == null || b == null) return false;
         return a.equals(b);
     }
-    
+
     public int hashCode() {
         int result = length;
         // TODO might want to abbreviate this for speed.
         for (int i = 0; i < length-1; ++i) {
             result = 37*result + transitions[i];
-            result = 37*result + getHashCode(values[i]);
+            result = 37*result + values[i].hashCode();
         }
         return result;
     }
-    
+
     /**
      * Standard clone. Warning, as with Collections, does not do deep clone.
      */
-    public Object cloneAsThawed() {
-        UnicodeMap that = new UnicodeMap();
+    public UnicodeMap<T> cloneAsThawed() {
+        UnicodeMap<T> that = new UnicodeMap<T>();
         that.length = length;
         that.transitions = (int[]) transitions.clone();
-        that.values = (Object[]) values.clone();
-        that.availableValues = new LinkedHashSet(availableValues);
+        that.values = (T[]) values.clone();
+        that.availableValues = new LinkedHashSet<T>(availableValues);
         that.locked = false;
         return that;
     }
-    
+
     /* for internal consistency checking */
-    
+
     void _checkInvariants() {
         if (length < 2
-          || length > transitions.length
-          || transitions.length != values.length) {
-              throw new IllegalArgumentException("Invariant failed: Lengths bad");
-          }
+                || length > transitions.length
+                || transitions.length != values.length) {
+            throw new IllegalArgumentException("Invariant failed: Lengths bad");
+        }
         for (int i = 1; i < length-1; ++i) {
             if (areEqual(values[i-1], values[i])) {
                 throw new IllegalArgumentException("Invariant failed: values shared at " 
-                    + "\t" + Utility.hex(i-1) + ": <" + values[i-1] + ">"
-                    + "\t" + Utility.hex(i) + ": <" + values[i] + ">"
-                    );
+                        + "\t" + Utility.hex(i-1) + ": <" + values[i-1] + ">"
+                        + "\t" + Utility.hex(i) + ": <" + values[i] + ">"
+                );
             }
         }
         if (transitions[0] != 0 || transitions[length-1] != 0x110000) {
@@ -142,13 +140,13 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         for (int i = 1; i < length-1; ++i) {
             if (transitions[i-1] >= transitions[i]) {
                 throw new IllegalArgumentException("Invariant failed: not monotonic"
-                + "\t" + Utility.hex(i-1) + ": " + transitions[i-1]
-                + "\t" + Utility.hex(i) + ": " + transitions[i]
-                    );
+                        + "\t" + Utility.hex(i-1) + ": " + transitions[i-1]
+                                                                       + "\t" + Utility.hex(i) + ": " + transitions[i]
+                );
             }
         }
     }
-    
+
     /**
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
      * Assumes that 0 <= codepoint <= 0x10FFFF
@@ -172,27 +170,26 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         if (ASSERTIONS) _checkFind(c, lo);
         return lo;
     }
-    
+
     private void _checkFind(int codepoint, int value) {
         int other = __findIndex(codepoint);
         if (other != value) {
             throw new IllegalArgumentException("Invariant failed: binary search"
-                + "\t" + Utility.hex(codepoint) + ": " + value
-                + "\tshould be: " + other);            
+                    + "\t" + Utility.hex(codepoint) + ": " + value
+                    + "\tshould be: " + other);            
         }
     }
-    
+
     private int __findIndex(int codepoint) {
-        // TODO use binary search
         for (int i = length-1; i > 0; --i) {
             if (transitions[i] <= codepoint) return i;
         }
         return 0;
     }
-    
+
     /*
      * Try indexed lookup
-     
+
     static final int SHIFT = 8;
     int[] starts = new int[0x10FFFF>>SHIFT]; // lowest transition index where codepoint>>x can be found
     boolean startsValid = false;
@@ -200,7 +197,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         if (!startsValid) {
             int start = 0;
             for (int i = 1; i < length; ++i) {
-                
+
             }
         }
         for (int i = length-1; i > 0; --i) {
@@ -208,8 +205,8 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
        }
        return 0;
    }
-   */
-   
+     */
+
     /**
      * Remove the items from index through index+count-1.
      * Logically reduces the size of the internal arrays.
@@ -233,11 +230,11 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     private void _insertGapAt(int index, int count) {
         int newLength = length + count;
         int[] oldtransitions = transitions;
-        Object[] oldvalues = values;
+        T[] oldvalues = values;
         if (newLength > transitions.length) {
             int allocation = (int) (GROWTH_GAP + (newLength * GROWTH_PERCENT) / 100);
             transitions = new int[allocation];
-            values = new Object[allocation];
+            values = (T[]) new Object[allocation];
             for (int i = 0; i < index; ++i) {
                 transitions[i] = oldtransitions[i];
                 values[i] = oldvalues[i];
@@ -249,20 +246,21 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         }
         length = newLength;
     }
-    
+
     /**
      * Associates code point with value. Removes any previous association.
+     * All code that calls this MUST check for frozen first!
      * @param codepoint
      * @param value
      * @return this, for chaining
      */
-    private UnicodeMap _put(int codepoint, Object value) {
+    private UnicodeMap _put(int codepoint, T value) {
         // Warning: baseIndex is an invariant; must
         // be defined such that transitions[baseIndex] < codepoint
         // at end of this routine.
         int baseIndex;
         if (transitions[lastIndex] <= codepoint 
-          && codepoint < transitions[lastIndex+1]) {
+                && codepoint < transitions[lastIndex+1]) {
             baseIndex = lastIndex;
         } else { 
             baseIndex = _findIndex(codepoint);
@@ -270,7 +268,9 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         int limitIndex = baseIndex + 1;
         // cases are (a) value is already set
         if (areEqual(values[baseIndex], value)) return this;
-        if (locked) throw new UnsupportedOperationException("Attempt to modify locked object");
+        if (locked) {
+            throw new UnsupportedOperationException("Attempt to modify locked object");
+        }
         if (errorOnReset && values[baseIndex] != null) {
             throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
                     + " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
@@ -285,22 +285,22 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         // we now start walking through the difference case,
         // based on whether we are at the start or end of range
         // and whether the range is a single character or multiple
-        
+
         if (baseCP == codepoint) {
             // CASE: At very start of range
             boolean connectsWithPrevious = 
                 baseIndex != 0 && areEqual(value, values[baseIndex-1]);               
-                
+
             if (limitCP == codepoint + 1) {
                 // CASE: Single codepoint range
                 boolean connectsWithFollowing =
-                    baseIndex < length - 1 && areEqual(value, values[limitIndex]);
-                
+                    baseIndex < length - 2 && areEqual(value, values[limitIndex]); // was -1
+
                 if (connectsWithPrevious) {
                     // A1a connects with previous & following, so remove index
                     if (connectsWithFollowing) {
                         _removeAt(baseIndex, 2);
-                     } else {
+                    } else {
                         _removeAt(baseIndex, 1); // extend previous
                     }
                     --baseIndex; // fix up
@@ -312,8 +312,8 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
                     values[baseIndex] = value;
                 }
             } else if (connectsWithPrevious) {             
-            // A.1: start of multi codepoint range
-            // if connects
+                // A.1: start of multi codepoint range
+                // if connects
                 ++transitions[baseIndex]; // extend previous
             } else {
                 // otherwise insert new transition
@@ -326,7 +326,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
             // CASE: at end of range        
             // if connects, just back up range
             boolean connectsWithFollowing =
-                baseIndex < length - 1 && areEqual(value, values[limitIndex]);
+                baseIndex < length - 2 && areEqual(value, values[limitIndex]); // was -1
 
             if (connectsWithFollowing) {
                 --transitions[limitIndex]; 
@@ -348,19 +348,23 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         lastIndex = baseIndex; // store for next time
         return this;
     }
-    private UnicodeMap _putAll(int startCodePoint, int endCodePoint, Object value) {
+    
+    private UnicodeMap _putAll(int startCodePoint, int endCodePoint, T value) {
+        // TODO optimize
         for (int i = startCodePoint; i <= endCodePoint; ++i) {
             _put(i, value);
+            if (ASSERTIONS) _checkInvariants();
         }
         return this;
     }
+    
     /**
      * Sets the codepoint value.
      * @param codepoint
      * @param value
      * @return this (for chaining)
      */
-    public UnicodeMap put(int codepoint, Object value) {
+    public UnicodeMap<T> put(int codepoint, T value) {
         if (codepoint < 0 || codepoint > 0x10FFFF) {
             throw new IllegalArgumentException("Codepoint out of range: " + codepoint);
         }
@@ -368,21 +372,49 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         if (ASSERTIONS) _checkInvariants();
         return this;
     }
+
+    /**
+     * Sets the codepoint value.
+     * @param codepoint
+     * @param value
+     * @return this (for chaining)
+     */
+    public UnicodeMap<T> put(String string, T value) {
+        int v = UnicodeSet.getSingleCodePoint(string);
+        if (v == Integer.MAX_VALUE) {
+            if (value != null) {
+                if (stringMap == null) {
+                    stringMap = new TreeMap<String,T>();
+                }
+                stringMap.put(string, value);
+                staleAvailableValues = true;
+            } else if (stringMap != null) {
+                if (stringMap.remove(string) != null) {
+                    staleAvailableValues = true;
+                }
+            }
+            return this;
+        }
+        return put(v, value);
+    }
+
     /**
      * Adds bunch o' codepoints; otherwise like put.
      * @param codepoints
      * @param value
      * @return this (for chaining)
      */
-    public UnicodeMap putAll(UnicodeSet codepoints, Object value) {
-        // TODO optimize
+    public UnicodeMap<T> putAll(UnicodeSet codepoints, T value) {
         UnicodeSetIterator it = new UnicodeSetIterator(codepoints);
         while (it.nextRange()) {
             _putAll(it.codepoint, it.codepointEnd, value);
         }
+        for (String key : codepoints.strings()) {
+            put(key, value);
+        }
         return this;
     }
-    
+
     /**
      * Adds bunch o' codepoints; otherwise like add.
      * @param startCodePoint
@@ -390,26 +422,36 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param value
      * @return this (for chaining)
      */
-    public UnicodeMap putAll(int startCodePoint, int endCodePoint, Object value) {
+    public UnicodeMap<T> putAll(int startCodePoint, int endCodePoint, T value) {
+        if (locked) {
+            throw new UnsupportedOperationException("Attempt to modify locked object");
+        }
         if (startCodePoint < 0 || endCodePoint > 0x10FFFF) {
             throw new IllegalArgumentException("Codepoint out of range: "
-             + Utility.hex(startCodePoint) + ".." + Utility.hex(endCodePoint));
+                    + Utility.hex(startCodePoint) + ".." + Utility.hex(endCodePoint));
         }
-        // TODO optimize
-        for (int i = startCodePoint; i <= endCodePoint; ++i) {
-            _put(i, value);
-        }
-        return this;
+        return _putAll(startCodePoint, endCodePoint, value);
     }
+    
     /**
      * Add all the (main) values from a Unicode property
      * @param prop the property to add to the map
      * @return this (for chaining)
      */
-    public UnicodeMap putAll(UnicodeProperty prop) {
-        // TODO optimize
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            _put(i, prop.getValue(i));
+    public UnicodeMap<T> putAll(UnicodeMap<T> prop) {
+        
+        for (int i = 0; i < prop.length; ++i) {
+            T value = prop.values[i];
+            if (value != null) {
+                _putAll(prop.transitions[i], prop.transitions[i+1]-1, value);
+            }
+            if (ASSERTIONS) _checkInvariants();
+        }
+        if (!prop.stringMap.isEmpty()) {
+            if (stringMap == null) {
+                stringMap = new TreeMap<String,T>();
+            }
+            stringMap.putAll(prop.stringMap);
         }
         return this;
     }
@@ -419,10 +461,17 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param prop the property to add to the map
      * @return this (for chaining)
      */
-    public UnicodeMap putAll(UnicodeMap prop) {
+    public UnicodeMap<T> putAllFiltered(UnicodeMap<T> prop, UnicodeSet filter) {
         // TODO optimize
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            _put(i, prop.getValue(i));
+        for (UnicodeSetIterator it = new UnicodeSetIterator(filter); it.next();) {
+            _put(it.codepoint, prop.getValue(it.codepoint));
+        }
+        // now do the strings
+        for (String key : filter.strings()) {
+            T value = prop.get(key);
+            if (value != null) {
+                put(key, value);
+            }
         }
         return this;
     }
@@ -432,7 +481,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param value the value to set
      * @return this (for chaining)
      */
-    public UnicodeMap setMissing(Object value) {
+    public UnicodeMap<T> setMissing(T value) {
         // fast path, if value not yet present
         if (!getAvailableValues().contains(value)) {
             staleAvailableValues = true;
@@ -453,23 +502,36 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param result
      * @return result
      */
-    public UnicodeSet getSet(Object value, UnicodeSet result) {
+    public UnicodeSet getSet(T value, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();
         for (int i = 0; i < length - 1; ++i) {
             if (areEqual(value, values[i])) {
                 result.add(transitions[i], transitions[i+1]-1);
             } 
         }
+        if (value != null && stringMap != null) {
+            for (String key : stringMap.keySet()) {
+                T newValue = stringMap.get(key);
+                if (value.equals(newValue)) {
+                    result.add((String)key);
+                }
+            }
+        }
         return result;
     }
 
-    public UnicodeSet getSet(Object value) {
+    public UnicodeSet getSet(T value) {
         return getSet(value,null);
     }
 
     public UnicodeSet keySet() {
-        return getSet(null,null).complement();
+        UnicodeSet complement = getSet(null,null).complement();
+        if (stringMap != null) {
+            complement.addAll(stringMap.keySet());
+        }
+        return complement;
     }
+    
     /**
      * Returns the list of possible values. Deposits each non-null value into
      * result. Creates result if it is null. Remember to clear result if
@@ -477,26 +539,31 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param result
      * @return result
      */
-    public Collection getAvailableValues(Collection result) {
+    public <U extends Collection<T>> U values(U result) {
         if (staleAvailableValues) {
             // collect all the current values
             // retain them in the availableValues
-            Set temp = new HashSet();
+            Set<T> temp = new HashSet<T>();
             for (int i = 0; i < length - 1; ++i) {
                 if (values[i] != null) temp.add(values[i]);
             }
             availableValues.retainAll(temp);
+            if (stringMap != null) {
+                availableValues.addAll(stringMap.values());
+            }
             staleAvailableValues = false;
         }
-        if (result == null) result = new ArrayList(availableValues.size());
+        if (result == null) {
+            result = (U) new ArrayList<T>(availableValues.size());
+        }
         result.addAll(availableValues);
         return result;
     }
-    
+
     /**
      * Convenience method
      */
-    public Collection getAvailableValues() {
+    public Collection<T> values() {
         return getAvailableValues(null);
     }
     /**
@@ -505,13 +572,30 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @param codepoint
      * @return the value
      */
-    public Object getValue(int codepoint) {
+    public T get(int codepoint) {
         if (codepoint < 0 || codepoint > 0x10FFFF) {
             throw new IllegalArgumentException("Codepoint out of range: " + codepoint);
         }
         return values[_findIndex(codepoint)];
     }
-    
+
+    /**
+     * Gets the value associated with a given code point.
+     * Returns null, if there is no such value.
+     * @param codepoint
+     * @return the value
+     */
+    public T get(String value) {
+        if (UTF16.hasMoreCodePointsThan(value, 1)) {
+            if (stringMap == null) {
+                return null;
+            }
+            return stringMap.get(value);
+        }
+        return getValue(UTF16.charAt(value, 0));
+    }
+
+
     /**
      * Change a new string from the source string according to the mappings. For each code point cp, if getValue(cp) is null, append the character, otherwise append getValue(cp).toString()
      * @param source
@@ -521,118 +605,87 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
-          cp = UTF16.charAt(source, i);
-          Object mResult = getValue(cp);
-          if (mResult != null) {
-            result.append(mResult);
-          } else {
-            UTF16.append(result, cp);
-          }
+            cp = UTF16.charAt(source, i);
+            T mResult = getValue(cp);
+            if (mResult != null) {
+                result.append(mResult);
+            } else {
+                UTF16.append(result, cp);
+            }
         }
         return result.toString();
-      }
-    
-    public interface Composer {
-        Object compose(int codePoint, Object a, Object b);
     }
-    
-    public UnicodeMap composeWith(UnicodeMap other, Composer composer) {
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            Object v1 = getValue(i);
-            Object v2 = other.getValue(i);
-            Object v3 = composer.compose(i, v1, v2);
-            if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
+
+    /**
+     * Used to add complex values, where the value isn't replaced but in some sense composed
+     * @author markdavis
+     */
+    public abstract static class Composer<T> {
+        /**
+         * This will be called with either a string or a code point. The result is the new value for that item.
+         * If the codepoint is used, the string is null; if the string is used, the codepoint is -1.
+         * @param a
+         * @param b
+         */
+        public abstract T compose(int codePoint, String string, T a, T b);
+    }
+
+    public UnicodeMap<T> composeWith(UnicodeMap<T> other, Composer<T> composer) {
+        for (T value : other.getAvailableValues()) {
+            UnicodeSet set = other.getSet(value);
+            composeWith(set, value, composer);
         }
         return this;
     }
-    
-    public UnicodeMap composeWith(UnicodeSet set, Object value, Composer composer) {
+
+    public UnicodeMap<T> composeWith(UnicodeSet set, T value, Composer<T> composer) {
         for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
             int i = it.codepoint;
-            Object v1 = getValue(i);
-            Object v3 = composer.compose(i, v1, value);
-            if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
+            if (i == UnicodeSetIterator.IS_STRING) {
+                String s = it.string;
+                T v1 = getValue(s);
+                T v3 = composer.compose(-1, s, v1, value);
+                if (v1 != v3 && (v1 == null || !v1.equals(v3))) {
+                    put(s, v3);
+                }                
+            } else {
+                T v1 = getValue(i);
+                T v3 = composer.compose(i, null, v1, value);
+                if (v1 != v3 && (v1 == null || !v1.equals(v3))) {
+                    put(i, v3);
+                }
+            }
         }
         return this;
     }
-    
-    /**
-     * Follow the style used by UnicodeSetIterator
-     */
-    public static class MapIterator {
-        public int codepoint;
-        public int codepointEnd;
-        public Object value;
-        
-        private UnicodeMap map;
-        private int index;
-        private int startRange;
-        private int endRange;
-        private Object lastValue;
-        
-        public MapIterator(UnicodeMap map) {
-            reset(map);
-        }
-        // note: length of 2 means {0, 110000}. Only want to index up to 0!
-        public boolean nextRange() {
-            if (index < 0 || index >= map.length - 1) return false;
-            value = map.values[index];
-            codepoint = startRange = map.transitions[index++];
-            codepointEnd = endRange = map.transitions[index] - 1; // -1 to make limit into end
-            return true;
-        }
-        public boolean next() {
-            if (startRange > endRange) {
-                //System.out.println("***" + Utility.hex(startRange) + ".." + Utility.hex(endRange));
-                if (!nextRange()) return false;
-                // index now points AFTER the start of the range
-                lastValue = map.values[index-1];
-                //System.out.println("***" + Utility.hex(codepoint) + ".." + Utility.hex(codepointEnd) + " => " + lastValue);
-            }
-            value = lastValue;
-            codepoint = codepointEnd = startRange++; // set to first, and iterate
-            return true;
-        }
 
-        public MapIterator reset() {
-            index = 0;
-            startRange = 0;
-            endRange = -1;
-            return this;
-        }
-        public MapIterator reset(UnicodeMap newMap) {
-            this.map = newMap;
-            return reset();
-        }
-    }
-    
     public String toString() {
         return toString(null);
     }
-    public String toString(Comparator collected) {
+    
+    public String toString(Comparator<T> collected) {
         StringBuffer result = new StringBuffer();       
         if (collected == null) {
             for (int i = 0; i < length-1; ++i) {
-                Object value = values[i];
+                T value = values[i];
                 if (value == null) continue;
                 int start = transitions[i];
                 int end = transitions[i+1]-1;
                 result.append(Utility.hex(start));
-                if (start != end) result.append("..")
-                .append(Utility.hex(end));
-                result.append("\t=> ")
-                .append(values[i] == null ? "null" : values[i].toString())
-                .append("\r\n");
+                if (start != end) result.append("-").append(Utility.hex(end));
+                result.append("=").append(value.toString()).append("\n");
+            }
+            if (stringMap != null) {
+                for (String s : stringMap.keySet()) {
+                    result.append(Utility.hex(s)).append("=").append(stringMap.get(s).toString()).append("\n");
+                }
             }
         } else {
-            Set set = (Set) getAvailableValues(new TreeSet(collected));
-            for (Iterator it = set.iterator(); it.hasNext();) {
-                Object value = it.next();
+            Set<T> set = getAvailableValues(new TreeSet<T>(collected));
+            for (Iterator<T> it = set.iterator(); it.hasNext();) {
+                T value = it.next();
                 UnicodeSet s = getSet(value);
-                result.append(value)
-                .append("\t=> ")
-                .append(s.toPattern(true))
-                .append("\r\n");
+                result.append(value).append("=").append(s.toString()).append("\n");
             }
         }
         return result.toString();
@@ -646,8 +699,9 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     /**
      * @param errorOnReset The errorOnReset to set.
      */
-    public void setErrorOnReset(boolean errorOnReset) {
+    public UnicodeMap<T> setErrorOnReset(boolean errorOnReset) {
         this.errorOnReset = errorOnReset;
+        return this;
     }
 
     /* (non-Javadoc)
@@ -661,97 +715,9 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.util.Lockable#lock()
      */
-    public Object freeze() {
+    public UnicodeMap<T> freeze() {
         locked = true;
         return this;
-    }
-    
-    static final boolean DEBUG_WRITE = false;
-    
-    // TODO Fix to serialize more than just strings.
-    // Only if all the items are strings will we do the following compression
-    // Otherwise we'll just use Java Serialization, bulky as it is
-    public void writeExternal(ObjectOutput out1) throws IOException {
-        DataOutputCompressor sc = new DataOutputCompressor(out1);
-        // if all objects are strings
-        Collection availableVals = getAvailableValues();
-        boolean allStrings = allAreString(availableVals);
-        sc.writeBoolean(allStrings);
-        Map object_index = new LinkedHashMap();
-        if (allAreString(availableVals)) {
-            sc.writeStringSet(new TreeSet(availableVals), object_index);
-        } else {
-            sc.writeCollection(availableVals, object_index);           
-        }
-        sc.writeUInt(length);
-        int lastTransition = -1;
-        int lastValueNumber = 0;
-        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
-        for (int i = 0; i < length; ++i) {
-            int valueNumber = ((Integer)object_index.get(values[i])).intValue();
-            if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + valueNumber);
-            
-            int deltaTransition = transitions[i] - lastTransition;
-            lastTransition = transitions[i];
-            int deltaValueNumber = valueNumber - lastValueNumber;
-            lastValueNumber = valueNumber;
-            
-            deltaValueNumber <<= 1; // make room for one bit
-            boolean canCombine = deltaTransition == 1;
-            if (canCombine) deltaValueNumber |= 1;
-            sc.writeInt(deltaValueNumber);
-            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + deltaValueNumber);
-            if (!canCombine) {
-                sc.writeUInt(deltaTransition);
-                if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
-            }
-        }
-        sc.flush();
-    }
-
-    /**
-     * 
-     */
-    private boolean allAreString(Collection availableValues2) {
-        //if (true) return false;
-        for (Iterator it = availableValues2.iterator(); it.hasNext();) {
-            if (!(it.next() instanceof String)) return false;
-        }
-        return true;
-    }
-
-    public void readExternal(ObjectInput in1) throws IOException, ClassNotFoundException {
-        DataInputCompressor sc = new DataInputCompressor(in1);
-        boolean allStrings = sc.readBoolean();
-        Object[] valuesList;
-        availableValues = new LinkedHashSet();
-        if (allStrings) {
-            valuesList = sc.readStringSet(availableValues);
-        } else {
-            valuesList = sc.readCollection(availableValues);            
-        }
-        length = sc.readUInt();
-        transitions = new int[length];
-        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
-        values = new Object[length];
-        int currentTransition = -1;
-        int currentValue = 0;
-        int deltaTransition;
-        for (int i = 0; i < length; ++i) {
-            int temp = sc.readInt();
-            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + temp);
-            boolean combined = (temp & 1) != 0;
-            temp >>= 1;
-            values[i] = valuesList[currentValue += temp];
-            if (!combined) {
-                deltaTransition = sc.readUInt();
-                if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
-            } else {
-                deltaTransition = 1;
-            }
-            transitions[i] = currentTransition += deltaTransition; // delta value
-            if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + currentValue);
-        }
     }
 
     /**
@@ -765,141 +731,292 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         return minLen;
     }
 
+    /**
+     * Get the number of ranges; used for getRangeStart/End. The ranges together cover all of the single-codepoint keys in the UnicodeMap. Other keys can be gotten with getStrings().
+     */
+    public int getRangeCount() {
+        return length-1;
+    }
 
+    /**
+     * Get the start of a range. All code points between start and end are in the UnicodeMap's keyset.
+     */
+    public int getRangeStart(int range) {
+        return transitions[range];
+    }
+    
+    /**
+     * Get the start of a range. All code points between start and end are in the UnicodeMap's keyset.
+     */
+    public int getRangeEnd(int range) {
+        return transitions[range+1] - 1;
+    }
+    
+    /**
+     * Get the value for the range.
+     */
+    public T getRangeValue(int range) {
+        return values[range];
+    }
+
+    /**
+     * Get the strings that are not in the ranges. Returns null if there are none.
+     * @return
+     */
+    public Set<String> getNonRangeStrings() {
+        if (stringMap == null || stringMap.size() == 0) {
+            return null;
+        }
+        return Collections.unmodifiableSet(stringMap.keySet());
+    }
+
+    static final boolean DEBUG_WRITE = false;
+
+    /* (non-Javadoc)
+     * @see java.util.Map#containsKey(java.lang.Object)
+     */
+    public boolean containsKey(String key) {
+        return getValue(key) != null;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#containsKey(java.lang.Object)
+     */
+    public boolean containsKey(int key) {
+        return getValue(key) != null;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#containsValue(java.lang.Object)
+     */
+    public boolean containsValue(T value) {
+        // TODO Optimize
+        return getAvailableValues().contains(value);
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#isEmpty()
+     */
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#putAll(java.util.Map)
+     */
+    public UnicodeMap<T> putAll(Map<? extends String, ? extends T> map) {
+        for (String key : map.keySet()) {
+            put(key,map.get(key));
+        }
+        return this;
+    }
+    
+    /**
+     * Utility for extracting map
+     */
+    public UnicodeMap<T> putAllIn(Map<? super String, ? super T> map) {
+        for (String key : keySet()) {
+            map.put(key, get(key));
+        }
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#remove(java.lang.Object)
+     */
+    public UnicodeMap<T> remove(String key) {
+        return put(key, null);
+    }
+    
+    /* (non-Javadoc)
+     * @see java.util.Map#remove(java.lang.Object)
+     */
+    public UnicodeMap<T> remove(int key) {
+        return put(key, null);
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#size()
+     */
+    public int size() {
+        int result = stringMap.size();
+        for (int i = 0; i < length-1; ++i) {
+            T value = values[i];
+            if (value == null) continue;
+            result += transitions[i+1] - transitions[i];
+        }
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#entrySet()
+     */
+    public Iterable<Entry<String,T>> entrySet() {
+        return new EntrySetX();
+    }
+    
+    private class EntrySetX implements Iterable<Entry<String, T>> {
+        public Iterator<Entry<String, T>> iterator() {
+            return new IteratorX();
+        }
+        public String toString() {
+            StringBuffer b = new StringBuffer();
+            for (Iterator it = iterator(); it.hasNext();) {
+                Object item = it.next();
+                b.append(item.toString()).append(' ');
+            }
+            return b.toString();
+        }
+    }
+    
+    private class IteratorX implements Iterator<Entry<String, T>> {
+        Iterator<String> iterator = keySet().iterator();
+        
+        /* (non-Javadoc)
+         * @see java.util.Iterator#hasNext()
+         */
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        /* (non-Javadoc)
+         * @see java.util.Iterator#next()
+         */
+        public Entry<String, T> next() {
+            String key = iterator.next();
+            return new ImmutableEntry(key, get(key));
+        }
+
+        /* (non-Javadoc)
+         * @see java.util.Iterator#remove()
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Iterable#iterator()
+     */
+    public Iterator<String> iterator() {
+        return keySet().iterator();
+    }
+
+    /**
+     * Old form for compatibility
+     */
+    public T getValue(String key) {
+        return get(key);
+    }
+    
+    /**
+     * Old form for compatibility
+     */
+    public T getValue(int key) {
+        // TODO Auto-generated method stub
+        return get(key);
+    }
+
+    /**
+     * Old form for compatibility
+     */
+    public Collection<T> getAvailableValues() {
+        return values();
+    }
+    
+    /**
+     * Old form for compatibility
+     */
+    public <U extends Collection<T>> U getAvailableValues(U result) {
+        return values(result);
+    }
+
+
+// This is to support compressed serialization. It works; just commented out for now as we shift to Generics
+//    // TODO Fix to serialize more than just strings.
+//    // Only if all the items are strings will we do the following compression
+//    // Otherwise we'll just use Java Serialization, bulky as it is
+//    public void writeExternal(ObjectOutput out1) throws IOException {
+//        DataOutputCompressor sc = new DataOutputCompressor(out1);
+//        // if all objects are strings
+//        Collection<T> availableVals = getAvailableValues();
+//        boolean allStrings = allAreString(availableVals);
+//        sc.writeBoolean(allStrings);
+//        Map object_index = new LinkedHashMap();
+//        if (allAreString(availableVals)) {
+//            sc.writeStringSet(new TreeSet(availableVals), object_index);
+//        } else {
+//            sc.writeCollection(availableVals, object_index);           
+//        }
+//        sc.writeUInt(length);
+//        int lastTransition = -1;
+//        int lastValueNumber = 0;
+//        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
+//        for (int i = 0; i < length; ++i) {
+//            int valueNumber = ((Integer)object_index.get(values[i])).intValue();
+//            if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + valueNumber);
+//
+//            int deltaTransition = transitions[i] - lastTransition;
+//            lastTransition = transitions[i];
+//            int deltaValueNumber = valueNumber - lastValueNumber;
+//            lastValueNumber = valueNumber;
+//
+//            deltaValueNumber <<= 1; // make room for one bit
+//            boolean canCombine = deltaTransition == 1;
+//            if (canCombine) deltaValueNumber |= 1;
+//            sc.writeInt(deltaValueNumber);
+//            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + deltaValueNumber);
+//            if (!canCombine) {
+//                sc.writeUInt(deltaTransition);
+//                if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
+//            }
+//        }
+//        sc.flush();
+//    }
+//
 //    /**
-//     * @param sc
-//     * @throws IOException
 //     * 
 //     */
-//    private void showSize(String title, ObjectOutput out, StreamCompressor sc) throws IOException {
-//        sc.showSize(this, title, out);
+//    private boolean allAreString(Collection<T> availableValues2) {
+//        //if (true) return false;
+//        for (Iterator<T> it = availableValues2.iterator(); it.hasNext();) {
+//            if (!(it.next() instanceof String)) return false;
+//        }
+//        return true;
 //    }
-//    //public void readObject(ObjectInputStream in) throws IOException {
-//    public static class StreamCompressor {
-//        transient byte[] buffer = new byte[1];
-//        transient StringBuffer stringBuffer = new StringBuffer();
-//        
-//        transient byte[] readWriteBuffer = new byte[8];
-//        int position = 0;
-//        DataOutput out;
-//        DataInput in;
 //
-//        /**
-//         * Format is:
-//         * @throws IOException
-//         */
-//        public void writeInt(int i) throws IOException {
-//            while (true) {
-//                if (position == readWriteBuffer.length) {
-//                    out.write(readWriteBuffer);
-//                    position = 0;
-//                }
-//                if ((i & ~0x7F) == 0) {
-//                    readWriteBuffer[position++] = (byte)i;
-//                    break;
-//                }
-//                readWriteBuffer[position++] = (byte)(0x80 | i);
-//                i >>>= 7;
-//            }
+//    public void readExternal(ObjectInput in1) throws IOException, ClassNotFoundException {
+//        DataInputCompressor sc = new DataInputCompressor(in1);
+//        boolean allStrings = sc.readBoolean();
+//        T[] valuesList;
+//        availableValues = new LinkedHashSet();
+//        if (allStrings) {
+//            valuesList = sc.readStringSet(availableValues);
+//        } else {
+//            valuesList = sc.readCollection(availableValues);            
 //        }
-//        /**
-//         * @throws IOException
-//         * 
-//         */
-//        public int readNInt(ObjectInput in) throws IOException {
-//            int result = readInt(in);
-//            boolean negative = (result & 1) != 0;
-//            result >>>= 1;
-//            if (negative) result = ~result;
-//            return result;
+//        length = sc.readUInt();
+//        transitions = new int[length];
+//        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
+//        values = (T[]) new Object[length];
+//        int currentTransition = -1;
+//        int currentValue = 0;
+//        int deltaTransition;
+//        for (int i = 0; i < length; ++i) {
+//            int temp = sc.readInt();
+//            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + temp);
+//            boolean combined = (temp & 1) != 0;
+//            temp >>= 1;
+//        values[i] = valuesList[currentValue += temp];
+//        if (!combined) {
+//            deltaTransition = sc.readUInt();
+//            if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
+//        } else {
+//            deltaTransition = 1;
 //        }
-//        /**
-//         * @throws IOException
-//         * 
-//         */
-//        public void writeNInt(int input) throws IOException {
-//            int flag = 0;
-//            if (input < 0) {
-//                input = ~input;
-//                flag = 1;
-//            }
-//            input = (input << 1) | flag;
-//            writeInt(out, input);
-//        }
-//        /**
-//         * @throws IOException
-//         * 
-//         */
-//        public void flush() throws IOException {
-//            out.write(readWriteBuffer);
-//            position = 0;
-//        }
-//        
-//        int readPosition = readWriteBuffer.length;
-//        
-//        public int readInt(ObjectInput in) throws IOException {
-//            int result = 0;
-//            int offset = 0;
-//            while (true) {
-//                if (readPosition == readWriteBuffer.length) {
-//                    in.read(readWriteBuffer);
-//                    readPosition = 0;
-//                }
-//                //in.read(buffer);
-//                int input = readWriteBuffer[readPosition++]; // buffer[0];
-//                result |= (input & 0x7F) << offset;
-//                if ((input & 0x80) == 0) {
-//                    return result;
-//                }
-//                offset += 7;
-//            }  
-//        }
-//
-//        /**
-//         * @throws IOException
-//         * 
-//         */
-//        public void writeString(String s) throws IOException {
-//            writeInt(UTF16.countCodePoint(s));
-//            writeCodePoints(s);
-//        }
-//        /**
-//         * 
-//         */
-//        private void writeCodePoints(String s) throws IOException {
-//            int cp = 0;
-//            for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
-//                cp = UTF16.charAt(s, i);
-//                writeInt(cp);
-//            }
-//        }
-//        /**
-//         * @throws IOException
-//         * 
-//         */
-//        public String readString() throws IOException {
-//            int len = readInt(in);
-//            return readCodePoints(in, len);
-//        }
-//        /**
-//         * 
-//         */
-//        private String readCodePoints(int len) throws IOException {
-//            stringBuffer.setLength(0);
-//            for (int i = 0; i < len; ++i) {
-//                int cp = readInt(in);
-//                UTF16.append(stringBuffer, cp);
-//            }
-//            return stringBuffer.toString();
-//        }
-//        /**
-//         * @param this
-//         * @throws IOException
-//         * 
-//         */
-//        private void showSize(UnicodeMap map, String title, ObjectOutput out) throws IOException {
-//            out.flush();
-//            System.out.println(title + ": " + (map.debugOut.size() + position));
+//        transitions[i] = currentTransition += deltaTransition; // delta value
+//        if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + currentValue);
 //        }
 //    }
 }
