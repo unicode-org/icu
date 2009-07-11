@@ -49,7 +49,7 @@ public class TestBagFormatter {
                 values.clear();
                 if (type == UnicodeProperty.NUMERIC || type == UnicodeProperty.EXTENDED_NUMERIC) {
                     UnicodeMap um = new UnicodeMap();
-                    um.putAll(up);
+                    um.putAll(up.getUnicodeMap());
                     System.out.println(um.toString(new NumberComparator()));
                     continue;
                 }
