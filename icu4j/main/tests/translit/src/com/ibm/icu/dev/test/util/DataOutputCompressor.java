@@ -158,7 +158,7 @@ public final class DataOutputCompressor implements ObjectOutput {
         for (Iterator it = c.iterator(); it.hasNext();) {
             String s = (String) it.next();
             object_index.put(s, new Integer(i++));
-            int common = UnicodeMap.findCommon(lastString, s); // runlength encode
+            int common = UnicodeMap.findCommonPrefix(lastString, s); // runlength encode
             lastString = s;
             String piece = s.substring(common);
             if (SHOW) System.out.println(common);

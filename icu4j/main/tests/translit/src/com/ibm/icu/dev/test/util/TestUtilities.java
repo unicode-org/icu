@@ -90,7 +90,7 @@ public class TestUtilities extends TestFmwk {
         for (Iterator it = values1.iterator(); it.hasNext();) {
             Object value = it.next();
             logln(value == null ? "null" : value.toString());
-            UnicodeSet set1 = map1.getSet(value);
+            UnicodeSet set1 = map1.keySet(value);
             UnicodeSet set2 = TestBoilerplate.getSet(map2, value);
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
                 throw new IllegalArgumentException("Halting");

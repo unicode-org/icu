@@ -262,7 +262,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
                 // System.out.println("Values:" + value2);
                 if (matcher.matches(value2)
                         || matcher.matches(toSkeleton(value2))) {
-                    um.getSet(value, result);
+                    um.keySet(value, result);
                     continue main;
                 }
             }
