@@ -2204,9 +2204,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new Locale("en_US"));
-        sym = new ChineseDateFormatSymbols(null, new Locale("en_US"));
         sym = new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en_US"));
-        sym = new ChineseDateFormatSymbols(null, foo);
         sym = new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
         // cover new ChineseDateFormatSymbols(Calendar, ULocale)
         ChineseCalendar ccal = new ChineseCalendar();
