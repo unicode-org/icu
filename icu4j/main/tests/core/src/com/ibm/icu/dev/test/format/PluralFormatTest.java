@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -215,4 +216,51 @@ public class PluralFormatTest extends TestFmwk {
       changes.put(new Integer(105), "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
+  
+    /* Tests the method public PluralRules getPluralRules() */
+    public void TestGetPluralRules() {
+        CurrencyPluralInfo cpi = new CurrencyPluralInfo();
+        try {
+            cpi.getPluralRules();
+        } catch (Exception e) {
+            errln("CurrencyPluralInfo.getPluralRules() was not suppose to " + "return an exception.");
+        }
+    }
+
+    /* Tests the method public ULocale getLocale() */
+    public void TestGetLocale() {
+        CurrencyPluralInfo cpi = new CurrencyPluralInfo(new ULocale("en_US"));
+        if (!cpi.getLocale().equals(new ULocale("en_US"))) {
+            errln("CurrencyPluralInfo.getLocale() was suppose to return true " + "when passing the same ULocale");
+        }
+        if (cpi.getLocale().equals(new ULocale("jp_JP"))) {
+            errln("CurrencyPluralInfo.getLocale() was not suppose to return true " + "when passing a different ULocale");
+        }
+    }
+    
+    /* Tests the method public void setLocale(ULocale loc) */
+    public void TestSetLocale() {
+        CurrencyPluralInfo cpi = new CurrencyPluralInfo();
+        cpi.setLocale(new ULocale("en_US"));
+        if (!cpi.getLocale().equals(new ULocale("en_US"))) {
+            errln("CurrencyPluralInfo.setLocale() was suppose to return true when passing the same ULocale");
+        }
+        if (cpi.getLocale().equals(new ULocale("jp_JP"))) {
+            errln("CurrencyPluralInfo.setLocale() was not suppose to return true when passing a different ULocale");
+        }
+    }
+    
+    /* Tests the method public boolean equals(Object a) */
+    public void TestEquals(){
+        CurrencyPluralInfo cpi = new CurrencyPluralInfo();
+        if(cpi.equals(0)){
+            errln("CurrencyPluralInfo.equals(Object) was not suppose to return true when comparing to an invalid object for integer 0.");
+        }
+        if(cpi.equals(0.0)){
+            errln("CurrencyPluralInfo.equals(Object) was not suppose to return true when comparing to an invalid object for float 0.");
+        }
+        if(cpi.equals("0")){
+            errln("CurrencyPluralInfo.equals(Object) was not suppose to return true when comparing to an invalid object for string 0.");
+        }
+    }
 }
