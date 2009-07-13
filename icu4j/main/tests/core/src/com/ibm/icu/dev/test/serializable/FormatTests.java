@@ -1693,10 +1693,14 @@ public class FormatTests
         public Object[] getTestObjects()
         {
             CurrencyPluralInfo currencyPluralInfo[] = {
-                new CurrencyPluralInfo()
+                new CurrencyPluralInfo(), new CurrencyPluralInfo(new ULocale("en_US")),
+                CurrencyPluralInfo.getInstance(), CurrencyPluralInfo.getInstance(new Locale("en_US")),
+                CurrencyPluralInfo.getInstance(new ULocale("en_US"))
             };
-            currencyPluralInfo[0].setPluralRules("one: n is 1; few: n in 2..4");
-            currencyPluralInfo[0].setCurrencyPluralPattern("few", "few currency");
+            for(int i=0; i<currencyPluralInfo.length; i++){
+                currencyPluralInfo[i].setPluralRules("one: n is 1; few: n in 2..4");
+                currencyPluralInfo[i].setCurrencyPluralPattern("few", "few currency");
+            }
             return currencyPluralInfo;
         }
         

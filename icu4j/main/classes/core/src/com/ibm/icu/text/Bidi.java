@@ -1163,7 +1163,9 @@ public class Bidi {
             bdp = UBiDiProps.getSingleton();
         }
         catch (IOException e) {
+            ///CLOVER:OFF
             throw new MissingResourceException(e.getMessage(), "(BidiProps)", "");
+            ///CLOVER:ON
         }
 
         /* allocate memory for arrays as requested */

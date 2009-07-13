@@ -901,6 +901,154 @@ public class TestIDNA extends TestFmwk {
                 logln("IDNA.convertToUnicode(idn, IDNA.DEFAULT) Succeeded");
             }
         }
-        
+    }
+    
+    /* Tests the method public static StringBuffer convertToASCII(String src, int options) */
+    public void TestConvertToASCII() {
+        try {
+            if (!IDNA.convertToASCII("dummy", 0).toString().equals("dummy")) {
+                errln("IDNA.convertToASCII(String,int) was suppose to return the same string passed.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.convertToASCII(String,int) was not suppose to return an exception.");
+        }
+    }
+
+    /*
+     * Tests the method public static StringBuffer convertIDNToASCII(UCharacterIterator src, int options), method public
+     * static StringBuffer public static StringBuffer convertIDNToASCII(StringBuffer src, int options), public static
+     * StringBuffer convertIDNToASCII(UCharacterIterator src, int options)
+     */
+    public void TestConvertIDNToASCII() {
+        try {
+            UCharacterIterator uci = UCharacterIterator.getInstance("dummy");
+            if (!IDNA.convertIDNToASCII(uci, 0).toString().equals("dummy")) {
+                errln("IDNA.convertIDNToASCII(UCharacterIterator, int) was suppose to "
+                        + "return the same string passed.");
+            }
+            if (!IDNA.convertIDNToASCII(new StringBuffer("dummy"), 0).toString().equals("dummy")) {
+                errln("IDNA.convertIDNToASCII(StringBuffer, int) was suppose to " + "return the same string passed.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.convertIDNToASCII was not suppose to return an exception.");
+        }
+    }
+
+    /*
+     * Tests the method public static StringBuffer convertToUnicode(String src, int options), public static StringBuffer
+     * convertToUnicode(StringBuffer src, int options)
+     */
+    public void TestConvertToUnicode() {
+        try {
+            if (!IDNA.convertToUnicode("dummy", 0).toString().equals("dummy")) {
+                errln("IDNA.convertToUnicode(String, int) was suppose to " + "return the same string passed.");
+            }
+            if (!IDNA.convertToUnicode(new StringBuffer("dummy"), 0).toString().equals("dummy")) {
+                errln("IDNA.convertToUnicode(StringBuffer, int) was suppose to " + "return the same string passed.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.convertToUnicode was not suppose to return an exception.");
+        }
+    }
+
+    /* Tests the method public static StringBuffer convertIDNToUnicode(UCharacterIterator src, int options) */
+    public void TestConvertIDNToUnicode() {
+        try {
+            UCharacterIterator uci = UCharacterIterator.getInstance("dummy");
+            if (!IDNA.convertIDNToUnicode(uci, 0).toString().equals("dummy")) {
+                errln("IDNA.convertIDNToUnicode(UCharacterIterator, int) was suppose to "
+                        + "return the same string passed.");
+            }
+            if (!IDNA.convertIDNToUnicode(new StringBuffer("dummy"), 0).toString().equals("dummy")) {
+                errln("IDNA.convertIDNToUnicode(StringBuffer, int) was suppose to " + "return the same string passed.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.convertIDNToUnicode was not suppose to return an exception.");
+        }
+    }
+
+    /* Tests the method public static int compare */
+    public void TestIDNACompare() {
+        // Testing the method public static int compare(String s1, String s2, int options)
+        try {
+            IDNA.compare((String) null, (String) null, 0);
+            errln("IDNA.compare((String)null,(String)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare((String) null, "dummy", 0);
+            errln("IDNA.compare((String)null,'dummy') was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare("dummy", (String) null, 0);
+            errln("IDNA.compare('dummy',(String)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            if (IDNA.compare("dummy", "dummy", 0) != 0) {
+                errln("IDNA.compare('dummy','dummy') was suppose to return a 0.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.compare('dummy','dummy') was not suppose to return an exception.");
+        }
+
+        // Testing the method public static int compare(StringBuffer s1, StringBuffer s2, int options)
+        try {
+            IDNA.compare((StringBuffer) null, (StringBuffer) null, 0);
+            errln("IDNA.compare((StringBuffer)null,(StringBuffer)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare((StringBuffer) null, new StringBuffer("dummy"), 0);
+            errln("IDNA.compare((StringBuffer)null,'dummy') was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare(new StringBuffer("dummy"), (StringBuffer) null, 0);
+            errln("IDNA.compare('dummy',(StringBuffer)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            if (IDNA.compare(new StringBuffer("dummy"), new StringBuffer("dummy"), 0) != 0) {
+                errln("IDNA.compare(new StringBuffer('dummy'),new StringBuffer('dummy')) was suppose to return a 0.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.compare(new StringBuffer('dummy'),new StringBuffer('dummy')) was not suppose to return an exception.");
+        }
+
+        // Testing the method public static int compare(UCharacterIterator s1, UCharacterIterator s2, int options)
+        UCharacterIterator uci = UCharacterIterator.getInstance("dummy");
+        try {
+            IDNA.compare((UCharacterIterator) null, (UCharacterIterator) null, 0);
+            errln("IDNA.compare((UCharacterIterator)null,(UCharacterIterator)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare((UCharacterIterator) null, uci, 0);
+            errln("IDNA.compare((UCharacterIterator)null,UCharacterIterator) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            IDNA.compare(uci, (UCharacterIterator) null, 0);
+            errln("IDNA.compare(UCharacterIterator,(UCharacterIterator)null) was suppose to return an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            if (IDNA.compare(uci, uci, 0) != 0) {
+                errln("IDNA.compare(UCharacterIterator('dummy'),UCharacterIterator('dummy')) was suppose to return a 0.");
+            }
+        } catch (Exception e) {
+            errln("IDNA.compare(UCharacterIterator('dummy'),UCharacterIterator('dummy')) was not suppose to return an exception.");
+        }
     }
 }

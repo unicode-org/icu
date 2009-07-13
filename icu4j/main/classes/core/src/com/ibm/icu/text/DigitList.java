@@ -234,6 +234,8 @@ final class DigitList {
      * @param isPositive determines the sign of the returned result
      * @return the value of this object as a <code>BigDecimal</code>
      */
+    ///CLOVER:OFF
+    // The method is in a protected class and is not called by anything
     public java.math.BigDecimal getBigDecimal(boolean isPositive) {
         if (isZero()) {
             return java.math.BigDecimal.valueOf(0);
@@ -271,6 +273,7 @@ final class DigitList {
             return new java.math.BigDecimal(getStringRep(isPositive));
         }
     }
+    ///CLOVER:ON
 
     /**
      * Return an <code>ICU BigDecimal</code> representing the value stored in this
