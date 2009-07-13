@@ -655,6 +655,7 @@ LAYOUT_TRUE
 ICUIO_TRUE
 EXTRAS_TRUE
 U_CHECK_UTF16_STRING
+U_CHECK_GNUC_UTF16_STRING
 U_SIZEOF_WCHAR_T
 U_HAVE_WCSCPY
 U_HAVE_WCHAR_H
@@ -9983,6 +9984,7 @@ fi
 $as_echo_n "checking for UTF-16 string literal support... " >&6; }
 U_CHECK_UTF16_STRING=1
 CHECK_UTF16_STRING_RESULT="unknown"
+
 case "${host}" in
 *-*-aix*|powerpc64-*-linux*)
     if test "$ac_cv_c_compiler_gnu" = no; then
@@ -10117,6 +10119,75 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 *)
     ;;
 esac
+
+# GCC >= 4.4 supports UTF16 string literals. The CFLAGS and CXXFLAGS may change in the future.
+# Since we have to use a different standard, if strict is enable, don't enable UTF16 string literals.
+U_CHECK_GNUC_UTF16_STRING=0
+if test "$ac_use_strict_options" = no && test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
+    if test "$ac_cv_c_compiler_gnu" = yes; then
+        OLD_CFLAGS="${CFLAGS}"
+        OLD_CXXFLAGS="${CXXFLAGS}"
+        CFLAGS="${CFLAGS} -std=gnu99 -D_GCC_"
+        CXXFLAGS="${CXXFLAGS} -std=c++0x"
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
+int daisy;
+#else
+GCC IS TOO OLD!
+#endif
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  U_CHECK_UTF16_STRING=1
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	U_CHECK_UTF16_STRING=0
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+        if test "$U_CHECK_UTF16_STRING" = 1; then
+            CHECK_UTF16_STRING_RESULT="available";
+            U_CHECK_GNUC_UTF16_STRING=1
+        else
+            CFLAGS="${OLD_CFLAGS}"
+            CXXFLAGS="${OLD_CXXFLAGS}"
+        fi
+    fi
+fi
+
+
 { $as_echo "$as_me:$LINENO: result: $CHECK_UTF16_STRING_RESULT" >&5
 $as_echo "$CHECK_UTF16_STRING_RESULT" >&6; }
 

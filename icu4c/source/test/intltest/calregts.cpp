@@ -1235,7 +1235,7 @@ void CalendarRegressionTest::test4108764()
 void CalendarRegressionTest::test4114578() 
 {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t ONE_HOUR = 60*60*1000;
+    double ONE_HOUR = 60*60*1000;
     Calendar *cal = Calendar::createInstance(status);
     if(U_FAILURE(status)) {
       errln("Error creating calendar %s", u_errorName(status));
