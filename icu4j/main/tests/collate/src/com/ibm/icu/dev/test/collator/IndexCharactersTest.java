@@ -77,4 +77,17 @@ public class IndexCharactersTest extends TestFmwk {
             logln("\t" + title + ":\t" + alreadyIn);
         }
     }
+    
+    /* Test the method public ULocale getLocale() */
+    public void TestGetLocale(){
+        IndexCharacters ic = new IndexCharacters(new ULocale("en_US"));
+        if(!ic.getLocale().equals(new ULocale("en_US"))){
+            errln("IndexCharacter.getLocale() was suppose to return the same " +
+                    "ULocale that was passed for the object.");
+        }
+        if(ic.getLocale().equals(new ULocale("jp_JP"))){
+            errln("IndexCharacter.getLocale() was not suppose to return the same " +
+                    "ULocale that was passed for the object.");
+        }
+    }
 }

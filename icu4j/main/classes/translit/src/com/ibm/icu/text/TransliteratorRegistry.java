@@ -597,10 +597,12 @@ class TransliteratorRegistry {
                                       Spec trg,
                                       String variant) {
         String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
+        ///CLOVER:OFF
         if (DEBUG) {
             System.out.println("TransliteratorRegistry.findInDynamicStore:" +
                                ID);
         }
+        ///CLOVER:ON
         return (Object[]) registry.get(new CaseInsensitiveString(ID));
     }
 
@@ -616,11 +618,13 @@ class TransliteratorRegistry {
     private Object[] findInStaticStore(Spec src,
                                      Spec trg,
                                      String variant) {
+        ///CLOVER:OFF
         if (DEBUG) {
             String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
             System.out.println("TransliteratorRegistry.findInStaticStore:" +
                                ID);
         }
+        ///CLOVER:ON
         Object[] entry = null;
         if (src.isLocale()) {
             entry = findInBundle(src, trg, variant, Transliterator.FORWARD);
@@ -708,7 +712,9 @@ class TransliteratorRegistry {
                 }
 
             } catch (MissingResourceException e) {
+                ///CLOVER:OFF
                 if (DEBUG) System.out.println("missing resource: " + e);
+                ///CLOVER:ON
             }
         }
 

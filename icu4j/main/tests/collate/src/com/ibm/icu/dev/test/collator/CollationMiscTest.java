@@ -22,6 +22,7 @@ import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.CollationKey.BoundMode;
@@ -2575,6 +2576,23 @@ public class CollationMiscTest extends TestFmwk {
             ck.merge(ck);
             errln("Collationkey.merge(CollationKey) was suppose to return " + "an exception for a null parameter.");
         } catch (Exception e) {
+        }
+    }
+    
+    /* Test the method public int compareTo(RawCollationKey rhs) */
+    public void TestRawCollationKeyCompareTo(){
+        RawCollationKey rck = new RawCollationKey();
+        byte[] b = {(byte) 10, (byte) 20};
+        RawCollationKey rck100 = new RawCollationKey(b, 2);
+        
+        if(rck.compareTo(rck) != 0){
+            errln("RawCollatonKey.compareTo(RawCollationKey) was suppose to return 0 " +
+                    "for two idential RawCollationKey objects.");
+        }
+        
+        if(rck.compareTo(rck100) == 0){
+            errln("RawCollatonKey.compareTo(RawCollationKey) was not suppose to return 0 " +
+                    "for two different RawCollationKey objects.");
         }
     }
 }

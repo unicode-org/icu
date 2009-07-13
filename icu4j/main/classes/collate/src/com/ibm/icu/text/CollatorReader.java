@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -202,7 +202,9 @@ final class CollatorReader
         m_dataInputStream_.skipBytes(56); // for future use
         readcount += 56;
         if (m_headerSize_ < readcount) {
+            ///CLOVER:OFF
             throw new IOException("Internal Error: Header size error");
+            ///CLOVER:ON
         }
         m_dataInputStream_.skipBytes(m_headerSize_ - readcount);
 
@@ -275,7 +277,9 @@ final class CollatorReader
         readcount += 60;
         m_dataInputStream_.skipBytes(m_optionSize_ - readcount);
         if (m_optionSize_ < readcount) {
+            ///CLOVER:OFF
             throw new IOException("Internal Error: Option size error");
+            ///CLOVER:ON
         }
     }
     
@@ -448,12 +452,16 @@ final class CollatorReader
             }
             readcount += m_UCAValuesSize_;
             if (readcount != m_size_) {
+                ///CLOVER:OFF
                 throw new IOException("Internal Error: Data file size error");
+                ///CLOVER:ON
             }
             return result;
         }
         if (readcount != m_size_) {
+            ///CLOVER:OFF
             throw new IOException("Internal Error: Data file size error");
+            ///CLOVER:ON
         }
         return null;
     }
