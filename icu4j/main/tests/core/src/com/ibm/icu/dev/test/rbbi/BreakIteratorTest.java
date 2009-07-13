@@ -846,40 +846,50 @@ public class BreakIteratorTest extends TestFmwk
         }
     }
     
-    /* Tests the constructors
-     *      public DictionaryBasedBreakIterator(String rules, ...
-     *      public DictionaryBasedBreakIterator(InputStream compiledRules, ...
+    /*
+     * Tests the constructors public DictionaryBasedBreakIterator(String rules, ... public
+     * DictionaryBasedBreakIterator(InputStream compiledRules, ...
      */
-    public void TestDictionaryBasedBreakIterator() throws IOException{
+    public void TestDictionaryBasedBreakIterator() throws IOException {
         // The following class allows the testing of the constructor
-        //      public DictionaryBasedBreakIterator(String rules, ...
-        class TestDictionaryBasedBreakIterator extends DictionaryBasedBreakIterator{
-            public TestDictionaryBasedBreakIterator() throws IOException{
-                super("",null);
+        // public DictionaryBasedBreakIterator(String rules, ...
+        class TestDictionaryBasedBreakIterator extends DictionaryBasedBreakIterator {
+            public TestDictionaryBasedBreakIterator(InputStream is) throws IOException {
+                super("", is);
             }
         }
-        try{
+        try {
             @SuppressWarnings("unused")
-            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator();
-            errln("DictionaryBasedBreakIterator constructor is suppose to return an " +
-                    "exception for an empty string.");
-        } catch(Exception e){}
+            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator(null);
+            errln("DictionaryBasedBreakIterator constructor is suppose to return an "
+                    + "exception for an empty string.");
+        } catch (Exception e) {
+        }
+        
+        /* Problems passing a FileInputStream
+        try {
+            File file = new File("");
+            file = new File(file.getAbsoluteFile() + "/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt");
+            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator(new DataInputStream(new FileInputStream(file)));
+        } catch (Exception e) {
+            System.out.println(e);
+        }*/
 
         // The following class allows the testing of the constructor
-        //      public DictionaryBasedBreakIterator(InputStream compiledRules, ...
-        class TestDictionaryBasedBreakIterator1 extends DictionaryBasedBreakIterator{
-            public TestDictionaryBasedBreakIterator1() throws IOException{
-                super((InputStream)null,(InputStream)null);
+        // public DictionaryBasedBreakIterator(InputStream compiledRules, ...
+        class TestDictionaryBasedBreakIterator1 extends DictionaryBasedBreakIterator {
+            public TestDictionaryBasedBreakIterator1() throws IOException {
+                super((InputStream) null, (InputStream) null);
             }
-            
+
         }
-        try{
+        try {
             @SuppressWarnings("unused")
             TestDictionaryBasedBreakIterator1 td1 = new TestDictionaryBasedBreakIterator1();
-            errln("DictionaryBasedBreakIterator constructor is suppose to return an " +
-            "exception for an null input stream.");
-        } catch(Exception e){}
-        
-        
+            errln("DictionaryBasedBreakIterator constructor is suppose to return an "
+                    + "exception for an null input stream.");
+        } catch (Exception e) {
+        }
+
     }
 }

@@ -2204,7 +2204,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new Locale("en_US"));
+        try{
+            sym = new ChineseDateFormatSymbols(null, new Locale("en_US"));
+            errln("ChineseDateFormatSymbols(Calender, Locale) was suppose to return a null " +
+                    "pointer exception for a null paramater.");
+        } catch(Exception e){}
         sym = new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en_US"));
+        try{
+            sym = new ChineseDateFormatSymbols(null, new ULocale("en_US"));
+            errln("ChineseDateFormatSymbols(Calender, ULocale) was suppose to return a null " +
+                    "pointer exception for a null paramater.");
+        } catch(Exception e){}
         sym = new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
         // cover new ChineseDateFormatSymbols(Calendar, ULocale)
         ChineseCalendar ccal = new ChineseCalendar();
