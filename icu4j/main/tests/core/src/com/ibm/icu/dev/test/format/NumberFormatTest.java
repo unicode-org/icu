@@ -2436,11 +2436,39 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * Tests the method public static ULocale[] getAvailableLocales()
      */
+    @SuppressWarnings("static-access")
     public void TestGetAvailableLocales() {
         // Tests when "if (shim == null)" is true
+        @SuppressWarnings("serial")
+        class TestGetAvailableLocales extends NumberFormat {
+            public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+
+            public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+
+            public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+
+            public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+
+            public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+
+            public Number parse(String text, ParsePosition parsePosition) {
+                return null;
+            }
+        }
+
         try {
-            @SuppressWarnings("unused")
-            Locale[] nf = NumberFormat.getAvailableLocales();
+            TestGetAvailableLocales test = new TestGetAvailableLocales();
+            test.getAvailableLocales();
         } catch (Exception e) {
             errln("NumberFormat.getAvailableLocales() was not suppose to "
                     + "return an exception when getting getting available locales.");

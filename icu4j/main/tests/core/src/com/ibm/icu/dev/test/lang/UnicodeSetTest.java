@@ -1629,6 +1629,7 @@ public class UnicodeSetTest extends TestFmwk {
         
         try {
             actual = null;
+            @SuppressWarnings("unused")
             UnicodeSet u = new UnicodeSet(5);
         } catch (IllegalArgumentException e) {
             actual = e.getClass();
@@ -1637,6 +1638,7 @@ public class UnicodeSetTest extends TestFmwk {
         
         try {
             actual = null;
+            @SuppressWarnings("unused")
             UnicodeSet u = new UnicodeSet(3, 2, 7, 9);
         } catch (IllegalArgumentException e) {
             actual = e.getClass();
@@ -1645,6 +1647,7 @@ public class UnicodeSetTest extends TestFmwk {
         
         try {
             actual = null;
+            @SuppressWarnings("unused")
             UnicodeSet u = new UnicodeSet(3, 5, 6, 9);
         } catch (IllegalArgumentException e) {
             actual = e.getClass();
@@ -2322,5 +2325,24 @@ public class UnicodeSetTest extends TestFmwk {
         return Utility.unescape(s);
     }
 
-
+    /* Test the method public UnicodeSet getSet() */
+    public void TestGetSet() {
+        UnicodeSetIterator us = new UnicodeSetIterator();
+        try {
+            us.getSet();
+        } catch (Exception e) {
+            errln("UnicodeSetIterator.getSet() was not suppose to given an " + "an exception.");
+        }
+    }
+    
+    /* Tests the method public UnicodeSet add(Collection<?> source) */
+    public void TestAddCollection() {
+        UnicodeSet us = new UnicodeSet();
+        Collection<?> s = null;
+        try {
+            us.add(s);
+            errln("UnicodeSet.add(Collection<?>) was suppose to return an exception for a null parameter.");
+        } catch (Exception e) {
+        }
+    }
 }

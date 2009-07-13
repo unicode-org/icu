@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 import java.util.TreeSet;
@@ -2788,12 +2787,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         int b;
         // TODO: Based on the call hierarchy, polarity of 1 or 2 is never used
         //      so the following if statement will not be called.
+        ///CLOVER:OFF
         if (polarity == 1 || polarity == 2) {
             b = LOW;
             if (other[j] == LOW) { // skip base if already LOW
                 ++j;
                 b = other[j];
             }
+        ///CLOVER:ON
         } else {
             b = other[j++];
         }

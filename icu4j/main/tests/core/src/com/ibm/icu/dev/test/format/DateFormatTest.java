@@ -3663,4 +3663,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    /* Tests the method public final static DateFormat getPatternInstance */
+    public void TestGetPatternInstance(){
+        //public final static DateFormat getPatternInstance(String pattern)
+        try{
+            @SuppressWarnings("unused")
+            DateFormat df = DateFormat.getPatternInstance("");
+            df = DateFormat.getPatternInstance("", new Locale("en_US"));
+            df = DateFormat.getPatternInstance(null, "", new Locale("en_US"));
+        } catch(Exception e) {
+            errln("DateFormat.getPatternInstance is not suppose to return an exception.");
+        }
+    }
 }

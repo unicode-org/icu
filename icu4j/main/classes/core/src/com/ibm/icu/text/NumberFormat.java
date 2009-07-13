@@ -435,9 +435,11 @@ public abstract class NumberFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+        ///CLOVER:OFF
         // Default implementation only -- subclasses should override
         Number n = parse(text, pos);
         return n == null ? null : new CurrencyAmount(n, getEffectiveCurrency());
+        ///CLOVER:ON
     }
 
     /**
