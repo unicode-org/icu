@@ -275,10 +275,14 @@ typedef unsigned int uint32_t;
  * instead.
  * @internal
  */
+#ifndef U_GNUC_UTF16_STRING
+#define U_GNUC_UTF16_STRING @U_CHECK_GNUC_UTF16_STRING@
+#endif
 #if @U_CHECK_UTF16_STRING@ || defined(U_CHECK_UTF16_STRING)
 #if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
     || (defined(__HP_aCC) && __HP_aCC >= 035000) \
-    || (defined(__HP_cc) && __HP_cc >= 111106)
+    || (defined(__HP_cc) && __HP_cc >= 111106) \
+    || U_GNUC_UTF16_STRING
 #define U_DECLARE_UTF16(string) u ## string
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
 /* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
