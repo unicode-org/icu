@@ -1329,14 +1329,13 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
         f = T_FileStream_open(mapFile, "w");
         if (f == NULL) {
             fprintf(stderr,"Unable to create map file: %s.\n", mapFile);
-            return;
+        } else {
+            sprintf(tmpbuffer, "%s%s ", o->entryName, UDATA_CMN_INTERMEDIATE_SUFFIX);
+    
+            T_FileStream_writeLine(f, tmpbuffer);
+    
+            T_FileStream_close(f);
         }
-
-        sprintf(tmpbuffer, "%s%s ", o->entryName, UDATA_CMN_INTERMEDIATE_SUFFIX);
-
-        T_FileStream_writeLine(f, tmpbuffer);
-
-        T_FileStream_close(f);
     }
 #elif defined(U_CYGWIN)
     /* Cygwin needs to change flag options. */
