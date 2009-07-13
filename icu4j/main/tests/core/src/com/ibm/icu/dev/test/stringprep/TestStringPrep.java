@@ -1,12 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
+import java.util.Locale;
+
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTest;
+import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
 
 /**
@@ -201,4 +205,123 @@ public class TestStringPrep extends TestFmwk {
         }
     }
     
+    /* Tests the method public static StringPrep getInstance(int profile) */
+    public void TestGetInstance(){
+        // Tests when "if (profile < 0 || profile > MAX_PROFILE)" is true
+        int[] neg_num_cases = {-100,-50,-10,-5,-2,-1};
+        for(int i=0; i<neg_num_cases.length; i++){
+            try{
+                StringPrep.getInstance(neg_num_cases[i]);
+                errln("StringPrep.getInstance(int) expected an exception for " +
+                        "an invalid parameter of " + neg_num_cases[i]);
+            } catch(Exception e){
+            }
+        }
+        
+        int[] max_profile_cases = {StringPrep.RFC4518_LDAP_CI+1, StringPrep.RFC4518_LDAP_CI+2, StringPrep.RFC4518_LDAP_CI+5, StringPrep.RFC4518_LDAP_CI+10};
+        for(int i=0; i<max_profile_cases.length; i++){
+            try{
+                StringPrep.getInstance(max_profile_cases[i]);
+                errln("StringPrep.getInstance(int) expected an exception for " +
+                        "an invalid parameter of " + max_profile_cases[i]);
+            } catch(Exception e){
+            }
+        }
+        
+        // Tests when "if (instance == null)", "if (stream != null)", "if (instance != null)", and "if (ref != null)" is true
+        int[] cases = {0, 1, StringPrep.RFC4518_LDAP_CI};
+        for(int i=0; i<cases.length; i++){
+            try{
+                StringPrep.getInstance(cases[i]);
+            } catch(Exception e){
+                errln("StringPrep.getInstance(int) did not expected an exception for " +
+                        "an valid parameter of " + cases[i]);
+            }
+        }
+    }
+    
+    /* Test the method public String prepare(String src, int options) */
+    public void TestPrepare() {
+        StringPrep sp = StringPrep.getInstance(0);
+        try {
+            if (!(sp.prepare("dummy", 0)).equals("dummy")) {
+                errln("StringPrep.prepare(String,int) was suppose to return " + "'dummy'");
+            }
+        } catch (Exception e) {
+            errln("StringPrep.prepare(String,int) was not suppose to return " + "an exception.");
+        }
+    }
+    
+    /*
+     * Tests the constructor public StringPrepParseException(String message, int error, String rules, int pos, int
+     * lineNumber)
+     */
+    public void TestStringPrepParseException() {
+        Locale locales[] = SerializableTest.getLocales();
+        String rules = "This is a very odd little set of rules, just for testing, you know...";
+        StringPrepParseException exceptions[] = new StringPrepParseException[locales.length];
+
+        for (int i = 0; i < locales.length; i += 1) {
+            exceptions[i] = new StringPrepParseException(locales[i].toString(), i, rules, i, i);
+        }
+    }
+    
+    /* Tests the method public boolean equals(Object other) for StringPrepParseException */
+    public void TestStringPrepParseExceptionEquals(){
+        StringPrepParseException sppe = new StringPrepParseException("dummy",0,"dummy",0,0);
+        StringPrepParseException sppe_clone = new StringPrepParseException("dummy",0,"dummy",0,0);
+        StringPrepParseException sppe1 = new StringPrepParseException("dummy1",1,"dummy1",0,0);
+        
+        // Tests when "if(!(other instanceof StringPrepParseException))" is true
+        if(sppe.equals(0)){
+            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
+                    "passing integer '0'");
+        }
+        if(sppe.equals(0.0)){
+            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
+                    "passing float/double '0.0'");
+        }
+        if(sppe.equals("0")){
+            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
+                    "passing string '0'");
+        }
+        
+        // Tests when "if(!(other instanceof StringPrepParseException))" is true
+        if(!sppe.equals(sppe)){
+            errln("StringPrepParseException.equals(Object) is suppose to return true when " +
+            "comparing to the same object");
+        }
+        if(!sppe.equals(sppe_clone)){
+            errln("StringPrepParseException.equals(Object) is suppose to return true when " +
+            "comparing to the same initiated object");
+        }
+        if(sppe.equals(sppe1)){
+            errln("StringPrepParseException.equals(Object) is suppose to return false when " +
+            "comparing to another object that isn't the same");
+        }
+    }
+    
+    /* Tests the method public int getError() */
+    public void TestGetError(){
+        for(int i=0; i < 5; i++){
+            StringPrepParseException sppe = new StringPrepParseException("dummy",i,"dummy",0,0);
+            if(sppe.getError() != i){
+                errln("StringPrepParseExcpetion.getError() was suppose to return " + i + " but got " + sppe.getError());
+            }
+        }
+    }
+    
+    /* Tests the private void setPreContext(char[] str, int pos) */
+    public void TestSetPreContext(){
+        String WordAtLeast16Characters = "abcdefghijklmnopqrstuvwxyz";
+        for(int i=0; i < 5; i++){
+            try{
+                @SuppressWarnings("unused")
+                StringPrepParseException sppe = new StringPrepParseException("dummy",i,WordAtLeast16Characters,0,0);
+                sppe = new StringPrepParseException(WordAtLeast16Characters,i,"dummy",0,0);
+            } catch(Exception e){
+                errln("StringPrepParseException.setPreContext was not suppose to return an exception");
+            }
+        }
+    }
 }

@@ -20,6 +20,7 @@ import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.util.ULocale;
 
+import java.text.CharacterIterator;
 import java.util.Vector;
 
 public class RBBITest extends TestFmwk 
@@ -690,4 +691,140 @@ public class RBBITest extends TestFmwk
         }
     }
 
+    /* Tests the method public Object clone() */
+    public void TestClone() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator();
+        try {
+            rbbi.setText((CharacterIterator) null);
+            if (((RuleBasedBreakIterator) rbbi.clone()).getText() != null)
+                errln("RuleBasedBreakIterator.clone() was suppose to return "
+                        + "the same object because fText is set to null.");
+        } catch (Exception e) {
+            errln("RuleBasedBreakIterator.clone() was not suppose to return " + "an exception.");
+        }
+    }
+
+    /*
+     * Tests the method public boolean equals(Object that)
+     */
+    public void TestEquals() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi1 = new RuleBasedBreakIterator("");
+
+        // TODO: Tests when "if (fRData != other.fRData && (fRData == null || other.fRData == null))" is true
+
+        // Tests when "if (fText == null || other.fText == null)" is true
+        rbbi.setText((CharacterIterator) null);
+        if (rbbi.equals(rbbi1)) {
+            errln("RuleBasedBreakIterator.equals(Object) was not suppose to return "
+                    + "true when the other object has a null fText.");
+        }
+
+        // Tests when "if (fText == null && other.fText == null)" is true
+        rbbi1.setText((CharacterIterator) null);
+        if (!rbbi.equals(rbbi1)) {
+            errln("RuleBasedBreakIterator.equals(Object) was not suppose to return "
+                    + "false when both objects has a null fText.");
+        }
+
+        // Tests when an exception occurs
+        if (rbbi.equals(0)) {
+            errln("RuleBasedBreakIterator.equals(Object) was suppose to return " + "false when comparing to integer 0.");
+        }
+        if (rbbi.equals(0.0)) {
+            errln("RuleBasedBreakIterator.equals(Object) was suppose to return " + "false when comparing to float 0.0.");
+        }
+        if (rbbi.equals("0")) {
+            errln("RuleBasedBreakIterator.equals(Object) was suppose to return "
+                    + "false when comparing to string '0'.");
+        }
+    }
+
+    /*
+     * Tests the method public void dump()
+     */
+    public void TestDump() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator();
+        try {
+            rbbi.dump();
+            errln("RuleBasedBreakIterator.dump() was suppose to return "
+                    + "an exception for a blank RuleBasedBreakIterator object.");
+        } catch (Exception e) {
+        }
+    }
+    
+    /*
+     * Tests the method public int first()
+     */
+    public void TestFirst() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        // Tests when "if (fText == null)" is true
+        rbbi.setText((CharacterIterator) null);
+        if (rbbi.first() != BreakIterator.DONE) {
+            errln("RuleBasedBreakIterator.first() was suppose to return "
+                    + "BreakIterator.DONE when the object has a null fText.");
+        }
+    }
+    
+    /*
+     * Tests the method public int last()
+     */
+    public void TestLast() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        // Tests when "if (fText == null)" is true
+        rbbi.setText((CharacterIterator) null);
+        if (rbbi.last() != BreakIterator.DONE) {
+            errln("RuleBasedBreakIterator.last() was suppose to return "
+                    + "BreakIterator.DONE when the object has a null fText.");
+        }
+    }
+    
+    /*
+     * Tests the method public int following(int offset)
+     */
+    public void TestFollowing() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        // Tests when "else if (offset < fText.getBeginIndex())" is true
+        rbbi.setText("dummy");
+        if (rbbi.following(-1) != 0) {
+            errln("RuleBasedBreakIterator.following(-1) was suppose to return "
+                    + "0 when the object has a fText of dummy.");
+        }
+    }
+    
+    /*
+     * Tests the method public int preceding(int offset)
+     */
+    public void TestPreceding() {
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        // Tests when "if (fText == null || offset > fText.getEndIndex())" is true
+        rbbi.setText((CharacterIterator)null);
+        if (rbbi.preceding(-1) != BreakIterator.DONE) {
+            errln("RuleBasedBreakIterator.preceding(-1) was suppose to return "
+                    + "0 when the object has a fText of null.");
+        }
+        
+        // Tests when "else if (offset < fText.getBeginIndex())" is true
+        rbbi.setText("dummy");
+        if (rbbi.preceding(-1) != 0) {
+            errln("RuleBasedBreakIterator.preceding(-1) was suppose to return "
+                    + "0 when the object has a fText of dummy.");
+        }
+    }
+    
+    /* Tests the method public int current() */
+    public void TestCurrent(){
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        // Tests when "(fText != null) ? fText.getIndex() : BreakIterator.DONE" is true and false
+        rbbi.setText((CharacterIterator)null);
+        if(rbbi.current() != BreakIterator.DONE){
+            errln("RuleBasedBreakIterator.current() was suppose to return "
+                    + "BreakIterator.DONE when the object has a fText of null.");
+        }
+        rbbi.setText("dummy");
+        if(rbbi.current() != 0){
+            errln("RuleBasedBreakIterator.current() was suppose to return "
+                    + "0 when the object has a fText of dummy.");
+        }
+    }
 }

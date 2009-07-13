@@ -115,6 +115,8 @@ public final class ArabicShaping {
             throw new IllegalArgumentException("Wrong Tashkeel argument");
         }
 
+       ///CLOVER:OFF
+       //According to Steven Loomis, the code is unreachable when you OR all the constants within the if statements
        if(((options&LAMALEF_MASK) > 0)&&
               !(((options & LAMALEF_MASK)==LAMALEF_BEGIN)  ||
                 ((options & LAMALEF_MASK)==LAMALEF_END )   ||
@@ -123,6 +125,8 @@ public final class ArabicShaping {
                  ((options & LAMALEF_MASK)==LAMALEF_NEAR))){
            throw new IllegalArgumentException("Wrong Lam Alef argument");
        }
+       ///CLOVER:ON
+       
        /* Validate Tashkeel (Tashkeel replacement options should be enabled in shaping mode only)*/
        if(((options&TASHKEEL_MASK) > 0) && (options&LETTERS_MASK) == LETTERS_UNSHAPE) {
             throw new IllegalArgumentException("Tashkeel replacement should not be enabled in deshaping mode ");
@@ -852,7 +856,10 @@ public final class ArabicShaping {
         try {
             bdp=UBiDiProps.getSingleton();
         } catch (IOException e) {
+            ///CLOVER:OFF
+            // This is dependent on the UBiDiProps object
             throw new MissingResourceException(e.getMessage(), "(BidiProps)", "");
+            ///CLOVER:ON
         }
         digitBase -= '0'; // move common adjustment out of loop
 

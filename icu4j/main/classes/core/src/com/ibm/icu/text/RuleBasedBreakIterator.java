@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008 International Business Machines Corporation and          *
+ * Copyright (C) 2005-2009 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -70,11 +70,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
             InputStream ruleIS = new ByteArrayInputStream(ruleBA);
             fRData = RBBIDataWrapper.get(ruleIS);
         } catch (IOException e) {
+            ///CLOVER:OFF
             // An IO exception can only arrive here if there is a bug in the RBBI Rule compiler,
             //  causing bogus compiled rules to be produced, but with no compile error raised.
             RuntimeException rte = new RuntimeException("RuleBasedBreakIterator rule compilation internal error: "
                     + e.getMessage());
             throw rte;
+            ///CLOVER:ON
         }
     }
     
@@ -106,8 +108,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
     public boolean equals(Object that) {
         try {
             RuleBasedBreakIterator other = (RuleBasedBreakIterator) that;
-            if (fRData != other.fRData && (fRData == null || other.fRData == null)) {
-                return false;   
+            if (fRData != other.fRData && (fRData == null || other.fRData == null)) {System.out.println("GOT HERE");
+                return false;
             }
             if (fRData != null && other.fRData != null && 
                     (!fRData.fRuleSource.equals(other.fRData.fRuleSource))) {
