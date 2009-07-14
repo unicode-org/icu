@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Linux-specific setup
-## Copyright (c) 1999-2006, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -26,6 +26,10 @@ LD_RPATH_PRE=	-Wl,-rpath,
 
 ## Compiler switch to embed a library name
 LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
+
+
+## Shared library options
+LD_SOOPTIONS= -Wl,-Bsymbolic
 
 ## Shared object suffix
 SO = so

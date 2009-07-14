@@ -160,8 +160,8 @@ LINK.c=       $(CC) $(CFLAGS) $(LDFLAGS)
 LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 # Commands to make a shared library
-SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared
+SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
+SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH

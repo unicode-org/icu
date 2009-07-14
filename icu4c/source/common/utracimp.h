@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -126,7 +126,7 @@ U_CDECL_END
  * to at least the specified level.
  * @internal
  */
-#define UTRACE_LEVEL(level) (utrace_level>=(level))
+#define UTRACE_LEVEL(level) (utrace_getLevel()>=(level))
 
 /**
   *  Flag bit in utraceFnNumber, the local variable added to each function 
@@ -156,7 +156,7 @@ U_CDECL_END
  */
 #define UTRACE_ENTRY(fnNumber) \
     int32_t utraceFnNumber=(fnNumber); \
-    if(utrace_level>=UTRACE_INFO) { \
+    if(utrace_getLevel()>=UTRACE_INFO) { \
         utrace_entry(fnNumber); \
         utraceFnNumber |= UTRACE_TRACED_ENTRY; \
     }
@@ -174,7 +174,7 @@ U_CDECL_END
  */
 #define UTRACE_ENTRY_OC(fnNumber) \
     int32_t utraceFnNumber=(fnNumber); \
-    if(utrace_level>=UTRACE_OPEN_CLOSE) { \
+    if(utrace_getLevel()>=UTRACE_OPEN_CLOSE) { \
         utrace_entry(fnNumber); \
         utraceFnNumber |= UTRACE_TRACED_ENTRY; \
     }
