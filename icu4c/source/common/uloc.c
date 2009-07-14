@@ -76,6 +76,9 @@ static const char _kRootName[]        = "root";
 static const char _kIndexTag[]        = "InstalledLocales";
 static const char _kCurrency[]        = "currency";
 static const char _kCurrencies[]      = "Currencies";
+static const char _kLocaleDisplayPattern[] = "localeDisplayPattern";
+static const char _kPattern[]         = "pattern";
+static const char _kSeparator[]       = "separator";
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
@@ -2338,6 +2341,14 @@ uloc_getDisplayName(const char *locale,
     char keywordValue[256];
     int32_t keywordValueLen = 0;
 
+    int32_t locSepLen = 0;
+    int32_t locPatLen = 0;
+    const UChar *dispLocSeparator;
+    const UChar *dispLocPattern;
+    static const UChar defaultSeparator[3] = { 0x002c, 0x0020 , 0x0000 }; /* comma + space */
+    static const UChar defaultPattern[10] = { 0x007b, 0x0030, 0x007d, 0x0020, 0x0028, 0x007b, 0x0031, 0x007d, 0x0029, 0x0000 }; /* {0} ({1}) */
+    UErrorCode status = U_ZERO_ERROR;
+
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -2346,6 +2357,26 @@ uloc_getDisplayName(const char *locale,
     if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
+    }
+
+    UResourceBundle *bundle     = ures_open(NULL, displayLocale, &status);
+    UResourceBundle *locdsppat  = ures_getByKeyWithFallback(bundle, _kLocaleDisplayPattern, NULL, &status);
+    dispLocSeparator = ures_getStringByKeyWithFallback(locdsppat, _kSeparator, &locSepLen, &status);
+    dispLocPattern = ures_getStringByKeyWithFallback(locdsppat, _kPattern, &locPatLen, &status);
+        
+    /*close the bundles */
+    ures_close(locdsppat);
+    ures_close(bundle);
+
+    /* If we couldn't find any data, then use the defaults */
+    if ( locSepLen == 0) {
+       dispLocSeparator = defaultSeparator;
+       locSepLen = 2;
+    }
+
+    if ( locPatLen == 0) {
+       dispLocPattern = defaultPattern;
+       locPatLen = 9;
     }
 
     /*
@@ -2390,15 +2421,11 @@ uloc_getDisplayName(const char *locale,
     length+=length2;
 
     if(hasScript) {
-        /* append ", " */
-        if(length<destCapacity) {
-            dest[length]=0x2c;
+        /* append separator */
+        if(length+locSepLen<=destCapacity) {
+            u_memcpy(dest+length,dispLocSeparator,locSepLen);
         }
-        ++length;
-        if(length<destCapacity) {
-            dest[length]=0x20;
-        }
-        ++length;
+        length+=locSepLen;
     }
 
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
@@ -2420,15 +2447,11 @@ uloc_getDisplayName(const char *locale,
     length+=length2;
 
     if(hasCountry) {
-        /* append ", " */
-        if(length<destCapacity) {
-            dest[length]=0x2c;
+        /* append separator */
+        if(length+locSepLen<=destCapacity) {
+            u_memcpy(dest+length,dispLocSeparator,locSepLen);
         }
-        ++length;
-        if(length<destCapacity) {
-            dest[length]=0x20;
-        }
-        ++length;
+        length+=locSepLen;
     }
 
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
@@ -2450,15 +2473,11 @@ uloc_getDisplayName(const char *locale,
     length+=length2;
 
     if(hasVariant) {
-        /* append ", " */
-        if(length<destCapacity) {
-            dest[length]=0x2c;
+        /* append separator */
+        if(length+locSepLen<=destCapacity) {
+            u_memcpy(dest+length,dispLocSeparator,locSepLen);
         }
-        ++length;
-        if(length<destCapacity) {
-            dest[length]=0x20;
-        }
-        ++length;
+        length+=locSepLen;
     }
 
     keywordEnum = uloc_openKeywords(locale, pErrorCode);
@@ -2495,12 +2514,10 @@ uloc_getDisplayName(const char *locale,
             }
           }
           if(keywordCount > 1) {
-            if(length + length3 + 1 < destCapacity && keywordCount) {
-              dest[length + length3]=0x2c;
-              dest[length + length3+1]=0x20;
-            }
-            length3++; /* ',' */
-            length3++; /* ' ' */ 
+              if(length + length3 + locSepLen <= destCapacity && keywordCount) {
+                  u_memcpy(dest+length+length3,dispLocSeparator,locSepLen);
+                  length3+=locSepLen;
+              }
           }
     }
     uenum_close(keywordEnum);
@@ -2509,13 +2526,13 @@ uloc_getDisplayName(const char *locale,
     length += length3;
 
 
-
     if ((hasScript && !hasCountry)
         || ((hasScript || hasCountry) && !hasVariant && !hasKeywords)
-        || ((hasScript || hasCountry || hasVariant) && !hasKeywords)
-        || (hasLanguage && !hasScript && !hasCountry && !hasVariant && !hasKeywords))
-    {
-        /* remove ", " or " (" */
+        || ((hasScript || hasCountry || hasVariant) && !hasKeywords)) {
+        /* Remove separator  */
+        length -= locSepLen;
+    } else if (hasLanguage && !hasScript && !hasCountry && !hasVariant && !hasKeywords) {
+        /* Remove " (" */
         length-=2;
     }
 
