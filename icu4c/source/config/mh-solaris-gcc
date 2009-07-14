@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using gcc
-## Copyright (c) 1999-2006, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -24,6 +24,9 @@ LD_RPATH_PRE=
 
 ## Compiler switch to embed a library name
 LD_SONAME = -h $(notdir $(MIDDLE_SO_TARGET))
+
+## Shared library options
+LD_SOOPTIONS= -Wl,-Bsymbolic
 
 ## The type of assembly needed when pkgdata is used for generating shared libraries.
 ## Only use this when not on x86 Solaris.

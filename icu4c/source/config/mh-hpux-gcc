@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HPUX/gcc specific setup
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -24,9 +24,12 @@ DEFS += -D_HPUX_SOURCE -D_POSIX_C_SOURCE=199506L
 LINK.c=     $(CXX) $(DEFS) $(LDFLAGS) -Wl,+s $(LD_DEFAULTPATH)
 LINK.cc=    $(CXX) $(DEFS) $(LDFLAGS) -Wl,+s $(LD_DEFAULTPATH)
 
+## Shared library options
+LD_SOOPTIONS= -Wl,-Bsymbolic
+
 ## Commands to make a shared library
-SHLIB.c=  $(CC) $(DEFS) $(CFLAGS) $(LDFLAGS) $(SHAREDLIBCXXFLAGS) -shared -Wl,+s $(LD_DEFAULTPATH)
-SHLIB.cc= $(CXX) $(DEFS) $(CXXFLAGS) $(LDFLAGS) $(SHAREDLIBCXXFLAGS) -shared -Wl,+s $(LD_DEFAULTPATH)
+SHLIB.c=  $(CC) $(DEFS) $(CFLAGS) $(LDFLAGS) $(SHAREDLIBCXXFLAGS) -shared -Wl,+s $(LD_DEFAULTPATH) $(LD_SOOPTIONS)
+SHLIB.cc= $(CXX) $(DEFS) $(CXXFLAGS) $(LDFLAGS) $(SHAREDLIBCXXFLAGS) -shared -Wl,+s $(LD_DEFAULTPATH) $(LD_SOOPTIONS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=   -Wl,+b,
