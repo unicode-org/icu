@@ -933,7 +933,10 @@ if test "$ac_use_strict_options" = no && test "$CHECK_UTF16_STRING_RESULT" = "un
         CXXFLAGS="${CXXFLAGS} -std=c++0x"
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
-int daisy;
+#ifdef _GCC_
+typedef __CHAR16_TYPE__ char16_t;
+#endif
+char16_t test[] = u"This is a UTF16 literal string.";
 #else
 GCC IS TOO OLD!
 #endif
