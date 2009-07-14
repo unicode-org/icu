@@ -10,6 +10,9 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DictionaryBasedBreakIterator;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.StringCharacterIterator;
@@ -866,15 +869,17 @@ public class BreakIteratorTest extends TestFmwk
         } catch (Exception e) {
         }
         
-        /* Problems passing a FileInputStream
         try {
-            File file = new File("");
-            file = new File(file.getAbsoluteFile() + "/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt");
-            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator(new DataInputStream(new FileInputStream(file)));
+            File file = File.createTempFile("dummy", "");
+            FileInputStream fis = new FileInputStream(file);
+            DataInputStream dis = new DataInputStream(fis);
+            @SuppressWarnings("unused")
+            TestDictionaryBasedBreakIterator td = new TestDictionaryBasedBreakIterator(dis);
+            errln("DictionaryBasedBreakIterator constructor is suppose to return an "
+                    + "exception for a temporary file with EOF.");
         } catch (Exception e) {
-            System.out.println(e);
-        }*/
-
+        }
+        
         // The following class allows the testing of the constructor
         // public DictionaryBasedBreakIterator(InputStream compiledRules, ...
         class TestDictionaryBasedBreakIterator1 extends DictionaryBasedBreakIterator {
@@ -890,6 +895,5 @@ public class BreakIteratorTest extends TestFmwk
                     + "exception for an null input stream.");
         } catch (Exception e) {
         }
-
-    }
+    }   
 }

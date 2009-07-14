@@ -359,8 +359,10 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
             text.setIndex(cachedBreakPositions[positionInCache]);
             return cachedBreakPositions[positionInCache];
         }
+        ///CLOVER:OFF
         Assert.assrt(false);
         return -9999;   // SHOULD NEVER GET HERE!
+        ///CLOVER:ON
     }
 
     /**
