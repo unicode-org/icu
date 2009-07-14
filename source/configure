@@ -10137,7 +10137,10 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
-int daisy;
+#ifdef _GCC_
+typedef __CHAR16_TYPE__ char16_t;
+#endif
+char16_t test[] = u"This is a UTF16 literal string.";
 #else
 GCC IS TOO OLD!
 #endif
