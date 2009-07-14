@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Linux-specific setup
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -28,6 +28,9 @@ LDFLAGSICUDT=-nodefaultlibs -nostdlib
 	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 #SH# # We can't depend on MIDDLE_SO_TARGET being set.
 #SH# LD_SONAME=
+
+## Shared library options
+LD_SOOPTIONS= -Wl,-Bsymbolic
 
 ## Shared object suffix
 SO = so
