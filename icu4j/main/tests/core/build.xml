@@ -30,6 +30,7 @@
         <unjar src="${icu4j.testdata.jar}" dest="${bin.dir}">
             <patternset>
                 <exclude name="**/*.cnv"/>
+            	<exclude name="**/conversion.res"/>
             </patternset>
         </unjar>
     </target>
