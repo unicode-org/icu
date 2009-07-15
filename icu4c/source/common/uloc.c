@@ -2347,6 +2347,10 @@ uloc_getDisplayName(const char *locale,
     const UChar *dispLocPattern;
     static const UChar defaultSeparator[3] = { 0x002c, 0x0020 , 0x0000 }; /* comma + space */
     static const UChar defaultPattern[10] = { 0x007b, 0x0030, 0x007d, 0x0020, 0x0028, 0x007b, 0x0031, 0x007d, 0x0029, 0x0000 }; /* {0} ({1}) */
+    
+    UResourceBundle *bundle = NULL;
+    UResourceBundle *locdsppat = NULL;
+    
     UErrorCode status = U_ZERO_ERROR;
 
     /* argument checking */
@@ -2359,8 +2363,8 @@ uloc_getDisplayName(const char *locale,
         return 0;
     }
 
-    UResourceBundle *bundle     = ures_open(NULL, displayLocale, &status);
-    UResourceBundle *locdsppat  = ures_getByKeyWithFallback(bundle, _kLocaleDisplayPattern, NULL, &status);
+    bundle    = ures_open(NULL, displayLocale, &status);
+    locdsppat = ures_getByKeyWithFallback(bundle, _kLocaleDisplayPattern, NULL, &status);
     dispLocSeparator = ures_getStringByKeyWithFallback(locdsppat, _kSeparator, &locSepLen, &status);
     dispLocPattern = ures_getStringByKeyWithFallback(locdsppat, _kPattern, &locPatLen, &status);
         
