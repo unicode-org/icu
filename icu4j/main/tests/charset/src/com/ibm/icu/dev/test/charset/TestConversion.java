@@ -589,7 +589,8 @@ public class TestConversion extends ModuleTest {
             CharBuffer out = null;
 
             try {
-                out = decoder.decode(ByteBuffer.wrap(cc.bytes.array()));
+                cc.bytes.rewind();
+                out = decoder.decode(cc.bytes);
                 out.position(out.limit());
                 if (out.limit() < cc.unicode.length()) {
                     int pos = out.position();

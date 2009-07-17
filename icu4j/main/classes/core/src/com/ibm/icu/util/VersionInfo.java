@@ -130,7 +130,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static final String ICU_DATA_VERSION = "42b";
+    public static final String ICU_DATA_VERSION = "43b";
 
     /**
      * ICU4J collator runtime version

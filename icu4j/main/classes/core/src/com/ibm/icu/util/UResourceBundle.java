@@ -9,17 +9,20 @@ package com.ibm.icu.util;
 
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.impl.SimpleCache;
 
@@ -318,20 +321,24 @@ public abstract class UResourceBundle extends ResourceBundle{
         //TODO figure a way around this method(see method comment)
         BUNDLE_CACHE = new SimpleCache<ResourceCacheKey, UResourceBundle>();
     }
-    
-    private static void addToCache(ResourceCacheKey key, UResourceBundle b) {
-        BUNDLE_CACHE.put(key, b);
-    }
 
     /**
-     * Method used by subclasses to add the a particular resource bundle object to the managed cache
+     * Method used by subclasses to add a resource bundle object to the managed cache.
+     * Works like a putIfAbsent(): If the cache already contains a matching bundle,
+     * that one will be retained and returned.
      * @internal revisit for ICU 3.6
      * @deprecated This API is ICU internal only.
      */
-    protected static void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
+    protected static UResourceBundle addToCache(ClassLoader cl, String fullName,
+                                                ULocale defaultLocale, UResourceBundle b) {
         synchronized(cacheKey){
             cacheKey.setKeyValues(cl, fullName, defaultLocale);
-            addToCache((ResourceCacheKey)cacheKey.clone(), b);
+            UResourceBundle cachedBundle = BUNDLE_CACHE.get(cacheKey);
+            if (cachedBundle != null) {
+                return cachedBundle;
+            }
+            BUNDLE_CACHE.put((ResourceCacheKey)cacheKey.clone(), b);
+            return b;
         }
     }
     /**
@@ -342,11 +349,8 @@ public abstract class UResourceBundle extends ResourceBundle{
     protected static UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
         synchronized(cacheKey){
             cacheKey.setKeyValues(cl, fullName, defaultLocale);
-            return loadFromCache(cacheKey);
+            return BUNDLE_CACHE.get(cacheKey);
         }
-    }
-    private static UResourceBundle loadFromCache(ResourceCacheKey key) {
-        return BUNDLE_CACHE.get(key);
     }
 
     /**
@@ -495,7 +499,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     /**
-     * Loads a new resource bundle for the give base name, locale and class loader.
+     * Loads a new resource bundle for the given base name, locale and class loader.
      * Optionally will disable loading of fallback bundles.
      * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param localeName the locale for which a resource bundle is desired
@@ -517,16 +521,10 @@ public abstract class UResourceBundle extends ResourceBundle{
         {
         case ROOT_ICU:
             if(disableFallback) {
-                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-                synchronized(cacheKey){
-                    cacheKey.setKeyValues(root, fullName, defaultLocale);
-                    b = loadFromCache(cacheKey);
-                }
-
+                String fullName = ICUResourceBundle.getFullName(baseName, localeName);
+                b = loadFromCache(root, fullName, defaultLocale);
                 if (b == null) {
                     b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
-                    //cacheKey.setKeyValues(root, fullName, defaultLocale);
-                    addToCache(cacheKey, b);
                 }
             } else {
                 b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
@@ -549,11 +547,10 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
     }
 
-
     /**
-     * Returns a binary data from a binary resource.
+     * Returns a binary data item from a binary resource, as a read-only ByteBuffer.
      *
-     * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+     * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
      * @see #getIntVector
      * @see #getInt
      * @throws MissingResourceException
@@ -594,10 +591,11 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     /**
-     * Returns a binary data from a binary resource.
+     * Returns a binary data from a binary resource, as a byte array with a copy
+     * of the bytes from the resource bundle.
      *
      * @param ba  The byte array to write the bytes to. A null variable is OK.
-     * @return an array bytes containing the binary data from the resource.
+     * @return an array of bytes containing the binary data from the resource.
      * @see #getIntVector
      * @see #getInt
      * @throws MissingResourceException
@@ -668,8 +666,7 @@ public abstract class UResourceBundle extends ResourceBundle{
                 obj = res.handleGet(aKey, null, this);
             }
             if (obj == null) {
-                String fullName = ICUResourceBundleReader.getFullName(
-                        getBaseName(), getLocaleID());
+                String fullName = ICUResourceBundle.getFullName(getBaseName(), getLocaleID());
                 throw new MissingResourceException(
                         "Can't find resource for bundle " + fullName + ", key "
                                 + aKey, this.getClass().getName(), aKey);
@@ -723,28 +720,56 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     /**
      * Returns the keys in this bundle as an enumeration
-     * @return an enumeration containing key strings
+     * @return an enumeration containing key strings,
+     *         which is empty if this is not a bundle or a table resource
      * @stable ICU 3.8
      */
     public Enumeration<String> getKeys() {
-        initKeysVector();
-        return keys.elements();
+        return Collections.enumeration(keySet());
     }
-
-    private Vector<String> keys = null;
-    private synchronized void initKeysVector(){
-        if(keys != null){
-            return;
-        }
-        //ICUResourceBundle current = this;
-        keys = new Vector<String>();
-        Enumeration<String> e = this.handleGetKeys();
-        while(e.hasMoreElements()){
-            String elem = e.nextElement();
-            if(!keys.contains(elem)){
-                keys.add(elem);
+    /**
+     * Returns a Set of all keys contained in this ResourceBundle and its parent bundles.
+     * @return a Set of all keys contained in this ResourceBundle and its parent bundles,
+     *         which is empty if this is not a bundle or a table resource
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public Set<String> keySet() {
+        if(keys == null) {
+            if(isTopLevelResource()) {
+                TreeSet<String> newKeySet;
+                if(parent == null) {
+                    newKeySet = new TreeSet<String>();
+                } else if(parent instanceof UResourceBundle) {
+                    newKeySet = new TreeSet<String>(((UResourceBundle)parent).keySet());
+                } else {
+                    // TODO: Java 6 ResourceBundle has keySet(); use it when we upgrade to Java 6
+                    // and remove this else branch.
+                    newKeySet = new TreeSet<String>();
+                    Enumeration<String> parentKeys = parent.getKeys();
+                    while(parentKeys.hasMoreElements()) {
+                        newKeySet.add(parentKeys.nextElement());
+                    }
+                }
+                newKeySet.addAll(handleKeySet());
+                keys = Collections.unmodifiableSet(newKeySet);
+            } else {
+                return handleKeySet();
             }
         }
+        return keys;
+    }
+    private Set<String> keys = null;
+    /**
+     * Returns a Set of the keys contained <i>only</i> in this ResourceBundle.
+     * This does not include further keys from parent bundles.
+     * @return a Set of the keys contained only in this ResourceBundle,
+     *         which is empty if this is not a bundle or a table resource
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected Set<String> handleKeySet() {
+        return Collections.emptySet();
     }
 
     /**
@@ -757,7 +782,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public int getSize() {
-        return size;
+        return 1;
     }
 
     /**
@@ -770,11 +795,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public int getType() {
-        int type = ICUResourceBundle.RES_GET_TYPE(resource);
-        if(type==TABLE32){
-            return TABLE; //Mask the table32's real type
-        }
-        return type;
+        return NONE;
     }
 
     /**
@@ -803,7 +824,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public String getKey() {
-        return key;
+        return null;
     }
     /**
      * Resource type constant for "no resource".
@@ -830,25 +851,6 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static final int TABLE = 2;
 
     /**
-     * Resource type constant for aliases;
-     * internally stores a string which identifies the actual resource
-     * storing the data (can be in a different resource bundle).
-     * Resolved internally before delivering the actual resource through the API.
-     * @internal ICU 3.8
-     * @deprecated This API is ICU internal only.
-     */
-    protected static final int ALIAS = 3;
-
-    /**
-     * Internal use only.
-     * Alternative resource type constant for tables of key-value pairs.
-     * Never returned by getType().
-     * @internal ICU 3.8
-     * @deprecated This API is ICU internal only.
-     */
-    protected static final int TABLE32 = 4;
-
-    /**
      * Resource type constant for a single 28-bit integer, interpreted as
      * signed or unsigned by the getInt() function.
      * @see #getInt
@@ -870,32 +872,6 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static final int INT_VECTOR = 14;
 
     //====== protected members ==============
-    /**
-     * Data member where the subclasses store the key
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected String key;
-    /**
-     * Data member where the subclasses store the size of resources
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected int size = 1;
-    /**
-     * Data member where the subclasses store the offset within resource data
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected long resource = RES_BOGUS;
-    /**
-     * Data member where the subclasses store whether the resource is top level
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected boolean isTopLevel = false;
-
-    private static final long RES_BOGUS = 0xffffffff;
 
     /**
      * Actual worker method for fetching a resource based on the given key.
@@ -945,13 +921,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     protected Enumeration<String> handleGetKeys(){
-        Vector<String> resKeys = new Vector<String>();
-        UResourceBundle item = null;
-        for (int i = 0; i < size; i++) {
-            item = get(i);
-            resKeys.add(item.getKey());
-        }
-        return resKeys.elements();
+        return null;
     }
 
     /**
@@ -1019,4 +989,14 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @deprecated This API is ICU internal only.
      */
     protected abstract void setLoadingStatus(int newStatus);
+
+    /**
+     * Is this a top-level resource, that is, a whole bundle?
+     * @return true if this is a top-level resource
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected boolean isTopLevelResource() {
+        return true;
+    }
 }

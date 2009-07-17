@@ -206,7 +206,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
                     System.out.println(e);
             }
 
-            addToCache(cl, name, defaultLocale, b);
+            b = (ResourceBundleWrapper)addToCache(cl, name, defaultLocale, b);
         }
         if(b!=null){
             b.initKeysVector();
