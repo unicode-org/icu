@@ -1096,6 +1096,7 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t idx, ch
             exit(errorCode);
         }
         udata_closeSwapper(ds);
+        pItem->type=outType;
     }
 
     // create the file and write its contents

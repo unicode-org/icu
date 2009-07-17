@@ -29,7 +29,7 @@ SUBDIRS =
 .PHONY : all all-local all-recursive install install-local	\
 install-recursive clean clean-local clean-recursive distclean	\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive build-dir java-output
+check check-local check-recursive build-dir java-output testdata.jar
 
 .NOTPARALLEL: build-dir
 
@@ -224,4 +224,33 @@ build-dir: $(BUILD_DIRS)
 $(BUILD_DIRS):
 	-$(MKINSTALLDIRS) $(BUILD_DIRS)
 
+# Build the ICU4J testdata.jar.
+# Command line:
+#   (Run this from the output testdata folder which may not be .../source/test/testdata in an out-of-source build.)
+#   ~/svn.icu/trunk/source/test/testdata> make JAR=jar ICU4J_ROOT=~/svn.icu4j/trunk testdata.jar
+# You can omit the ICU4J_ROOT for just building the .jar files without copying them.
+# You can omit the JAR if it's just jar.
+JAR=jar
 
+# Build testdata.jar:
+# - swap the test data
+# - extract all data items
+# - package them into the .jar file
+$(OUTDIR)/icu4j/testdata.jar: build-dir testdata $(TESTOUTDIR)/testdata.dat
+	mkdir -p $(OUTDIR)/icu4j/com/ibm/icu/dev/data/testdata
+	$(INVOKE) $(TOOLBINDIR)/icupkg $(TESTOUTDIR)/testdata.dat -r test.icu -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/dev/data/testdata
+	$(JAR) cf $(OUTDIR)/icu4j/testdata.jar -C $(OUTDIR)/icu4j com/ibm/icu/dev/data/testdata
+
+ifdef ICU4J_ROOT
+
+$(ICU4J_ROOT)/main/shared/data/testdata.jar: $(OUTDIR)/icu4j/testdata.jar
+	mkdir -p $(ICU4J_ROOT)/main/shared/data
+	cp $(OUTDIR)/icu4j/testdata.jar $(ICU4J_ROOT)/main/shared/data
+
+testdata.jar: build-dir $(ICU4J_ROOT)/main/shared/data/testdata.jar
+
+else
+
+testdata.jar: build-dir $(OUTDIR)/icu4j/testdata.jar
+
+endif

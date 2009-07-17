@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -467,58 +467,11 @@ static void printHex(FILE *out, UConverter *converter, uint8_t what) {
 
     printString(out, converter, hex, (int32_t)(sizeof(hex)/sizeof(*hex)));
 }
-static const UChar *
-derb_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS) {
-        int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        if (pLength) {
-            *pLength=*p;
-        }
-        return (UChar *)++p;
-    } else {
-        if (pLength) {
-            *pLength=0;
-        }
-        return NULL;
-    }
-}
-
-static const char *
-derb_getTableKey(const Resource *pRoot, const Resource res, uint16_t indexS) {
-    uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
-    if(indexS<*p) {
-        return ((const char *)(pRoot)+(p[indexS+1])); /*RES_GET_KEY(pRoot, p[indexS+1]);*/
-    } else {
-        return NULL;    /* indexS>itemCount */
-    }
-}
-
-static Resource
-derb_getArrayItem(Resource *pRoot, Resource res, int32_t indexR) {
-    int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
-    if(indexR<*p) {
-        return ((Resource *)(p))[1+indexR];
-    } else {
-        return RES_BOGUS;   /* indexR>itemCount */
-    }
-}
-
-static Resource
-derb_getTableItem(const Resource *pRoot, const Resource res, uint16_t indexR) {
-    uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
-    uint16_t count=*p;
-    if(indexR<count) {
-        return ((Resource *)(p+1+count+(~count&1)))[indexR];
-    } else {
-        return RES_BOGUS;   /* indexR>itemCount */
-    }
-}
-
 
 static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *parent, Resource r, const char *key, int32_t indent, const char *pname, UErrorCode *status) {
     static const UChar cr[] = { '\n' };
     int32_t len = 0;
-    const UChar* thestr = derb_getString(&(parent->fResData), r, &len);
+    const UChar* thestr = res_getAlias(&(parent->fResData), r, &len);
     UChar *string = quotedString(thestr);
     if(trunc && len > truncsize) {
         char msg[128];
@@ -557,7 +510,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
     const char *key = ures_getKey(resource);
 
     switch(ures_getType(resource)) {
-    case RES_STRING :
+    case URES_STRING :
         {
             int32_t len=0;
             const UChar* thestr = ures_getString(resource, &len, status);
@@ -598,7 +551,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
         }
         break;
 
-    case RES_INT :
+    case URES_INT :
         {
             static const UChar openStr[] = { 0x003A, 0x0069, 0x006E, 0x0074, 0x0020, 0x007B, 0x0020 }; /* ":int { " */
             static const UChar closeStr[] = { 0x0020, 0x007D }; /* " }" */
@@ -619,7 +572,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
             break;
         }
-    case RES_BINARY :
+    case URES_BINARY :
         {
             int32_t len = 0;
             const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
@@ -652,7 +605,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             }
         }
         break;
-    case RES_INT_VECTOR :
+    case URES_INT_VECTOR :
         {
             int32_t len = 0;
             const int32_t *data = ures_getIntVector(resource, &len, status);
@@ -687,8 +640,8 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             }
       }
       break;
-    case RES_TABLE :
-    case RES_ARRAY :
+    case URES_TABLE :
+    case URES_ARRAY :
         {
             static const UChar openStr[] = { 0x007B }; /* "{" */
             static const UChar closeStr[] = { 0x007D, '\n' }; /* "}\n" */
@@ -701,7 +654,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             }
             printString(out, converter, openStr, (int32_t)(sizeof(openStr) / sizeof(*openStr)));
             if(verbose) {
-                if(ures_getType(resource) == RES_TABLE) {
+                if(ures_getType(resource) == URES_TABLE) {
                     printCString(out, converter, "// TABLE", -1);
                 } else {
                     printCString(out, converter, "// ARRAY", -1);
@@ -720,17 +673,18 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
                   }
               }
             } else { /* we have to use low level access to do this */
-              Resource r = RES_BOGUS;
-              for(i = 0; i < ures_getSize(resource); i++) {
+              Resource r;
+              int32_t resSize = ures_getSize(resource);
+              UBool isTable = (UBool)(ures_getType(resource) == URES_TABLE);
+              for(i = 0; i < resSize; i++) {
                 /* need to know if it's an alias */
-                if(ures_getType(resource) == RES_TABLE) {
-                  r = derb_getTableItem(resource->fResData.pRoot, resource->fRes, (int16_t)i);
-                  key = derb_getTableKey(resource->fResData.pRoot, resource->fRes, (int16_t)i);
+                if(isTable) {
+                  r = res_getTableItemByIndex(&resource->fResData, resource->fRes, i, &key);
                 } else {
-                  r = derb_getArrayItem(resource->fResData.pRoot, resource->fRes, i);
+                  r = res_getArrayItem(&resource->fResData, resource->fRes, i);
                 }
                 if(U_SUCCESS(*status)) {
-                  if(RES_GET_TYPE(r) == RES_ALIAS) {
+                  if(res_getPublicType(r) == URES_ALIAS) {
                     printOutAlias(out, converter, resource, r, key, indent+indentsize, pname, status);
                   } else {
                     t = ures_getByIndex(resource, i, t, status);

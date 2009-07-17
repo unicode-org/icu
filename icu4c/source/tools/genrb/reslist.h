@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,22 +29,43 @@
 #include "cstring.h"
 #include "unewdata.h"
 #include "ustr.h"
+#include "uhash.h"
 
 U_CDECL_BEGIN
 
+typedef struct KeyMapEntry {
+    int32_t oldpos, newpos;
+} KeyMapEntry;
+
 /* Resource bundle root table */
 struct SRBRoot {
-  char *fLocale;
-  int32_t fKeyPoint;
-  char *fKeys;
-  int32_t fKeysCapacity;
-  int32_t fCount;
   struct SResource *fRoot;
+  char *fLocale;
+  int32_t fIndexLength;
   int32_t fMaxTableLength;
   UBool noFallback; /* see URES_ATT_NO_FALLBACK */
+  int8_t fStringsForm; /* default STRINGS_UTF16_V1 */
+  UBool fIsPoolBundle;
+
+  char *fKeys;
+  KeyMapEntry *fKeyMap;
+  int32_t fKeysBottom, fKeysTop;
+  int32_t fKeysCapacity;
+  int32_t fKeysCount;
+  int32_t fLocalKeyLimit; /* key offset < limit fits into URES_TABLE */
+
+  UHashtable *fStringSet;
+  uint16_t *f16BitUnits;
+  int32_t f16BitUnitsCapacity;
+  int32_t f16BitUnitsLength;
+
+  const char *fPoolBundleKeys;
+  int32_t fPoolBundleKeysLength;
+  int32_t fPoolBundleKeysCount;
+  int32_t fPoolChecksum;
 };
 
-struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status);
+struct SRBRoot *bundle_open(const struct UString* comment, UBool isPoolBundle, UErrorCode *status);
 void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *outputPkg, char *writtenFilename, int writtenFilenameLen, UErrorCode *status);
 
 /* write a java resource file */
@@ -64,8 +85,16 @@ void bundle_close(struct SRBRoot *bundle, UErrorCode *status);
 void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status);
 int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
 
+const char *
+bundle_getKeyBytes(struct SRBRoot *bundle, int32_t *pLength);
+
+int32_t
+bundle_addKeyBytes(struct SRBRoot *bundle, const char *keyBytes, int32_t length, UErrorCode *status);
+
+void
+bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status);
+
 /* Various resource types */
-struct SResource* res_open(const struct UString* comment, UErrorCode* status);
 
 /*
  * Return a unique pointer to a dummy object,
@@ -76,17 +105,16 @@ struct SResource* res_none(void);
 
 struct SResTable {
     uint32_t fCount;
-    uint32_t fChildrenSize;
+    int8_t fType;  /* determined by table_write16() for table_preWrite() & table_write() */
     struct SResource *fFirst;
     struct SRBRoot *fRoot;
 };
 
-struct SResource* table_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status);
+struct SResource* table_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 void table_add(struct SResource *table, struct SResource *res, int linenumber, UErrorCode *status);
 
 struct SResArray {
     uint32_t fCount;
-    uint32_t fChildrenSize;
     struct SResource *fFirst;
     struct SResource *fLast;
 };
@@ -95,11 +123,21 @@ struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const stru
 void array_add(struct SResource *array, struct SResource *res, UErrorCode *status);
 
 struct SResString {
-    uint32_t fLength;
+    struct SResource *fSame;  /* used for duplicates */
     UChar *fChars;
+    int32_t fLength;
+    int32_t fSuffixOffset;  /* this string is a suffix of fSame at this offset */
+    int8_t fNumCharsForLength;
 };
 
 struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
+
+/**
+ * Remove a string from a bundle and close (delete) it.
+ * The string must not have been added to a table or array yet.
+ * This function only undoes what string_open() did.
+ */
+void bundle_closeString(struct SRBRoot *bundle, struct SResource *string);
 
 struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
@@ -128,10 +166,11 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
 /* Resource place holder */
 
 struct SResource {
-    UResType fType;
-    int32_t  fKey;
-    uint32_t fSize; /* Size in bytes outside the header part */
-    int      line;  /* used internally to report duplicate keys in tables */
+    int8_t   fType;     /* nominal type: fRes (when != 0xffffffff) may use subtype */
+    UBool    fWritten;  /* res_write() can exit early */
+    uint32_t fRes;      /* resource item word; 0xffffffff if not known yet */
+    int32_t  fKey;      /* Index into bundle->fKeys; -1 if no key. */
+    int      line;      /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
     struct UString fComment;
     union {
@@ -144,9 +183,20 @@ struct SResource {
     } u;
 };
 
+const char *
+res_getKeyString(const struct SRBRoot *bundle, const struct SResource *res, char temp[8]);
+
 void res_close(struct SResource *res);
+
 void setIncludeCopyright(UBool val);
 UBool getIncludeCopyright(void);
+
+void setFormatVersion(int32_t formatVersion);
+
+void setUsePoolBundle(UBool use);
+
+/* in wrtxml.cpp */
+uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc);
 
 U_CDECL_END
 #endif /* #ifndef RESLIST_H */

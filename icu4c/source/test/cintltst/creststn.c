@@ -853,8 +853,8 @@ static void TestEmptyTypes() {
     }
     else {
         binResult=ures_getBinary(res, &len, &status);
-        if(!U_SUCCESS(status) || binResult != NULL || len != 0) {
-            log_err("Shouldn't get emptybin\n");
+        if(!U_SUCCESS(status) || len != 0) {
+            log_err("Couldn't get emptybin, or it's not empty\n");
         }
     }
 
@@ -870,7 +870,7 @@ static void TestEmptyTypes() {
     else {
         resArray=ures_getByIndex(res, 0, resArray, &status);
         if(U_SUCCESS(status) || resArray != NULL){
-            log_err("Shouldn't get emptyarray\n");
+            log_err("Shouldn't get emptyarray[0]\n");
         }
     }
 
@@ -886,7 +886,7 @@ static void TestEmptyTypes() {
     else {
         resArray=ures_getByIndex(res, 0, resArray, &status);
         if(U_SUCCESS(status) || resArray != NULL){
-            log_err("Shouldn't get emptytable\n");
+            log_err("Shouldn't get emptytable[0]\n");
         }
     }
 
@@ -2042,10 +2042,10 @@ static void TestFallback()
     ures_close(subResource);
 
     /* and this is a Fallback, to fr */
-    junk = tres_getString(fr_FR, -1, "Countries", &resultLen, &status);
+    junk = tres_getString(fr_FR, -1, "ExemplarCharacters", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get Countries from fr_FR, got %d\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get ExemplarCharacters from fr_FR, got %d\n", 
             status);
     }
     

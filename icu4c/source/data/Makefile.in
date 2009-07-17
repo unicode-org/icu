@@ -90,7 +90,7 @@ TOOLDIR=$(top_builddir)/tools
 .PHONY : all all-local all-recursive install install-local install-files	\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-local clean-resindex build-dir
+check check-local check-recursive build-local clean-resindex build-dir icudata.jar
 
 ## Clear suffix list
 .SUFFIXES :
@@ -290,8 +290,8 @@ endif
 endif
 
 ALL_RES_SRC= $(RES_SRC) $(TRNS_SOURCE) $(MSC_SOURCE)
-RES_FILES = $(ALL_RES_SRC:%.txt=$(BUILDDIR)/%.res)
-RES_FILES_SHORT = $(ALL_RES_SRC:%.txt=%.res)
+RES_FILES = $(ALL_RES_SRC:%.txt=$(BUILDDIR)/%.res) $(BUILDDIR)/pool.res
+RES_FILES_SHORT = $(ALL_RES_SRC:%.txt=%.res) pool.res
 PKGDATA_LIST = $(OUTTMPDIR)/icudata.lst
 
 INDEX_NAME=res_index
@@ -542,7 +542,12 @@ $(TRANSLITBLDDIR)/%.res: $(TRANSLITSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEX
 all-RES:  $(RES_FILES)
 
 $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+
+# copy the pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+$(BUILDDIR)/pool.res: $(LOCSRCDIR)/pool.res
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(LOCSRCDIR)/pool.res $(BUILDDIR)/pool.res
 
 # if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
 TZDATA = $(firstword $(wildcard $(top_builddir)/tools/tzcode/tzdata*.tar.gz) $(wildcard $(top_srcdir)/tools/tzcode/tzdata*.tar.gz))
@@ -599,6 +604,41 @@ $(INDEX_RES_FILE): $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
 	@echo Unicode .c source files built to $(OUTTMPDIR)
+
+# Build the ICU4J icudata.jar.
+# Command line:
+#   (Run this from the output data folder which may not be .../source/data in an out-of-source build.)
+#   ~/svn.icu/trunk/source/data> make JAR=jar ICU4J_ROOT=~/svn.icu4j/trunk icudata.jar
+# You can omit the ICU4J_ROOT for just building the .jar files without copying them.
+# You can omit the JAR if it's just jar.
+JAR=jar
+
+# For building the testdata.jar see ../test/testdata/Makefile.
+
+# Build icudata.jar:
+# - add the uni-core-data to the ICU package
+# - swap the ICU data
+# - extract all data items
+# - package them into the .jar file
+$(OUTDIR)/icu4j/icudata.jar: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
+	mkdir -p $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+	echo ubidi.icu ucase.icu uprops.icu unorm.icu > $(OUTDIR)/icu4j/add.txt
+	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+
+ifdef ICU4J_ROOT
+
+$(ICU4J_ROOT)/main/shared/data/icudata.jar: $(OUTDIR)/icu4j/icudata.jar
+	mkdir -p $(ICU4J_ROOT)/main/shared/data
+	cp $(OUTDIR)/icu4j/icudata.jar $(ICU4J_ROOT)/main/shared/data
+
+icudata.jar: build-dir $(ICU4J_ROOT)/main/shared/data/icudata.jar
+
+else
+
+icudata.jar: build-dir $(OUTDIR)/icu4j/icudata.jar
+
+endif
 
 build-icu4j: all
 	$(MAKE) -C ../tools/genrb $@

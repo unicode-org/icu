@@ -504,6 +504,7 @@ icu4c/source/data/locales/pa_IN.txt svneol=native#text/plain
 icu4c/source/data/locales/pa_PK.txt svneol=native#text/plain
 icu4c/source/data/locales/pl.txt svneol=native#text/plain
 icu4c/source/data/locales/pl_PL.txt svneol=native#text/plain
+icu4c/source/data/locales/pool.res -text
 icu4c/source/data/locales/ps.txt svneol=native#text/plain
 icu4c/source/data/locales/ps_AF.txt svneol=native#text/plain
 icu4c/source/data/locales/pt.txt svneol=native#text/plain

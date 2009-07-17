@@ -21,11 +21,13 @@
 
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uarrsort.h"
 #include "udataswp.h"
 #include "ucol_swp.h"
+#include "uinvchar.h"
 #include "uresdata.h"
 #include "uresimp.h"
 
@@ -36,162 +38,86 @@
  */
 
 /* get a const char* pointer to the key with the keyOffset byte offset from pRoot */
-#define RES_GET_KEY(pRoot, keyOffset) ((const char *)(pRoot)+(keyOffset))
+#define RES_GET_KEY16(pResData, keyOffset) \
+    ((keyOffset)<(pResData)->localKeyLimit ? \
+        (const char *)(pResData)->pRoot+(keyOffset) : \
+        (pResData)->poolBundleKeys+(keyOffset)-(pResData)->localKeyLimit)
+
+#define RES_GET_KEY32(pResData, keyOffset) \
+    ((keyOffset)>=0 ? \
+        (const char *)(pResData)->pRoot+(keyOffset) : \
+        (pResData)->poolBundleKeys+((keyOffset)&0x7fffffff))
+
 #define URESDATA_ITEM_NOT_FOUND -1
+
+/* empty resource of any type, returned when the resource offset is 0 */
+static const int32_t gEmpty[2]={ 0, 0 };
 
 /*
  * All the type-access functions assume that
  * the resource is of the expected type.
  */
 
-
-/*
- * Array functions
- */
-static Resource
-_res_getArrayItem(Resource *pRoot, Resource res, int32_t indexR) {
-    const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
-    if(indexR<*p) {
-        return ((const Resource *)(p))[1+indexR];
-    } else {
-        return RES_BOGUS;   /* indexR>itemCount */
-    }
-}
-
-/*
- * Table functions
- *
- * Important: the key offsets are 16-bit byte offsets from pRoot,
- * and the itemCount is one more 16-bit, too.
- * Thus, there are (count+1) uint16_t values.
- * In order to 4-align the Resource item values, there is a padding
- * word if count is even, i.e., there is exactly (~count&1)
- * 16-bit padding words.
- *
- * For Table32, both the count and the key offsets are int32_t's
- * and need not alignment.
- */
-static const char *
-_res_getTableKey(const Resource *pRoot, const Resource res, int32_t indexS) {
-    const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
-    if((uint32_t)indexS<(uint32_t)*p) {
-        return RES_GET_KEY(pRoot, p[indexS+1]);
-    } else {
-        return NULL;    /* indexS>itemCount */
-    }
-}
-
-static const char *
-_res_getTable32Key(const Resource *pRoot, const Resource res, int32_t indexS) {
-    const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
-    if((uint32_t)indexS<(uint32_t)*p) {
-        return RES_GET_KEY(pRoot, p[indexS+1]);
-    } else {
-        return NULL;    /* indexS>itemCount */
-    }
-}
-
-
-static Resource
-_res_getTableItem(const Resource *pRoot, const Resource res, int32_t indexR) {
-    const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
-    int32_t count=*p;
-    if((uint32_t)indexR<(uint32_t)count) {
-        return ((const Resource *)(p+1+count+(~count&1)))[indexR];
-    } else {
-        return RES_BOGUS;   /* indexR>itemCount */
-    }
-}
-
-static Resource
-_res_getTable32Item(const Resource *pRoot, const Resource res, int32_t indexR) {
-    const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
-    int32_t count=*p;
-    if((uint32_t)indexR<(uint32_t)count) {
-        return ((const Resource *)(p+1+count))[indexR];
-    } else {
-        return RES_BOGUS;   /* indexR>itemCount */
-    }
-}
-
-
-static Resource
-_res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
-                   int32_t *idx, const char **realKey) {
-    const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
-    uint32_t mid, start, limit;
-    uint32_t lastMid;
-    int result;
-
-    limit=*p++; /* number of entries */
-
-    if(limit != 0) {
-        /* do a binary search for the key */
-        start=0;
-        lastMid = UINT32_MAX;
-        for (;;) {
-            mid = (uint32_t)((start + limit) / 2);
-            if (lastMid == mid) {   /* Have we moved? */
-                break;  /* We haven't moved, and it wasn't found. */
-            }
-            lastMid = mid;
-            result = uprv_strcmp(key, RES_GET_KEY(pRoot, p[mid]));
-
-            if (result < 0) {
-                limit = mid;
-            } else if (result > 0) {
-                start = mid;
-            } else {
-                /* We found it! */
-                *idx=mid;
-                *realKey=RES_GET_KEY(pRoot, p[mid]);
-                limit=*(p-1);   /* itemCount */
-                return ((const Resource *)(p+limit+(~limit&1)))[mid];
-            }
-        }
-    }
-
-    *idx=URESDATA_ITEM_NOT_FOUND;
-    return RES_BOGUS;   /* not found or table is empty. */
-}
-
-static Resource
-_res_findTable32Item(const Resource *pRoot, const Resource res, const char *key,
-                     int32_t *idx, const char **realKey) {
-    const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
+static int32_t
+_res_findTableItem(const ResourceData *pResData, const uint16_t *keyOffsets, int32_t length,
+                   const char *key, const char **realKey) {
+    const char *tableKey;
     int32_t mid, start, limit;
-    int32_t lastMid;
     int result;
 
-    limit=*p++; /* number of entries */
-
-    if(limit != 0) {
-        /* do a binary search for the key */
-        start=0;
-        lastMid = INT32_MAX;
-        for (;;) {
-            mid = (uint32_t)((start + limit) / 2);
-            if (lastMid == mid) {   /* Have we moved? */
-                break;  /* We haven't moved, and it wasn't found. */
-            }
-            lastMid = mid;
-            result = uprv_strcmp(key, RES_GET_KEY(pRoot, p[mid]));
-
-            if (result < 0) {
-                limit = mid;
-            } else if (result > 0) {
-                start = mid;
-            } else {
-                /* We found it! */
-                *idx=mid;
-                *realKey=RES_GET_KEY(pRoot, p[mid]);
-                return ((const Resource *)(p+(*(p-1))))[mid];
-            }
+    /* do a binary search for the key */
+    start=0;
+    limit=length;
+    while(start<limit) {
+        mid = (start + limit) / 2;
+        tableKey = RES_GET_KEY16(pResData, keyOffsets[mid]);
+        if (pResData->useNativeStrcmp) {
+            result = uprv_strcmp(key, tableKey);
+        } else {
+            result = uprv_compareInvCharsAsAscii(key, tableKey);
+        }
+        if (result < 0) {
+            limit = mid;
+        } else if (result > 0) {
+            start = mid + 1;
+        } else {
+            /* We found it! */
+            *realKey=tableKey;
+            return mid;
         }
     }
+    return URESDATA_ITEM_NOT_FOUND;  /* not found or table is empty. */
+}
 
-    *idx=URESDATA_ITEM_NOT_FOUND;
-    return RES_BOGUS;   /* not found or table is empty. */
+static int32_t
+_res_findTable32Item(const ResourceData *pResData, const int32_t *keyOffsets, int32_t length,
+                     const char *key, const char **realKey) {
+    const char *tableKey;
+    int32_t mid, start, limit;
+    int result;
+
+    /* do a binary search for the key */
+    start=0;
+    limit=length;
+    while(start<limit) {
+        mid = (start + limit) / 2;
+        tableKey = RES_GET_KEY32(pResData, keyOffsets[mid]);
+        if (pResData->useNativeStrcmp) {
+            result = uprv_strcmp(key, tableKey);
+        } else {
+            result = uprv_compareInvCharsAsAscii(key, tableKey);
+        }
+        if (result < 0) {
+            limit = mid;
+        } else if (result > 0) {
+            start = mid + 1;
+        } else {
+            /* We found it! */
+            *realKey=tableKey;
+            return mid;
+        }
+    }
+    return URESDATA_ITEM_NOT_FOUND;  /* not found or table is empty. */
 }
 
 /* helper for res_load() ---------------------------------------------------- */
@@ -210,46 +136,118 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        pInfo->formatVersion[0]==1);
+        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2));
 }
 
 /* semi-public functions ---------------------------------------------------- */
 
-U_CFUNC UBool
+static void
+res_init(ResourceData *pResData,
+         UVersionInfo formatVersion, const void *inBytes, int32_t length,
+         UErrorCode *errorCode) {
+    UResType rootType;
+
+    /* get the root resource */
+    pResData->pRoot=(const int32_t *)inBytes;
+    pResData->rootRes=(Resource)*pResData->pRoot;
+    pResData->p16BitUnits=(const uint16_t *)gEmpty;
+
+    /* formatVersion 1.1 must have a root item and at least 5 indexes */
+    if(length>=0 && (length/4)<((formatVersion[0]==1 && formatVersion[1]==0) ? 1 : 1+5)) {
+        *errorCode=U_INVALID_FORMAT_ERROR;
+        res_unload(pResData);
+        return;
+    }
+
+    /* currently, we accept only resources that have a Table as their roots */
+    rootType=RES_GET_TYPE(pResData->rootRes);
+    if(!URES_IS_TABLE(rootType)) {
+        *errorCode=U_INVALID_FORMAT_ERROR;
+        res_unload(pResData);
+        return;
+    }
+
+    if(formatVersion[0]==1 && formatVersion[1]==0) {
+        pResData->localKeyLimit=0x10000;  /* greater than any 16-bit key string offset */
+    } else {
+        /* bundles with formatVersion 1.1 and later contain an indexes[] array */
+        const int32_t *indexes=pResData->pRoot+1;
+        int32_t indexLength=indexes[URES_INDEX_LENGTH]&0xff;
+        if(indexLength<=URES_INDEX_MAX_TABLE_LENGTH) {
+            *errorCode=U_INVALID_FORMAT_ERROR;
+            res_unload(pResData);
+            return;
+        }
+        if( length>=0 &&
+            (length<((1+indexLength)<<2) ||
+             length<(indexes[URES_INDEX_BUNDLE_TOP]<<2))
+        ) {
+            *errorCode=U_INVALID_FORMAT_ERROR;
+            res_unload(pResData);
+            return;
+        }
+        if(indexes[URES_INDEX_KEYS_TOP]>(1+indexLength)) {
+            pResData->localKeyLimit=indexes[URES_INDEX_KEYS_TOP]<<2;
+        }
+        if(indexLength>URES_INDEX_ATTRIBUTES) {
+            int32_t att=indexes[URES_INDEX_ATTRIBUTES];
+            pResData->noFallback=(UBool)(att&URES_ATT_NO_FALLBACK);
+            pResData->isPoolBundle=(UBool)((att&URES_ATT_IS_POOL_BUNDLE)!=0);
+            pResData->usesPoolBundle=(UBool)((att&URES_ATT_USES_POOL_BUNDLE)!=0);
+        }
+        if((pResData->isPoolBundle || pResData->usesPoolBundle) && indexLength<=URES_INDEX_POOL_CHECKSUM) {
+            *errorCode=U_INVALID_FORMAT_ERROR;
+            res_unload(pResData);
+            return;
+        }
+        if( indexLength>URES_INDEX_16BIT_TOP &&
+            indexes[URES_INDEX_16BIT_TOP]>indexes[URES_INDEX_KEYS_TOP]
+        ) {
+            pResData->p16BitUnits=(const uint16_t *)(pResData->pRoot+indexes[URES_INDEX_KEYS_TOP]);
+        }
+    }
+
+    if(formatVersion[0]==1 || U_CHARSET_FAMILY==U_ASCII_FAMILY) {
+        /*
+         * formatVersion 1: compare key strings in native-charset order
+         * formatVersion 2 and up: compare key strings in ASCII order
+         */
+        pResData->useNativeStrcmp=TRUE;
+    }
+}
+
+U_CAPI void U_EXPORT2
+res_read(ResourceData *pResData,
+         const UDataInfo *pInfo, const void *inBytes, int32_t length,
+         UErrorCode *errorCode) {
+    UVersionInfo formatVersion;
+
+    uprv_memset(pResData, 0, sizeof(ResourceData));
+    if(U_FAILURE(*errorCode)) {
+        return;
+    }
+    if(!isAcceptable(formatVersion, NULL, NULL, pInfo)) {
+        *errorCode=U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    res_init(pResData, formatVersion, inBytes, length, errorCode);
+}
+
+U_CFUNC void
 res_load(ResourceData *pResData,
          const char *path, const char *name, UErrorCode *errorCode) {
     UVersionInfo formatVersion;
-    UResType rootType;
+
+    uprv_memset(pResData, 0, sizeof(ResourceData));
 
     /* load the ResourceBundle file */
     pResData->data=udata_openChoice(path, "res", name, isAcceptable, formatVersion, errorCode);
     if(U_FAILURE(*errorCode)) {
-        return FALSE;
+        return;
     }
 
-    /* get its memory and root resource */
-    pResData->pRoot=(Resource *)udata_getMemory(pResData->data);
-    pResData->rootRes=*pResData->pRoot;
-    pResData->noFallback=FALSE;
-
-    /* currently, we accept only resources that have a Table as their roots */
-    rootType=RES_GET_TYPE(pResData->rootRes);
-    if(rootType!=URES_TABLE && rootType!=URES_TABLE32) {
-        *errorCode=U_INVALID_FORMAT_ERROR;
-        udata_close(pResData->data);
-        pResData->data=NULL; 
-        return FALSE;
-    }
-
-    if(formatVersion[0]>1 || (formatVersion[0]==1 && formatVersion[1]>=1)) {
-        /* bundles with formatVersion 1.1 and later contain an indexes[] array */
-        const int32_t *indexes=(const int32_t *)pResData->pRoot+1;
-        if(indexes[URES_INDEX_LENGTH]>URES_INDEX_ATTRIBUTES) {
-            pResData->noFallback=(UBool)(indexes[URES_INDEX_ATTRIBUTES]&URES_ATT_NO_FALLBACK);
-        }
-    }
-
-    return TRUE;
+    /* get its memory and initialize *pResData */
+    res_init(pResData, formatVersion, udata_getMemory(pResData->data), -1, errorCode);
 }
 
 U_CFUNC void
@@ -260,117 +258,268 @@ res_unload(ResourceData *pResData) {
     }
 }
 
-U_CFUNC const UChar *
-res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    /*
-     * The data structure is documented as supporting res==0 for empty strings.
-     * Return a fixed pointer in such a case.
-     * This was dropped in uresdata.c 1.17 as part of Jitterbug 1005 work
-     * on code coverage for ICU 2.0.
-     * Re-added for consistency with the design and with other code.
-     */
-    static const int32_t emptyString[2]={ 0, 0 };
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_STRING) {
-        const int32_t *p= res==0 ? emptyString : (const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        if (pLength) {
-            *pLength=*p;
+static const int8_t gPublicTypes[URES_LIMIT] = {
+    URES_STRING,
+    URES_BINARY,
+    URES_TABLE,
+    URES_ALIAS,
+
+    URES_TABLE,     /* URES_TABLE32 */
+    URES_TABLE,     /* URES_TABLE16 */
+    URES_STRING,    /* URES_STRING_V2 */
+    URES_INT,
+
+    URES_ARRAY,
+    URES_ARRAY,     /* URES_ARRAY16 */
+    URES_NONE,
+    URES_NONE,
+
+    URES_NONE,
+    URES_NONE,
+    URES_INT_VECTOR,
+    URES_NONE
+};
+
+U_CAPI UResType U_EXPORT2
+res_getPublicType(Resource res) {
+    return (UResType)gPublicTypes[RES_GET_TYPE(res)];
+}
+
+U_CAPI const UChar * U_EXPORT2
+res_getString(const ResourceData *pResData, Resource res, int32_t *pLength) {
+    const UChar *p;
+    uint32_t offset=RES_GET_OFFSET(res);
+    int32_t length;
+    if(RES_GET_TYPE(res)==URES_STRING_V2) {
+        int32_t first;
+        p=(const UChar *)(pResData->p16BitUnits+offset);
+        first=*p;
+        if(!U16_IS_TRAIL(first)) {
+            length=u_strlen(p);
+        } else if(first<0xdfef) {
+            length=first&0x3ff;
+            ++p;
+        } else if(first<0xdfff) {
+            length=((first-0xdfef)<<16)|p[1];
+            p+=2;
+        } else {
+            length=((int32_t)p[1]<<16)|p[2];
+            p+=3;
         }
-        return (const UChar *)++p;
+    } else if(res==offset) /* RES_GET_TYPE(res)==URES_STRING */ {
+        const int32_t *p32= res==0 ? gEmpty : pResData->pRoot+res;
+        length=*p32++;
+        p=(const UChar *)p32;
     } else {
-        if (pLength) {
-            *pLength=0;
-        }
-        return NULL;
+        p=NULL;
+        length=0;
+    }
+    if(pLength) {
+        *pLength=length;
+    }
+    return p;
+}
+
+U_CAPI const UChar * U_EXPORT2
+res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
+    const UChar *p;
+    uint32_t offset=RES_GET_OFFSET(res);
+    int32_t length;
+    if(RES_GET_TYPE(res)==URES_ALIAS) {
+        const int32_t *p32= offset==0 ? gEmpty : pResData->pRoot+offset;
+        length=*p32++;
+        p=(const UChar *)p32;
+    } else {
+        p=NULL;
+        length=0;
+    }
+    if(pLength) {
+        *pLength=length;
+    }
+    return p;
+}
+
+U_CAPI const uint8_t * U_EXPORT2
+res_getBinary(const ResourceData *pResData, Resource res, int32_t *pLength) {
+    const uint8_t *p;
+    uint32_t offset=RES_GET_OFFSET(res);
+    int32_t length;
+    if(RES_GET_TYPE(res)==URES_BINARY) {
+        const int32_t *p32= offset==0 ? gEmpty : pResData->pRoot+offset;
+        length=*p32++;
+        p=(const uint8_t *)p32;
+    } else {
+        p=NULL;
+        length=0;
+    }
+    if(pLength) {
+        *pLength=length;
+    }
+    return p;
+}
+
+
+U_CAPI const int32_t * U_EXPORT2
+res_getIntVector(const ResourceData *pResData, Resource res, int32_t *pLength) {
+    const int32_t *p;
+    uint32_t offset=RES_GET_OFFSET(res);
+    int32_t length;
+    if(RES_GET_TYPE(res)==URES_INT_VECTOR) {
+        p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        length=*p++;
+    } else {
+        p=NULL;
+        length=0;
+    }
+    if(pLength) {
+        *pLength=length;
+    }
+    return p;
+}
+
+U_CAPI int32_t U_EXPORT2
+res_countArrayItems(const ResourceData *pResData, Resource res) {
+    uint32_t offset=RES_GET_OFFSET(res);
+    switch(RES_GET_TYPE(res)) {
+    case URES_STRING:
+    case URES_STRING_V2:
+    case URES_BINARY:
+    case URES_ALIAS:
+    case URES_INT:
+    case URES_INT_VECTOR:
+        return 1;
+    case URES_ARRAY:
+    case URES_TABLE32:
+        return *(offset==0 ? gEmpty : pResData->pRoot+offset);
+    case URES_TABLE:
+        return *(offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset));
+    case URES_ARRAY16:
+    case URES_TABLE16:
+        return pResData->p16BitUnits[offset];
+    default:
+        return 0;
     }
 }
 
-U_CFUNC const UChar *
-res_getAlias(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_ALIAS) {
-        const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        if (pLength) {
-            *pLength=*p;
-        }
-        return (const UChar *)++p;
-    } else {
-        if (pLength) {
-            *pLength=0;
-        }
-        return NULL;
-    }
-}
-
-U_CFUNC const uint8_t *
-res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS) {
-        const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        *pLength=*p++;
-        if (*pLength == 0) {
-            p = NULL;
-        }
-        return (const uint8_t *)p;
-    } else {
-        *pLength=0;
-        return NULL;
-    }
-}
-
-
-U_CFUNC const int32_t *
-res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_INT_VECTOR) {
-        const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        *pLength=*p++;
-        if (*pLength == 0) {
-            p = NULL;
-        }
-        return (const int32_t *)p;
-    } else {
-        *pLength=0;
-        return NULL;
-    }
-}
-
-U_CFUNC int32_t
-res_countArrayItems(const ResourceData *pResData, const Resource res) {
-    if(res!=RES_BOGUS) {
-        switch(RES_GET_TYPE(res)) {
-        case URES_STRING:
-        case URES_BINARY:
-        case URES_ALIAS:
-        case URES_INT:
-        case URES_INT_VECTOR:
-            return 1;
-        case URES_ARRAY:
-        case URES_TABLE32: {
-            const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-            return *p;
-        }
-        case URES_TABLE: {
-            const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pResData->pRoot, res);
-            return *p;
-        }
-        default:
-            break;
-        }
-    } 
-    return 0;
-}
-
-U_CFUNC Resource
-res_getResource(const ResourceData *pResData, const char *key) {
+U_CAPI Resource U_EXPORT2
+res_getTableItemByKey(const ResourceData *pResData, Resource table,
+                      int32_t *indexR, const char **key) {
+    uint32_t offset=RES_GET_OFFSET(table);
+    int32_t length;
     int32_t idx;
-    const char *realKey;
-    if(RES_GET_TYPE(pResData->rootRes)==URES_TABLE) {
-        return _res_findTableItem(pResData->pRoot, pResData->rootRes, key, &idx, &realKey);
-    } else {
-        return _res_findTable32Item(pResData->pRoot, pResData->rootRes, key, &idx, &realKey);
+    if(key == NULL || *key == NULL) {
+        return RES_BOGUS;
     }
+    switch(RES_GET_TYPE(table)) {
+    case URES_TABLE: {
+        const uint16_t *p= offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset);
+        length=*p++;
+        *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
+        if(idx>=0) {
+            const Resource *p32=(const Resource *)(p+length+(~length&1));
+            return p32[idx];
+        }
+        break;
+    }
+    case URES_TABLE16: {
+        const uint16_t *p=pResData->p16BitUnits+offset;
+        length=*p++;
+        *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
+        if(idx>=0) {
+            return URES_MAKE_RESOURCE(URES_STRING_V2, p[length+idx]);
+        }
+        break;
+    }
+    case URES_TABLE32: {
+        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        length=*p++;
+        *indexR=idx=_res_findTable32Item(pResData, p, length, *key, key);
+        if(idx>=0) {
+            return (Resource)p[length+idx];
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return RES_BOGUS;
 }
 
-U_CFUNC Resource 
-res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t indexR) {
-    return _res_getArrayItem(pResData->pRoot, array, indexR);
+U_CAPI Resource U_EXPORT2
+res_getTableItemByIndex(const ResourceData *pResData, Resource table,
+                        int32_t indexR, const char **key) {
+    uint32_t offset=RES_GET_OFFSET(table);
+    int32_t length;
+    switch(RES_GET_TYPE(table)) {
+    case URES_TABLE: {
+        const uint16_t *p= offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset);
+        length=*p++;
+        if(indexR<length) {
+            const Resource *p32=(const Resource *)(p+length+(~length&1));
+            if(key!=NULL) {
+                *key=RES_GET_KEY16(pResData, p[indexR]);
+            }
+            return p32[indexR];
+        }
+        break;
+    }
+    case URES_TABLE16: {
+        const uint16_t *p=pResData->p16BitUnits+offset;
+        length=*p++;
+        if(indexR<length) {
+            if(key!=NULL) {
+                *key=RES_GET_KEY16(pResData, p[indexR]);
+            }
+            return URES_MAKE_RESOURCE(URES_STRING_V2, p[length+indexR]);
+        }
+        break;
+    }
+    case URES_TABLE32: {
+        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        length=*p++;
+        if(indexR<length) {
+            if(key!=NULL) {
+                *key=RES_GET_KEY32(pResData, p[indexR]);
+            }
+            return (Resource)p[length+indexR];
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return RES_BOGUS;
+}
+
+U_CAPI Resource U_EXPORT2
+res_getResource(const ResourceData *pResData, const char *key) {
+    const char *realKey=key;
+    int32_t idx;
+    return res_getTableItemByKey(pResData, pResData->rootRes, &idx, &realKey);
+}
+
+U_CAPI Resource U_EXPORT2
+res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
+    uint32_t offset=RES_GET_OFFSET(array);
+    switch(RES_GET_TYPE(array)) {
+    case URES_ARRAY: {
+        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        if(indexR<*p) {
+            return (Resource)p[1+indexR];
+        }
+        break;
+    }
+    case URES_ARRAY16: {
+        const uint16_t *p=pResData->p16BitUnits+offset;
+        if(indexR<*p) {
+            return URES_MAKE_RESOURCE(URES_STRING_V2, p[1+indexR]);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return RES_BOGUS;
 }
 
 U_CFUNC Resource
@@ -393,13 +542,11 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
   }
 
   /* one needs to have an aggregate resource in order to search in it */
-  if(!(type == URES_TABLE || type == URES_TABLE32 || type == URES_ARRAY)) {
+  if(!URES_IS_CONTAINER(type)) {
       return RES_BOGUS;
   }
   
-  while(nextSepP && *pathP && t1 != RES_BOGUS &&
-        (type == URES_TABLE || type == URES_TABLE32 || type == URES_ARRAY)
-  ) {
+  while(nextSepP && *pathP && t1 != RES_BOGUS && URES_IS_CONTAINER(type)) {
     /* Iteration stops if: the path has been consumed, we found a non-existing
      * resource (t1 == RES_BOGUS) or we found a scalar resource (including alias)
      */
@@ -416,8 +563,9 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
 
     /* if the resource is a table */
     /* try the key based access */
-    if(type == URES_TABLE) {
-      t2 = _res_findTableItem(pResData->pRoot, t1, pathP, &indexR, key);
+    if(URES_IS_TABLE(type)) {
+      *key = pathP;
+      t2 = res_getTableItemByKey(pResData, t1, &indexR, key);
       if(t2 == RES_BOGUS) { 
         /* if we fail to get the resource by key, maybe we got an index */
         indexR = uprv_strtol(pathP, &closeIndex, 10);
@@ -426,20 +574,10 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
           t2 = res_getTableItemByIndex(pResData, t1, indexR, key);
         }
       }
-    } else if(type == URES_TABLE32) {
-      t2 = _res_findTable32Item(pResData->pRoot, t1, pathP, &indexR, key);
-      if(t2 == RES_BOGUS) { 
-        /* if we fail to get the resource by key, maybe we got an index */
-        indexR = uprv_strtol(pathP, &closeIndex, 10);
-        if(closeIndex != pathP) {
-          /* if we indeed have an index, try to get the item by index */
-          t2 = res_getTableItemByIndex(pResData, t1, indexR, key);
-        }
-      }
-    } else if(type == URES_ARRAY) {
+    } else if(URES_IS_ARRAY(type)) {
       indexR = uprv_strtol(pathP, &closeIndex, 10);
       if(closeIndex != pathP) {
-        t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+        t2 = res_getArrayItem(pResData, t1, indexR);
       } else {
         t2 = RES_BOGUS; /* have an array, but don't have a valid index */
       }
@@ -454,40 +592,6 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
   }
 
   return t1;
-}
-
-U_CFUNC Resource 
-res_getTableItemByKey(const ResourceData *pResData, Resource table,
-                      int32_t *indexR, const char **key ){
-    if(key != NULL && *key != NULL) {
-        if(RES_GET_TYPE(table)==URES_TABLE) {
-            return _res_findTableItem(pResData->pRoot, table, *key, indexR, key);
-        } else {
-            return _res_findTable32Item(pResData->pRoot, table, *key, indexR, key);
-        }
-    } else {
-        return RES_BOGUS;
-    }
-}
-
-U_CFUNC Resource 
-res_getTableItemByIndex(const ResourceData *pResData, Resource table,
-                        int32_t indexR, const char **key) {
-    if(indexR>-1) {
-        if(RES_GET_TYPE(table)==URES_TABLE) {
-            if(key != NULL) {
-                *key = _res_getTableKey(pResData->pRoot, table, indexR);
-            }
-            return _res_getTableItem(pResData->pRoot, table, indexR);
-        } else {
-            if(key != NULL) {
-                *key = _res_getTable32Key(pResData->pRoot, table, indexR);
-            }
-            return _res_getTable32Item(pResData->pRoot, table, indexR);
-        }
-    } else {
-        return RES_BOGUS;
-    }
 }
 
 /* resource bundle swapping ------------------------------------------------- */
@@ -538,18 +642,17 @@ typedef struct TempTable {
     const char *keyChars;
     Row *rows;
     int32_t *resort;
+    uint32_t *resFlags;
+    int32_t localKeyLimit;
+    uint8_t majorFormatVersion;
 } TempTable;
 
 enum {
     STACK_ROW_CAPACITY=200
 };
 
-/* binary data with known formats is swapped too */
-typedef enum UResSpecialType {
-    URES_NO_SPECIAL_TYPE,
-    URES_COLLATION_BINARY,
-    URES_SPECIAL_TYPE_COUNT
-} UResSpecialType;
+/* The table item key string is not locally available. */
+static const char *const gUnknownKey="";
 
 /* resource table key for collation binaries: "%%CollationBin" */
 static const UChar gCollationBinKey[]={
@@ -562,6 +665,9 @@ static const UChar gCollationBinKey[]={
 /*
  * preflight one resource item and set bottom and top values;
  * length, bottom, and top count Resource item offsets (4 bytes each), not bytes
+ *
+ * Preflighting is only necessary for formatVersion 1.0:
+ * 1.1 adds these values to the data format.
  */
 static void
 ures_preflightResource(const UDataSwapper *ds,
@@ -700,20 +806,38 @@ static void
 ures_swapResource(const UDataSwapper *ds,
                   const Resource *inBundle, Resource *outBundle,
                   Resource res, /* caller swaps res itself */
-                  UResSpecialType specialType,
+                  const char *key,
                   TempTable *pTempTable,
                   UErrorCode *pErrorCode) {
     const Resource *p;
     Resource *q;
     int32_t offset, count;
 
-    if(res==0 || RES_GET_TYPE(res)==URES_INT) {
-        /* empty string or integer, nothing to do */
+    switch(RES_GET_TYPE(res)) {
+    case URES_TABLE16:
+    case URES_STRING_V2:
+    case URES_INT:
+    case URES_ARRAY16:
+        /* integer, or points to 16-bit units, nothing to do here */
         return;
+    default:
+        break;
     }
 
     /* all other types use an offset to point to their data */
     offset=(int32_t)RES_GET_OFFSET(res);
+    if(offset==0) {
+        /* special offset indicating an empty item */
+        return;
+    }
+    if(pTempTable->resFlags[offset>>5]&((uint32_t)1<<(offset&0x1f))) {
+        /* we already swapped this resource item */
+        return;
+    } else {
+        /* mark it as swapped now */
+        pTempTable->resFlags[offset>>5]|=((uint32_t)1<<(offset&0x1f));
+    }
+
     p=inBundle+offset;
     q=outBundle+offset;
 
@@ -734,11 +858,18 @@ ures_swapResource(const UDataSwapper *ds,
         /* no need to swap or copy bytes - ures_swap() copied them all */
 
         /* swap known formats */
-        if(specialType==URES_COLLATION_BINARY) {
 #if !UCONFIG_NO_COLLATION
+        if( key!=NULL &&  /* the binary is in a table */
+            (key!=gUnknownKey ?
+                /* its table key string is "%%CollationBin" */
+                0==ds->compareInvChars(ds, key, -1,
+                                       gCollationBinKey, LENGTHOF(gCollationBinKey)-1) :
+                /* its table key string is unknown but it looks like a collation binary */
+                ucol_looksLikeCollationBinary(ds, p+1, count))
+        ) {
             ucol_swapBinary(ds, p+1, count, q+1, pErrorCode);
-#endif
         }
+#endif
         break;
     case URES_TABLE:
     case URES_TABLE32:
@@ -787,29 +918,20 @@ ures_swapResource(const UDataSwapper *ds,
 
             /* recurse */
             for(i=0; i<count; ++i) {
-                /*
-                 * detect a collation binary that is to be swapped via
-                 * ds->compareInvChars(ds, outData+readUInt16(pKey[i]), "%%CollationBin")
-                 * etc.
-                 *
-                 * use some UDataSwapFn pointer from somewhere for collation swapping
-                 * because the common library cannot directly call into the i18n library
-                 */
-                if(0==ds->compareInvChars(ds,
-                            ((const char *)outBundle)+
-                                (pKey16!=NULL ?
-                                    ds->readUInt16(pKey16[i]) :
-                                    udata_readInt32(ds, pKey32[i])),
-                            -1,
-                            gCollationBinKey, LENGTHOF(gCollationBinKey)-1)
-                ) {
-                    specialType=URES_COLLATION_BINARY;
+                const char *itemKey=gUnknownKey;
+                if(pKey16!=NULL) {
+                    int32_t keyOffset=ds->readUInt16(pKey16[i]);
+                    if(keyOffset<pTempTable->localKeyLimit) {
+                        itemKey=(const char *)outBundle+keyOffset;
+                    }
                 } else {
-                    specialType=URES_NO_SPECIAL_TYPE;
+                    int32_t keyOffset=udata_readInt32(ds, pKey32[i]);
+                    if(keyOffset>=0) {
+                        itemKey=(const char *)outBundle+keyOffset;
+                    }
                 }
-
                 item=ds->readUInt32(p[i]);
-                ures_swapResource(ds, inBundle, outBundle, item, specialType, pTempTable, pErrorCode);
+                ures_swapResource(ds, inBundle, outBundle, item, itemKey, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "ures_swapResource(table res=%08x)[%d].recurse(%08x) failed\n",
                                      res, i, item);
@@ -817,7 +939,7 @@ ures_swapResource(const UDataSwapper *ds,
                 }
             }
 
-            if(ds->inCharset==ds->outCharset) {
+            if(pTempTable->majorFormatVersion>1 || ds->inCharset==ds->outCharset) {
                 /* no need to sort, just swap the offset/value arrays */
                 if(pKey16!=NULL) {
                     ds->swapArray16(ds, pKey16, count*2, qKey16, pErrorCode);
@@ -929,7 +1051,7 @@ ures_swapResource(const UDataSwapper *ds,
             /* recurse */
             for(i=0; i<count; ++i) {
                 item=ds->readUInt32(p[i]);
-                ures_swapResource(ds, inBundle, outBundle, item, URES_NO_SPECIAL_TYPE, pTempTable, pErrorCode);
+                ures_swapResource(ds, inBundle, outBundle, item, NULL, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "ures_swapResource(array res=%08x)[%d].recurse(%08x) failed\n",
                                      res, i, item);
@@ -967,7 +1089,7 @@ ures_swap(const UDataSwapper *ds,
     TempTable tempTable;
 
     /* the following integers count Resource item offsets (4 bytes each), not bytes */
-    int32_t bundleLength, stringsBottom, bottom, top;
+    int32_t bundleLength, indexLength, keysBottom, keysTop, resBottom, top;
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
@@ -982,7 +1104,7 @@ ures_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        pInfo->formatVersion[0]==1
+        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2)
     )) {
         udata_printError(ds, "ures_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not a resource bundle\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
@@ -991,6 +1113,7 @@ ures_swap(const UDataSwapper *ds,
         *pErrorCode=U_UNSUPPORTED_ERROR;
         return 0;
     }
+    tempTable.majorFormatVersion=pInfo->formatVersion[0];
 
     /* a resource bundle must contain at least one resource item */
     if(length<0) {
@@ -1000,7 +1123,7 @@ ures_swap(const UDataSwapper *ds,
 
         /* formatVersion 1.1 must have a root item and at least 5 indexes */
         if( bundleLength<
-                (pInfo->formatVersion[1]==0 ? 1 : 1+5)
+                ((pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]==0) ? 1 : 1+5)
         ) {
             udata_printError(ds, "ures_swap(): too few bytes (%d after header) for a resource bundle\n",
                              length-headerSize);
@@ -1012,14 +1135,17 @@ ures_swap(const UDataSwapper *ds,
     inBundle=(const Resource *)((const char *)inData+headerSize);
     rootRes=ds->readUInt32(*inBundle);
 
-    if(pInfo->formatVersion[1]==0) {
+    if(pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]==0) {
         /* preflight to get the bottom, top and maxTableLength values */
-        stringsBottom=1; /* just past root */
-        bottom=0x7fffffff;
+        indexLength=0;
+        keysBottom=1; /* just past root */
+        keysTop=0x7fffffff;
         top=maxTableLength=0;
         ures_preflightResource(ds, inBundle, bundleLength, rootRes,
-                               &bottom, &top, &maxTableLength,
+                               &keysTop, &top, &maxTableLength,
                                pErrorCode);
+        resBottom=keysTop;
+        tempTable.localKeyLimit=keysTop<<2;
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_preflightResource(root res=%08x) failed\n",
                              rootRes);
@@ -1031,8 +1157,19 @@ ures_swap(const UDataSwapper *ds,
 
         inIndexes=(const int32_t *)(inBundle+1);
 
-        stringsBottom=1+udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH]);
-        bottom=udata_readInt32(ds, inIndexes[URES_INDEX_STRINGS_TOP]);
+        indexLength=udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH])&0xff;
+        if(indexLength<=URES_INDEX_MAX_TABLE_LENGTH) {
+            udata_printError(ds, "ures_swap(): too few indexes for a 1.1+ resource bundle\n");
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+        keysBottom=1+indexLength;
+        keysTop=udata_readInt32(ds, inIndexes[URES_INDEX_KEYS_TOP]);
+        if(indexLength>URES_INDEX_16BIT_TOP) {
+            resBottom=udata_readInt32(ds, inIndexes[URES_INDEX_16BIT_TOP]);
+        } else {
+            resBottom=keysTop;
+        }
         top=udata_readInt32(ds, inIndexes[URES_INDEX_BUNDLE_TOP]);
         maxTableLength=udata_readInt32(ds, inIndexes[URES_INDEX_MAX_TABLE_LENGTH]);
 
@@ -1042,10 +1179,41 @@ ures_swap(const UDataSwapper *ds,
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
             return 0;
         }
+        if(keysTop>(1+indexLength)) {
+            tempTable.localKeyLimit=keysTop<<2;
+        } else {
+            tempTable.localKeyLimit=0;
+        }
     }
 
     if(length>=0) {
         Resource *outBundle=(Resource *)((char *)outData+headerSize);
+
+        /* track which resources we have already swapped */
+        uint32_t stackResFlags[STACK_ROW_CAPACITY];
+        int32_t resFlagsLength;
+
+        /*
+         * We need one bit per 4 resource bundle bytes so that we can track
+         * every possible Resource for whether we have swapped it already.
+         * Multiple Resource words can refer to the same bundle offsets
+         * for sharing identical values.
+         * We could optimize this by allocating only for locations above
+         * where Resource values are stored (above keys & strings).
+         */
+        resFlagsLength=(length+31)>>5;          /* number of bytes needed */
+        resFlagsLength=(resFlagsLength+3)&~3;   /* multiple of 4 bytes for uint32_t */
+        if(resFlagsLength<=sizeof(stackResFlags)) {
+            tempTable.resFlags=stackResFlags;
+        } else {
+            tempTable.resFlags=(uint32_t *)uprv_malloc(resFlagsLength);
+            if(tempTable.resFlags==NULL) {
+                udata_printError(ds, "ures_swap(): unable to allocate memory for tracking resources\n");
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
+        }
+        uprv_memset(tempTable.resFlags, 0, resFlagsLength);
 
         /* copy the bundle for binary and inaccessible data */
         if(inData!=outData) {
@@ -1053,16 +1221,25 @@ ures_swap(const UDataSwapper *ds,
         }
 
         /* swap the key strings, but not the padding bytes (0xaa) after the last string and its NUL */
-        udata_swapInvStringBlock(ds, inBundle+stringsBottom, 4*(bottom-stringsBottom),
-                                    outBundle+stringsBottom, pErrorCode);
+        udata_swapInvStringBlock(ds, inBundle+keysBottom, 4*(keysTop-keysBottom),
+                                    outBundle+keysBottom, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed\n", 4*(bottom-1));
+            udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed\n", 4*(keysTop-keysBottom));
             return 0;
+        }
+
+        /* swap the 16-bit units (strings, table16, array16) */
+        if(keysTop<resBottom) {
+            ds->swapArray16(ds, inBundle+keysTop, (resBottom-keysTop)*4, outBundle+keysTop, pErrorCode);
+            if(U_FAILURE(*pErrorCode)) {
+                udata_printError(ds, "ures_swap().swapArray16(16-bit units[%d]) failed\n", 2*(resBottom-keysTop));
+                return 0;
+            }
         }
 
         /* allocate the temporary table for sorting resource tables */
         tempTable.keyChars=(const char *)outBundle; /* sort by outCharset */
-        if(maxTableLength<=STACK_ROW_CAPACITY) {
+        if(tempTable.majorFormatVersion>1 || maxTableLength<=STACK_ROW_CAPACITY) {
             tempTable.rows=rows;
             tempTable.resort=resort;
         } else {
@@ -1071,13 +1248,16 @@ ures_swap(const UDataSwapper *ds,
                 udata_printError(ds, "ures_swap(): unable to allocate memory for sorting tables (max length: %d)\n",
                                  maxTableLength);
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                if(tempTable.resFlags!=stackResFlags) {
+                    uprv_free(tempTable.resFlags);
+                }
                 return 0;
             }
             tempTable.resort=(int32_t *)(tempTable.rows+maxTableLength);
         }
 
         /* swap the resources */
-        ures_swapResource(ds, inBundle, outBundle, rootRes, URES_NO_SPECIAL_TYPE, &tempTable, pErrorCode);
+        ures_swapResource(ds, inBundle, outBundle, rootRes, NULL, &tempTable, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_swapResource(root res=%08x) failed\n",
                              rootRes);
@@ -1086,9 +1266,12 @@ ures_swap(const UDataSwapper *ds,
         if(tempTable.rows!=rows) {
             uprv_free(tempTable.rows);
         }
+        if(tempTable.resFlags!=stackResFlags) {
+            uprv_free(tempTable.resFlags);
+        }
 
         /* swap the root resource and indexes */
-        ds->swapArray32(ds, inBundle, stringsBottom*4, outBundle, pErrorCode);
+        ds->swapArray32(ds, inBundle, keysBottom*4, outBundle, pErrorCode);
     }
 
     return headerSize+4*top;

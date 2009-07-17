@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2004, International Business Machines Corporation 
+* Copyright (C) 1998-2009, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -26,10 +26,12 @@ static void TestAPI(void);
 void addCStringTest(TestNode** root);
 
 static void TestInvariant(void);
+static void TestCompareInvEbcdicAsAscii(void);
 
 void addCStringTest(TestNode** root) {
     addTest(root, &TestAPI,   "tsutil/cstrtest/TestAPI");
     addTest(root, &TestInvariant,   "tsutil/cstrtest/TestInvariant");
+    addTest(root, &TestCompareInvEbcdicAsAscii, "tsutil/cstrtest/TestCompareInvEbcdicAsAscii");
 }
 
 static void TestAPI(void)
@@ -281,6 +283,59 @@ TestInvariant() {
     for(i=0; i<LENGTHOF(nonASCIIUChars); ++i) {
         if(uprv_isInvariantUString(nonASCIIUChars+i, 1)) {
             log_err("uprv_isInvariantUString(nonASCIIUChars[%d]) failed\n", i);
+        }
+    }
+}
+
+static int32_t getSign(int32_t n) {
+    if(n<0) {
+        return -1;
+    } else if(n==0) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+static void
+TestCompareInvEbcdicAsAscii() {
+    static const char *const invStrings[][2]={
+        /* invariant-character strings in ascending ASCII order */
+        /* EBCDIC       native */
+        "",             "",
+        "\x6c",         "%",
+        "\xf0",         "0",
+        "\xf0\xf0",     "00",
+        "\xf0\xf0\x81", "00a",
+        "\x7e",         "=",
+        "\xc1",         "A",
+        "\xc1\xf0\xf0", "A00",
+        "\xc1\xf0\xf0", "A00",
+        "\xc1\xc1",     "AA",
+        "\xc1\xc1\xf0", "AA0",
+        "\x6d",         "_",
+        "\x81",         "a",
+        "\x81\xf0\xf0", "a00",
+        "\x81\xf0\xf0", "a00",
+        "\x81\x81",     "aa",
+        "\x81\x81\xf0", "aa0",
+        "\x81\x81\x81", "aaa",
+        "\x81\x81\x82", "aab"
+    };
+    int32_t i;
+    for(i=1; i<LENGTHOF(invStrings); ++i) {
+        int32_t diff1, diff2;
+        /* compare previous vs. current */
+        diff1=getSign(uprv_compareInvEbcdicAsAscii(invStrings[i-1][0], invStrings[i][0]));
+        if(diff1>0 || (diff1==0 && 0!=uprv_strcmp(invStrings[i-1][0], invStrings[i][0]))) {
+            log_err("uprv_compareInvEbcdicAsAscii(%s, %s)=%hd is wrong\n",
+                    invStrings[i-1][1], invStrings[i][1], (short)diff1);
+        }
+        /* compare current vs. previous, should be inverse diff */
+        diff2=getSign(uprv_compareInvEbcdicAsAscii(invStrings[i][0], invStrings[i-1][0]));
+        if(diff2!=-diff1) {
+            log_err("uprv_compareInvEbcdicAsAscii(%s, %s)=%hd is wrong\n",
+                    invStrings[i][1], invStrings[i-1][1], (short)diff2);
         }
     }
 }

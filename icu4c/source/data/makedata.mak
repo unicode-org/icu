@@ -20,7 +20,7 @@ ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 #     Must be provided by whoever runs this makefile.
 #     Is the directory containing this file (makedata.mak)
 #     Is the directory into which most data is built (prior to packaging)
-#     Is icu\source\data\build
+#     Is icu\source\data\
 #
 !IF "$(ICUMAKE)"==""
 !ERROR Can't find ICUMAKE (ICU Data Make dir, should point to icu\source\data\ )!
@@ -266,7 +266,7 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ENDIF
 
 !IFDEF GENRB_SOURCE
-RB_FILES = root.res $(GENRB_ALIAS_SOURCE:.txt=.res) $(GENRB_ALIAS_SOURCE_LOCAL:.txt=.res) $(GENRB_SOURCE:.txt=.res)
+RB_FILES = root.res pool.res $(GENRB_ALIAS_SOURCE:.txt=.res) $(GENRB_ALIAS_SOURCE_LOCAL:.txt=.res) $(GENRB_SOURCE:.txt=.res)
 ALL_RES = $(ALL_RES) res_index.res
 !ENDIF
 
@@ -394,6 +394,53 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
 	@echo Unicode .icu files built to "$(ICUBLD_PKG)"
 	@echo Unicode .c source files built to "$(ICUTMP)"
+
+# Build the ICU4J icudata.jar and testdata.jar.
+# Command line:
+#   C:\svn\icuproj\icu\trunk\source\data>nmake -f makedata.mak ICUMAKE=C:\svn\icuproj\icu\trunk\source\data\ CFG=x86\Release JAR="C:\Program Files\Java\jdk1.5.0_07\bin\jar" ICU4J_ROOT=C:\svn\icuproj\icu4j\trunk icudata.jar testdata.jar
+# You can omit the ICU4J_ROOT for just building the .jar files without copying them.
+
+# Build icudata.jar:
+# - add the uni-core-data to the ICU package
+# - swap the ICU data
+# - extract all data items
+# - package them into the .jar file
+"$(ICUOUT)\icu4j\icudata.jar": GODATA "$(ICUOUT)\$(ICUPKG).dat" uni-core-data
+	if not exist "$(ICUOUT)\icu4j\com\ibm\icu\impl\data\$(U_ICUDATA_NAME)b" mkdir "$(ICUOUT)\icu4j\com\ibm\icu\impl\data\$(U_ICUDATA_NAME)b"
+	echo ubidi.icu ucase.icu uprops.icu unorm.icu > "$(ICUOUT)\icu4j\add.txt"
+	"$(ICUPBIN)\icupkg" "$(ICUOUT)\$(ICUPKG).dat" "$(ICUOUT)\icu4j\$(U_ICUDATA_NAME)b.dat" -a "$(ICUOUT)\icu4j\add.txt" -s "$(ICUBLD_PKG)" -x * -tb -d "$(ICUOUT)\icu4j\com\ibm\icu\impl\data\$(U_ICUDATA_NAME)b"
+	"$(JAR)" cf "$(ICUOUT)\icu4j\icudata.jar" -C "$(ICUOUT)\icu4j" com\ibm\icu\impl\data\$(U_ICUDATA_NAME)b
+
+# Build testdata.jar:
+# - swap the test data
+# - extract all data items
+# - package them into the .jar file
+"$(ICUOUT)\icu4j\testdata.jar": GODATA "$(TESTDATAOUT)\testdata.dat"
+	if not exist "$(ICUOUT)\icu4j\com\ibm\icu\dev\data\testdata" mkdir "$(ICUOUT)\icu4j\com\ibm\icu\dev\data\testdata"
+	"$(ICUPBIN)\icupkg" "$(TESTDATAOUT)\testdata.dat" -r test.icu -x * -tb -d "$(ICUOUT)\icu4j\com\ibm\icu\dev\data\testdata"
+	"$(JAR)" cf "$(ICUOUT)\icu4j\testdata.jar" -C "$(ICUOUT)\icu4j" com\ibm\icu\dev\data\testdata
+
+!IFDEF ICU4J_ROOT
+
+"$(ICU4J_ROOT)\main\shared\data\icudata.jar": "$(ICUOUT)\icu4j\icudata.jar"
+	if not exist "$(ICU4J_ROOT)\main\shared\data" mkdir "$(ICU4J_ROOT)\main\shared\data"
+	copy "$(ICUOUT)\icu4j\icudata.jar" "$(ICU4J_ROOT)\main\shared\data"
+
+icudata.jar: GODATA "$(ICU4J_ROOT)\main\shared\data\icudata.jar"
+
+"$(ICU4J_ROOT)\main\shared\data\testdata.jar": "$(ICUOUT)\icu4j\testdata.jar"
+	if not exist "$(ICU4J_ROOT)\main\shared\data" mkdir "$(ICU4J_ROOT)\main\shared\data"
+	copy "$(ICUOUT)\icu4j\testdata.jar" "$(ICU4J_ROOT)\main\shared\data"
+
+testdata.jar: GODATA "$(ICU4J_ROOT)\main\shared\data\testdata.jar"
+
+!ELSE
+
+icudata.jar: GODATA "$(ICUOUT)\icu4j\icudata.jar"
+
+testdata.jar: GODATA "$(ICUOUT)\icu4j\testdata.jar"
+
+!ENDIF
 
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat
@@ -550,7 +597,12 @@ CLEAN : GODATA
 # Inference rule for creating resource bundle files
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICULOC)}.txt.res::
 	@echo Making Locale Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD_PKG)" $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" --usePoolBundle -k -d"$(ICUBLD_PKG)" $<
+
+# copy the pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+pool.res: $(ICUSRCDATA_RELATIVE_PATH)\$(ICULOC)\pool.res
+	"$(ICUPBIN)\icupkg" -tl "$(ICUSRCDATA_RELATIVE_PATH)\$(ICULOC)\pool.res" pool.res
 
 res_index.res:
 	@echo Generating <<res_index.txt
