@@ -595,11 +595,10 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
             if (o->version != 0 && o->rebuild == FALSE) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
-                sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION_TMP]);
+                sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION]);
                 if (T_FileStream_file_exists(checkLibFile)) {
                     if (isFileModTimeLater(checkLibFile, o->srcDir, TRUE) && isFileModTimeLater(checkLibFile, o->options)) {
                         if (o->install != NULL) {
-                            uprv_strcpy(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_TMP]);
                             result = pkg_installLibrary(o->install, targetDir);
                         }
                         return result;
@@ -690,7 +689,7 @@ static void createFileNames(const char *version_major, const char *version, cons
             sprintf(pkgDataFlags[SO_EXT], "%s.%s",
                     pkgDataFlags[SO_EXT],
                     pkgDataFlags[A_EXT]);
-#elif defined(OS400)
+#elif defined(OS400) || defined(_AIX)
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                     libFileNames[LIB_FILE],
                     pkgDataFlags[SOBJ_EXT]);
@@ -707,7 +706,12 @@ static void createFileNames(const char *version_major, const char *version, cons
                     reverseExt ? version_major : pkgDataFlags[SO_EXT],
                     reverseExt ? pkgDataFlags[SO_EXT] : version_major);
 
-            libFileNames[LIB_FILE_VERSION][0] = 0;
+            sprintf(libFileNames[LIB_FILE_VERSION], "%s%s%s.%s",
+                    libFileNames[LIB_FILE],
+                    pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
+                    reverseExt ? version : pkgDataFlags[SO_EXT],
+                    reverseExt ? pkgDataFlags[SO_EXT] : version);
+
 
 #ifdef U_CYGWIN
             /* Cygwin only deals with the version major number. */
@@ -841,7 +845,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
     int32_t result = 0;
     char cmd[LARGE_BUFFER_MAX_SIZE];
 
-    /* If the shard object suffix and the final object suffix is different and the final object suffix and the
+    /* If the shared object suffix and the final object suffix is different and the final object suffix and the
      * archive file suffix is the same, then the final library needs to be archived.
      */
     if (uprv_strcmp(pkgDataFlags[SOBJ_EXT], pkgDataFlags[SO_EXT]) != 0 && uprv_strcmp(pkgDataFlags[A_EXT], pkgDataFlags[SO_EXT]) == 0) {
