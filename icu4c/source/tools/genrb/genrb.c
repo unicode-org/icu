@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,6 +18,8 @@
 
 #include "genrb.h"
 #include "unicode/uclean.h"
+
+#include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
 /* Protos */
 static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
@@ -54,7 +56,10 @@ enum
     NO_BINARY_COLLATION,
     /*added by Jing*/
     LANGUAGE,
-    NO_COLLATION_RULES
+    NO_COLLATION_RULES,
+    FORMAT_VERSION,
+    WRITE_POOL_BUNDLE,
+    USE_POOL_BUNDLE
 };
 
 UOption options[]={
@@ -71,11 +76,14 @@ UOption options[]={
                       UOPTION_COPYRIGHT,
                       /* UOPTION_PACKAGE_NAME, This option is deprecated and should not be used ever. */
                       UOPTION_BUNDLE_NAME,
-                      UOPTION_DEF( "write-xliff", 'x', UOPT_OPTIONAL_ARG),
-                      UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
-                      UOPTION_DEF( "noBinaryCollation", 'C', UOPT_NO_ARG),/* 15 */
-                      UOPTION_DEF( "language",  'l', UOPT_REQUIRES_ARG), /* 16 */
-                      UOPTION_DEF( "omitCollationRules", 'R', UOPT_NO_ARG),/* 17 */
+                      UOPTION_DEF("write-xliff", 'x', UOPT_OPTIONAL_ARG),
+                      UOPTION_DEF("strict",    'k', UOPT_NO_ARG), /* 14 */
+                      UOPTION_DEF("noBinaryCollation", 'C', UOPT_NO_ARG),/* 15 */
+                      UOPTION_DEF("language",  'l', UOPT_REQUIRES_ARG), /* 16 */
+                      UOPTION_DEF("omitCollationRules", 'R', UOPT_NO_ARG),/* 17 */
+                      UOPTION_DEF("formatVersion", '\x01', UOPT_REQUIRES_ARG),/* 18 */
+                      UOPTION_DEF("writePoolBundle", '\x01', UOPT_NO_ARG),/* 19 */
+                      UOPTION_DEF("usePoolBundle", '\x01', UOPT_NO_ARG),/* 20 */
                   };
 
 static     UBool       write_java = FALSE;
@@ -83,6 +91,20 @@ static     UBool       write_xliff = FALSE;
 static     const char* outputEnc ="";
 static     const char* gPackageName=NULL;
 static     const char* bundleName=NULL;
+static     struct SRBRoot *newPoolBundle = NULL;
+
+/* TODO: separate header file for ResFile? */
+typedef struct ResFile {
+  uint8_t *fBytes;
+  const int32_t *fIndexes;
+  const char *fKeys;
+  int32_t fKeysLength;
+  int32_t fKeysCount;
+  int32_t fChecksum;
+} ResFile;
+
+static ResFile poolBundle = { NULL };
+
 /*added by Jing*/
 static     const char* language = NULL;
 static     const char* xliffOutputFileName = NULL;
@@ -107,6 +129,24 @@ main(int argc,
     } else if(argc<2) {
         argc = -1;
     }
+    if(options[WRITE_POOL_BUNDLE].doesOccur && options[USE_POOL_BUNDLE].doesOccur) {
+        fprintf(stderr, "%s: cannot combine --writePoolBundle and --usePoolBundle\n", argv[0]);
+        argc = -1;
+    }
+    if(options[FORMAT_VERSION].doesOccur) {
+        const char *s = options[FORMAT_VERSION].value;
+        if(uprv_strlen(s) != 1 || (s[0] != '1' && s[0] != '2')) {
+            fprintf(stderr, "%s: unsupported --formatVersion %s\n", s);
+            argc = -1;
+        } else if(s[0] == '1' &&
+                  (options[WRITE_POOL_BUNDLE].doesOccur || options[USE_POOL_BUNDLE].doesOccur)
+        ) {
+            fprintf(stderr, "%s: cannot combine --formatVersion 1 with --writePoolBundle or --usePoolBundle\n", argv[0]);
+            argc = -1;
+        } else {
+            setFormatVersion(s[0] - '0');
+        }
+    }
 
     if(options[VERSION].doesOccur) {
         fprintf(stderr,
@@ -118,7 +158,7 @@ main(int argc,
 
     if(argc<0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
         /*
-         * Broken into chucks because the C89 standard says the minimum
+         * Broken into chunks because the C89 standard says the minimum
          * required supported string length is 509 bytes.
          */
         fprintf(stderr,
@@ -161,6 +201,14 @@ main(int argc,
                 "\t-R or --omitCollationRules do not include collation (tailoring) rules;\n"
                 "\t                           makes .res file smaller and maintains collator instantiation speed\n"
                 "\t                           but tailoring rules will not be available (they are rarely used)\n");
+        fprintf(stderr,
+                "\t      --formatVersion      write a .res file compatible with the requested formatVersion (single digit);\n"
+                "\t                           for example, --formatVersion 1\n");
+        fprintf(stderr,
+                "\t      --writePoolBundle    write a pool.res file with all of the keys of all input bundles\n"
+                "\t      --usePoolBundle      point to keys from the pool.res keys pool bundle if they are available there;\n"
+                "\t                           makes .res files smaller but dependent on the pool bundle\n"
+                "\t                           (--writePoolBundle and --usePoolBundle cannot be combined)\n");
 
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -241,6 +289,113 @@ main(int argc,
         language = options[LANGUAGE].value;
     }
 
+    if(options[WRITE_POOL_BUNDLE].doesOccur) {
+        newPoolBundle = bundle_open(NULL, TRUE, &status);
+        if(U_FAILURE(status)) {
+            fprintf(stderr, "unable to create an empty bundle for the pool keys: %s\n", u_errorName(status));
+            return status;
+        } else {
+            const char *poolResName = "pool.res";
+            char *nameWithoutSuffix = uprv_malloc(uprv_strlen(poolResName) + 1);
+            if (nameWithoutSuffix == NULL) {
+                fprintf(stderr, "out of memory error\n");
+                return U_MEMORY_ALLOCATION_ERROR;
+            }
+            uprv_strcpy(nameWithoutSuffix, poolResName);
+            *uprv_strrchr(nameWithoutSuffix, '.') = 0;
+            newPoolBundle->fLocale = nameWithoutSuffix;
+        }
+    }
+
+    if(options[USE_POOL_BUNDLE].doesOccur) {
+        const char *poolResName = "pool.res";
+        FileStream *poolFile;
+        int32_t poolFileSize;
+        int32_t indexLength;
+        /*
+         * TODO: Consolidate inputDir/filename handling from main() and processFile()
+         * into a common function, and use it here as well.
+         * Try to create toolutil functions for dealing with dir/filenames and
+         * loading ICU data files without udata_open().
+         * Share code with icupkg?
+         * Also, make_res_filename() seems to be unused. Review and remove.
+         */
+        if (inputDir) {
+            uprv_strcpy(theCurrentFileName, inputDir);
+            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
+        } else {
+            *theCurrentFileName = 0;
+        }
+        uprv_strcat(theCurrentFileName, poolResName);
+        poolFile = T_FileStream_open(theCurrentFileName, "rb");
+        if (poolFile == NULL) {
+            fprintf(stderr, "unable to open pool bundle file %s\n", theCurrentFileName);
+            return 1;
+        }
+        poolFileSize = T_FileStream_size(poolFile);
+        if (poolFileSize < 32) {
+            fprintf(stderr, "the pool bundle file %s is too small\n", theCurrentFileName);
+            return 1;
+        }
+        poolBundle.fBytes = (uint8_t *)uprv_malloc((poolFileSize + 15) & ~15);
+        if (poolFileSize > 0 && poolBundle.fBytes == NULL) {
+            fprintf(stderr, "unable to allocate memory for the pool bundle file %s\n", theCurrentFileName);
+            return U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            UDataSwapper *ds;
+            const DataHeader *header;
+            int32_t bytesRead = T_FileStream_read(poolFile, poolBundle.fBytes, poolFileSize);
+            int32_t keysBottom;
+            if (bytesRead != poolFileSize) {
+                fprintf(stderr, "unable to read the pool bundle file %s\n", theCurrentFileName);
+                return 1;
+            }
+            /*
+             * Swap the pool bundle so that a single checked-in file can be used.
+             * The swapper functions also test that the data looks like
+             * a well-formed .res file.
+             */
+            ds = udata_openSwapperForInputData(poolBundle.fBytes, bytesRead,
+                                               U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &status);
+            if (U_FAILURE(status)) {
+                fprintf(stderr, "udata_openSwapperForInputData(pool bundle %s) failed: %s\n",
+                        theCurrentFileName, u_errorName(status));
+                return status;
+            }
+            ures_swap(ds, poolBundle.fBytes, bytesRead, poolBundle.fBytes, &status);
+            udata_closeSwapper(ds);
+            if (U_FAILURE(status)) {
+                fprintf(stderr, "ures_swap(pool bundle %s) failed: %s\n",
+                        theCurrentFileName, u_errorName(status));
+                return status;
+            }
+            header = (const DataHeader *)poolBundle.fBytes;
+            if (header->info.formatVersion[0]!=2) {
+                fprintf(stderr, "invalid format of pool bundle file %s\n", theCurrentFileName);
+                return U_INVALID_FORMAT_ERROR;
+            }
+            poolBundle.fKeys = (const char *)header + header->dataHeader.headerSize;
+            poolBundle.fIndexes = (const int32_t *)poolBundle.fKeys + 1;
+            indexLength = poolBundle.fIndexes[URES_INDEX_LENGTH] & 0xff;
+            if (indexLength <= URES_INDEX_POOL_CHECKSUM) {
+                fprintf(stderr, "insufficient indexes[] in pool bundle file %s\n", theCurrentFileName);
+                return U_INVALID_FORMAT_ERROR;
+            }
+            keysBottom = (1 + indexLength) * 4;
+            poolBundle.fKeys += keysBottom;
+            poolBundle.fKeysLength = (poolBundle.fIndexes[URES_INDEX_KEYS_TOP] * 4) - keysBottom;
+            poolBundle.fChecksum = poolBundle.fIndexes[URES_INDEX_POOL_CHECKSUM];
+        }
+        for (i = 0; i < poolBundle.fKeysLength; ++i) {
+            if (poolBundle.fKeys[i] == 0) {
+                ++poolBundle.fKeysCount;
+            }
+        }
+        T_FileStream_close(poolFile);
+        setUsePoolBundle(TRUE);
+    }
+
+    printf("genrb number of files: %d\n", argc - 1);
     /* generate the binary files */
     for(i = 1; i < argc; ++i) {
         status = U_ZERO_ERROR;
@@ -260,8 +415,19 @@ main(int argc,
         processFile(arg, encoding, inputDir, outputDir, gPackageName, &status);
     }
 
+    uprv_free(poolBundle.fBytes);
+
+    if(options[WRITE_POOL_BUNDLE].doesOccur) {
+        char outputFileName[256];
+        bundle_write(newPoolBundle, outputDir, NULL, outputFileName, sizeof(outputFileName), &status);
+        bundle_close(newPoolBundle, &status);
+        if(U_FAILURE(status)) {
+            fprintf(stderr, "unable to write the pool bundle: %s\n", u_errorName(status));
+        }
+    }
+
     /* Dont return warnings as a failure */
-    if (! U_FAILURE(status)) {
+    if (U_SUCCESS(status)) {
         return 0;
     }
 
@@ -382,6 +548,31 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     if (data == NULL || U_FAILURE(*status)) {
         fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));
         goto finish;
+    }
+    if(options[WRITE_POOL_BUNDLE].doesOccur) {
+        int32_t newKeysLength;
+        const char *newKeys, *newKeysLimit;
+        bundle_compactKeys(data, status);
+        newKeys = bundle_getKeyBytes(data, &newKeysLength);
+        bundle_addKeyBytes(newPoolBundle, newKeys, newKeysLength, status);
+        if(U_FAILURE(*status)) {
+            fprintf(stderr, "bundle_compactKeys(%s) or bundle_getKeyBytes() failed: %s\n",
+                    filename, u_errorName(*status));
+            goto finish;
+        }
+        /* count the number of just-added key strings */
+        for(newKeysLimit = newKeys + newKeysLength; newKeys < newKeysLimit; ++newKeys) {
+            if(*newKeys == 0) {
+                ++newPoolBundle->fKeysCount;
+            }
+        }
+    }
+
+    if(options[USE_POOL_BUNDLE].doesOccur) {
+        data->fPoolBundleKeys = poolBundle.fKeys;
+        data->fPoolBundleKeysLength = poolBundle.fKeysLength;
+        data->fPoolBundleKeysCount = poolBundle.fKeysCount;
+        data->fPoolChecksum = poolBundle.fChecksum;
     }
 
     /* Determine the target rb filename */

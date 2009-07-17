@@ -315,7 +315,7 @@ main(int argc, char *argv[]) {
          * If we swap a single file, just assume that we are modifying it.
          * The Package class does not give us access to the item and its type.
          */
-        isModified=(UBool)(!isPackage || outType!=pkg->getInType());
+        isModified|=(UBool)(!isPackage || outType!=pkg->getInType());
     } else if(isPackage) {
         outType=pkg->getInType(); // default to input type
     } else /* !isPackage: swap single file */ {

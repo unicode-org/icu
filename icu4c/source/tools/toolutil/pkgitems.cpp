@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2008, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -15,7 +15,7 @@
 *
 *   Companion file to package.cpp. Deals with details of ICU data item formats.
 *   Used for item dependencies.
-*   Contains adapted code from uresdata.c and ucnv_bld.c (swapper code from 2003).
+*   Contains adapted code from ucnv_bld.c (swapper code from 2003).
 */
 
 #include "unicode/utypes.h"
@@ -23,6 +23,7 @@
 #include "unicode/putil.h"
 #include "unicode/udata.h"
 #include "cstring.h"
+#include "uinvchar.h"
 #include "ucmndata.h"
 #include "udataswp.h"
 #include "swapimpl.h"
@@ -53,6 +54,70 @@ printError(void *context, const char *fmt, va_list args) {
 
 U_CDECL_END
 
+// a data item in native-platform form ------------------------------------- ***
+
+class NativeItem {
+public:
+    NativeItem() : pItem(NULL), pInfo(NULL), bytes(NULL), swapped(NULL), length(0) {}
+    NativeItem(const Item *item, UDataSwapFn *swap) : swapped(NULL) {
+        setItem(item, swap);
+    }
+    ~NativeItem() {
+        delete [] swapped;
+    }
+    const UDataInfo *getDataInfo() const {
+        return pInfo;
+    }
+    const uint8_t *getBytes() const {
+        return bytes;
+    }
+    int32_t getLength() const {
+        return length;
+    }
+
+    void setItem(const Item *item, UDataSwapFn *swap) {
+        pItem=item;
+        int32_t infoLength, itemHeaderLength;
+        UErrorCode errorCode=U_ZERO_ERROR;
+        pInfo=::getDataInfo(pItem->data, pItem->length, infoLength, itemHeaderLength, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            exit(errorCode); // should succeed because readFile() checks headers
+        }
+        length=pItem->length-itemHeaderLength;
+
+        if(pInfo->isBigEndian==U_IS_BIG_ENDIAN && pInfo->charsetFamily==U_CHARSET_FAMILY) {
+            bytes=pItem->data+itemHeaderLength;
+        } else {
+            UDataSwapper *ds=udata_openSwapper((UBool)pInfo->isBigEndian, pInfo->charsetFamily, U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(stderr, "icupkg: udata_openSwapper(\"%s\") failed - %s\n",
+                        pItem->name, u_errorName(errorCode));
+                exit(errorCode);
+            }
+
+            ds->printError=printError;
+            ds->printErrorContext=stderr;
+
+            swapped=new uint8_t[pItem->length];
+            if(swapped==NULL) {
+                fprintf(stderr, "icupkg: unable to allocate memory for swapping \"%s\"\n", pItem->name);
+                exit(U_MEMORY_ALLOCATION_ERROR);
+            }
+            swap(ds, pItem->data, pItem->length, swapped, &errorCode);
+            pInfo=::getDataInfo(swapped, pItem->length, infoLength, itemHeaderLength, &errorCode);
+            bytes=swapped+itemHeaderLength;
+            udata_closeSwapper(ds);
+        }
+    }
+
+private:
+    const Item *pItem;
+    const UDataInfo *pInfo;
+    const uint8_t *bytes;
+    uint8_t *swapped;
+    int32_t length;
+};
+
 // check a dependency ------------------------------------------------------ ***
 
 /*
@@ -60,10 +125,9 @@ U_CDECL_END
  * and a suffix
  */
 static void 
-checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char *suffix,
-              CheckDependency check, void *context,
-              UErrorCode *pErrorCode) {
-    char target[200];
+makeTargetName(const char *itemName, const char *id, int32_t idLength, const char *suffix,
+               char *target, int32_t capacity,
+               UErrorCode *pErrorCode) {
     const char *itemID;
     int32_t treeLength, suffixLength, targetLength;
 
@@ -82,8 +146,8 @@ checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char
     }
     suffixLength=(int32_t)strlen(suffix);
     targetLength=treeLength+idLength+suffixLength;
-    if(targetLength>=(int32_t)sizeof(target)) {
-        fprintf(stderr, "icupkg/checkIDSuffix(%s) alias target item name length %ld too long\n",
+    if(targetLength>=capacity) {
+        fprintf(stderr, "icupkg/makeTargetName(%s) target item name length %ld too long\n",
                         itemName, (long)targetLength);
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -92,8 +156,17 @@ checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char
     memcpy(target, itemName, treeLength);
     memcpy(target+treeLength, id, idLength);
     memcpy(target+treeLength+idLength, suffix, suffixLength+1); // +1 includes the terminating NUL
+}
 
-    check(context, itemName, target);
+static void 
+checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char *suffix,
+              CheckDependency check, void *context,
+              UErrorCode *pErrorCode) {
+    char target[200];
+    makeTargetName(itemName, id, idLength, suffix, target, (int32_t)sizeof(target), pErrorCode);
+    if(U_SUCCESS(*pErrorCode)) {
+        check(context, itemName, target);
+    }
 }
 
 /* assemble the target item name from the item's parent item name */
@@ -139,235 +212,123 @@ checkParent(const char *itemName, CheckDependency check, void *context,
 
 // get dependencies from resource bundles ---------------------------------- ***
 
-static const char gAliasKey[]="%%ALIAS";
-static const char gDependencyKey[]="%%DEPENDENCY";
-enum { gAliasKeyLength=7, gDependencyKeyLength=12 };
+static const UChar SLASH=0x2f;
+
+/*
+ * Check for the alias from the string or alias resource res.
+ */
+static void
+checkAlias(const char *itemName,
+           Resource res, const UChar *alias, int32_t length, UBool useResSuffix,
+           CheckDependency check, void *context, UErrorCode *pErrorCode) {
+    int32_t i;
+
+    if(!uprv_isInvariantUString(alias, length)) {
+        fprintf(stderr, "icupkg/ures_enumDependencies(%s res=%08x) alias string contains non-invariant characters\n",
+                        itemName, res);
+        *pErrorCode=U_INVALID_CHAR_FOUND;
+        return;
+    }
+
+    // extract the locale ID from alias strings like
+    // locale_ID/key1/key2/key3
+    // locale_ID
+
+    // search for the first slash
+    for(i=0; i<length && alias[i]!=SLASH; ++i) {}
+
+    if(res_getPublicType(res)==URES_ALIAS) {
+        // ignore aliases with an initial slash:
+        // /ICUDATA/... and /pkgname/... go to a different package
+        // /LOCALE/... are for dynamic sideways fallbacks and don't go to a fixed bundle
+        if(i==0) {
+            return; // initial slash ('/')
+        }
+
+        // ignore the intra-bundle path starting from the first slash ('/')
+        length=i;
+    } else /* URES_STRING */ {
+        // the whole string should only consist of a locale ID
+        if(i!=length) {
+            fprintf(stderr, "icupkg/ures_enumDependencies(%s res=%08x) %%ALIAS contains a '/'\n",
+                            itemName, res);
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return;
+        }
+    }
+
+    // convert the Unicode string to char *
+    char localeID[32];
+    if(length>=(int32_t)sizeof(localeID)) {
+        fprintf(stderr, "icupkg/ures_enumDependencies(%s res=%08x) alias locale ID length %ld too long\n",
+                        itemName, res, (long)length);
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
+    u_UCharsToChars(alias, localeID, length);
+    localeID[length]=0;
+
+    checkIDSuffix(itemName, localeID, -1, (useResSuffix ? ".res" : ""), check, context, pErrorCode);
+}
 
 /*
  * Enumerate one resource item and its children and extract dependencies from
  * aliases.
- * Code adapted from ures_preflightResource() and ures_swapResource().
  */
 static void
-ures_enumDependencies(const UDataSwapper *ds,
-                      const char *itemName,
-                      const Resource *inBundle, int32_t length,
+ures_enumDependencies(const char *itemName,
+                      const ResourceData *pResData,
                       Resource res, const char *inKey, const char *parentKey, int32_t depth,
                       CheckDependency check, void *context,
                       UErrorCode *pErrorCode) {
-    const Resource *p;
-    int32_t offset;
-    UBool useResSuffix = TRUE;
-
-    if(res==0 || RES_GET_TYPE(res)==URES_INT) {
-        /* empty string or integer, nothing to do */
-        return;
-    }
-
-    /* all other types use an offset to point to their data */
-    offset=(int32_t)RES_GET_OFFSET(res);
-    if(0<=length && length<=offset) {
-        udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) resource offset exceeds bundle length %d\n",
-                         itemName, res, length);
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return;
-    }
-    p=inBundle+offset;
-
-    switch(RES_GET_TYPE(res)) {
-        /* strings and aliases have physically the same value layout */
+    switch(res_getPublicType(res)) {
     case URES_STRING:
-        // Check for %%ALIAS
-        if(depth==1 && inKey!=NULL) {
-            char key[gAliasKeyLength+1];
-            int32_t keyLength;
-
-            keyLength=(int32_t)strlen(inKey);
-            if(keyLength!=gAliasKeyLength) {
+        {
+            UBool useResSuffix = TRUE;
+            // Check for %%ALIAS
+            if(depth==1 && inKey!=NULL) {
+                if(0!=strcmp(inKey, "%%ALIAS")) {
+                    break;
+                }
+            }
+            // Check for %%DEPENDENCY
+            else if(depth==2 && parentKey!=NULL) {
+                if(0!=strcmp(parentKey, "%%DEPENDENCY")) {
+                    break;
+                }
+                useResSuffix = FALSE;
+            } else {
+                // we ignore all other strings
                 break;
             }
-            ds->swapInvChars(ds, inKey, gAliasKeyLength+1, key, pErrorCode);
-            if(U_FAILURE(*pErrorCode)) {
-                udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) string key contains variant characters\n",
-                                itemName, res);
-                return;
-            }
-            if(0!=strcmp(key, gAliasKey)) {
-                break;
-            }
+            int32_t length;
+            const UChar *alias=res_getString(pResData, res, &length);
+            checkAlias(itemName, res, alias, length, useResSuffix, check, context, pErrorCode);
         }
-        // Check for %%DEPENDENCY
-        else if(depth==2 && parentKey!=NULL) {
-            char key[gDependencyKeyLength+1];
-            int32_t keyLength;
-
-            keyLength=(int32_t)strlen(parentKey);
-            if(keyLength!=gDependencyKeyLength) {
-                break;
-            }
-            ds->swapInvChars(ds, parentKey, gDependencyKeyLength+1, key, pErrorCode);
-            if(U_FAILURE(*pErrorCode)) {
-                udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) string key contains variant characters\n",
-                                itemName, res);
-                return;
-            }
-            if(0!=strcmp(key, gDependencyKey)) {
-                break;
-            }
-            useResSuffix = FALSE;
-        } else {
-            // we ignore all other strings
-            break;
-        }
-        // for the top-level %%ALIAS or %%DEPENDENCY string fall through to URES_ALIAS
+        break;
     case URES_ALIAS:
         {
-            char localeID[32];
-            const uint16_t *p16;
-            int32_t i, stringLength;
-            uint16_t u16, ored16;
-
-            stringLength=udata_readInt32(ds, (int32_t)*p);
-
-            /* top=offset+1+(string length +1)/2 rounded up */
-            offset+=1+((stringLength+1)+1)/2;
-            if(offset>length) {
-                break; // the resource does not fit into the bundle, print error below
-            }
-
-            // extract the locale ID from alias strings like
-            // locale_ID/key1/key2/key3
-            // locale_ID
-            if(U_IS_BIG_ENDIAN==ds->inIsBigEndian) {
-                u16=0x2f;   // slash in local endianness
-            } else {
-                u16=0x2f00; // slash in opposite endianness
-            }
-            p16=(const uint16_t *)(p+1); // Unicode string contents
-
-            // search for the first slash
-            for(i=0; i<stringLength && p16[i]!=u16; ++i) {}
-
-            if(RES_GET_TYPE(res)==URES_ALIAS) {
-                // ignore aliases with an initial slash:
-                // /ICUDATA/... and /pkgname/... go to a different package
-                // /LOCALE/... are for dynamic sideways fallbacks and don't go to a fixed bundle
-                if(i==0) {
-                    break; // initial slash ('/')
-                }
-
-                // ignore the intra-bundle path starting from the first slash ('/')
-                stringLength=i;
-            } else /* URES_STRING */ {
-                // the whole string should only consist of a locale ID
-                if(i!=stringLength) {
-                    udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) %%ALIAS contains a '/'\n",
-                                    itemName, res);
-                    *pErrorCode=U_UNSUPPORTED_ERROR;
-                    return;
-                }
-            }
-
-            // convert the Unicode string to char * and
-            // check that it has a bundle path but no package
-            if(stringLength>=(int32_t)sizeof(localeID)) {
-                udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) alias locale ID length %ld too long\n",
-                                itemName, res, stringLength);
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                return;
-            }
-
-            // convert the alias Unicode string to US-ASCII
-            ored16=0;
-            if(U_IS_BIG_ENDIAN==ds->inIsBigEndian) {
-                for(i=0; i<stringLength; ++i) {
-                    u16=p16[i];
-                    ored16|=u16;
-                    localeID[i]=(char)u16;
-                }
-            } else {
-                for(i=0; i<stringLength; ++i) {
-                    u16=p16[i];
-                    ored16|=u16;
-                    localeID[i]=(char)(u16>>8);
-                }
-                ored16=(uint16_t)((ored16<<8)|(ored16>>8));
-            }
-            localeID[stringLength]=0;
-            if(ored16>0x7f) {
-                udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) alias string contains non-ASCII characters\n",
-                                itemName, res);
-                *pErrorCode=U_INVALID_CHAR_FOUND;
-                return;
-            }
-
-#if (U_CHARSET_FAMILY==U_EBCDIC_FAMILY)
-            // swap to EBCDIC
-            // our swapper is probably not the right one, but
-            // the function uses it only for printing errors
-            uprv_ebcdicFromAscii(ds, localeID, stringLength, localeID, pErrorCode);
-            if(U_FAILURE(*pErrorCode)) {
-                return;
-            }
-#endif
-#if U_CHARSET_FAMILY!=U_ASCII_FAMILY && U_CHARSET_FAMILY!=U_EBCDIC_FAMILY
-#           error Unknown U_CHARSET_FAMILY value!
-#endif
-
-            checkIDSuffix(itemName, localeID, -1, (useResSuffix ? ".res" : ""), check, context, pErrorCode);
+            int32_t length;
+            const UChar *alias=res_getAlias(pResData, res, &length);
+            checkAlias(itemName, res, alias, length, TRUE, check, context, pErrorCode);
         }
         break;
     case URES_TABLE:
-    case URES_TABLE32:
         {
-            const uint16_t *pKey16;
-            const int32_t *pKey32;
-
-            Resource item;
-            int32_t i, count;
-
-            if(RES_GET_TYPE(res)==URES_TABLE) {
-                /* get table item count */
-                pKey16=(const uint16_t *)p;
-                count=ds->readUInt16(*pKey16++);
-
-                pKey32=NULL;
-
-                /* top=((1+ table item count)/2 rounded up)+(table item count) */
-                offset+=((1+count)+1)/2;
-            } else {
-                /* get table item count */
-                pKey32=(const int32_t *)p;
-                count=udata_readInt32(ds, *pKey32++);
-
-                pKey16=NULL;
-
-                /* top=(1+ table item count)+(table item count) */
-                offset+=1+count;
-            }
-
-            p=inBundle+offset; /* pointer to table resources */
-            offset+=count;
-
-            if(offset>length) {
-                break; // the resource does not fit into the bundle, print error below
-            }
-
             /* recurse */
-            for(i=0; i<count; ++i) {
-                item=ds->readUInt32(*p++);
+            int32_t count=res_countArrayItems(pResData, res);
+            for(int32_t i=0; i<count; ++i) {
+                const char *itemKey;
+                Resource item=res_getTableItemByIndex(pResData, res, i, &itemKey);
                 ures_enumDependencies(
-                        ds, itemName, inBundle, length, item,
-                        ((const char *)inBundle)+
-                            (pKey16!=NULL ?
-                                ds->readUInt16(pKey16[i]) :
-                                udata_readInt32(ds, pKey32[i])),
+                        itemName, pResData,
+                        item, itemKey,
                         inKey, depth+1,
                         check, context,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "icupkg/ures_enumDependencies(%s table res=%08x)[%d].recurse(%08x) failed\n",
-                                        itemName, res, i, item);
+                    fprintf(stderr, "icupkg/ures_enumDependencies(%s table res=%08x)[%d].recurse(%s: %08x) failed\n",
+                                    itemName, res, i, itemKey, item);
                     break;
                 }
             }
@@ -375,28 +336,19 @@ ures_enumDependencies(const UDataSwapper *ds,
         break;
     case URES_ARRAY:
         {
-            Resource item;
-            int32_t i, count;
-
-            /* top=offset+1+(array length) */
-            count=udata_readInt32(ds, (int32_t)*p++);
-            offset+=1+count;
-
-            if(offset>length) {
-                break; // the resource does not fit into the bundle, print error below
-            }
-
             /* recurse */
-            for(i=0; i<count; ++i) {
-                item=ds->readUInt32(*p++);
+            int32_t count=res_countArrayItems(pResData, res);
+            for(int32_t i=0; i<count; ++i) {
+                Resource item=res_getArrayItem(pResData, res, i);
                 ures_enumDependencies(
-                        ds, itemName, inBundle, length,
-                        item, NULL, inKey, depth+1,
+                        itemName, pResData,
+                        item, NULL,
+                        inKey, depth+1,
                         check, context,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "icupkg/ures_enumDependencies(%s array res=%08x)[%d].recurse(%08x) failed\n",
-                                        itemName, res, i, item);
+                    fprintf(stderr, "icupkg/ures_enumDependencies(%s array res=%08x)[%d].recurse(%08x) failed\n",
+                                    itemName, res, i, item);
                     break;
                 }
             }
@@ -405,75 +357,79 @@ ures_enumDependencies(const UDataSwapper *ds,
     default:
         break;
     }
-
-    if(U_FAILURE(*pErrorCode)) {
-        /* nothing to do */
-    } else if(0<=length && length<offset) {
-        udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) resource limit exceeds bundle length %d\n",
-                         itemName, res, length);
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    }
 }
 
-/* code adapted from ures_swap() */
 static void
-ures_enumDependencies(const UDataSwapper *ds,
-                      const char *itemName, const UDataInfo *pInfo,
+ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
                       const uint8_t *inBytes, int32_t length,
                       CheckDependency check, void *context,
                       UErrorCode *pErrorCode) {
-    const Resource *inBundle;
-    Resource rootRes;
+    ResourceData resData;
 
-    /* the following integers count Resource item offsets (4 bytes each), not bytes */
-    int32_t bundleLength;
-
-    /* check format version */
-    if(pInfo->formatVersion[0]!=1) {
-        fprintf(stderr, "icupkg: .res format version %02x not supported\n",
-                        pInfo->formatVersion[0]);
+    res_read(&resData, pInfo, inBytes, length, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "icupkg: .res format version %02x.%02x not supported, or bundle malformed\n",
+                        pInfo->formatVersion[0], pInfo->formatVersion[1]);
         exit(U_UNSUPPORTED_ERROR);
     }
-
-    /* a resource bundle must contain at least one resource item */
-    bundleLength=length/4;
-
-    /* formatVersion 1.1 must have a root item and at least 5 indexes */
-    if( bundleLength<
-            (pInfo->formatVersion[1]==0 ? 1 : 1+5)
-    ) {
-        fprintf(stderr, "icupkg: too few bytes (%d after header) for a resource bundle\n",
-                        length);
-        exit(U_INDEX_OUTOFBOUNDS_ERROR);
-    }
-
-    inBundle=(const Resource *)inBytes;
-    rootRes=ds->readUInt32(*inBundle);
-
-    ures_enumDependencies(
-        ds, itemName, inBundle, bundleLength,
-        rootRes, NULL, NULL, 0,
-        check, context,
-        pErrorCode);
 
     /*
      * if the bundle attributes are present and the nofallback flag is not set,
      * then add the parent bundle as a dependency
      */
-    if(pInfo->formatVersion[1]>=1) {
-        int32_t indexes[URES_INDEX_TOP];
-        const int32_t *inIndexes;
-
-        inIndexes=(const int32_t *)inBundle+1;
-        indexes[URES_INDEX_LENGTH]=udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH]);
-        if(indexes[URES_INDEX_LENGTH]>URES_INDEX_ATTRIBUTES) {
-            indexes[URES_INDEX_ATTRIBUTES]=udata_readInt32(ds, inIndexes[URES_INDEX_ATTRIBUTES]);
-            if(0==(indexes[URES_INDEX_ATTRIBUTES]&URES_ATT_NO_FALLBACK)) {
-                /* this bundle participates in locale fallback */
-                checkParent(itemName, check, context, pErrorCode);
-            }
+    if(pInfo->formatVersion[0]>1 || (pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]>=1)) {
+        if(!resData.noFallback) {
+            /* this bundle participates in locale fallback */
+            checkParent(itemName, check, context, pErrorCode);
         }
     }
+
+    NativeItem nativePool;
+
+    if(resData.usesPoolBundle) {
+        char poolName[200];
+        makeTargetName(itemName, "pool", 4, ".res", poolName, (int32_t)sizeof(poolName), pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return;
+        }
+        check(context, itemName, poolName);
+        // TODO: The Package should be passed in.
+        // Since the context is always a Package, we could just redeclare it.
+        Package *pkg=(Package *)context;
+        int32_t index=pkg->findItem(poolName);
+        if(index<0) {
+            // We cannot work with a bundle if its pool resource is missing.
+            // check() already printed a complaint.
+            return;
+        }
+        // TODO: Cache the native version in the Item itself.
+        nativePool.setItem(pkg->getItem(index), ures_swap);
+        const UDataInfo *poolInfo=nativePool.getDataInfo();
+        if(poolInfo->formatVersion[0]<=1) {
+            fprintf(stderr, "icupkg: %s is not a pool bundle\n", poolName);
+            return;
+        }
+        const int32_t *poolIndexes=(const int32_t *)nativePool.getBytes()+1;
+        int32_t poolIndexLength=poolIndexes[URES_INDEX_LENGTH]&0xff;
+        if(!(poolIndexLength>URES_INDEX_POOL_CHECKSUM &&
+             (poolIndexes[URES_INDEX_ATTRIBUTES]&URES_ATT_IS_POOL_BUNDLE))
+        ) {
+            fprintf(stderr, "icupkg: %s is not a pool bundle\n", poolName);
+            return;
+        }
+        if(resData.pRoot[1+URES_INDEX_POOL_CHECKSUM]==poolIndexes[URES_INDEX_POOL_CHECKSUM]) {
+            resData.poolBundleKeys=(const char *)(poolIndexes+poolIndexLength);
+        } else {
+            fprintf(stderr, "icupkg: %s has mismatched checksum for %s\n", poolName, itemName);
+            return;
+        }
+    }
+
+    ures_enumDependencies(
+        itemName, &resData,
+        resData.rootRes, NULL, NULL, 0,
+        check, context,
+        pErrorCode);
 }
 
 // get dependencies from conversion tables --------------------------------- ***
@@ -616,52 +572,59 @@ U_NAMESPACE_BEGIN
 
 void
 Package::enumDependencies(Item *pItem, void *context, CheckDependency check) {
-    const UDataInfo *pInfo;
-    const uint8_t *inBytes;
-    int32_t format, length, infoLength, itemHeaderLength;
-    UErrorCode errorCode;
-
-    errorCode=U_ZERO_ERROR;
-    pInfo=getDataInfo(pItem->data,pItem->length, infoLength, itemHeaderLength, &errorCode);
+    int32_t infoLength, itemHeaderLength;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UDataInfo *pInfo=getDataInfo(pItem->data, pItem->length, infoLength, itemHeaderLength, &errorCode);
     if(U_FAILURE(errorCode)) {
         return; // should not occur because readFile() checks headers
     }
 
     // find the data format and call the corresponding function, if any
-    format=getDataFormat(pInfo->dataFormat);
+    int32_t format=getDataFormat(pInfo->dataFormat);
     if(format>=0) {
-        UDataSwapper *ds;
-
-        // TODO: share/cache swappers
-        ds=udata_openSwapper((UBool)pInfo->isBigEndian, pInfo->charsetFamily, U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "icupkg: udata_openSwapper(\"%s\") failed - %s\n",
-                    pItem->name, u_errorName(errorCode));
-            exit(errorCode);
-        }
-
-        ds->printError=printError;
-        ds->printErrorContext=stderr;
-
-        inBytes=pItem->data+itemHeaderLength;
-        length=pItem->length-itemHeaderLength;
-
         switch(format) {
         case FMT_RES:
-            ures_enumDependencies(ds, pItem->name, pInfo, inBytes, length, check, context, &errorCode);
-            break;
+            {
+                /*
+                 * Swap the resource bundle (if necessary) so that we can use
+                 * the normal runtime uresdata.c code to read it.
+                 * We do not want to duplicate that code, especially not together with on-the-fly swapping.
+                 */
+                NativeItem nrb(pItem, ures_swap);
+                ures_enumDependencies(pItem->name, nrb.getDataInfo(), nrb.getBytes(), nrb.getLength(), check, context, &errorCode);
+                break;
+            }
         case FMT_CNV:
-            ucnv_enumDependencies(ds, pItem->name, pInfo, inBytes, length, check, context, &errorCode);
-            break;
+            {
+                // TODO: share/cache swappers
+                UDataSwapper *ds=udata_openSwapper(
+                                    (UBool)pInfo->isBigEndian, pInfo->charsetFamily,
+                                    U_IS_BIG_ENDIAN, U_CHARSET_FAMILY,
+                                    &errorCode);
+                if(U_FAILURE(errorCode)) {
+                    fprintf(stderr, "icupkg: udata_openSwapper(\"%s\") failed - %s\n",
+                            pItem->name, u_errorName(errorCode));
+                    exit(errorCode);
+                }
+
+                ds->printError=printError;
+                ds->printErrorContext=stderr;
+
+                const uint8_t *inBytes=pItem->data+itemHeaderLength;
+                int32_t length=pItem->length-itemHeaderLength;
+
+                ucnv_enumDependencies(ds, pItem->name, pInfo, inBytes, length, check, context, &errorCode);
+                udata_closeSwapper(ds);
+                break;
+            }
         default:
             break;
         }
-
-        udata_closeSwapper(ds);
 
         if(U_FAILURE(errorCode)) {
             exit(errorCode);
         }
     }
 }
+
 U_NAMESPACE_END
