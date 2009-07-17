@@ -37,7 +37,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     int    invalidCharLength;
     
     /* maximum number of indexed bytes */
-    private static final int EXT_MAX_BYTES = 0x1f;
+    protected static final int EXT_MAX_BYTES = 0x1f;
 
     /* store previous UChars/chars to continue partial matches */
     byte[] preToUArray = new byte[EXT_MAX_BYTES];

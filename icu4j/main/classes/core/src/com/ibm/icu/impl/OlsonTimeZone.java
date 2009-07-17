@@ -459,7 +459,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
         // Type data must be of the same size as the transitions list        
         r = res.get(2);
-        typeData = r.getBinary().array();
+        typeData = r.getBinary(null);
         if (typeData.length != transitionCount) {
             throw new IllegalArgumentException("Invalid Format");
         }

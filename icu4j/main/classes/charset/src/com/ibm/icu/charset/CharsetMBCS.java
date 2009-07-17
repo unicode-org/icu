@@ -1650,7 +1650,7 @@ class CharsetMBCS extends CharsetICU {
         }
 
         /*
-         * this works like natchFromU() except - the first character is in pre - no trie is used - the returned
+         * this works like matchFromU() except - the first character is in pre - no trie is used - the returned
          * matchLength is not offset by 2
          */
         private int matchToU(byte sisoState, byte[] preArray, int preArrayBegin, int preLength, ByteBuffer source,
@@ -1910,9 +1910,23 @@ class CharsetMBCS extends CharsetICU {
             }
 
             /* try to match */
-            match = matchToU((byte) -1, source.array(), source.position(), source.limit(), null, value, useFallback, true);
+            byte[] sourceArray;
+            int sourcePosition, sourceLimit;
+            if (source.isReadOnly()) {
+                // source.array() would throw an exception
+                sourcePosition = source.position();  // relative to source.array()
+                sourceArray = new byte[Math.min(source.remaining(), EXT_MAX_BYTES)];
+                source.get(sourceArray).position(sourcePosition);
+                sourcePosition = 0;  // relative to sourceArray
+                sourceLimit = sourceArray.length;
+            } else {
+                sourceArray = source.array();
+                sourcePosition = source.position();
+                sourceLimit = source.limit();
+            }
+            match = matchToU((byte) -1, sourceArray, sourcePosition, sourceLimit, null, value, useFallback, true);
 
-            if (match == (source.limit() - source.position())) {
+            if (match == source.remaining()) {
                 /* write result for simple, single-character conversion */
                 if (TO_U_IS_CODE_POINT(value[0])) {
                     return TO_U_GET_CODE_POINT(value[0]);

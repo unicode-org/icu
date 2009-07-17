@@ -15,6 +15,8 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.MissingResourceException;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -593,7 +595,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(b.getSize()>0){
                 logln("%%ALIAS mechanism works");
             }else{
-                errln("%%ALIAS mechanism failed for iw_IL collations");
+                errln("%%ALIAS mechanism failed for iw_IL NumberPatterns");
             }
         }else{
             errln("%%ALIAS mechanism failed for iw_IL");
@@ -1000,5 +1002,49 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }catch(MissingResourceException ex){
             warnln("Failed to load data for abbreviated month names");
         }
+    }
+    private Set<String> setFromEnumeration(Enumeration<String> e) {
+        TreeSet<String> set = new TreeSet<String>();
+        while (e.hasMoreElements()) {
+            set.add(e.nextElement());
+        }
+        return set;
+    }
+    /**
+     * Test ICUResourceBundle.getKeys() for a whole bundle (top-level resource).
+     * JDK JavaDoc for ResourceBundle.getKeys() says that it returns
+     * "an Enumeration of the keys contained in this ResourceBundle and its parent bundles."
+     */
+    public void TestICUGetKeysAtTopLevel() {
+        String baseName="com/ibm/icu/dev/data/testdata";
+        UResourceBundle te_IN = UResourceBundle.getBundleInstance(baseName, "te_IN", testLoader);
+        UResourceBundle te = UResourceBundle.getBundleInstance(baseName, "te", testLoader);
+        Set<String> te_set = setFromEnumeration(te.getKeys());
+        Set<String> te_IN_set = setFromEnumeration(te_IN.getKeys());
+        assertTrue("te.getKeys().contains(string_only_in_Root)", te_set.contains("string_only_in_Root"));
+        assertTrue("te.getKeys().contains(string_only_in_te)", te_set.contains("string_only_in_te"));
+        assertFalse("te.getKeys().contains(string_only_in_te_IN)", te_set.contains("string_only_in_te_IN"));
+        assertTrue("te_IN.getKeys().contains(string_only_in_Root)", te_IN_set.contains("string_only_in_Root"));
+        assertTrue("te_IN.getKeys().contains(string_only_in_te)", te_IN_set.contains("string_only_in_te"));
+        assertTrue("te_IN.getKeys().contains(string_only_in_te_IN)", te_IN_set.contains("string_only_in_te_IN"));
+        // TODO: Check for keys of alias resource items
+    }
+    /**
+     * Test ICUResourceBundle.getKeys() for a resource item (not a whole bundle/top-level resource).
+     * This does not take parent bundles into account.
+     */
+    public void TestICUGetKeysForResourceItem() {
+        String baseName="com/ibm/icu/dev/data/testdata";
+        UResourceBundle te = UResourceBundle.getBundleInstance(baseName, "te", testLoader);
+        UResourceBundle tagged_array_in_Root_te = te.get("tagged_array_in_Root_te");
+        Set<String> keys = setFromEnumeration(tagged_array_in_Root_te.getKeys());
+        assertTrue("tagged_array_in_Root_te.getKeys().contains(tag0)", keys.contains("tag0"));
+        assertTrue("tagged_array_in_Root_te.getKeys().contains(tag1)", keys.contains("tag1"));
+        assertFalse("tagged_array_in_Root_te.getKeys().contains(tag7)", keys.contains("tag7"));
+        assertFalse("tagged_array_in_Root_te.getKeys().contains(tag12)", keys.contains("tag12"));
+        UResourceBundle array_in_Root_te = te.get("array_in_Root_te");
+        assertFalse("array_in_Root_te.getKeys().hasMoreElements()", array_in_Root_te.getKeys().hasMoreElements());
+        UResourceBundle string_in_Root_te = te.get("string_in_Root_te");
+        assertFalse("string_in_Root_te.getKeys().hasMoreElements()", string_in_Root_te.getKeys().hasMoreElements());
     }
 }

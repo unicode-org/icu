@@ -1834,8 +1834,7 @@ public final class RuleBasedCollator extends Collator
                     // %%CollationBin
                     if(buf!=null){
                     //     m_rules_ = (String)rules[1][1];
-                        byte map[] = buf.array();
-                        CollatorReader.initRBC(this, map);
+                        CollatorReader.initRBC(this, buf);
                         /*
                         BufferedInputStream input =
                                                  new BufferedInputStream(
