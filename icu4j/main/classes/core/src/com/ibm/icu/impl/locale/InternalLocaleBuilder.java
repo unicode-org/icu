@@ -145,7 +145,10 @@ public final class InternalLocaleBuilder {
                 if (_kwdMap == null) {
                     _kwdMap = new HashMap<String, String>(kwdtags.length / 2);
                 }
-                _kwdMap.put(kwdkey, kwdtype);
+                String prevVal = _kwdMap.put(kwdkey, kwdtype);
+                if (prevVal != null) {
+                    throw new LocaleSyntaxException("Ill-formed LDML extension containing duplicated keys: " + value);
+                }
             }
         } else {
             // other extensions including privateuse
