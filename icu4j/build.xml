@@ -11,6 +11,7 @@
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <property name="icu4j.jar.file" value="icu4j.jar"/>
+    <property name="icu4j-core.jar.file" value="icu4j-core.jar"/>
     <property name="icu4j-collate.jar.file" value="icu4j-collate.jar"/>
     <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
     <property name="icu4j-localespi.jar.file" value="icu4j-localespi.jar"/>
@@ -76,6 +77,7 @@
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
 
         <delete file="${icu4j.jar.file}"/>
+        <delete file="${icu4j-core.jar.file}"/>
         <delete file="${icu4j-collate.jar.file}"/>
         <delete file="${icu4j-charsets.jar.file}"/>
         <delete file="${icu4j-localespi.jar.file}"/>
@@ -146,7 +148,7 @@
                 <pathelement path="${icu4j.core.jar}"/>
                 <pathelement path="${icu4j.collate.jar}"/>
                 <pathelement path="${icu4j.charset.jar}"/>
-		<pathelement path="${icu4j.translit.jar}"/>
+                <pathelement path="${icu4j.translit.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
                 <pathelement path="${icu4j.core-tests.jar}"/>
                 <pathelement path="${icu4j.collate-tests.jar}"/> 
@@ -180,6 +182,18 @@
         </java>
     </target>
 
+    <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
+        <java classname="com.ibm.icu.dev.test.TestAllTranslit" fork="yes" failonerror="true">
+            <arg line="-n"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.translit.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.translit-tests.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="localespiCheck" if="is.java6.plus" depends="info" description="Run the ICU4J Locale SPI test suite">
         <antcall target="_runLocalespiCheck"/>
     </target>
@@ -195,26 +209,41 @@
         </java>
     </target>
 
-    <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
-        <java classname="com.ibm.icu.dev.test.TestAllTranslit" fork="yes" failonerror="true">
-            <arg line="-n"/>
-            <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.translit-tests.jar}"/>
-            </classpath>
-        </java>
-    </target>
-
     <!-- jar targets -->
-    <target name="jar" depends="main" description="Build ICU4J API jar files">
-        <copy file="${icu4j.core.jar}" tofile="${icu4j.jar.file}"/>
+    <target name="jar" depends="main, icu4jJar" description="Build ICU4J API jar files">
+        <copy file="${icu4j.core.jar}" tofile="${icu4j-core.jar.file}"/>
         <copy file="${icu4j.collate.jar}" tofile="${icu4j-collate.jar.file}"/>
         <copy file="${icu4j.charset.jar}" tofile="${icu4j-charsets.jar.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}"/>
         <copy file="${icu4j.translit.jar}" tofile="${icu4j-translit.jar.file}"/>
     </target>
+
+    <target name="icu4jJar" depends="info, core, collate, translit" description="Build ICU4J all-in-one core jar">
+        <mkdir dir="${out.dir}"/>
+
+        <!-- manifest -->
+        <copy file="${icu4j.core.dir}/manifest.stub" todir="${out.dir}">
+            <filterset>
+                <filter token="SPECVERSION" value="${jar.spec.version}"/>
+                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
+                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+            </filterset>
+        </copy>
+
+        <!-- jar -->
+        <jar jarfile="${icu4j.jar.file}"
+                compress="true"
+                manifest="${out.dir}/manifest.stub">
+            <fileset dir="${icu4j.core.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.collate.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.translit.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${shared.dir}/licenses">
+                <include name="license.html"/>
+                <include name="unicode-license.txt"/>
+            </fileset>
+        </jar>
+    </target>
+
 
     <target name="jarDocs" depends="docs" description="Build ICU4J API doc jar file">
         <jar jarfile="${icu4jdocs.jar.file}" compress="true" basedir="${doc.dir}"/>
