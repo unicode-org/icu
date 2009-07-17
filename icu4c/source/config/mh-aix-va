@@ -67,12 +67,17 @@ STATIC_O = o
 FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
+SHARED_OBJECT_NO_VERSION=  $(basename $(SO_TARGET)).$(SOBJ)
 
 ## Build archive from shared object
 %.a : %.so
-	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $<
+	ln -f $< $(SHARED_OBJECT_NO_VERSION) 
+	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	rm -f $(SHARED_OBJECT_NO_VERSION)
 $(LIBDIR)/%.a : %.so
-	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $<
+	ln -f $< $(SHARED_OBJECT_NO_VERSION) 
+	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	rm -f $(SHARED_OBJECT_NO_VERSION)
 
 ## Build import list from export list
 %.e : %.exp
