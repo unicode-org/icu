@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -59,6 +59,26 @@ uprv_isInvariantUString(const UChar *s, int32_t length);
 #   define U_UPPER_ORDINAL(x) (((x) < 'J') ? ((x)-'A') : \
                               (((x) < 'S') ? ((x)-'J'+9) : \
                                ((x)-'S'+18)))
+#else
+#   error Unknown charset family!
+#endif
+
+/**
+ * Compare two EBCDIC invariant-character strings in ASCII order.
+ * @internal
+ */
+U_INTERNAL int32_t U_EXPORT2
+uprv_compareInvEbcdicAsAscii(const char *s1, const char *s2);
+
+/**
+ * \def uprv_compareInvCharsAsAscii
+ * Compare two invariant-character strings in ASCII order.
+ * @internal
+ */
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define uprv_compareInvCharsAsAscii(s1, s2) uprv_strcmp(s1, s2)
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define uprv_compareInvCharsAsAscii(s1, s2) uprv_compareInvEbcdicAsAscii(s1, s2)
 #else
 #   error Unknown charset family!
 #endif

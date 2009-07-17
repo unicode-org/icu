@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,14 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "udataswp.h"
+
+/*
+ * Does the data look like a collation binary?
+ * @internal
+ */
+U_INTERNAL UBool U_EXPORT2
+ucol_looksLikeCollationBinary(const UDataSwapper *ds,
+                              const void *inData, int32_t length);
 
 /**
  * Swap a header-less collation binary, inside a resource bundle or ucadata.icu.

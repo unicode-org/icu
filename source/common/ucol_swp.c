@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2006, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -101,6 +101,49 @@ utrie_swap(const UDataSwapper *ds,
 }
 
 #if !UCONFIG_NO_COLLATION
+
+/* Modified copy of the beginning of ucol_swapBinary(). */
+U_CAPI UBool U_EXPORT2
+ucol_looksLikeCollationBinary(const UDataSwapper *ds,
+                              const void *inData, int32_t length) {
+    const uint8_t *inBytes;
+    const UCATableHeader *inHeader;
+    UCATableHeader header={ 0 };
+
+    if(ds==NULL || inData==NULL || length<-1) {
+        return FALSE;
+    }
+
+    inBytes=(const uint8_t *)inData;
+    inHeader=(const UCATableHeader *)inData;
+
+    /*
+     * The collation binary must contain at least the UCATableHeader,
+     * starting with its size field.
+     * sizeof(UCATableHeader)==42*4 in ICU 2.8
+     * check the length against the header size before reading the size field
+     */
+    if(length<0) {
+        header.size=udata_readInt32(ds, inHeader->size);
+    } else if((length<(42*4) || length<(header.size=udata_readInt32(ds, inHeader->size)))) {
+        return FALSE;
+    }
+
+    header.magic=ds->readUInt32(inHeader->magic);
+    if(!(
+        header.magic==UCOL_HEADER_MAGIC &&
+        inHeader->formatVersion[0]==2 &&
+        inHeader->formatVersion[1]>=3
+    )) {
+        return FALSE;
+    }
+
+    if(inHeader->isBigEndian!=ds->inIsBigEndian || inHeader->charSetFamily!=ds->inCharset) {
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 /* swap a header-less collation binary, inside a resource bundle or ucadata.icu */
 U_CAPI int32_t U_EXPORT2

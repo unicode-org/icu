@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -453,7 +453,7 @@ uprv_compareInvAscii(const UDataSwapper *ds,
 
         c2=*localString++;
         if(!UCHAR_IS_INVARIANT(c2)) {
-            c1=-2;
+            c2=-2;
         }
 
         if((c1-=c2)!=0) {
@@ -500,7 +500,7 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
 
         c2=*localString++;
         if(!UCHAR_IS_INVARIANT(c2)) {
-            c1=-2;
+            c2=-2;
         }
 
         if((c1-=c2)!=0) {
@@ -512,4 +512,25 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
 
     /* strings start with same prefix, compare lengths */
     return outLength-localLength;
+}
+
+U_CAPI int32_t U_EXPORT2
+uprv_compareInvEbcdicAsAscii(const char *s1, const char *s2) {
+    int32_t c1, c2;
+
+    for(;; ++s1, ++s2) {
+        c1=(uint8_t)*s1;
+        c2=(uint8_t)*s2;
+        if(c1!=c2) {
+            if(c1!=0 && ((c1=asciiFromEbcdic[c1])==0 || !UCHAR_IS_INVARIANT(c1))) {
+                c1=-(int32_t)(uint8_t)*s1;
+            }
+            if(c2!=0 && ((c2=asciiFromEbcdic[c2])==0 || !UCHAR_IS_INVARIANT(c2))) {
+                c2=-(int32_t)(uint8_t)*s2;
+            }
+            return c1-c2;
+        } else if(c1==0) {
+            return 0;
+        }
+    }
 }

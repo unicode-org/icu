@@ -90,7 +90,7 @@ static void write_tabs(FileStream* os){
 }
 
 /*get ID for each element. ID is globally unique.*/
-static char* getID(const char* id, char* curKey, char* result) {
+static char* getID(const char* id, const char* curKey, char* result) {
     if(curKey == NULL) {
         result = (char *)uprv_malloc(sizeof(char)*uprv_strlen(id) + 1);
         uprv_memset(result, 0, sizeof(char)*uprv_strlen(id) + 1);
@@ -124,7 +124,7 @@ static char* getID(const char* id, char* curKey, char* result) {
  * conversion is not portable across platforms with different endianess.
  */
 
-static uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc){
+uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc){
     int32_t crc;
     uint32_t temp1;
     uint32_t temp2;
@@ -533,13 +533,14 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
  */
 static char *printContainer(struct SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
 {
-    char *resname = NULL;
+    char resKeyBuffer[8];
+    const char *resname = NULL;
     char *sid = NULL;
 
     write_tabs(out);
 
-    if (res->fKey >= 0 && uprv_strcmp(srBundle->fKeys + res->fKey, "") != 0) {
-        resname = srBundle->fKeys + res->fKey;
+    resname = res_getKeyString(srBundle, res, resKeyBuffer);
+    if (resname != NULL && *resname != 0) {
         sid = getID(id, resname, sid);
     } else {
         sid = getID(id, NULL, sid);
@@ -979,7 +980,6 @@ res_write_xml(struct SResource *res, const char* id,  const char* language, UBoo
              return;
 
         case URES_TABLE:
-        case URES_TABLE32:
              table_write_xml     (res, id, language, isTopLevel, status);
              return;
 
