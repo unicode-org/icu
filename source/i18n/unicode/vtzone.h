@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and         *
+* Copyright (C) 2007-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -368,25 +368,25 @@ private:
     void writeHeaders(VTZWriter& w, UErrorCode& status) const;
     void writeFooter(VTZWriter& writer, UErrorCode& status) const;
 
-    void writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                               int32_t fromOffset, int32_t toOffset, UDate time, UBool withRDATE,
                               UErrorCode& status) const;
-    void writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                              int32_t fromOffset, int32_t toOffset,
                              int32_t month, int32_t dayOfMonth, UDate startTime, UDate untilTime,
                              UErrorCode& status) const;
-    void writeZonePropsByDOW(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void writeZonePropsByDOW(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                              int32_t fromOffset, int32_t toOffset,
                              int32_t month, int32_t weekInMonth, int32_t dayOfWeek,
                              UDate startTime, UDate untilTime, UErrorCode& status) const;
-    void writeZonePropsByDOW_GEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void writeZonePropsByDOW_GEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                      int32_t fromOffset, int32_t toOffset,
                                      int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                      UDate startTime, UDate untilTime, UErrorCode& status) const;
     void writeZonePropsByDOW_GEQ_DOM_sub(VTZWriter& writer, int32_t month, int32_t dayOfMonth,
                                          int32_t dayOfWeek, int32_t numDays,
                                          UDate untilTime, int32_t fromOffset, UErrorCode& status) const;
-    void writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                      int32_t fromOffset, int32_t toOffset,
                                      int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                      UDate startTime, UDate untilTime, UErrorCode& status) const;
@@ -394,7 +394,7 @@ private:
                         int32_t fromRawOffset, int32_t fromDSTSavings,
                         UDate startTime, UErrorCode& status) const;
 
-    void beginZoneProps(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+    void beginZoneProps(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                         int32_t fromOffset, int32_t toOffset, UDate startTime, UErrorCode& status) const;
     void endZoneProps(VTZWriter& writer, UBool isDst, UErrorCode& status) const;
     void beginRRULE(VTZWriter& writer, int32_t month, UErrorCode& status) const;
