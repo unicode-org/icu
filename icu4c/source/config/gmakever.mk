@@ -6,6 +6,10 @@
 # Make sure we have the right version of Make.
 
 at_least=3.80
+ifeq ($(MACHTYPE),i370-ibm-mvs)
+at_least=3.76.1
+endif
+
 latest_a=$(firstword $(sort $(MAKE_VERSION) $(at_least)))
 
 ifneq ($(at_least),$(latest_a))
