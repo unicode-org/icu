@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -354,12 +354,12 @@ static void millisToOffset(int32_t millis, UnicodeString& str) {
 /*
  * Create a default TZNAME from TZID
  */
-static void getDefaultTZName(const UnicodeString tzid, UBool isDST, UnicodeString& tzname) {
-    tzname = tzid;
+static void getDefaultTZName(const UnicodeString tzid, UBool isDST, UnicodeString& zonename) {
+    zonename = tzid;
     if (isDST) {
-        tzname += UNICODE_STRING_SIMPLE("(DST)");
+        zonename += UNICODE_STRING_SIMPLE("(DST)");
     } else {
-        tzname += UNICODE_STRING_SIMPLE("(STD)");
+        zonename += UNICODE_STRING_SIMPLE("(STD)");
     }
 }
 
@@ -519,7 +519,7 @@ rruleParseError:
     }
 }
 
-static TimeZoneRule* createRuleByRRULE(const UnicodeString& tzname, int rawOffset, int dstSavings, UDate start,
+static TimeZoneRule* createRuleByRRULE(const UnicodeString& zonename, int rawOffset, int dstSavings, UDate start,
                                        UVector* dates, int fromOffset, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return NULL;
@@ -712,7 +712,7 @@ static TimeZoneRule* createRuleByRRULE(const UnicodeString& tzname, int rawOffse
     if (adtr == NULL) {
         goto unsupportedRRule;
     }
-    return new AnnualTimeZoneRule(tzname, rawOffset, dstSavings, adtr, startYear, endYear);
+    return new AnnualTimeZoneRule(zonename, rawOffset, dstSavings, adtr, startYear, endYear);
 
 unsupportedRRule:
     status = U_INVALID_STATE_ERROR;
@@ -722,7 +722,7 @@ unsupportedRRule:
 /*
  * Create a TimeZoneRule by the RDATE definition
  */
-static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawOffset, int32_t dstSavings,
+static TimeZoneRule* createRuleByRDATE(const UnicodeString& zonename, int32_t rawOffset, int32_t dstSavings,
                                        UDate start, UVector* dates, int32_t fromOffset, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return NULL;
@@ -731,7 +731,7 @@ static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawO
     if (dates == NULL || dates->size() == 0) {
         // When no RDATE line is provided, use start (DTSTART)
         // as the transition time
-        retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
+        retVal = new TimeArrayTimeZoneRule(zonename, rawOffset, dstSavings,
             &start, 1, DateTimeRule::UTC_TIME);
     } else {
         // Create an array of transition times
@@ -749,7 +749,7 @@ static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawO
                 return NULL;
             }
         }
-        retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
+        retVal = new TimeArrayTimeZoneRule(zonename, rawOffset, dstSavings,
             times, size, DateTimeRule::UTC_TIME);
         uprv_free(times);
     }
@@ -1324,7 +1324,7 @@ VTimeZone::parse(UErrorCode& status) {
     UBool dst = FALSE;      // current zone type
     UnicodeString from;     // current zone from offset
     UnicodeString to;       // current zone offset
-    UnicodeString tzname;   // current zone name
+    UnicodeString zonename;   // current zone name
     UnicodeString dtstart;  // current zone starts
     UBool isRRULE = FALSE;  // true if the rule is described by RRULE
     int32_t initialRawOffset = 0;   // initial offset
@@ -1398,7 +1398,7 @@ VTimeZone::parse(UErrorCode& status) {
                     isRRULE = FALSE;
                     from.remove();
                     to.remove();
-                    tzname.remove();
+                    zonename.remove();
                     dst = isDST;
                     state = TZI;
                 } else {
@@ -1414,7 +1414,7 @@ VTimeZone::parse(UErrorCode& status) {
             if (name.compare(ICAL_DTSTART) == 0) {
                 dtstart = value;
             } else if (name.compare(ICAL_TZNAME) == 0) {
-                tzname = value;
+                zonename = value;
             } else if (name.compare(ICAL_TZOFFSETFROM) == 0) {
                 from = value;
             } else if (name.compare(ICAL_TZOFFSETTO) == 0) {
@@ -1458,9 +1458,9 @@ VTimeZone::parse(UErrorCode& status) {
                 if (dtstart.length() == 0 || from.length() == 0 || to.length() == 0) {
                     goto cleanupParse;
                 }
-                // if tzname is not available, create one from tzid
-                if (tzname.length() == 0) {
-                    getDefaultTZName(tzid, dst, tzname);
+                // if zonename is not available, create one from tzid
+                if (zonename.length() == 0) {
+                    getDefaultTZName(tzid, dst, zonename);
                 }
 
                 // create a time zone rule
@@ -1502,9 +1502,9 @@ VTimeZone::parse(UErrorCode& status) {
                 // Create the rule
                 UDate actualStart = MAX_MILLIS;
                 if (isRRULE) {
-                    rule = createRuleByRRULE(tzname, rawOffset, dstSavings, start, dates, fromOffset, status);
+                    rule = createRuleByRRULE(zonename, rawOffset, dstSavings, start, dates, fromOffset, status);
                 } else {
-                    rule = createRuleByRDATE(tzname, rawOffset, dstSavings, start, dates, fromOffset, status);
+                    rule = createRuleByRDATE(zonename, rawOffset, dstSavings, start, dates, fromOffset, status);
                 }
                 if (U_FAILURE(status) || rule == NULL) {
                     goto cleanupParse;
@@ -1545,8 +1545,8 @@ VTimeZone::parse(UErrorCode& status) {
     }
 
     // Create a initial rule
-    getDefaultTZName(tzid, FALSE, tzname);
-    initialRule = new InitialTimeZoneRule(tzname,
+    getDefaultTZName(tzid, FALSE, zonename);
+    initialRule = new InitialTimeZoneRule(zonename,
         initialRawOffset, initialDSTSavings);
     if (initialRule == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -2178,13 +2178,13 @@ VTimeZone::writeFooter(VTZWriter& writer, UErrorCode& status) const {
  * Write a single start time
  */
 void
-VTimeZone::writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                 int32_t fromOffset, int32_t toOffset, UDate time, UBool withRDATE,
                                 UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
-    beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, time, status);
+    beginZoneProps(writer, isDst, zonename, fromOffset, toOffset, time, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -2205,14 +2205,14 @@ VTimeZone::writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeStr
  * Write start times defined by a DOM rule using VTIMEZONE RRULE
  */
 void
-VTimeZone::writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                int32_t fromOffset, int32_t toOffset,
                                int32_t month, int32_t dayOfMonth, UDate startTime, UDate untilTime,
                                UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
-    beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime, status);
+    beginZoneProps(writer, isDst, zonename, fromOffset, toOffset, startTime, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -2239,14 +2239,14 @@ VTimeZone::writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeStri
  * Write start times defined by a DOW rule using VTIMEZONE RRULE
  */
 void
-VTimeZone::writeZonePropsByDOW(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::writeZonePropsByDOW(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                int32_t fromOffset, int32_t toOffset,
                                int32_t month, int32_t weekInMonth, int32_t dayOfWeek,
                                UDate startTime, UDate untilTime, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
-    beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime, status);
+    beginZoneProps(writer, isDst, zonename, fromOffset, toOffset, startTime, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -2275,7 +2275,7 @@ VTimeZone::writeZonePropsByDOW(VTZWriter& writer, UBool isDst, const UnicodeStri
  * Write start times defined by a DOW_GEQ_DOM rule using VTIMEZONE RRULE
  */
 void
-VTimeZone::writeZonePropsByDOW_GEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::writeZonePropsByDOW_GEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                        int32_t fromOffset, int32_t toOffset,
                                        int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                        UDate startTime, UDate untilTime, UErrorCode& status) const {
@@ -2285,21 +2285,21 @@ VTimeZone::writeZonePropsByDOW_GEQ_DOM(VTZWriter& writer, UBool isDst, const Uni
     // Check if this rule can be converted to DOW rule
     if (dayOfMonth%7 == 1) {
         // Can be represented by DOW rule
-        writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 month, (dayOfMonth + 6)/7, dayOfWeek, startTime, untilTime, status);
         if (U_FAILURE(status)) {
             return;
         }
     } else if (month != UCAL_FEBRUARY && (MONTHLENGTH[month] - dayOfMonth)%7 == 6) {
         // Can be represented by DOW rule with negative week number
-        writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 month, -1*((MONTHLENGTH[month] - dayOfMonth + 1)/7), dayOfWeek, startTime, untilTime, status);
         if (U_FAILURE(status)) {
             return;
         }
     } else {
         // Otherwise, use BYMONTHDAY to include all possible dates
-        beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime, status);
+        beginZoneProps(writer, isDst, zonename, fromOffset, toOffset, startTime, status);
         if (U_FAILURE(status)) {
             return;
         }
@@ -2399,7 +2399,7 @@ VTimeZone::writeZonePropsByDOW_GEQ_DOM_sub(VTZWriter& writer, int32_t month, int
  * Write start times defined by a DOW_LEQ_DOM rule using VTIMEZONE RRULE
  */
 void
-VTimeZone::writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                                        int32_t fromOffset, int32_t toOffset,
                                        int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                        UDate startTime, UDate untilTime, UErrorCode& status) const {
@@ -2409,19 +2409,19 @@ VTimeZone::writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const Uni
     // Check if this rule can be converted to DOW rule
     if (dayOfMonth%7 == 0) {
         // Can be represented by DOW rule
-        writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 month, dayOfMonth/7, dayOfWeek, startTime, untilTime, status);
     } else if (month != UCAL_FEBRUARY && (MONTHLENGTH[month] - dayOfMonth)%7 == 0){
         // Can be represented by DOW rule with negative week number
-        writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 month, -1*((MONTHLENGTH[month] - dayOfMonth)/7 + 1), dayOfWeek, startTime, untilTime, status);
     } else if (month == UCAL_FEBRUARY && dayOfMonth == 29) {
         // Specical case for February
-        writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 UCAL_FEBRUARY, -1, dayOfWeek, startTime, untilTime, status);
     } else {
         // Otherwise, convert this to DOW_GEQ_DOM rule
-        writeZonePropsByDOW_GEQ_DOM(writer, isDst, tzname, fromOffset, toOffset,
+        writeZonePropsByDOW_GEQ_DOM(writer, isDst, zonename, fromOffset, toOffset,
                 month, dayOfMonth - 6, dayOfWeek, startTime, untilTime, status);
     }
 }
@@ -2472,7 +2472,7 @@ VTimeZone::writeFinalRule(VTZWriter& writer, UBool isDst, const AnnualTimeZoneRu
  * Write the opening section of zone properties
  */
 void
-VTimeZone::beginZoneProps(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
+VTimeZone::beginZoneProps(VTZWriter& writer, UBool isDst, const UnicodeString& zonename,
                           int32_t fromOffset, int32_t toOffset, UDate startTime, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
@@ -2505,7 +2505,7 @@ VTimeZone::beginZoneProps(VTZWriter& writer, UBool isDst, const UnicodeString& t
     // TZNAME
     writer.write(ICAL_TZNAME);
     writer.write(COLON);
-    writer.write(tzname);
+    writer.write(zonename);
     writer.write(ICAL_NEWLINE);
     
     // DTSTART

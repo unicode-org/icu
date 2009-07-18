@@ -661,7 +661,7 @@ typedef struct {
 
 
 // Comparason function used in quick sort.
-static int currencyNameComparator(const void* a, const void* b) {
+static int U_CALLCONV currencyNameComparator(const void* a, const void* b) {
     const CurrencyNameStruct* currName_1 = (const CurrencyNameStruct*)a;
     const CurrencyNameStruct* currName_2 = (const CurrencyNameStruct*)b;
     for (int32_t i = 0; 

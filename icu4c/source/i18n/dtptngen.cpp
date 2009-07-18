@@ -66,7 +66,10 @@ struct UResourceBundleAIterator {
 
 /* Must be C linkage to pass function pointer to the sort function */
 
-extern "C" static int32_t U_CALLCONV
+#if !defined (OS390)
+extern "C"
+#endif
+static int32_t U_CALLCONV
 ures_a_codepointSort(const void *context, const void *left, const void *right) {
     //CompareContext *cmp=(CompareContext *)context;
     return u_strcmp(((const UResAEntry *)left)->key,

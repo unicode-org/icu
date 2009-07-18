@@ -248,7 +248,7 @@
  * you must use the U_CAPI and U_EXPORT2 qualifiers.
  * @stable ICU 2.0
  */
-#if defined(OS390) && (__COMPILER_VER__ < 0x41020000) && defined(XP_CPLUSPLUS)
+#if defined(OS390) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
 #else
 #    define U_CALLCONV U_EXPORT2

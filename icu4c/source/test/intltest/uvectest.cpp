@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2004-2006, International Business Machines Corporation and
+ * Copyright (c) 2004-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -66,7 +66,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         errln("UVectorTest failure at line %d.\n", __LINE__);\
     }
 
-static int8_t
+static int8_t U_CALLCONV
 UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
     if (key1.integer > key2.integer) {
         return 1;
