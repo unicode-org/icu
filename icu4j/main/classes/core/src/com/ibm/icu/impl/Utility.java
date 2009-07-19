@@ -1002,8 +1002,30 @@ public final class Utility {
             if (i != 0) result.append(',');
             hex(s.charAt(i), result);
         }
+        return hex(s, 4, ",", result);
+    }
+    
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".  Append the output
+     * to the given StringBuffer.
+     */
+    public static StringBuffer hex(String s, int width, String separator, StringBuffer result) {
+        for (int i = 0; i < s.length(); ++i) {
+            if (i != 0) result.append(separator);
+            hex(s.charAt(i), width, result);
+        }
         return result;
     }
+    
+    
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".
+     */
+    public static String hex(String s, int width, String separator) {
+        return hex(s, width, separator, new StringBuffer()).toString();
+    }   
 
     /**
      * Split a string into pieces based on the given divider character
