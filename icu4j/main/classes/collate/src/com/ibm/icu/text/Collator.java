@@ -258,6 +258,15 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         }
         m_strength_ = newStrength;
     }
+    
+    /**
+     * @internal
+     */
+    public Collator setStrength2(int newStrength)
+    {
+        setStrength(newStrength);
+        return this;
+    }
 
     /**
      * <p>Set the decomposition mode of this Collator.  Setting this
