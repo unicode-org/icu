@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.regex.Matcher;
 
-import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -23,7 +22,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
  * Utilities that ought to be on collections, but aren't
  */
 public final class CollectionUtilities {
-    
+
     public static String join(Object[] array, String separator) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < array.length; ++i) {
@@ -57,14 +56,14 @@ public final class CollectionUtilities {
         }
         return target;
     }
-    
+
     public static Collection addAll(Iterator source, Collection target) {
         while (source.hasNext()) {
             target.add(source.next());
         }
         return target; // for chaining
     }
-    
+
     public static int size(Iterator source) {
         int result = 0;
         while (source.hasNext()) {
@@ -73,12 +72,12 @@ public final class CollectionUtilities {
         }
         return result;
     }
-    
+
 
     public static Map asMap(Object[][] source) {
         return asMap(source, new HashMap(), false);
     }
-    
+
     /**
      * Utility that ought to be on Map
      */
@@ -89,13 +88,13 @@ public final class CollectionUtilities {
         }
         return m;
     }
-    
+
     public Object getFirst(Collection c) {
         Iterator it = c.iterator();
         if (!it.hasNext()) return null;
         return it.next();
     }
-    
+
     public static Object getBest(Collection c, Comparator comp, int direction) {
         Iterator it = c.iterator();
         if (!it.hasNext()) return null;
@@ -119,14 +118,14 @@ public final class CollectionUtilities {
         }
         return bestSoFar;
     }
-    
+
     public interface ObjectMatcher {
         /**
          * Must handle null, never throw exception
          */
         boolean matches(Object o);
     }
-    
+
     public static class InverseMatcher implements ObjectMatcher {
         ObjectMatcher other;
         public ObjectMatcher set(ObjectMatcher toInverse) {
@@ -145,7 +144,7 @@ public final class CollectionUtilities {
         }
         return c;
     }
-    
+
     public static Collection retainAll(Collection c, ObjectMatcher f) {
         for (Iterator it = c.iterator(); it.hasNext();) {
             Object item = it.next();
@@ -153,7 +152,7 @@ public final class CollectionUtilities {
         }
         return c;
     }
-    
+
     public static boolean containsSome(Collection a, Collection b) {
         // fast paths
         if (a.size() == 0 || b.size() == 0) return false;
@@ -162,26 +161,23 @@ public final class CollectionUtilities {
         if (a instanceof SortedSet && b instanceof SortedSet) {
             SortedSet aa = (SortedSet) a;
             SortedSet bb = (SortedSet) b;
-            aa.containsAll(null);
             Comparator bbc = bb.comparator();
             Comparator aac = aa.comparator();
-            if (bbc == null) {
-                if (aac == null) {
-                    Iterator ai = aa.iterator();
-                    Iterator bi = bb.iterator();
-                    Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
-                    Comparable bo = (Comparable) bi.next();
-                    while (true) {
-                        int rel = ao.compareTo(bo);
-                        if (rel < 0) {
-                            if (!ai.hasNext()) return false;
-                            ao = (Comparable) ai.next();
-                        } else if (rel > 0) {
-                            if (!bi.hasNext()) return false;
-                            bo = (Comparable) bi.next();
-                        } else {
-                                return true;  
-                        }
+            if (bbc == null && aac == null) {
+                Iterator ai = aa.iterator();
+                Iterator bi = bb.iterator();
+                Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
+                Comparable bo = (Comparable) bi.next();
+                while (true) {
+                    int rel = ao.compareTo(bo);
+                    if (rel < 0) {
+                        if (!ai.hasNext()) return false;
+                        ao = (Comparable) ai.next();
+                    } else if (rel > 0) {
+                        if (!bi.hasNext()) return false;
+                        bo = (Comparable) bi.next();
+                    } else {
+                        return true;  
                     }
                 }
             } else if (bbc.equals(a)) {
@@ -208,40 +204,38 @@ public final class CollectionUtilities {
         }
         return false;
     }
-    
+
     public static boolean containsAll(Collection a, Collection b) {
         // fast paths
         if (a == b) return true;
         if (b.size() == 0) return true;
-        if (a.size() == 0) return false;
+        if (a.size() < b.size()) return false;
 
         if (a instanceof SortedSet && b instanceof SortedSet) {
             SortedSet aa = (SortedSet) a;
             SortedSet bb = (SortedSet) b;
             Comparator bbc = bb.comparator();
             Comparator aac = aa.comparator();
-            if (bbc == null) {
-                if (aac == null) {
-                    Iterator ai = aa.iterator();
-                    Iterator bi = bb.iterator();
-                    Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
-                    Comparable bo = (Comparable) bi.next();
-                    while (true) {
-                        int rel = ao.compareTo(bo);
-                        if (rel == 0) {
-                            if (!bi.hasNext()) return true;
-                            if (!ai.hasNext()) return false;
-                            bo = (Comparable) bi.next();
-                            ao = (Comparable) ai.next();
-                        } else if (rel < 0) {
-                            if (!ai.hasNext()) return false;
-                            ao = (Comparable) ai.next();
-                        } else {
-                            return false;  
-                        }
+            if (bbc == null && aac == null) {
+                Iterator ai = aa.iterator();
+                Iterator bi = bb.iterator();
+                Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
+                Comparable bo = (Comparable) bi.next();
+                while (true) {
+                    int rel = ao.compareTo(bo);
+                    if (rel == 0) {
+                        if (!bi.hasNext()) return true;
+                        if (!ai.hasNext()) return false;
+                        bo = (Comparable) bi.next();
+                        ao = (Comparable) ai.next();
+                    } else if (rel < 0) {
+                        if (!ai.hasNext()) return false;
+                        ao = (Comparable) ai.next();
+                    } else {
+                        return false;  
                     }
                 }
-            } else if (bbc.equals(a)) {
+            } else if (bbc.equals(aac)) {
                 Iterator ai = aa.iterator();
                 Iterator bi = bb.iterator();
                 Object ao = ai.next(); // these are ok, since the sizes are != 0
@@ -264,24 +258,24 @@ public final class CollectionUtilities {
         }
         return a.containsAll(b);
     }
-    
+
     public static boolean containsNone(Collection a, Collection b) {
         return !containsSome(a, b);
     }
-    
+
     /**
      * Used for results of getContainmentRelation
      */
     public static final int
-        ALL_EMPTY = 0,
-        NOT_A_SUPERSET_B = 1,
-        NOT_A_DISJOINT_B = 2,
-        NOT_A_SUBSET_B = 4,
-        NOT_A_EQUALS_B = NOT_A_SUBSET_B | NOT_A_SUPERSET_B,
-        A_PROPER_SUBSET_OF_B = NOT_A_DISJOINT_B | NOT_A_SUPERSET_B,
-        A_PROPER_SUPERSET_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B,
-        A_PROPER_OVERLAPS_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B | NOT_A_SUPERSET_B;
-    
+    ALL_EMPTY = 0,
+    NOT_A_SUPERSET_B = 1,
+    NOT_A_DISJOINT_B = 2,
+    NOT_A_SUBSET_B = 4,
+    NOT_A_EQUALS_B = NOT_A_SUBSET_B | NOT_A_SUPERSET_B,
+    A_PROPER_SUBSET_OF_B = NOT_A_DISJOINT_B | NOT_A_SUPERSET_B,
+    A_PROPER_SUPERSET_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B,
+    A_PROPER_OVERLAPS_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B | NOT_A_SUPERSET_B;
+
     /**
      * Assesses all the possible containment relations between collections A and B with one call.<br>
      * Returns an int with bits set, according to a "Venn Diagram" view of A vs B.<br>
@@ -295,7 +289,7 @@ public final class CollectionUtilities {
      * for A_DISJOINT_B, use (x & CollectionUtilities.NOT_A_DISJOINT_B) == 0<br>
      * for A_OVERLAPS_B, use (x & CollectionUtilities.NOT_A_DISJOINT_B) != 0<br>
      */
-     public static int getContainmentRelation(Collection a, Collection b) {
+    public static int getContainmentRelation(Collection a, Collection b) {
         if (a.size() == 0) {
             return (b.size() == 0) ? ALL_EMPTY : NOT_A_SUPERSET_B;
         } else if (b.size() == 0) {
@@ -324,71 +318,62 @@ public final class CollectionUtilities {
         return result.toString();
     }
 
-     /**
-      * Does one string contain another, starting at a specific offset?
-      * @param text
-      * @param offset
-      * @param other
-      * @return
-      */
-        public static int matchesAt(CharSequence text, int offset, CharSequence other) {
-            int len = other.length();
-            int i = 0;
-            int j = offset;
-            for (; i < len; ++i, ++j) {
-                char pc = other.charAt(i);
-                char tc = text.charAt(j);
-                if (pc != tc) return -1;
-            }
-            return i;
+    /**
+     * Does one string contain another, starting at a specific offset?
+     * @param text
+     * @param offset
+     * @param other
+     * @return
+     */
+    public static int matchesAt(CharSequence text, int offset, CharSequence other) {
+        int len = other.length();
+        int i = 0;
+        int j = offset;
+        for (; i < len; ++i, ++j) {
+            char pc = other.charAt(i);
+            char tc = text.charAt(j);
+            if (pc != tc) return -1;
         }
-
-        /**
-         * Returns the ending offset found by matching characters with testSet, until a position is found that doen't match
-         * @param string
-         * @param offset
-         * @param testSet
-         * @return
-         */
-        public int span(CharSequence string, int offset, UnicodeSet testSet) {
-            while (true) {
-                int newOffset = testSet.matchesAt(string, offset);
-                if (newOffset < 0) return offset;
-            }
-        }
-
-        /**
-         * Returns the ending offset found by matching characters with testSet, until a position is found that does match
-         * @param string
-         * @param offset
-         * @param testSet
-         * @return
-         */
-        public int spanNot(CharSequence string, int offset, UnicodeSet testSet) {
-            while (true) {
-                int newOffset = testSet.matchesAt(string, offset);
-                if (newOffset >= 0) return offset;
-                ++offset; // try next character position
-                // we don't have to worry about surrogates for this.
-            }
-        }
-
-    public static String prettyPrint(UnicodeSet uset, boolean compressRanges, UnicodeSet toQuote, Transliterator quoter, 
-            Comparator ordering, Comparator spaceComparator) {
-        PrettyPrinter pp = new PrettyPrinter().setCompressRanges(compressRanges);
-        if (toQuote != null) pp.setToQuote(toQuote);
-        if (ordering != null) pp.setOrdering(ordering);
-        if (spaceComparator != null) pp.setSpaceComparator(spaceComparator);
-        return pp.toPattern(uset);
+        return i;
     }
-    
+
+    /**
+     * Returns the ending offset found by matching characters with testSet, until a position is found that doen't match
+     * @param string
+     * @param offset
+     * @param testSet
+     * @return
+     */
+    public int span(CharSequence string, int offset, UnicodeSet testSet) {
+        while (true) {
+            int newOffset = testSet.matchesAt(string, offset);
+            if (newOffset < 0) return offset;
+        }
+    }
+
+    /**
+     * Returns the ending offset found by matching characters with testSet, until a position is found that does match
+     * @param string
+     * @param offset
+     * @param testSet
+     * @return
+     */
+    public int spanNot(CharSequence string, int offset, UnicodeSet testSet) {
+        while (true) {
+            int newOffset = testSet.matchesAt(string, offset);
+            if (newOffset >= 0) return offset;
+            ++offset; // try next character position
+            // we don't have to worry about surrogates for this.
+        }
+    }
+
     public static class MultiComparator implements Comparator {
         private Comparator[] comparators;
-    
+
         public MultiComparator (Comparator[] comparators) {
             this.comparators = comparators;
         }
-    
+
         /* Lexigraphic compare. Returns the first difference
          * @return zero if equal. Otherwise +/- (i+1) 
          * where i is the index of the first comparator finding a difference
@@ -460,7 +445,7 @@ public final class CollectionUtilities {
         }
         abstract public boolean isIncluded(Object item);
     }
-    
+
     public static class PrefixIterator extends FilteredIterator {
         private String prefix;
         public PrefixIterator set(Iterator baseIterator, String prefix) {
