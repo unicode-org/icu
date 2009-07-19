@@ -726,7 +726,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     }
 
     /* (non-Javadoc)
-     * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
+     * @see com.ibm.icu.dev.test.util.Freezable#isFrozen()
      */
     public boolean isFrozen() {
         // TODO Auto-generated method stub
@@ -734,7 +734,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
     }
 
     /* (non-Javadoc)
-     * @see com.ibm.icu.dev.test.util.Lockable#lock()
+     * @see com.ibm.icu.dev.test.util.Freezable#lock()
      */
     public UnicodeMap<T> freeze() {
         locked = true;
