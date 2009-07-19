@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -134,29 +133,73 @@ public class TestUtilities extends TestFmwk {
     }
     
     public void TestCollectionUtilitySpeed() {
-        HashSet hs1 = new HashSet();
-        HashSet hs2 = new HashSet();
-        int size = 100000;
-        int iterations = 100;
-        String prefix = "abcde";
-        String postfix = "abcde";
-        int start1 = 0; // 1 for some, 0 for all
-        for (int i = 0; i < size; i += 2) hs1.add(prefix + String.valueOf(i) + postfix);
-        for (int i = start1; i < size; i += 2) hs2.add(prefix + String.valueOf(i) + postfix);
-        TreeSet ts1 = new TreeSet(hs1);
-        TreeSet ts2 = new TreeSet(hs2);
-        CollectionUtilities.containsAll(hs1, hs2);
+        TreeSet ts1 = new TreeSet();
+        TreeSet ts2 = new TreeSet();
+        int size = 1000;
+        int iterations = 1000;
+        String prefix =  "abc";
+        String postfix = "nop";
+        for (int i = 0; i < size; ++i) {
+            ts1.add(prefix + String.valueOf(i) + postfix);
+            ts2.add(prefix + String.valueOf(i) + postfix);
+        }
+        // warm up
         CollectionUtilities.containsAll(ts1, ts2);
-        long start, end;
-        boolean temp = false;
-        start = System.currentTimeMillis();
-        for (int i = 0; i < iterations; ++i) temp = CollectionUtilities.containsAll(hs1, hs2);
-        end = System.currentTimeMillis();
-        logln(temp + " " + (end - start)/1000.0);
-        start = System.currentTimeMillis();
-        for (int i = 0; i < iterations; ++i) temp = CollectionUtilities.containsAll(ts1, ts2);
-        end = System.currentTimeMillis();
-        logln(temp + " " + (end - start)/1000.0);
+        ts1.containsAll(ts2);
+
+        timeAndCompare(ts1, ts2, iterations, true, .75);
+        // now different sets
+        ts1.add("Able");
+        timeAndCompare(ts1, ts2, iterations, true, .75);
+        timeAndCompare(ts2, ts1, iterations*100, false, 1.05);
+    }
+
+    private void timeAndCompare(TreeSet ts1, TreeSet ts2, int iterations, boolean expected, double factorOfStandard) {
+        double utilityTimeSorted = timeUtilityContainsAll(iterations, ts1, ts2, expected)/(double)iterations;
+        double standardTimeSorted = timeStandardContainsAll(iterations, ts1, ts2, expected)/(double)iterations;
+        
+        if (utilityTimeSorted < standardTimeSorted*factorOfStandard) {
+            logln("Sorted: Utility time (" + utilityTimeSorted + ") << Standard duration (" + standardTimeSorted + "); " + 100*(utilityTimeSorted/standardTimeSorted) + "%");
+        } else {
+            errln("Sorted: Utility time (" + utilityTimeSorted + ") !<< Standard duration (" + standardTimeSorted + "); " + 100*(utilityTimeSorted/standardTimeSorted) + "%");
+        }
+    }
+
+    private long timeStandardContainsAll(int iterations, Set hs1, Set hs2, boolean expected) {
+        long standardTime;
+        {
+            long start, end;
+            boolean temp = false;
+
+            start = System.currentTimeMillis();
+            for (int i = 0; i < iterations; ++i) {
+                temp = hs1.containsAll(hs2);
+                if (temp != expected) {
+                    errln("Bad result");
+                }
+            }
+            end = System.currentTimeMillis();
+            standardTime = end - start;
+        }
+        return standardTime;
+    }
+
+    private long timeUtilityContainsAll(int iterations, Set hs1, Set hs2, boolean expected) {
+        long utilityTime;
+        {
+            long start, end;
+            boolean temp = false;
+            start = System.currentTimeMillis();
+            for (int i = 0; i < iterations; ++i) {
+                temp = CollectionUtilities.containsAll(hs1, hs2);
+                if (temp != expected) {
+                    errln("Bad result");
+                }
+            }
+            end = System.currentTimeMillis();
+            utilityTime = end - start;
+        }
+        return utilityTime;
     }
     
     public void TestCollectionUtilities() {

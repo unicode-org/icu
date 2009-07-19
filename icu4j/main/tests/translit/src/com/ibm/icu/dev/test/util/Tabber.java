@@ -1,7 +1,7 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -163,20 +163,36 @@ public abstract class Tabber {
     };
     
     public static class HTMLTabber extends Tabber {
-        private List parameters = new ArrayList();
+        private List<String> parameters = new ArrayList();
+        private String element = "td";
         {
             setPrefix("<tr>");
             setPostfix("</tr>");
         }
-        public void setParameters(int count, String params) {
-            while (count >= parameters.size()) parameters.add(null);
+        public HTMLTabber setParameters(int count, String params) {
+            // fill in
+            while (parameters.size() <= count) {
+                parameters.add(null);
+            }
             parameters.set(count,params);
+            return this;
         }
         
+        public String getElement() {
+            return element;
+        }
+
+        public HTMLTabber setElement(String element) {
+            this.element = element;
+            return this;
+        }
+
         public void process_field(int count, String source, int start, int limit, StringBuffer output) {
-            output.append("<td");
+            output.append("<" + element);
             String params = null;
-            if (count < parameters.size()) params = (String) parameters.get(count);
+            if (count < parameters.size()) {
+                params = parameters.get(count);
+            }
             if (params != null) {
                 output.append(' ');
                 output.append(params);
@@ -184,7 +200,7 @@ public abstract class Tabber {
             output.append(">");
             output.append(source.substring(start, limit));
             // TODO Quote string
-            output.append("</td>");            
+            output.append("</" + element + ">");            
         }
     }
     /**
