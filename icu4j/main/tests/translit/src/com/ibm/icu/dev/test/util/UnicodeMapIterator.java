@@ -135,8 +135,10 @@ public class UnicodeMapIterator<T> {
             codepoint = codepointEnd = nextElement++;
             return true;
         }
-        if (range < endRange) {
-            loadRange(++range);
+        while (range < endRange) {
+            if (loadRange(++range) == null) {
+                continue;
+            }
             codepoint = codepointEnd = nextElement++;
             return true;
         }
@@ -177,7 +179,10 @@ public class UnicodeMapIterator<T> {
             nextElement = endElement+1;
             return true;
         }
-        while (range < endRange && loadRange(++range) != null) {
+        while (range < endRange) {
+            if (loadRange(++range) == null) {
+                continue;
+            }
             codepointEnd = endElement;
             codepoint = nextElement;
             nextElement = endElement+1;
@@ -212,12 +217,12 @@ public class UnicodeMapIterator<T> {
      */
     public UnicodeMapIterator<T> reset() {
         endRange = map.getRangeCount() - 1;
-        range = 0;
+        // both next*() methods will test: if (nextElement <= endElement)
+        // we set them to fail this test, which will cause them to load the first range
+        nextElement = 0; 
         endElement = -1;
-        nextElement = 0;            
-        if (endRange >= 0) {
-            loadRange(range);
-        }
+        range = -1;
+
         stringIterator = null;
         Set<String> strings = map.getNonRangeStrings();
         if (strings != null) {
