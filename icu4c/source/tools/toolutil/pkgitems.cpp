@@ -56,6 +56,8 @@ U_CDECL_END
 
 // a data item in native-platform form ------------------------------------- ***
 
+U_NAMESPACE_BEGIN
+
 class NativeItem {
 public:
     NativeItem() : pItem(NULL), pInfo(NULL), bytes(NULL), swapped(NULL), length(0) {}
@@ -117,6 +119,8 @@ private:
     uint8_t *swapped;
     int32_t length;
 };
+
+U_NAMESPACE_END
 
 // check a dependency ------------------------------------------------------ ***
 
@@ -384,7 +388,7 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
         }
     }
 
-    NativeItem nativePool;
+    U_NAMESPACE_QUALIFIER NativeItem nativePool;
 
     if(resData.usesPoolBundle) {
         char poolName[200];
@@ -395,7 +399,7 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
         check(context, itemName, poolName);
         // TODO: The Package should be passed in.
         // Since the context is always a Package, we could just redeclare it.
-        Package *pkg=(Package *)context;
+        U_NAMESPACE_QUALIFIER Package *pkg=(U_NAMESPACE_QUALIFIER Package *)context;
         int32_t index=pkg->findItem(poolName);
         if(index<0) {
             // We cannot work with a bundle if its pool resource is missing.
