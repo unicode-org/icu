@@ -1,11 +1,11 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.demo.translit;
+package com.ibm.icu.impl;
 
 /** VERY Basic Diff program. Compares two sequences of objects fed into it, and
  * lets you know where they are different.
@@ -14,8 +14,8 @@ package com.ibm.icu.dev.demo.translit;
  */
 
 final public class Differ {
-    public static final String copyright =
-      "Copyright (C) 2000, International Business Machines Corporation and others. All Rights Reserved.";
+//    public static final String copyright =
+//      "Copyright (C) 2000, International Business Machines Corporation and others. All Rights Reserved.";
 
     /**
      * @param stackSize The size of the largest difference you expect.
@@ -122,13 +122,13 @@ final public class Differ {
      * @return -1 if not found, otherwise start position in b
      */
 
-    public int find (Object[] aArray, int aStart, int aEnd, Object[] bArray, int bStart, int bEnd) {
+    public int find (Object[] aArr, int aStart, int aEnd, Object[] bArr, int bStart, int bEnd) {
         int len = aEnd - aStart;
         int bEndMinus = bEnd - len;
         tryA:
         for (int i = bStart; i <= bEndMinus; ++i) {
             for (int j = 0; j < len; ++j) {
-                if (!bArray[i + j].equals(aArray[aStart + j])) continue tryA;
+                if (!bArr[i + j].equals(aArr[aStart + j])) continue tryA;
             }
             return i; // we have a match!
         }

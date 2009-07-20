@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.text.CharacterIterator;
 
+import com.ibm.icu.impl.Differ;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
