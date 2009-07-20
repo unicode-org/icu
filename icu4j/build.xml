@@ -138,12 +138,12 @@
     </target>
 
     <target name="_runCheck" depends="info, core, collate, charset, translit, core-tests, collate-tests, charset-tests, translit-tests">
-        <echo message="JVM argument:   ${runcheck.jvmarg}"/>
+        <echo message="JVM argument:   ${runcheck.jvmarg} -Djava.awt.headless=true"/>
         <echo message="Test argument:   ${runcheck.arg}"/>
 
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg line="${runcheck.arg}"/>
-            <jvmarg line="${runcheck.jvmarg}"/>
+            <jvmarg line="${runcheck.jvmarg} -Djava.awt.headless=true"/>
             <classpath>
                 <pathelement path="${icu4j.core.jar}"/>
                 <pathelement path="${icu4j.collate.jar}"/>
