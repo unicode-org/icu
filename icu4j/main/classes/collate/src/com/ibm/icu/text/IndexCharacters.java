@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.CollectionUtilities.MultiComparator;
+import com.ibm.icu.impl.MultiComparator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;

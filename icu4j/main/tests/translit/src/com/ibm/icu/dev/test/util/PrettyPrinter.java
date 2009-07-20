@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.util;
 import java.util.Comparator;
 import java.util.TreeSet;
 
+import com.ibm.icu.impl.MultiComparator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.StringTransform;
@@ -46,7 +47,6 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter setQuoter(StringTransform quoter) {
-        this.quoter = quoter;
         return this; // for chaining
     }
 
@@ -72,7 +72,7 @@ public class PrettyPrinter {
      * @return
      */
     public PrettyPrinter setOrdering(Comparator ordering) {
-        this.ordering = ordering == null ? CODEPOINT_ORDER : new CollectionUtilities.MultiComparator(new Comparator[] {ordering, CODEPOINT_ORDER});
+        this.ordering = ordering == null ? CODEPOINT_ORDER : new com.ibm.icu.impl.MultiComparator(new Comparator[] {ordering, CODEPOINT_ORDER});
         return this;
     }
 
@@ -98,11 +98,14 @@ public class PrettyPrinter {
      * @param toQuote
      */
     public PrettyPrinter setToQuote(UnicodeSet toQuote) {
-        toQuote = (UnicodeSet)toQuote.clone();
-        toQuote.addAll(PATTERN_WHITESPACE);
-        this.toQuote = toQuote;
+        if (toQuote != null) {
+            toQuote = (UnicodeSet)toQuote.clone();
+            toQuote.addAll(PATTERN_WHITESPACE);
+            this.toQuote = toQuote;
+        }
         return this;
     }
+
 
     /**
      * Get the pattern for a particular set.
