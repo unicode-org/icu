@@ -124,7 +124,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         result = new DateTimePatternGenerator();
         String lang = uLocale.getLanguage();
         if (lang.equals("zh") || lang.equals("ko") || lang.equals("ja")) {
-          result.chineseMonthHack = true;
+            result.chineseMonthHack = true;
         }
         PatternInfo returnInfo = new PatternInfo();
         String shortTimePattern = null;
@@ -185,15 +185,15 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 
         // set the AvailableFormat in CLDR
         try {
-           ICUResourceBundle formatBundle =  gregorianBundle.getWithFallback("availableFormats");
-           //System.out.println("available format from current locale:"+uLocale.getName());
-           for (int i=0; i<formatBundle.getSize(); ++i) { 
-               String formatKey = formatBundle.get(i).getKey();
-               String formatValue = formatBundle.get(i).getString();
-               //System.out.println(" availableFormat:"+formatValue);
-               result.setAvailableFormat(formatKey);
-               result.addPattern(formatValue, false, returnInfo);
-           } 
+            ICUResourceBundle formatBundle =  gregorianBundle.getWithFallback("availableFormats");
+            //System.out.println("available format from current locale:"+uLocale.getName());
+            for (int i=0; i<formatBundle.getSize(); ++i) { 
+                String formatKey = formatBundle.get(i).getKey();
+                String formatValue = formatBundle.get(i).getString();
+                //System.out.println(" availableFormat:"+formatValue);
+                result.setAvailableFormat(formatKey);
+                result.addPattern(formatValue, false, returnInfo);
+            } 
         }catch(Exception e) {
         }
 
@@ -215,12 +215,12 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                         //System.out.println(" availableFormat:"+formatValue);
                     }
                 } 
-              
-             }catch(Exception e) {
-             }
+
+            }catch(Exception e) {
+            }
 
         }
-        
+
         // assume it is always big endian (ok for CLDR right now)
         // some languages didn't add mm:ss or HH:mm, so put in a hack to compute that from the short time.
         if (shortTimePattern != null) {
@@ -312,7 +312,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             if (CLDR_FIELD_APPEND[i].equals(string)) return i;
         }
         return -1;
-        
+
     }
 
     private static boolean isCLDRFieldName(int index) {
@@ -356,7 +356,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         // otherwise break up by date and time.
         String datePattern = getBestAppending(neededFields & DATE_MASK);
         String timePattern = getBestAppending(neededFields & TIME_MASK);
-        
+
         if (datePattern == null) return timePattern == null ? "" : timePattern;
         if (timePattern == null) return datePattern;
         return MessageFormat.format(getDateTimeFormat(), new Object[]{timePattern, datePattern});
@@ -402,7 +402,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         public PatternInfo() {
         }
     }
-    
+
     /**
      * Adds a pattern to the generator. If the pattern has the same skeleton as
      * an existing pattern, and the override parameter is set, then the previous
@@ -439,7 +439,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         basePattern_pattern.put(basePattern, pattern);
         return this;
     }
-    
+
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
      * both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
@@ -455,7 +455,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             return current.toString();
         }
     }
-    
+
     /**
      * Utility to return a unique base skeleton from a given pattern. This is
      * the same as the skeleton, except that differences in length are minimized
@@ -655,7 +655,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     static final public int ERA = 0;
-    
+
     /**
      * @stable ICU 3.6
      */
@@ -817,7 +817,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return true;
     }
 
-     /**
+    /**
      * Add key to HashSet cldrAvailableFormatKeys.
      * 
      * @param key of the availableFormats in CLDR
@@ -885,7 +885,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             result.current = new DateTimeMatcher();
             result.fp = new FormatParser();
             result._distanceInfo = new DistanceInfo();
-            
+
             result.frozen = false;
             return result;
         } catch (CloneNotSupportedException e) {
@@ -997,7 +997,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         //.setEscapeCharacters(new UnicodeSet("[^\\u0020-\\u007E]")) // WARNING: DateFormat doesn't accept \\uXXXX
         .setUsingQuote(true);
         private List<Object> items = new ArrayList<Object>();
-        
+
         /**
          * Construct an empty date format parser, to which strings and variables can be added with set(...).
          * @internal
@@ -1056,43 +1056,43 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             }
         }
 
-//        /** Private method. Return a collection of fields. These will be a mixture of literal Strings and VariableFields. Any "a" variable field is removed.
-//         * @param output List to append the items to. If null, is allocated as an ArrayList.
-//         * @return list
-//         */
-//        private List getVariableFields(List output) {
-//            if (output == null) output = new ArrayList();
-//            main:
-//                for (Iterator it = items.iterator(); it.hasNext();) {
-//                    Object item = it.next();
-//                    if (item instanceof VariableField) {
-//                        String s = item.toString();
-//                        switch(s.charAt(0)) {
-//                        //case 'Q': continue main; // HACK
-//                        case 'a': continue main; // remove
-//                        }
-//                        output.add(item);
-//                    }
-//                }
-//            //System.out.println(output);
-//            return output;
-//        }
+        //        /** Private method. Return a collection of fields. These will be a mixture of literal Strings and VariableFields. Any "a" variable field is removed.
+        //         * @param output List to append the items to. If null, is allocated as an ArrayList.
+        //         * @return list
+        //         */
+        //        private List getVariableFields(List output) {
+        //            if (output == null) output = new ArrayList();
+        //            main:
+        //                for (Iterator it = items.iterator(); it.hasNext();) {
+        //                    Object item = it.next();
+        //                    if (item instanceof VariableField) {
+        //                        String s = item.toString();
+        //                        switch(s.charAt(0)) {
+        //                        //case 'Q': continue main; // HACK
+        //                        case 'a': continue main; // remove
+        //                        }
+        //                        output.add(item);
+        //                    }
+        //                }
+        //            //System.out.println(output);
+        //            return output;
+        //        }
 
-//        /**
-//         * Produce a string which concatenates all the variables. That is, it is the logically the same as the input with all literals removed.
-//         * @return a string which is a concatenation of all the variable fields
-//         * @internal
-//         * @deprecated This API is ICU internal only.
-//         */
-//        public String getVariableFieldString() {
-//            List list = getVariableFields(null);
-//            StringBuffer result = new StringBuffer();
-//            for (Iterator it = list.iterator(); it.hasNext();) {
-//                String item = it.next().toString();
-//                result.append(item);
-//            }
-//            return result.toString();
-//        }
+        //        /**
+        //         * Produce a string which concatenates all the variables. That is, it is the logically the same as the input with all literals removed.
+        //         * @return a string which is a concatenation of all the variable fields
+        //         * @internal
+        //         * @deprecated This API is ICU internal only.
+        //         */
+        //        public String getVariableFieldString() {
+        //            List list = getVariableFields(null);
+        //            StringBuffer result = new StringBuffer();
+        //            for (Iterator it = list.iterator(); it.hasNext();) {
+        //                String item = it.next().toString();
+        //                result.append(item);
+        //            }
+        //            return result.toString();
+        //        }
 
         /**
          * Returns modifiable list which is a mixture of Strings and VariableFields, in the order found during parsing. The strings represent literals, and have all quoting removed. Thus the string "dd 'de' MM" will parse into three items:
@@ -1160,99 +1160,99 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             return isDate && isTime;
         }
 
-//        /**
-//         * Internal routine
-//         * @param value
-//         * @param result
-//         * @return list
-//         * @internal
-//         * @deprecated This API is ICU internal only.
-//         */
-//        public List getAutoPatterns(String value, List result) {
-//            if (result == null) result = new ArrayList();
-//            int fieldCount = 0;
-//            int minField = Integer.MAX_VALUE;
-//            int maxField = Integer.MIN_VALUE;
-//            for (Iterator it = items.iterator(); it.hasNext();) {
-//                Object item = it.next();
-//                if (item instanceof VariableField) {
-//                    try {
-//                        int type = ((VariableField)item).getType();
-//                        if (minField > type) minField = type;
-//                        if (maxField < type) maxField = type;
-//                        if (type == ZONE || type == DAYPERIOD || type == WEEKDAY) return result; // skip anything with zones                    
-//                        fieldCount++;
-//                    } catch (Exception e) {
-//                        return result; // if there are any funny fields, return
-//                    }
-//                }
-//            }
-//            if (fieldCount < 3) return result; // skip
-//            // trim from start
-//            // trim first field IF there are no letters around it
-//            // and it is either the min or the max field
-//            // first field is either 0 or 1
-//            for (int i = 0; i < items.size(); ++i) {
-//                Object item = items.get(i);
-//                if (item instanceof VariableField) {
-//                    int type = ((VariableField)item).getType();
-//                    if (type != minField && type != maxField) break;
-//                    
-//                    if (i > 0) {
-//                        Object previousItem = items.get(0);
-//                        if (alpha.containsSome(previousItem.toString())) break;
-//                    }
-//                    int start = i+1;
-//                    if (start < items.size()) {
-//                        Object nextItem = items.get(start);
-//                        if (nextItem instanceof String) {
-//                            if (alpha.containsSome(nextItem.toString())) break;
-//                            start++; // otherwise skip over string
-//                        }
-//                    }
-//                    result.add(toString(start, items.size()));
-//                    break;
-//                }
-//            }
-//            // now trim from end
-//            for (int i = items.size()-1; i >= 0; --i) {
-//                Object item = items.get(i);
-//                if (item instanceof VariableField) {
-//                    int type = ((VariableField)item).getType();
-//                    if (type != minField && type != maxField) break;
-//                    if (i < items.size() - 1) {
-//                        Object previousItem = items.get(items.size() - 1);
-//                        if (alpha.containsSome(previousItem.toString())) break;
-//                    }
-//                    int end = i-1;
-//                    if (end > 0) {
-//                        Object nextItem = items.get(end);
-//                        if (nextItem instanceof String) {
-//                            if (alpha.containsSome(nextItem.toString())) break;
-//                            end--; // otherwise skip over string
-//                        }
-//                    }
-//                    result.add(toString(0, end+1));
-//                    break;
-//                }
-//            }
-//
-//            return result;
-//        }
-        
-//        private static UnicodeSet alpha = new UnicodeSet("[:alphabetic:]");
-        
-//        private int getType(Object item) {
-//            String s = item.toString();
-//            int canonicalIndex = getCanonicalIndex(s);
-//            if (canonicalIndex < 0) {
-//                throw new IllegalArgumentException("Illegal field:\t"
-//                        + s);
-//            }
-//            int type = types[canonicalIndex][1];
-//            return type;
-//        }
-        
+        //        /**
+        //         * Internal routine
+        //         * @param value
+        //         * @param result
+        //         * @return list
+        //         * @internal
+        //         * @deprecated This API is ICU internal only.
+        //         */
+        //        public List getAutoPatterns(String value, List result) {
+        //            if (result == null) result = new ArrayList();
+        //            int fieldCount = 0;
+        //            int minField = Integer.MAX_VALUE;
+        //            int maxField = Integer.MIN_VALUE;
+        //            for (Iterator it = items.iterator(); it.hasNext();) {
+        //                Object item = it.next();
+        //                if (item instanceof VariableField) {
+        //                    try {
+        //                        int type = ((VariableField)item).getType();
+        //                        if (minField > type) minField = type;
+        //                        if (maxField < type) maxField = type;
+        //                        if (type == ZONE || type == DAYPERIOD || type == WEEKDAY) return result; // skip anything with zones                    
+        //                        fieldCount++;
+        //                    } catch (Exception e) {
+        //                        return result; // if there are any funny fields, return
+        //                    }
+        //                }
+        //            }
+        //            if (fieldCount < 3) return result; // skip
+        //            // trim from start
+        //            // trim first field IF there are no letters around it
+        //            // and it is either the min or the max field
+        //            // first field is either 0 or 1
+        //            for (int i = 0; i < items.size(); ++i) {
+        //                Object item = items.get(i);
+        //                if (item instanceof VariableField) {
+        //                    int type = ((VariableField)item).getType();
+        //                    if (type != minField && type != maxField) break;
+        //                    
+        //                    if (i > 0) {
+        //                        Object previousItem = items.get(0);
+        //                        if (alpha.containsSome(previousItem.toString())) break;
+        //                    }
+        //                    int start = i+1;
+        //                    if (start < items.size()) {
+        //                        Object nextItem = items.get(start);
+        //                        if (nextItem instanceof String) {
+        //                            if (alpha.containsSome(nextItem.toString())) break;
+        //                            start++; // otherwise skip over string
+        //                        }
+        //                    }
+        //                    result.add(toString(start, items.size()));
+        //                    break;
+        //                }
+        //            }
+        //            // now trim from end
+        //            for (int i = items.size()-1; i >= 0; --i) {
+        //                Object item = items.get(i);
+        //                if (item instanceof VariableField) {
+        //                    int type = ((VariableField)item).getType();
+        //                    if (type != minField && type != maxField) break;
+        //                    if (i < items.size() - 1) {
+        //                        Object previousItem = items.get(items.size() - 1);
+        //                        if (alpha.containsSome(previousItem.toString())) break;
+        //                    }
+        //                    int end = i-1;
+        //                    if (end > 0) {
+        //                        Object nextItem = items.get(end);
+        //                        if (nextItem instanceof String) {
+        //                            if (alpha.containsSome(nextItem.toString())) break;
+        //                            end--; // otherwise skip over string
+        //                        }
+        //                    }
+        //                    result.add(toString(0, end+1));
+        //                    break;
+        //                }
+        //            }
+        //
+        //            return result;
+        //        }
+
+        //        private static UnicodeSet alpha = new UnicodeSet("[:alphabetic:]");
+
+        //        private int getType(Object item) {
+        //            String s = item.toString();
+        //            int canonicalIndex = getCanonicalIndex(s);
+        //            if (canonicalIndex < 0) {
+        //                throw new IllegalArgumentException("Illegal field:\t"
+        //                        + s);
+        //            }
+        //            int type = types[canonicalIndex][1];
+        //            return type;
+        //        }
+
         /**
          *  Each literal string is quoted as needed. That is, the ' quote marks will only be added if needed. The exact pattern of quoting is not guaranteed, thus " de la " could be quoted as " 'de la' " or as " 'de' 'la' ".
          * @param string
@@ -1265,6 +1265,30 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
 
     }
+
+    /**
+    * (moved from CLDR)
+    * @internal
+    */
+    public boolean skeletonsAreSimilar(String id, String skeleton) {
+        if (id.equals(skeleton)) {
+            return true; // fast path
+        }
+        List parser1 = fp.set(id).getItems();
+        List parser2 = fp.set(skeleton).getItems();
+        if (parser1.size() != parser2.size()) {
+            return false;
+        }
+        for (int i = 0; i < parser1.size(); ++i) {
+            int index1 = getCanonicalIndex(parser1.get(i).toString(), false);
+            int index2 = getCanonicalIndex(parser2.get(i).toString(), false);
+            if (types[index1][1] != types[index2][1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // ========= PRIVATES ============
 
     private TreeMap<DateTimeMatcher, String> skeleton2pattern = new TreeMap<DateTimeMatcher, String>(); // items are in priority order
@@ -1313,7 +1337,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             resultPattern = adjustFieldTypes(resultPattern, current, false);
 
             while (_distanceInfo.missingFieldMask != 0) { // precondition: EVERY single field must work!
-                
+
                 // special hack for SSS. If we are missing SSS, and we had ss but found it, replace the s field according to the 
                 // number separator
                 if ((_distanceInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
@@ -1341,14 +1365,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return appendItemFormats[foundMask];
     }
 
-//    /**
-//     * @param current2
-//     * @return
-//     */
-//    private String adjustSeconds(DateTimeMatcher current2) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
+    //    /**
+    //     * @param current2
+    //     * @return
+    //     */
+    //    private String adjustSeconds(DateTimeMatcher current2) {
+    //        // TODO Auto-generated method stub
+    //        return null;
+    //    }
 
     /**
      * @param foundMask
@@ -1358,7 +1382,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         int i = 0;
         while (foundMask != 0) {
             foundMask >>>= 1;
-            ++i;
+    ++i;
         }
         return i-1;
     }
@@ -1383,8 +1407,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * 
      */
     private String getBestRaw(DateTimeMatcher source, int includeMask, DistanceInfo missingFields) {
-//      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern 
-//      + ", mask: " + showMask(includeMask));
+        //      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern 
+        //      + ", mask: " + showMask(includeMask));
         int bestDistance = Integer.MAX_VALUE;
         String bestPattern = "";
         DistanceInfo tempInfo = new DistanceInfo();
@@ -1393,8 +1417,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 continue;
             }
             int distance = source.getDistance(trial, includeMask, tempInfo);
-//          if (SHOW_DISTANCE) System.out.println("\tDistance: " + trial.pattern + ":\t" 
-//          + distance + ",\tmissing fields: " + tempInfo);
+            //          if (SHOW_DISTANCE) System.out.println("\tDistance: " + trial.pattern + ":\t" 
+            //          + distance + ",\tmissing fields: " + tempInfo);
             if (distance < bestDistance) {
                 bestDistance = distance;
                 bestPattern = skeleton2pattern.get(trial);
@@ -1420,13 +1444,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             } else {
                 final VariableField variableField = (VariableField) item;
                 String field = variableField.toString();
-//                int canonicalIndex = getCanonicalIndex(field, true);
-//                if (canonicalIndex < 0) {
-//                    continue; // don't adjust
-//                }
-//                int type = types[canonicalIndex][1];
+                //                int canonicalIndex = getCanonicalIndex(field, true);
+                //                if (canonicalIndex < 0) {
+                //                    continue; // don't adjust
+                //                }
+                //                int type = types[canonicalIndex][1];
                 int type = variableField.getType();
-                
+
                 if (fixFractionalSeconds && type == SECOND) {
                     String newField = inputRequest.original[FRACTIONAL_SECOND];
                     field = field + decimal + newField;
@@ -1448,13 +1472,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return newPattern.toString();
     }
 
-//  public static String repeat(String s, int count) {
-//  StringBuffer result = new StringBuffer();
-//  for (int i = 0; i < count; ++i) {
-//  result.append(s);
-//  }
-//  return result.toString();
-//  }
+    //  public static String repeat(String s, int count) {
+    //  StringBuffer result = new StringBuffer();
+    //  for (int i = 0; i < count; ++i) {
+    //  result.append(s);
+    //  }
+    //  return result.toString();
+    //  }
 
     /**
      * internal routine
@@ -1584,7 +1608,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         {'Q', QUARTER, NUMERIC, 1, 2},
         {'Q', QUARTER, SHORT, 3},
         {'Q', QUARTER, LONG, 4},
-        
+
         {'q', QUARTER, NUMERIC + DELTA, 1, 2},
         {'q', QUARTER, SHORT + DELTA, 3},
         {'q', QUARTER, LONG + DELTA, 4},
@@ -1681,10 +1705,10 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 String field = item.toString();
                 if (field.charAt(0) == 'a') continue; // skip day period, special case
                 int canonicalIndex = item.getCanonicalIndex();
-//                if (canonicalIndex < 0) {
-//                    throw new IllegalArgumentException("Illegal field:\t"
-//                            + field + "\t in " + pattern);
-//                }
+                //                if (canonicalIndex < 0) {
+                //                    throw new IllegalArgumentException("Illegal field:\t"
+                //                            + field + "\t in " + pattern);
+                //                }
                 int[] row = types[canonicalIndex];
                 int typeValue = row[1];
                 if (original[typeValue].length() != 0) {
@@ -1703,7 +1727,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             }
             return this;
         }
-        
+
         /**
          * 
          */
@@ -1774,7 +1798,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             return result;
         }
     }
-    
+
     private static class DistanceInfo {
         int missingFieldMask;
         int extraFieldMask;
