@@ -50,6 +50,7 @@ LDLIBRARYPATH_ENVVAR = LIBPATH
 FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
+SHARED_OBJECT_NO_VERSION = $(basename $(SO_TARGET)).$(SOBJ)
 
 # The following is for Makefile.inc's use.
 ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
@@ -78,9 +79,13 @@ STATIC_O = o
 
 ## Build archive from shared object
 %.a : %.so
-	$(AR) $(ARFLAGS) $@ $<
+	ln -f $< $(SHARED_OBJECT_NO_VERSION)
+	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	rm -f $(SHARED_OBJECT_NO_VERSION)
 $(LIBDIR)/%.a : %.so
-	$(AR) $(ARFLAGS) $@ $<
+	ln -f $< $(SHARED_OBJECT_NO_VERSION)
+	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	rm -f $(SHARED_OBJECT_NO_VERSION)
 
 ## Build import list from export list
 %.e : %.exp
