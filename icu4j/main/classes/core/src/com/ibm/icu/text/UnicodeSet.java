@@ -2714,10 +2714,29 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Add the contents of the UnicodeSet (as strings) into a collection.
      * @param target collection to add into
      * @return 
-     * @stable ICU 2.8
+     * @draft ICU 4.4
      */
     public <U extends Collection<String>> U addAllTo(U target) {
         return addAllTo(this, target);
+    }
+    
+
+    /**
+     * Add the contents of the UnicodeSet (as strings) into a collection.
+     * @param target collection to add into
+     * @return 
+     * @draft ICU 4.4
+     */
+    public String[] addAllTo(String[] target) {
+        return addAllTo(this, target);
+    }
+
+    /**
+     * Add the contents of the UnicodeSet (as strings) into an array.
+     * @draft ICU 4.4
+     */
+    public static String[] toArray(UnicodeSet set) {
+        return addAllTo(set, new String[set.size()]);
     }
 
     /**
@@ -4107,6 +4126,18 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public static <T, U extends Collection<T>> U addAllTo(Iterable<T> source, U target) {
         for (T item : source) {
             target.add(item);
+        }
+        return target;
+    }
+    
+    /**
+     * Utility for adding the contents of an iterable to a collection.
+     * @draft ICU 4.2
+     */
+    public static <T> T[] addAllTo(Iterable<T> source, T[] target) {
+        int i = 0;
+        for (T item : source) {
+            target[i++] = item;
         }
         return target;
     }
