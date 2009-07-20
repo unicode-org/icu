@@ -214,7 +214,7 @@
         <copy file="${icu4j.core.jar}" tofile="${icu4j-core.jar.file}"/>
         <copy file="${icu4j.collate.jar}" tofile="${icu4j-collate.jar.file}"/>
         <copy file="${icu4j.charset.jar}" tofile="${icu4j-charsets.jar.file}"/>
-        <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}"/>
+        <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}" failonerror="false"/>
         <copy file="${icu4j.translit.jar}" tofile="${icu4j-translit.jar.file}"/>
     </target>
 
