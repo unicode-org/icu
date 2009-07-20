@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -126,14 +126,10 @@ public class CompatibilityTest extends TestFmwk
     private static final String[][] SKIP_CASES = {
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralFormat.dat"},
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralRules.dat"},
-        // The case below actually works OK with 4.2M1 on JRE5, but not on JRE1.4.2.
-        // It looks the use of anonymous inner class is the root cause.  If we want
-        // to fix the root cause, it will likely break the backward compatibility.
-        // For now, we're skipping this case even it works OK on JRE5.  See ticket#6550.
-        {"ICU_4.0",     "com.ibm.icu.text.PluralRules.dat"},
         {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
-        {"ICU_3.8.1",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+        {"ICU_3.8.1",   "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_4.0",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+        {"ICU_4.2.1",   "com.ibm.icu.text.CurrencyPluralInfo.dat"},
     };
 
     private Target getFileTargets(URL fileURL)
