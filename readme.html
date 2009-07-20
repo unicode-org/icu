@@ -17,9 +17,9 @@
 
   <body class="readme">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.2 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.3.1 ReadMe</h1>
 
-    <p>Version: 2009 May 8th<br />
+    <p>Version: 2009 July 22nd<br />
      Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -639,7 +639,7 @@
         
             <tr>
                 <td>SuSE 10 (x86, 64-bit)</td>
-                <td>gcc</td>
+                <td>gcc 4.1.0</td>
                 <td class="works">Frequently Tested</td>
 
             </tr>
@@ -653,7 +653,7 @@
         
             <tr>
                 <td>Windows 2000 Professional (x86, 32-bit)</td>
-                <td>gcc via Cygwin</td>
+                <td>gcc 3.4.4 via Cygwin</td>
                 <td class="works">Frequently Tested</td>
 
             </tr>
@@ -678,6 +678,13 @@
                 <td class="works">Frequently Tested</td>
 
             </tr>
+            
+            <tr>
+                <td>Windows Server 2008 (x86, 64-bit)</td>
+                <td>MS Visual Studio 9 via Cygwin</td>
+                <td class="works">Frequently Tested</td>
+
+            </tr>
         
             <tr class="broken">
                 <td>Red Hat Enterprise Linux 5 (x86, 32-bit)</td>
@@ -693,13 +700,6 @@
 
             </tr>
         
-            <tr class="broken">
-                <td>Windows Server 2008 (x86, 64-bit)</td>
-                <td>MS Visual Studio 9 via Cygwin</td>
-                <td class="broken">Broken <b><a href="http://bugs.icu-project.org/trac/ticket/6890">#6890</a></b></td>
-
-            </tr>
-        
 
 <!-- end IBM lab data -->
 
@@ -707,14 +707,6 @@
         <td>z/OS 1.7</td>
 
         <td>cxx 1.7</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>Cygwin</td>
-
-        <td>gcc 3.4.4</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -799,13 +791,9 @@
     <h4>Key to testing frequency</h4>
 
     <dl>
-      <dt><i>Reference platform</i></dt>
+      <dt><i>Frequently tested</i></dt>
 
       <dd>ICU will work on these platforms with these compilers</dd>
-
-      <dt><i>Regularly tested</i></dt>
-
-      <dd>ICU should work on these platforms with these compilers</dd>
 
       <dt><i>Rarely tested</i></dt>
 
@@ -821,7 +809,7 @@
     <ul>
       <li>Microsoft Windows 2000 or above</li>
 
-      <li>Microsoft Visual C++ 2005</li>
+      <li>Microsoft Visual C++ 2008</li>
 
       <li><a href="#HowToBuildCygwin">Cygwin</a> is required when other versions
       of Microsoft Visual C++ and other compilers are used to build ICU.</li>
