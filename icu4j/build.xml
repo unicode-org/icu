@@ -785,11 +785,13 @@
     <!-- this module will soon be obsolete, use the collate jar -->
     <target name="collator" description="Modular build of collator services">
         <mkdir dir="${module.bin.dir}"/>
-        <javac srcdir="${icu4j.core.dir}/src"
-                destdir="${module.bin.dir}"
+        <javac  destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
                 debug="on" deprecation="off">
+            <src path="${icu4j.core.dir}/src"/>
+            <src path="${icu4j.collate.dir}/src"/>
+
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
             <include name="com/ibm/icu/text/*BreakIterator*.java"/>
             <include name="com/ibm/icu/text/*Collation*.java"/>
@@ -821,12 +823,14 @@
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
-            <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.collate-tests.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
+            <include name="com/ibm/icu/dev/test/TestAllCollate.java"/>
             <include name="com/ibm/icu/dev/test/collator/**/*.java"/>
             <include name="java,com/ibm/icu/dev/test/search/**/*.java"/>
             <exclude name="com/ibm/icu/dev/test/collator/RandomCollator.java"/>
+            <exclude name="com/ibm/icu/dev/test/collator/IndexCharactersTest.java"/>
         </javac>
 
         <unjar src="${icu4j.testdata.jar}" dest="${module.tests.dir}">
@@ -835,7 +839,7 @@
             </patternset>
         </unjar>
         <copy todir="${module.tests.dir}">
-            <fileset dir="${icu4j.core-tests.dir}/src">
+            <fileset dir="${icu4j.collate-tests.dir}/src">
                 <include name="com/ibm/icu/dev/data/riwords.txt"/>
                 <include name="com/ibm/icu/dev/data/CollationTest_*.txt"/>
             </fileset>
@@ -1065,11 +1069,13 @@
     <!-- this module will soon be obsolete, use the translit jar -->
     <target name="transliterator" depends="_propertiesClasses" description="Modular build of transliterator services">
         <mkdir dir="${module.bin.dir}"/>
-        <javac srcdir="${icu4j.core.dir}/src"
-                destdir="${module.bin.dir}"
+        <javac  destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
                 debug="on" deprecation="off">
+            <src path="${icu4j.core.dir}/src"/>
+            <src path="${icu4j.translit.dir}/src"/>
+
             <include name="com/ibm/icu/impl/*Iterator*.java"/>
             <include name="com/ibm/icu/impl/*Property*.java"/>
             <include name="com/ibm/icu/impl/data/ResourceReader.java"/>
@@ -1104,14 +1110,15 @@
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
-            <src path="${icu4j.core-tests.dir}/src"/>
+            <src path="${icu4j.translit-tests.dir}/src"/>
 
             <patternset refid="common.test.sources"/>
+            <include name="com/ibm/icu/dev/test/TestAllTranslit.java"/>
             <include name="com/ibm/icu/dev/test/translit/**/*.java"/>
             <exclude name="com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java"/>
         </javac>
 
-        <copy file="${icu4j.core-tests.dir}/src/com/ibm/icu/dev/test/translit/langtagRegex.txt"
+        <copy file="${icu4j.translit-tests.dir}/src/com/ibm/icu/dev/test/translit/langtagRegex.txt"
                 todir="${module.tests.dir}/com/ibm/icu/dev/test/translit"/>
     </target>
 
