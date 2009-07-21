@@ -594,6 +594,7 @@
             <src path="${icu4j.core-tests.dir}/src"/> <!-- still needed? -->
             <src path="${icu4j.translit-tests.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
+            <src path="${icu4j.tools.dir}/src"/>
 
             <include name="com/ibm/icu/dev/test/TestFmwk.java" />
             <include name="com/ibm/icu/dev/test/util/*.java" />
