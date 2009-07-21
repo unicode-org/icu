@@ -7,11 +7,19 @@
 
 package com.ibm.icu.dev.test.lang;
 
-import com.ibm.icu.impl.UBiDiProps;
-import com.ibm.icu.impl.UCaseProps;
+import java.io.BufferedReader;
+import java.util.Arrays;
+import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UBiDiProps;
+import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.impl.UCharacterName;
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.USerializedSet;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
@@ -24,14 +32,6 @@ import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.impl.UCharacterName;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.USerializedSet;
-import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.UCharacterProperty;
-import java.io.BufferedReader;
-import java.util.Arrays;
-import java.util.Locale;
 
 /**
 * Testing class for UCharacter
@@ -2409,9 +2409,6 @@ public final class UCharacterTest extends TestFmwk
             if (!UCharacter.isSpace(spaces[i]))
                 errln("FAIL \\u" + hex(spaces[i]) + " expected to be a Java space");
         }
-        if (!UCharacter.getStringPropertyValue(UProperty.AGE,'\u3400',0).equals("3.0.0.0")){
-            errln("FAIL \\u3400 expected to be 3.0.0.0");
-        }
     }
 
     public void TestCasePropsDummy() {
@@ -2709,26 +2706,16 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String toTitleCase(Locale locale, String str, BreakIterator breakiter)
      */
-    public void TestToTitleCase(){
+    public void TestToTitleCaseCoverage(){
         //Calls the function "toTitleCase(Locale locale, String str, BreakIterator breakiter)"
         String[] locale={"en","fr","zh","ko","ja","it","de",""};
-        try{
-            for(int i=0; i<locale.length; i++){
-                UCharacter.toTitleCase(new Locale(locale[i]), "", null);
-            }
-        }catch(Exception e){
-            errln("UCharacter.toTitleCase(Locale locale, String str, " +
-                    "BreakIterator breakiter) was not suppose to return an exception");
+        for(int i=0; i<locale.length; i++){
+            UCharacter.toTitleCase(new Locale(locale[i]), "", null);
         }
         
         // Calls the function "String toTitleCase(ULocale locale, String str, BreakIterator titleIter, int options)"
         // Tests when "if (locale == null)" is true
-        try{
-            UCharacter.toTitleCase(null, "", null, 0);
-        } catch(Exception e){
-            errln("UCharacter.toTitleCase(ULocale locale, String str, " +
-                    "BreakIterator titleIter, int options) was not suppose to return an exception");
-        }
+        UCharacter.toTitleCase(null, "", null, 0);
         
         // TODO: Tests when "if(index==BreakIterator.DONE || index>srcLength)" is true
         // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c))" is false
@@ -2896,52 +2883,6 @@ public final class UCharacterTest extends TestFmwk
                         "when passing ch: " + i + "and type of Property.HANGUL_SYLLABLE_TYPE");
 
             }
-        }
-    }
-
-    /*
-     * The following method tests
-     *      public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice)
-     */
-    public void TestGetStringPropertyValue(){
-        /* Testing UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) */
-        // Tests  "if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||
-        // (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT))"
-        // when true
-        // The following tests the switch statement for all possible cases
-        // and tests when "if (propertyEnum == UProperty.NUMERIC_VALUE)" is true
-        int[] enumCases = {
-                UProperty.BINARY_START, UProperty.BINARY_START+1,
-                UProperty.BINARY_LIMIT-2, UProperty.BINARY_LIMIT-1,
-                UProperty.INT_START, UProperty.INT_START+1,
-                UProperty.INT_LIMIT-1, UProperty.INT_LIMIT-1,
-                UProperty.NUMERIC_VALUE,
-                UProperty.AGE, UProperty.ISO_COMMENT, UProperty.BIDI_MIRRORING_GLYPH,
-                UProperty.CASE_FOLDING, UProperty.LOWERCASE_MAPPING, UProperty.NAME,
-                UProperty.SIMPLE_CASE_FOLDING, UProperty.SIMPLE_LOWERCASE_MAPPING,
-                UProperty.SIMPLE_TITLECASE_MAPPING, UProperty.SIMPLE_UPPERCASE_MAPPING,
-                UProperty.TITLECASE_MAPPING, UProperty.UNICODE_1_NAME,
-                UProperty.UPPERCASE_MAPPING};
-        
-        for(int i=0; i<enumCases.length; i++){
-            try{
-                UCharacter.getStringPropertyValue(enumCases[i],10,0);
-            } catch(Exception e){
-                errln("UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) " +
-                        "was not suppose to return an exception for values passed: " + 
-                        "Enum case: " + enumCases[i] + ", codepoint: 10, nameChoice: 0");
-            }
-        }
-
-        // Testing when "throw new IllegalArgumentException("Illegal Property Enum");"
-        int[] illegalEnum = {Integer.MIN_VALUE, -50, -10, -5, -2, -1};
-        for(int i=0; i<illegalEnum.length; i++){
-            try{
-                UCharacter.getStringPropertyValue(illegalEnum[i],10,0);
-                errln("UCharacter.getStringPropertyValue(propertyEnum, codepoint, nameChoice) " +
-                        "was suppose to return an exception for values passed: " + 
-                        "Enum case: " + illegalEnum[i] + ", codepoint: 10, nameChoice: 0");
-            } catch(Exception e){}
         }
     }
 

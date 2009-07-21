@@ -5362,7 +5362,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    ///CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
+
         // TODO some of these are less efficient, since a string is forced!
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||
                 (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT)) {
@@ -5389,7 +5391,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         throw new IllegalArgumentException("Illegal Property Enum");
     }
-    
+    ///CLOVER:ON
+
     /**
      * Get the minimum value for an integer/binary Unicode property type.
      * Can be used together with UCharacter.getIntPropertyMaxValue(int)
