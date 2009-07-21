@@ -28,6 +28,7 @@ public class TestAll extends TestGroup {
                 // "TestStringPrep",
                 // "TestIDNARef",
                 "IDNAConformanceTest",
+                "TestStringPrepProfiles",
             },
             "StringPrep and IDNA test"
             );

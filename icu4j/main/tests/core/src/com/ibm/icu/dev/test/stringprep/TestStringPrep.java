@@ -9,7 +9,6 @@ package com.ibm.icu.dev.test.stringprep;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.serializable.SerializableTest;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
 
@@ -257,7 +256,7 @@ public class TestStringPrep extends TestFmwk {
      * lineNumber)
      */
     public void TestStringPrepParseException() {
-        Locale locales[] = SerializableTest.getLocales();
+        Locale locales[] = {Locale.US, Locale.FRENCH, Locale.SIMPLIFIED_CHINESE};
         String rules = "This is a very odd little set of rules, just for testing, you know...";
         StringPrepParseException exceptions[] = new StringPrepParseException[locales.length];
 

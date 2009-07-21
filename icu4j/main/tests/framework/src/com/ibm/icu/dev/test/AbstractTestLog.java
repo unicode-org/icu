@@ -1,15 +1,15 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.VersionInfo;
 
 public abstract class AbstractTestLog implements TestLog {
