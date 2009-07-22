@@ -1,0 +1,1016 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css2">
+  <title>ReadMe for ICU4J</title>
+  <meta name="COPYRIGHT" content="Copyright 2000-2009, International Business Machines Corporation and others. All Rights Reserved.">
+  <style type="text/css">
+h3.doc { background: #CCCCFF }
+  </style>
+</head>
+<body style="background-color: rgb(255, 255, 255);" lang="EN-US"
+ link="#0000ff" vlink="#800080">
+<h2>International Components for Unicode for Java (ICU4J)</h2>
+<h3>Read Me for ICU4J 4.4M1</h3>
+<hr size="2" width="100%">
+<p><b>Release Date</b><br>
+July 22, 2009<br>
+</p>
+
+<p><b>Note:</b> This is a development milestone release of ICU4J 4.4.
+Following contents may be out of date.
+</p>
+
+<p>For the most recent release, see the <a
+ href="http://www.icu-project.org/download/"> ICU4J
+download site</a>. </p>
+<h3 class="doc">Contents</h3>
+<ul type="disc">
+  <li><a href="#introduction">Introduction to ICU4J</a></li>
+  <li><a href="#news">What Is New In This Release?</a></li>
+  <li><a href="#license">License Information</a></li>
+  <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
+  <li><a href="#download">How to Download ICU4J</a></li>
+  <li><a href="#WhatContain">The Structure and Contents of ICU4J</a></li>
+  <li><a href="#API">Where to Get Documentation</a></li>
+  <li><a href="#HowToInstallJavac">How to Install and Build</a></li>
+  <li><a href="#HowToModularize">How to modularize ICU4J</a></li>
+  <li><a href="#tryingout">Trying Out ICU4J</a></li>
+  <li><a href="#resources">ICU4J Resource Information</a></li>
+  <li><a href="#timezone">About ICU4J Time Zone</a></li>
+  <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
+  <li><a href="#SubmittingComments">Submitting Comments, Requesting
+Features and Reporting Bugs</a></li>
+</ul>
+<h3 class="doc"><a name="introduction"></a>Introduction to ICU4J</h3>
+<p>The International Components for Unicode (ICU) library provides
+robust and
+full-featured Unicode services on a wide variety of platforms. ICU
+supports the
+most current version of the Unicode standard, including support for
+supplementary characters (needed for GB 18030 repertoire support).</p>
+<p>Java provides a strong foundation for global programs, and IBM and
+the
+ICU team played a key role in providing globalization technology to
+Java. But because of its long release schedule, Java cannot always keep
+up with evolving standards. The ICU team continues to extend Java's
+Unicode and internationalization support, focusing on improving
+performance,
+keeping current with the Unicode standard, and providing richer APIs,
+while
+remaining as compatible as possible with the original Java text and
+internationalization API design.</p>
+<p>ICU4J is an add-on to the regular JRE that provides:
+</p>
+<ul>
+  <li><a
+ href="http://www.icu-project.org/userguide/Collate_Intro.html"><b>Collation</b></a>
+&#8211; rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison; faster
+and more complete than
+the J2SE implementation</li>
+  <li><a href="http://www.icu-project.org/userguide/strings.html"><b>Supplementary
+Characters</b></a> &#8211; String manipulation and character properties<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for proper GB 18030 and JIS X 0213
+repertoire support</li>
+  <li><a href="http://www.icu-project.org/userguide/charsetDetection.html"><b>Charset
+Detection</b></a> &#8211; Recognition of various single and multibyte charsets<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Useful for recognizing untagged text data</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
+&#8211; standard set operations optimized for sets of Unicode characters<br>
+&nbsp;&nbsp;&nbsp;&nbsp;UnicodeSets can be built from string patterns
+using any Unicode properties.</li>
+  <li><a href="http://www.icu-project.org/userguide/Transform.html"><b>Transforms</b></a>
+&#8211; a flexible mechanism for Unicode text conversions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Including Full/Halfwidth conversions,
+Normalization, Case conversions, Hex
+conversions, and transliterations between scripts (50+ pairs)</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/normalization.html"><b>Unicode
+Normalization</b></a> &#8211; NFC, NFD, NFKD, NFKC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For canonical text representations, needed for
+XML and the net</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/dateCalendar.html"><b>International
+Calendars</b></a> &#8211; Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic, Islamic, Coptic and other calendars<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
+certain countries</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/formatNumbers.html"><b>Number
+Format
+Enhancements</b></a> &#8211; Scientific Notation, Spelled-out, etc.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java number
+formatting. The spell-out format is
+used for checks and similar documents</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/boundaryAnalysis.html"><b>Enhanced
+Word-Break Detection</b></a> &#8211; Rule-based, supports Thai<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/compression.html"><b>Unicode
+Text
+Compression</b></a> &#8211; Standard compression of Unicode text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields,
+where LZW and similar schemes
+do not apply</li>
+  <li><a
+ href="http://www.icu-project.org/userguide/conversion.html"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Plugs into Java CharsetProvider Service Provider Interface (SPI)</li>
+
+</ul>
+<blockquote>
+  <p><b>Note:</b> We continue to provide assistance to Sun, and in some
+cases, ICU4J support has been rolled into a later release of Java. For
+example, the Thai word-break is now in Java 1.4. However, the most
+current and complete version is always found in ICU4J.</p>
+</blockquote>
+
+<h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
+<p>
+See the <a href="http://www.icu-project.org/download/">ICU 4.2 download page</a> about
+new features in this release.  The list of API changes since the previous ICU4J release
+is available
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-2/APIChangeReport.html">here</a>.
+</p>
+<h3 class="doc"><a name="license"></a>License Information</h3>
+<p>
+The ICU projects (ICU4C and ICU4J) use the X license. The X
+license is <b>suitable for commercial use</b> and is a recommended free software license
+that is compatible with the GNU GPL license. This became
+effective with release 1.8.1 of ICU4C and release 1.3.1 of ICU4J in
+mid-2001. All new ICU releases will adopt the X license; previous ICU
+releases continue to utilize the IPL (IBM Public License). Users
+of previous releases of ICU who want to adopt new ICU releases will
+need to accept the terms and conditions of the X license.
+</p>
+<p>
+The main effect of the change is to provide GPL compatibility.
+The X license is listed as GPL compatible, see the GNU page at 
+<a href="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
+http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.
+This means that GPL projects can now use ICU code, it does <b>not</b>
+mean that projects using ICU become subject to GPL.
+</p>
+<p>
+ The IBM version contains the essential text of the license, omitting the
+X-specific trademarks and copyright notices. The full copy of <a
+ href="license.html">ICU's license</a> is included in the download
+package.
+</p>
+<h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
+<p> By default ICU4J depends on functionality available
+in J2SE 5 or later releases.  The binary distribution of ICU4J
+jar file may have a problem with older JRE versions.
+We provide the ability to build a variant of ICU4J for JRE 1.3
+or 1.4.  If you want to use ICU4J running on JRE 1.4, you should
+build ICU4J libraries from the source package with JDK 1.4.
+With older JDK releases, some build targets may not work.
+
+<p>The table below shows operating systems and JRE/JDK versions currently
+used by the ICU development team.
+</p>
+<table bgcolor="#CCCCFF">
+<tr>
+  <th rowspan="2" bgcolor="#FFFFFF">Operating System</th>
+  <th colspan="3" bgcolor="#FFFFFF">Sun Java SE</th>
+  <th colspan="3" bgcolor="#FFFFFF">IBM Java SE</th>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">1.6.0</th>
+  <th bgcolor="#FFFFFF">1.5.0</th>
+  <th bgcolor="#FFFFFF">1.4.2</th>
+  <th bgcolor="#FFFFFF">1.6.0</th>
+  <th bgcolor="#FFFFFF">1.5.0</th>
+  <th bgcolor="#FFFFFF">1.4.2</th>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">AIX 5.2</th>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">AIX 5.3</th>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">AIX 6.1</th>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">HP-UX 11 (PA-RISC)</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">HP-UX 11 (IA64)</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">Redhat Enterprise Linux 4 (x86)</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+  <th>Redhat Enterprise Linux 5 (x86)</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+  <th>Solaris 9 (SPARC)</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+  <th>Solaris 10 (SPARC)</th>
+  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">Windows XP</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">Windows Vista</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">Windows 2008 Server</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+</table>
+
+<h3 class="doc"><a name="download"></a>How to Download ICU4J</h3>
+<p>There are two ways to download the ICU4J releases.
+</p>
+<ul type="disc">
+  <li><b>Official Release:</b><br>
+If you want to use ICU4J (as opposed to developing it), your best bet
+is to download an official, packaged version of the ICU4J library files.
+These versions are tested more thoroughly than day-to-day development
+builds, and they are packaged in jar files for convenient download.
+These packaged files can be found at the
+<a href="http://www.icu-project.org/download/">ICU Downloads page</a>.
+</li></ul>
+<ul type="disc">
+  <li><b>Subversion Source Repository:</b><br>
+If you are interested in developing features, patches, or bug fixes for
+ICU4J, you should probably be working with the latest version of the
+ICU4J source code. You will need to check the code out of our Subversion
+repository to ensure that you have the most recent version of all of
+the files. There are several ways to do this. Please follow the
+directions that are contained on the <a
+ href="http://www.icu-project.org/repository/">Source
+ Repository page</a> for details.
+  </li>
+</ul>
+<p>For more details on how to download ICU4J directly from the web
+site, please see the ICU downloads page at <a
+ href="http://www.icu-project.org/download/">http://www.icu-project.org/download/</a>
+</p>
+<h3 class="doc"><a name="WhatContain"></a>The Structure and Contents of
+ICU4J</h3>
+<p>Below, <b>$icu4j_root</b> is the placement of the icu directory in your
+file system, like
+"drive:\...\icu4j" in your environment. "drive:\..." stands for any
+drive and any directory on that drive that you chose to install icu4j
+into. </p>
+<p><b>Information and build files:</b></p>
+<table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
+  <tbody>
+    <tr>
+      <td align="right" bgcolor="#ffffff" valign="baseline"><b>readme.html</b><br>
+(this file)</td>
+      <td bgcolor="#ffffff" valign="baseline">A description of ICU4J
+(International Components for Unicode for Java)</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">license.html</th>
+      <td bgcolor="#ffffff" valign="baseline">The X license, used by
+ICU4J</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">build.xml</th>
+      <td bgcolor="#ffffff" valign="baseline">Ant build file. See <a
+ href="#HowToInstallJavac">How to Install and Build</a> for more
+information</td>
+    </tr>
+  </tbody>
+</table>
+<p><b>The source directories mirror the package structure of the code.</b><br>
+<font color="red">Core</font> packages become part of the ICU4J jar
+file.<br>
+<font color="red">Charset</font> packages become part of the ICU4J charset jar
+file.<br>
+<font color="red">LocaleSPI</font> packages become part of the ICU4J Locale
+service provider jar file.<br>
+<font color="red">RichText</font> classes are Core and API, but can be
+removed from icu4j.jar, and can be built into their own jar.<br>
+<font color="red">API</font> packages contain classes with supported
+API.<br>
+</p>
+<table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
+ width="623">
+  <tbody>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/charset<br>
+      <font color="red">Charset, API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Packages that provide Charset conversion
+      </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/dev<br>
+      <font color="red">Non-Core, Non-API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Packages used for
+internal development:
+      <ul>
+        <li>Data: data used by tests and in building ICU</li>
+        <li>Demos: Calendar, Holiday, Break Iterator, Rule-based Number
+Format, Transformations<br>
+(See <a href="#tryingout">below</a> for more information about the
+demos.)</li>
+        <li>Tests: API and coverage tests of all functionality.<br>
+For information about running the tests, see
+$icu4j_root/src/com/ibm/icu/dev/test/TestAll.java.</li>
+        <li>Tools: tools used to build data tables, etc.</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/impl<br>
+      <font color="red">Core, Non-API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">These are utility classes
+used from different ICU4J core packages.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/lang<br>
+      <font color="red">Core, API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Character properties
+package.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/math<br>
+      <font color="red">Core, API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Additional math classes.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/text<br>
+      <font color="red">Core, API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Additional text classes.
+These add to, and in some cases replace, related core Java classes:
+      <ul>
+        <li>Arabic shaping</li>
+        <li>Bidirectional text manipulation</li>
+        <li>Break iteration</li>
+        <li>Date formatting</li>
+        <li>Number formatting</li>
+        <li>Transliteration</li>
+        <li>Normalization</li>
+        <li>String manipulation</li>
+        <li>Collation</li>
+        <li>String search</li>
+        <li>Unicode compression</li>
+        <li>Unicode sets</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/icu/util<br>
+      <font color="red">Core, API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Additional utility
+classes:
+      <ul>
+        <li>Calendars - Gregorian, Buddhist, Coptic, Ethiopic, Hebrew, Islamic, Japanese, Chinese and others</li>
+        <li>Holiday</li>
+        <li>TimeZone</li>
+        <li>VersionInfo</li>
+        <li>Iteration</li>
+        <li>Currency</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/src/com/ibm/richtext<br>
+      <font color="red">RichText,Non-API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Styled text editing
+package. This includes demos, tests, and GUIs for editing and
+displaying styled text. The richtext package provides a scrollable
+display, typing, arrow-key support, tabs, alignment and justification,
+word- and sentence-selection (by double-clicking and triple-clicking,
+respectively), text styles, clipboard operations (cut, copy and paste)
+and a log of changes for undo-redo. Richtext uses Java's TextLayout and
+complex text support (provided to Sun by the ICU4J team).</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/localespi/src/com/ibm/icu/impl<br>
+      <font color="red">LocaleSPI,Non-API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">
+        Packages for ICU4J Locale Service Provider runtime
+        code implementing the Java SE 6 locale sensitive service provider interfaces.
+      </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/localespi/src/com/ibm/icu/dev<br>
+      <font color="red">LocaleSPI,Non-API</font></th>
+      <td bgcolor="#ffffff" valign="baseline">
+        Packages used for internal development for ICU4J Locale Service Provider, including
+        test cases. 
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><b>Building ICU4J creates and populates the following directories:</b></p>
+<table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
+  <tbody>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/classes</th>
+      <td bgcolor="#ffffff" valign="baseline">contains all class files</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$icu4j_root/doc</th>
+      <td bgcolor="#ffffff" valign="baseline">contains JavaDoc for all
+packages</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<p><b>ICU4J data is stored in the following locations:</b></p>
+<table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
+ width="623">
+  <tbody>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline"><code>com.ibm.icu.impl.data</code></th>
+      <td bgcolor="#ffffff" valign="baseline">Holds data used by the
+ICU4J core and charset packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>,
+      <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code>,
+      <code>com.ibm.icu.text</code> and <code>com.ibm.icu.charset</code>). In particular, all resource
+information is stored here.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline"><code>com.ibm.icu.dev.data</code></th>
+      <td bgcolor="#ffffff" valign="baseline">Holds data that is not
+part of ICU4J core, but rather part of a test, sample, or demo.</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h3 class="doc"><a name="API"></a>Where to get Documentation</h3>
+<p>The <a href="http://www.icu-project.org/userguide/">ICU user's
+guide</a> contains lots of general information about ICU, in its C,
+C++, and Java incarnations.</p>
+<p>The complete API documentation for ICU4J (javadoc) is available on
+the ICU4J web site, and can be built from the sources:
+</p>
+<ul>
+  <li><a href="http://www.icu-project.org/apiref/icu4j/">Index
+to all ICU4J API</a></li>
+  <li><a href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/CharsetDetector.html">Charset Detector</a> &#8211; Detection of charset from a byte stream</li>
+  <li>International Calendars &#8211; 
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/BuddhistCalendar.html">Buddhist</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/ChineseCalendar.html">Chinese</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/CopticCalendar.html">Coptic</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/EthiopicCalendar.html">Ethiopic</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/GregorianCalendar.html">Gregorian</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/HebrewCalendar.html">Hebrew</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/IndianCalendar.html">Indian</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/IslamicCalendar.html">Islamic</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/JapaneseCalendar.html">Japanese</a>.</li>
+  <li><a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/Normalizer.html">Unicode
+Normalization</a> &#8211; Canonical text representation for W3C.</li>
+  <li><a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/NumberFormat.html">Number
+Format Enhancements</a> &#8211; Scientific Notation, Spelled out.</li>
+  <li><a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/BreakIterator.html">Enhanced
+word-break detection</a> &#8211; Rule-based, supports Thai</li>
+  <li><a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/Transliterator.html">Transliteration</a>
+&#8211; A general framework for converting text from one format to another,
+e.g. Cyrillic to Latin, or Hex to Unicode. </li>
+  <li>Unicode Text <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/UnicodeCompressor.html">Compression</a>
+&amp; <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/UnicodeDecompressor.html">Decompression</a>
+&#8211; 2:1 compression on English Unicode text.</li>
+  <li>Collation - <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/RuleBasedCollator.html">Rule-based
+sorting</a>, <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/StringSearch.html">Efficient
+multi-lingual searching</a> </li>
+</ul>
+<h3 class="doc"><a name="HowToInstallJavac"></a>How to Install and Build</h3>
+<p>To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong>
+on your Java CLASSPATH. If you need Charset API support please place
+<strong>icu4j-charsets.jar</strong> on your class path. No other files are needed.</p>
+<p>To build ICU4J, you will need a J2SE SDK and the Ant build system.
+We strongly recommend using the Ant build system to build ICU4J.
+It's recommended to install both the J2SE SDK and Ant somewhere <em>outside</em>
+the ICU4J directory. For example, on Linux you might install these in
+/usr/local.</p>
+<ul>
+  <li>Install J2SE SDK 6.0.  (You can use any version of J2SE SDK 1.3 or newer,
+  but but J2SE SDK 5.0 is the minimum version required to enable the all
+  available ICU4J features.)</li>
+  <li>Install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
+  build system. Ant is a portable, Java-based build system similar to
+  make. ICU4J uses Ant because it introduces no other dependencies, it's
+  portable, and it's easier to manage than a collection of makefiles. We
+  currently build ICU4J using a single makefile on all platforms Ant.
+  The build system requires Ant 1.6 or later.
+    <p>Installing Ant is straightforward. Download it (see <a
+ href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
+extract it onto your system, set some environment variables, and add
+its bin directory to your path. For example: </p>
+    <pre>
+        set JAVA_HOME=C:\jdk1.6.0
+        set ANT_HOME=C:\ant
+        set PATH=%PATH%;%ANT_HOME%\bin</pre>
+    <p>See the current Ant documentation for details.</p>
+  </li>
+</ul>
+<p>Once the J2SE SDK and Ant are installed, building is just a matter of
+typing <strong>ant</strong> in the ICU4J root directory. This causes
+the Ant build system to perform a build as specified by the file
+<strong>build.xml</strong>, located in the ICU4J root directory. You
+can give Ant options like -verbose, and you can specify targets. Ant
+will only build what's been changed and will resolve dependencies
+properly. For example:</p>
+<blockquote>
+<pre>C:\icu4j&gt;ant
+Buildfile: build.xml
+
+checkAntVersion:
+
+warnAntVersion:
+
+initBase:
+    [mkdir] Created dir: C:\icu4j\classes
+     [echo] java home: C:\jdk1.6.0
+     [echo] java version: 1.6.0
+     [echo] ant java version: 1.6
+     [echo] Apache Ant version 1.7.0 compiled on December 13 2006
+     [echo] ICU4JDEV with Windows XP 5.1 build 2600 Service Pack 3 on x86
+     [echo] clover initstring = '${clover.initstring}'
+     [echo] target runtime environment: JAVASE6
+     [echo] Initialized at 2009-04-25 at 05:25:03 EDT
+
+buildMangle:
+    [javac] Compiling 1 source file to C:\icu4j\classes
+
+initSrc:
+
+displayBuildEnvWarning:
+
+doMangle:
+     [echo] Running source code preprocessor [java com.ibm.icu.dev.tool.docs.Cod
+eMangler -dJAVASE6 -n @preprocessor.txt]
+
+init:
+
+coreData:
+     [copy] Copying 1 file to C:\icu4j\classes\com\ibm\icu
+
+icudata:
+    [unjar] Expanding: C:\icu4j\src\com\ibm\icu\impl\data\icudata.jar into c:\ic
+u4j\classes
+     [copy] Copying 1 file to C:\icu4j\classes\META-INF
+
+durationdata:
+     [copy] Copying 16 files to C:\icu4j\classes\com\ibm\icu\impl\duration\i
+mpl\data
+
+core:
+    [javac] Compiling 351 source files to C:\icu4j\classes
+    [javac] Note: Some input files use or override a deprecated API.
+    [javac] Note: Recompile with -Xlint:deprecation for details.
+
+BUILD SUCCESSFUL
+Total time: 44 seconds</pre>
+</blockquote>
+<I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
+<p>The following are some targets that you can provide to <b>ant</b>.
+For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p>
+<table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
+ width="623">
+  <tbody>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">all</th>
+      <td bgcolor="#ffffff" valign="baseline">Build all targets.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">core</th>
+      <td bgcolor="#ffffff" valign="baseline">Build the main class
+files in the subdirectory <strong>classes</strong>. If no target is
+specified, core is assumed.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">tests</th>
+      <td bgcolor="#ffffff" valign="baseline">Build the test class
+files.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">demos</th>
+      <td bgcolor="#ffffff" valign="baseline">Build the demos.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">tools</th>
+      <td bgcolor="#ffffff" valign="baseline">Build the tools.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">docs</th>
+      <td bgcolor="#ffffff" valign="baseline">Run javadoc over the main
+class files, generating an HTML documentation tree in the subdirectory <strong>doc</strong>.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">jar</th>
+      <td bgcolor="#ffffff" valign="baseline">Create a jar archive <strong>icu4j.jar</strong>
+in the root ICU4J directory containing the main class files.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">jarSrc</th>
+      <td bgcolor="#ffffff" valign="baseline">Like the <strong>jar</strong>
+target, but containing only the source files. </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">jarDocs</th>
+      <td bgcolor="#ffffff" valign="baseline">Like the <strong>jar</strong>
+target, but containing only the docs. </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">richedit</th>
+      <td bgcolor="#ffffff" valign="baseline">Build the richedit core
+class files and tests. </td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">richeditJar</th>
+      <td bgcolor="#ffffff" valign="baseline">Create the richedit jar
+file (which contains only the richedit core class files). The file <strong>richedit.jar</strong>
+will be created in the <strong>./richedit</strong> subdirectory. Any
+existing file of that name will be overwritten.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">richeditZip</th>
+      <td bgcolor="#ffffff" valign="baseline">Create a zip archive of
+the richedit docs and jar file for distribution. The zip file <strong>richedit.zip</strong>
+will be created in the <strong>./richedit</strong> subdirectory. Any
+existing file of that name will be overwritten.</td>
+    </tr>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">clean</th>
+      <td bgcolor="#ffffff" valign="baseline">Remove all built targets,
+leaving the source.</td>
+    </tr>
+  </tbody>
+</table>
+<p>For more information, read the Ant documentation and the <strong>build.xml</strong>
+file.</p>
+<p>After doing a build it is a good idea to run all the icu4j tests by
+typing<br>
+<tt>"ant check"</tt> or
+"java -classpath classes com.ibm.icu.dev.test.TestAll -nothrow".<br>
+<b>Note:</b> If you get a OutOfMemoryError when you are running <tt>"ant check"</tt>, you can <br>
+set the heap size of the jvm by setting the environment variable JVM_OPTIONS<br>
+to the appropriate java options.</p>
+
+<p><b>Eclipse users:</b> See the ICU4J site for information on<a
+ href="http://www.icu-project.org/docs/eclipse_howto/eclipse_howto.html">
+how to configure Eclipse</a> to build and develop ICU4J on Eclipse IDE.</p>
+
+<p><b>Note: </b>To install/build ICU4J Locale Service Provider, please refer
+<a href="localespi/readme.html">Read Me for ICU4J Locale Service Provider</a>.</p>
+
+<h3 class="doc"><a name="HowToModularize"></a>How to modularize ICU4J</h3>
+<p>Some clients may not wish to ship all of ICU4J with their
+application, since the application might only use a small part of ICU4J.
+ICU4J release 2.6 and later provide build options to build individual
+ICU4J 'modules' for a more compact distribution.  For more details, please
+refer to the section <em>Modularization of ICU4J</em> in the ICU user's
+guide article <a href="http://www.icu-project.org/userguide/packaging.html">Packaging ICU</a>.
+
+<h3 class="doc"><a name="tryingout"></a>Trying Out ICU4J</h3>
+<p><strong>Note:</strong> the demos provided with ICU4J are for the
+most part undocumented. This list can show you where to look, but
+you'll
+have to experiment a bit. The demos (with the
+exception of richedit) are <strong>unsupported</strong> and may change
+or disappear without notice.</p>
+<p>The icu4j.jar file contains only the core ICU4J classes, not the
+demo classes, so unless you build ICU4J there is little to try out.
+</p>
+<h4>Charset</h4>
+To try out the <strong>Charset</strong> package, build <strong>icu4j.jar</strong> and <strong>icu4j-charsets.jar</strong> using 'jar' target.
+You can use the charsets by placing these files on your classpath.
+<blockquote><tt>java -cp $icu4j_root/icu4j.jar:$icu4j_root/icu4j-charsets.jar &lt;your program&gt;</tt></blockquote>
+<h4>Rich Edit</h4>
+To try out the <strong>richedit</strong> package, first build the
+richeditJar target.
+This is a 'runnable' jar file. To run the richedit demo, type:
+<blockquote><tt>java -jar $icu4j_root/richedit/richedit.jar</tt></blockquote>
+This will present an empty edit pane with an awt interface.
+<p>With a fuller command line you can try out other options, for
+example:</p>
+<blockquote><tt>java -classpath $icu4j_root/richedit/richedit.jar
+com.ibm.richtext.demo.EditDemo [-swing][file]</tt></blockquote>
+<p>This will use an awt GUI, or a swing GUI if
+<tt>-swing</tt> is passed on the command line. It will open a text
+file if one is provided, otherwise it will open a blank page. Click
+to type.</p>
+<p>
+You can add tabs to the tab ruler by clicking in the ruler while
+holding down the control key.
+Clicking on an existing tab changes between left, right, center, and
+decimal tabs. Dragging
+a tab moves it, dragging it off the ruler removes it.</p>
+<p>
+You can experiment with complex text by using the keymap functions.
+Please note that these are mainly for demo purposes, for real work
+with Arabic or Hebrew you will want to use an input method. You will
+need to use a font that supports Arabic or Hebrew, 'Lucida Sans'
+(provided
+with Java) supports these languages.</p>
+<h4>Other demos</h4>
+<p>The other demo programs are <strong>not supported</strong> and
+exist only to let you
+experiment with the ICU4J classes. First, build ICU4J using <tt>ant&nbsp;all</tt>.
+Then try
+one of the following:
+</p>
+<ul>
+  <li><tt>java -classpath classes com.ibm.icu.dev.demo.calendar.CalendarApp</tt></li>
+  <li><tt>java -classpath classes com.ibm.icu.dev.demo.holiday.HolidayCalendarDemo</tt></li>
+  <li><tt>java -classpath classes com.ibm.icu.dev.demo.rbnf.RbnfDemo</tt></li>
+  <li><tt>java -classpath classes com.ibm.icu.dev.demo.translit.Demo</tt></li>
+</ul>
+
+<h3 class="doc"><a name="resources">ICU4J Resource Information</a></h3>
+Starting with release 2.1, ICU4J includes its own
+resource information
+which is completely independent of the JRE resource information. (Note,
+ICU4J 2.8 to 3.4, time zone information depends on the underlying JRE).
+The ICU4J resource information is equivalent to the information in ICU4C and
+many resources are, in fact, the same binary files that ICU4C uses.
+<p>
+By default the ICU4J distribution includes all of the standard resource
+information. It is located under the directory com/ibm/icu/impl/data.
+Depending on the service, the data is in different locations and in
+different formats. <strong>Note:</strong> This will continue to change
+from release to release, so clients should not depend on the exact
+organization
+of the data in ICU4J.</p>
+<ul>
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt42b</tt>,
+as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
+Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
+class, and the use of these names in searching for resources is documented 
+in <code>com.ibm.icu.util.UResourceBundle</code>.
+  </li>
+  <li>The <b>collation data</b> is under the directory <tt>icudt42b/coll</tt>,
+as a set of <tt>".res"</tt> files.</li>
+  <li>The <b>rule-based transliterator data</b> is under the directory
+<tt>icudt42b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
+Han transliterator test data is no longer included in the core icu4j.jar 
+file by default.)</li>
+  <li>The <b>rule-based number format data</b> is under the directory
+<tt>icudt42b/rbnf</tt> as a set of <tt>".res"</tt> files.
+  <li>The <b>break iterator data</b> is directly under the data
+directory, as a set of <tt>".brk"</tt> files, named according to the
+type of break and the locale where there are locale-specific versions.</li>
+  <li>The <b>holiday data</b> is under the <tt>data</tt> directory,
+as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
+followed by the locale ID.</li>
+  <li>The <b>character property data</b> as well as assorted <b>normalization
+data</b> and default <b>unicode collation algorithm (UCA) data</b>
+is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
+files. </li>
+  <li>The <b>character set converter data</b> is under the directory
+  <tt>icudt42b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  currently included only in icu-charset.jar.</li>
+  <li>The <b>time zone data</b> is named <tt>zoneinfo.res</tt> under
+  the directory <tt>icudt42b</tt>.</li>
+</ul>
+<p>
+Some of the data files alias or otherwise reference data from other
+data files. One reason for this is because some locale names have
+changed. For example, <tt>he_IL</tt> used to be <tt>iw_IL</tt>. In
+order to support both names but not duplicate the data, one of the
+resource files refers to the other file's data. In other cases, a
+file may alias a portion of another file's data in order to save
+space. Currently ICU4J provides no tool for revealing these
+dependencies.</p>
+<blockquote><strong>Note:</strong>  Java's <code>Locale</code> class
+silently converts the language code <tt>"he"</tt> to <tt>"iw"</tt>
+when you construct the Locale (for versions of Java through Java 5). Thus
+Java cannot be used to locate resources that use the <tt>"he"</tt>
+language code. ICU, on the other hand, does not perform this
+conversion in ULocale, and instead uses aliasing in the locale data to
+represent the same set of data under different locale
+ids.</blockquote>
+<p>
+Resource files that use locale ids form a hierarchy, with up to four
+levels: a root, language, region (country), and variant. Searches for
+locale data attempt to match as far down the hierarchy as possible,
+for example, <tt>"he_IL"</tt> will match <tt>he_IL</tt>, but
+<tt>"he_US"</tt> will match <tt>he</tt> (since there is no <tt>US</tt>
+variant for he, and <tt>"xx_YY</tt> will match root (the
+default fallback locale) since there is no <tt>xx</tt> language code
+in the locale hierarchy. Again, see
+<code>java.util.ResourceBundle</code> for more information.
+</p>
+<p>
+<strong>Currently ICU4J provides no tool for revealing these
+dependencies</strong> between data files, so trimming the data
+directly in the ICU4J project is a hit-or-miss affair. The key point
+when you remove data is to make sure to remove all dependencies on
+that data as well. For example, if you remove <tt>he.res</tt>, you
+need to remove <tt>he_IL.res</tt>, since it is lower in the hierarchy,
+and you must remove iw.res, since it references <tt>he.res</tt>, and
+<tt>iw_IL.res</tt>, since it depends on it (and also references
+<tt>he_IL.res</tt>).
+</p>
+<p>
+Unfortunately, the jar tool in the JDK provides no way to remove items
+from a jar file. Thus you have to extract the resources, remove the
+ones you don't want, and then create a new jar file with the remining
+resources. See the jar tool information for how to do this. Before
+'rejaring' the files, be sure to thoroughly test your application with
+the remaining resources, making sure each required resource is
+present.
+</p>
+<h4>Using additional resource files with ICU4J</h4>
+<blockquote>
+  <table cellpadding="3" frame="border" rules="none" width="50%">
+    <tbody>
+      <tr>
+        <td><b><font color="red" size="+1">Warning:</font> Resource
+file formats can change across releases of ICU4J!</b></td>
+      </tr>
+      <tr>
+        <td>The format of ICU4J resources is not part of the API.
+Clients who develop their own resources for use with ICU4J should be
+prepared to
+regenerate them when they move to new releases of ICU4J.</td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+<p>
+We are still developing ICU4J's resource mechanism. Currently it 
+is not possible to mix icu's new binary <tt>.res</tt>
+resources
+with traditional java-style <tt>.class</tt> or <tt>.txt</tt>
+resources. We might
+allow for this in a future release, but since the resource data and
+format is not formally
+supported, you run the risk of incompatibilities with future releases
+of ICU4J.
+</p>
+<p>
+Resource data in ICU4J is checked in to the repository as a jar file
+containing the resource binaries, <tt>icudata.jar</tt>. This
+means that inspecting the contents of these resources is difficult.
+They currently are compiled from ICU4C <tt>.txt</tt> file data. You
+can view the contents of the ICU4C text resource files to understand
+the contents of the ICU4J resources.
+</p>
+<p>
+The files in <tt>icudata.jar</tt> get extracted to <tt>com/ibm/icu/impl/data</tt>
+in
+the build directory when the 'core' target is built.
+Building the <tt>'resources'</tt> target will force the
+resources to once again be extracted. Extraction will
+overwrite any corresponding resource files already in that directory.
+</p>
+<h4><a name="resourcesICU4C">Building ICU4J Resources from ICU4C</a></h4>
+ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_root</I>/source/data for the procedures.
+<h5> Generating Data from CLDR </h5>
+<I> Note: This procedure assumes that all 3 sources are in sibling directories</I>
+<ol>
+    <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
+    the CLDR source files checked out.</li>
+    <li>Update <I>$cldr_root</I>/common to 'release-1-7-0' tag</li>
+    <li>Update <I>$cldr_root</I>/tools to 'release-1-7-0' tag</li>
+    <li>Checkout ICU4C with tag 'release-4-2'</li>
+    <li>Checkout ICU4J with tag 'release-4-2'</li>
+    <li>Build ICU4J</li>
+    <li>Build ICU4C</li>
+    <li>Change to <I>$cldr_root</I>/tools/java directory</li>
+    <li>Build CLDR using ant after pointing ICU4J_CLASSES env var to the newly build ICU4J</li>
+    <li>cd to <I>$icu4c_root</I>/source/data directory</li>
+    <li>Follow the instructions in the cldr-icu-readme.txt</li>
+    <li>Build ICU4C data from CLDR</li>
+    <li>Build ICU4J data from ICU4C data by following the procedures in <I>$icu4c_root</I>/source/data/icu4j-readme.txt</li>
+    <li>cd to <I>$icu4j_root</I> dir</li>
+    <li>Build and test icu4j</li>
+</ol>
+
+<h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
+<p>ICU4J 4.2 includes time zone data version 2009g, which is the latest one as of
+the release date.  However, time zone data is frequently updated in response
+to changes made by local governments around the world.  If you need to update
+the time zone data, please refer the ICU user guide topic
+<a href="http://www.icu-project.org/userguide/dateTimezone.html#tzupdate">Updating the Time Zone Data</a>.</p>
+<p>Starting with ICU4J 4.0, you can optionally configure ICU4J date and time
+service classes to use underlying JDK TimeZone implementation (see the ICU4J API reference
+<a href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/TimeZone.html">TimeZone</a>
+for the details).  When this configuration is enabled, ICU's own time zone data
+won't be used and you have to get time zone data patches from the JRE vendor.</p>
+
+<h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
+Information</h3>
+<p><a href="http://www.icu-project.org/">http://www.icu-project.org/</a>
+is the home page of International Components for Unicode development project</p>
+<p><a href="http://www.ibm.com/software/globalization/icu/">http://www.ibm.com/software/globalization/icu/</a>
+is a pointer to general information about the International Components for
+Unicode hosted by IBM</p>
+<p><a href="http://www.ibm.com/software/globalization/">http://www.ibm.com/software/globalization/</a>
+is a pointer to
+information on how to make applications global. </p>
+<h3 class="doc"><a name="SubmittingComments"></a>Submitting Comments,
+Requesting Features and
+Reporting Bugs</h3>
+<p>Your comments are important to making ICU4J successful. We are
+committed to investigate any bug reports or suggestions,
+and will use your feedback to help plan future releases.</p>
+<p>To submit comments, request features and report bugs,
+please see <a href="http://www.icu-project.org/bugs.html">ICU bug database
+information</a> or contact us through the <a
+ href="http://www.icu-project.org/contacts.html">ICU Support
+mailing list</a>.  While we are not able to respond individually to each comment, we do
+review all comments.</p>
+<br>
+<br>
+<h2>Thank you for your interest in ICU4J!</h2>
+<br>
+<hr align="center" size="2" width="100%">
+<p><I><font size="-1">Copyright &copy; 2002-2009 International Business
+Machines Corporation and others. All Rights
+Reserved.<br>
+4400 North First Street, San Jos&eacute;, CA 95193, USA
+</font></I></p>
+</body>
+</html>

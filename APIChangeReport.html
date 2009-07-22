@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.1</title>
+<!-- Copyright 2009, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.1</h1>
+
+<hr/>
+<h2>Removed from ICU4J 4.2.1</h2>
+
+<h3>Package com.ibm.icu.math</h3>
+<ul>
+BigDecimal
+<ul>
+<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:red'>*internal*  </span>public class <i>BreakDictionary</i></li>
+CollationKey
+<ul>
+<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Calendar
+<ul>
+<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
+</ul>
+ULocale
+<ul>
+<li>(draft)      public static VersionInfo <i>getCLDRVersion</i>()</li>
+</ul>
+UResourceBundle
+<ul>
+<li><span style='color:red'>*internal*  </span>protected static final int ALIAS</li>
+<li><span style='color:red'>*internal*  </span>protected static final int TABLE32</li>
+<li><span style='color:red'>*internal*  </span>protected boolean isTopLevel</li>
+<li><span style='color:red'>*internal*  </span>protected java.lang.String key</li>
+<li><span style='color:red'>*internal*  </span>protected long resource</li>
+<li><span style='color:red'>*internal*  </span>protected int size</li>
+</ul>
+VersionInfo
+<ul>
+<li>(draft)      public int <i>compareTo</i>(java.lang.Object)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.3.1</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 4.3.1 (old, new)</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetProviderICU
+<ul>
+<li>    <span style='color:red'>*internal*  </span>public static final java.lang.Object[] <i>getAvailableNames</i>()</br>
+<span style='color:red'>*internal*  </span>public static final java.lang.String[] <i>getAvailableNames</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+CharsetMatch
+<ul>
+<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
+(draft)      public int <i>compareTo</i>(com.ibm.icu.text.CharsetMatch)</li>
+</ul>
+RawCollationKey
+<ul>
+<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
+(stable)     public int <i>compareTo</i>(com.ibm.icu.text.RawCollationKey)</li>
+</ul>
+UTF16.StringComparator
+<ul>
+<li>    (stable)     public int <i>compare</i>(java.lang.Object, java.lang.Object)</br>
+(stable)     public int <i>compare</i>(java.lang.String, java.lang.String)</li>
+<li>    (stable)     public class <i>UnicodeSet</i> extends com.ibm.icu.text.UnicodeFilter implements com.ibm.icu.util.Freezable</br>
+(stable)     public class <i>UnicodeSet</i> extends com.ibm.icu.text.UnicodeFilter implements java.lang.Iterable, java.lang.Comparable, com.ibm.icu.util.Freezable</li>
+</ul>
+UnicodeSet
+<ul>
+<li>    (stable)     public void <i>addAll</i>(java.util.Collection)</br>
+(draft)      public com.ibm.icu.text.UnicodeSet <i>addAll</i>(int, int)</li>
+<li>    (stable)     public void <i>addAllTo</i>(java.util.Collection)</br>
+(draft)      public static java.lang.Object[] <i>addAllTo</i>(java.lang.Iterable, T[])</li>
+<li>    (stable)     public java.lang.Object <i>freeze</i>()</br>
+(stable)     public com.ibm.icu.text.UnicodeSet <i>freeze</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+ByteArrayWrapper
+<ul>
+<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
+(stable)     public int <i>compareTo</i>(com.ibm.icu.util.ByteArrayWrapper)</li>
+</ul>
+UResourceBundle
+<ul>
+<li>    <span style='color:red'>*internal*  </span>protected static void <i>addToCache</i>(java.lang.ClassLoader, java.lang.String, com.ibm.icu.util.ULocale, com.ibm.icu.util.UResourceBundle)</br>
+<span style='color:red'>*internal*  </span>protected static com.ibm.icu.util.UResourceBundle <i>addToCache</i>(java.lang.ClassLoader, java.lang.String, com.ibm.icu.util.ULocale, com.ibm.icu.util.UResourceBundle)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 4.3.1</h2>
+<p>(no API promoted)</p>
+
+<hr/>
+<h2>Added in ICU4J 4.3.1</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetDecoderICU
+<ul>
+<li>(draft)      protected static final int EXT_MAX_BYTES</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.impl</h3>
+<ul>
+<li>(draft)      public class <i>Assert</i></li>
+<li>(draft)      public class <i>BOCU</i></li>
+<li><span style='color:red'>*internal*  </span>public class <i>CalendarAstronomer</i></li>
+<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Ecliptic</i></li>
+<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Equatorial</i></li>
+<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Horizon</i></li>
+<li><span style='color:red'>*internal*  </span>public class <i>CalendarCache</i></li>
+<li><span style='color:red'>*internal*  </span>public class <i>CalendarData</i></li>
+<li>(draft)      public class <i>CharTrie</i></li>
+<li>(draft)      public class <i>CharTrie.FriendAgent</i></li>
+<li>(draft)      public class <i>CharacterIteratorWrapper</i></li>
+<li>(draft)      public final class <i>DateNumberFormat</i></li>
+<li>(draft)      public final class <i>Differ</i></li>
+<li>(draft)      public class <i>Grego</i></li>
+<li>(draft)      public final class <i>ICUBinary</i></li>
+<li>(draft)      public static interface <i>ICUBinary.Authenticate</i></li>
+<li>(draft)      public interface <i>ICUCache</i></li>
+<li>(draft)      public class <i>ICUConfig</i></li>
+<li>(draft)      public final class <i>ICUData</i></li>
+<li>(draft)      public final class <i>ICUDebug</i></li>
+<li>(draft)      public class <i>ICULocaleService</i></li>
+<li>(draft)      public static class <i>ICULocaleService.ICUResourceBundleFactory</i></li>
+<li>(draft)      public static class <i>ICULocaleService.LocaleKey</i></li>
+<li>(draft)      public static abstract class <i>ICULocaleService.LocaleKeyFactory</i></li>
+<li>(draft)      public static class <i>ICULocaleService.SimpleLocaleKeyFactory</i></li>
+<li>(draft)      public abstract class <i>ICUNotifier</i></li>
+<li>(draft)      public class <i>ICURWLock</i></li>
+<li>(draft)      public static final class <i>ICURWLock.Stats</i></li>
+<li>(draft)      public class <i>ICUResourceBundle</i></li>
+<li>(draft)      public final class <i>ICUResourceBundleReader</i></li>
+<li>(draft)      public class <i>ICUService</i></li>
+<li>(draft)      public static interface <i>ICUService.Factory</i></li>
+<li>(draft)      public static class <i>ICUService.Key</i></li>
+<li>(draft)      public static interface <i>ICUService.ServiceListener</i></li>
+<li>(draft)      public static class <i>ICUService.SimpleFactory</i></li>
+<li>(draft)      public class <i>IllegalIcuArgumentException</i></li>
+<li><span style='color:red'>*internal*  </span>public class <i>ImplicitCEGenerator</i></li>
+<li>(draft)      public class <i>IntTrie</i></li>
+<li>(draft)      public class <i>IntTrieBuilder</i></li>
+<li>(draft)      public class <i>InvalidFormatException</i></li>
+<li>(draft)      public class <i>JavaTimeZone</i></li>
+<li>(draft)      public class <i>LocaleUtility</i></li>
+<li>(draft)      public class <i>MultiComparator</i></li>
+<li>(draft)      public final class <i>NormalizerImpl</i></li>
+<li>(draft)      public class <i>OlsonTimeZone</i></li>
+<li>(draft)      public class <i>PVecToTrieCompactHandler</i></li>
+<li>(draft)      public class <i>PatternTokenizer</i></li>
+<li>(draft)      public class <i>PluralRulesLoader</i></li>
+<li>(draft)      public class <i>PropsVectors</i></li>
+<li>(draft)      public static interface <i>PropsVectors.CompactHandler</i></li>
+<li>(draft)      public final class <i>Punycode</i></li>
+<li>(draft)      public class <i>RelativeDateFormat</i></li>
+<li>(draft)      public class <i>RelativeDateFormat.URelativeString</i></li>
+<li>(draft)      public class <i>ReplaceableUCharacterIterator</i></li>
+<li>(draft)      public class <i>ResourceBundleWrapper</i></li>
+<li>(draft)      public class <i>RuleCharacterIterator</i></li>
+<li>(draft)      public class <i>SimpleCache</i></li>
+<li>(draft)      public class <i>SortedSetRelation</i></li>
+<li>(draft)      public final class <i>StringPrepDataReader</i></li>
+<li>(draft)      public final class <i>StringUCharacterIterator</i></li>
+<li>(draft)      public class <i>TextTrieMap</i></li>
+<li>(draft)      public static interface <i>TextTrieMap.ResultHandler</i></li>
+<li>(draft)      public class <i>TimeZoneAdapter</i></li>
+<li>(draft)      public abstract class <i>Trie</i></li>
+<li>(draft)      public static interface <i>Trie.DataManipulate</i></li>
+<li>(draft)      public class <i>TrieBuilder</i></li>
+<li>(draft)      public static interface <i>TrieBuilder.DataManipulate</i></li>
+<li>(draft)      public class <i>TrieIterator</i></li>
+<li>(draft)      public final class <i>UBiDiProps</i></li>
+<li>(draft)      public final class <i>UCaseProps</i></li>
+<li>(draft)      public static interface <i>UCaseProps.ContextIterator</i></li>
+<li>(draft)      public final class <i>UCharArrayIterator</i></li>
+<li>(draft)      public class <i>UCharacterIteratorWrapper</i></li>
+<li>(draft)      public final class <i>UCharacterName</i></li>
+<li>(draft)      public interface <i>UCharacterNameChoice</i></li>
+<li>(draft)      public final class <i>UCharacterProperty</i></li>
+<li>(draft)      public final class <i>UCharacterUtility</i></li>
+<li>(draft)      public final class <i>UPropertyAliases</i></li>
+<li>(draft)      public abstract class <i>URLHandler</i></li>
+<li>(draft)      public static interface <i>URLHandler.URLVisitor</i></li>
+<li><span style='color:red'>*internal*  </span>public final class <i>USerializedSet</i></li>
+<li>(draft)      public class <i>UnicodeRegex</i></li>
+<li>(draft)      public final class <i>Utility</i></li>
+<li>(draft)      public class <i>UtilityExtensions</i></li>
+<li>(draft)      public final class <i>ZoneMeta</i></li>
+<li>(draft)      public class <i>ZoneStringFormat</i></li>
+<li>(draft)      public static class <i>ZoneStringFormat.ZoneStringInfo</i></li>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(draft)      public interface <i>RbnfLenientScanner</i></li>
+<li>(draft)      public interface <i>RbnfLenientScannerProvider</i></li>
+<li>(draft)      public class <i>RbnfScannerProviderImpl</i></li>
+Collator
+<ul>
+<li><span style='color:red'>*internal*  </span>public Collator <i>setStrength2</i>(int)</li>
+</ul>
+DateTimePatternGenerator
+<ul>
+<li><span style='color:red'>*internal*  </span>public boolean <i>skeletonsAreSimilar</i>(java.lang.String, java.lang.String)</li>
+</ul>
+RuleBasedNumberFormat
+<ul>
+<li>(draft)      public RbnfLenientScannerProvider <i>getLenientScannerProvider</i>()</li>
+<li>(draft)      public void <i>setLenientScannerProvider</i>(RbnfLenientScannerProvider)</li>
+</ul>
+UnicodeSet
+<ul>
+<li>(draft)      public <i>UnicodeSet</i>(int[])</li>
+<li>(stable)     public UnicodeSet <i>add</i>(java.util.Collection)</li>
+<li>(draft)      public UnicodeSet <i>addAll</i>(java.lang.String[])</li>
+<li>(draft)      public UnicodeSet <i>addAll</i>(java.util.Collection)</li>
+<li>(draft)      public java.lang.String[] <i>addAllTo</i>(java.lang.String[])</li>
+<li>(draft)      public java.util.Collection <i>addAllTo</i>(U)</li>
+<li>(draft)      public static java.util.Collection <i>addAllTo</i>(java.lang.Iterable, U)</li>
+<li>(draft)      public static int <i>compare</i>(int, java.lang.String)</li>
+<li>(draft)      public static int <i>compare</i>(java.lang.Iterable, java.lang.Iterable)</li>
+<li>(draft)      public static int <i>compare</i>(java.lang.String, int)</li>
+<li>(draft)      public int <i>compareTo</i>(UnicodeSet)</li>
+<li>(draft)      public int <i>compareTo</i>(java.lang.Iterable)</li>
+<li>(draft)      public boolean <i>containsAll</i>(java.util.Collection)</li>
+<li>(draft)      public boolean <i>containsNone</i>(java.util.Collection)</li>
+<li>(draft)      public final boolean <i>containsSome</i>(java.util.Collection)</li>
+<li>(draft)      public static int <i>getSingleCodePoint</i>(java.lang.String)</li>
+<li>(draft)      public java.util.Iterator <i>iterator</i>()</li>
+<li>(draft)      public UnicodeSet <i>removeAll</i>(java.util.Collection)</li>
+<li>(draft)      public UnicodeSet <i>retainAll</i>(java.util.Collection)</li>
+<li>(draft)      public java.lang.Iterable <i>strings</i>()</li>
+<li>(draft)      public static java.lang.String[] <i>toArray</i>(UnicodeSet)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+LocaleData
+<ul>
+<li>(draft)      public static VersionInfo <i>getCLDRVersion</i>()</li>
+</ul>
+UResourceBundle
+<ul>
+<li><span style='color:red'>*internal*  </span>protected java.util.Set <i>handleKeySet</i>()</li>
+<li><span style='color:red'>*internal*  </span>protected boolean <i>isTopLevelResource</i>()</li>
+<li><span style='color:red'>*internal*  </span>public java.util.Set <i>keySet</i>()</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Jul 22 16:04:44 EDT 2009<br/>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
