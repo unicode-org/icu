@@ -170,13 +170,28 @@ public final class Utility {
     /**
      * Convenience utility. Does null checks on objects, then calls equals.
      */
-    public final static boolean objectEquals(Object source, Object target) {
-        if (source == null)
-            return (target == null);
-        else
-            return source.equals(target);
+    public final static boolean objectEquals(Object a, Object b) {
+        return a == null ? 
+                b == null ? true : false : 
+                    b == null ? false : a.equals(b);
     }
+    
+    /**
+     * Convenience utility. Does null checks on objects, then calls compare.
+     */
+    public static <T> int checkCompare(Comparable a, Comparable b) {
+        return a == null ? 
+                b == null ? 0 : -1 : 
+                    b == null ? 1 : a.compareTo(b);
+      }
 
+    /**
+     * Convenience utility. Does null checks on object, then calls hashCode.
+     */
+    public static int checkHash(Object a) {
+        return a == null ? 0 : a.hashCode();
+      }
+    
     /**
      * The ESCAPE character is used during run-length encoding.  It signals
      * a run of identical chars.
