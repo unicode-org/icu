@@ -1243,10 +1243,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * When in lenient parse mode, the formatter uses an RbnfLenientScanner
      * for parsing the text.  Lenient parsing is only in effect if a scanner
      * is set.  If a provider is not set, and this is used for parsing,
-     * a default scanner {@see RbnfLenientScannerProviderImpl} will be set if
+     * a default scanner <code>RbnfLenientScannerProviderImpl</code> will be set if
      * it is available on the classpath.  Otherwise this will have no effect.
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
+     * @see RbnfLenientScanner
+     * @see RbnfLenientScannerProvider
      * @stable ICU 2.0
      */
     public void setLenientParseMode(boolean enabled) {

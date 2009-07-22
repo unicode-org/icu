@@ -194,7 +194,6 @@ abstract class CECalendar extends Calendar {
      * year of this calendar system.  Subclasses should override this
      * method if they can provide a more correct or more efficient
      * implementation than the default implementation in Calendar.
-     * @new ICU 4.4
      */
     protected int handleGetMonthLength(int extendedYear, int month)
     {
