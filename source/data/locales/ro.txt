@@ -1,0 +1,2908 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ro.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ro.xml
+ */
+ro{
+    AuxExemplarCharacters{"[á à å ä ç é è ê ë ñ ö q ş ţ ü w y]"}
+    Countries{
+        001{"Lume"}
+        002{"Africa"}
+        003{"America de Nord"}
+        005{"America de Sud"}
+        009{"Oceania"}
+        011{"Africa Occidentală"}
+        013{"America Centrală"}
+        014{"Africa Orientală"}
+        015{"Africa Septentrională"}
+        017{"Africa Centrală"}
+        018{"Africa Meridională"}
+        019{"Americi"}
+        021{"America Septentrională"}
+        029{"Caraibe"}
+        030{"Asia Orientală"}
+        034{"Asia Meridională"}
+        035{"Asia de Sud-Est"}
+        039{"Europa Meridională"}
+        053{"Australia și Noua Zeelandă"}
+        054{"Melanezia"}
+        057{"Regiunea Micronezia"}
+        061{"Polinezia"}
+        062{"Asia Centrală de Sud"}
+        142{"Asia"}
+        143{"Asia Centrală"}
+        145{"Asia Occidentală"}
+        150{"Europa"}
+        151{"Europa Orientală"}
+        154{"Europa Septentrională"}
+        155{"Europa Occidentală"}
+        172{"Comunitatea Statelor Independente"}
+        419{"America Latină și Caraibe"}
+        830{"Insulele Anglo-Normande"}
+        AD{"Andorra"}
+        AE{"Emiratele Arabe Unite"}
+        AF{"Afganistan"}
+        AG{"Antigua și Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AN{"Antilele Olandeze"}
+        AO{"Angola"}
+        AQ{"Antarctica"}
+        AR{"Argentina"}
+        AS{"Samoa Americană"}
+        AT{"Austria"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AX{"Insulele Aland"}
+        AZ{"Azerbaidjan"}
+        BA{"Bosnia și Herțegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Belgia"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaria"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"Sfântul Bartolomeu"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
+        BO{"Bolivia"}
+        BR{"Brazilia"}
+        BS{"Bahamas"}
+        BT{"Bhutan"}
+        BV{"Insula Bouvet"}
+        BW{"Botswana"}
+        BY{"Bielorusia"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Insulele Cocos"}
+        CD{"Republica Democrată Congo"}
+        CF{"Republica Centrafricană"}
+        CG{"Congo"}
+        CH{"Eleveția"}
+        CI{"Coasta de Fildeș"}
+        CK{"Insulele Cook"}
+        CL{"Chile"}
+        CM{"Camerun"}
+        CN{"China"}
+        CO{"Columbia"}
+        CR{"Costa Rica"}
+        CS{"Serbia și Muntenegru"}
+        CU{"Cuba"}
+        CV{"Capul Verde"}
+        CX{"Insula Christmas"}
+        CY{"Cipru"}
+        CZ{"Republica Cehă"}
+        DE{"Germania"}
+        DJ{"Djibouti"}
+        DK{"Danemarca"}
+        DM{"Dominica"}
+        DO{"Republica Dominicană"}
+        DZ{"Algeria"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
+        EG{"Egipt"}
+        EH{"Sahara Occidentală"}
+        ER{"Eritreea"}
+        ES{"Spania"}
+        ET{"Etiopia"}
+        FI{"Finlanda"}
+        FJ{"Fiji"}
+        FK{"Insulele Falkland"}
+        FM{"Micronezia"}
+        FO{"Insulele Feroe"}
+        FR{"Franța"}
+        GA{"Gabon"}
+        GB{"Marea Britanie"}
+        GD{"Grenada"}
+        GE{"Georgia"}
+        GF{"Guyana Franceză"}
+        GG{"Guernsey"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Groenlanda"}
+        GM{"Gambia"}
+        GN{"Guineea"}
+        GP{"Guadelupa"}
+        GQ{"Guineea Ecuatorială"}
+        GR{"Grecia"}
+        GS{"Insulele Georgia de Sud și Sandwich de Sud"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guineea-Bissau"}
+        GY{"Guyana"}
+        HK{"R.A.S. Hong Kong a Chinei"}
+        HM{"Insula Heard și Insulele McDonald"}
+        HN{"Honduras"}
+        HR{"Croația"}
+        HT{"Haiti"}
+        HU{"Ungaria"}
+        ID{"Indonezia"}
+        IE{"Irlanda"}
+        IL{"Israel"}
+        IM{"Insula Man"}
+        IN{"India"}
+        IO{"Teritoriul Britanic din Oceanul Indian"}
+        IQ{"Irak"}
+        IR{"Iran"}
+        IS{"Islanda"}
+        IT{"Italia"}
+        JE{"Jersey"}
+        JM{"Jamaica"}
+        JO{"Iordania"}
+        JP{"Japonia"}
+        KE{"Kenya"}
+        KG{"Kârgâzstan"}
+        KH{"Cambodgia"}
+        KI{"Kiribati"}
+        KM{"Comore"}
+        KN{"Sfântul Kitts și Nevis"}
+        KP{"Coreea de Nord"}
+        KR{"Coreea de Sud"}
+        KW{"Kuweit"}
+        KY{"Insulele Cayman"}
+        KZ{"Kazahstan"}
+        LA{"Laos"}
+        LB{"Liban"}
+        LC{"Sfânta Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotho"}
+        LT{"Lituania"}
+        LU{"Luxemburg"}
+        LV{"Letonia"}
+        LY{"Libia"}
+        MA{"Maroc"}
+        MC{"Monaco"}
+        MD{"Republica Moldova"}
+        ME{"Muntenegru"}
+        MF{"Sfântul Martin"}
+        MG{"Madagascar"}
+        MH{"Insulele Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolia"}
+        MO{"R.A.S. Macao a Chinei"}
+        MP{"Insulele Mariane de Nord"}
+        MQ{"Martinica"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"Maldive"}
+        MW{"Malawi"}
+        MX{"Mexic"}
+        MY{"Malaezia"}
+        MZ{"Mozambic"}
+        NA{"Namibia"}
+        NC{"Noua Caledonie"}
+        NE{"Niger"}
+        NF{"Insulele Norfolk"}
+        NG{"Nigeria"}
+        NI{"Nicaragua"}
+        NL{"Olanda"}
+        NO{"Norvegia"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Noua Zeelandă"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Polinezia Franceză"}
+        PG{"Papua Noua Guinee"}
+        PH{"Filipine"}
+        PK{"Pakistan"}
+        PL{"Polonia"}
+        PM{"Sfântul Pierre și Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Porto Rico"}
+        PS{"Teritoriul Palestinian"}
+        PT{"Portugalia"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        QO{"Oceania Periferică"}
+        QU{"Uniunea Europeană"}
+        RE{"Reunion"}
+        RO{"România"}
+        RS{"Serbia"}
+        RU{"Rusia"}
+        RW{"Rwanda"}
+        SA{"Arabia Saudită"}
+        SB{"Insulele Solomon"}
+        SC{"Seychelles"}
+        SD{"Sudan"}
+        SE{"Suedia"}
+        SG{"Singapore"}
+        SH{"Sfânta Elena"}
+        SI{"Slovenia"}
+        SJ{"Svalbard și Jan Mayen"}
+        SK{"Slovacia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        ST{"Sao Tome și Principe"}
+        SV{"El Salvador"}
+        SY{"Siria"}
+        SZ{"Swaziland"}
+        TC{"Insulele Turks și Caicos"}
+        TD{"Ciad"}
+        TF{"Teritoriile Australe și Antarctice Franceze"}
+        TG{"Togo"}
+        TH{"Thailanda"}
+        TJ{"Tadjikistan"}
+        TK{"Tokelau"}
+        TL{"Timorul de Est"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Turcia"}
+        TT{"Trinidad-Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzania"}
+        UA{"Ucraina"}
+        UG{"Uganda"}
+        UM{"Insulele mici îndepărtate ale Statelor Unite ale Americii"}
+        US{"Statele Unite ale Americii"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistan"}
+        VA{"Vatican"}
+        VC{"Sfântul Vincent și Grenadine"}
+        VE{"Venezuela"}
+        VG{"Insulele Virgine Britanice"}
+        VI{"Insulele Virgine S.U.A."}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis și Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        ZA{"Africa de Sud"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+        ZZ{"Regiune necunoscută sau nevalidă"}
+    }
+    Currencies{
+        ADP{
+            "ADP",
+            "pesetă andorrană",
+        }
+        AED{
+            "AED",
+            "dirham Emiratele Arabe Unite",
+        }
+        ALL{
+            "ALL",
+            "leka albanez",
+        }
+        AMD{
+            "AMD",
+            "dram armenesc",
+        }
+        ANG{
+            "NAf.",
+            "gulden Antilele Olandeze",
+        }
+        ARP{
+            "ARP",
+            "peso argentinian (1983–1985)",
+        }
+        ARS{
+            "AR$",
+            "peso argentinian",
+        }
+        ATS{
+            "ATS",
+            "șiling austriac",
+        }
+        AUD{
+            "AU$",
+            "dolar australian",
+        }
+        AZN{
+            "man.",
+            "manat Azerbaidjan",
+        }
+        BAD{
+            "BAD",
+            "dinar Bosnia-Herțegovina",
+        }
+        BAM{
+            "KM",
+            "marcă convertibilă bosniacă",
+        }
+        BBD{
+            "Bds$",
+            "dolar Barbados",
+        }
+        BDT{
+            "Tk",
+            "taka Bangladeș",
+        }
+        BEC{
+            "BEC",
+            "franc belgian (convertibil)",
+        }
+        BEF{
+            "BF",
+            "franc belgian",
+        }
+        BEL{
+            "BEL",
+            "franc belgian (financiar)",
+        }
+        BGN{
+            "BGN",
+            "leva bulgărească nouă",
+        }
+        BIF{
+            "FBu",
+            "franc Burundi",
+        }
+        BMD{
+            "BD$",
+            "dolar Bermude",
+        }
+        BND{
+            "BN$",
+            "dolar Brunei",
+        }
+        BOB{
+            "Bs",
+            "bolivian bolivian",
+        }
+        BOP{
+            "$b.",
+            "peso bolivian",
+        }
+        BOV{
+            "BOV",
+            "mvdol bolivian",
+        }
+        BRE{
+            "BRE",
+            "cruzeiro brazilian (1990–1993)",
+        }
+        BRL{
+            "R$",
+            "real brazilian",
+        }
+        BRR{
+            "BRR",
+            "cruzeiro brazilian",
+        }
+        BSD{
+            "BS$",
+            "dolar Bahamas",
+        }
+        BTN{
+            "Nu.",
+            "ngultrum Bhutan",
+        }
+        BUK{
+            "BUK",
+            "kyat birman",
+        }
+        BYR{
+            "BYR",
+            "rublă bielorusă",
+        }
+        BZD{
+            "BZ$",
+            "dolar Belize",
+        }
+        CAD{
+            "CA$",
+            "dolar canadian",
+        }
+        CDF{
+            "CDF",
+            "franc congolez",
+        }
+        CHF{
+            "Fr.",
+            "franc elvețian",
+        }
+        CLP{
+            "CL$",
+            "peso chilian",
+        }
+        CNY{
+            "CN¥",
+            "yuan renminbi chinezesc",
+        }
+        COP{
+            "CO$",
+            "peso columbian",
+        }
+        CRC{
+            "₡",
+            "colon costarican",
+        }
+        CSD{
+            "CSD",
+            "dinar vechi Serbia și Muntenegru",
+        }
+        CUP{
+            "CU$",
+            "peso cubanez",
+        }
+        CVE{
+            "CV$",
+            "escudo Capul Verde",
+        }
+        CYP{
+            "CY£",
+            "liră cipriotă",
+        }
+        CZK{
+            "Kč",
+            "coroană cehă",
+        }
+        DDM{
+            "DDM",
+            "marcă est-germană",
+        }
+        DEM{
+            "DM",
+            "marcă germană",
+        }
+        DJF{
+            "Fdj",
+            "franc Djibouti",
+        }
+        DKK{
+            "Dkr",
+            "coroană daneză",
+        }
+        DOP{
+            "RD$",
+            "peso dominican",
+        }
+        DZD{
+            "DA",
+            "dinar algerian",
+        }
+        ECS{
+            "ECS",
+            "sucre Ecuador",
+        }
+        EEK{
+            "Ekr",
+            "coroană estoniană",
+        }
+        EGP{
+            "EG£",
+            "liră egipteană",
+        }
+        ESA{
+            "ESA",
+            "peseta spaniolă (cont A)",
+        }
+        ESB{
+            "ESB",
+            "peseta spaniolă (cont convertibil)",
+        }
+        ESP{
+            "Pts",
+            "pesetă spaniolă",
+        }
+        ETB{
+            "Br",
+            "birr Etiopia",
+        }
+        EUR{
+            "€",
+            "euro",
+        }
+        FIM{
+            "mk",
+            "marcă finlandeză",
+        }
+        FJD{
+            "FJ$",
+            "dolar Fiji",
+        }
+        FKP{
+            "FK£",
+            "liră Insulele Falkland",
+        }
+        FRF{
+            "₣",
+            "franc francez",
+        }
+        GBP{
+            "£",
+            "liră sterlină",
+        }
+        GEL{
+            "GEL",
+            "lari Georgia",
+        }
+        GHC{
+            "₵",
+            "cedi Ghana",
+        }
+        GIP{
+            "GI£",
+            "liră Gibraltar",
+        }
+        GMD{
+            "GMD",
+            "dalasi Gambia",
+        }
+        GNF{
+            "FG",
+            "franc Guineea",
+        }
+        GRD{
+            "₯",
+            "drahmă grecească",
+        }
+        GTQ{
+            "GTQ",
+            "quetzal Guatemala",
+        }
+        GWP{
+            "GWP",
+            "peso Guineea-Bissau",
+        }
+        GYD{
+            "GY$",
+            "dolar Guyana",
+        }
+        HKD{
+            "HK$",
+            "dolar Hong Kong",
+        }
+        HNL{
+            "HNL",
+            "lempira Honduras",
+        }
+        HRD{
+            "HRD",
+            "dinar croat",
+        }
+        HRK{
+            "kn",
+            "kuna croată",
+        }
+        HTG{
+            "HTG",
+            "gourde Haiti",
+        }
+        HUF{
+            "Ft",
+            "forint maghiar",
+        }
+        IDR{
+            "Rp",
+            "rupie indoneziană",
+        }
+        IEP{
+            "IR£",
+            "liră irlandeză",
+        }
+        ILP{
+            "I£",
+            "liră israeliană",
+        }
+        ILS{
+            "₪",
+            "șechel israelian nou",
+        }
+        INR{
+            "Rs",
+            "rupie indiană",
+        }
+        IQD{
+            "IQD",
+            "dinar irakian",
+        }
+        IRR{
+            "IRR",
+            "rial iranian",
+        }
+        ISK{
+            "Ikr",
+            "coroană islandeză",
+        }
+        ITL{
+            "IT₤",
+            "liră italiană",
+        }
+        JMD{
+            "J$",
+            "dolar jamaican",
+        }
+        JOD{
+            "JD",
+            "dinar iordanian",
+        }
+        JPY{
+            "JP¥",
+            "yen japonez",
+        }
+        KES{
+            "Ksh",
+            "șiling kenyan",
+        }
+        KGS{
+            "KGS",
+            "som Kirghizstan",
+        }
+        KHR{
+            "KHR",
+            "riel cambodgian",
+        }
+        KMF{
+            "CF",
+            "franc comorian",
+        }
+        KPW{
+            "KPW",
+            "won nord-coreean",
+        }
+        KRW{
+            "₩",
+            "won sud-coreean",
+        }
+        KWD{
+            "KD",
+            "dinar kuweitian",
+        }
+        KYD{
+            "KY$",
+            "dolar Insulele Cayman",
+        }
+        LAK{
+            "₭",
+            "kip Laos",
+        }
+        LBP{
+            "LB£",
+            "liră libaneză",
+        }
+        LKR{
+            "SLRs",
+            "rupie Sri Lanka",
+        }
+        LRD{
+            "L$",
+            "dolar liberian",
+        }
+        LTL{
+            "Lt",
+            "litu lituanian",
+        }
+        LUC{
+            "LUC",
+            "franc convertibil luxemburghez",
+        }
+        LUF{
+            "LUF",
+            "franc luxemburghez",
+        }
+        LUL{
+            "LUL",
+            "franc financiar luxemburghez",
+        }
+        LVL{
+            "Ls",
+            "lats Letonia",
+        }
+        LVR{
+            "LVR",
+            "rublă Letonia",
+        }
+        LYD{
+            "LD",
+            "dinar libian",
+        }
+        MAD{
+            "MAD",
+            "dirham marocan",
+        }
+        MAF{
+            "MAF",
+            "franc marocan",
+        }
+        MDL{
+            "MDL",
+            "leu moldovenesc",
+        }
+        MGF{
+            "MGF",
+            "franc Madagascar",
+        }
+        MKD{
+            "MKD",
+            "dinar macedonean",
+        }
+        MLF{
+            "MLF",
+            "franc Mali",
+        }
+        MMK{
+            "MMK",
+            "kyat Myanmar",
+        }
+        MNT{
+            "₮",
+            "tugrik mongol",
+        }
+        MTL{
+            "Lm",
+            "liră malteză",
+        }
+        MXN{
+            "MXN",
+            "peso mexican",
+        }
+        MXP{
+            "MX$",
+            "peso mexican de argint (1861–1992)",
+        }
+        MYR{
+            "RM",
+            "ringgit malaiezian",
+        }
+        MZE{
+            "MZE",
+            "escudo Mozambic",
+        }
+        MZM{
+            "Mt",
+            "metical Mozambic vechi",
+        }
+        MZN{
+            "MTn",
+            "metical Mozambic",
+        }
+        NAD{
+            "N$",
+            "dolar namibian",
+        }
+        NIC{
+            "NIC",
+            "cordoba Nicaragua",
+        }
+        NLG{
+            "fl",
+            "gulden olandez",
+        }
+        NOK{
+            "Nkr",
+            "coroană norvegiană",
+        }
+        NPR{
+            "NPRs",
+            "rupie nepaleză",
+        }
+        NZD{
+            "NZ$",
+            "dolar neozeelandez",
+        }
+        OMR{
+            "OMR",
+            "riyal Oman",
+        }
+        PAB{
+            "B/.",
+            "balboa panameză",
+        }
+        PEI{
+            "I/.",
+            "inti peruvian",
+        }
+        PEN{
+            "S/.",
+            "sol nou peruvian",
+        }
+        PES{
+            "PES",
+            "sol peruvian",
+        }
+        PGK{
+            "PGK",
+            "kina Papua-Noua Guinee",
+        }
+        PHP{
+            "₱",
+            "peso filipinez",
+        }
+        PKR{
+            "PKRs",
+            "rupie pakistaneză",
+        }
+        PLN{
+            "zł",
+            "zlot nou polonez",
+        }
+        PLZ{
+            "PLZ",
+            "zlot polonez (1950–1995)",
+        }
+        PYG{
+            "₲",
+            "guarani Paraguay",
+        }
+        QAR{
+            "QR",
+            "riyal Qatar",
+        }
+        RHD{
+            "RH$",
+            "dolar rhodesian",
+        }
+        ROL{
+            "ROL",
+            "leu vechi",
+        }
+        RON{
+            "RON",
+            "leu",
+        }
+        RSD{
+            "din.",
+            "dinar sârbesc",
+        }
+        RUB{
+            "RUB",
+            "rublă rusească",
+        }
+        RWF{
+            "RWF",
+            "franc Rwanda",
+        }
+        SAR{
+            "SR",
+            "riyal Arabia Saudită",
+        }
+        SBD{
+            "SI$",
+            "dolar Insulele Solomon",
+        }
+        SCR{
+            "SRe",
+            "rupie Seychelles",
+        }
+        SDD{
+            "LSd",
+            "dinar sudanez",
+        }
+        SDP{
+            "SDP",
+            "liră sudaneză",
+        }
+        SEK{
+            "Skr",
+            "coroană suedeză",
+        }
+        SGD{
+            "S$",
+            "dolar Singapore",
+        }
+        SHP{
+            "SH£",
+            "liră Insula Sf. Elena",
+        }
+        SIT{
+            "SIT",
+            "tolar sloven",
+        }
+        SKK{
+            "Sk",
+            "coroană slovacă",
+        }
+        SLL{
+            "Le",
+            "leu Sierra Leone",
+        }
+        SOS{
+            "Ssh",
+            "șiling somalez",
+        }
+        SRD{
+            "SR$",
+            "dolar Surinam",
+        }
+        SRG{
+            "Sf",
+            "gulden Surinam",
+        }
+        STD{
+            "Db",
+            "dobra Sao Tome și Principe",
+        }
+        SUR{
+            "SUR",
+            "rublă sovietică",
+        }
+        SVC{
+            "SV₡",
+            "colon El Salvador",
+        }
+        SYP{
+            "SY£",
+            "liră siriană",
+        }
+        THB{
+            "฿",
+            "baht thailandez",
+        }
+        TJR{
+            "TJR",
+            "rublă Tadjikistan",
+        }
+        TND{
+            "DT",
+            "dinar tunisian",
+        }
+        TRL{
+            "TRL",
+            "liră turcească",
+        }
+        TRY{
+            "TL",
+            "liră turcească nouă",
+        }
+        TTD{
+            "TT$",
+            "dolar Trinidad-Tobago",
+        }
+        TWD{
+            "NT$",
+            "dolar nou Taiwan",
+        }
+        TZS{
+            "TSh",
+            "șiling tanzanian",
+        }
+        UAH{
+            "₴",
+            "hryvna ucraineană",
+        }
+        UAK{
+            "UAK",
+            "carboavă ucraineană",
+        }
+        UGS{
+            "UGS",
+            "șiling ugandez (1966–1987)",
+        }
+        UGX{
+            "USh",
+            "șiling ugandez",
+        }
+        USD{
+            "US$",
+            "dolar american",
+        }
+        USN{
+            "USN",
+            "dolar american (ziua următoare)",
+        }
+        USS{
+            "USS",
+            "dolar american (aceeași zi)",
+        }
+        UYP{
+            "UYP",
+            "peso Uruguay (1975–1993)",
+        }
+        UYU{
+            "$U",
+            "peso nou Uruguay",
+        }
+        UZS{
+            "UZS",
+            "sum Uzbekistan",
+        }
+        VEB{
+            "VEB",
+            "bolivar Venezuela",
+        }
+        VND{
+            "₫",
+            "dong vietnamez",
+        }
+        XAF{
+            "FCFA",
+            "franc Comunitatea Financiară",
+        }
+        XAG{
+            "XAG",
+            "argint",
+        }
+        XAU{
+            "XAU",
+            "aur",
+        }
+        XBA{
+            "XBA",
+            "unitate compusă europeană",
+        }
+        XBB{
+            "XBB",
+            "unitate monetară europeană",
+        }
+        XBC{
+            "XBC",
+            "unitate de cont europeană (XBC)",
+        }
+        XBD{
+            "XBD",
+            "unitate de cont europeană (XBD)",
+        }
+        XCD{
+            "EC$",
+            "dolar Caraibele de Est",
+        }
+        XDR{
+            "XDR",
+            "drepturi speciale de tragere",
+        }
+        XEU{
+            "XEU",
+            "unitate de monedă europeană",
+        }
+        XFO{
+            "XFO",
+            "franc francez de aur",
+        }
+        XFU{
+            "XFU",
+            "franc UIC francez",
+        }
+        XPD{
+            "XPD",
+            "paladiu",
+        }
+        XPT{
+            "XPT",
+            "platină",
+        }
+        XTS{
+            "XTS",
+            "cod monetar de test",
+        }
+        XXX{
+            "XXX",
+            "monedă necunoscută sau nevalidă",
+        }
+        YDD{
+            "YDD",
+            "dinar Yemen",
+        }
+        YER{
+            "YR",
+            "riyal Yemen",
+        }
+        YUD{
+            "YUD",
+            "dinar iugoslav greu",
+        }
+        YUM{
+            "YUM",
+            "dinar iugoslav nou",
+        }
+        YUN{
+            "YUN",
+            "dinar iugoslav convertibil",
+        }
+        ZAL{
+            "ZAL",
+            "rand sud-african (financiar)",
+        }
+        ZAR{
+            "R",
+            "rand sud-african",
+        }
+        ZRN{
+            "NZ",
+            "zair nou",
+        }
+        ZWD{
+            "Z$",
+            "dolar Zimbabwe",
+        }
+    }
+    CurrencyPlurals{
+        ADP{
+            few{"pesete andorrane"}
+            other{"pesete andorrane"}
+        }
+        AED{
+            few{"dirhami Emiratele Arabe Unite"}
+            other{"dirhami Emiratele Arabe Unite"}
+        }
+        ALL{
+            few{"leka albanezi"}
+            one{"leka albanez"}
+            other{"leka albanezi"}
+        }
+        AMD{
+            few{"drami armenești"}
+            one{"dram armenesc"}
+            other{"drami armenești"}
+        }
+        ANG{
+            few{"guldeni Antilele Olandeze"}
+            other{"guldeni Antilele Olandeze"}
+        }
+        ARP{
+            few{"pesos argentinieni (ARP)"}
+            one{"peso argentinian (ARP)"}
+            other{"pesos argentinieni (ARP)"}
+        }
+        ARS{
+            few{"pesos argentinieni"}
+            other{"pesos argentinieni"}
+        }
+        ATS{
+            few{"șilingi austrieci"}
+            other{"șilingi austrieci"}
+        }
+        AUD{
+            few{"dolari australieni"}
+            other{"dolari australieni"}
+        }
+        AZN{
+            few{"manați Azerbaidjan"}
+            other{"manați Azerbaidjan"}
+        }
+        BAD{
+            few{"dinari Bosnia-Herțegovina"}
+            other{"dinari Bosnia-Herțegovina"}
+        }
+        BAM{
+            few{"mărci convertibile bosniace"}
+            other{"mărci convertibile bosniace"}
+        }
+        BBD{
+            few{"dolari Barbados"}
+            other{"dolari Barbados"}
+        }
+        BEC{
+            few{"franci belgieni (convertibili)"}
+            other{"franci belgieni (convertibili)"}
+        }
+        BEF{
+            few{"franci belgieni"}
+            other{"franci belgieni"}
+        }
+        BEL{
+            few{"franci belgieni (financiari)"}
+            other{"franci belgieni (financiari)"}
+        }
+        BGN{
+            few{"leva bulgărești noi"}
+            other{"leva bulgărești noi"}
+        }
+        BIF{
+            few{"franci Burundi"}
+            other{"franci Burundi"}
+        }
+        BMD{
+            few{"dolari Bermude"}
+            other{"dolari Bermude"}
+        }
+        BND{
+            few{"dolari Brunei"}
+            other{"dolari Brunei"}
+        }
+        BOB{
+            few{"bolivieni bolivieni"}
+            other{"bolivieni bolivieni"}
+        }
+        BOP{
+            few{"pesos bolivieni"}
+            other{"pesos bolivieni"}
+        }
+        BRL{
+            few{"reali brazilieni"}
+            other{"reali brazilieni"}
+        }
+        BSD{
+            few{"dolari Bahamas"}
+            other{"dolari Bahamas"}
+        }
+        BYR{
+            few{"ruble bieloruse"}
+            other{"ruble bieloruse"}
+        }
+        BZD{
+            few{"dolari Belize"}
+            other{"dolari Belize"}
+        }
+        CAD{
+            few{"dolari canadieni"}
+            other{"dolari canadieni"}
+        }
+        CDF{
+            few{"franci congolezi"}
+            other{"franci congolezi"}
+        }
+        CHF{
+            few{"franci elvețieni"}
+            other{"franci elvețieni"}
+        }
+        CLP{
+            few{"pesos chilieni"}
+            other{"pesos chilieni"}
+        }
+        CNY{
+            few{"yuani renminbi chinezești"}
+            other{"yuani renminbi chinezești"}
+        }
+        COP{
+            few{"pesos columbieni"}
+            other{"pesos columbieni"}
+        }
+        CRC{
+            few{"coloni costaricani"}
+            other{"coloni costaricani"}
+        }
+        CSD{
+            few{"dinari vechi Serbia și Muntenegru"}
+            other{"dinari vechi Serbia și Muntenegru"}
+        }
+        CUP{
+            few{"pesos cubanezi"}
+            other{"pesos cubanezi"}
+        }
+        CVE{
+            few{"escudo Capul Verde"}
+            one{"escudo Capul Verde"}
+            other{"escudo Capul Verde"}
+        }
+        CYP{
+            few{"lire cipriote"}
+            other{"lire cipriote"}
+        }
+        CZK{
+            few{"coroane cehe"}
+            other{"coroane cehe"}
+        }
+        DDM{
+            few{"mărci est-germane"}
+            other{"mărci est-germane"}
+        }
+        DEM{
+            few{"mărci germane"}
+            other{"mărci germane"}
+        }
+        DJF{
+            few{"franci Djibouti"}
+            other{"franci Djibouti"}
+        }
+        DKK{
+            few{"coroane daneze"}
+            other{"coroane daneze"}
+        }
+        DOP{
+            few{"pesos dominicani"}
+            other{"pesos dominicani"}
+        }
+        DZD{
+            few{"dinari algerieni"}
+            other{"dinari algerieni"}
+        }
+        EEK{
+            few{"coroane estoniene"}
+            other{"coroane estoniene"}
+        }
+        EGP{
+            few{"lire egiptene"}
+            other{"lire egiptene"}
+        }
+        ESP{
+            few{"pesete spaniole"}
+            other{"pesete spaniole"}
+        }
+        ETB{
+            few{"birr Etiopia"}
+            one{"birr Etiopia"}
+            other{"birr Etiopia"}
+        }
+        FIM{
+            few{"mărci finlandeze"}
+            one{"mărci finlandeze"}
+            other{"mărci finlandeze"}
+        }
+        FJD{
+            few{"dolari Fiji"}
+            other{"dolari Fiji"}
+        }
+        FKP{
+            few{"lire Insulele Falkland"}
+            other{"lire Insulele Falkland"}
+        }
+        FRF{
+            few{"franci francezi"}
+            other{"franci francezi"}
+        }
+        GBP{
+            few{"lire sterline"}
+            other{"lire sterline"}
+        }
+        GEL{
+            few{"lari Georgia"}
+            one{"lari Georgia"}
+            other{"lari Georgia"}
+        }
+        GIP{
+            few{"lire Gibraltar"}
+            other{"lire Gibraltar"}
+        }
+        GNF{
+            few{"franci Guineea"}
+            other{"franci Guineea"}
+        }
+        GRD{
+            few{"drahme grecești"}
+            other{"drahme grecești"}
+        }
+        GWP{
+            few{"pesos Guineea-Bissau"}
+            other{"pesos Guineea-Bissau"}
+        }
+        GYD{
+            few{"dolari Guyana"}
+            other{"dolari Guyana"}
+        }
+        HKD{
+            few{"dolari Hong Kong"}
+            other{"dolari Hong Kong"}
+        }
+        HRD{
+            few{"dinari croați"}
+            other{"dinari croați"}
+        }
+        HRK{
+            few{"kune croate"}
+            other{"kune croate"}
+        }
+        HUF{
+            few{"forinți maghiari"}
+            other{"forinți maghiari"}
+        }
+        IDR{
+            few{"rupii indoneziene"}
+            other{"rupii indoneziene"}
+        }
+        IEP{
+            few{"lire irlandeze"}
+            other{"lire irlandeze"}
+        }
+        ILP{
+            few{"lire israeliene"}
+            other{"lire israeliene"}
+        }
+        ILS{
+            few{"șecheli israelieni noi"}
+            other{"șecheli israelieni noi"}
+        }
+        INR{
+            few{"rupii indiene"}
+            other{"rupii indiene"}
+        }
+        IQD{
+            few{"dinari irakieni"}
+            other{"dinari irakieni"}
+        }
+        IRR{
+            few{"riali iranieni"}
+            other{"riali iranieni"}
+        }
+        ISK{
+            few{"coroane islandeze"}
+            other{"coroane islandeze"}
+        }
+        ITL{
+            few{"lire italiene"}
+            other{"lire italiene"}
+        }
+        JMD{
+            few{"dolari jamaicani"}
+            other{"dolari jamaicani"}
+        }
+        JOD{
+            few{"dinari iordanieni"}
+            other{"dinari iordanieni"}
+        }
+        JPY{
+            few{"yeni japonezi"}
+            other{"yeni japonezi"}
+        }
+        KES{
+            few{"șilingi kenyeni"}
+            other{"șilingi kenyeni"}
+        }
+        KHR{
+            few{"rieli cambodgieni"}
+            other{"rieli cambodgieni"}
+        }
+        KMF{
+            few{"franci comorieni"}
+            other{"franci comorieni"}
+        }
+        KPW{
+            few{"woni nord-coreeni"}
+            other{"woni nord-coreeni"}
+        }
+        KRW{
+            few{"woni sud-coreeni"}
+            other{"woni sud-coreeni"}
+        }
+        KWD{
+            few{"dinari kuweitieni"}
+            other{"dinari kuweitieni"}
+        }
+        KYD{
+            few{"dolari Insulele Cayman"}
+            other{"dolari Insulele Cayman"}
+        }
+        LBP{
+            few{"lire libaneze"}
+            other{"lire libaneze"}
+        }
+        LKR{
+            few{"rupii Sri Lanka"}
+            other{"rupii Sri Lanka"}
+        }
+        LRD{
+            few{"dolari liberieni"}
+            other{"dolari liberieni"}
+        }
+        LTL{
+            few{"lite lituaniene"}
+            other{"lite lituaniene"}
+        }
+        LUC{
+            few{"franci convertibili luxemburghezi"}
+            other{"franci convertibili luxemburghezi"}
+        }
+        LUF{
+            few{"franci luxemburghezi"}
+            other{"franci luxemburghezi"}
+        }
+        LUL{
+            few{"franci financiari luxemburghezi"}
+            other{"franci financiari luxemburghezi"}
+        }
+        LVR{
+            few{"ruble Letonia"}
+            other{"ruble Letonia"}
+        }
+        LYD{
+            few{"dinari libieni"}
+            other{"dinari libieni"}
+        }
+        MAD{
+            few{"dirhami marocani"}
+            other{"dirhami marocani"}
+        }
+        MAF{
+            few{"franci marocani"}
+            other{"franci marocani"}
+        }
+        MDL{
+            few{"lei moldovenești"}
+            other{"lei moldovenești"}
+        }
+        MGF{
+            few{"franci Madagascar"}
+            other{"franci Madagascar"}
+        }
+        MKD{
+            few{"dinari macedoneni"}
+            other{"dinari macedoneni"}
+        }
+        MLF{
+            few{"franci Mali"}
+            other{"franci Mali"}
+        }
+        MTL{
+            few{"lire malteze"}
+            other{"lire malteze"}
+        }
+        MXN{
+            few{"pesos mexicani"}
+            other{"pesos mexicani"}
+        }
+        MXP{
+            few{"pesos mexicani de argint (1861–1992"}
+            other{"pesos mexicani de argint (1861–1992"}
+        }
+        NAD{
+            few{"dolari namibieni"}
+            other{"dolari namibieni"}
+        }
+        NLG{
+            few{"guldeni olandezi"}
+            other{"guldeni olandezi"}
+        }
+        NOK{
+            few{"coroane norvegiene"}
+            other{"coroane norvegiene"}
+        }
+        NPR{
+            few{"rupii nepaleze"}
+            other{"rupii nepaleze"}
+        }
+        NZD{
+            few{"dolari neozeelandezi"}
+            other{"dolari neozeelandezi"}
+        }
+        OMR{
+            few{"riyali Oman"}
+            other{"riyali Oman"}
+        }
+        PAB{
+            few{"balboa panameze"}
+            other{"balboa panameze"}
+        }
+        PEN{
+            few{"soli noi Peru"}
+            other{"soli noi Peru"}
+        }
+        PES{
+            few{"soli Peru"}
+            other{"soli Peru"}
+        }
+        PHP{
+            few{"pesos filipinezi"}
+            other{"pesos filipinezi"}
+        }
+        PKR{
+            few{"rupii pakistaneze"}
+            other{"rupii pakistaneze"}
+        }
+        PLN{
+            few{"zloți noi polonezi"}
+            other{"zloți noi polonezi"}
+        }
+        PLZ{
+            few{"zloți polonezi (1950–1995)"}
+            other{"zloți polonezi (1950–1995)"}
+        }
+        QAR{
+            few{"riyali Qatar"}
+            other{"riyali Qatar"}
+        }
+        RHD{
+            few{"dolari rhodesieni"}
+            other{"dolari rhodesieni"}
+        }
+        ROL{
+            few{"lei vechi"}
+            other{"lei vechi"}
+        }
+        RON{
+            few{"lei"}
+            other{"lei"}
+        }
+        RSD{
+            few{"dinari sârbești"}
+            other{"dinari sârbești"}
+        }
+        RUB{
+            few{"ruble rusești"}
+            other{"ruble rusești"}
+        }
+        RWF{
+            few{"franci Rwanda"}
+            other{"franci Rwanda"}
+        }
+        SAR{
+            few{"riyali Arabia Saudită"}
+            other{"riyali Arabia Saudită"}
+        }
+        SBD{
+            few{"dolari Insulele Solomon"}
+            other{"dolari Insulele Solomon"}
+        }
+        SCR{
+            few{"rupii Seychelles"}
+            other{"rupii Seychelles"}
+        }
+        SDD{
+            few{"dinari sudanezi"}
+            other{"dinari sudanezi"}
+        }
+        SDP{
+            few{"lire sudaneze"}
+            other{"lire sudaneze"}
+        }
+        SEK{
+            few{"coroane suedeze"}
+            other{"coroane suedeze"}
+        }
+        SGD{
+            few{"dolari Singapore"}
+            other{"dolari Singapore"}
+        }
+        SHP{
+            few{"lire Insula Sf. Elena"}
+            other{"lire Insula Sf. Elena"}
+        }
+        SIT{
+            few{"tolari sloveni"}
+            other{"tolari sloveni"}
+        }
+        SKK{
+            few{"coroane slovace"}
+            other{"coroane slovace"}
+        }
+        SLL{
+            few{"lei Sierra Leone"}
+            other{"lei Sierra Leone"}
+        }
+        SOS{
+            few{"șilingi somalezi"}
+            other{"șilingi somalezi"}
+        }
+        SRD{
+            few{"dolari Surinam"}
+            other{"dolari Surinam"}
+        }
+        SRG{
+            few{"guldeni Surinam"}
+            other{"guldeni Surinam"}
+        }
+        SUR{
+            few{"ruble sovietice"}
+            other{"ruble sovietice"}
+        }
+        SVC{
+            few{"coloni El Salvador"}
+            other{"coloni El Salvador"}
+        }
+        SYP{
+            few{"lire siriene"}
+            other{"lire siriene"}
+        }
+        TJR{
+            few{"ruble Tadjikistan"}
+            other{"ruble Tadjikistan"}
+        }
+        TND{
+            few{"dinari tunisieni"}
+            other{"dinari tunisieni"}
+        }
+        TRL{
+            other{"lire turcești"}
+        }
+        TRY{
+            other{"lire turcești noi"}
+        }
+        TTD{
+            few{"dolari Trinidad-Tobago"}
+            other{"dolari Trinidad-Tobago"}
+        }
+        TWD{
+            few{"dolari noi Taiwan"}
+            other{"dolari noi Taiwan"}
+        }
+        TZS{
+            few{"șilingi tanzanieni"}
+            other{"șilingi tanzanieni"}
+        }
+        UAH{
+            few{"hryvna ucrainiene"}
+            other{"hryvna ucrainiene"}
+        }
+        UAK{
+            few{"carboave ucrainiene"}
+            other{"carboave ucrainiene"}
+        }
+        UGS{
+            few{"șilingi ugandezi (1966–1987)"}
+            other{"șilingi ugandezi (1966–1987)"}
+        }
+        UGX{
+            few{"șilingi ugandezi"}
+            other{"șilingi ugandezi"}
+        }
+        USD{
+            few{"dolari americani"}
+            other{"dolari americani"}
+        }
+        USN{
+            few{"dolari americani (ziua următoare)"}
+            other{"dolari americani (ziua următoare)"}
+        }
+        USS{
+            few{"dolari americani (aceeași zi)"}
+            other{"dolari americani (aceeași zi)"}
+        }
+        UYP{
+            few{"pesos Uruguay (1975–1993)"}
+            other{"pesos Uruguay (1975–1993)"}
+        }
+        UYU{
+            few{"pesos noi Uruguay"}
+            other{"pesos noi Uruguay"}
+        }
+        VEB{
+            few{"bolivari Venezuela"}
+            other{"bolivari Venezuela"}
+        }
+        XAF{
+            few{"franci Comunitatea Financiară"}
+            other{"franci Comunitatea Financiară"}
+        }
+        XCD{
+            few{"dolari Caraibele de Est"}
+            other{"dolari Caraibele de Est"}
+        }
+        XFO{
+            few{"franci francezi de aur"}
+            other{"franci francezi de aur"}
+        }
+        XXX{
+            few{"monede necunoscute sau nevalide"}
+            other{"monede necunoscute sau nevalide"}
+        }
+        YDD{
+            few{"dinari Yemen"}
+            other{"dinari Yemen"}
+        }
+        YER{
+            few{"riyali Yemen"}
+            other{"riyali Yemen"}
+        }
+        YUD{
+            few{"dinari iugoslavi grei"}
+            other{"dinari iugoslavi grei"}
+        }
+        YUM{
+            few{"dinari iugoslavi noi"}
+            other{"dinari iugoslavi noi"}
+        }
+        YUN{
+            few{"dinari iugoslavi convertibili"}
+            other{"dinari iugoslavi convertibili"}
+        }
+        ZRN{
+            few{"zairi noi"}
+            other{"zairi noi"}
+        }
+        ZWD{
+            few{"dolari Zimbabwe"}
+            other{"dolari Zimbabwe"}
+        }
+    }
+    CurrencyUnitPatterns{
+        few{"{0} {1}"}
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u v x z]"}
+    Keys{
+        collation{"ordine de sortare"}
+        currency{"monedă"}
+    }
+    Languages{
+        ab{"abhază"}
+        af{"afrikaans"}
+        afa{"limbă afro-asiatică"}
+        ain{"ainu"}
+        akk{"akkadiană"}
+        ale{"aleută"}
+        alt{"altaică meridională"}
+        am{"amharică"}
+        an{"aragoneză"}
+        ang{"engleză veche"}
+        apa{"limbă apașă"}
+        ar{"arabă"}
+        arc{"aramaică"}
+        art{"limbă artificială"}
+        as{"asameză"}
+        ast{"asturiană"}
+        aus{"limbă australiană"}
+        av{"avară"}
+        ay{"aymara"}
+        az{"azeră"}
+        ba{"bașkiră"}
+        bat{"limbă baltică"}
+        be{"bielorusă"}
+        ber{"berberă"}
+        bg{"bulgară"}
+        bh{"bihari"}
+        bn{"bengaleză"}
+        bnt{"bantu"}
+        bo{"tibetană"}
+        br{"bretonă"}
+        bs{"bosniacă"}
+        ca{"catalană"}
+        cai{"limbă central-amerindiană"}
+        cau{"limbă caucaziană"}
+        ce{"cecenă"}
+        cel{"limbă celtică"}
+        co{"corsicană"}
+        cop{"coptă"}
+        cs{"cehă"}
+        cu{"slavonă"}
+        cv{"ciuvașă"}
+        cy{"velșă"}
+        da{"daneză"}
+        de{"germană"}
+        de_AT{"germană austriacă"}
+        de_CH{"germană standard elvețiană"}
+        dra{"limbă dravidiană"}
+        egy{"egipteană veche"}
+        el{"greacă"}
+        elx{"elamită"}
+        en{"engleză"}
+        en_AU{"engleză australiană"}
+        en_CA{"engleză canadiană"}
+        en_GB{"engleză britanică"}
+        en_US{"engleză americană"}
+        eo{"esperanto"}
+        es{"spaniolă"}
+        es_419{"spaniolă latino-americană"}
+        es_ES{"spaniolă iberică"}
+        et{"estoniană"}
+        eu{"bască"}
+        fa{"persană"}
+        fi{"finlandeză"}
+        fil{"filipineză"}
+        fiu{"limbă fino-ugrică"}
+        fj{"fijiană"}
+        fo{"faroeză"}
+        fr{"franceză"}
+        fr_CA{"franceză canadiană"}
+        fr_CH{"franceză elvețiană"}
+        fro{"franceză veche"}
+        frs{"frizonă orientală"}
+        fy{"frizonă occidentală"}
+        ga{"irlandeză"}
+        gd{"gaelică scoțiană"}
+        gem{"limbă germanică"}
+        gl{"galiciană"}
+        gn{"guarani"}
+        got{"gotică"}
+        grc{"greacă veche"}
+        gsw{"germană elvețiană"}
+        gu{"gujarati"}
+        haw{"hawaiană"}
+        he{"ebraică"}
+        hi{"hindi"}
+        hit{"hitită"}
+        hr{"croată"}
+        ht{"haitiană"}
+        hu{"maghiară"}
+        hy{"armeană"}
+        ia{"interlingua"}
+        id{"indoneziană"}
+        ie{"interlingue"}
+        ik{"inupiak"}
+        inc{"limbă indiană"}
+        ine{"limbă indo-europeană"}
+        ira{"limbă iraniană"}
+        is{"islandeză"}
+        it{"italiană"}
+        ja{"japoneză"}
+        jpr{"iudeo-persană"}
+        jrb{"iudeo-arabă"}
+        jv{"javaneză"}
+        ka{"georgiană"}
+        kg{"congoleză"}
+        kk{"kazahă"}
+        kl{"kalaallisut"}
+        km{"khmeră"}
+        kn{"kannada"}
+        ko{"coreeană"}
+        ks{"cașmireză"}
+        ku{"kurdă"}
+        ky{"kîrgîză"}
+        la{"latină"}
+        lb{"luxemburgheză"}
+        ln{"lingala"}
+        lo{"laoțiană"}
+        lt{"lituaniană"}
+        lv{"letonă"}
+        map{"austroneziană"}
+        mg{"malgașă"}
+        mi{"maori"}
+        mis{"limbi diverse"}
+        mk{"macedoneană"}
+        ml{"malayalam"}
+        mn{"mongolă"}
+        mnc{"manciuriană"}
+        mo{"moldovenească"}
+        mr{"marathi"}
+        ms{"malay"}
+        mt{"malteză"}
+        mul{"limbi multiple"}
+        mun{"limbă munda"}
+        mwl{"mirandeză"}
+        my{"birmaneză"}
+        myn{"limbă mayașă"}
+        nai{"limbă nord-amerindiană"}
+        nap{"napolitană"}
+        ne{"nepaleză"}
+        nl{"olandeză"}
+        nl_BE{"flamandă"}
+        nn{"norvegiană nynorsk"}
+        no{"norvegiană"}
+        nub{"limbă nubiană"}
+        nv{"navajo"}
+        oc{"occitană"}
+        om{"oromo"}
+        or{"oriya"}
+        ota{"turcă otomană"}
+        oto{"limbă otomi"}
+        pa{"punjabi"}
+        paa{"limbă papuașă"}
+        peo{"persană veche"}
+        phi{"limbă filipineză"}
+        phn{"feniciană"}
+        pi{"pali"}
+        pl{"poloneză"}
+        pro{"provensală veche"}
+        ps{"pașto"}
+        pt{"portugheză"}
+        pt_BR{"portugheză braziliană"}
+        pt_PT{"portugheză iberică"}
+        qu{"quechua"}
+        rm{"retoromană"}
+        ro{"română"}
+        roa{"limbă romanică"}
+        ru{"rusă"}
+        rup{"aromână"}
+        sa{"sanscrită"}
+        sai{"limbă sud-amerindiană"}
+        sam{"aramaică samariteană"}
+        sc{"sardiniană"}
+        scn{"siciliană"}
+        sco{"scots"}
+        sd{"sindhi"}
+        sem{"limbă semitică"}
+        sga{"irlandeză veche"}
+        sgn{"limbaj mimico-gestual"}
+        sh{"sârbo-croată"}
+        si{"singaleză"}
+        sit{"limbă sino-tibetană"}
+        sk{"slovacă"}
+        sl{"slovenă"}
+        sla{"limbă slavă"}
+        sm{"samoană"}
+        so{"somaleză"}
+        sq{"albaneză"}
+        sr{"sârbă"}
+        st{"sesotho"}
+        su{"sundaneză"}
+        sux{"sumeriană"}
+        sv{"suedeză"}
+        sw{"swahili"}
+        syr{"siriacă"}
+        ta{"tamilă"}
+        tai{"limbă thai"}
+        te{"telugu"}
+        tg{"tadjică"}
+        th{"thailandeză"}
+        ti{"tigrinya"}
+        tk{"turkmenă"}
+        tl{"tagalog"}
+        tlh{"klingoniană"}
+        tn{"setswana"}
+        tr{"turcă"}
+        tt{"tătară"}
+        tut{"limbă altaică"}
+        tw{"twi"}
+        ty{"tahitiană"}
+        ug{"uigură"}
+        uk{"ucraineană"}
+        und{"limbă necunoscută sau nevalidă"}
+        ur{"urdu"}
+        uz{"uzbecă"}
+        vi{"vietnameză"}
+        vo{"volapuk"}
+        wa{"valonă"}
+        wo{"wolof"}
+        xal{"calmucă"}
+        xh{"xhosa"}
+        yi{"idiș"}
+        yo{"yoruba"}
+        zap{"zapotecă"}
+        zh{"chineză"}
+        zh_Hans{"chineză simplificată"}
+        zh_Hant{"chineză tradițională"}
+        zu{"zulu"}
+        zxx{"fară conținut lingvistic"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"arabă"}
+        Armn{"armeană"}
+        Bali{"balineză"}
+        Beng{"bengali"}
+        Bopo{"bopomofo"}
+        Brai{"braille"}
+        Cans{"silabică aborigenă canadiană unificată"}
+        Copt{"coptă"}
+        Cprt{"cipriotă"}
+        Cyrl{"chirilică"}
+        Cyrs{"chirilică slavonă bisericească veche"}
+        Deva{"devanagari"}
+        Dsrt{"mormonă"}
+        Egyd{"demotică egipteană"}
+        Egyh{"hieratică egipteană"}
+        Egyp{"hieroglife egiptene"}
+        Ethi{"etiopiană"}
+        Geok{"georgiană bisericească"}
+        Geor{"georgiană"}
+        Glag{"glagolitică"}
+        Goth{"gotică"}
+        Grek{"greacă"}
+        Hang{"coreeană"}
+        Hani{"ideografică"}
+        Hans{"ideografică simplificată"}
+        Hant{"ideografică tradițională"}
+        Hebr{"ebraică"}
+        Hira{"hiragana"}
+        Hrkt{"katakana sau hiragana"}
+        Hung{"maghiară veche"}
+        Inds{"Indus"}
+        Ital{"italică veche"}
+        Java{"javaneză"}
+        Jpan{"japoneză"}
+        Kana{"katakana"}
+        Khmr{"khmeră"}
+        Laoo{"laoțiană"}
+        Latf{"latină Fraktur"}
+        Latg{"latină gaelică"}
+        Latn{"latină"}
+        Lina{"lineară A"}
+        Linb{"lineară B"}
+        Lydi{"lidiană"}
+        Maya{"hieroglife maya"}
+        Mong{"mongolă"}
+        Mymr{"birmană"}
+        Phnx{"feniciană"}
+        Qaai{"moștenită"}
+        Runr{"runică"}
+        Sinh{"singaleză"}
+        Syrc{"siriacă"}
+        Syrj{"siriacă occidentală"}
+        Syrn{"siriacă orientală"}
+        Tfng{"berberă"}
+        Thai{"Thai"}
+        Tibt{"tibetană"}
+        Xpeo{"persană veche"}
+        Xsux{"cuneiformă sumero-akkadiană"}
+        Zxxx{"nescrisă"}
+        Zyyy{"comună"}
+        Zzzz{"scriere necunoscută sau nevalidă"}
+    }
+    Types{
+        calendar{
+            buddhist{"calendar budist"}
+            chinese{"calendar chinezesc"}
+            gregorian{"calendar gregorian"}
+            hebrew{"calendar ebraic"}
+            indian{"calendar național indian"}
+            islamic{"calendar islamic"}
+            islamic-civil{"calendar islamic civil"}
+            japanese{"calendar japonez"}
+            roc{"calendar al Republicii Chineze"}
+        }
+        collation{
+            big5han{"sortare pentru chineza tradițională - Big5"}
+            direct{"sortare directă"}
+            gb2312han{"sortare pentru chineza simplificată - GB2312"}
+            phonebook{"sortare după cartea de telefon"}
+            pinyin{"sortare pinyin"}
+            stroke{"ordine de sortare după trasare"}
+            traditional{"sortare tradițională"}
+        }
+    }
+    Version{"1.116"}
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM, y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "d/M/yyyy",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                yMEd{"EEE, d/M/y"}
+                yMMMEd{"EEE, d MMM Y"}
+                yQ{"'T'Q y"}
+                yQQQ{"QQQ y"}
+            }
+            eras{
+                abbreviated{
+                    "e.b.",
+                }
+                wide{
+                    "era budistă",
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "dd.MM.yyyy",
+                "dd.MM.yyyy",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                EEEd{"EEE d"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, d MMM"}
+                MMM{"LLL"}
+                MMMEEEd{"EEE, d MMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd.MM"}
+                Md{"d.M"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M.yyyy"}
+                yMEd{"EEE, d/M/yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
+                yMMMM{"MMMM y"}
+                yQ{"'trimestrul' Q y"}
+                yQQQ{"QQQ y"}
+                yyMM{"MM.yy"}
+                yyMMM{"MMM yy"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM.yyyy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Du",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Jo",
+                        "Vi",
+                        "Sâ",
+                    }
+                    wide{
+                        "duminică",
+                        "luni",
+                        "marți",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "sâmbătă",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Du",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Jo",
+                        "Vi",
+                        "Sâ",
+                    }
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                    wide{
+                        "duminică",
+                        "luni",
+                        "marți",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "sâmbătă",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "î.Hr.",
+                    "d.Hr.",
+                }
+                wide{
+                    "înainte de Hristos",
+                    "după Hristos",
+                }
+            }
+            fields{
+                day{
+                    dn{"zi"}
+                    relative{
+                        "-1"{"ieri"}
+                        "-2"{"alaltăieri"}
+                        "-3"{"răsalaltăieri"}
+                        "0"{"azi"}
+                        "1"{"mâine"}
+                        "2"{"poimâine"}
+                        "3"{"răspoimâine"}
+                    }
+                }
+                dayperiod{
+                    dn{"perioada zilei"}
+                }
+                era{
+                    dn{"eră"}
+                }
+                hour{
+                    dn{"oră"}
+                }
+                minute{
+                    dn{"minut"}
+                }
+                month{
+                    dn{"lună"}
+                }
+                second{
+                    dn{"secundă"}
+                }
+                week{
+                    dn{"săptămână"}
+                }
+                weekday{
+                    dn{"zi a săptămânii"}
+                }
+                year{
+                    dn{"an"}
+                }
+                zone{
+                    dn{"zonă"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd.MM - E, dd.MM"}
+                    d{"E, dd.MM - E, dd.MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, d MMM - E, d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd.MM - dd.MM"}
+                    d{"dd.MM - dd.MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM.yyyy - MM.yyyy"}
+                    y{"MM.yyyy - MM.yyyy"}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                }
+                yMMM{
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM y"}
+                    d{"E, d MMM - E, d MMM y"}
+                    y{"E, d MMM y - E, d MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM-MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM y"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
+                }
+                yMd{
+                    M{"dd.MM.yyyy - dd.MM.yyyy"}
+                    d{"dd.MM.yyyy - dd.MM.yyyy"}
+                    y{"dd.MM.yyyy - dd.MM.yyyy"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ian.",
+                        "feb.",
+                        "mar.",
+                        "apr.",
+                        "mai",
+                        "iun.",
+                        "iul.",
+                        "aug.",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "dec.",
+                    }
+                    wide{
+                        "ianuarie",
+                        "februarie",
+                        "martie",
+                        "aprilie",
+                        "mai",
+                        "iunie",
+                        "iulie",
+                        "august",
+                        "septembrie",
+                        "octombrie",
+                        "noiembrie",
+                        "decembrie",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "I",
+                        "I",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "trim. I",
+                        "trim. II",
+                        "trim. III",
+                        "trim. IV",
+                    }
+                    narrow{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "trimestrul I",
+                        "trimestrul al II-lea",
+                        "trimestrul al III-lea",
+                        "trimestrul al IV-lea",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "trimestrul I",
+                        "trimestrul al II-lea",
+                        "trimestrul al III-lea",
+                        "trimestrul al IV-lea",
+                    }
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Limbă: {0}"}
+        script{"Scriere: {0}"}
+        territory{"Regiune: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"»"}
+        alternateQuotationStart{"«"}
+        quotationEnd{"”"}
+        quotationStart{"„"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"american"}
+        metric{"metric"}
+    }
+    units{
+        day{
+            few{"{0} zile"}
+            one{"{0} zi"}
+            other{"{0} de zile"}
+        }
+        hour{
+            few{"{0} ore"}
+            one{"{0} oră"}
+            other{"{0} de ore"}
+        }
+        minute{
+            few{"{0} minute"}
+            one{"{0} minut"}
+            other{"{0} de minute"}
+        }
+        month{
+            few{"{0} luni"}
+            one{"{0} lună"}
+            other{"{0} de luni"}
+        }
+        second{
+            few{"{0} secunde"}
+            one{"{0} secundă"}
+            other{"{0} de secunde"}
+        }
+        week{
+            few{"{0} săptămâni"}
+            one{"{0} săptămână"}
+            other{"{0} de săptămâni"}
+        }
+        year{
+            few{"{0} ani"}
+            one{"{0} an"}
+            other{"{0} de ani"}
+        }
+    }
+    unitsShort{
+        day{
+            few{"{0} zile"}
+            one{"{0} zi"}
+            other{"{0} zile"}
+        }
+        hour{
+            few{"{0} ore"}
+            one{"{0} oră"}
+            other{"{0} ore"}
+        }
+        minute{
+            few{"{0} min."}
+            one{"{0} min."}
+            other{"{0} min."}
+        }
+        month{
+            few{"{0} luni"}
+            one{"{0} lună"}
+            other{"{0} luni"}
+        }
+        second{
+            few{"{0} sec."}
+            one{"{0} sec."}
+            other{"{0} sec."}
+        }
+        week{
+            few{"{0} săpt."}
+            one{"{0} săpt."}
+            other{"{0} săpt."}
+        }
+        year{
+            few{"{0} ani"}
+            one{"{0} an"}
+            other{"{0} ani"}
+        }
+    }
+    zoneStrings{
+        "Africa:Addis_Ababa"{
+            ec{"Addis Abeba"}
+        }
+        "Africa:Algiers"{
+            ec{"Alger"}
+        }
+        "America:Guadeloupe"{
+            ec{"Guadalupe"}
+        }
+        "America:Martinique"{
+            ec{"Martinica"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Centru, Dakota de Nord"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Dakota de Nord"}
+        }
+        "America:St_Kitts"{
+            ec{"St. Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"St. Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"Saint Vincent și Grenadines"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Polul Sud"}
+        }
+        "Asia:Baghdad"{
+            ec{"Bagdad"}
+        }
+        "Asia:Damascus"{
+            ec{"Damasc"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkuțk"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Ierusalim"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamciatka"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoiarsk"}
+        }
+        "Asia:Kuwait"{
+            ec{"Kuweit"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kyzylorda"}
+        }
+        "Asia:Riyadh"{
+            ec{"Riyad"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sahalin"}
+        }
+        "Asia:Seoul"{
+            ec{"Seul"}
+        }
+        "Asia:Tehran"{
+            ec{"Teheran"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakuțk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinburg"}
+        }
+        "Asia:Yerevan"{
+            ec{"Erevan"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azore"}
+        }
+        "Atlantic:Canary"{
+            ec{"Insulele Canare"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Capul Verde"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Georgia de Sud"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Sf. Elena"}
+        }
+        "Etc:Unknown"{
+            ec{"Necunoscut"}
+        }
+        "Europe:Athens"{
+            ec{"Atena"}
+        }
+        "Europe:Brussels"{
+            ec{"Bruxelles"}
+        }
+        "Europe:Bucharest"{
+            ec{"București"}
+        }
+        "Europe:Budapest"{
+            ec{"Budapesta"}
+        }
+        "Europe:Chisinau"{
+            ec{"Chișinău"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Copenhaga"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabona"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Luxemburg"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscova"}
+        }
+        "Europe:Rome"{
+            ec{"Roma"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
+        "Europe:Vienna"{
+            ec{"Viena"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varșovia"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporoje"}
+        }
+        "Indian:Maldives"{
+            ec{"Maldive"}
+        }
+        "Pacific:Easter"{
+            ec{"Insula Paștelui"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marchize"}
+        }
+        "meta:Acre"{
+            ld{"Ora de vară Acre"}
+            ls{"Ora Acre"}
+        }
+        "meta:Africa_Central"{
+            ls{"Ora Africii Centrale"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Ora Africii Orientale"}
+        }
+        "meta:Africa_Southern"{
+            lg{"Ora Africii Meridionale"}
+            ls{"Ora Standard a Africii Meridionale"}
+        }
+        "meta:Africa_Western"{
+            ld{"Ora de vară a Africii Occidentale"}
+            ls{"Ora Africii Occidentale"}
+        }
+        "meta:Alaska"{
+            ld{"Ora de vară în zona Alaska"}
+            lg{"Ora zonei Alaska"}
+            ls{"Ora standard în zona Alaska"}
+        }
+        "meta:Alaska_Hawaii"{
+            ld{"Ora de vară în zona Alaska-Hawaii"}
+            lg{"Ora zonei Alaska-Hawaii"}
+            ls{"Ora standard în zona Alaska-Hawaii"}
+        }
+        "meta:Amazon"{
+            ld{"Ora de vară Amazon"}
+            ls{"Ora Amazon"}
+        }
+        "meta:America_Central"{
+            ld{"Ora de vară centrală"}
+            lg{"Ora Centrală"}
+            ls{"Ora standard centrală"}
+        }
+        "meta:America_Eastern"{
+            ld{"Ora de vară orientală"}
+            lg{"Ora orientală"}
+            ls{"Ora standard orientală"}
+        }
+        "meta:America_Mountain"{
+            ld{"Ora de vară în zona montană"}
+            lg{"Ora zonei montane"}
+            ls{"Ora standard în zona montană"}
+        }
+        "meta:America_Pacific"{
+            ld{"Ora de vară în zona Pacific"}
+            lg{"Ora zonei Pacific"}
+            ls{"Ora standard în zona Pacific"}
+        }
+        "meta:Argentina"{
+            ld{"Ora de vară a Argentinei"}
+            ls{"Ora Argentinei"}
+        }
+        "meta:Argentina_Western"{
+            ls{"Ora Argentinei Occidentale"}
+        }
+        "meta:Atlantic"{
+            ld{"Ora de vară în zona Atlantic"}
+            lg{"Ora zonei Atlantic"}
+            ls{"Ora standard în zona Atlantic"}
+        }
+        "meta:Australia_Central"{
+            ld{"Ora de vară a Australiei Centrale"}
+            lg{"Ora Australiei Centrale"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Ora de vară a Australiei Central Occidentale"}
+            lg{"Ora Australiei Central Occidentale"}
+            ls{"Ora standard a Australiei Central Occidentale"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Ora de vară a Australiei Orientale"}
+            lg{"Ora Australiei Orientale"}
+            ls{"Ora standard a Australiei Orientale"}
+        }
+        "meta:Australia_Western"{
+            ld{"Ora de vară a Australiei Occidentale"}
+            lg{"Ora Australiei Occidentale"}
+        }
+        "meta:Bering"{
+            ld{"Ora de vară Bering"}
+            lg{"Ora Bering"}
+            ls{"Ora standard Bering"}
+        }
+        "meta:Bolivia"{
+            ls{"Ora Boliviei"}
+        }
+        "meta:Davis"{
+            ls{"Ora Davis"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Ora Dumont-d'Urville"}
+        }
+        "meta:Europe_Central"{
+            ld{"Ora de vară a Europei Centrale"}
+            ls{"Ora Europei Centrale"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Ora de vară a Europei de Est"}
+            ls{"Ora Europei de Est"}
+        }
+        "meta:Europe_Western"{
+            ld{"Ora de vară a Europei Occidentale"}
+            ls{"Ora Europei Occidentale"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:GMT"{
+            cu:int{1}
+            ls{"Greenwich Mean Time"}
+            ss{"GMT"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Ora de vară Lord Howe"}
+            lg{"Ora Lord Howe"}
+            ls{"Ora standard Lord Howe"}
+        }
+        "meta:Mawson"{
+            ls{"Ora Mawson"}
+        }
+        "meta:Rothera"{
+            ls{"Ora Rothera"}
+        }
+        "meta:Syowa"{
+            ls{"Ora Syowa"}
+        }
+        "meta:Vostok"{
+            ls{"Ora Vostok"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;−HH:mm"}
+        regionFormat{"{0}"}
+    }
+}

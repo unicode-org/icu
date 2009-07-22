@@ -1,0 +1,2631 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/lv.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/lv.xml
+ */
+lv{
+    AuxExemplarCharacters{"[y q w x]"}
+    Countries{
+        001{"pasaule"}
+        002{"Āfrika"}
+        003{"Ziemeļamerika"}
+        005{"Dienvidamerika"}
+        009{"Okeānija"}
+        011{"Rietumāfrika"}
+        013{"Centrālamerika"}
+        014{"Austrumāfrika"}
+        015{"Ziemeļāfrika"}
+        017{"Vidusāfrika"}
+        018{"Āfrikas dienvidi"}
+        019{"Amerika"}
+        021{"Amerikas ziemeļi"}
+        029{"Karību jūras reģions"}
+        030{"Austrumāzija"}
+        034{"Dienvidāzija"}
+        035{"Centrālaustrumāzija"}
+        039{"Dienvideiropa"}
+        053{"Austrālija un Jaunzēlande"}
+        054{"Melanēzija"}
+        057{"Mikronēzijas reģions"}
+        061{"Polinēzija"}
+        062{"Centrāldienvidāzija"}
+        142{"Āzija"}
+        143{"Centrālāzija"}
+        145{"Rietumāzija"}
+        150{"Eiropa"}
+        151{"Austrumeiropa"}
+        154{"Ziemeļeiropa"}
+        155{"Rietumeiropa"}
+        172{"Neatkarīgo Valstu Savienība"}
+        419{"Latīņamerika un Karību jūras reģions"}
+        AD{"Andora"}
+        AE{"Apvienotie Arābu Emirāti"}
+        AF{"Afganistāna"}
+        AG{"Antigva un Barbuda"}
+        AI{"Angilja"}
+        AL{"Albānija"}
+        AM{"Armēnija"}
+        AN{"Nīderlandes Antiļas"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Argentīna"}
+        AS{"Amerikāņu Samoa"}
+        AT{"Austrija"}
+        AU{"Austrālija"}
+        AW{"Aruba"}
+        AX{"Olandes salas"}
+        AZ{"Azerbaidžāna"}
+        BA{"Bosnija un Hercegovina"}
+        BB{"Barbadosa"}
+        BD{"Bangladeša"}
+        BE{"Beļģija"}
+        BF{"Burkinafaso"}
+        BG{"Bulgārija"}
+        BH{"Bahreina"}
+        BI{"Burundi"}
+        BJ{"Benina"}
+        BL{"Senbartelmī"}
+        BM{"Bermudu salas"}
+        BN{"Bruneja"}
+        BO{"Bolīvija"}
+        BR{"Brazīlija"}
+        BS{"Bahamas"}
+        BT{"Butāna"}
+        BV{"Buvē sala"}
+        BW{"Botsvāna"}
+        BY{"Baltkrievija"}
+        BZ{"Beliza"}
+        CA{"Kanāda"}
+        CC{"Kokosu jeb Kīlinga salas"}
+        CD{"Kongo Demokrātiskā Republika"}
+        CF{"Centrālāfrikas Republika"}
+        CG{"Kongo"}
+        CH{"Šveice"}
+        CI{"Kotdivuāra"}
+        CK{"Kuka salas"}
+        CL{"Čīle"}
+        CM{"Kamerūna"}
+        CN{"Ķīna"}
+        CO{"Kolumbija"}
+        CR{"Kostarika"}
+        CS{"Serbija un Melnkalne"}
+        CU{"Kuba"}
+        CV{"Kaboverde"}
+        CX{"Ziemsvētku sala"}
+        CY{"Kipra"}
+        CZ{"Čehija"}
+        DE{"Vācija"}
+        DJ{"Džibutija"}
+        DK{"Dānija"}
+        DM{"Dominika"}
+        DO{"Dominikānas Republika"}
+        DZ{"Alžīrija"}
+        EC{"Ekvadora"}
+        EE{"Igaunija"}
+        EG{"Ēģipte"}
+        EH{"Rietumsahāra"}
+        ER{"Eritreja"}
+        ES{"Spānija"}
+        ET{"Etiopija"}
+        FI{"Somija"}
+        FJ{"Fidži"}
+        FK{"Folklenda salas"}
+        FM{"Mikronēzijas Federatīvās Valstis"}
+        FO{"Farēru salas"}
+        FR{"Francija"}
+        GA{"Gabona"}
+        GB{"Lielbritānija"}
+        GD{"Grenāda"}
+        GE{"Gruzija"}
+        GF{"Franču Gviāna"}
+        GG{"Gērnsija"}
+        GH{"Gana"}
+        GI{"Gibraltārs"}
+        GL{"Grenlande"}
+        GM{"Gambija"}
+        GN{"Gvineja"}
+        GP{"Gvadelupa"}
+        GQ{"Ekvatoriālā Gvineja"}
+        GR{"Grieķija"}
+        GS{"Dienviddžordžija un Dienvidsendviču salas"}
+        GT{"Gvatemala"}
+        GU{"Guama"}
+        GW{"Gvineja-Bisava"}
+        GY{"Gajāna"}
+        HK{"Ķīnas īpašās pārvaldes apgabals Honkonga"}
+        HM{"Hērda un Makdonalda salas"}
+        HN{"Hondurasa"}
+        HR{"Horvātija"}
+        HT{"Haiti"}
+        HU{"Ungārija"}
+        ID{"Indonēzija"}
+        IE{"Īrija"}
+        IL{"Izraēla"}
+        IM{"Mena"}
+        IN{"Indija"}
+        IO{"Britu Indijas okeāna teritorija"}
+        IQ{"Irāka"}
+        IR{"Irāna"}
+        IS{"Īslande"}
+        IT{"Itālija"}
+        JE{"Džērsija"}
+        JM{"Jamaika"}
+        JO{"Jordānija"}
+        JP{"Japāna"}
+        KE{"Kenija"}
+        KG{"Kirgīzija"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komoru salas"}
+        KN{"Sentkitsa un Nevisa"}
+        KP{"Ziemeļkoreja"}
+        KR{"Dienvidkoreja"}
+        KW{"Kuveita"}
+        KY{"Kaimanu salas"}
+        KZ{"Kazahstāna"}
+        LA{"Laosa"}
+        LB{"Libāna"}
+        LC{"Sentlūsija"}
+        LI{"Lihtenšteina"}
+        LK{"Šrilanka"}
+        LR{"Libērija"}
+        LS{"Lesoto"}
+        LT{"Lietuva"}
+        LU{"Luksemburga"}
+        LV{"Latvija"}
+        LY{"Lībija"}
+        MA{"Maroka"}
+        MC{"Monako"}
+        MD{"Moldova"}
+        ME{"Melnkalne"}
+        MF{"Senmartēna"}
+        MG{"Madagaskara"}
+        MH{"Māršala salas"}
+        MK{"Maķedonija"}
+        ML{"Mali"}
+        MM{"Mjanma"}
+        MN{"Mongolija"}
+        MO{"Ķīnas īpašās pārvaldes apgabals Makao"}
+        MP{"Ziemeļu Marianas salas"}
+        MQ{"Martinika"}
+        MR{"Mauritānija"}
+        MS{"Montserrata"}
+        MT{"Malta"}
+        MU{"Maurīcija"}
+        MV{"Maldīvija"}
+        MW{"Malāvija"}
+        MX{"Meksika"}
+        MY{"Malaizija"}
+        MZ{"Mozambika"}
+        NA{"Namībija"}
+        NC{"Jaunkaledonija"}
+        NE{"Nigēra"}
+        NF{"Norfolkas sala"}
+        NG{"Nigērija"}
+        NI{"Nikaragva"}
+        NL{"Nīderlande"}
+        NO{"Norvēģija"}
+        NP{"Nepāla"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Jaunzēlande"}
+        OM{"Omāna"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Franču Polinēzija"}
+        PG{"Papua-Jaungvineja"}
+        PH{"Filipīnas"}
+        PK{"Pakistāna"}
+        PL{"Polija"}
+        PM{"Senpjēra un Mikelona"}
+        PN{"Pitkērna"}
+        PR{"Puertoriko"}
+        PS{"Palestīniešu pašpārvaldes teritorija"}
+        PT{"Portugāle"}
+        PW{"Palau"}
+        PY{"Paragvaja"}
+        QA{"Katara"}
+        QO{"ASV Mazās Aizjūras salas"}
+        QU{"Eiropas Savienība"}
+        RE{"Reinjona"}
+        RO{"Rumānija"}
+        RS{"Serbija"}
+        RU{"Krievija"}
+        RW{"Ruanda"}
+        SA{"Saūda Arābija"}
+        SB{"Zālamana salas"}
+        SC{"Seišeļu salas"}
+        SD{"Sudāna"}
+        SE{"Zviedrija"}
+        SG{"Singapūra"}
+        SH{"Sv. Helēnas sala"}
+        SI{"Slovēnija"}
+        SJ{"Svalbāra un Jana Majena sala"}
+        SK{"Slovākija"}
+        SL{"Sjerraleone"}
+        SM{"Sanmarīno"}
+        SN{"Senegāla"}
+        SO{"Somālija"}
+        SR{"Surinama"}
+        ST{"Santome un Prinsipi"}
+        SV{"Salvadora"}
+        SY{"Sīrija"}
+        SZ{"Svazilenda"}
+        TC{"Tērksas un Kaikosas salas"}
+        TD{"Čada"}
+        TF{"Franču dienvidu teritorijas"}
+        TG{"Togo"}
+        TH{"Taizeme"}
+        TJ{"Tadžikistāna"}
+        TK{"Tokelau"}
+        TL{"Austrumtimora"}
+        TM{"Turkmenistāna"}
+        TN{"Tunisija"}
+        TO{"Tonga"}
+        TR{"Turcija"}
+        TT{"Trinidāda un Tobāgo"}
+        TV{"Tuvalu"}
+        TW{"Taivāna"}
+        TZ{"Tanzānija"}
+        UA{"Ukraina"}
+        UG{"Uganda"}
+        UM{"ASV mazās aizjūras teritorijas"}
+        US{"Amerikas Savienotās Valstis"}
+        UY{"Urugvaja"}
+        UZ{"Uzbekistāna"}
+        VA{"Vatikāns"}
+        VC{"Sentvinsenta un Grenadīnas"}
+        VE{"Venecuēla"}
+        VG{"Britu Virdžīnu salas"}
+        VI{"Amerikāņu Virdžīnu salas"}
+        VN{"Vjetnama"}
+        VU{"Vanuatu"}
+        WF{"Volisa un Futuna"}
+        WS{"Samoa"}
+        YE{"Jemena"}
+        YT{"Majota"}
+        ZA{"Dienvidāfrika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabve"}
+        ZZ{"nezināms vai nederīgs reģions"}
+    }
+    Currencies{
+        AED{
+            "AED",
+            "Apvienoto Arābu Emirātu dirhēms",
+        }
+        AFN{
+            "Af",
+            "Afganistānas afgāns",
+        }
+        ALL{
+            "ALL",
+            "Albānijas leks",
+        }
+        AMD{
+            "AMD",
+            "Armēnijas drams",
+        }
+        ANG{
+            "NAf.",
+            "Nīderlandes Antiļu guldenis",
+        }
+        AOA{
+            "Kz",
+            "Angolas jaunā kvanza",
+        }
+        ARS{
+            "AR$",
+            "Argentīnas peso",
+        }
+        ATS{
+            "ATS",
+            "Austrijas šiliņš",
+        }
+        AUD{
+            "AU$",
+            "Austrālijas dolārs",
+        }
+        AWG{
+            "Afl.",
+            "Arubas guldenis",
+        }
+        AZN{
+            "man.",
+            "Azerbaidžānas manats",
+        }
+        BAM{
+            "KM",
+            "Bosnijas konvertējamā marka",
+        }
+        BBD{
+            "Bds$",
+            "Barbadosas dolārs",
+        }
+        BDT{
+            "Tk",
+            "Bangladešas taka",
+        }
+        BEF{
+            "BF",
+            "Beļģijas franks",
+        }
+        BGN{
+            "BGN",
+            "Bulgārijas leva",
+        }
+        BIF{
+            "FBu",
+            "Burundi franks",
+        }
+        BMD{
+            "BD$",
+            "Bermudu salu dolārs",
+        }
+        BND{
+            "BN$",
+            "Brunejas dolārs",
+        }
+        BOB{
+            "Bs",
+            "Bolīvijas boliviano",
+        }
+        BRL{
+            "R$",
+            "Brazīlijas reāls",
+        }
+        BSD{
+            "BS$",
+            "Bahamu dolārs",
+        }
+        BTN{
+            "Nu.",
+            "Butānas ngultrums",
+        }
+        BWP{
+            "BWP",
+            "Botsvānas pula",
+        }
+        BYR{
+            "BYR",
+            "Baltkrievijas rubelis",
+        }
+        BZD{
+            "BZ$",
+            "Belizas dolārs",
+        }
+        CAD{
+            "CA$",
+            "Kanādas dolārs",
+        }
+        CDF{
+            "CDF",
+            "KDR franks",
+        }
+        CHF{
+            "Fr.",
+            "Šveices franks",
+        }
+        CLP{
+            "CL$",
+            "Čīles peso",
+        }
+        CNY{
+            "CN¥",
+            "Ķīnas juana",
+        }
+        COP{
+            "CO$",
+            "Kolumbijas peso",
+        }
+        COU{
+            "COU",
+            "Kolumbijas reāls",
+        }
+        CRC{
+            "₡",
+            "Kostarikas kolons",
+        }
+        CUP{
+            "CU$",
+            "Kubas peso",
+        }
+        CVE{
+            "CV$",
+            "Kaboverdes eskudo",
+        }
+        CYP{
+            "CY£",
+            "Kipras mārciņa",
+        }
+        CZK{
+            "Kč",
+            "Čehijas krona",
+        }
+        DEM{
+            "DM",
+            "Vācijas marka",
+        }
+        DJF{
+            "Fdj",
+            "Džibutijas franks",
+        }
+        DKK{
+            "Dkr",
+            "Dānijas krona",
+        }
+        DOP{
+            "RD$",
+            "Dominikānas peso",
+        }
+        DZD{
+            "DA",
+            "Alžīrijas dinārs",
+        }
+        EEK{
+            "Ekr",
+            "Igaunijas krona",
+        }
+        EGP{
+            "EG£",
+            "Ēģiptes mārciņa",
+        }
+        ERN{
+            "Nfk",
+            "Eritrejas nakfa",
+        }
+        ESP{
+            "Pts",
+            "Spānijas peseta",
+        }
+        ETB{
+            "Br",
+            "Etiopijas birs",
+        }
+        EUR{
+            "€",
+            "eiro",
+        }
+        FIM{
+            "mk",
+            "Somijas marka",
+        }
+        FJD{
+            "FJ$",
+            "Fidži dolārs",
+        }
+        FKP{
+            "FK£",
+            "Folklenda salu mārciņa",
+        }
+        FRF{
+            "₣",
+            "Francijas franks",
+        }
+        GBP{
+            "£",
+            "Lielbritānijas sterliņu mārciņa",
+        }
+        GEL{
+            "GEL",
+            "Gruzijas lari",
+        }
+        GHS{
+            "GH₵",
+            "Ganas sedi",
+        }
+        GIP{
+            "GI£",
+            "Gibraltāra mārciņa",
+        }
+        GMD{
+            "GMD",
+            "Gambijas dalasi",
+        }
+        GNF{
+            "FG",
+            "Gvinejas franks",
+        }
+        GRD{
+            "₯",
+            "Grieķijas drahma",
+        }
+        GTQ{
+            "GTQ",
+            "(Gvatemalas) ketsals",
+        }
+        GYD{
+            "GY$",
+            "Gajānas dolārs",
+        }
+        HKD{
+            "HK$",
+            "Honkongas dolārs",
+        }
+        HNL{
+            "HNL",
+            "Hondurasas lempīra",
+        }
+        HRK{
+            "kn",
+            "Horvātijas kuna",
+        }
+        HTG{
+            "HTG",
+            "Haiti gurds",
+        }
+        HUF{
+            "Ft",
+            "Ungārijas forints",
+        }
+        IDR{
+            "Rp",
+            "Indonēzijas rūpija",
+        }
+        IEP{
+            "IR£",
+            "Īrijas mārciņa",
+        }
+        ILS{
+            "₪",
+            "Izraēlas šekelis",
+        }
+        INR{
+            "Rs",
+            "Indijas rūpija",
+        }
+        IQD{
+            "IQD",
+            "Irākas dinārs",
+        }
+        IRR{
+            "IRR",
+            "Irānas riāls",
+        }
+        ISK{
+            "Ikr",
+            "Īslandes krona",
+        }
+        ITL{
+            "IT₤",
+            "Itālijas lira",
+        }
+        JMD{
+            "J$",
+            "Jamaikas dolārs",
+        }
+        JOD{
+            "JD",
+            "Jordānas dinārs",
+        }
+        JPY{
+            "JP¥",
+            "Japānas jena",
+        }
+        KES{
+            "Ksh",
+            "Kenijas šiliņš",
+        }
+        KGS{
+            "KGS",
+            "Kirgizstānas soms",
+        }
+        KPW{
+            "KPW",
+            "Ziemeļkorejas vona",
+        }
+        KRW{
+            "₩",
+            "Dienvidkorejas vona",
+        }
+        KWD{
+            "KD",
+            "Kuveitas dinārs",
+        }
+        KZT{
+            "KZT",
+            "Kazahstānas tenge",
+        }
+        LAK{
+            "₭",
+            "Laosas kips",
+        }
+        LBP{
+            "LB£",
+            "Libānas mārciņa",
+        }
+        LKR{
+            "SLRs",
+            "Šrilankas rūpija",
+        }
+        LRD{
+            "L$",
+            "Libērijas dolārs",
+        }
+        LSL{
+            "LSL",
+            "Lesoto loti",
+        }
+        LTL{
+            "Lt",
+            "Lietuvas lits",
+        }
+        LUF{
+            "LUF",
+            "Luksemburgas franks",
+        }
+        LVL{
+            "Ls",
+            "Latvijas lats",
+        }
+        LVR{
+            "LVR",
+            "Latvijas rublis",
+        }
+        LYD{
+            "LD",
+            "Lībijas dinārs",
+        }
+        MAD{
+            "MAD",
+            "Marokas dirhēms",
+        }
+        MDL{
+            "MDL",
+            "Moldovas leja",
+        }
+        MGA{
+            "MGA",
+            "ariari",
+        }
+        MKD{
+            "MKD",
+            "Maķedonijas denārs",
+        }
+        MLF{
+            "MLF",
+            "CFA (Āfrikas) franks",
+        }
+        MMK{
+            "MMK",
+            "Mjanmas kjats",
+        }
+        MNT{
+            "₮",
+            "Mongolijas tugriks",
+        }
+        MOP{
+            "MOP$",
+            "Makao pataka",
+        }
+        MRO{
+            "UM",
+            "Mauritānijas ugija",
+        }
+        MTL{
+            "Lm",
+            "Maltas lira",
+        }
+        MTP{
+            "MT£",
+            "Maltas mārciņa",
+        }
+        MUR{
+            "MURs",
+            "Maurīcijas rūpija",
+        }
+        MVR{
+            "MVR",
+            "Maldīvijas rūfija",
+        }
+        MWK{
+            "MWK",
+            "Malāvijas kvača",
+        }
+        MXN{
+            "MXN",
+            "Meksikas peso",
+        }
+        MYR{
+            "RM",
+            "Malaizijas ringits",
+        }
+        MZE{
+            "MZE",
+            "Mozambikas eskudo",
+        }
+        MZN{
+            "MTn",
+            "Mozambikas metikals",
+        }
+        NAD{
+            "N$",
+            "Namībijas dolārs",
+        }
+        NGN{
+            "₦",
+            "Nigērijas naira",
+        }
+        NIO{
+            "C$",
+            "Kordovas oro",
+        }
+        NLG{
+            "fl",
+            "Nīderlandes guldenis",
+        }
+        NOK{
+            "Nkr",
+            "Norvēģijas krona",
+        }
+        NPR{
+            "NPRs",
+            "Nepālas rūpija",
+        }
+        NZD{
+            "NZ$",
+            "Jaunzēlandes dolārs",
+        }
+        OMR{
+            "OMR",
+            "Omānas riāls",
+        }
+        PAB{
+            "B/.",
+            "Panamas balboa",
+        }
+        PEN{
+            "S/.",
+            "Peru jaunais sols",
+        }
+        PGK{
+            "PGK",
+            "Papua-Jaungvinejas kina",
+        }
+        PHP{
+            "₱",
+            "Filipīnu peso",
+        }
+        PKR{
+            "PKRs",
+            "Pakistānas rūpija",
+        }
+        PLN{
+            "zł",
+            "Polijas zlots",
+        }
+        PTE{
+            "Esc",
+            "Portugāles eskudo",
+        }
+        QAR{
+            "QR",
+            "Kataras riāls",
+        }
+        RON{
+            "RON",
+            "Rumānijas leja",
+        }
+        RSD{
+            "din.",
+            "Serbijas dinārs",
+        }
+        RUB{
+            "RUB",
+            "Krievijas rublis",
+        }
+        RWF{
+            "RWF",
+            "Ruandas franks",
+        }
+        SAR{
+            "SR",
+            "Saūda riāls",
+        }
+        SBD{
+            "SI$",
+            "Zālamana salu dolārs",
+        }
+        SCR{
+            "SRe",
+            "Seišelu salu rūpija",
+        }
+        SDG{
+            "SDG",
+            "Sudānas mārciņa",
+        }
+        SEK{
+            "Skr",
+            "Zviedrijas krona",
+        }
+        SGD{
+            "S$",
+            "Singapūras dolārs",
+        }
+        SHP{
+            "SH£",
+            "Sv.Helēnas salas mārciņa",
+        }
+        SIT{
+            "SIT",
+            "Slovēnijas tolars",
+        }
+        SKK{
+            "Sk",
+            "Slovakijas krona",
+        }
+        SLL{
+            "Le",
+            "Sjerraleones leone",
+        }
+        SOS{
+            "Ssh",
+            "Somālijas šiliņš",
+        }
+        SRD{
+            "SR$",
+            "Surinamas dolārs",
+        }
+        SRG{
+            "Sf",
+            "Surinamas guldenis",
+        }
+        STD{
+            "Db",
+            "Santome un Prinsipi dobra",
+        }
+        SVC{
+            "SV₡",
+            "Salvadoras kolons",
+        }
+        SZL{
+            "SZL",
+            "Svazilendas lilangeni",
+        }
+        THB{
+            "฿",
+            "Taizemes bāts",
+        }
+        TJS{
+            "TJS",
+            "Tadžikistānas somons",
+        }
+        TMM{
+            "TMM",
+            "Turkmēnijas manats",
+        }
+        TND{
+            "DT",
+            "Tunisijas dinārs",
+        }
+        TOP{
+            "T$",
+            "Tongas paanga",
+        }
+        TRL{
+            "TRL",
+            "Turcijas lira",
+        }
+        TRY{
+            "TL",
+            "jaunā Turcijas lira",
+        }
+        TTD{
+            "TT$",
+            "Trinidādas un Tobāgo dolārs",
+        }
+        TWD{
+            "NT$",
+            "jaunais Taivānas dolārs",
+        }
+        TZS{
+            "TSh",
+            "Tanzānijas šiliņš",
+        }
+        UAH{
+            "₴",
+            "Ukrainas grivna",
+        }
+        UGX{
+            "USh",
+            "Ugandas šiliņš",
+        }
+        USD{
+            "US$",
+            "ASV dolārs",
+        }
+        UYU{
+            "$U",
+            "Urugvajas peso",
+        }
+        UZS{
+            "UZS",
+            "Uzbekistānas sums",
+        }
+        VEB{
+            "VEB",
+            "Venecuēlas bolivārs",
+        }
+        VEF{
+            "Bs.F.",
+            "Venecuēlas stiprais bolivārs",
+        }
+        VND{
+            "₫",
+            "Vjetnamas dongi",
+        }
+        VUV{
+            "VT",
+            "Vanuatu vatu",
+        }
+        WST{
+            "WS$",
+            "Samoa tala",
+        }
+        XAG{
+            "XAG",
+            "sudrabs",
+        }
+        XAU{
+            "XAU",
+            "zelts",
+        }
+        XBB{
+            "XBB",
+            "Eiropas naudas vienība",
+        }
+        XCD{
+            "EC$",
+            "Austrumkarību dolārs",
+        }
+        XDR{
+            "XDR",
+            "Speciālās aizņēmuma tiesības",
+        }
+        XEU{
+            "XEU",
+            "Eiropas norēķinu vienība",
+        }
+        XFO{
+            "XFO",
+            "Francijas zelta franks",
+        }
+        XFU{
+            "XFU",
+            "Francijas UIC franks",
+        }
+        XPD{
+            "XPD",
+            "pallādijs",
+        }
+        XPT{
+            "XPT",
+            "platīns",
+        }
+        XXX{
+            "XXX",
+            "nezināma vai nederīga valūta",
+        }
+        YER{
+            "YR",
+            "Jemenas riāls",
+        }
+        ZAR{
+            "R",
+            "Dienvidāfrikas rands",
+        }
+        ZMK{
+            "ZK",
+            "Zambijas kvača",
+        }
+        ZWD{
+            "Z$",
+            "Zimbabves dolārs",
+        }
+    }
+    CurrencyPlurals{
+        KZT{
+            zero{"Kazahstānas tenge"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+        zero{"{0} {1}"}
+    }
+    ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
+    Keys{
+        calendar{"kalendārs"}
+        collation{"salīdzināšana"}
+        currency{"valūta"}
+    }
+    Languages{
+        aa{"afāru"}
+        ab{"abhāzu"}
+        ace{"ačinu"}
+        ach{"ačolu"}
+        ada{"adangmu"}
+        ady{"adigu"}
+        ae{"avesta"}
+        af{"afrikandu"}
+        afa{"afroaziātu valodas"}
+        afh{"afrihili"}
+        ain{"ainu"}
+        ak{"akanu"}
+        akk{"akadiešu"}
+        ale{"aleutu"}
+        alg{"algonkinu valodas"}
+        alt{"dienvidaltajiešu"}
+        am{"amharu"}
+        an{"aragoniešu"}
+        ang{"senangļu"}
+        anp{"angika"}
+        apa{"apaču valodas"}
+        ar{"arābu"}
+        arc{"aramiešu"}
+        arn{"araukāņu"}
+        arp{"arapahu"}
+        art{"mākslīgās valodas"}
+        arw{"aravaku"}
+        as{"asamiešu"}
+        ast{"astūriešu"}
+        ath{"atapasku valodas"}
+        aus{"austrāliešu valodas"}
+        av{"avāru"}
+        awa{"avadhu"}
+        ay{"aimaru"}
+        az{"azerbaidžāņu"}
+        ba{"baškīru"}
+        bad{"bandu"}
+        bal{"beludžu"}
+        ban{"baliešu"}
+        bas{"basu"}
+        bat{"baltu valodas"}
+        be{"baltkrievu"}
+        bej{"bedžu"}
+        bem{"bembu"}
+        ber{"berberu"}
+        bg{"bulgāru"}
+        bh{"biharu"}
+        bho{"bhodžpūru"}
+        bi{"bišlamā"}
+        bik{"bikolu"}
+        bin{"binu"}
+        bla{"siksiku"}
+        bm{"bambaru"}
+        bn{"bengāļu"}
+        bnt{"bantu"}
+        bo{"tibetiešu"}
+        br{"bretoņu"}
+        bra{"bradžiešu"}
+        bs{"bosniešu"}
+        btk{"bataku"}
+        bua{"burjatu"}
+        bug{"bugu"}
+        byn{"bilinu"}
+        ca{"katalāņu"}
+        cad{"kadu"}
+        cai{"Centrālamerikas indiāņu valodas"}
+        car{"karību"}
+        cau{"kaukāziešu valodas"}
+        ce{"čečenu"}
+        ceb{"sebuāņu"}
+        cel{"ķeltu valoda"}
+        ch{"čamorru"}
+        chb{"čibču"}
+        chg{"džagatajs"}
+        chk{"čūku"}
+        chm{"mariešu"}
+        chn{"činuku žargons"}
+        cho{"čoktavu"}
+        chp{"čipevaianu"}
+        chr{"irokēzu"}
+        chy{"šejenu"}
+        cmc{"čamiešu valodas"}
+        co{"korsikāņu"}
+        cop{"koptu"}
+        cpe{"angliskās kreoliskās valodas un pidžinvalodas"}
+        cpf{"franciskās kreoliskās valodas un pidžinvalodas"}
+        cpp{"portugāliskās kreoliskās valodas un pidžinvalodas"}
+        cr{"krī"}
+        crh{"Krimas tatāru"}
+        crp{"kreoliskās valodas un pidžinvalodas"}
+        cs{"čehu"}
+        csb{"kašubu"}
+        cu{"baznīcslāvu"}
+        cus{"kušītu valodas"}
+        cv{"čuvašu"}
+        cy{"velsiešu"}
+        da{"dāņu"}
+        dak{"dakotu"}
+        dar{"dargu"}
+        day{"dajaku"}
+        de{"vācu"}
+        de_AT{"Austrijas vācu"}
+        de_CH{"Šveices augšvācu"}
+        del{"delavēru"}
+        den{"sleivu"}
+        dgr{"dogribu"}
+        din{"dinku"}
+        doi{"dogru"}
+        dra{"dravīdu valodas"}
+        dsb{"lejassorbu"}
+        dua{"dualu"}
+        dum{"vidusholandiešu"}
+        dv{"maldīviešu"}
+        dyu{"diūlu"}
+        dz{"dzongke"}
+        ee{"evu"}
+        efi{"efiku"}
+        egy{"ēģiptiešu"}
+        eka{"ekadžuku"}
+        el{"grieķu"}
+        elx{"elamiešu"}
+        en{"angļu"}
+        en_AU{"Austrālijas angļu"}
+        en_CA{"Kanādas angļu"}
+        en_US{"angļu (ASV)"}
+        enm{"vidusangļu"}
+        eo{"esperanto"}
+        es{"spāņu"}
+        es_419{"spāņu (Latīņamerika)"}
+        es_ES{"ibēriešu spāņu"}
+        et{"igauņu"}
+        eu{"basku"}
+        ewo{"evondu"}
+        fa{"persiešu"}
+        fan{"fangu"}
+        fat{"fantu"}
+        ff{"fulu"}
+        fi{"somu"}
+        fil{"filipīniešu"}
+        fiu{"somugru valodas"}
+        fj{"fidžiešu"}
+        fo{"fēru"}
+        fon{"fonu"}
+        fr{"franču"}
+        fr_CA{"Kanādas franču"}
+        fr_CH{"Šveices franču"}
+        frm{"vidusfranču"}
+        fro{"senfranču"}
+        frr{"ziemeļfrīzu"}
+        frs{"austrumfrīzu"}
+        fur{"friūlu"}
+        fy{"rietumfrīzu"}
+        ga{"īru"}
+        gaa{"ga"}
+        gay{"gajo"}
+        gba{"gbaju"}
+        gd{"gēlu"}
+        gem{"ģermāņu valodas"}
+        gez{"gēzu"}
+        gil{"kiribatiešu"}
+        gl{"galisiešu"}
+        gmh{"vidusaugšvācu"}
+        gn{"gvaranu"}
+        goh{"senaugšvācu"}
+        gon{"gondu valodas"}
+        gor{"gorontalu"}
+        got{"gotu"}
+        grb{"grebo"}
+        grc{"sengrieķu"}
+        gsw{"Šveices vācu"}
+        gu{"gudžaratu"}
+        gv{"meniešu"}
+        gwi{"kučinu"}
+        ha{"hausu"}
+        hai{"haidu"}
+        haw{"havajiešu"}
+        he{"ivrits"}
+        hi{"hindi"}
+        hil{"hiligainonu"}
+        him{"himačali"}
+        hit{"hetu"}
+        hmn{"hmongu"}
+        ho{"hirimotu"}
+        hr{"horvātu"}
+        hsb{"augšsorbu"}
+        ht{"haitiešu"}
+        hu{"ungāru"}
+        hup{"hupu"}
+        hy{"armēņu"}
+        hz{"hereru"}
+        ia{"interlingva"}
+        iba{"ibanu"}
+        id{"indonēziešu"}
+        ie{"interlingve"}
+        ig{"igbo"}
+        ii{"Sičuaņas ji"}
+        ijo{"idžbu"}
+        ik{"inupiaku"}
+        ilo{"iloku"}
+        inc{"indoāriešu valodas"}
+        ine{"indoeiropiešu valodas"}
+        inh{"ingušu"}
+        io{"ido"}
+        ira{"irāņu valodas"}
+        iro{"irokēzu valodas"}
+        is{"īslandiešu"}
+        it{"itāliešu"}
+        iu{"inuītu"}
+        ja{"japāņu"}
+        jbo{"ložbans"}
+        jpr{"jūdpersiešu"}
+        jrb{"jūdarābu"}
+        jv{"javiešu"}
+        ka{"gruzīnu"}
+        kaa{"karakalpaku"}
+        kab{"kabilu"}
+        kac{"kačinu"}
+        kam{"kambu"}
+        kar{"karenu"}
+        kaw{"kāvi"}
+        kbd{"kabardiešu"}
+        kg{"kongu"}
+        kha{"khasu"}
+        khi{"hosjanu valodas"}
+        kho{"hotaniešu"}
+        ki{"kikuju"}
+        kj{"kvaņamu"}
+        kk{"kazahu"}
+        kl{"grenlandiešu"}
+        km{"khmeru"}
+        kmb{"kimbundu"}
+        kn{"kannadu"}
+        ko{"korejiešu"}
+        kok{"konkanu"}
+        kos{"kosrājiešu"}
+        kpe{"kpellu"}
+        kr{"kanuru"}
+        krc{"karačaju un balkāru"}
+        krl{"karēļu"}
+        kro{"krū"}
+        kru{"kuruhu"}
+        ks{"kašmiriešu"}
+        ku{"kurdu"}
+        kum{"kumiku"}
+        kut{"kutenaju"}
+        kv{"komiešu"}
+        kw{"korniešu"}
+        ky{"kirgīzu"}
+        la{"latīņu"}
+        lad{"ladino"}
+        lah{"landu"}
+        lam{"lambu"}
+        lb{"luksemburgiešu"}
+        lez{"lezgīnu"}
+        lg{"gandu"}
+        li{"limburgiešu"}
+        ln{"lingala"}
+        lo{"laosiešu"}
+        lol{"mongu"}
+        loz{"lozu"}
+        lt{"lietuviešu"}
+        lu{"lubakatanga"}
+        lua{"lubalulva"}
+        lui{"luisenu"}
+        lun{"lundu"}
+        luo{"luo"}
+        lus{"lušeju"}
+        lv{"latviešu"}
+        mad{"maduriešu"}
+        mag{"magahiešu"}
+        mai{"maithili"}
+        mak{"makasaru"}
+        man{"mandingu"}
+        map{"austronēziešu valoda"}
+        mas{"masaju"}
+        mdf{"mokšu"}
+        mdr{"mandaru"}
+        men{"mendu"}
+        mg{"malagasu"}
+        mga{"vidusīru"}
+        mh{"māršaliešu"}
+        mi{"maoru"}
+        mic{"mikmaku"}
+        min{"minangkabavu"}
+        mis{"dažādas valodas"}
+        mk{"maķedoniešu"}
+        mkh{"monkhmeru valodas"}
+        ml{"malajalu"}
+        mn{"mongoļu"}
+        mnc{"mandžūru"}
+        mni{"manipūru"}
+        mno{"manobu valodas"}
+        mo{"moldāvu"}
+        moh{"mohauku"}
+        mos{"mosu"}
+        mr{"maratu"}
+        ms{"malajiešu"}
+        mt{"maltiešu"}
+        mul{"vairākas valodas"}
+        mun{"mundu valoda"}
+        mus{"krīku"}
+        mwl{"mirandiešu"}
+        mwr{"marvaru"}
+        my{"birmiešu"}
+        myn{"maiju valodas"}
+        myv{"erzju"}
+        na{"nauruiešu"}
+        nah{"navatlu"}
+        nai{"Ziemeļamerikas indiāņu valodas"}
+        nap{"neapoliešu"}
+        nb{"norvēģu bukmols"}
+        nd{"ziemeļndebelu"}
+        nds{"lejasvācu"}
+        ne{"nepāliešu"}
+        new{"nevaru"}
+        ng{"ndongu"}
+        nia{"njasu"}
+        nic{"nigēriešu-kordofāņu valodas"}
+        niu{"niuāņu"}
+        nl{"holandiešu"}
+        nl_BE{"flāmu"}
+        nn{"jaunnorvēģu"}
+        no{"norvēģu"}
+        nog{"nogaju"}
+        non{"sennorvēģu"}
+        nr{"dienvidndebelu"}
+        nso{"ziemeļsotu"}
+        nub{"nūbiešu valodas"}
+        nv{"navahu"}
+        nwc{"klasiskā nevaru"}
+        ny{"čičeva"}
+        nym{"ņamvezu"}
+        nyn{"ņankolu"}
+        nyo{"ņoru"}
+        nzi{"nzemu"}
+        oc{"oksitāņu"}
+        oj{"odžibvu"}
+        om{"oromu"}
+        os{"osetīnu"}
+        osa{"važāžu"}
+        ota{"turku osmaņu"}
+        oto{"otomu valoda"}
+        pa{"pandžabu"}
+        paa{"papuasu valoda"}
+        pag{"pangasinanu"}
+        pal{"pehlevi"}
+        pam{"pampanganu"}
+        pap{"papjamento"}
+        pau{"palaviešu"}
+        phi{"filipīniešu valoda"}
+        phn{"feniķiešu"}
+        pi{"pāli"}
+        pl{"poļu"}
+        pon{"ponapiešu"}
+        pra{"prākrita valoda"}
+        pro{"senprovansiešu"}
+        ps{"puštu"}
+        pt{"portugāļu"}
+        pt_BR{"Brazīlijas portugāļu"}
+        pt_PT{"ibēriešu portugāļu"}
+        qu{"kečvu"}
+        raj{"radžastāņu"}
+        rap{"rapanuju"}
+        rar{"rarotongiešu"}
+        rm{"retoromāņu"}
+        rn{"rundu"}
+        ro{"rumāņu"}
+        roa{"romāņu valoda"}
+        rom{"čigānu"}
+        root{"sakne"}
+        ru{"krievu"}
+        rup{"aromūnu"}
+        rw{"kiņaruanda"}
+        sa{"sanskrits"}
+        sad{"sandavu"}
+        sah{"jakutu"}
+        sai{"Dienvidamerikas indiāņu"}
+        sal{"sališu valodas"}
+        sam{"Samārijas aramiešu"}
+        sas{"sasaku"}
+        sat{"santalu"}
+        sc{"sardīniešu"}
+        scn{"sicīliešu"}
+        sco{"skotu"}
+        sd{"sindhu"}
+        se{"ziemeļsāmu"}
+        sel{"selkupu"}
+        sem{"semītu valodas"}
+        sg{"sangu"}
+        sga{"senīru"}
+        sgn{"zīmju valodas"}
+        sh{"serbu-horvātu"}
+        shn{"šanu"}
+        si{"singāļu"}
+        sid{"sidamu"}
+        sio{"siū valodas"}
+        sit{"sinotibetiešu valodas"}
+        sk{"slovāku"}
+        sl{"slovēņu"}
+        sla{"slāvu"}
+        sm{"samoāņu"}
+        sma{"dienvidsāmu"}
+        smi{"sāmu valoda"}
+        smj{"Luleo sāmu"}
+        smn{"Inari sāmu"}
+        sms{"skoltsāmu"}
+        sn{"šonu"}
+        snk{"soninku"}
+        so{"somāļu"}
+        sog{"sogdiešu"}
+        son{"songaju"}
+        sq{"albāņu"}
+        sr{"serbu"}
+        srn{"sranantogo"}
+        srr{"serēru"}
+        ss{"svatu"}
+        ssa{"Nīlas-Sahāras valodas"}
+        su{"sundaniešu"}
+        suk{"sukumu"}
+        sus{"susu"}
+        sux{"šumeru"}
+        sv{"zviedru"}
+        sw{"svahili"}
+        syc{"klasiskā sīriešu"}
+        syr{"sīriešu"}
+        ta{"tamilu"}
+        tai{"taju valodas"}
+        te{"telugu"}
+        tem{"temnu"}
+        ter{"tereno"}
+        tet{"tetumu"}
+        tg{"tadžiku"}
+        th{"taju"}
+        ti{"tigrinja"}
+        tig{"tigru"}
+        tiv{"tivu"}
+        tk{"turkmēņu"}
+        tkl{"tokelaviešu"}
+        tl{"tagalu"}
+        tlh{"klingoņu"}
+        tli{"tlinkitu"}
+        tmh{"tuaregu"}
+        tn{"cvanu"}
+        to{"tongu"}
+        tog{"Njasas tongu valoda"}
+        tpi{"tokpisins"}
+        tr{"turku"}
+        ts{"congu"}
+        tsi{"cimšiāņu"}
+        tt{"tatāru"}
+        tum{"tumbuku"}
+        tup{"tupu valodas"}
+        tut{"altajiešu valodas"}
+        tvl{"tuvaliešu"}
+        tw{"tvī"}
+        ty{"taitiešu"}
+        tyv{"tuviešu"}
+        udm{"udmurtu"}
+        ug{"uiguru"}
+        uga{"ugaritiešu"}
+        uk{"ukraiņu"}
+        umb{"umbundu"}
+        und{"nezināma vai nederīga valoda"}
+        ur{"urdu"}
+        uz{"uzbeku"}
+        vai{"vaju"}
+        ve{"vendu"}
+        vi{"vjetnamiešu"}
+        vo{"volapiks"}
+        vot{"votu"}
+        wa{"valoņu"}
+        wak{"vakašu valodas"}
+        wal{"valamu"}
+        war{"varaju"}
+        was{"vašo"}
+        wen{"sorbu"}
+        wo{"volofu"}
+        xal{"kalmiku"}
+        xh{"khosu"}
+        yao{"jao"}
+        yap{"japiešu"}
+        yi{"jidišs"}
+        yo{"jorubu"}
+        ypk{"jopiku valodas"}
+        za{"džuanu"}
+        zap{"sapoteku"}
+        zen{"zenagu"}
+        zh{"ķīniešu"}
+        zh_Hans{"ķīniešu vienkāršotā"}
+        zh_Hant{"ķīniešu tradicionālā"}
+        znd{"zandē"}
+        zu{"zulu"}
+        zun{"zunju"}
+        zxx{"Bez lingvistiska satura"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "−",
+        "E",
+        "‰",
+        "∞",
+        "nav skaitlis",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"arābu"}
+        Armi{"aramiešu"}
+        Armn{"armēņu"}
+        Bali{"baliešu"}
+        Beng{"bengāļu"}
+        Bopo{"bopomofo"}
+        Brah{"brahmi"}
+        Brai{"Braila raksts"}
+        Cher{"irokēzu"}
+        Copt{"koptu"}
+        Cyrl{"kirilica"}
+        Cyrs{"senslāvu"}
+        Deva{"devānagāri"}
+        Egyd{"demotiskais raksts"}
+        Egyh{"hierātiskais raksts"}
+        Egyp{"ēģiptiešu hieroglifi"}
+        Ethi{"etiopiešu"}
+        Geor{"gruzīnu"}
+        Goth{"gotu"}
+        Grek{"grieķu"}
+        Gujr{"gudžaratu"}
+        Hani{"ķīniešu"}
+        Hans{"ķīniešu vienkāršotā"}
+        Hant{"ķīniešu tradicionālā"}
+        Hebr{"ivrits"}
+        Hira{"hiragana"}
+        Hrkt{"katakana vai hiragana"}
+        Hung{"senungāru"}
+        Ital{"vecitāļu"}
+        Java{"javiešu"}
+        Jpan{"japāņu"}
+        Kana{"katakana"}
+        Khmr{"khmeru"}
+        Knda{"kannaru"}
+        Kore{"korejiešu"}
+        Laoo{"lao"}
+        Latn{"latīņu"}
+        Lina{"lineārā A"}
+        Linb{"lineārā B"}
+        Lydi{"līdiešu"}
+        Maya{"maiju"}
+        Mlym{"malajalu"}
+        Mong{"mongoļu"}
+        Moon{"Mūna raksts"}
+        Mymr{"birmiešu"}
+        Ogam{"ogamiskais raksts"}
+        Orya{"oriju"}
+        Osma{"osmaņu turku"}
+        Phnx{"feniķiešu"}
+        Qaai{"mantotā"}
+        Roro{"rongorongo"}
+        Runr{"rūnu raksts"}
+        Samr{"samariešu"}
+        Sinh{"sinhalas"}
+        Sund{"zundu"}
+        Syrc{"sīriešu"}
+        Syrj{"rietumsīriešu"}
+        Syrn{"austrumsīriešu"}
+        Taml{"tamilu"}
+        Telu{"telugu"}
+        Tglg{"tagalu"}
+        Thaa{"taana"}
+        Thai{"taju"}
+        Tibt{"tibetiešu"}
+        Xpeo{"vecpersiešu"}
+        Xsux{"šumeru-akadiešu ķīļraksts"}
+        Yiii{"ji"}
+        Zmth{"matemātiskais pieraksts"}
+        Zxxx{"bez rakstības"}
+        Zzzz{"nezināma vai nederīga rakstība"}
+    }
+    Types{
+        calendar{
+            buddhist{"budistu kalendārs"}
+            chinese{"ķīniešu kalendārs"}
+            gregorian{"Gregora kalendārs"}
+            hebrew{"ebreju kalendārs"}
+            indian{"Indijas nacionālais kalendārs"}
+            islamic{"islāma kalendārs"}
+            islamic-civil{"islāma pilsoņu kalendārs"}
+            japanese{"japāņu kalendārs"}
+            roc{"Ķīnas Republikas kalendārs"}
+        }
+        collation{
+            big5han{"tradicionālās ķīniešu valodas kārtošanas secība - Big5"}
+            direct{"tiešā kārtošanas secība"}
+            gb2312han{"vienkāršotās ķīniešu valodas kārtošanas secība - GB2312"}
+            phonebook{"tālruņu grāmatas kārtošanas secība"}
+            pinyin{"Pinyin kārtošanas secība"}
+            stroke{"Stroke kārtošanas secība"}
+            traditional{"tradicionālā kārtošanas secība"}
+        }
+    }
+    Version{"1.97"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, y. 'gada' d. MMMM",
+                "y. 'gada' d. MMMM",
+                "y. 'gada' d. MMM",
+                "dd.MM.yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EEEd{"EEE, d."}
+                Ed{"EEE, d."}
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"HH:mm"}
+                M{"L"}
+                MEd{"E, dd.MM."}
+                MMM{"LLL"}
+                MMMEd{"E, d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMMd{"d. MMMM"}
+                MMMd{"d. MMM"}
+                Md{"dd.mm."}
+                d{"d"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"y. 'g'."}
+                yM{"mm.yyyy."}
+                yMEd{"EEE, dd.mm.yyyy."}
+                yMMM{"yyyy. 'g'. MMM"}
+                yMMMEd{"EEE, yyyy. 'g'. dd. MMM"}
+                yMMMM{"y. 'g'. MMMM"}
+                yQ{"Q yyyy"}
+                yQQQ{"y QQQ"}
+                yyQ{"Q yy"}
+                yyyy{"y. 'g'."}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sv",
+                        "Pr",
+                        "Ot",
+                        "Tr",
+                        "Ce",
+                        "Pk",
+                        "Se",
+                    }
+                    wide{
+                        "svētdiena",
+                        "pirmdiena",
+                        "otrdiena",
+                        "trešdiena",
+                        "ceturtdiena",
+                        "piektdiena",
+                        "sestdiena",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "P",
+                        "S",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "p.m.ē.",
+                    "m.ē.",
+                }
+                narrow{
+                    "p.m.ē.",
+                    "m.ē.",
+                }
+                wide{
+                    "pirms mūsu ēras",
+                    "mūsu ērā",
+                }
+            }
+            fields{
+                day{
+                    dn{"diena"}
+                    relative{
+                        "-1"{"vakar"}
+                        "-2"{"aizvakar"}
+                        "-3"{"aizaizvakar"}
+                        "0"{"šodien"}
+                        "1"{"rīt"}
+                        "2"{"parīt"}
+                        "3"{"aizparīt"}
+                    }
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
+                }
+                era{
+                    dn{"ēra"}
+                }
+                hour{
+                    dn{"Stundas"}
+                }
+                minute{
+                    dn{"Minūtes"}
+                }
+                month{
+                    dn{"Mēnesis"}
+                }
+                second{
+                    dn{"Sekundes"}
+                }
+                week{
+                    dn{"Nedēļa"}
+                }
+                weekday{
+                    dn{"Nedēļas diena"}
+                }
+                year{
+                    dn{"Gads"}
+                }
+                zone{
+                    dn{"Josla"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"mm.–mm."}
+                }
+                MEd{
+                    M{"E, dd.MM - E, dd.MM"}
+                    d{"E, dd.MM – E, dd.MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d. MMM - E, d. MMM"}
+                    d{"E, d. MMM – E, d. MMM"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMd{
+                    M{"d. MMM - d. MMM"}
+                    d{"d.-d. MMM"}
+                }
+                Md{
+                    M{"dd.mm–dd.mm"}
+                    d{"dd.mm.–dd.mm."}
+                }
+                d{
+                    d{"d.–d."}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH–HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm–HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm–HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH–HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y.–y."}
+                }
+                yM{
+                    M{"mm.yyyy.–mm.yyyy."}
+                    y{"mm.yyyy.–mm.yyyy."}
+                }
+                yMEd{
+                    M{"EEE, dd.mm.yy. – EEE, dd.mm.yy."}
+                    d{"EEE, dd.mm.yy. – EEE, dd.mm.yy."}
+                    y{"EEE, dd.mm.yy. – EEE, dd.mm.yy."}
+                }
+                yMMM{
+                    M{"y. 'gada' MMM-MMM"}
+                    y{"y. 'gada' MMM - y. 'gada' MMM"}
+                }
+                yMMMEd{
+                    M{"E, y. 'gada' d. MMM - E, y. 'gada' d. MMM"}
+                    d{"E, y. 'gada' d. MMM - E, y. 'gada' d. MMM"}
+                    y{"E, y. 'gada' d. MMM - E, y. 'gada' d. MMM"}
+                }
+                yMMMM{
+                    M{"mm.yyyy.–mm.yyyy."}
+                    y{"mm.yyyy.–mm.yyyy."}
+                }
+                yMMMd{
+                    M{"y. 'gada' d. MMM - d. MMM"}
+                    d{"y. 'gada' d.-d. MMM"}
+                    y{"y. 'gada' d. MMM - y. 'gada' d. MMM"}
+                }
+                yMd{
+                    M{"dd.mm.yy.–dd.mm.yy."}
+                    d{"dd.mm.yyyy.–dd.mm.yyyy."}
+                    y{"dd.mm.yy.–dd.mm.yy."}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "janv.",
+                        "febr.",
+                        "marts",
+                        "apr.",
+                        "maijs",
+                        "jūn.",
+                        "jūl.",
+                        "aug.",
+                        "sept.",
+                        "okt.",
+                        "nov.",
+                        "dec.",
+                    }
+                    wide{
+                        "janvāris",
+                        "februāris",
+                        "marts",
+                        "aprīlis",
+                        "maijs",
+                        "jūnijs",
+                        "jūlijs",
+                        "augusts",
+                        "septembris",
+                        "oktobris",
+                        "novembris",
+                        "decembris",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "C1",
+                        "C2",
+                        "C3",
+                        "C4",
+                    }
+                    wide{
+                        "1. ceturksnis",
+                        "2. ceturksnis",
+                        "3. ceturksnis",
+                        "4. ceturksnis",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    wide{
+                        "tišri",
+                        "hešvans",
+                        "kisļevs",
+                        "tevets",
+                        "ševats",
+                        "Adar I",
+                        "adars",
+                        "nisans",
+                        "ijars",
+                        "sivans",
+                        "tamuzs",
+                        "avs",
+                        "eluls",
+                    }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
+                    wide{
+                        "muharams",
+                        "safars",
+                        "1. rabī",
+                        "2. rabī",
+                        "1. džumādā",
+                        "2. džumādā",
+                        "radžabs",
+                        "šabans",
+                        "ramadāns",
+                        "šauvals",
+                        "du al-kidā",
+                        "du al-hidžā",
+                    }
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Valoda: {0}"}
+        script{"Rakstība: {0}"}
+        territory{"Reģions: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"britu"}
+        metric{"metriskā"}
+    }
+    units{
+        day{
+            one{"{0} diena"}
+            other{"{0} dienas"}
+            zero{"{0} dienas"}
+        }
+        hour{
+            one{"{0} stunda"}
+            other{"{0} stundas"}
+            zero{"{0} stundas"}
+        }
+        minute{
+            one{"{0} minūte"}
+            other{"{0} minūtes"}
+            zero{"{0} minūtes"}
+        }
+        month{
+            one{"{0} mēnesis"}
+            other{"{0} mēneši"}
+            zero{"{0} mēneši"}
+        }
+        second{
+            one{"{0} sekunde"}
+            other{"{0} sekundes"}
+            zero{"{0} sekundes"}
+        }
+        week{
+            one{"{0} nedēļa"}
+            other{"{0} nedēļas"}
+            zero{"{0} nedēļas"}
+        }
+        year{
+            one{"{0} gads"}
+            other{"{0} gadi"}
+            zero{"{0} gadi"}
+        }
+    }
+    unitsShort{
+        day{
+            one{"{0} d"}
+            other{"{0} d"}
+            zero{"{0} d"}
+        }
+        hour{
+            one{"{0} h"}
+            other{"{0} h"}
+            zero{"{0} h"}
+        }
+        minute{
+            one{"{0} min"}
+            other{"{0} min"}
+            zero{"{0} min"}
+        }
+        month{
+            one{"{0} mēn"}
+            other{"{0} mēn"}
+            zero{"{0} mēn"}
+        }
+        second{
+            one{"{0} s"}
+            other{"{0} s"}
+            zero{"{0} s"}
+        }
+        week{
+            one{"{0} ned"}
+            other{"{0} ned"}
+            zero{"{0} ned"}
+        }
+        year{
+            one{"{0} g"}
+            other{"{0} g"}
+            zero{"{0} g"}
+        }
+    }
+    zoneStrings{
+        "Africa:Ceuta"{
+            ec{"Seūta"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaši"}
+        }
+        "America:Adak"{
+            ec{"Adaka"}
+        }
+        "America:Anchorage"{
+            ec{"Ankurāža"}
+        }
+        "America:Araguaina"{
+            ec{"Aragvaina"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"Larioha"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Riogaljegosa"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"Sanhuana"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"Sanluisa"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tukumana"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ušuaja"}
+        }
+        "America:Bahia"{
+            ec{"Brazīlija (Salvadora)"}
+        }
+        "America:Belem"{
+            ec{"Belena"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanksablona"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boavista"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenosairesa"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Kembridžbeja"}
+        }
+        "America:Campo_Grande"{
+            ec{"Kampugrandi"}
+        }
+        "America:Cancun"{
+            ec{"Kankūna"}
+        }
+        "America:Catamarca"{
+            ec{"Katamarka"}
+        }
+        "America:Chicago"{
+            ec{"Čikāga"}
+        }
+        "America:Chihuahua"{
+            ec{"Čihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Koralharbora"}
+        }
+        "America:Cordoba"{
+            ec{"Kordoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Kujaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Denmārkšavna"}
+        }
+        "America:Dawson"{
+            ec{"Dausona"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dousonkrīka"}
+        }
+        "America:Denver"{
+            ec{"Denvera"}
+        }
+        "America:Detroit"{
+            ec{"Detroita"}
+        }
+        "America:Edmonton"{
+            ec{"Edmontona"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirenupe"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortalesa"}
+        }
+        "America:Glace_Bay"{
+            ec{"Gleisbeja"}
+        }
+        "America:Goose_Bay"{
+            ec{"Gūsbeja"}
+        }
+        "America:Halifax"{
+            ec{"Halifaksa"}
+        }
+        "America:Hermosillo"{
+            ec{"Ermosiljo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Noksa"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Pēterburga"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tellsitija"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Viveja"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vinsensa"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Vinimaka"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolisa"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvika"}
+        }
+        "America:Iqaluit"{
+            ec{"Ikaluita"}
+        }
+        "America:Jujuy"{
+            ec{"Žužuja"}
+        }
+        "America:Juneau"{
+            ec{"Džuno"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Montiselo"}
+        }
+        "America:Los_Angeles"{
+            ec{"Losandželosa"}
+        }
+        "America:Louisville"{
+            ec{"Luisvilla"}
+        }
+        "America:Maceio"{
+            ec{"Maseio"}
+        }
+        "America:Manaus"{
+            ec{"Manausa"}
+        }
+        "America:Mazatlan"{
+            ec{"Masatlāna"}
+        }
+        "America:Mendoza"{
+            ec{"Mendosa"}
+        }
+        "America:Menominee"{
+            ec{"Menominī"}
+        }
+        "America:Mexico_City"{
+            ec{"Mehiko"}
+        }
+        "America:Moncton"{
+            ec{"Monktona"}
+        }
+        "America:Monterrey"{
+            ec{"Montereja"}
+        }
+        "America:Montreal"{
+            ec{"Monreāla"}
+        }
+        "America:New_York"{
+            ec{"Ņujorka"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigona"}
+        }
+        "America:Nome"{
+            ec{"Noma"}
+        }
+        "America:Noronha"{
+            ec{"Noroņa"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Centra Ziemeļdakotā"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"Ņūsalema"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtanga"}
+        }
+        "America:Phoenix"{
+            ec{"Fīniksa"}
+        }
+        "America:Porto_Velho"{
+            ec{"Portuvelju"}
+        }
+        "America:Rainy_River"{
+            ec{"Reinirivera"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankininleta"}
+        }
+        "America:Recife"{
+            ec{"Resifi"}
+        }
+        "America:Regina"{
+            ec{"Regīna"}
+        }
+        "America:Resolute"{
+            ec{"Rezolūta"}
+        }
+        "America:Rio_Branco"{
+            ec{"Riobranko"}
+        }
+        "America:Santarem"{
+            ec{"Santarena"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sanpaulu"}
+        }
+        "America:Scoresbysund"{
+            ec{"Skoresbisunda"}
+        }
+        "America:Shiprock"{
+            ec{"Šiproka"}
+        }
+        "America:St_Johns"{
+            ec{"Sentdžonsa"}
+        }
+        "America:Swift_Current"{
+            ec{"Sviftkarenta"}
+        }
+        "America:Thule"{
+            ec{"Tūle"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Tanderbeja"}
+        }
+        "America:Tijuana"{
+            ec{"Tihuāna"}
+        }
+        "America:Vancouver"{
+            ec{"Vankūvera"}
+        }
+        "America:Whitehorse"{
+            ec{"Vaithorsa"}
+        }
+        "America:Winnipeg"{
+            ec{"Vinipega"}
+        }
+        "America:Yakutat"{
+            ec{"Jakutata"}
+        }
+        "America:Yellowknife"{
+            ec{"Jelounaifa"}
+        }
+        "Antarctica:Casey"{
+            ec{"Kesija"}
+        }
+        "Antarctica:Davis"{
+            ec{"Deivisa"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mavsona"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"Makmerdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmera"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rotera"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Dienvidpols"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Sjova"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostoka"}
+        }
+        "Asia:Almaty"{
+            ec{"Almati"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadira"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aktobe"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Čoibalsana"}
+        }
+        "Asia:Chongqing"{
+            ec{"Čuncina"}
+        }
+        "Asia:Harbin"{
+            ec{"Harbina"}
+        }
+        "Asia:Hovd"{
+            ec{"Hovda"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutska"}
+        }
+        "Asia:Jakarta"{
+            ec{"Džakarta"}
+        }
+        "Asia:Jayapura"{
+            ec{"Džajapūra"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kašgara"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarska"}
+        }
+        "Asia:Kuching"{
+            ec{"Kučinga"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadāna"}
+        }
+        "Asia:Makassar"{
+            ec{"Makasara"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirska"}
+        }
+        "Asia:Omsk"{
+            ec{"Omska"}
+        }
+        "Asia:Oral"{
+            ec{"Orāla"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianaka"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kizilorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sahalīna"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarkanda"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulanbatora"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumči"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostoka"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutska"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburga"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azoru salas"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanāriju salas"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaida"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbena"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Brokenhila"}
+        }
+        "Australia:Currie"{
+            ec{"Kerija"}
+        }
+        "Australia:Darwin"{
+            ec{"Dārvina"}
+        }
+        "Australia:Eucla"{
+            ec{"Jūkla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobarta"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindemana"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lordhova"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melburna"}
+        }
+        "Australia:Perth"{
+            ec{"Pērta"}
+        }
+        "Australia:Sydney"{
+            ec{"Sidneja"}
+        }
+        "Etc:Unknown"{
+            ec{"Nezināma"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaļiņingrada"}
+        }
+        "Europe:Moscow"{
+            ec{"Maskava"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopole"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Užgoroda"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograda"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
+        }
+        "Pacific:Auckland"{
+            ec{"Oklenda"}
+        }
+        "Pacific:Chatham"{
+            ec{"Četema"}
+        }
+        "Pacific:Easter"{
+            ec{"Lieldienu sala"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderburija"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagu salas"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambjera"}
+        }
+        "Pacific:Johnston"{
+            ec{"Džonstauna"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kirisimasi"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosraja"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kvadžaleina"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Markvesa"}
+        }
+        "Pacific:Midway"{
+            ec{"Midveja"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponpeja"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarava"}
+        }
+        "Pacific:Truk"{
+            ec{"Trūka"}
+        }
+        "Pacific:Wake"{
+            ec{"Veika"}
+        }
+        "meta:Europe_Central"{
+            ld{"Centrāleiropas vasaras laiks"}
+            ls{"Centrāleiropas laiks"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Austrumeiropas vasaras laiks"}
+            ls{"Austrumeiropas laiks"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Kuybyshev"{
+            ld{"Kuibiševas vasaras laiks"}
+            ls{"Kuibiševas laiks"}
+        }
+        "meta:Moscow"{
+            ld{"Maskavas vasaras laiks"}
+            lg{"Maskavas laiks"}
+            ls{"Maskavas standarta laiks"}
+        }
+        "meta:Samara"{
+            ld{"Samaras vasaras laiks"}
+            ls{"Samaras laiks"}
+        }
+        "meta:Turkey"{
+            ld{"Turcijas vasaras laiks"}
+            ls{"Turcijas laiks"}
+        }
+        "meta:Volgograd"{
+            ld{"Volgogradas vasaras laiks"}
+            ls{"Volgogradas laiks"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;−HH:mm"}
+        regionFormat{"{0}"}
+    }
+}

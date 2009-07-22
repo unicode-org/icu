@@ -1,0 +1,27 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/sv_FI.xml
+// *
+// ***************************************************************************
+sv_FI{
+    AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
+    Countries{
+        UM{"USA:s yttre öar"}
+    }
+    Variants{
+        1996{"1996 års stavning"}
+    }
+    Version{"1.60"}
+    calendar{
+        gregorian{
+            fields{
+                dayperiod{
+                    dn{"dagsperiod"}
+                }
+            }
+        }
+    }
+}

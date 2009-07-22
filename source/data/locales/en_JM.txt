@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_JM.xml
+// *
+// ***************************************************************************
+en_JM{
+    Currencies{
+        JMD{
+            "$",
+            "Jamaican Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.44"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                4,
+            }
+        }
+    }
+}

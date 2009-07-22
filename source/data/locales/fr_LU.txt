@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/fr_LU.xml
+// *
+// ***************************************************************************
+fr_LU{
+    Currencies{
+        FRF{
+            "FRF",
+            "franc français",
+        }
+        LUF{
+            "F",
+            "franc luxembourgeois",
+        }
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.49"}
+}

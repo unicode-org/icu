@@ -1,0 +1,57 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/de_CH.xml
+// *
+// ***************************************************************************
+de_CH{
+    AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ß ú ù ŭ û ū ÿ]"}
+    Countries{
+        BD{"Bangladesh"}
+        BN{"Brunei"}
+        BW{"Botswana"}
+        BY{"Weissrussland"}
+        CV{"Kapverden"}
+        DJ{"Djibouti"}
+        GB{"Grossbritannien"}
+        MH{"Marshall-Inseln"}
+        QO{"Äusseres Ozeanien"}
+        RW{"Rwanda"}
+        SB{"Salomon-Inseln"}
+        ST{"Sao Tomé und Principe"}
+        ZW{"Zimbabwe"}
+    }
+    ExemplarCharacters{"[a ä b-o ö p-u ü v-z]"}
+    Languages{
+        be{"Weissrussisch"}
+    }
+    NumberElements{
+        ".",
+        "'",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00;¤-#,##0.00",
+        "#,##0 %",
+        "#E0",
+    }
+    Version{"1.57"}
+    delimiters{
+        alternateQuotationEnd{"›"}
+        alternateQuotationStart{"‹"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
+    }
+}

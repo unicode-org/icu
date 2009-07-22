@@ -1,0 +1,23 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/collation/root.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/collation/root.xml
+ */
+root{
+    UCARules:process(uca_rules){"../unidata/UCARules.txt"}
+    Version{"1.29"}
+    collations{
+        default{"standard"}
+        standard{
+            Sequence{""}
+            Version{"1.7"}
+        }
+    }
+    depends:process(dependency){"ucadata.icu"}
+}

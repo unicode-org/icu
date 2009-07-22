@@ -1,0 +1,29 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_PH.xml
+// *
+// ***************************************************************************
+en_PH{
+    Currencies{
+        PHP{
+            "₱",
+            "Peso",
+        }
+    }
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.50"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                4,
+            }
+        }
+    }
+}

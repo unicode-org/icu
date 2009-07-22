@@ -1,0 +1,967 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/vi.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/vi.xml
+ */
+vi{
+    AuxExemplarCharacters{"[]"}
+    Countries{
+        001{"Thế giới"}
+        002{"Châu Phi"}
+        003{"Bắc Mỹ"}
+        005{"Nam Mỹ"}
+        009{"Châu Đại Dương"}
+        011{"Tây Phi"}
+        013{"Trung Mỹ"}
+        014{"Đông Phí"}
+        015{"Bắc Phi"}
+        017{"Trung Phi"}
+        018{"Miền Nam Châu Phi"}
+        019{"Châu Mỹ"}
+        021{"Miền Bắc Châu Mỹ"}
+        029{"Ca-ri-bê"}
+        030{"Đông Á"}
+        034{"Nam Á"}
+        035{"Đông Nam Á"}
+        039{"Nam Âu"}
+        053{"Úc và New Zealand"}
+        054{"Melanesia"}
+        057{"Vùng Micronesian"}
+        061{"Polynesia"}
+        062{"Trung Nam Á"}
+        142{"Châu Á"}
+        143{"Trung Á"}
+        145{"Tây Á"}
+        150{"Âu Châu"}
+        151{"Đông Âu"}
+        154{"Miền Bắc Châu Âu"}
+        155{"Tây Âu"}
+        419{"Châu Mỹ La-tinh và Ca-ri-be"}
+        AD{"Andorra"}
+        AE{"Các Tiểu Vương quốc A-rập Thống nhất"}
+        AF{"Áp-ga-ni-xtan"}
+        AG{"An-ti-gu-a và Ba-bu-đa"}
+        AL{"An-ba-ni"}
+        AM{"Ác-mê-ni-a"}
+        AN{"Tây Ấn Hà Lan"}
+        AO{"Ăng-gô-la"}
+        AQ{"Nam Cực"}
+        AR{"Ác-hen-ti-na"}
+        AS{"Đảo Somoa thuộc Mỹ"}
+        AT{"Áo"}
+        AU{"Úc"}
+        AX{"Quần đảo Aland"}
+        AZ{"Ai-déc-bai-gian"}
+        BA{"Bô-xni-a Héc-xê-gô-vi-na"}
+        BB{"Bác-ba-đốt"}
+        BD{"Băng-la-đét"}
+        BE{"Bỉ"}
+        BF{"Buốc-ki-na Pha-xô"}
+        BG{"Bun-ga-ri"}
+        BH{"Ba-ren"}
+        BI{"Bu-run-đi"}
+        BJ{"Bê-nanh"}
+        BL{"BL"}
+        BN{"Bru-nây"}
+        BO{"Bô-li-vi-a"}
+        BR{"Bra-xin"}
+        BS{"Ba-ha-ma"}
+        BT{"Bu-tan (Bhutan)"}
+        BV{"Đảo Bouvet (Na Uy)"}
+        BW{"Bốt-xoa-na"}
+        BY{"Bê-la-rút"}
+        BZ{"Bê-li-xê"}
+        CA{"Ca-na-đa"}
+        CC{"Quần đảo Cocos"}
+        CD{"Cộng hoà dân chủ Côngô"}
+        CF{"Cộng hòa Trung Phi"}
+        CG{"Công-gô"}
+        CH{"Thụy Sĩ"}
+        CI{"Bờ Biển Ngà"}
+        CK{"Quần Đảo Cook"}
+        CL{"Chi-lê"}
+        CM{"Ca-mơ-run"}
+        CN{"Trung Quốc"}
+        CO{"Cô-lôm-bi-a"}
+        CR{"Cốt-xta Ri-ca"}
+        CS{"Séc-bia"}
+        CU{"Cu Ba"}
+        CV{"Cáp-ve"}
+        CX{"Đảo Giáng Sinh"}
+        CY{"Síp"}
+        CZ{"Cộng hòa Séc"}
+        DE{"Đức"}
+        DJ{"Gi-bu-ti"}
+        DK{"Đan Mạch"}
+        DO{"Cộng hoà Đô-mi-ni-ca"}
+        DZ{"An-giê-ri"}
+        EC{"Ê-cu-a-đo"}
+        EE{"E-xtô-ni-a"}
+        EG{"Ai Cập"}
+        EH{"Tây Sahara"}
+        ER{"Ê-ri-tơ-rê-a"}
+        ES{"Tây Ban Nha"}
+        ET{"Ê-ti-ô-pi-a"}
+        FI{"Phần Lan"}
+        FJ{"Phi-gi"}
+        FK{"Quần Đảo Falkland"}
+        FM{"Mi-crô-nê-xi-a"}
+        FO{"Quần Đảo Faroe"}
+        FR{"Pháp"}
+        GA{"Ga-bông"}
+        GB{"Vương quốc Anh"}
+        GD{"Grê-na-đa"}
+        GE{"Gru-di-a"}
+        GF{"Quiana thuộc Pháp"}
+        GG{"Guernsey"}
+        GH{"Gha-na"}
+        GL{"Băng Đảo"}
+        GM{"Găm-bi-a"}
+        GN{"Ghi-nê"}
+        GQ{"Ghi-nê Xích-đạo"}
+        GR{"Hy Lạp"}
+        GS{"Quần đảo Nam Georgia và Nam Sandwich"}
+        GT{"Goa-tê-ma-la"}
+        GU{"Đảo Gu-am"}
+        GW{"Ghi-nê Bít-xao"}
+        GY{"Guy-a-na"}
+        HK{"Đặc khu hành chính Hồng Kông thuộc CHND Trung Hoa"}
+        HM{"Đảo Heard và Quần đảo McDonald"}
+        HN{"Hôn-đu-rát"}
+        HR{"Crô-a-ti-a"}
+        HT{"Ha-i-ti"}
+        HU{"Hung-ga-ri"}
+        ID{"Nam Dương"}
+        IE{"Ai-len"}
+        IL{"I-xra-en"}
+        IM{"Đảo Man"}
+        IN{"Ấn Độ"}
+        IO{"Thuộc địa Anh tại Ấn Độ Dương"}
+        IQ{"I-rắc"}
+        IR{"I-ran"}
+        IS{"Ai-xơ-len"}
+        IT{"Ý"}
+        JE{"Jersey"}
+        JM{"Ha-mai-ca"}
+        JO{"Gióc-đa-ni"}
+        JP{"Nhật Bản"}
+        KE{"Kê-ni-a"}
+        KG{"Cư-rơ-gư-xtan"}
+        KH{"Campuchia"}
+        KI{"Ki-ri-ba-ti"}
+        KM{"Cô-mô"}
+        KN{"Xan-kít và Nê-vi"}
+        KP{"Bắc Triều Tiên"}
+        KR{"Hàn Quốc"}
+        KW{"Cô-oét"}
+        KY{"Quần Đảo Cayman"}
+        KZ{"Ka-dắc-xtan"}
+        LA{"Lào"}
+        LB{"Li-băng"}
+        LC{"Xan Lu-xi"}
+        LI{"Lich-ten-xtên"}
+        LK{"Xri Lan-ca"}
+        LR{"Li-bê-ri-a"}
+        LS{"Lê-xô-thô"}
+        LT{"Li-tu-a-ni-a"}
+        LU{"Lúc-xăm-bua"}
+        LV{"Lát-vi-a"}
+        LY{"Li-bi"}
+        MA{"Ma-rốc"}
+        MC{"Mô-na-cô"}
+        MD{"Môn-đô-va"}
+        ME{"Montenegro"}
+        MF{"MF"}
+        MG{"Ma-đa-gát-xca"}
+        MH{"Quần đảo Mác-san"}
+        MK{"Ma-xê-đô-ni-a"}
+        ML{"Ma-li"}
+        MM{"Mi-an-ma"}
+        MN{"Mông Cổ"}
+        MO{"Đặc khu hành chính Macao thuộc CHND Trung Hoa"}
+        MP{"Quần Đảo Bắc Mariana"}
+        MQ{"MQ"}
+        MR{"Mô-ri-ta-ni"}
+        MT{"Man-ta"}
+        MU{"Mô-ri-xơ"}
+        MV{"Man-đi-vơ"}
+        MW{"Ma-la-uy"}
+        MX{"Mê-hi-cô"}
+        MY{"Ma-lay-xi-a"}
+        MZ{"Mô-dăm-bích"}
+        NA{"Nam-mi-bi-a"}
+        NC{"New Caledonia"}
+        NE{"Ni-giê"}
+        NF{"Đảo Norfolk"}
+        NG{"Ni-giê-ri-a"}
+        NI{"Ni-ca-ra-goa"}
+        NL{"Hà Lan"}
+        NO{"Na Uy"}
+        NP{"Nê-pan"}
+        NZ{"Niu Di-lân"}
+        OM{"Ô-man"}
+        PA{"Pa-na-ma"}
+        PE{"Pê-ru"}
+        PF{"Polynesia thuộc Pháp"}
+        PG{"Pa-pu-a Niu Ghi-nê"}
+        PH{"Phi-lip-pin"}
+        PK{"Pa-ki-xtan"}
+        PL{"Ba Lan"}
+        PM{"Saint Pierre và Miquelon"}
+        PS{"Lãnh thổ Palestine"}
+        PT{"Bồ Đào Nha"}
+        PY{"Pa-ra-goay"}
+        QA{"Ca-ta"}
+        QO{"Vùng xa xôi thuộc Châu Đại Dương"}
+        QU{"Liên Minh Châu Âu"}
+        RE{"RE"}
+        RO{"Ru-ma-ni"}
+        RS{"Xéc-bi"}
+        RU{"Nga"}
+        RW{"Ru-an-đa"}
+        SA{"A-rập Xê-út"}
+        SB{"Quần đảo Xô-lô-mông"}
+        SC{"Xây-sen"}
+        SD{"Xu-đăng"}
+        SE{"Thụy Điển"}
+        SG{"Xin-ga-po"}
+        SH{"Saint Helena"}
+        SI{"Xlô-ven-ni-a"}
+        SJ{"Svalbard và Jan Mayen"}
+        SK{"Xlô-va-ki-a"}
+        SL{"Xi-ê-ra Lê-ôn"}
+        SM{"Xan Ma-ri-nô"}
+        SN{"Xê-nê-gan"}
+        SO{"Xô-ma-li"}
+        SR{"Xu-ri-nam"}
+        ST{"Xao Tô-mê và Prin-xi-pê"}
+        SV{"En-san-va-đo"}
+        SY{"Xi-ri"}
+        SZ{"Xoa-di-len"}
+        TC{"Quần Đảo Turk và Caicos"}
+        TD{"Sát"}
+        TF{"Thuộc Địa Nam của Pháp"}
+        TG{"Tô-gô"}
+        TH{"Thái Lan"}
+        TJ{"Tát-gi-ki-xtan"}
+        TK{"Tokelau"}
+        TL{"Đông Ti-mo"}
+        TM{"Tuốc-mê-ni-xtan"}
+        TN{"Tuy-ni-di"}
+        TO{"Tông-ga"}
+        TR{"Thổ Nhĩ Kỳ"}
+        TT{"Tri-ni-đát và Tô-ba-gô"}
+        TV{"Tu-va-lu"}
+        TW{"Đài Loan"}
+        TZ{"Tan-da-ni-a"}
+        UA{"U-crai-na"}
+        UG{"U-gan-đa"}
+        UM{"Các đảo nhỏ xa trung tâm thuộc Mỹ"}
+        US{"Hoa Kỳ"}
+        UY{"U-ru-goay"}
+        UZ{"U-dơ-bê-ki-xtan"}
+        VA{"Va-ti-căng"}
+        VC{"Xan Vin-xen và Grê-na-din"}
+        VE{"Vê-nê-zu-ê-la"}
+        VG{"Đảo Virgin, thuộc Anh"}
+        VI{"Quần đảo Virgin, Mỹ"}
+        VN{"Việt Nam"}
+        VU{"Va-nu-a-tu"}
+        WF{"Wallis và Futuna"}
+        WS{"Xa-moa"}
+        YE{"Y-ê-men"}
+        YT{"YT"}
+        ZA{"Nam Phi"}
+        ZM{"Dăm-bi-a"}
+        ZW{"Dim-ba-bu-ê"}
+        ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
+    }
+    Currencies{
+        AED{
+            "AED",
+            "Điram UAE",
+        }
+        BGN{
+            "BGN",
+            "Lép Bungari",
+        }
+        BRL{
+            "R$",
+            "BRL",
+        }
+        CHF{
+            "Fr.",
+            "Franc Thụy sĩ",
+        }
+        CNY{
+            "CN¥",
+            "CNY",
+        }
+        EEK{
+            "Ekr",
+            "Crun Extônia",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        FJD{
+            "FJ$",
+            "Đô-la Fi-ji",
+        }
+        FRF{
+            "₣",
+            "Franc Pháp",
+        }
+        GBP{
+            "£",
+            "Bảng Anh",
+        }
+        GEL{
+            "GEL",
+            "Lari Georgia",
+        }
+        GHC{
+            "₵",
+            "Cedi Ghana (1979-2007)",
+        }
+        GHS{
+            "GH₵",
+            "Cedi Ghana",
+        }
+        GIP{
+            "GI£",
+            "Pao Gibraltar",
+        }
+        GNF{
+            "FG",
+            "Franc Guinea",
+        }
+        GNS{
+            "GNS",
+            "Syli Guinea",
+        }
+        GRD{
+            "₯",
+            "Drachma Hy Lạp",
+        }
+        GTQ{
+            "GTQ",
+            "Quetzal Guatemala",
+        }
+        GWP{
+            "GWP",
+            "Peso Guinea-Bissau",
+        }
+        GYD{
+            "GY$",
+            "Đô-la Guyana",
+        }
+        HKD{
+            "HK$",
+            "Đô-la Hồng Kông",
+        }
+        HNL{
+            "HNL",
+            "Honduras Lempira",
+        }
+        HTG{
+            "HTG",
+            "Gourde Haiti",
+        }
+        HUF{
+            "Ft",
+            "Phôrin Hungari",
+        }
+        IDR{
+            "Rp",
+            "Rupia Inđônêxia",
+        }
+        IEP{
+            "IR£",
+            "Pao Ai-len",
+        }
+        ILP{
+            "I£",
+            "Pao Ixraen",
+        }
+        ILS{
+            "₪",
+            "Sêken Ixraen",
+        }
+        INR{
+            "Rs",
+            "Rupi Ấn Độ",
+        }
+        IQD{
+            "IQD",
+            "Dinar I-rắc",
+        }
+        IRR{
+            "IRR",
+            "Rial I-ran",
+        }
+        ITL{
+            "IT₤",
+            "Lia Ý",
+        }
+        JMD{
+            "J$",
+            "Đô la Jamaica",
+        }
+        JOD{
+            "JD",
+            "Dinar Jordan",
+        }
+        JPY{
+            "JP¥",
+            "Yên Nhật",
+        }
+        KES{
+            "Ksh",
+            "Si-ling Kê-ny-a",
+        }
+        KRW{
+            "₩",
+            "Won Hàn Quốc",
+        }
+        KZT{
+            "KZT",
+            "Kazakhstan Tenge",
+        }
+        LTL{
+            "Lt",
+            "Litat Lituani",
+        }
+        MAD{
+            "MAD",
+            "Điaham Marốc",
+        }
+        MTL{
+            "Lm",
+            "Lia xứ Man-tơ",
+        }
+        MXN{
+            "MXN",
+            "Peso Mêhicô",
+        }
+        MYR{
+            "RM",
+            "Rinhgit Malaixia",
+        }
+        NOK{
+            "Nkr",
+            "Curon Na Uy",
+        }
+        NZD{
+            "NZ$",
+            "Đô-la New Zealand",
+        }
+        PEN{
+            "S/.",
+            "Nuevo Sol Pêru",
+        }
+        PHP{
+            "₱",
+            "Peso Philíppin",
+        }
+        PKR{
+            "PKRs",
+            "Rupi Pakistan",
+        }
+        PLN{
+            "zł",
+            "Zloty Ba Lan",
+        }
+        RON{
+            "RON",
+            "Lây Rumani",
+        }
+        RSD{
+            "din.",
+            "Đina Xéc-bi",
+        }
+        RUB{
+            "RUB",
+            "Rúp Nga",
+        }
+        SAR{
+            "SR",
+            "Rian Ả rập Xêút",
+        }
+        SEK{
+            "Skr",
+            "Cua-ron Thuỵ Điển",
+        }
+        SGD{
+            "S$",
+            "Đô-la Singapore",
+        }
+        SIT{
+            "SIT",
+            "Tôla Xlôvênia",
+        }
+        SKK{
+            "Sk",
+            "Cuaron Xlôvác",
+        }
+        THB{
+            "฿",
+            "Bạt Thái Lan",
+        }
+        TRL{
+            "TRL",
+            "Lia Thổ Nhĩ Kỳ",
+        }
+        TRY{
+            "TL",
+            "Lia Thổ Nhĩ Kỳ Mới",
+        }
+        TWD{
+            "NT$",
+            "Đô-la Đài Loan",
+        }
+        UAH{
+            "₴",
+            "Rúp U-crai-na",
+        }
+        USD{
+            "US$",
+            "Đô-la Mỹ",
+        }
+        VEB{
+            "VEB",
+            "Bôliva Vênêduêla",
+        }
+        VND{
+            "₫",
+            "đồng",
+        }
+        XAU{
+            "XAU",
+            "Vàng",
+        }
+        XXX{
+            "XXX",
+            "Tiền tệ chưa biết hoặc không hợp lệ",
+        }
+        ZAR{
+            "R",
+            "Ran Nam Phi",
+        }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    ExemplarCharacters{
+        "[a à ả ã á ạ ă ằ ẳ ẵ ắ ặ â ầ ẩ ẫ ấ ậ b-d đ e è ẻ ẽ é ẹ ê ề ể ễ ế ệ f-i ì ỉ ĩ"
+        " í ị j-o ò ỏ õ ó ọ ô ồ ổ ỗ ố ộ ơ ờ ở ỡ ớ ợ p-u ù ủ ũ ú ụ ư ừ ử ữ ứ ự v-y ỳ ỷ"
+        " ỹ ý ỵ z]"
+    }
+    Languages{
+        af{"Tiếng Nam Phi"}
+        am{"Tiếng Amharic"}
+        ar{"Tiếng A-rập"}
+        as{"Tiếng Assam"}
+        ay{"Tiếng Aymara"}
+        az{"Tiếng Ai-déc-bai-gian"}
+        be{"Tiếng Bê-la-rút"}
+        bg{"Tiếng Bun-ga-ri"}
+        bh{"Tiếng Bihari"}
+        bn{"Tiếng Bengali (Ấn Độ)"}
+        bo{"Tiếng Tây Tạng"}
+        br{"Tiếng Breton"}
+        bs{"Tiếng Nam Tư"}
+        ca{"Tiếng Ca-ta-lăng"}
+        cs{"Tiếng Séc"}
+        cy{"Tiếng Xentơ"}
+        da{"Tiếng Đan Mạch"}
+        de{"Tiếng Đức"}
+        el{"Tiếng Hy Lạp"}
+        en{"Tiếng Anh"}
+        en_GB{"Tiếng Anh (Anh)"}
+        en_US{"Tiếng Anh (Mỹ)"}
+        eo{"Tiếng Quốc Tế Ngữ"}
+        es{"Tiếng Tây Ban Nha"}
+        et{"Tiếng E-xtô-ni-a"}
+        eu{"Tiếng Basque"}
+        fa{"Tiếng Ba Tư"}
+        fi{"Tiếng Phần Lan"}
+        fil{"Tiếng Philipin"}
+        fo{"Tiếng Faore"}
+        fr{"Tiếng Pháp"}
+        fy{"Tiếng Frisian"}
+        ga{"Tiếng Ai-len"}
+        gd{"Tiếng Xentơ (Xcốt len)"}
+        gl{"Tiếng Galician"}
+        gn{"Tiếng Guarani"}
+        gu{"Tiếng Gujarati"}
+        he{"Tiếng Hê-brơ"}
+        hi{"Tiếng Hin-đi"}
+        hr{"Tiếng Crô-a-ti-a"}
+        hu{"Tiếng Hung-ga-ri"}
+        hy{"Tiếng Ác-mê-ni"}
+        ia{"Tiếng Khoa Học Quốc Tế"}
+        id{"Tiếng In-đô-nê-xia"}
+        is{"Tiếng Ai-xơ-len"}
+        it{"Tiếng Ý"}
+        ja{"Tiếng Nhật"}
+        jv{"Tiếng Gia-va"}
+        ka{"Tiếng Georgian"}
+        km{"Tiếng Campuchia"}
+        kn{"Tiếng Kan-na-đa"}
+        ko{"Tiếng Hàn Quốc"}
+        ks{"Tiếng Kashmiri"}
+        ku{"Tiếng Kurd (Iran)"}
+        ky{"Tiếng Kyrgyz"}
+        la{"Tiếng La-tinh"}
+        ln{"Tiếng Lingala"}
+        lo{"Tiếng Lào"}
+        lt{"Tiếng Lít-va"}
+        lv{"Tiếng Lát-vi-a"}
+        mk{"Tiếng Ma-xê-đô-ni-a"}
+        ml{"Tiếng Malayalam"}
+        mn{"Tiếng Mông Cổ"}
+        mr{"Tiếng Marathi"}
+        ms{"Tiếng Ma-lay-xi-a"}
+        mt{"Tiếng Mantơ"}
+        ne{"Tiếng Nê-pan"}
+        nl{"Tiếng Hà Lan"}
+        nn{"Tiếng Na Uy (Nynorsk)"}
+        no{"Tiếng Na Uy"}
+        oc{"Tiếng Occitan"}
+        or{"Tiếng Ô-ri-a"}
+        pa{"Tiếng Punjabi"}
+        pl{"Tiếng Ba Lan"}
+        ps{"Tiếng Pa-tô"}
+        pt{"Tiếng Bồ Đào Nha"}
+        pt_BR{"Tiếng Bồ Đào Nha (Braxin)"}
+        pt_PT{"Tiếng Bồ Đào Nha (I-bê-ri)"}
+        rm{"Tiếng Rhaeto-Romance"}
+        ro{"Tiếng Ru-ma-ni"}
+        ru{"Tiếng Nga"}
+        sa{"Tiếng Phạn"}
+        sd{"Tiếng Sin-hi"}
+        sh{"Tiếng Xéc bi - Croatia"}
+        si{"Tiếng Sinhala"}
+        sk{"Tiếng Xlô-vác"}
+        sl{"Tiếng Xlô-ven"}
+        so{"Tiếng Xô-ma-li"}
+        sq{"Tiếng An-ba-ni"}
+        sr{"Tiếng Séc-bi"}
+        su{"Tiếng Xu đăng"}
+        sv{"Tiếng Thụy Điển"}
+        sw{"Tiếng Bantu (Đông Phi)"}
+        ta{"Tiếng Tamil"}
+        te{"Tiếng Telugu"}
+        th{"Tiếng Thái"}
+        ti{"Tiếng Tigrigya"}
+        tk{"Tiếng Tuôc-men"}
+        tlh{"Tiếng Klingon"}
+        tr{"Tiếng Thổ Nhĩ Kỳ"}
+        tw{"Tiếng Twi"}
+        ug{"Tiếng Uighur"}
+        uk{"Tiếng U-crai-na"}
+        ur{"Tiếng Uđu"}
+        uz{"Tiếng U-dơ-bếch"}
+        vi{"Tiếng Việt"}
+        wo{"Tiếng Wolof"}
+        xh{"Tiếng Bantu"}
+        yi{"Tiếng Y-đit"}
+        zh{"Tiếng Trung Quốc"}
+        zh_Hans{"Tiếng Trung Quốc (Giản thể)"}
+        zh_Hant{"Tiếng Trung Quốc (Phồn thể)"}
+        zu{"Tiếng Zulu"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Types{
+        calendar{
+            gregorian{"gregorian"}
+        }
+    }
+    Version{"1.86"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "SA",
+                "CH",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, 'ngày' dd MMMM 'năm' y",
+                "'Ngày' dd 'tháng' M 'năm' y",
+                "dd-MM-yyyy",
+                "dd/MM/yyyy",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+            }
+            availableFormats{
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MEd{"E, d-M"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd-MM"}
+                Md{"d-M"}
+                mmss{"mm:ss"}
+                yMEd{"EEE, d-M-yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
+                yMMMM{"MMMM y"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+                yyyy{"y"}
+                yyyyMM{"MM-yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "CN",
+                        "Th 2",
+                        "Th 3",
+                        "Th 4",
+                        "Th 5",
+                        "Th 6",
+                        "Th 7",
+                    }
+                    wide{
+                        "Chủ nhật",
+                        "Thứ hai",
+                        "Thứ ba",
+                        "Thứ tư",
+                        "Thứ năm",
+                        "Thứ sáu",
+                        "Thứ bảy",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "tr. CN",
+                    "sau CN",
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"'Tháng' M - 'Tháng' M"}
+                }
+                MEd{
+                    M{"EEEE, dd/MM - EEEE, dd/MM"}
+                    d{"EEEE, dd/MM - EEEE, dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"EEEE, 'ngày' dd 'tháng' M - EEEE, 'ngày' dd 'tháng' M"}
+                    d{"EEEE, 'ngày' dd - EEEE, 'ngày' dd 'tháng' M"}
+                }
+                MMMd{
+                    M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
+                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"'Ngày' d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH'h' - HH'h'"}
+                    h{"HH'h' - HH'h'"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH'h'-HH'h' v"}
+                    h{"HH'h'-HH'h' v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yyyy - MM/yyyy"}
+                    y{"MM/yyyy - MM/yyyy"}
+                }
+                yMEd{
+                    M{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                    d{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                    y{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                }
+                yMMM{
+                    M{"'Tháng' M - 'Tháng' M 'năm' y"}
+                    y{"'Tháng' M 'năm' y - 'Tháng' M 'năm' y"}
+                }
+                yMMMEd{
+                    M{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y"}
+                    d{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y"}
+                    y{"EEEE, 'ngày' dd MMM 'năm' y - EEEE, 'ngày' dd MMM 'năm' y"}
+                }
+                yMMMd{
+                    M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y"}
+                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' y"}
+                    y{"'Ngày' dd 'tháng' M 'năm' y - 'Ngày' dd 'tháng' M 'năm' y"}
+                }
+                yMd{
+                    M{"dd/MM/yyyy - dd/MM/yyyy"}
+                    d{"dd/MM/yyyy - dd/MM/yyyy"}
+                    y{"dd/MM/yyyy - dd/MM/yyyy"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "thg 1",
+                        "thg 2",
+                        "thg 3",
+                        "thg 4",
+                        "thg 5",
+                        "thg 6",
+                        "thg 7",
+                        "thg 8",
+                        "thg 9",
+                        "thg 10",
+                        "thg 11",
+                        "thg 12",
+                    }
+                    wide{
+                        "tháng một",
+                        "tháng hai",
+                        "tháng ba",
+                        "tháng tư",
+                        "tháng năm",
+                        "tháng sáu",
+                        "tháng bảy",
+                        "tháng tám",
+                        "tháng chín",
+                        "tháng mười",
+                        "tháng mười một",
+                        "tháng mười hai",
+                    }
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Ngôn ngữ: {0}"}
+        script{"Chữ viết: {0}"}
+        territory{"Vùng: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
+    units{
+        day{
+            other{"{0} ngày"}
+        }
+        hour{
+            other{"{0} giờ"}
+        }
+        minute{
+            other{"{0} phút"}
+        }
+        month{
+            other{"{0} tháng"}
+        }
+        second{
+            other{"{0} giây"}
+        }
+        week{
+            other{"{0} tuần"}
+        }
+        year{
+            other{"{0} năm"}
+        }
+    }
+    unitsShort{
+        day{
+            other{"{0} ngày"}
+        }
+        hour{
+            other{"{0} g"}
+        }
+        minute{
+            other{"{0} ph"}
+        }
+        month{
+            other{"{0} tháng"}
+        }
+        second{
+            other{"{0} s"}
+        }
+        week{
+            other{"{0} tuần"}
+        }
+        year{
+            other{"{0} năm"}
+        }
+    }
+    zoneStrings{
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Atlantic:Canary"{
+            ec{"Quần Đảo Canary"}
+        }
+        "Etc:Unknown"{
+            ec{"Không rõ"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
+    }
+}
