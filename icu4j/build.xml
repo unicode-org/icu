@@ -483,7 +483,7 @@
                 <include name="com/ibm/icu/**"/>
             </packageset>
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${icu4j.build-tools.jar}">
-                <param name="-name" value="ICU4J ${api.report.version}"/>
+                <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
                 <param name="-output" value="${out.dir}/icu4j${api.report.version}.api"/>
                 <param name="-internal"/>
                 <param name="-gzip"/>
