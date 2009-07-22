@@ -34,15 +34,13 @@ grant
 // this is so ICUData (in icu4j.jar), called from test code (in core/charset tests jar)
 // can read test resource files (in core/charset tests jar)
 //
-grant codebase "file:${user.dir}/main/classes/core/out/lib/icu4j.jar"
+grant codebase "file:${user.dir}/icu4j.jar"
 {
-    permission java.io.FilePermission "${/}${user.dir}${/}main${/}tests${/}core${/}out${/}lib${/}icu4j-core-tests.jar", "read";
-    permission java.io.FilePermission "${/}${user.dir}${/}main${/}tests${/}charset${/}out${/}lib${/}icu4j-charset-tests.jar", "read";
-    permission java.io.FilePermission "${/}${user.dir}${/}main${/}classes${/}charset${/}out${/}lib${/}icu4j-charsets.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
 };
 
-grant codebase "file:${user.dir}/main/tests/framework/out/lib/icu4j-test-framework.jar"
+grant codebase "file:${user.dir}/icu4jtests.jar"
 {
-    permission java.io.FilePermission "${/}${user.dir}${/}main${/}tests${/}core${/}out${/}lib${/}icu4j-core-tests.jar", "read";
-    permission java.io.FilePermission "${/}${user.dir}${/}main${/}tests${/}charset${/}out${/}lib${/}icu4j-charset-tests.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4j.jar", "read";
 };

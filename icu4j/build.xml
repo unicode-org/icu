@@ -11,6 +11,7 @@
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <property name="icu4j.jar.file" value="icu4j.jar"/>
+    <property name="icu4jtests.jar.file" value="icu4jtests.jar"/>
     <property name="icu4j-core.jar.file" value="icu4j-core.jar"/>
     <property name="icu4j-collate.jar.file" value="icu4j-collate.jar"/>
     <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
@@ -77,6 +78,7 @@
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
 
         <delete file="${icu4j.jar.file}"/>
+        <delete file="${icu4jtests.jar.file}"/>
         <delete file="${icu4j-core.jar.file}"/>
         <delete file="${icu4j-collate.jar.file}"/>
         <delete file="${icu4j-charsets.jar.file}"/>
@@ -92,12 +94,12 @@
     </target>
 
     <!-- meta build targets -->
-    <target name="all" depends="info, main, tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
-    <target name="main" depends="info, core, collate, charset, localespi, translit" description="Build ICU4J API classes"/>
-    <target name="tests" depends="info, core-tests, charset-tests, collate-tests, localespi-tests, translit-tests" description="Build ICU4J API test classes"/>
+    <target name="all" depends="info, main, tests, localespi, localespi-tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
+    <target name="main" depends="info, core, collate, charset, translit" description="Build ICU4J API classes"/>
+    <target name="tests" depends="info, core-tests, charset-tests, collate-tests, translit-tests" description="Build ICU4J API test classes"/>
     <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
 
-    <target name="secure" depends="main, jar, tests" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
+    <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
     
     <!-- Check to see if JVM_OPTIONS enviroment variable is set. This can be use to set the heap size. -->
     <property name="env.JVM_OPTIONS" value=""/>
@@ -123,13 +125,6 @@
         </antcall>
     </target>
 
-    <target name="secureCheck" description="Run the secure (applet-like) ICU4J test suite">
-        <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n -w"/>
-            <param name="runcheck.jvmarg" value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy"/>
-        </antcall>
-    </target>
-
     <target name="jdktzCheck" description="Run the standard ICU4J test suite with JDK TimeZone">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n"/>
@@ -137,7 +132,7 @@
         </antcall>
     </target>
 
-    <target name="_runCheck" depends="info, core, collate, charset, translit, core-tests, collate-tests, charset-tests, translit-tests">
+    <target name="_runCheck" depends="main, tests">
         <echo message="JVM argument:   ${runcheck.jvmarg} -Djava.awt.headless=true"/>
         <echo message="Test argument:   ${runcheck.arg}"/>
 
@@ -200,11 +195,30 @@
 
     <target name="_runLocalespiCheck" depends="localespi, localespi-tests">
         <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
-            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${ext.dir}"/>
+            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${ext.dir}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${icu4j.localespi-tests.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="secureCheck" depends="main, jar, icu4jtestsJar" description="Run the secure (applet-like) ICU4J test suite">
+        <property name="securecheck.arg" value="-n -w"/>
+        <property name="securecheck.jvmarg"
+                value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy -Djava.awt.headless=true"/>
+
+        <echo message="JVM argument:   ${securecheck.jvmarg}"/>
+        <echo message="Test argument:  ${securecheck.arg}"/>
+
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg line="${securecheck.arg}"/>
+            <jvmarg line="${securecheck.jvmarg}"/>
+            <classpath>
+                <pathelement path="${icu4j.jar.file}"/>
+                <pathelement path="${icu4j-charsets.jar.file}"/>
+                <pathelement path="${icu4jtests.jar.file}"/>
             </classpath>
         </java>
     </target>
@@ -244,6 +258,16 @@
         </jar>
     </target>
 
+    <target name="icu4jtestsJar" depends="info, tests" description="Build ICU4J all-in-one test jar">
+        <jar jarfile="${icu4jtests.jar.file}"
+                compress="true">
+            <fileset dir="${icu4j.test-framework.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.core-tests.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.collate-tests.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.translit-tests.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.charset-tests.dir}/${bin.dir}" includes="**/*"/>
+        </jar>
+    </target>
 
     <target name="jarDocs" depends="docs" description="Build ICU4J API doc jar file">
         <jar jarfile="${icu4jdocs.jar.file}" compress="true" basedir="${doc.dir}"/>
@@ -283,7 +307,7 @@
         <antcall target="_build-localespi"/>
     </target>
 
-    <target name="_build-localespi" depends="core">
+    <target name="_build-localespi" depends="core, collate">
         <ant dir="${icu4j.localespi.dir}" inheritAll="false"/>
     </target>
 
