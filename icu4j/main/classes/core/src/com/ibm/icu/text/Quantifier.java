@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -82,10 +82,10 @@ class Quantifier implements UnicodeMatcher {
             return result.append('+').toString();
         }
         result.append('{');
-        Utility.appendNumber(result, minCount);
+        result.append(Utility.hex(minCount,1));
         result.append(',');
         if (maxCount != MAX) {
-            Utility.appendNumber(result, maxCount);
+            result.append(Utility.hex(maxCount,1));
         }
         result.append('}');
         return result.toString();

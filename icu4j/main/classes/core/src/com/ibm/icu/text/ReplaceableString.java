@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -126,7 +126,9 @@ public class ReplaceableString implements Replaceable {
      * @stable ICU 2.0
      */
     public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
-        Utility.getChars(buf, srcStart, srcLimit, dst, dstStart);
+        if (srcStart != srcLimit) {
+            buf.getChars(srcStart, srcLimit, dst, dstStart);
+        }
     }
 
     /**

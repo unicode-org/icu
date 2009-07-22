@@ -42,7 +42,9 @@ public final class UTF16Test extends TestFmwk
           int strsize = strbuff.length();
           int arraysize = strsize;
 
-          Utility.getChars(strbuff, 0, strsize, array, 0);
+          if (0 != strsize) {
+            strbuff.getChars(0, strsize, array, 0);
+        }
           for (int i = 1; i < UCharacter.MAX_VALUE; i += 100) {
         UTF16.append(strbuff, i);
         arraysize = UTF16.append(array, arraysize, i);
@@ -493,7 +495,10 @@ public final class UTF16Test extends TestFmwk
     {
         StringBuffer strbuff = new StringBuffer("0123456789");
         char array[] = new char[128];
-        Utility.getChars(strbuff, 0, strbuff.length(), array, 0);
+        int srcEnd = strbuff.length();
+        if (0 != srcEnd) {
+            strbuff.getChars(0, srcEnd, array, 0);
+        }
         int length = 10;
         UTF16.insert(strbuff, 5, 't');
         UTF16.insert(strbuff, 5, 's');
@@ -800,7 +805,10 @@ public final class UTF16Test extends TestFmwk
     {
         StringBuffer strbuff = new StringBuffer("012345");
         char array[] = new char[128];
-        Utility.getChars(strbuff, 0, strbuff.length(), array, 0);
+        int srcEnd = strbuff.length();
+        if (0 != srcEnd) {
+            strbuff.getChars(0, srcEnd, array, 0);
+        }
         int length = 6;
         for (int i = 0; i < length; i ++) {
         UTF16.setCharAt(strbuff, i, '0');

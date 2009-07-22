@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.ibm.icu.lang.*;
@@ -87,14 +88,14 @@ public final class Utility {
      * The start indices and start+len must be valid.
      */
     public final static boolean arrayRegionMatches(Object[] source, int sourceStart,
-                                            Object[] target, int targetStart,
-                                            int len)
+            Object[] target, int targetStart,
+            int len)
     {
         int sourceEnd = sourceStart + len;
         int delta = targetStart - sourceStart;
         for (int i = sourceStart; i < sourceEnd; i++) {
             if (!arrayEquals(source[i],target[i + delta]))
-            return false;
+                return false;
         }
         return true;
     }
@@ -106,14 +107,14 @@ public final class Utility {
      * The start indices and start+len must be valid.
      */
     public final static boolean arrayRegionMatches(char[] source, int sourceStart,
-                                            char[] target, int targetStart,
-                                            int len)
+            char[] target, int targetStart,
+            int len)
     {
         int sourceEnd = sourceStart + len;
         int delta = targetStart - sourceStart;
         for (int i = sourceStart; i < sourceEnd; i++) {
             if (source[i]!=target[i + delta])
-            return false;
+                return false;
         }
         return true;
     }
@@ -125,14 +126,14 @@ public final class Utility {
      * Ought to be in System
      */
     public final static boolean arrayRegionMatches(int[] source, int sourceStart,
-                                            int[] target, int targetStart,
-                                            int len)
+            int[] target, int targetStart,
+            int len)
     {
         int sourceEnd = sourceStart + len;
         int delta = targetStart - sourceStart;
         for (int i = sourceStart; i < sourceEnd; i++) {
             if (source[i] != target[i + delta])
-            return false;
+                return false;
         }
         return true;
     }
@@ -144,14 +145,14 @@ public final class Utility {
      * Ought to be in System
      */
     public final static boolean arrayRegionMatches(double[] source, int sourceStart,
-                                            double[] target, int targetStart,
-                                            int len)
+            double[] target, int targetStart,
+            int len)
     {
         int sourceEnd = sourceStart + len;
         int delta = targetStart - sourceStart;
         for (int i = sourceStart; i < sourceEnd; i++) {
             if (source[i] != target[i + delta])
-            return false;
+                return false;
         }
         return true;
     }
@@ -162,7 +163,7 @@ public final class Utility {
         for (int i = sourceStart; i < sourceEnd; i++) {
             if (source[i] != target[i + delta])
                 return false;
-            }
+        }
         return true;
     }
 
@@ -170,9 +171,9 @@ public final class Utility {
      * Convenience utility. Does null checks on objects, then calls equals.
      */
     public final static boolean objectEquals(Object source, Object target) {
-    if (source == null)
+        if (source == null)
             return (target == null);
-    else
+        else
             return source.equals(target);
     }
 
@@ -202,7 +203,7 @@ public final class Utility {
      * seen values.
      */
     static public final String arrayToRLEString(int[] a) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         appendInt(buffer, a.length);
         int runValue = a[0];
@@ -235,7 +236,7 @@ public final class Utility {
      * seen values.
      */
     static public final String arrayToRLEString(short[] a) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         // for (int i=0; i<a.length; ++i) buffer.append((char) a[i]);
         buffer.append((char) (a.length >> 16));
         buffer.append((char) a.length);
@@ -245,9 +246,9 @@ public final class Utility {
             short s = a[i];
             if (s == runValue && runLength < 0xFFFF) ++runLength;
             else {
-            encodeRun(buffer, runValue, runLength);
-            runValue = s;
-            runLength = 1;
+                encodeRun(buffer, runValue, runLength);
+                runValue = s;
+                runLength = 1;
             }
         }
         encodeRun(buffer, runValue, runLength);
@@ -268,7 +269,7 @@ public final class Utility {
      * seen values.
      */
     static public final String arrayToRLEString(char[] a) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append((char) (a.length >> 16));
         buffer.append((char) a.length);
         char runValue = a[0];
@@ -277,9 +278,9 @@ public final class Utility {
             char s = a[i];
             if (s == runValue && runLength < 0xFFFF) ++runLength;
             else {
-            encodeRun(buffer, (short)runValue, runLength);
-            runValue = s;
-            runLength = 1;
+                encodeRun(buffer, (short)runValue, runLength);
+                runValue = s;
+                runLength = 1;
             }
         }
         encodeRun(buffer, (short)runValue, runLength);
@@ -301,7 +302,7 @@ public final class Utility {
      * seen values.
      */
     static public final String arrayToRLEString(byte[] a) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append((char) (a.length >> 16));
         buffer.append((char) a.length);
         byte runValue = a[0];
@@ -329,7 +330,7 @@ public final class Utility {
      * Encode a run, possibly a degenerate run (of < 4 values).
      * @param length The length of the run; must be > 0 && <= 0xFFFF.
      */
-    private static final void encodeRun(StringBuffer buffer, int value, int length) {
+    private static final <T extends Appendable> void encodeRun(T buffer, int value, int length) {
         if (length < 4) {
             for (int j=0; j<length; ++j) {
                 if (value == ESCAPE) {
@@ -351,32 +352,41 @@ public final class Utility {
             appendInt(buffer, value); // Don't need to escape this value
         }
     }
-    
-    private static final void appendInt(StringBuffer buffer, int value) {
-        buffer.append((char)(value >>> 16));
-        buffer.append((char)(value & 0xFFFF));
+
+    private static final <T extends Appendable> void appendInt(T buffer, int value) {
+        try {
+            buffer.append((char)(value >>> 16));
+            buffer.append((char)(value & 0xFFFF));
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
+        }
     }
 
     /**
      * Encode a run, possibly a degenerate run (of < 4 values).
      * @param length The length of the run; must be > 0 && <= 0xFFFF.
      */
-    private static final void encodeRun(StringBuffer buffer, short value, int length) {
-        if (length < 4) {
-            for (int j=0; j<length; ++j) {
-                if (value == (int) ESCAPE) buffer.append(ESCAPE);
-                buffer.append((char) value);
+    private static final <T extends Appendable> void encodeRun(T buffer, short value, int length) {
+        try {
+            if (length < 4) {
+                for (int j=0; j<length; ++j) {
+                    if (value == (int) ESCAPE)
+                        buffer.append(ESCAPE);
+                    buffer.append((char) value);
+                }
             }
-        }
-        else {
-            if (length == (int) ESCAPE) {
-                if (value == (int) ESCAPE) buffer.append(ESCAPE);
-                buffer.append((char) value);
-                --length;
+            else {
+                if (length == (int) ESCAPE) {
+                    if (value == (int) ESCAPE) buffer.append(ESCAPE);
+                    buffer.append((char) value);
+                    --length;
+                }
+                buffer.append(ESCAPE);
+                buffer.append((char) length);
+                buffer.append((char) value); // Don't need to escape this value
             }
-            buffer.append(ESCAPE);
-            buffer.append((char) length);
-            buffer.append((char) value); // Don't need to escape this value
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
         }
     }
 
@@ -384,8 +394,8 @@ public final class Utility {
      * Encode a run, possibly a degenerate run (of < 4 values).
      * @param length The length of the run; must be > 0 && <= 0xFF.
      */
-    private static final void encodeRun(StringBuffer buffer, byte value, int length,
-                    byte[] state) {
+    private static final <T extends Appendable> void encodeRun(T buffer, byte value, int length,
+            byte[] state) {
         if (length < 4) {
             for (int j=0; j<length; ++j) {
                 if (value == ESCAPE_BYTE) appendEncodedByte(buffer, ESCAPE_BYTE, state);
@@ -394,9 +404,9 @@ public final class Utility {
         }
         else {
             if (length == ESCAPE_BYTE) {
-            if (value == ESCAPE_BYTE) appendEncodedByte(buffer, ESCAPE_BYTE, state);
-            appendEncodedByte(buffer, value, state);
-            --length;
+                if (value == ESCAPE_BYTE) appendEncodedByte(buffer, ESCAPE_BYTE, state);
+                appendEncodedByte(buffer, value, state);
+                --length;
             }
             appendEncodedByte(buffer, ESCAPE_BYTE, state);
             appendEncodedByte(buffer, (byte)length, state);
@@ -405,23 +415,27 @@ public final class Utility {
     }
 
     /**
-     * Append a byte to the given StringBuffer, packing two bytes into each
+     * Append a byte to the given Appendable, packing two bytes into each
      * character.  The state parameter maintains intermediary data between
      * calls.
      * @param state A two-element array, with state[0] == 0 if this is the
      * first byte of a pair, or state[0] != 0 if this is the second byte
      * of a pair, in which case state[1] is the first byte.
      */
-    private static final void appendEncodedByte(StringBuffer buffer, byte value,
-                        byte[] state) {
-        if (state[0] != 0) {
-            char c = (char) ((state[1] << 8) | (((int) value) & 0xFF));
-            buffer.append(c);
-            state[0] = 0;
-        }
-        else {
-            state[0] = 1;
-            state[1] = value;
+    private static final <T extends Appendable> void appendEncodedByte(T buffer, byte value,
+            byte[] state) {
+        try {
+            if (state[0] != 0) {
+                char c = (char) ((state[1] << 8) | (((int) value) & 0xFF));
+                buffer.append(c);
+                state[0] = 0;
+            }
+            else {
+                state[0] = 1;
+                state[1] = value;
+            }
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
         }
     }
 
@@ -605,7 +619,7 @@ public final class Utility {
      * when necessary (control characters and double quotes).
      */
     static public final String formatForSource(String s) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i=0; i<s.length();) {
             if (i > 0) buffer.append('+').append(LINE_SEPARATOR);
             buffer.append("        \"");
@@ -653,14 +667,14 @@ public final class Utility {
     }
 
     static final char[] HEX_DIGIT = {'0','1','2','3','4','5','6','7',
-                     '8','9','A','B','C','D','E','F'};
+        '8','9','A','B','C','D','E','F'};
 
     /**
      * Format a String for representation in a source file.  Like
      * formatForSource but does not do line breaking.
      */
     static public final String format1ForSource(String s) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("\"");
         for (int i=0; i<s.length();) {
             char c = s.charAt(i++);
@@ -702,9 +716,9 @@ public final class Utility {
      * Unicode escapes, and convert backslash to a double backslash.
      */
     public static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i=0; i<s.length(); ) {
-            int c = UTF16.charAt(s, i);
+            int c = Character.codePointAt(s, i);
             i += UTF16.getCharCount(c);
             if (c >= ' ' && c <= 0x007F) {
                 if (c == '\\') {
@@ -715,7 +729,7 @@ public final class Utility {
             } else {
                 boolean four = c <= 0xFFFF;
                 buf.append(four ? "\\u" : "\\U");
-                hex(c, four ? 4 : 8, buf);
+                buf.append(hex(c, four ? 4 : 8));
             }
         }
         return buf.toString();
@@ -764,7 +778,7 @@ public final class Utility {
         }
 
         /* Fetch first UChar after '\\' */
-        c = UTF16.charAt(s, offset);
+        c = Character.codePointAt(s, offset);
         offset += UTF16.getCharCount(c);
 
         /* Convert hexadecimal and octal escapes */
@@ -824,7 +838,7 @@ public final class Utility {
             // escape or as a literal.  If so, join them up into a
             // supplementary.
             if (offset < length &&
-                UTF16.isLeadSurrogate((char) result)) {
+                    UTF16.isLeadSurrogate((char) result)) {
                 int ahead = offset+1;
                 c = s.charAt(offset); // [sic] get 16-bit code unit
                 if (c == '\\' && ahead < length) {
@@ -834,8 +848,8 @@ public final class Utility {
                 }
                 if (UTF16.isTrailSurrogate((char) c)) {
                     offset = ahead;
-                result = UCharacterProperty.getRawSupplementary(
-                                  (char) result, (char) c);
+                    result = UCharacterProperty.getRawSupplementary(
+                            (char) result, (char) c);
                 }
             }
             offset16[0] = offset;
@@ -871,7 +885,7 @@ public final class Utility {
      * seen.
      */
     public static String unescape(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int[] pos = new int[1];
         for (int i=0; i<s.length(); ) {
             char c = s.charAt(i++);
@@ -880,9 +894,9 @@ public final class Utility {
                 int e = unescapeAt(s, pos);
                 if (e < 0) {
                     throw new IllegalArgumentException("Invalid escape sequence " +
-                                                       s.substring(i-1, Math.min(i+8, s.length())));
+                            s.substring(i-1, Math.min(i+8, s.length())));
                 }
-                UTF16.append(buf, e);
+                buf.appendCodePoint(e);
                 i = pos[0];
             } else {
                 buf.append(c);
@@ -896,7 +910,7 @@ public final class Utility {
      * Leave invalid escape sequences unchanged.
      */
     public static String unescapeLeniently(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int[] pos = new int[1];
         for (int i=0; i<s.length(); ) {
             char c = s.charAt(i++);
@@ -906,7 +920,7 @@ public final class Utility {
                 if (e < 0) {
                     buf.append(c);
                 } else {
-                    UTF16.append(buf, e);
+                    buf.appendCodePoint(e);
                     i = pos[0];
                 }
             } else {
@@ -920,55 +934,10 @@ public final class Utility {
      * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
      * "0041".
      */
-    public static String hex(char ch) {
-        StringBuffer temp = new StringBuffer();
-        return hex(ch, temp).toString();
+    public static String hex(long ch) {
+        return hex(ch, 4);
     }
 
-    /**
-     * Convert a string to comma-separated groups of 4 hex uppercase
-     * digits.  E.g., hex('ab') => "0041,0042".
-     */
-    public static String hex(String s) {
-        StringBuffer temp = new StringBuffer();
-        return hex(s, temp).toString();
-    }
-
-    /**
-     * Convert a string to comma-separated groups of 4 hex uppercase
-     * digits.  E.g., hex('ab') => "0041,0042".
-     */
-    public static String hex(StringBuffer s) {
-        return hex(s.toString());
-    }
-
-    /**
-     * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
-     * "0041".  Append the output to the given StringBuffer.
-     */
-    public static StringBuffer hex(char ch, StringBuffer output) {
-        return appendNumber(output, ch, 16, 4);
-    }
-
-    /**
-     * Convert a integer to size width hex uppercase digits.
-     * E.g., hex('a', 4, str) => "0041".
-     * Append the output to the given StringBuffer.
-     * If width is too small to fit, nothing will be appended to output.
-     */
-    public static StringBuffer hex(int ch, int width, StringBuffer output) {
-        return appendNumber(output, ch, 16, width);
-    }
-
-    /**
-     * Convert a integer to size width (minimum) hex uppercase digits.
-     * E.g., hex('a', 4, str) => "0041".  If the integer requires more
-     * than width digits, more will be used.
-     */
-    public static String hex(int ch, int width) {
-        StringBuffer buf = new StringBuffer();
-        return appendNumber(buf, ch, 16, width).toString();
-    }
     /**
      * Supplies a zero-padded hex representation of an integer (without 0x)
      */
@@ -987,44 +956,52 @@ public final class Utility {
         }
         return result;
     }
-    
-    public static String hex(long ch) {
-        return hex(ch,4);
-    }
-    
-    /**
-     * Convert a string to comma-separated groups of 4 hex uppercase
-     * digits.  E.g., hex('ab') => "0041,0042".  Append the output
-     * to the given StringBuffer.
-     */
-    public static StringBuffer hex(String s, StringBuffer result) {
-        for (int i = 0; i < s.length(); ++i) {
-            if (i != 0) result.append(',');
-            hex(s.charAt(i), result);
-        }
-        return hex(s, 4, ",", result);
-    }
-    
-    /**
-     * Convert a string to comma-separated groups of 4 hex uppercase
-     * digits.  E.g., hex('ab') => "0041,0042".  Append the output
-     * to the given StringBuffer.
-     */
-    public static StringBuffer hex(String s, int width, String separator, StringBuffer result) {
-        for (int i = 0; i < s.length(); ++i) {
-            if (i != 0) result.append(separator);
-            hex(s.charAt(i), width, result);
-        }
-        return result;
-    }
-    
-    
+
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".
      */
-    public static String hex(String s, int width, String separator) {
-        return hex(s, width, separator, new StringBuffer()).toString();
+    public static String hex(CharSequence s) {
+        return hex(s, 4, ",", false, new StringBuilder()).toString();
+    }
+
+    /**
+     * Convert a string to separated groups of hex uppercase
+     * digits.  E.g., hex('ab'...) => "0041,0042".  Append the output
+     * to the given Appendable.
+     */
+    public static <S extends CharSequence, U extends CharSequence, T extends Appendable> T hex(S s, int width, U separator, boolean useCodePoints, T result) {
+        try {
+            if (useCodePoints) {
+                int cp;
+                for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+                    cp = Character.codePointAt(s, i);
+                    if (i != 0) {
+                        result.append(separator);
+                    }
+                    result.append(hex(cp,width));
+                }
+            } else {
+                for (int i = 0; i < s.length(); ++i) {
+                    if (i != 0) {
+                        result.append(separator);
+                    }
+                    result.append(hex(s.charAt(i),width));
+                }
+            }
+            return result;
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
+        }
+    }
+
+
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".
+     */
+    public static <S extends CharSequence> String hex(S s, int width, S separator) {
+        return hex(s, width, separator, true, new StringBuilder()).toString();
     }   
 
     /**
@@ -1076,7 +1053,7 @@ public final class Utility {
         output.add( s.substring(last,i));
         return output.toArray(new String[output.size()]);
     }
-    
+
     /**
      * Look up a given string in a string array.  Returns the index at
      * which the first occurrence of the string was found in the
@@ -1101,7 +1078,7 @@ public final class Utility {
      */
     public static int skipWhitespace(String str, int pos) {
         while (pos < str.length()) {
-            int c = UTF16.charAt(str, pos);
+            int c = Character.codePointAt(str, pos);
             if (!UCharacterProperty.isRuleWhiteSpace(c)) {
                 break;
             }
@@ -1122,14 +1099,14 @@ public final class Utility {
      * Remove all rule white space from a string.
      */
     public static String deleteRuleWhiteSpace(String str) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i=0; i<str.length(); ) {
-            int ch = UTF16.charAt(str, i);
+            int ch = Character.codePointAt(str, i);
             i += UTF16.getCharCount(ch);
             if (UCharacterProperty.isRuleWhiteSpace(ch)) {
                 continue;
             }
-            UTF16.append(buf, ch);
+            buf.appendCodePoint(ch);
         }
         return buf.toString();
     }
@@ -1150,7 +1127,7 @@ public final class Utility {
         int start = pos[0];
         skipWhitespace(id, pos);
         if (pos[0] == id.length() ||
-            id.charAt(pos[0]) != ch) {
+                id.charAt(pos[0]) != ch) {
             pos[0] = start;
             return false;
         }
@@ -1178,7 +1155,7 @@ public final class Utility {
      * the parse failed
      */
     public static int parsePattern(String rule, int pos, int limit,
-                                   String pattern, int[] parsedInts) {
+            String pattern, int[] parsedInts) {
         // TODO Update this to handle surrogates
         int[] p = new int[1];
         int intCount = 0; // number of integers parsed
@@ -1238,9 +1215,9 @@ public final class Utility {
      * @return index after last parsed character, or -1 on parse failure.
      */
     public static int parsePattern(String pat,
-                                   Replaceable text,
-                                   int index,
-                                   int limit) {
+            Replaceable text,
+            int index,
+            int limit) {
         int ipat = 0;
 
         // empty pattern matches immediately
@@ -1248,7 +1225,7 @@ public final class Utility {
             return index;
         }
 
-        int cpat = UTF16.charAt(pat, ipat);
+        int cpat = Character.codePointAt(pat, ipat);
 
         while (index < limit) {
             int c = text.char32At(index);
@@ -1351,19 +1328,19 @@ public final class Utility {
     public static String parseUnicodeIdentifier(String str, int[] pos) {
         // assert(pos[0] < str.length());
         // assert(!UCharacterProperty.isRuleWhiteSpace(UTF16.charAt(str, pos[0])));
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int p = pos[0];
         while (p < str.length()) {
-            int ch = UTF16.charAt(str, p);
+            int ch = Character.codePointAt(str, p);
             if (buf.length() == 0) {
                 if (UCharacter.isUnicodeIdentifierStart(ch)) {
-                    UTF16.append(buf, ch);
+                    buf.appendCodePoint(ch);
                 } else {
                     return null;
                 }
             } else {
                 if (UCharacter.isUnicodeIdentifierPart(ch)) {
-                    UTF16.append(buf, ch);
+                    buf.appendCodePoint(ch);
                 } else {
                     break;
                 }
@@ -1374,18 +1351,6 @@ public final class Utility {
         return buf.toString();
     }
 
-    /**
-     * Trim whitespace from ends of a StringBuffer.
-     */
-    public static StringBuffer trim(StringBuffer b) {
-        // TODO update to handle surrogates
-        int i;
-        for (i=0; i<b.length() && UCharacter.isWhitespace(b.charAt(i)); ++i) {}
-        b.delete(0, i);
-        for (i=b.length()-1; i>=0 && UCharacter.isWhitespace(b.charAt(i)); --i) {}
-        return b.delete(i+1, b.length());
-    }
-
     static final char DIGITS[] = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -1394,38 +1359,33 @@ public final class Utility {
     };
 
     /**
-     * Append a number to the given StringBuffer in the radix 10
-     * generating at least one digit.
-     */
-    public static StringBuffer appendNumber(StringBuffer result, int n) {
-        return appendNumber(result, n, 10, 1);
-    }
-
-    /**
      * Append the digits of a positive integer to the given
-     * <code>StringBuffer</code> in the given radix. This is
+     * <code>Appendable</code> in the given radix. This is
      * done recursively since it is easiest to generate the low-
      * order digit first, but it must be appended last.
      *
-     * @param result is the <code>StringBuffer</code> to append to
+     * @param result is the <code>Appendable</code> to append to
      * @param n is the positive integer
      * @param radix is the radix, from 2 to 36 inclusive
      * @param minDigits is the minimum number of digits to append.
      */
-    private static void recursiveAppendNumber(StringBuffer result, int n,
-                                                int radix, int minDigits)
+    private static <T extends Appendable> void recursiveAppendNumber(T result, int n,
+            int radix, int minDigits)
     {
-        int digit = n % radix;
+        try {
+            int digit = n % radix;
 
-        if (n >= radix || minDigits > 1) {
-            recursiveAppendNumber(result, n / radix, radix, minDigits - 1);
+            if (n >= radix || minDigits > 1) {
+                recursiveAppendNumber(result, n / radix, radix, minDigits - 1);
+            }
+            result.append(DIGITS[digit]);
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
         }
-
-        result.append(DIGITS[digit]);
     }
 
     /**
-     * Append a number to the given StringBuffer in the given radix.
+     * Append a number to the given Appendable in the given radix.
      * Standard digits '0'-'9' are used and letters 'A'-'Z' for
      * radices 11 through 36.
      * @param result the digits of the number are appended here
@@ -1437,25 +1397,29 @@ public final class Utility {
      * digit is always emitted regardless of this parameter.
      * @return a reference to result
      */
-    public static StringBuffer appendNumber(StringBuffer result, int n,
-                                             int radix, int minDigits)
-        throws IllegalArgumentException
+    public static <T extends Appendable> T appendNumber(T result, int n,
+            int radix, int minDigits)
     {
-        if (radix < 2 || radix > 36) {
-            throw new IllegalArgumentException("Illegal radix " + radix);
+        try {
+            if (radix < 2 || radix > 36) {
+                throw new IllegalArgumentException("Illegal radix " + radix);
+            }
+
+
+            int abs = n;
+
+            if (n < 0) {
+                abs = -n;
+                result.append("-");
+            }
+
+            recursiveAppendNumber(result, abs, radix, minDigits);
+
+            return result;
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
         }
 
-
-        int abs = n;
-
-        if (n < 0) {
-            abs = -n;
-            result.append("-");
-        }
-
-        recursiveAppendNumber(result, abs, radix, minDigits);
-
-        return result;
     }
 
     /**
@@ -1481,7 +1445,7 @@ public final class Utility {
         int n = 0;
         int p = pos[0];
         while (p < text.length()) {
-            int ch = UTF16.charAt(text, p);
+            int ch = Character.codePointAt(text, p);
             int d = UCharacter.digit(ch, radix);
             if (d < 0) {
                 break;
@@ -1517,25 +1481,29 @@ public final class Utility {
      * and return FALSE.  Otherwise, append the escaped notation and
      * return TRUE.
      */
-    public static boolean escapeUnprintable(StringBuffer result, int c) {
-        if (isUnprintable(c)) {
-            result.append('\\');
-            if ((c & ~0xFFFF) != 0) {
-                result.append('U');
-                result.append(DIGITS[0xF&(c>>28)]);
-                result.append(DIGITS[0xF&(c>>24)]);
-                result.append(DIGITS[0xF&(c>>20)]);
-                result.append(DIGITS[0xF&(c>>16)]);
-            } else {
-                result.append('u');
+    public static <T extends Appendable> boolean escapeUnprintable(T result, int c) {
+        try {
+            if (isUnprintable(c)) {
+                result.append('\\');
+                if ((c & ~0xFFFF) != 0) {
+                    result.append('U');
+                    result.append(DIGITS[0xF&(c>>28)]);
+                    result.append(DIGITS[0xF&(c>>24)]);
+                    result.append(DIGITS[0xF&(c>>20)]);
+                    result.append(DIGITS[0xF&(c>>16)]);
+                } else {
+                    result.append('u');
+                }
+                result.append(DIGITS[0xF&(c>>12)]);
+                result.append(DIGITS[0xF&(c>>8)]);
+                result.append(DIGITS[0xF&(c>>4)]);
+                result.append(DIGITS[0xF&c]);
+                return true;
             }
-            result.append(DIGITS[0xF&(c>>12)]);
-            result.append(DIGITS[0xF&(c>>8)]);
-            result.append(DIGITS[0xF&(c>>4)]);
-            result.append(DIGITS[0xF&c]);
-            return true;
+            return false;
+        } catch (IOException e) {
+            throw new IllegalIcuArgumentException(e);
         }
-        return false;
     }
 
     /**
@@ -1555,40 +1523,19 @@ public final class Utility {
      * @see String#indexOf
      */
     public static int quotedIndexOf(String text, int start, int limit,
-                                    String setOfChars) {
+            String setOfChars) {
         for (int i=start; i<limit; ++i) {
             char c = text.charAt(i);
             if (c == BACKSLASH) {
                 ++i;
             } else if (c == APOSTROPHE) {
                 while (++i < limit
-                       && text.charAt(i) != APOSTROPHE) {}
+                        && text.charAt(i) != APOSTROPHE) {}
             } else if (setOfChars.indexOf(c) >= 0) {
                 return i;
             }
         }
         return -1;
-    }
-
-    /**
-    * Similar to StringBuffer.getChars, version 1.3.
-    * Since JDK 1.2 implements StringBuffer.getChars differently, this method
-    * is here to provide consistent results.
-    * To be removed after JDK 1.2 ceased to be the reference platform.
-    * @param src source string buffer
-    * @param srcBegin offset to the start of the src to retrieve from
-    * @param srcEnd offset to the end of the src to retrieve from
-    * @param dst char array to store the retrieved chars
-    * @param dstBegin offset to the start of the destination char array to
-    *                 store the retrieved chars
-    */
-    public static void getChars(StringBuffer src, int srcBegin, int srcEnd,
-                                char dst[], int dstBegin)
-    {
-        if (srcBegin == srcEnd) {
-            return;
-        }
-        src.getChars(srcBegin, srcEnd, dst, dstBegin);
     }
 
     /**
@@ -1610,15 +1557,15 @@ public final class Utility {
      * character (which may be -1).
      */
     public static void appendToRule(StringBuffer rule,
-                                    int c,
-                                    boolean isLiteral,
-                                    boolean escapeUnprintable,
-                                    StringBuffer quoteBuf) {
+            int c,
+            boolean isLiteral,
+            boolean escapeUnprintable,
+            StringBuffer quoteBuf) {
         // If we are escaping unprintables, then escape them outside
         // quotes.  \\u and \\U are not recognized within quotes.  The same
         // logic applies to literals, but literals are never escaped.
         if (isLiteral ||
-            (escapeUnprintable && Utility.isUnprintable(c))) {
+                (escapeUnprintable && Utility.isUnprintable(c))) {
             if (quoteBuf.length() > 0) {
                 // We prefer backslash APOSTROPHE to double APOSTROPHE
                 // (more readable, less similar to ") so if there are
@@ -1628,8 +1575,8 @@ public final class Utility {
                 // If the first thing in the quoteBuf is APOSTROPHE
                 // (doubled) then pull it out.
                 while (quoteBuf.length() >= 2 &&
-                       quoteBuf.charAt(0) == APOSTROPHE &&
-                       quoteBuf.charAt(1) == APOSTROPHE) {
+                        quoteBuf.charAt(0) == APOSTROPHE &&
+                        quoteBuf.charAt(1) == APOSTROPHE) {
                     rule.append(BACKSLASH).append(APOSTROPHE);
                     quoteBuf.delete(0, 2);
                 }
@@ -1637,8 +1584,8 @@ public final class Utility {
                 // (doubled) then remove and count it and add it after.
                 int trailingCount = 0;
                 while (quoteBuf.length() >= 2 &&
-                       quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
-                       quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
+                        quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
+                        quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
                     quoteBuf.setLength(quoteBuf.length()-2);
                     ++trailingCount;
                 }
@@ -1669,14 +1616,14 @@ public final class Utility {
                         rule.append(' ');
                     }
                 } else if (!escapeUnprintable || !Utility.escapeUnprintable(rule, c)) {
-                    UTF16.append(rule, c);
+                    rule.appendCodePoint(c);
                 }
             }
         }
 
         // Escape ' and '\' and don't begin a quote just for them
         else if (quoteBuf.length() == 0 &&
-                 (c == APOSTROPHE || c == BACKSLASH)) {
+                (c == APOSTROPHE || c == BACKSLASH)) {
             rule.append(BACKSLASH).append((char)c);
         }
 
@@ -1684,12 +1631,12 @@ public final class Utility {
         // whitespace need quoting.  Also append stuff to quotes if we are
         // building up a quoted substring already.
         else if (quoteBuf.length() > 0 ||
-                 (c >= 0x0021 && c <= 0x007E &&
-                  !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
-                    (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
-                    (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-                 UCharacterProperty.isRuleWhiteSpace(c)) {
-            UTF16.append(quoteBuf, c);
+                (c >= 0x0021 && c <= 0x007E &&
+                        !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
+                                (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
+                                (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
+                                UCharacterProperty.isRuleWhiteSpace(c)) {
+            quoteBuf.appendCodePoint(c);
             // Double ' within a quote
             if (c == APOSTROPHE) {
                 quoteBuf.append((char)c);
@@ -1698,7 +1645,7 @@ public final class Utility {
 
         // Otherwise just append
         else {
-            UTF16.append(rule, c);
+            rule.appendCodePoint(c);
         }
     }
 
@@ -1707,10 +1654,10 @@ public final class Utility {
      * version of appendToRule for each character.
      */
     public static void appendToRule(StringBuffer rule,
-                                    String text,
-                                    boolean isLiteral,
-                                    boolean escapeUnprintable,
-                                    StringBuffer quoteBuf) {
+            String text,
+            boolean isLiteral,
+            boolean escapeUnprintable,
+            StringBuffer quoteBuf) {
         for (int i=0; i<text.length(); ++i) {
             // Okay to process in 16-bit code units here
             appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
@@ -1722,12 +1669,12 @@ public final class Utility {
      * pattern as a literal to the given rule.
      */
     public static void appendToRule(StringBuffer rule,
-                                    UnicodeMatcher matcher,
-                                    boolean escapeUnprintable,
-                                    StringBuffer quoteBuf) {
+            UnicodeMatcher matcher,
+            boolean escapeUnprintable,
+            StringBuffer quoteBuf) {
         if (matcher != null) {
             appendToRule(rule, matcher.toPattern(escapeUnprintable),
-                         true, escapeUnprintable, quoteBuf);
+                    true, escapeUnprintable, quoteBuf);
         }
     }
 
@@ -1770,27 +1717,27 @@ public final class Utility {
 
         if (n >= 1 << 16) {
             n >>= 16;
-            bit += 16;
+        bit += 16;
         }
 
         if (n >= 1 << 8) {
             n >>= 8;
-            bit += 8;
+        bit += 8;
         }
 
         if (n >= 1 << 4) {
             n >>= 4;
-            bit += 4;
+        bit += 4;
         }
 
         if (n >= 1 << 2) {
             n >>= 2;
-            bit += 2;
+        bit += 2;
         }
 
         if (n >= 1 << 1) {
             n >>= 1;
-            bit += 1;
+        bit += 1;
         }
 
         return bit;
@@ -1800,15 +1747,15 @@ public final class Utility {
      * a string representation with code units. 
      */
     public static String valueOf(int[]source){
-    // TODO: Investigate why this method is not on UTF16 class
-        StringBuffer result = new StringBuffer(source.length);
+        // TODO: Investigate why this method is not on UTF16 class
+        StringBuilder result = new StringBuilder(source.length);
         for(int i=0; i<source.length; i++){
-            UTF16.append(result,source[i]);
+            result.appendCodePoint(source[i]);
         }
         return result.toString();
     }
-    
-    
+
+
     /**
      * Utility to duplicate a string count times
      * @param s
@@ -1817,20 +1764,21 @@ public final class Utility {
     public static String repeat(String s, int count) {
         if (count <= 0) return "";
         if (count == 1) return s;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < count; ++i) {
             result.append(s);
         }
         return result.toString();
     }
-   public static String[] splitString(String src, String target) {
-       return src.split("\\Q" + target + "\\E");
-   }
+    
+    public static String[] splitString(String src, String target) {
+        return src.split("\\Q" + target + "\\E");
+    }
 
-  /**
-   * Split the string at runs of ascii whitespace characters.
-   */
-   public static String[] splitWhitespace(String src) {
-       return src.split("\\s+");
-   }
+    /**
+     * Split the string at runs of ascii whitespace characters.
+     */
+    public static String[] splitWhitespace(String src) {
+        return src.split("\\s+");
+    }
 }

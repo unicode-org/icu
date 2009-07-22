@@ -3118,7 +3118,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 sb.append('E').append(csign).append(euse);
             }
             rec = new char[sb.length()];
-            Utility.getChars(sb, 0, sb.length(), rec, 0);
+            int srcEnd = sb.length();
+            if (0 != srcEnd) {
+                sb.getChars(0, srcEnd, rec, 0);
+            }
             return rec;
         }
 
