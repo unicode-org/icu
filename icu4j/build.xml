@@ -77,16 +77,10 @@
         <ant dir="${icu4j.tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
 
-        <delete file="${icu4j.jar.file}"/>
-        <delete file="${icu4jtests.jar.file}"/>
-        <delete file="${icu4j-core.jar.file}"/>
-        <delete file="${icu4j-collate.jar.file}"/>
-        <delete file="${icu4j-charsets.jar.file}"/>
-        <delete file="${icu4j-localespi.jar.file}"/>
-        <delete file="${icu4j-translit.jar.file}"/>
-        <delete file="${icu4jdemos.jar.file}"/>
-        <delete file="${icu4jsrc.jar.file}"/>
-        <delete file="${icu4jdocs.jar.file}"/>
+        <!-- delete all .jar files in icu4j root directory -->
+        <delete>
+            <fileset dir="." includes="*.jar"/>
+        </delete>
 
         <delete dir="${doc.dir}"/>
         <delete dir="${out.dir}"/>
@@ -195,7 +189,7 @@
 
     <target name="_runLocalespiCheck" depends="localespi, localespi-tests">
         <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
-            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${ext.dir}"/>
+            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${java.ext.dirs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${icu4j.localespi-tests.jar}"/>
