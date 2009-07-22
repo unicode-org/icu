@@ -50,8 +50,14 @@
 
 #define URESDATA_ITEM_NOT_FOUND -1
 
-/* empty resource of any type, returned when the resource offset is 0 */
-static const int32_t gEmpty[2]={ 0, 0 };
+/* empty resources, returned when the resource offset is 0 */
+static const uint16_t gEmpty16=0;
+static const int32_t gEmpty32=0;
+static const struct {
+    int32_t length;
+    UChar nul;
+    UChar pad;
+} gEmptyString={ 0, 0, 0 };
 
 /*
  * All the type-access functions assume that
@@ -150,7 +156,7 @@ res_init(ResourceData *pResData,
     /* get the root resource */
     pResData->pRoot=(const int32_t *)inBytes;
     pResData->rootRes=(Resource)*pResData->pRoot;
-    pResData->p16BitUnits=(const uint16_t *)gEmpty;
+    pResData->p16BitUnits=&gEmpty16;
 
     /* formatVersion 1.1 must have a root item and at least 5 indexes */
     if(length>=0 && (length/4)<((formatVersion[0]==1 && formatVersion[1]==0) ? 1 : 1+5)) {
@@ -307,7 +313,7 @@ res_getString(const ResourceData *pResData, Resource res, int32_t *pLength) {
             p+=3;
         }
     } else if(res==offset) /* RES_GET_TYPE(res)==URES_STRING */ {
-        const int32_t *p32= res==0 ? gEmpty : pResData->pRoot+res;
+        const int32_t *p32= res==0 ? &gEmptyString.length : pResData->pRoot+res;
         length=*p32++;
         p=(const UChar *)p32;
     } else {
@@ -326,7 +332,7 @@ res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_ALIAS) {
-        const int32_t *p32= offset==0 ? gEmpty : pResData->pRoot+offset;
+        const int32_t *p32= offset==0 ? &gEmptyString.length : pResData->pRoot+offset;
         length=*p32++;
         p=(const UChar *)p32;
     } else {
@@ -345,7 +351,7 @@ res_getBinary(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_BINARY) {
-        const int32_t *p32= offset==0 ? gEmpty : pResData->pRoot+offset;
+        const int32_t *p32= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
         length=*p32++;
         p=(const uint8_t *)p32;
     } else {
@@ -365,7 +371,7 @@ res_getIntVector(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_INT_VECTOR) {
-        p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
         length=*p++;
     } else {
         p=NULL;
@@ -390,9 +396,9 @@ res_countArrayItems(const ResourceData *pResData, Resource res) {
         return 1;
     case URES_ARRAY:
     case URES_TABLE32:
-        return *(offset==0 ? gEmpty : pResData->pRoot+offset);
+        return offset==0 ? 0 : *(pResData->pRoot+offset);
     case URES_TABLE:
-        return *(offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset));
+        return offset==0 ? 0 : *((const uint16_t *)(pResData->pRoot+offset));
     case URES_ARRAY16:
     case URES_TABLE16:
         return pResData->p16BitUnits[offset];
@@ -412,7 +418,7 @@ res_getTableItemByKey(const ResourceData *pResData, Resource table,
     }
     switch(RES_GET_TYPE(table)) {
     case URES_TABLE: {
-        const uint16_t *p= offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset);
+        const uint16_t *p= offset==0 ? &gEmpty16 : (const uint16_t *)(pResData->pRoot+offset);
         length=*p++;
         *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
         if(idx>=0) {
@@ -431,7 +437,7 @@ res_getTableItemByKey(const ResourceData *pResData, Resource table,
         break;
     }
     case URES_TABLE32: {
-        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
         length=*p++;
         *indexR=idx=_res_findTable32Item(pResData, p, length, *key, key);
         if(idx>=0) {
@@ -452,7 +458,7 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
     int32_t length;
     switch(RES_GET_TYPE(table)) {
     case URES_TABLE: {
-        const uint16_t *p= offset==0 ? (const uint16_t *)gEmpty : (const uint16_t *)(pResData->pRoot+offset);
+        const uint16_t *p= offset==0 ? &gEmpty16 : (const uint16_t *)(pResData->pRoot+offset);
         length=*p++;
         if(indexR<length) {
             const Resource *p32=(const Resource *)(p+length+(~length&1));
@@ -475,7 +481,7 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
         break;
     }
     case URES_TABLE32: {
-        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
         length=*p++;
         if(indexR<length) {
             if(key!=NULL) {
@@ -503,7 +509,7 @@ res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
     uint32_t offset=RES_GET_OFFSET(array);
     switch(RES_GET_TYPE(array)) {
     case URES_ARRAY: {
-        const int32_t *p= offset==0 ? gEmpty : pResData->pRoot+offset;
+        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
         if(indexR<*p) {
             return (Resource)p[1+indexR];
         }
