@@ -541,10 +541,7 @@ test_swap(const UDataSwapper *ds,
     const uint8_t *inBytes;
     uint8_t *outBytes;
 
-    const int32_t *inIndexes;
-    int32_t indexes[32];
-
-    int32_t i, offset, count;
+    int32_t offset;
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
@@ -594,6 +591,7 @@ test_swap(const UDataSwapper *ds,
 
     return headerSize+size;
 }
+
 /* swap any data (except a .dat package) ------------------------------------ */
 
 static const struct {

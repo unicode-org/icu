@@ -649,7 +649,6 @@ void bundle_write(struct SRBRoot *bundle,
                   char *writtenFilename, int writtenFilenameLen,
                   UErrorCode *status) {
     UNewDataMemory *mem        = NULL;
-    uint8_t         pad        = 0;
     uint32_t        byteOffset = 0;
     uint32_t        top, size;
     char            dataName[1024];
@@ -661,7 +660,7 @@ void bundle_write(struct SRBRoot *bundle,
      * Safe because the capacity is a multiple of 4.
      */
     while (bundle->fKeysTop & 3) {
-        bundle->fKeys[bundle->fKeysTop++] = 0xaa;
+        bundle->fKeys[bundle->fKeysTop++] = (char)0xaa;
     }
     /*
      * In URES_TABLE, use all local key offsets that fit into 16 bits,
@@ -828,6 +827,11 @@ void bundle_write(struct SRBRoot *bundle,
 }
 
 /* Opening Functions */
+
+/* gcc 4.2 complained "no previous prototype for ‘res_open’" without this prototype... */
+struct SResource* res_open(struct SRBRoot *bundle, const char *tag,
+                           const struct UString* comment, UErrorCode* status);
+
 struct SResource* res_open(struct SRBRoot *bundle, const char *tag,
                            const struct UString* comment, UErrorCode* status){
     struct SResource *res;
@@ -1554,7 +1558,6 @@ bundle_compactKeys(struct SRBRoot *bundle, UErrorCode *status) {
                        compareKeyNewpos, NULL, FALSE, status);
         if (U_SUCCESS(*status)) {
             int32_t oldpos, newpos, limit;
-            int32_t i;
             oldpos = newpos = bundle->fKeysBottom;
             limit = bundle->fKeysTop;
             /* skip key offsets that point into the pool bundle rather than this new bundle */
