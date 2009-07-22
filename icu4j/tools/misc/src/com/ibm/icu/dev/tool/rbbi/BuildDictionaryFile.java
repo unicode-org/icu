@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -108,7 +108,9 @@ int totalChars = 0;
 
 //System.out.println(tempReverseMap.toString());
         reverseColumnMap = new char[p];
-        Utility.getChars(tempReverseMap, 0, p, reverseColumnMap, 0);
+        if (0 != p) {
+            tempReverseMap.getChars(0, p, reverseColumnMap, 0);
+        }
 
         System.out.println("total columns = " + p);
         numCols = p;

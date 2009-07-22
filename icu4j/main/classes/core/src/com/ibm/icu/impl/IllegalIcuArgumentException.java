@@ -17,7 +17,16 @@ public class IllegalIcuArgumentException extends IllegalArgumentException {
         super(errorMessage);
     }
     
-    public synchronized Throwable initCause(Throwable cause) {
-        return super.initCause(cause);
+    public IllegalIcuArgumentException(Throwable cause) {
+        super(cause);
     }
+    
+    public IllegalIcuArgumentException(String errorMessage, Throwable cause) {
+        super(errorMessage, cause);
+    }
+    
+    public synchronized IllegalIcuArgumentException initCause(Throwable cause) {
+        return (IllegalIcuArgumentException) super.initCause(cause);
+    }
+    
 }

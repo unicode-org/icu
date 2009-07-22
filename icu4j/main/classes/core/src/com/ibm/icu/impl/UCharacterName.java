@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -699,7 +699,7 @@ public final class UCharacterName
             {
                 case TYPE_0_:
                     // prefix followed by hex digits indicating variants
-                    Utility.hex(ch, m_variant_, str);
+                str.append(Utility.hex(ch,m_variant_));
                     break;
                 case TYPE_1_:
                     // prefix followed by factorized-elements
