@@ -1694,9 +1694,10 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 *pSep = 0;
 
                 /* to title case */
-                *p++ = uprv_toupper(*p);
-                while (*p) {
-                    *p++ = uprv_tolower(*p);
+                *p = uprv_toupper(*p);
+                p++;
+                for (; *p; p++) {
+                    *p = uprv_tolower(*p);
                 }
 
                 t->script = pSubtag;
