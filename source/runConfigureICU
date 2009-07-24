@@ -125,11 +125,11 @@ case $platform in
         THE_OS=AIX
         THE_COMP="xlC_r"
         CC=`which xlc_r`; export CC
-        if ! [-x $CC]; then
+        if [ ! -x $CC ]; then
            echo "ERROR: xlc_r was not found, please check the PATH to make sure it is correct."; exit 1
         fi
         CXX=`which xlC_r`; export CXX
-        if ! [-x $CXX]; then
+        if [ ! -x $CXX ]; then
            echo "ERROR: xlC_r was not found, please check the PATH to make sure it is correct."; exit 1
         fi
         RELEASE_CFLAGS="-O2 -qmaxmem=-1"
