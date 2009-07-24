@@ -17,9 +17,9 @@
 
   <body class="readme">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.3.1 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.4 ReadMe</h1>
 
-    <p>Version: 2009 July 22nd<br />
+    <p>Version: 2009 July 24th<br />
      Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -205,14 +205,22 @@
 
     <p><!-- The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. --> For more news about
-    this release, see the <a href="http://www.icu-project.org/download/">ICU 4.2
+    this release, see the <a href="http://www.icu-project.org/download/">ICU
     download page</a>.</p>
 
+    <!-- The following is in regards of Ticket #6894 done by John Huan Vu -->
+    
+    <h3><a name="LinuxICCValueSafeOptimization">Linux/ICC (Intel C++ Compiler) value-safe optimization on floating-point data</a></h3>
+    <p>
+      To ensure that the behavior of the Linux/ICC compiler are consistent with other compilers and other platforms, the flag <code>-fp-model precise</code> is added to the file <code>runConfigureICU</code>. According to the <a href="http://www.intel.com/software/products/compilers/docs/clin/main_cls/whnjs.htm">Intel C++ Compiler User and Reference Guides</a>, the flag enables value-safe optimizations on floating-point data. In contrast, the default value of the <code>-fp-model</code> option is <code>-fp-model fast=1</code> which enables a more aggressive optimizations on floating-point data. This is particularly important when all of the bits of a <code>float</code> or a <code>double</code> value are used for ICU. 
+    </p>
+    <p>This new functionality fixes <a href="http://bugs.icu-project.org/trac/ticket/6894">Ticket #6894</a>.</p>
+
+<!--
     <h3>Cross compilation and 64-bit support</h3>
     <p>ICU may now be cross compiled, see <a href="#HowToCrossCompileICU">How To Cross Compile ICU</a>.</p>
     <p>The --enable-64bit-libs and --disable-64bit-libs options are now deprecated. By default, ICU will build binaries using the compiler's default setting. To request 32 or 64 bit libraries, use --with-library-bits=32 or --with-library-bits=64.  For the old behavior, of attempting 64 bit libraries if possible, use --with-library-bits=64else32.   Intltest now reports the bit width that ICU is currently running under.</p>
-
-
+<!--
     <h3>u_strToUTF32() and u_strFromUTF32() validate input UTF strings</h3>
     <p>
       Before ICU 4.2, the ustring.h functions u_strToUTF32() and u_strFromUTF32()
@@ -243,6 +251,7 @@
       for details, in particular definitions D79 Unicode encoding form
       and D80 Unicode string.
     </p>
+-->
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -629,7 +638,13 @@
                 <td class="works">Frequently Tested</td>
 
             </tr>
-        
+
+            <tr>
+                <td>Red Hat Enterprise Linux 5 (x86, 32-bit)</td>
+                <td>icc 11.0</td>
+                <td class="works">Frequently Tested<br/><b>[<a href="#LinuxICCValueSafeOptimization">See Change</a>]</b></td>
+            </tr>
+
             <tr>
                 <td>Solaris 10 (sparc, 64-bit)</td>
                 <td>gcc 4.2.1</td>
@@ -684,13 +699,6 @@
                 <td>MS Visual Studio 9 via Cygwin</td>
                 <td class="works">Frequently Tested</td>
 
-            </tr>
-        
-            <tr class="broken">
-                <td>Red Hat Enterprise Linux 5 (x86, 32-bit)</td>
-                <td>icc 11.0</td>
-                <td class="broken">Broken <b><a href="http://bugs.icu-project.org/trac/ticket/6894">#6894</a></b></td>
-		
             </tr>
         
             <tr class="broken">
