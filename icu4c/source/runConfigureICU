@@ -190,6 +190,8 @@ case $platform in
         THE_COMP="Intel ICC 9.0"
         CC=`which icc`; export CC
         CXX=`which icpc`; export CXX
+        export CFLAGS="-fp-model precise"
+        export CXXFLAGS="-fp-model precise"
         RELEASE_CFLAGS='-O'
         RELEASE_CXXFLAGS='-O'
         ;;
