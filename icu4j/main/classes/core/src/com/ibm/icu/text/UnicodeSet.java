@@ -4186,5 +4186,24 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         int result = s.codePointAt(0);
         return (result < 0x10000) == (length == 1) ? result : Integer.MAX_VALUE;
     }
+
+    /**
+     * Simplify the ranges in a Unicode set by merging any ranges that are only separated by characters in the dontCare set. 
+     * For example, the ranges: \\u2E80-\\u2E99\\u2E9B-\\u2EF3\\u2F00-\\u2FD5\\u2FF0-\\u2FFB\\u3000-\\u303E change to \\u2E80-\\u303E 
+     * if the dontCare set includes unassigned characters (for a particular version of Unicode).
+     * @param input Set to be modified
+     * @param dontCare Set with the don't-care characters for spanning
+     * @return 
+     * @return the input set, modified
+     */
+    public UnicodeSet addBridges(UnicodeSet dontCare) {
+      UnicodeSet notInInput = new UnicodeSet(this).complement();
+      for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
+        if (it.codepoint != 0 && it.codepoint != UnicodeSetIterator.IS_STRING && it.codepointEnd != 0x10FFFF && dontCare.contains(it.codepoint,it.codepointEnd)) {
+          add(it.codepoint,it.codepointEnd);
+        }
+      }
+      return this;
+    }
 }
 //eof
