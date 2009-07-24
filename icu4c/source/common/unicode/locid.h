@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -633,7 +633,7 @@ public:
     static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
-     * Gets a list of all available 2-letter country codes defined in ISO 639.  This is a
+     * Gets a list of all available 2-letter country codes defined in ISO 3166.  This is a
      * pointer to an array of pointers to arrays of char.  All of these pointers are
      * owned by ICU-- do not delete them, and do not write through them.  The array is
      * terminated with a null pointer.
