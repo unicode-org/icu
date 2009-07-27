@@ -27,10 +27,6 @@ import com.ibm.icu.text.DateFormat;
  * which month is a leap month depends on the relative movements of the sun
  * and moon.
  *
- * <p>This class defines one addition field beyond those defined by
- * <code>Calendar</code>: The <code>IS_LEAP_MONTH</code> field takes the
- * value of 0 for normal months, or 1 for leap months.
- *
  * <p>All astronomical computations are performed with respect to a time
  * zone of GMT+8:00 and a longitude of 120 degrees east.  Although some
  * calendars implement a historically more accurate convention of using
@@ -162,7 +158,7 @@ public class ChineseCalendar extends Calendar {
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
      *                  The value is 0-based. e.g., 0 for January.
-     * @param isLeapMonth The value used to set the Chiense calendar's (@link #IS_LEAP_MONTH)
+     * @param isLeapMonth The value used to set the Chinese calendar's (@link #IS_LEAP_MONTH)
      *                  time field.
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
      * @stable ICU 4.0
@@ -289,24 +285,12 @@ public class ChineseCalendar extends Calendar {
      * Should have a value of 0 for non-leap months, and 1 for leap months.
      * @stable ICU 2.8
      */
-    public static int IS_LEAP_MONTH = BASE_FIELD_COUNT;
+    // public static int IS_LEAP_MONTH = BASE_FIELD_COUNT;
 
-    /**
-     * Count of fields in this class.
-     */
-    private static final int FIELD_COUNT = IS_LEAP_MONTH + 1;
 
     //------------------------------------------------------------------
     // Calendar framework
     //------------------------------------------------------------------
-
-    /**
-     * Override Calendar to allocate our additional field.
-     * @stable ICU 2.8
-     */
-    protected int[] handleCreateFields() {
-        return new int[FIELD_COUNT];
-    }
 
     /**
      * Array defining the limits of field values for this class.  Field

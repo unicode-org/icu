@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and
+ * Copyright (C) 2000-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -95,7 +95,7 @@ public class ChineseTest extends CalendarTest {
             cal.setTime(date);
             int y = cal.get(Calendar.EXTENDED_YEAR);
             int m = cal.get(Calendar.MONTH)+1; // 0-based -> 1-based
-            int L = cal.get(ChineseCalendar.IS_LEAP_MONTH);
+            int L = cal.get(Calendar.IS_LEAP_MONTH);
             int d = cal.get(Calendar.DAY_OF_MONTH);
             int yE = DATA[i++]; // Expected y, m, isLeapMonth, d
             int mE = DATA[i++]; // 1-based
@@ -123,7 +123,7 @@ public class ChineseTest extends CalendarTest {
             cal.clear();
             cal.set(Calendar.EXTENDED_YEAR, cyear);
             cal.set(Calendar.MONTH, cmonth-1);
-            cal.set(ChineseCalendar.IS_LEAP_MONTH, cisleapmonth);
+            cal.set(Calendar.IS_LEAP_MONTH, cisleapmonth);
             cal.set(Calendar.DAY_OF_MONTH, cdayofmonth);
             Date date = cal.getTime();
             buf.setLength(0);
@@ -153,7 +153,7 @@ public class ChineseTest extends CalendarTest {
                 errln("Fail: " + greg.getTime() + " -> " +
                       cal.get(Calendar.EXTENDED_YEAR) + "/" +
                       cal.get(Calendar.MONTH) +
-                      (cal.get(ChineseCalendar.IS_LEAP_MONTH)==1?"(leap)":"") +
+                      (cal.get(Calendar.IS_LEAP_MONTH)==1?"(leap)":"") +
                       "/" + cal.get(Calendar.DAY_OF_MONTH));
             }
             greg.add(Calendar.DAY_OF_YEAR, 1);
@@ -298,7 +298,7 @@ public class ChineseTest extends CalendarTest {
             1,0,1, // Expect 1-1
             
             // If we set MONTH only, that should be used
-            ChineseCalendar.IS_LEAP_MONTH, 1,
+            Calendar.IS_LEAP_MONTH, 1,
             Calendar.DAY_OF_MONTH, 1,
             Calendar.MONTH, 3,
             END,
@@ -306,7 +306,7 @@ public class ChineseTest extends CalendarTest {
             
             // If we set the DOY last, that should take precedence
             Calendar.MONTH, 1, // Should ignore
-            ChineseCalendar.IS_LEAP_MONTH, 1, // Should ignore
+            Calendar.IS_LEAP_MONTH, 1, // Should ignore
             Calendar.DAY_OF_MONTH, 1, // Should ignore
             Calendar.DAY_OF_YEAR, 121,
             END,
@@ -328,7 +328,7 @@ public class ChineseTest extends CalendarTest {
             Calendar.MONTH, 3,
             Calendar.DAY_OF_MONTH, 1,
             Calendar.DAY_OF_YEAR, 5, // Should ignore
-            ChineseCalendar.IS_LEAP_MONTH, 1,
+            Calendar.IS_LEAP_MONTH, 1,
             END,
             4,1,1, // Expect 4*-1
         };
@@ -348,7 +348,7 @@ public class ChineseTest extends CalendarTest {
             int expIsLeapMonth = DATA[i++];
             int expDOM = DATA[i++];
             int month = cal.get(Calendar.MONTH);
-            int isLeapMonth = cal.get(ChineseCalendar.IS_LEAP_MONTH);
+            int isLeapMonth = cal.get(Calendar.IS_LEAP_MONTH);
             int dom = cal.get(Calendar.DAY_OF_MONTH);
             if (expMonth == month && expIsLeapMonth == isLeapMonth &&
                 dom == expDOM) {
@@ -358,7 +358,7 @@ public class ChineseTest extends CalendarTest {
                 cal.clear();
                 cal.set(Calendar.EXTENDED_YEAR, THE_YEAR);
                 cal.set(Calendar.MONTH, expMonth);
-                cal.set(ChineseCalendar.IS_LEAP_MONTH, expIsLeapMonth);
+                cal.set(Calendar.IS_LEAP_MONTH, expIsLeapMonth);
                 cal.set(Calendar.DAY_OF_MONTH, expDOM);
                 errln("Fail: " + buf + " => " + s +
                       "=" + (month+1) + "," + isLeapMonth + "," + dom +
@@ -472,7 +472,7 @@ public class ChineseTest extends CalendarTest {
             cal.clear();
                 cal.set(Calendar.EXTENDED_YEAR, test[0]);
                 cal.set(Calendar.MONTH, test[1]-1);
-                cal.set(ChineseCalendar.IS_LEAP_MONTH, test[2]);
+                cal.set(Calendar.IS_LEAP_MONTH, test[2]);
                 cal.set(Calendar.DAY_OF_MONTH, test[3]);
             if (roll) {
                 cal.roll(test[4], test[5]);
@@ -481,7 +481,7 @@ public class ChineseTest extends CalendarTest {
             }
             if (cal.get(Calendar.EXTENDED_YEAR) != test[6] ||
                 cal.get(MONTH) != (test[7]-1) ||
-                cal.get(ChineseCalendar.IS_LEAP_MONTH) != test[8] ||
+                cal.get(Calendar.IS_LEAP_MONTH) != test[8] ||
                 cal.get(DATE) != test[9]) {
                 errln("Fail: " + name + " " +
                       ymdToString(test[0], test[1]-1, test[2], test[3])
@@ -542,7 +542,7 @@ public class ChineseTest extends CalendarTest {
             }
             // Make sure the given values are properly set
             if (cal.get(Calendar.YEAR) != 23 || cal.get(Calendar.MONTH) != Calendar.JULY
-                    || cal.get(ChineseCalendar.IS_LEAP_MONTH) != 1 || cal.get(Calendar.DATE) != 2
+                    || cal.get(Calendar.IS_LEAP_MONTH) != 1 || cal.get(Calendar.DATE) != 2
                     || cal.get(Calendar.MILLISECONDS_IN_DAY) != 0) {
                 errln("ChineseCalendar was initialized incorrectly with year,month,isLeapMonth,date");
             }
@@ -556,7 +556,7 @@ public class ChineseTest extends CalendarTest {
             }
             // Make sure the given values are properly set
             if (cal.get(Calendar.YEAR) != 23 || cal.get(Calendar.MONTH) != Calendar.JULY
-                    || cal.get(ChineseCalendar.IS_LEAP_MONTH) != 1 || cal.get(Calendar.DATE) != 2
+                    || cal.get(Calendar.IS_LEAP_MONTH) != 1 || cal.get(Calendar.DATE) != 2
                     || cal.get(Calendar.HOUR_OF_DAY) != 12 || cal.get(Calendar.MINUTE) != 34
                     || cal.get(Calendar.SECOND) != 56 || cal.get(Calendar.MILLISECOND) != 0) {
                 errln("ChineseCalendar was initialized incorrectly with year,month,isLeapMonth,date,hour,minute,second");
@@ -666,7 +666,7 @@ public class ChineseTest extends CalendarTest {
         cc.set(Calendar.MONTH, 0);
          // need to set leap month flag off, otherwise, the test case always fails when
          // current time is in a leap month
-        cc.set(ChineseCalendar.IS_LEAP_MONTH, 0);
+        cc.set(Calendar.IS_LEAP_MONTH, 0);
         cc.set(Calendar.DATE, 19);
         cc.set(Calendar.HOUR_OF_DAY, 0);
         cc.set(Calendar.MINUTE, 0);

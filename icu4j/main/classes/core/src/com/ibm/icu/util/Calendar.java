@@ -940,11 +940,18 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int MILLISECONDS_IN_DAY = 21;
 
     /**
+     * Field indicating whether or not the current month is a leap month.
+     * Should have a value of 0 for non-leap months, and 1 for leap months.
+     * @draft ICU 4.4
+     */
+    public static final int IS_LEAP_MONTH = 22;
+    
+    /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
      * @stable ICU 2.0
      */
-    protected static final int BASE_FIELD_COUNT = 22;
+    protected static final int BASE_FIELD_COUNT = 23;
 
     /**
      * The maximum number of fields possible.  Subclasses must not define
@@ -1546,7 +1553,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             (1 << MONTH) |
             (1 << DAY_OF_MONTH) |
             (1 << DAY_OF_YEAR) |
-            (1 << EXTENDED_YEAR);
+            (1 << EXTENDED_YEAR) |
+            (1 << IS_LEAP_MONTH);
         for (int i=BASE_FIELD_COUNT; i<fields.length; ++i) {
             mask |= (1 << i);
         }
@@ -2328,7 +2336,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * of the DAY_OF_YEAR or MONTH depends only on the year and supra-year
      * fields.  The actual maximum of the DAY_OF_MONTH depends, in
      * addition, on the MONTH field and any other fields at that
-     * granularity (such as ChineseCalendar.IS_LEAP_MONTH).  The
+     * granularity (such as IS_LEAP_MONTH).  The
      * DAY_OF_WEEK_IN_MONTH field does not depend on the current
      * DAY_OF_WEEK; it returns the maximum for any day of week in the
      * current month.  Likewise for the WEEK_OF_MONTH and WEEK_OF_YEAR
@@ -3887,6 +3895,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         {/*                                                      */}, // EXTENDED_YEAR
         { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
         {           0,            0, 24*ONE_HOUR-1, 24*ONE_HOUR-1  }, // MILLISECONDS_IN_DAY
+        {           0,            0,             1,             1  }, // IS_LEAP_MONTH
+        
     };
 
     /**
@@ -3936,6 +3946,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case DOW_LOCAL:
         case JULIAN_DAY:
         case MILLISECONDS_IN_DAY:
+        case IS_LEAP_MONTH:
             return LIMITS[field][limitType];
 
         case WEEK_OF_MONTH:

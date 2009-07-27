@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -425,7 +425,7 @@ public class CalendarTest extends TestFmwk {
         if (cal instanceof ChineseCalendar) {
             return "" + cal.get(Calendar.EXTENDED_YEAR) + "/" +
                 (cal.get(Calendar.MONTH)+1) +
-                (cal.get(ChineseCalendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
+                (cal.get(Calendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
                 cal.get(Calendar.DATE) + " (" + day + ", time=" + cal.getTimeInMillis() + ")";
         }
         return ymdToString(cal.get(Calendar.EXTENDED_YEAR),
