@@ -1792,7 +1792,7 @@ public final class NormalizerImpl {
         DecomposeArgs decompArgs = new DecomposeArgs();
 
         for(;;) {
-            if(start >= limit) {
+            if(start == limit) {
                 break; /* end of string */
             }
             c=src[start];
