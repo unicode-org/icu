@@ -3340,7 +3340,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // ChineseDateFormat.Field#ofCalendarField and getCalendarField
         int ccalField = ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField();
-        if (ccalField != ChineseCalendar.IS_LEAP_MONTH) {
+        if (ccalField != Calendar.IS_LEAP_MONTH) {
             errln("FAIL: ChineseCalendar field " + ccalField + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()");
         } else {
             DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
@@ -3654,7 +3654,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestOfCalendarField() {
         // Tests when if (calendarField == ChineseCalendar.IS_LEAP_MONTH) is false
-        int[] cases = { ChineseCalendar.IS_LEAP_MONTH - 1};
+        int[] cases = { Calendar.IS_LEAP_MONTH - 1};
         for (int i = 0; i < cases.length; i++) {
             try {
                 Field.ofCalendarField(cases[i]);

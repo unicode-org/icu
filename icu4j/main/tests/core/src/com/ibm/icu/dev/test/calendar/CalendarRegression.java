@@ -1353,7 +1353,8 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                   (op==0 ? "add" : "roll"));
             for (int field=0; field < cal.getFieldCount(); ++field) {
                 if (field != Calendar.ZONE_OFFSET &&
-                    field != Calendar.DST_OFFSET) {
+                    field != Calendar.DST_OFFSET &&
+                    field != Calendar.IS_LEAP_MONTH ) {
                     for (int j=0; j<fieldsList.length; ++j) {
                         int fields[] = fieldsList[j];
                         cal.clear();

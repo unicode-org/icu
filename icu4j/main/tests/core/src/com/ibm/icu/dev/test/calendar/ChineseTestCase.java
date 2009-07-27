@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -35,7 +35,7 @@ public class ChineseTestCase extends TestCase {
         set(Calendar.ERA, era);
         set(Calendar.YEAR, year);
         set(Calendar.MONTH, month - 1);
-        set(ChineseCalendar.IS_LEAP_MONTH, isLeapMonth?1:0);
+        set(Calendar.IS_LEAP_MONTH, isLeapMonth?1:0);
         set(Calendar.DAY_OF_MONTH, dayOfMonth);
         set(Calendar.DAY_OF_WEEK, dayOfWeek);
     }
@@ -47,7 +47,7 @@ public class ChineseTestCase extends TestCase {
         return dowToString(get(Calendar.DAY_OF_WEEK)) +
             get(Calendar.YEAR) + "of" + get(Calendar.ERA) +
             "/" + (get(Calendar.MONTH)+1) +
-            (get(ChineseCalendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
+            (get(Calendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
             get(Calendar.DAY_OF_MONTH);
     }
 }
