@@ -956,69 +956,69 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     // Use numbering system cache hashtable 
     UMTX_CHECK(NULL, (UBool)(cache != NumberingSystem_cache), getCache);
     if (getCache) {
-     	umtx_lock(NULL); 
-     	cache = NumberingSystem_cache; 
-     	umtx_unlock(NULL); 
- 	}
- 	
+        umtx_lock(NULL); 
+        cache = NumberingSystem_cache; 
+        umtx_unlock(NULL); 
+    }
+
     // Check cache we got, create if non-existant 
- 	status = U_ZERO_ERROR; 
- 	if (cache == NULL) { 
- 	    cache = uhash_open(uhash_hashLong,  
- 	                       uhash_compareLong,  
- 	                       NULL,  
- 	                       &status); 
- 	 
- 	    if (cache == NULL || U_FAILURE(status)) { 
- 	        // cache not created - out of memory 
- 	        cache = NULL;  
- 	    } 
- 	    else { 
- 	        // cache created 
+    status = U_ZERO_ERROR; 
+    if (cache == NULL) { 
+        cache = uhash_open(uhash_hashLong,  
+                           uhash_compareLong,  
+                           NULL,  
+                           &status); 
+     
+        if (cache == NULL || U_FAILURE(status)) { 
+            // cache not created - out of memory 
+            cache = NULL;  
+        } 
+        else { 
+            // cache created 
             uhash_setValueDeleter(cache, deleteNumberingSystem);
- 		 
- 	        // set final NumberingSystem_cache value 
- 	        UHashtable* h; 
+         
+            // set final NumberingSystem_cache value 
+            UHashtable* h; 
 
             UMTX_CHECK(NULL, (UBool)(h != NumberingSystem_cache), getCache);
             if (getCache) {
-     	        umtx_lock(NULL); 
-     	        h = NumberingSystem_cache; 
-     	        if (h == NULL) { 
-     	            NumberingSystem_cache = h = cache; 
-     	            cache = NULL; 
-     	            ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, NSCache_cleanup); 
-     	        } 
-     	        umtx_unlock(NULL); 
- 	        }
- 	 
- 	        if(cache != NULL) { 
- 	          delete cache; 
- 	        } 
- 	        cache = h; 
- 	    } 
- 	} 
- 	 
- 	// Get cached numbering system 
- 	if (cache != NULL) { 
- 	    hashKey = desiredLocale.hashCode(); 
- 	    UMTX_CHECK(NULL, (UBool)(ns == NULL), getCache);
- 	    if (getCache) {
-     	    umtx_lock(NULL); 
-     	    ns = (NumberingSystem *)uhash_iget(cache, hashKey); 
-     	    if (ns == NULL) { 
-     	        ns = NumberingSystem::createInstance(desiredLocale,status); 
-     	        uhash_iput(cache, hashKey, (void*)ns, &status); 
-     	    } 
-     	    umtx_unlock(NULL);
- 	    }
- 	} 
- 	else { 
- 	    ns = NumberingSystem::createInstance(desiredLocale,status); 
- 	} 
- 	
+                umtx_lock(NULL); 
+                h = NumberingSystem_cache; 
+                if (h == NULL) { 
+                    NumberingSystem_cache = h = cache; 
+                    cache = NULL; 
+                    ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, NSCache_cleanup); 
+                } 
+                umtx_unlock(NULL); 
+            }
+
+            if(cache != NULL) { 
+              delete cache; 
+            } 
+            cache = h; 
+        } 
+    } 
+     
+    // Get cached numbering system 
+    if (cache != NULL) { 
+        hashKey = desiredLocale.hashCode(); 
+        UMTX_CHECK(NULL, (UBool)(ns == NULL), getCache);
+        if (getCache) {
+            umtx_lock(NULL); 
+            ns = (NumberingSystem *)uhash_iget(cache, hashKey); 
+            if (ns == NULL) { 
+                ns = NumberingSystem::createInstance(desiredLocale,status); 
+                uhash_iput(cache, hashKey, (void*)ns, &status); 
+            } 
+            umtx_unlock(NULL);
+        }
+    } 
+    else { 
+        ns = NumberingSystem::createInstance(desiredLocale,status); 
+    } 
+    
     // check results of getting a numbering system 
- 	if ((ns == NULL) || (U_FAILURE(status))) { 
+    if ((ns == NULL) || (U_FAILURE(status))) { 
         goto cleanup;
     }
 
