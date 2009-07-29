@@ -4047,7 +4047,7 @@ UnicodeString::extract(int32_t start,
 
 {
   // This dstSize value will be checked explicitly
-  return extract(start, _length, dst, dst!=0 ? 0xffffffff : 0, codepage);
+  return extract(start, _length, dst, dst!=0 ? ((dst >= ((size_t)-1) - UINT32_MAX) ? (((char*)UINT32_MAX) - dst) : UINT32_MAX) : 0, codepage);
 }
 
 #endif
