@@ -903,7 +903,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     UResourceBundle *numberPatterns = ures_getByKey(resource, DecimalFormat::fgNumberPatterns, NULL, &status);
     NumberingSystem *ns = NULL;
     UBool deleteSymbols = TRUE;
-    UHashtable * cache; 
+    UHashtable * cache = NULL; 
     int32_t hashKey; 
     UBool getCache;
 
@@ -978,7 +978,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             uhash_setValueDeleter(cache, deleteNumberingSystem);
          
             // set final NumberingSystem_cache value 
-            UHashtable* h; 
+            UHashtable* h = NULL; 
 
             UMTX_CHECK(NULL, (UBool)(h != NumberingSystem_cache), getCache);
             if (getCache) {
@@ -1002,16 +1002,14 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     // Get cached numbering system 
     if (cache != NULL) { 
         hashKey = desiredLocale.hashCode(); 
-        UMTX_CHECK(NULL, (UBool)(ns == NULL), getCache);
-        if (getCache) {
-            umtx_lock(NULL); 
-            ns = (NumberingSystem *)uhash_iget(cache, hashKey); 
-            if (ns == NULL) { 
-                ns = NumberingSystem::createInstance(desiredLocale,status); 
-                uhash_iput(cache, hashKey, (void*)ns, &status); 
-            } 
-            umtx_unlock(NULL);
-        }
+        
+        umtx_lock(NULL); 
+        ns = (NumberingSystem *)uhash_iget(cache, hashKey); 
+        if (ns == NULL) { 
+            ns = NumberingSystem::createInstance(desiredLocale,status); 
+            uhash_iput(cache, hashKey, (void*)ns, &status); 
+        } 
+        umtx_unlock(NULL);
     } 
     else { 
         ns = NumberingSystem::createInstance(desiredLocale,status); 
