@@ -326,7 +326,7 @@ then
     then
         case $CXX in
             g++|*/g++|*-g++-*|*/*-g++-*)
-                RELEASE_CXXFLAGS=-O
+                RELEASE_CXXFLAGS=-O3
                 ;;
         esac
     fi
