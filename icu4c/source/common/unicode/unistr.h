@@ -4047,7 +4047,8 @@ UnicodeString::extract(int32_t start,
 
 {
   // This dstSize value will be checked explicitly
-  return extract(start, _length, dst, dst!=0 ? ((dst >= ((size_t)-1) - UINT32_MAX) ? (((char*)UINT32_MAX) - dst) : UINT32_MAX) : 0, codepage);
+  // Ticket #7039: Clip length to the maximum valid length to the end of addressable memory given the starting address
+  return extract(start, _length, dst, dst!=0 ? ((dst >= (char*)((size_t)-1) - UINT32_MAX) ? (((char*)UINT32_MAX) - dst) : UINT32_MAX) : 0, codepage);
 }
 
 #endif
