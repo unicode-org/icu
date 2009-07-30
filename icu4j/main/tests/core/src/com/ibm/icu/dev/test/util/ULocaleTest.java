@@ -3848,4 +3848,19 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
+    
+    /*
+     * Test that if you use any locale without keyword that you will get a NULL
+     * string returned and not throw and exception.
+     */
+    public void Test4735()
+    {
+        try {
+            new ULocale("und").getDisplayKeywordValue("calendar",ULocale.GERMAN);
+            new ULocale("en").getDisplayKeywordValue("calendar",ULocale.GERMAN);
+        } catch (Exception e) {
+            errln("Unexpected exception: " + e.getMessage());
+        }  
+    }
+
 }
