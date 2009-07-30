@@ -342,7 +342,7 @@ typedef unsigned int uint32_t;
 #define U_EXPORT2
 
 /* cygwin needs to export/import data */
-#ifdef U_CYGWIN
+#if defined(U_CYGWIN) && !defined(__GNUC__)
 #define U_IMPORT __declspec(dllimport)
 #else
 #define U_IMPORT 
