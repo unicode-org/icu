@@ -2192,15 +2192,15 @@ public final class ULocale implements Serializable {
      * Utility to fetch locale display data from resource bundle tables.
      */
     private static String getTableString(String tableName, String subtableName, String item, String displayLocaleID) {
-        if (item.length() > 0) {
-            try {
+        try {
+            if (item.length() > 0) {
                 ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
                   getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
                 return getTableString(tableName, subtableName, item, bundle);
-            } catch (Exception e) {
-//              System.out.println("gtsu: " + e.getMessage());
             }
-        }
+        } catch (Exception e) {
+//          System.out.println("gtsu: " + e.getMessage());
+        }        
         return item;
     }
         
