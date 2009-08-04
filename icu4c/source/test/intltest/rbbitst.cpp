@@ -50,16 +50,28 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
 
     switch (index) {
+#if !UCONFIG_NO_FILE_IO
         case 0: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
+#else
+        case 0: name = "skip";
+            break;
+#endif
+
         case 1: name = "TestJapaneseLineBreak";
             if(exec) TestJapaneseLineBreak();                  break;
         case 2: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
+ 
+#if !UCONFIG_NO_FILE_IO
         case 3: name = "TestUnicodeFiles";
             if(exec) TestUnicodeFiles();                       break;
         case 4: name = "TestEmptyString";
             if(exec) TestEmptyString();                        break;
+#else
+        case 3: case 4: name = "skip";
+            break;
+#endif
 
         case 5: name = "TestGetAvailableLocales";
             if(exec) TestGetAvailableLocales();                break;
@@ -67,6 +79,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 6: name = "TestGetDisplayName";
             if(exec) TestGetDisplayName();                     break;
 
+#if !UCONFIG_NO_FILE_IO
         case 7: name = "TestEndBehaviour";
             if(exec) TestEndBehaviour();                       break;
         case 8: name = "TestMixedThaiLineBreak";
@@ -85,29 +98,48 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
              if(exec) TestSentBreaks();                        break;
         case 15: name = "TestExtended";
              if(exec) TestExtended();                          break;
-        case 16: name = "TestMonkey";
+#else
+        case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: name = "skip";
+             break;
+#endif
+
+        case 16:
              if(exec) {
- #if !UCONFIG_NO_REGULAR_EXPRESSIONS
+ #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
+               name = "TestMonkey";
                TestMonkey(params);
  #else
-               logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
+               name = "skip";
  #endif
              }
                                                                break;
+
+#if !UCONFIG_NO_FILE_IO
         case 17: name = "TestBug3818";
             if(exec) TestBug3818();                            break;
         case 18: name = "TestJapaneseWordBreak";
             if(exec) TestJapaneseWordBreak();                  break;
+#else
+        case 17: case 18: name = "skip";
+            break;
+#endif
+
         case 19: name = "TestDebug";
             if(exec) TestDebug();                              break;
         case 20: name = "TestTrieDict";
             if(exec) TestTrieDict();                           break;
+
+#if !UCONFIG_NO_FILE_IO
         case 21: name = "TestBug5775";
             if (exec) TestBug5775();                           break;
         case 22: name = "TestThaiBreaks";
             if (exec) TestThaiBreaks();                        break;
         case 23: name = "TestTailoredBreaks";
             if (exec) TestTailoredBreaks();                    break;
+#else
+        case 21: case 22: case 23: name = "skip";
+            break;
+#endif
 
         default: name = ""; break; //needed to end loop
     }

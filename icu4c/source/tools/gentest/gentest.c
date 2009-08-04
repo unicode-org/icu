@@ -196,6 +196,7 @@ outputJavaStuff(const char* progname, const char *outputDir) {
             fprintf(out, 
                 "           ");
             switch(t) {
+#if !UCONFIG_NO_FORMATTING
             case UDBG_UCalendarDateFields:
             case UDBG_UCalendarMonths:
                 /* Temporary workaround for IS_LEAP_MOTH #6051 */
@@ -204,6 +205,7 @@ outputJavaStuff(const char* progname, const char *outputDir) {
                 } else
                 fprintf(out, "com.ibm.icu.util.Calendar.%s, /* %d */", udbg_enumName((UDebugEnumType)t,i), i);
                 break;
+#endif
             case UDBG_UDebugEnumType:
             default:
                 fprintf(out,"%d, /* %s */", i, udbg_enumName((UDebugEnumType)t,i));

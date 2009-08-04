@@ -1251,8 +1251,12 @@ void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 7: name = "TestRootLabelSeparator"; if(exec) TestRootLabelSeparator(); break;
         case 8: name = "TestCompareReferenceImpl"; if(exec) TestCompareReferenceImpl(); break;
         case 9: name = "TestDataFile"; if(exec) TestDataFile(); break;
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
         case 10: name = "TestRefIDNA"; if(exec) TestRefIDNA(); break;
         case 11: name = "TestIDNAMonkeyTest"; if(exec) TestIDNAMonkeyTest(); break;
+#else
+        case 10: case 11: name = "skip"; break;
+#endif
         case 12: 
             {
                 name = "TestConformanceTestVectors";

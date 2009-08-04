@@ -646,12 +646,16 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
     gTest = this;
     do {
         this->runIndexedTest( index, FALSE, name, par );
-        if (!name || (name[0] == 0))
-            break;
-        if (!testname) {
-            run_this_test = TRUE;
-        }else{
-            run_this_test = (UBool) (strcmp( name, testname ) == 0);
+        if (strcmp(name,"skip") == 0) {
+            run_this_test = FALSE;
+        } else {
+            if (!name || (name[0] == 0))
+                break;
+            if (!testname) {
+                run_this_test = TRUE;
+            }else{
+                run_this_test = (UBool) (strcmp( name, testname ) == 0);
+            }
         }
         if (run_this_test) {
             lastErrorCount = errorCount;

@@ -67,9 +67,15 @@ void
 ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) logln("TestSuite ConversionTest: ");
     switch (index) {
+#if !UCONFIG_NO_FILE_IO
         case 0: name="TestToUnicode"; if (exec) TestToUnicode(); break;
         case 1: name="TestFromUnicode"; if (exec) TestFromUnicode(); break;
         case 2: name="TestGetUnicodeSet"; if (exec) TestGetUnicodeSet(); break;
+#else
+        case 0:
+        case 1:
+        case 2: name="skip"; break;
+#endif
         case 3: name="TestGetUnicodeSet2"; if (exec) TestGetUnicodeSet2(); break;
         default: name=""; break; //needed to end loop
     }

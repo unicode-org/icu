@@ -57,8 +57,13 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 3: name = "API_Pattern";
             if (exec) API_Pattern();
             break;
-        case 4: name = "Extended";
+        case 4:
+#if !UCONFIG_NO_FILE_IO
+            name = "Extended";
             if (exec) Extended();
+#else
+            name = "skip";
+#endif
             break;
         case 5: name = "Errors";
             if (exec) Errors();

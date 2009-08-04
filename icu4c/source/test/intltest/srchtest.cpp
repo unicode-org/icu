@@ -114,7 +114,9 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
     }
 
     switch (index) {
+#if !UCONFIG_NO_FILE_IO
         CASE(0, TestOpenClose)
+#endif
         CASE(1, TestInitialization)
         CASE(2, TestBasic)
         CASE(3, TestNormExact)

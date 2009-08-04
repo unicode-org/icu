@@ -76,7 +76,7 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_TRANSLITERATION
     addUTransTest(root);
 #endif
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION
     addUSpoofTest(root);
 #endif
 

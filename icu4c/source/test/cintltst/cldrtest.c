@@ -1343,11 +1343,13 @@ void addCLDRTest(TestNode** root);
 
 void addCLDRTest(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE(TestLocaleStructure);
+    TESTCASE(TestCurrencyList);
+#endif
     TESTCASE(TestConsistentCountryInfo);
     TESTCASE(VerifyTranslation);
     TESTCASE(TestExemplarSet);
-    TESTCASE(TestCurrencyList);
     TESTCASE(TestLocaleDisplayPattern);
     TESTCASE(TestCoverage);
 }

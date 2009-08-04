@@ -352,7 +352,12 @@ readFile(const char *path, const char *name, int32_t &length, char &type) {
     if(typeEnum<0 || U_FAILURE(errorCode)) {
         fprintf(stderr, "icupkg: not an ICU data file: \"%s\"\n", filename);
         free(data);
+#if !UCONFIG_NO_LEGACY_CONVERSION
         exit(U_INVALID_FORMAT_ERROR);
+#else
+        fprintf(stderr, "U_INVALID_FORMAT_ERROR occurred but UCONFIG_NO_LEGACY_CONVERSION is on so this is expected.\n");
+        exit(0);
+#endif
     }
     type=makeTypeLetter(typeEnum);
 

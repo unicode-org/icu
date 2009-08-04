@@ -88,7 +88,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(14, LotusCollationKoreanTest);
       TESTCLASS(15, StringSearchTest);
       TESTCLASS(16, ContractionTableTest);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
       TESTCLASS(17, DataDrivenCollatorTest);
+#endif
       TESTCLASS(18, UCAConformanceTest);
       TESTCLASS(19, CollationServiceTest);
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation

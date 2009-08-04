@@ -11,7 +11,7 @@
 #include "unicode/bmsearch.h"
 
 
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
 
 
 //#define USE_SAFE_CASTS

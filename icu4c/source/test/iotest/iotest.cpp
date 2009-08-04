@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -184,7 +184,7 @@ uto64(const UChar     *buffer)
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenPrintf(void)
 {
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -352,7 +352,7 @@ U_CDECL_END
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenScanf(void)
 {
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -554,7 +554,7 @@ U_CDECL_END
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenPrintfPrecision(void)
 {
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -683,7 +683,7 @@ static void addAllTests(TestNode** root) {
     addStringTest(root);
     addTranslitTest(root);
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &DataDrivenPrintf, "datadriv/DataDrivenPrintf");
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");

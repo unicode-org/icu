@@ -17,7 +17,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_FILE_IO
 
 #include "unicode/uchar.h"
 #include "unicode/tstdtmod.h"

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -44,7 +44,7 @@ void addCollTest(TestNode** root)
     addCollIterTest(root);
     addAllCollTest(root);
     addMiscCollTest(root);
-#if !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO
     addSearchTest(root);
 #endif
 }

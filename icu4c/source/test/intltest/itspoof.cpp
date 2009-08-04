@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_FILE_IO
 
 #include "itspoof.h"
 #include "unicode/uspoof.h"
