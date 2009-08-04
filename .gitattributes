@@ -1123,6 +1123,8 @@ icu4c/source/test/compat/readme.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/cxxfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/dfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/pfiles.txt svneol=native#text/plain
+icu4c/source/test/intltest/simplethread.cpp -text
+icu4c/source/test/intltest/simplethread.h -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/README -text
