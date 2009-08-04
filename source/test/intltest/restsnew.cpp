@@ -181,11 +181,16 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
 {
     if (exec) logln("TestSuite ResourceBundleTest: ");
     switch (index) {
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     case 0: name = "TestResourceBundles"; if (exec) TestResourceBundles(); break;
     case 1: name = "TestConstruction"; if (exec) TestConstruction(); break;
     case 2: name = "TestIteration"; if (exec) TestIteration(); break;
     case 3: name = "TestOtherAPI";  if(exec) TestOtherAPI(); break;
     case 4: name = "TestNewTypes";  if(exec) TestNewTypes(); break;
+#else
+    case 0: case 1: case 2: case 3: case 4: name = "skip"; break;
+#endif
+
     case 5: name = "TestGetByFallback";  if(exec) TestGetByFallback(); break;
         default: name = ""; break; //needed to end loop
     }

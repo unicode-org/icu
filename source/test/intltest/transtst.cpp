@@ -171,7 +171,9 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(62,TestAnchorMasking);
         TESTCASE(63,TestDisplayName);
         TESTCASE(64,TestSpecialCases);
+#if !UCONFIG_NO_FILE_IO
         TESTCASE(65,TestIncrementalProgress);
+#endif
         TESTCASE(66,TestSurrogateCasing);
         TESTCASE(67,TestFunction);
         TESTCASE(68,TestInvalidBackRef);
@@ -237,16 +239,20 @@ void TransliteratorTest::TestInstantiation() {
         name.truncate(0);
         Transliterator::getDisplayName(id, name);
         if (t == 0) {
-            errln(UnicodeString("FAIL: Couldn't create ") + id +
-                  /*", parse error " + parseError.code +*/
-                  ", line " + parseError.line +
-                  ", offset " + parseError.offset +
-                  ", pre-context " + prettify(parseError.preContext, TRUE) +
-                  ", post-context " +prettify(parseError.postContext,TRUE) +
-                  ", Error: " + u_errorName(status));
-            // When createInstance fails, it deletes the failing
-            // entry from the available ID list.  We detect this
-            // here by looking for a change in countAvailableIDs.
+#if UCONFIG_NO_BREAK_ITERATION
+            // If UCONFIG_NO_BREAK_ITERATION is on, then only Thai should fail.
+            if (id.compare((UnicodeString)"Thai-Latin") != 0)
+#endif
+                errln(UnicodeString("FAIL: Couldn't create ") + id +
+                      /*", parse error " + parseError.code +*/
+                      ", line " + parseError.line +
+                      ", offset " + parseError.offset +
+                      ", pre-context " + prettify(parseError.preContext, TRUE) +
+                      ", post-context " +prettify(parseError.postContext,TRUE) +
+                      ", Error: " + u_errorName(status));
+                // When createInstance fails, it deletes the failing
+                // entry from the available ID list.  We detect this
+                // here by looking for a change in countAvailableIDs.
             int32_t nn = Transliterator::countAvailableIDs();
             if (nn == (n - 1)) {
                 n = nn;
@@ -3566,7 +3572,12 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 _trans(*t, test, rev);
                 Transliterator *inv = t->createInverse(status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: Could not create inverse of " + id);
+#if UCONFIG_NO_BREAK_ITERATION
+                    // If UCONFIG_NO_BREAK_ITERATION is on, then only Thai should fail.
+                    if (id.compare((UnicodeString)"Latin-Thai/") != 0)
+#endif
+                        errln((UnicodeString)"FAIL: Could not create inverse of " + id);
+
                     delete t;
                     delete inv;
                     continue;
@@ -4576,6 +4587,7 @@ void TransliteratorTest::TestHalfwidthFullwidth(void) {
      *              For now, test just confirms that C++ and Java give identical results.
      */
 void TransliteratorTest::TestThai(void) {
+#if !UCONFIG_NO_BREAK_ITERATION
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* tr = Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
@@ -4649,6 +4661,7 @@ void TransliteratorTest::TestThai(void) {
     expect(*tr, xlitText, expectedText);
     
     delete tr;
+#endif
 }
 
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ***************************************************************************/
 /*****************************************************************************
@@ -104,7 +104,9 @@ void addTestConverterFallBack(TestNode** root);
 
 void addTestConverterFallBack(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO
    addTest(root, &TestConverterFallBack, "tsconv/ncnvfbts/TestConverterFallBack");
+#endif
  
 }
 

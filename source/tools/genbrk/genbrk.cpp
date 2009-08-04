@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -74,7 +74,7 @@ void usageAndDie(int retCode) {
 }
 
 
-#if UCONFIG_NO_BREAK_ITERATION
+#if UCONFIG_NO_BREAK_ITERATION || UCONFIG_NO_FILE_IO
 
 /* dummy UDataInfo cf. udata.h */
 static UDataInfo dummyDataInfo = {
@@ -159,13 +159,6 @@ int  main(int argc, char **argv) {
         u_setDataDirectory(options[5].value);
     }
 
-    /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status)) {
-        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
-    }
     status = U_ZERO_ERROR;
 
     /* Combine the directory with the file name */
@@ -176,13 +169,13 @@ int  main(int argc, char **argv) {
         copyright = U_COPYRIGHT_STRING;
     }
 
-#if UCONFIG_NO_BREAK_ITERATION
+#if UCONFIG_NO_BREAK_ITERATION || UCONFIG_NO_FILE_IO
 
     UNewDataMemory *pData;
     char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h", outFileName);
+    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */
@@ -192,6 +185,14 @@ int  main(int argc, char **argv) {
     return (int)status;
 
 #else
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
 
     //
     //  Read in the rule source file

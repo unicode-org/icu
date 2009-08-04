@@ -35,10 +35,12 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     if (exec) logln("TestSuite StringCaseTest: ");
     switch (index) {
         case 0: name = "TestCaseConversion"; if (exec) TestCaseConversion(); break;
-        case 1:
+        case 1: 
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
             name = "TestCasing";
-#if !UCONFIG_NO_BREAK_ITERATION
             if(exec) TestCasing();
+#else
+            name = "skip";
 #endif
             break;
 

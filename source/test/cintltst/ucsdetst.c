@@ -42,8 +42,10 @@ void addUCsdetTest(TestNode** root)
     addTest(root, &TestInputFilter, "ucsdetst/TestInputFilter");
     addTest(root, &TestChaining, "ucsdetst/TestErrorChaining");
     addTest(root, &TestBufferOverflow, "ucsdetst/TestBufferOverflow");
+#if !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestIBM424, "ucsdetst/TestIBM424");
     addTest(root, &TestIBM420, "ucsdetst/TestIBM420");
+#endif
 }
 
 static int32_t preflight(const UChar *src, int32_t length, UConverter *cnv)

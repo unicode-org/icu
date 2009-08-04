@@ -213,7 +213,9 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         TESTCASE(24, TestKeywordVariants);
         TESTCASE(25, TestKeywordVariantParsing);
         TESTCASE(26, TestGetBaseName);
+#if !UCONFIG_NO_FILE_IO
         TESTCASE(27, TestGetLocale);
+#endif
         TESTCASE(28, TestVariantWithOutCountry);
         TESTCASE(29, TestCanonicalization);
         TESTCASE(30, TestCurrencyByDate);

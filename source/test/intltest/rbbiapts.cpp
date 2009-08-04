@@ -1112,20 +1112,28 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
     switch (index) {
      //   case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
+#if !UCONFIG_NO_FILE_IO
         case  0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
         case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
         case  4: name = "TestIteration"; if (exec) TestIteration(); break;
+#else
+        case  0: case  1: case  2: case  3: case  4: name = "skip"; break;
+#endif
         case  5: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  6: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case  7: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
-        case  8: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
-        case  9: name = "TestBug2190"; if (exec) TestBug2190(); break;
-        case 10: name = "TestRegistration"; if (exec) TestRegistration(); break;
-        case 11: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+        case  7: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
+        case  8: name = "TestBug2190"; if (exec) TestBug2190(); break;
+#if !UCONFIG_NO_FILE_IO
+        case  9: name = "TestRegistration"; if (exec) TestRegistration(); break;
+        case 10: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+        case 11: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
         case 12: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
         case 13: name = "TestCreateFromRBBIData"; if (exec) TestCreateFromRBBIData(); break;
+#else
+        case  9: case 10: case 11: case 12: case 13: name = "skip"; break;
+#endif
 
         default: name = ""; break; // needed to end loop
     }

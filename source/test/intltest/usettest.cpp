@@ -1215,9 +1215,11 @@ void UnicodeSetTest::TestCloseOver() {
 
         CASE, "[{\\u1f7c\\u03b9}]", "[\\u1ff2{\\u1f7c\\u03b9}]", // last in sorted table
 
+#if !UCONFIG_NO_FILE_IO
         CASE_MAPPINGS,
         "[aq\\u00DF{Bc}{bC}{Fi}]",
         "[aAqQ\\u00DF{ss}{Ss}{SS}{Bc}{BC}{bC}{bc}{FI}{Fi}{fi}]",
+#endif
 
         CASE_MAPPINGS,
         "[\\u01F1]", // 'DZ'

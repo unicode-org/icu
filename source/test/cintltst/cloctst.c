@@ -206,7 +206,9 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayNames);
     TESTCASE(TestGetAvailableLocales);
     TESTCASE(TestDataDirectory);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE(TestISOFunctions);
+#endif
     TESTCASE(TestISO3Fallback);
     TESTCASE(TestUninstalledISO3Names);
     TESTCASE(TestSimpleDisplayNames);
@@ -219,7 +221,9 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayKeywords);
     TESTCASE(TestDisplayKeywordValues);
     TESTCASE(TestGetBaseName);
+#if !UCONFIG_NO_FILE_IO
     TESTCASE(TestGetLocale);
+#endif
     TESTCASE(TestDisplayNameWarning);
     TESTCASE(TestNonexistentLanguageExemplars);
     TESTCASE(TestLocDataErrorCodeChaining);

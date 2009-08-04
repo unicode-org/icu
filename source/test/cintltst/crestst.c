@@ -93,15 +93,18 @@ void addResourceBundleTest(TestNode** root);
 
 void addResourceBundleTest(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
     addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundles");
     addTest(root, &TestTable32, "tsutil/crestst/TestTable32");
-    addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
-    addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
     addTest(root, &TestGetSize, "tsutil/crestst/TestGetSize");
     addTest(root, &TestGetLocaleByType, "tsutil/crestst/TestGetLocaleByType");
+#endif
+    addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
+    addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
+
 }
 
 

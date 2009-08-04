@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -1393,7 +1393,11 @@ main(int argc, char **argv)
 
     goto normal_exit;
 error_exit:
+#if !UCONFIG_NO_LEGACY_CONVERSION
     ret = 1;
+#else 
+    fprintf(stderr, "uconv error: UCONFIG_NO_LEGACY_CONVERSION is on. See uconfig.h\n");
+#endif
 normal_exit:
 
     if (outfile != stdout) {
