@@ -1833,6 +1833,7 @@ IntlTestRBNF::TestAllLocales()
                     + "ERROR could not instantiate -> " + u_errorName(status));
                 continue;
             }
+#if !UCONFIG_NO_COLLATION
             for (unsigned int numidx = 0; numidx < sizeof(numbers)/sizeof(double); numidx++) {
                 double n = numbers[numidx];
                 UnicodeString str;
@@ -1876,6 +1877,7 @@ IntlTestRBNF::TestAllLocales()
                     }
                 }
             }
+#endif
             delete f;
         }
     }

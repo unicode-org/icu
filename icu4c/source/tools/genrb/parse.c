@@ -712,8 +712,8 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
         }
         else if (uprv_strcmp(subtag, "Sequence") == 0)
         {
-#if UCONFIG_NO_COLLATION
-            warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION, see uconfig.h");
+#if UCONFIG_NO_COLLATION || UCONFIG_NO_FILE_IO
+            warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION and/or UCONFIG_NO_FILE_IO, see uconfig.h");
 #else
             if(gMakeBinaryCollation) {
                 UErrorCode intStatus = U_ZERO_ERROR;

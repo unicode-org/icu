@@ -76,7 +76,7 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
        case 5: name = "DetectionTest";
             if (exec) DetectionTest();
             break;
-
+#if !UCONFIG_NO_LEGACY_CONVERSION
        case 6: name = "IBM424Test";
             if (exec) IBM424Test();
             break;
@@ -84,7 +84,10 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
        case 7: name = "IBM420Test";
             if (exec) IBM420Test();
             break;
-
+#else
+       case 6:
+       case 7: name = "skip"; break;
+#endif
        case 8: name = "Ticket6394Test";
             if (exec) Ticket6394Test();
             break;

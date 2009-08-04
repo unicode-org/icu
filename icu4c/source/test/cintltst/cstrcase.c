@@ -995,14 +995,14 @@ void addCaseTest(TestNode** root) {
     /* cstrcase.c functions, declared in cucdtst.h */
     addTest(root, &TestCaseLower, "tsutil/cstrcase/TestCaseLower");
     addTest(root, &TestCaseUpper, "tsutil/cstrcase/TestCaseUpper");
-#if !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO
     addTest(root, &TestCaseTitle, "tsutil/cstrcase/TestCaseTitle");
     addTest(root, &TestCaseDutchTitle, "tsutil/cstrcase/TestCaseDutchTitle");
 #endif
     addTest(root, &TestCaseFolding, "tsutil/cstrcase/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/cstrcase/TestCaseCompare");
     addTest(root, &TestUCaseMap, "tsutil/cstrcase/TestUCaseMap");
-#if !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO
     addTest(root, &TestUCaseMapToTitle, "tsutil/cstrcase/TestUCaseMapToTitle");
 #endif
 }

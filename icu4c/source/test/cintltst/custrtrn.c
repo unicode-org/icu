@@ -53,7 +53,9 @@ addUCharTransformTest(TestNode** root)
    addTest(root, &Test_FromUTF8Lenient, "custrtrn/Test_FromUTF8Lenient");
    addTest(root, &Test_UChar_WCHART_API,  "custrtrn/Test_UChar_WCHART_API");
    addTest(root, &Test_widestrs,  "custrtrn/Test_widestrs");
+#if !UCONFIG_NO_FILE_IO
    addTest(root, &Test_WCHART_LongString, "custrtrn/Test_WCHART_LongString");
+#endif
 }
 
 static const UChar32 src32[]={

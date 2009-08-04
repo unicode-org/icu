@@ -47,6 +47,7 @@ UStringPrepProfileType getTypeFromProfileName(const char* profileName);
 void 
 addUStringPrepTest(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &Test_nfs4_cs_prep_data,    "spreptst/Test_nfs4_cs_prep_data");
    addTest(root, &Test_nfs4_cis_prep_data,   "spreptst/Test_nfs4_cis_prep_data");
    addTest(root, &Test_nfs4_mixed_prep_data, "spreptst/Test_nfs4_mixed_prep_data");
@@ -54,6 +55,7 @@ addUStringPrepTest(TestNode** root)
    addTest(root, &Test_nfs4_cis_prep,        "spreptst/Test_nfs4_cis_prep");
    addTest(root, &Test_nfs4_mixed_prep,      "spreptst/Test_nfs4_mixed_prep");
    addTest(root, &TestBEAMWarning,           "spreptst/TestBEAMWarning");
+#endif
    addTest(root, &TestCoverage,              "spreptst/TestCoverage");
    addTest(root, &TestStringPrepProfiles,              "spreptst/TestStringPrepProfiles");
 }

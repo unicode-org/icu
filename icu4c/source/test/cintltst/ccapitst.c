@@ -137,14 +137,18 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestCCSID,                   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,                    "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,                   "tsconv/ccapitst/TestJ1968");
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestLMBCSMaxChar,            "tsconv/ccapitst/TestLMBCSMaxChar");
+#endif
     addTest(root, &TestEBCDICSwapLFNL,          "tsconv/ccapitst/TestEBCDICSwapLFNL");
     addTest(root, &TestConvertEx,               "tsconv/ccapitst/TestConvertEx");
     addTest(root, &TestConvertExFromUTF8,       "tsconv/ccapitst/TestConvertExFromUTF8");
     addTest(root, &TestConvertAlgorithmic,      "tsconv/ccapitst/TestConvertAlgorithmic");
     addTest(root, &TestDefaultConverterError,   "tsconv/ccapitst/TestDefaultConverterError");
+#if !UCONFIG_NO_FILE_IO
     addTest(root, &TestToUCountPending,         "tsconv/ccapitst/TestToUCountPending");
     addTest(root, &TestFromUCountPending,       "tsconv/ccapitst/TestFromUCountPending");
+#endif
     addTest(root, &TestDefaultName,             "tsconv/ccapitst/TestDefaultName");
     addTest(root, &TestCompareNames,            "tsconv/ccapitst/TestCompareNames");
     addTest(root, &TestSubstString,             "tsconv/ccapitst/TestSubstString");

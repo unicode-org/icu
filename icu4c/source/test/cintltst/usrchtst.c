@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO
 
 #include "unicode/usearch.h"
 #include "unicode/ustring.h"

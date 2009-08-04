@@ -189,13 +189,10 @@ static void TestCLDRVersion(void);
 void addNEWResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestErrorCodes,            "tsutil/creststn/TestErrorCodes");
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION   
     addTest(root, &TestEmptyBundle,           "tsutil/creststn/TestEmptyBundle");
     addTest(root, &TestConstruction1,         "tsutil/creststn/TestConstruction1");
     addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundles");
-    addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
-    addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
-    addTest(root, &TestGetVersionColl,        "tsutil/creststn/TestGetVersionColl");
-    addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
     addTest(root, &TestNewTypes,              "tsutil/creststn/TestNewTypes");
     addTest(root, &TestEmptyTypes,            "tsutil/creststn/TestEmptyTypes");
     addTest(root, &TestBinaryCollationData,   "tsutil/creststn/TestBinaryCollationData");
@@ -204,15 +201,20 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestDecodedBundle,         "tsutil/creststn/TestDecodedBundle");
     addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
     addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
+    addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath");
+    addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
+    addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");
+    addTest(root, &TestGetUTF8String,         "tsutil/creststn/TestGetUTF8String");
+    addTest(root, &TestCLDRVersion,           "tsutil/creststn/TestCLDRVersion");
+#endif
+    addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
+    addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
+    addTest(root, &TestGetVersionColl,        "tsutil/creststn/TestGetVersionColl");
+    addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
     addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
-    addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath"); 
-    addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
-    addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");    
     addTest(root, &TestStackReuse,            "tsutil/creststn/TestStackReuse");
-    addTest(root, &TestGetUTF8String,         "tsutil/creststn/TestGetUTF8String");
-    addTest(root, &TestCLDRVersion,           "tsutil/creststn/TestCLDRVersion");
 }
 
 

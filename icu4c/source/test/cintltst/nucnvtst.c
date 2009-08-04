@@ -227,8 +227,10 @@ static void TestOutBufSizes(void)
 
 void addTestNewConvert(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO
    addTest(root, &TestInBufSizes, "tsconv/nucnvtst/TestInBufSizes");
    addTest(root, &TestOutBufSizes, "tsconv/nucnvtst/TestOutBufSizes");
+#endif
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
    addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
@@ -253,7 +255,9 @@ void addTestNewConvert(TestNode** root)
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestSBCS, "tsconv/nucnvtst/TestSBCS");
+#if !UCONFIG_NO_FILE_IO
    addTest(root, &TestDBCS, "tsconv/nucnvtst/TestDBCS");
+#endif
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
@@ -290,7 +294,7 @@ void addTestNewConvert(TestNode** root)
 #endif
 
 
-#if !UCONFIG_NO_LEGACY_CONVERSION
+#if !UCONFIG_NO_LEGACY_CONVERSION && !UCONFIG_NO_FILE_IO
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
 #endif
 

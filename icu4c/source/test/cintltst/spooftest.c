@@ -18,7 +18,7 @@
 **/
 
 #include "unicode/utypes.h"
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -69,7 +69,9 @@ void addUSpoofTest(TestNode** root);
 
 void addUSpoofTest(TestNode** root)
 {
+#if !UCONFIG_NO_FILE_IO
     addTest(root, &TestUSpoofCAPI, "uspoof/TestUSpoofCAPI");
+#endif
 }
 
 /*

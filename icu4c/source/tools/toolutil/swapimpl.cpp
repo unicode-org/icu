@@ -630,9 +630,9 @@ static const struct {
 #endif
     { { 0x70, 0x6e, 0x61, 0x6d }, upname_swap },        /* dataFormat="pnam" */
     { { 0x75, 0x6e, 0x61, 0x6d }, uchar_swapNames },    /* dataFormat="unam" */
-
+#if !UCONFIG_NO_NORMALIZATION
     { { 0x43, 0x66, 0x75, 0x20 }, uspoof_swap },         /* dataFormat="Cfu " */
-
+#endif
     { { 0x54, 0x65, 0x73, 0x74 }, test_swap }            /* dataFormat="Test" */
 };
 

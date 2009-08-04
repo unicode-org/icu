@@ -74,7 +74,7 @@ void usageAndDie(int retCode) {
 }
 
 
-#if UCONFIG_NO_REGULAR_EXPRESSIONS
+#if UCONFIG_NO_REGULAR_EXPRESSIONS || UCONFIG_NO_NORMALIZATION || UCONFIG_NO_FILE_IO
 
 /* dummy UDataInfo cf. udata.h */
 static UDataInfo dummyDataInfo = {
@@ -164,13 +164,6 @@ int  main(int argc, char **argv) {
         u_setDataDirectory(options[6].value);
     }
 
-    /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status)) {
-        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
-    }
     status = U_ZERO_ERROR;
 
     /* Combine the directory with the file name */
@@ -181,7 +174,7 @@ int  main(int argc, char **argv) {
         copyright = U_COPYRIGHT_STRING;
     }
 
-#if UCONFIG_NO_REGULAR_EXPRESSIONS
+#if UCONFIG_NO_REGULAR_EXPRESSIONS || UCONFIG_NO_NORMALIZATION || UCONFIG_NO_FILE_IO
     // spoof detection data file parsing is dependent on regular expressions.
     // TODO: have the tool return an error status.  Requires fixing the ICU data build
     //       so that it doesn't abort entirely on that error.
@@ -190,7 +183,7 @@ int  main(int argc, char **argv) {
     char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "gencfu writes dummy %s because of UCONFIG_NO_REGULAR_EXPRESSIONS, see uconfig.h", outFileName);
+    sprintf(msg, "gencfu writes dummy %s because of UCONFIG_NO_REGULAR_EXPRESSIONS and/or UCONFIG_NO_NORMALIZATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */
@@ -200,6 +193,14 @@ int  main(int argc, char **argv) {
     return (int)status;
 
 #else
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
 
     //  Read in the confusables source file
 

@@ -143,7 +143,7 @@ const char *SSearchTest::getPath(char buffer[2048], const char *filename) {
 
 void SSearchTest::searchTest()
 {
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
     UErrorCode status = U_ZERO_ERROR;
     char path[PATH_BUFFER_SIZE];
     const char *testFilePath = getPath(path, "ssearch.xml");

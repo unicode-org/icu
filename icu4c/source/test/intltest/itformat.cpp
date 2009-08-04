@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -112,8 +112,10 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(27,AstroTest);
         TESTCLASS(28,CalendarCaseTest);
         TESTCLASS(29,TimeZoneRuleTest);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
         TESTCLASS(30,DataDrivenCalendarTest);
         TESTCLASS(31,DataDrivenFormatTest);
+#endif
         TESTCLASS(32,IntlTestDateTimePatternGeneratorAPI);
         TESTCLASS(33,TimeZoneOffsetLocalTest);
         TESTCLASS(34,TimeZoneFormatTest);
