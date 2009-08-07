@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2003, International Business Machines Corporation
+*   Copyright (c) 2002-2009, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -75,9 +75,11 @@ class FunctionReplacer implements UnicodeReplacer {
      * Union the set of all characters that may output by this object
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
+     * @return 
      */
-    public void addReplacementSetTo(UnicodeSet toUnionTo) {
+    public FunctionReplacer addReplacementSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(translit.getTargetSet());
+        return this;
     }
 }
 

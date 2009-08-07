@@ -1836,12 +1836,14 @@ public final class Normalizer implements Cloneable {
     /**
      * Reset the index to the beginning of the text.
      * This is equivalent to setIndexOnly(startIndex)).
+     * @return 
      * @stable ICU 2.8
      */
-    public void reset() {
+    public Normalizer reset() {
         text.setIndex(0);
         currentIndex=nextIndex=0;
         clearBuffer();
+        return this;
     }
     
     /**
@@ -1851,12 +1853,14 @@ public final class Normalizer implements Cloneable {
      * specified here.
      *
      * @param index the desired index in the input text.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setIndexOnly(int index) {
+    public Normalizer setIndexOnly(int index) {
         text.setIndex(index);
         currentIndex=nextIndex=index; // validates index
         clearBuffer();
+        return this;
     }
         
     /**
@@ -2005,12 +2009,14 @@ public final class Normalizer implements Cloneable {
      *  <li>{@link #NONE}   - Do nothing but return characters
      *                        from the underlying input text.
      * </ul>
+     * @return 
      *
      * @see #getMode
      * @stable ICU 2.8
      */
-    public void setMode(Mode newMode) {
+    public Normalizer setMode(Mode newMode) {
         mode = newMode;
+        return this;
     }
     /**
      * Return the basic operation performed by this <tt>Normalizer</tt>
@@ -2035,16 +2041,18 @@ public final class Normalizer implements Cloneable {
      * @param   option  the option whose value is to be set.
      * @param   value   the new setting for the option.  Use <tt>true</tt> to
      *                  turn the option on and <tt>false</tt> to turn it off.
+     * @return 
      *
      * @see #getOption
      * @stable ICU 2.6
      */
-    public void setOption(int option,boolean value) {
+    public Normalizer setOption(int option,boolean value) {
         if (value) {
             options |= option;
         } else {
             options &= (~option);
         }
+        return this;
     }
         
     /**
@@ -2096,80 +2104,85 @@ public final class Normalizer implements Cloneable {
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(StringBuffer newText) {
+    public Normalizer setText(StringBuffer newText) {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
-        reset();
+        return reset();
     }
         
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(char[] newText) {
+    public Normalizer setText(char[] newText) {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
-        reset();
+        return reset();
     }
     
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(String newText) {
+    public Normalizer setText(String newText) {
             
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
-        reset();
+        return reset();
     }
     
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(CharacterIterator newText) {
+    public Normalizer setText(CharacterIterator newText) {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
-        reset();
+        return reset();
     }
     
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the string.
      * @param newText   The new string to be normalized.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(UCharacterIterator newText) { 
+    public Normalizer setText(UCharacterIterator newText) { 
         try{
             UCharacterIterator newIter = (UCharacterIterator)newText.clone();
             if (newIter == null) {
                 throw new IllegalStateException("Could not create a new UCharacterIterator");
             }
             text = newIter;
-            reset();
+            return reset();
         }catch(CloneNotSupportedException e) {
             throw new IllegalStateException("Could not clone the UCharacterIterator");
         }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -103,7 +103,7 @@ public interface Replaceable {
      * @param dstStart the start offset in the destination array.
      * @stable ICU 2.0
      */
-    void getChars(int srcStart, int srcLimit, char dst[], int dstStart);
+    Replaceable getChars(int srcStart, int srcLimit, char dst[], int dstStart);
 
     /**
      * Replaces a substring of this object with the given text.
@@ -123,7 +123,7 @@ public interface Replaceable {
      * to <code>limit - 1</code>
      * @stable ICU 2.0
      */
-    void replace(int start, int limit, String text);
+    Replaceable replace(int start, int limit, String text);
 
     /**
      * Replaces a substring of this object with the given text.
@@ -146,7 +146,7 @@ public interface Replaceable {
      * @param charsLen the number of characters of <code>chars</code>.
      * @stable ICU 2.0
      */
-    void replace(int start, int limit, char[] chars,
+    Replaceable replace(int start, int limit, char[] chars,
                  int charsStart, int charsLen);
     // Note: We use length rather than limit to conform to StringBuffer
     // and System.arraycopy.
@@ -172,7 +172,7 @@ public interface Replaceable {
      * dest >= limit</code>.
      * @stable ICU 2.0
      */
-    void copy(int start, int limit, int dest);
+    Replaceable copy(int start, int limit, int dest);
     
     /**
      * Returns true if this object contains metadata.  If a

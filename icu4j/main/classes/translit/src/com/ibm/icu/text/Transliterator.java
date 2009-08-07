@@ -368,13 +368,15 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Copies the indices of this position from another.
+         * @return 
          * @stable ICU 2.6
          */
-        public void set(Position pos) {
+        public Position set(Position pos) {
             contextStart = pos.contextStart;
             contextLimit = pos.contextLimit;
             start = pos.start;
             limit = pos.limit;
+            return this;
         }
 
         /**
@@ -807,8 +809,9 @@ public abstract class Transliterator implements StringTransform  {
      * incremental processing, as described above, and undo partial
      * transliterations where necessary.  If incremental is FALSE then this
      * parameter is ignored.
+     * @return 
      */
-    private void filteredTransliterate(Replaceable text,
+    private Transliterator filteredTransliterate(Replaceable text,
                                        Position index,
                                        boolean incremental,
                                        boolean rollback) {
@@ -816,7 +819,7 @@ public abstract class Transliterator implements StringTransform  {
         // non-incremental mode.
         if (filter == null && !rollback) {
             handleTransliterate(text, index, incremental);
-            return;
+            return this;
         }
 
         //----------------------------------------------------------------------
@@ -1109,6 +1112,7 @@ public abstract class Transliterator implements StringTransform  {
             System.out.println("filteredTransliterate{"+getID()+"}: OUT=" +
                                UtilityExtensions.formatInput(text, index));
         }
+        return this;
     }
 
     /**
@@ -1120,12 +1124,13 @@ public abstract class Transliterator implements StringTransform  {
      * @param incremental if TRUE, then assume more characters may be inserted
      * at index.limit, and postpone processing to accomodate future incoming
      * characters
+     * @return 
      * @stable ICU 2.0
      */
-    public void filteredTransliterate(Replaceable text,
+    public Transliterator filteredTransliterate(Replaceable text,
                                          Position index,
                                          boolean incremental) {
-        filteredTransliterate(text, index, incremental, false);
+        return filteredTransliterate(text, index, incremental, false);
     }
 
     /**
@@ -1307,10 +1312,12 @@ public abstract class Transliterator implements StringTransform  {
      * <p>Callers must take care if a transliterator is in use by
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setFilter(UnicodeFilter filter) {
+    public Transliterator setFilter(UnicodeFilter filter) {
         this.filter = filter;
+        return this;
     }
 
     /**

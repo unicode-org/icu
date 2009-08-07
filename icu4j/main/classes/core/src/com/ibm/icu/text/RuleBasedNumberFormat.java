@@ -1247,12 +1247,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * it is available on the classpath.  Otherwise this will have no effect.
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
+     * @return 
      * @see RbnfLenientScanner
      * @see RbnfLenientScannerProvider
      * @stable ICU 2.0
      */
-    public void setLenientParseMode(boolean enabled) {
+    public RuleBasedNumberFormat setLenientParseMode(boolean enabled) {
         lenientParse = enabled;
+        return this;
     }
 
     /**
@@ -1271,12 +1273,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * {@link #setLenientParseMode}
      * has no effect.  This is necessary to decouple collation from format code.
      * @param scannerProvider the provider
+     * @return 
      * @see #setLenientParseMode
      * @see #getLenientScannerProvider
      * @draft ICU 4.4
      */
-    public void setLenientScannerProvider(RbnfLenientScannerProvider scannerProvider) {
+    public RuleBasedNumberFormat setLenientScannerProvider(RbnfLenientScannerProvider scannerProvider) {
         this.scannerProvider = scannerProvider;
+        return this;
     }
 
     /**
@@ -1312,10 +1316,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Override the default rule set to use.  If ruleSetName is null, reset
      * to the initial default rule set.
      * @param ruleSetName the name of the rule set, or null to reset the initial default.
+     * @return 
      * @throws IllegalArgumentException if ruleSetName is not the name of a public ruleset.
      * @stable ICU 2.0
      */
-    public void setDefaultRuleSet(String ruleSetName) {
+    public RuleBasedNumberFormat setDefaultRuleSet(String ruleSetName) {
         if (ruleSetName == null) {
             if (publicRuleSetNames.length > 0) {
                 defaultRuleSet = findRuleSet(publicRuleSetNames[0]);
@@ -1329,7 +1334,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                        currentName.equals("%duration")) {
 
                        defaultRuleSet = ruleSets[n];
-                       return;
+                       return this;
                    }
                 }
 
@@ -1346,6 +1351,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         } else {
             defaultRuleSet = findRuleSet(ruleSetName);
         }
+        return this;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -132,7 +132,7 @@ public interface UnicodeMatcher {
      * @param toUnionTo the set into which to union the source characters
      * @stable ICU 2.2
      */
-    public abstract void addMatchSetTo(UnicodeSet toUnionTo);
+    public abstract UnicodeMatcher addMatchSetTo(UnicodeSet toUnionTo);
 }
 
 //eof

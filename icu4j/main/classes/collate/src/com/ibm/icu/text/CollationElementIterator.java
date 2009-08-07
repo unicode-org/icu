@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -219,13 +219,15 @@ public final class CollationElementIterator
      * <p>If the RuleBasedCollator used by this iterator has had its
      * attributes changed, calling reset() will reinitialize the
      * iterator to use the new attributes.</p>
+     * @return 
      *
      * @stable ICU 2.8
      */
-    public void reset()
+    public CollationElementIterator reset()
     {
         m_source_.setToStart();
         updateInternalState();
+        return this;
     }
 
     /**
@@ -452,9 +454,10 @@ public final class CollationElementIterator
      * @param offset the character offset into the original source string to
      *        set. Note that this is not an offset into the corresponding
      *        sequence of collation elements.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setOffset(int offset)
+    public CollationElementIterator setOffset(int offset)
     {
         m_source_.setIndex(offset);
         int ch_int = m_source_.current();
@@ -501,6 +504,7 @@ public final class CollationElementIterator
             // the string again if we are at the end
             m_isForwards_ = true;
         }
+        return this;
     }
 
     /**
@@ -508,13 +512,15 @@ public final class CollationElementIterator
      * to the beginning of the text.</p>
      *
      * @param source the new source string for iteration.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(String source)
+    public CollationElementIterator setText(String source)
     {
         m_srcUtilIter_.setText(source);
         m_source_ = m_srcUtilIter_;
         updateInternalState();
+        return this;
     }
     
     /**
@@ -524,13 +530,15 @@ public final class CollationElementIterator
      * <p>The source iterator's integrity will be preserved since a new copy
      * will be created for use.</p>
      * @param source the new source string iterator for iteration.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(UCharacterIterator source)
+    public CollationElementIterator setText(UCharacterIterator source)
     {
         m_srcUtilIter_.setText(source.getText());
         m_source_ = m_srcUtilIter_;
         updateInternalState(); 
+        return this;
     }
 
     /**
@@ -538,13 +546,15 @@ public final class CollationElementIterator
      * offset to the beginning of the text.
      * </p>
      * @param source the new source string iterator for iteration.
+     * @return 
      * @stable ICU 2.8
      */
-    public void setText(CharacterIterator source)
+    public CollationElementIterator setText(CharacterIterator source)
     {
         m_source_ = new CharacterIteratorWrapper(source);
         m_source_.setToStart();
         updateInternalState();
+        return this;
     }
 
     // public miscellaneous methods -----------------------------------------

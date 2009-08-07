@@ -554,11 +554,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @param dateTimeFormat
      *            message format pattern, where {1} will be replaced by the date
      *            pattern and {0} will be replaced by the time pattern.
+     * @return 
      * @stable ICU 3.6
      */
-    public void setDateTimeFormat(String dateTimeFormat) {
+    public DateTimePatternGenerator setDateTimeFormat(String dateTimeFormat) {
         checkFrozen();
         this.dateTimeFormat = dateTimeFormat;
+        return this;
     }
 
     /**
@@ -580,11 +582,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * "H:mm:ss,SSSS"
      * 
      * @param decimal
+     * @return 
      * @stable ICU 3.6
      */
-    public void setDecimal(String decimal) {
+    public DateTimePatternGenerator setDecimal(String decimal) {
         checkFrozen();
         this.decimal = decimal;
+        return this;
     }
 
     /**
@@ -754,11 +758,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      *            such as ERA
      * @param value
      *            pattern, such as "{0}, {1}"
+     * @return 
      * @stable ICU 3.6
      */
-    public void setAppendItemFormat(int field, String value) {
+    public DateTimePatternGenerator setAppendItemFormat(int field, String value) {
         checkFrozen();
         appendItemFormats[field] = value;
+        return this;
     }
 
     /**
@@ -782,11 +788,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * 
      * @param field
      * @param value
+     * @return 
      * @stable ICU 3.6
      */
-    public void setAppendItemName(int field, String value) {
+    public DateTimePatternGenerator setAppendItemName(int field, String value) {
         checkFrozen();
         appendItemNames[field] = value;
+        return this;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -350,11 +350,12 @@ public final class StringSearch extends SearchIterator
      * to be recalculated, but the iterator's position is unchanged.
      * </p>
      * @param collator to use for this StringSearch
+     * @return 
      * @exception IllegalArgumentException thrown when collator is null
      * @see #getCollator
      * @stable ICU 2.0
      */
-    public void setCollator(RuleBasedCollator collator) 
+    public StringSearch setCollator(RuleBasedCollator collator) 
     {
         if (collator == null) {
             throw new IllegalArgumentException("Collator can not be null");
@@ -367,6 +368,7 @@ public final class StringSearch extends SearchIterator
         m_utilColEIter_.setCollator(m_collator_);
         m_charBreakIter_ = BreakIterator.getCharacterInstance(/*collator.getLocale(ULocale.VALID_LOCALE)*/);
         m_charBreakIter_.setText(targetText);
+        return this;
     }
     
     /**
@@ -378,12 +380,13 @@ public final class StringSearch extends SearchIterator
      * to be recalculated, but the iterator's position is unchanged.
      * </p>
      * @param pattern for searching
+     * @return 
      * @see #getPattern
      * @exception IllegalArgumentException thrown if pattern is null or of
      *               length 0
      * @stable ICU 2.0
      */
-    public void setPattern(String pattern) 
+    public StringSearch setPattern(String pattern) 
     {
         if (pattern == null || pattern.length() <= 0) {
             throw new IllegalArgumentException(
@@ -391,6 +394,7 @@ public final class StringSearch extends SearchIterator
         }
         m_pattern_.targetText = pattern;
         initialize();
+        return this;
     }
     
     /**
@@ -398,18 +402,20 @@ public final class StringSearch extends SearchIterator
      * the start of the text string. This method is useful if you want to 
      * re-use an iterator to search within a different body of text.
      * @param text new text iterator to look for match, 
+     * @return 
      * @exception IllegalArgumentException thrown when text is null or has
      *            0 length
      * @see #getTarget
      * @stable ICU 2.8
      */
-    public void setTarget(CharacterIterator text)
+    public StringSearch setTarget(CharacterIterator text)
     {
         super.setTarget(text);
         m_textBeginOffset_ = targetText.getBeginIndex();
         m_textLimitOffset_ = targetText.getEndIndex();
         m_colEIter_.setText(targetText);
         m_charBreakIter_.setText(targetText);
+        return this;
     }
     
     /**
@@ -427,16 +433,18 @@ public final class StringSearch extends SearchIterator
      * the class documentation.
      * </p>
      * @param position index to start next search from.
+     * @return 
      * @exception IndexOutOfBoundsException thrown if argument position is out
      *            of the target text range.
      * @see #getIndex
      * @stable ICU 2.8
      */
-    public void setIndex(int position)
+    public StringSearch setIndex(int position)
     {
         super.setIndex(position);
         m_matchedIndex_ = DONE;
         m_colEIter_.setExactOffset(position);
+        return this;
     }
     
     /**
@@ -445,10 +453,11 @@ public final class StringSearch extends SearchIterator
      * The default setting for this property is false.
      * </p>
      * @param allowCanonical flag indicator if canonical matches are allowed
+     * @return 
      * @see #isCanonical
      * @stable ICU 2.8
      */
-    public void setCanonical(boolean allowCanonical)
+    public StringSearch setCanonical(boolean allowCanonical)
     {
         m_isCanonicalMatch_ = allowCanonical;
         if (m_isCanonicalMatch_ == true) {
@@ -467,6 +476,7 @@ public final class StringSearch extends SearchIterator
                                             m_canonicalSuffixAccents_.length());
             }
         }
+        return this;
     }
     
     // public miscellaneous methods -----------------------------------------
@@ -485,9 +495,10 @@ public final class StringSearch extends SearchIterator
      * <p>
      * Canonical match option will be reset to false, ie an exact match.
      * </p>
+     * @return 
      * @stable ICU 2.8
      */
-    public void reset()
+    public StringSearch reset()
     {
         // reset is setting the attributes that are already in string search, 
         // hence all attributes in the collator should be retrieved without any 
@@ -500,6 +511,7 @@ public final class StringSearch extends SearchIterator
         m_colEIter_.setCollator(m_collator_);
         m_colEIter_.reset();
         m_utilColEIter_.setCollator(m_collator_);
+        return this;
     }
 
     // protected methods -----------------------------------------------------

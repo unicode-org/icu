@@ -62,16 +62,18 @@ public final class DateNumberFormat extends NumberFormat {
         minusSign = elems[1];
     }
 
-    public void setMaximumIntegerDigits(int newValue) {
+    public DateNumberFormat setMaximumIntegerDigits(int newValue) {
         maxIntDigits = newValue;
+        return this;
     }
 
     public int getMaximumIntegerDigits() {
         return maxIntDigits;
     }
 
-    public void setMinimumIntegerDigits(int newValue) {
+    public DateNumberFormat setMinimumIntegerDigits(int newValue) {
         minIntDigits = newValue;
+        return this;
     }
 
     public int getMinimumIntegerDigits() {

@@ -793,9 +793,10 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Set the date time interval patterns. 
      * @param newItvPattern   the given interval patterns to copy.
+     * @return 
      * @stable ICU 4.0
      */
-    public void setDateIntervalInfo(DateIntervalInfo newItvPattern)
+    public DateIntervalFormat setDateIntervalInfo(DateIntervalInfo newItvPattern)
     {
         // clone it. If it is frozen, the clone returns itself.
         // Otherwise, clone returns a copy
@@ -805,6 +806,7 @@ public class DateIntervalFormat extends UFormat {
         if ( fDateFormat != null ) {
             initializePattern();
         }
+        return this;
     }
 
 

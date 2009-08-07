@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -432,12 +432,13 @@ public class HebrewCalendar extends Calendar {
      * <p>
      * @param field     the time field.
      * @param amount    the amount to add to the field.
+     * @return 
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
      * @stable ICU 2.8
      */
-    public void add(int field, int amount)
+    public HebrewCalendar add(int field, int amount)
     {
         switch (field) {
         case MONTH: 
@@ -489,6 +490,7 @@ public class HebrewCalendar extends Calendar {
             super.add(field, amount);
             break;
         }
+        return this;
     }
 
     /**
@@ -518,12 +520,13 @@ public class HebrewCalendar extends Calendar {
      * <p>
      * @param field     the time field.
      * @param amount    the amount by which the field should be rolled.
+     * @return 
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
      * @stable ICU 2.8
      */
-    public void roll(int field, int amount)
+    public HebrewCalendar roll(int field, int amount)
     {
         switch (field) {
         case MONTH:
@@ -547,11 +550,12 @@ public class HebrewCalendar extends Calendar {
                 }
                 set(MONTH, (newMonth + 13) % 13);
                 pinField(DAY_OF_MONTH);
-                return;
+                return this;
             }
         default:
             super.roll(field, amount);
         }
+        return this;
     }
 
     //-------------------------------------------------------------------------

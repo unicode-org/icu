@@ -82,20 +82,24 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * @stable ICU 3.8
      */
-    public void getOffset(long date, boolean local, int[] offsets) {
+    public VTimeZone getOffset(long date, boolean local, int[] offsets) {
         tz.getOffset(date, local, offsets);
+        return this;
     }
 
     /**
      * {@inheritDoc}
+     * @return 
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void getOffsetFromLocal(long date,
+    public VTimeZone getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         tz.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+        return this;
     }
 
     /**
@@ -116,10 +120,12 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * @stable ICU 3.8
      */
-    public void setRawOffset(int offsetMillis) {
+    public VTimeZone setRawOffset(int offsetMillis) {
         tz.setRawOffset(offsetMillis);
+        return this;
     }
 
     /**

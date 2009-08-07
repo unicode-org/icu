@@ -545,10 +545,11 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * Get time zone offsets from local wall time.
+     * @return 
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void getOffsetFromLocal(long date,
+    public BasicTimeZone getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         throw new IllegalStateException("Not implemented");
     }

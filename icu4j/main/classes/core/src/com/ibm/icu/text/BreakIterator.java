@@ -409,7 +409,7 @@ public abstract class BreakIterator implements Cloneable
      * position is ignored, but its other state is significant).
      * @stable ICU 2.0
      */
-    public abstract void setText(CharacterIterator newText);
+    public abstract BreakIterator setText(CharacterIterator newText);
 
     /** @stable ICU 2.4 */
     public static final int KIND_CHARACTER = 0;

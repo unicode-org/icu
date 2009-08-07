@@ -35,21 +35,24 @@ public class RangeDateRule implements DateRule {
 //    }
 
     /**
+     * @return 
      * @draft ICU 2.8
      * @provisional This API might change or be removed in a future release.
      */
-    public void add(DateRule rule) {
-        add(new Date(Long.MIN_VALUE), rule);
+    public RangeDateRule add(DateRule rule) {
+        return add(new Date(Long.MIN_VALUE), rule);
     }
 
     /**
+     * @return 
      * @draft ICU 2.8
      * @provisional This API might change or be removed in a future release.
      */
-    public void add(Date start, DateRule rule) {
+    public RangeDateRule add(Date start, DateRule rule) {
         // TODO: Insert in the right place
         // System.out.println("Add: " + start.toString());
         ranges.addElement(new Range(start, rule));
+        return this;
     }
 
     //-----------------------------------------------------------------------

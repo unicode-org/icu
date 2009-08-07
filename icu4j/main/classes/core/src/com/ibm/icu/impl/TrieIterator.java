@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and   *
+* Copyright (C) 1996-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -129,8 +129,9 @@ public class TrieIterator implements RangeValueIterator
      
     /**
     * Resets the iterator to the beginning of the iteration
+     * @return 
     */
-    public final void reset()
+    public final TrieIterator reset()
     {
         m_currentCodepoint_ = 0;
         m_nextCodepoint_    = 0;
@@ -144,6 +145,7 @@ public class TrieIterator implements RangeValueIterator
         }
         m_nextBlockIndex_ = 0;
         m_nextTrailIndexOffset_ = TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_;
+        return this;
     }
     
     // protected methods ----------------------------------------------

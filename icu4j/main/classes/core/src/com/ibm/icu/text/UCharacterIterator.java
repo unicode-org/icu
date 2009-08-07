@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -265,22 +265,25 @@ public abstract class UCharacterIterator
      *            supplied
      * @stable ICU 2.4
      */
-    public abstract void setIndex(int index);
+    public abstract UCharacterIterator setIndex(int index);
 
     /**
      * Sets the current index to the limit.
      * @stable ICU 2.4
      */
-    public void setToLimit() {
+    public UCharacterIterator setToLimit() {
         setIndex(getLength());
+        return this;
     }
     
     /**
      * Sets the current index to the start.
+     * @return 
      * @stable ICU 2.4
      */
-    public void setToStart() {
+    public UCharacterIterator setToStart() {
         setIndex(0);
+        return this;
     }
 
     /**

@@ -461,11 +461,13 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Sets whether or not numbers should be parsed as integers only.
      * @param value true if this should parse integers only
+     * @return 
      * @see #isParseIntegerOnly
      * @stable ICU 2.0
      */
-    public void setParseIntegerOnly(boolean value) {
+    public NumberFormat setParseIntegerOnly(boolean value) {
         parseIntegerOnly = value;
+        return this;
     }
 
     /**
@@ -484,11 +486,13 @@ public abstract class NumberFormat extends UFormat {
      * When strict parsing is off, leading zeros and all grouping separators are ignored.
      * This is the default behavior.
      * @param value True to enable strict parsing.  Default is false.
+     * @return 
      * @see #isParseStrict
      * @stable ICU 3.6
      */
-    public void setParseStrict(boolean value) {
+    public NumberFormat setParseStrict(boolean value) {
         parseStrict = value;
+        return this;
     }
 
     /**
@@ -1035,10 +1039,12 @@ public abstract class NumberFormat extends UFormat {
      * affects both parsing and formatting.
      * @see #isGroupingUsed
      * @param newValue true to use grouping.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setGroupingUsed(boolean newValue) {
+    public NumberFormat setGroupingUsed(boolean newValue) {
         groupingUsed = newValue;
+        return this;
     }
 
     /**
@@ -1063,13 +1069,15 @@ public abstract class NumberFormat extends UFormat {
      * @param newValue the maximum number of integer digits to be shown; if
      * less than zero, then zero is used.  Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
+     * @return 
      * @see #getMaximumIntegerDigits
      * @stable ICU 2.0
      */
-    public void setMaximumIntegerDigits(int newValue) {
+    public NumberFormat setMaximumIntegerDigits(int newValue) {
         maximumIntegerDigits = Math.max(0,newValue);
         if (minimumIntegerDigits > maximumIntegerDigits)
             minimumIntegerDigits = maximumIntegerDigits;
+        return this;
     }
 
     /**
@@ -1095,13 +1103,15 @@ public abstract class NumberFormat extends UFormat {
      * @param newValue the minimum number of integer digits to be shown; if
      * less than zero, then zero is used. Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
+     * @return 
      * @see #getMinimumIntegerDigits
      * @stable ICU 2.0
      */
-    public void setMinimumIntegerDigits(int newValue) {
+    public NumberFormat setMinimumIntegerDigits(int newValue) {
         minimumIntegerDigits = Math.max(0,newValue);
         if (minimumIntegerDigits > maximumIntegerDigits)
             maximumIntegerDigits = minimumIntegerDigits;
+        return this;
     }
 
     /**
@@ -1127,13 +1137,15 @@ public abstract class NumberFormat extends UFormat {
      * @param newValue the maximum number of fraction digits to be shown; if
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
+     * @return 
      * @see #getMaximumFractionDigits
      * @stable ICU 2.0
      */
-    public void setMaximumFractionDigits(int newValue) {
+    public NumberFormat setMaximumFractionDigits(int newValue) {
         maximumFractionDigits = Math.max(0,newValue);
         if (maximumFractionDigits < minimumFractionDigits)
             minimumFractionDigits = maximumFractionDigits;
+        return this;
     }
 
     /**
@@ -1159,13 +1171,15 @@ public abstract class NumberFormat extends UFormat {
      * @param newValue the minimum number of fraction digits to be shown; if
      * less than zero, then zero is used.  Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
+     * @return 
      * @see #getMinimumFractionDigits
      * @stable ICU 2.0
      */
-    public void setMinimumFractionDigits(int newValue) {
+    public NumberFormat setMinimumFractionDigits(int newValue) {
         minimumFractionDigits = Math.max(0,newValue);
         if (maximumFractionDigits < minimumFractionDigits)
             maximumFractionDigits = minimumFractionDigits;
+        return this;
     }
 
     /**
@@ -1176,10 +1190,12 @@ public abstract class NumberFormat extends UFormat {
      * currency format.
      * @param theCurrency new currency object to use.  May be null for
      * some subclasses.
+     * @return 
      * @stable ICU 2.6
      */
-    public void setCurrency(Currency theCurrency) {
+    public NumberFormat setCurrency(Currency theCurrency) {
         currency = theCurrency;
+        return this;
     }
 
     /**
@@ -1229,10 +1245,11 @@ public abstract class NumberFormat extends UFormat {
      * @param roundingMode A rounding mode, between
      * <code>BigDecimal.ROUND_UP</code> and
      * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @return 
      * @see #getRoundingMode()
      * @stable ICU 4.0
      */
-    public void setRoundingMode(int roundingMode) {
+    public NumberFormat setRoundingMode(int roundingMode) {
         throw new UnsupportedOperationException("setRoundingMode must be implemented by the subclass implementation.");
     }
 
