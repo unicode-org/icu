@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2008, International Business Machines Corporation and   *
+* Copyright (C) 2004-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -77,11 +77,13 @@ public class UResourceBundleIterator{
     
     /**
      * Resets the internal context of a resource so that iteration starts from the first element.
+     * @return 
      * @stable ICU 3.8
      */
-    public void reset(){
+    public UResourceBundleIterator reset(){
         //reset the internal context   
         index = 0;
+        return this;
     }
     
     /**

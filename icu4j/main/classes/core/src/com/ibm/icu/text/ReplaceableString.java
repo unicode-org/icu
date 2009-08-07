@@ -123,12 +123,14 @@ public class ReplaceableString implements Replaceable {
      * <code>start <= limit <= length()</code>.
      * @param dst the destination array.
      * @param dstStart the start offset in the destination array.
+     * @return 
      * @stable ICU 2.0
      */
-    public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
+    public ReplaceableString getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
         if (srcStart != srcLimit) {
             buf.getChars(srcStart, srcLimit, dst, dstStart);
         }
+        return this;
     }
 
     /**
@@ -140,10 +142,12 @@ public class ReplaceableString implements Replaceable {
      * <= length()</code>.
      * @param text new text to replace characters <code>start</code> to
      * <code>limit - 1</code>
+     * @return 
      * @stable ICU 2.0
      */
-    public void replace(int start, int limit, String text) {
+    public ReplaceableString replace(int start, int limit, String text) {
         buf.replace(start, limit, text);
+        return this;
     }
 
     /**
@@ -157,12 +161,14 @@ public class ReplaceableString implements Replaceable {
      * @param charsStart the beginning index into <code>chars</code>,
      * inclusive; <code>0 <= start <= limit</code>.
      * @param charsLen the number of characters of <code>chars</code>.
+     * @return 
      * @stable ICU 2.0
      */
-    public void replace(int start, int limit, char[] chars,
+    public ReplaceableString replace(int start, int limit, char[] chars,
                         int charsStart, int charsLen) {
         buf.delete(start, limit);
         buf.insert(start, chars, charsStart, charsLen);
+        return this;
     }
 
     /**
@@ -178,15 +184,17 @@ public class ReplaceableString implements Replaceable {
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
+     * @return 
      * @stable ICU 2.0
      */
-    public void copy(int start, int limit, int dest) {
+    public ReplaceableString copy(int start, int limit, int dest) {
         if (start == limit && start >= 0 && start <= buf.length()) {
-            return;
+            return this;
         }
         char[] text = new char[limit - start];
         getChars(start, limit, text, 0);
         replace(dest, dest, text, 0, limit - start);
+        return this;
     }
     
     /**

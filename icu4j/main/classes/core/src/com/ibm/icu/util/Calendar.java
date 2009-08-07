@@ -2045,9 +2045,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Sets this Calendar's current time from the given long value.
      * @param millis the new time in UTC milliseconds from the epoch.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setTimeInMillis( long millis ) {
+    public Calendar setTimeInMillis( long millis ) {
         if (millis > MAX_MILLIS) {
             millis = MAX_MILLIS;
         } else if (millis < MIN_MILLIS) {
@@ -2056,6 +2057,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         time = millis;
         areFieldsSet = areAllFieldsSet = false;
         isTimeSet = areFieldsVirtuallySet = true;
+        return this;
     }
 
     /**
@@ -2654,6 +2656,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * <p>
      * @param field     the calendar field to roll.
      * @param amount    the amount by which the field should be rolled.
+     * @return 
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
@@ -2661,10 +2664,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #add
      * @stable ICU 2.0
      */
-    public void roll(int field, int amount) {
+    public Calendar roll(int field, int amount) {
 
         if (amount == 0) {
-            return; // Nothing to do
+            return this; // Nothing to do
         }
 
         complete();
@@ -2693,7 +2696,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 value += min;
 
                 set(field, value);
-                return;
+                return this;
             }
 
         case HOUR:
@@ -2715,7 +2718,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                     newHour += max + 1;
                 }
                 setTimeInMillis(start + ONE_HOUR * (newHour - oldHour));
-                return;
+                return this;
             }
 
         case MONTH:
@@ -2736,7 +2739,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // into the next month; e.g., we don't want jan31 + 1 mo -> feb31 ->
                 // mar3.
                 pinField(DAY_OF_MONTH);
-                return;
+                return this;
             }
 
         case YEAR:
@@ -2746,7 +2749,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             set(field, internalGet(field) + amount);
             pinField(MONTH);
             pinField(DAY_OF_MONTH);
-            return;
+            return this;
 
         case WEEK_OF_MONTH:
             {
@@ -2827,7 +2830,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // the appropriate fields here so that DAY_OF_MONTH is attended
                 // to.
                 set(DAY_OF_MONTH, day_of_month);
-                return;
+                return this;
             }
         case WEEK_OF_YEAR:
             {
@@ -2884,7 +2887,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // have to be updated as well.
                 set(DAY_OF_YEAR, day_of_year);
                 clear(MONTH);
-                return;
+                return this;
             }
         case DAY_OF_YEAR:
             {
@@ -2896,7 +2899,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 time = (time + delta - min2) % (yearLength*ONE_DAY);
                 if (time < 0) time += yearLength*ONE_DAY;
                 setTimeInMillis(time + min2);
-                return;
+                return this;
             }
         case DAY_OF_WEEK:
         case DOW_LOCAL:
@@ -2914,7 +2917,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 time = (time + delta - min2) % ONE_WEEK;
                 if (time < 0) time += ONE_WEEK;
                 setTimeInMillis(time + min2);
-                return;
+                return this;
             }
         case DAY_OF_WEEK_IN_MONTH:
             {
@@ -2936,11 +2939,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 time = (time + delta - min2) % gap2;
                 if (time < 0) time += gap2;
                 setTimeInMillis(time + min2);
-                return;
+                return this;
             }
         case JULIAN_DAY:
             set(field, internalGet(field) + amount);
-            return;
+            return this;
         default:
             // Other fields cannot be rolled by this method
             throw new IllegalArgumentException("Calendar.roll(" + fieldName(field) +
@@ -2991,16 +2994,17 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * <p>
      * @param field     the time field.
      * @param amount    the amount to add to the field.
+     * @return 
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
      * @see #roll(int, int)
      * @stable ICU 2.0
      */
-    public void add(int field, int amount) {
+    public Calendar add(int field, int amount) {
 
         if (amount == 0) {
-            return;   // Do nothing!
+            return this;   // Do nothing!
         }
 
         // We handle most fields in the same way.  The algorithm is to add
@@ -3030,7 +3034,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case ERA:
             set(field, get(field) + amount);
             pinField(ERA);
-            return;
+            return this;
 
         case YEAR:
         case EXTENDED_YEAR:
@@ -3038,7 +3042,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case MONTH:
             set(field, get(field) + amount);
             pinField(DAY_OF_MONTH);
-            return;
+            return this;
 
         case WEEK_OF_YEAR:
         case WEEK_OF_MONTH:
@@ -3114,6 +3118,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 }
             }
         }
+        return this;
     }
 
     /**
@@ -3753,9 +3758,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Sets the time zone with the given time zone value.
      * @param value the given time zone.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setTimeZone(TimeZone value)
+    public Calendar setTimeZone(TimeZone value)
     {
         zone = value;
         /* Recompute the fields from the time using the new zone.  This also
@@ -3768,6 +3774,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * AFTER it up to the next call to complete().
          */
         areFieldsSet = false;
+        return this;
     }
 
     /**
@@ -3786,13 +3793,15 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * treated as being equivalent to the 941st day after February 1, 1996.
      * With strict interpretation, such dates will cause an exception to be
      * thrown.
+     * @return 
      *
      * @see DateFormat#setLenient
      * @stable ICU 2.0
      */
-    public void setLenient(boolean lenient)
+    public Calendar setLenient(boolean lenient)
     {
         this.lenient = lenient;
+        return this;
     }
 
     /**
@@ -3808,9 +3817,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Sets what the first day of the week is; e.g., Sunday in US,
      * Monday in France.
      * @param value the given first day of the week.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setFirstDayOfWeek(int value)
+    public Calendar setFirstDayOfWeek(int value)
     {
         if (firstDayOfWeek != value) {
             if (value < SUNDAY || value > SATURDAY) {
@@ -3819,6 +3829,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             firstDayOfWeek = value;
             areFieldsSet = false;
         }
+        return this;
     }
 
     /**
@@ -3839,9 +3850,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * must be a full week, use value 7.
      * @param value the given minimal days required in the first week
      * of the year.
+     * @return 
      * @stable ICU 2.0
      */
-    public void setMinimalDaysInFirstWeek(int value)
+    public Calendar setMinimalDaysInFirstWeek(int value)
     {
         // Values less than 1 have the same effect as 1; values greater
         // than 7 have the same effect as 7. However, we normalize values
@@ -3855,6 +3867,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             minimalDaysInFirstWeek = value;
             areFieldsSet = false;
         }
+        return this;
     }
 
     /**

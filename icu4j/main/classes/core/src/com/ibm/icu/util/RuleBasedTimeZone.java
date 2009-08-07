@@ -102,21 +102,25 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * 
      * @stable ICU 3.8
      */
-    public void getOffset(long time, boolean local, int[] offsets) {
+    public RuleBasedTimeZone getOffset(long time, boolean local, int[] offsets) {
         getOffset(time, local, LOCAL_FORMER, LOCAL_LATTER, offsets);
+        return this;
     }
 
     /**
      * {@inheritDoc}
+     * @return 
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void getOffsetFromLocal(long date,
+    public RuleBasedTimeZone getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         getOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+        return this;
     }
     
     /**
@@ -146,11 +150,12 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * 
      * @stable ICU 3.8
      */
     ///CLOVER:OFF
-    public void setRawOffset(int offsetMillis) {
+    public RuleBasedTimeZone setRawOffset(int offsetMillis) {
         // TODO: Do nothing for now..
         throw new UnsupportedOperationException("setRawOffset in RuleBasedTimeZone is not supported.");
     }

@@ -315,10 +315,11 @@ public class PluralFormat extends UFormat {
      * Patterns and their interpretation are specified in the class description.
      *
      * @param pttrn the pattern for this plural format.
+     * @return 
      * @throws IllegalArgumentException if the pattern is invalid.
      * @stable ICU 3.8
      */
-    public void applyPattern(String pttrn) {
+    public PluralFormat applyPattern(String pttrn) {
         pttrn = pttrn.trim();
 
         this.pattern = pttrn;
@@ -403,6 +404,7 @@ public class PluralFormat extends UFormat {
                     "Malformed formatting expression. Braces do not match.");
         }
         checkSufficientDefinition();
+        return this;
     }
 
     /**
@@ -511,13 +513,15 @@ public class PluralFormat extends UFormat {
      * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
      *     default locale will be used.
+     * @return 
      * @stable ICU 3.8
      */
-    public void setLocale(ULocale ulocale) {
+    public PluralFormat setLocale(ULocale ulocale) {
         if (ulocale == null) {
             ulocale = ULocale.getDefault();
         }
         init(null, ulocale);
+        return this;
     }
 
     /**
@@ -525,10 +529,12 @@ public class PluralFormat extends UFormat {
      * call this if you want a different number format than the default
      * formatter for the locale.
      * @param format the number format to use.
+     * @return 
      * @stable ICU 3.8
      */
-    public void setNumberFormat(NumberFormat format) {
+    public PluralFormat setNumberFormat(NumberFormat format) {
         numberFormat = format;
+        return this;
     }
 
     /*

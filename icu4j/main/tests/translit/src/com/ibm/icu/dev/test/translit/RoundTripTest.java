@@ -81,21 +81,22 @@ public class RoundTripTest extends TestFmwk {
             abbreviated = false;
         }
 
-        public void reset(UnicodeSet newSet) {
-            reset(newSet, false);
+        public AbbreviatedUnicodeSetIterator reset(UnicodeSet newSet) {
+            return reset(newSet, false);
         }
 
-        public void reset(UnicodeSet newSet, boolean abb) {
-            reset(newSet, abb, 100);
+        public AbbreviatedUnicodeSetIterator reset(UnicodeSet newSet, boolean abb) {
+            return reset(newSet, abb, 100);
         }
 
-        public void reset(UnicodeSet newSet, boolean abb, int density) {
+        public AbbreviatedUnicodeSetIterator reset(UnicodeSet newSet, boolean abb, int density) {
             super.reset(newSet);
             abbreviated = abb;
             perRange = newSet.getRangeCount();
             if (perRange != 0) {
                 perRange = density / perRange;
             }
+            return this;
         }
 
         protected void loadRange(int myRange) {

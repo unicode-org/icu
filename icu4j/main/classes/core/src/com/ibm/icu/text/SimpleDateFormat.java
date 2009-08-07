@@ -596,10 +596,12 @@ public class SimpleDateFormat extends DateFormat {
      * to begin on the date the user specifies.
      * @param startDate During parsing, two digit years will be placed in the range
      * <code>startDate</code> to <code>startDate + 100 years</code>.
+     * @return 
      * @stable ICU 2.0
      */
-    public void set2DigitYearStart(Date startDate) {
+    public SimpleDateFormat set2DigitYearStart(Date startDate) {
         parseAmbiguousDatesAsAfter(startDate);
+        return this;
     }
 
     /**
@@ -1520,12 +1522,14 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Overrides superclass method
+     * @return 
      * @stable ICU 2.0
      */
-    public void setNumberFormat(NumberFormat newNumberFormat) {
+    public SimpleDateFormat setNumberFormat(NumberFormat newNumberFormat) {
         // Override this method to update local zero padding number formatter
         super.setNumberFormat(newNumberFormat);
         initLocalZeroPaddingNumberFormat();
+        return this;
     }
 
     private void initLocalZeroPaddingNumberFormat() {
@@ -1607,10 +1611,11 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Overrides DateFormat
+     * @return 
      * @see DateFormat
      * @stable ICU 2.0
      */
-    public void parse(String text, Calendar cal, ParsePosition parsePos)
+    public SimpleDateFormat parse(String text, Calendar cal, ParsePosition parsePos)
     {
         TimeZone backupTZ = null;
         Calendar resultCal = null;
@@ -1688,7 +1693,7 @@ public class SimpleDateFormat extends DateFormat {
                             if (backupTZ != null) {
                                 calendar.setTimeZone(backupTZ);
                             }
-                            return;
+                            return this;
                         }
                         i = numericFieldStart;
                         pos = numericStartPos;
@@ -1708,7 +1713,7 @@ public class SimpleDateFormat extends DateFormat {
                         if (backupTZ != null) {
                             calendar.setTimeZone(backupTZ);
                         }
-                        return;
+                        return this;
                     }
                 }
             } else {
@@ -1746,7 +1751,7 @@ public class SimpleDateFormat extends DateFormat {
                     if (backupTZ != null) {
                         calendar.setTimeZone(backupTZ);
                     }
-                    return;
+                    return this;
                 }
             }
             ++i;
@@ -1909,7 +1914,7 @@ public class SimpleDateFormat extends DateFormat {
             if (backupTZ != null) {
                 calendar.setTimeZone(backupTZ);
             }
-            return;
+            return this;
         }
         // Set the parsed result if local calendar is used
         // instead of the input calendar
@@ -1921,6 +1926,7 @@ public class SimpleDateFormat extends DateFormat {
         if (backupTZ != null) {
             calendar.setTimeZone(backupTZ);
         }
+        return this;
     }
 
     /**
@@ -2567,25 +2573,29 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Apply the given unlocalized pattern string to this date format.
+     * @return 
      * @stable ICU 2.0
      */
-    public void applyPattern(String pat)
+    public SimpleDateFormat applyPattern(String pat)
     {
         this.pattern = pat;
         setLocale(null, null);
         // reset parsed pattern items
         patternItems = null;
+        return this;
     }
 
     /**
      * Apply the given localized pattern string to this date format.
+     * @return 
      * @stable ICU 2.0
      */
-    public void applyLocalizedPattern(String pat) {
+    public SimpleDateFormat applyLocalizedPattern(String pat) {
         this.pattern = translatePattern(pat,
                                         formatData.localPatternChars,
                                         DateFormatSymbols.patternChars);
         setLocale(null, null);
+        return this;
     }
 
     /**
@@ -2602,12 +2612,14 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Allows you to set the date/time formatting data.
      * @param newFormatSymbols the new symbols
+     * @return 
      * @stable ICU 2.0
      */
-    public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)
+    public SimpleDateFormat setDateFormatSymbols(DateFormatSymbols newFormatSymbols)
     {
         this.formatData = (DateFormatSymbols)newFormatSymbols.clone();
         gmtfmtCache = null;
+        return this;
     }
 
     /**

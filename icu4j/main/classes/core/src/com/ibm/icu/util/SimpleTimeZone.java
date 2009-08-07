@@ -236,13 +236,15 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * 
      * @stable ICU 3.8
      */
-    public void setID(String ID) {
+    public SimpleTimeZone setID(String ID) {
         super.setID(ID);
 
         transitionRulesInitialized = false;
+        return this;
     }
 
     /**
@@ -250,12 +252,14 @@ public class SimpleTimeZone extends BasicTimeZone {
      * Sets the base time zone offset to GMT.
      * This is the offset to add "to" UTC to get local time.
      * @param offsetMillis the raw offset of the time zone
+     * @return 
      * @stable ICU 2.0
      */
-    public void setRawOffset(int offsetMillis) {
+    public SimpleTimeZone setRawOffset(int offsetMillis) {
         raw = offsetMillis;
 
         transitionRulesInitialized = false;
+        return this;
     }
   
     /**
@@ -734,10 +738,11 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
+     * @return 
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void getOffsetFromLocal(long date,
+    public SimpleTimeZone getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         offsets[0] = getRawOffset();
         int fields[] = new int[6];
@@ -769,6 +774,7 @@ public class SimpleTimeZone extends BasicTimeZone {
                     fields[0], fields[1], fields[2],
                     fields[3], fields[5]) - offsets[0];        
         }
+        return this;
     }
 
     private static final int

@@ -169,9 +169,9 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
-    public void setRawOffset(int offsetMillis) {
+    public OlsonTimeZone setRawOffset(int offsetMillis) {
         if (getRawOffset() == offsetMillis) {
-            return;
+            return this;
         }
         long current = System.currentTimeMillis();
 
@@ -246,6 +246,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         }
 
         transitionRulesInitialized = false;
+        return this;
     }
 
     public Object clone() {
@@ -262,8 +263,9 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     /**
      * TimeZone API.
+     * @return 
      */
-    public void getOffset(long date, boolean local, int[] offsets)  {
+    public OlsonTimeZone getOffset(long date, boolean local, int[] offsets)  {
         // The check against finalMillis will suffice most of the time, except
         // for the case in which finalMillis == DBL_MAX, date == DBL_MAX,
         // and finalZone == 0.  For this case we add "&& finalZone != 0".
@@ -273,20 +275,23 @@ public class OlsonTimeZone extends BasicTimeZone {
             getHistoricalOffset(date, local,
                     LOCAL_FORMER, LOCAL_LATTER, offsets);
         }
+        return this;
     }
 
     /**
      * {@inheritDoc}
+     * @return 
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void getOffsetFromLocal(long date,
+    public OlsonTimeZone getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         if (date >= finalMillis && finalZone != null) {
             finalZone.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
             getHistoricalOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         }
+        return this;
     }
 
     /* (non-Javadoc)
@@ -528,12 +533,13 @@ public class OlsonTimeZone extends BasicTimeZone {
         super.setID(id);
     }
 
-    public void setID(String id){
+    public OlsonTimeZone setID(String id){
         if(finalZone!= null){
             finalZone.setID(id);
         }
         super.setID(id);
         transitionRulesInitialized = false;
+        return this;
     }
 
     private static final int UNSIGNED_BYTE_MASK =0xFF;

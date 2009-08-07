@@ -792,8 +792,9 @@ public class CollationAPITest extends TestFmwk {
                 return key;
             }
             
-            public void setVariableTop(int ce)
+            public Collator setVariableTop(int ce)
             {
+                return this;
             }
             
             public int setVariableTop(String str) 

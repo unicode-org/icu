@@ -284,28 +284,32 @@ public final class RuleBasedCollator extends Collator
      * distinguishing between Katakana  and Hiragana characters.
      * @param flag true if Hiragana Quaternary mode is to be on, false
      *        otherwise
+     * @return 
      * @see #setHiraganaQuaternaryDefault
      * @see #isHiraganaQuaternary
      * @stable ICU 2.8
      */
-    public void setHiraganaQuaternary(boolean flag)
+    public RuleBasedCollator setHiraganaQuaternary(boolean flag)
     {
         m_isHiragana4_ = flag;
-        updateInternalState();        
+        updateInternalState();  
+        return this;
     }
 
     /**
      * Sets the Hiragana Quaternary mode to the initial mode set during
      * construction of the RuleBasedCollator.
      * See setHiraganaQuaternary(boolean) for more details.
+     * @return 
      * @see #setHiraganaQuaternary(boolean)
      * @see #isHiraganaQuaternary
      * @stable ICU 2.8
      */
-    public void setHiraganaQuaternaryDefault()
+    public RuleBasedCollator setHiraganaQuaternaryDefault()
     {
         m_isHiragana4_ = m_defaultIsHiragana4_;
         updateInternalState();
+        return this;
     }
 
     /**
@@ -317,13 +321,14 @@ public final class RuleBasedCollator extends Collator
      * @param upperfirst true to sort uppercase characters before
      *                   lowercase characters, false to sort lowercase
      *                   characters before uppercase characters
+     * @return 
      * @see #isLowerCaseFirst
      * @see #isUpperCaseFirst
      * @see #setLowerCaseFirst
      * @see #setCaseFirstDefault
      * @stable ICU 2.8
      */
-    public void setUpperCaseFirst(boolean upperfirst)
+    public RuleBasedCollator setUpperCaseFirst(boolean upperfirst)
     {
         if (upperfirst) {
             if(m_caseFirst_ != AttributeValue.UPPER_FIRST_) {
@@ -338,6 +343,7 @@ public final class RuleBasedCollator extends Collator
             m_caseFirst_ = AttributeValue.OFF_;
         }
         updateInternalState();
+        return this;
     }
 
     /**
@@ -351,13 +357,14 @@ public final class RuleBasedCollator extends Collator
      * @param lowerfirst true for sorting lower cased characters before
      *                   upper cased characters, false to ignore case
      *                   preferences.
+     * @return 
      * @see #isLowerCaseFirst
      * @see #isUpperCaseFirst
      * @see #setUpperCaseFirst
      * @see #setCaseFirstDefault
      * @stable ICU 2.8
      */
-    public void setLowerCaseFirst(boolean lowerfirst)
+    public RuleBasedCollator setLowerCaseFirst(boolean lowerfirst)
     {
         if (lowerfirst) {
                 if(m_caseFirst_ != AttributeValue.LOWER_FIRST_) {
@@ -372,6 +379,7 @@ public final class RuleBasedCollator extends Collator
             m_caseFirst_ = AttributeValue.OFF_;
             }
         updateInternalState();
+        return this;
     }
 
     /**
@@ -379,92 +387,104 @@ public final class RuleBasedCollator extends Collator
      * construction of the RuleBasedCollator.
      * See setUpperCaseFirst(boolean) and setLowerCaseFirst(boolean) for more
      * details.
+     * @return 
      * @see #isLowerCaseFirst
      * @see #isUpperCaseFirst
      * @see #setLowerCaseFirst(boolean)
      * @see #setUpperCaseFirst(boolean)
      * @stable ICU 2.8
      */
-    public final void setCaseFirstDefault()
+    public final RuleBasedCollator setCaseFirstDefault()
     {
         if(m_caseFirst_ != m_defaultCaseFirst_) {
             latinOneRegenTable_ = true;
         }
         m_caseFirst_ = m_defaultCaseFirst_;
         updateInternalState();
+        return this;
     }
 
     /**
      * Sets the alternate handling mode to the initial mode set during
      * construction of the RuleBasedCollator.
      * See setAlternateHandling(boolean) for more details.
+     * @return 
      * @see #setAlternateHandlingShifted(boolean)
      * @see #isAlternateHandlingShifted()
      * @stable ICU 2.8
      */
-    public void setAlternateHandlingDefault()
+    public RuleBasedCollator setAlternateHandlingDefault()
     {
         m_isAlternateHandlingShifted_ = m_defaultIsAlternateHandlingShifted_;
         updateInternalState();
+        return this;
     }
 
     /**
      * Sets the case level mode to the initial mode set during
      * construction of the RuleBasedCollator.
      * See setCaseLevel(boolean) for more details.
+     * @return 
      * @see #setCaseLevel(boolean)
      * @see #isCaseLevel
      * @stable ICU 2.8
      */
-    public void setCaseLevelDefault()
+    public RuleBasedCollator setCaseLevelDefault()
     {
         m_isCaseLevel_ = m_defaultIsCaseLevel_;
         updateInternalState();
+        return this;
     }
 
     /**
      * Sets the decomposition mode to the initial mode set during construction
      * of the RuleBasedCollator.
      * See setDecomposition(int) for more details.
+     * @return 
      * @see #getDecomposition
      * @see #setDecomposition(int)
      * @stable ICU 2.8
      */
-    public void setDecompositionDefault()
+    public RuleBasedCollator setDecompositionDefault()
     {
         setDecomposition(m_defaultDecomposition_);
-        updateInternalState();        
+        updateInternalState();     
+        return this;
     }
 
     /**
      * Sets the French collation mode to the initial mode set during
      * construction of the RuleBasedCollator.
      * See setFrenchCollation(boolean) for more details.
+     * @return 
      * @see #isFrenchCollation
      * @see #setFrenchCollation(boolean)
      * @stable ICU 2.8
      */
-    public void setFrenchCollationDefault()
+    public RuleBasedCollator setFrenchCollationDefault()
     {
         if(m_isFrenchCollation_ != m_defaultIsFrenchCollation_) {
             latinOneRegenTable_ = true;
         }
         m_isFrenchCollation_ = m_defaultIsFrenchCollation_;
         updateInternalState();
+        return this;
     }
 
     /**
      * Sets the collation strength to the initial mode set during the
      * construction of the RuleBasedCollator.
      * See setStrength(int) for more details.
+     * @return 
      * @see #setStrength(int)
      * @see #getStrength
      * @stable ICU 2.8
      */
-    public void setStrengthDefault()
+    public RuleBasedCollator setStrengthDefault()
     {
         setStrength(m_defaultStrength_);
-        updateInternalState();        
+        updateInternalState();      
+        return this;
     }
     
     /**
@@ -472,14 +492,16 @@ public final class RuleBasedCollator extends Collator
      * When numeric collation is turned on, this Collator generates a collation 
      * key for the numeric value of substrings of digits. This is a way to get 
      * '100' to sort AFTER '2'
+     * @return 
      * @see #getNumericCollation
      * @see #setNumericCollation
      * @stable ICU 2.8
      */
-    public void setNumericCollationDefault()
+    public RuleBasedCollator setNumericCollationDefault()
     {
         setNumericCollation(m_defaultIsNumericCollation_);
-        updateInternalState();        
+        updateInternalState();  
+        return this;
     }
 
     /**
@@ -492,17 +514,19 @@ public final class RuleBasedCollator extends Collator
      * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
      * French collation</a> for more information.
      * @param flag true to set the French collation on, false to set it off
+     * @return 
      * @stable ICU 2.8
      * @see #isFrenchCollation
      * @see #setFrenchCollationDefault
      */
-    public void setFrenchCollation(boolean flag)
+    public RuleBasedCollator setFrenchCollation(boolean flag)
     {
         if(m_isFrenchCollation_ != flag) {
             latinOneRegenTable_ = true;
         }
         m_isFrenchCollation_ = flag;
         updateInternalState();
+        return this;
     }
 
     /**
@@ -522,14 +546,16 @@ public final class RuleBasedCollator extends Collator
      * moved to the QUATERNARY order.
      * @param shifted true if SHIFTED behaviour for alternate handling is
      *        desired, false for the NON_IGNORABLE behaviour.
+     * @return 
      * @see #isAlternateHandlingShifted
      * @see #setAlternateHandlingDefault
      * @stable ICU 2.8
      */
-    public void setAlternateHandlingShifted(boolean shifted)
+    public RuleBasedCollator setAlternateHandlingShifted(boolean shifted)
     {
         m_isAlternateHandlingShifted_ = shifted;
         updateInternalState();
+        return this;
     }
 
     /**
@@ -550,14 +576,16 @@ public final class RuleBasedCollator extends Collator
      * case level</a> for more information.
      * </p>
      * @param flag true if case level sorting is required, false otherwise
+     * @return 
      * @stable ICU 2.8
      * @see #setCaseLevelDefault
      * @see #isCaseLevel
      */
-    public void setCaseLevel(boolean flag)
+    public RuleBasedCollator setCaseLevel(boolean flag)
     {
         m_isCaseLevel_ = flag;
         updateInternalState();
+        return this;
     }
 
     /**
@@ -568,6 +596,7 @@ public final class RuleBasedCollator extends Collator
      * </p>
      * <p>See the Collator class description for an example of use.</p>
      * @param newStrength the new strength value.
+     * @return 
      * @see #getStrength
      * @see #setStrengthDefault
      * @see #PRIMARY
@@ -579,10 +608,11 @@ public final class RuleBasedCollator extends Collator
      *              of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
      * @stable ICU 2.8
      */
-    public void setStrength(int newStrength)
+    public RuleBasedCollator setStrength(int newStrength)
     {
         super.setStrength(newStrength);
         updateInternalState();
+        return this;
     }
     
     /** 
@@ -656,13 +686,15 @@ public final class RuleBasedCollator extends Collator
      * Lower 16 bits are ignored.
      * @param varTop Collation element value, as returned by setVariableTop or 
      *               getVariableTop
+     * @return 
      * @see #getVariableTop
      * @see #setVariableTop(String)
      * @stable ICU 2.6
      */
-    public void setVariableTop(int varTop)
+    public RuleBasedCollator setVariableTop(int varTop)
     {
         m_variableTopValue_ = (varTop & CE_PRIMARY_MASK_) >> 16;
+        return this;
     }
     
     /**
@@ -670,15 +702,17 @@ public final class RuleBasedCollator extends Collator
      * key for the numeric value of substrings of digits. This is a way to get 
      * '100' to sort AFTER '2'
      * @param flag true to turn numeric collation on and false to turn it off
+     * @return 
      * @see #getNumericCollation
      * @see #setNumericCollationDefault
      * @stable ICU 2.8
      */
-    public void setNumericCollation(boolean flag)
+    public RuleBasedCollator setNumericCollation(boolean flag)
     {
         // sort substrings of digits as numbers
         m_isNumericCollation_ = flag;
         updateInternalState();
+        return this;
     }
 
     // public getters --------------------------------------------------------
@@ -857,11 +891,11 @@ public final class RuleBasedCollator extends Collator
      * @param contractions if not null, set to contain contractions
      * @param expansions if not null, set to contain expansions
      * @param addPrefixes add the prefix contextual elements to contractions
+     * @return 
      * @throws Exception 
      * @stable ICU 3.4
      */
-    public void
-    getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,
+    public RuleBasedCollator getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,
             boolean addPrefixes) throws Exception {
         if(contractions != null) {
             contractions.clear();
@@ -884,6 +918,7 @@ public final class RuleBasedCollator extends Collator
         } catch (Exception e) {
             throw e;
         }
+        return this;
     }
     
     /**

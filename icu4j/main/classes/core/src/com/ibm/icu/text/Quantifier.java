@@ -103,12 +103,14 @@ class Quantifier implements UnicodeMatcher {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
+     * @return 
      * @returns a reference to toUnionTo
      */
-    public void addMatchSetTo(UnicodeSet toUnionTo) {
+    public Quantifier addMatchSetTo(UnicodeSet toUnionTo) {
         if (maxCount > 0) {
             matcher.addMatchSetTo(toUnionTo);
         }
+        return this;
     }
 }
 

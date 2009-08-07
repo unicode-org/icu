@@ -458,10 +458,11 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * {@link #formatToCharacterIterator formatToCharacterIterator} methods.
      *
      * @param locale the locale to be used when creating or comparing subformats
+     * @return 
      * @stable ICU 3.0
      */
-    public void setLocale(Locale locale) {
-        setLocale(ULocale.forLocale(locale));
+    public MessageFormat setLocale(Locale locale) {
+        return setLocale(ULocale.forLocale(locale));
     }
 
     /**
@@ -472,15 +473,17 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * {@link #formatToCharacterIterator formatToCharacterIterator} methods.
      *
      * @param locale the locale to be used when creating or comparing subformats
+     * @return 
      * @stable ICU 3.2
      */
-    public void setLocale(ULocale locale) {
+    public MessageFormat setLocale(ULocale locale) {
         /* Save the pattern, and then reapply so that */
         /* we pick up any changes in locale specific */
         /* elements */
         String existingPattern = toPattern();                       /*ibm.3550*/
         this.ulocale = locale;
         applyPattern(existingPattern);                              /*ibm.3550*/
+        return this;
     }
 
     /**
@@ -514,10 +517,11 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * mixing them is not allowed.
      *
      * @param pttrn the pattern for this message format
+     * @return 
      * @throws IllegalArgumentException if the pattern is invalid
      * @stable ICU 3.0
      */
-    public void applyPattern(String pttrn) {
+    public MessageFormat applyPattern(String pttrn) {
         StringBuffer[] segments = new StringBuffer[4];
         for (int i = 0; i < segments.length; ++i) {
             segments[i] = new StringBuffer();
@@ -584,6 +588,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
             throw new IllegalArgumentException("Unmatched braces in the pattern.");
         }
         this.pattern = segments[0].toString();
+        return this;
     }
 
 
@@ -696,13 +701,14 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param newFormats
      *            the new formats to use
+     * @return 
      * @throws NullPointerException
      *                if <code>newFormats</code> is null
      * @throws IllegalArgumentException
      *                if this formatter uses named arguments
      * @stable ICU 3.0
      */
-    public void setFormatsByArgumentIndex(Format[] newFormats) {
+    public MessageFormat setFormatsByArgumentIndex(Format[] newFormats) {
         if (!argumentNamesAreNumeric) {
             throw new IllegalArgumentException(
                     "This method is not available in MessageFormat objects " +
@@ -714,6 +720,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
                 formats[i] = newFormats[j];
             }
         }
+        return this;
     }
 
     /**
@@ -735,15 +742,17 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param newFormats a map from String to Format providing new
      *        formats for named arguments.
+     * @return 
      * @stable ICU 3.8
      */
-    public void setFormatsByArgumentName(Map<String, Format> newFormats) {
+    public MessageFormat setFormatsByArgumentName(Map<String, Format> newFormats) {
         for (int i = 0; i <= maxOffset; i++) {
             if (newFormats.containsKey(argumentNames[i])) {
                 Format f = newFormats.get(argumentNames[i]);
                 formats[i] = f;
             }
         }
+        return this;
     }
 
     /**
@@ -766,10 +775,11 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * the <code>parse</code> methods.
      *
      * @param newFormats the new formats to use
+     * @return 
      * @exception NullPointerException if <code>newFormats</code> is null
      * @stable ICU 3.0
      */
-    public void setFormats(Format[] newFormats) {
+    public MessageFormat setFormats(Format[] newFormats) {
         int runsToCopy = newFormats.length;
         if (runsToCopy > maxOffset + 1) {
             runsToCopy = maxOffset + 1;
@@ -777,6 +787,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
         for (int i = 0; i < runsToCopy; i++) {
             formats[i] = newFormats[i];
         }
+        return this;
     }
 
     /**
@@ -800,11 +811,12 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *            the argument index for which to use the new format
      * @param newFormat
      *            the new format to use
+     * @return 
      * @exception IllegalArgumentException
      *            if alphanumeric arguments where used in MessageFormat.
      * @stable ICU 3.0
      */
-    public void setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
+    public MessageFormat setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
         if (!argumentNamesAreNumeric) {
             throw new IllegalArgumentException(
                     "This method is not available in MessageFormat objects " +
@@ -815,6 +827,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
                 formats[j] = newFormat;
             }
         }
+        return this;
     }
 
     /**
@@ -834,14 +847,16 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param argumentName the name of the argument to change
      * @param newFormat the new format to use
+     * @return 
      * @stable ICU 3.8
      */
-    public void setFormatByArgumentName(String argumentName, Format newFormat) {
+    public MessageFormat setFormatByArgumentName(String argumentName, Format newFormat) {
         for (int i = 0; i <= maxOffset; ++i) {
             if (argumentName.equals(argumentNames[i])) {
                 formats[i] = newFormat;
             }
         }
+        return this;
     }
 
     /**
@@ -858,12 +873,14 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param formatElementIndex the index of a format element within the pattern
      * @param newFormat the format to use for the specified format element
+     * @return 
      * @exception ArrayIndexOutOfBoundsException if formatElementIndex is equal to or
      *            larger than the number of format elements in the pattern string
      * @stable ICU 3.0
      */
-    public void setFormat(int formatElementIndex, Format newFormat) {
+    public MessageFormat setFormat(int formatElementIndex, Format newFormat) {
         formats[formatElementIndex] = newFormat;
+        return this;
     }
 
     /**
