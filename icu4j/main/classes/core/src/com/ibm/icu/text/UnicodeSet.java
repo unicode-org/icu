@@ -265,7 +265,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
-                                             // 110000 for codepoints
+    // 110000 for codepoints
 
     /**
      * Minimum value that can be stored in a UnicodeSet.
@@ -348,7 +348,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         this();
         complement(start, end);
     }
-    
+
     /**
      * Quickly constructs a set from a set of ranges <s0, e0, s1, e1, s2, e2, ..., sn, en>.
      * There must be an even number of integers, and they must be all greater than zero,
@@ -559,7 +559,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public static boolean resemblesPattern(String pattern, int pos) {
         return ((pos+1) < pattern.length() &&
                 pattern.charAt(pos) == '[') ||
-            resemblesPropertyPattern(pattern, pos);
+                resemblesPropertyPattern(pattern, pos);
     }
 
     /**
@@ -627,7 +627,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * is one.  Otherwise it will be generated.
      */
     private StringBuffer _toPattern(StringBuffer result,
-                                    boolean escapeUnprintable) {
+            boolean escapeUnprintable) {
         if (pat != null) {
             int i;
             int backslashCount = 0;
@@ -679,18 +679,18 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 3.8
      */
     public StringBuffer _generatePattern(StringBuffer result,
-                                         boolean escapeUnprintable, boolean includeStrings) {
+            boolean escapeUnprintable, boolean includeStrings) {
         result.append('[');
 
-//      // Check against the predefined categories.  We implicitly build
-//      // up ALL category sets the first time toPattern() is called.
-//      for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
-//          if (this.equals(getCategorySet(cat))) {
-//              result.append(':');
-//              result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
-//              return result.append(":]");
-//          }
-//      }
+        //      // Check against the predefined categories.  We implicitly build
+        //      // up ALL category sets the first time toPattern() is called.
+        //      for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
+        //          if (this.equals(getCategorySet(cat))) {
+        //              result.append(':');
+        //              result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
+        //              return result.append(":]");
+        //          }
+        //      }
 
         int count = getRangeCount();
 
@@ -698,8 +698,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // MIN_VALUE and MAX_VALUE, then the inverse representation will
         // be more economical.
         if (count > 1 &&
-            getRangeStart(0) == MIN_VALUE &&
-            getRangeEnd(count-1) == MAX_VALUE) {
+                getRangeStart(0) == MIN_VALUE &&
+                getRangeEnd(count-1) == MAX_VALUE) {
 
             // Emit the inverse
             result.append('^');
@@ -818,9 +818,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public int matches(Replaceable text,
-                       int[] offset,
-                       int limit,
-                       boolean incremental) {
+            int[] offset,
+            int limit,
+            boolean incremental) {
 
         if (offset[0] == limit) {
             // Strings, if any, have length != 0, so we don't worry
@@ -874,7 +874,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                             return U_PARTIAL_MATCH;
                         }
                     }
-                    
+
                     if (length == trial.length()) {
                         // We have successfully matched the whole string.
                         if (length > highWaterLength) {
@@ -949,33 +949,33 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public int matchesAt(CharSequence text, int offset) {
         int lastLen = -1;
         strings:
-        if (strings.size() != 0) {
-            char firstChar = text.charAt(offset);
-            String trial = null;
-            // find the first string starting with firstChar
-            Iterator<String> it = strings.iterator();
-            while (it.hasNext()) {
-                trial = it.next();
-                char firstStringChar = trial.charAt(0);
-                if (firstStringChar < firstChar) continue;
-                if (firstStringChar > firstChar) break strings;
+            if (strings.size() != 0) {
+                char firstChar = text.charAt(offset);
+                String trial = null;
+                // find the first string starting with firstChar
+                Iterator<String> it = strings.iterator();
+                while (it.hasNext()) {
+                    trial = it.next();
+                    char firstStringChar = trial.charAt(0);
+                    if (firstStringChar < firstChar) continue;
+                    if (firstStringChar > firstChar) break strings;
+                }
+
+                // now keep checking string until we get the longest one
+                for (;;) {
+                    int tempLen = matchesAt(text, offset, trial);
+                    if (lastLen > tempLen) break strings;
+                    lastLen = tempLen;
+                    if (!it.hasNext()) break;
+                    trial = (String) it.next();
+                }
             }
 
-            // now keep checking string until we get the longest one
-            for (;;) {
-                int tempLen = matchesAt(text, offset, trial);
-                if (lastLen > tempLen) break strings;
-                lastLen = tempLen;
-                if (!it.hasNext()) break;
-                trial = (String) it.next();
-            }
-        }
-        
         if (lastLen < 2) {
             int cp = UTF16.charAt(text, offset);
             if (contains(cp)) lastLen = UTF16.getCharCount(cp);
         }
-        
+
         return offset+lastLen;
     }
 
@@ -1080,7 +1080,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         checkFrozen();
         return add_unchecked(start, end);
     }
-    
+
     /**
      * Adds all characters in range (uses preferred naming convention).
      * @param start
@@ -1093,7 +1093,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         checkFrozen();
         return add_unchecked(start, end);
     }
-    
+
     // for internal use, after checkFrozen has been called
     private UnicodeSet add_unchecked(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1110,24 +1110,24 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return this;
     }
 
-//    /**
-//     * Format out the inversion list as a string, for debugging.  Uncomment when
-//     * needed.
-//     */
-//    public final String dump() {
-//        StringBuffer buf = new StringBuffer("[");
-//        for (int i=0; i<len; ++i) {
-//            if (i != 0) buf.append(", ");
-//            int c = list[i];
-//            //if (c <= 0x7F && c != '\n' && c != '\r' && c != '\t' && c != ' ') {
-//            //    buf.append((char) c);
-//            //} else {
-//                buf.append("U+").append(Utility.hex(c, (c<0x10000)?4:6));
-//            //}
-//        }
-//        buf.append("]");
-//        return buf.toString();
-//    }
+    //    /**
+    //     * Format out the inversion list as a string, for debugging.  Uncomment when
+    //     * needed.
+    //     */
+    //    public final String dump() {
+    //        StringBuffer buf = new StringBuffer("[");
+    //        for (int i=0; i<len; ++i) {
+    //            if (i != 0) buf.append(", ");
+    //            int c = list[i];
+    //            //if (c <= 0x7F && c != '\n' && c != '\r' && c != '\t' && c != ' ') {
+    //            //    buf.append((char) c);
+    //            //} else {
+    //                buf.append("U+").append(Utility.hex(c, (c<0x10000)?4:6));
+    //            //}
+    //        }
+    //        buf.append("]");
+    //        return buf.toString();
+    //    }
 
     /**
      * Adds the specified character to this set if it is not already
@@ -1139,7 +1139,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         checkFrozen();
         return add_unchecked(c);
     }
-    
+
     // for internal use only, after checkFrozen has been called
     private final UnicodeSet add_unchecked(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
@@ -1249,7 +1249,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         return this;
     }
-    
+
     /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
@@ -1334,7 +1334,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         return this;
     }
-        
+
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
      * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
@@ -1578,7 +1578,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         while (true) {
             if (c < list[++i]) break;
         }
-        */
+         */
 
         int i = findCodePoint(c);
 
@@ -1617,129 +1617,129 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // invariant: c < list[hi]
         for (;;) {
             int i = (lo + hi) >>> 1;
-            if (i == lo) return hi;
-            if (c < list[i]) {
-                hi = i;
-            } else {
-                lo = i;
-            }
+        if (i == lo) return hi;
+        if (c < list[i]) {
+            hi = i;
+        } else {
+            lo = i;
+        }
         }
     }
 
-//    //----------------------------------------------------------------
-//    // Unrolled binary search
-//    //----------------------------------------------------------------
-//
-//    private int validLen = -1; // validated value of len
-//    private int topOfLow;
-//    private int topOfHigh;
-//    private int power;
-//    private int deltaStart;
-//
-//    private void validate() {
-//        if (len <= 1) {
-//            throw new IllegalArgumentException("list.len==" + len + "; must be >1");
-//        }
-//
-//        // find greatest power of 2 less than or equal to len
-//        for (power = exp2.length-1; power > 0 && exp2[power] > len; power--) {}
-//
-//        // assert(exp2[power] <= len);
-//
-//        // determine the starting points
-//        topOfLow = exp2[power] - 1;
-//        topOfHigh = len - 1;
-//        deltaStart = exp2[power-1];
-//        validLen = len;
-//    }
-//
-//    private static final int exp2[] = {
-//        0x1, 0x2, 0x4, 0x8,
-//        0x10, 0x20, 0x40, 0x80,
-//        0x100, 0x200, 0x400, 0x800,
-//        0x1000, 0x2000, 0x4000, 0x8000,
-//        0x10000, 0x20000, 0x40000, 0x80000,
-//        0x100000, 0x200000, 0x400000, 0x800000,
-//        0x1000000, 0x2000000, 0x4000000, 0x8000000,
-//        0x10000000, 0x20000000 // , 0x40000000 // no unsigned int in Java
-//    };
-//
-//    /**
-//     * Unrolled lowest index GT.
-//     */
-//    private final int leastIndexGT(int searchValue) {
-//
-//        if (len != validLen) {
-//            if (len == 1) return 0;
-//            validate();
-//        }
-//        int temp;
-//
-//        // set up initial range to search. Each subrange is a power of two in length
-//        int high = searchValue < list[topOfLow] ? topOfLow : topOfHigh;
-//
-//        // Completely unrolled binary search, folhighing "Programming Pearls"
-//        // Each case deliberately falls through to the next
-//        // Logically, list[-1] < all_search_values && list[count] > all_search_values
-//        // although the values -1 and count are never actually touched.
-//
-//        // The bounds at each point are low & high,
-//        // where low == high - delta*2
-//        // so high - delta is the midpoint
-//
-//        // The invariant AFTER each line is that list[low] < searchValue <= list[high]
-//
-//        switch (power) {
-//        //case 31: if (searchValue < list[temp = high-0x40000000]) high = temp; // no unsigned int in Java
-//        case 30: if (searchValue < list[temp = high-0x20000000]) high = temp;
-//        case 29: if (searchValue < list[temp = high-0x10000000]) high = temp;
-//
-//        case 28: if (searchValue < list[temp = high- 0x8000000]) high = temp;
-//        case 27: if (searchValue < list[temp = high- 0x4000000]) high = temp;
-//        case 26: if (searchValue < list[temp = high- 0x2000000]) high = temp;
-//        case 25: if (searchValue < list[temp = high- 0x1000000]) high = temp;
-//
-//        case 24: if (searchValue < list[temp = high-  0x800000]) high = temp;
-//        case 23: if (searchValue < list[temp = high-  0x400000]) high = temp;
-//        case 22: if (searchValue < list[temp = high-  0x200000]) high = temp;
-//        case 21: if (searchValue < list[temp = high-  0x100000]) high = temp;
-//
-//        case 20: if (searchValue < list[temp = high-   0x80000]) high = temp;
-//        case 19: if (searchValue < list[temp = high-   0x40000]) high = temp;
-//        case 18: if (searchValue < list[temp = high-   0x20000]) high = temp;
-//        case 17: if (searchValue < list[temp = high-   0x10000]) high = temp;
-//
-//        case 16: if (searchValue < list[temp = high-    0x8000]) high = temp;
-//        case 15: if (searchValue < list[temp = high-    0x4000]) high = temp;
-//        case 14: if (searchValue < list[temp = high-    0x2000]) high = temp;
-//        case 13: if (searchValue < list[temp = high-    0x1000]) high = temp;
-//
-//        case 12: if (searchValue < list[temp = high-     0x800]) high = temp;
-//        case 11: if (searchValue < list[temp = high-     0x400]) high = temp;
-//        case 10: if (searchValue < list[temp = high-     0x200]) high = temp;
-//        case  9: if (searchValue < list[temp = high-     0x100]) high = temp;
-//
-//        case  8: if (searchValue < list[temp = high-      0x80]) high = temp;
-//        case  7: if (searchValue < list[temp = high-      0x40]) high = temp;
-//        case  6: if (searchValue < list[temp = high-      0x20]) high = temp;
-//        case  5: if (searchValue < list[temp = high-      0x10]) high = temp;
-//
-//        case  4: if (searchValue < list[temp = high-       0x8]) high = temp;
-//        case  3: if (searchValue < list[temp = high-       0x4]) high = temp;
-//        case  2: if (searchValue < list[temp = high-       0x2]) high = temp;
-//        case  1: if (searchValue < list[temp = high-       0x1]) high = temp;
-//        }
-//
-//        return high;
-//    }
-//
-//    // For debugging only
-//    public int len() {
-//        return len;
-//    }
-//
-//    //----------------------------------------------------------------
-//    //----------------------------------------------------------------
+    //    //----------------------------------------------------------------
+    //    // Unrolled binary search
+    //    //----------------------------------------------------------------
+    //
+    //    private int validLen = -1; // validated value of len
+    //    private int topOfLow;
+    //    private int topOfHigh;
+    //    private int power;
+    //    private int deltaStart;
+    //
+    //    private void validate() {
+    //        if (len <= 1) {
+    //            throw new IllegalArgumentException("list.len==" + len + "; must be >1");
+    //        }
+    //
+    //        // find greatest power of 2 less than or equal to len
+    //        for (power = exp2.length-1; power > 0 && exp2[power] > len; power--) {}
+    //
+    //        // assert(exp2[power] <= len);
+    //
+    //        // determine the starting points
+    //        topOfLow = exp2[power] - 1;
+    //        topOfHigh = len - 1;
+    //        deltaStart = exp2[power-1];
+    //        validLen = len;
+    //    }
+    //
+    //    private static final int exp2[] = {
+    //        0x1, 0x2, 0x4, 0x8,
+    //        0x10, 0x20, 0x40, 0x80,
+    //        0x100, 0x200, 0x400, 0x800,
+    //        0x1000, 0x2000, 0x4000, 0x8000,
+    //        0x10000, 0x20000, 0x40000, 0x80000,
+    //        0x100000, 0x200000, 0x400000, 0x800000,
+    //        0x1000000, 0x2000000, 0x4000000, 0x8000000,
+    //        0x10000000, 0x20000000 // , 0x40000000 // no unsigned int in Java
+    //    };
+    //
+    //    /**
+    //     * Unrolled lowest index GT.
+    //     */
+    //    private final int leastIndexGT(int searchValue) {
+    //
+    //        if (len != validLen) {
+    //            if (len == 1) return 0;
+    //            validate();
+    //        }
+    //        int temp;
+    //
+    //        // set up initial range to search. Each subrange is a power of two in length
+    //        int high = searchValue < list[topOfLow] ? topOfLow : topOfHigh;
+    //
+    //        // Completely unrolled binary search, folhighing "Programming Pearls"
+    //        // Each case deliberately falls through to the next
+    //        // Logically, list[-1] < all_search_values && list[count] > all_search_values
+    //        // although the values -1 and count are never actually touched.
+    //
+    //        // The bounds at each point are low & high,
+    //        // where low == high - delta*2
+    //        // so high - delta is the midpoint
+    //
+    //        // The invariant AFTER each line is that list[low] < searchValue <= list[high]
+    //
+    //        switch (power) {
+    //        //case 31: if (searchValue < list[temp = high-0x40000000]) high = temp; // no unsigned int in Java
+    //        case 30: if (searchValue < list[temp = high-0x20000000]) high = temp;
+    //        case 29: if (searchValue < list[temp = high-0x10000000]) high = temp;
+    //
+    //        case 28: if (searchValue < list[temp = high- 0x8000000]) high = temp;
+    //        case 27: if (searchValue < list[temp = high- 0x4000000]) high = temp;
+    //        case 26: if (searchValue < list[temp = high- 0x2000000]) high = temp;
+    //        case 25: if (searchValue < list[temp = high- 0x1000000]) high = temp;
+    //
+    //        case 24: if (searchValue < list[temp = high-  0x800000]) high = temp;
+    //        case 23: if (searchValue < list[temp = high-  0x400000]) high = temp;
+    //        case 22: if (searchValue < list[temp = high-  0x200000]) high = temp;
+    //        case 21: if (searchValue < list[temp = high-  0x100000]) high = temp;
+    //
+    //        case 20: if (searchValue < list[temp = high-   0x80000]) high = temp;
+    //        case 19: if (searchValue < list[temp = high-   0x40000]) high = temp;
+    //        case 18: if (searchValue < list[temp = high-   0x20000]) high = temp;
+    //        case 17: if (searchValue < list[temp = high-   0x10000]) high = temp;
+    //
+    //        case 16: if (searchValue < list[temp = high-    0x8000]) high = temp;
+    //        case 15: if (searchValue < list[temp = high-    0x4000]) high = temp;
+    //        case 14: if (searchValue < list[temp = high-    0x2000]) high = temp;
+    //        case 13: if (searchValue < list[temp = high-    0x1000]) high = temp;
+    //
+    //        case 12: if (searchValue < list[temp = high-     0x800]) high = temp;
+    //        case 11: if (searchValue < list[temp = high-     0x400]) high = temp;
+    //        case 10: if (searchValue < list[temp = high-     0x200]) high = temp;
+    //        case  9: if (searchValue < list[temp = high-     0x100]) high = temp;
+    //
+    //        case  8: if (searchValue < list[temp = high-      0x80]) high = temp;
+    //        case  7: if (searchValue < list[temp = high-      0x40]) high = temp;
+    //        case  6: if (searchValue < list[temp = high-      0x20]) high = temp;
+    //        case  5: if (searchValue < list[temp = high-      0x10]) high = temp;
+    //
+    //        case  4: if (searchValue < list[temp = high-       0x8]) high = temp;
+    //        case  3: if (searchValue < list[temp = high-       0x4]) high = temp;
+    //        case  2: if (searchValue < list[temp = high-       0x2]) high = temp;
+    //        case  1: if (searchValue < list[temp = high-       0x1]) high = temp;
+    //        }
+    //
+    //        return high;
+    //    }
+    //
+    //    // For debugging only
+    //    public int len() {
+    //        return len;
+    //    }
+    //
+    //    //----------------------------------------------------------------
+    //    //----------------------------------------------------------------
 
     /**
      * Returns true if this set contains every character
@@ -1789,79 +1789,79 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public boolean containsAll(UnicodeSet b) {
-      // The specified set is a subset if all of its pairs are contained in
-      // this set. This implementation accesses the lists directly for speed.
-      // TODO: this could be faster if size() were cached. But that would affect building speed
-      // so it needs investigation.
-      int[] listB = b.list;
-      boolean needA = true;
-      boolean needB = true;
-      int aPtr = 0;
-      int bPtr = 0;
-      int aLen = len - 1;
-      int bLen = b.len - 1;
-      int startA = 0, startB = 0, limitA = 0, limitB = 0;
-      while (true) {
-        // double iterations are such a pain...
-        if (needA) {
-          if (aPtr >= aLen) {
-            // ran out of A. If B is also exhausted, then break;
-            if (needB && bPtr >= bLen) {
-              break;
+        // The specified set is a subset if all of its pairs are contained in
+        // this set. This implementation accesses the lists directly for speed.
+        // TODO: this could be faster if size() were cached. But that would affect building speed
+        // so it needs investigation.
+        int[] listB = b.list;
+        boolean needA = true;
+        boolean needB = true;
+        int aPtr = 0;
+        int bPtr = 0;
+        int aLen = len - 1;
+        int bLen = b.len - 1;
+        int startA = 0, startB = 0, limitA = 0, limitB = 0;
+        while (true) {
+            // double iterations are such a pain...
+            if (needA) {
+                if (aPtr >= aLen) {
+                    // ran out of A. If B is also exhausted, then break;
+                    if (needB && bPtr >= bLen) {
+                        break;
+                    }
+                    return false;
+                }
+                startA = list[aPtr++];
+                limitA = list[aPtr++];
             }
+            if (needB) {
+                if (bPtr >= bLen) {
+                    // ran out of B. Since we got this far, we have an A and we are ok so far
+                    break;
+                }
+                startB = listB[bPtr++];
+                limitB = listB[bPtr++];
+            }
+            // if B doesn't overlap and is greater than A, get new A
+            if (startB >= limitA) {
+                needA = true;
+                needB = false;
+                continue;
+            }
+            // if B is wholy contained in A, then get a new B
+            if (startB >= startA && limitB <= limitA) {
+                needA = false;
+                needB = true;
+                continue;
+            }
+            // all other combinations mean we fail
             return false;
-          }
-          startA = list[aPtr++];
-          limitA = list[aPtr++];
         }
-        if (needB) {
-          if (bPtr >= bLen) {
-            // ran out of B. Since we got this far, we have an A and we are ok so far
-            break;
-          }
-          startB = listB[bPtr++];
-          limitB = listB[bPtr++];
-        }
-        // if B doesn't overlap and is greater than A, get new A
-        if (startB >= limitA) {
-          needA = true;
-          needB = false;
-          continue;
-        }
-        // if B is wholy contained in A, then get a new B
-        if (startB >= startA && limitB <= limitA) {
-          needA = false;
-          needB = true;
-          continue;
-        }
-        // all other combinations mean we fail
-        return false;
-      }
 
-      if (!strings.containsAll(b.strings)) return false;
-      return true;
-  }
+        if (!strings.containsAll(b.strings)) return false;
+        return true;
+    }
 
-//    /**
-//     * Returns true if this set contains all the characters and strings
-//     * of the given set.
-//     * @param c set to be checked for containment
-//     * @return true if the test condition is met
-//     * @stable ICU 2.0
-//     */
-//    public boolean containsAllOld(UnicodeSet c) {
-//        // The specified set is a subset if all of its pairs are contained in
-//        // this set.  It's possible to code this more efficiently in terms of
-//        // direct manipulation of the inversion lists if the need arises.
-//        int n = c.getRangeCount();
-//        for (int i=0; i<n; ++i) {
-//            if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
-//                return false;
-//            }
-//        }
-//        if (!strings.containsAll(c.strings)) return false;
-//        return true;
-//    }
+    //    /**
+    //     * Returns true if this set contains all the characters and strings
+    //     * of the given set.
+    //     * @param c set to be checked for containment
+    //     * @return true if the test condition is met
+    //     * @stable ICU 2.0
+    //     */
+    //    public boolean containsAllOld(UnicodeSet c) {
+    //        // The specified set is a subset if all of its pairs are contained in
+    //        // this set.  It's possible to code this more efficiently in terms of
+    //        // direct manipulation of the inversion lists if the need arises.
+    //        int n = c.getRangeCount();
+    //        for (int i=0; i<n; ++i) {
+    //            if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
+    //                return false;
+    //            }
+    //        }
+    //        if (!strings.containsAll(c.strings)) return false;
+    //        return true;
+    //    }
 
     /**
      * Returns true if there is a partition of the string such that this set contains each of the partitioned strings.
@@ -1872,7 +1872,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return true if the test condition is met
      * @stable ICU 2.0
      */
-     public boolean containsAll(String s) {
+    public boolean containsAll(String s) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
@@ -1906,7 +1906,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
         }
         return false;
-        
+
     }
 
     /**
@@ -1960,76 +1960,76 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public boolean containsNone(UnicodeSet b) {
-      // The specified set is a subset if some of its pairs overlap with some of this set's pairs.
-      // This implementation accesses the lists directly for speed.
-      int[] listB = b.list;
-      boolean needA = true;
-      boolean needB = true;
-      int aPtr = 0;
-      int bPtr = 0;
-      int aLen = len - 1;
-      int bLen = b.len - 1;
-      int startA = 0, startB = 0, limitA = 0, limitB = 0;
-      while (true) {
-        // double iterations are such a pain...
-        if (needA) {
-          if (aPtr >= aLen) {
-            // ran out of A: break so we test strings
-            break;
-          }
-          startA = list[aPtr++];
-          limitA = list[aPtr++];
+        // The specified set is a subset if some of its pairs overlap with some of this set's pairs.
+        // This implementation accesses the lists directly for speed.
+        int[] listB = b.list;
+        boolean needA = true;
+        boolean needB = true;
+        int aPtr = 0;
+        int bPtr = 0;
+        int aLen = len - 1;
+        int bLen = b.len - 1;
+        int startA = 0, startB = 0, limitA = 0, limitB = 0;
+        while (true) {
+            // double iterations are such a pain...
+            if (needA) {
+                if (aPtr >= aLen) {
+                    // ran out of A: break so we test strings
+                    break;
+                }
+                startA = list[aPtr++];
+                limitA = list[aPtr++];
+            }
+            if (needB) {
+                if (bPtr >= bLen) {
+                    // ran out of B: break so we test strings
+                    break;
+                }
+                startB = listB[bPtr++];
+                limitB = listB[bPtr++];
+            }
+            // if B is higher than any part of A, get new A
+            if (startB >= limitA) {
+                needA = true;
+                needB = false;
+                continue;
+            }
+            // if A is higher than any part of B, get new B
+            if (startA >= limitB) {
+                needA = false;
+                needB = true;
+                continue;
+            }
+            // all other combinations mean we fail
+            return false;
         }
-        if (needB) {
-          if (bPtr >= bLen) {
-            // ran out of B: break so we test strings
-            break;
-          }
-          startB = listB[bPtr++];
-          limitB = listB[bPtr++];
-        }
-        // if B is higher than any part of A, get new A
-        if (startB >= limitA) {
-          needA = true;
-          needB = false;
-          continue;
-        }
-        // if A is higher than any part of B, get new B
-        if (startA >= limitB) {
-          needA = false;
-          needB = true;
-          continue;
-        }
-        // all other combinations mean we fail
-        return false;
-      }
 
-      if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, b.strings)) return false;
-      return true;
-  }
+        if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, b.strings)) return false;
+        return true;
+    }
 
-//    /**
-//     * Returns true if none of the characters or strings in this UnicodeSet appears in the string.
-//     * For example, for the Unicode set [a{bc}{cd}]<br>
-//     * containsNone is true for: "xy", "cb"<br>
-//     * containsNone is false for: "a", "bc", "bcd"<br>
-//     * @param c set to be checked for containment
-//     * @return true if the test condition is met
-//     * @stable ICU 2.0
-//     */
-//    public boolean containsNoneOld(UnicodeSet c) {
-//        // The specified set is a subset if all of its pairs are contained in
-//        // this set.  It's possible to code this more efficiently in terms of
-//        // direct manipulation of the inversion lists if the need arises.
-//        int n = c.getRangeCount();
-//        for (int i=0; i<n; ++i) {
-//            if (!containsNone(c.getRangeStart(i), c.getRangeEnd(i))) {
-//                return false;
-//            }
-//        }
-//        if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, c.strings)) return false;
-//        return true;
-//    }
+    //    /**
+    //     * Returns true if none of the characters or strings in this UnicodeSet appears in the string.
+    //     * For example, for the Unicode set [a{bc}{cd}]<br>
+    //     * containsNone is true for: "xy", "cb"<br>
+    //     * containsNone is false for: "a", "bc", "bcd"<br>
+    //     * @param c set to be checked for containment
+    //     * @return true if the test condition is met
+    //     * @stable ICU 2.0
+    //     */
+    //    public boolean containsNoneOld(UnicodeSet c) {
+    //        // The specified set is a subset if all of its pairs are contained in
+    //        // this set.  It's possible to code this more efficiently in terms of
+    //        // direct manipulation of the inversion lists if the need arises.
+    //        int n = c.getRangeCount();
+    //        for (int i=0; i<n; ++i) {
+    //            if (!containsNone(c.getRangeStart(i), c.getRangeEnd(i))) {
+    //                return false;
+    //            }
+    //        }
+    //        if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, c.strings)) return false;
+    //        return true;
+    //    }
 
     /**
      * Returns true if this set contains none of the characters
@@ -2306,9 +2306,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated - for internal use only
      */
     public UnicodeSet applyPattern(String pattern,
-                      ParsePosition pos,
-                      SymbolTable symbols,
-                      int options) {
+            ParsePosition pos,
+            SymbolTable symbols,
+            int options) {
 
         // Need to build the pattern in a temporary string because
         // _applyPattern calls add() etc., which set pat to empty.
@@ -2335,7 +2335,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
             if (i != pattern.length()) {
                 throw new IllegalArgumentException("Parse of \"" + pattern +
-                                                   "\" failed at " + i);
+                        "\" failed at " + i);
             }
         }
         return this;
@@ -2356,14 +2356,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * IGNORE_SPACE, CASE.
      */
     void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
-                      StringBuffer rebuiltPat, int options) {
+            StringBuffer rebuiltPat, int options) {
 
         // Syntax characters: [ ] ^ - & { }
 
         // Recognized special forms for chars, sets: c-c s-s s&s
 
         int opts = RuleCharacterIterator.PARSE_VARIABLES |
-                   RuleCharacterIterator.PARSE_ESCAPES;
+        RuleCharacterIterator.PARSE_ESCAPES;
         if ((options & IGNORE_SPACE) != 0) {
             opts |= RuleCharacterIterator.SKIP_WHITESPACE;
         }
@@ -2386,8 +2386,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             if (false) {
                 // Debugging assertion
                 if (!((lastItem == 0 && op == 0) ||
-                      (lastItem == 1 && (op == 0 || op == '-')) ||
-                      (lastItem == 2 && (op == 0 || op == '-' || op == '&')))) {
+                        (lastItem == 1 && (op == 0 || op == '-')) ||
+                        (lastItem == 2 && (op == 0 || op == '-' || op == '&')))) {
                     throw new IllegalArgumentException();
                 }
             }
@@ -2447,15 +2447,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         }
                     }
                 } else if (symbols != null) {
-                     UnicodeMatcher m = symbols.lookupMatcher(c); // may be null
-                     if (m != null) {
-                         try {
-                             nested = (UnicodeSet) m;
-                             setMode = 3;
-                         } catch (ClassCastException e) {
-                             syntaxError(chars, "Syntax error");
-                         }
-                     }
+                    UnicodeMatcher m = symbols.lookupMatcher(c); // may be null
+                    if (m != null) {
+                        try {
+                            nested = (UnicodeSet) m;
+                            setMode = 3;
+                        } catch (ClassCastException e) {
+                            syntaxError(chars, "Syntax error");
+                        }
+                    }
                 }
             }
 
@@ -2708,8 +2708,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     private static void syntaxError(RuleCharacterIterator chars, String msg) {
         throw new IllegalArgumentException("Error: " + msg + " at \"" +
-                                           Utility.escape(chars.toString()) +
-                                           '"');
+                Utility.escape(chars.toString()) +
+        '"');
     }
 
     /**
@@ -2721,7 +2721,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public <U extends Collection<String>> U addAllTo(U target) {
         return addAllTo(this, target);
     }
-    
+
 
     /**
      * Add the contents of the UnicodeSet (as strings) into a collection.
@@ -2751,7 +2751,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public UnicodeSet add(Collection<?> source) {
         return addAll(source);
     }
-    
+
     /**
      * Add the contents of the UnicodeSet (as strings) into a collection.
      * Uses standard naming convention.
@@ -2818,7 +2818,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 ++j;
                 b = other[j];
             }
-        ///CLOVER:ON
+            ///CLOVER:ON
         } else {
             b = other[j++];
         }
@@ -2862,81 +2862,81 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // change from xor is that we have to check overlapping pairs
         // polarity bit 1 means a is second, bit 2 means b is.
         main:
-        while (true) {
-            switch (polarity) {
-              case 0: // both first; take lower if unequal
-                if (a < b) { // take a
-                    // Back up over overlapping ranges in buffer[]
-                    if (k > 0 && a <= buffer[k-1]) {
-                        // Pick latter end value in buffer[] vs. list[]
-                        a = max(list[i], buffer[--k]);
-                    } else {
-                        // No overlap
-                        buffer[k++] = a;
-                        a = list[i];
+            while (true) {
+                switch (polarity) {
+                case 0: // both first; take lower if unequal
+                    if (a < b) { // take a
+                        // Back up over overlapping ranges in buffer[]
+                        if (k > 0 && a <= buffer[k-1]) {
+                            // Pick latter end value in buffer[] vs. list[]
+                            a = max(list[i], buffer[--k]);
+                        } else {
+                            // No overlap
+                            buffer[k++] = a;
+                            a = list[i];
+                        }
+                        i++; // Common if/else code factored out
+                        polarity ^= 1;
+                    } else if (b < a) { // take b
+                        if (k > 0 && b <= buffer[k-1]) {
+                            b = max(other[j], buffer[--k]);
+                        } else {
+                            buffer[k++] = b;
+                            b = other[j];
+                        }
+                        j++;
+                        polarity ^= 2;
+                    } else { // a == b, take a, drop b
+                        if (a == HIGH) break main;
+                        // This is symmetrical; it doesn't matter if
+                        // we backtrack with a or b. - liu
+                        if (k > 0 && a <= buffer[k-1]) {
+                            a = max(list[i], buffer[--k]);
+                        } else {
+                            // No overlap
+                            buffer[k++] = a;
+                            a = list[i];
+                        }
+                        i++;
+                        polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
                     }
-                    i++; // Common if/else code factored out
-                    polarity ^= 1;
-                } else if (b < a) { // take b
-                    if (k > 0 && b <= buffer[k-1]) {
-                        b = max(other[j], buffer[--k]);
-                    } else {
+                    break;
+                case 3: // both second; take higher if unequal, and drop other
+                    if (b <= a) { // take a
+                        if (a == HIGH) break main;
+                        buffer[k++] = a;
+                    } else { // take b
+                        if (b == HIGH) break main;
                         buffer[k++] = b;
-                        b = other[j];
                     }
-                    j++;
-                    polarity ^= 2;
-                } else { // a == b, take a, drop b
-                    if (a == HIGH) break main;
-                    // This is symmetrical; it doesn't matter if
-                    // we backtrack with a or b. - liu
-                    if (k > 0 && a <= buffer[k-1]) {
-                        a = max(list[i], buffer[--k]);
-                    } else {
-                        // No overlap
-                        buffer[k++] = a;
-                        a = list[i];
+                    a = list[i++]; polarity ^= 1;   // factored common code
+                    b = other[j++]; polarity ^= 2;
+                    break;
+                case 1: // a second, b first; if b < a, overlap
+                    if (a < b) { // no overlap, take a
+                        buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                    } else if (b < a) { // OVERLAP, drop b
+                        b = other[j++]; polarity ^= 2;
+                    } else { // a == b, drop both!
+                        if (a == HIGH) break main;
+                        a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
                     }
-                    i++;
-                    polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
+                    break;
+                case 2: // a first, b second; if a < b, overlap
+                    if (b < a) { // no overlap, take b
+                        buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                    } else  if (a < b) { // OVERLAP, drop a
+                        a = list[i++]; polarity ^= 1;
+                    } else { // a == b, drop both!
+                        if (a == HIGH) break main;
+                        a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
+                    }
+                    break;
                 }
-                break;
-              case 3: // both second; take higher if unequal, and drop other
-                if (b <= a) { // take a
-                    if (a == HIGH) break main;
-                    buffer[k++] = a;
-                } else { // take b
-                    if (b == HIGH) break main;
-                    buffer[k++] = b;
-                }
-                a = list[i++]; polarity ^= 1;   // factored common code
-                b = other[j++]; polarity ^= 2;
-                break;
-              case 1: // a second, b first; if b < a, overlap
-                if (a < b) { // no overlap, take a
-                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                } else if (b < a) { // OVERLAP, drop b
-                    b = other[j++]; polarity ^= 2;
-                } else { // a == b, drop both!
-                    if (a == HIGH) break main;
-                    a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
-                }
-                break;
-              case 2: // a first, b second; if a < b, overlap
-                if (b < a) { // no overlap, take b
-                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
-                } else  if (a < b) { // OVERLAP, drop a
-                    a = list[i++]; polarity ^= 1;
-                } else { // a == b, drop both!
-                    if (a == HIGH) break main;
-                    a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
-                }
-                break;
             }
-        }
         buffer[k++] = HIGH;    // terminate
         len = k;
         // swap list and buffer
@@ -2960,54 +2960,54 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // change from xor is that we have to check overlapping pairs
         // polarity bit 1 means a is second, bit 2 means b is.
         main:
-        while (true) {
-            switch (polarity) {
-              case 0: // both first; drop the smaller
-                if (a < b) { // drop a
-                    a = list[i++]; polarity ^= 1;
-                } else if (b < a) { // drop b
-                    b = other[j++]; polarity ^= 2;
-                } else { // a == b, take one, drop other
-                    if (a == HIGH) break main;
-                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
+            while (true) {
+                switch (polarity) {
+                case 0: // both first; drop the smaller
+                    if (a < b) { // drop a
+                        a = list[i++]; polarity ^= 1;
+                    } else if (b < a) { // drop b
+                        b = other[j++]; polarity ^= 2;
+                    } else { // a == b, take one, drop other
+                        if (a == HIGH) break main;
+                        buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
+                    }
+                    break;
+                case 3: // both second; take lower if unequal
+                    if (a < b) { // take a
+                        buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                    } else if (b < a) { // take b
+                        buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                    } else { // a == b, take one, drop other
+                        if (a == HIGH) break main;
+                        buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
+                    }
+                    break;
+                case 1: // a second, b first;
+                    if (a < b) { // NO OVERLAP, drop a
+                        a = list[i++]; polarity ^= 1;
+                    } else if (b < a) { // OVERLAP, take b
+                        buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                    } else { // a == b, drop both!
+                        if (a == HIGH) break main;
+                        a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
+                    }
+                    break;
+                case 2: // a first, b second; if a < b, overlap
+                    if (b < a) { // no overlap, drop b
+                        b = other[j++]; polarity ^= 2;
+                    } else  if (a < b) { // OVERLAP, take a
+                        buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                    } else { // a == b, drop both!
+                        if (a == HIGH) break main;
+                        a = list[i++]; polarity ^= 1;
+                        b = other[j++]; polarity ^= 2;
+                    }
+                    break;
                 }
-                break;
-              case 3: // both second; take lower if unequal
-                if (a < b) { // take a
-                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                } else if (b < a) { // take b
-                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
-                } else { // a == b, take one, drop other
-                    if (a == HIGH) break main;
-                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
-                }
-                break;
-              case 1: // a second, b first;
-                if (a < b) { // NO OVERLAP, drop a
-                    a = list[i++]; polarity ^= 1;
-                } else if (b < a) { // OVERLAP, take b
-                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
-                } else { // a == b, drop both!
-                    if (a == HIGH) break main;
-                    a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
-                }
-                break;
-              case 2: // a first, b second; if a < b, overlap
-                if (b < a) { // no overlap, drop b
-                    b = other[j++]; polarity ^= 2;
-                } else  if (a < b) { // OVERLAP, take a
-                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                } else { // a == b, drop both!
-                    if (a == HIGH) break main;
-                    a = list[i++]; polarity ^= 1;
-                    b = other[j++]; polarity ^= 2;
-                }
-                break;
             }
-        }
         buffer[k++] = HIGH;    // terminate
         len = k;
         // swap list and buffer
@@ -3069,7 +3069,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // Reference comparison ok; VersionInfo caches and reuses
             // unique objects.
             return v != NO_VERSION &&
-                   v.compareTo(version) <= 0;
+            v.compareTo(version) <= 0;
         }
     }
 
@@ -3182,7 +3182,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             i += UTF16.getCharCount(ch);
             if (UCharacterProperty.isRuleWhiteSpace(ch)) {
                 if (buf.length() == 0 ||
-                    buf.charAt(buf.length() - 1) == ' ') {
+                        buf.charAt(buf.length() - 1) == ' ') {
                     continue;
                 }
                 ch = ' '; // convert to ' '
@@ -3190,7 +3190,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             UTF16.append(buf, ch);
         }
         if (buf.length() != 0 &&
-            buf.charAt(buf.length() - 1) == ' ') {
+                buf.charAt(buf.length() - 1) == ' ') {
             buf.setLength(buf.length() - 1);
         }
         return buf.toString();
@@ -3278,7 +3278,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 3.2
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
-                                         String valueAlias, SymbolTable symbols) {
+            String valueAlias, SymbolTable symbols) {
         checkFrozen();
         int p;
         int v;
@@ -3287,7 +3287,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (symbols != null
                 && (symbols instanceof XSymbolTable)
                 && ((XSymbolTable)symbols).applyPropertyAlias(propertyAlias, valueAlias, this)) {
-                return this;
+            return this;
         }
 
         if (valueAlias.length() > 0) {
@@ -3299,15 +3299,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
 
             if ((p >= UProperty.BINARY_START && p < UProperty.BINARY_LIMIT) ||
-                (p >= UProperty.INT_START && p < UProperty.INT_LIMIT) ||
-                (p >= UProperty.MASK_START && p < UProperty.MASK_LIMIT)) {
+                    (p >= UProperty.INT_START && p < UProperty.INT_LIMIT) ||
+                    (p >= UProperty.MASK_START && p < UProperty.MASK_LIMIT)) {
                 try {
                     v = UCharacter.getPropertyValueEnum(p, valueAlias);
                 } catch (IllegalArgumentException e) {
                     // Handle numeric CCC
                     if (p == UProperty.CANONICAL_COMBINING_CLASS ||
-                        p == UProperty.LEAD_CANONICAL_COMBINING_CLASS ||
-                        p == UProperty.TRAIL_CANONICAL_COMBINING_CLASS) {
+                            p == UProperty.LEAD_CANONICAL_COMBINING_CLASS ||
+                            p == UProperty.TRAIL_CANONICAL_COMBINING_CLASS) {
                         v = Integer.parseInt(Utility.deleteRuleWhiteSpace(valueAlias));
                         // If the resultant set is empty then the numeric value
                         // was invalid.
@@ -3324,38 +3324,38 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
                 switch (p) {
                 case UProperty.NUMERIC_VALUE:
-                    {
-                        double value = Double.parseDouble(Utility.deleteRuleWhiteSpace(valueAlias));
-                        applyFilter(new NumericValueFilter(value), UCharacterProperty.SRC_CHAR);
-                        return this;
-                    }
+                {
+                    double value = Double.parseDouble(Utility.deleteRuleWhiteSpace(valueAlias));
+                    applyFilter(new NumericValueFilter(value), UCharacterProperty.SRC_CHAR);
+                    return this;
+                }
                 case UProperty.NAME:
                 case UProperty.UNICODE_1_NAME:
-                    {
-                        // Must munge name, since
-                        // UCharacter.charFromName() does not do
-                        // 'loose' matching.
-                        String buf = mungeCharName(valueAlias);
-                        int ch =
-                            (p == UProperty.NAME) ?
-                            UCharacter.getCharFromExtendedName(buf) :
-                            UCharacter.getCharFromName1_0(buf);
-                        if (ch == -1) {
-                            throw new IllegalArgumentException("Invalid character name");
-                        }
-                        clear();
-                        add_unchecked(ch);
-                        return this;
-                    }
+                {
+                    // Must munge name, since
+                    // UCharacter.charFromName() does not do
+                    // 'loose' matching.
+                    String buf = mungeCharName(valueAlias);
+                    int ch =
+                        (p == UProperty.NAME) ?
+                                UCharacter.getCharFromExtendedName(buf) :
+                                    UCharacter.getCharFromName1_0(buf);
+                                if (ch == -1) {
+                                    throw new IllegalArgumentException("Invalid character name");
+                                }
+                                clear();
+                                add_unchecked(ch);
+                                return this;
+                }
                 case UProperty.AGE:
-                    {
-                        // Must munge name, since
-                        // VersionInfo.getInstance() does not do
-                        // 'loose' matching.
-                        VersionInfo version = VersionInfo.getInstance(mungeCharName(valueAlias));
-                        applyFilter(new VersionFilter(version), UCharacterProperty.SRC_PROPSVEC);
-                        return this;
-                    }
+                {
+                    // Must munge name, since
+                    // VersionInfo.getInstance() does not do
+                    // 'loose' matching.
+                    VersionInfo version = VersionInfo.getInstance(mungeCharName(valueAlias));
+                    applyFilter(new VersionFilter(version), UCharacterProperty.SRC_PROPSVEC);
+                    return this;
+                }
                 }
 
                 // p is a non-binary, non-enumerated property that we
@@ -3438,8 +3438,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
         // Look for an opening [:, [:^, \p, or \P
         return pattern.regionMatches(pos, "[:", 0, 2) ||
-            pattern.regionMatches(true, pos, "\\p", 0, 2) ||
-            pattern.regionMatches(pos, "\\N", 0, 2);
+        pattern.regionMatches(true, pos, "\\p", 0, 2) ||
+        pattern.regionMatches(pos, "\\N", 0, 2);
     }
 
     /**
@@ -3451,7 +3451,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param iterOpts RuleCharacterIterator options
      */
     private static boolean resemblesPropertyPattern(RuleCharacterIterator chars,
-                                                    int iterOpts) {
+            int iterOpts) {
         boolean result = false;
         iterOpts &= ~RuleCharacterIterator.PARSE_ESCAPES;
         Object pos = chars.getPos(null);
@@ -3459,7 +3459,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (c == '[' || c == '\\') {
             int d = chars.next(iterOpts & ~RuleCharacterIterator.SKIP_WHITESPACE);
             result = (c == '[') ? (d == ':') :
-                     (d == 'N' || d == 'p' || d == 'P');
+                (d == 'N' || d == 'p' || d == 'P');
         }
         chars.setPos(pos);
         return result;
@@ -3492,7 +3492,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 invert = true;
             }
         } else if (pattern.regionMatches(true, pos, "\\p", 0, 2) ||
-                   pattern.regionMatches(pos, "\\N", 0, 2)) {
+                pattern.regionMatches(pos, "\\N", 0, 2)) {
             char c = pattern.charAt(pos+1);
             invert = (c == 'P');
             isName = (c == 'N');
@@ -3564,7 +3564,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param symbols TODO
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
-                                      StringBuffer rebuiltPat, SymbolTable symbols) {
+            StringBuffer rebuiltPat, SymbolTable symbols) {
         String patStr = chars.lookahead();
         ParsePosition pos = new ParsePosition(0);
         applyPropertyPattern(patStr, pos, symbols);
@@ -3795,7 +3795,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
-            */
+         */
         public char[] lookup(String s) {
             return null;
         }
@@ -3810,7 +3810,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     private boolean frozen;
-    
+
     /**
      * Is this frozen, according to the Freezable interface?
      * @return value
@@ -3829,7 +3829,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         frozen = true;
         return this;
     }
-    
+
     /**
      * Clone a thawed version of this class, according to the Freezable interface.
      * @return this
@@ -3840,18 +3840,18 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         result.frozen = false;
         return result;
     }
-    
+
     // internal function
     private void checkFrozen() {
         if (frozen) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
     }
-    
+
     // ************************
     // Additional methods for integration with Generics and Collections
     // ************************
-    
+
     /**
      * Returns a string iterator. Uses the same order of iteration as {@link UnicodeSetIterator}.
      * @see java.util.Set#iterator()
@@ -4017,12 +4017,31 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return this;
     }
 
-    /* (non-Javadoc)
+    public enum ComparisonStyle {SHORTER_FIRST, LEXICOGRAPHIC, LONGER_FIRST}
+
+    /**
+     * Compares UnicodeSets, where shorter come first, and otherwise lexigraphically
+     * (according to the comparison of the first characters that differ).
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(UnicodeSet o) {
+        return compareTo(o, ComparisonStyle.SHORTER_FIRST);
+    }
+    /**
+     * Compares UnicodeSets, in three different ways.
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int compareTo(UnicodeSet o, ComparisonStyle style) {
+        if (style != ComparisonStyle.LEXICOGRAPHIC) {
+            int diff = size() - o.size();
+            if (diff != 0) {
+                return (diff < 0) == (style == ComparisonStyle.SHORTER_FIRST) ? -1 : 1;
+            }
+        }
         int result;
         for (int i = 0; ; ++i) {
             if (0 != (result = list[i] - o.list[i])) {
@@ -4074,7 +4093,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         char firstChar = string.charAt(0);
         int offset = codePoint - Character.MIN_SUPPLEMENTARY_CODE_POINT;
-        
+
         if (offset < 0) { // BMP codePoint
             int result = firstChar - codePoint;
             if (result != 0) {
@@ -4097,7 +4116,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         return stringLength - 2;
     }
-    
+
     /**
      * Utility to compare a string to a code point.
      * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
@@ -4110,12 +4129,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Utility to compare two collections of iterables. Warning: the ordering in iterables is important. For Collections that are ordered,
+     * Utility to compare two iterables. Warning: the ordering in iterables is important. For Collections that are ordered,
      * like Lists, that is expected. However, Sets in Java violate Leibniz's law when it comes to iteration.
      * That means that sets can't be compared directly with this method, unless they are TreeSets without
      * (or with the same) comparator. Unfortunately, it is impossible to reliably detect in Java whether subclass of
      * Collection satisfies the right criteria, so it is left to the user to avoid those circumstances.
-     * @draft ICU 4.2
+     * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public static <T extends Comparable<T>> int compare(Iterable<T> collection1, Iterable<T> collection2) {
@@ -4137,6 +4156,21 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
+     * Utility to compare two collections, optionally by size, and then lexicographically.
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static <T extends Comparable<T>> int compare(Collection<T> collection1, Collection<T> collection2, ComparisonStyle style) {
+        if (style != ComparisonStyle.LEXICOGRAPHIC) {
+            int diff = collection1.size() - collection2.size();
+            if (diff != 0) {
+                return (diff < 0) == (style == ComparisonStyle.SHORTER_FIRST) ? -1 : 1;
+            }
+        }
+        return compare(collection1, collection2);
+    }
+
+    /**
      * Utility for adding the contents of an iterable to a collection.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -4147,7 +4181,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         return target;
     }
-    
+
     /**
      * Utility for adding the contents of an iterable to a collection.
      * @draft ICU 4.2
@@ -4174,9 +4208,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public Iterable<String> strings() {
         return Collections.unmodifiableSortedSet(strings);
     }
-    
+
     /**
      * Return the value of the first code point, if the string is exactly one code point. Otherwise return Integer.MAX_VALUE.
+     * @internal
      */
     public static int getSingleCodePoint(String s) {
         int length = s.length();
@@ -4195,15 +4230,70 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param dontCare Set with the don't-care characters for spanning
      * @return 
      * @return the input set, modified
+     * @internal
      */
     public UnicodeSet addBridges(UnicodeSet dontCare) {
-      UnicodeSet notInInput = new UnicodeSet(this).complement();
-      for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
-        if (it.codepoint != 0 && it.codepoint != UnicodeSetIterator.IS_STRING && it.codepointEnd != 0x10FFFF && dontCare.contains(it.codepoint,it.codepointEnd)) {
-          add(it.codepoint,it.codepointEnd);
+        UnicodeSet notInInput = new UnicodeSet(this).complement();
+        for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
+            if (it.codepoint != 0 && it.codepoint != UnicodeSetIterator.IS_STRING && it.codepointEnd != 0x10FFFF && dontCare.contains(it.codepoint,it.codepointEnd)) {
+                add(it.codepoint,it.codepointEnd);
+            }
         }
-      }
-      return this;
+        return this;
+    }
+
+    /**
+     * Find the first index at or after fromIndex where the UnicodeSet matches at that index.
+     * If findNot is true, then reverse the sense of the match: find the first place where the UnicodeSet doesn't match.
+     * If there is no match, length is returned.
+     * <br>TODO add strings, optimize, using ICU4C algorithms
+     * @internal
+     */
+    public int findIn(CharSequence value, int fromIndex, boolean findNot) {
+        int cp;
+        for (; fromIndex < value.length(); fromIndex += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(value, fromIndex);
+            if (contains(cp) != findNot) {
+                break;
+            }
+        }
+        return fromIndex;
+    }
+
+    /**
+     * Find the last index before fromIndex where the UnicodeSet matches at that index.
+     * If findNot is true, then reverse the sense of the match: find the last place where the UnicodeSet doesn't match.
+     * If there is no match, -1 is returned.
+     * BEFORE index is not in the UnicodeSet.
+     * <br>TODO add strings, optimize, using ICU4C algorithms
+     * @internal
+     */
+    public int findLastIn(CharSequence value, int fromIndex, boolean findNot) {
+        int cp;
+        fromIndex -= 1;
+        for (; fromIndex >= 0; fromIndex -= UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(value, fromIndex);
+            if (contains(cp) != findNot) {
+                break;
+            }
+        }
+        return fromIndex < 0 ? -1 : fromIndex;
+    }
+
+    /**
+     * Strips code points from source. If matches is true, script all that match <i>this</i>. If matches is false, then strip all that <i>don't</i> match.
+     * @param source
+     * @param matches
+     * @return
+     */
+    public String stripFrom(CharSequence source, boolean matches) {
+        StringBuilder result = new StringBuilder();
+        for (int pos = 0; pos < source.length();) {
+            int inside = findIn(source, pos, !matches);
+            result.append(source.subSequence(pos, inside));
+            pos = findIn(source, inside, matches); // get next start
+        }
+        return result.toString();
     }
 }
 //eof

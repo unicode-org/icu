@@ -11,6 +11,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.text.UnicodeSet.ComparisonStyle;
 
 /**
  * @test
@@ -1551,17 +1553,39 @@ public class UnicodeSetTest extends TestFmwk {
     
     public void TestComparison() {
         UnicodeSet set1 = new UnicodeSet("[a-b d-g {ch} {zh}]").freeze();
-        UnicodeSet set2 = new UnicodeSet("[e-f {ch}]").freeze();
-        UnicodeSet set3 = new UnicodeSet("[d m-n {dh}]").freeze();
+        UnicodeSet set2 = new UnicodeSet("[c-e {ch}]").freeze();
+        UnicodeSet set3 = new UnicodeSet("[d m-n z {dh}]").freeze();
 
         //compareTo(UnicodeSet)
         // do indirectly, by sorting
-        List<UnicodeSet> unsorted = Arrays.asList(set1, set2, set3);
-        List<UnicodeSet> goal = Arrays.asList(set1, set3, set2);
+        List<UnicodeSet> unsorted = Arrays.asList(set3, set2, set1);
+        List<UnicodeSet> goalShortest = Arrays.asList(set2, set3, set1);
+        List<UnicodeSet> goalLongest = Arrays.asList(set1, set3, set2);
+        List<UnicodeSet> goalLex = Arrays.asList(set1, set2, set3);
 
         List<UnicodeSet> sorted = new ArrayList(new TreeSet<UnicodeSet>(unsorted));
-        assertNotEquals("compareTo", unsorted, sorted);
-        assertEquals("compareTo", goal, sorted);
+        assertNotEquals("compareTo-shorter-first", unsorted, sorted);
+        assertEquals("compareTo-shorter-first", goalShortest, sorted);
+        
+        TreeSet<UnicodeSet> sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
+            public int compare(UnicodeSet o1, UnicodeSet o2) {
+                // TODO Auto-generated method stub
+                return o1.compareTo(o2, ComparisonStyle.LONGER_FIRST);
+            }});
+        sorted1.addAll(unsorted);
+        sorted = new ArrayList(sorted1);
+        assertNotEquals("compareTo-longer-first", unsorted, sorted);
+        assertEquals("compareTo-longer-first", goalLongest, sorted);
+
+        sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
+            public int compare(UnicodeSet o1, UnicodeSet o2) {
+                // TODO Auto-generated method stub
+                return o1.compareTo(o2, ComparisonStyle.LEXICOGRAPHIC);
+            }});
+        sorted1.addAll(unsorted);
+        sorted = new ArrayList(sorted1);
+        assertNotEquals("compareTo-lex", unsorted, sorted);
+        assertEquals("compareTo-lex", goalLex, sorted);
 
         //compare(String, int)
         // make a list of interesting combinations

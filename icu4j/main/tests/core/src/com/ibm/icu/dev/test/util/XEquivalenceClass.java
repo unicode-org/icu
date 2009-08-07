@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,40 +15,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class XEquivalenceClass {
+import com.ibm.icu.text.Transform;
 
-    public SetMaker getSetMaker() {
+public class XEquivalenceClass<T,R> implements Iterable<T> {
+    private static final String ARROW = "\u2192";
+
+    public SetMaker<T> getSetMaker() {
         return setMaker;
     }
 
     // quick test
     static public void main(String[] args) {
-        XEquivalenceClass foo1 = new XEquivalenceClass("NONE");
+        XEquivalenceClass<String, Integer> foo1 = new XEquivalenceClass<String, Integer>(1);
         String[][] tests = {{"b","a1"}, {"b", "c"}, {"a1", "c"}, {"d", "e"}, {"e", "f"}, {"c", "d"}};
         for (int i = 0; i < tests.length; ++i) {
             System.out.println("Adding: " + tests[i][0] + ", " + tests[i][1]);
             foo1.add(tests[i][0], tests[i][1], new Integer(i));
-            for (Iterator it = foo1.getExplicitItems().iterator(); it.hasNext();) {
-                Object item = it.next();
+            for (String item : foo1.getExplicitItems()) {
                 System.out.println("\t" + item  + ";\t" + foo1.getSample(item) + ";\t" + foo1.getEquivalences(item));
-                System.out.println("\t\t" + foo1.getReasons(item, foo1.getSample(item)));
+                List<Linkage<String, Integer>> reasons = foo1.getReasons(item, foo1.getSample(item));
+                if (reasons != null) {
+                    System.out.println("\t\t" + XEquivalenceClass.toString(reasons, null));
+                }
             }
         }
     }
 
-    private Map toPartitionSet = new HashMap();
-    private Map obj_obj_reasons = new HashMap();
-    private Object defaultReason;
+    private Map<T,Set<T>> toPartitionSet = new HashMap();
+    private Map<T,Map<T,Set<R>>> obj_obj_reasons = new HashMap();
+    private R defaultReason;
     private SetMaker setMaker;
     
-    public interface SetMaker {
-        Set make();
+    public interface SetMaker<T> {
+        Set<T> make();
     }
 
     /**
      * empty, as if just created
      */
-    public XEquivalenceClass clear(Object defaultReasonArg) {
+    public XEquivalenceClass clear(R defaultReasonArg) {
         toPartitionSet.clear();
         obj_obj_reasons.clear();
         this.defaultReason = defaultReasonArg;
@@ -56,10 +61,17 @@ public class XEquivalenceClass {
     }
 
     /**
+     * Create class
+     *
+     */
+    public XEquivalenceClass() {
+    }
+
+    /**
      * Create class with comparator, and default reason.
      *
      */
-    public XEquivalenceClass(Object defaultReason) {
+    public XEquivalenceClass(R defaultReason) {
         this.defaultReason = defaultReason;
     }
     
@@ -67,7 +79,7 @@ public class XEquivalenceClass {
      * Create class with comparator, and default reason.
      *
      */
-    public XEquivalenceClass(Object defaultReason, SetMaker setMaker) {
+    public XEquivalenceClass(R defaultReason, SetMaker<T> setMaker) {
         this.defaultReason = defaultReason;
         this.setMaker = setMaker;
     }
@@ -75,20 +87,28 @@ public class XEquivalenceClass {
     /**
      * Add two equivalent items, with NO_REASON for the reason.
      */
-    public XEquivalenceClass add(Object a, Object b) {
+    public XEquivalenceClass add(T a, T b) {
         return add(a,b,null);
+    }
+
+    /**
+     * Add two equivalent items, with NO_REASON for the reason.
+     */
+    public XEquivalenceClass add(T a, T b, R reason) {
+        return add(a,b,reason, reason);
     }
 
     /**
      * Add two equivalent items, plus a reason. The reason is only used for getReasons
      */
-    public XEquivalenceClass add(Object a, Object b, Object reason) {
+    public XEquivalenceClass add(T a, T b, R reasonAB, R reasonBA) {
         if (a.equals(b)) return this;
-        if (reason == null) reason = defaultReason;
-        addReason(a,b,reason);
-        addReason(b,a,reason);
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
-        Set bPartitionSet = (Set) toPartitionSet.get(b);
+        if (reasonAB == null) reasonAB = defaultReason;
+        if (reasonBA == null) reasonBA = defaultReason;
+        addReason(a,b,reasonAB);
+        addReason(b,a,reasonBA);
+        Set<T>aPartitionSet = toPartitionSet.get(a);
+        Set<T>bPartitionSet = toPartitionSet.get(b);
         if (aPartitionSet == null) {
             if (bPartitionSet == null) { // both null, set up bSet
                 bPartitionSet = setMaker != null ? setMaker.make() : new HashSet();
@@ -103,8 +123,8 @@ public class XEquivalenceClass {
         } else if (aPartitionSet != bPartitionSet) {  // both non-null, not equal, merge.  Equality check ok here
             aPartitionSet.addAll(bPartitionSet);
             // remap every x that had x => bPartitionSet
-            for (Iterator it = bPartitionSet.iterator(); it.hasNext();) {
-                toPartitionSet.put(it.next(), aPartitionSet);
+            for (T item : bPartitionSet) {
+                toPartitionSet.put(item, aPartitionSet);
             }
         }
         return this;
@@ -114,16 +134,13 @@ public class XEquivalenceClass {
      * Add all the information from the other class
      *
      */
-    public XEquivalenceClass addAll(XEquivalenceClass other) {
+    public XEquivalenceClass<T,R> addAll(XEquivalenceClass<T,R> other) {
         // For now, does the simple, not optimized version
-        for (Iterator it = other.obj_obj_reasons.keySet().iterator(); it.hasNext();) {
-            Object a = it.next();
-            Map obj_reasons = (Map) other.obj_obj_reasons.get(a);
-            for (Iterator it2 = obj_reasons.keySet().iterator(); it2.hasNext();) {
-                Object b = it2.next();
-                Set reasons = (Set) obj_reasons.get(b);
-                for (Iterator it3 = reasons.iterator(); it3.hasNext();) {
-                    Object reason = it3.next();
+        for (T a : other.obj_obj_reasons.keySet()) {
+            Map<T,Set<R>> obj_reasons = other.obj_obj_reasons.get(a);
+            for (T b : obj_reasons.keySet()) {
+                Set<R> reasons = obj_reasons.get(b);
+                for (R reason: reasons) {
                     add(a, b, reason);
                 }
             }
@@ -134,10 +151,10 @@ public class XEquivalenceClass {
     /**
      * 
      */
-    private void addReason(Object a, Object b, Object reason) {
-        Map obj_reasons = (Map) obj_obj_reasons.get(a);
+    private void addReason(T a, T b, R reason) {
+        Map<T,Set<R>> obj_reasons = obj_obj_reasons.get(a);
         if (obj_reasons == null) obj_obj_reasons.put(a, obj_reasons = new HashMap());
-        Set reasons = (Set) obj_reasons.get(b);
+        Set<R> reasons = obj_reasons.get(b);
         if (reasons == null) obj_reasons.put(b, reasons = new HashSet());
         reasons.add(reason);
     }
@@ -147,7 +164,7 @@ public class XEquivalenceClass {
      * have themselves as equivalences.)
      *
      */
-    public Set getExplicitItems() {
+    public Set<T> getExplicitItems() {
         return Collections.unmodifiableSet(toPartitionSet.keySet());
     }
 
@@ -155,20 +172,23 @@ public class XEquivalenceClass {
      * Returns an unmodifiable set of all the equivalent objects
      *
      */
-    public Set getEquivalences(Object a) {
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
+    public Set<T>getEquivalences(T a) {
+        Set<T> aPartitionSet = toPartitionSet.get(a);
         if (aPartitionSet == null) { // manufacture an equivalence
-            aPartitionSet = new HashSet();
+            aPartitionSet = new HashSet<T>();
             aPartitionSet.add(a); 
         }
         return Collections.unmodifiableSet(aPartitionSet);
     }
+    
+    public boolean hasEquivalences(T a) {
+        return toPartitionSet.get(a) != null;
+    }
 
-    public Set getEquivalenceSets() {
-        Set result = new HashSet();
-        for (Iterator it = toPartitionSet.keySet().iterator(); it.hasNext();) {
-            Object item = it.next();
-            Set partition = (Set) toPartitionSet.get(item);
+    public Set<Set<T>> getEquivalenceSets() {
+        Set<Set<T>> result = new HashSet<Set<T>>();
+        for (T item : toPartitionSet.keySet()) {
+            Set<T> partition = toPartitionSet.get(item);
             result.add(Collections.unmodifiableSet(partition));
         }
         return result;
@@ -177,9 +197,9 @@ public class XEquivalenceClass {
      * returns true iff a is equivalent to b (or a.equals b)
      *
      */
-    public boolean isEquivalent(Object a, Object b) {
+    public boolean isEquivalent(T a, T b) {
         if (a.equals(b)) return true;
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
+        Set<T>aPartitionSet = toPartitionSet.get(a);
         if (aPartitionSet == null) return false;
         return aPartitionSet.contains(b);
     }
@@ -188,21 +208,20 @@ public class XEquivalenceClass {
      * Gets a sample object in the equivalence set for a. 
      *
      */
-    public Object getSample(Object a) {
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
+    public T getSample(T a) {
+        Set<T> aPartitionSet = toPartitionSet.get(a);
         if (aPartitionSet == null) return a; // singleton
         return aPartitionSet.iterator().next();
     }
 
-    public interface Filter {
-        boolean matches(Object o);
+    public interface Filter<T> {
+        boolean matches(T o);
     }
 
-    public Object getSample(Object a, Filter f) {
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
+    public T getSample(T a, Filter<T> f) {
+        Set<T> aPartitionSet = toPartitionSet.get(a);
         if (aPartitionSet == null) return a; // singleton
-        for (Iterator it = aPartitionSet.iterator(); it.hasNext();) {
-            Object obj = it.next();
+        for (T obj : aPartitionSet) {
             if (f.matches(obj)) return obj;
         }
         return a;
@@ -212,76 +231,101 @@ public class XEquivalenceClass {
      * gets the set of all the samples, one from each equivalence class. 
      *
      */
-    public Set getSamples() {
-        Set seenAlready = new HashSet();
-        Set result = new HashSet();
-        for (Iterator it = toPartitionSet.keySet().iterator(); it.hasNext();) {
-            Object item = it.next();
+    public Set<T> getSamples() {
+        Set<T> seenAlready = new HashSet();
+        Set<T> result = new HashSet();
+        for (T item : toPartitionSet.keySet()) {
             if (seenAlready.contains(item)) continue;
-            Set partition = (Set) toPartitionSet.get(item);
+            Set<T> partition = toPartitionSet.get(item);
             result.add(partition.iterator().next());
             seenAlready.addAll(partition);
         }
         return result;
     }
 
+    public Iterator<T> iterator() {
+        return getSamples().iterator();
+    }
+    
+    public static class Linkage<T,R> {
+        /**
+         * 
+         */
+        public Set<R> reasons;
+        public T result;
+        /**
+         * @param reasons
+         * @param item
+         */
+        public Linkage(Set<R> reasons, T result) {
+            this.reasons = reasons;
+            this.result = result;
+        }
+        public String toString() {
+            return reasons + (result == null ? "" : ARROW + result);
+        }
+    }
+
+    public static <T,R> String toString(List<Linkage<T,R>> others, Transform<Linkage<T,R>,String> itemTransform) {
+        StringBuffer result = new StringBuffer();
+        for (Linkage<T,R> item : others) {
+            result.append(itemTransform == null ? item.toString() : itemTransform.transform(item));
+        }
+        return result.toString();
+    }
 
     /**
-     * Returns a list of lists. Each sublist is in the form [reasons, obj, reasons, obj,..., reasons]
-     * where each reasons is a set of reasons to go from one obj to the next.<br>
+     * Returns a list of linkages, where each set of reasons to go from one obj to the next. The list does not include a and b themselves.
+     * The last linkage has a null result.<br>
      * Returns null if there is no connection.
      */
-    public List getReasons(Object a, Object b) {
+    public List<Linkage<T,R>> getReasons(T a, T b) {
         // use dumb algorithm for getting shortest path
         // don't bother with optimization
-        Set aPartitionSet = (Set) toPartitionSet.get(a);
-        Set bPartitionSet = (Set) toPartitionSet.get(b);
+        Set<T> aPartitionSet = toPartitionSet.get(a);
+        Set<T> bPartitionSet = toPartitionSet.get(b);
 
         // see if they connect
         if (aPartitionSet == null || bPartitionSet == null || aPartitionSet != bPartitionSet || a.equals(b)) return null;
 
-        ArrayList list = new ArrayList();
-        list.add(a);
-        ArrayList lists = new ArrayList();
+        ArrayList<Linkage<T,R>> list = new ArrayList<Linkage<T,R>>();
+        list.add(new Linkage(null, a));
+        ArrayList<ArrayList<Linkage<T,R>>> lists = new ArrayList<ArrayList<Linkage<T,R>>>();
         lists.add(list);
 
         // this will contain the results
-        List foundLists = new ArrayList();
-        Set sawLastTime = new HashSet();
+        Set<T> sawLastTime = new HashSet<T>();
         sawLastTime.add(a);
 
-        // each time, we extend the lists by one (adding multiple other lists)
-        while (foundLists.size() == 0) {
+        // each time, we extend each lists by one (adding multiple other lists)
+        while (true) { // foundLists.size() == 0
             ArrayList extendedList = new ArrayList();
-            Set sawThisTime = new HashSet();
-            for (Iterator it = lists.iterator(); it.hasNext();) {
-                ArrayList lista = (ArrayList) it.next();
-                Object last = lista.get(lista.size()-1);
-                Map obj_reasons = (Map) obj_obj_reasons.get(last);
-                for (Iterator it2 = obj_reasons.keySet().iterator(); it2.hasNext();) {
-                    Object item = it2.next();
-                    if (sawLastTime.contains(item)) {
+            Set<T>sawThisTime = new HashSet();
+            for (ArrayList<Linkage<T,R>> lista : lists) {
+                Linkage<T,R> last = lista.get(lista.size()-1);
+                Map<T,Set<R>> obj_reasons = obj_obj_reasons.get(last.result);
+                for (T result : obj_reasons.keySet()) {
+                    if (sawLastTime.contains(result)) {
                         continue; // skip since we have shorter
                     }
-                    sawThisTime.add(item);
-                    Set reasons = (Set) obj_reasons.get(item);
-                    ArrayList lista2 = (ArrayList)lista.clone();
-                    lista2.add(reasons);
-                    lista2.add(item);
+                    sawThisTime.add(result);
+                    Set<R> reasons = obj_reasons.get(result);
+                    ArrayList<Linkage<T,R>> lista2 = (ArrayList<Linkage<T,R>>) lista.clone();
+                    lista2.add(new Linkage(reasons,result));
                     extendedList.add(lista2);
-                    if (item.equals(b)) {
+                    if (result.equals(b)) {
                         // remove first and last
-                        ArrayList found = (ArrayList)lista2.clone();
+                        ArrayList<Linkage<T,R>> found = (ArrayList<Linkage<T,R>>) lista2.clone();
                         found.remove(0);
-                        found.remove(found.size()-1);
-                        foundLists.add(found);
+                        found.get(found.size()-1).result = null;
+                        return found;
                     }
                 }
             }
             lists = extendedList;
             sawLastTime.addAll(sawThisTime);
         }
-        return foundLists;
+        // return foundLists;
     }
     
     /**
