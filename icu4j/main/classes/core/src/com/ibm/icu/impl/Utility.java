@@ -8,6 +8,7 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
@@ -1795,5 +1796,34 @@ public final class Utility {
      */
     public static String[] splitWhitespace(String src) {
         return src.split("\\s+");
+    }
+
+    /**
+     * Parse a list of hex numbers and return a string
+     * @param string
+     * @param string2
+     * @return
+     */
+    public static String fromHex(String string, int minLength, String separator) {
+        return fromHex(string, minLength, Pattern.compile(separator != null ? separator : "\\s+"));
+    }
+    
+    /**
+     * Parse a list of hex numbers and return a string
+     * @param string
+     * @param string2
+     * @return
+     */
+    public static String fromHex(String string, int minLength, Pattern separator) {
+        StringBuilder buffer = new StringBuilder();
+        String[] parts = separator.split(string);
+        for (String part : parts) {
+            if (part.length() < minLength) {
+                throw new IllegalArgumentException("code point too short: " + part);
+            }
+            int cp = Integer.parseInt(part, 16);
+            buffer.appendCodePoint(cp);
+        }
+        return buffer.toString();
     }
 }

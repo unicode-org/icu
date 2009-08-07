@@ -836,7 +836,7 @@ public class BagFormatter {
     }
 
     public static BufferedReader openReader(String dir, String filename, String encoding) throws IOException {
-        File file = new File(dir, filename);
+        File file = dir.length() == 0 ? new File(filename) : new File(dir, filename);
         if (SHOW_FILES && log != null) {
             log.println("Opening File: "
                 + file.getCanonicalPath());

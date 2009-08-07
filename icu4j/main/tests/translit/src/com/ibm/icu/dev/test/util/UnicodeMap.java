@@ -451,7 +451,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
             }
             if (ASSERTIONS) _checkInvariants();
         }
-        if (!unicodeMap.stringMap.isEmpty()) {
+        if (unicodeMap.stringMap != null && !unicodeMap.stringMap.isEmpty()) {
             if (stringMap == null) {
                 stringMap = new TreeMap<String,T>();
             }
@@ -786,7 +786,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
      * @return
      */
     public Set<String> getNonRangeStrings() {
-        if (stringMap == null || stringMap.size() == 0) {
+        if (stringMap == null || stringMap.isEmpty()) {
             return null;
         }
         return Collections.unmodifiableSet(stringMap.keySet());
