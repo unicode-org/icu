@@ -1227,6 +1227,10 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#tex
 icu4j/main/classes/core/src/com/ibm/icu/impl/duration/impl/data/index.txt svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/math/package.html svneol=native#text/html
+icu4j/main/classes/core/src/com/ibm/icu/text/BaseFormat.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/text/Formatter.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/text/Parser.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/main/classes/localespi/.classpath -text
