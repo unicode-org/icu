@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, Google, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,7 +13,7 @@ package com.ibm.icu.text;
  * @author markdavis
  *
  */
-public interface StringTransform {
+public interface StringTransform extends Transform<String,String> {
     /**
      * Transform the text in some way, to be determined by the subclass.
      * @param source text to be transformed (eg lowercased)

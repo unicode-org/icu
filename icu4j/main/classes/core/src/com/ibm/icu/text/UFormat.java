@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,7 +20,7 @@ import com.ibm.icu.util.ULocale;
  * @draft ICU 2.8 (retain)
  * @provisional This API might change or be removed in a future release.
  */
-public abstract class UFormat extends Format {
+public abstract class UFormat extends Format implements BaseFormat<Object,StringBuffer,String> {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = -4964390515840164416L;
 
