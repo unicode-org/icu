@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -54,14 +54,13 @@ public final class UCharArrayIterator extends UCharacterIterator {
         return pos > start ? text[--pos] : DONE;
     }
 
-    public UCharArrayIterator setIndex(int index) {
+    public void setIndex(int index) {
         if (index < 0 || index > limit - start) {
             throw new IndexOutOfBoundsException("index: " + index + 
                                                 " out of range [0, " 
                                                 + (limit - start) + ")");
         }
         pos = start + index;
-        return this;
     }
 
     public int getText(char[] fillIn, int offset) {

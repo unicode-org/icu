@@ -481,10 +481,9 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Override Calendar to handle leap months properly.
-     * @return 
      * @stable ICU 2.8
      */
-    public ChineseCalendar add(int field, int amount) {
+    public void add(int field, int amount) {
         switch (field) {
         case MONTH:
             if (amount != 0) {
@@ -498,15 +497,13 @@ public class ChineseCalendar extends Calendar {
             super.add(field, amount);
             break;
         }
-        return this;
     }
 
     /**
      * Override Calendar to handle leap months properly.
-     * @return 
      * @stable ICU 2.8
      */
-    public ChineseCalendar roll(int field, int amount) {
+    public void roll(int field, int amount) {
         switch (field) {
         case MONTH:
             if (amount != 0) {
@@ -558,7 +555,6 @@ public class ChineseCalendar extends Calendar {
             super.roll(field, amount);
             break;
         }
-        return this;
     }
 
     //------------------------------------------------------------------

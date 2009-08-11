@@ -237,7 +237,6 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      *
      * <p>See the Collator class description for an example of use.</p>
      * @param newStrength the new strength value.
-     * @return 
      * @see #getStrength
      * @see #PRIMARY
      * @see #SECONDARY
@@ -248,7 +247,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      *                of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
      * @stable ICU 2.8
      */
-    public Collator setStrength(int newStrength)
+    public void setStrength(int newStrength)
     {
         if ((newStrength != PRIMARY) &&
             (newStrength != SECONDARY) &&
@@ -258,7 +257,6 @@ public abstract class Collator implements Comparator<Object>, Cloneable
             throw new IllegalArgumentException("Incorrect comparison level.");
         }
         m_strength_ = newStrength;
-        return this;
     }
     
     /**
@@ -293,7 +291,6 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * mode.</p>
      *
      * @param decomposition the new decomposition mode
-     * @return 
      * @see #getDecomposition
      * @see #NO_DECOMPOSITION
      * @see #CANONICAL_DECOMPOSITION
@@ -301,14 +298,13 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      *            decomposition mode.
      * @stable ICU 2.8
      */
-    public Collator setDecomposition(int decomposition)
+    public void setDecomposition(int decomposition)
     {
         if ((decomposition != NO_DECOMPOSITION) &&
             (decomposition != CANONICAL_DECOMPOSITION)) {
             throw new IllegalArgumentException("Wrong decomposition mode.");
         }
         m_decomposition_ = decomposition;
-        return this;
     }
 
     // public getters --------------------------------------------------------
@@ -970,7 +966,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @see #setVariableTop
      * @stable ICU 2.6
      */
-    public abstract Collator setVariableTop(int varTop);
+    public abstract void setVariableTop(int varTop);
 
     /**
      * Get the version of this collator object.

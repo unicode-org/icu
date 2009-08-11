@@ -1,12 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.*;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.UTF16;    
 
 /**
  * DLF docs must define behavior when Replaceable is mutated underneath
@@ -165,18 +168,16 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * single UTF16 character at currentIndex. 
      * This assumes the text is stored as 16-bit code units.</p>
      * @param currentIndex the currentIndex within the text. 
-     * @return 
      * @exception IllegalArgumentException is thrown if an invalid currentIndex is 
      *            supplied. i.e. currentIndex is out of bounds.
      * @returns the character at the specified currentIndex or DONE if the specified 
      *         currentIndex is equal to the end of the text.
      */
-    public ReplaceableUCharacterIterator setIndex(int currentIndex) throws IndexOutOfBoundsException{
+    public void setIndex(int currentIndex) throws IndexOutOfBoundsException{
         if (currentIndex < 0 || currentIndex > replaceable.length()) {
             throw new IndexOutOfBoundsException();
         }
         this.currentIndex = currentIndex;
-        return this;
     }
     
     public int getText(char[] fillIn, int offset){

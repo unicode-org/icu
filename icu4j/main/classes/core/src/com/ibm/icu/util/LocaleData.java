@@ -166,12 +166,10 @@ public final class LocaleData {
      *                  methods of this locale data object will return
      *                  an error when no data is available for that method,
      *                  given the locale ID supplied to the constructor.
-     * @return 
      * @stable ICU 3.4
      */
-    public LocaleData setNoSubstitute(boolean setting) {
+    public void setNoSubstitute(boolean setting) {
        noSubstitute = setting;
-       return this;
     }
 
     /**

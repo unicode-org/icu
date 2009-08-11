@@ -123,7 +123,7 @@ public class RelativeDateFormat extends DateFormat {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.DateFormat#parse(java.lang.String, com.ibm.icu.util.Calendar, java.text.ParsePosition)
      */
-    public RelativeDateFormat parse(String text, Calendar cal, ParsePosition pos) {
+    public void parse(String text, Calendar cal, ParsePosition pos) {
         throw new UnsupportedOperationException("Relative Date parse is not implemented yet");
     }
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -77,13 +77,11 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     }
 
     /**
-     * @return 
      * @see UCharacterIterator#setIndex(int)
      */
-    public CharacterIteratorWrapper setIndex(int index) {
+    public void setIndex(int index) {
         try{
             iterator.setIndex(index);
-            return this;
         }catch(IllegalArgumentException e){
             throw new IndexOutOfBoundsException();
         }
@@ -92,9 +90,8 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     /**
      * @see UCharacterIterator#setToLimit()
      */
-    public CharacterIteratorWrapper setToLimit() {
+    public void setToLimit() {
         iterator.setIndex(iterator.getEndIndex());
-        return this;
     }
 
     /**

@@ -786,13 +786,11 @@ public int getRuleStatusVec(int[] fillInArray) {
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
      * @param newText An iterator over the text to analyze.
-     * @return 
      * @stable ICU 2.0
      */
-    public RuleBasedBreakIterator setText(CharacterIterator newText) {
+    public void setText(CharacterIterator newText) {
         fText = newText;
         this.first();
-        return this;
     }
     
     /**

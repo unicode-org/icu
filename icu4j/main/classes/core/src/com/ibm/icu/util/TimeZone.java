@@ -253,11 +253,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * `rawOffset' to obtain the total offset between local and GMT
      * time, in offsets[1]. If DST is not in effect, the DST offset is
      * zero; otherwise it is a positive value, typically one hour.
-     * @return 
      *
      * @stable ICU 2.8
      */
-    public TimeZone getOffset(long date, boolean local, int[] offsets) {
+    public void getOffset(long date, boolean local, int[] offsets) {
         offsets[0] = getRawOffset();
         if (!local) {
             date += offsets[0]; // now in local standard millis
@@ -288,7 +287,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
             // adjust to local standard millis
             date -= offsets[1];
         }
-        return this;
     }
 
     /**
@@ -297,7 +295,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param offsetMillis the given base time zone offset to GMT.
      * @stable ICU 2.0
      */
-    abstract public TimeZone setRawOffset(int offsetMillis);
+    abstract public void setRawOffset(int offsetMillis);
 
     /**
      * Gets unmodified offset, NOT modified in case of daylight savings.
@@ -320,15 +318,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Sets the time zone ID. This does not change any other data in
      * the time zone object.
      * @param ID the new time zone ID.
-     * @return 
      * @stable ICU 2.0
      */
-    public TimeZone setID(String ID) {
+    public void setID(String ID) {
         if (ID == null) {
             throw new NullPointerException();
         }
         this.ID = ID;
-        return this;
     }
 
     /**

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -123,27 +123,24 @@ public class ReplaceableTest extends TestFmwk {
             return chars.char32At(offset);
         }
 
-        public TestReplaceable getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
+        public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
             chars.getChars(srcStart, srcLimit, dst, dstStart);
-            return this;
         }
 
-        public TestReplaceable replace(int start, int limit, String text) {
-            if (substring(start,limit).equals(text)) return this; // NO ACTION!
+        public void replace(int start, int limit, String text) {
+            if (substring(start,limit).equals(text)) return; // NO ACTION!
             if (DEBUG) System.out.print(Utility.escape(toString() + " -> replace(" + start +
                                             "," + limit + "," + text) + ") -> ");
             chars.replace(start, limit, text);
             fixStyles(start, limit, text.length());
             if (DEBUG) System.out.println(Utility.escape(toString()));
-            return this;
         }
         
-        public TestReplaceable replace(int start, int limit, char[] charArray,
+        public void replace(int start, int limit, char[] charArray,
                             int charsStart, int charsLen) {
-            if (substring(start,limit).equals(new String(charArray, charsStart, charsLen-charsStart))) return this; // NO ACTION!
+            if (substring(start,limit).equals(new String(charArray, charsStart, charsLen-charsStart))) return; // NO ACTION!
             this.chars.replace(start, limit, charArray, charsStart, charsLen);
             fixStyles(start, limit, charsLen);
-            return this;
         }
 
         void fixStyles(int start, int limit, int newLen) {
@@ -170,10 +167,9 @@ public class ReplaceableTest extends TestFmwk {
             styles.replace(start, limit, s.toString());
         }
 
-        public TestReplaceable copy(int start, int limit, int dest) {
+        public void copy(int start, int limit, int dest) {
             chars.copy(start, limit, dest);
             styles.copy(start, limit, dest);
-            return this;
         }
         
         public boolean hasMetaData() {

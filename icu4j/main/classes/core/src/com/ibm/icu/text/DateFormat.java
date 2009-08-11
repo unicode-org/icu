@@ -543,7 +543,7 @@ public abstract class DateFormat extends UFormat {
      *              start position if the parse failed.
      * @stable ICU 2.0
      */
-    public abstract DateFormat parse(String text, Calendar cal, ParsePosition pos);
+    public abstract void parse(String text, Calendar cal, ParsePosition pos);
 
     /**
      * Parse a date/time string according to the given parse position.  For
@@ -1104,13 +1104,11 @@ public abstract class DateFormat extends UFormat {
      * Set the calendar to be used by this date format.  Initially, the default
      * calendar for the specified or default locale is used.
      * @param newCalendar the new Calendar to be used by the date format
-     * @return 
      * @stable ICU 2.0
      */
-    public DateFormat setCalendar(Calendar newCalendar)
+    public void setCalendar(Calendar newCalendar)
     {
         this.calendar = newCalendar;
-        return this;
     }
 
     /**
@@ -1126,17 +1124,15 @@ public abstract class DateFormat extends UFormat {
     /**
      * Allows you to set the number formatter.
      * @param newNumberFormat the given new NumberFormat.
-     * @return 
      * @stable ICU 2.0
      */
-    public DateFormat setNumberFormat(NumberFormat newNumberFormat)
+    public void setNumberFormat(NumberFormat newNumberFormat)
     {
         this.numberFormat = newNumberFormat;
         /*In order to parse String like "11.10.2001" to DateTime correctly 
           in Locale("fr","CH") [Richard/GCL]
         */
         this.numberFormat.setParseIntegerOnly(true);
-        return this;
     }
 
     /**
@@ -1153,13 +1149,11 @@ public abstract class DateFormat extends UFormat {
     /**
      * Sets the time zone for the calendar of this DateFormat object.
      * @param zone the given new time zone.
-     * @return 
      * @stable ICU 2.0
      */
-    public DateFormat setTimeZone(TimeZone zone)
+    public void setTimeZone(TimeZone zone)
     {
         calendar.setTimeZone(zone);
-        return this;
     }
 
     /**
@@ -1178,14 +1172,12 @@ public abstract class DateFormat extends UFormat {
      * do not precisely match this object's format.  With strict parsing,
      * inputs must match this object's format.
      * @param lenient when true, parsing is lenient
-     * @return 
      * @see com.ibm.icu.util.Calendar#setLenient
      * @stable ICU 2.0
      */
-    public DateFormat setLenient(boolean lenient)
+    public void setLenient(boolean lenient)
     {
         calendar.setLenient(lenient);
-        return this;
     }
 
     /**

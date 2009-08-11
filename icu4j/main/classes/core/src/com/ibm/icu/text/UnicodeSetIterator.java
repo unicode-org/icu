@@ -186,20 +186,18 @@ public class UnicodeSetIterator {
      * resets it to the start of that set.  The iterator is valid only
      * so long as <tt>set</tt> is valid.
      * @param uset the set to iterate over.
-     * @return 
      * @stable ICU 2.0
      */
-    public UnicodeSetIterator reset(UnicodeSet uset) {
+    public void reset(UnicodeSet uset) {
         set = uset;
-        return reset();
+        reset();
     }
         
     /**
      * Resets this iterator to the start of the set.
-     * @return 
      * @stable ICU 2.0
      */
-    public UnicodeSetIterator reset() {
+    public void reset() {
         endRange = set.getRangeCount() - 1;
         range = 0;
         endElement = -1;
@@ -214,7 +212,6 @@ public class UnicodeSetIterator {
                 stringIterator = null;
             }
         }
-        return this;
     }
     
     /**

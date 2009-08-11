@@ -473,10 +473,9 @@ public class GregorianCalendar extends Calendar {
      * set the change date to <code>Date(Long.MIN_VALUE)</code>.
      *
      * @param date the given Gregorian cutover date.
-     * @return 
      * @stable ICU 2.0
      */
-    public GregorianCalendar setGregorianChange(Date date) {
+    public void setGregorianChange(Date date) {
         gregorianCutover = date.getTime();
 
         // If the cutover has an extreme value, then create a pure
@@ -497,7 +496,6 @@ public class GregorianCalendar extends Calendar {
             cal.setTime(date);
             gregorianCutoverYear = cal.get(EXTENDED_YEAR);
         }
-        return this;
     }
 
     /**
@@ -548,10 +546,9 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Roll a field by a signed amount.
-     * @return 
      * @stable ICU 2.0
      */
-    public GregorianCalendar roll(int field, int amount) {
+    public void roll(int field, int amount) {
 
         switch (field) {
         case WEEK_OF_YEAR:
@@ -596,12 +593,12 @@ public class GregorianCalendar extends Calendar {
                 }
                 set(WEEK_OF_YEAR, woy);
                 set(YEAR, isoYear); // Why not YEAR_WOY? - Alan 11/6/00
-                return this;
+                return;
             }
 
         default:
             super.roll(field, amount);
-            return this;
+            return;
         }
     }
 

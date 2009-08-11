@@ -119,14 +119,12 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
     }
                     
 
-    /** @return 
-     * @stable ICU 2.0 */
-    public DictionaryBasedBreakIterator setText(CharacterIterator newText) {
+    /** @stable ICU 2.0 */
+    public void setText(CharacterIterator newText) {
         super.setText(newText);
         cachedBreakPositions = null;
         fDictionaryCharCount = 0;
         positionInCache = 0;
-        return this;
     }
 
     /**

@@ -475,7 +475,7 @@ public class TransliteratorTest extends TestFmwk {
             public boolean matchesIndexValue(int v) {
                 return false;
             }
-            public UnicodeFilter addMatchSetTo(UnicodeSet toUnionTo) {return this;}
+            public void addMatchSetTo(UnicodeSet toUnionTo) {}
         });
         String s = "abcde";
         String out = hex.transliterate(s);
