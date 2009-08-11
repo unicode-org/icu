@@ -23,6 +23,11 @@
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "putilimp.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>    // tolower, toupper
+
 #if !defined(U_WINDOWS) && !defined(XP_MAC) && !defined(U_RHAPSODY)
 #define POSIX 1
 #endif
@@ -38,8 +43,8 @@
 #include <unistd.h>
 /*#include "platform_xopen_source_extended.h"*/
 #endif
-#if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
 
+#if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
 #define HAVE_IMP
 
 #if (ICU_USE_THREADS == 1)
@@ -90,23 +95,29 @@
 
 
 #if (ICU_USE_THREADS==0)
-/*void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
-                const char* &name, char* ) {
-  if (exec) logln("TestSuite MultithreadTest: ");
+    SimpleThread::SimpleThread()
+    {}
 
-  if(index == 0)
-      name = "NO_THREADED_TESTS";
-  else
-      name = "";
+    SimpleThread::~SimpleThread()
+    {}
 
-  if(exec) { logln("MultithreadTest - test DISABLED.  ICU_USE_THREADS set to 0, check your configuration if this is a problem..");
-  }
-}*/
+    int32_t 
+    SimpleThread::start()
+    { return -1; }
+
+    void 
+    SimpleThread::run()
+    {}
+
+    void 
+    SimpleThread::sleep(int32_t millis)
+    {}
+
+    UBool  
+    SimpleThread::isRunning() {
+        return FALSE;
+    }
 #else
-
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>    // tolower, toupper
 
 #include "unicode/putil.h"
 
