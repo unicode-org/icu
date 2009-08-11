@@ -520,14 +520,13 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      *                         For example, if lrgDiffCalUnit is 
      *                         "year", the interval pattern for en_US when year
      *                         is different could be "'from' yyyy 'to' yyyy".
-     * @return 
      * @throws IllegalArgumentException  if setting interval pattern on 
      *                            a calendar field that is smaller
      *                            than the MINIMUM_SUPPORTED_CALENDAR_FIELD 
      * @throws UnsupportedOperationException  if the object is frozen
      * @stable ICU 4.0
      */
-    public DateIntervalInfo setIntervalPattern(String skeleton, 
+    public void setIntervalPattern(String skeleton, 
                                    int lrgDiffCalUnit, 
                                    String intervalPattern)
     {
@@ -554,7 +553,6 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
                                CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE],
                                ptnInfo);
         }
-        return this;
     }
 
 
@@ -688,14 +686,13 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * This method provides a way for user to replace the fallback pattern.
      *
      * @param fallbackPattern                 fall-back interval pattern.
-     * @return 
      * @throws UnsupportedOperationException  if the object is frozen
      * @throws IllegalArgumentException       if there is no pattern {0} or 
      *                                        pattern {1} in fallbakckPattern
      *                   
      * @stable ICU 4.0
      */
-    public DateIntervalInfo setFallbackIntervalPattern(String fallbackPattern)
+    public void setFallbackIntervalPattern(String fallbackPattern)
     {
         if ( frozen ) {
             throw new UnsupportedOperationException("no modification is allowed after DII is frozen");
@@ -709,7 +706,6 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             fFirstDateInPtnIsLaterDate = true;
         }
         fFallbackIntervalPattern = fallbackPattern;
-        return this;
     }
 
 

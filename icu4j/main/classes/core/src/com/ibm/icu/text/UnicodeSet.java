@@ -1004,12 +1004,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @return 
      * @stable ICU 2.2
      */
-    public UnicodeSet addMatchSetTo(UnicodeSet toUnionTo) {
+    public void addMatchSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(this);
-        return this;
     }
 
     /**

@@ -2594,13 +2594,12 @@ public final class UTF16 {
          *            true for code point compare, false for code unit compare
          * @stable ICU 2.4
          */
-        public StringComparator setCodePointCompare(boolean flag) {
+        public void setCodePointCompare(boolean flag) {
             if (flag) {
                 m_codePointCompare_ = Normalizer.COMPARE_CODE_POINT_ORDER;
             } else {
                 m_codePointCompare_ = 0;
             }
-            return this;
         }
 
         /**
@@ -2617,13 +2616,12 @@ public final class UTF16 {
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
          * @stable ICU 2.4
          */
-        public StringComparator setIgnoreCase(boolean ignorecase, int foldcaseoption) {
+        public void setIgnoreCase(boolean ignorecase, int foldcaseoption) {
             m_ignoreCase_ = ignorecase;
             if (foldcaseoption < FOLD_CASE_DEFAULT || foldcaseoption > FOLD_CASE_EXCLUDE_SPECIAL_I) {
                 throw new IllegalArgumentException("Invalid fold case option");
             }
             m_foldCase_ = foldcaseoption;
-            return this;
         }
 
         // public getters ----------------------------------------------------

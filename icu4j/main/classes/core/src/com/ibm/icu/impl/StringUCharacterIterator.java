@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -130,17 +130,15 @@ public final class StringUCharacterIterator extends UCharacterIterator
      * returns that single UTF16 character at currentIndex. 
      * This assumes the text is stored as 16-bit code units.</p>
      * @param currentIndex the currentIndex within the text. 
-     * @return 
      * @exception IndexOutOfBoundsException is thrown if an invalid currentIndex 
      *            is supplied. i.e. currentIndex is out of bounds.
      */
-    public StringUCharacterIterator setIndex(int currentIndex) throws IndexOutOfBoundsException
+    public void setIndex(int currentIndex) throws IndexOutOfBoundsException
     {
         if (currentIndex < 0 || currentIndex > m_text_.length()) {
             throw new IndexOutOfBoundsException();
         }
         m_currentIndex_ = currentIndex;
-        return this;
     }
     
     /**

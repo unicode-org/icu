@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2009, International Business Machines Corporation
+*   Copyright (c) 2002, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -58,7 +58,7 @@ interface UnicodeReplacer {
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
      */
-    public abstract UnicodeReplacer addReplacementSetTo(UnicodeSet toUnionTo);
+    public abstract void addReplacementSetTo(UnicodeSet toUnionTo);
 }
 
 //eof

@@ -1251,7 +1251,7 @@ public class TimeZoneTest extends TestFmwk
              */
             private static final long serialVersionUID = 8658654217433379343L;
             public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {return 0;}
-            public StubTimeZone setRawOffset(int offsetMillis) {return this;}
+            public void setRawOffset(int offsetMillis) {}
             public int getRawOffset() {return 0;}
             public boolean useDaylightTime() {return false;}
             public boolean inDaylightTime(Date date) {return false;}

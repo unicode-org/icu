@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -147,13 +147,12 @@ public abstract class SearchIterator
      * This method clears any previous match.
      * </p>
      * @param position position from which to start the next search
-     * @return 
      * @exception IndexOutOfBoundsException thrown if argument position is out
      *            of the target text range.
      * @see #getIndex
      * @stable ICU 2.8
      */
-    public SearchIterator setIndex(int position) {
+    public void setIndex(int position) {
         if (position < targetText.getBeginIndex() 
             || position > targetText.getEndIndex()) {
             throw new IndexOutOfBoundsException(
@@ -163,7 +162,6 @@ public abstract class SearchIterator
         m_setOffset_ = position;
         m_reset_ = false;
         matchLength = 0;
-        return this;
     }
     
     /**
@@ -175,14 +173,12 @@ public abstract class SearchIterator
      * The default setting of this property is false
      * </p>
      * @param allowOverlap flag indicator if overlapping matches are allowed
-     * @return 
      * @see #isOverlapping
      * @stable ICU 2.8
      */
-    public SearchIterator setOverlapping(boolean allowOverlap)
+    public void setOverlapping(boolean allowOverlap)
     {
         m_isOverlap_ = allowOverlap;
-        return this;
     }
     
     /**
@@ -193,18 +189,16 @@ public abstract class SearchIterator
      * See class documentation for more information.
      * @param breakiter A BreakIterator that will be used to restrict the 
      *                     points at which matches are detected.
-     * @return 
      * @see #getBreakIterator
      * @see BreakIterator
      * @stable ICU 2.0
      */
-    public SearchIterator setBreakIterator(BreakIterator breakiter) 
+    public void setBreakIterator(BreakIterator breakiter) 
     {
         breakIterator = breakiter;
         if (breakIterator != null) {
             breakIterator.setText(targetText);
         }
-        return this;
     }
     
     /**
@@ -212,13 +206,12 @@ public abstract class SearchIterator
       * the start of the text string. This method is useful if you want to 
      * reuse an iterator to search within a different body of text.
      * @param text new text iterator to look for match, 
-     * @return 
      * @exception IllegalArgumentException thrown when text is null or has
      *               0 length
      * @see #getTarget
      * @stable ICU 2.4
      */
-    public SearchIterator setTarget(CharacterIterator text)
+    public void setTarget(CharacterIterator text)
     {
         if (text == null || text.getEndIndex() == text.getIndex()) {
             throw new IllegalArgumentException("Illegal null or empty text");
@@ -232,7 +225,6 @@ public abstract class SearchIterator
         if (breakIterator != null) {
             breakIterator.setText(targetText);
         }
-        return this;
     }
 
     // public getters ----------------------------------------------------
@@ -522,10 +514,9 @@ public abstract class SearchIterator
      * start of the target text. Otherwise, if a backwards iteration is initiated,
      * the next search will begin at the end of the target text.
      * </p>
-     * @return 
      * @stable ICU 2.8
      */
-    public SearchIterator reset()
+    public void reset()
     {
         // reset is setting the attributes that are already in string search
         matchLength = 0;
@@ -534,7 +525,6 @@ public abstract class SearchIterator
         m_isForwardSearching_ = true;
         m_reset_ = true;
         m_setOffset_ = DONE;
-        return this;
     }
     
     /**

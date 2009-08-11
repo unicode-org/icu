@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and   *
+* Copyright (C) 1996-2004, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -106,5 +106,5 @@ public interface RangeValueIterator
     * Resets the iterator to the beginning of the iteration.
     * @stable ICU 2.6
     */
-    public RangeValueIterator reset();
+    public void reset();
 }

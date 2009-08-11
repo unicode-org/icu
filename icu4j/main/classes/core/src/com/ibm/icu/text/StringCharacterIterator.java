@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -90,10 +90,9 @@ public final class StringCharacterIterator implements CharacterIterator
      * is called.
      *
      * @param  text   The String to be iterated over 
-     * @return 
      * @deprecated ICU 2.4. Use java.text.StringCharacterIterator instead.
      */
-    public StringCharacterIterator setText(String text) {
+    public void setText(String text) {
         if (text == null) {
             throw new NullPointerException();
         }
@@ -101,7 +100,6 @@ public final class StringCharacterIterator implements CharacterIterator
         this.begin = 0;
         this.end = text.length();
         this.pos = 0;
-        return this;
     }
 
     /**

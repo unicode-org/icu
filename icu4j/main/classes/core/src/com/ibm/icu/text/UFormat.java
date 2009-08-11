@@ -73,13 +73,12 @@ public abstract class UFormat extends Format implements BaseFormat<Object,String
      * data, or null
      * @param actual the locale containing data used to construct this
      * object, or null
-     * @return 
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @internal
      */
-    final UFormat setLocale(ULocale valid, ULocale actual) {
+    final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
             ///CLOVER:OFF
@@ -90,7 +89,6 @@ public abstract class UFormat extends Format implements BaseFormat<Object,String
         // the same level or less specific than the valid locale.
         this.validLocale = valid;
         this.actualLocale = actual;
-        return this;
     }
 
     /**

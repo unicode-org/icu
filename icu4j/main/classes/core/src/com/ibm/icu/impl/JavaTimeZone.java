@@ -95,7 +95,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getOffset(long, boolean, int[])
      */
-    public JavaTimeZone getOffset(long date, boolean local, int[] offsets) {
+    public void getOffset(long date, boolean local, int[] offsets) {
         synchronized (javacal) {
             if (local) {
                 int fields[] = new int[6];
@@ -135,7 +135,6 @@ public class JavaTimeZone extends TimeZone {
             offsets[0] = javacal.get(java.util.Calendar.ZONE_OFFSET);
             offsets[1] = javacal.get(java.util.Calendar.DST_OFFSET);
         }
-        return this;
     }
 
     /* (non-Javadoc)
@@ -155,9 +154,8 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
-    public JavaTimeZone setRawOffset(int offsetMillis) {
+    public void setRawOffset(int offsetMillis) {
         javatz.setRawOffset(offsetMillis);
-        return this;
     }
 
     /* (non-Javadoc)

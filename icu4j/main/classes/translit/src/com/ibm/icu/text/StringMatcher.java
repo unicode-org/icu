@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -214,9 +214,8 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @return 
      */
-    public StringMatcher addMatchSetTo(UnicodeSet toUnionTo) {
+    public void addMatchSetTo(UnicodeSet toUnionTo) {
         int ch;
         for (int i=0; i<pattern.length(); i+=UTF16.getCharCount(ch)) {
             ch = UTF16.charAt(pattern, i);
@@ -227,7 +226,6 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
                 matcher.addMatchSetTo(toUnionTo);
             }
         }
-        return this;
     }
 
     /**
@@ -269,26 +267,22 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * Remove any match data.  This must be called before performing a
      * set of matches with this segment.
-     * @return 
      */
-    public StringMatcher resetMatch() {
+    public void resetMatch() {
         matchStart = matchLimit = -1;
-        return this;
     }
 
     /**
      * Union the set of all characters that may output by this object
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
-     * @return 
      */
-    public StringMatcher addReplacementSetTo(UnicodeSet toUnionTo) {
+    public void addReplacementSetTo(UnicodeSet toUnionTo) {
         // The output of this replacer varies; it is the source text between
         // matchStart and matchLimit.  Since this varies depending on the
         // input text, we can't compute it here.  We can either do nothing
         // or we can add ALL characters to the set.  It's probably more useful
         // to do nothing.
-        return this;
     }
 }
 
