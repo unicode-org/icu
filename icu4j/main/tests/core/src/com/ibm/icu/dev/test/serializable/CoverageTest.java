@@ -143,7 +143,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                 Class c = Class.forName(className);
                 int   m = c.getModifiers();
                 
-                if (serializable.isAssignableFrom(c)) {
+                if (!c.isEnum() && serializable.isAssignableFrom(c)) {
                     if (Modifier.isPublic(m) && !Modifier.isInterface(m)) { 
                         SerializableTest.Handler handler = SerializableTest.getHandler(className);
                         
