@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="**/.svn/" kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-collate"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-test-framework"/>
