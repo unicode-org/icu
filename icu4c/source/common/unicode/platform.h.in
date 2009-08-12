@@ -29,6 +29,11 @@
 #define @platform@
 #endif
 
+/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#define ICU_USE_THREADS @ICU_USE_THREADS@
+
+/* Need platform.h when using CYGWINMSVC to get definition above. Ignore everything else. */
+#ifndef CYGWINMSVC
 /**
  * \def U_HAVE_DIRENT_H
  * Define whether dirent.h is available */
@@ -191,9 +196,6 @@ typedef unsigned int uint32_t;
 #else
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
 #endif
-
-/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
-#define ICU_USE_THREADS @ICU_USE_THREADS@
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check lock. */
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
@@ -381,5 +383,6 @@ typedef unsigned int uint32_t;
 #endif
 
 /** @} */
+#endif /* CYGWINMSVC */
 
 #endif

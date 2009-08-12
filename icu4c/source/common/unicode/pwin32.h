@@ -181,7 +181,9 @@ typedef unsigned int uint32_t;
 #define U_IS_BIG_ENDIAN 0
 
 /** 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#ifndef ICU_USE_THREADS
 #define ICU_USE_THREADS 1
+#endif
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check mutex lock. */
 /**

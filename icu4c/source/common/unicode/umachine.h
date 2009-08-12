@@ -44,6 +44,9 @@
 #if defined(U_PALMOS)
 #   include "unicode/ppalmos.h"
 #elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#ifdef CYGWINMSVC
+#   include "unicode/platform.h"
+#endif
 #   include "unicode/pwin32.h"
 #else
 #   include "unicode/platform.h"
