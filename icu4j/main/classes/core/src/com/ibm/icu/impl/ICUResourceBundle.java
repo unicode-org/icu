@@ -42,7 +42,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * The data path to be used with getBundleInstance API
      */
-    public static final String ICU_BUNDLE = "data/icudt" + VersionInfo.ICU_DATA_VERSION;
+    public static final String ICU_BUNDLE = "data/icudt" + VersionInfo.ICU_DATA_VERSION_PATH;
 
     /**
      * The base name of ICU data to be used with getBundleInstance API
