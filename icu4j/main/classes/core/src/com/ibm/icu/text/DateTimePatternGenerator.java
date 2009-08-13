@@ -1274,8 +1274,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         if (id.equals(skeleton)) {
             return true; // fast path
         }
-        List parser1 = fp.set(id).getItems();
-        List parser2 = fp.set(skeleton).getItems();
+        List<Object> parser1 = fp.set(id).getItems();
+        List<Object> parser2 = fp.set(skeleton).getItems();
         if (parser1.size() != parser2.size()) {
             return false;
         }
@@ -1742,6 +1742,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * 
          */
+        @SuppressWarnings("unused")
         void extractFrom(DateTimeMatcher source, int fieldMask) {
             for (int i = 0; i < type.length; ++i) {
                 if ((fieldMask & (1<<i)) != 0) {

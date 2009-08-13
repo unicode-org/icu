@@ -1266,9 +1266,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         NumberFormat fmt3 = NumberFormat.getInstance(loc3);
         NumberFormat fmt4 = NumberFormat.getInstance(loc4);
         
-        NumberFormat fmt5 = NumberFormat.getInstance(loc3);
-        fmt5 = NumberFormat.getInstance(loc3);
-        
         expect2(fmt1,1234.567,"\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57");
         expect3(fmt2,5678.0,"\u05d4\u05f3\u05ea\u05e8\u05e2\u05f4\u05d7");
         expect2(fmt3,1234.567,"\u06f1,\u06f2\u06f3\u06f4.\u06f5\u06f6\u06f7");

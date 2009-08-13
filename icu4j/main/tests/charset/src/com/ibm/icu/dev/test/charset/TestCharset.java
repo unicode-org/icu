@@ -5309,7 +5309,7 @@ public class TestCharset extends TestFmwk {
             CharBuffer monkeyCB = CharBuffer.wrap(monkeyIn);
             try {
                 ByteBuffer monkeyBB = encode.encode(monkeyCB); 
-                CharBuffer monkeyEndResult = decode.decode(monkeyBB);
+                /* CharBuffer monkeyEndResult =*/ decode.decode(monkeyBB);
                 
             } catch (Exception ex) {
                 errln("Exception thrown while encoding/decoding monkey test in SCSU: " + ex);

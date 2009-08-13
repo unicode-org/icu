@@ -1787,67 +1787,69 @@ public class UnicodeSetTest extends TestFmwk {
             }
     }
 
-    // String[] prettyData = {
-    //     "[\\uD7DE-\\uD90C \\uDCB5-\\uDD9F]", // special case
-    //     "[:any:]",
-    //     "[:whitespace:]",
-    //     "[:linebreak=AL:]",
-    // };
+// Following cod block is commented out to eliminate PrettyPrinter depenencies
 
-    // public void TestPrettyPrinting() {
-    //   try{
-    //     PrettyPrinter pp = new PrettyPrinter();
-
-    //     int i = 0;
-    //     for (; i < prettyData.length; ++i) {
-    //       UnicodeSet test = new UnicodeSet(prettyData[i]);
-    //       checkPrettySet(pp, i, test);
-    //     }
-    //     Random random = new Random(0);
-    //     UnicodeSet test = new UnicodeSet();
-
-    //     // To keep runtimes under control, make the number of random test cases
-    //     //   to try depends on the test framework exhaustive setting.
-    //     //  params.inclusions = 5:   default exhaustive value
-    //     //  params.inclusions = 10:  max exhaustive value.
-    //     int iterations = 50;
-    //     if (params.inclusion > 5) {
-    //       iterations = (params.inclusion-5) * 200;
-    //     }
-    //     for (; i < iterations; ++i) {
-    //       double start = random.nextGaussian() * 0x10000;
-    //       if (start < 0) start = - start;
-    //       if (start > 0x10FFFF) {
-    //         start = 0x10FFFF;
-    //       }
-    //       double end = random.nextGaussian() * 0x100;
-    //       if (end < 0) end = -end;
-    //       end = start + end;
-    //       if (end > 0x10FFFF) {
-    //         end = 0x10FFFF;
-    //       }
-    //       test.complement((int)start, (int)end);
-    //       checkPrettySet(pp, i, test);
-    //     }
-    //   }catch(RuntimeException ex){
-    //     warnln("Could not load Collator");
-    //   }
-    // }
-
-    // private void checkPrettySet(PrettyPrinter pp, int i, UnicodeSet test) {
-    //   String pretty = pp.toPattern(test);
-    //   UnicodeSet retry = new UnicodeSet(pretty);
-    //   if (!test.equals(retry)) {
-    //     errln(i + ". Failed test: " + test + " != " + pretty);
-    //   } else {
-    //     logln(i + ". Worked for " + truncate(test.toString()) + " => " + truncate(pretty));
-    //   }
-    // }
-
-    private String truncate(String string) {
-        if (string.length() <= 100) return string;
-        return string.substring(0,97) + "...";
-    }
+//    String[] prettyData = {
+//            "[\\uD7DE-\\uD90C \\uDCB5-\\uDD9F]", // special case
+//            "[:any:]",
+//            "[:whitespace:]",
+//            "[:linebreak=AL:]",
+//    };
+//
+//    public void TestPrettyPrinting() {
+//        try{
+//            PrettyPrinter pp = new PrettyPrinter();
+//
+//            int i = 0;
+//            for (; i < prettyData.length; ++i) {
+//                UnicodeSet test = new UnicodeSet(prettyData[i]);
+//                checkPrettySet(pp, i, test);
+//            }
+//            Random random = new Random(0);
+//            UnicodeSet test = new UnicodeSet();
+//
+//            // To keep runtimes under control, make the number of random test cases
+//            //   to try depends on the test framework exhaustive setting.
+//            //  params.inclusions = 5:   default exhaustive value
+//            //  params.inclusions = 10:  max exhaustive value.
+//            int iterations = 50;
+//            if (params.inclusion > 5) {
+//                iterations = (params.inclusion-5) * 200;
+//            }
+//            for (; i < iterations; ++i) {
+//                double start = random.nextGaussian() * 0x10000;
+//                if (start < 0) start = - start;
+//                if (start > 0x10FFFF) {
+//                    start = 0x10FFFF;
+//                }
+//                double end = random.nextGaussian() * 0x100;
+//                if (end < 0) end = -end;
+//                end = start + end;
+//                if (end > 0x10FFFF) {
+//                    end = 0x10FFFF;
+//                }
+//                test.complement((int)start, (int)end);
+//                checkPrettySet(pp, i, test);
+//            }
+//        }catch(RuntimeException ex){
+//            warnln("Could not load Collator");
+//        }
+//    }
+//
+//    private void checkPrettySet(PrettyPrinter pp, int i, UnicodeSet test) {
+//        String pretty = pp.toPattern(test);
+//        UnicodeSet retry = new UnicodeSet(pretty);
+//        if (!test.equals(retry)) {
+//            errln(i + ". Failed test: " + test + " != " + pretty);
+//        } else {
+//            logln(i + ". Worked for " + truncate(test.toString()) + " => " + truncate(pretty));
+//        }
+//    }
+//
+//    private String truncate(String string) {
+//        if (string.length() <= 100) return string;
+//        return string.substring(0,97) + "...";
+//    }
 
     public class TokenSymbolTable implements SymbolTable {
         HashMap contents = new HashMap();

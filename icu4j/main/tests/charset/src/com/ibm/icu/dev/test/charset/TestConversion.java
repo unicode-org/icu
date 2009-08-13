@@ -857,7 +857,7 @@ public class TestConversion extends ModuleTest {
                 .getString();
         
      
-        int which = ((ICUResourceBundle) testcase.getObject("which")).getInt(); // only checking for ROUNDTRIP_SET
+        cc.which = ((ICUResourceBundle) testcase.getObject("which")).getInt(); // only checking for ROUNDTRIP_SET
         
         // ----for debugging only
         logln("");
@@ -882,7 +882,7 @@ public class TestConversion extends ModuleTest {
                    return;
                }
                              
-               if(which==1){
+               if(cc.which==1){
                    logln("Fallback set not supported at this point for converter : "+charset.displayName());
                   return;
                }
@@ -897,7 +897,7 @@ public class TestConversion extends ModuleTest {
            mapset.applyPattern(cc.map,false);
            mapnotset.applyPattern(cc.mapnot,false);
            
-           charset.getUnicodeSet(unicodeset, which);
+           charset.getUnicodeSet(unicodeset, cc.which);
            UnicodeSet diffset = new UnicodeSet();
            
            //are there items that must be in unicodeset but are not?           

@@ -12,28 +12,11 @@ package com.ibm.icu.dev.test.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
-
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.IllformedLocaleException;
-import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.ULocale.Builder;
 
 public class ULocaleCollationTest extends TestFmwk {
 

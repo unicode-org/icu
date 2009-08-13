@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -54,6 +54,5 @@ class ICUBinaryStream extends DataInputStream {
             throw new IllegalStateException("Skip(" + offset + ") only skipped " +
                                        actual + " bytes");
         }
-        if (false) System.out.println("(seek " + offset + ")");
     }
 }

@@ -552,6 +552,7 @@ public class BagFormatter {
             doAt(c);
         }
 
+        @SuppressWarnings("unused")
         public String format(Object o) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -695,12 +696,10 @@ public class BagFormatter {
     private static class NameIterator {
         String source;
         int position;
-        int start;
         int limit;
 
         NameIterator(String source) {
             this.source = source;
-            this.start = 0;
             this.limit = source.length();
         }
         /**

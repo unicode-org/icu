@@ -180,7 +180,7 @@ public final class Utility {
     /**
      * Convenience utility. Does null checks on objects, then calls compare.
      */
-    public static <T> int checkCompare(Comparable a, Comparable b) {
+    public static <T extends Comparable<T>> int checkCompare(T a, T b) {
         return a == null ? 
                 b == null ? 0 : -1 : 
                     b == null ? 1 : a.compareTo(b);

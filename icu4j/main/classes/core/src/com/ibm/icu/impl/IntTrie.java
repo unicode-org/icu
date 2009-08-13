@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and   *
+* Copyright (C) 1996-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -57,6 +57,7 @@ public class IntTrie extends Trie
      *                      have associated supplementary data
      * @param dataManipulate object which provides methods to parse the char data
      */
+    @SuppressWarnings("all") // No way to ignore dead code warning specifically - see eclipse bug#282770
     public IntTrie(int initialValue, int leadUnitValue, DataManipulate dataManipulate) {
         super(new char[BMP_INDEX_LENGTH+SURROGATE_BLOCK_COUNT], HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_, dataManipulate);
 
