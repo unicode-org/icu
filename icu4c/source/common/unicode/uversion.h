@@ -124,6 +124,11 @@
  */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
+/** Data version in ICU4C.
+ * @draft ICU 4.4
+ */
+#define U_ICU_DATA_VERSION "4.3.2"
+
 /*===========================================================================*/
 /* C++ namespace if supported. Versioned unless versioning is disabled.      */
 /*===========================================================================*/
@@ -245,6 +250,14 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  */
 U_STABLE void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
+
+/* TODO: Add description */
+U_CAPI int32_t U_EXPORT2
+u_versionCompare(UVersionInfo version1, UVersionInfo version2);
+
+/* TODO: Add description */
+U_CAPI void U_EXPORT2
+u_versionCopy(UVersionInfo versionDest, UVersionInfo versionSrc);
 
 
 /*===========================================================================
