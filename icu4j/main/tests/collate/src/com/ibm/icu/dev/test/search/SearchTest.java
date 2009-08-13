@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1308,10 +1308,6 @@ public class SearchTest extends TestFmwk {
             errln("Fail: an extremely large pattern will fail the initialization");
             return;
         }
-        if (result != result) {
-            errln("Error: string search object expected to match itself");
-        }
-
     }
 
     public void TestNormCanonical() {

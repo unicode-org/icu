@@ -3,7 +3,7 @@
 package com.ibm.icu.math;
 
 import java.math.BigInteger;
-import com.ibm.icu.impl.Utility;
+
 import com.ibm.icu.lang.UCharacter;
 
 /* ------------------------------------------------------------------ */

@@ -9,10 +9,8 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.HashMap;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 public class LocaleAliasCollationTest extends com.ibm.icu.dev.test.TestFmwk {
     private static final ULocale[][] _LOCALES = {

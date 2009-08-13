@@ -119,6 +119,7 @@ class CharsetSCSU extends CharsetICU{
         short toUState;
         byte toUQuoteWindow, toUDynamicWindow;
         short toUByteOne;
+        @SuppressWarnings("unused")
         short toUPadding[];
 
         /* state machine state - fromUnicode */

@@ -1199,21 +1199,20 @@ public final class RuleBasedCollator extends Collator
                 }
             }
         }
-        if (Arrays.equals(m_contractionCE_, other.m_contractionCE_)
-            && Arrays.equals(m_contractionEnd_, other.m_contractionEnd_)
-            && Arrays.equals(m_contractionIndex_, other.m_contractionIndex_)
-            && Arrays.equals(m_expansion_, other.m_expansion_)
-            && Arrays.equals(m_expansionEndCE_, other.m_expansionEndCE_)) {
-            // not comparing paddings
-            for (int i = 0; i < m_expansionEndCE_.length; i ++) {
-                 if (m_expansionEndCEMaxSize_[i]
-                     != other.m_expansionEndCEMaxSize_[i]) {
-                     return false;
-                 }
-                 return true;
-            }
+        if (!Arrays.equals(m_contractionCE_, other.m_contractionCE_)
+                || !Arrays.equals(m_contractionEnd_, other.m_contractionEnd_)
+                || !Arrays.equals(m_contractionIndex_, other.m_contractionIndex_)
+                || !Arrays.equals(m_expansion_, other.m_expansion_)
+                || !Arrays.equals(m_expansionEndCE_, other.m_expansionEndCE_)) {
+            return false;
         }
-        return false;
+        // not comparing paddings
+        for (int i = 0; i < m_expansionEndCE_.length; i++) {
+            if (m_expansionEndCEMaxSize_[i] != other.m_expansionEndCEMaxSize_[i]) {
+                return false;
+            }
+       }
+        return true;
     }
 
     /**

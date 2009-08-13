@@ -6,8 +6,6 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.Utility;
-
 /**
  * <code>ReplaceableString</code> is an adapter class that implements the
  * <code>Replaceable</code> API around an ordinary <code>StringBuffer</code>.

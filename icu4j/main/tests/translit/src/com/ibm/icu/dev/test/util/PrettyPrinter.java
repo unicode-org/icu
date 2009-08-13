@@ -10,7 +10,6 @@ package com.ibm.icu.dev.test.util;
 import java.util.Comparator;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.MultiComparator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.StringTransform;
@@ -153,7 +152,6 @@ public class PrettyPrinter {
     }
 
     private PrettyPrinter appendUnicodeSetItem(String s) {
-        int cp;
         if (UTF16.hasMoreCodePointsThan(s, 1)) {
             flushLast();
             addSpaceAsNeededBefore(s);

@@ -6,32 +6,16 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.ByteBuffer;
-import java.util.Enumeration;
 import java.util.MissingResourceException;
-import java.util.jar.JarEntry;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceTypeMismatchException;
 
 
 public final class ICUResourceBundleCollationTest extends TestFmwk {
-    private static final ClassLoader testLoader = ICUResourceBundleCollationTest.class.getClassLoader();
-
     private static final String COLLATION_RESNAME = "collations";
     private static final String COLLATION_KEYWORD = "collation";
     private static final String DEFAULT_NAME = "default";

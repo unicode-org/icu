@@ -651,7 +651,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         */
         ICUResourceBundle bundle = null;
-        String key = null;
 
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_FR");
         ICUResourceBundle b1 = bundle.getWithFallback("calendar");
@@ -670,8 +669,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
 
-    private static final String DEFAULT_NAME = "default";
-    private static final String STANDARD_NAME = "standard";
     private static final String CALENDAR_RESNAME = "calendar";
     private static final String CALENDAR_KEYWORD = "calendar";
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -568,9 +568,10 @@ abstract public class Pick {
        }
     }
    
+    @SuppressWarnings("unused")
     private abstract static class ListPick extends Pick {
         protected Pick[] items = new Pick[0];
-        
+
         Pick simplify() {
             if (items.length > 1) return this;
             if (items.length == 1) return items[0];

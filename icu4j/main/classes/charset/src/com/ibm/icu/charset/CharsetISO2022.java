@@ -341,6 +341,7 @@ class CharsetISO2022 extends CharsetICU {
         CharsetEncoderMBCS currentEncoder;
         CharsetDecoderMBCS currentDecoder;
         CharsetMBCS currentConverter;
+        @SuppressWarnings("unused")
         int currentType; // Cnv2022Type;
         ISO2022State toU2022State;
         ISO2022State fromU2022State;

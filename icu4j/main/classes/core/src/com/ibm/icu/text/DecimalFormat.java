@@ -5304,10 +5304,6 @@ public class DecimalFormat extends NumberFormat {
         private String posSuffixPatternForCurrency = null;
         private int patternType;
 
-        public AffixForCurrency() {
-            patternType = Currency.SYMBOL_NAME;
-        }
-
         public AffixForCurrency(String negPrefix, String negSuffix, String posPrefix, String posSuffix, int type) {
             negPrefixPatternForCurrency = negPrefix;
             negSuffixPatternForCurrency = negSuffix;
