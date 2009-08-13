@@ -861,7 +861,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     public static synchronized String getTZDataVersion() {
         if (TZDATA_VERSION == null) {
             UResourceBundle tzbundle = UResourceBundle.getBundleInstance(
-                    "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION, "zoneinfo");
+                    "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION_PATH, "zoneinfo");
             TZDATA_VERSION = tzbundle.getString("TZVersion");
         }
         return TZDATA_VERSION;
