@@ -55,8 +55,6 @@ import java.util.logging.Level;
  * java -Dicu4j.debug.logging=all program
  * </pre>
  * </blockquote>
- * @author       Michael Ow
- * @draft ICU 4.4
  */
 
 public class ICULogger extends Logger {
@@ -114,6 +112,7 @@ public class ICULogger extends Logger {
      * @param name to be use by the logger (usually is the class name)
      * @return a new ICULogger object
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static ICULogger getICULogger(String name) {
         return getICULogger(name, null);
@@ -127,6 +126,7 @@ public class ICULogger extends Logger {
      * @param ResourceBundle name to localize messages (can be null)
      * @return a new ICULogger object
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static ICULogger getICULogger(String name, String resourceBundleName) {
         LOGGER_STATUS flag = checkGlobalLoggingFlag();
@@ -153,6 +153,7 @@ public class ICULogger extends Logger {
      *
      * @return whether logging is turned on or off.
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isLoggingOn() {
         if (currentStatus == LOGGER_STATUS.ON) {
@@ -166,6 +167,7 @@ public class ICULogger extends Logger {
      * Turn logging on.
      *
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public void turnOnLogging() {
         setStatus(LOGGER_STATUS.ON);
@@ -175,6 +177,7 @@ public class ICULogger extends Logger {
      * Turn logging off.
      *
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public void turnOffLogging() {
         setStatus(LOGGER_STATUS.OFF);
