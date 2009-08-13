@@ -405,9 +405,7 @@ public class VTimeZone extends BasicTimeZone {
     static {
         // Initialize ICU_TZVERSION
         try {
-            UResourceBundle tzbundle = UResourceBundle.getBundleInstance(
-                    "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION_PATH, "zoneinfo");
-                ICU_TZVERSION = tzbundle.getString("TZVersion");
+            ICU_TZVERSION = TimeZone.getTZDataVersion();
         } catch (MissingResourceException e) {
             ///CLOVER:OFF
             ICU_TZVERSION = null;
