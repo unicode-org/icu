@@ -136,6 +136,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Data version in ICU4J.
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static final VersionInfo ICU_DATA_VERSION;
 

@@ -31,6 +31,7 @@ public final class ICUDataVersion {
      * @return TRUE if ICU_DATA_VERSION is newer than icuver, else FALSE
      * 
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static boolean isDataOlder(VersionInfo dataVersionFillin) {
         boolean result = true;
@@ -57,6 +58,7 @@ public final class ICUDataVersion {
      * @return TRUE if data has been modified, else FALSE
      * 
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static boolean isDataModified() {
         if (hasICUSTDBundle()) {
@@ -71,6 +73,7 @@ public final class ICUDataVersion {
      * @return Current icu data version
      * 
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static VersionInfo getDataVersion() {
         UResourceBundle icudatares = null;
