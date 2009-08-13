@@ -79,6 +79,7 @@ public:
     virtual UBool setQuick( UBool quick = TRUE );
     virtual UBool setLeaks( UBool leaks = TRUE );
     virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
+    virtual int32_t setThreadCount( int32_t count = 1);
 
     virtual int32_t getErrors( void );
     virtual int32_t getDataErrors (void );
@@ -192,6 +193,7 @@ protected:
     UBool       quick;
     UBool       leaks;
     UBool       warn_on_missing_data;
+    int32_t     threadCount;
 
 private:
     UBool       LL_linestart;

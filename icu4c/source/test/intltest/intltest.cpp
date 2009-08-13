@@ -508,6 +508,7 @@ IntlTest::IntlTest()
     warn_on_missing_data = FALSE;
     quick = FALSE;
     leaks = FALSE;
+    threadCount = 1;
     testoutfp = stdout;
     LL_indentlevel = indentLevel_offset;
     numProps = 0;
@@ -574,6 +575,13 @@ UBool IntlTest::setLeaks( UBool leaksVal )
 {
     UBool rval = this->leaks;
     this->leaks = leaksVal;
+    return rval;
+}
+
+int32_t IntlTest::setThreadCount( int32_t count )
+{
+    int32_t rval = this->threadCount;
+    this->threadCount = count;
     return rval;
 }
 
@@ -1016,6 +1024,7 @@ main(int argc, char* argv[])
     UBool leaks = FALSE;
     UBool warnOnMissingData = FALSE;
     UBool defaultDataFound = FALSE;
+    int32_t threadCount = 1;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure";
@@ -1050,6 +1059,9 @@ main(int argc, char* argv[])
               warnOnMissingData = TRUE;
               warnOrErr = "WARNING";
             }
+            else if (strncmp("threads:", str, 8) == 0) {
+                threadCount = atoi(str + 8);
+            }
             else if (strncmp("prop:", str, 5) == 0) {
                 if (nProps < IntlTest::kMaxProps) {
                     props[nProps] = str + 5;
@@ -1074,8 +1086,12 @@ main(int argc, char* argv[])
         fprintf(stdout,
                 "### Syntax:\n"
                 "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
-                "### where options are: verbose (v), all (a), noerrormsg (n), \n"
+                "### \n"
+                "### Options are: verbose (v), all (a), noerrormsg (n), \n"
                 "### exhaustive (e), leaks (l), prop:<propery>=<value>, \n"
+                "### threads:<threadCount> (Mulithreading must first be \n"
+                "###     enabled otherwise this will be ignored. \n"
+                "###     The default thread count is 1.),\n"
                 "### (Specify either -all (shortcut -a) or a test name). \n"
                 "### -all will run all of the tests.\n"
                 "### \n"
@@ -1101,6 +1117,7 @@ main(int argc, char* argv[])
     major.setNoErrMsg( no_err_msg );
     major.setQuick( quick );
     major.setLeaks( leaks );
+    major.setThreadCount( threadCount );
     major.setWarnOnMissingData( warnOnMissingData );
     for (int32_t i = 0; i < nProps; i++) {
         major.setProperty(props[i]);
@@ -1130,6 +1147,11 @@ main(int argc, char* argv[])
     fprintf(stdout, "   Exhaustive (e)           : %s\n", (!quick?            "On" : "Off"));
     fprintf(stdout, "   Leaks (l)                : %s\n", (leaks?             "On" : "Off"));
     fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
+#if (ICU_USE_THREADS==0)
+    fprintf(stdout, "   Threads                  : Disabled\n");
+#else
+    fprintf(stdout, "   Threads                  : %d\n", threadCount);
+#endif
     for (int32_t i = 0; i < nProps; i++) {
         fprintf(stdout, "   Custom property (prop:)  : %s\n", props[i]);
     }
@@ -1441,8 +1463,7 @@ const char *  IntlTest::pathToDataDirectory()
  * It converts a character string into a UnicodeString, with
  * unescaping \u sequences.
  */
-UnicodeString CharsToUnicodeString(const char* chars)
-{
+UnicodeString CharsToUnicodeString(const char* chars){
     UnicodeString str(chars, ""); // Invariant conversion
     return str.unescape();
 }
