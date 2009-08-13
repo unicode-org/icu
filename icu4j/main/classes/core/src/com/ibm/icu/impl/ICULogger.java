@@ -10,6 +10,8 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import com.ibm.icu.util.TimeZone;
+
 /**
  *
  * Extends the Java Logger class adding a method to turn off/on logging.
@@ -23,7 +25,38 @@ import java.util.logging.Level;
  * To use logging, the system property "icu4j.debug.logging" must be set to "on" or "all",
  * otherwise the static ICULogger object will be null. This will help lower any unneccessary
  * resource usage when logging is not desired.
- * 
+ * <P>
+ * <strong>Examples</strong>:<P>
+ * Usage in code
+ * <blockquote>
+ * <pre>
+ * public class Class {
+ *     // Create logger object (usually with the class name)
+ *     public static ICULogger ClassLogger = ICULogger.getICULogger(Class.class.getName());
+ *     
+ *     // Method that will use logger.
+ *     public boolean hasSomething(Object obj) {
+ *         if (obj == null) {
+ *              // Log that obj is null.
+ *              // Note: Good to check for null and if logging is turned on to minimize resource usage when logging is not needed.
+ *              if (ClassLogger != null && ClassLogger.isLoggingOn()) {
+ *                  ClassLogger.warning("obj is null so false was returned by default.");
+ *              }
+ *             return false;
+ *         }
+ *         
+ *         ...
+ *         
+ *     }
+ * }
+ * </pre>
+ * </blockquote>
+ * Turning on logging (using the default settings)
+ * <blockquote>
+ * <pre>
+ * java -Dicu4j.debug.logging=all program
+ * </pre>
+ * </blockquote>
  * @author       Michael Ow
  * @draft ICU 4.4
  */
