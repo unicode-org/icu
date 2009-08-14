@@ -20,7 +20,7 @@ import java.util.SortedMap;
 
 public class ICUServiceTestSample {
     static public void main(String[] args) {
-        HelloServiceClient client = new HelloServiceClient();
+        new HelloServiceClient();
 
         Thread t = new HelloUpdateThread();
         t.start();
