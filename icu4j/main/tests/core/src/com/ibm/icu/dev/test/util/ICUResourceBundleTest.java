@@ -368,7 +368,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         };
         UResourceBundle bundle = null;
         try {
-            bundle = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testtable32", testLoader);
+            bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testtable32", testLoader);
         }
         catch (MissingResourceException ex) {
             warnln("could not load resource data: " + ex.getMessage());
@@ -378,15 +378,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle.getType()!= UResourceBundle.TABLE){
             errln("Could not get the correct type for bundle testtable32");
         }
+
         int size =bundle.getSize();
         if(size!=66000){
             errln("Could not get the correct size for bundle testtable32");
         }
+
+        int number = -1;
+
+        // get the items by index
         for(int i =0; i<size; i++){
             UResourceBundle item = bundle.get(i);
             String key = item.getKey();
             int parsedNumber = parseTable32Key(key);
-            int number=-1;
             switch(item.getType()){
                 case UResourceBundle.STRING:
                     String value = item.getString();
@@ -397,7 +401,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     break;
                 default:
                     errln("Got unexpected resource type in testtable32");
-
             }
             if(number!=parsedNumber){
                 errln("Did not get expected value in testtypes32 for key"+
@@ -405,15 +408,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
 
         }
+
+        // search for some items by key
         for(int i=0;i<arr.length; i++){
-            String expected = arr[i].key;
-            UResourceBundle item = bundle.get(expected);
-            int number=0;
-            String key = item.getKey();
-            int parsedNumber = parseTable32Key(key);
-            if(!key.equals(expected)){
-                errln("Did not get the expected key. Expected: "+expected+" Got:"+key);
-            }
+            UResourceBundle item = bundle.get(arr[i].key);
             switch(item.getType()){
                 case UResourceBundle.STRING:
                     String value = item.getString();
@@ -426,9 +424,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     errln("Got unexpected resource type in testtable32");
             }
 
-            if(number!=parsedNumber){
-                errln("Did not get expected value in testtypes32 for key"+
-                      key+". Expected: "+parsedNumber+" Got:"+number);
+            if(number != arr[i].value){
+                errln("Did not get expected value in testtypes32 for key" +
+                      arr[i].key +". Expected: " + arr[i].value + " Got:" + number);
             }
         }
     }
