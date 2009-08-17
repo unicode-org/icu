@@ -127,7 +127,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     /**
      * Returns the respath of this bundle
-     * @return
+     * @return the respath of the bundle
      */
     public String getResPath(){
         return resPath;
@@ -327,10 +327,9 @@ public  class ICUResourceBundle extends UResourceBundle {
      *  }
      * </code>
      *
-     * @param path
-     *            The path to the required resource key
+     * @param path The path to the required resource key
      * @return resource represented by the key
-     * @exception MissingResourceException
+     * @exception MissingResourceException If a resource was not found.
      */
     public ICUResourceBundle getWithFallback(String path)
             throws MissingResourceException {
@@ -897,9 +896,9 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     /**
      *
-     * @param baseName
-     * @param localeID
-     * @param root
+     * @param baseName The name for the bundle.
+     * @param localeID The locale identification.
+     * @param root The ClassLoader object root.
      * @return the new bundle
      */
     public static ICUResourceBundle createBundle(String baseName,
@@ -1231,7 +1230,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * Determines if the object with the specified key 
      * is an alias. If it is, returns true
      * 
-     * @param key The key of the resource to check
      * @returns True if the resource with 'key' is an alias, false otherwise.
      * 
      * @internal
@@ -1249,8 +1247,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      * This method can be used to retrieve the underlying alias path (aka where the alias points to)
      * This method was written to allow conversion from ICU back to LDML format.
      * 
-     * @param index
-     * @return
+     * @param index The index where the alias path points to.
+     * @return The alias path.
      * @author Brian Rower
      * @internal
      * @deprecated This API is ICU internal only.

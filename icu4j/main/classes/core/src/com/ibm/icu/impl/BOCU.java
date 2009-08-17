@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -22,12 +22,12 @@ import com.ibm.icu.text.UCharacterIterator;
  * code points.  The byte stream does not contain the values 0, 1, or
  * 2.</p>
  * 
- * <p>One example of a use of BOCU is in {@link 
- * com.ibm.icu.text.Collator#getCollationKey(String)} for a RuleBasedCollator object with 
+ * <p>One example of a use of BOCU is in 
+ * com.ibm.icu.text.Collator#getCollationKey(String) for a RuleBasedCollator object with 
  * collation strength IDENTICAL. The result CollationKey will consist of the 
  * collation order of the source string followed by the BOCU result of the 
  * source string. 
- * </p> 
+ * </p>
  *
  * <p>Unlike a UTF encoding, BOCU-compressed text is not suitable for
  * random access.</p>

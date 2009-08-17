@@ -478,8 +478,7 @@ public class PluralFormat extends UFormat {
      * and upon return, the position where parsing left off.  If the position
      * has not changed upon return, then parsing failed.
      * @return nothing because this method is not yet implemented.
-     * @throws UnsupportedOperationException
-     *     will always be thrown by this method.
+     * @throws UnsupportedOperationException will always be thrown by this method.
      * @stable ICU 3.8
      */
     public Number parse(String text, ParsePosition parsePosition) {
@@ -493,8 +492,7 @@ public class PluralFormat extends UFormat {
      * and upon return, the position where parsing left off.  If the position
      * has not changed upon return, then parsing failed.
      * @return nothing because this method is not yet implemented.
-     * @throws UnsupportedOperationException
-     *     will always be thrown by this method.
+     * @throws UnsupportedOperationException will always be thrown by this method.
      * @stable ICU 3.8
      */
     public Object parseObject(String source, ParsePosition pos) {

@@ -354,10 +354,8 @@ import com.ibm.icu.text.SimpleDateFormat;
  *     code cannot be guaranteed well-behaved results with dates such as
  *     <code>Date(Long.MIN_VALUE)</code> or
  *     <code>Date(Long.MAX_VALUE)</code>. Instead, the
- *     <code>Calendar</code> constants {@link #MIN_DATE},
- *     {@link #MAX_DATE}, {@link #MIN_MILLIS},
- *     {@link #MAX_MILLIS}, {@link #MIN_JULIAN}, and
- *     {@link #MAX_JULIAN} should be used. <b>Motivation:</b> With
+ *     <code>Calendar</code> protected constants should be used.
+ *     <b>Motivation:</b> With
  *     the addition of the {@link #JULIAN_DAY} field, Julian day
  *     numbers must be restricted to a 32-bit <code>int</code>.  This
  *     restricts the overall supported range. Furthermore, restricting
@@ -373,12 +371,10 @@ import com.ibm.icu.text.SimpleDateFormat;
  *     {@link #YEAR_WOY} implement localized day-of-week and
  *     week-of-year behavior.</li>
  *
- *   <li>Subclasses can access millisecond constants
- *     {@link #ONE_SECOND}, {@link #ONE_MINUTE},
- *     {@link #ONE_HOUR}, {@link #ONE_DAY}, and
- *     {@link #ONE_WEEK} defined in <code>Calendar</code>.</li>
+ *   <li>Subclasses can access protected millisecond constants
+ *   defined in <code>Calendar</code>.</li>
  *
- *   <li>New API has been added to suport calendar-specific subclasses
+ *   <li>New API has been added to support calendar-specific subclasses
  *     of <code>DateFormat</code>.</li>
  *
  *   <li>Several subclasses have been implemented, representing
@@ -483,9 +479,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
  *
  *   <li>Subclasses should implement {@link #handleGetLimit}
- *     to return the {@link #MINIMUM},
- *     {@link #GREATEST_MINIMUM}, {@link #LEAST_MAXIMUM}, or
- *     {@link #MAXIMUM} of a field, depending on the value of
+ *     to return the protected values of a field, depending on the value of
  *     <code>limitType</code>. This method only needs to handle the
  *     fields {@link #ERA}, {@link #YEAR}, {@link #MONTH},
  *     {@link #WEEK_OF_YEAR}, {@link #WEEK_OF_MONTH},
@@ -508,8 +502,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  *     array large enough to hold the calendar's fields. This is only
  *     necessary if the calendar defines additional fields beyond those
  *     defined by <code>Calendar</code>. The length of the result must be
- *     at least {@link #BASE_FIELD_COUNT} and no more than
- *     {@link #MAX_FIELD_COUNT}.</li>
+ *     be between the base and maximum field counts.</li>
  *
  *   <li>Optionally, subclasses may override
  *     {@link #handleGetDateFormat} to create a
@@ -586,11 +579,8 @@ import com.ibm.icu.text.SimpleDateFormat;
  * maximum range of supportable dates as those having Julian day numbers
  * of <code>-0x7F000000</code> to <code>+0x7F000000</code>. This
  * corresponds to years from ~5,000,000 BCE to ~5,000,000 CE. Programmers
- * should use the constants {@link #MIN_DATE} (or
- * {@link #MIN_MILLIS} or {@link #MIN_JULIAN}) and
- * {@link #MAX_DATE} (or {@link #MAX_MILLIS} or
- * {@link #MAX_JULIAN}) in <code>Calendar</code> to specify an
- * extremely early or extremely late date.</p>
+ * should use the protected constants in <code>Calendar</code> to
+ * specify an extremely early or extremely late date.</p>
  *
  * <p><big><b>General notes</b></big>
  *
@@ -1285,7 +1275,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * The currently set time for this calendar, expressed in milliseconds after
      * January 1, 1970, 0:00:00 GMT.
-     * @see <tt>isTimeSet</tt>
      * @serial
      */
     private long          time;

@@ -30,7 +30,7 @@ class UCharacterNameIterator implements ValueIterator
     * be updated.</p>
     * @param element for storing the result codepoint and name
     * @return true if we are not at the end of the iteration, false otherwise.
-    * @see Element
+    * @see ValueIterator.Element
     */
     public boolean next(ValueIterator.Element element)
     {

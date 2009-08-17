@@ -176,7 +176,7 @@ public final class NormalizerImpl {
        /**
         * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
         * data the index array offset of the indexes for that lead surrogate.
-        * @param property data value for a surrogate from the trie, including 
+        * @param value data value for a surrogate from the trie, including 
         *         the folding offset
         * @return data offset or 0 if there is no data for the lead surrogate
         */
@@ -193,7 +193,7 @@ public final class NormalizerImpl {
        /**
         * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
         * data the index array offset of the indexes for that lead surrogate.
-        * @param property data value for a surrogate from the trie, including
+        * @param value data value for a surrogate from the trie, including
         *         the folding offset
         * @return data offset or 0 if there is no data for the lead surrogate
         */
@@ -208,7 +208,7 @@ public final class NormalizerImpl {
        /**
         * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
         * data the index array offset of the indexes for that lead surrogate.
-        * @param property data value for a surrogate from the trie, including 
+        * @param value data value for a surrogate from the trie, including 
         *        the folding offset
         * @return data offset or 0 if there is no data for the lead surrogate
         */

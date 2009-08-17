@@ -128,10 +128,9 @@ public final class Punycode {
      * The input string must not contain single, unpaired surrogates.
      * The output will be represented as an array of ASCII code points.
      * 
-     * @param src
-     * @param caseFlags
-     * @return
-     * @throws ParseException
+     * @param src The source of the String Buffer passed.
+     * @param caseFlags The boolean array of case flags.
+     * @return An array of ASCII code points.
      */
     public static StringBuffer encode(StringBuffer src, boolean[] caseFlags) throws StringPrepParseException{
         
@@ -289,10 +288,9 @@ public final class Punycode {
      * Converts Punycode to Unicode.
      * The Unicode string will be at most as long as the Punycode string.
      * 
-     * @param src
-     * @param caseFlags
-     * @return
-     * @throws ParseException
+     * @param src The source of the string buffer being passed.
+     * @param caseFlags The array of boolean case flags.
+     * @return StringBuffer string.
      */
     public static StringBuffer decode(StringBuffer src, boolean[] caseFlags) 
                                throws StringPrepParseException{

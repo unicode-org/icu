@@ -129,8 +129,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the default locale.
      *
-     * @throws  java.util.MissingResourceException
-     *          if the resources for the default locale cannot be
+     * @throws  java.util.MissingResourceException if the resources for the default locale cannot be
      *          found or cannot be loaded.
      * @stable ICU 2.0
      */
@@ -143,8 +142,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the given locale.
      *
-     * @throws  java.util.MissingResourceException
-     *          if the resources for the specified locale cannot be
+     * @throws  java.util.MissingResourceException if the resources for the specified locale cannot be
      *          found or cannot be loaded.
      * @stable ICU 2.0
      */
@@ -157,8 +155,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the given ulocale.
      *
-     * @throws  java.util.MissingResourceException
-     *          if the resources for the specified locale cannot be
+     * @throws  java.util.MissingResourceException if the resources for the specified locale cannot be
      *          found or cannot be loaded.
      * @stable ICU 3.2
      */

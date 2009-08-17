@@ -555,12 +555,10 @@ public class PluralRules implements Serializable {
             this.constraint = constraint;
         }
 
-        @SuppressWarnings("unused")
         public Rule and(Constraint c) {
             return new ConstrainedRule(keyword, new AndConstraint(constraint, c));
         }
 
-        @SuppressWarnings("unused")
         public Rule or(Constraint c) {
             return new ConstrainedRule(keyword, new OrConstraint(constraint, c));
         }

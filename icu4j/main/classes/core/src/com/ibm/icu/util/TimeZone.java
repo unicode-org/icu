@@ -426,7 +426,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style 
+     * @param style  The style of the name to display.
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.

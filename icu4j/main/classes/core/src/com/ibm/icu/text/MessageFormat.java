@@ -694,12 +694,9 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * This method is only supported if the format does not use
      * named arguments, otherwise an IllegalArgumentException is thrown.
      *
-     * @param newFormats
-     *            the new formats to use
-     * @throws NullPointerException
-     *                if <code>newFormats</code> is null
-     * @throws IllegalArgumentException
-     *                if this formatter uses named arguments
+     * @param newFormats the new formats to use
+     * @throws NullPointerException if <code>newFormats</code> is null
+     * @throws IllegalArgumentException if this formatter uses named arguments
      * @stable ICU 3.0
      */
     public void setFormatsByArgumentIndex(Format[] newFormats) {
@@ -796,12 +793,9 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * This method is only supported when exclusively numbers are used for
      * argument names. Otherwise an IllegalArgumentException is thrown.
      *
-     * @param argumentIndex
-     *            the argument index for which to use the new format
-     * @param newFormat
-     *            the new format to use
-     * @exception IllegalArgumentException
-     *            if alphanumeric arguments where used in MessageFormat.
+     * @param argumentIndex the argument index for which to use the new format
+     * @param newFormat the new format to use
+     * @exception IllegalArgumentException if alphanumeric arguments where used in MessageFormat.
      * @stable ICU 3.0
      */
     public void setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
@@ -887,8 +881,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * argument names. Otherwise an IllegalArgumentException is thrown.
      *
      * @return the formats used for the arguments within the pattern
-     * @throws IllegalArgumentException
-     *         if this format uses named arguments
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public Format[] getFormatsByArgumentIndex() {
@@ -942,7 +935,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
     /**
      * Get the format argument names. For more details, see {@link #setFormatByArgumentName(String, Format)}.
      * @return List of names
-     * @deprecated
+     * @deprecated This API is ICU internal only.
      * @internal
      */
     public Set<String> getFormatArgumentNames() {
@@ -956,7 +949,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
     /**
      * Get the formats according to their argument names. For more details, see {@link #setFormatByArgumentName(String, Format)}.
      * @return format associated with the name, or null if there isn't one.
-     * @deprecated
+     * @deprecated This API is ICU internal only.
      * @internal
      */
     public Format getFormatByArgumentName(String argumentName) {
@@ -1036,8 +1029,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * @throws IllegalArgumentException if an argument in the
      *            <code>arguments</code> array is not of the type
      *            expected by the format element(s) that use it.
-     * @throws IllegalArgumentException
-     *            if this format uses named arguments
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public final StringBuffer format(Object[] arguments, StringBuffer result,
@@ -1096,8 +1088,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *            or if an argument in the <code>arguments</code> array
      *            is not of the type expected by the format element(s)
      *            that use it.
-     * @throws IllegalArgumentException
-     *            if this format uses named arguments
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public static String format(String pattern, Object[] arguments) {
@@ -1393,10 +1384,8 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param source A <code>String</code> whose beginning should be parsed.
      * @return An <code>Object</code> array parsed from the string.
-     * @exception ParseException
-     *                if the beginning of the specified string cannot be parsed.
-     * @exception IllegalArgumentException
-     *                if this format uses named arguments
+     * @exception ParseException if the beginning of the specified string cannot be parsed.
+     * @exception IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public Object[] parse(String source) throws ParseException {

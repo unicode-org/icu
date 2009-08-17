@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -132,7 +132,7 @@ public class PeriodFormatterData {
    * @param last true if this is the last unit
    * @param wasSkipped true if the unit(s) before this were skipped
    * @param sb the string builder to which to append the text
-   * @param return true if will require skip marker
+   * @return true if will require skip marker
    */
   public boolean appendUnit(TimeUnit unit, int count, int cv, 
                             int uv, boolean useCountSep, 

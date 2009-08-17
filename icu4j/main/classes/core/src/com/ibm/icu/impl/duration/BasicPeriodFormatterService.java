@@ -38,8 +38,7 @@ public class BasicPeriodFormatterService implements PeriodFormatterService {
      * Construct a BasicPeriodFormatterService using the given
      * PeriodFormatterDataService.
      * 
-     * @param ds
-     *            the data service to use
+     * @param ds the data service to use
      */
     public BasicPeriodFormatterService(PeriodFormatterDataService ds) {
         this.ds = ds;

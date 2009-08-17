@@ -5355,9 +5355,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
     /**
      * Returns a string version of the property value.
-     * @param propertyEnum
-     * @param codepoint
-     * @param nameChoice
+     * @param propertyEnum The property enum value.
+     * @param codepoint The codepoint value.
+     * @param nameChoice The choice of the name.
      * @return value as string
      * @internal
      * @deprecated This API is ICU internal only.

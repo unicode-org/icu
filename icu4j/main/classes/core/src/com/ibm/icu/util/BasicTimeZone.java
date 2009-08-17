@@ -87,13 +87,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @param tz    The instance of <code>TimeZone</code>
      * @param start The start time of the evaluated time range (inclusive)
      * @param end   The end time of the evaluated time range (inclusive)
-     * @param ignoreDstAmount
-     *              When true, any transitions with only daylight saving amount
-     *              changes will be ignored, except either of them is zero.
-     *              For example, a transition from rawoffset 3:00/dstsavings 1:00
-     *              to rawoffset 2:00/dstsavings 2:00 is excluded from the comparison,
-     *              but a transtion from rawoffset 2:00/dstsavings 1:00 to
-     *              rawoffset 3:00/dstsavings 0:00 is included.
+     * @param ignoreDstAmount When true, any transitions with only daylight saving amount changes will be ignored, except either of them is zero. For example, a transition from rawoffset 3:00/dstsavings 1:00 to rawoffset 2:00/dstsavings 2:00 is excluded from the comparison, but a transtion from rawoffset 2:00/dstsavings 1:00 to rawoffset 3:00/dstsavings 0:00 is included.
      * 
      * @return true if the other time zone has the equivalent transitions in the
      * time range.  When tz is not a <code>BasicTimeZone</code>, this method

@@ -330,7 +330,7 @@ public final class UCharacterName
 
     /**
      * Gets the group index for the codepoint, or the group before it.
-     * @param codepoint
+     * @param codepoint The codepoint index.
      * @return group index containing codepoint or the group before it.
      */
     public int getGroup(int codepoint)
@@ -410,7 +410,7 @@ public final class UCharacterName
 
     /**
      * Gets the MSB of the codepoint
-     * @param codepoint
+     * @param codepoint The codepoint value.
      * @return the MSB of the codepoint
      */
     public static int getCodepointMSB(int codepoint)
@@ -440,7 +440,7 @@ public final class UCharacterName
 
     /**
      * Gets the offset to a group
-     * @param codepoint
+     * @param codepoint The codepoint value.
      * @return offset to a group
      */
     public static int getGroupOffset(int codepoint)
@@ -450,7 +450,7 @@ public final class UCharacterName
 
     /**
      * Gets the minimum codepoint of a group
-     * @param codepoint
+     * @param codepoint The codepoint value.
      * @return minimum codepoint in the group which codepoint belongs to
      */
     ///CLOVER:OFF
@@ -492,7 +492,7 @@ public final class UCharacterName
     /**
      * Gets the Algorithmic name of the codepoint
      * @param index algorithmic range index
-     * @param codepoint
+     * @param codepoint The codepoint value.
      * @return algorithmic name of codepoint
      */
     public String getAlgorithmName(int index, int codepoint)

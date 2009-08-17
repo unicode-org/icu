@@ -17,8 +17,7 @@ public abstract class PeriodFormatterDataService {
     /**
      * Returns a PeriodFormatterData for the given locale name.
      * 
-     * @param localeName
-     *            the name of the locale
+     * @param localeName the name of the locale
      * @return a PeriodFormatterData object
      */
     public abstract PeriodFormatterData get(String localeName);

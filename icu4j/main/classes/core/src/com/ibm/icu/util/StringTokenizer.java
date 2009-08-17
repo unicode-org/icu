@@ -113,7 +113,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @param delim the delimiters.
      * @param returndelims flag indicating whether to return the delimiters 
      *        as tokens.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @stable ICU 2.4
      */
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims)
@@ -139,7 +139,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @param coalescedelims flag indicating whether to return a run of 
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @internal ICU 3.4.3
      * @deprecated This API is ICU internal only.
      */
@@ -176,7 +176,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * <p>Delimiter characters themselves will not be treated as tokens.</p>
      * @param str a string to be parsed.
      * @param delim the delimiters.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @stable ICU 2.4
      */
     public StringTokenizer(String str, UnicodeSet delim)
@@ -196,7 +196,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @param delim the delimiters.
      * @param returndelims flag indicating whether to return the delimiters 
      *        as tokens.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @stable ICU 2.4
      */
     public StringTokenizer(String str, String delim, boolean returndelims)
@@ -222,7 +222,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @param coalescedelims flag indicating whether to return a run of 
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @internal ICU 3.4.3
      * @deprecated This API is ICU internal only.
      */
@@ -260,7 +260,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * <p>Delimiter characters themselves will not be treated as tokens.</p>
      * @param str a string to be parsed.
      * @param delim the delimiters.
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @stable ICU 2.4
      */
     public StringTokenizer(String str, String delim)
@@ -277,7 +277,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * carriage-return character, and the form-feed character.</p> 
      * <p>Delimiter characters themselves will not be treated as tokens.</p>
      * @param str a string to be parsed
-     * @exception throws a NullPointerException if str is null
+     * @exception NullPointerException if str is null
      * @stable ICU 2.4
      */
     public StringTokenizer(String str) 

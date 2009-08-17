@@ -199,7 +199,7 @@ public final class UCharacterProperty
      * C version getUnicodeProperties.
      * @param codepoint codepoint whose additional properties is to be
      *                  retrieved
-     * @param column
+     * @param column The column index.
      * @return unicode properties
      */
        public int getAdditional(int codepoint, int column) {

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -98,8 +98,8 @@ public class ImplicitCEGenerator {
     
     /**
      * Set up to generate implicits.
-     * @param minPrimary
-     * @param maxPrimary
+     * @param minPrimary The minimum primary value.
+     * @param maxPrimary The maximum primary value.
      * @param minTrail final byte
      * @param maxTrail final byte
      * @param gap3 the gap we leave for tailoring for 3-byte forms
@@ -179,7 +179,7 @@ public class ImplicitCEGenerator {
 
     /**
      * Converts implicit CE into raw integer
-     * @param implicit
+     * @param implicit The implicit value passed.
      * @return -1 if illegal format
      */
     public int getRawFromImplicit(int implicit) {
@@ -279,7 +279,7 @@ public class ImplicitCEGenerator {
      * Gets an Implicit from a code point. Internally, 
      * swaps (which produces a raw value 0..220000, 
      * then converts raw to implicit.
-     * @param cp
+     * @param cp The code point to convert to implicit.
      * @return Primary implicit weight
      */
     public int getImplicitFromCodePoint(int cp) {

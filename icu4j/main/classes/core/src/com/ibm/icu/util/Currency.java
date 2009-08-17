@@ -290,7 +290,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Returns a currency object given an ISO 4217 3-letter code.
      * @param theISOCode the iso code
      * @return the currency for this iso code
-     * @throws NullPoninterException if <code>theISOCode</code> is null.
+     * @throws NullPointerException if <code>theISOCode</code> is null.
      * @throws IllegalArgumentException if <code>theISOCode</code> is not a
      *         3-letter alpha code.
      * @stable ICU 2.2

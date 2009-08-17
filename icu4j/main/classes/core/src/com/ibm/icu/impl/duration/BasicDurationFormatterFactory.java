@@ -43,7 +43,6 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * Set the period formatter used by the factory.  New formatters created
    * with this factory will use the given period formatter.
    *
-   * @param builder the builder to use
    * @return this BasicDurationFormatterFactory
    */
   public DurationFormatterFactory setPeriodFormatter(
@@ -129,7 +128,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * Set the name of the locale that will be used when 
    * creating new formatters.
    *
-   * @param localeName the name of the Locale
+   * @param timeZone The time zone to use.
    * @return this BasicDurationFormatterFactory
    */
   public DurationFormatterFactory setTimeZone(TimeZone timeZone) {

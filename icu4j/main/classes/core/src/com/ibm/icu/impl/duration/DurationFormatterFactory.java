@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -22,7 +22,7 @@ public interface DurationFormatterFactory {
    * Set the period formatter used by the factory.  New formatters created
    * with this factory will use the given period formatter.
    *
-   * @param builder the builder to use
+   * @param formatter the formatter to use
    * @return this DurationFormatterFactory
    */
   public DurationFormatterFactory setPeriodFormatter(PeriodFormatter formatter);
@@ -65,7 +65,7 @@ public interface DurationFormatterFactory {
    * Set the name of the locale that will be used when 
    * creating new formatters.
    *
-   * @param localeName the name of the Locale
+   * @param timeZone The time zone to set.
    * @return this DurationFormatterFactory
    */
   public DurationFormatterFactory setTimeZone(TimeZone timeZone);

@@ -7,8 +7,6 @@
 
 package com.ibm.icu.text;
 
-import java.text.ParseException;
-
 import com.ibm.icu.impl.Punycode;
 
 /**
@@ -223,7 +221,7 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws StringPrepParseException
+     * @throws StringPrepParseException When an error occurs for parsing a string.
      * @stable ICU 2.8
      */    
     public static StringBuffer convertToASCII(String src, int options)
@@ -254,7 +252,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertToASCII(StringBuffer src, int options)
@@ -285,7 +282,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertToASCII(UCharacterIterator src, int options)
@@ -424,7 +420,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(UCharacterIterator src, int options)
@@ -459,7 +454,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(StringBuffer src, int options)
@@ -494,7 +488,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(String src,int options)
@@ -550,7 +543,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(String src, int options)
@@ -581,7 +573,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(StringBuffer src, int options)
@@ -612,7 +603,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(UCharacterIterator src, int options)
@@ -749,7 +739,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(UCharacterIterator src, int options)
@@ -781,7 +770,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(StringBuffer src, int options)
@@ -813,7 +801,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(String src, int options)
@@ -871,7 +858,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
-     * @throws ParseException
      * @stable ICU 2.8
      */
     //  TODO: optimize
@@ -910,7 +896,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
-     * @throws ParseException
      * @stable ICU 2.8
      */
     //  TODO: optimize
@@ -948,7 +933,6 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if i1 > i2 and < 0 if i1 < i2
-     * @throws ParseException
      * @stable ICU 2.8
      */
     //  TODO: optimize

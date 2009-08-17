@@ -75,9 +75,8 @@ import com.ibm.icu.impl.locale.LanguageTag.Extension;
  * <tt>getLocale()</tt>.  These methods exist in several ICU classes,
  * including {@link com.ibm.icu.util.Calendar}, {@link
  * com.ibm.icu.util.Currency}, {@link com.ibm.icu.text.UFormat},
- * {@link com.ibm.icu.text.BreakIterator}, {@link
- * com.ibm.icu.text.Collator}, {@link
- * com.ibm.icu.text.DateFormatSymbols}, and {@link
+ * {@link com.ibm.icu.text.BreakIterator}, {@link com.ibm.icu.text.Collator},
+ * {@link com.ibm.icu.text.DateFormatSymbols}, and {@link
  * com.ibm.icu.text.DecimalFormatSymbols} and their subclasses, if
  * any.  Once an object of one of these classes has been created,
  * <tt>getLocale()</tt> may be called on it to determine the valid and
@@ -941,8 +940,7 @@ public final class ULocale implements Serializable {
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
      * @param newLocale the new default locale
-     * @throws SecurityException
-     *        if a security manager exists and its
+     * @throws SecurityException if a security manager exists and its
      *        <code>checkPermission</code> method doesn't allow the operation.
      * @throws NullPointerException if <code>newLocale</code> is null
      * @see SecurityManager#checkPermission(java.security.Permission)
@@ -1081,7 +1079,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns the country/region code for this locale, which will either be the empty string
      * or an uppercase ISO 3166 2-letter code.
-     * @param localeID
+     * @param localeID The locale identification string.
      * @see #getDisplayCountry()
      * @see #getDisplayCountry(ULocale)
      * @stable ICU 3.0

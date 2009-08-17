@@ -568,7 +568,6 @@ abstract public class Pick {
        }
     }
    
-    @SuppressWarnings("unused")
     private abstract static class ListPick extends Pick {
         protected Pick[] items = new Pick[0];
 

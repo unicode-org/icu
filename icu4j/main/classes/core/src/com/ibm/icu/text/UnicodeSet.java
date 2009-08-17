@@ -1083,8 +1083,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Adds all characters in range (uses preferred naming convention).
-     * @param start
-     * @param end
+     * @param start The index of where to start on adding all characters.
+     * @param end The index of where to end on adding all characters.
      * @return a reference to this object
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3270,8 +3270,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Modifies this set to contain those code points which have the
      * given value for the given property.  Prior contents of this
      * set are lost.
-     * @param propertyAlias
-     * @param valueAlias
+     * @param propertyAlias A string of the property alias.
+     * @param valueAlias A string of the value alias.
      * @param symbols if not null, then symbols are first called to see if a property
      * is available. If true, then everything else is skipped.
      * @return this set
@@ -4226,9 +4226,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Simplify the ranges in a Unicode set by merging any ranges that are only separated by characters in the dontCare set. 
      * For example, the ranges: \\u2E80-\\u2E99\\u2E9B-\\u2EF3\\u2F00-\\u2FD5\\u2FF0-\\u2FFB\\u3000-\\u303E change to \\u2E80-\\u303E 
      * if the dontCare set includes unassigned characters (for a particular version of Unicode).
-     * @param input Set to be modified
      * @param dontCare Set with the don't-care characters for spanning
-     * @return 
      * @return the input set, modified
      * @internal
      */
@@ -4282,9 +4280,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Strips code points from source. If matches is true, script all that match <i>this</i>. If matches is false, then strip all that <i>don't</i> match.
-     * @param source
-     * @param matches
-     * @return
+     * @param source The source of the CharSequence to strip from.
+     * @param matches A boolean to either strip all that matches or don't match with the current UnicodeSet object.
+     * @return The string after it has been stripped.
      */
     public String stripFrom(CharSequence source, boolean matches) {
         StringBuilder result = new StringBuilder();

@@ -47,9 +47,9 @@ public class RelativeDateFormat extends DateFormat {
     // copy c'tor?
     
     /**
-     * @param timeStyle
-     * @param dateStyle
-     * @param locale
+     * @param timeStyle The time style for the date and time.
+     * @param dateStyle The date style for the date and time.
+     * @param locale The locale for the date.
      */
     public RelativeDateFormat(int timeStyle, int dateStyle, ULocale locale) {
         fLocale = locale;

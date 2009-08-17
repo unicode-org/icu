@@ -421,8 +421,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <i>(Note: this constructor is provided only in the <code>com.ibm.icu.math</code> version of the BigDecimal class.
      * It would not be present in a <code>java.math</code> version.)</i>
      * 
-     * @param bd
-     *            The <code>BigDecimal</code> to be translated.
+     * @param bd The <code>BigDecimal</code> to be translated.
      * @stable ICU 2.0
      */
 
@@ -441,8 +440,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus sign (hyphen) if the
      * <code>BigInteger</code> is negative. A leading zero will be present only if the <code>BigInteger</code> is zero.
      * 
-     * @param bi
-     *            The <code>BigInteger</code> to be converted.
+     * @param bi The <code>BigInteger</code> to be converted.
      * @stable ICU 2.0
      */
 
@@ -465,12 +463,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * scale</code> decimal digits if the scale is positive), prefixed with a leading minus sign (hyphen) if the <code>
      * BigInteger</code> is negative. A leading zero will be present only if the <code>BigInteger</code> is zero.
      * 
-     * @param bi
-     *            The <code>BigInteger</code> to be converted.
-     * @param scale
-     *            The <code>int</code> specifying the scale.
-     * @throws NumberFormatException
-     *             if the scale is negative.
+     * @param bi The <code>BigInteger</code> to be converted.
+     * @param scale The <code>int</code> specifying the scale.
+     * @throws NumberFormatException If the scale is negative.
      * @stable ICU 2.0
      */
 
@@ -492,10 +487,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Using this constructor is faster than using the <code>BigDecimal(String)</code> constructor if the string is
      * already available in character array form.
      * 
-     * @param inchars
-     *            The <code>char[]</code> array containing the number to be converted.
-     * @throws NumberFormatException
-     *             if the parameter is not a valid number.
+     * @param inchars The <code>char[]</code> array containing the number to be converted.
+     * @throws NumberFormatException If the parameter is not a valid number.
      * @stable ICU 2.0
      */
 
@@ -514,14 +507,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Using this constructor is faster than using the <code>BigDecimal(String)</code> constructor if the string is
      * already available within a character array.
      * 
-     * @param inchars
-     *            The <code>char[]</code> array containing the number to be converted.
-     * @param offset
-     *            The <code>int</code> offset into the array of the start of the number to be converted.
-     * @param length
-     *            The <code>int</code> length of the number.
-     * @throws NumberFormatException
-     *             if the parameter is not a valid number for any reason.
+     * @param inchars The <code>char[]</code> array containing the number to be converted.
+     * @param offset The <code>int</code> offset into the array of the start of the number to be converted.
+     * @param length The <code>int</code> length of the number.
+     * @throws NumberFormatException If the parameter is not a valid number for any reason.
      * @stable ICU 2.0
      */
 
@@ -753,10 +742,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * {@link #BigDecimal(java.lang.String)} constructor. To get that result, use the static {@link #valueOf(double)}
      * method to construct a <code>BigDecimal</code> from a <code>double</code>.
      * 
-     * @param num
-     *            The <code>double</code> to be converted.
-     * @throws NumberFormatException
-     *             if the parameter is infinite or not a number.
+     * @param num The <code>double</code> to be converted.
+     * @throws NumberFormatException If the parameter is infinite or not a number.
      * @stable ICU 2.0
      */
 
@@ -776,8 +763,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * integer parameter. The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus
      * sign (hyphen) if the parameter is negative. A leading zero will be present only if the parameter is zero.
      * 
-     * @param num
-     *            The <code>int</code> to be converted.
+     * @param num The <code>int</code> to be converted.
      * @stable ICU 2.0
      */
 
@@ -856,8 +842,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * integer parameter. The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus
      * sign (hyphen) if the parameter is negative. A leading zero will be present only if the parameter is zero.
      * 
-     * @param num
-     *            The <code>long</code> to be converted.
+     * @param num The <code>long</code> to be converted.
      * @stable ICU 2.0
      */
 
@@ -934,10 +919,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Any digits in the parameter must be decimal; that is, <code>Character.digit(c, 10)</code> (where </code>c</code>
      * is the character in question) would not return -1.
      * 
-     * @param string
-     *            The <code>String</code> to be converted.
-     * @throws NumberFormatException
-     *             if the parameter is not a valid number.
+     * @param string The <code>String</code> to be converted.
+     * @throws NumberFormatException If the parameter is not a valid number.
      * @stable ICU 2.0
      */
 
@@ -979,8 +962,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * with the same parameter is returned. Otherwise, the same result as invoking the {@link #negate(MathContext)}
      * method with the same parameter is returned.
      * 
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the absolute value of this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -999,8 +981,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The length of the decimal part (the scale) of the result will be the maximum of the scales of the two operands.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the addition.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the addition.
      * @return A <code>BigDecimal</code> whose value is <code>this+rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
      */
@@ -1015,10 +996,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the addition (<b><code>+</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the addition.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the addition.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this+rhs</code>.
      * @stable ICU 2.0
      */
@@ -1238,11 +1217,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #compareTo(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>,
      * and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return An <code>int</code> whose value is -1, 0, or 1 as <code>this</code> is numerically less than, equal to,
      *         or greater than <code>rhs</code>.
-     * @see #compareTo(Object)
      * @stable ICU 2.0
      */
 
@@ -1269,15 +1246,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * </tr>
      * </table>
      * <p>
-     * A {@link #compareTo(Object)} method is also provided.
+     * A {@link #compareTo(BigDecimal)} method is also provided.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return An <code>int</code> whose value is -1, 0, or 1 as <code>this</code> is numerically less than, equal to,
      *         or greater than <code>rhs</code>.
-     * @see #compareTo(Object)
      * @stable ICU 2.0
      */
 
@@ -1336,11 +1310,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The length of the decimal part (the scale) of the result will be the same as the scale of the current object, if
      * the latter were formatted without exponential notation.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the division.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @return A plain <code>BigDecimal</code> whose value is <code>this/rhs</code>, using fixed point arithmetic.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
+     * @throws ArithmeticException If <code>rhs</code> is zero.
      * @stable ICU 2.0
      */
 
@@ -1359,19 +1331,13 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * object, if the latter were formatted without exponential notation.
      * <p>
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the division.
-     * @param round
-     *            The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
+     * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
      * @return A plain <code>BigDecimal</code> whose value is <code>this/rhs</code>, using fixed point arithmetic and
      *         the specified rounding mode.
-     * @throws IllegalArgumentException
-     *             if <code>round</code> is not a valid rounding mode.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
-     * @throws ArithmeticException
-     *             if <code>round</code> is {@link MathContext#ROUND_UNNECESSARY} and <code>this.scale()</code> is
-     *             insufficient to represent the result exactly.
+     * @throws IllegalArgumentException if <code>round</code> is not a valid rounding mode.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
+     * @throws ArithmeticException if <code>round</code> is {@link MathContext#ROUND_UNNECESSARY} and <code>this.scale()</code> is insufficient to represent the result exactly.
      * @stable ICU 2.0
      */
 
@@ -1394,22 +1360,15 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * the latter were formatted without exponential notation.
      * <p>
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the division.
-     * @param scale
-     *            The <code>int</code> scale to be used for the result.
-     * @param round
-     *            The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
+     * @param scale The <code>int</code> scale to be used for the result.
+     * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
      * @return A plain <code>BigDecimal</code> whose value is <code>this/rhs</code>, using fixed point arithmetic and
      *         the specified rounding mode.
-     * @throws IllegalArgumentException
-     *             if <code>round</code> is not a valid rounding mode.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
-     * @throws ArithmeticException
-     *             if <code>scale</code> is negative.
-     * @throws ArithmeticException
-     *             if <code>round</code> is {@link MathContext#ROUND_UNNECESSARY} and <code>scale</code> is insufficient
+     * @throws IllegalArgumentException if <code>round</code> is not a valid rounding mode.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
+     * @throws ArithmeticException if <code>scale</code> is negative.
+     * @throws ArithmeticException if <code>round</code> is {@link MathContext#ROUND_UNNECESSARY} and <code>scale</code> is insufficient
      *             to represent the result exactly.
      * @stable ICU 2.0
      */
@@ -1428,13 +1387,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the division (<b><code>/</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the division.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this/rhs</code>.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
      * @stable ICU 2.0
      */
 
@@ -1448,11 +1404,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #divideInteger(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs
      * </code>, and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the integer division.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the integer division.
      * @return A <code>BigDecimal</code> whose value is the integer part of <code>this/rhs</code>.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
      * @stable ICU 2.0
      */
 
@@ -1467,15 +1421,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the integer division operator (as defined in the decimal documentation, see {@link BigDecimal class
      * header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the integer division.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the integer division.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the integer part of <code>this/rhs</code>.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
-     * @throws ArithmeticException
-     *             if the result will not fit in the number of digits specified for the context.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
+     * @throws ArithmeticException if the result will not fit in the number of digits specified for the context.
      * @stable ICU 2.0
      */
 
@@ -1490,8 +1440,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #max(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>, and the
      * context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return A <code>BigDecimal</code> whose value is the maximum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
      */
@@ -1511,10 +1460,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * {@link #plus(MathContext)} method on the first parameter object (using the same <code>MathContext</code>
      * parameter) is returned.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the maximum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
      */
@@ -1532,8 +1479,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #min(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>, and the
      * context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return A <code>BigDecimal</code> whose value is the minimum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
      */
@@ -1553,10 +1499,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * {@link #plus(MathContext)} method on the first parameter object (using the same <code>MathContext</code>
      * parameter) is returned.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the comparison.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the minimum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
      */
@@ -1577,8 +1521,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The length of the decimal part (the scale) of the result will be the sum of the scales of the operands, if they
      * were formatted without exponential notation.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the multiplication.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the multiplication.
      * @return A <code>BigDecimal</code> whose value is <code>this*rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
      */
@@ -1593,10 +1536,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the multiplication (<b><code> </code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the multiplication.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the multiplication.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this*rhs</code>.
      * @stable ICU 2.0
      */
@@ -1711,8 +1652,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the negation (Prefix <b><code>-</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>-this</code>.
      * @stable ICU 2.0
      */
@@ -1752,8 +1692,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * This method is useful for rounding or otherwise applying a context to a decimal value.
      * 
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>+this</code>.
      * @stable ICU 2.0
      */
@@ -1787,11 +1726,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * In addition, the power must not be negative, as no <code>MathContext</code> is used and so the result would then
      * always be 0.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the operation (the power).
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the operation (the power).
      * @return A <code>BigDecimal</code> whose value is <code>this**rhs</code>, using fixed point arithmetic.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is out of range or is not a whole number.
+     * @throws ArithmeticException if <code>rhs</code> is out of range or is not a whole number.
      * @stable ICU 2.0
      */
 
@@ -1815,13 +1752,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * If the <code>digits</code> setting of the <code>MathContext</code> parameter is 0, the power must be zero or
      * positive.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the operation (the power).
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the operation (the power).
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this**rhs</code>.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is out of range or is not a whole number.
+     * @throws ArithmeticException if <code>rhs</code> is out of range or is not a whole number.
      * @stable ICU 2.0
      */
 
@@ -1898,12 +1832,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * This is not the modulo operator -- the result may be negative.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the remainder operation.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the remainder operation.
      * @return A <code>BigDecimal</code> whose value is the remainder of <code>this/rhs</code>, using fixed point
      *         arithmetic.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
      * @stable ICU 2.0
      */
 
@@ -1919,15 +1851,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * This is not the modulo operator -- the result may be negative.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the remainder operation.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the remainder operation.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the remainder of <code>this+rhs</code>.
-     * @throws ArithmeticException
-     *             if <code>rhs</code> is zero.
-     * @throws ArithmeticException
-     *             if the integer part of the result will not fit in the number of digits specified for the context.
+     * @throws ArithmeticException if <code>rhs</code> is zero.
+     * @throws ArithmeticException  if the integer part of the result will not fit in the number of digits specified for the context.
      * @stable ICU 2.0
      */
 
@@ -1943,8 +1871,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The length of the decimal part (the scale) of the result will be the maximum of the scales of the two operands.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the subtraction.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the subtraction.
      * @return A <code>BigDecimal</code> whose value is <code>this-rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
      */
@@ -1959,10 +1886,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Implements the subtraction (<b><code>-</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
-     * @param rhs
-     *            The <code>BigDecimal</code> for the right hand side of the subtraction.
-     * @param set
-     *            The <code>MathContext</code> arithmetic settings.
+     * @param rhs The <code>BigDecimal</code> for the right hand side of the subtraction.
+     * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this-rhs</code>.
      * @stable ICU 2.0
      */
@@ -1989,8 +1914,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * ArithmeticException</code> is thrown.
      * 
      * @return A <code>byte</code> equal in value to <code>this</code>.
-     * @throws ArithmeticException
-     *             if <code>this</code> has a non-zero decimal part, or will not fit in a <code>byte</code>.
+     * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>byte</code>.
      * @stable ICU 2.0
      */
 
@@ -2032,14 +1956,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The {@link #compareTo(BigDecimal, MathContext)} method should be used for more general comparisons.
      * 
-     * @param obj
-     *            The <code>Object</code> for the right hand side of the comparison.
+     * @param obj The <code>Object</code> for the right hand side of the comparison.
      * @return A <code>boolean</code> whose value <i>true</i> if and only if the operands have identical string
      *         representations.
-     * @throws ClassCastException
-     *             if <code>rhs</code> cannot be cast to a <code>BigDecimal</code> object.
+     * @throws ClassCastException if <code>rhs</code> cannot be cast to a <code>BigDecimal</code> object.
      * @stable ICU 2.0
-     * @see #compareTo(Object)
      * @see #compareTo(BigDecimal)
      * @see #compareTo(BigDecimal, MathContext)
      */
@@ -2134,18 +2055,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * {@link #format(int,int,int,int,int,int)}. Using the two-parameter form of the method has exactly the same effect
      * as using the six-parameter form with the final four parameters all being -1.
      * 
-     * @param before
-     *            The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as
-     *            are needed'.
-     * @param after
-     *            The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as
-     *            are needed'.
-     * @return A <code>String</code> representing this <code>BigDecimal</code>, laid out according to the specified
-     *         parameters
-     * @throws ArithmeticException
-     *             if the number cannot be laid out as requested.
-     * @throws IllegalArgumentException
-     *             if a parameter is out of range.
+     * @param before The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as are needed'.
+     * @param after The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as are needed'.
+     * @return A <code>String</code> representing this <code>BigDecimal</code>, laid out according to the specified parameters
+     * @throws ArithmeticException if the number cannot be laid out as requested.
+     * @throws IllegalArgumentException if a parameter is out of range.
      * @stable ICU 2.0
      * @see #toString
      * @see #toCharArray
@@ -2203,31 +2117,23 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * discarded -- if <code>exround</code> has this value than if non-zero digits would be discarded (rounded) during
      * formatting then an <code>ArithmeticException</code> is thrown.
      * 
-     * @param before
-     *            The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as
+     * @param before The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as
      *            are needed'.
-     * @param after
-     *            The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as
+     * @param after The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as
      *            are needed'.
-     * @param explaces
-     *            The <code>int</code> specifying the number of places to be used for any exponent. Use -1 for 'as many
+     * @param explaces The <code>int</code> specifying the number of places to be used for any exponent. Use -1 for 'as many
      *            as are needed'.
-     * @param exdigits
-     *            The <code>int</code> specifying the trigger (digits before the decimal point) which if exceeded causes
+     * @param exdigits The <code>int</code> specifying the trigger (digits before the decimal point) which if exceeded causes
      *            exponential notation to be used. Use 0 to force exponential notation. Use -1 to force plain notation
      *            (no exponential notation).
-     * @param exformint
-     *            The <code>int</code> specifying the form of exponential notation to be used (
+     * @param exformint The <code>int</code> specifying the form of exponential notation to be used (
      *            {@link MathContext#SCIENTIFIC} or {@link MathContext#ENGINEERING}).
-     * @param exround
-     *            The <code>int</code> specifying the rounding mode to use. Use -1 for the default,
+     * @param exround The <code>int</code> specifying the rounding mode to use. Use -1 for the default,
      *            {@link MathContext#ROUND_HALF_UP}.
      * @return A <code>String</code> representing this <code>BigDecimal</code>, laid out according to the specified
      *         parameters
-     * @throws ArithmeticException
-     *             if the number cannot be laid out as requested.
-     * @throws IllegalArgumentException
-     *             if a parameter is out of range.
+     * @throws ArithmeticException if the number cannot be laid out as requested.
+     * @throws IllegalArgumentException if a parameter is out of range.
      * @see #toString
      * @see #toCharArray
      * @stable ICU 2.0
@@ -2488,8 +2394,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>ArithmeticException</code> is thrown.
      * 
      * @return An <code>int</code> equal in value to <code>this</code>.
-     * @throws ArithmeticException
-     *             if <code>this</code> has a non-zero decimal part, or will not fit in an <code>int</code>.
+     * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in an <code>int</code>.
      * @stable ICU 2.0
      */
 
@@ -2573,8 +2478,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>ArithmeticException</code> is thrown.
      * 
      * @return A <code>long</code> equal in value to <code>this</code>.
-     * @throws ArithmeticException
-     *             if <code>this</code> has a non-zero decimal part, or will not fit in a <code>long</code>.
+     * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>long</code>.
      * @stable ICU 2.0
      */
 
@@ -2651,8 +2555,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>n</code> may be negative, in which case the method returns the same result as <code>movePointRight(-n)
      * </code>.
      * 
-     * @param n
-     *            The <code>int</code> specifying the number of places to move the decimal point leftwards.
+     * @param n The <code>int</code> specifying the number of places to move the decimal point leftwards.
      * @return A <code>BigDecimal</code> derived from <code>this</code>, with the decimal point moved <code>n</code>
      *         places to the left.
      * @stable ICU 2.0
@@ -2676,8 +2579,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>n</code> may be negative, in which case the method returns the same result as <code>movePointLeft(-n)
      * </code>.
      * 
-     * @param n
-     *            The <code>int</code> specifying the number of places to move the decimal point rightwards.
+     * @param n The <code>int</code> specifying the number of places to move the decimal point rightwards.
      * @return A <code>BigDecimal</code> derived from <code>this</code>, with the decimal point moved <code>n</code>
      *         places to the right.
      * @stable ICU 2.0
@@ -2718,13 +2620,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #setScale(int, int)}, where the first parameter is the scale, and the second is <code>
      * MathContext.ROUND_UNNECESSARY</code>.
      * 
-     * @param scale
-     *            The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
+     * @param scale The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
      * @return A plain <code>BigDecimal</code> with the given scale.
-     * @throws ArithmeticException
-     *             if <code>scale</code> is negative.
-     * @throws ArithmeticException
-     *             if reducing scale would discard non-zero digits.
+     * @throws ArithmeticException if <code>scale</code> is negative.
+     * @throws ArithmeticException if reducing scale would discard non-zero digits.
      * @stable ICU 2.0
      */
 
@@ -2746,17 +2645,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * If <code>round</code> is <code>MathContext.ROUND_UNNECESSARY</code>, an <code>ArithmeticException</code> is
      * thrown if any discarded digits are non-zero.
      * 
-     * @param scale
-     *            The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
-     * @param round
-     *            The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
+     * @param scale The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
+     * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
      * @return A plain <code>BigDecimal</code> with the given scale.
-     * @throws IllegalArgumentException
-     *             if <code>round</code> is not a valid rounding mode.
-     * @throws ArithmeticException
-     *             if <code>scale</code> is negative.
-     * @throws ArithmeticException
-     *             if <code>round</code> is <code>MathContext.ROUND_UNNECESSARY</code>, and reducing scale would discard
+     * @throws IllegalArgumentException if <code>round</code> is not a valid rounding mode.
+     * @throws ArithmeticException if <code>scale</code> is negative.
+     * @throws ArithmeticException if <code>round</code> is <code>MathContext.ROUND_UNNECESSARY</code>, and reducing scale would discard
      *             non-zero digits.
      * @stable ICU 2.0
      */
@@ -2804,8 +2698,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>ArithmeticException</code> is thrown.
      * 
      * @return A <code>short</code> equal in value to <code>this</code>.
-     * @throws ArithmeticException
-     *             if <code>this</code> has a non-zero decimal part, or will not fit in a <code>short</code>.
+     * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>short</code>.
      * @stable ICU 2.0
      */
 
@@ -2896,8 +2789,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * An exception is thrown if the decimal part (if any) is non-zero.
      * 
      * @return The <code>java.math.BigInteger</code> equal in value to the integer part of this <code>BigDecimal</code>.
-     * @throws ArithmeticException
-     *             if <code>this</code> has a non-zero decimal part.
+     * @throws ArithmeticException if <code>this</code> has a non-zero decimal part.
      * @stable ICU 2.0
      */
 
@@ -2975,11 +2867,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Double.toString()</code> method and the {@link #BigDecimal(java.lang.String)} constructor had then been used.
      * This is typically not an exact conversion.
      * 
-     * @param dub
-     *            The <code>double</code> to be translated.
+     * @param dub The <code>double</code> to be translated.
      * @return The <code>BigDecimal</code> equal in value to <code>dub</code>.
-     * @throws NumberFormatException
-     *             if the parameter is infinite or not a number.
+     * @throws NumberFormatException if the parameter is infinite or not a number.
      * @stable ICU 2.0
      */
 
@@ -2994,8 +2884,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Translates a <code>long</code> to a <code>BigDecimal</code>. That is, returns a plain <code>BigDecimal</code>
      * whose value is equal to the given <code>long</code>.
      * 
-     * @param lint
-     *            The <code>long</code> to be translated.
+     * @param lint The <code>long</code> to be translated.
      * @return The <code>BigDecimal</code> equal in value to <code>lint</code>.
      * @stable ICU 2.0
      */
@@ -3015,13 +2904,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * A <code>NumberFormatException</code> is thrown if <code>scale</code> is negative.
      * 
-     * @param lint
-     *            The <code>long</code> to be translated.
-     * @param scale
-     *            The <code>int</code> scale to be applied.
+     * @param lint The <code>long</code> to be translated.
+     * @param scale The <code>int</code> scale to be applied.
      * @return The <code>BigDecimal</code> equal in value to <code>lint</code>.
-     * @throws NumberFormatException
-     *             if the scale is negative.
+     * @throws NumberFormatException if the scale is negative.
      * @stable ICU 2.0
      */
 

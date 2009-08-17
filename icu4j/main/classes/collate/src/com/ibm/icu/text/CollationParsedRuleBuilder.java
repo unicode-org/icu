@@ -687,7 +687,6 @@ final class CollationParsedRuleBuilder {
 
     // private inner classes -------------------------------------------------
 
-    @SuppressWarnings("unused")
     private static class CEGenerator {
         // package private data members --------------------------------------
 
@@ -909,7 +908,6 @@ final class CollationParsedRuleBuilder {
         /**
          * size of cPoints.
          */
-        @SuppressWarnings("unused")
         int size;
 
         // constructor
@@ -951,7 +949,6 @@ final class CollationParsedRuleBuilder {
          * @return combining mark codepoint or 0 if no combining make with class
          *         value cClass
          */
-        @SuppressWarnings("unused")
         char GetFirstCM(int cClass) {
             curClass = cClass;
             if (cPoints == null || cClass == 0
@@ -966,7 +963,6 @@ final class CollationParsedRuleBuilder {
          * Get next CM(combining mark) with the combining class value cClass.
          * Return combining mark codepoint or 0 if no next CM.
          */
-        @SuppressWarnings("unused")
         char GetNextCM() {
             if (cPoints == null
                     || index[curClass] == (index[curClass - 1] + pos)) {

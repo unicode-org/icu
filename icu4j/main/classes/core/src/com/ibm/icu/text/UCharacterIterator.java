@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -314,7 +314,7 @@ public abstract class UCharacterIterator
      *         units.
      * @param offset the position within the array to start putting the data.
      * @return the number of code units added to fillIn, as a convenience
-     * @exception IndexOutOfBounds exception if there is not enough
+     * @exception IndexOutOfBoundsException exception if there is not enough
      *            room after offset in the array, or if offset < 0.
      * @stable ICU 2.4  
      */
@@ -326,7 +326,7 @@ public abstract class UCharacterIterator
      * @param fillIn an array of chars to fill with the underlying UTF-16 code 
      *         units.
      * @return the number of code units added to fillIn, as a convenience
-     * @exception IndexOutOfBounds exception if there is not enough
+     * @exception IndexOutOfBoundsException exception if there is not enough
      *            room in the array.
      * @stable ICU 2.4  
      */

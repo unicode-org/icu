@@ -549,7 +549,7 @@ public final class Normalizer implements Cloneable {
 
     
     /**
-     * Null operation for use with the {@link #Normalizer constructors}
+     * Null operation for use with the {@link com.ibm.icu.text.Normalizer constructors}
      * and the static {@link #normalize normalize} method.  This value tells
      * the <tt>Normalizer</tt> to do nothing but return unprocessed characters
      * from the underlying String or CharacterIterator.  If you have code which
@@ -566,7 +566,7 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Canonical decomposition followed by canonical composition.  Used with the
-     * {@link #Normalizer constructors} and the static 
+     * {@link com.ibm.icu.text.Normalizer constructors} and the static 
      * {@link #normalize normalize} method to determine the operation to be 
      * performed.
      * <p>
@@ -584,7 +584,7 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Compatibility decomposition followed by canonical composition.
-     * Used with the {@link #Normalizer constructors} and the static
+     * Used with the {@link com.ibm.icu.text.Normalizer constructors} and the static
      * {@link #normalize normalize} method to determine the operation to be 
      * performed.
      * <p>
@@ -602,7 +602,7 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Canonical decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static
+     * {@link com.ibm.icu.text.Normalizer constructors} and the static
      * {@link #normalize normalize}
      * method to determine the operation to be performed.
      * <p>
@@ -620,7 +620,7 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Compatibility decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static 
+     * {@link com.ibm.icu.text.Normalizer constructors} and the static 
      * {@link #normalize normalize}
      * method to determine the operation to be performed.
      * <p>
@@ -1877,7 +1877,6 @@ public final class Normalizer implements Cloneable {
      *
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
-     * @return The codepoint as an int
      * @deprecated ICU 3.2
      * @obsolete ICU 3.2
      */
@@ -2066,7 +2065,7 @@ public final class Normalizer implements Cloneable {
      * @param fillIn the char buffer to fill the UTF-16 units.
      *         The length of the buffer should be equal to the length of the
      *         underlying text storage
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException If the index passed for the array is invalid.
      * @see   #getLength
      * @stable ICU 2.8
      */
