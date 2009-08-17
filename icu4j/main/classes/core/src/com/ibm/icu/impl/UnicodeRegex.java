@@ -126,8 +126,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     /**
      * Compile a regex string, after processing by fix(...).
      * 
-     * @param regex
-     *            Raw regex pattern, as in fix(...).
+     * @param regex Raw regex pattern, as in fix(...).
      * @return Pattern
      */
     public static Pattern compile(String regex) {
@@ -137,8 +136,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     /**
      * Compile a regex string, after processing by fix(...).
      * 
-     * @param regex
-     *            Raw regex pattern, as in fix(...).
+     * @param regex Raw regex pattern, as in fix(...).
      * @return Pattern
      */
     public static Pattern compile(String regex, int options) {
@@ -175,8 +173,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
      * The equality sign and a few others can be reset with
      * setBnfX().
      * 
-     * @param bnfLines
-     *          Series of lines that represent a BNF expression. The lines contain
+     * @param lines Series of lines that represent a BNF expression. The lines contain
      *          a series of statements that of the form x=y;. A statement can take
      *          multiple lines, but there can't be multiple statements on a line.
      *          A hash quotes to the end of the line.
@@ -242,11 +239,11 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
 
     /**
      * Utility for loading lines from a file.
-     * @param result
-     * @param file
+     * @param result The result of the appended lines.
+     * @param file The file to have an input stream.
      * @param encoding if null, then UTF-8
      * @return filled list
-     * @throws IOException
+     * @throws IOException If there were problems opening the file for input stream.
      */
     public static List<String> appendLines(List<String> result, String file, String encoding) throws IOException {
         return appendLines(result, new FileInputStream(file), encoding);
@@ -254,11 +251,11 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
 
     /**
      * Utility for loading lines from a UTF8 file.
-     * @param result
-     * @param inputStream
+     * @param result The result of the appended lines.
+     * @param inputStream The input stream.
      * @param encoding if null, then UTF-8
      * @return filled list
-     * @throws IOException
+     * @throws IOException  If there were problems opening the input stream for reading.
      */
     public static List<String> appendLines(List<String> result, InputStream inputStream, String encoding)
             throws UnsupportedEncodingException, IOException {

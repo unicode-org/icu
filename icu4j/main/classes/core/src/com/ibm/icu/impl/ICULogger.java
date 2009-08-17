@@ -123,7 +123,7 @@ public class ICULogger extends Logger {
      * unless the system property "icu4j.debug.logging" is set to "all"
      *
      * @param name to be use by the logger (usually is the class name)
-     * @param ResourceBundle name to localize messages (can be null)
+     * @param resourceBundleName name to localize messages (can be null)
      * @return a new ICULogger object
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.

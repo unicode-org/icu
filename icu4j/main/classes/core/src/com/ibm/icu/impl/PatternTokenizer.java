@@ -41,8 +41,8 @@ public class PatternTokenizer {
     }
     /**
      * Sets the characters to be ignored in parsing, eg new UnicodeSet("[:pattern_whitespace:]");
-     * @param ignorableCharacters
-     * @return
+     * @param ignorableCharacters Characters to be ignored.
+     * @return A PatternTokenizer object in which characters are specified as ignored characters.
      */
     public PatternTokenizer setIgnorableCharacters(UnicodeSet ignorableCharacters) {
         this.ignorableCharacters = (UnicodeSet) ignorableCharacters.clone();
@@ -57,8 +57,8 @@ public class PatternTokenizer {
     }
     /**
      *  Sets the characters to be interpreted as syntax characters in parsing, eg new UnicodeSet("[:pattern_syntax:]")
-     * @param syntaxCharacters
-     * @return
+     * @param syntaxCharacters Characters to be set as syntax characters.
+     * @return A PatternTokenizer object in which characters are specified as syntax characters.
      */
     public PatternTokenizer setSyntaxCharacters(UnicodeSet syntaxCharacters) {
         this.syntaxCharacters = (UnicodeSet) syntaxCharacters.clone();
@@ -67,8 +67,8 @@ public class PatternTokenizer {
     }   
     /**
      *  Sets the extra characters to be quoted in literals
-     * @param syntaxCharacters
-     * @return
+     * @param syntaxCharacters Characters to be set as extra quoting characters.
+     * @return A PatternTokenizer object in which characters are specified as extra quoting characters.
      */
     public PatternTokenizer setExtraQuotingCharacters(UnicodeSet syntaxCharacters) {
         this.extraQuotingCharacters = (UnicodeSet) syntaxCharacters.clone();
@@ -81,8 +81,8 @@ public class PatternTokenizer {
     }
     /**
      * Set characters to be escaped in literals, in quoteLiteral and normalize, eg new UnicodeSet("[^\\u0020-\\u007E]");
-     * @param escapeCharacters
-     * @return
+     * @param escapeCharacters Characters to be set as escape characters.
+     * @return A PatternTokenizer object in which characters are specified as escape characters.
      */
     public PatternTokenizer setEscapeCharacters(UnicodeSet escapeCharacters) {
         this.escapeCharacters = (UnicodeSet) escapeCharacters.clone();
@@ -151,8 +151,8 @@ public class PatternTokenizer {
 
     /**
      * Quote a literal string, using the available settings. Thus syntax characters, quote characters, and ignorable characters will be put into quotes.
-     * @param string
-     * @return
+     * @param string String passed to quote a literal string.
+     * @return A string using the available settings will place syntax, quote, or ignorable characters into quotes.
      */
     public String quoteLiteral(String string) {
         if (needingQuoteCharacters == null) {

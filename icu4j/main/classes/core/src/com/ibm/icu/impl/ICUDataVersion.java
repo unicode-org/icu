@@ -26,8 +26,6 @@ public final class ICUDataVersion {
      * (standard ICU) will be missing, and the function will alert the caller that the data is not standard.
      * 
      * @param dataVersionFillin icuver data version information to be filled in if not-null
-     * @param status stores the error code from the calls to resource bundle
-     *
      * @return TRUE if ICU_DATA_VERSION is newer than icuver, else FALSE
      * 
      * @draft ICU 4.4

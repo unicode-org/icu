@@ -73,7 +73,6 @@ class CharsetISCII extends CharsetICU {
         static final short DELTA = 0x80;
     }
 
-    @SuppressWarnings("unused")
     private static final class ISCIILang {
         static final short DEF = 0x40;
         static final short RMN = 0x41;
@@ -121,7 +120,6 @@ class CharsetISCII extends CharsetICU {
         short defMaskToUnicode;           /* mask for default state in toUnicode */
         boolean isFirstBuffer;          /* boolean for fromUnicode to see if we need to announce the first script */
         boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
-        @SuppressWarnings("unused")
         String name;
         int prevToUnicodeStatus;        /* Hold the previous toUnicodeStatus. This is necessary because we may need to know the last two code points. */
         

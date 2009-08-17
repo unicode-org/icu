@@ -248,7 +248,7 @@ abstract class NFSubstitution {
 
     /**
      * Compares two substitutions for equality
-     * @param The substitution to compare this one to
+     * @param that The substitution to compare this one to
      * @return true if the two substitutions are functionally equivalent
      */
     public boolean equals(Object that) {
@@ -356,7 +356,7 @@ abstract class NFSubstitution {
      * is formatted using the rule set or DecimalFormat that this
      * substitution refers to, and the result is inserted into the result
      * string.
-     * @param The number being formatted
+     * @param number The number being formatted
      * @return The result of performing the opreration on the number
      */
     public abstract long transformNumber(long number);
@@ -367,7 +367,7 @@ abstract class NFSubstitution {
      * is formatted using the rule set or DecimalFormat that this
      * substitution refers to, and the result is inserted into the result
      * string.
-     * @param The number being formatted
+     * @param number The number being formatted
      * @return The result of performing the opreration on the number
      */
     public abstract double transformNumber(double number);

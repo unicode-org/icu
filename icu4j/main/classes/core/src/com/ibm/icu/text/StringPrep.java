@@ -282,7 +282,7 @@ public final class StringPrep {
      * closed after the method returns.
      * 
      * @param inputStream The stream for reading the StringPrep profile binarySun 
-     * @throws IOException
+     * @throws IOException An exception occurs when I/O of the inputstream is invalid
      * @stable ICU 2.8
      */
     public StringPrep(InputStream inputStream) throws IOException{
@@ -329,7 +329,7 @@ public final class StringPrep {
     /**
      * Gets a StringPrep instance for the specified profile
      * 
-     * @param profile 
+     * @param profile The profile passed to find the StringPrep instance.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
@@ -551,7 +551,7 @@ public final class StringPrep {
      *                                  as normal Unicode code points.
      *
      * @return StringBuffer A StringBuffer containing the output
-     * @throws StringPrepParseException
+     * @throws StringPrepParseException An exception occurs when parsing a string is invalid.
      * @stable ICU 2.8
      */
     public StringBuffer prepare(UCharacterIterator src, int options)
@@ -635,7 +635,7 @@ public final class StringPrep {
      *                                  as normal Unicode code points.
      *
      * @return String A String containing the output
-     * @throws StringPrepParseException
+     * @throws StringPrepParseException An exception when parsing or preparing a string is invalid.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */

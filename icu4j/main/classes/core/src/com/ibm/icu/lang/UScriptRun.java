@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2008, International Business Machines
+ *   Copyright (C) 1999-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -158,7 +158,7 @@ public final class UScriptRun
      *
      * @param start the index of the new first character over which to iterate
      * @param count the new number of characters over which to iterate.
-     * @exception IllegalArgumentException
+     * @exception IllegalArgumentException If invalid arguments are passed.
      *
      * @internal
      * @deprecated This API is ICU internal only.

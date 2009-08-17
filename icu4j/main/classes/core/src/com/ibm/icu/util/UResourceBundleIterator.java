@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2008, International Business Machines Corporation and   *
+* Copyright (C) 2004-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -52,7 +52,7 @@ public class UResourceBundleIterator{
     /**
      * Returns the next element of this iterator if this iterator object has at least one more element to provide
      * @return the UResourceBundle object
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException If there does not exist such an element.
      * @stable ICU 3.8
      */
     public UResourceBundle next()throws NoSuchElementException{
@@ -64,8 +64,8 @@ public class UResourceBundleIterator{
     /**
      * Returns the next String of this iterator if this iterator object has at least one more element to provide
      * @return the UResourceBundle object
-     * @throws NoSuchElementException
-     * @throws UResourceTypeMismatchException
+     * @throws NoSuchElementException If there does not exist such an element.
+     * @throws UResourceTypeMismatchException If resource has a type mismatch.
      * @stable ICU 3.8
      */
     public String nextString()throws NoSuchElementException, UResourceTypeMismatchException{

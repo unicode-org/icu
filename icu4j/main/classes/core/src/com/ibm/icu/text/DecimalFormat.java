@@ -668,10 +668,8 @@ public class DecimalFormat extends NumberFormat {
      * To obtain standard formats for a given locale, use the factory methods on NumberFormat such as getNumberInstance.
      * These factories will return the most appropriate sub-class of NumberFormat for a given locale.
      * 
-     * @param pattern
-     *            A non-localized pattern string.
-     * @exception IllegalArgumentException
-     *                if the given pattern is invalid.
+     * @param pattern A non-localized pattern string.
+     * @exception IllegalArgumentException if the given pattern is invalid.
      * @see NumberFormat#getInstance
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
@@ -699,12 +697,9 @@ public class DecimalFormat extends NumberFormat {
      * getCurrencyInstance. If you need only minor adjustments to a standard format, you can modify the format returned
      * by a NumberFormat factory method.
      * 
-     * @param pattern
-     *            a non-localized pattern string
-     * @param symbols
-     *            the set of symbols to be used
-     * @exception IllegalArgumentException
-     *                if the given pattern is invalid
+     * @param pattern a non-localized pattern string
+     * @param symbols the set of symbols to be used
+     * @exception IllegalArgumentException if the given pattern is invalid
      * @see NumberFormat#getInstance
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
@@ -743,16 +738,10 @@ public class DecimalFormat extends NumberFormat {
      * patterns), you can use this constructor.
      * <p>
      * 
-     * @param pattern
-     *            a non-localized pattern string
-     * @param symbols
-     *            the set of symbols to be used
-     * @param infoInput
-     *            the information used for currency plural format, including currency plural patterns and plural rules.
-     * @param style
-     *            the decimal formatting style, it is one of the following values: NumberFormat.NUMBERSTYLE;
-     *            NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE; NumberFormat.SCIENTIFICSTYLE;
-     *            NumberFormat.INTEGERSTYLE; NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
+     * @param pattern a non-localized pattern string
+     * @param symbols the set of symbols to be used
+     * @param infoInput the information used for currency plural format, including currency plural patterns and plural rules.
+     * @param style the decimal formatting style, it is one of the following values: NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE; NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE; NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
@@ -1640,11 +1629,8 @@ public class DecimalFormat extends NumberFormat {
      * that order of preference. If {@link #isParseBigDecimal()} is true, all other values are returned as
      * <code>BigDecimal</code> valuse. If the parse fails, null is returned.
      * 
-     * @param text
-     *            the string to be parsed
-     * @param parsePosition
-     *            defines the position where parsing is to begin, and upon return, the position where parsing left off.
-     *            If the position has not changed upon return, then parsing failed.
+     * @param text the string to be parsed
+     * @param parsePosition defines the position where parsing is to begin, and upon return, the position where parsing left off. If the position has not changed upon return, then parsing failed.
      * @return a <code>Number</code> object with the parsed value or <code>null</code> if the parse failed
      * @stable ICU 2.0
      */
@@ -2680,8 +2666,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets the decimal format symbols used by this format. The format uses a copy of the provided symbols.
      * 
-     * @param newSymbols
-     *            desired DecimalFormatSymbols
+     * @param newSymbols desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
      */
@@ -2856,11 +2841,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the rounding increment. This method also controls whether rounding is enabled.
      * 
-     * @param newValue
-     *            A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to disable
-     *            rounding.
-     * @exception IllegalArgumentException
-     *                if <code>newValue</code> is < 0.0
+     * @param newValue A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to disable rounding.
+     * @exception IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -2877,11 +2859,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the rounding increment. This method also controls whether rounding is enabled.
      * 
-     * @param newValue
-     *            A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to disable
-     *            rounding.
-     * @exception IllegalArgumentException
-     *                if <code>newValue</code> is < 0.0
+     * @param newValue A positive rounding increment, or <code>null</code> or <code>BigDecimal(0.0)</code> to disable rounding.
+     * @exception IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -2903,10 +2882,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the rounding increment. This method also controls whether rounding is enabled.
      * 
-     * @param newValue
-     *            A positive rounding increment, or 0.0 to disable rounding.
-     * @exception IllegalArgumentException
-     *                if <code>newValue</code> is < 0.0
+     * @param newValue A positive rounding increment, or 0.0 to disable rounding.
+     * @exception IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -2956,11 +2933,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the rounding mode. This has no effect unless the rounding increment is greater than zero.
      * 
-     * @param roundingMode
-     *            A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     *            <code>BigDecimal.ROUND_UNNECESSARY</code>.
-     * @exception IllegalArgumentException
-     *                if <code>roundingMode</code> is unrecognized.
+     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #getRoundingMode
@@ -2998,10 +2972,8 @@ public class DecimalFormat extends NumberFormat {
      * Set the width to which the output of <code>format()</code> is padded. The width is counted in 16-bit code units.
      * This method also controls whether padding is enabled.
      * 
-     * @param width
-     *            the width to which to pad the result of <code>format()</code>, or zero to disable padding
-     * @exception IllegalArgumentException
-     *                if <code>width</code> is < 0
+     * @param width the width to which to pad the result of <code>format()</code>, or zero to disable padding
+     * @exception IllegalArgumentException if <code>width</code> is < 0
      * @see #getFormatWidth
      * @see #getPadCharacter
      * @see #setPadCharacter
@@ -3035,8 +3007,7 @@ public class DecimalFormat extends NumberFormat {
      * Set the character used to pad to the format width. If padding is not enabled, then this will take effect if
      * padding is later enabled.
      * 
-     * @param padChar
-     *            the pad character
+     * @param padChar the pad character
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #getPadCharacter
@@ -3073,11 +3044,8 @@ public class DecimalFormat extends NumberFormat {
      * Set the position at which padding will take place. This is the location at which padding will be inserted if the
      * result of <code>format()</code> is shorter than the format width. This has no effect unless padding is enabled.
      * 
-     * @param padPos
-     *            the pad position, one of <code>PAD_BEFORE_PREFIX</code>, <code>PAD_AFTER_PREFIX</code>,
-     *            <code>PAD_BEFORE_SUFFIX</code>, or <code>PAD_AFTER_SUFFIX</code>.
-     * @exception IllegalArgumentException
-     *                if the pad position in unrecognized
+     * @param padPos the pad position, one of <code>PAD_BEFORE_PREFIX</code>, <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or <code>PAD_AFTER_SUFFIX</code>.
+     * @exception IllegalArgumentException if the pad position in unrecognized
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -3116,8 +3084,7 @@ public class DecimalFormat extends NumberFormat {
      * integer digits is <= 8. If the maximum number of integer digits is set to more than 8, the effective maximum will
      * be 1. This allows this call to generate a 'default' scientific number format without additional changes.
      * 
-     * @param useScientific
-     *            true if this object formats and parses scientific notation
+     * @param useScientific true if this object formats and parses scientific notation
      * @see #isScientificNotation
      * @see #getMinimumExponentDigits
      * @see #setMinimumExponentDigits
@@ -3147,10 +3114,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the minimum exponent digits that will be shown. This has no effect unless scientific notation is in use.
      * 
-     * @param minExpDig
-     *            a value >= 1 indicating the fewest exponent digits that will be shown
-     * @exception IllegalArgumentException
-     *                if <code>minExpDig</code> < 1
+     * @param minExpDig a value >= 1 indicating the fewest exponent digits that will be shown
+     * @exception IllegalArgumentException if <code>minExpDig</code> < 1
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #getMinimumExponentDigits
@@ -3184,9 +3149,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set whether the exponent sign is always shown. This has no effect unless scientific notation is in use.
      * 
-     * @param expSignAlways
-     *            true if the exponent is always prefixed with either the localized minus sign or the localized plus
-     *            sign, false if only negative exponents are prefixed with the localized minus sign.
+     * @param expSignAlways true if the exponent is always prefixed with either the localized minus sign or the localized plus sign, false if only negative exponents are prefixed with the localized minus sign.
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #setMinimumExponentDigits
@@ -3259,7 +3222,6 @@ public class DecimalFormat extends NumberFormat {
      * Returns the MathContext used by this format.
      * 
      * @return desired MathContext
-     * @see #mathContext
      * @see #getMathContext
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3272,7 +3234,6 @@ public class DecimalFormat extends NumberFormat {
      * Returns the MathContext used by this format.
      * 
      * @return desired MathContext
-     * @see #mathContext
      * @see #getMathContext
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3290,9 +3251,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets the MathContext used by this format.
      * 
-     * @param newValue
-     *            desired MathContext
-     * @see #mathContext
+     * @param newValue desired MathContext
      * @see #getMathContext
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3304,9 +3263,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets the MathContext used by this format.
      * 
-     * @param newValue
-     *            desired MathContext
-     * @see #mathContext
+     * @param newValue desired MathContext
      * @see #getMathContext
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3368,8 +3325,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets the CurrencyPluralInfo used by this format. The format uses a copy of the provided information.
      * 
-     * @param newInfo
-     *            desired CurrencyPluralInfo
+     * @param newInfo desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -3586,7 +3542,6 @@ public class DecimalFormat extends NumberFormat {
      *            ChoiceFormat, the currencyChoice member variable will be initialized if it is null. If doFormat is
      *            true, then it is assumed that the currencyChoice has been created, and it will be used to format the
      *            value in digitList.
-     * @return the expanded equivalent of pattern
      */
     // Bug 4212072 [Richard/GCL]
     private void expandAffix(String pattern, String pluralCount, StringBuffer buffer, boolean doFormat) {
@@ -4629,8 +4584,7 @@ public class DecimalFormat extends NumberFormat {
      * it is set to one. If the maximum significant digits count is less than <code>min</code>, then it is set to
      * <code>min</code>. This value has no effect unless areSignificantDigitsUsed() returns true.
      * 
-     * @param min
-     *            the fewest significant digits to be shown
+     * @param min the fewest significant digits to be shown
      * @stable ICU 3.0
      */
     public void setMinimumSignificantDigits(int min) {
@@ -4648,8 +4602,7 @@ public class DecimalFormat extends NumberFormat {
      * it is set to one. If the minimum significant digits count is greater than <code>max</code>, then it is set to
      * <code>max</code>. This value has no effect unless areSignificantDigitsUsed() returns true.
      * 
-     * @param max
-     *            the most significant digits to be shown
+     * @param max the most significant digits to be shown
      * @stable ICU 3.0
      */
     public void setMaximumSignificantDigits(int max) {
@@ -4675,8 +4628,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets whether significant digits are in use, or integer and fraction digit counts are in use.
      * 
-     * @param useSignificantDigits
-     *            true to use significant digits, or false to use integer and fraction digit counts
+     * @param useSignificantDigits true to use significant digits, or false to use integer and fraction digit counts
      * @stable ICU 3.0
      */
     public void setSignificantDigitsUsed(boolean useSignificantDigits) {
@@ -4688,8 +4640,7 @@ public class DecimalFormat extends NumberFormat {
      * is a currency format. If this format is not a currency format, then the currency object is used if and when this
      * object becomes a currency format through the application of a new pattern.
      * 
-     * @param theCurrency
-     *            new currency object to use. Must not be null.
+     * @param theCurrency new currency object to use. Must not be null.
      * @stable ICU 2.2
      */
     public void setCurrency(Currency theCurrency) {
@@ -4757,8 +4708,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets whether {@link #parse(String, ParsePosition)} method returns BigDecimal. The default value is false.
      * 
-     * @param value
-     *            true if {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * @param value true if {@link #parse(String, ParsePosition)} method returns BigDecimal.
      * @stable ICU 3.6
      */
     public void setParseBigDecimal(boolean value) {

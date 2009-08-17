@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,8 +9,9 @@ package com.ibm.icu.text;
 /**
  * <code>UnicodeFilter</code> defines a protocol for selecting a
  * subset of the full range (U+0000 to U+FFFF) of Unicode characters.
- * Currently, filters are used in conjunction with classes like {@link
- * Transliterator} to only process selected characters through a
+ * Currently, filters are used in conjunction with classes like
+ * {@link com.ibm.icu.text.Transliterator}
+ * to only process selected characters through a
  * transformation.
  * @stable ICU 2.0
  */

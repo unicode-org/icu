@@ -1,11 +1,13 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and   *
+* Copyright (C) 1996-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl;
+
+import java.util.NoSuchElementException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
@@ -77,7 +79,6 @@ import com.ibm.icu.util.RangeValueIterator;
  * </p>
  * @author synwee
  * @see com.ibm.icu.impl.Trie
- * @see com.ibm.icu.lang.UCharacterTypeIterator
  * @since release 2.1, Jan 17 2002
  */
 public class TrieIterator implements RangeValueIterator

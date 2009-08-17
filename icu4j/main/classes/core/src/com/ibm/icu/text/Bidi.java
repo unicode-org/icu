@@ -788,8 +788,7 @@ public class Bidi {
      * part of the text.</p>
      *
      * <p>When the <code>OPTION_STREAMING</code> option is used, it is
-     * recommended to call <code>orderParagraphsLTR()</code> with argument
-     * <code>orderParagraphsLTR</code> set to <code>true</code> before calling
+     * recommended to call <code>orderParagraphsLTR(true)</code> before calling
      * <code>setPara()</code> so that later paragraphs may be concatenated to
      * previous paragraphs on the right.
      * </p>
@@ -797,7 +796,6 @@ public class Bidi {
      * @see #setReorderingMode
      * @see #setReorderingOptions
      * @see #getProcessedLength
-     * @see #orderParagraphsLTR
      * @stable ICU 3.8
      */
     public static final int OPTION_STREAMING = 4;
@@ -3419,7 +3417,6 @@ public class Bidi {
      * @return <code>true</code> if the <code>Bidi</code> object is set to
      *         allocate level 0 to block separators.
      *
-     * @see #orderParagraphsLTR
      * @stable ICU 3.8
      */
     public boolean isOrderParagraphsLTR() {

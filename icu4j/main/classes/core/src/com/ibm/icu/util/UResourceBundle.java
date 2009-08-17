@@ -91,8 +91,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * ICU_DATA_CLASS is used as the default root.
      * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param localeName the locale for which a resource bundle is desired
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
+     * @exception MissingResourceException If no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.0
      */
@@ -106,8 +105,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
+     * @exception MissingResourceException If no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.0
      */
@@ -503,8 +501,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
      * @param disableFallback disables loading of fallback lookup chain
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
+     * @exception MissingResourceException If no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.0
      */
@@ -551,8 +548,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
      * @see #getIntVector
      * @see #getInt
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If no resource bundle can be found.
+     * @throws UResourceTypeMismatchException If the resource has a type mismatch.
      * @stable ICU 3.8
      */
     public ByteBuffer getBinary() {
@@ -566,8 +563,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getBinary()
      * @see #getIntVector
      * @see #getInt
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle has a type mismatch.
      * @stable ICU 3.8
      */
     public String getString() {
@@ -580,8 +577,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a string
      * @see #getString()
      * @see #getIntVector
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle has a type mismatch.
      * @stable ICU 3.8
      */
     public String[] getStringArray() {
@@ -596,8 +593,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return an array of bytes containing the binary data from the resource.
      * @see #getIntVector
      * @see #getInt
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle has a type mismatch.
      * @stable ICU 3.8
      */
     public byte[] getBinary(byte[] ba) {
@@ -610,8 +607,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
      * @see #getBinary()
      * @see #getInt
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle has a type mismatch.
      * @stable ICU 3.8
      */
     public int[] getIntVector() {
@@ -624,8 +621,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return an integer value
      * @see #getIntVector
      * @see #getBinary()
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle type mismatch.
      * @stable ICU 3.8
      */
     public int getInt() {
@@ -639,8 +636,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return an integer value
      * @see #getIntVector
      * @see #getBinary()
-     * @throws MissingResourceException
-     * @throws UResourceTypeMismatchException
+     * @throws MissingResourceException If resource bundle is missing.
+     * @throws UResourceTypeMismatchException If resource bundle type mismatch.
      * @stable ICU 3.8
      */
     public int getUInt() {
@@ -652,7 +649,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *
      * @param aKey               a key associated with the wanted resource
      * @return                  a resource bundle object representing the resource
-     * @throws MissingResourceException
+     * @throws MissingResourceException If resource bundle is missing.
      * @stable ICU 3.8
      */
     public UResourceBundle get(String aKey) {
@@ -679,8 +676,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      *
      * @param index            an index to the wanted string.
      * @return                  a string which lives in the resource.
-     * @throws IndexOutOfBoundsException
-     * @throws UResourceTypeMismatchException
+     * @throws IndexOutOfBoundsException If the index value is out of bounds of accepted values.
+     * @throws UResourceTypeMismatchException If resource bundle type mismatch.
      * @stable ICU 3.8
      */
     public String getString(int index) {
@@ -696,8 +693,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      *
      * @param index             an index to the wanted resource.
      * @return                  the sub resource UResourceBundle object
-     * @throws IndexOutOfBoundsException
-     * @throws MissingResourceException
+     * @throws IndexOutOfBoundsException If the index value is out of bounds of accepted values.
+     * @throws MissingResourceException If the resource bundle is missing.
      * @stable ICU 3.8
      */
     public UResourceBundle get(int index) {

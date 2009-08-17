@@ -91,9 +91,9 @@ public class BasicDurationFormat extends DurationFormat {
 
     /** 
      *  JDK 1.5+ only
-     * @param o
-     * @return
-     * @see http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/datatype/Duration.html
+     * @param obj Object being passed.
+     * @return The PeriodFormatter object formatted to the object passed.
+     * @see "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/datatype/Duration.html"
      */
     public String formatDuration(Object obj) {
         javax.xml.datatype.DatatypeConstants.Field inFields[] = { 

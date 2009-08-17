@@ -1774,8 +1774,8 @@ public final class Utility {
 
     /**
      * Utility to duplicate a string count times
-     * @param s
-     * @param count
+     * @param s String to be duplicated.
+     * @param count Number of times to duplicate a string.
      */
     public static String repeat(String s, int count) {
         if (count <= 0) return "";
@@ -1800,9 +1800,10 @@ public final class Utility {
 
     /**
      * Parse a list of hex numbers and return a string
-     * @param string
-     * @param string2
-     * @return
+     * @param string String of hex numbers.
+     * @param minLength Minimal length.
+     * @param separator Seperator.
+     * @return A string from hex numbers.
      */
     public static String fromHex(String string, int minLength, String separator) {
         return fromHex(string, minLength, Pattern.compile(separator != null ? separator : "\\s+"));
@@ -1810,9 +1811,10 @@ public final class Utility {
     
     /**
      * Parse a list of hex numbers and return a string
-     * @param string
-     * @param string2
-     * @return
+     * @param string String of hex numbers.
+     * @param minLength Minimal length.
+     * @param separator Seperator.
+     * @return A string from hex numbers.
      */
     public static String fromHex(String string, int minLength, Pattern separator) {
         StringBuilder buffer = new StringBuilder();

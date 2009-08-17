@@ -190,7 +190,7 @@ public class VTimeZone extends BasicTimeZone {
      * Writes RFC2445 VTIMEZONE data for this time zone
      * 
      * @param writer A <code>Writer</code> used for the output
-     * @throws IOException
+     * @throws IOException If there were problems creating a buffered writer or writing to it.
      * 
      * @stable ICU 3.8
      */
@@ -235,7 +235,7 @@ public class VTimeZone extends BasicTimeZone {
      * @param writer    The <code>Writer</code> used for the output
      * @param start     The start time
      * 
-     * @throws IOException
+     * @throws IOException If there were problems reading and writing to the writer.
      * 
      * @stable ICU 3.8
      */
@@ -269,7 +269,7 @@ public class VTimeZone extends BasicTimeZone {
      * @param writer    The <code>Writer</code> used for the output
      * @param time      The date
      * 
-     * @throws IOException
+     * @throws IOException If there were problems reading or writing to the writer.
      * 
      * @stable ICU 3.8
      */

@@ -140,7 +140,6 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
         ///CLOVER:OFF
         // The following method contains the same signature as findText
         //  and has never been used by anything once.
-        @SuppressWarnings("unused")
         public int[] findText2(String str, String key, int startingAt) {
 
             CollationElementIterator strIter = collator.getCollationElementIterator(str);
