@@ -79,7 +79,7 @@ public class IndexCharacters {
 
     /**
      * Create the index object.
-     * @param locale
+     * @param locale The locale to be passed.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */

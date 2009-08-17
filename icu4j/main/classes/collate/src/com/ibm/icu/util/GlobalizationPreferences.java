@@ -489,7 +489,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Explicitly set the collator for this object.
-     * @param collator
+     * @param collator The collator object to be passed.
      * @return this, for chaining
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -510,8 +510,7 @@ public class GlobalizationPreferences implements Freezable {
      * Get a copy of the break iterator for the specified type according to the
      * settings.
      * 
-     * @param type
-     *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
+     * @param type break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @return break iterator explicit or implicit
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -529,8 +528,7 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Explicitly set the break iterator for this object.
      * 
-     * @param type
-     *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
+     * @param type break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @param iterator a break iterator
      * @return this, for chaining
      * @draft ICU 3.6

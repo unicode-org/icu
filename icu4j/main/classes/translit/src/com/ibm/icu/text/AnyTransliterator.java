@@ -142,12 +142,13 @@ class AnyTransliterator extends Transliterator {
     }
 
     /**
-     * @param id
-     * @param filter
-     * @param target2
-     * @param targetScript2
-     * @param widthFix2
-     * @param cache2
+     * @param id the ID of the form S-T or S-T/V, where T is theTarget
+     * and V is theVariant.  Must not be empty.
+     * @param filter The Unicode filter.
+     * @param target2 the target name. 
+     * @param targetScript2 the script code corresponding to theTarget.
+     * @param widthFix2 The Transliterator width fix.
+     * @param cache2 The Map object for cache.
      */
     public AnyTransliterator(String id, UnicodeFilter filter, String target2,
             int targetScript2, Transliterator widthFix2, Map<Integer, Transliterator> cache2) {
@@ -394,7 +395,7 @@ class AnyTransliterator extends Transliterator {
     /**
      * Temporary hack for registry problem. Needs to be replaced by better architecture.
      * @internal
-     * @deprecated
+     * @deprecated Function is deprecated.
      */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();
