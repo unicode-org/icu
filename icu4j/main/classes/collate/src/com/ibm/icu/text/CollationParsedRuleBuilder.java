@@ -717,8 +717,7 @@ final class CollationParsedRuleBuilder {
         /**
          * Compares this object with target
          * 
-         * @param target
-         *            object to compare with
+         * @param target object to compare with
          * @return 0 if equals, 1 if this is > target, -1 otherwise
          */
         public int compareTo(WeightRange target) {
@@ -982,8 +981,8 @@ final class CollationParsedRuleBuilder {
         /**
          * For construction of the Trie tables. Has to be labeled public
          * 
-         * @param cp
-         * @param offset
+         * @param cp The value of the code point.
+         * @param offset The value of the offset.
          * @return data offset or 0
          */
         public int getFoldedValue(int cp, int offset) {
@@ -1183,8 +1182,7 @@ final class CollationParsedRuleBuilder {
         /**
          * Equals calculation
          * 
-         * @param target
-         *            object to compare
+         * @param target Object to compare
          * @return true if target is the same as this object
          */
         public boolean equals(Object target) {

@@ -720,8 +720,6 @@ public final class RuleBasedCollator extends Collator
      * @return a pointer to a UnicodeSet object containing all the
      *         code points and sequences that may sort differently than
      *         in the UCA.
-     * @exception ParseException thrown when argument rules have an
-     *            invalid syntax. IOException
      * @stable ICU 2.4
      */
     public UnicodeSet getTailoredSet()
@@ -857,7 +855,7 @@ public final class RuleBasedCollator extends Collator
      * @param contractions if not null, set to contain contractions
      * @param expansions if not null, set to contain expansions
      * @param addPrefixes add the prefix contextual elements to contractions
-     * @throws Exception 
+     * @throws Exception Throws an exception if any errors occurs.
      * @stable ICU 3.4
      */
     public void
