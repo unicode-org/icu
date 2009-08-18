@@ -2,16 +2,21 @@
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
- *******************************************************************************
+ **********************************************************************
+ * Author: Mark Davis
+ **********************************************************************
  */
 
 package com.ibm.icu.dev.test.util;
 
+import java.io.IOException;
+import java.text.FieldPosition;
 import java.util.Comparator;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Formatter;
 import com.ibm.icu.text.StringTransform;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -20,7 +25,7 @@ import com.ibm.icu.text.UTF16.StringComparator;
 
 /** Provides more flexible formatting of UnicodeSet patterns.
  */
-public class PrettyPrinter {
+public class PrettyPrinter implements Formatter<UnicodeSet, Appendable>{
     private static final StringComparator CODEPOINT_ORDER = new UTF16.StringComparator(true,false,0);
     private static final UnicodeSet PATTERN_WHITESPACE = (UnicodeSet) new UnicodeSet("[[:Cn:][:Default_Ignorable_Code_Point:][:patternwhitespace:]]").freeze();
     private static final UnicodeSet SORT_AT_END = (UnicodeSet) new UnicodeSet("[[:Cn:][:Cs:][:Co:][:Ideographic:]]").freeze();
@@ -35,9 +40,9 @@ public class PrettyPrinter {
     private UnicodeSet toQuote = new UnicodeSet(PATTERN_WHITESPACE);
     private StringTransform quoter = null;
 
-    private Comparator ordering;
-    private Comparator spaceComp;
-    
+    private Comparator<String> ordering;
+    private Comparator<String> spaceComp;
+
     public PrettyPrinter() {
     }
 
@@ -62,7 +67,7 @@ public class PrettyPrinter {
         return this;
     }
 
-    public Comparator getOrdering() {
+    public Comparator<String> getOrdering() {
         return ordering;
     }
 
@@ -71,11 +76,11 @@ public class PrettyPrinter {
      * @return
      */
     public PrettyPrinter setOrdering(Comparator ordering) {
-        this.ordering = ordering == null ? CODEPOINT_ORDER : new com.ibm.icu.impl.MultiComparator(new Comparator[] {ordering, CODEPOINT_ORDER});
+        this.ordering = ordering == null ? CODEPOINT_ORDER : new com.ibm.icu.impl.MultiComparator<String>(ordering, CODEPOINT_ORDER);
         return this;
     }
 
-    public Comparator getSpaceComparator() {
+    public Comparator<String> getSpaceComparator() {
         return spaceComp;
     }
 
@@ -98,7 +103,7 @@ public class PrettyPrinter {
      */
     public PrettyPrinter setToQuote(UnicodeSet toQuote) {
         if (toQuote != null) {
-            toQuote = (UnicodeSet)toQuote.clone();
+            toQuote = (UnicodeSet)toQuote.cloneAsThawed();
             toQuote.addAll(PATTERN_WHITESPACE);
             this.toQuote = toQuote;
         }
@@ -111,7 +116,7 @@ public class PrettyPrinter {
      * @param uset
      * @return formatted UnicodeSet
      */
-    public String toPattern(UnicodeSet uset) {
+    public String format(UnicodeSet uset) {
         first = true;
         UnicodeSet putAtEnd = new UnicodeSet(uset).retainAll(SORT_AT_END); // remove all the unassigned gorp for now
         // make sure that comparison separates all strings, even canonically equivalent ones
@@ -274,4 +279,12 @@ public class PrettyPrinter {
     //  public String toString() {
     //  return target.toString();
     //  }
+
+    public Appendable format(UnicodeSet obj, Appendable toAppendTo, FieldPosition pos) {
+        try {
+            return toAppendTo.append(format(obj));
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 }
