@@ -1922,24 +1922,116 @@ public class DecimalFormat extends NumberFormat {
     private static final int STATUS_POSITIVE = 1;
     private static final int STATUS_UNDERFLOW = 2;
     private static final int STATUS_LENGTH = 3;
-    private static final UnicodeSet dotEquivalents = (UnicodeSet) new UnicodeSet(
-            "[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]").freeze();
-    private static final UnicodeSet commaEquivalents = (UnicodeSet) new UnicodeSet(
-            "[,\u060C\u066B\u3001\uFE10\uFE11\uFE50\uFE51\uFF0C\uFF64]").freeze();
-    private static final UnicodeSet otherGroupingSeparators = (UnicodeSet) new UnicodeSet(
-            "[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]").freeze();
 
-    private static final UnicodeSet strictDotEquivalents = (UnicodeSet) new UnicodeSet("[.\u2024\uFE52\uFF0E\uFF61]")
-            .freeze();
-    private static final UnicodeSet strictCommaEquivalents = (UnicodeSet) new UnicodeSet("[,\u066B\uFE10\uFE50\uFF0C]")
-            .freeze();
-    private static final UnicodeSet strictOtherGroupingSeparators = (UnicodeSet) new UnicodeSet(
-            "[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]").freeze();
+    private static final UnicodeSet dotEquivalents = new UnicodeSet(
+            //"[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]"
+            0x002E, 0x002E,
+            0x2024, 0x2024,
+            0x3002, 0x3002,
+            0xFE12, 0xFE12,
+            0xFE52, 0xFE52,
+            0xFF0E, 0xFF0E,
+            0xFF61, 0xFF61).freeze();
 
-    private static final UnicodeSet defaultGroupingSeparators = (UnicodeSet) new UnicodeSet(dotEquivalents).addAll(
-            commaEquivalents).addAll(otherGroupingSeparators).freeze();
-    private static final UnicodeSet strictDefaultGroupingSeparators = (UnicodeSet) new UnicodeSet(strictDotEquivalents)
-            .addAll(strictCommaEquivalents).addAll(strictOtherGroupingSeparators).freeze();
+    private static final UnicodeSet commaEquivalents = new UnicodeSet(
+            //"[,\u060C\u066B\u3001\uFE10\uFE11\uFE50\uFE51\uFF0C\uFF64]"
+            0x002C, 0x002C,
+            0x060C, 0x060C,
+            0x066B, 0x066B,
+            0x3001, 0x3001,
+            0xFE10, 0xFE11,
+            0xFE50, 0xFE51,
+            0xFF0C, 0xFF0C,
+            0xFF64, 0xFF64).freeze();
+
+//    private static final UnicodeSet otherGroupingSeparators = new UnicodeSet(
+//            //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
+//            0x0020, 0x0020,
+//            0x0027, 0x0027,
+//            0x00A0, 0x00A0,
+//            0x066C, 0x066C,
+//            0x2000, 0x200A,
+//            0x2018, 0x2019,
+//            0x202F, 0x202F,
+//            0x205F, 0x205F,
+//            0x3000, 0x3000,
+//            0xFF07, 0xFF07).freeze();
+
+    private static final UnicodeSet strictDotEquivalents = new UnicodeSet(
+            //"[.\u2024\uFE52\uFF0E\uFF61]"
+            0x002E, 0x002E,
+            0x2024, 0x2024,
+            0xFE52, 0xFE52,
+            0xFF0E, 0xFF0E,
+            0xFF61, 0xFF61).freeze();
+
+    private static final UnicodeSet strictCommaEquivalents = new UnicodeSet(
+            //"[,\u066B\uFE10\uFE50\uFF0C]"
+            0x002C, 0x002C,
+            0x066B, 0x066B,
+            0xFE10, 0xFE10,
+            0xFE50, 0xFE50,
+            0xFF0C, 0xFF0C).freeze();
+
+//    private static final UnicodeSet strictOtherGroupingSeparators = new UnicodeSet(
+//            //"[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]"
+//            0x0020, 0x0020,
+//            0x0027, 0x0027,
+//            0x00A0, 0x00A0,
+//            0x066C, 0x066C,
+//            0x2000, 0x200A,
+//            0x2018, 0x2019,
+//            0x202F, 0x202F,
+//            0x205F, 0x205F,
+//            0x3000, 0x3000,
+//            0xFF07, 0xFF07).freeze();
+
+    private static final UnicodeSet defaultGroupingSeparators =
+        //new UnicodeSet(dotEquivalents).addAll(commaEquivalents).addAll(otherGroupingSeparators).freeze();
+        new UnicodeSet(
+                0x0020, 0x0020,
+                0x0027, 0x0027,
+                0x002C, 0x002C,
+                0x002E, 0x002E,
+                0x00A0, 0x00A0,
+                0x060C, 0x060C,
+                0x066B, 0x066C,
+                0x2000, 0x200A,
+                0x2018, 0x2019,
+                0x2024, 0x2024,
+                0x202F, 0x202F,
+                0x205F, 0x205F,
+                0x3000, 0x3002,
+                0xFE10, 0xFE12,
+                0xFE50, 0xFE52,
+                0xFF07, 0xFF07,
+                0xFF0C, 0xFF0C,
+                0xFF0E, 0xFF0E,
+                0xFF61, 0xFF61,
+                0xFF64, 0xFF64).freeze();
+
+    private static final UnicodeSet strictDefaultGroupingSeparators =
+        //new UnicodeSet(strictDotEquivalents).addAll(strictCommaEquivalents).addAll(strictOtherGroupingSeparators).freeze();
+        new UnicodeSet(
+                0x0020, 0x0020,
+                0x0027, 0x0027,
+                0x002C, 0x002C,
+                0x002E, 0x002E,
+                0x00A0, 0x00A0,
+                0x066B, 0x066C,
+                0x2000, 0x200A,
+                0x2018, 0x2019,
+                0x2024, 0x2024,
+                0x202F, 0x202F,
+                0x205F, 0x205F,
+                0x3000, 0x3000,
+                0xFE10, 0xFE10,
+                0xFE50, 0xFE50,
+                0xFE52, 0xFE52,
+                0xFF07, 0xFF07,
+                0xFF0C, 0xFF0C,
+                0xFF0E, 0xFF0E,
+                0xFF61, 0xFF61).freeze();
 
     // When parsing a number with big exponential value, it requires to transform
     // the value into a string representation to construct BigInteger instance.
