@@ -687,6 +687,7 @@ final class CollationParsedRuleBuilder {
 
     // private inner classes -------------------------------------------------
 
+    @SuppressWarnings("unused")
     private static class CEGenerator {
         // package private data members --------------------------------------
 
@@ -893,6 +894,7 @@ final class CollationParsedRuleBuilder {
      * Private class for combining mark table. The table is indexed by the class
      * value(0-255).
      */
+    @SuppressWarnings("unused")
     private static class CombinClassTable {
         /**
          * accumulated numbers of combining marks.

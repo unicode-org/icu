@@ -187,7 +187,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * Sets fromUContext used in callbacks.
      * 
      * @param newContext Object
-     * @exception IllegalArgumentException
+     * @exception IllegalArgumentException The object is an illegal argument for UContext.
      * @stable ICU 4.0
      */
     public final void setFromUContext(Object newContext) {
@@ -849,9 +849,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @return <code>CoderResult.malformedForLength(1)</code> or
      *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or
      *         <code>null</code> if there isn't.
-     * @see handleSurrogates(CharBuffer, char)
-     * @see handleSurrogates(CharBuffer, int, char)
-     * @see handleSurrogates(char[], int, int, char)
+     * @see #handleSurrogates(CharBuffer, char)
+     * @see #handleSurrogates(CharBuffer, int, char)
+     * @see #handleSurrogates(char[], int, int, char)
      */
     final CoderResult handleSurrogates(CharBuffer source, char lead) {
         if (!UTF16.isLeadSurrogate(lead)) {
@@ -891,9 +891,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @return <code>CoderResult.malformedForLength(1)</code> or
      *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or <code>null</code> if
      *         there isn't.
-     * @see handleSurrogates(CharBuffer, char)
-     * @see handleSurrogates(CharBuffer, int, char)
-     * @see handleSurrogates(char[], int, int, char)
+     * @see #handleSurrogates(CharBuffer, char)
+     * @see #handleSurrogates(CharBuffer, int, char)
+     * @see #handleSurrogates(char[], int, int, char)
      */
     final CoderResult handleSurrogates(char[] sourceArray, int sourceIndex,
             int sourceLimit, char lead) {

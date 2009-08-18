@@ -3693,13 +3693,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 }
             }
         } else if (startMs > targetMs) {
-            if (false) {
+            //Eclipse stated the following is "dead code"
+            /*if (false) {
                 // This works, and makes the code smaller, but costs
                 // an extra object creation and an extra couple cycles
                 // of calendar computation.
                 setTimeInMillis(targetMs);
                 min = -fieldDifference(new Date(startMs), field);
-            }
+            }*/
             int max = -1;
             // Find a value that is too small
             for (;;) {

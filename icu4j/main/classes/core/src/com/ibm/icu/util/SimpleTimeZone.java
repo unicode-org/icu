@@ -652,10 +652,12 @@ public class SimpleTimeZone extends BasicTimeZone {
                 || prevMonthLength > 31) {
                 throw new IllegalArgumentException();
             }
-        } else {
-            /* This parameter checking code is better for debugging, but
-             * overkill for normal operation.  Only one of these two blocks
-             * should actually get compiled into the class file.  */
+        } 
+        //Eclipse stated the following is "dead code"
+        /*else {
+            // This parameter checking code is better for debugging, but
+            // overkill for normal operation.  Only one of these two blocks
+            // should actually get compiled into the class file.
             if (era != GregorianCalendar.AD && era != GregorianCalendar.BC) {
                 throw new IllegalArgumentException("Illegal era " + era);
             }
@@ -683,7 +685,7 @@ public class SimpleTimeZone extends BasicTimeZone {
                 || prevMonthLength > 31) {
                 throw new IllegalArgumentException("Illegal previous month length " + prevMonthLength);
             }
-        }
+        }*/
 
         int result = raw;
 

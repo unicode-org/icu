@@ -2383,6 +2383,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         clear();
 
         while (mode != 2 && !chars.atEnd()) {
+            //Eclipse stated the following is "dead code"
+            /*
             if (false) {
                 // Debugging assertion
                 if (!((lastItem == 0 && op == 0) ||
@@ -2390,7 +2392,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         (lastItem == 2 && (op == 0 || op == '-' || op == '&')))) {
                     throw new IllegalArgumentException();
                 }
-            }
+            }*/
 
             int c = 0;
             boolean literal = false;

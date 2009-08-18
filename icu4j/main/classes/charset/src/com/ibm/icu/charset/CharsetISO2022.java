@@ -336,6 +336,7 @@ class CharsetISO2022 extends CharsetICU {
 //    private static final byte UCNV_OPTIONS_VERSION_MASK = 0xf;
     private static final byte UCNV_2022_MAX_CONVERTERS  = 10;
     
+    @SuppressWarnings("unused")
     private class UConverterDataISO2022 {
         UConverterSharedData []myConverterArray;
         CharsetEncoderMBCS currentEncoder;

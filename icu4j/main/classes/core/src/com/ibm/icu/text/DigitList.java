@@ -161,7 +161,8 @@ final class DigitList {
      */
     public BigInteger getBigInteger(boolean isPositive) {
         if (isZero()) return BigInteger.valueOf(0);
-        if (false) {
+        //Eclipse stated the following is "dead code"
+        /*if (false) {
             StringBuffer stringRep = new StringBuffer(count);
             if (!isPositive) {
                 stringRep.append('-');
@@ -174,7 +175,7 @@ final class DigitList {
                 stringRep.append('0');
             }
             return new BigInteger(stringRep.toString());
-        } else {
+        } else*/ {
             int len = decimalAt > count ? decimalAt : count;
             if (!isPositive) {
                 len += 1;

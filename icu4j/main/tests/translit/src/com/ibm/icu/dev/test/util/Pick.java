@@ -571,20 +571,24 @@ abstract public class Pick {
     private abstract static class ListPick extends Pick {
         protected Pick[] items = new Pick[0];
 
+        @SuppressWarnings("unused")
         Pick simplify() {
             if (items.length > 1) return this;
             if (items.length == 1) return items[0];
             return null;
         }
         
+        @SuppressWarnings("unused")
         int size() {
             return items.length;
         }
 
+        @SuppressWarnings("unused")
         Pick getLast() {
             return items[items.length-1];
         }
 
+        @SuppressWarnings("unused")
         void setLast(Pick newOne) {
             items[items.length-1] = newOne;
         }

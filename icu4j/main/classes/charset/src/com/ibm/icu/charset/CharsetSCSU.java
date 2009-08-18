@@ -108,7 +108,8 @@ class CharsetSCSU extends CharsetICU{
     private static final int definePairTwo=5;
     private static final int defineOne=6;
   //  };
-       
+    
+    @SuppressWarnings("unused")
     private final class SCSUData{   
         /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;

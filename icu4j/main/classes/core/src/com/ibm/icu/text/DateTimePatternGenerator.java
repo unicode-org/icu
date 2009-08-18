@@ -620,7 +620,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             }
             ///CLOVER:OFF
             //The following would never be called since the parameter is false
-            if (false) { // ordered
+            //Eclipse stated the following is "dead code"
+            /*if (false) { // ordered
                 DateTimePatternGenerator results = new DateTimePatternGenerator();
                 PatternInfo pinfo = new PatternInfo();
                 for (DateTimeMatcher cur : skeleton2pattern.keySet()) {
@@ -636,7 +637,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                         results.addPattern(pattern, false, pinfo);
                     }
                 }
-            }
+            }*/
             ///CLOVER:ON
             return output;
         }
@@ -1733,6 +1734,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * 
          */
+        @SuppressWarnings("unused")
         void extractFrom(DateTimeMatcher source, int fieldMask) {
             for (int i = 0; i < type.length; ++i) {
                 if ((fieldMask & (1<<i)) != 0) {

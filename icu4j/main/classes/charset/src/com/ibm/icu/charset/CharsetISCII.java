@@ -72,7 +72,7 @@ class CharsetISCII extends CharsetICU {
         static final short MALAYALAM = KANNADA + 1;
         static final short DELTA = 0x80;
     }
-
+    @SuppressWarnings("unused")
     private static final class ISCIILang {
         static final short DEF = 0x40;
         static final short RMN = 0x41;
@@ -108,6 +108,7 @@ class CharsetISCII extends CharsetICU {
     
     private final String ISCII_CNV_PREFIX = "ISCII,version=";
     
+    @SuppressWarnings("unused")
     private final class UConverterDataISCII {
         int option;
         int contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
