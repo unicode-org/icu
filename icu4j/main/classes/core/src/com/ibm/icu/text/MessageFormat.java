@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -2128,10 +2129,10 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
             return false;
         }
         for (int i = 0; i < argument.length(); ++i ) {
-            if (i == 0 && !IDStartChars.contains(argument.charAt(i)) ||
-                i > 0 &&  !IDContChars.contains(argument.charAt(i))){
-                return false;
-            }
+            if (i == 0 && !UCharacter.isUnicodeIdentifierStart(argument.charAt(i)) ||
+                    i > 0 &&  !UCharacter.isUnicodeIdentifierPart(argument.charAt(i))){
+                    return false;
+                }
         }
         return true;
     }
@@ -2144,9 +2145,6 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
     private static final int STATE_SINGLE_QUOTE = 1;
     private static final int STATE_IN_QUOTE = 2;
     private static final int STATE_MSG_ELEMENT = 3;
-
-    private static UnicodeSet IDStartChars = new UnicodeSet("[:ID_Start:]");
-    private static UnicodeSet IDContChars = new UnicodeSet("[:ID_Continue:]");
 
     /**
      * Convert an 'apostrophe-friendly' pattern into a standard
