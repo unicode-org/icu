@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -29,6 +29,8 @@
 #   define NOMCX
 
 #include <windows.h>
+
+U_NAMESPACE_USE
 
 static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SYSTEMTIME &standardDate, int32_t &bias, int32_t &daylightBias, int32_t &standardBias) {
     UErrorCode status = U_ZERO_ERROR;
