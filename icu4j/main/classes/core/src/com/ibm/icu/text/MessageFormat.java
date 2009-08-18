@@ -1676,10 +1676,11 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
                 continue;
             }
             // int argRecursion = ((recursionProtection >> (argumentNumber*2)) & 0x3);
-            if (false) { // if (argRecursion == 3){
+            //Eclipse stated the following is "dead code"
+            /*if (false) { // if (argRecursion == 3){
                 // prevent loop!!!
                 result.append('\uFFFD');
-            } else {
+            } else*/ {
                 Object obj = arguments.get(argumentName);
                 String arg = null;
                 Format subFormatter = null;

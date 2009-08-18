@@ -552,6 +552,7 @@ public class BagFormatter {
             doAt(c);
         }
 
+        @SuppressWarnings("unused")
         public String format(Object o) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
