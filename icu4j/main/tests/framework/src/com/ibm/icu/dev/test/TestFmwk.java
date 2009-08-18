@@ -870,8 +870,7 @@ public class TestFmwk extends AbstractTestLog {
                         + "       be in alphabetical order to ensure cross-platform consistency.");
         pw.println(" -s[ilent] No output except error summary or exceptions.");
         pw.println(" -tfilter:<str> Transliterator Test filter of ids.");
-        pw.println(" -t[ime][:<n>] Print elapsed time for each test.  if n is present\n"
-                        + "       only print times >= n milliseconds.");
+        pw.println(" -t[ime]:<n> Print elapsed time only for tests exceeding n milliseconds.");
         pw.println(" -v[erbose] Show log messages");
         pw.println(" -u[nicode] Don't escape error or log messages");
         pw.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
@@ -1068,7 +1067,7 @@ public class TestFmwk extends AbstractTestLog {
         public boolean describe;
         public boolean warnings;
         public boolean nodata;
-        public long timing = Long.MAX_VALUE;
+        public long timing = 0;
         public boolean memusage;
         public int inclusion;
         public String filter;
@@ -1124,6 +1123,7 @@ public class TestFmwk extends AbstractTestLog {
             
             boolean usageError = false;
             String filter = null;
+            String fmt = "#,##0.000s";
             int wx = 0; // write argets.
             if (args != null) {
                 for (int i = 0; i < args.length; i++) {
@@ -1203,7 +1203,6 @@ public class TestFmwk extends AbstractTestLog {
                                 }
                             }
                             params.timing = val;
-                            String fmt = "#,00s";
                             if (val <= 10) {
                                 fmt = "#,##0.000s";
                             } else if (val <= 100) {
@@ -1211,7 +1210,6 @@ public class TestFmwk extends AbstractTestLog {
                             } else if (val <= 1000) {
                                 fmt = "#,##0.0s";
                             }
-                            params.tformat = new DecimalFormat(fmt);
                         } else if (arg.startsWith("-filter:")) {
                             String temp = arg.substring(8).toLowerCase();
                             filter = filter == null ? temp : filter + "," + temp;
@@ -1251,7 +1249,9 @@ public class TestFmwk extends AbstractTestLog {
                     args[wx++] = null;
                 }
             }
-            
+
+            params.tformat = new DecimalFormat(fmt);
+
             if (usageError) {
                 usage(log, "TestAll");
                 return null;
