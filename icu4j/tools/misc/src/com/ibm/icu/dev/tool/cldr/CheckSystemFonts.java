@@ -1,9 +1,11 @@
 /*
-**********************************************************************
-* Copyright (c) 2009, Google, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2009, Google, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Mark Davis
+ **********************************************************************
+ */
 package com.ibm.icu.dev.tool.cldr;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
