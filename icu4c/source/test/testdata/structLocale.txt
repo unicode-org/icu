@@ -5777,6 +5777,7 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                        "",
                     }
                     abbreviated{
                         "",
@@ -5792,8 +5793,10 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                        "",
                     }
                     narrow{
+                        "",
                         "",
                         "",
                         "",
@@ -5824,8 +5827,10 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                        "",
                     }
                     abbreviated{
+                        "",
                         "",
                         "",
                         "",
@@ -5842,6 +5847,7 @@ structLocale:table(nofallback){
                     }
                     default{""}
                     narrow{
+                        "",
                         "",
                         "",
                         "",
