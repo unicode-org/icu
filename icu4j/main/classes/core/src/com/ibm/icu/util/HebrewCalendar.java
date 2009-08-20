@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -678,13 +678,13 @@ public class HebrewCalendar extends Calendar {
      * The rule here is that if (year % 19) == 0, 3, 6, 8, 11, 14, or 17.
      * The formula below performs the same test, believe it or not.
      */
-    private static final boolean isLeapYear(int year) {
+    public static final boolean isLeapYear(int year) {
         //return (year * 12 + 17) % 19 >= 12;
         int x = (year*12 + 17) % 19;
         return x >= ((x < 0) ? -7 : 12);
     }
 
-    private static int monthsInYear(int year) {
+    public static int monthsInYear(int year) {
         return isLeapYear(year) ? 13 : 12;
     }
 

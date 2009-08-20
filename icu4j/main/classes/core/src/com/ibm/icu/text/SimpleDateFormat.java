@@ -34,6 +34,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
@@ -232,6 +233,7 @@ public class SimpleDateFormat extends DateFormat {
     // - 1 for version from JDK 1.1.4, which includes a new field
     static final int currentSerialVersion = 1;
 
+    static boolean DelayedHebrewMonthCheck = false;
     
     /*
      * From calendar field to its level.
@@ -866,6 +868,15 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 2: // 'M' - MONTH
+            if ( cal.getType().equals("hebrew")) {
+               HebrewCalendar hc = (HebrewCalendar)cal.clone();
+               if (hc.isLeapYear(hc.get(Calendar.YEAR)) && value == 6 && count >= 3 ) {
+                   value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
+               }
+               if (!hc.isLeapYear(hc.get(Calendar.YEAR)) && value >= 6 && count < 3 ) {
+                   value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
+               }
+            }
             if (count == 5) {
                 safeAppend(formatData.narrowMonths, value, buf);
             } else if (count == 4) {
@@ -2046,6 +2057,7 @@ public class SimpleDateFormat extends DateFormat {
         int value = 0;
         int i;
         ParsePosition pos = new ParsePosition(0);
+
         //int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);c
         int patternCharIndex = -1;
         if ('A' <= ch && ch <= 'z') {
@@ -2132,6 +2144,15 @@ public class SimpleDateFormat extends DateFormat {
                             (value < ambiguousTwoDigitYear ? 100 : 0);
                     }
                 cal.set(Calendar.YEAR, value);
+
+                // Delayed checking for adjustment of Hebrew month numbers in non-leap years.
+                if (DelayedHebrewMonthCheck) {
+                    HebrewCalendar hc = (HebrewCalendar) cal.clone();
+                    if (!hc.isLeapYear(value)) {
+                        cal.add(Calendar.MONTH,1);
+                    }
+                    DelayedHebrewMonthCheck = false;
+                }
                 return pos.getIndex();
             case 2: // 'M' - MONTH
                 if (count <= 2) { // i.e., M or MM.
@@ -2139,6 +2160,19 @@ public class SimpleDateFormat extends DateFormat {
                     // while pattern uses numeric style: M or MM.
                     // [We computed 'value' above.]
                     cal.set(Calendar.MONTH, value - 1);
+                    // When parsing month numbers from the Hebrew Calendar, we might need to adjust the month depending on whether
+                    // or not it was a leap year.  We may or may not yet know what year it is, so might have to delay checking 
+                    // until the year is parsed.
+                    if (cal.getType().equals("hebrew") && value >= 6) {
+                       HebrewCalendar hc = (HebrewCalendar) cal.clone();
+                       if (cal.isSet(Calendar.YEAR)) {
+                           if (!hc.isLeapYear(hc.get(Calendar.YEAR))) {
+                               cal.set(Calendar.MONTH, value);
+                           }
+                       } else {
+                           DelayedHebrewMonthCheck = true;
+                       }
+                    }
                     return pos.getIndex();
                 } else {
                     // count >= 3 // i.e., MMM or MMMM
