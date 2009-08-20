@@ -3585,14 +3585,15 @@ fi{
                         "kislév",
                         "tevét",
                         "ševát",
+                        "adár I",
                         "adár",
-                        "adár II",
                         "nisán",
                         "ijjár",
                         "siván",
                         "tammúz",
                         "ab",
                         "elúl",
+                        "adár II",
                     }
                     wide{
                         "tišríkuu",
@@ -3600,14 +3601,15 @@ fi{
                         "kislévkuu",
                         "tevétkuu",
                         "ševátkuu",
+                        "adárkuu I",
                         "adárkuu",
-                        "adárkuu II",
                         "nisánkuu",
                         "ijjárkuu",
                         "sivánkuu",
                         "tammúzkuu",
                         "abkuu",
                         "elúlkuu",
+                        "adárkuu II",
                     }
                 }
             }
