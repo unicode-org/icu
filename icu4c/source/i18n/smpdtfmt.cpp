@@ -48,6 +48,7 @@
 #include "olsontz.h"
 #include "util.h"
 #include "gregoimp.h" 
+#include "hebrwcal.h"
 #include "cstring.h"
 #include "uassert.h"
 #include "zstrfmt.h"
@@ -1451,6 +1452,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     int32_t beginOffset = appendTo.length();
     NumberFormat *currentNumberFormat;
 
+    UBool isHebrewCalendar = !strcmp(cal.getType(),"hebrew");
+
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharPtr == NULL)
     {
@@ -1500,6 +1503,13 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // appropriate number of digits
     // for "MMMMM", use the narrow form
     case UDAT_MONTH_FIELD:
+        if ( isHebrewCalendar ) {
+           HebrewCalendar *hc = (HebrewCalendar*)&cal;
+           if (hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value == 6 && count >= 3 )
+               value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar. 
+           if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6 && count < 3 )
+               value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
+        }
         if (count == 5) 
             _appendSymbol(appendTo, value, fSymbols->fNarrowMonths,
                           fSymbols->fNarrowMonthsCount);
@@ -2279,7 +2289,13 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     }
     if (bestMatch >= 0)
     {
-        cal.set(field, bestMatch);
+        // Adjustment for Hebrew Calendar month Adar II
+        if (!strcmp(cal.getType(),"hebrew") && field==UCAL_MONTH && bestMatch==13) {
+            cal.set(field,6);
+        }
+        else {
+            cal.set(field, bestMatch);
+        }
 
         // Once we have a match, we have to determine the length of the
         // original source string.  This will usually be == the length of
@@ -2341,6 +2357,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     UDateFormatField patternCharIndex;
     NumberFormat *currentNumberFormat;
     UnicodeString temp;
+    static UBool DelayedHebrewMonthCheck = FALSE;
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
 
 #if defined (U_DEBUG_CAL)
@@ -2460,6 +2477,16 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             }
         }
         cal.set(UCAL_YEAR, value);
+
+        // Delayed checking for adjustment of Hebrew month numbers in non-leap years.  
+        if (DelayedHebrewMonthCheck) {
+            HebrewCalendar *hc = (HebrewCalendar*)&cal;
+            UErrorCode status = U_ZERO_ERROR;
+            if (!hc->isLeapYear(value)) {
+               cal.add(UCAL_MONTH,1,status);
+            }
+            DelayedHebrewMonthCheck = FALSE;
+        }
         return pos.getIndex();
 
     case UDAT_YEAR_WOY_FIELD:
@@ -2484,6 +2511,20 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // while pattern uses numeric style: M or MM.
             // [We computed 'value' above.]
             cal.set(UCAL_MONTH, value - 1);
+            // When parsing month numbers from the Hebrew Calendar, we might need to adjust the month depending on whether
+            // or not it was a leap year.  We may or may not yet know what year it is, so might have to delay checking until
+            // the year is parsed.
+            if (!strcmp(cal.getType(),"hebrew") && value >= 6) {
+                HebrewCalendar *hc = (HebrewCalendar*)&cal;
+                if (cal.isSet(UCAL_YEAR)) {
+                   UErrorCode status = U_ZERO_ERROR;
+                   if (!hc->isLeapYear(hc->get(UCAL_YEAR,status))) {
+                       cal.set(UCAL_MONTH, value);
+                   }
+                } else {
+                    DelayedHebrewMonthCheck = TRUE;
+                } 
+            }
             return pos.getIndex();
         } else {
             // count >= 3 // i.e., MMM or MMMM

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2007, International Business Machines Corporation
+* Copyright (C) 2003-2009, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -273,6 +273,10 @@ public:
 `     */
     virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
 
+    /**
+     * @internal 
+     */
+    static UBool isLeapYear(int32_t year) ;
 
  protected:
 
@@ -467,10 +471,6 @@ public:
      */
     int32_t yearType(int32_t year) const;
 
-    /**
-     * @internal 
-     */
-    static UBool isLeapYear(int32_t year) ;
     /**
      * @internal 
      */
