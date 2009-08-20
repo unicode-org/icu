@@ -416,6 +416,7 @@ if test $threads = true; then
     # For gcc, the thread options are set by mh-mingw/mh-cygwin
     # For msvc, the thread options are set by runConfigureICU
     ICU_USE_THREADS=1
+    ;;
   *-*-hpux*)
     # Add -mt because it does several nice things on newer compilers.
     case "${icu_cv_host_frag}" in
