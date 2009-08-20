@@ -3491,14 +3491,15 @@ sv{
                         "kislév",
                         "tevét",
                         "shevát",
+                        "adár I",
                         "adár",
-                        "adár II",
                         "nisán",
                         "ijjár",
                         "siván",
                         "tammúz",
                         "ab",
                         "elúl",
+                        "adár II",
                     }
                 }
             }

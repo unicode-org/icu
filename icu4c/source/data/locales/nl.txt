@@ -2435,14 +2435,15 @@ nl{
                         "Kislev",
                         "Tevet",
                         "Sjevat",
+                        "Adar A",
                         "Adar",
-                        "Adar B",
                         "Nisan",
                         "Ijar",
                         "Sivan",
                         "Tammoez",
                         "Av",
                         "Elloel",
+                        "Adar B",
                     }
                 }
             }

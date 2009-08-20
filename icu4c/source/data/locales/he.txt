@@ -1492,7 +1492,7 @@ he{
         MONOTON{"מונוטונית"}
         POSIX{"מחשב"}
     }
-    Version{"1.126"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1636,86 +1636,86 @@ he{
             }
             intervalFormats{
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MEd{
-                    M{"EEEE dd/MM - EEEE dd/MM"}
-                    d{"EEEE dd/MM - EEEE dd/MM"}
+                    M{"EEEE dd/MM – EEEE dd/MM"}
+                    d{"EEEE dd/MM – EEEE dd/MM"}
                 }
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"EEEE d MMM - EEEE d MMM"}
-                    d{"EEEE d MMM - EEEE d MMM"}
+                    M{"EEEE d MMM – EEEE d MMM"}
+                    d{"EEEE d MMM – EEEE d MMM"}
                 }
                 MMMM{
-                    M{"LLLL-LLLL"}
+                    M{"LLLL–LLLL"}
                 }
                 MMMd{
-                    M{"d MMM - d MMM"}
-                    d{"d-d MMM"}
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
                 }
                 Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"HH-HH"}
+                    a{"HH–HH"}
                     h{"HH–HH"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
+                    a{"HH:mm–HH:mm"}
                     h{"HH:mm–HH:mm"}
                     m{"HH:mm–HH:mm"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
+                    a{"HH:mm–HH:mm v"}
                     h{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
                 }
                 hv{
-                    a{"HH-HH v"}
+                    a{"HH–HH v"}
                     h{"HH–HH v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
-                    M{"MM/yy - MM/yy"}
-                    y{"MM/yy - MM/yy"}
+                    M{"MM/yy – MM/yy"}
+                    y{"MM/yy – MM/yy"}
                 }
                 yMEd{
-                    M{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
-                    d{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
-                    y{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
+                    M{"EEEE dd/MM/yy – EEEE dd/MM/yy"}
+                    d{"EEEE dd/MM/yy – EEEE dd/MM/yy"}
+                    y{"EEEE dd/MM/yy – EEEE dd/MM/yy"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
                 }
                 yMMMEd{
-                    M{"EEEE d MMM - EEEE d MMM y"}
-                    d{"EEEE d MMM - EEEE d MMM y"}
-                    y{"EEEE d MMM y - EEEE d MMM y"}
+                    M{"EEEE d MMM – EEEE d MMM y"}
+                    d{"EEEE d MMM – EEEE d MMM y"}
+                    y{"EEEE d MMM y – EEEE d MMM y"}
                 }
                 yMMMM{
                     M{"yyyy-MM – MM"}
                     y{"yyyy-MM – yyyy-MM"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"d MMM – d MMM y"}
+                    d{"d–d MMM y"}
+                    y{"d MMM y – d MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/yy - dd/MM/yy"}
-                    d{"dd/MM/yy - dd/MM/yy"}
-                    y{"dd/MM/yy - dd/MM/yy"}
+                    M{"dd/MM/yy – dd/MM/yy"}
+                    d{"dd/MM/yy – dd/MM/yy"}
+                    y{"dd/MM/yy – dd/MM/yy"}
                 }
             }
             monthNames{
@@ -1823,7 +1823,7 @@ he{
                         "כסלו",
                         "טבת",
                         "שבט",
-                        "אדר א'",
+                        "אדר א׳",
                         "אדר",
                         "ניסן",
                         "אייר",
@@ -1831,6 +1831,7 @@ he{
                         "תמוז",
                         "אב",
                         "אלול",
+                        "אדר ב׳",
                     }
                 }
                 stand-alone{
@@ -1840,7 +1841,7 @@ he{
                         "כסלו",
                         "טבת",
                         "שבט",
-                        "אדר א'",
+                        "אדר א׳",
                         "אדר",
                         "ניסן",
                         "אייר",
@@ -1848,6 +1849,7 @@ he{
                         "תמוז",
                         "אב",
                         "אלול",
+                        "אדר ב׳",
                     }
                 }
             }

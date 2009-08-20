@@ -2598,13 +2598,14 @@ hu{
                         "Tévész",
                         "Svát",
                         "Ádár risón",
-                        "Ádár séni",
+                        "Ádár",
                         "Niszán",
                         "Ijár",
                         "Sziván",
                         "Tamuz",
                         "Áv",
                         "Elul",
+                        "Ádár séni",
                     }
                 }
             }

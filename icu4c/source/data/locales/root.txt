@@ -701,7 +701,7 @@ root{
         297,
         210,
     }
-    Version{"1.192"}
+    Version{"1.193"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -1130,21 +1130,21 @@ root{
             }
             intervalFormats{
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MEd{
                     M{"E, MM-dd – E, MM-dd"}
                     d{"E, MM-dd – E, MM-dd"}
                 }
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, MM-d – E, MM-d"}
                     d{"E, MM-d – E, MM-d"}
                 }
                 MMMM{
-                    M{"LLLL-LLLL"}
+                    M{"LLLL–LLLL"}
                 }
                 MMMd{
                     M{"MM-d – MM-d"}
@@ -1155,29 +1155,29 @@ root{
                     d{"MM-dd – dd"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"HH-HH"}
-                    h{"HH-HH"}
+                    a{"HH–HH"}
+                    h{"HH–HH"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    a{"HH:mm–HH:mm"}
+                    h{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    a{"HH:mm–HH:mm v"}
+                    h{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 hv{
-                    a{"HH-HH v"}
-                    h{"HH-HH v"}
+                    a{"HH–HH v"}
+                    h{"HH–HH v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
                     M{"yyyy-MM – MM"}
@@ -1303,7 +1303,7 @@ root{
                 format{
                     abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/hebrew/monthNames/stand-alone/narrow"}
+                    narrow:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tishri",
                         "Heshvan",
@@ -1318,25 +1318,12 @@ root{
                         "Tamuz",
                         "Av",
                         "Elul",
+                        "Adar II",
                     }
                 }
                 stand-alone{
                     abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/abbreviated"}
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
+                    narrow:alias{"/LOCALE/calendar/hebrew/monthNames/format/narrow"}
                     wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                 }
             }
