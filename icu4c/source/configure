@@ -5014,6 +5014,65 @@ fi
 $as_echo "$enabled" >&6; }
 
 
+# MSVC floating-point option
+MSVC_RELEASE_FLAG=""
+if test $enabled = yes
+then
+    if test $icu_cv_host_frag = mh-cygwin-msvc
+    then
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+    #if defined _MSC_VER && _MSC_VER >= 1400
+    #else
+    Microsoft Visual C++ < 2005
+    #endif
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  MSVC_RELEASE_FLAG="/fp:precise"
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	MSVC_RELEASE_FLAG="/Op"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        CFLAGS="${CFLAGS} ${MSVC_RELEASE_FLAG}"
+        CXXFLAGS="${CXXFLAGS} ${MSVC_RELEASE_FLAG}"
+    fi
+fi
+
 # Check whether to enabled draft APIs
 { $as_echo "$as_me:$LINENO: checking whether to enable draft APIs" >&5
 $as_echo_n "checking whether to enable draft APIs... " >&6; }
@@ -5984,20 +6043,8 @@ $as_echo "$ac_cv_func_pthread_mutex_lock" >&6; }
   case "${host}" in
   *-pc-cygwin*|*-pc-mingw*)
     # For gcc, the thread options are set by mh-mingw/mh-cygwin
+    # For msvc, the thread options are set by runConfigureICU
     ICU_USE_THREADS=1
-    if test "$ac_cv_c_compiler_gnu" = no; then
-      # We're using normal windows compilers. Threading is available.
-      ICU_USE_THREADS=1
-      if test $ENABLE_DEBUG = 1; then
-        # /MDd means 'compiles and links a debugable multithreaded program with DLL'
-        CFLAGS="${CFLAGS} /MDd"
-        CXXFLAGS="${CXXFLAGS} /MDd"
-      else
-        # /MD means 'compiles and links a multithreaded program with DLL'
-        CFLAGS="${CFLAGS} /MD"
-        CXXFLAGS="${CXXFLAGS} /MD"
-      fi
-    fi ;;
   *-*-hpux*)
     # Add -mt because it does several nice things on newer compilers.
     case "${icu_cv_host_frag}" in
