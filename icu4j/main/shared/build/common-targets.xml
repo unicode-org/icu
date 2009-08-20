@@ -196,9 +196,10 @@
         <pathelement location="${icu4j.translit.jar}"/>
         <pathelement location="${icu4j.test-framework.jar}"/>
         <pathelement location="${icu4j.core-tests.jar}"/>
+        <pathelement location="${icu4j.translit-tests.jar}"/>
     </path>
 
-    <target name="_all.tools" depends="_all.core, _all.collate, _all.translit, _all.test-framework, _all.core-tests">
+    <target name="_all.tools" depends="_all.core, _all.collate, _all.translit, _all.test-framework, _all.core-tests, _all.translit-tests">
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
 
