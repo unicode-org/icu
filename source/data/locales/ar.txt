@@ -1907,7 +1907,7 @@ ar{
         REVISED{"تهجئة تم مراجعتها"}
         VALENCIA{"بلنسية"}
     }
-    Version{"1.126"}
+    Version{"1.127"}
     calendar{
         buddhist{
             eras{
@@ -2118,44 +2118,44 @@ ar{
             }
             intervalFormats{
                 MEd{
-                    M{"E، d/‏M - E، d/‏M"}
-                    d{"E، d/‏M -‏ E، d/‏M"}
+                    M{"E، d/‏M – E، d/‏M"}
+                    d{"E، d/‏M –‏ E، d/‏M"}
                 }
                 MMMEd{
-                    M{"E، d MMM - E، d MMM"}
-                    d{"E، d - E، d MMM"}
+                    M{"E، d MMM – E، d MMM"}
+                    d{"E، d – E، d MMM"}
                 }
                 MMMM{
-                    M{"LLLL-LLLL"}
+                    M{"LLLL–LLLL"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yMEd{
-                    M{"E، d‏/M‏/yyyy - E، d‏/M‏/yyyy"}
-                    d{"E، dd‏/MM‏/yyyy - E، dd‏/MM‏/yyyy"}
-                    y{"E، d‏/M‏/yyyy - E، d‏/M‏/yyyy"}
+                    M{"E، d‏/M‏/yyyy – E، d‏/M‏/yyyy"}
+                    d{"E، dd‏/MM‏/yyyy – E، dd‏/MM‏/yyyy"}
+                    y{"E، d‏/M‏/yyyy – E، d‏/M‏/yyyy"}
                 }
                 yMMM{
-                    M{"MMM - MMM، y"}
-                    y{"MMM، y - MMM، y"}
+                    M{"MMM – MMM، y"}
+                    y{"MMM، y – MMM، y"}
                 }
                 yMMMEd{
-                    M{"E، d MMM - E، d MMM، y"}
-                    d{"E، d - ِE، d MMM، yyyy"}
-                    y{"E، d MMM، y - E، d MMM، y"}
+                    M{"E، d MMM – E، d MMM، y"}
+                    d{"E، d – ِE، d MMM، yyyy"}
+                    y{"E، d MMM، y – E، d MMM، y"}
                 }
                 yMMMM{
                     M{"MM ‏– MM‏-yyyy‏"}
-                    y{"MM -‏ MM–‏yyyy"}
+                    y{"MM –‏ MM–‏yyyy"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM، yyyy"}
-                    d{"d-d MMM، y"}
-                    y{"d MMM، y - d MMM، y"}
+                    M{"d MMM – d MMM، yyyy"}
+                    d{"d–d MMM، y"}
+                    y{"d MMM، y – d MMM، y"}
                 }
             }
             monthNames{
@@ -2241,13 +2241,14 @@ ar{
                         "طيفت",
                         "شباط",
                         "آذار الأول",
-                        "آذار الثاني",
+                        "آذار",
                         "نيسان",
                         "أيار",
                         "سيفان",
                         "تموز",
                         "آب",
                         "أيلول",
+                        "آذار الثاني",
                     }
                     wide{
                         "تشري",
@@ -2256,13 +2257,14 @@ ar{
                         "طيفت",
                         "شباط",
                         "آذار الأول",
-                        "آذار الثاني",
+                        "آذار",
                         "نيسان",
                         "أيار",
                         "سيفان",
                         "تموز",
                         "آب",
                         "Elul",
+                        "آذار الثاني",
                     }
                 }
             }

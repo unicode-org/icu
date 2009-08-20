@@ -1962,7 +1962,7 @@ lv{
                         "kisļevs",
                         "tevets",
                         "ševats",
-                        "Adar I",
+                        "1. adars",
                         "adars",
                         "nisans",
                         "ijars",
@@ -1970,6 +1970,7 @@ lv{
                         "tamuzs",
                         "avs",
                         "eluls",
+                        "2. adars",
                     }
                 }
             }

@@ -2464,6 +2464,7 @@ tr{
                         "Tamuz",
                         "Av",
                         "Elul",
+                        "Adar II",
                     }
                 }
             }

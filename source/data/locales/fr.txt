@@ -3530,14 +3530,15 @@ fr{
                         "Kislev",
                         "Tébeth",
                         "Schébat",
+                        "Adar I",
                         "Adar",
-                        "Adar II",
                         "Nissan",
                         "Iyar",
                         "Sivan",
                         "Tamouz",
                         "Ab",
                         "Elloul",
+                        "Adar II",
                     }
                 }
             }
