@@ -192,6 +192,24 @@ AC_ARG_ENABLE(release,
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_RELEASE)
 
+# MSVC floating-point option
+MSVC_RELEASE_FLAG=""
+if test $enabled = yes
+then  
+    if test $icu_cv_host_frag = mh-cygwin-msvc
+    then
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    #if defined _MSC_VER && _MSC_VER >= 1400
+    #else
+    Microsoft Visual C++ < 2005
+    #endif
+        ]], [[]])],[MSVC_RELEASE_FLAG="/fp:precise"],[MSVC_RELEASE_FLAG="/Op"])
+        
+        CFLAGS="${CFLAGS} ${MSVC_RELEASE_FLAG}"
+        CXXFLAGS="${CXXFLAGS} ${MSVC_RELEASE_FLAG}"
+    fi
+fi
+
 # Check whether to enabled draft APIs
 AC_MSG_CHECKING([whether to enable draft APIs])
 enabled=yes
@@ -396,20 +414,8 @@ if test $threads = true; then
   case "${host}" in
   *-pc-cygwin*|*-pc-mingw*)
     # For gcc, the thread options are set by mh-mingw/mh-cygwin
+    # For msvc, the thread options are set by runConfigureICU
     ICU_USE_THREADS=1
-    if test "$ac_cv_c_compiler_gnu" = no; then
-      # We're using normal windows compilers. Threading is available.
-      ICU_USE_THREADS=1
-      if test $ENABLE_DEBUG = 1; then
-        # /MDd means 'compiles and links a debugable multithreaded program with DLL'
-        CFLAGS="${CFLAGS} /MDd"
-        CXXFLAGS="${CXXFLAGS} /MDd"
-      else
-        # /MD means 'compiles and links a multithreaded program with DLL'
-        CFLAGS="${CFLAGS} /MD"
-        CXXFLAGS="${CXXFLAGS} /MD"
-      fi
-    fi ;;
   *-*-hpux*)
     # Add -mt because it does several nice things on newer compilers.
     case "${icu_cv_host_frag}" in
