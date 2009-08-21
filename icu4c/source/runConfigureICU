@@ -226,8 +226,8 @@ case $platform in
         THE_COMP="Microsoft Visual C++"
         CC=cl; export CC
         CXX=cl; export CXX
-        RELEASE_CFLAGS='/O2 /Ob2 /MD'
-        RELEASE_CXXFLAGS='/O2 /Ob2 /MD'
+        RELEASE_CFLAGS='/GF /Gy /MD'
+        RELEASE_CXXFLAGS='/GF /Gy /MD'
         DEBUG_CFLAGS='/Zi /MDd'
         DEBUG_CXXFLAGS='/Zi /MDd'
         DEBUG_LDFLAGS='/DEBUG'
@@ -237,8 +237,8 @@ case $platform in
         THE_COMP="Microsoft Visual C++ 2005"
         CC=cl; export CC
         CXX=cl; export CXX
-        RELEASE_CFLAGS='/O2 /Ob2 /fp:precise /MD'
-        RELEASE_CXXFLAGS='/O2 /Ob2 /fp:precise /MD'
+        RELEASE_CFLAGS='/GF /Gy /MD'
+        RELEASE_CXXFLAGS='/GF /Gy /MD'
         DEBUG_CFLAGS='/Zi /MDd'
         DEBUG_CXXFLAGS='/Zi /MDd'
         DEBUG_LDFLAGS='/DEBUG'
