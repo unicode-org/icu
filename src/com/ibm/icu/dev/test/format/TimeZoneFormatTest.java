@@ -288,6 +288,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     long t = START_TIME;
                     TimeZoneTransition tzt = null;
                     boolean middle = true;
+                    boolean isJdkTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
+testTransitions:
                     while (t < END_TIME) {
                         if (tzt == null) {
                             testTimes[0] = t;
@@ -347,10 +349,24 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                             times[patidx] += System.currentTimeMillis() - timer;
                         }
+
+                        long tmpt = t;
+                        while (tmpt < END_TIME) {
+                            tzt = btz.getNextTransition(tmpt, false);
+                            if (tzt == null) {
+                                break testTransitions;
+                            }
+                            // JDK time zone data may be out of synch
+                            if (!isJdkTimeZone || (tz.getOffset(tzt.getTime() - 1) != tz.getOffset(tzt.getTime()))) {
+                                break;
+                            }
+                            tmpt = tzt.getTime();
+                        }
                         tzt = btz.getNextTransition(t, false);
                         if (tzt == null) {
-                            break;
+                            break testTransitions;
                         }
+
                         if (middle) {
                             // Test the date in the middle of two transitions.
                             t += (tzt.getTime() - t)/2;
