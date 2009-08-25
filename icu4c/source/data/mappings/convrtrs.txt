@@ -23,7 +23,11 @@
 # This is an alias file used by the character set converter.
 # A lot of converter information can be found in unicode/ucnv.h, but here
 # is more information about this file.
-#
+# 
+# If you are adding a new converter to this list and want to include it in the
+# icu data library, please be sure to add an entry to the appropriate ucm*.mk file
+# (see ucmfiles.mk for more information).
+# 
 # Here is the file format using BNF-like syntax:
 #
 # converterTable ::= tags { converterLine* }
