@@ -932,6 +932,10 @@
 
           <li>GNU make</li>
 
+          <li>ar</li>
+
+          <li>ranlib</li>
+
           <li>man (if you plan to look at the man pages)</li>
         </ul>
       </li>
@@ -953,9 +957,9 @@
       Visual C++ compiler will not work with a bash command prompt.</li>
 
       <li>If the computer isn't set up to use Visual C++ from the command line,
-      you need to run vcvars32.bat. For example "<tt>C:\Program Files\Microsoft
+      you need to run vcvars32.bat.<br>For example:<br>"<tt>C:\Program Files\Microsoft
       Visual Studio 8\VC\bin\vcvars32.bat</tt>" can be used for 32-bit builds
-      <strong>or</strong> "<tt>C:\Program Files (x86)\Microsoft Visual Studio
+      <strong>or</strong> <br>"<tt>C:\Program Files (x86)\Microsoft Visual Studio
       8\VC\bin\amd64\vcvarsamd64.bat</tt>" can be used for 64-bit builds on
       Windows x64.</li>
 
@@ -984,7 +988,13 @@
 
     <p><a name="HowToWindowsConfigureICU" id=
     "HowToWindowsConfigureICU"><strong>Configuring ICU on Windows
-    NOTE:</strong></a> In addition to the Unix <a href=
+    NOTE:</strong></a> </p>
+    <p>
+    You may need to run <tt>"dos2unix.exe"</tt> on all of the scripts (e.g. configure)
+    in the top source directory of ICU. To avoid this issue, you can download
+    the ICU source for Unix platforms (icu-xxx.tgz).
+    </p>
+    <p>In addition to the Unix <a href=
     "#HowToConfigureICU">configuration note</a> the following configure options
     currently do not work on Windows with Microsoft's compiler. Some options can
     work by manually editing <tt>icu/source/common/unicode/pwin32.h</tt>, but
@@ -993,7 +1003,8 @@
     <ul>
       <li><tt>--disable-renaming</tt></li>
 
-      <li><tt>--disable-threading</tt></li>
+      <li><tt>--disable-threading</tt> (This flag does disable threading in ICU,
+      but the resulting ICU library will still be linked with MSVC's multithread DLL)</li>
 
       <li><tt>--enable-tracing</tt></li>
 
