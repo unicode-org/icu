@@ -100,6 +100,12 @@ static char gStrBuf[256];
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const UChar         Z_STR[] = {0x7A, 0x00}; /* "z" */
 static const UChar         ZZZZ_STR[] = {0x7A, 0x7A, 0x7A, 0x7A, 0x00}; /* "zzzz" */
+static const UChar         Z_UC_STR[] = {0x5A, 0x00}; /* "Z" */
+static const UChar         ZZZZ_UC_STR[] = {0x5A, 0x5A, 0x5A, 0x5A, 0x00}; /* "ZZZZ" */
+static const UChar         V_STR[] = {0x76, 0x00}; /* "v" */
+static const UChar         VVVV_STR[] = {0x76, 0x76, 0x76, 0x76, 0x00}; /* "vvvv" */
+static const UChar         V_UC_STR[] = {0x56, 0x00}; /* "V" */
+static const UChar         VVVV_UC_STR[] = {0x56, 0x56, 0x56, 0x56, 0x00}; /* "VVVV" */
 static const int32_t       GMT_ID_LENGTH = 3;
 
 static UMTX                             LOCK;
@@ -1140,7 +1146,37 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
     char buf[128];
     fID.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
 #endif
-    SimpleDateFormat format(style == LONG ? ZZZZ_STR : Z_STR, locale, status);
+
+    // select the proper format string
+    UnicodeString pat;
+    switch(style){
+    case LONG:
+        pat = ZZZZ_STR;
+        break;
+    case SHORT_GENERIC:
+        pat = V_STR;
+        break;
+    case LONG_GENERIC:
+        pat = VVVV_STR;
+        break;
+    case SHORT_GMT:
+        pat = Z_UC_STR;
+        break;
+    case LONG_GMT:
+        pat = ZZZZ_UC_STR;
+        break;
+    case SHORT_COMMONLY_USED:
+        pat = V_UC_STR;
+        break;
+    case GENERIC_LOCATION:
+        pat = VVVV_UC_STR;
+        break;
+    default: // SHORT
+        pat = Z_STR;
+        break;
+    }
+
+    SimpleDateFormat format(pat, locale, status);
     U_DEBUG_TZ_MSG(("getDisplayName(%s)\n", buf));
     if(!U_SUCCESS(status))
     {
@@ -1160,7 +1196,11 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         return result.remove();
     }
     
-    if ((daylight && dstOffset != 0) || (!daylight && dstOffset == 0)) {
+    if ((daylight && dstOffset != 0) || 
+        (!daylight && dstOffset == 0) ||
+        (style == SHORT_GENERIC) ||
+        (style == LONG_GENERIC)
+       ) {
         // Current time and the request (daylight / not daylight) agree.
         format.setTimeZone(*this);
         return format.format(d, result);
@@ -1220,7 +1260,6 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
     format.format(d, result, status);
     return  result;
 }
-
 
 /**
  * Parse a custom time zone identifier and return a corresponding zone.
