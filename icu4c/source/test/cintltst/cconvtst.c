@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -15,7 +15,7 @@
 #include "cintltst.h"
 
 void addTestConvert(TestNode**);
-void addTestNewConvert(TestNode**);
+#include "nucnvtst.h"
 void addTestConvertErrorCallBack(TestNode** root);
 void addTestEuroRegression(TestNode** root);
 void addTestConverterFallBack(TestNode** root);
