@@ -2553,38 +2553,39 @@ uloc_getDisplayName(const char *locale,
         }
         ++length;
 
-        // If the localized display pattern is something other than the default pattern of "{0} ({1})", then
-        // then we need to do the formatting here.  It would be easier to use a messageFormat to do this, but we
-        // can't since we don't have the APIs in the i18n library available to us at this point.
-        //
-        if (locPatLen != defaultPatternLen || u_strcmp(dispLocPattern,defaultPattern)) { // Something other than the default pattern
-           u_terminateUChars(dest, destCapacity, length, pErrorCode);
+        /* If the localized display pattern is something other than the default pattern of "{0} ({1})", then
+         * then we need to do the formatting here.  It would be easier to use a messageFormat to do this, but we
+         * can't since we don't have the APIs in the i18n library available to us at this point.
+         */
+        if (locPatLen != defaultPatternLen || u_strcmp(dispLocPattern,defaultPattern)) { /* Something other than the default pattern */
            UChar *p0 = u_strstr(dispLocPattern,pat0);
            UChar *p1 = u_strstr(dispLocPattern,pat1);
-           if ( p0 != NULL && p1 != NULL ) { // The pattern is well formed
+           u_terminateUChars(dest, destCapacity, length, pErrorCode);
+
+           if ( p0 != NULL && p1 != NULL ) { /* The pattern is well formed */
               if ( dest ) {
                   int32_t destLen = 0;
                   UChar *result = (UChar *)uprv_malloc((length+1)*sizeof(UChar)); 
-                  u_strcpy(result,dest);
-                  dest[0] == 0;
                   UChar *upos = (UChar *)dispLocPattern;
+                  u_strcpy(result,dest);
+                  dest[0] = 0;
                   while ( *upos ) {
-                     if ( upos == p0 ) { // Handle {0} substitution
+                     if ( upos == p0 ) { /* Handle {0} substitution */
                          u_strncat(dest,result,p0Len);
                          destLen += p0Len;
-                         dest[destLen] = 0; // Null terminate
+                         dest[destLen] = 0; /* Null terminate */
                          upos += 3;
-                     } else if ( upos == p1 ) { // Handle {1} substitution
+                     } else if ( upos == p1 ) { /* Handle {1} substitution */
                          UChar *p1Start = &result[p0Len+2];
                          u_strncat(dest,p1Start,length-p0Len-3);
                          destLen += (length-p0Len-3);
-                         dest[destLen] = 0; // Null terminate
+                         dest[destLen] = 0; /* Null terminate */
                          upos += 3;
-                     } else { // Something from the pattern not {0} or {1}
+                     } else { /* Something from the pattern not {0} or {1} */
                          u_strncat(dest,upos,1);
                          upos++;
                          destLen++;
-                         dest[destLen] = 0; // Null terminate
+                         dest[destLen] = 0; /* Null terminate */
                      }
                   } 
                   uprv_free(result);
