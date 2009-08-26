@@ -151,53 +151,53 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a short generic name, such as "PT."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #LONG_GENERIC
+     * @draft ICU 4.4
      */    
     public static final int SHORT_GENERIC = 2;
 
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a long generic name, such as "Pacific Time."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #SHORT_GENERIC
+     * @draft ICU 4.4
      */   
     public static final int LONG_GENERIC = 3;
 
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a short name derived from the timezone's offset, such as "-0800."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #LONG_GMT
+     * @draft ICU 4.4
      */       
-    public static final int SHORT_RFC = 4;
+    public static final int SHORT_GMT = 4;
     
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a long name derived from the timezone's offset, such as "GMT-08:00."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #SHORT_GMT
+     * @draft ICU 4.4
      */      
-    public static final int LONG_RFC = 5;
+    public static final int LONG_GMT = 5;
     
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a short name derived from the timezone's short standard or daylight
      * timezone name ignoring commonlyUsed, such as "PDT."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #GENERIC_LOCATION
+     * @draft ICU 4.4
      */   
     
-    public static final int SHORT_SPECIAL = 6;
+    public static final int SHORT_COMMONLY_USED = 6;
     
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a long name derived from the timezone's fallback name, such as 
      * "United States (Los Angeles)."
-     * @see #SHORT
-     * @draft ICU 4.2
+     * @see #SHORT_COMMONLY_USED
+     * @draft ICU 4.4
      */      
-    public static final int LONG_SPECIAL = 7;
+    public static final int GENERIC_LOCATION = 7;
     
     
     /**
@@ -341,12 +341,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * If the display name is not available for the locale,
      * a fallback based on the country, city, or time zone id will be used.
      * @return the human-readable name of this time zone in the default locale.
-     * @draft ICU 4.2
+     * @stable ICU 2.0
      */
-    public final String getDisplayName() {
-        if (TZ_defaultStyleOveride) 
-            return _getDisplayName(false, TZ_defaultStyle, ULocale.getDefault());
-              
+    public final String getDisplayName() {             
         return _getDisplayName(false, LONG_GENERIC, ULocale.getDefault());
     }
 
@@ -359,12 +356,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
-     * @draft ICU 4.2
+     * @stable ICU 2.0
      */
     public final String getDisplayName(Locale locale) {
-        if (TZ_defaultStyleOveride)         
-            return _getDisplayName(false, TZ_defaultStyle, ULocale.forLocale(locale));
-
         return _getDisplayName(false, LONG_GENERIC, ULocale.forLocale(locale));
     }
 
@@ -377,12 +371,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param locale the ulocale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default ulocale if the given ulocale is not recognized.
-     * @draft ICU 4.2
+     * @stable ICU 3.2
      */
-    public final String getDisplayName(ULocale locale) {
-        if (TZ_defaultStyleOveride)         
-            return _getDisplayName(false, TZ_defaultStyle, locale);
-        
+    public final String getDisplayName(ULocale locale) {        
         return _getDisplayName(false, LONG_GENERIC, locale);
     }
 
@@ -393,7 +384,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style either <code>LONG</code> or <code>SHORT</code>
+     * @param style the output style of the display name.  Valid styles are 
+     * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
+     * <code>LONG_GENERIC</code>, <code>SHORT_GMT</code>, <code>LONG_GMT</code>,
+     * <code>SHORT_COMMONLY_USED</code> or <code>GENERIC_LOCATION</code>.
      * @return the human-readable name of this time zone in the default locale.
      * @stable ICU 2.0
      */
@@ -408,7 +402,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style either <code>LONG</code> or <code>SHORT</code>
+     * @param style the output style of the display name.  Valid styles are 
+     * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
+     * <code>LONG_GENERIC</code>, <code>SHORT_GMT</code>, <code>LONG_GMT</code>,
+     * <code>SHORT_COMMONLY_USED</code> or <code>GENERIC_LOCATION</code>.
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
@@ -426,15 +423,18 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style  The style of the name to display.
+     * @param style the output style of the display name.  Valid styles are 
+     * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
+     * <code>LONG_GENERIC</code>, <code>SHORT_GMT</code>, <code>LONG_GMT</code>,
+     * <code>SHORT_COMMONLY_USED</code> or <code>GENERIC_LOCATION</code>.
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
      * @exception IllegalArgumentException style is invalid.
-     * @draft ICU 4.2
+     * @stable ICU 3.2
      */
     public String getDisplayName(boolean daylight, int style, ULocale locale) {
-        if (style < SHORT || style > LONG_SPECIAL) {
+        if (style < SHORT || style > GENERIC_LOCATION) {
             throw new IllegalArgumentException("Illegal style: " + style);
         }
      
@@ -442,8 +442,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * The public version of this API only accepts LONG/SHORT, the
-     * internal version (which this calls) also accepts LONG_GENERIC/SHORT_GENERIC.
+     * internal version (which is called by public APIs) accepts  
+     * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT, 
+     * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
     private synchronized String _getDisplayName(boolean daylight, int style, ULocale locale) {
         if (locale == null) {
@@ -473,7 +474,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
         format.applyPattern(patterns[style]);
         format.setTimeZone(this);
         Date d = new Date();
-        if ((style >= 2) && (style <= 3)) {
+        if ((style == SHORT_GENERIC) || (style == LONG_GENERIC)) {
             // Generic names may change time to time even for a single time zone.
             // This method returns the one used for the zone now.
             return format.format(d);
@@ -636,33 +637,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
      */
     public static int getDefaultTimeZoneType() {
         return TZ_IMPL;
-    }
-
-    /**
-     * Sets the default time zone name style used by <code>getDisplayName</code>.
-     * @param style either <code>LONG_GENERIC</code> or <code>LONG_SPECIAL</code>.
-     * @exception IllegalArgumentException style is invalid. 
-     * @draft ICU 4.2
-     */     
-    public synchronized void setDefaultTimeZoneNameStyle(int style) {
-        if (style != LONG_GENERIC && style != LONG_SPECIAL) {
-            throw new IllegalArgumentException("Illegal style: " + style);
-        }
-        TZ_defaultStyleOveride = true;
-        TZ_defaultStyle = style;
-    }
-
-    /**
-     * Returns the default time zone name style currently used.
-     * @return The default time zone name style, either 
-     * <code>LONG_GENERIC</code> or <code>LONG_SPECIAL</code>. 
-     * @draft ICU 4.2
-     */
-    public int getDefaultTimeZoneNameStyle() {
-        if (TZ_defaultStyleOveride) 
-            return TZ_defaultStyle;
-        
-        return LONG_GENERIC;
     }
         
     /**
@@ -947,17 +921,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * TimeZone implementation type
      */
     private static int TZ_IMPL = TIMEZONE_ICU;
-
-    /**
-     * TimeZone display name style type
-     */
-    private int TZ_defaultStyle = LONG_GENERIC;
-    
-    /**
-     * Use TimeZone display name style type.  Use
-     * boolean indicator to help ensure compatibility
-     */
-    private boolean TZ_defaultStyleOveride = false;
     
     /**
      * TimeZone implementation type initialization

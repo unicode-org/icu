@@ -371,15 +371,15 @@ public class TimeZoneTest extends TestFmwk
             Boolean.FALSE, new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
             Boolean.TRUE,  new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",  
             // z and ZZZZ
-            Boolean.FALSE, new Integer(TimeZone.SHORT_RFC), "-0800",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT_RFC), "-0700",
-            Boolean.FALSE, new Integer(TimeZone.LONG_RFC),  "GMT-08:00",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_RFC),  "GMT-07:00",              
+            Boolean.FALSE, new Integer(TimeZone.SHORT_GMT), "-0800",
+            Boolean.TRUE,  new Integer(TimeZone.SHORT_GMT), "-0700",
+            Boolean.FALSE, new Integer(TimeZone.LONG_GMT),  "GMT-08:00",
+            Boolean.TRUE,  new Integer(TimeZone.LONG_GMT),  "GMT-07:00",              
             // V and VVVV
-            Boolean.FALSE, new Integer(TimeZone.SHORT_SPECIAL), "PST",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT_SPECIAL), "PDT",
-            Boolean.FALSE, new Integer(TimeZone.LONG_SPECIAL),  "United States (Los Angeles)",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_SPECIAL),  "United States (Los Angeles)",
+            Boolean.FALSE, new Integer(TimeZone.SHORT_COMMONLY_USED), "PST",
+            Boolean.TRUE,  new Integer(TimeZone.SHORT_COMMONLY_USED), "PDT",
+            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "United States (Los Angeles)",
+            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "United States (Los Angeles)",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
@@ -463,28 +463,7 @@ public class TimeZoneTest extends TestFmwk
             !name.equals("GMT+130"))
             errln("Fail: Expected GMT+01:30 or something similar");        
         ULocale.setDefault(save);
-             
-        // Test the option to chose the "regularized" form, eg not to 
-        // get the "Eastern Time", but to always get the form based off 
-        // of the exemplar city "New York (United States)".
-        Object[] DATA2 = {
-                new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
-                new Integer(TimeZone.LONG_SPECIAL),  "United States (Los Angeles)",
-        };
-
-        for (int i=0; i<DATA2.length; i+=2) {
-            zone.setDefaultTimeZoneNameStyle(((Integer)DATA2[i]).intValue());
-            
-            name = zone.getDisplayName();
-            if (!name.equals(DATA2[i+1]))
-                errln("Fail: Expected " + DATA2[i+1] + "; got " + name);
-            
-            name = zone.getDisplayName(Locale.ENGLISH);
-            if (!name.equals(DATA2[i+1]))
-                errln("Fail: Expected " + DATA2[i+1] + "; got " + name);            
-
-        }    
-
+ 
     }
 
 
