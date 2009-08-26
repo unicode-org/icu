@@ -521,7 +521,41 @@ public:
          * Selector for long display name
          * @stable ICU 2.4
          */
-        LONG
+        LONG,
+        /**
+         * Selector for short generic display name
+         * @draft ICU 4.4
+         */
+        SHORT_GENERIC,
+        /**
+         * Selector for long generic display name
+         * @draft ICU 4.4
+         */
+        LONG_GENERIC,
+        /**
+         * Selector for short display name derived
+         * from time zone offset
+         * @draft ICU 4.4
+         */
+        SHORT_GMT,
+        /**
+         * Selector for long display name derived
+         * from time zone offset
+         * @draft ICU 4.4
+         */
+        LONG_GMT,
+        /**
+         * Selector for short display name derived
+         * from the time zone's fallback name
+         * @draft ICU 4.4
+         */
+        SHORT_COMMONLY_USED,
+        /**
+         * Selector for long display name derived
+         * from the time zone's fallback name
+         * @draft ICU 4.4
+         */
+        GENERIC_LOCATION
     };
 
     /**
@@ -559,10 +593,10 @@ public:
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style either <code>LONG</code> or <code>SHORT</code>
+     * @param style
      * @param result the human-readable name of this time zone in the default locale.
      * @return       A reference to 'result'.
-     * @stable ICU 2.0
+     * @draft ICU 4.4
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result) const;
 
@@ -573,14 +607,17 @@ public:
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
-     * @param style either <code>LONG</code> or <code>SHORT</code>
+     * @param style
      * @param locale the locale in which to supply the display name.
      * @param result the human-readable name of this time zone in the given locale
      *               or in the default locale if the given locale is not recognized.
      * @return       A refence to 'result'.
-     * @stable ICU 2.0
+     * @draft ICU 4.4
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
+
+    void setDefaultTimeZoneNameStyle(EDisplayType style);
+    EDisplayType getDefaultTimeZoneNameStyle();
 
     /**
      * Queries if this time zone uses daylight savings time.
@@ -775,6 +812,7 @@ private:
     static TimeZone*        createSystemTimeZone(const UnicodeString& name);
 
     UnicodeString           fID;    // this time zone's ID
+
 };
 
 
