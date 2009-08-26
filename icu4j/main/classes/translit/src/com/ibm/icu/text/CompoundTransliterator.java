@@ -539,7 +539,7 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Temporary hack for registry problem. Needs to be replaced by better architecture.
      * @internal
-     * @deprecated Deprecated function.
+     * @deprecated This API is ICU internal only.
      */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();
