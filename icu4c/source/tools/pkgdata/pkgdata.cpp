@@ -1243,12 +1243,20 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         uprv_strcat(dllFilePath, PKGDATA_FILE_SEP_STRING);
         uprv_strcpy(libFilePath, dllFilePath);
 
+#ifdef CYGWINMSVC
+        sprintf(libFilePath, "%s%s.lib", libFilePath, o->libName);
+        
+        uprv_strcat(dllFilePath, o->libName);
+        uprv_strcat(dllFilePath, o->version);
+#else
+        uprv_strcat(dllFilePath, o->entryName);
+        
+        uprv_strcat(libFilePath, LIB_FILE);
+#endif
+        uprv_strcat(dllFilePath, DLL_EXT);
+        
         uprv_strcpy(resFilePath, o->tmpDir);
         uprv_strcat(resFilePath, PKGDATA_FILE_SEP_STRING);
-
-        uprv_strcat(dllFilePath, o->entryName);
-        uprv_strcat(dllFilePath, DLL_EXT);
-        uprv_strcat(libFilePath, LIB_FILE);
         uprv_strcat(resFilePath, ICUDATA_RES_FILE);
 
         if (!T_FileStream_file_exists(resFilePath)) {
