@@ -1195,6 +1195,21 @@ TimeZoneTest::TestDisplayName()
         {FALSE, TimeZone::LONG,  "Pacific Standard Time"},
         {TRUE,  TimeZone::LONG,  "Pacific Daylight Time"},
 
+        {FALSE, TimeZone::SHORT_GENERIC, "PT"},
+        {TRUE,  TimeZone::SHORT_GENERIC, "PT"},
+        {FALSE, TimeZone::LONG_GENERIC,  "Pacific Time"},
+        {TRUE,  TimeZone::LONG_GENERIC,  "Pacific Time"},
+
+        {FALSE, TimeZone::SHORT_GMT, "-0800"},
+        {TRUE,  TimeZone::SHORT_GMT, "-0700"},
+        {FALSE, TimeZone::LONG_GMT,  "GMT-08:00"},
+        {TRUE,  TimeZone::LONG_GMT,  "GMT-07:00"},
+
+        {FALSE, TimeZone::SHORT_COMMONLY_USED, "PST"},
+        {TRUE,  TimeZone::SHORT_COMMONLY_USED, "PDT"},
+        {FALSE, TimeZone::GENERIC_LOCATION,  "United States (Los Angeles)"},
+        {TRUE,  TimeZone::GENERIC_LOCATION,  "United States (Los Angeles)"},
+
         {FALSE, TimeZone::LONG, ""}
     };
 
