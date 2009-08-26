@@ -193,13 +193,21 @@ case $platform in
         ;;
     Linux/ICC)
         THE_OS="Linux"
-        THE_COMP="Intel ICC 9.0"
         CC=`which icc`; export CC
         CXX=`which icpc`; export CXX
-        export CFLAGS="-fp-model precise"
-        export CXXFLAGS="-fp-model precise"
+	ICC_VER=`${CC} -v 2>&1`
         RELEASE_CFLAGS='-O'
         RELEASE_CXXFLAGS='-O'
+        export CFLAGS="-fp-model precise"
+        export CXXFLAGS="-fp-model precise"
+	if [ "${ICC_VER}" = "Version 9.0 " ]; then
+		RELEASE_CFLAGS=''
+		RELEASE_CXXFLAGS=''
+		export CFLAGS="${CFLAGS} -O0"
+		export CXXFLAGS="${CXXFLAGS} -O0"
+		echo "ICC 9.0 does not work with optimization- disabling optimizations"
+	fi
+        THE_COMP="Intel ${ICC_VER}"
         ;;
     Linux/VA)
         THE_OS="Linux"
@@ -292,7 +300,7 @@ case $platform in
         THE_COMP="z/OS 1.2 C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
-        export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
+        export COMPILE_LINK_ENVVAR='_CXX_CICC_VER}=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
         export _CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(zOSV1R2)'"
