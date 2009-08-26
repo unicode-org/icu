@@ -2343,10 +2343,14 @@ uloc_getDisplayName(const char *locale,
 
     int32_t locSepLen = 0;
     int32_t locPatLen = 0;
+    int32_t p0Len = 0;
+    int32_t defaultPatternLen = 9;
     const UChar *dispLocSeparator;
     const UChar *dispLocPattern;
     static const UChar defaultSeparator[3] = { 0x002c, 0x0020 , 0x0000 }; /* comma + space */
     static const UChar defaultPattern[10] = { 0x007b, 0x0030, 0x007d, 0x0020, 0x0028, 0x007b, 0x0031, 0x007d, 0x0029, 0x0000 }; /* {0} ({1}) */
+    static const UChar pat0[4] = { 0x007b, 0x0030, 0x007d , 0x0000 } ; /* {0} */
+    static const UChar pat1[4] = { 0x007b, 0x0031, 0x007d , 0x0000 } ; /* {1} */
     
     UResourceBundle *bundle = NULL;
     UResourceBundle *locdsppat = NULL;
@@ -2395,6 +2399,8 @@ uloc_getDisplayName(const char *locale,
     hasLanguage= length>0;
 
     if(hasLanguage) {
+        p0Len = length;
+
         /* append " (" */
         if(length<destCapacity) {
             dest[length]=0x20;
@@ -2546,8 +2552,46 @@ uloc_getDisplayName(const char *locale,
             dest[length]=0x29;
         }
         ++length;
-    }
 
+        // If the localized display pattern is something other than the default pattern of "{0} ({1})", then
+        // then we need to do the formatting here.  It would be easier to use a messageFormat to do this, but we
+        // can't since we don't have the APIs in the i18n library available to us at this point.
+        //
+        if (locPatLen != defaultPatternLen || u_strcmp(dispLocPattern,defaultPattern)) { // Something other than the default pattern
+           u_terminateUChars(dest, destCapacity, length, pErrorCode);
+           UChar *p0 = u_strstr(dispLocPattern,pat0);
+           UChar *p1 = u_strstr(dispLocPattern,pat1);
+           if ( p0 != NULL && p1 != NULL ) { // The pattern is well formed
+              if ( dest ) {
+                  int32_t destLen = 0;
+                  UChar *result = (UChar *)uprv_malloc((length+1)*sizeof(UChar)); 
+                  u_strcpy(result,dest);
+                  dest[0] == 0;
+                  UChar *upos = (UChar *)dispLocPattern;
+                  while ( *upos ) {
+                     if ( upos == p0 ) { // Handle {0} substitution
+                         u_strncat(dest,result,p0Len);
+                         destLen += p0Len;
+                         dest[destLen] = 0; // Null terminate
+                         upos += 3;
+                     } else if ( upos == p1 ) { // Handle {1} substitution
+                         UChar *p1Start = &result[p0Len+2];
+                         u_strncat(dest,p1Start,length-p0Len-3);
+                         destLen += (length-p0Len-3);
+                         dest[destLen] = 0; // Null terminate
+                         upos += 3;
+                     } else { // Something from the pattern not {0} or {1}
+                         u_strncat(dest,upos,1);
+                         upos++;
+                         destLen++;
+                         dest[destLen] = 0; // Null terminate
+                     }
+                  } 
+                  uprv_free(result);
+              }
+           }
+        }
+    }
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         /* keep preflighting */
         *pErrorCode=U_ZERO_ERROR;
