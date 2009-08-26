@@ -395,7 +395,7 @@ class AnyTransliterator extends Transliterator {
     /**
      * Temporary hack for registry problem. Needs to be replaced by better architecture.
      * @internal
-     * @deprecated Function is deprecated.
+     * @deprecated This API is ICU internal only.
      */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();

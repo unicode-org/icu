@@ -2303,7 +2303,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
      * @internal
-     * @deprecated - for internal use only
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet applyPattern(String pattern,
             ParsePosition pos,
