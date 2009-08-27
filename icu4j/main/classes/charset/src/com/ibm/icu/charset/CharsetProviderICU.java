@@ -144,7 +144,7 @@ public final class CharsetProviderICU extends CharsetProvider{
         } 
     }
     private static final Charset getCharset(String icuCanonicalName) throws IOException{
-       String[] aliases = (String[])getAliases(icuCanonicalName);    
+       String[] aliases = getAliases(icuCanonicalName);    
        String canonicalName = getJavaCanonicalName(icuCanonicalName);
        
        /* Concat the option string to the icuCanonicalName so that the options can be handled properly

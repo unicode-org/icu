@@ -773,7 +773,7 @@ class RBBIRuleScanner {
                 //    the middle (a variable name, for example.)
                 for (;;) {
                     c.fChar = nextCharLL();
-                    if (c.fChar == (int) -1 || // EOF
+                    if (c.fChar == -1 || // EOF
                         c.fChar == '\r' ||
                         c.fChar == '\n' ||
                         c.fChar == chNEL ||
@@ -783,7 +783,7 @@ class RBBIRuleScanner {
                     }
                 }
             }
-            if (c.fChar == (int) -1) {
+            if (c.fChar == -1) {
                 return;
             }
 
@@ -874,14 +874,14 @@ class RBBIRuleScanner {
                     // Table row specified "escaped P" and the char is either 'p' or 'P'.
                     break;
                 }
-                if (tableEl.fCharClass == 252 && fC.fChar == (int) -1) {
+                if (tableEl.fCharClass == 252 && fC.fChar == -1) {
                     // Table row specified eof and we hit eof on the input.
                     break;
                 }
 
                 if (tableEl.fCharClass >= 128 && tableEl.fCharClass < 240 && // Table specs a char class &&
                         fC.fEscaped == false && //   char is not escaped &&
-                        fC.fChar != (int) -1) { //   char is not EOF
+                        fC.fChar != -1) { //   char is not EOF
                     UnicodeSet uniset = fRuleSets[tableEl.fCharClass - 128];
                     if (uniset.contains(fC.fChar)) {
                         // Table row specified a character class, or set of characters,

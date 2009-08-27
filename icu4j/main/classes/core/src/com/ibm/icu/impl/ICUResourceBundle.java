@@ -312,7 +312,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 // ignore the err - just skip that resource
             }
         }
-        return (String[])keywords.toArray(new String[0]);
+        return keywords.toArray(new String[0]);
     }
 
     /**
@@ -811,7 +811,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                                 + aKey, this.getClass().getName(), aKey);
             }
         }
-        ((ICUResourceBundle)obj).setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
+        obj.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         return obj;
     }
 
@@ -1094,7 +1094,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 ICUResourceBundle current = bundle;
                 while (st.hasMoreTokens()) {
                     String subKey = st.nextToken();
-                    sub = (ICUResourceBundle)((ICUResourceBundle) current).get(subKey, table, requested);
+                    sub = (ICUResourceBundle)current.get(subKey, table, requested);
                     if (sub == null) {
                         break;
                     }
@@ -1148,7 +1148,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         Integer indexKey = null;
         if (lookup != null) {
             indexKey = Integer.valueOf(index);
-            res = (UResourceBundle)lookup.get(indexKey);
+            res = lookup.get(indexKey);
         }
         if (res == null) {
             boolean[] alias = new boolean[1];

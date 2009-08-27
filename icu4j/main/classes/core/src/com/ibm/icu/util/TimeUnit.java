@@ -45,7 +45,7 @@ public class TimeUnit extends MeasureUnit {
      * @stable ICU 4.0
      */
     public static TimeUnit[] values() {
-        return (TimeUnit[])values.clone();
+        return values.clone();
     }
 
     /**

@@ -474,7 +474,7 @@ final class NFRuleSet {
         // and if we haven't yet returned a rule, use findNormalRule()
         // to find the applicable rule
         } else {
-            return findNormalRule((long)Math.round(number));
+            return findNormalRule(Math.round(number));
         }
     }
 
@@ -591,7 +591,7 @@ final class NFRuleSet {
         for (int i = 1; i < rules.length; i++) {
             leastCommonMultiple = lcm(leastCommonMultiple, rules[i].getBaseValue());
         }
-        long numerator = (long)(Math.round(number * leastCommonMultiple));
+        long numerator = Math.round(number * leastCommonMultiple);
 
         // for each rule, do the following...
         long tempDifference;

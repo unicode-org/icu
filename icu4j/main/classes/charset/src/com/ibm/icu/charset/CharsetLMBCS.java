@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -788,6 +788,7 @@ class CharsetLMBCS extends CharsetICU {
          * one of the 12 groups. The return value is the number of bytes written
          * starting at pStartLMBCS (if any).
          */
+        @SuppressWarnings("fallthrough")
         private int LMBCSConversionWorker(short group, byte[] LMBCS, char pUniChar, short[] lastConverterIndex, boolean[] groups_tried) {
             byte pLMBCS = 0;
             UConverterSharedData xcnv = extraInfo.OptGrpConverter[group];

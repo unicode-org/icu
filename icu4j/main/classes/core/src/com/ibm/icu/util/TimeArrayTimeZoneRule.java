@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -44,7 +44,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
         if (startTimes == null || startTimes.length == 0) {
             throw new IllegalArgumentException("No start times are specified.");
         } else {
-            this.startTimes = (long[])startTimes.clone();
+            this.startTimes = startTimes.clone();
             Arrays.sort(this.startTimes);
         }
         this.timeType = timeType;
@@ -58,7 +58,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * @stable ICU 3.8
      */
     public long[] getStartTimes() {
-        return (long[])startTimes.clone();
+        return startTimes.clone();
     }
 
     /**

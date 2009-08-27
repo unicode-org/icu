@@ -73,7 +73,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param cs The CharsetICU object containing information about how to charset to decode.
      */
     CharsetDecoderICU(CharsetICU cs) {
-        super(cs, (float) (1/(float)cs.maxCharsPerByte), cs.maxCharsPerByte);
+        super(cs, (1/cs.maxCharsPerByte), cs.maxCharsPerByte);
     }
 
     /*
@@ -591,7 +591,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                         if(realSource!=null) {
                             int length;
                             Assert.assrt(preToULength==0);
-                            length=(int)(source.limit()-source.position());
+                            length = source.limit() - source.position();
                             if(length>0) {
                                 //UConverterUtility.uprv_memcpy(preToUArray, preToUBegin, pArgs.sourceArray, pArgs.sourceBegin, length);
                                 source.get(preToUArray, preToUBegin, length);

@@ -137,9 +137,9 @@ class CharsetISCII extends CharsetICU {
             this.defDeltaToUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* defDeltaToUnicode */ 
             this.currentDeltaFromUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* currentDeltaFromUnicode */ 
             this.currentDeltaToUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* currentDeltaToUnicode */ 
-            this.currentMaskToUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskToUnicode */
-            this.currentMaskFromUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskFromUnicode */
-            this.defMaskToUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* defMaskToUnicode */
+            this.currentMaskToUnicode = lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskToUnicode */
+            this.currentMaskFromUnicode = lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskFromUnicode */
+            this.defMaskToUnicode = lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* defMaskToUnicode */
             this.isFirstBuffer = true; /* isFirstBuffer */
             this.resetToDefaultToUnicode = false; /* resetToDefaultToUnicode */   
             this.prevToUnicodeStatus = 0x0000;
@@ -826,7 +826,8 @@ class CharsetISCII extends CharsetICU {
             this.toUnicodeStatus = 0xFFFF;
             extraInfo.initialize();
         }
-        
+
+        @SuppressWarnings("fallthrough")
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
             CoderResult cr = CoderResult.UNDERFLOW;
             int targetUniChar = 0x0000;
@@ -1327,7 +1328,7 @@ class CharsetISCII extends CharsetICU {
                              */
                             char temp = 0;
                             temp = (char)(ATR << 8);
-                            temp += (char)((short)lookupInitialData[range].isciiLang & UConverterConstants.UNSIGNED_BYTE_MASK);
+                            temp += (char)(lookupInitialData[range].isciiLang & UConverterConstants.UNSIGNED_BYTE_MASK);
                             /* reset */
                             deltaChanged = false;
                             /* now append ATR and language code */

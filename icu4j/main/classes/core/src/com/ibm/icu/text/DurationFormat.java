@@ -28,7 +28,7 @@ public abstract class DurationFormat extends UFormat {
      * @stable ICU 3.8
      */
     public static DurationFormat getInstance(ULocale locale) {
-        return (DurationFormat)BasicDurationFormat.getInstance(locale);
+        return BasicDurationFormat.getInstance(locale);
     }
     
 

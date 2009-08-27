@@ -510,7 +510,7 @@ public class CharsetDetector {
         int out = 0;
         
         for (int i = 0; i < recognizers.size(); i++) {
-            String name = ((CharsetRecognizer)recognizers.get(i)).getName();
+            String name = recognizers.get(i).getName();
             
             if (out == 0 || ! name.equals(charsetNames[out - 1])) {
                 charsetNames[out++] = name;

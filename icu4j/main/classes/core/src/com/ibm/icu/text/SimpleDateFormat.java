@@ -818,6 +818,7 @@ public class SimpleDateFormat extends DateFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @SuppressWarnings("fallthrough")
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
                              FieldPosition pos,
@@ -1446,7 +1447,7 @@ public class SimpleDateFormat extends DateFormat {
         }
         int cacheIdx = sign*2 + width;
         if (gmtfmtCache[cacheIdx] != null) {
-            fmt = (MessageFormat)gmtfmtCache[cacheIdx].get();
+            fmt = gmtfmtCache[cacheIdx].get();
         }
         if (fmt == null) {
             fmt = new MessageFormat(formatData.gmtFormat);

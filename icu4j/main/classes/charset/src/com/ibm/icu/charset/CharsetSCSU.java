@@ -694,10 +694,10 @@ class CharsetSCSU extends CharsetICU{
         }
         
         private boolean isInOffsetWindowOrDirect(int offsetValue, int a){
-            return (boolean)((a & UConverterConstants.UNSIGNED_INT_MASK)<=(offsetValue & UConverterConstants.UNSIGNED_INT_MASK)+0x7f & 
+            return (a & UConverterConstants.UNSIGNED_INT_MASK)<=(offsetValue & UConverterConstants.UNSIGNED_INT_MASK)+0x7f & 
                     ((a & UConverterConstants.UNSIGNED_INT_MASK)>=(offsetValue & UConverterConstants.UNSIGNED_INT_MASK) || 
                             ((a & UConverterConstants.UNSIGNED_INT_MASK)<=0x7f && ((a & UConverterConstants.UNSIGNED_INT_MASK)>=0x20 
-                                    || ((1L<<(a & UConverterConstants.UNSIGNED_INT_MASK))&0x2601)!=0))));
+                                    || ((1L<<(a & UConverterConstants.UNSIGNED_INT_MASK))&0x2601)!=0)));
         }
         
         private byte getNextDynamicWindow(){
@@ -751,11 +751,11 @@ class CharsetSCSU extends CharsetICU{
                     ((c-0x1d000)&UConverterConstants.UNSIGNED_INT_MASK)<=(0x1ffff-0x1d000)){
                 /*This character is in the code range for a "small", i.e, reasonably windowable, script*/
                 offset = c&0x7fffff80;
-                return (int)(c>>7);
+                return (c>>7);
             }else if(0xe000<=(c&UConverterConstants.UNSIGNED_INT_MASK) && (c&UConverterConstants.UNSIGNED_INT_MASK)!=0xfeff && (c&UConverterConstants.UNSIGNED_INT_MASK) < 0xfff0){
                 /*for these characters we need to take the gapOffset into account*/
                 offset=(c)&0x7fffff80;
-                return (int)((c-gapOffset)>>7);
+                return ((c-gapOffset)>>7);
             }else{
                 return -1;
             }
@@ -844,7 +844,7 @@ class CharsetSCSU extends CharsetICU{
                             dynamicWindow = window;
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow];
                             useDynamicWindow(dynamicWindow);
-                            c = (((int)(SC0+dynamicWindow))<<8 | (c-currentOffset)|0x80);
+                            c = ((SC0+dynamicWindow)<<8 | (c-currentOffset)|0x80);
                             length = 2;
                             label  = OutputBytes;
                             return label;
@@ -855,8 +855,8 @@ class CharsetSCSU extends CharsetICU{
                             dynamicWindow=getNextDynamicWindow();
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
                             useDynamicWindow(dynamicWindow);
-                            c = ((int)(SDX<<24) | (int)(dynamicWindow<<21)|
-                                 (int)(code<<8)| (c- currentOffset) |0x80  );
+                            c = ((SDX<<24) | (dynamicWindow<<21)|
+                                 (code<<8)| (c- currentOffset) |0x80);
                            // c = (((SDX)<<25) | (dynamicWindow<<21)|
                              //           (code<<8)| (c- currentOffset) |0x80  );
                             length = 4;
@@ -870,7 +870,7 @@ class CharsetSCSU extends CharsetICU{
                                 offsets.put(sourceIndex);
                             }
                             --targetCapacity;
-                            c = ((int)(lead<<16))|trail;
+                            c = (lead<<16)|trail;
                             length = 4;
                             label = OutputBytes;
                             return label;
@@ -896,13 +896,13 @@ class CharsetSCSU extends CharsetICU{
                                 dynamicWindow = window;
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow];
                                 useDynamicWindow(dynamicWindow);
-                                c = ((int)((SC0+window)<<8)) | (c- currentOffset) | 0x80;
+                                c = ((SC0+window)<<8) | (c- currentOffset) | 0x80;
                                 length = 2;
                                 label = OutputBytes;
                                 return label;
                             } else {
                                 /*quote from dynamic window*/
-                                c = ((int)((SQ0+window)<<8)) | (c - data.fromUDynamicOffsets[window]) |
+                                c = ((SQ0+window)<<8) | (c - data.fromUDynamicOffsets[window]) |
                                     0x80;
                                 length = 2;
                                 label = OutputBytes;
@@ -910,7 +910,7 @@ class CharsetSCSU extends CharsetICU{
                             }
                         } else if((window = getWindow(staticOffsets))>=0){
                             /*quote from static window*/
-                            c = ((int)((SQ0+window)<<8)) | (c - staticOffsets[window]);
+                            c = ((SQ0+window)<<8) | (c - staticOffsets[window]);
                             length = 2;
                             label = OutputBytes;
                             return label;
@@ -919,8 +919,8 @@ class CharsetSCSU extends CharsetICU{
                             dynamicWindow = getNextDynamicWindow();
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
                             useDynamicWindow(dynamicWindow);
-                            c = ((int)((SD0+dynamicWindow)<<16)) | (int)(code<<8)|
-                                (c- currentOffset) | 0x80;
+                            c = ((SD0+dynamicWindow)<<16) | (code<<8)|
+                                (c - currentOffset) | 0x80;
                             length = 3;
                             label = OutputBytes;
                             return label;
@@ -991,7 +991,7 @@ class CharsetSCSU extends CharsetICU{
                                     || (((c-0x41)&UConverterConstants.UNSIGNED_INT_MASK))<26)){
                                 /*ASCII digit or letter*/
                                 isSingleByteMode = true;
-                                c |=((int)((UC0+dynamicWindow)<<8))|c;
+                                c |=((UC0+dynamicWindow)<<8)|c;
                                 length = 2;
                                 label = OutputBytes;
                                 return label;
@@ -1001,7 +1001,7 @@ class CharsetSCSU extends CharsetICU{
                                 dynamicWindow = window;
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow];
                                 useDynamicWindow(dynamicWindow);
-                                c = ((int)((UC0+dynamicWindow)<<8)) | (c- currentOffset) | 0x80;
+                                c = ((UC0+dynamicWindow)<<8) | (c- currentOffset) | 0x80;
                                 length = 2;
                                 label = OutputBytes;
                                 return label;
@@ -1011,8 +1011,8 @@ class CharsetSCSU extends CharsetICU{
                                 dynamicWindow = getNextDynamicWindow();
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
                                 useDynamicWindow(dynamicWindow);
-                                c = ((int)((UD0+dynamicWindow)<<16)) | (int)(code<<8) 
-                                    |(c- currentOffset) | 0x80;
+                                c = ((UD0+dynamicWindow)<<16) | (code<<8) 
+                                    |(c - currentOffset) | 0x80;
                                 length = 3;
                                 label = OutputBytes;
                                 return label;
@@ -1052,7 +1052,7 @@ class CharsetSCSU extends CharsetICU{
             if(source.hasRemaining()){
                 /*test the following code unit*/
                 trail = source.get(source.position());
-                if(UTF16.isTrailSurrogate((char)trail)){
+                if(UTF16.isTrailSurrogate(trail)){
                     source.position(source.position()+1);
                     ++nextSourceIndex;
                     c = UCharacter.getCodePoint((char)c, trail);
@@ -1151,7 +1151,8 @@ class CharsetSCSU extends CharsetICU{
             fromUChar32 = c;
             LabelLoop = false;
         }
-        
+
+        @SuppressWarnings("fallthrough")
         private int outputBytes(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             int label;
             //int targetCapacity = target.limit()-target.position();

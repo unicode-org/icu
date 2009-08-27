@@ -617,7 +617,7 @@ class CharsetMBCS extends CharsetICU {
         
         /* reconsitute the initial part of stage 2 from the mbcsIndex */
         {
-            int stageUTF8Length=((int)(mbcsTable.maxFastUChar+1))>>6;
+            int stageUTF8Length=(mbcsTable.maxFastUChar+1)>>6;
             int stageUTF8Index=0;
             int st1, st2, st3, i;
             
@@ -749,7 +749,7 @@ class CharsetMBCS extends CharsetICU {
                 action = MBCS_ENTRY_FINAL_ACTION(entry);
                 if (action == MBCS_STATE_VALID_DIRECT_16) {
                     /* output BMP code point */
-                    c = (char)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    c = MBCS_ENTRY_FINAL_VALUE_16(entry);
                 } else if (action == MBCS_STATE_VALID_16) {
                     int finalOffset = offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
                     c = unicodeCodeUnits[finalOffset];
@@ -774,7 +774,7 @@ class CharsetMBCS extends CharsetICU {
                     }
                 } else if (action == MBCS_STATE_VALID_DIRECT_20) {
                     /* output supplementary code point */
-                    c = (int)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
+                    c = MBCS_ENTRY_FINAL_VALUE(entry)+0x10000;
                 } else {
                     c = UConverterConstants.U_SENTINEL;
                 }
@@ -1137,7 +1137,7 @@ class CharsetMBCS extends CharsetICU {
     static final int MBCS_STATE_CHANGE_ONLY = MBCS_STATE_ILLEGAL + 1;
     
     static int MBCS_ENTRY_SET_STATE(int entry, int state) { 
-        return (int)(((entry)&0x80ffffff)|((int)(state)<<24L));
+        return (entry&0x80ffffff)|(state<<24L);
     }
 
     static int MBCS_ENTRY_STATE(int entry) {
@@ -1150,7 +1150,7 @@ class CharsetMBCS extends CharsetICU {
     }
 
     static int MBCS_ENTRY_FINAL(int state, int action, int value) {
-        return (int) (0x80000000 | ((int) (state) << 24L) | ((action) << 20L) | (value));
+        return 0x80000000 | (state << 24L) | (action << 20L) | value;
     }
 
     static boolean MBCS_ENTRY_IS_TRANSITION(int entry) {
@@ -1992,7 +1992,7 @@ class CharsetMBCS extends CharsetICU {
             unicodeCodeUnits = sharedData.mbcs.unicodeCodeUnits;
 
             /* get the converter state from UConverter */
-            offset = (int)toUnicodeStatus;
+            offset = toUnicodeStatus;
             byteIndex = toULength;
             bytes = toUBytesArray;
 
@@ -2055,7 +2055,7 @@ class CharsetMBCS extends CharsetICU {
                             if (MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
                                 /* output BMP code point */
                                 ++sourceArrayIndex;
-                                target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
+                                target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                                 if (offsets != null) {
                                     offsets.put(sourceIndex);
                                     sourceIndex = ++nextSourceIndex;
@@ -2116,7 +2116,7 @@ class CharsetMBCS extends CharsetICU {
                         }
                         byteIndex = 0;
                     } else if (c == 0xfffe) {
-                        if (isFallbackUsed() && (entry = (int)getFallback(sharedData.mbcs, offset)) != 0xfffe) {
+                        if (isFallbackUsed() && (entry = getFallback(sharedData.mbcs, offset)) != 0xfffe) {
                             /* output fallback BMP code point */
                             target.put((char)entry);
                             if (offsets != null) {
@@ -2130,7 +2130,7 @@ class CharsetMBCS extends CharsetICU {
                     }
                 } else if (action == MBCS_STATE_VALID_DIRECT_16) {
                     /* output BMP code point */
-                    target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
+                    target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                     if (offsets != null) {
                         offsets.put(sourceIndex);
                     }
@@ -2219,7 +2219,7 @@ class CharsetMBCS extends CharsetICU {
                 } else if (action == MBCS_STATE_FALLBACK_DIRECT_16) {
                     if (isFallbackUsed()) {
                         /* output BMP code point */
-                        target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
+                        target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                         if (offsets != null) {
                             offsets.put(sourceIndex);
                         }
@@ -2276,7 +2276,7 @@ class CharsetMBCS extends CharsetICU {
                     source.position(sourceArrayIndex);
                     byteIndex = toU(byteIndex, source, target, offsets, sourceIndex, flush, cr);
                     sourceArrayIndex = source.position();
-                    sourceIndex = nextSourceIndex += (int)(sourceArrayIndex - sourceBeginIndex);
+                    sourceIndex = nextSourceIndex += (sourceArrayIndex - sourceBeginIndex);
 
                     if (cr[0].isError() || cr[0].isOverflow()) {
                         /* not mappable or buffer overflow */
@@ -2344,7 +2344,7 @@ class CharsetMBCS extends CharsetICU {
                 /* test the most common case first */
                 if (MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
                     /* output BMP code point */
-                    target.put((char) MBCS_ENTRY_FINAL_VALUE_16(entry));
+                    target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                     --targetCapacity;
                     continue;
                 }
@@ -2357,7 +2357,7 @@ class CharsetMBCS extends CharsetICU {
                 if (action == MBCS_STATE_FALLBACK_DIRECT_16) {
                     if (isFallbackUsed()) {
                         /* output BMP code point */
-                        target.put((char) MBCS_ENTRY_FINAL_VALUE_16(entry));
+                        target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                         --targetCapacity;
                         continue;
                     }
@@ -2392,7 +2392,7 @@ class CharsetMBCS extends CharsetICU {
                     source.position(sourceArrayIndex);
                     toULength = toU((byte) 1, source, target, offsets, sourceIndex, flush, cr);
                     sourceArrayIndex = source.position();
-                    sourceIndex += 1 + (int) (sourceArrayIndex - lastSource);
+                    sourceIndex += 1 + (sourceArrayIndex - lastSource);
 
                     if (cr[0].isError()) {
                         /* not mappable or buffer overflow */
@@ -2474,7 +2474,7 @@ class CharsetMBCS extends CharsetICU {
                 /* test the most common case first */
                 if (MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
                     /* output BMP code point */
-                    target.put((char) MBCS_ENTRY_FINAL_VALUE_16(entry));
+                    target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                     if (offsets != null) {
                         offsets.put(sourceIndex);
                     }
@@ -2517,7 +2517,7 @@ class CharsetMBCS extends CharsetICU {
                 } else if (action == MBCS_STATE_FALLBACK_DIRECT_16) {
                     if (isFallbackUsed()) {
                         /* output BMP code point */
-                        target.put((char) MBCS_ENTRY_FINAL_VALUE_16(entry));
+                        target.put(MBCS_ENTRY_FINAL_VALUE_16(entry));
                         if (offsets != null) {
                             offsets.put(sourceIndex);
                         }
@@ -2546,7 +2546,7 @@ class CharsetMBCS extends CharsetICU {
                     source.position(sourceArrayIndex);
                     toULength = toU((byte) 1, source, target, offsets, sourceIndex, flush, cr);
                     sourceArrayIndex = source.position();
-                    sourceIndex += 1 + (int) (sourceArrayIndex - sourceBeginIndex);
+                    sourceIndex += 1 + (sourceArrayIndex - sourceBeginIndex);
 
                     if (cr[0].isError()) {
                         /* not mappable or buffer overflow */
@@ -2785,6 +2785,7 @@ class CharsetMBCS extends CharsetICU {
             preFromUFirstCP = UConverterConstants.U_SENTINEL;
         }
 
+        @SuppressWarnings("fallthrough")
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult[] cr = { CoderResult.UNDERFLOW };
             // if (!source.hasRemaining() && fromUChar32 == 0)
@@ -2845,7 +2846,7 @@ class CharsetMBCS extends CharsetICU {
                 c = fromUChar32;
 
                 if (outputType == MBCS_OUTPUT_2_SISO) {
-                    prevLength = (int) fromUnicodeStatus;
+                    prevLength = fromUnicodeStatus;
                     if (prevLength == 0) {
                         /* set the real value */
                         prevLength = 1;
@@ -3697,6 +3698,7 @@ class CharsetMBCS extends CharsetICU {
             return 0;
         }
 
+        @SuppressWarnings("fallthrough")
         private CoderResult writeFromU(int value, ByteBuffer target, IntBuffer offsets, int srcIndex) {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
 
@@ -3742,7 +3744,7 @@ class CharsetMBCS extends CharsetICU {
 
             /* with correct data we have length>0 */
 
-            if ((prevLength = (int) fromUnicodeStatus) != 0) {
+            if ((prevLength = fromUnicodeStatus) != 0) {
                 /* handle SI/SO stateful output */
                 byte shiftByte;
 
@@ -4484,7 +4486,7 @@ class CharsetMBCS extends CharsetICU {
             x.c = fromU(x.c, source, target, null, x.sourceIndex, x.nextSourceIndex, flush, cr);
             x.sourceArrayIndex = source.position();
             x.nextSourceIndex += x.sourceArrayIndex - sourceBegin;
-            x.prevLength = (int) fromUnicodeStatus;
+            x.prevLength = fromUnicodeStatus;
 
             if (cr[0].isError()) {
                 /* not mappable or buffer overflow */
@@ -4663,7 +4665,8 @@ class CharsetMBCS extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderMBCS(this);
     }
-    
+
+    @SuppressWarnings("fallthrough")
     void MBCSGetFilteredUnicodeSetForUnicode(UConverterSharedData data, UnicodeSet setFillIn, int which, int filter){
         UConverterMBCSTable mbcsTable;
         char[] table;
@@ -4749,7 +4752,7 @@ class CharsetMBCS extends CharsetICU {
                         st3+=table[stage2*2 + ++st2];
                         if(st3!=0){
                         //if((st3=table[stage2+st2])!=0){
-                            stage3 = st3Multiplier*16*(int)(st3&UConverterConstants.UNSIGNED_SHORT_MASK);
+                            stage3 = st3Multiplier*16*(st3&UConverterConstants.UNSIGNED_SHORT_MASK);
                             
                             /* get the roundtrip flags for the stage 3 block */
                             st3>>=16;
@@ -4928,7 +4931,7 @@ class CharsetMBCS extends CharsetICU {
         stage3b = (IntBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3B_INDEX,int.class );
         
         stage1Length = cx.asIntBuffer().get(EXT_FROM_U_STAGE_1_LENGTH);
-        useFallback =(boolean)(which==ROUNDTRIP_AND_FALLBACK_SET);
+        useFallback = (which==ROUNDTRIP_AND_FALLBACK_SET);
         
         c = 0;
         if(filter == UCNV_SET_FILTER_2022_CN) {
@@ -4949,13 +4952,13 @@ class CharsetMBCS extends CharsetICU {
                     if(st3!= 0){
                         ps3 = st3;
                         do {
-                            value = stage3b.get((int)(UConverterConstants.UNSIGNED_SHORT_MASK&stage3.get(ps3++)));
+                            value = stage3b.get(UConverterConstants.UNSIGNED_SHORT_MASK&stage3.get(ps3++));
                             if(value==0){
                                 /* no mapping do nothing */
                             }else if (FROM_U_IS_PARTIAL(value)){
                                 length = 0;
                                 length=UTF16.append(s, length, c);
-                                extGetUnicodeSetString(cx,setFillIn,useFallback,minLength,c,s,length,(int)FROM_U_GET_PARTIAL_INDEX(value));
+                                extGetUnicodeSetString(cx,setFillIn,useFallback,minLength,c,s,length,FROM_U_GET_PARTIAL_INDEX(value));
                             } else if ((useFallback ?  (value&FROM_U_RESERVED_MASK)==0 :((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))== FROM_U_ROUNDTRIP_FLAG)) && 
                                     FROM_U_GET_LENGTH(value)>=minLength){
                                 

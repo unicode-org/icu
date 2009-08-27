@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -202,7 +202,7 @@ public final class UCaseProps {
             value=exceptions[excOffset++];
             value=(value<<16)|exceptions[excOffset];
         }
-        return (long)value|((long)excOffset<<32);
+        return value |((long)excOffset<<32);
     }
 
     /* same as getSlotValueAndOffset() but does not return the slot offset */

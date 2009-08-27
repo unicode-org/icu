@@ -2388,7 +2388,7 @@ public class Bidi {
         cell = impTab[oldStateSeq][_prop];
         levState.state = GetState(cell);        /* isolate the new state */
         actionSeq = impAct[GetAction(cell)];    /* isolate the action */
-        addLevel = (byte)impTab[levState.state][IMPTABLEVELS_RES];
+        addLevel = impTab[levState.state][IMPTABLEVELS_RES];
 
         if (actionSeq != 0) {
             switch (actionSeq) {
@@ -2412,7 +2412,7 @@ public class Bidi {
                     /* nothing, just clean up */
                     levState.lastStrongRTL = -1;
                     /* check if we have a pending conditional segment */
-                    level = (byte)impTab[oldStateSeq][IMPTABLEVELS_RES];
+                    level = impTab[oldStateSeq][IMPTABLEVELS_RES];
                     if ((level & 1) != 0 && levState.startON > 0) { /* after ON */
                         start = levState.startON;   /* reset to basic run level */
                     }
@@ -2515,7 +2515,7 @@ public class Bidi {
                 break;
 
             case 11:                    /* L after L+ON+EN/AN/ON */
-                level = (byte)levState.runLevel;
+                level = levState.runLevel;
                 for (k = start0-1; k >= levState.startON; k--) {
                     if (levels[k] == level+3) {
                         while (levels[k] == level+3) {
@@ -2582,7 +2582,7 @@ public class Bidi {
         levState.runLevel = levels[start];
         levState.impTab = impTabPair.imptab[levState.runLevel & 1];
         levState.impAct = impTabPair.impact[levState.runLevel & 1];
-        processPropertySeq(levState, (short)sor, start, start);
+        processPropertySeq(levState, sor, start, start);
         /* initialize for property state table */
         if (dirProps[start] == NSM) {
             stateImp = (short)(1 + sor);
@@ -2658,7 +2658,7 @@ public class Bidi {
             }
         }
         /* flush possible pending sequence, e.g. ON */
-        processPropertySeq(levState, (short)eor, limit, limit);
+        processPropertySeq(levState, eor, limit, limit);
     }
 
     /* perform (L1) and (X9) ---------------------------------------------------- */

@@ -444,7 +444,7 @@ class RBBISetBuilder {
 
         System.out.print("\n\n Nonoverlapping Ranges ...\n");
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            System.out.print(" " + rlRange.fNum + "   " + (int)rlRange.fStartChar + "-" + (int)rlRange.fEndChar);
+            System.out.print(" " + rlRange.fNum + "   " + rlRange.fStartChar + "-" + rlRange.fEndChar);
 
             for (i=0; i<rlRange.fIncludesSets.size(); i++) {
                 RBBINode       usetNode    = rlRange.fIncludesSets.get(i);
@@ -506,9 +506,9 @@ class RBBISetBuilder {
                         if (i++ % 5 == 0) {
                             System.out.print("\n    ");
                         }
-                        RBBINode.printHex((int)tRange.fStartChar, -1);
+                        RBBINode.printHex(tRange.fStartChar, -1);
                         System.out.print("-");
-                        RBBINode.printHex((int)tRange.fEndChar, 0);
+                        RBBINode.printHex(tRange.fEndChar, 0);
                     }
                 }
                 System.out.print("\n");
@@ -535,7 +535,7 @@ class RBBISetBuilder {
             RBBINode        varRef;
             String          setName;
 
-            usetNode = (RBBINode )fRB.fUSetNodes.get(i);
+            usetNode = fRB.fUSetNodes.get(i);
 
             //System.out.print(" " + i + "   ");
             RBBINode.printInt(2, i);

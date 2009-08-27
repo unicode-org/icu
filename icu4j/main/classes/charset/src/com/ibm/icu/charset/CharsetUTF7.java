@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -382,7 +382,7 @@ class CharsetUTF7 extends CharsetICU {
                                     /* illegal:  + immediately followed by something other than base64 minus sign */
                                     /* include the plus sign in the reported sequence */
                                     --sourceIndex;
-                                    toUBytesArray[0]=(byte)PLUS;
+                                    toUBytesArray[0]=PLUS;
                                     toUBytesArray[1]=(byte)b;
                                     byteIndex=2;
                                     cr=CoderResult.malformedForLength(sourceArrayIndex);
@@ -402,7 +402,7 @@ class CharsetUTF7 extends CharsetICU {
                                     // illegal: & immediately followed by something other than base64 or minus sign
                                     // include the ampersand in the reported sequence
                                     --sourceIndex;
-                                    toUBytesArray[0]=(byte)AMPERSAND;
+                                    toUBytesArray[0]=AMPERSAND;
                                     toUBytesArray[1]=(byte)b;
                                     byteIndex=2;
                                 }
@@ -426,7 +426,7 @@ class CharsetUTF7 extends CharsetICU {
                     if (base64Counter==-1) {
                         /* & at the very end of the input */
                         /* make the ampersand the reported sequence */
-                        toUBytesArray[0]=(byte)AMPERSAND;
+                        toUBytesArray[0]=AMPERSAND;
                         byteIndex=1;
                     }
                     /* else if (base64Counter!=-1) byteIndex remains 0 because ther is no particular byte sequence */
@@ -448,7 +448,7 @@ class CharsetUTF7 extends CharsetICU {
                 }
             }
             /* set the converter state */
-            toUnicodeStatus=((int)inDirectMode<<24 | (int)(((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (int)bits);
+            toUnicodeStatus=(inDirectMode<<24 | (((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (int)bits);
             toULength=byteIndex;
    
             return cr;
@@ -509,9 +509,9 @@ class CharsetUTF7 extends CharsetICU {
                     } else if ((!useIMAP && c==PLUS) || (useIMAP && c==AMPERSAND)) {
                         /* IMAP: output &- for & */
                         /* UTF-7: output +- for + */
-                        target.put(useIMAP ? (byte)AMPERSAND : (byte)PLUS);
+                        target.put(useIMAP ? AMPERSAND : PLUS);
                         if (target.hasRemaining()) {
-                            target.put((byte)MINUS);
+                            target.put(MINUS);
                             if (offsets != null) {
                                 offsets.put(sourceIndex);
                                 offsets.put(sourceIndex++);
@@ -530,7 +530,7 @@ class CharsetUTF7 extends CharsetICU {
                     } else {
                         /* un-read this character and switch to unicode mode */
                         source.position(source.position() - 1);
-                        target.put(useIMAP ? (byte)AMPERSAND : (byte)PLUS);
+                        target.put(useIMAP ? AMPERSAND : PLUS);
                         if (offsets != null) {
                             offsets.put(sourceIndex);
                         }
@@ -568,7 +568,7 @@ class CharsetUTF7 extends CharsetICU {
                             if (FROM_BASE_64[c]!=-1 || useIMAP) {
                                 /* need to terminate with a minus */
                                 if (target.hasRemaining()) {
-                                    target.put((byte)MINUS);
+                                    target.put(MINUS);
                                     if (offsets!=null) {
                                         offsets.put(sourceIndex-1);
                                     }
@@ -721,7 +721,7 @@ class CharsetUTF7 extends CharsetICU {
                     if (useIMAP) {
                         /* IMAP: need to terminate with a minus */
                         if (target.hasRemaining()) {
-                            target.put((byte)MINUS);
+                            target.put(MINUS);
                             if (offsets!=null) {
                                 offsets.put(sourceIndex - 1);
                             }
@@ -735,7 +735,7 @@ class CharsetUTF7 extends CharsetICU {
                 fromUnicodeStatus=((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=TRUE */
             } else {
                 /* set the converter state back */
-                fromUnicodeStatus=((status&0xf0000000) | ((int)inDirectMode<<24) | (int)(((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | ((int)bits));
+                fromUnicodeStatus=((status&0xf0000000) | (inDirectMode<<24) | (((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | ((int)bits));
             }
             
             return cr;

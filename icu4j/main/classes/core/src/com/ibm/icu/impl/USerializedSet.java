@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2002-2008, International Business Machines
+ *   Copyright (C) 2002-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
 */
@@ -157,7 +157,7 @@ public final class USerializedSet {
             int i;
             /* find c in the BMP part */
             for(i=0; i<bmpLength && (char)c>=array[i]; ++i) {}
-            return (boolean)((i&1) != 0);
+            return ((i&1) != 0);
         } else {
             int i;
             /* find c in the supplementary part */
@@ -167,7 +167,7 @@ public final class USerializedSet {
                 i+=2) {}
         
             /* count pairs of 16-bit units even per BMP and check if the number of pairs is odd */
-            return (boolean)(((i+bmpLength)&2)!=0);
+            return (((i+bmpLength)&2)!=0);
         }
     }
 

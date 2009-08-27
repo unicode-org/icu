@@ -181,7 +181,7 @@ class CharsetISO2022 extends CharsetICU {
      * corresponding to SO, SI, and ESC.
      */
     private static boolean IS_2022_CONTROL(int c) { 
-        return (((c)<0x20) && ((((int)1<<c) & 0x0800c000) != 0));
+        return (c<0x20) && (((1<<c) & 0x0800c000) != 0);
     }
     
     /*
@@ -257,7 +257,7 @@ class CharsetISO2022 extends CharsetICU {
          int returnValue;
          UConverterSharedData tempSharedData = myConverterData.currentConverter.sharedData;
          myConverterData.currentConverter.sharedData = sharedData;
-         returnValue = ((CharsetDecoderMBCS)myConverterData.currentDecoder).simpleGetNextUChar(source, useFallback);
+         returnValue = myConverterData.currentDecoder.simpleGetNextUChar(source, useFallback);
          myConverterData.currentConverter.sharedData = tempSharedData;
          
          return returnValue;
@@ -525,6 +525,7 @@ class CharsetISO2022 extends CharsetICU {
     };
     
     /* runs through a state machine to determine the escape sequence - codepage correspondence */
+    @SuppressWarnings("fallthrough")
     private CoderResult changeState_2022(CharsetDecoderICU decoder, ByteBuffer source, int var) {
         CoderResult err = CoderResult.UNDERFLOW;
         boolean DONE = false;
@@ -839,6 +840,8 @@ class CharsetISO2022 extends CharsetICU {
             bytes[0] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & c1);
             bytes[1] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & c2);
         }
+
+        @SuppressWarnings("fallthrough")
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             boolean gotoGetTrail = false;
             boolean gotoEscape = false;
@@ -1098,7 +1101,8 @@ class CharsetISO2022 extends CharsetICU {
             super.implReset();
             myConverterData.reset();
         }
-        
+
+        @SuppressWarnings("fallthrough")
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] tempBuf = new byte[3];
@@ -1269,12 +1273,12 @@ class CharsetISO2022 extends CharsetICU {
                         targetUniChar -= 0x0010000;
                         target.put((char)(0xd800+(char)(targetUniChar>>10)));
                         if (offsets != null) {
-                            offsets.array()[target.position()-1] = (int)(source.position() - (mySourceChar <= 0xff ? 1 : 2));
+                            offsets.array()[target.position()-1] = source.position() - (mySourceChar <= 0xff ? 1 : 2);
                         }
                         if (target.hasRemaining()) {
                             target.put((char)(0xdc00+(char)(targetUniChar&0x3ff)));
                             if (offsets != null) {
-                                offsets.array()[target.position()-1] = (int)(source.position() - (mySourceChar <= 0xff ? 1 : 2));
+                                offsets.array()[target.position()-1] = source.position() - (mySourceChar <= 0xff ? 1 : 2);
                             }
                         } else {
                             charErrorBufferArray[charErrorBufferLength++] = (char)(0xdc00+(char)(targetUniChar&0x3ff));
@@ -1469,7 +1473,7 @@ class CharsetISO2022 extends CharsetICU {
                          * converter, can handle truncated and illegal input etc.
                          */
                         if (toULength > 0) {
-                            cnv.toUBytesArray = (byte[])(toUBytesArray.clone());
+                            cnv.toUBytesArray = toUBytesArray.clone();
                         }
                         cnv.toULength = toULength;
                         
@@ -1501,13 +1505,13 @@ class CharsetISO2022 extends CharsetICU {
                         
                         /* copy input/error/overflow buffers */
                         if (cnv.toULength > 0) {
-                            toUBytesArray = (byte[])(cnv.toUBytesArray.clone());
+                            toUBytesArray = cnv.toUBytesArray.clone();
                         }
                         toULength = cnv.toULength;
                         
                         if (err.isOverflow()) {
                             if (cnv.charErrorBufferLength > 0) {
-                                charErrorBufferArray = (char[])(cnv.charErrorBufferArray.clone());
+                                charErrorBufferArray = cnv.charErrorBufferArray.clone();
                             }
                             charErrorBufferLength = cnv.charErrorBufferLength;
                             cnv.charErrorBufferLength = 0;
@@ -2607,7 +2611,7 @@ class CharsetISO2022 extends CharsetICU {
                 
                 if (err.isOverflow()) {
                     if (myConverterData.currentEncoder.errorBufferLength > 0) {
-                        encoder.errorBuffer = (byte[])(myConverterData.currentEncoder.errorBuffer.clone());
+                        encoder.errorBuffer = myConverterData.currentEncoder.errorBuffer.clone();
                     }
                     encoder.errorBufferLength = myConverterData.currentEncoder.errorBufferLength;
                     myConverterData.currentEncoder.errorBufferLength = 0;
@@ -2626,7 +2630,7 @@ class CharsetISO2022 extends CharsetICU {
             
             if (err.isOverflow()) {
                 if (myConverterData.currentEncoder.errorBufferLength > 0) {
-                    errorBuffer = (byte[])(myConverterData.currentEncoder.errorBuffer.clone());
+                    errorBuffer = myConverterData.currentEncoder.errorBuffer.clone();
                 }
                 errorBufferLength = myConverterData.currentEncoder.errorBufferLength;
                 myConverterData.currentEncoder.errorBufferLength = 0;

@@ -163,7 +163,7 @@ class CharsetHZ extends CharsetICU {
                             } else if (trailIsOk) {
                                 /* report a single illegal byte and continue with the following DBCS starter byte */
                                 source.position(source.position() - 1);
-                                mySourceChar = (int)leadByte;
+                                mySourceChar = leadByte;
                             } else {
                                 /* report a pair of illegal bytes if the second byte is not a DBCS starter */
                                 /* add another bit so that the code below writes 2 bytes in case of error */

@@ -828,8 +828,8 @@ public class DateIntervalFormat extends UFormat {
      * Initialize interval patterns locale to this formatter.
      */
     private void initializePattern() { 
-        String fullPattern = ((SimpleDateFormat)fDateFormat).toPattern();
-        ULocale locale = ((SimpleDateFormat)fDateFormat).getLocale();
+        String fullPattern = fDateFormat.toPattern();
+        ULocale locale = fDateFormat.getLocale();
         String key;
         if ( fSkeleton != null ) {
             key = locale.toString() + "+" + fullPattern + "+" + fSkeleton;
@@ -1501,8 +1501,8 @@ public class DateIntervalFormat extends UFormat {
                     // for skeleton "M+", the pattern is "...L..." 
                     skeletonChar = 'M';
                 }
-                int fieldCount = bestMatchSkeletonFieldWidth[(int)(skeletonChar - PATTERN_CHAR_BASE)];
-                int inputFieldCount = inputSkeletonFieldWidth[(int)(skeletonChar - PATTERN_CHAR_BASE)];
+                int fieldCount = bestMatchSkeletonFieldWidth[skeletonChar - PATTERN_CHAR_BASE];
+                int inputFieldCount = inputSkeletonFieldWidth[skeletonChar - PATTERN_CHAR_BASE];
                 if ( fieldCount == count && inputFieldCount > fieldCount ) {
                     count = inputFieldCount - fieldCount;
                     for ( int j = 0; j < count; ++j ) {
@@ -1537,8 +1537,8 @@ public class DateIntervalFormat extends UFormat {
                 // for skeleton "M+", the pattern is "...L..." 
                 skeletonChar = 'M';
             }
-            int fieldCount = bestMatchSkeletonFieldWidth[(int)(skeletonChar - PATTERN_CHAR_BASE)];
-            int inputFieldCount = inputSkeletonFieldWidth[(int)(skeletonChar - PATTERN_CHAR_BASE)];
+            int fieldCount = bestMatchSkeletonFieldWidth[skeletonChar - PATTERN_CHAR_BASE];
+            int inputFieldCount = inputSkeletonFieldWidth[skeletonChar - PATTERN_CHAR_BASE];
             if ( fieldCount == count && inputFieldCount > fieldCount ) {
                 count = inputFieldCount - fieldCount;
                 for ( int j = 0; j < count; ++j ) {
@@ -1568,8 +1568,7 @@ public class DateIntervalFormat extends UFormat {
     {
 
         PatternInfo  timeItvPtnInfo = 
-          (PatternInfo)intervalPatterns.get(
-              DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field]);
+            intervalPatterns.get(DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field]);
         if ( timeItvPtnInfo != null ) {
             String timeIntervalPattern = timeItvPtnInfo.getFirstPart() + 
                                          timeItvPtnInfo.getSecondPart();

@@ -23,8 +23,8 @@
         <echo message="source:         ${javac.source}"/>
         <echo message="target:         ${javac.target}"/>
         <echo message="debug:          ${javac.debug}"/>
-        <echo message="deprecation:    ${javac.deprecation}"/>
         <echo message="encoding:       ${javac.encoding}"/>
+        <echo message="compiler arg:   ${javac.compilerarg}"/>
         <echo message="----------------------------------------------------"/>
 
         <mkdir dir="${bin.dir}"/>
@@ -34,8 +34,9 @@
             classpathref="javac.classpathref"
             source="${javac.source}"
             target="${javac.target}"
-            debug="${javac.debug}"
-            deprecation="${javac.deprecation}"/>
+            debug="${javac.debug}">
+            <compilerarg value="${javac.compilerarg}"/>
+        </javac>
     </target>
 
     <target name="@copy">

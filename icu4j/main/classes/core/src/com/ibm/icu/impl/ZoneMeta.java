@@ -275,7 +275,7 @@ public final class ZoneMeta {
                         if (alias.equals(ids[i])) {
                             continue;
                         }
-                        tmpinfo = (String[])m.get(alias);
+                        tmpinfo = m.get(alias);
                         if (tmpinfo != null) {
                             break;
                         }
@@ -509,7 +509,7 @@ public final class ZoneMeta {
             return -1;
         }
         for (;;) {
-            mid = (int)((start + limit) / 2);
+            mid = (start + limit) / 2;
             if (lastMid == mid) {   /* Have we moved? */
                 break;  /* We haven't moved, and it wasn't found. */
             }

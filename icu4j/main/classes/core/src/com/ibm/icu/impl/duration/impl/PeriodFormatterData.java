@@ -134,6 +134,7 @@ public class PeriodFormatterData {
    * @param sb the string builder to which to append the text
    * @return true if will require skip marker
    */
+  @SuppressWarnings("fallthrough")
   public boolean appendUnit(TimeUnit unit, int count, int cv, 
                             int uv, boolean useCountSep, 
                             boolean useDigitPrefix, boolean multiple, 
@@ -525,7 +526,7 @@ public class PeriodFormatterData {
             // if half-floor is 1/2, use singular
             // else if half-floor is not integral, use plural
             // else do more analysis
-            int v = (int)(count / 500);
+            int v = count / 500;
             if (v == 1) {
               if (dr.halfNames != null && dr.halfNames[unit.ordinal()] != null) {
                 return FORM_HALF_SPELLED;
@@ -546,7 +547,7 @@ public class PeriodFormatterData {
           } break;
 
           case EFractionHandling.FPAUCAL: {
-            int v = (int)(count / 500);
+            int v = count / 500;
             if (v == 1 || v == 3) {
               return FORM_PAUCAL;
             }

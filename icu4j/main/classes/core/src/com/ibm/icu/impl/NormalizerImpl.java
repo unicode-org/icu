@@ -87,11 +87,11 @@ public final class NormalizerImpl {
     //private static final int EXTRA_JAMO_T=EXTRA_SURROGATE_TOP+3;
     
     /* norm32 value constants using >16 bits */
-    private static final long  MIN_SPECIAL    =  (long)(0xfc000000 & UNSIGNED_INT_MASK);
-    private static final long  SURROGATES_TOP =  (long)(0xfff00000 & UNSIGNED_INT_MASK);
-    private static final long  MIN_HANGUL     =  (long)(0xfff00000 & UNSIGNED_INT_MASK);
-    //private static final long  MIN_JAMO_V     =  (long)(0xfff20000 & UNSIGNED_INT_MASK);
-    private static final long  JAMO_V_TOP     =  (long)(0xfff30000 & UNSIGNED_INT_MASK);
+    private static final long  MIN_SPECIAL    =  0xfc000000 & UNSIGNED_INT_MASK;
+    private static final long  SURROGATES_TOP =  0xfff00000 & UNSIGNED_INT_MASK;
+    private static final long  MIN_HANGUL     =  0xfff00000 & UNSIGNED_INT_MASK;
+    //private static final long  MIN_JAMO_V     =  0xfff20000 & UNSIGNED_INT_MASK;
+    private static final long  JAMO_V_TOP     =  0xfff30000 & UNSIGNED_INT_MASK;
     
     
     /* indexes[] value names */
@@ -131,7 +131,7 @@ public final class NormalizerImpl {
     private static final int AUX_COMP_EX_SHIFT           = 10;
     private static final int AUX_NFC_SKIPPABLE_F_SHIFT = 12;
     
-    private static final int AUX_MAX_FNC          =   ((int)1<<AUX_COMP_EX_SHIFT);
+    private static final int AUX_MAX_FNC          =   1<<AUX_COMP_EX_SHIFT;
     private static final int AUX_UNSAFE_MASK      =   (int)((1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK);
     private static final int AUX_FNC_MASK         =   (int)((AUX_MAX_FNC-1) & UNSIGNED_INT_MASK);
     private static final int AUX_COMP_EX_MASK     =   (int)((1<<AUX_COMP_EX_SHIFT) & UNSIGNED_INT_MASK);
@@ -213,8 +213,8 @@ public final class NormalizerImpl {
         * @return data offset or 0 if there is no data for the lead surrogate
         */
         /* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
-        public int getFoldingOffset(int value){
-            return (int)(value &AUX_FNC_MASK)<<SURROGATE_BLOCK_BITS;
+        public int getFoldingOffset(int value) {
+            return (value & AUX_FNC_MASK) << SURROGATE_BLOCK_BITS;
         }
     }
          
@@ -857,9 +857,9 @@ public final class NormalizerImpl {
                 if(i==length) {
                     return true;
                 } else if((c=src[i++])<MIN_WITH_LEAD_CC) {
-                    prevCC=(int)-c;
+                    prevCC = -c;
                 } else if((fcd16=getFCD16(c))==0) {
-                    prevCC=0;
+                    prevCC = 0;
                 } else {
                     break;
                 }
@@ -892,18 +892,16 @@ public final class NormalizerImpl {
             //
     
             // check the combining order 
-            cc=(int)(fcd16>>8);
+            cc = fcd16>>8;
             if(cc!=0) {
                 if(prevCC<0) {
                     // the previous character was <_NORM_MIN_WITH_LEAD_CC, 
                     // we need to get its trail cc 
                     //
-                    if(!nx_contains(nx, (int)-prevCC)) {
-                        prevCC=(int)(FCDTrieImpl.fcdTrie.getBMPValue(
-                                             (char)-prevCC)&0xff
-                                             ); 
+                    if(!nx_contains(nx, -prevCC)) {
+                        prevCC = FCDTrieImpl.fcdTrie.getBMPValue((char)-prevCC) & 0xff;
                     } else {
-                        prevCC=0; /* excluded: fcd16==0 */
+                        prevCC = 0; /* excluded: fcd16==0 */
                     }
                                       
                 }
@@ -912,7 +910,7 @@ public final class NormalizerImpl {
                     return false;
                 }
             }
-            prevCC=(int)(fcd16&0xff);
+            prevCC = fcd16 & 0xff;
         }
     }
     
@@ -1053,11 +1051,11 @@ public final class NormalizerImpl {
     
             // initialize 
             if(!compat) {
-                minNoMaybe=(int)indexes[INDEX_MIN_NFD_NO_MAYBE];
-                qcMask=QC_NFD;
+                minNoMaybe = indexes[INDEX_MIN_NFD_NO_MAYBE];
+                qcMask = QC_NFD;
             } else {
-                minNoMaybe=(int)indexes[INDEX_MIN_NFKD_NO_MAYBE];
-                qcMask=QC_NFKD;
+                minNoMaybe = indexes[INDEX_MIN_NFKD_NO_MAYBE];
+                qcMask = QC_NFKD;
             }
     
             if(c<minNoMaybe) {
@@ -1176,7 +1174,7 @@ public final class NormalizerImpl {
 
             /* copy these code units all at once */
             if(srcIndex!=prevSrc) {
-                length=(int)(srcIndex-prevSrc);
+                length = srcIndex - prevSrc;
                 if((destIndex+length)<=destLimit) {
                     System.arraycopy(src,prevSrc,dest,destIndex,length);
                 }
@@ -2028,7 +2026,7 @@ public final class NormalizerImpl {
     
             /* copy these code units all at once */
             if(srcIndex!=prevSrc) {
-                length=(int)(srcIndex-prevSrc);
+                length = srcIndex - prevSrc;
                 if((destIndex+length)<=destLimit) {
                     System.arraycopy(src,prevSrc,dest,destIndex,length);
                 }
@@ -2446,9 +2444,9 @@ public final class NormalizerImpl {
                 if(srcStart==srcLimit) {
                     break;
                 } else if((c=src[srcStart])<MIN_WITH_LEAD_CC) {
-                    prevCC=(int)-c;
+                    prevCC = -c;
                 } else if((fcd16=getFCD16(c))==0) {
-                    prevCC=0;
+                    prevCC = 0;
                 } else {
                     break;
                 }
@@ -2467,7 +2465,7 @@ public final class NormalizerImpl {
     
             /* copy these code units all at once */
             if(srcStart!=prevSrc) {
-                length=(int)(srcStart-prevSrc);
+                length = srcStart - prevSrc;
                 if((destIndex+length)<=destLimit) {
                     System.arraycopy(src,prevSrc,dest,destIndex,length);
                 }
@@ -2479,10 +2477,10 @@ public final class NormalizerImpl {
                 if(prevCC<0) {
                     /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we 
                      * need to get its trail cc */
-                    if(!nx_contains(nx, (int)-prevCC)) {
-                        prevCC=(int)(getFCD16((int)-prevCC)&0xff);
+                    if(!nx_contains(nx, -prevCC)) {
+                        prevCC = getFCD16(-prevCC) & 0xff;
                     } else {
-                        prevCC=0; /* excluded: fcd16==0 */
+                        prevCC = 0; /* excluded: fcd16==0 */
                     }
                     /*
                      * set a pointer to this below-U+0300 character;
@@ -2532,13 +2530,13 @@ public final class NormalizerImpl {
                 fcd16=0; /* excluded: fcd16==0 */
             }
             /* check the combining order, get the lead cc */
-            cc=(int)(fcd16>>8);
+            cc = fcd16 >> 8;
             if(cc==0 || cc>=prevCC) {
                 /* the order is ok */
                 if(cc==0) {
                     decompStart=prevSrc;
                 }
-                prevCC=(int)(fcd16&0xff);
+                prevCC = fcd16 & 0xff;
     
                 /* just append (c, c2) */
                 length= c2==0 ? 1 : 2;
@@ -2556,7 +2554,7 @@ public final class NormalizerImpl {
                  * is now going to be decomposed;
                  * prevSrc is set to after what was copied
                  */
-                destIndex-=(int)(prevSrc-decompStart);
+                destIndex -= (prevSrc - decompStart);
     
                 /*
                  * find the part of the source that needs to be decomposed;
@@ -2590,7 +2588,7 @@ public final class NormalizerImpl {
     public static boolean isFullCompositionExclusion(int c) {
         if(isFormatVersion_2_1) {
             int aux =AuxTrieImpl.auxTrie.getCodePointValue(c);
-            return (boolean)((aux & AUX_COMP_EX_MASK)!=0);
+            return (aux & AUX_COMP_EX_MASK) != 0;
         } else {
             return false;
         }
@@ -2599,7 +2597,7 @@ public final class NormalizerImpl {
     public static boolean isCanonSafeStart(int c) {
         if(isFormatVersion_2_1) {
             int aux = AuxTrieImpl.auxTrie.getCodePointValue(c);
-            return (boolean)((aux & AUX_UNSAFE_MASK)==0);
+            return (aux & AUX_UNSAFE_MASK) == 0;
         } else {
             return false;
         }
@@ -2710,7 +2708,7 @@ public final class NormalizerImpl {
                         //i|=((int)h & 0x1f00)<<8; /* add high bits from high(c) */
                         int temp = ((int)h & 0x1f00)<<8;
                         i|=temp; /* add high bits from high(c) */
-                        fillSet.setToOne((int)i);
+                        fillSet.setToOne(i);
                         return true;
                     }
                 }
@@ -2997,7 +2995,7 @@ public final class NormalizerImpl {
         
         long norm32;
         int length=0;
-        norm32 = (long) ((UNSIGNED_INT_MASK) & NormTrieImpl.normTrie.getCodePointValue(c));
+        norm32 = UNSIGNED_INT_MASK & NormTrieImpl.normTrie.getCodePointValue(c);
         if((norm32 & QC_NFD)!=0) {
             if(isNorm32HangulOrJamo(norm32)) {
                 /* Hangul syllable: decompose algorithmically */
@@ -3085,15 +3083,15 @@ public final class NormalizerImpl {
         while ((i+offset1<=s1.length() && j+offset2<=s2.length())) {
             if ((cmp!=0) || (s1.charAt(i) != s2.charAt(j))) {
                 if(i>0 && j>0 && 
-                   (UTF16.isLeadSurrogate((char)s1.charAt(i-1)) ||
-                    UTF16.isLeadSurrogate((char)s2.charAt(j-1)))) {
+                   (UTF16.isLeadSurrogate(s1.charAt(i-1)) ||
+                    UTF16.isLeadSurrogate(s2.charAt(j-1)))) {
                     // Current codepoint may be the low surrogate pair.
                     return cmpEquivFold(s1.toCharArray(),i-1,s1.length(),
                             s2.toCharArray(),j-1,s2.length(),
                             options);
                 }
-                else if (UTF16.isLeadSurrogate((char)s1.charAt(i))||
-                         UTF16.isLeadSurrogate((char)s2.charAt(j))) {
+                else if (UTF16.isLeadSurrogate(s1.charAt(i))||
+                         UTF16.isLeadSurrogate(s2.charAt(j))) {
                     return cmpEquivFold(s1.toCharArray(),i,s1.length(),
                             s2.toCharArray(),j,s2.length(),
                             options);

@@ -46,7 +46,7 @@ public class PluralRulesLoader {
         ULocale[] locales = new ULocale[keys.size()];
         int n = 0;
         for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
-            locales[n++] = ULocale.createCanonical((String) iter.next());
+            locales[n++] = ULocale.createCanonical(iter.next());
         }
         return locales;
     }
@@ -66,7 +66,7 @@ public class PluralRulesLoader {
             return ULocale.ROOT; // ultimate fallback
         }
 
-        ULocale result = (ULocale) getRulesIdToEquivalentULocaleMap().get(
+        ULocale result = getRulesIdToEquivalentULocaleMap().get(
                 rulesId);
         if (result == null) {
             return ULocale.ROOT; // ultimate fallback

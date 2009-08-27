@@ -383,7 +383,7 @@ class TransliteratorIDParser {
 
         // Construct canonical ID
         for (int i=0; i<list.size(); ++i) {
-            SingleID single = (SingleID) list.elementAt(i);
+            SingleID single = list.elementAt(i);
             canonID.append(single.canonID);
             if (i != (list.size()-1)) {
                 canonID.append(ID_DELIM);

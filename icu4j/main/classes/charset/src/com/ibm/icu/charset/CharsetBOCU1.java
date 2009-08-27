@@ -481,7 +481,8 @@ class CharsetBOCU1 extends CharsetICU {
             LoopAfterTrail = true;
             return regularLoop;
         }
-        
+
+        @SuppressWarnings("fallthrough")
         private int regularLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             if(!LoopAfterTrail){
                 /*restore real values*/
@@ -1007,9 +1008,9 @@ class CharsetBOCU1 extends CharsetICU {
                     }
                 } else {
                     /* output surrogate pair */
-                    target.put((char)UTF16.getLeadSurrogate(c));
+                    target.put(UTF16.getLeadSurrogate(c));
                     if(target.hasRemaining()) {
-                        target.put((char)UTF16.getTrailSurrogate(c));
+                        target.put(UTF16.getTrailSurrogate(c));
                         if(offsets!=null){
                             offsets.put(sourceIndex);
                             offsets.put(sourceIndex);

@@ -982,8 +982,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * the start and end ranges the same for consistency.
      */
     private void decodeStartRule() {
-
-        useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false  );
+        useDaylight = (startDay != 0) && (endDay != 0);
         if (useDaylight && dst == 0) {
             dst = Grego.MILLIS_PER_DAY;
         }
@@ -1001,11 +1000,11 @@ public class SimpleTimeZone extends BasicTimeZone {
                 if (startDayOfWeek > 0) {
                     startMode = DOW_IN_MONTH_MODE;
                 } else {
-                    startDayOfWeek = (int)-startDayOfWeek;
+                    startDayOfWeek = -startDayOfWeek;
                     if (startDay > 0) {
                         startMode = DOW_GE_DOM_MODE;
                     } else {
-                        startDay = (int)-startDay;
+                        startDay = -startDay;
                         startMode = DOW_LE_DOM_MODE;
                     }
                 }
@@ -1029,7 +1028,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @see #decodeStartRule
      */
     private void decodeEndRule() {
-        useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false);
+        useDaylight = (startDay != 0) && (endDay != 0);
         if (useDaylight && dst == 0) {
             dst = Grego.MILLIS_PER_DAY;
         }
@@ -1047,11 +1046,11 @@ public class SimpleTimeZone extends BasicTimeZone {
                 if (endDayOfWeek > 0) {
                     endMode = DOW_IN_MONTH_MODE;
                 } else {
-                    endDayOfWeek = (int)-endDayOfWeek;
+                    endDayOfWeek = -endDayOfWeek;
                     if (endDay > 0) {
                         endMode = DOW_GE_DOM_MODE;
                     } else {
-                        endDay = (int)-endDay;
+                        endDay = -endDay;
                         endMode = DOW_LE_DOM_MODE;
                     }
                 }
@@ -1115,24 +1114,24 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 3.6
      */
     public int hashCode(){
-        int ret = (int)( super.hashCode() +
-                                         raw ^ (raw>>>8) +
-                                         (useDaylight?0:1));
+        int ret = super.hashCode()
+                    + raw ^ (raw >>> 8)
+                    + (useDaylight ? 0 : 1);
         if(!useDaylight){
-                ret += (int)(dst ^ (dst>>>10) +
-                                startMode ^ (startMode>>>11) +
-                                startMonth ^ (startMonth>>>12) +
-                                startDay ^ (startDay>>>13) +
-                                startDayOfWeek ^ (startDayOfWeek>>>14) +
-                                startTime ^ (startTime>>>15) +
-                                startTimeMode ^ (startTimeMode>>>16) +
-                                endMode ^ (endMode>>>17) +
-                                endMonth ^ (endMonth>>>18) +
-                                endDay ^ (endDay>>>19) +
-                                endDayOfWeek ^ (endDayOfWeek>>>20) +
-                                endTime ^ (endTime>>>21) +
-                                endTimeMode ^ (endTimeMode>>>22) +
-                                startYear ^ (startYear>>>23));
+                ret += dst ^ (dst >>> 10) +
+                        startMode ^ (startMode>>>11) +
+                        startMonth ^ (startMonth>>>12) +
+                        startDay ^ (startDay>>>13) +
+                        startDayOfWeek ^ (startDayOfWeek>>>14) +
+                        startTime ^ (startTime>>>15) +
+                        startTimeMode ^ (startTimeMode>>>16) +
+                        endMode ^ (endMode>>>17) +
+                        endMonth ^ (endMonth>>>18) +
+                        endDay ^ (endDay>>>19) +
+                        endDayOfWeek ^ (endDayOfWeek>>>20) +
+                        endTime ^ (endTime>>>21) +
+                        endTimeMode ^ (endTimeMode>>>22) +
+                        startYear ^ (startYear>>>23);
         }
                 return ret;
     }

@@ -432,7 +432,7 @@ public class ZoneStringFormat {
             // metazone generic partial location names are collected
             genericPartialLocationNames = new String[mzPartialLocIdx][];
             for (int mzi = 0; mzi < mzPartialLocIdx; mzi++) {
-                genericPartialLocationNames[mzi] = (String[])mzPartialLoc[mzi].clone();
+                genericPartialLocationNames[mzi] = mzPartialLoc[mzi].clone();
             }
         }
         // Finally, create ZoneStrings instance and put it into the tzidToStinrgs map
@@ -1071,7 +1071,7 @@ public class ZoneStringFormat {
                 }
                 int i = 0;
                 for (; i < resultList.size(); i++) {
-                    ZoneStringInfo tmp = (ZoneStringInfo)resultList.get(i);
+                    ZoneStringInfo tmp = resultList.get(i);
                     if (zsitem.getType() == tmp.getType()) {
                         if (matchLength > tmp.getString().length()) {
                             resultList.set(i, zsitem);

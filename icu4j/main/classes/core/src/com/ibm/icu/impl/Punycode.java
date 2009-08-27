@@ -158,8 +158,8 @@ public final class Punycode {
                     cpBuffer[srcCPCount++]=0;
                     dest[destLength]=
                         caseFlags!=null ?
-                            asciiCaseMap((char)c, caseFlags[j]) :
-                            (char)c;
+                            asciiCaseMap(c, caseFlags[j]) :
+                            c;
                 }
                 ++destLength;
             } else {

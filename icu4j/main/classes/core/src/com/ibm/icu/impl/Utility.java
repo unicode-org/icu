@@ -1170,6 +1170,7 @@ public final class Utility {
      * @return the position after the last character parsed, or -1 if
      * the parse failed
      */
+    @SuppressWarnings("fallthrough")
     public static int parsePattern(String rule, int pos, int limit,
             String pattern, int[] parsedInts) {
         // TODO Update this to handle surrogates

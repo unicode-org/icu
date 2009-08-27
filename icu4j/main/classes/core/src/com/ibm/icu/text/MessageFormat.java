@@ -518,6 +518,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * @throws IllegalArgumentException if the pattern is invalid
      * @stable ICU 3.0
      */
+    @SuppressWarnings("fallthrough")
     public void applyPattern(String pttrn) {
         StringBuffer[] segments = new StringBuffer[4];
         for (int i = 0; i < segments.length; ++i) {
@@ -1469,14 +1470,14 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
         MessageFormat other = (MessageFormat) super.clone();
 
         // clone arrays. Can't do with utility because of bug in Cloneable
-        other.formats = (Format[]) formats.clone(); // shallow clone
+        other.formats = formats.clone(); // shallow clone
         for (int i = 0; i < formats.length; ++i) {
             if (formats[i] != null)
                 other.formats[i] = (Format) formats[i].clone();
         }
         // for primitives or immutables, shallow clone is enough
-        other.offsets = (int[]) offsets.clone();
-        other.argumentNames = (String[]) argumentNames.clone();
+        other.offsets = offsets.clone();
+        other.argumentNames = argumentNames.clone();
         other.argumentNamesAreNumeric = argumentNamesAreNumeric;
 
         return other;

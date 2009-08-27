@@ -177,7 +177,7 @@ class BreakCTDictionary {
         CompactTrieNodes node = getCompactTrieNode(fData.root);
         int mycount = 0;
 
-        char uc = (char) text.current();
+        char uc = text.current();
         int i = 0;
         boolean exitFlag = false;
 
@@ -212,7 +212,7 @@ class BreakCTDictionary {
                         break;
                     }
                     text.next();
-                    uc = (char) text.current();
+                    uc = text.current();
                     i++;
                 }
                 if (exitFlag) {
@@ -235,7 +235,7 @@ class BreakCTDictionary {
                         // We hit a match; get the next node and next character
                         node = getCompactTrieNode(hnode[middle].equal);
                         text.next();
-                        uc = (char) text.current();
+                        uc = text.current();
                         i++;
                         break;
                     } else if (uc < hnode[middle].ch) {

@@ -1094,7 +1094,7 @@ class TransliteratorParser {
                 data.ruleSet.freeze();
             }
 
-            if (idBlockVector.size() == 1 && ((String)idBlockVector.get(0)).length() == 0)
+            if (idBlockVector.size() == 1 && (idBlockVector.get(0)).length() == 0)
                 idBlockVector.remove(0);
 
         } catch (IllegalArgumentException e) {
@@ -1544,7 +1544,7 @@ class TransliteratorParser {
                 if (variableNext >= variableLimit) {
                     throw new RuntimeException("Private use variables exhausted");
                 }
-                buf.append((char) --variableLimit);
+                buf.append(--variableLimit);
             } else {
                 throw new IllegalIcuArgumentException("Undefined variable $"
                                                    + name);

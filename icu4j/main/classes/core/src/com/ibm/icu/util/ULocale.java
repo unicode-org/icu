@@ -1008,7 +1008,7 @@ public final class ULocale implements Serializable {
      */
     public static String[] getISOCountries() {
         initCountryTables();
-        return (String[])_countries.clone();
+        return _countries.clone();
     }
 
     /**
@@ -1021,7 +1021,7 @@ public final class ULocale implements Serializable {
      */
     public static String[] getISOLanguages() {
         initLanguageTables();
-        return (String[])_languages.clone();
+        return _languages.clone();
     }
 
     /**
@@ -1891,9 +1891,9 @@ public final class ULocale implements Serializable {
                 for (Map.Entry<String, String> e : m.entrySet()) {
                     append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
                     first = false;
-                    append((String)e.getKey());
+                    append(e.getKey());
                     append(KEYWORD_ASSIGN);
-                    append((String)e.getValue());
+                    append(e.getValue());
                 }
                 if (blen != oldBlen) {
                     ++oldBlen;
@@ -3174,9 +3174,9 @@ public final class ULocale implements Serializable {
 
         String newLocaleID =
             createLikelySubtagsString(
-                (String)tags[0],
-                (String)tags[1],
-                (String)tags[2],
+                tags[0],
+                tags[1],
+                tags[2],
                 trailing);
 
         return newLocaleID == null ? loc : new ULocale(newLocaleID);
@@ -3217,9 +3217,9 @@ public final class ULocale implements Serializable {
                 loc.localeID,
                 tags);
 
-        String originalLang = (String)tags[0];
-        String originalScript = (String)tags[1];
-        String originalRegion = (String)tags[2];
+        String originalLang = tags[0];
+        String originalScript = tags[1];
+        String originalRegion = tags[2];
         String originalTrailing = null;
 
         if (trailingIndex < loc.localeID.length()) {
@@ -4309,7 +4309,7 @@ public final class ULocale implements Serializable {
         TreeMap<String, String> ldmlKwMap = null;
 
         while (kwitr.hasNext()) {
-            String key = (String)kwitr.next();
+            String key = kwitr.next();
             String value = getKeywordValue(key);
             if (key.length() == 1) {
                 // non LDML extension or private use

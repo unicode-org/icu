@@ -254,9 +254,9 @@ public class OlsonTimeZone extends BasicTimeZone {
             finalZone.setID(getID());
             other.finalZone = (SimpleTimeZone)finalZone.clone();
         }
-        other.transitionTimes = (int[])transitionTimes.clone();
-        other.typeData = (byte[])typeData.clone();
-        other.typeOffsets = (int[])typeOffsets.clone();
+        other.transitionTimes = transitionTimes.clone();
+        other.typeData = typeData.clone();
+        other.typeOffsets = typeOffsets.clone();
         return other;
     }
 
@@ -447,7 +447,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         if ((transitionTimes.length<0 || transitionTimes.length>0x7FFF) ) {
             throw new IllegalArgumentException("Invalid Format");
         }
-        transitionCount = (int) transitionTimes.length;
+        transitionCount = transitionTimes.length;
         
         // Type offsets list must be of even size, with size >= 2
         r = res.get( 1);
@@ -455,7 +455,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         if ((typeOffsets.length<2 || typeOffsets.length>0x7FFE || ((typeOffsets.length&1)!=0))) {
             throw new IllegalArgumentException("Invalid Format");
         }
-        typeCount = (int) typeOffsets.length >> 1;
+        typeCount = typeOffsets.length >> 1;
 
         // Type data must be of the same size as the transitions list        
         r = res.get(2);
@@ -519,7 +519,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     public OlsonTimeZone(String id){
-        UResourceBundle top = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle res = ZoneMeta.openOlsonResource(id);
         construct(top, res);
         if(finalZone!=null){
@@ -539,7 +539,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     private static final int UNSIGNED_BYTE_MASK =0xFF;
 
     private int getInt(byte val){
-        return (int)(UNSIGNED_BYTE_MASK & val); 
+        return UNSIGNED_BYTE_MASK & val; 
     }
 
     private void getHistoricalOffset(long date, boolean local,
@@ -628,11 +628,11 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     private int rawOffset(int index){
-        return typeOffsets[(int)(index << 1)];
+        return typeOffsets[index << 1];
     }
 
     private int dstOffset(int index){
-        return typeOffsets[(int)((index << 1) + 1)];
+        return typeOffsets[(index << 1) + 1];
     }
     
     // temp

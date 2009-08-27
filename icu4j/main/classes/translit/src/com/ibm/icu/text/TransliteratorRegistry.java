@@ -603,7 +603,7 @@ class TransliteratorRegistry {
                                ID);
         }
         ///CLOVER:ON
-        return (Object[]) registry.get(new CaseInsensitiveString(ID));
+        return registry.get(new CaseInsensitiveString(ID));
     }
 
     /**
@@ -903,7 +903,7 @@ class TransliteratorRegistry {
                     entryWrapper[0] = new AliasEntry(parser.compoundFilter.toPattern(false) + ";"
                             + parser.idBlockVector.get(0));
                 } else {
-                    entryWrapper[0] = new AliasEntry((String)parser.idBlockVector.get(0));
+                    entryWrapper[0] = new AliasEntry(parser.idBlockVector.get(0));
                 }
             }
             else {

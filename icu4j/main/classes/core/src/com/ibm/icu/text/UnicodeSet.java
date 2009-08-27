@@ -498,7 +498,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public UnicodeSet set(UnicodeSet other) {
         checkFrozen();
-        list = (int[]) other.list.clone();
+        list = other.list.clone();
         len = other.len;
         pat = other.pat;
         strings = new TreeSet<String>(other.strings);
@@ -967,7 +967,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     if (lastLen > tempLen) break strings;
                     lastLen = tempLen;
                     if (!it.hasNext()) break;
-                    trial = (String) it.next();
+                    trial = it.next();
                 }
             }
 
@@ -2355,6 +2355,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param options a bit mask of zero or more of the following:
      * IGNORE_SPACE, CASE.
      */
+    @SuppressWarnings("fallthrough")
     void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
             StringBuffer rebuiltPat, int options) {
 

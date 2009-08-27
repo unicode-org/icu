@@ -603,6 +603,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * not critical.
      * @stable ICU 2.8
      */
+    @SuppressWarnings("fallthrough")
     protected int handleGetLimit(int field, int limitType) {
         switch (field) {
         case ERA:
@@ -621,6 +622,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             case MAXIMUM:
                 return super.handleGetLimit(field, MAXIMUM) - ERAS[CURRENT_ERA*3];
             }
+            //Fall through to the default if not handled above
         }
         default:
             return super.handleGetLimit(field, limitType);

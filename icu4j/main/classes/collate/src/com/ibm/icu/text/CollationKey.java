@@ -310,7 +310,7 @@ public final class CollationKey implements Comparable<CollationKey>
         if (target == null) {
             return false;
         }
-        CollationKey other = (CollationKey)target;
+        CollationKey other = target;
         int i = 0;
         while (true) {
             if (m_key_[i] != other.m_key_[i]) {

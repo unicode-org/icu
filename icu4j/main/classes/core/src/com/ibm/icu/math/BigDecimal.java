@@ -473,7 +473,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         this(bi.toString(10));
         if (scale < 0)
             throw new java.lang.NumberFormatException("Negative scale:" + " " + scale);
-        exp = (int) -scale; // exponent is -scale
+        exp = -scale; // exponent is -scale
         return;
     }
 
@@ -623,7 +623,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     }
                 }/* j */
                 if (eneg)
-                    exp = (int) -exp; // was negative
+                    exp = -exp; // was negative
                 hadexp = true; // remember we had one
                 break i; // we are done
             }
@@ -793,7 +793,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                                     mant[0] = (byte) num;
                                     ind = ispos;
                                 } else { // num<-1
-                                    mant[0] = (byte) ((int) -num);
+                                    mant[0] = (byte) -num;
                                     ind = isneg;
                                 }
                             }
@@ -806,7 +806,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         /* We work on negative numbers so we handle the most negative number */
         if (num > 0) {
             ind = ispos;
-            num = (int) -num;
+            num = -num;
         } else
             ind = isneg;/* negative */// [0 case already handled]
         // [it is quicker, here, to pre-calculate the length with
@@ -856,7 +856,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         /* We work on negative num so we handle the most negative number */
         if (num > 0) {
             ind = ispos;
-            num = (long) -num;
+            num = -num;
         } else if (num == 0)
             ind = iszero;
         else
@@ -1801,7 +1801,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         if (n == 0)
             return res; // x**0 == 1
         if (n < 0)
-            n = (int) -n; // [rhs.ind records the sign]
+            n = -n; // [rhs.ind records the sign]
         seenbit = false; // set once we've seen a 1-bit
         {
             i = 1;
@@ -2223,7 +2223,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 // calculate the current after-length
                 {/* select */
                     if (num.form == com.ibm.icu.math.MathContext.PLAIN)
-                        thisafter = (int) -num.exp; // has decimal part
+                        thisafter = -num.exp; // has decimal part
                     else if (num.form == com.ibm.icu.math.MathContext.SCIENTIFIC)
                         thisafter = num.mant.length - 1;
                     else { // engineering
@@ -2454,7 +2454,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         /* Looks good */
         if (ind == ispos)
             return result;
-        return (int) -result;
+        return -result;
     }
 
     /**
@@ -2542,7 +2542,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         /* Looks good */
         if (ind == ispos)
             return result;
-        return (long) -result;
+        return -result;
     }
 
     /**
@@ -2604,7 +2604,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     public int scale() {
         if (exp >= 0)
             return 0; // scale can never be negative
-        return (int) -exp;
+        return -exp;
     }
 
     /**
@@ -2674,7 +2674,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             else
                 padding = scale - ourscale;
             res.mant = extend(res.mant, res.mant.length + padding);
-            res.exp = (int) -scale; // as requested
+            res.exp = -scale; // as requested
         } else {/* ourscale>scale: shortening, probably */
             if (scale < 0)
                 throw new java.lang.ArithmeticException("Negative scale:" + " " + scale);
@@ -2683,7 +2683,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             res = res.round(newlen, round); // round to required length
             // This could have shifted left if round (say) 0.9->1[.0]
             // Repair if so by adding a zero and reducing exponent
-            if (res.exp != ((int) -scale)) {
+            if (res.exp != -scale) {
                 res.mant = extend(res.mant, res.mant.length + 1);
                 res.exp = res.exp - 1;
             }
@@ -2765,7 +2765,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             } else {
                 { // exp<0; scale to be truncated
                     // we could use divideInteger, but we may as well be quicker
-                    if (((int) -this.exp) >= this.mant.length)
+                    if (-this.exp >= this.mant.length)
                         res = ZERO; // all blows away
                     else {
                         res = clone(this); // safe copy
@@ -2929,7 +2929,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         if (scale < 0)
             throw new java.lang.NumberFormatException("Negative scale:" + " " + scale);
         res = clone(res); // safe copy [do not mutate]
-        res.exp = (int) -scale; // exponent is -scale
+        res.exp = -scale; // exponent is -scale
         return res;
     }
 
@@ -2998,7 +2998,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             if (euse != 0) {
                 if (euse < 0) {
                     csign = '-';
-                    euse = (int) -euse;
+                    euse = -euse;
                 } else
                     csign = '+';
                 sb.append('E').append(csign).append(euse);
@@ -3022,7 +3022,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         }
 
         /* Need a '.' and/or some zeros */
-        needsign = (int) ((ind == isneg) ? 1 : 0); // space for sign? 0 or 1
+        needsign = (ind == isneg) ? 1 : 0; // space for sign? 0 or 1
 
         /*
          * MAG is the position of the point in the mantissa (index of the character it follows)
@@ -3037,7 +3037,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             rec[needsign] = '0';
             rec[needsign + 1] = '.';
             {
-                int $20 = (int) -mag;
+                int $20 = -mag;
                 i = needsign + 2;
                 for (; $20 > 0; $20--, i++) { // maybe none
                     rec[i] = '0';
@@ -3164,7 +3164,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             // set reqdig to be at least large enough for the computation
             reqdig = lhs.mant.length; // base length
             // next line handles both positive lhs.exp and also scale mismatch
-            if (scale != ((int) -lhs.exp))
+            if (scale != -lhs.exp)
                 reqdig = (reqdig + scale) + lhs.exp;
             reqdig = (reqdig - ((rhs.mant.length - 1))) - rhs.exp; // reduce by RHS effect
             if (reqdig < lhs.mant.length)
@@ -3260,7 +3260,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                             mult = 1;
                         thisdigit = thisdigit + mult;
                         // subtract; var1 reusable
-                        var1 = byteaddsub(var1, var1len, var2, var2len, (int) -mult, true);
+                        var1 = byteaddsub(var1, var1len, var2, var2len, -mult, true);
                         if (var1[0] != 0)
                             continue inner; // maybe another subtract needed
                         /*
@@ -3294,7 +3294,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 }
                 /* can leave now if a scaled divide and exponent is small enough */
                 if (scale >= 0)
-                    if (((int) -res.exp) > scale)
+                    if (-res.exp > scale)
                         break outer;
                 /* can leave now if not Divide and no integer part left */
                 if (code != 'D')
@@ -3379,11 +3379,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     // already padded with 0's, so just adjust exponent
                     res.exp = res.exp - ((res.mant.length - have));
                 // calculate number of digits we really want [may be 0]
-                actdig = res.mant.length - ((((int) -res.exp) - scale));
+                actdig = res.mant.length - (-res.exp - scale);
                 res.round(actdig, set.roundingMode); // round to desired length
                 // This could have shifted left if round (say) 0.9->1[.0]
                 // Repair if so by adding a zero and reducing exponent
-                if (res.exp != ((int) -scale)) {
+                if (res.exp != -scale) {
                     res.mant = extend(res.mant, res.mant.length + 1);
                     res.exp = res.exp - 1;
                 }
@@ -3728,7 +3728,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 } else {
                     // mantissa is non-0; we can safely add or subtract 1
                     if (ind == isneg)
-                        increment = (int) -increment;
+                        increment = -increment;
                     newmant = byteaddsub(mant, mant.length, ONE.mant, 1, increment, reuse);
                     if (newmant.length > mant.length) { // had a carry
                         // drop rightmost digit and raise exponent

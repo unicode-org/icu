@@ -679,7 +679,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         result[0] = defcoll;
         int idx = 1;
         while (itr.hasNext()) {
-            String collKey = (String)itr.next();
+            String collKey = itr.next();
             if (!collKey.equals(defcoll)) {
                 result[idx++] = collKey;
             }
