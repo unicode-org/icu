@@ -125,7 +125,7 @@ class TransliterationRuleSet {
                     // a set, and we must use the more time-consuming
                     // matchesIndexValue check.  In practice this happens
                     // rarely, so we seldom tread this code path.
-                    TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+                    TransliterationRule r = ruleVector.elementAt(j);
                     if (r.matchesIndexValue(x)) {
                         v.addElement(r);
                     }

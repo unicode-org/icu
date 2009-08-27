@@ -345,7 +345,7 @@ public final class StringPrep {
         synchronized (CACHE) {
             WeakReference<StringPrep> ref = CACHE[profile];
             if (ref != null) {
-                instance = (StringPrep)ref.get();
+                instance = ref.get();
             }
 
             if (instance == null) {
@@ -402,7 +402,7 @@ public final class StringPrep {
 
             }else{
                 values.isIndex = false;
-                values.value = ((int)(trieWord<<16))>>16;
+                values.value = (trieWord<<16)>>16;
                 values.value =  (values.value >> 2);
 
             }

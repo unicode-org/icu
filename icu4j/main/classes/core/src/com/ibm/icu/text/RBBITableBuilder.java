@@ -951,7 +951,7 @@ class RBBITableBuilder {
            System.out.print("state |           i n p u t     s y m b o l s \n");
            System.out.print("      | Acc  LA    Tag");
            for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-               RBBINode.printInt((int)c, 3);
+               RBBINode.printInt(c, 3);
            }
            System.out.print("\n");
            System.out.print("      |---------------");
@@ -997,10 +997,10 @@ class RBBITableBuilder {
 
            while (nextRecord < tbl.size()) {
                thisRecord = nextRecord;
-               nextRecord = thisRecord + ((Integer)tbl.get(thisRecord)).intValue() + 1;
+               nextRecord = thisRecord + tbl.get(thisRecord).intValue() + 1;
                RBBINode.printInt(thisRecord, 7);
                for (i=thisRecord+1; i<nextRecord; i++) {
-                   int val = ((Integer)tbl.get(i)).intValue();
+                   int val = tbl.get(i).intValue();
                    RBBINode.printInt(val, 7);
                }
                System.out.print("\n");

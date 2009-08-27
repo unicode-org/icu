@@ -5286,7 +5286,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 case UProperty.JOINING_TYPE:
                     return gBdp.getJoiningType(ch);
                 case UProperty.LINE_BREAK:
-                    return (int)(PROPERTY_.getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
+                    return (PROPERTY_.getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
                 case UProperty.NUMERIC_TYPE:
                     type=getNumericType(PROPERTY_.getProperty(ch));
                     if(type>NumericType.NUMERIC) {
@@ -5336,11 +5336,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                     return NormalizerImpl.getFCD16(ch)&0xff;
                 case UProperty.GRAPHEME_CLUSTER_BREAK:
-                    return (int)(PROPERTY_.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
+                    return (PROPERTY_.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
                 case UProperty.SENTENCE_BREAK:
-                    return (int)(PROPERTY_.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
+                    return (PROPERTY_.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
                 case UProperty.WORD_BREAK:
-                    return (int)(PROPERTY_.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
+                    return (PROPERTY_.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
                 /* Values were tested for variable type from Integer.MIN_VALUE
                  * to UProperty.INT_LIMIT and none would not reach the default case.
                  */

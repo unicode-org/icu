@@ -254,7 +254,7 @@ public class TimeUnitFormat extends MeasureFormat {
             Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(timeUnit);
             for (String count : countToPattern.keySet()) {
               for (int styl = FULL_NAME; styl < TOTAL_STYLES; ++styl) {
-                MessageFormat pattern = (MessageFormat)((Object[])countToPattern.get(count))[styl];
+                MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[styl];
                 pos.setErrorIndex(-1);
                 pos.setIndex(oldPos);
                 // see if we can parse

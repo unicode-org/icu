@@ -2387,19 +2387,18 @@ public final class Normalizer implements Cloneable {
                                                 mode, options);
                 
                 if(pNeededToNormalize!=null) {
-                    pNeededToNormalize[0]=(boolean)(destLength!=bufferLength ||
-                                                    Utility.arrayRegionMatches(
-                                                                               buffer,0,dest,
-                                                                               destStart,destLimit
-                                                                               ));
+                    pNeededToNormalize[0]=(destLength!=bufferLength ||
+                                                Utility.arrayRegionMatches(
+                                                                           buffer,0,dest,
+                                                                           destStart,destLimit
+                                                                           ));
                 }
             } else {
                 /* just copy the source characters */
                 if(destCapacity>0) {
                     System.arraycopy(buffer,startIndex[0],dest,0,
                                      (bufferLength<destCapacity) ? 
-                                     bufferLength : destCapacity
-                                     );
+                                     bufferLength : destCapacity);
                 }
             }
         } 
@@ -2613,20 +2612,17 @@ public final class Normalizer implements Cloneable {
                                           dest,destStart,destLimit, options);
                 
                 if(pNeededToNormalize!=null) {
-                    pNeededToNormalize[0]=(boolean)(destLength!=bufferLength ||
-                                                    Utility.arrayRegionMatches(buffer,startIndex[0],
-                                                                               dest,destStart,
-                                                                               destLength));
+                    pNeededToNormalize[0]=(destLength!=bufferLength ||
+                                                Utility.arrayRegionMatches(buffer,startIndex[0],
+                                                                           dest,destStart,
+                                                                           destLength));
                 }
             } else {
                 /* just copy the source characters */
                 if(destCapacity>0) {
                     System.arraycopy(buffer,0,dest,destStart,
-                                     Math.min(bufferLength,destCapacity)
-                                     );
+                                     Math.min(bufferLength,destCapacity));
                 }
-                                      
-               
             }
         }
         return destLength;
@@ -2711,7 +2707,7 @@ public final class Normalizer implements Cloneable {
             throw new IllegalArgumentException();
         }
 
-        UnicodeSet nx=NormalizerImpl.getNX((int)(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT));
+        UnicodeSet nx=NormalizerImpl.getNX(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT);
         options|= NormalizerImpl.COMPARE_EQUIV;
         result=0;
 

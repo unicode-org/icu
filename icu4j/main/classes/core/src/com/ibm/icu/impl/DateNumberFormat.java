@@ -48,7 +48,7 @@ public final class DateNumberFormat extends NumberFormat {
 */
 
     private void initialize(ULocale loc,char zeroDigitIn) {
-        char[] elems = (char[])CACHE.get(loc);
+        char[] elems = CACHE.get(loc);
         if (elems == null) {
             // Missed cache
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc);

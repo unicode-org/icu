@@ -1148,6 +1148,7 @@ final class CollationRuleParser
      * @exception ParseException
      *                thrown when rule parsing fails
      */
+    @SuppressWarnings("fallthrough")
     private int parseNextToken(boolean startofrules) throws ParseException
     {
         // parsing part
@@ -1430,8 +1431,9 @@ final class CollationRuleParser
                     case 0x0040 : // '@'
                         if (newstrength == TOKEN_UNSET_) {
                             m_options_.m_isFrenchCollation_ = true;
-                        break;
-                    }
+                            break;
+                        }
+                        // fall through
                     case 0x007C : //|
                         // this means we have actually been reading prefix part
                         // we want to store read characters to the prefix part

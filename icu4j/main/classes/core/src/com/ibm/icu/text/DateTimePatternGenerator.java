@@ -872,8 +872,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             DateTimePatternGenerator result = (DateTimePatternGenerator) (super.clone());
             result.skeleton2pattern = (TreeMap<DateTimeMatcher, String>) skeleton2pattern.clone();
             result.basePattern_pattern = (TreeMap<String, String>) basePattern_pattern.clone();
-            result.appendItemFormats = (String[]) appendItemFormats.clone();
-            result.appendItemNames = (String[]) appendItemNames.clone();
+            result.appendItemFormats = appendItemFormats.clone();
+            result.appendItemNames = appendItemNames.clone();
             result.current = new DateTimeMatcher();
             result.fp = new FormatParser();
             result._distanceInfo = new DistanceInfo();

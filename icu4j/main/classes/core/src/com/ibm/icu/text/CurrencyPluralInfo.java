@@ -217,7 +217,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
             //other.pluralCountToCurrencyUnitPattern = pluralCountToCurrencyUnitPattern;
             other.pluralCountToCurrencyUnitPattern = new HashMap<String, String>();
             for (String pluralCount : pluralCountToCurrencyUnitPattern.keySet()) {
-                String currencyPattern = (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
+                String currencyPattern = pluralCountToCurrencyUnitPattern.get(pluralCount);
                 other.pluralCountToCurrencyUnitPattern.put(pluralCount, currencyPattern);
             }
             return other;

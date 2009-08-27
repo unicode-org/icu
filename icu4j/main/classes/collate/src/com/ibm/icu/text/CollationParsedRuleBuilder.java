@@ -1729,8 +1729,7 @@ final class CollationParsedRuleBuilder {
                     while (currentSequenceLen > 0) {
                         m_utilToken_.m_source_ = (currentSequenceLen << 24)
                                 | expOffset;
-                        CollationRuleParser.Token expt = (CollationRuleParser.Token) m_parser_.m_hashTable_
-                                .get(m_utilToken_);
+                        CollationRuleParser.Token expt = m_parser_.m_hashTable_.get(m_utilToken_);
                         if (expt != null
                                 && expt.m_strength_ != CollationRuleParser.TOKEN_RESET_) {
                             // expansion is tailored
@@ -3591,8 +3590,8 @@ final class CollationParsedRuleBuilder {
         size = maxexpansion.m_endExpansionCE_.size();
         collator.m_expansionEndCE_ = new int[size - 1];
         for (int i = 1; i < size; i++) {
-            collator.m_expansionEndCE_[i - 1] = ((Integer) maxexpansion.m_endExpansionCE_
-                    .get(i)).intValue();
+            collator.m_expansionEndCE_[i - 1] = maxexpansion.m_endExpansionCE_
+                    .get(i).intValue();
         }
         collator.m_expansionEndCEMaxSize_ = new byte[size - 1];
         for (int i = 1; i < size; i++) {
@@ -3665,8 +3664,7 @@ final class CollationParsedRuleBuilder {
         StringBuffer cpPointer = table.m_codePoints_;
         Vector<Integer> CEPointer = table.m_CEs_;
         for (int i = 0; i < tsize; i++) {
-            BasicContractionTable bct = (BasicContractionTable) table.m_elements_
-                    .get(i);
+            BasicContractionTable bct = table.m_elements_.get(i);
             int size = bct.m_CEs_.size();
             char ccMax = 0;
             char ccMin = 255;
@@ -3687,14 +3685,12 @@ final class CollationParsedRuleBuilder {
             cpPointer.insert(offset,
                     (char) (((ccMin == ccMax) ? 1 : 0 << 8) | ccMax));
             for (int j = 0; j < size; j++) {
-                if (isContractionTableElement(((Integer) CEPointer.get(offset
-                        + j)).intValue())) {
+                if (isContractionTableElement(CEPointer.get(offset + j).intValue())) {
                     int ce = CEPointer.get(offset + j).intValue();
                     CEPointer.set(offset + j,
                             new Integer(constructSpecialCE(getCETag(ce),
-                                    ((Integer) table.m_offsets_
-                                            .get(getContractionOffset(ce)))
-                                            .intValue())));
+                                    table.m_offsets_.get(getContractionOffset(ce))
+                                    .intValue())));
                 }
             }
         }
@@ -4133,7 +4129,7 @@ final class CollationParsedRuleBuilder {
 
         CombinClassTable cmLookup = t.cmLookup;
         char[] combiningMarks = { cMark };
-        int cMarkClass = (int) (UCharacter.getCombiningClass(cMark) & 0xFF);
+        int cMarkClass = UCharacter.getCombiningClass(cMark) & 0xFF;
         String comMark = new String(combiningMarks);
         int noOfPrecomposedChs = maxComp;
 

@@ -449,18 +449,18 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
         return chars;
     }
     private int getInt(int offset) {
-        return (int)((resourceBytes[offset] << 24) |
-                     ((resourceBytes[offset+1] & 0xff) << 16) |
-                     ((resourceBytes[offset+2] & 0xff) << 8) |
-                     ((resourceBytes[offset+3] & 0xff)));
+        return (resourceBytes[offset] << 24) |
+                ((resourceBytes[offset+1] & 0xff) << 16) |
+                ((resourceBytes[offset+2] & 0xff) << 8) |
+                ((resourceBytes[offset+3] & 0xff));
     }
     private int[] getInts(int offset, int count) {
         int[] ints = new int[count];
         for(int i = 0; i < count; offset += 4, ++i) {
-            ints[i] = (int)((resourceBytes[offset] << 24) |
-                            ((resourceBytes[offset+1] & 0xff) << 16) |
-                            ((resourceBytes[offset+2] & 0xff) << 8) |
-                            ((resourceBytes[offset+3] & 0xff)));
+            ints[i] = (resourceBytes[offset] << 24) |
+                        ((resourceBytes[offset+1] & 0xff) << 16) |
+                        ((resourceBytes[offset+2] & 0xff) << 8) |
+                        ((resourceBytes[offset+3] & 0xff));
         }
         return ints;
     }

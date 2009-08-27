@@ -382,7 +382,7 @@ public class CharsetCallback {
         char temp;
         
         do {
-            digit = (int)(i % radix);
+            digit = i % radix;
             buffer[sourceIndex + length++] = (char)(digit <= 9 ? (0x0030+digit) : (0x0030+digit+7));
             i = i/radix;
         } while (i != 0 && (sourceIndex + length) < buffer.length);

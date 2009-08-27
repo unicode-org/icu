@@ -939,7 +939,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public String[] getRuleSetNames() {
-        return (String[])publicRuleSetNames.clone();
+        return publicRuleSetNames.clone();
     }
 
     /**
@@ -992,7 +992,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public String[] getRuleSetDisplayNames(ULocale loc) {
         String[] names = getNameListForLocale(loc);
         if (names != null) {
-            return (String[])names.clone();
+            return names.clone();
         }
         names = getRuleSetNames();
         for (int i = 0; i < names.length; ++i) {
@@ -1609,7 +1609,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private void initLocalizations(String[][] localizations) {
         if (localizations != null) {
-            publicRuleSetNames = (String[])localizations[0].clone();
+            publicRuleSetNames = localizations[0].clone();
 
             Map<String, String[]> m = new HashMap<String, String[]>();
             for (int i = 1; i < localizations.length; ++i) {

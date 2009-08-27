@@ -210,7 +210,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
         if (unused.size() != 1) {
             throw new IllegalArgumentException("Not a single root: " + unused);
         }
-        return (String) variables.get(unused.iterator().next());
+        return variables.get(unused.iterator().next());
     }
 
     public String getBnfCommentString() {

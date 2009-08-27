@@ -422,7 +422,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             other.historicRules = new ArrayList<TimeZoneRule>(historicRules); // rules are immutable
         }
         if (finalRules != null) {
-            other.finalRules = (AnnualTimeZoneRule[])finalRules.clone();
+            other.finalRules = finalRules.clone();
         }
         return other;
     }

@@ -437,7 +437,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
              * need not check cnv.preFromULength==0 because a replay (<0) will cause
              * s<sourceLimit before converterSawEndOfInput is checked
              */
-            converterSawEndOfInput = (boolean) (cr.isUnderflow() && flush
+            converterSawEndOfInput = (cr.isUnderflow() && flush
                     && source.remaining() == 0 && fromUChar32 == 0);
 
             /* no callback called yet for this iteration */

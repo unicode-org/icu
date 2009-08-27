@@ -453,7 +453,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             
             if (ch != prevCh && count > 0) {
                 // check the repeativeness of pattern letter
-                int repeated = patternRepeated[(int)(prevCh - PATTERN_CHAR_BASE)];
+                int repeated = patternRepeated[prevCh - PATTERN_CHAR_BASE];
                 if ( repeated == 0 ) {
                     patternRepeated[prevCh - PATTERN_CHAR_BASE] = 1;
                 } else {
@@ -484,7 +484,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         // "d-d"(last char repeated ), and 
         // "d-d MM" ( repetition found )
         if ( count > 0 && foundRepetition == false ) {
-            if ( patternRepeated[(int)(prevCh - PATTERN_CHAR_BASE)] == 0 ) {
+            if ( patternRepeated[prevCh - PATTERN_CHAR_BASE] == 0 ) {
                 count = 0;
             }
         }
@@ -806,7 +806,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     static void parseSkeleton(String skeleton, int[] skeletonFieldWidth) {
         int PATTERN_CHAR_BASE = 0x41;
         for ( int i = 0; i < skeleton.length(); ++i ) {
-            ++skeletonFieldWidth[(int)(skeleton.charAt(i) - PATTERN_CHAR_BASE)];
+            ++skeletonFieldWidth[skeleton.charAt(i) - PATTERN_CHAR_BASE];
         }
     }
 

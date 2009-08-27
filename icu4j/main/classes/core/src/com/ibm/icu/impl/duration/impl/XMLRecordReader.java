@@ -150,7 +150,7 @@ public class XMLRecordReader implements RecordReader {
                 list.add(s);
             }
             if (match("/" + name + "List")) {
-                return (String[]) list.toArray(new String[list.size()]);
+                return list.toArray(new String[list.size()]);
             }
         }
         return null;

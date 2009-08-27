@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -2088,10 +2088,10 @@ public final class CollationElementIterator
             // won't be in the normalization buffer if something like this
             // happens
             // Move Jamos into normalization buffer
-            m_buffer_.append((char)L);
-            m_buffer_.append((char)V);
+            m_buffer_.append(L);
+            m_buffer_.append(V);
             if (T != HANGUL_TBASE_) {
-                m_buffer_.append((char)T);
+                m_buffer_.append(T);
             }
             m_FCDLimit_ = m_source_.getIndex();
             m_FCDStart_ = m_FCDLimit_ - 1;
@@ -2492,7 +2492,6 @@ public final class CollationElementIterator
                 if (!isBackwardsStart()){
                     backupInternalState(m_utilSpecialBackUp_);
                     char32 = previousChar();
-                    ch = (char)ch;
                     if (UTF16.isTrailSurrogate(ch)){
                         if (!isBackwardsStart()) {
                             char lead = (char)previousChar();

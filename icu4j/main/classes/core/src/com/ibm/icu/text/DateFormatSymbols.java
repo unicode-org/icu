@@ -1329,7 +1329,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     private final String[] duplicate(String[] srcArray)
     {
-        return (String[])srcArray.clone();
+        return srcArray.clone();
     }
 
     private final String[][] duplicate(String[][] srcArray)
