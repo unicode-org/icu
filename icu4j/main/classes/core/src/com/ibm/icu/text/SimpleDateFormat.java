@@ -869,13 +869,13 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 2: // 'M' - MONTH
             if ( cal.getType().equals("hebrew")) {
-               HebrewCalendar hc = (HebrewCalendar)cal.clone();
-               if (hc.isLeapYear(hc.get(Calendar.YEAR)) && value == 6 && count >= 3 ) {
-                   value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
-               }
-               if (!hc.isLeapYear(hc.get(Calendar.YEAR)) && value >= 6 && count < 3 ) {
-                   value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
-               }
+                boolean isLeap = HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR));
+                if (isLeap && value == 6 && count >= 3 ) {
+                    value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
+                }
+                if (HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR)) && value >= 6 && count < 3 ) {
+                    value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
+                }
             }
             if (count == 5) {
                 safeAppend(formatData.narrowMonths, value, buf);
@@ -2147,8 +2147,7 @@ public class SimpleDateFormat extends DateFormat {
 
                 // Delayed checking for adjustment of Hebrew month numbers in non-leap years.
                 if (DelayedHebrewMonthCheck) {
-                    HebrewCalendar hc = (HebrewCalendar) cal.clone();
-                    if (!hc.isLeapYear(value)) {
+                    if (!HebrewCalendar.isLeapYear(value)) {
                         cal.add(Calendar.MONTH,1);
                     }
                     DelayedHebrewMonthCheck = false;
@@ -2164,14 +2163,13 @@ public class SimpleDateFormat extends DateFormat {
                     // or not it was a leap year.  We may or may not yet know what year it is, so might have to delay checking 
                     // until the year is parsed.
                     if (cal.getType().equals("hebrew") && value >= 6) {
-                       HebrewCalendar hc = (HebrewCalendar) cal.clone();
-                       if (cal.isSet(Calendar.YEAR)) {
-                           if (!hc.isLeapYear(hc.get(Calendar.YEAR))) {
-                               cal.set(Calendar.MONTH, value);
-                           }
-                       } else {
-                           DelayedHebrewMonthCheck = true;
-                       }
+                        if (cal.isSet(Calendar.YEAR)) {
+                            if (!HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR))) {
+                                cal.set(Calendar.MONTH, value);
+                            }
+                        } else {
+                            DelayedHebrewMonthCheck = true;
+                        }
                     }
                     return pos.getIndex();
                 } else {
