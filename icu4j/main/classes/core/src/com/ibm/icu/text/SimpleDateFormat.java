@@ -873,7 +873,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (isLeap && value == 6 && count >= 3 ) {
                     value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
                 }
-                if (HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR)) && value >= 6 && count < 3 ) {
+                if (!isLeap && value >= 6 && count < 3 ) {
                     value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
                 }
             }
