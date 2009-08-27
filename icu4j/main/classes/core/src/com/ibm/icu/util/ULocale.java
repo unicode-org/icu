@@ -31,6 +31,8 @@ import com.ibm.icu.impl.locale.LocaleExtensions;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.impl.locale.LanguageTag.Extension;
 
+import com.ibm.icu.text.MessageFormat;
+
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
  * support for ICU protocol.  In ICU 3.0 this class is enhanced to support
@@ -2619,7 +2621,8 @@ public final class ULocale implements Serializable {
 
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
 
-        StringBuffer buf = new StringBuffer();
+        StringBuffer buf0 = new StringBuffer();
+        StringBuffer buf1 = new StringBuffer();
 
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
@@ -2630,41 +2633,53 @@ public final class ULocale implements Serializable {
             String name = names[i];
             if (name.length() > 0) {
                 name = getTableString(tableNames[i], null, name, bundle);
-                if (buf.length() > 0) { // need a separator
-                    if (haveLanguage & !openParen) {
-                        buf.append(" (");
-                        openParen = true;
-                    } else {
-                        buf.append(", ");
+                if ( i == 0 ) {
+                    buf0.append(name);
+                } else {
+                    if (buf1.length() > 0) {
+                        try {
+                            buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
+                        } catch ( MissingResourceException ex ) {
+                            buf1.append(", ");
+                        }
                     }
+                    buf1.append(name);
                 }
-                buf.append(name);
             }
         }
 
         Map<String, String> m = parser.getKeywordMap();
         if (!m.isEmpty()) {
             for (Map.Entry<String, String> e : m.entrySet()) {
-                if (buf.length() > 0) {
-                    if (haveLanguage & !openParen) {
-                        buf.append(" (");
-                        openParen = true;
-                    } else {
-                        buf.append(", ");
+                if (buf1.length() > 0) {
+                    try {
+                        buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
+                    } catch ( MissingResourceException ex ) {
+                        buf1.append(", ");
                     }
                 }
                 String key = e.getKey();
-                buf.append(getTableString("Keys", null, key, bundle));
-                buf.append("=");
-                buf.append(getTableString("Types", key, e.getValue(), bundle));
+                buf1.append(getTableString("Keys", null, key, bundle));
+                buf1.append("=");
+                buf1.append(getTableString("Types", key, e.getValue(), bundle));
             }
         }
 
-        if (openParen) {
-            buf.append(")");
+        String locDispPattern;
+        try {
+           locDispPattern = bundle.get("localeDisplayPattern").getString("pattern");
+        } catch ( MissingResourceException ex ) {
+           locDispPattern = "{0} ({1})";
         }
-            
-        return buf.toString();
+
+        Object[] args = { (Object)buf0.toString() , (Object)buf1.toString() };
+        if ( buf0.length() > 0 && buf1.length() > 0 ) {
+            return MessageFormat.format(locDispPattern,args);
+        } else if ( buf0.length() > 0 ) {
+            return buf0.toString();
+        } else {
+            return buf1.toString();
+        }
     }
 
     /**
