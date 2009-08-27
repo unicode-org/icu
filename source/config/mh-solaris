@@ -73,4 +73,8 @@ BIR_LDFLAGS=  -Wl,-M,$(NAME).map -Wl,-B,symbolic -Wl,-B,eliminate
 BIR_DEPS=   $(NAME).map
 endif
 
+## Remove shared library 's'
+STATIC_PREFIX_WHEN_USED = 
+STATIC_PREFIX = 
+
 ## End Solaris-specific setup
