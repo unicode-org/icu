@@ -78,5 +78,9 @@ STATIC_O = o
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
+## Remove shared library 's'
+STATIC_PREFIX_WHEN_USED = 
+STATIC_PREFIX = 
+
 ## End HPUX/gcc specific setup
 

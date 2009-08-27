@@ -87,4 +87,8 @@ TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
 # genren opts
 GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
 
+## Remove shared library 's'
+STATIC_PREFIX_WHEN_USED = 
+STATIC_PREFIX = 
+
 ## End Darwin-specific setup

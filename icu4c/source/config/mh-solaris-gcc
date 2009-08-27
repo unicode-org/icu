@@ -71,4 +71,8 @@ STATIC_O = ao
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
+## Remove shared library 's'
+STATIC_PREFIX_WHEN_USED = 
+STATIC_PREFIX = 
+
 ## End Solaris-specific setup
