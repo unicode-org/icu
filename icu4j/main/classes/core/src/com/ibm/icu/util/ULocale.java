@@ -2627,8 +2627,6 @@ public final class ULocale implements Serializable {
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
 
-        boolean haveLanguage = names[0].length() > 0;
-        boolean openParen = false;
         for (int i = 0; i < names.length; ++i) {
             String name = names[i];
             if (name.length() > 0) {
