@@ -6,11 +6,19 @@
  */
 package com.ibm.icu.dev.tool.rbbi;
 
-import com.ibm.icu.util.CompactByteArray;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.impl.Utility;
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
+
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.CompactByteArray;
 
 public class BuildDictionaryFile {
     public static void main(String args[])
