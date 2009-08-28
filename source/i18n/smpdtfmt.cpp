@@ -2379,7 +2379,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             return -start;
         }
         UChar32 c = text.char32At(start);
-        if (!u_isUWhiteSpace(c)) {
+        if (!u_isUWhiteSpace(c) || !uprv_isRuleWhiteSpace(c)) {
             break;
         }
         start += UTF_CHAR_LENGTH(c);
