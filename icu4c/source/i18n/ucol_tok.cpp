@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -461,7 +461,7 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
 
     ucol_uprv_tok_initData();
 
-    while(start < end && u_isWhitespace(*start)) { /* eat whitespace */
+    while(start < end && (u_isWhitespace(*start) || uprv_isRuleWhiteSpace(*start))) { /* eat whitespace */
         start++;
     }
     if(start >= end) {
@@ -480,7 +480,7 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
             foundOption = TRUE;
             if(end - start > rulesOptions[i].optionLen) {
                 optionArg = start+rulesOptions[i].optionLen+1; /* start of the options, skip space */
-                while(u_isWhitespace(*optionArg)) { /* eat whitespace */
+                while(u_isWhitespace(*optionArg) || uprv_isRuleWhiteSpace(*optionArg)) { /* eat whitespace */
                     optionArg++;
                 }
             }
@@ -501,7 +501,7 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
                 *attrib = rulesOptions[i].attr;
                 *value = rulesOptions[i].subopts[j].attrVal;
                 optionArg += rulesOptions[i].subopts[j].subLen;
-                while(u_isWhitespace(*optionArg)) { /* eat whitespace */
+                while(u_isWhitespace(*optionArg) || uprv_isRuleWhiteSpace(*optionArg)) { /* eat whitespace */
                     optionArg++;
                 }
                 if(*optionArg == 0x005d) {
@@ -548,14 +548,14 @@ int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UCh
     int32_t i = 0;
     ucol_uprv_tok_initData();
 
-    while(u_isWhitespace(*start)) { /* eat whitespace */
+    while(u_isWhitespace(*start) || uprv_isRuleWhiteSpace(*start)) { /* eat whitespace */
         start++;
     }
     while(i < UTOK_OPTION_COUNT) {
         if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
             if(end - start > rulesOptions[i].optionLen) {
                 *optionArg = start+rulesOptions[i].optionLen; /* start of the options*/
-                while(u_isWhitespace(**optionArg)) { /* eat whitespace */
+                while(u_isWhitespace(**optionArg) || uprv_isRuleWhiteSpace(**optionArg)) { /* eat whitespace */
                     (*optionArg)++;
                 }
             }

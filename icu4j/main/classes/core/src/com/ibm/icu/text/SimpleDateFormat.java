@@ -2080,7 +2080,7 @@ public class SimpleDateFormat extends DateFormat {
                 return -start;
             }
             int c = UTF16.charAt(text, start);
-            if (!UCharacter.isUWhiteSpace(c)) {
+            if (!UCharacter.isUWhiteSpace(c) || !UCharacterProperty.isRuleWhiteSpace(c)) {
                 break;
             }
             start += UTF16.getCharCount(c);
