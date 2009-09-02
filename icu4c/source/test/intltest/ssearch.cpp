@@ -1226,6 +1226,8 @@ void SSearchTest::boyerMooreTest()
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = NULL;
     CollData *data = NULL;
+    const CEList* ce = NULL;
+    const CEList* ce1 = NULL;
     UnicodeString lp  = "fuss";
     UnicodeString sp = "fu\\u00DF";
     BoyerMooreSearch *longPattern = NULL;
@@ -1247,11 +1249,88 @@ void SSearchTest::boyerMooreTest()
         goto close_data;
     }
 
+    data->getDynamicClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get dynamic class ID of CollData.");
+        goto close_patterns;
+    }
+
+    data->getStaticClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get static class ID of CollData.");
+        goto close_patterns;
+    }
 
     longPattern = new BoyerMooreSearch(data, lp.unescape(), NULL, status);
     shortPattern = new BoyerMooreSearch(data, sp.unescape(), NULL, status);
     if (U_FAILURE(status)) {
         errln("Could not create pattern objects.");
+        goto close_patterns;
+    }
+
+    longPattern->getBadCharacterTable();
+    shortPattern->getBadCharacterTable();
+    if (U_FAILURE(status)) {
+        errln("Could not get bad character table.");
+        goto close_patterns;
+    }
+
+    longPattern->getGoodSuffixTable();
+    shortPattern->getGoodSuffixTable();
+    if (U_FAILURE(status)) {
+        errln("Could not get good suffix table.");
+        goto close_patterns;
+    }
+
+    longPattern->getDynamicClassID();
+    shortPattern->getDynamicClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get dynamic class ID of BoyerMooreSearch.");
+        goto close_patterns;
+    }
+
+    longPattern->getStaticClassID();
+    shortPattern->getStaticClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get static class ID of BoyerMooreSearch.");
+        goto close_patterns;
+    }
+
+    longPattern->getData();
+    shortPattern->getData();
+    if (U_FAILURE(status)) {
+        errln("Could not get collate data.");
+        goto close_patterns;
+    }
+
+    ce = longPattern->getPatternCEs();
+    ce1 = shortPattern->getPatternCEs();
+    if (U_FAILURE(status)) {
+        errln("Could not get pattern CEs.");
+        goto close_patterns;
+    }
+
+    ce->getDynamicClassID();
+    ce1->getDynamicClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get dynamic class ID of CEList.");
+        goto close_patterns;
+    }
+
+    ce->getStaticClassID();
+    ce1->getStaticClassID();
+    if (U_FAILURE(status)) {
+        errln("Could not get static class ID of CEList.");
+        goto close_patterns;
+    }
+
+    if(data->minLengthInChars(ce,0) != 3){
+        errln("Minimal Length in Characters for 'data' with 'ce' was suppose to give 3.");
+        goto close_patterns;
+    }
+
+    if(data->minLengthInChars(ce1,0) != 3){
+        errln("Minimal Length in Characters for 'data' with 'ce1' was suppose to give 3.");
         goto close_patterns;
     }
 
@@ -1270,6 +1349,14 @@ void SSearchTest::boyerMooreTest()
             logln("Test %d: found short pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find short pattern.", t);
+        }
+
+        if(longPattern->empty()){
+            errln("Test %d: Long pattern should not have been empty.");
+        }
+
+        if(shortPattern->empty()){
+            errln("Test %d: Short pattern should not have been empty.");
         }
     }
 
