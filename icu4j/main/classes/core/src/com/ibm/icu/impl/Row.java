@@ -6,9 +6,8 @@
  * Author: Mark Davis
  **********************************************************************
  */
-package com.ibm.icu.dev.test.util;
+package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Freezable;
 
 

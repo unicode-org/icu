@@ -1,9 +1,9 @@
 /*
- *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
-*/
+ ****************************************************************************************
+ * Copyright (C) 2009, Google, Inc.; International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                         *
+ ****************************************************************************************
+ */
 package com.ibm.icu.util;
 
 import java.util.MissingResourceException;

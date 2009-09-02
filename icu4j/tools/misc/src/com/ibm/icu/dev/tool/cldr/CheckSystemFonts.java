@@ -32,15 +32,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.Row;
 import com.ibm.icu.dev.test.util.TransliteratorUtilities;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeMapIterator;
-import com.ibm.icu.dev.test.util.Row.R2;
 import com.ibm.icu.dev.test.util.Tabber.HTMLTabber;
 import com.ibm.icu.dev.test.util.UnicodeMap.Composer;
 import com.ibm.icu.dev.test.util.XEquivalenceClass.SetMaker;
+import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.Row.R2;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Collator;

@@ -1223,6 +1223,7 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/MultiComparator.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/impl/duration/impl/data/index.txt svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/package.html svneol=native#text/html
@@ -1232,6 +1233,8 @@ icu4j/main/classes/core/src/com/ibm/icu/text/Formatter.java svneol=native#text/p
 icu4j/main/classes/core/src/com/ibm/icu/text/Parser.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/package.html svneol=native#text/html
+icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/util/LocalePriorityList.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/main/classes/localespi/.classpath -text
 icu4j/main/classes/localespi/.project -text
@@ -1502,6 +1505,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.i
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.VTimeZone.dat -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java svneol=native#text/plain
 icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
@@ -1517,7 +1522,6 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/PrettyPrinterTest.ja
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/ImmutableEntry.java svneol=native#text/plain
-icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/Row.java svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/UnicodeMapIterator.java svneol=native#text/plain
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/main/tests/translit/translit-tests.launch -text svneol=unset#text/plain
