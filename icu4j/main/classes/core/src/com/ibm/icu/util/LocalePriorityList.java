@@ -171,8 +171,9 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * Internal class used for building LanguagePriorityLists
+     * @internal
      */
-    static class LanguagePriorityListBuilder {
+    public static class LanguagePriorityListBuilder {
         /**
          * These store the input languages and weights, in chronological order,
          * where later additions override previous ones.
