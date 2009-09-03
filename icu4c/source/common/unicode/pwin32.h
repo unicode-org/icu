@@ -185,6 +185,11 @@ typedef unsigned int uint32_t;
 #define ICU_USE_THREADS 1
 #endif
 
+/** 0 or 1 to enable or disable auto cleanup of libraries. If undefined, default is: disabled. */
+#ifndef UCLN_NO_AUTO_CLEANUP
+#define UCLN_NO_AUTO_CLEANUP 1
+#endif
+
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check mutex lock. */
 /**
 Microsoft can define _M_IX86, _M_AMD64 (before Visual Studio 8) or _M_X64 (starting in Visual Studio 8). 

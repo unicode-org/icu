@@ -56,7 +56,7 @@ CXXFLAGS += $(LIBCXXFLAGS)
 ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
 endif
-CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common $(LIBCPPFLAGS)
+CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common $(LIBCPPFLAGS) $(CPPFLAGSICUI18N)
 DEFS += -DU_I18N_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUI18N)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
