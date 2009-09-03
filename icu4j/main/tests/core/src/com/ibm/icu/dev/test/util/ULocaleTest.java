@@ -1002,11 +1002,22 @@ public class ULocaleTest extends TestFmwk {
             String[] names = {
                 "Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
             };
+            String[] names2 = {
+                    "Simplified Chinese (China)", "Chinesisch (vereinfacht) (China)", "chinois simplifi\u00E9 (Chine)"
+                };
             ULocale locale = new ULocale("zh_CN");
+            ULocale locale2 = new ULocale("zh_Hans_CN");
+            
             for (int i = 0; i < locales.length; ++i) {
                 String name = locale.getDisplayName(locales[i]);
                 if (!names[i].equals(name)) {
                     errln("expected '" + names[i] + "' but got '" + name + "'");
+                }
+            }
+            for (int i = 0; i < locales.length; ++i) {
+                String name = locale2.getDisplayNameWithDialect(locales[i]);
+                if (!names2[i].equals(name)) {
+                    errln("expected '" + names2[i] + "' but got '" + name + "'");
                 }
             }
         }

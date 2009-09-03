@@ -1242,6 +1242,27 @@ public final class ULocale implements Serializable {
         return new IDParser(localeID).getKeywordValue(keywordName);
     }
 
+    /** Utility class to handle getDisplayLanguageWithDialect() functions and remember
+     * which fields got eaten.
+     */
+    
+    private static final class DisplayLanguageResult {
+        protected String value;
+        protected boolean ateCountry = false;
+        protected boolean ateScript = false;
+        
+        public void set(String s) {
+            value = s;
+        }  
+        public void eatCountry() {
+            ateCountry = true;
+        }
+        public void eatScript() {
+            ateScript = true;
+        }
+
+    }
+ 
     /**
      * Utility class to parse and normalize locale ids (including POSIX style)
      */
@@ -2307,6 +2328,52 @@ public final class ULocale implements Serializable {
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
         return getDisplayLanguageInternal(localeID, displayLocale.localeID);
     } 
+    /**
+     * Returns this locale's language localized for display in the default locale.
+     * If a dialect name is present in the data, then it is returned.
+     * @return the localized language name.
+     * @draft ICU 4.4
+     */
+    public String getDisplayLanguageWithDialect() {
+        return getDisplayLanguageWithDialectInternal(localeID, getDefault().localeID).value;
+    }
+
+    /**
+     * Returns this locale's language localized for display in the provided locale.
+     * If a dialect name is present in the data, then it is returned.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized language name.
+     * @draft ICU 4.4
+     */
+    public String getDisplayLanguageWithDialect(ULocale displayLocale) {
+        return getDisplayLanguageWithDialectInternal(localeID, displayLocale.localeID).value;
+    }
+    
+    /**
+     * Returns a locale's language localized for display in the provided locale.
+     * If a dialect name is present in the data, then it is returned.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose language will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized language name.
+     * @draft ICU 4.4
+     */
+    public static String getDisplayLanguageWithDialect(String localeID, String displayLocaleID) {
+        return getDisplayLanguageWithDialectInternal(localeID, getName(displayLocaleID)).value;
+    }
+
+    /**
+     * Returns a locale's language localized for display in the provided locale.
+     * If a dialect name is present in the data, then it is returned.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose language will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized language name.
+     * @draft ICU 4.4
+     */
+    public static String getDisplayLanguageWithDialect(String localeID, ULocale displayLocale) {
+        return getDisplayLanguageWithDialectInternal(localeID, displayLocale.localeID).value;
+    } 
 
     static String getCurrentCountryID(String oldID){
         initCountryTables();
@@ -2329,6 +2396,48 @@ public final class ULocale implements Serializable {
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayLanguageInternal(String localeID, String displayLocaleID) {
         return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocaleID);
+    }
+    
+    private static DisplayLanguageResult getDisplayLanguageWithDialectInternal(String localeID, String displayLocaleID) {
+        IDParser parser = new IDParser(localeID);
+        String[] names = parser.getLanguageScriptCountryVariant();
+
+        boolean hasScript = names[1].length() > 0;
+        boolean hasCountry = names[2].length() > 0;
+        DisplayLanguageResult dlr = new DisplayLanguageResult();
+        
+        if (hasScript && hasCountry) {
+            String langScriptCountry = names[0] + UNDERSCORE + names[1] + UNDERSCORE + names[2];
+            String result = getTableString("Languages", null, langScriptCountry, displayLocaleID);
+            if (!result.equals(langScriptCountry)) {
+                dlr.set(result);
+                dlr.eatScript();
+                dlr.eatCountry();
+                return dlr;
+            }
+        }
+        if (hasScript) {
+            String langScript = names[0] + UNDERSCORE + names[1];
+            String result = getTableString("Languages", null, langScript, displayLocaleID);
+            if (!result.equals(langScript)) {
+                dlr.set(result);
+                dlr.eatScript();
+                return dlr;
+            }
+        }
+        if (hasCountry) {
+            String langCountry = names[0] + UNDERSCORE + names[2];
+            String result = getTableString("Languages", null, langCountry, displayLocaleID);
+            if (!result.equals(langCountry)) {
+                dlr.set(result);
+                dlr.eatCountry();
+                return dlr;
+            }
+        }
+        
+        
+        dlr.set(getTableString("Languages", null, names[0], displayLocaleID));
+        return dlr;
     }
  
     /**
@@ -2626,14 +2735,134 @@ public final class ULocale implements Serializable {
 
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
-
+        
         for (int i = 0; i < names.length; ++i) {
             String name = names[i];
-            if (name.length() > 0) {
+            if (name.length() > 0) {               
                 name = getTableString(tableNames[i], null, name, bundle);
                 if ( i == 0 ) {
                     buf0.append(name);
                 } else {
+                    if (buf1.length() > 0) {
+                        try {
+                            buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
+                        } catch ( MissingResourceException ex ) {
+                            buf1.append(", ");
+                        }
+                    }
+                    buf1.append(name);
+                }
+            }
+        }
+
+        Map<String, String> m = parser.getKeywordMap();
+        if (!m.isEmpty()) {
+            for (Map.Entry<String, String> e : m.entrySet()) {
+                if (buf1.length() > 0) {
+                    try {
+                        buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
+                    } catch ( MissingResourceException ex ) {
+                        buf1.append(", ");
+                    }
+                }
+                String key = e.getKey();
+                buf1.append(getTableString("Keys", null, key, bundle));
+                buf1.append("=");
+                buf1.append(getTableString("Types", key, e.getValue(), bundle));
+            }
+        }
+
+        String locDispPattern;
+        try {
+           locDispPattern = bundle.get("localeDisplayPattern").getString("pattern");
+        } catch ( MissingResourceException ex ) {
+           locDispPattern = "{0} ({1})";
+        }
+
+        Object[] args = { (Object)buf0.toString() , (Object)buf1.toString() };
+        if ( buf0.length() > 0 && buf1.length() > 0 ) {
+            return MessageFormat.format(locDispPattern,args);
+        } else if ( buf0.length() > 0 ) {
+            return buf0.toString();
+        } else {
+            return buf1.toString();
+        }
+    }
+    
+    /**
+     * Returns this locale name localized for display in the default locale.
+     * If a dialect name is present in the locale data, then it is returned.
+     * @return the localized locale name.
+     * @draft ICU 4.4
+     */
+    public String getDisplayNameWithDialect() {
+        return getDisplayNameWithDialectInternal(localeID, getDefault().localeID);
+    }
+    
+    /**
+     * Returns this locale name localized for display in the provided locale.
+     * If a dialect name is present in the locale data, then it is returned.
+     * @param displayLocale the locale in which to display the locale name.
+     * @return the localized locale name.
+     * @draft ICU 4.4
+     */
+    public String getDisplayNameWithDialect(ULocale displayLocale) {
+        return getDisplayNameWithDialectInternal(localeID, displayLocale.localeID);
+    }
+    
+    /**
+     * Returns the locale ID localized for display in the provided locale.
+     * If a dialect name is present in the locale data, then it is returned.
+     * This is a cover for the ICU4C API.
+     * @param localeID the locale whose name is to be displayed.
+     * @param displayLocaleID the id of the locale in which to display the locale name.
+     * @return the localized locale name.
+     * @draft ICU 4.4
+     */
+    public static String getDisplayNameWithDialect(String localeID, String displayLocaleID) {
+        return getDisplayNameWithDialectInternal(localeID, getName(displayLocaleID));
+    }
+
+    /**
+     * Returns the locale ID localized for display in the provided locale.
+     * If a dialect name is present in the locale data, then it is returned.
+     * This is a cover for the ICU4C API.
+     * @param localeID the locale whose name is to be displayed.
+     * @param displayLocale the locale in which to display the locale name.
+     * @return the localized locale name.
+     * @draft ICU 4.4
+     */
+    public static String getDisplayNameWithDialect(String localeID, ULocale displayLocale) {
+        return getDisplayNameWithDialectInternal(localeID, displayLocale.localeID);
+    }
+
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayNameWithDialectInternal(String localeID, String displayLocaleID) {
+        // lang
+        // lang (script, country, variant, keyword=value, ...)
+        // script, country, variant, keyword=value, ...
+
+        final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
+
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
+
+        StringBuffer buf0 = new StringBuffer();
+        StringBuffer buf1 = new StringBuffer();
+
+        IDParser parser = new IDParser(localeID);
+        String[] names = parser.getLanguageScriptCountryVariant();
+
+        DisplayLanguageResult dlr = null;
+        
+        for (int i = 0; i < names.length; ++i) {
+            String name = names[i];
+            if (name.length() > 0) {               
+                if ( i == 0 ) {
+                    dlr = getDisplayLanguageWithDialectInternal(localeID,displayLocaleID);
+                    buf0.append(dlr.value);
+                } else if ( i > 2 || ( i == 1 && !dlr.ateScript) || ( i == 2 && !dlr.ateCountry) ) {
+                    name = getTableString(tableNames[i], null, name, bundle);
                     if (buf1.length() > 0) {
                         try {
                             buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
