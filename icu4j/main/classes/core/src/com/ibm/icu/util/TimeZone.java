@@ -446,7 +446,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT, 
      * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
-    private String _getDisplayName(boolean daylight, int style, ULocale locale) {
+    private synchronized String _getDisplayName(boolean daylight, int style, ULocale locale) {
         if (locale == null) {
             throw new NullPointerException("locale is null");
         }
