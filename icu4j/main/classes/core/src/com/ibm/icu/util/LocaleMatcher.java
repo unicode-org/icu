@@ -83,9 +83,10 @@ public class LocaleMatcher {
     }
 
     /**
+     * Internal testing function; may expose API later.
      * @internal
-     * @param languagePriorityList
-     * @param matcherData
+     * @param languagePriorityList LocalePriorityList to match
+     * @param matcherData Internal matching data
      */
     public LocaleMatcher(LocalePriorityList languagePriorityList, LanguageMatcherData matcherData) {
         this.matcherData = matcherData;
@@ -102,29 +103,29 @@ public class LocaleMatcher {
      * perfect match, and 0 means that they are completely different. Note that
      * the precise values may change over time; no code should be made dependent
      * on the values remaining constant.
-     * @param a 
-     * @param aMax 
-     * @param b 
-     * @param bMax 
+     * @param desired Desired locale
+     * @param desiredMax Maximized locale (using likely subtags)
+     * @param supported Supported locale
+     * @param supportedMax Maximized locale (using likely subtags)
      * @return value between 0 and 1, inclusive.
      */
-    public double match(ULocale a, ULocale aMax, ULocale b, ULocale bMax) {
-        return matcherData.match(a, aMax, b, bMax);
+    public double match(ULocale desired, ULocale desiredMax, ULocale supported, ULocale supportedMax) {
+        return matcherData.match(desired, desiredMax, supported, supportedMax);
     }
 
 
     /**
      * Canonicalize a locale (language). Note that for now, it is canonicalizing according to CLDR conventions (he vs iw, etc), since that is what is needed for likelySubtags.
      * TODO Get the data from CLDR, use Java conventions.
-     * @param languageCode 
+     * @param ulocale language/locale code
      * @return ULocale with remapped subtags.
      */
-    public ULocale canonicalize(ULocale languageCode) {
-        String lang = languageCode.getLanguage();
+    public ULocale canonicalize(ULocale ulocale) {
+        String lang = ulocale.getLanguage();
         String lang2 = canonicalMap.get(lang);
-        String script = languageCode.getScript();
+        String script = ulocale.getScript();
         String script2 = canonicalMap.get(script);
-        String region = languageCode.getCountry();
+        String region = ulocale.getCountry();
         String region2 = canonicalMap.get(region);
         if (lang2 != null || script2 != null || region2 != null) {
             return new ULocale(
@@ -133,13 +134,13 @@ public class LocaleMatcher {
                                     region2 == null ? region : region2
             );
         }
-        return languageCode;
+        return ulocale;
     }
 
     /**
      * Get the best match for a LanguagePriorityList
      * 
-     * @param languageList
+     * @param languageList list to match
      * @return best matching language code
      */
     public ULocale getBestMatch(LocalePriorityList languageList) {
@@ -160,9 +161,9 @@ public class LocaleMatcher {
     }
 
     /**
-     * Get the best match for a LanguagePriorityList
+     * Convenience method: Get the best match for a LanguagePriorityList
      * 
-     * @param languageList
+     * @param languageList String form of language priority list
      * @return best matching language code
      */
     public ULocale getBestMatch(String languageList) {
@@ -172,11 +173,11 @@ public class LocaleMatcher {
     /**
      * Get the best match for an individual language code.
      * 
-     * @param languageCode
+     * @param ulocale locale/language code to match
      * @return best matching language code
      */
-    public ULocale getBestMatch(ULocale languageCode) {
-        return getBestMatchInternal(languageCode).get0();
+    public ULocale getBestMatch(ULocale ulocale) {
+        return getBestMatchInternal(ulocale).get0();
     }
 
     @Override
