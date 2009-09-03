@@ -1149,7 +1149,33 @@ public class TimeZoneRegression extends TestFmwk {
         } else {
             logln("OK: zone " + j_id +" returned offset in December: " + offset2);
         }
+    }
 
+    public void TestT7107() {
+        Thread[] workers = new Thread[20];
+        for (int i = 0 ; i < workers.length; i++) {
+            workers[i] = new Thread(new Runnable() {
+                public void run() {
+                    for (int j = 0; j < 10000; j++) {
+                        try {
+                            com.ibm.icu.util.TimeZone.getTimeZone("GMT").getDisplayName();
+                        } catch (Exception e) {
+                            errln("FAIL: Caught an exception " + e);
+                        }
+                    }
+                }
+            });
+        }
+        for (Thread wk : workers) {
+            wk.start();
+        }
+        for (Thread wk : workers) {
+            try {
+                wk.join();
+            } catch (InterruptedException ie) {
+                
+            }
+        }
     }
 }
 
