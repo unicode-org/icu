@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1594,7 +1594,7 @@ public class BasicTest extends TestFmwk {
             expect=(String)cases[i][3];
             {
                 result=Normalizer.concatenate(left, right, mode,0);
-                if( result.equals(expect)) {
+                if(!result.equals(expect)) {
                     errln("error in Normalizer.concatenate(), cases[] failed"
                           +", result==expect: expected: "
                           + hex(expect)+" =========> got: " + hex(result));
@@ -1602,7 +1602,7 @@ public class BasicTest extends TestFmwk {
             }
             {
                 result=Normalizer.concatenate(left.toCharArray(), right.toCharArray(), mode,0);
-                if( result.equals(expect)) {
+                if(!result.equals(expect)) {
                     errln("error in Normalizer.concatenate(), cases[] failed"
                           +", result==expect: expected: "
                           + hex(expect)+" =========> got: " + hex(result));
