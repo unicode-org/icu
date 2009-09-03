@@ -23,7 +23,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * Provides an immutable list of languages (locales) in priority order.
  * The string format is based on the Accept-Language format 
- * {@link http://www.ietf.org/rfc/rfc2616.txt}, such as 
+ * {@link "http://www.ietf.org/rfc/rfc2616.txt"}, such as 
  * "af, en, fr;q=0.9". Syntactically it is slightly
  * more lenient, in allowing extra whitespace between elements, extra commas,
  * and more than 3 decimals (on input), and pins between 0 and 1.
@@ -77,45 +77,42 @@ public class LocalePriorityList implements Iterable<ULocale> {
     /**
      * Add a language code to the list being built, with weight 1.0.
      * 
-     * @param ULocale
+     * @param languageCode locale/language to be added
      * @return internal builder, for chaining
      */
-    public static LanguagePriorityListBuilder add(final ULocale languageCode) {
+    public static LanguagePriorityListBuilder add(ULocale languageCode) {
         return new LanguagePriorityListBuilder().add(languageCode);
     }
 
     /**
      * Add a language code to the list being built, with specified weight.
      * 
-     * @param languageCode
+     * @param languageCode locale/language to be added
      * @param weight value from 0.0 to 1.0
      * @return internal builder, for chaining
      */
-    public static LanguagePriorityListBuilder add(
-            final ULocale languageCode, final double weight) {
+    public static LanguagePriorityListBuilder add(ULocale languageCode, final double weight) {
         return new LanguagePriorityListBuilder().add(languageCode, weight);
     }
 
     /**
      * Add a language priority list.
      * 
-     * @param languagePriorityList
+     * @param languagePriorityList list to add all the members of
      * @return internal builder, for chaining
      */
-    public static LanguagePriorityListBuilder add(
-            final LocalePriorityList languagePriorityList) {
+    public static LanguagePriorityListBuilder add(LocalePriorityList languagePriorityList) {
         return new LanguagePriorityListBuilder().add(languagePriorityList);
     }
 
     /**
-     * Add language codes to the list being built, using a string in RFC2626
+     * Add language codes to the list being built, using a string in rfc2616
      * (lenient) format, where each language is a valid {@link ULocale}.
      * 
-     * @param acceptLanguageString
+     * @param acceptLanguageString String in rfc2616 format (but leniently parsed)
      * @return internal builder, for chaining
      */
-    public static LanguagePriorityListBuilder add(
-            final String acceptLanguageString) {
+    public static LanguagePriorityListBuilder add(String acceptLanguageString) {
         return new LanguagePriorityListBuilder().add(acceptLanguageString);
     }
 
@@ -123,10 +120,10 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * Return the weight for a given language, or null if there is none. Note that
      * the weights may be adjusted from those used to build the list.
      * 
-     * @param language
+     * @param language to get weight of
      * @return weight
      */
-    public Double getWeight(final ULocale language) {
+    public Double getWeight(ULocale language) {
         return languagesAndWeights.get(language);
     }
 
@@ -175,7 +172,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
     /**
      * Internal class used for building LanguagePriorityLists
      */
-    public static class LanguagePriorityListBuilder {
+    static class LanguagePriorityListBuilder {
         /**
          * These store the input languages and weights, in chronological order,
          * where later additions override previous ones.
@@ -222,7 +219,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
         /**
          * Adds a new language code, with weight = 1.0.
          * 
-         * @param languageCode
+         * @param languageCode to add with weight 1.0
          * @return this, for chaining
          */
         public LanguagePriorityListBuilder add(final ULocale languageCode) {
@@ -235,7 +232,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * @param languageCodes List of language codes.
          * @return this, for chaining.
          */
-        public LanguagePriorityListBuilder add(final ULocale... languageCodes) {
+        public LanguagePriorityListBuilder add(ULocale... languageCodes) {
             for (final ULocale languageCode : languageCodes) {
                 add(languageCode, D1);
             }
@@ -246,8 +243,8 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * Adds a new supported languageCode, with specified weight. Overrides any
          * previous weight for the language.
          * 
-         * @param languageCode
-         * @param weight
+         * @param languageCode language/locale to add
+         * @param weight value between 0.0 and 1.1
          * @return this, for chaining.
          */
         public LanguagePriorityListBuilder add(final ULocale languageCode,
@@ -267,7 +264,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
         /**
          * Adds rfc2616 list.
          * 
-         * @param acceptLanguageList
+         * @param acceptLanguageList in rfc2616 format
          * @return this, for chaining.
          */
         public LanguagePriorityListBuilder add(final String acceptLanguageList) {
