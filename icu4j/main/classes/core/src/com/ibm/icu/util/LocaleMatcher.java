@@ -577,8 +577,6 @@ public class LocaleMatcher {
 
     static {
         // TODO get data from CLDR
-        System.out.println(ULocale.addLikelySubtags(new ULocale("iw")));
-        System.out.println(ULocale.addLikelySubtags(new ULocale("he")));
         canonicalMap.put("iw", "he");
         canonicalMap.put("mo", "ro");
         canonicalMap.put("tl", "fil");
