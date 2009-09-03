@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2006, International Business Machines                   *
+* Copyright (C) 2001-2009, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -19,6 +19,10 @@
 #include "umutex.h"
 #include "uassert.h"
 
+/**  Auto-client */
+#define UCLN_TYPE UCLN_IO
+#include "ucln_imp.h"
+
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
 static const char copyright[] = U_COPYRIGHT_STRING;
 
@@ -35,6 +39,9 @@ static UBool io_cleanup(void)
             gCleanupFunctions[libType] = NULL;
         }
     }
+#if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
+    ucln_unRegisterAutomaticCleanup();
+#endif
     return TRUE;
 }
 
@@ -47,5 +54,9 @@ void ucln_io_registerCleanup(ECleanupIOType type,
     {
         gCleanupFunctions[type] = func;
     }
+
+#if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
+    ucln_registerAutomaticCleanup();
+#endif
 }
 

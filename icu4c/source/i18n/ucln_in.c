@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2006, International Business Machines                   *
+* Copyright (C) 2001-2009, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -17,6 +17,10 @@
 #include "ucln.h"
 #include "ucln_in.h"
 #include "uassert.h"
+
+/**  Auto-client for UCLN_I18N **/
+#define UCLN_TYPE UCLN_I18N
+#include "ucln_imp.h"
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
 static const char copyright[] = U_COPYRIGHT_STRING;
@@ -34,6 +38,9 @@ static UBool i18n_cleanup(void)
             gCleanupFunctions[libType] = NULL;
         }
     }
+#if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
+    ucln_unRegisterAutomaticCleanup();
+#endif
     return TRUE;
 }
 
@@ -46,5 +53,8 @@ void ucln_i18n_registerCleanup(ECleanupI18NType type,
     {
         gCleanupFunctions[type] = func;
     }
+#if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))
+    ucln_registerAutomaticCleanup();
+#endif
 }
 
