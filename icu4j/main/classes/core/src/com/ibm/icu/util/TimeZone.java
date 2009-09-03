@@ -446,7 +446,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT, 
      * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
-    private synchronized String _getDisplayName(boolean daylight, int style, ULocale locale) {
+    private String _getDisplayName(boolean daylight, int style, ULocale locale) {
         if (locale == null) {
             throw new NullPointerException("locale is null");
         }
@@ -464,10 +464,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
         // We keep a cache, indexed by locale.  The cache contains a
         // SimpleDateFormat object, which we create on demand.
-        SimpleDateFormat format = cachedLocaleData.get(locale);
-        if (format == null) {
+        SimpleDateFormat format;
+        SimpleDateFormat tmpfmt = cachedLocaleData.get(locale);
+        if (tmpfmt == null) {
             format = new SimpleDateFormat(null, locale);
             cachedLocaleData.put(locale, format);
+        } else {
+            format = (SimpleDateFormat)tmpfmt.clone();
         }
 
         String[] patterns = { "z", "zzzz", "v", "vvvv", "Z", "ZZZZ", "V", "VVVV" };
