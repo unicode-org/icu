@@ -192,6 +192,20 @@ AC_ARG_ENABLE(release,
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_RELEASE)
 
+# Check whether to enable auto cleanup of libraries
+AC_MSG_CHECKING([whether to enable auto cleanup of libraries])
+enabled=no
+UCLN_NO_AUTO_CLEANUP=1
+AC_ARG_ENABLE(auto-cleanup,
+    [  --enable-auto-cleanup   enable auto cleanup of libraries [default=no]],
+    [ case "${enableval}" in
+         yes) enabled=yes; UCLN_NO_AUTO_CLEANUP=0 ;;
+         *) ;;
+    esac],
+)
+AC_MSG_RESULT($enabled)
+AC_SUBST(UCLN_NO_AUTO_CLEANUP)
+
 # MSVC floating-point option
 MSVC_RELEASE_FLAG=""
 if test $enabled = yes

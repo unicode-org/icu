@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -46,12 +46,12 @@ CXXFLAGS += $(LIBCXXFLAGS)
 ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
 endif
-CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil -I$(srcdir) $(LIBCPPFLAGS)
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil -I$(srcdir) $(LIBCPPFLAGS) $(CPPFLAGSCTESTFW)
 DEFS += -DT_CTEST_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSCTESTFW)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o uperf.o dbgutil.o udbgutil.o
+OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o uperf.o dbgutil.o udbgutil.o ucln_ct.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
