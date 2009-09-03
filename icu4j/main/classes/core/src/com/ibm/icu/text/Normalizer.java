@@ -1657,7 +1657,7 @@ public final class Normalizer implements Cloneable {
         int rightLength=(rightLimit-rightStart);
         if(rightLength>0 && destLimit>destLength) {
             System.arraycopy(right,rightStart,dest,destLength,
-                             Math.min(rightLength,destLength)
+                             Math.min(rightLength,destLimit - destLength)
                              );
         }
         destLength+=rightLength;
@@ -2400,8 +2400,11 @@ public final class Normalizer implements Cloneable {
                                      (bufferLength<destCapacity) ? 
                                      bufferLength : destCapacity);
                 }
+                destLength = bufferLength;
             }
-        } 
+        } else {
+            destLength = bufferLength;
+        }
 
     
         return destLength;
@@ -2621,9 +2624,12 @@ public final class Normalizer implements Cloneable {
                 /* just copy the source characters */
                 if(destCapacity>0) {
                     System.arraycopy(buffer,0,dest,destStart,
-                                     Math.min(bufferLength,destCapacity));
+                                     Math.min(bufferLength,destCapacity - destStart));
                 }
+                destLength = bufferLength;
             }
+        } else {
+            destLength = bufferLength;
         }
         return destLength;
     } 
