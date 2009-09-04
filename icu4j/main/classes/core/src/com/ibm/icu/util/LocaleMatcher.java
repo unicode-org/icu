@@ -11,14 +11,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R2;
 import com.ibm.icu.impl.Row.R3;
-import com.ibm.icu.util.ULocale;
 
 /**
  * Provides a way to match the languages (locales) supported by a product to the
@@ -46,7 +44,6 @@ import com.ibm.icu.util.ULocale;
  */
 public class LocaleMatcher {
     private static final boolean DEBUG = false;
-
 
     /**
      * Threshold for falling back to the default (first) language. May make this
@@ -332,8 +329,8 @@ public class LocaleMatcher {
 
     enum Level {language, script, region}
 
-    private static class ScoreData {
-        final Set<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>();
+    private static class ScoreData implements Freezable {
+        LinkedHashSet<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>();
         final double worst;
         final Level level;
 
@@ -425,20 +422,39 @@ public class LocaleMatcher {
         public String toString() {
             return level + ", " + scores;
         }
+
+        @SuppressWarnings("unchecked")
+        public ScoreData cloneAsThawed() {
+            try {
+                ScoreData result = (ScoreData) clone();
+                result.scores = (LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>) result.scores.clone();
+                result.frozen = false;
+                return result;
+            } catch (CloneNotSupportedException e) {
+                throw new IllegalArgumentException(e); // will never happen
+            }
+
+        }
+
+        private boolean frozen = false;
+
+        public ScoreData freeze() {
+            return this;
+        }
+
+        public boolean isFrozen() {
+            return frozen;
+        }
     }
 
     /**
      * Only for testing and use by tools. Interface may change!!
      * @internal
      */
-    public static class LanguageMatcherData {
+    public static class LanguageMatcherData implements Freezable {
         ScoreData languageScores = new ScoreData(Level.language);
         ScoreData scriptScores = new ScoreData(Level.script);
         ScoreData regionScores = new ScoreData(Level.region);
-
-        public Builder start() {
-            return new Builder();
-        }
 
         public double match(ULocale a, ULocale aMax, ULocale b, ULocale bMax) {
             double diff = 0;
@@ -457,97 +473,118 @@ public class LocaleMatcher {
             return 1.0 - diff;
         }
 
-        class Builder {            
-            public LanguageMatcherData build() {
-                return LanguageMatcherData.this;
-            }
 
-            /**
-             * Add an exceptional distance between languages, typically because regional
-             * dialects were given their own language codes. At this point the code is
-             * symmetric. We don't bother producing an equivalence class because there are
-             * so few cases; this function depends on the other permutations being
-             * added specifically.
-             * @param desired
-             * @param supported
-             * @param distance
-             * @param bidirectional TODO
-             * @return 
-             */
-            private Builder addDistance(String desired, String supported, int percent) {
-                return addDistance(desired, supported, percent, false, null);
-            }
-            private Builder addDistance(String desired, String supported, int percent, String comment) {
-                return addDistance(desired, supported, percent, false, comment);
-            }
+        /**
+         * Add an exceptional distance between languages, typically because regional
+         * dialects were given their own language codes. At this point the code is
+         * symmetric. We don't bother producing an equivalence class because there are
+         * so few cases; this function depends on the other permutations being
+         * added specifically.
+         * @param desired
+         * @param supported
+         * @param distance
+         * @param bidirectional TODO
+         * @return 
+         */
+        private LanguageMatcherData addDistance(String desired, String supported, int percent) {
+            return addDistance(desired, supported, percent, false, null);
+        }
+        public LanguageMatcherData addDistance(String desired, String supported, int percent, String comment) {
+            return addDistance(desired, supported, percent, false, comment);
+        }
 
-            private Builder addDistance(String desired, String supported, int percent, boolean oneway) {
-                return addDistance(desired, supported, percent, oneway, null);
+        public LanguageMatcherData addDistance(String desired, String supported, int percent, boolean oneway) {
+            return addDistance(desired, supported, percent, oneway, null);
+        }
+
+        private LanguageMatcherData addDistance(String desired, String supported, int percent, boolean oneway, String comment) {
+            if (DEBUG) {
+                System.out.println("\t<languageMatch desired=\"" + desired + "\"" +
+                        " supported=\"" + supported + "\"" +
+                        " percent=\"" + percent + "\""
+                        + (oneway ? " oneway=\"true\"" : "")
+                        + "/>"
+                        + (comment == null ? "" : "\t<!-- " + comment + " -->"));
+                //                    //     .addDistance("nn", "nb", 4, true)
+                //                        System.out.println(".addDistance(\"" + desired + "\"" +
+                //                                ", \"" + supported + "\"" +
+                //                                ", " + percent + ""
+                //                                + (oneway ? "" : ", true")
+                //                                + (comment == null ? "" : ", \"" + comment + "\"")
+                //                                + ")"
+                //                        );
+
             }
-
-            private Builder addDistance(String desired, String supported, int percent, boolean oneway, String comment) {
-                if (DEBUG) {
-                    if (false)
-                        System.out.println("\t<distance desired=\"" + desired + "\"" +
-                                " supported=\"" + supported + "\"" +
-                                " percent=\"" + percent + "\""
-                                + (oneway ? "" : " oneway=\"true\"")
-                                + "/>"
-                                + (comment == null ? "" : "\t<!-- " + comment + " -->"));
-                    else //     .addDistance("nn", "nb", 4, true)
-                        System.out.println(".addDistance(\"" + desired + "\"" +
-                                ", \"" + supported + "\"" +
-                                ", " + percent + ""
-                                + (oneway ? "" : ", true")
-                                + (comment == null ? "" : ", \"" + comment + "\"")
-                                + ")"
-                        );
-
+            double score = 1-percent/100.0; // convert from percentage
+            LocalePatternMatcher desiredMatcher = new LocalePatternMatcher(desired);
+            Level desiredLen = desiredMatcher.getLevel();
+            LocalePatternMatcher supportedMatcher = new LocalePatternMatcher(supported);
+            Level supportedLen = supportedMatcher.getLevel();
+            if (desiredLen != supportedLen) {
+                throw new IllegalArgumentException();
+            }
+            R3<LocalePatternMatcher,LocalePatternMatcher,Double> data = Row.of(desiredMatcher, supportedMatcher, score);
+            R3<LocalePatternMatcher,LocalePatternMatcher,Double> data2 = oneway ? null : Row.of(supportedMatcher, desiredMatcher, score);
+            switch (desiredLen) {
+            case language:
+                String dlanguage = desiredMatcher.getLanguage();
+                String slanguage = supportedMatcher.getLanguage();
+                languageScores.addDataToScores(dlanguage, slanguage, data);
+                if (!oneway) {
+                    languageScores.addDataToScores(slanguage, dlanguage, data2);
                 }
-                double score = 1-percent/100.0; // convert from percentage
-                LocalePatternMatcher desiredMatcher = new LocalePatternMatcher(desired);
-                Level desiredLen = desiredMatcher.getLevel();
-                LocalePatternMatcher supportedMatcher = new LocalePatternMatcher(supported);
-                Level supportedLen = supportedMatcher.getLevel();
-                if (desiredLen != supportedLen) {
-                    throw new IllegalArgumentException();
+                break;
+            case script:
+                String dscript = desiredMatcher.getScript();
+                String sscript = supportedMatcher.getScript();
+                scriptScores.addDataToScores(dscript, sscript, data);
+                if (!oneway) {
+                    scriptScores.addDataToScores(sscript, dscript, data2);
                 }
-                R3<LocalePatternMatcher,LocalePatternMatcher,Double> data = Row.of(desiredMatcher, supportedMatcher, score);
-                R3<LocalePatternMatcher,LocalePatternMatcher,Double> data2 = oneway ? null : Row.of(supportedMatcher, desiredMatcher, score);
-                switch (desiredLen) {
-                case language:
-                    String dlanguage = desiredMatcher.getLanguage();
-                    String slanguage = supportedMatcher.getLanguage();
-                    languageScores.addDataToScores(dlanguage, slanguage, data);
-                    if (!oneway) {
-                        languageScores.addDataToScores(slanguage, dlanguage, data2);
-                    }
-                    break;
-                case script:
-                    String dscript = desiredMatcher.getScript();
-                    String sscript = supportedMatcher.getScript();
-                    scriptScores.addDataToScores(dscript, sscript, data);
-                    if (!oneway) {
-                        scriptScores.addDataToScores(sscript, dscript, data2);
-                    }
-                    break;
-                case region:
-                    String dregion = desiredMatcher.getRegion();
-                    String sregion = supportedMatcher.getRegion();
-                    regionScores.addDataToScores(dregion, sregion, data);
-                    if (!oneway) {
-                        regionScores.addDataToScores(sregion, dregion, data2);
-                    }
-                    break;
+                break;
+            case region:
+                String dregion = desiredMatcher.getRegion();
+                String sregion = supportedMatcher.getRegion();
+                regionScores.addDataToScores(dregion, sregion, data);
+                if (!oneway) {
+                    regionScores.addDataToScores(sregion, dregion, data2);
                 }
-                return this;
+                break;
             }
+            return this;
+        }
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.util.Freezable#cloneAsThawed()
+         */
+        public Object cloneAsThawed() {
+            LanguageMatcherData result;
+            try {
+                result = (LanguageMatcherData) clone();
+                result.languageScores = languageScores.cloneAsThawed();
+                result.scriptScores = scriptScores.cloneAsThawed();
+                result.regionScores = regionScores.cloneAsThawed();
+                result.frozen = false;
+                return result;
+            } catch (CloneNotSupportedException e) {
+                throw new IllegalArgumentException(e); // will never happen
+            }
+        }
+
+        private boolean frozen = false;
+
+        public LanguageMatcherData freeze() {
+            return this;
+        }
+
+        public boolean isFrozen() {
+            return frozen;
         }
     }
 
     LanguageMatcherData matcherData;
 
-    private static LanguageMatcherData defaultWritten = new LanguageMatcherData().start()
+    private static LanguageMatcherData defaultWritten = new LanguageMatcherData()
     // TODO get data from CLDR
     .addDistance("no", "nb", 100, "The language no is normally taken as nb in content; we might alias this for lookup.")
     .addDistance("nn", "nb", 96)
@@ -572,7 +609,7 @@ public class LocaleMatcher {
     .addDistance("*", "*", 1, "[Default value -- must be at end!] Normally there is no comprehension of different languages.")
     .addDistance("*-*", "*-*", 20, "[Default value -- must be at end!] Normally there is little comprehension of different scripts.")
     .addDistance("*-*-*", "*-*-*", 96, "[Default value -- must be at end!] Normally there are small differences across regions.")
-    .build();
+    .freeze();
 
     private static HashMap<String,String> canonicalMap = new HashMap<String, String>();
 
