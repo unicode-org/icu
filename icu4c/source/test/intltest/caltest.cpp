@@ -305,11 +305,13 @@ CalendarTest::TestGenericAPI()
         cal->after(*cal2, status) ||
         U_FAILURE(status)) errln("FAIL: equals/before/after failed after setTime(+1000)");
 
-    logln("cal1->roll(UCAL_SECOND)");
+    logln("cal->roll(UCAL_SECOND)");
     cal->roll(UCAL_SECOND, (UBool) TRUE, status);
     logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
-
+    cal->roll(UCAL_SECOND, 0, status);
+    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
     if (failure(status, "Calendar::roll")) return;
+
     if (!(eq=cal->equals(*cal2, status)) ||
         (b4=cal->before(*cal2, status)) ||
         (af=cal->after(*cal2, status)) ||
@@ -399,6 +401,10 @@ CalendarTest::TestGenericAPI()
         }
         cal->clear((UCalendarDateFields)i);
         if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed " + fieldName((UCalendarDateFields)i));
+    }
+
+    if(cal->getActualMinimum(UCAL_SECOND, status) != 0){
+        errln("Calendar is suppose to return 0 for getActualMinimum");
     }
 
     delete cal;

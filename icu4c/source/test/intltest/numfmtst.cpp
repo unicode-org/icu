@@ -148,6 +148,12 @@ NumberFormatTest::TestAPI(void)
         errln("format int64_t error");
     }
 
+    ParsePosition ppos;
+    test->parseCurrency("",bla,ppos);
+    if(U_FAILURE(status)) {
+        errln("Problems accessing the parseCurrency function for NumberFormat");
+    }
+
     delete test;  
   }
 }
