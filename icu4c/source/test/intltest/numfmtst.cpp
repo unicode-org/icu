@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "cstring.h"
+#include "unicode/numsys.h"
 
 //#define NUMFMTST_CACHE_DEBUG 1
 #ifdef NUMFMTST_CACHE_DEBUG 
@@ -2686,6 +2687,27 @@ void NumberFormatTest::TestNumberingSystems() {
     NumberFormat* fmt4= NumberFormat::createInstance(loc4, ec);
     if ( ec != U_UNSUPPORTED_ERROR ) {
         errln("FAIL: getInstance(en_US@numbers=foobar) should have returned U_UNSUPPORTED_ERROR");
+    }
+
+    NumberingSystem *ns = NumberingSystem::createInstance(ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: NumberingSystem::createInstance(ec); - %s", u_errorName(ec));
+    }
+
+    const NumberingSystem ns1 = NumberingSystem::NumberingSystem();
+    NumberingSystem::NumberingSystem(ns1);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: NumberingSystem::NumberingSystem(ns1); - %s", u_errorName(ec));
+    }
+
+    ns->getDynamicClassID();
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: NumberingSystem::getDynamicClassID(); - %s", u_errorName(ec));
+    }
+
+    ns->getStaticClassID();
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: NumberingSystem::getStaticClassID(); - %s", u_errorName(ec));
     }
 
     delete fmt1;

@@ -111,10 +111,14 @@ CollationAPITest::TestProperty(/* char* par */)
     logln("The property tests begin : ");
     logln("Test ctors : ");
     col = Collator::createInstance(Locale::getEnglish(), success);
-
-    if (U_FAILURE(success))
-    {
+    if (U_FAILURE(success)){
         errcheckln(success, "Default Collator creation failed. - %s", u_errorName(success));
+        return;
+    }
+
+    col->getKeywordValuesForLocale("", Locale::getEnglish(),true,success);
+    if (U_FAILURE(success)){
+        errcheckln(success, "Get Keyword Values for Locale failed. - %s", u_errorName(success));
         return;
     }
 
@@ -132,6 +136,7 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->compare("blackbird", "black-bird") == Collator::GREATER), "black-bird > blackbird comparison failed");
     doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
     doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
+    doAssert((col->compare("","",success) == Collator::EQUAL), "Comparison between empty strings failed");
 
     doAssert((col->compareUTF8("\x61\x62\xc3\xa4", "\x61\x62\xc3\x9f", success) == UCOL_LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
     success = U_ZERO_ERROR;
