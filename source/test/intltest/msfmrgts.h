@@ -43,6 +43,7 @@ public:
     void Test4142938(void);
     void TestChoicePatternQuote(void);
     void Test4112104(void);
+    void TestAPI(void);
 
 protected:
     UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=FALSE);
