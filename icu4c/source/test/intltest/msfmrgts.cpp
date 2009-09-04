@@ -51,6 +51,7 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(18,Test4142938)
         CASE(19,TestChoicePatternQuote)
         CASE(20,Test4112104)
+        CASE(21,TestAPI)
 
         default: name = ""; break;
     }
@@ -969,6 +970,26 @@ void MessageFormatRegressionTest::Test4112104()
     catch (NullPointerException e) {
         errln("MessageFormat.equals(null) throws " + e);
     }*/
+    delete format;
+}
+
+void MessageFormatRegressionTest::TestAPI() {
+    UErrorCode status = U_ZERO_ERROR;
+    MessageFormat *format = new MessageFormat("", status);
+    failure(status, "new MessageFormat");
+
+    // Test adoptFormat
+    MessageFormat *fmt = new MessageFormat("",status);
+    format->adoptFormat("",fmt,status);
+    failure(status, "adoptFormat");
+
+    // Test getFormat
+    format->getFormat("",status);
+    failure(status, "getFormat");
+
+    // Test setFormat
+    format->usesNamedArguments();
+    failure(status, "usesNamedArguments()");
     delete format;
 }
 
