@@ -308,7 +308,7 @@ CalendarTest::TestGenericAPI()
     logln("cal->roll(UCAL_SECOND)");
     cal->roll(UCAL_SECOND, (UBool) TRUE, status);
     logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
-    cal->roll(UCAL_SECOND, 0, status);
+    cal->roll(UCAL_SECOND, (int32_t)0, status);
     logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
     if (failure(status, "Calendar::roll")) return;
 
