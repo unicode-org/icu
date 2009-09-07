@@ -2694,8 +2694,8 @@ void NumberFormatTest::TestNumberingSystems() {
         dataerrln("FAIL: NumberingSystem::createInstance(ec); - %s", u_errorName(ec));
     }
 
-    const NumberingSystem ns1 = NumberingSystem::NumberingSystem();
-    NumberingSystem::NumberingSystem(ns1);
+    NumberingSystem ns1 = NumberingSystem::NumberingSystem();
+    NumberingSystem ns2 = NumberingSystem::NumberingSystem(ns1);
     if (U_FAILURE(ec)) {
         dataerrln("FAIL: NumberingSystem::NumberingSystem(ns1); - %s", u_errorName(ec));
     }
