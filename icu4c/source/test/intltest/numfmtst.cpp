@@ -2694,22 +2694,17 @@ void NumberFormatTest::TestNumberingSystems() {
         dataerrln("FAIL: NumberingSystem::createInstance(ec); - %s", u_errorName(ec));
     }
 
-    NumberingSystem ns1 = NumberingSystem::NumberingSystem();
-    NumberingSystem ns2 = NumberingSystem::NumberingSystem(ns1);
-    if (U_FAILURE(ec)) {
-        dataerrln("FAIL: NumberingSystem::NumberingSystem(ns1); - %s", u_errorName(ec));
-    }
-
     ns->getDynamicClassID();
-    if (U_FAILURE(ec)) {
-        dataerrln("FAIL: NumberingSystem::getDynamicClassID(); - %s", u_errorName(ec));
-    }
 
     ns->getStaticClassID();
-    if (U_FAILURE(ec)) {
-        dataerrln("FAIL: NumberingSystem::getStaticClassID(); - %s", u_errorName(ec));
+
+    NumberingSystem *ns1 = new NumberingSystem(*ns);
+    if (ns1 == NULL) {
+        errln("FAIL: NumberSystem copy constructor returned NULL.");
     }
 
+    delete ns1;
+    delete ns;
     delete fmt1;
     delete fmt2;
     delete fmt3;
