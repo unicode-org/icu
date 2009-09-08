@@ -26,6 +26,7 @@ public:
     void testAPI(/*char *par*/);
     void testRounding(/*char *par*/);
     void testRoundingInc(/*char *par*/);
+    void TestCurrencyPluralInfo();
 private:
     /*Helper functions */
     void verify(const UnicodeString& message, const UnicodeString& got, double expected);
