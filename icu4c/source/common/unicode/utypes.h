@@ -235,7 +235,10 @@
  * Do not use.
  * @internal
  */
+#ifndef U_DEF_ICUDATA_ENTRY_POINT
+/* affected by symbol renaming. See platform.h */
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
+#endif
 
 /**
  * \def U_CALLCONV

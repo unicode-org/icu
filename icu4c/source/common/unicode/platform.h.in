@@ -6,6 +6,10 @@
 *
 ******************************************************************************
 *
+* Note: autoconf creates platform.h from platform.h.in at configure time.
+*
+******************************************************************************
+*
 *  FILE NAME : platform.h
 *
 *   Date        Name        Description
@@ -23,6 +27,11 @@
  * \file 
  * \brief Basic types for the platform 
  */
+
+/* This file should be included before uverdefs.h. */
+#if defined(UVERDEFS_H)
+# error Do not include unicode/uverdefs.h before #including unicode/platform.h.  Instead of unicode/uverdefs,h, #include unicode/uversion.h
+#endif
 
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS @ICU_USE_THREADS@
@@ -118,75 +127,14 @@
 /** @} */
 
 /*===========================================================================*/
-/** @{ Generic data types                                                        */
+/** @{ Generic data types                                                    */
+/*     NOTE: type definitions have moved to ptypes.h                         */
 /*===========================================================================*/
-
-#include <sys/types.h>
-
-/* If your platform does not have the <inttypes.h> header, you may
-   need to edit the typedefs below. */
-#if U_HAVE_INTTYPES_H
-
-/* autoconf 2.13 sometimes can't properly find the data types in <inttypes.h> */
-/* os/390 needs <inttypes.h>, but it doesn't have int8_t, and it sometimes */
-/* doesn't have uint8_t depending on the OS version. */
-/* So we have this work around. */
-#ifdef OS390
-/* The features header is needed to get (u)int64_t sometimes. */
-#include <features.h>
-#if ! U_HAVE_INT8_T
-typedef signed char int8_t;
-#endif
-#if !defined(__uint8_t)
-#define __uint8_t 1
-typedef unsigned char uint8_t;
-#endif
-#endif /* OS390 */
-
-#include <inttypes.h>
-
-#else /* U_HAVE_INTTYPES_H */
-
-#if ! U_HAVE_INT8_T
-typedef signed char int8_t;
-#endif
-
-#if ! U_HAVE_UINT8_T
-typedef unsigned char uint8_t;
-#endif
-
-#if ! U_HAVE_INT16_T
-typedef signed short int16_t;
-#endif
-
-#if ! U_HAVE_UINT16_T
-typedef unsigned short uint16_t;
-#endif
-
-#if ! U_HAVE_INT32_T
-typedef signed int int32_t;
-#endif
-
-#if ! U_HAVE_UINT32_T
-typedef unsigned int uint32_t;
-#endif
-
-#if ! U_HAVE_INT64_T
-    typedef signed long long int64_t;
-/* else we may not have a 64-bit type */
-#endif
-
-#if ! U_HAVE_UINT64_T
-    typedef unsigned long long uint64_t;
-/* else we may not have a 64-bit type */
-#endif
-
-#endif
 
 /** @} */
 
 /*===========================================================================*/
-/** @{ Compiler and environment features                                         */
+/** @{ Compiler and environment features                                     */
 /*===========================================================================*/
 
 /* Define whether namespace is supported */
@@ -389,6 +337,22 @@ typedef unsigned int uint32_t;
 #endif
 
 /** @} */
+
+/*===========================================================================*/
+/* Custom function renaming                                                  */
+/*===========================================================================*/
+#ifndef U_HAVE_LIB_SUFFIX
+# define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
+#endif
+#if U_HAVE_LIB_SUFFIX
+# ifndef U_ICU_FUNCTION_RENAME
+/* Renaming pattern:    u_strcpy_41_suffix */
+#  define U_ICU_FUNCTION_RENAME(x)    x ## _ ## @LIB_VERSION_MAJOR@ ## @ICULIBSUFFIXCNAME@
+#  define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##@ICULIBSUFFIXCNAME@##major##minor##_dat
+
+# endif
+#endif
+
 #endif /* CYGWINMSVC */
 
 #endif
