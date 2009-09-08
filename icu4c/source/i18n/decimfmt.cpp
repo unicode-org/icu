@@ -2395,7 +2395,7 @@ int32_t DecimalFormat::match(const UnicodeString& text, int32_t pos, UChar32 ch)
         // Advance over run of white space in input text
         // Must see at least one white space char in input
         int32_t s = pos;
-        pos = skipUWhiteSpace(text, pos);
+        pos = skipRuleWhiteSpace(text, pos);
         if (pos == s) {
             return -1;
         }

@@ -2714,7 +2714,7 @@ public class DecimalFormat extends NumberFormat {
             // Advance over run of white space in input text
             // Must see at least one white space char in input
             int s = pos;
-            pos = skipUWhiteSpace(text, pos);
+            pos = skipRuleWhiteSpace(text, pos);
             if (pos == s) {
                 return -1;
             }
