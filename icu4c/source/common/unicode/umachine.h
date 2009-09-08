@@ -50,6 +50,7 @@
 #   include "unicode/pwin32.h"
 #else
 #   include "unicode/platform.h"
+#   include "unicode/ptypes.h"
 #endif
 
 /*
