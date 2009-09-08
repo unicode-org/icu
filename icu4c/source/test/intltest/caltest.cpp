@@ -403,9 +403,12 @@ CalendarTest::TestGenericAPI()
         if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed " + fieldName((UCalendarDateFields)i));
     }
 
-    if(cal->getActualMinimum(UCAL_SECOND, status) != 0){
+    if(cal->getActualMinimum(Calendar::SECOND, status) != 0){
         errln("Calendar is suppose to return 0 for getActualMinimum");
     }
+
+    cal->roll(Calendar::SECOND, 0, status);
+    if (failure(status, "Calendar::roll(EDateFields, int32_t, UErrorCode)")) return;
 
     delete cal;
     delete cal2;
