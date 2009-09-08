@@ -25,7 +25,7 @@ $path = substr($0, 0, rindex($0, "/")+1)."../../common/unicode/uversion.h";
 $nmopts = '-Cg -f s';
 $post = '';
 
-$mode = 'LINUX';
+$mode = 'POSIX';
 
 (-e $path) || die "Cannot find uversion.h";
 
@@ -68,7 +68,6 @@ $HEADERDEF =~ s/\./_/;
 
 #We will print our copyright here + warnings
 
-
 $YEAR = strftime "%Y",localtime;
 
 print HEADER <<"EndOfHeaderComment";
@@ -100,6 +99,36 @@ print HEADER <<"EndOfHeaderComment";
 /* #define U_DISABLE_RENAMING 1 */
 
 #if !U_DISABLE_RENAMING
+
+/* We need the U_ICU_FUNCTION_RENAME definition. There's a default one in unicode/uverdefs.h we can use, but we will give 
+   the platform a chance to define it first.
+   Normally (if utypes.h or umachine.h was included first) this will not be necessary as it will already be defined.
+ */
+#ifndef U_ICU_FUNCTION_RENAME
+/**
+ * Are we using platform.h? If so, include platform.h here. 
+ * NOTE: this logic was copied from umachine.h and must be kept in sync with it.
+ */
+#if defined(U_PALMOS)
+   /* No equivalent platform.h.  Was: include "unicode/ppalmos.h" */
+#elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+   /* No equivalent platform.h.  Was: include "unicode/pwin32.h" */
+#else
+#   include "unicode/platform.h"  /* platform.h is 'pure defines' */
+   /* Do not include "unicode/ptypes.h" - ptypes.h contains typedefs and other includes */
+#endif
+#endif
+
+/* If we still don't have U_ICU_FUNCTION_RENAME use the default. */
+#ifndef U_ICU_FUNCTION_RENAME
+#include "unicode/uverdefs.h"
+#endif
+
+/* Error out before the following defines cause very strange and unexpected code breakage */
+#ifndef U_ICU_FUNCTION_RENAME
+#error U_ICU_FUNCTION_RENAME is not defined - cannot continue. Consider defining U_DISABLE_RENAMING if renaming should not be used.
+#endif
+
 EndOfHeaderComment
 
 for(;@ARGV; shift(@ARGV)) {
@@ -169,14 +198,15 @@ for(;@ARGV; shift(@ARGV)) {
 
 print HEADER "\n/* C exports renaming data */\n\n";
 foreach(sort keys(%CFuncs)) {
-    print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
+    print HEADER "#define $_ U_ICU_FUNCTION_RENAME($_)\n";
+#    print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
 
 print HEADER "/* C++ class names renaming defines */\n\n";
 print HEADER "#ifdef XP_CPLUSPLUS\n";
 print HEADER "#if !U_HAVE_NAMESPACE\n\n";
 foreach(sort keys(%CppClasses)) {
-    print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
+    print HEADER "#define $_ U_ICU_FUNCTION_RENAME($_)\n";
 }
 print HEADER "\n#endif\n";
 print HEADER "#endif\n";
