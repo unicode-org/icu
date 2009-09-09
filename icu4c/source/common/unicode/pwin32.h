@@ -247,9 +247,15 @@ Intel can define _M_IX86 or _M_X64
 #endif
 
 /** @{ Define the library suffix in a C syntax. */
+#ifndef U_HAVE_LIB_SUFFIX
 #define U_HAVE_LIB_SUFFIX 0
-#define U_LIB_SUFFIX_C_NAME 
+#endif
+#ifndef U_LIB_SUFFIX_C_NAME
+#define U_LIB_SUFFIX_C_NAME
+#endif
+#ifndef U_LIB_SUFFIX_C_NAME_STRING
 #define U_LIB_SUFFIX_C_NAME_STRING ""
+#endif
 /** @} */
 
 /*===========================================================================*/
