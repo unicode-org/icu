@@ -977,19 +977,16 @@ void MessageFormatRegressionTest::TestAPI() {
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat *format = new MessageFormat("", status);
     failure(status, "new MessageFormat");
-
+    
     // Test adoptFormat
     MessageFormat *fmt = new MessageFormat("",status);
     format->adoptFormat("",fmt,status);
     failure(status, "adoptFormat");
 
     // Test getFormat
+    format->setFormat((int32_t)0,*fmt);
     format->getFormat("",status);
     failure(status, "getFormat");
-
-    // Test setFormat
-    format->usesNamedArguments();
-    failure(status, "usesNamedArguments()");
     delete format;
 }
 

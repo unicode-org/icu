@@ -116,6 +116,9 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 9: name = "udhrTest";
             if (exec) udhrTest();
             break;
+        case 10: name = "stringListTest";
+            if (exec) stringListTest();
+            break;
 #endif
         default: name = "";
             break; //needed to end loop
@@ -2447,6 +2450,25 @@ void SSearchTest::bmMonkeyTest(char *params)
     CollData::close(monkeyData);
 
     ucol_close(coll);
+}
+
+void SSearchTest::stringListTest(){
+    UErrorCode status = U_ZERO_ERROR;
+    StringList *sl = new StringList(status);
+    if(U_FAILURE(status)){
+        errln("ERROR: stringListTest: Could not start StringList");
+    }
+
+    const UChar *chars = new UChar();
+    sl->add(chars, (int32_t) 0, status);
+    if(U_FAILURE(status)){
+        errln("ERROR: stringListTest: StringList::add");
+    }
+
+    if(sl->getDynamicClassID() != StringList::getStaticClassID()){
+        errln("ERROR: stringListTest: getDynamicClassID and getStaticClassID does not match");
+    }
+    delete sl;
 }
 
 #endif
