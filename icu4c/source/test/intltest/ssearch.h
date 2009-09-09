@@ -45,6 +45,7 @@ public:
 
     virtual void udhrTest();
 
+    virtual void stringListTest();
 private:
     virtual const char   *getPath(char buffer[2048], const char *filename);
     virtual       int32_t monkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,

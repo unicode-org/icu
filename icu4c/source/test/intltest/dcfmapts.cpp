@@ -403,6 +403,8 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: DecimalFormat::getCurrencyPluralInfo");
     }
+
+    delete df;
 }
 
 void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
