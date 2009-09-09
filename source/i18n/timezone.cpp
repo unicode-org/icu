@@ -578,6 +578,11 @@ TimeZone::initDefault()
     hostStrID.truncate(hostStrID.length()-1);
     default_zone = createSystemTimeZone(hostStrID);
 
+#ifdef U_WINDOWS
+    // hostID points to a heap-allocated location on Windows.
+    uprv_free(const_cast<char *>(hostID));
+#endif
+
     int32_t hostIDLen = hostStrID.length();
     if (default_zone != NULL && rawOffset != default_zone->getRawOffset()
         && (3 <= hostIDLen && hostIDLen <= 4))
