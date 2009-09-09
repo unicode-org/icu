@@ -189,11 +189,6 @@
 #define U_DEFAULT_SHOW_DRAFT @U_DEFAULT_SHOW_DRAFT@
 #endif
 
-/* Define the library suffix in a C syntax. */
-#define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
-#define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
-#define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
-
 /** @} */
 
 /*===========================================================================*/
@@ -338,12 +333,16 @@
 
 /** @} */
 
+#endif /* CYGWINMSVC */
+
 /*===========================================================================*/
 /* Custom function renaming                                                  */
 /*===========================================================================*/
-#ifndef U_HAVE_LIB_SUFFIX
+/* Define the library suffix in a C syntax. */
+# define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
+# define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
 # define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
-#endif
+
 #if U_HAVE_LIB_SUFFIX
 # ifndef U_ICU_FUNCTION_RENAME
 /* Renaming pattern:    u_strcpy_41_suffix */
@@ -352,7 +351,5 @@
 
 # endif
 #endif
-
-#endif /* CYGWINMSVC */
 
 #endif
