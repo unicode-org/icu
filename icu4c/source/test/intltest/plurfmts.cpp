@@ -126,11 +126,25 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     else {
          dataerrln("ERROR: PluralFormat clone failed! - %s", u_errorName(status[1]));
     }
+
     delete plFmt[0];
     delete plFmt[2];
     delete plFmt[3];
     delete numFmt;
     delete plRules;
+
+    // Tests parseObject
+    UErrorCode stat = U_ZERO_ERROR;
+    PluralFormat *pf = new PluralFormat(stat);
+    Formattable *f = new Formattable();
+    ParsePosition *pp = new ParsePosition();
+    pf->parseObject((UnicodeString)"",*f,*pp);
+    if(U_FAILURE(stat)) {
+        errln("ERROR: PluralFormat::parseObject");
+    }
+    delete pf;
+    delete f;
+    delete pp;
 }
 
 /**

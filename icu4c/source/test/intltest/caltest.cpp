@@ -408,7 +408,7 @@ CalendarTest::TestGenericAPI()
     }
 
     Calendar *cal3 = Calendar::createInstance(status);
-    cal3->roll(Calendar::SECOND, 0, status);
+    cal3->roll(Calendar::SECOND, (int32_t)0, status);
     if (failure(status, "Calendar::roll(EDateFields, int32_t, UErrorCode)")) return;
 
     delete cal;
