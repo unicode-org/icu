@@ -407,11 +407,13 @@ CalendarTest::TestGenericAPI()
         errln("Calendar is suppose to return 0 for getActualMinimum");
     }
 
-    cal->roll(Calendar::SECOND, 0, status);
+    Calendar *cal3 = Calendar::createInstance(status);
+    cal3->roll(Calendar::SECOND, 0, status);
     if (failure(status, "Calendar::roll(EDateFields, int32_t, UErrorCode)")) return;
 
     delete cal;
     delete cal2;
+    delete cal3;
 
     int32_t count;
     const Locale* loc = Calendar::getAvailableLocales(count);

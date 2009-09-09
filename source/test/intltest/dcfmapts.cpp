@@ -48,6 +48,12 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                testRoundingInc(/*par*/);
             }
             break;
+        case 3: name = "TestCurrencyPluralInfo";
+            if(exec) {
+               logln((UnicodeString)"CurrencyPluralInfo API test---");
+               TestCurrencyPluralInfo();
+            }
+            break;
         default: name = ""; break;
     }
 }
