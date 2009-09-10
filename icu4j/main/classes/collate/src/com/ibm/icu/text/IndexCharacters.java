@@ -85,13 +85,21 @@ public class IndexCharacters {
      */
     @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale) {
+        this(locale, LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD), Collator.getInstance(locale));
+    }
+    
+    public IndexCharacters(ULocale locale, UnicodeSet exemplarSet, Collator collator) {
         this.locale = locale;
-        comparator = Collator.getInstance(locale);
+        try {
+            comparator = (Collator) collator.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalArgumentException(e);
+        }
         comparator.setStrength(Collator.PRIMARY);
 
         // get the exemplars, and handle special cases
 
-        UnicodeSet exemplars = LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD);
+        UnicodeSet exemplars = (UnicodeSet) exemplarSet.cloneAsThawed();
         // question: should we add auxiliary exemplars?
         if (exemplars.containsSome(CORE_LATIN)) {
             exemplars.addAll(CORE_LATIN);
