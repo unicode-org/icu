@@ -70,6 +70,7 @@ public:
     void TestBug5775();
     void TestThaiBreaks();
     void TestTailoredBreaks();
+    void TestDictRules();
 
     void TestDebug();
 
