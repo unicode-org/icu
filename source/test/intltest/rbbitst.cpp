@@ -140,6 +140,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 21: case 22: case 23: name = "skip";
             break;
 #endif
+        case 24: name = "TestDictRules";
+            if (exec) TestDictRules();                         break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1989,6 +1991,41 @@ void RBBITest::TestTailoredBreaks() {
         delete tailoredBrkiter;
     }
 }
+
+
+//-------------------------------------------------------------------------------
+//
+//  TestDictRules   create a break iterator from source rules that includes a
+//                  dictionary range.   Regression for bug #7130.  Source rules
+//                  do not declare a break iterator type (word, line, sentence, etc.
+//                  but the dictionary code, without a type, would loop.
+//
+//-------------------------------------------------------------------------------
+void RBBITest::TestDictRules() {
+    const char *rules =  "$dictionary = [a-z]; \n"
+                         "!!forward; \n"
+                         "$dictionary $dictionary; \n"
+                         "!!reverse; \n"
+                         "$dictionary $dictionary; \n";
+    const char *text = "aa";
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+
+    RuleBasedBreakIterator bi(rules, parseError, status);
+    TEST_ASSERT_SUCCESS(status);
+    UnicodeString utext = text;
+    bi.setText(utext);
+    int32_t position;
+    int32_t loops;
+    for (loops = 0; loops<10; loops++) {
+        position = bi.next();
+        if (position == RuleBasedBreakIterator::DONE) {
+            break;
+        }
+    }
+    TEST_ASSERT(loops == 1);
+}
+
 
 
 //-------------------------------------------------------------------------------
