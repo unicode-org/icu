@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2008 International Business Machines Corporation   *
+*   Copyright (C) 1999-2009 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -247,7 +247,10 @@ void RuleBasedBreakIterator::init() {
     fLastRuleStatusIndex  = 0;
     fLastStatusIndexValid = TRUE;
     fDictionaryCharCount  = 0;
-    fBreakType            = -1;
+    fBreakType            = UBRK_WORD;  // Defaulting BreakType to word gives reasonable
+                                        //   dictionary behavior for Break Iterators that are
+                                        //   built from rules.  Even better would be the ability to
+                                        //   declare the type in the rules.
 
     fCachedBreakPositions    = NULL;
     fLanguageBreakEngines    = NULL;
@@ -1019,7 +1022,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
 
         #ifdef RBBI_DEBUG
             if (fTrace) {
-                RBBIDebugPrintf("             %4d   ", utext_getNativeIndex(fText));
+                RBBIDebugPrintf("             %4ld   ", utext_getNativeIndex(fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {
