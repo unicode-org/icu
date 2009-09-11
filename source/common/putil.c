@@ -1637,6 +1637,12 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         /* Remap CP949 to a similar codepage to avoid issues with backslash and won symbol. */
         name = "EUC-KR";
     }
+    else if (locale != NULL && uprv_strcmp(locale, "en_US_POSIX") != 0 && uprv_strcmp(name, "US-ASCII") == 0) {
+        /*
+         * For non C/POSIX locale, default the code page to UTF-8 instead of US-ASCII.
+         */
+        name = "UTF-8";
+    }
 #elif defined(U_BSD)
     if (uprv_strcmp(name, "CP949") == 0) {
         /* Remap CP949 to a similar codepage to avoid issues with backslash and won symbol. */
@@ -1674,6 +1680,13 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         ibm-33722 is the default for eucJP (similar to Windows).
         */
         name = "eucjis";
+    }
+    else if (locale != NULL && uprv_strcmp(locale, "en_US_POSIX") != 0 &&
+            (uprv_strcmp(name, "ANSI_X3.4-1968") == 0 || uprv_strcmp(name, "US-ASCII") == 0)) {
+        /*
+         * For non C/POSIX locale, default the code page to UTF-8 instead of US-ASCII.
+         */
+        name = "UTF-8";
     }
 #endif
     /* return NULL when "" is passed in */
@@ -1773,7 +1786,19 @@ int_getDefaultCodepage()
        nl_langinfo may use the same buffer as setlocale. */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
-        codeset = remapPlatformDependentCodepage(NULL, codeset);
+#if defined(U_DARWIN) || defined(U_LINUX)
+        /*
+         * On Linux and MacOSX, ensure that default codepage for non C/POSIX locale is UTF-8
+         * instead of ASCII.
+         */
+        if (uprv_strcmp(localeName, "en_US_POSIX") != 0) {
+            codeset = remapPlatformDependentCodepage(localeName, codeset);
+        } else
+#endif
+        {
+            codeset = remapPlatformDependentCodepage(NULL, codeset);
+        }
+
         if (codeset != NULL) {
             uprv_strncpy(codesetName, codeset, sizeof(codesetName));
             codesetName[sizeof(codesetName)-1] = 0;
