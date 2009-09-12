@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2009, International Business Machines
 *   Corporation, Google and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -663,7 +663,7 @@ static const UEnumeration defaultEncodings = {
 
 // internal fn to intersect two sets of masks
 // returns whether the mask has reduced to all zeros
-UBool intersectMasks(uint32_t* dest, const uint32_t* source1, int32_t len) {
+static UBool intersectMasks(uint32_t* dest, const uint32_t* source1, int32_t len) {
   int32_t i;
   uint32_t oredDest = 0;
   for (i = 0 ; i < len ; ++i) {
@@ -674,7 +674,7 @@ UBool intersectMasks(uint32_t* dest, const uint32_t* source1, int32_t len) {
 
 // internal fn to count how many 1's are there in a mask
 // algorithm taken from  http://graphics.stanford.edu/~seander/bithacks.html
-int16_t countOnes(uint32_t* mask, int32_t len) {
+static int16_t countOnes(uint32_t* mask, int32_t len) {
   int32_t i, totalOnes = 0;
   for (i = 0 ; i < len ; ++i) {
     uint32_t ent = mask[i];

@@ -158,8 +158,9 @@ for(;@ARGV; shift(@ARGV)) {
         if(!($type =~ /[UAwW?]/)) {
             if(/@@/) { # These would be imports
                 &verbose( "Import: $_ \"$type\"\n");
-            } elsif (/::/) { # C++ methods, stuff class name in associative array
                 &verbose( "C++ method: $_\n");
+            } elsif (/^[^\(]*::/) { # C++ methods, stuff class name in associative array
+	        ##  DON'T match    ...  (   foo::bar ...   want :: to be to the left of paren
                 ## icu_2_0::CharString::~CharString(void) -> CharString
                 @CppName = split(/::/); ## remove scope stuff
                 if(@CppName>1) {
@@ -173,18 +174,22 @@ for(;@ARGV; shift(@ARGV)) {
                 } elsif($CppName[0] =~ /^~/) {
                     &verbose ("Skipping C++ destructor: $_\n");
                 } else {
+		    &verbose( " Class: '$CppName[0]': $_ \n");
                     $CppClasses{$CppName[0]}++;
                 }
+	    } elsif ( my ($cfn) = m/^([A-Za-z0-9_]*)\(.*/ ) {
+		&verbose ( "$ARGV[0]:  got global C++ function  $cfn with '$_'\n" );
+                $CFuncs{$cfn}++;
             } elsif ( /\(/) { # These are strange functions
-                print STDERR "$_\n";
+                print STDERR "$ARGV[0]: Not sure what to do with '$_'\n";
             } elsif ( /icu_/) {
-                print STDERR "Skipped strange mangled function $_\n";
+                print STDERR "$ARGV[0]: Skipped strange mangled function $_\n";
             } elsif ( /^vtable for /) {
-                print STDERR "Skipped vtable $_\n";
+                print STDERR "$ARGV[0]: Skipped vtable $_\n";
             } elsif ( /^typeinfo for /) {
-                print STDERR "Skipped typeinfo $_\n";
+                print STDERR "$ARGV[0]: Skipped typeinfo $_\n";
             } elsif ( /operator\+/ ) {
-                print STDERR "Skipped ignored function $_\n";
+                print STDERR "$ARGV[0]: Skipped ignored function $_\n";
             } else { # This is regular C function 
                 &verbose( "C func: $_\n");
                 @funcname = split(/[\(\s+]/);
