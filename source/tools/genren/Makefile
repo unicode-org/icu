@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2002-2008, International Business Machines
+#   Copyright (C) 2002-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -11,7 +11,7 @@ top_srcdir = $(TOP)
 
 top_builddir = $(TOP)
 
--include $(TOP)/icudefs.mk
+include $(TOP)/icudefs.mk
 ICUDIR=ICUunrenamed
 #SO=so
 
