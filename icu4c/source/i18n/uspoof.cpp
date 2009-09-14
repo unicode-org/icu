@@ -679,12 +679,13 @@ uspoof_getSkeleton(const USpoofChecker *sc,
     // Check the skeleton for NFKD, normalize it if needed.
     // Unnormalized results should be very rare.
     if (!unorm_isNormalized(result, resultLen, UNORM_NFKD, status)) {
-        normalizedLen = unorm_normalize(dest, resultLen, UNORM_NFKD, 0, NULL, 0, status);
+        normalizedLen = unorm_normalize(result, resultLen, UNORM_NFKD, 0, NULL, 0, status);
         UChar *normedResult = static_cast<UChar *>(uprv_malloc((normalizedLen+1)*sizeof(UChar)));
         if (normedResult == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
+        *status = U_ZERO_ERROR;
         unorm_normalize(result, resultLen, UNORM_NFKD, 0, normedResult, normalizedLen+1, status);
         result = normedResult;
         resultLen = normalizedLen;
@@ -776,21 +777,21 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
             goto cleanup;
         }
         *status = U_ZERO_ERROR;
-        u_strFromUTF8(inBuf, USPOOF_STACK_BUFFER_SIZE, &lengthInUChars+1,
+        u_strFromUTF8(inBuf, lengthInUChars+1, &lengthInUChars,
                       s, length, status);
     }
     
-    skelLengthInUChars = uspoof_getSkeleton(sc, type, outBuf, lengthInUChars,
+    skelLengthInUChars = uspoof_getSkeleton(sc, type, inBuf, lengthInUChars,
                                          outBuf, USPOOF_STACK_BUFFER_SIZE, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
-        *status = U_ZERO_ERROR;
         outBuf = static_cast<UChar *>(uprv_malloc((skelLengthInUChars+1)*sizeof(UChar)));
         if (outBuf == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto cleanup;
         }
-        skelLengthInUChars = uspoof_getSkeleton(sc, type, outBuf, lengthInUChars,
-                                         outBuf, USPOOF_STACK_BUFFER_SIZE, status);
+        *status = U_ZERO_ERROR;
+        skelLengthInUChars = uspoof_getSkeleton(sc, type, inBuf, lengthInUChars,
+                                         outBuf, skelLengthInUChars+1, status);
     }
 
     u_strToUTF8(dest, destCapacity, &skelLengthInUTF8,
