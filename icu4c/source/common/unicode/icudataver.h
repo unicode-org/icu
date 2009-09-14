@@ -32,7 +32,7 @@
  * 
  * @draft ICU 4.4
  */
-U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo *dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status);
+U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status);
 
 /**
  * Retrieves the data version from icuver and stores it in dataVersionFillin.
@@ -42,6 +42,6 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo *dataVersionFillin, UBool *isM
  * 
  * @draft ICU 4.4
  */
-U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo *dataVersionFillin, UErrorCode *status);
+U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
 
 #endif
