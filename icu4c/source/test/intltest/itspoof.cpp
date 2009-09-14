@@ -17,6 +17,7 @@
 #include "unicode/unistr.h"
 #include "unicode/regex.h"
 #include "unicode/normlzr.h"
+#include "cstring.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -315,8 +316,8 @@ void IntlTestSpoof::testConfData() {
     const char *testDataDir = IntlTest::getSourceTestData(status);
     TEST_ASSERT_SUCCESS(status);
     char buffer[2000];
-    strcpy(buffer, testDataDir);
-    strcat(buffer, "confusables.txt");
+    uprv_strcpy(buffer, testDataDir);
+    uprv_strcat(buffer, "confusables.txt");
 
     FILE     *f = NULL;
     f = fopen(buffer, "rb");
