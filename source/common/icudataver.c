@@ -11,13 +11,30 @@
 #include "unicode/icudataver.h"
 #include "unicode/uversion.h"
 #include "unicode/ures.h"
+#include "uresimp.h" /* for ures_getVersionByKey */
 
 /*
  * Determines if icustd is in the data.
  */
-UBool hasICUSTDBundle();
+static UBool hasICUSTDBundle();
 
-U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo *dataVersionFillin, UErrorCode *status) {
+static UBool hasICUSTDBundle() {
+    UErrorCode status = U_ZERO_ERROR;
+    UBool result = TRUE;
+    
+    UResourceBundle *icustdbundle = ures_openDirect(NULL, U_ICU_STD_BUNDLE, &status);
+    if (U_SUCCESS(status)) {
+        result = TRUE;
+    } else {
+        result = FALSE;
+    }
+    
+    ures_close(icustdbundle);
+    
+    return result;
+}
+
+U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status) {
     UResourceBundle *icudatares = NULL;
     
     if (U_FAILURE(*status)) {
@@ -32,7 +49,7 @@ U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo *dataVersionFillin, UErrorCo
     }
 }
 
-U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo *dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status) {
+U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status) {
     UBool result = TRUE;
     UVersionInfo dataVersion;
     UVersionInfo wiredVersion;
@@ -41,7 +58,7 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo *dataVersionFillin, UBool *isM
         return result;
     }
     
-    u_getDataVersion(&dataVersion, status);
+    u_getDataVersion(dataVersion, status);
     if (U_SUCCESS(*status)) {
         u_versionFromString(wiredVersion, U_ICU_DATA_VERSION);
         
@@ -59,22 +76,6 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo *dataVersionFillin, UBool *isM
             *isModifiedFillin = TRUE;
         }
     }
-    
-    return result;
-}
-
-UBool hasICUSTDBundle() {
-    UErrorCode status = U_ZERO_ERROR;
-    UBool result = TRUE;
-    
-    UResourceBundle *icustdbundle = ures_openDirect(NULL, U_ICU_STD_BUNDLE, &status);
-    if (U_SUCCESS(status)) {
-        result = TRUE;
-    } else {
-        result = FALSE;
-    }
-    
-    ures_close(icustdbundle);
     
     return result;
 }
