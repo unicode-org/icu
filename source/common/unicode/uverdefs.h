@@ -125,7 +125,7 @@
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
 #   else
-#       define U_ICU_NAMESPACE icu_4_1
+#       define U_ICU_NAMESPACE icu_4_3
         namespace U_ICU_NAMESPACE { }
         namespace icu = U_ICU_NAMESPACE;
 #   endif
