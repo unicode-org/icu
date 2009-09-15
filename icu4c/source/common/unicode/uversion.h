@@ -94,6 +94,21 @@ U_STABLE void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString);
 
 /**
+ * Parse a Unicode string with dotted-decimal version information and
+ * fill in a UVersionInfo structure with the result.
+ * Definition of this function lives in putil.c
+ *
+ * @param versionArray The destination structure for the version information.
+ * @param versionString A Unicode string with dotted-decimal version
+ *                      information, with up to four non-negative number
+ *                      fields with values of up to 255 each.
+ * @draft ICU 4.2
+ */
+U_STABLE void U_EXPORT2
+u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);
+
+
+/**
  * Write a string with dotted-decimal version information according
  * to the input UVersionInfo.
  * Definition of this function lives in putil.c
@@ -119,5 +134,29 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
 U_STABLE void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
 
+/**
+ * Compare two versions of UVersionInfo type to determine their equality.
+ *
+ * @param version1 The destination structure for the version information.
+ * @param version2 A Unicode string with dotted-decimal version
+ *                      information, with up to four non-negative number
+ *                      fields with values of up to 255 each.
+ *
+ * @return 0 if equal, negative value if version1 is less than version2, positive value if version1 is greater than version2
+ *
+ * @draft ICU 4.4
+ */
+U_DRAFT int32_t U_EXPORT2
+u_versionCompare(UVersionInfo version1, UVersionInfo version2);
+
+/**
+ * Copy the information in versionSrc to versionDest.
+ *
+ * @param versionDest The destination structure for the version information.
+ * @param versionSrc The source UVersionInfo to copy
+ * @draft ICU 4.4
+ */
+U_DRAFT void U_EXPORT2
+u_versionCopy(UVersionInfo versionDest, UVersionInfo versionSrc);
 
 #endif
