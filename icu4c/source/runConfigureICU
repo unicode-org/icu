@@ -179,6 +179,7 @@ case $platform in
         THE_COMP="the iCC C++"
         CC=/usr/bin/icc; export CC
         CXX=/usr/bin/icc; export CXX
+        CPP="$CC -c -qpponly"; export CPP
         MAKE=/usr/bin/gmake; export MAKE
         RELEASE_CFLAGS='-O4'
         RELEASE_CXXFLAGS='-O4'

@@ -34,8 +34,8 @@
 #include "uvector.h"
 #include "uassert.h"
 #include "uarrsort.h"
-#include "uspoof_buildconf.h"
-#include "uspoof_buildwsconf.h"
+#include "uspoof_conf.h"
+#include "uspoof_wsconf.h"
 
 #if !UCONFIG_NO_NORMALIZATION
 
