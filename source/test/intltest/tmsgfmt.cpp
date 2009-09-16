@@ -53,6 +53,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(19,TestTurkishCasing);
         TESTCASE(20,testAutoQuoteApostrophe);
         TESTCASE(21,testMsgFormatPlural);
+        TESTCASE(22,testCoverage);
         default: name = ""; break;
     }
 }
@@ -1346,6 +1347,73 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
             errln(buf);
         }
     }
+}
+
+void TestMessageFormat::testCoverage(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString testformat("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
+    MessageFormat *msgfmt = new MessageFormat(testformat, Locale("fr"), status);
+    if (msgfmt == NULL || U_FAILURE(status)) {
+        errln("FAIL: Unable to create MessageFormat.");
+        return;
+    }
+    if (!msgfmt->usesNamedArguments()) {
+        errln("FAIL: Unable to detect usage of named arguments.");
+    }
+    const double limit[] = {0.0, 1.0, 2.0};
+    const UnicodeString formats[] = {"0.0<=Arg<1.0",
+                                   "1.0<=Arg<2.0",
+                                   "2.0<-Arg"};
+    ChoiceFormat cf(limit, formats, 3);
+
+    msgfmt->setFormat("set", cf, status);
+
+    StringEnumeration *en = msgfmt->getFormatNames(status);
+    if (en == NULL || U_FAILURE(status)) {
+        errln("FAIL: Unable to get format names enumeration.");
+    } else {
+        int32_t count = 0;
+        en->reset(status);
+        count = en->count(status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: Unable to get format name enumeration count.");
+        } else {
+            for (int32_t i = 0; i < count; i++) {
+                en->snext(status);
+                if (U_FAILURE(status)) {
+                    errln("FAIL: Error enumerating through names.");
+                    break;
+                }
+            }
+        }
+    }
+
+    msgfmt->adoptFormat("adopt", &cf, status);
+
+    delete en;
+    delete msgfmt;
+
+    msgfmt = new MessageFormat("'", status);
+    if (msgfmt == NULL || U_FAILURE(status)) {
+        errln("FAIL: Unable to create MessageFormat.");
+        return;
+    }
+    if (msgfmt->usesNamedArguments()) {
+        errln("FAIL: Unable to detect usage of named arguments.");
+    }
+
+    msgfmt->setFormat("formatName", cf, status);
+    if (!U_FAILURE(status)) {
+        errln("FAIL: Should fail to setFormat instead of passing.");
+    }
+    status = U_ZERO_ERROR;
+    en = msgfmt->getFormatNames(status);
+    if (!U_FAILURE(status)) {
+        errln("FAIL: Should fail to get format names enumeration instead of passing.");
+    }
+
+    delete en;
+    delete msgfmt;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

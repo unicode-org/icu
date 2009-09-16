@@ -1425,6 +1425,21 @@ void SSearchTest::bmsTest()
         }
     }
 
+    /* Add better coverage for bms code. */
+    if(bms_empty(longPattern)) {
+        errln("FAIL: longgPattern is empty.");
+    }
+
+    if (!bms_getData(longPattern)) {
+        errln("FAIL: bms_getData returned NULL.");
+    }
+
+    if (!ucd_getCollator(data)) {
+        errln("FAIL: ucd_getCollator returned NULL.");
+    }
+
+    ucd_freeCache();
+
 close_patterns:
     bms_close(shortPattern);
     bms_close(longPattern);

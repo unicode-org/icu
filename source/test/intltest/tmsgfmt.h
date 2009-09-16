@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -91,6 +91,9 @@ public:
     void testAdopt(void);
     void TestTurkishCasing(void);
     void testAutoQuoteApostrophe(void);
+
+    /* Provide better code coverage */
+    void testCoverage(void);
 
 private:
 };
