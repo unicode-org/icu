@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2008 International Business Machines
+﻿# Copyright (c) 2001-2009 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -24,13 +24,8 @@
 
 
 #   Temp debugging tests 
-<sent>
-<data>•  (This is it).  •Testing the sentence iterator. •\
-"This isn't it." •Hi! \
-•This is a simple sample sentence. •(This is it.) •This is a simple sample sentence. •\
-"This isn't it." •\
-Hi! •This is a simple sample sentence. •It does not have to make any sense as you can see. •Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. •Che la dritta via aveo smarrita. •He said, that I said, that you said!! •Don't rock the boat.\u2029•Because I am the daddy, that is why. 
-•Not on my time (el timo.)! •</data>
+<line>
+<data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
 
 ########################################################################################
 #
@@ -94,6 +89,28 @@ Hi! •This is a simple sample sentence. •It does not have to make any sense a
 
 #  Treat Japanese Half Width voicing marks as combining
 <data>•A\uff9e•B\uff9f\uff9e\uff9f•C•</data>
+
+########################################################################################
+#
+#
+#       E x t e n d e d    G r a p h e m e    C l u s t e r     T e s t s
+#
+#
+##########################################################################################
+#<xgc>
+
+# Plain Vanilla grapheme clusters
+#<data>•a•b•c•</data>
+#<data>•a\u0301\u0302• •b\u0303\u0304•</data>
+
+# Assorted Hindi combining marks
+#<data>•\u0904\u0903• •\u0937\u093E• •\u0904\u093F• •\u0937\u0940• •\u0937\u0949• •\u0937\u094A• •\u0937\u094B• •\u0937\u094C•</data>
+
+# Thai Clusters
+# $Prepend $Extend* $PrependBase $Extend*;
+#
+#<data>•\u0e40\u0e01•\u0e44\u0301\u0e23\u0302\u0303•\u0e40•\u0e40\u0e02•\u0e02• •</data>
+
 
 ########################################################################################
 #
@@ -486,15 +503,28 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 
 #      Regression for bug 836
 #        Note:  Unicode 5.1 changed this behavior
-#               ICU will want to change it back before releasing,
-#               so there is no break preceding the '('
-<data>•AAA•(AAA •</data> 
+#               Unicode 5.2 changed it again, there is no break following the '('
+<data>•AAA(AAA •</data> 
 
 #       Try some words from other scripts.
 #          Greek, Cyrillic, Hebrew, Arabic, Arabic, Georgian, Latin
 #      
 <data>•ΑΒΓ •БВГ •אבג֓ •ابت •١٢٣ •\u10A0\u10A1\u10A2 •ABC •</data>
 
+#
+#       ticket #4853:  unpaired surrogates should behave like AL
+#
+<data>•abc\ud801xyz•</data>
+
+#
+#     Regression tests for failures that originally came from the monkey test.
+#     Monkey test failure lines can, with slight reformatting, be copied into this section
+#     as test cases.  The error display from here is more informative.
+#
+<data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
+<data>•\u114d\u31f3•\ube44\u002d•\u0362\u24e2\u276e\u2014\u205f\ufe16•\uc877•\u0fd0\u000a<100>\u20a3•</data>
+<data>•\u080a\u215b\U0001d7d3\u002c•\u2025\U000e012e•\u02df\u118d\u0029\ua8d6\u0085<100>\u6cc4\u2024\u202f\ufffc•</data>
+ 
 
 ########################################################################################
 #
@@ -538,5 +568,15 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 #  Jitterbug 3671 Test Case
 #
 <data>•สวัสดี<000>ครับ<000>สบาย<000>ดี<000>ไหม<000> •ครับ<000></data>
+
+#
+#  Trac ticket 5595 Test Case
+#     (Omitted from ICU4J because of old dictionary implementation.
+#
+# <data>•บท<000>ที่๑พายุ<000>ไซโคลน<000>โด<000>โรธี<000>อาศัย<000>อยู่<000>ท่ามกลาง<000>\
+# ทุ่งใหญ่<000>ใน<000>แคนซัส<000>กับ<000>ลุง<000>เฮ<000>นรี<000>ชาวไร่<000>และ<000>ป้า<000>เอ็ม<000>\
+# ภรรยา<000>ชาวไร่<000>บ้าน<000>ของ<000>พวก<000>เขา<000>หลัง<000>เล็ก<000>เพราะ<000>ไม้<000>\
+# สร้าง<000>บ้าน<000>ต้อง<000>ขน<000>มา<000>ด้วย<000>เกวียน<000>เป็น<000>ระยะ<000>ทาง<000>หลาย<000>\
+# ไมล์<000></data>
 
 
