@@ -3939,19 +3939,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\uspoof_buildconf.cpp"
+				RelativePath=".\uspoof_conf.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uspoof_buildconf.h"
+				RelativePath=".\uspoof_conf.h"
 				>
 			</File>
 			<File
-				RelativePath=".\uspoof_buildwsconf.cpp"
+				RelativePath=".\uspoof_wsconf.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uspoof_buildwsconf.h"
+				RelativePath=".\uspoof_wsconf.h"
 				>
 			</File>
 			<File

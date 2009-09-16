@@ -1,5 +1,5 @@
 #!/usr/bin/qsh
-#   Copyright (C) 2000-2007, International Business Machines
+#   Copyright (C) 2000-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -12,8 +12,19 @@
 # Shell script to unpax ICU and convert the files to an EBCDIC codepage.
 # After extracting to EBCDIC, binary files are re-extracted without the
 # EBCDIC conversion, thus restoring them to original codepage.
-#
+
+if [ -z "$QSH_VERSION" ];
+then
+	QSH=0
+    echo "QSH not detected (QSH_VERSION not set) - just testing."
+else
+	QSH=1
+	#echo "QSH version $QSH_VERSION"
+fi
+export QSH
+
 # Set the following variable to the list of binary file suffixes (extensions)
+
 
 #****************************************************************************
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
@@ -57,6 +68,7 @@ fi
 # Determine which directories in the data_files list
 # are included in the provided archive
 #****************************************************************************
+echo "Finding data_files ..."
 for data_dir in $data_files
 do
    if (pax -f $tar_file $data_dir >/dev/null 2>&1)
@@ -89,9 +101,9 @@ pax -C 37 -rvf $tar_file $ebcdic_data
 # be processed to restore files as 819.
 #****************************************************************************
 echo ""
-echo "Determining binary files ..."
+echo "Determining binary files by BOM ..."
 echo ""
-
+bin_count=0
 # Process BOMs
 for file in `find ./icu \( -name \*.txt -print \)`; do
     bom8=`head -n 1 $file|\
@@ -107,13 +119,15 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
 
         if [ `echo $binary_files | wc -w` -lt 200 ]
         then
+            bin_count=`expr $bin_count + 1`
             binary_files="$binary_files $file";
         else
-            echo "Restoring binary files ..."
+            echo "Restoring binary files by BOM ($bin_count)..."
             rm $binary_files;
             pax -C 819 -rvf $tar_file $binary_files;
-            echo "Determining binary files ..."
+            echo "Determining binary files by BOM ($bin_count)..."
             binary_files="$file";
+            bin_count=`expr $bin_count + 1`
         fi
     fi
 done
@@ -136,12 +150,14 @@ do
          if [ `echo $binary_files | wc -w` -lt 200 ]
          then
             binary_files="$binary_files $i";
+            bin_count=`expr $bin_count + 1`
          else
-            echo "Restoring binary files ..."
+            echo "Restoring binary files by special paths ($bin_count) ..."
             rm $binary_files;
             pax -C 819 -rvf $tar_file $binary_files;
-            echo "Determining binary files ..."
+            echo "Determining binary files by special paths ($bin_count) ..."
             binary_files="$i";
+            bin_count=`expr $bin_count + 1`
          fi
          break
        fi
@@ -156,7 +172,7 @@ done
 # now see if a re-extract of binary files is necessary
 if [ `echo $binary_files | wc -w` -gt 0 ]
 then
-  echo "Restoring binary files ..."
+  echo "Restoring binary files ($bin_count) ..."
   rm $binary_files
   pax -C 819 -rvf $tar_file $binary_files
 fi
@@ -175,5 +191,5 @@ mv icu/source/configureTemp icu/source/configure
 chmod 755 icu/source/configure
 
 echo ""
-echo "$0 has completed extracting ICU from $tar_file."
+echo "$0 has completed extracting ICU from $tar_file - $bin_count binary files extracted."
 

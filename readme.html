@@ -1407,14 +1407,14 @@ Data set name type  : PDS</samp>
         library on the OUTPUTDIR environment variable.
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)
-ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp>
 </pre>
       </li>
 
       <li>
       Set up the following environment variables and job characteristics in your build process
 <pre>
-<samp>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
+<samp>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake') REPLACE(*YES)
 CHGJOB CCSID(37)</samp>
 </pre>
 
@@ -1423,7 +1423,7 @@ CHGJOB CCSID(37)</samp>
       <li>Run gunzip on the ICU source code compressed tar archive
       (icu-<i>X</i>.<i>Y</i>.tgz).</li>
 
-      <li>Run unpax-icu.sh on the tar file generated from the previous step.</li>
+      <li>Run <a href='as_is/os400/unpax-icu.sh'>unpax-icu.sh</a> on the tar file generated from the previous step.</li>
 
       <li>Change your current directory to icu/source.</li>
 

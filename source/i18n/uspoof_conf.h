@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  uspoof_buildconf.h
+*   file name:  uspoof_conf.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
