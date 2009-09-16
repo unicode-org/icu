@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -150,7 +150,7 @@ static const UDate kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * U_MILL
 // -------------------------------------
 
 GregorianCalendar::GregorianCalendar(UErrorCode& status)
-:   Calendar(TimeZone::createDefault(), Locale::getDefault(), status),
+:   Calendar(status),
 fGregorianCutover(kPapalCutover),
 fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
 fIsGregorian(TRUE), fInvertGregorian(FALSE)
