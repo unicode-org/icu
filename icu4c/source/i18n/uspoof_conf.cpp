@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  uspoof_buildconf.cpp
+*   file name:  uspoof_conf.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -30,7 +30,7 @@
 #include "uvector.h"
 #include "uassert.h"
 #include "uarrsort.h"
-#include "uspoof_buildconf.h"
+#include "uspoof_conf.h"
 
 U_NAMESPACE_USE
 

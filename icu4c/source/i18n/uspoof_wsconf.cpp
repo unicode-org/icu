@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  uspoof_buildwsconf.cpp
+*   file name:  uspoof_wsconf.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -33,7 +33,7 @@
 #include "uhash.h"
 #include "uvector.h"
 #include "uassert.h"
-#include "uspoof_buildwsconf.h"
+#include "uspoof_wsconf.h"
 
 U_NAMESPACE_USE
 

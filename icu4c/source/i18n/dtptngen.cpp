@@ -66,7 +66,7 @@ struct UResourceBundleAIterator {
 
 /* Must be C linkage to pass function pointer to the sort function */
 
-#if !defined (OS390)
+#if !defined (OS390) && !defined (OS400)
 extern "C"
 #endif
 static int32_t U_CALLCONV

@@ -2710,7 +2710,8 @@ DecimalFormat::ERoundingMode DecimalFormat::getRoundingMode() const {
 void DecimalFormat::setRoundingMode(ERoundingMode roundingMode) {
     fRoundingMode = roundingMode;
     if (fRoundingIncrement == NULL) {
-        setRoundingIncrement(pow(10.0, -getMaximumFractionDigits()));
+        /* cast to double to avoid ambiguous pow() overloads */
+        setRoundingIncrement(pow(10.0, (double)-getMaximumFractionDigits()));
     }
 }
 
