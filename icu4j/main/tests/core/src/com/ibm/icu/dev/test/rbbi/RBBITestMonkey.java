@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008 International Business Machines Corporation and     *
+ * Copyright (C) 2003-2009 International Business Machines Corporation and     *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -470,6 +470,8 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
  
+    // TODO:  for class fCP, fCL: when Unicode 5.2 properties become available, change the definitions of
+    //        these classes to use them.
     static class RBBILineMonkey extends RBBIMonkeyKind {
         
         List        fSets;
@@ -490,6 +492,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fBB;
         UnicodeSet  fHY;
         UnicodeSet  fCL;
+        UnicodeSet  fCP;
         UnicodeSet  fEX;
         UnicodeSet  fIN;
         UnicodeSet  fNS;
@@ -535,7 +538,9 @@ public class RBBITestMonkey extends TestFmwk {
             fBA    = new UnicodeSet("[\\p{Line_break=BA}]");
             fBB    = new UnicodeSet("[\\p{Line_break=BB}]");
             fHY    = new UnicodeSet("[\\p{Line_break=HY}]");
-            fCL    = new UnicodeSet("[\\p{Line_break=CL}]");
+            fCL    = new UnicodeSet("[[\\p{Line_break=CL}]-[\\u0029\\u005d]]");
+            fCP    = new UnicodeSet("[\\u0029\\u005d]");
+            // fCP    = new UnicodeSet("[\\p{Line_break=CP}]");
             fEX    = new UnicodeSet("[\\p{Line_break=EX}]");
             fIN    = new UnicodeSet("[\\p{Line_break=IN}]");
             fNS    = new UnicodeSet("[\\p{Line_break=NS}]");
@@ -583,6 +588,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fH2);
             fSets.add(fH3);
             fSets.add(fCL);
+            fSets.add(fCP);
             fSets.add(fEX);
             fSets.add(fIN);
             fSets.add(fJL);
@@ -763,13 +769,14 @@ public class RBBITestMonkey extends TestFmwk {
                 
                 
                 // LB 13  Don't break before closings.
-                //       NU x CL  and NU x IS are not matched here so that they will
+                //       NU x CL, NU x CP  and NU x IS are not matched here so that they will
                 //       fall into LB 17 and the more general number regular expression.
                 //
                 if (!fNU.contains(prevChar) && fCL.contains(thisChar) ||
-                        fEX.contains(thisChar) ||
-                        !fNU.contains(prevChar) && fIS.contains(thisChar) ||
-                        !fNU.contains(prevChar) && fSY.contains(thisChar))    {
+                    !fNU.contains(prevChar) && fCP.contains(thisChar) ||
+                                               fEX.contains(thisChar) ||
+                    !fNU.contains(prevChar) && fIS.contains(thisChar) ||
+                    !fNU.contains(prevChar) && fSY.contains(thisChar))    {
                     continue;
                 }
                 
@@ -806,7 +813,7 @@ public class RBBITestMonkey extends TestFmwk {
                     }
                 }               
                 
-                // LB 16   CL SP* x NS
+                // LB 16   (CL | CP) SP* x NS
                 if (fNS.contains(thisChar)) {
                     tPos = prevPos;
                     while (tPos > 0 && fSP.contains(UTF16.charAt(fText, tPos))) {
@@ -815,7 +822,7 @@ public class RBBITestMonkey extends TestFmwk {
                     while (tPos > 0 && fCM.contains(UTF16.charAt(fText, tPos))) {
                         tPos = moveIndex32(fText, tPos, -1);
                     }
-                    if (fCL.contains(UTF16.charAt(fText, tPos))) {
+                    if (fCL.contains(UTF16.charAt(fText, tPos)) || fCP.contains(UTF16.charAt(fText, tPos))) {
                         continue;
                     }
                 }               
@@ -960,7 +967,16 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
                 
-                // LB 30  (Withdrawn as of Unicode 5.1)
+                // LB 30    Do not break between letters, numbers, or ordinary symbols and opening or closing punctuation.
+                //          (AL | NU) x OP
+                //          CP x (AL | NU)
+                if ((fAL.contains(prevChar) || fNU.contains(prevChar)) && fOP.contains(thisChar)) {
+                    continue;
+                }
+                if (fCP.contains(prevChar) && (fAL.contains(thisChar) || fNU.contains(thisChar))) {
+                    continue;
+                }
+
               
                 // LB 31    Break everywhere else
                 break;            
@@ -972,8 +988,8 @@ public class RBBITestMonkey extends TestFmwk {
         
         
         // Match the following regular expression in the input text.
-        //    ((PR | PO) CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS | SY) CM*) * (CL CM*)?  (PR | PO) CM*)?
-        //      0    0   1       3    3    4              7    7    7    7      9   9     11   11    (match states)
+        //    ((PR | PO) CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS | SY) CM*) * ((CL | CP) CM*)?  (PR | PO) CM*)?
+        //      0    0   1       3    3    4              7    7    7    7      9    9    9     11   11    (match states)
         //  retVals array  [0]  index of the start of the match, or -1 if no match
         //                 [1]  index of first char following the match.
         //  Can not use Java regex because need supplementary character support,
@@ -1065,6 +1081,10 @@ public class RBBITestMonkey extends TestFmwk {
                             matchState = 9;
                             break;                           
                         }
+                        //if (cLBType == UCharacter.LineBreak.CLOSE_PARENTHESIS) {
+                        //    matchState = 9;
+                        //    break;                           
+                        //}
                         if (cLBType == UCharacter.LineBreak.POSTFIX_NUMERIC) {
                             matchState = 11;
                             break;                           
