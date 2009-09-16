@@ -475,6 +475,23 @@ CalendarTest::TestGenericAPI()
     if (gc2 != *gc || !(gc2 == *gc)) errln("FAIL: GregorianCalendar assignment/operator==/operator!= failed");
     delete gc;
     delete z;
+
+    /* Code coverage for Calendar class. */
+    cal = Calendar::createInstance(status);
+    if (cal != NULL && !U_FAILURE(status)) {
+        ((Calendar *)cal)->roll(UCAL_HOUR, 100, status);
+        ((Calendar *)cal)->clear(UCAL_HOUR);
+        URegistryKey key = cal->registerFactory(NULL, status);
+        cal->unregister(key, status);
+    } else {
+        errln("FAIL: Unable to create calendar instance.");
+    }
+    StringEnumeration *en = Calendar::getKeywordValuesForLocale(NULL, Locale::getDefault(),FALSE, status);
+    if (en == NULL || U_FAILURE(status)) {
+        errln("FAIL: getKeywordValuesForLocale for Calendar.");
+    }
+    delete en;
+    delete cal;
 }
 
 // -------------------------------------

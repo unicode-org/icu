@@ -947,7 +947,8 @@ Calendar::getAvailableLocales(int32_t& count)
 
 // -------------------------------------
 
-StringEnumeration* U_EXPORT2 getKeywordValuesForLocale(const char* key,
+StringEnumeration* U_EXPORT2
+Calendar::getKeywordValuesForLocale(const char* key,
                     const Locale& locale, UBool commonlyUsed, UErrorCode& status)
 {
     // This is a wrapper over ucal_getKeywordValuesForLocale
