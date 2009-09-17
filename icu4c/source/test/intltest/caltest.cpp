@@ -478,14 +478,24 @@ CalendarTest::TestGenericAPI()
 
     /* Code coverage for Calendar class. */
     cal = Calendar::createInstance(status);
-    if (cal != NULL && !U_FAILURE(status)) {
-        ((Calendar *)cal)->roll(UCAL_HOUR, 100, status);
+    if (failure(status, "Calendar::createInstance")) {
+        return;
+    }else {
+        ((Calendar *)cal)->roll(UCAL_HOUR, (int32_t)100, status);
         ((Calendar *)cal)->clear(UCAL_HOUR);
         URegistryKey key = cal->registerFactory(NULL, status);
         cal->unregister(key, status);
-    } else {
-        errln("FAIL: Unable to create calendar instance.");
     }
+    delete cal;
+
+    status = U_ZERO_ERROR;
+    cal = Calendar::createInstance(Locale("he_IL@calendar=hebrew"), status);
+    if (failure(status, "Calendar::createInstance")) {
+        return;
+    } else {
+        cal->roll(Calendar::MONTH, (int32_t)100, status);
+    }
+
     StringEnumeration *en = Calendar::getKeywordValuesForLocale(NULL, Locale::getDefault(),FALSE, status);
     if (en == NULL || U_FAILURE(status)) {
         errln("FAIL: getKeywordValuesForLocale for Calendar.");

@@ -53,10 +53,39 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const cha
                 }
                 break;
 
+        case 3: name = "TestCoverage";
+                if (exec) {
+                    logln("TestCoverage---"); logln("");
+                    TestCoverage();
+                }
+                break;
+
         default: name = ""; break;
     }
 }
 
+/**
+ * Add better code coverage.
+ */
+void IntlTestDateFormatAPI::TestCoverage(void)
+{
+    const char *LOCALES[] = {
+            "zh_CN@calendar=chinese",
+            "cop_EG@calendar=coptic",
+            "hi_IN@calendar=indian",
+            "am_ET@calendar=ethiopic"
+    };
+    int32_t numOfLocales = 4;
+
+    for (int32_t i = 0; i < numOfLocales; i++) {
+        DateFormat *df = DateFormat::createDateTimeInstance(DateFormat::kMedium, DateFormat::kMedium, Locale(LOCALES[i]));
+        if (df == NULL){
+            dataerrln("Error creating DateFormat instances.");
+            return;
+        }
+        delete df;
+    }
+}
 /**
  * Test that the equals method works correctly.
  */
@@ -110,7 +139,7 @@ void IntlTestDateFormatAPI::testAPI(/* char* par */)
     DateFormat *de = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG, Locale::getGerman());
 
     if (def == NULL || fr == NULL || it == NULL || de == NULL){
-        dataerrln("Error creating instnaces.");
+        dataerrln("Error creating DateFormat instances.");
     }
 
 // ======= Test equality

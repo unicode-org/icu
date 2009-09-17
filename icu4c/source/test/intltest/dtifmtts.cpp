@@ -262,9 +262,27 @@ void DateIntervalFormatTest::testAPI() {
 
     delete dtitvfmt;
 
-
     //====== test format  in testFormat()
     
+    //====== test DateInterval class (better coverage)
+    DateInterval dtitv1(3600*24*365, 3600*24*366);
+    DateInterval dtitv2(dtitv1);
+
+    if (!(dtitv1 == dtitv2)) {
+        errln("ERROR: Copy constructor failed for DateInterval.");
+    }
+
+    DateInterval dtitv3(3600*365, 3600*366);
+    dtitv3 = dtitv1;
+    if (!(dtitv3 == dtitv1)) {
+        errln("ERROR: Equal operator failed for DateInterval.");
+    }
+
+    DateInterval *dtitv4 = dtitv1.clone();
+    if (*dtitv4 != dtitv1) {
+        errln("ERROR: Equal operator failed for DateInterval.");
+    }
+    delete dtitv4;
 }
 
 
