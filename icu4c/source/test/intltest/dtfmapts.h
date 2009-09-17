@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -36,6 +36,11 @@ private:
      * Test that no parse or format methods are hidden.
      */
     void TestNameHiding(void);
+
+    /**
+     * Add better code coverage.
+     */
+    void TestCoverage(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

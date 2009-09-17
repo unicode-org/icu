@@ -18,6 +18,7 @@
 #include "cmemory.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "unicode/icudataver.h"
 #include "cstring.h"
 #include "putilimp.h"
 
@@ -187,6 +188,9 @@ static void TestVersion()
     char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
     UChar versionUString[] = { 0x0031, 0x002E, 0x0030, 0x002E,
                                0x0032, 0x002E, 0x0038, 0x0000 }; /* 1.0.2.8 */
+    UBool isModified = FALSE;
+    UVersionInfo version;
+    UErrorCode status = U_ZERO_ERROR;
 
     log_verbose("Testing the API u_versionToString().....\n");
     u_versionToString(versionArray, versionString);
@@ -266,6 +270,17 @@ static void TestVersion()
     } 
     else {
        log_verbose(" from UString: %s\n", versionString);
+    }
+
+    /* Test the data version API for better code coverage */
+    u_getDataVersion(version, &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: Unable to get data version.");
+    } else {
+        u_isDataOlder(version, &isModified, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: Unable to compare data version.");
+        }
     }
 }
 
