@@ -1,0 +1,2 @@
+# Copyright (c) 2009 IBM Corp. and Others. All Rights Reserved
+# a list of ICU4Cs too old to build with the current patchset.

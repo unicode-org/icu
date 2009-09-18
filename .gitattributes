@@ -1568,6 +1568,12 @@ icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/package.html svneol=native
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/indicExceptions.txt svneol=native#text/plain
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/rbtTemplate.txt svneol=native#text/plain
+tools/multi/c/Makefile-c.inc -text
+tools/multi/c/patch/3_0 -text
+tools/multi/c/patch/3_2 -text
+tools/multi/c/patch/3_4_1 -text
+tools/multi/common/Makefile-multi.inc -text
+tools/multi/j/Makefile-j.inc -text
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text

@@ -1,0 +1,81 @@
+# Copyright (c) 2009 IBM Corp. and Others. All Rights Reserved
+# multicu/c makefile
+
+all:
+	@echo To build all ICUs:  $(MAKE) all-icus
+	@echo "Using the -k option may be a good idea if some are not building properly."
+	@echo ICUVERS: $(ICUVERS)
+
+info:
+
+#ICUCONF=sh ./configure
+ICUCONF=$(MULTICU_ROOT)/c/superconf.sh
+DOT=$(shell pwd)
+MULTICU_ROOT=$(DOT)/..
+include $(MULTICU_ROOT)/common/Makefile-multi.inc
+-include Makefile.local
+
+ICUVERS:=$(shell cd $(ICUS); ls icu4c*.tgz | cut -d- -f2 | sort | uniq | fgrep -v -f $(MULTICU_ROOT)/c/old-icu.txt)
+ICU4JVERS:=$(shell cd $(ICUS); ls icu4j*.jar | cut -d- -f2 | cut -d. -f1 |  sort | uniq | fgrep -v -f $(MULTICU_ROOT)/j/old-icu4j.txt)
+
+BLD=$(C_BLD)
+INS=$(C_INS)
+SRC=$(C_SRC)
+
+ALLICUS=$(ICUVERS:%=$(BLD)/%/$(S_BLD))
+IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS))
+
+APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS))
+
+.PRECIOUS: $(APRECIOUS)
+
+tehprecious:
+	echo $(APRECIOUS)
+	
+$(M_TMP):
+	-mkdir $(M_TMP)
+
+$(M_TMP) $(BLD) $(INS):
+	mkdir $(M_TMP)
+	mkdir $(BLD) $(SRC)  $(INS)
+
+$(INS)/%/$(S_INS): $(BLD)/%/$(S_BLD)
+	@if [ -f $(BLD)/$*/build.err ]; then echo '###' Error for $* stored in $(BLD)/$*/build.err - remove if you want me to retry; false;  fi
+	( make $(MAKE_OPTS) -C $(BLD)/$*/icu/source 2>&1 all install | tee $(BLD)/$*/build.log ) || ( mv $(BLD)/$*/build.log $(BLD)/$*/build.err ; false )
+	touch -c $@
+
+$(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
+	-mv $(BLD)/$* $(BLD)/$*.old
+	-( rm -rf ./$(BLD)/$*.old& )
+	mkdir -p $(BLD)/$*
+	( cd $(BLD)/$* ; gunzip -d < $^ | tar xfp - )
+	([ -f $(DOT)/patch/$* ] && patch -d $(BLD)/$* -p1 < $(DOT)/patch/$*) || true
+	touch -c $@
+
+$(BLD)/%/$(S_BLD): $(BLD)/%/$(S_SRC)
+	-mkdir -p $(INS)
+	-chmod a+rx $(BLD)/$*/icu/source/configure $(BLD)/$*/icu/source/runConfigureICU
+	( cd $(BLD)/$*/icu/source ; `ICU_VER="$*" $(ICUCONF)` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
+	touch -c $@
+
+$(INS)/%/bin/$(TARGET): $(INS)/%/$(S_INS) $(SRCS)
+	-rm -rf ./$(BLD)/$*/tmp
+	mkdir ./$(BLD)/$*/tmp
+	@for file in $(OBJECTS); \
+	do \
+		what=`basename $$file .o` ; \
+		echo compiling $*/$$what ; \
+		$(CXX) -c -o ./$(BLD)/$*/tmp/$$what.o $$what.cpp -I $(INS)/$*/include -I $(BLD)/$*/icu/source/tools/toolutil ; \
+	done
+	$(CXX) -o $@ $(OBJECTS:%.o=./$(BLD)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -L$(INS)/$*/lib 
+
+foo:
+	echo $(ALLICUS)
+
+allicus: $(BLD) $(ALLICUS)
+
+
+all-icus: iicus
+	
+iicus: $(BLD) $(IICUS)
+
