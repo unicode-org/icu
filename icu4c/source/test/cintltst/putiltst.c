@@ -453,10 +453,10 @@ void addPUtilTest(TestNode** root);
 void
 addPUtilTest(TestNode** root)
 {
-    addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
     addTest(root, &TestVersion,       "putiltst/TestVersion");
     addTest(root, &TestCompareVersions,       "putiltst/TestCompareVersions");
 /*    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder"); */
     addTest(root, &TestErrorName, "putiltst/TestErrorName");
+    addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
 }
 
