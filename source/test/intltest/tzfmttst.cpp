@@ -239,250 +239,242 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
     delete tzids;
 }
 
-struct LocaleData{
-	int32_t index;
+struct LocaleData {
+    int32_t index;
     int32_t testCounts;
     UDate *times;
-	const Locale* locales; // Static
-	int32_t nLocales;      // Static
-	UBool quick;           // Static
-    UDate START_TIME;      // Static
-    UDate END_TIME;        // Static
+    const Locale* locales; // Static
+    int32_t nLocales; // Static
+    UBool quick; // Static
+    UDate START_TIME; // Static
+    UDate END_TIME; // Static
     int32_t numDone;
 };
 
-class TestTimeRoundTripThread : public SimpleThread {
+class TestTimeRoundTripThread: public SimpleThread {
 public:
-	TestTimeRoundTripThread(IntlTest& tlog, LocaleData &ld, int32_t i) 
-		: log(tlog), data(ld), index(i){}
-	virtual void run(){
+    TestTimeRoundTripThread(IntlTest& tlog, LocaleData &ld, int32_t i)
+        : log(tlog), data(ld), index(i) {}
+    virtual void run() {
         UErrorCode status = U_ZERO_ERROR;
         UBool REALLY_VERBOSE = FALSE;
 
-		// Whether each pattern is ambiguous at DST->STD local time overlap
-		UBool AMBIGUOUS_DST_DECESSION[] = {FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE};
-		// Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
-		UBool AMBIGUOUS_NEGATIVE_SHIFT[] = {TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE};
+        // Whether each pattern is ambiguous at DST->STD local time overlap
+        UBool AMBIGUOUS_DST_DECESSION[] = { FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE };
+        // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
+        UBool AMBIGUOUS_NEGATIVE_SHIFT[] = { TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE };
 
-		// Workaround for #6338
-		//UnicodeString BASEPATTERN("yyyy-MM-dd'T'HH:mm:ss.SSS");
-		UnicodeString BASEPATTERN("yyyy.MM.dd HH:mm:ss.SSS");
+        // Workaround for #6338
+        //UnicodeString BASEPATTERN("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        UnicodeString BASEPATTERN("yyyy.MM.dd HH:mm:ss.SSS");
 
-		// timer for performance analysis
-		UDate timer;
+        // timer for performance analysis
+        UDate timer;
         UDate testTimes[4];
-		UBool expectedRoundTrip[4];
-		int32_t testLen = 0;
+        UBool expectedRoundTrip[4];
+        int32_t testLen = 0;
 
         StringEnumeration *tzids = TimeZone::createEnumeration();
-	    if (U_FAILURE(status)) {
-		    log.errln("tzids->count failed");
-		    return;
-	    }
+        if (U_FAILURE(status)) {
+            log.errln("tzids->count failed");
+            return;
+        }
 
-		int32_t locidx = -1;
+        int32_t locidx = -1;
         UDate times[NUM_PATTERNS];
-        for(int32_t i=0; i < NUM_PATTERNS; i++){
+        for (int32_t i = 0; i < NUM_PATTERNS; i++) {
             times[i] = 0;
         }
 
         int32_t testCounts = 0;
         UBool done = false;
 
-		while(true){
-			umtx_lock(NULL); // Lock to increment the index
-            for(int32_t i=0; i < NUM_PATTERNS; i++){
+        while (true) {
+            umtx_lock(NULL); // Lock to increment the index
+            for (int32_t i = 0; i < NUM_PATTERNS; i++) {
                 data.times[i] += times[i];
                 data.testCounts += testCounts;
             }
-			if(data.index < data.nLocales){
-				locidx = data.index;
-				data.index++;
-			} else {
+            if (data.index < data.nLocales) {
+                locidx = data.index;
+                data.index++;
+            } else {
                 locidx = -1;
             }
-			umtx_unlock(NULL); // Unlock for other threads to use
+            umtx_unlock(NULL); // Unlock for other threads to use
 
-            if(locidx == -1){
+            if (locidx == -1) {
                 log.logln((UnicodeString) "Thread " + index + " is done.");
                 break;
             }
 
-            log.logln((UnicodeString)"\nThread " + index + ": Locale: " + UnicodeString(data.locales[locidx].getName()));
+            log.logln((UnicodeString) "\nThread " + index + ": Locale: " + UnicodeString(data.locales[locidx].getName()));
 
-			for (int32_t patidx = 0; patidx < NUM_PATTERNS; patidx++) {
-				log.logln((UnicodeString)"    Pattern: " + PATTERNS[patidx]);
+            for (int32_t patidx = 0; patidx < NUM_PATTERNS; patidx++) {
+                log.logln((UnicodeString) "    Pattern: " + PATTERNS[patidx]);
                 times[patidx] = 0;
 
-				UnicodeString pattern(BASEPATTERN);
-				pattern.append(" ").append(PATTERNS[patidx]);
+                UnicodeString pattern(BASEPATTERN);
+                pattern.append(" ").append(PATTERNS[patidx]);
 
-				SimpleDateFormat *sdf = new SimpleDateFormat(pattern, data.locales[locidx], status);
-				if (U_FAILURE(status)) {
-					log.errcheckln(status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
-						pattern + " for locale " + data.locales[locidx].getName() + " - " + u_errorName(status));
-					status = U_ZERO_ERROR;
-					continue;
-				}
+                SimpleDateFormat *sdf = new SimpleDateFormat(pattern, data.locales[locidx], status);
+                if (U_FAILURE(status)) {
+                    log.errcheckln(status, (UnicodeString) "new SimpleDateFormat failed for pattern " + 
+                        pattern + " for locale " + data.locales[locidx].getName() + " - " + u_errorName(status));
+                    status = U_ZERO_ERROR;
+                    continue;
+                }
 
-				tzids->reset(status);
-				const UnicodeString *tzid;
+                tzids->reset(status);
+                const UnicodeString *tzid;
 
-				timer = Calendar::getNow();
+                timer = Calendar::getNow();
 
-				while ((tzid = tzids->snext(status))) {
-					UnicodeString canonical;
-					TimeZone::getCanonicalID(*tzid, canonical, status);
-					if (U_FAILURE(status)) {
-						// Unknown ID - we should not get here
-						status = U_ZERO_ERROR;
-						continue;
-					}
-					if (*tzid != canonical) {
-						// Skip aliases
-						continue;
-					}
-					BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
-					sdf->setTimeZone(*tz);
+                while ((tzid = tzids->snext(status))) {
+                    UnicodeString canonical;
+                    TimeZone::getCanonicalID(*tzid, canonical, status);
+                    if (U_FAILURE(status)) {
+                        // Unknown ID - we should not get here
+                        status = U_ZERO_ERROR;
+                        continue;
+                    }
+                    if (*tzid != canonical) {
+                        // Skip aliases
+                        continue;
+                    }
+                    BasicTimeZone *tz = (BasicTimeZone*) TimeZone::createTimeZone(*tzid);
+                    sdf->setTimeZone(*tz);
 
-					UDate t = data.START_TIME;
-					TimeZoneTransition tzt;
-					UBool tztAvail = FALSE;
-					UBool middle = TRUE;
-                    
-					while (t < data.END_TIME) {
-						if (!tztAvail) {
-							testTimes[0] = t;
-							expectedRoundTrip[0] = TRUE;
-							testLen = 1;
-						} else {
-							int32_t fromOffset = tzt.getFrom()->getRawOffset() + tzt.getFrom()->getDSTSavings();
-							int32_t toOffset = tzt.getTo()->getRawOffset() + tzt.getTo()->getDSTSavings();
-							int32_t delta = toOffset - fromOffset;
-							if (delta < 0) {
-								UBool isDstDecession = tzt.getFrom()->getDSTSavings() > 0 && tzt.getTo()->getDSTSavings() == 0;
-								testTimes[0] = t + delta - 1;
-								expectedRoundTrip[0] = TRUE;
-								testTimes[1] = t + delta;
-								expectedRoundTrip[1] = isDstDecession ?
-										!AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
-								testTimes[2] = t - 1;
-								expectedRoundTrip[2] = isDstDecession ?
-										!AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
-								testTimes[3] = t;
-								expectedRoundTrip[3] = TRUE;
-								testLen = 4;
-							} else {
-								testTimes[0] = t - 1;
-								expectedRoundTrip[0] = TRUE;
-								testTimes[1] = t;
-								expectedRoundTrip[1] = TRUE;
-								testLen = 2;
-							}
-						}
-						for (int32_t testidx = 0; testidx < testLen; testidx++) {
-							if (data.quick) {
-								// reduce regular test time
-								if (!expectedRoundTrip[testidx]) {
-									continue;
-								}
-							}
+                    UDate t = data.START_TIME;
+                    TimeZoneTransition tzt;
+                    UBool tztAvail = FALSE;
+                    UBool middle = TRUE;
+
+                    while (t < data.END_TIME) {
+                        if (!tztAvail) {
+                            testTimes[0] = t;
+                            expectedRoundTrip[0] = TRUE;
+                            testLen = 1;
+                        } else {
+                            int32_t fromOffset = tzt.getFrom()->getRawOffset() + tzt.getFrom()->getDSTSavings();
+                            int32_t toOffset = tzt.getTo()->getRawOffset() + tzt.getTo()->getDSTSavings();
+                            int32_t delta = toOffset - fromOffset;
+                            if (delta < 0) {
+                                UBool isDstDecession = tzt.getFrom()->getDSTSavings() > 0 && tzt.getTo()->getDSTSavings() == 0;
+                                testTimes[0] = t + delta - 1;
+                                expectedRoundTrip[0] = TRUE;
+                                testTimes[1] = t + delta;
+                                expectedRoundTrip[1] = isDstDecession ? !AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
+                                testTimes[2] = t - 1;
+                                expectedRoundTrip[2] = isDstDecession ? !AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
+                                testTimes[3] = t;
+                                expectedRoundTrip[3] = TRUE;
+                                testLen = 4;
+                            } else {
+                                testTimes[0] = t - 1;
+                                expectedRoundTrip[0] = TRUE;
+                                testTimes[1] = t;
+                                expectedRoundTrip[1] = TRUE;
+                                testLen = 2;
+                            }
+                        }
+                        for (int32_t testidx = 0; testidx < testLen; testidx++) {
+                            if (data.quick) {
+                                // reduce regular test time
+                                if (!expectedRoundTrip[testidx]) {
+                                    continue;
+                                }
+                            }
 
                             testCounts++;
 
-							UnicodeString text;
-							FieldPosition fpos(0);
-							sdf->format(testTimes[testidx], text, fpos);
+                            UnicodeString text;
+                            FieldPosition fpos(0);
+                            sdf->format(testTimes[testidx], text, fpos);
 
-							UDate parsedDate = sdf->parse(text, status);
-							if (U_FAILURE(status)) {
-								log.errln((UnicodeString)"Failed to parse " + text);
-								status = U_ZERO_ERROR;
-								continue;
-							}
-							if (parsedDate != testTimes[testidx]) {
-								UnicodeString msg = (UnicodeString)"Time round trip failed for "
-									+ "tzid=" + *tzid
-									+ ", locale=" + data.locales[locidx].getName()
-									+ ", pattern=" + PATTERNS[patidx]
-									+ ", text=" + text
-									+ ", time=" + testTimes[testidx]
-									+ ", restime=" + parsedDate
-									+ ", diff=" + (parsedDate - testTimes[testidx]);
-								if (expectedRoundTrip[testidx]) {
-									log.errln((UnicodeString)"FAIL: " + msg);
-								} else if (REALLY_VERBOSE) {
-									log.logln(msg);
-								}
-							}
-						}
-						tztAvail = tz->getNextTransition(t, FALSE, tzt);
-						if (!tztAvail) {
-							break;
-						}
-						if (middle) {
-							// Test the date in the middle of two transitions.
-							t += (int64_t)((tzt.getTime() - t)/2);
-							middle = FALSE;
-							tztAvail = FALSE;
-						} else {
-							t = tzt.getTime();
-						}
-					}
-					delete tz;
-				}
-				times[patidx] += (Calendar::getNow() - timer);
-				delete sdf;
-			}
+                            UDate parsedDate = sdf->parse(text, status);
+                            if (U_FAILURE(status)) {
+                                log.errln((UnicodeString) "Failed to parse " + text);
+                                status = U_ZERO_ERROR;
+                                continue;
+                            }
+                            if (parsedDate != testTimes[testidx]) {
+                                UnicodeString msg = (UnicodeString) "Time round trip failed for " + "tzid=" + *tzid + ", locale=" + data.locales[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                        + ", text=" + text + ", time=" + testTimes[testidx] + ", restime=" + parsedDate + ", diff=" + (parsedDate - testTimes[testidx]);
+                                if (expectedRoundTrip[testidx]) {
+                                    log.errln((UnicodeString) "FAIL: " + msg);
+                                } else if (REALLY_VERBOSE) {
+                                    log.logln(msg);
+                                }
+                            }
+                        }
+                        tztAvail = tz->getNextTransition(t, FALSE, tzt);
+                        if (!tztAvail) {
+                            break;
+                        }
+                        if (middle) {
+                            // Test the date in the middle of two transitions.
+                            t += (int64_t) ((tzt.getTime() - t) / 2);
+                            middle = FALSE;
+                            tztAvail = FALSE;
+                        } else {
+                            t = tzt.getTime();
+                        }
+                    }
+                    delete tz;
+                }
+                times[patidx] += (Calendar::getNow() - timer);
+                delete sdf;
+            }
             umtx_lock(NULL);
             data.numDone++;
             umtx_unlock(NULL);
-		}
+        }
         delete tzids;
-	}
+    }
 private:
-	IntlTest& log;
-	LocaleData& data;
+    IntlTest& log;
+    LocaleData& data;
     int32_t index;
 };
 
 void
 TimeZoneFormatTest::TestTimeRoundTrip(void) {
     int32_t nThreads = threadCount;
-	const Locale *LOCALES;
+    const Locale *LOCALES;
     int32_t nLocales;
     int32_t testCounts = 0;
 
-	UErrorCode status = U_ZERO_ERROR;
-	Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone((UnicodeString)"UTC"), status);
-	if (U_FAILURE(status)) {
-		errln("Calendar::createInstance failed");
-		return;
-	}
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone((UnicodeString) "UTC"), status);
+    if (U_FAILURE(status)) {
+        errln("Calendar::createInstance failed");
+        return;
+    }
 
     const char* testAllProp = getProperty("TimeZoneRoundTripAll");
     UBool bTestAll = (testAllProp && uprv_strcmp(testAllProp, "true") == 0);
 
     UDate START_TIME, END_TIME;
-	if (bTestAll || !quick) {
-		cal->set(1900, UCAL_JANUARY, 1);
-	} else {
-		cal->set(1990, UCAL_JANUARY, 1);
-	}
-	START_TIME = cal->getTime(status);
+    if (bTestAll || !quick) {
+        cal->set(1900, UCAL_JANUARY, 1);
+    } else {
+        cal->set(1990, UCAL_JANUARY, 1);
+    }
+    START_TIME = cal->getTime(status);
 
-	cal->set(2015, UCAL_JANUARY, 1);
-	END_TIME = cal->getTime(status);
+    cal->set(2015, UCAL_JANUARY, 1);
+    END_TIME = cal->getTime(status);
 
-	if (U_FAILURE(status)) {
-		errln("getTime failed");
-		return;
-	}
+    if (U_FAILURE(status)) {
+        errln("getTime failed");
+        return;
+    }
 
-	UDate times[NUM_PATTERNS];
-	for (int32_t i = 0; i < NUM_PATTERNS; i++) {
-		times[i] = 0;
-	}
+    UDate times[NUM_PATTERNS];
+    for (int32_t i = 0; i < NUM_PATTERNS; i++) {
+        times[i] = 0;
+    }
 
     // Set up test locales
     const Locale locales1[] = {Locale("en")};
@@ -508,13 +500,13 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
         nLocales = sizeof(locales2)/sizeof(Locale);
     }
 
-	LocaleData data;
-	data.index = 0;
+    LocaleData data;
+    data.index = 0;
     data.testCounts = testCounts;
     data.times = times;
-	data.locales = LOCALES;
-	data.nLocales = nLocales;
-	data.quick = quick;
+    data.locales = LOCALES;
+    data.nLocales = nLocales;
+    data.quick = quick;
     data.START_TIME = START_TIME;
     data.END_TIME = END_TIME;
     data.numDone = 0;
@@ -525,35 +517,36 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
 #else
     TestTimeRoundTripThread **threads = new TestTimeRoundTripThread*[threadCount];
     int32_t i;
-	for(i=0; i<nThreads; i++){
-		threads[i] = new TestTimeRoundTripThread(*this, data, i);
-		if(threads[i]->start() != 0){
-			errln("Error starting thread %d", i);
-		}
+    for (i = 0; i < nThreads; i++) {
+        threads[i] = new TestTimeRoundTripThread(*this, data, i);
+        if (threads[i]->start() != 0) {
+            errln("Error starting thread %d", i);
+        }
     }
 
     UBool done = false;
-    while(true){
+    while (true) {
         umtx_lock(NULL);
-        if(data.numDone == nLocales) {
+        if (data.numDone == nLocales) {
             done = true;
         }
         umtx_unlock(NULL);
-        if(done) break;
+        if (done)
+            break;
         SimpleThread::sleep(1000);
     }
 #endif
-	UDate total = 0;
-	logln("### Elapsed time by patterns ###");
-	for (int32_t i = 0; i < NUM_PATTERNS; i++) {
-		logln(UnicodeString("") + data.times[i] + "ms (" + PATTERNS[i] + ")");
-		total += data.times[i];
-	}
-	logln((UnicodeString)"Total: " + total + "ms");
-	logln((UnicodeString)"Iteration: " + data.testCounts);
+    UDate total = 0;
+    logln("### Elapsed time by patterns ###");
+    for (int32_t i = 0; i < NUM_PATTERNS; i++) {
+        logln(UnicodeString("") + data.times[i] + "ms (" + PATTERNS[i] + ")");
+        total += data.times[i];
+    }
+    logln((UnicodeString) "Total: " + total + "ms");
+    logln((UnicodeString) "Iteration: " + data.testCounts);
 
-	delete cal;
-	
+    delete cal;
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
