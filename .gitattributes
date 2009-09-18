@@ -330,6 +330,12 @@ icu4j/tools/build/icu4j42.api.gz -text
 icu4j/tools/build/icu4j421.api.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/manifest.stub -text
+tools/multi/c/Makefile-c.inc -text
+tools/multi/c/patch/3_0 -text
+tools/multi/c/patch/3_2 -text
+tools/multi/c/patch/3_4_1 -text
+tools/multi/common/Makefile-multi.inc -text
+tools/multi/j/Makefile-j.inc -text
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text
