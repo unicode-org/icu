@@ -98,6 +98,8 @@ const UChar lll_Cyrl[]    = {(UChar)0x0406, (UChar)0x04C0, (UChar)0x31, 0};
 /* The skeleton transform for all of thes 'lll' lookalikes is all ascii digit 1. */
 const UChar lll_Skel[]    = {(UChar)0x31, (UChar)0x31, (UChar)0x31, 0};  
 
+/* Provide better code coverage */
+const char goodLatinUTF8[]    = {0x75, 0x77, 0};
 /*
  *   Spoof Detction C API Tests
  */
@@ -489,6 +491,9 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, u_strcmp(lll_Skel, dest));
         TEST_ASSERT_EQ(u_strlen(lll_Skel), skelLength);
+
+        skelLength = uspoof_getSkeletonUTF8(sc, USPOOF_ANY_CASE, goodLatinUTF8, -1, dest, sizeof(dest)/sizeof(UChar), &status);
+        TEST_ASSERT_SUCCESS(status);
 
         skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, NULL, 0, &status);
         TEST_ASSERT_EQ(U_BUFFER_OVERFLOW_ERROR, status);

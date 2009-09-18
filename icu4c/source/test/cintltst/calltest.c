@@ -44,7 +44,6 @@ void addAllTests(TestNode** root)
 {
     addCnvSelTest(root);
     addUDataTest(root);
-    addPUtilTest(root);
     addHeapMutexTest(root);
     addUTF16Test(root);
     addUTF8Test(root);
@@ -79,6 +78,6 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION
     addUSpoofTest(root);
 #endif
-
+    addPUtilTest(root);
 }
 
