@@ -1438,14 +1438,13 @@ void SSearchTest::bmsTest()
         errln("FAIL: ucd_getCollator returned NULL.");
     }
 
-    ucd_freeCache();
-
 close_patterns:
     bms_close(shortPattern);
     bms_close(longPattern);
 
 close_data:
     ucd_close(data);
+    ucd_freeCache();
     ucol_close(coll);
 }
 
@@ -2474,7 +2473,9 @@ void SSearchTest::stringListTest(){
         errln("ERROR: stringListTest: Could not start StringList");
     }
 
-    const UChar *chars = new UChar();
+    const UChar chars[] = {
+            0x0000
+    };
     sl->add(chars, (int32_t) 0, status);
     if(U_FAILURE(status)){
         errln("ERROR: stringListTest: StringList::add");
