@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -134,14 +135,15 @@ public abstract class URLHandler {
     
     private static class FileURLHandler extends URLHandler {
         File file;
-        String root;
-        
+
         FileURLHandler(URL url) {
-            root = url.getPath();
-            file = new File(root);
-            
-            if (!file.exists()) {
-                if (DEBUG) System.err.println("file does not exist");
+            try {
+                file = new File(url.toURI());
+            } catch (URISyntaxException use) {
+                // fall through
+            }
+            if (file == null || !file.exists()) {
+                if (DEBUG) System.err.println("file does not exist - " + url.toString());
                 throw new IllegalArgumentException();
             }
         }
