@@ -33,9 +33,6 @@
 # error Do not include unicode/uverdefs.h before #including unicode/platform.h.  Instead of unicode/uverdefs,h, #include unicode/uversion.h
 #endif
 
-/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
-#define ICU_USE_THREADS @ICU_USE_THREADS@
-
 /* Determine wheter to enable auto cleanup of libraries. */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
@@ -149,6 +146,11 @@
 #define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
 #else
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
+#endif
+
+/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#ifndef ICU_USE_THREADS 
+#define ICU_USE_THREADS @ICU_USE_THREADS@
 #endif
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check lock. */
@@ -315,6 +317,16 @@
 
 #ifndef U_ALIGN_CODE
 #define U_ALIGN_CODE(n) 
+#endif
+
+/** @} */
+
+/*===========================================================================*/
+/** @{ GCC built in functions for atomic memory operations                       */
+/*===========================================================================*/
+
+#ifndef U_HAVE_GCC_ATOMICS
+#define U_HAVE_GCC_ATOMICS @U_HAVE_GCC_ATOMICS@
 #endif
 
 /** @} */

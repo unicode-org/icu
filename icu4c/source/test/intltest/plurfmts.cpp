@@ -15,7 +15,6 @@
 #include "unicode/plurfmt.h"
 
 
-const UnicodeString oddAndEvenRule = UNICODE_STRING_SIMPLE("odd: n mod 2 is 1");
 #define PLURAL_PATTERN_DATA 4
 #define PLURAL_TEST_ARRAY_SIZE 256
 
@@ -182,6 +181,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     };
 
     UErrorCode status = U_ZERO_ERROR;
+    UnicodeString oddAndEvenRule = UNICODE_STRING_SIMPLE("odd: n mod 2 is 1");
     PluralRules*  plRules = PluralRules::createRules(oddAndEvenRule, status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR:  create PluralRules instance failed in unit tests.- exitting");
