@@ -698,6 +698,25 @@ fi
 AC_SUBST(U_OVERRIDE_CXX_ALLOCATION)
 AC_SUBST(U_HAVE_PLACEMENT_NEW)
 
+# gcc atomic built-in functions check
+# AC_TRY_LINK([], [int foo, bar; bar = __sync_val_compare_and_swap(&foo, 0, 1);],, 
+AC_LANG(C)
+AC_MSG_CHECKING([for gcc atomic functions])
+AC_LINK_IFELSE([AC_LANG_PROGRAM(
+    [[
+        void *p;
+        int   i;
+    ]],
+    [[
+        __sync_fetch_and_add(&i, 1);
+        __sync_fetch_and_sub(&i, 1);
+        __sync_val_compare_and_swap(&p, 0, 0);
+    ]]
+)],
+[U_HAVE_GCC_ATOMICS=1; AC_MSG_RESULT([yes])],
+[U_HAVE_GCC_ATOMICS=0; AC_MSG_RESULT([no])])
+AC_SUBST(U_HAVE_GCC_ATOMICS)
+
 AC_LANG(C)
 AC_CHECK_FUNC(popen)
 if test x$ac_cv_func_popen = xyes
