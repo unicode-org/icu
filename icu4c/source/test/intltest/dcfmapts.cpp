@@ -370,49 +370,17 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     }
 
     delete test;
-
-// ======= Test API with CurrencyPluralInfo
-
-    status = U_ZERO_ERROR;
-    DecimalFormat *df = new DecimalFormat(status);
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: Couldn't create a DecimalFormat");
-    }
-
-    CurrencyPluralInfo *cpi = new CurrencyPluralInfo(status);
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: CurrencyPluralInfo(UErrorCode) could not be created");
-    }
-
-    const CurrencyPluralInfo cpi1 = *cpi;
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: const CurrencyPluralInfo(UErrorCode) could not be created");
-    }
-
-    df->adoptCurrencyPluralInfo(cpi);
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: DecimalFormat::adoptCurrencyPluralInfo");
-    }
-
-    df->getCurrencyPluralInfo();
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: DecimalFormat::getCurrencyPluralInfo");
-    }
-
-    df->setCurrencyPluralInfo(cpi1);
-    if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: DecimalFormat::getCurrencyPluralInfo");
-    }
-
-    delete df;
 }
 
 void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     UErrorCode status = U_ZERO_ERROR;
+
     CurrencyPluralInfo *cpi = new CurrencyPluralInfo(status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo(UErrorCode) could not be created");
     }
+
+    CurrencyPluralInfo cpi1 = *cpi;
 
     if(cpi->getDynamicClassID() != CurrencyPluralInfo::getStaticClassID()){
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::getDynamicClassID() didn't return the expected value");
@@ -423,8 +391,7 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setCurrencyPluralPattern");
     }
 
-    Locale locale = Locale::getCanada();
-    cpi->setLocale(locale, status);
+    cpi->setLocale(Locale::getCanada(), status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setLocale");
     }
@@ -433,6 +400,19 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setPluralRules");
     }
+
+    DecimalFormat *df = new DecimalFormat(status);
+    if(U_FAILURE(status)) {
+        errln((UnicodeString)"ERROR: Couldn't create a DecimalFormat");
+    }
+
+    df->adoptCurrencyPluralInfo(cpi);
+
+    df->getCurrencyPluralInfo();
+
+    df->setCurrencyPluralInfo(cpi1);
+
+    delete df;
 }
 
 void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)

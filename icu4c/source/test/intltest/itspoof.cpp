@@ -395,6 +395,8 @@ void IntlTestSpoof::testConfData() {
         }
     }
 
+    uspoof_close(sc);
+    delete [] fileBuf;
 }
 #endif // UCONFIG_NO_REGULAR_EXPRESSIONS
 

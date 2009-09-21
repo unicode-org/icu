@@ -545,8 +545,12 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
     logln((UnicodeString) "Total: " + total + "ms");
     logln((UnicodeString) "Iteration: " + data.testCounts);
 
-    delete cal;
+    for (i = 0; i < nThreads; i++) {
+        delete threads[i];
+    }
+    delete [] threads;
 
+    delete cal;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

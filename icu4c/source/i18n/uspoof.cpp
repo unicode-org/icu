@@ -680,7 +680,7 @@ uspoof_getSkeleton(const USpoofChecker *sc,
     // Unnormalized results should be very rare.
     if (!unorm_isNormalized(result, resultLen, UNORM_NFKD, status)) {
         normalizedLen = unorm_normalize(result, resultLen, UNORM_NFKD, 0, NULL, 0, status);
-        UChar *normedResult = static_cast<UChar *>(uprv_malloc((normalizedLen+1)*sizeof(UChar)));
+        normedResult = static_cast<UChar *>(uprv_malloc((normalizedLen+1)*sizeof(UChar)));
         if (normedResult == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;

@@ -116,11 +116,12 @@ CollationAPITest::TestProperty(/* char* par */)
         return;
     }
 
-    col->getKeywordValuesForLocale("", Locale::getEnglish(),true,success);
+    StringEnumeration* kwEnum = col->getKeywordValuesForLocale("", Locale::getEnglish(),true,success);
     if (U_FAILURE(success)){
         errcheckln(success, "Get Keyword Values for Locale failed. - %s", u_errorName(success));
         return;
     }
+    delete kwEnum;
 
     col->getVersion(versionArray);
     for (i=0; i<4; ++i) {
