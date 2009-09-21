@@ -485,6 +485,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     UBool isRoot = FALSE;
     UBool hasRealData = FALSE;
     UBool hasChopped = TRUE;
+
     char name[96];
 
     initCache(status);
@@ -506,13 +507,19 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
                 /* insert regular parents */
                 t2 = init_entry(name, r->fPath, &parentStatus);
+
                 /* Check for null pointer. */
                 if (t2 == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     goto finishUnlock;
                 }
-                t1->fParent = t2;
-                t1 = t2;
+
+                Resource parentIsRoot = res_getResource(&(t1->fData),"%%ParentIsRoot");
+                
+                if (parentIsRoot == RES_BOGUS) {
+                    t1->fParent = t2;
+                    t1 = t2;
+                }
                 hasChopped = chopLocale(name);
             }
         }
@@ -536,8 +543,13 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                         *status = U_MEMORY_ALLOCATION_ERROR;
                         goto finishUnlock;
                     }
-                    t1->fParent = t2;
-                    t1 = t2;
+
+                    Resource parentIsRoot = res_getResource(&(t1->fData),"%%ParentIsRoot");
+                
+                    if (parentIsRoot == RES_BOGUS) {
+                        t1->fParent = t2;
+                        t1 = t2;
+                    }
                     hasChopped = chopLocale(name);
                 }
             } 
