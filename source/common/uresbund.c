@@ -513,10 +513,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     goto finishUnlock;
                 }
-
-                Resource parentIsRoot = res_getResource(&(t1->fData),"%%ParentIsRoot");
                 
-                if (parentIsRoot == RES_BOGUS) {
+                if ( res_getResource(&t1->fData,"%%ParentIsRoot") == RES_BOGUS) {
                     t1->fParent = t2;
                     t1 = t2;
                 }
@@ -544,9 +542,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                         goto finishUnlock;
                     }
 
-                    Resource parentIsRoot = res_getResource(&(t1->fData),"%%ParentIsRoot");
-                
-                    if (parentIsRoot == RES_BOGUS) {
+                    if ( res_getResource(&t1->fData,"%%ParentIsRoot") == RES_BOGUS) {
                         t1->fParent = t2;
                         t1 = t2;
                     }
