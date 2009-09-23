@@ -73,10 +73,6 @@ pkgdataMakefile:
 #########################################################################
 ############################## Test ## stuff ############################
 
-ifeq ($(PKGDATA_OPTS),)
-PKGDATA_OPTS = -O $(top_builddir)/test/testdata/pkgdata.inc
-endif
-
 # relative lib links from pkgdata are the same as for tmp
 GENRBOPTS=-k
 # use the cross root, in case we are cross compiling. Otherwise it is equal to top_builddir
@@ -105,7 +101,7 @@ ICU_DATA_OPT = -i $(BUILDDIR)
 endif
 endif
 
-PKGDATA = $(TOOLBINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME)
+PKGDATA = $(TOOLBINDIR)/pkgdata -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME)
 PKGDATA_INVOKE:=$(INVOKE) $(PKGDATA_INVOKE_OPTS)
 
 # Contains all 'intermediate' files (and temp files) except for 'unpackaged data' below
