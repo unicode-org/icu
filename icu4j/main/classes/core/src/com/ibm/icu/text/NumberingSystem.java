@@ -16,6 +16,9 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.SimpleCache;
+
 
 /**
  * <code>NumberingSystem</code> is the base class for all number
@@ -85,10 +88,17 @@ class NumberingSystem {
      */
     public static NumberingSystem getInstance(ULocale locale) {
 
+        // Get the numbering system from the cache
+        NumberingSystem ns = cachedLocaleData.get(locale);
+        if (ns != null ) {
+            return ns;
+        }
+        
         String numbersKeyword = locale.getKeywordValue("numbers");
         if (numbersKeyword != null) {
-            NumberingSystem ns = getInstanceByName(numbersKeyword);
+            ns = getInstanceByName(numbersKeyword);
             if ( ns != null ) {
+                cachedLocaleData.put(locale, ns);                
                 return ns;
             }
         }
@@ -99,15 +109,21 @@ class NumberingSystem {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             defaultNumberingSystem = rb.getString("defaultNumberingSystem");
         } catch (MissingResourceException ex) {
-            return new NumberingSystem();
+            ns = new NumberingSystem();
+            cachedLocaleData.put(locale, ns);                            
+            return ns;
         }
 
-        NumberingSystem ns = getInstanceByName(defaultNumberingSystem);
+        ns = getInstanceByName(defaultNumberingSystem);
         if ( ns != null ) {
+           cachedLocaleData.put(locale, ns);                            
            return ns;
         }
 
-        return new NumberingSystem();
+        ns = new NumberingSystem();
+        cachedLocaleData.put(locale, ns);                            
+        return ns;        
+        
     }
 
     /**
@@ -132,6 +148,13 @@ class NumberingSystem {
         int radix;
         boolean isAlgorithmic;
         String description;
+        
+        // Get the numbering system from the cache
+        NumberingSystem ns = cachedStringData.get(name);
+        if (ns != null ) {
+            return ns;
+        }        
+        
         try {
             UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "numberingSystems");
             UResourceBundle nsCurrent = numberingSystemsInfo.get("numberingSystems");
@@ -149,7 +172,9 @@ class NumberingSystem {
             return null;
         }
 
-        return getInstance(radix,isAlgorithmic,description); 
+        ns = getInstance(radix,isAlgorithmic,description);
+        cachedStringData.put(name, ns);                       
+        return ns;     
     }
 
     /**
@@ -240,9 +265,18 @@ class NumberingSystem {
         return algorithmic;
     }
 
-
     private String desc;
     private int radix;
     private boolean algorithmic;
 
+    /**
+     * Cache to hold the NumberingSystems by Locale.
+     */
+    private static ICUCache<ULocale, NumberingSystem> cachedLocaleData = new SimpleCache<ULocale, NumberingSystem>();      
+        
+    /**
+     * Cache to hold the NumberingSystems by name.
+     */
+    private static ICUCache<String, NumberingSystem> cachedStringData = new SimpleCache<String, NumberingSystem>();      
+    
 }

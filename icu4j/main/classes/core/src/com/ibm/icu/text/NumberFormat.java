@@ -20,10 +20,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
-
-import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -1291,15 +1288,9 @@ public abstract class NumberFormat extends UFormat {
             pattern = pattern.replace("\u00A4", doubleCurrencyStr);
         }
 
-        // Get the numbering system from the cache or create one
-        NumberingSystem ns = cachedLocaleData.get(desiredLocale);
-        if (ns == null ) {
-            // add to cache
-            ns = NumberingSystem.getInstance(desiredLocale);
-            cachedLocaleData.put(desiredLocale, ns);
-        }
+        // Get the numbering system
+        NumberingSystem ns = NumberingSystem.getInstance(desiredLocale);
         if ( ns == null ) {
-            // some error getting a numbering system
             return null;
         }
 
@@ -1516,11 +1507,7 @@ public abstract class NumberFormat extends UFormat {
       Add Field for the new method getIntegerInstance() [Richard/GCL]
     */
 
-    /**
-     * Cache to hold the NumberingSystems of a Locale.
-     */
-    private static ICUCache<ULocale, NumberingSystem> cachedLocaleData = new SimpleCache<ULocale, NumberingSystem>();      
-    
+
     /**
      * True if the the grouping (i.e. thousands) separator is used when
      * formatting and parsing numbers.
