@@ -2023,7 +2023,7 @@ TimeZoneRuleTest::TestT6216(void) {
         {0, 0, 0}
     };
 
-    static const UnicodeString TestZones[] = {
+    /*static*/ const UnicodeString TestZones[] = {
         UnicodeString(tokyoTZ),
         UnicodeString(finalOverlap),
         UnicodeString(finalNonOverlap),
