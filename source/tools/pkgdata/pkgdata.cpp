@@ -236,7 +236,7 @@ const char options_help[][320]={
     "Install the data (specify target)",
     "Specify a custom source directory",
     "Specify a custom entrypoint name (default: short name)",
-    "Specify a version when packaging in DLL or static mode",
+    "Specify a version when packaging in dll or static mode",
     "Add package to all file names if not present",
     "Library name to build (if different than package name)",
     "Quite mode. (e.g. Do not output a readme file for static libraries)"
@@ -284,9 +284,9 @@ main(int argc, char* argv[]) {
 
 
 #ifndef WINDOWS_WITH_MSVC
-        if(!options[BLDOPT].doesOccur) {
+        if(!options[BLDOPT].doesOccur && uprv_strcmp(options[MODE].value, "common") != 0) {
             if (pkg_getOptionsFromICUConfig(&options[BLDOPT]) != 0) {
-                fprintf(stderr, " required parameter is missing: -O is required \n");
+                fprintf(stderr, " required parameter is missing: -O is required for static and shared builds.\n");
                 fprintf(stderr, "Run '%s --help' for help.\n", progname);
                 return 1;
             }
@@ -382,7 +382,11 @@ main(int argc, char* argv[]) {
     o.verbose   = options[VERBOSE].doesOccur;
 
 #ifndef WINDOWS_WITH_MSVC /* on UNIX, we'll just include the file... */
-    o.options   = options[BLDOPT].value;
+    if (options[BLDOPT].doesOccur) {
+        o.options   = options[BLDOPT].value;
+    } else {
+        o.options = NULL;
+    }
 #endif
     if(options[COPYRIGHT].doesOccur) {
         o.comment = U_COPYRIGHT_STRING;
@@ -490,30 +494,6 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
     char datFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
     char checkLibFile[LARGE_BUFFER_MAX_SIZE] = "";
 
-    /* Initialize pkgdataFlags */
-    pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
-    if (pkgDataFlags != NULL) {
-        for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-            pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * SMALL_BUFFER_MAX_SIZE);
-            if (pkgDataFlags[i] != NULL) {
-                pkgDataFlags[i][0] = 0;
-            } else {
-                fprintf(stderr,"Error allocating memory for pkgDataFlags.\n");
-                return -1;
-            }
-        }
-    } else {
-        fprintf(stderr,"Error allocating memory for pkgDataFlags.\n");
-        return -1;
-    }
-#ifndef WINDOWS_WITH_MSVC
-    /* Read in options file. */
-    parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
-    if (U_FAILURE(status)) {
-        fprintf(stderr,"Unable to open or read \"%s\" option file.\n", o->options);
-        return -1;
-    }
-#endif
     if (mode == MODE_FILES) {
         /* Copy the raw data to the installation directory. */
         if (o->install != NULL) {
@@ -570,7 +550,31 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             char version_major[10] = "";
             UBool reverseExt = FALSE;
 
+            /* Initialize pkgdataFlags */
+            pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
+            if (pkgDataFlags != NULL) {
+                for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
+                    pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * SMALL_BUFFER_MAX_SIZE);
+                    if (pkgDataFlags[i] != NULL) {
+                        pkgDataFlags[i][0] = 0;
+                    } else {
+                        fprintf(stderr,"Error allocating memory for pkgDataFlags.\n");
+                        return -1;
+                    }
+                }
+            } else {
+                fprintf(stderr,"Error allocating memory for pkgDataFlags.\n");
+                return -1;
+            }
+
 #ifndef WINDOWS_WITH_MSVC
+            /* Read in options file. */
+            parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
+            if (U_FAILURE(status)) {
+                fprintf(stderr,"Unable to open or read \"%s\" option file.\n", o->options);
+                return -1;
+            }
+
             /* Get the version major number. */
             if (o->version != NULL) {
                 for (uint32_t i = 0;i < sizeof(version_major);i++) {
