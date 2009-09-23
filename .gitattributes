@@ -1222,6 +1222,7 @@ icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/IterableComparator.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/MultiComparator.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
