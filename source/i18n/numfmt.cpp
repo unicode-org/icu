@@ -108,6 +108,10 @@ static UHashtable * NumberingSystem_cache = NULL;
 
 static UMTX nscacheMutex = NULL;
 
+#if !UCONFIG_NO_SERVICE
+static ICULocaleService* gService = NULL;
+#endif
+
 /** 
  * Release all static memory held by Number Format.   
  */  
@@ -117,12 +121,19 @@ deleteNumberingSystem(void *obj) {
     delete (NumberingSystem *)obj;
 }
 
-static UBool U_CALLCONV NSCache_cleanup(void) { 
+static UBool U_CALLCONV numfmt_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
+    if (gService) {
+        delete gService;
+        gService = NULL;
+    }
+#endif
     if (NumberingSystem_cache) { 
         // delete NumberingSystem_cache; 
         uhash_close(NumberingSystem_cache); 
         NumberingSystem_cache = NULL; 
-    } 
+    }
+
     return TRUE; 
 } 
 U_CDECL_END
@@ -508,20 +519,6 @@ NumberFormat::getAvailableLocales(int32_t& count)
 //-------------------------------------------
 
 #if !UCONFIG_NO_SERVICE
-static ICULocaleService* gService = NULL;
-
-/**
- * Release all static memory held by numberformat.  
- */
-U_CDECL_BEGIN
-static UBool U_CALLCONV numfmt_cleanup(void) {
-    if (gService) {
-        delete gService;
-        gService = NULL;
-    }
-    return TRUE;
-}
-U_CDECL_END
 
 // -------------------------------------
 
@@ -993,7 +990,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                 umtx_lock(&nscacheMutex);
                 NumberingSystem_cache = h = cache; 
                 cache = NULL; 
-                ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, NSCache_cleanup); 
+                ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
                 umtx_unlock(&nscacheMutex);
             }
 
