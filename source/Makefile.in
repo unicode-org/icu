@@ -16,6 +16,11 @@ include $(top_builddir)/icudefs.mk
 
 docdir = $(datadir)/doc
 docsubdir = $(PACKAGE)$(ICULIBDASHSUFFIX)/html
+docsubsrchdir = $(docsubdir)/search
+docfilesdir = doc/html
+docfiles = $(docfilesdir)/*.gif $(docfilesdir)/*.png $(docfilesdir)/*.html $(docfilesdir)/*.css $(docfilesdir)/*.tag $(docfilesdir)/installdox
+docsrchdir = $(docfilesdir)/search
+docsrchfiles = $(docsrchdir)/*
 
 ##
 
@@ -145,8 +150,9 @@ install-doc:
 else
 install-doc: doc
 	$(RM) -r $(DESTDIR)$(docdir)/$(docsubdir)
-	$(MKINSTALLDIRS) $(DESTDIR)$(docdir)/$(docsubdir)
-	$(INSTALL_DATA) doc/html/* $(DESTDIR)$(docdir)/$(docsubdir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(docdir)/$(docsubsrchdir)
+	$(INSTALL_DATA) $(docfiles) $(DESTDIR)$(docdir)/$(docsubdir)
+	$(INSTALL_DATA) $(docsrchfiles) $(DESTDIR)$(docdir)/$(docsubsrchdir)
 endif
 
 $(DESTDIR)$(pkglibdir)/%: $(top_srcdir)/../data/%
