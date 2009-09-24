@@ -9,7 +9,7 @@
 
 #define LARGE_BUFFER_MAX_SIZE 2048
 
-static void extractFlag(char* buffer, int32_t bufferSize, char* flag);
+static void extractFlag(char* buffer, int32_t bufferSize, char* flag, int32_t flagSize, UErrorCode *status);
 static int32_t getFlagOffset(const char *buffer, int32_t bufferSize);
 
 /*
@@ -23,6 +23,7 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
     FileStream *f = T_FileStream_open(fileName, "r");
     if (f == NULL) {
         *status = U_FILE_ACCESS_ERROR;
+        return;
     }
 
     for (i = 0; i < numOfFlags; i++) {
@@ -31,7 +32,10 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
             break;
         }
 
-        extractFlag(buffer, LARGE_BUFFER_MAX_SIZE, flagBuffer[i]);
+        extractFlag(buffer, LARGE_BUFFER_MAX_SIZE, flagBuffer[i], flagBufferSize, status);
+        if (U_FAILURE(*status)) {
+            break;
+        }
     }
 
     T_FileStream_close(f);
@@ -41,7 +45,7 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
 /*
  * Extract the setting after the '=' and store it in flag excluding the newline character.
  */
-static void extractFlag(char* buffer, int32_t bufferSize, char* flag) {
+static void extractFlag(char* buffer, int32_t bufferSize, char* flag, int32_t flagSize, UErrorCode *status) {
     int32_t i;
     char *pBuffer;
     int32_t offset;
@@ -52,6 +56,10 @@ static void extractFlag(char* buffer, int32_t bufferSize, char* flag) {
         offset = getFlagOffset(buffer, bufferSize);
         pBuffer = buffer+offset;
         for(i = 0;;i++) {
+            if (i >= flagSize) {
+                *status = U_BUFFER_OVERFLOW_ERROR;
+                return;
+            }
             if (pBuffer[i+1] == 0) {
                 /* Indicates a new line character. End here. */
                 flag[i] = 0;
