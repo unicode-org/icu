@@ -783,7 +783,15 @@ public  class ICUResourceBundle extends UResourceBundle {
 
                 b = (ICUResourceBundle)addToCache(root, fullName, defaultLocale, b);
 
-                if (i != -1) {
+                boolean ParentIsRoot;
+                try {
+                    b.get("%%ParentIsRoot");
+                    ParentIsRoot = true;
+                } catch (MissingResourceException ex) {
+                    ParentIsRoot = false;
+                }
+
+                if (i != -1 && !ParentIsRoot) {
                     parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
                 }else if(!localeName.equals(rootLocale)){
                     parent = instantiateBundle(baseName, rootLocale, root, true);
