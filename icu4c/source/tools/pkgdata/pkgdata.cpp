@@ -571,7 +571,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             /* Read in options file. */
             parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
             if (U_FAILURE(status)) {
-                fprintf(stderr,"Unable to open or read \"%s\" option file.\n", o->options);
+                fprintf(stderr,"Unable to open or read \"%s\" option file. status = %s\n", o->options, u_errorName(status));
                 return -1;
             }
 
