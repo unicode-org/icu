@@ -115,7 +115,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 static int32_t pkg_createWithAssemblyCode(const char *targetDir, const char mode, const char *gencFilePath);
 static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command = NULL);
 static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UBool reverseExt);
-static void createFileNames(const char *version_major, const char *version, const char *libName, const UBool reverseExt);
+static void createFileNames(const char mode, const char *version_major, const char *version, const char *libName, const UBool reverseExt);
 
 static int32_t pkg_getOptionsFromICUConfig(UOption *option);
 static int runCommand(const char* command);
@@ -595,7 +595,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 #endif
             /* Using the base libName and version number, generate the library file names. */
-            createFileNames(version_major, o->version, o->libName, reverseExt);
+            createFileNames(mode, version_major, o->version, o->libName, reverseExt);
 
             if (o->version != 0 && o->rebuild == FALSE) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
@@ -648,20 +648,22 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
             }
 #ifndef U_WINDOWS
-            /* Certain platforms uses archive library. (e.g. AIX) */
-            result = pkg_archiveLibrary(targetDir, o->version, reverseExt);
-            if (result != 0) {
-                fprintf(stderr, "Error creating data archive library file.\n");
-               return result;
-            }
+            if(mode != MODE_STATIC) {
+                /* Certain platforms uses archive library. (e.g. AIX) */
+                result = pkg_archiveLibrary(targetDir, o->version, reverseExt);
+                if (result != 0) {
+                    fprintf(stderr, "Error creating data archive library file.\n");
+                   return result;
+                }
 #ifndef OS400
-            /* Create symbolic links for the final library file. */
-            result = pkg_createSymLinks(targetDir);
-            if (result != 0) {
-                fprintf(stderr, "Error creating symbolic links of the data library file.\n");
-                return result;
-            }
+                /* Create symbolic links for the final library file. */
+                result = pkg_createSymLinks(targetDir);
+                if (result != 0) {
+                    fprintf(stderr, "Error creating symbolic links of the data library file.\n");
+                    return result;
+                }
 #endif
+            } /* !MODE_STATIC */
             /* Install the libraries if option was set. */
             if (o->install != NULL) {
                 result = pkg_installLibrary(o->install, targetDir);
@@ -679,7 +681,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
  * Given the base libName and version numbers, generate the libary file names and store it in libFileNames.
  * Depending on the configuration, the library name may either end with version number or shared object suffix.
  */
-static void createFileNames(const char *version_major, const char *version, const char *libName, UBool reverseExt) {
+static void createFileNames(const char mode, const char *version_major, const char *version, const char *libName, UBool reverseExt) {
         sprintf(libFileNames[LIB_FILE], "%s%s",
                 pkgDataFlags[LIBPREFIX],
                 libName);
@@ -721,6 +723,10 @@ static void createFileNames(const char *version_major, const char *version, cons
             /* Cygwin only deals with the version major number. */
             uprv_strcpy(libFileNames[LIB_FILE_VERSION_TMP], libFileNames[LIB_FILE_VERSION_MAJOR]);
 #endif
+        }
+        if(mode == MODE_STATIC) {
+            sprintf(libFileNames[LIB_FILE_VERSION], "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
+            libFileNames[LIB_FILE_VERSION_MAJOR][0]=0;
         }
 }
 
@@ -925,28 +931,26 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
 
     if (mode == MODE_STATIC) {
 #ifdef OS400
-        sprintf(cmd, "QSH CMD('%s %s %s%s.%s %s')",
+        sprintf(cmd, "QSH CMD('%s %s %s%s %s')",
 #else
-        sprintf(cmd, "%s %s %s%s.%s %s",
+        sprintf(cmd, "%s %s %s%s %s",
 #endif
                 pkgDataFlags[AR],
                 pkgDataFlags[ARFLAGS],
                 targetDir,
-                libFileNames[LIB_FILE],
-                pkgDataFlags[A_EXT],
+                libFileNames[LIB_FILE_VERSION],
                 objectFile);
 
         result = runCommand(cmd); 
         if (result == 0) {
 #ifdef OS400 
-            sprintf(cmd, "QSH CMD('%s %s%s.%s')", 
+            sprintf(cmd, "QSH CMD('%s %s%s')", 
 #else 
-            sprintf(cmd, "%s %s%s.%s", 
+            sprintf(cmd, "%s %s%s", 
 #endif 
                     pkgDataFlags[RANLIB], 
                     targetDir, 
-                    libFileNames[LIB_FILE], 
-                    pkgDataFlags[A_EXT]); 
+                    libFileNames[LIB_FILE_VERSION]); 
         
             result = runCommand(cmd); 
         }
