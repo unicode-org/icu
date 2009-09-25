@@ -10456,9 +10456,11 @@ case "$datapackaging" in
     fi
     datapackaging_howfound="$datapackaging_msg_set"
     ;;
-#    static)
-#	DATA_PACKAGING_MODE=static
-#	;;
+    static)
+    DATA_PACKAGING_MODE=static
+    datapackaging_msg="ICU data will be stored in a static library."
+    datapackaging_howfound="$datapackaging_msg_set"
+    ;;
 esac
 
 
