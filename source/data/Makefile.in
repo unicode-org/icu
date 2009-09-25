@@ -34,7 +34,11 @@ endif
 ifeq ($(PKGDATA_MODE),dll)
 ICUPKGDATA_OUTDIR = $(LIBDIR)
 else
+ifeq ($(PKGDATA_MODE),static)
+ICUPKGDATA_OUTDIR = $(LIBDIR)
+else
 ICUPKGDATA_OUTDIR = $(OUTDIR)
+endif
 endif
 
 CURDIR:=$(CURR_FULL_DIR)
