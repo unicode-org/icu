@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -146,7 +146,7 @@ const UnicodeString &BreakTransliterator::getInsertion() const {
 //
 //  setInsertion()
 //
-void BreakTransliterator::setInsertsion(const UnicodeString &insertion) {
+void BreakTransliterator::setInsertion(const UnicodeString &insertion) {
     this->fInsertion = insertion;
 }
 
