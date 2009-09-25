@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -58,7 +58,7 @@ public:
 
     virtual const UnicodeString &getInsertion() const;
 
-    virtual void setInsertsion(const UnicodeString &insertion);
+    virtual void setInsertion(const UnicodeString &insertion);
 
     /**
       *  Return the break iterator used by this transliterator.
