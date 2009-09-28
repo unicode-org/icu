@@ -88,40 +88,43 @@ class NumberingSystem {
      */
     public static NumberingSystem getInstance(ULocale locale) {
 
-        // Get the numbering system from the cache
-        NumberingSystem ns = cachedLocaleData.get(locale);
-        if (ns != null ) {
-            return ns;
-        }
+        NumberingSystem ns;
+        String defaultNumberingSystem;
         
+        // Check for @numbers
         String numbersKeyword = locale.getKeywordValue("numbers");
         if (numbersKeyword != null) {
             ns = getInstanceByName(numbersKeyword);
             if ( ns != null ) {
-                cachedLocaleData.put(locale, ns);                
                 return ns;
             }
         }
 
-        String defaultNumberingSystem;
-
+        // Get the numbering system from the cache
+        String baseName = locale.getBaseName();
+        ns = cachedLocaleData.get(baseName);
+        if (ns != null ) {
+            return ns;
+        }
+        
+        // Cache miss, create new instance
         try {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             defaultNumberingSystem = rb.getString("defaultNumberingSystem");
         } catch (MissingResourceException ex) {
             ns = new NumberingSystem();
-            cachedLocaleData.put(locale, ns);                            
+            cachedLocaleData.put(baseName, ns);
             return ns;
         }
 
         ns = getInstanceByName(defaultNumberingSystem);
         if ( ns != null ) {
-           cachedLocaleData.put(locale, ns);                            
+           cachedLocaleData.put(baseName, ns);
            return ns;
         }
 
         ns = new NumberingSystem();
-        cachedLocaleData.put(locale, ns);                            
+        cachedLocaleData.put(baseName, ns);
         return ns;        
         
     }
@@ -272,11 +275,11 @@ class NumberingSystem {
     /**
      * Cache to hold the NumberingSystems by Locale.
      */
-    private static ICUCache<ULocale, NumberingSystem> cachedLocaleData = new SimpleCache<ULocale, NumberingSystem>();      
+    private static ICUCache<String, NumberingSystem> cachedLocaleData = new SimpleCache<String, NumberingSystem>();
         
     /**
      * Cache to hold the NumberingSystems by name.
      */
-    private static ICUCache<String, NumberingSystem> cachedStringData = new SimpleCache<String, NumberingSystem>();      
+    private static ICUCache<String, NumberingSystem> cachedStringData = new SimpleCache<String, NumberingSystem>();
     
 }

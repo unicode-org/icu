@@ -3676,15 +3676,5 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("DateFormat.getPatternInstance is not suppose to return an exception.");
         }
     }
-    
-    public void Test7140(){
-        // Performance test to profile with Eclispe TPTP
-        try{
-            for (int i=0; i<10000; i++) {
-                DateFormat df1 = SimpleDateFormat.getDateTimeInstance();
-            }
-        } catch(Exception e) {
-            errln("SimpleDateFormat.getDateTimeInstance is not suppose to return an exception.");
-        }        
-    }    
+       
 }
