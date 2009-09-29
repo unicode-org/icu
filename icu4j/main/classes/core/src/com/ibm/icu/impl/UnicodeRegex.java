@@ -33,7 +33,7 @@ import com.ibm.icu.util.Freezable;
  * 
  * @author markdavis
  */
-public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
+public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringTransform {
     // Note: we don't currently have any state, but intend to in the future,
     // particularly for the regex style supported.
 
@@ -273,10 +273,10 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.Freezable#cloneAsThawed()
      */
-    public Object cloneAsThawed() {
+    public UnicodeRegex cloneAsThawed() {
         // TODO Auto-generated method stub
         try {
-            return this.clone();
+            return (UnicodeRegex)clone();
         } catch (CloneNotSupportedException e) {
             throw new IllegalArgumentException(); // should never happen
         }
@@ -285,7 +285,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.Freezable#freeze()
      */
-    public Object freeze() {
+    public UnicodeRegex freeze() {
         // no action needed now.
         return this;
     }

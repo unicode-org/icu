@@ -143,7 +143,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @stable ICU 4.0
  */
 
-public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
+public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>, Serializable {
     /* Save the interval pattern information.
      * Interval pattern consists of 2 single date patterns and the separator.
      * For example, interval pattern "MMM d - MMM d, yyyy" consists
@@ -779,7 +779,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Boilerplate for Freezable
      * @stable ICU 4.0
      */
-    public Object freeze() {
+    public DateIntervalInfo freeze() {
         frozen = true;
         return this;
     }
@@ -788,7 +788,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Boilerplate for Freezable
      * @stable ICU 4.0
      */
-    public Object cloneAsThawed() {
+    public DateIntervalInfo cloneAsThawed() {
         DateIntervalInfo result = (DateIntervalInfo) (this.cloneUnfrozenDII());
         return result;
     }

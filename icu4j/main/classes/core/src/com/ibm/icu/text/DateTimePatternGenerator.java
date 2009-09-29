@@ -82,7 +82,7 @@ import com.ibm.icu.util.UResourceBundle;
  * </pre>
  * @stable ICU 3.6
  */
-public class DateTimePatternGenerator implements Freezable, Cloneable {
+public class DateTimePatternGenerator implements Freezable<DateTimePatternGenerator>, Cloneable {
     // debugging flags
     //static boolean SHOW_DISTANCE = false;
     // TODO add hack to fix months for CJK, as per bug ticket 1099
@@ -847,7 +847,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * Boilerplate for Freezable
      * @stable ICU 3.6
      */
-    public Object freeze() {
+    public DateTimePatternGenerator freeze() {
         frozen = true;
         return this;
     }
@@ -856,7 +856,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * Boilerplate for Freezable
      * @stable ICU 3.6
      */
-    public Object cloneAsThawed() {
+    public DateTimePatternGenerator cloneAsThawed() {
         DateTimePatternGenerator result = (DateTimePatternGenerator) (this.clone());
         frozen = false;
         return result;

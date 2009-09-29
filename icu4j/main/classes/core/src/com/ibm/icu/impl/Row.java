@@ -12,7 +12,8 @@ import com.ibm.icu.util.Freezable;
 
 
 @SuppressWarnings("unchecked")
-public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable, Freezable{
+public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
+                                        Freezable<Row<C0, C1, C2, C3, C4>>{
     protected Object[] items;
     protected boolean frozen;
 
@@ -53,38 +54,38 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
         }
     }
 
-    public Row set0(C0 item) {
-        return (Row) set(0, item);
+    public Row<C0, C1, C2, C3, C4> set0(C0 item) {
+        return set(0, item);
     }
     public C0 get0() {
         return (C0) items[0];
     }
-    public Row set1(C1 item) {
-        return (Row) set(1, item);
+    public Row<C0, C1, C2, C3, C4> set1(C1 item) {
+        return set(1, item);
     }
     public C1 get1() {
         return (C1) items[1];
     }
-    public Row set2(C2 item) {
-        return (Row) set(2, item);
+    public Row<C0, C1, C2, C3, C4> set2(C2 item) {
+        return set(2, item);
     }
     public C2 get2() {
         return (C2) items[2];
     }
-    public Row set3(C3 item) {
-        return (Row) set(3, item);
+    public Row<C0, C1, C2, C3, C4> set3(C3 item) {
+        return set(3, item);
     }
     public C3 get3() {
         return (C3) items[3];
     }
-    public Row set4(C4 item) {
-        return (Row) set(4, item);
+    public Row<C0, C1, C2, C3, C4> set4(C4 item) {
+        return set(4, item);
     }
     public C4 get4() {
         return (C4) items[4];
     }
 
-    protected Row set(int i, Object item) {
+    protected Row<C0, C1, C2, C3, C4> set(int i, Object item) {
         if (frozen) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
@@ -102,7 +103,7 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
 
     public boolean equals(Object other) {
         try {
-            Row that = (Row)other;
+            Row<C0, C1, C2, C3, C4> that = (Row<C0, C1, C2, C3, C4>)other;
             if (items.length != that.items.length) {
                 return false;
             }
@@ -120,7 +121,7 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
 
     public int compareTo(Object other) {
         int result;
-        Row that = (Row)other;
+        Row<C0, C1, C2, C3, C4> that = (Row<C0, C1, C2, C3, C4>)other;
         result = items.length - that.items.length;
         if (result != 0) {
             return result;
@@ -153,7 +154,7 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
         return frozen;
     }
 
-    public Object freeze() {
+    public Row<C0, C1, C2, C3, C4> freeze() {
         frozen = true;
         return this;
     }
@@ -161,7 +162,7 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
     public Object clone() {
         if (frozen) return this;
         try {
-            Row result = (Row) super.clone();
+            Row<C0, C1, C2, C3, C4> result = (Row<C0, C1, C2, C3, C4>) super.clone();
             items = items.clone();
             return result;
         } catch (CloneNotSupportedException e) {
@@ -169,9 +170,9 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
         }
     }
 
-    public Object cloneAsThawed() {
+    public Row<C0, C1, C2, C3, C4> cloneAsThawed() {
         try {
-            Row result = (Row) super.clone();
+            Row<C0, C1, C2, C3, C4> result = (Row<C0, C1, C2, C3, C4>) super.clone();
             items = items.clone();
             result.frozen = false;
             return result;

@@ -261,7 +261,7 @@ import com.ibm.icu.util.VersionInfo;
  * @stable ICU 2.0
  * @see UnicodeSetIterator
  */
-public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Comparable<UnicodeSet>, Freezable {
+public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Comparable<UnicodeSet>, Freezable<UnicodeSet> {
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -2568,14 +2568,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         }
                     }
                     syntaxError(chars, "'-' not after char or set");
+                    break;
                 case '&':
                     if (lastItem == 2 && op == 0) {
                         op = (char) c;
                         continue;
                     }
                     syntaxError(chars, "'&' not after set");
+                    break;
                 case '^':
                     syntaxError(chars, "'^' not after '['");
+                    break;
                 case '{':
                     if (op != 0) {
                         syntaxError(chars, "Missing operand after operator");
@@ -2639,6 +2642,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         continue;
                     }
                     syntaxError(chars, "Unquoted '$'");
+                    break;
                 default:
                     break;
                 }
@@ -3836,7 +3840,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return this
      * @stable ICU 3.8
      */
-    public Object cloneAsThawed() {
+    public UnicodeSet cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();
         result.frozen = false;
         return result;
