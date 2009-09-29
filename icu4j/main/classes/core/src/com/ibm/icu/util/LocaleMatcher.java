@@ -329,7 +329,7 @@ public class LocaleMatcher {
 
     enum Level {language, script, region}
 
-    private static class ScoreData implements Freezable {
+    private static class ScoreData implements Freezable<ScoreData> {
         LinkedHashSet<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>();
         final double worst;
         final Level level;
@@ -451,7 +451,7 @@ public class LocaleMatcher {
      * Only for testing and use by tools. Interface may change!!
      * @internal
      */
-    public static class LanguageMatcherData implements Freezable {
+    public static class LanguageMatcherData implements Freezable<LanguageMatcherData> {
         ScoreData languageScores = new ScoreData(Level.language);
         ScoreData scriptScores = new ScoreData(Level.script);
         ScoreData regionScores = new ScoreData(Level.region);
@@ -557,7 +557,7 @@ public class LocaleMatcher {
         /* (non-Javadoc)
          * @see com.ibm.icu.util.Freezable#cloneAsThawed()
          */
-        public Object cloneAsThawed() {
+        public LanguageMatcherData cloneAsThawed() {
             LanguageMatcherData result;
             try {
                 result = (LanguageMatcherData) clone();

@@ -26,7 +26,7 @@ public class BasicDurationFormat extends DurationFormat {
     transient PeriodFormatter pformatter;
     transient PeriodFormatterService pfs = null;
 
-    public static DurationFormat getInstance(ULocale locale) {
+    public static BasicDurationFormat getInstance(ULocale locale) {
         return new BasicDurationFormat(locale);
     }
 

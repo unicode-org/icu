@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 200-2007, International Business Machines Corporation and    *
+ * Copyright (C) 200-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
 */
@@ -62,17 +62,16 @@ package com.ibm.icu.util;
  * 
  * <pre>
  *  public test1(SupposedlyImmutableClass x, SafeStorage y) {
- *   &lt;font color=&quot;#0000FF&quot;&gt;    &lt;b&gt;// unsafe getter&lt;/b&gt;
- *   &lt;/font&gt;    A a = x.getA();
- *   Collection col = a.get_b();
- *   col.add(something);&lt;font color=&quot;#0000FF&quot;&gt; // a has now been changed, and x too
- *   &lt;/font&gt;
- *   &lt;font color=&quot;#0000FF&quot;&gt;&lt;b&gt;// unsafe constructor&lt;/b&gt;&lt;/font&gt;
- *   a = new A(col, col);
- *   y.store(a);
- *   col.add(something);&lt;font color=&quot;#0000FF&quot;&gt; // a has now been changed, and y too
- *  
- *   &lt;/font&gt;}
+ *    // unsafe getter
+ *    A a = x.getA();
+ *    Collection col = a.get_b();
+ *    col.add(something); // a has now been changed, and x too
+ *
+ *    // unsafe constructor
+ *    a = new A(col, col);
+ *    y.store(a);
+ *    col.add(something); // a has now been changed, and y too
+ *  }
  * </pre>
  * 
  * <p>
@@ -141,11 +140,11 @@ package com.ibm.icu.util;
  * </p>
  * 
  * <pre>
- *  public class A implements Freezable {
+ *  public class A implements Freezable<A> {
  *   ...
  *   public final boolean isFrozen() {return true;}
- *   public final Object freeze() {return this;}
- *   public final Object cloneAsThawed() { return this; }
+ *   public final A freeze() {return this;}
+ *   public final A cloneAsThawed() { return this; }
  *   }
  * </pre>
  * 
@@ -172,7 +171,7 @@ package com.ibm.icu.util;
  *      return frozen;
  * };
  * 
- * public Object freeze() {
+ * public A freeze() {
  *      frozen = true;
  *      return this;
  * }
@@ -243,14 +242,13 @@ package com.ibm.icu.util;
  * </p>
  * <p>
  * To deal with unsafe internals, the simplest course of action is to do the
- * work in the <code>
- freeze()</code> function. Just make all of your internal
+ * work in the <code>freeze()</code> function. Just make all of your internal
  * fields frozen, and set the frozen flag. Any subsequent getter/setter will
  * work properly. Here is an example:
  * </p>
  * 
  * <pre>
- * public Object freeze() {
+ * public A freeze() {
  *      if (!frozen) {
  *              foo.freeze();
  *              frozen = true;
@@ -301,7 +299,7 @@ package com.ibm.icu.util;
  * </blockquote>
  * @stable ICU 3.8
  */
-public interface Freezable extends Cloneable {
+public interface Freezable<T> extends Cloneable {
     /**
      * Determines whether the object has been locked or not.
      * @stable ICU 3.8
@@ -313,11 +311,11 @@ public interface Freezable extends Cloneable {
      * @return the object itself.
      * @stable ICU 3.8
      */
-    public Object freeze();
+    public T freeze();
 
     /**
      * Provides for the clone operation. Any clone is initially unlocked.
      * @stable ICU 3.8
      */
-    public Object cloneAsThawed();
+    public T cloneAsThawed();
 }

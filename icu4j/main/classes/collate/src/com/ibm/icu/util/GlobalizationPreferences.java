@@ -84,7 +84,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 // - Should this be serializable?
 // - Other utilities?
 
-public class GlobalizationPreferences implements Freezable {
+public class GlobalizationPreferences implements Freezable<GlobalizationPreferences> {
     
     /**
      * Default constructor
@@ -1491,7 +1491,7 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public Object freeze() {
+    public GlobalizationPreferences freeze() {
         frozen = true;
         return this;
     }
@@ -1500,7 +1500,7 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public Object cloneAsThawed() {
+    public GlobalizationPreferences cloneAsThawed() {
         try {
             GlobalizationPreferences result = (GlobalizationPreferences) clone();
             result.frozen = false;
