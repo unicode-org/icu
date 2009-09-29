@@ -14,17 +14,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
-import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UPropertyAliases;
-import com.ibm.icu.lang.UCharacterEnums.*;
+import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
+import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ValueIterator;
@@ -4176,7 +4178,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.4
      */
     public static int getPropertyEnum(String propertyAlias) {
-        return PNAMES_.getPropertyEnum(propertyAlias);
+        int propEnum = PNAMES_.getPropertyEnum(propertyAlias);
+        if (propEnum == UProperty.UNDEFINED) {
+            throw new IllegalIcuArgumentException("Invalid name: " + propertyAlias);
+        }
+        return propEnum;
     }
 
     /**
@@ -4284,7 +4290,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.4
      */
     public static int getPropertyValueEnum(int property, String valueAlias) {
-        return PNAMES_.getPropertyValueEnum(property, valueAlias);
+        int propEnum = PNAMES_.getPropertyValueEnum(property, valueAlias);
+        if (propEnum == UProperty.UNDEFINED) {
+            throw new IllegalIcuArgumentException("Invalid name: " + valueAlias);
+        }
+        return propEnum;
     }
       
     /**
@@ -6023,31 +6033,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Database storing the sets of character name
      */
-    static UCharacterName NAME_ = null;
+    static UCharacterName NAME_ = UCharacterName.getInstance();
 
     /**
      * Singleton object encapsulating the imported pnames.icu property aliases
      */
-    static UPropertyAliases PNAMES_ = null;
-      
-    // block to initialise name database and unicode 1.0 data 
-    static {
-        try {
-            PNAMES_ = new UPropertyAliases();
-            NAME_ = UCharacterName.getInstance();
-        } catch (IOException e) {
-            ///CLOVER:OFF
-            // e.printStackTrace();
-            // This part of code is initialize as part of the class
-            throw new MissingResourceException(e.getMessage(),"","");
-            //throw new RuntimeException(e.getMessage());
-            // DONOT throw an exception
-            // we might be building ICU modularly wothout names.icu and
-            // pnames.icu
-            ///CLOVER:ON
-        }
-    }
-        
+    static UPropertyAliases PNAMES_ = UPropertyAliases.getInstance();
+
     // private variables -------------------------------------------------
     
     /**

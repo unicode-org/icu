@@ -12,6 +12,7 @@
 package com.ibm.icu.impl;
 
 import java.io.*;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.*;
 
@@ -203,6 +204,21 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     //----------------------------------------------------------------
     // Public API
 
+    public static UPropertyAliases INSTANCE_;
+
+    public static synchronized UPropertyAliases getInstance() {
+        if (INSTANCE_ == null) {
+            try {
+                INSTANCE_ = new UPropertyAliases();
+            } catch(IOException e){
+                ///CLOVER:OFF
+                throw new MissingResourceException("Could not construct UPropertyAliases. Missing pnames.icu","","");
+                ///CLOVER:ON
+            }
+        }
+        return INSTANCE_;
+    }
+
     /**
      * Return a property name given a property enum.  Multiple
      * names may be available for each property; the nameChoice
@@ -216,6 +232,8 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
 
     /**
      * Return a property enum given one of its property names.
+     * If the property name is not known, this method returns
+     * UProperty.UNDEFINED.
      */
     public int getPropertyEnum(String propertyAlias) {
         return nameToEnum.getEnum(propertyAlias);
@@ -364,7 +382,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                 if (c < 0) break;
                 return enumArray[i];
             }
-            throw new IllegalIcuArgumentException("Invalid name: " + nameProbe);
+            return UProperty.UNDEFINED;
         }
 
         NameToEnum(Builder b) throws IOException {

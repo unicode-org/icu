@@ -3371,17 +3371,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // valueAlias is empty.  Interpret as General Category, Script,
             // Binary property, or ANY or ASCII.  Upon success, p and v will
             // be set.
-            try {
-                p = UProperty.GENERAL_CATEGORY_MASK;
-                v = UCharacter.getPropertyValueEnum(p, propertyAlias);
-            } catch (IllegalArgumentException e) {
-                try {
-                    p = UProperty.SCRIPT;
-                    v = UCharacter.getPropertyValueEnum(p, propertyAlias);
-                } catch (IllegalArgumentException e2) {
-                    try {
-                        p = UCharacter.getPropertyEnum(propertyAlias);
-                    } catch (IllegalArgumentException e3) {
+            UPropertyAliases pnames = UPropertyAliases.getInstance();
+            p = UProperty.GENERAL_CATEGORY_MASK;
+            v = pnames.getPropertyValueEnum(p, propertyAlias);
+            if (v == UProperty.UNDEFINED) {
+                p = UProperty.SCRIPT;
+                v = pnames.getPropertyValueEnum(p, propertyAlias);
+                if (v == UProperty.UNDEFINED) {
+                    p = pnames.getPropertyEnum(propertyAlias);
+                    if (p == UProperty.UNDEFINED) {
                         p = -1;
                     }
                     if (p >= UProperty.BINARY_START && p < UProperty.BINARY_LIMIT) {
