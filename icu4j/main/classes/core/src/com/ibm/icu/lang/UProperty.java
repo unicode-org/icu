@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -29,7 +29,14 @@ package com.ibm.icu.lang;
 public interface UProperty
 {
     // public data member --------------------------------------------------
-  
+
+    /**
+     * Special value indicating undefined property.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static final int UNDEFINED = -1;
+
     /** 
      * <p>Binary property Alphabetic. </p>
      * <p>Property for UCharacter.isUAlphabetic(), different from the property 
