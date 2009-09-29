@@ -2721,7 +2721,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    public <U extends Collection<String>> U addAllTo(U target) {
+    public <T extends Collection<String>> T addAllTo(T target) {
         return addAllTo(this, target);
     }
 
