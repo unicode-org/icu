@@ -20,6 +20,7 @@
 #ifndef _PTYPES_H
 #define _PTYPES_H
 
+#include "unicode/platform.h"
 
 /*===========================================================================*/
 /* Generic data types                                                        */
