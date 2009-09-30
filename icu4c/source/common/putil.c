@@ -846,6 +846,9 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     struct dirent* dirEntry = NULL;
 
     char* result = NULL;
+    if (dirp == NULL) {
+        return result;
+    }
 
     /* Save the current path */
     char curpath[MAX_PATH_SIZE];
