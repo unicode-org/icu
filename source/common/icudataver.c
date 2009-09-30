@@ -12,6 +12,7 @@
 #include "unicode/uversion.h"
 #include "unicode/ures.h"
 #include "uresimp.h" /* for ures_getVersionByKey */
+#include "cmemory.h"
 
 /*
  * Determines if icustd is in the data.
@@ -63,12 +64,12 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isMo
     if (U_SUCCESS(*status)) {
         u_versionFromString(wiredVersion, U_ICU_DATA_VERSION);
         
-        if (u_versionCompare(dataVersion, wiredVersion) != -1) {
+        if (uprv_memcmp(dataVersion, wiredVersion, sizeof(UVersionInfo)) != -1) {
             result = FALSE;
         }
         
         if (dataVersionFillin != NULL) {
-            u_versionCopy(dataVersionFillin, dataVersion);
+            uprv_memcpy(dataVersionFillin, dataVersion, sizeof(UVersionInfo));
         }
         
         if (hasICUSTDBundle()) {

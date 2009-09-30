@@ -69,11 +69,73 @@
 #define U_MAX_VERSION_STRING_LENGTH 20
 
 /** The binary form of a version on ICU APIs is an array of 4 uint8_t.
+ *  To compare two versions, use memcmp(v1,v2,sizeof(UVersionInfo)).
  *  @stable ICU 2.4
  */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
+/*===========================================================================*/
+/* C++ namespace if supported. Versioned unless versioning is disabled.      */
+/*===========================================================================*/
 
+/**
+ * \def U_NAMESPACE_BEGIN
+ * This is used to begin a declaration of a public ICU C++ API.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_END
+ * This is used to end a declaration of a public ICU C++ API
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_USE
+ * This is used to specify that the rest of the code uses the
+ * public ICU C++ API namespace.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_QUALIFIER
+ * This is used to qualify that a function or class is part of
+ * the public ICU C++ API namespace.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/* Define namespace symbols if the compiler supports it. */
+#if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
+#   if U_DISABLE_RENAMING
+#       define U_ICU_NAMESPACE icu
+        namespace U_ICU_NAMESPACE { }
+#   else
+#       define U_ICU_NAMESPACE icu_4_3
+        namespace U_ICU_NAMESPACE { }
+        namespace icu = U_ICU_NAMESPACE;
+#   endif
+
+#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
+#   define U_NAMESPACE_END  }
+#   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
+#   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
+
+#   ifndef U_USING_ICU_NAMESPACE
+#       define U_USING_ICU_NAMESPACE 1
+#   endif
+#   if U_USING_ICU_NAMESPACE
+        U_NAMESPACE_USE
+#   endif
+#else
+#   define U_NAMESPACE_BEGIN
+#   define U_NAMESPACE_END
+#   define U_NAMESPACE_USE
+#   define U_NAMESPACE_QUALIFIER
+#endif
 
 /*===========================================================================*/
 /* General version helper functions. Definitions in putil.c                  */
@@ -133,30 +195,4 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  */
 U_STABLE void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
-
-/**
- * Compare two versions of UVersionInfo type to determine their equality.
- *
- * @param version1 The destination structure for the version information.
- * @param version2 A Unicode string with dotted-decimal version
- *                      information, with up to four non-negative number
- *                      fields with values of up to 255 each.
- *
- * @return 0 if equal, negative value if version1 is less than version2, positive value if version1 is greater than version2
- *
- * @draft ICU 4.4
- */
-U_DRAFT int32_t U_EXPORT2
-u_versionCompare(UVersionInfo version1, UVersionInfo version2);
-
-/**
- * Copy the information in versionSrc to versionDest.
- *
- * @param versionDest The destination structure for the version information.
- * @param versionSrc The source UVersionInfo to copy
- * @draft ICU 4.4
- */
-U_DRAFT void U_EXPORT2
-u_versionCopy(UVersionInfo versionDest, UVersionInfo versionSrc);
-
 #endif

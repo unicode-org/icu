@@ -1936,33 +1936,6 @@ U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray) {
     u_versionFromString(versionArray, U_ICU_VERSION);
 }
-
-U_CAPI int32_t U_EXPORT2
-u_versionCompare(UVersionInfo version1, UVersionInfo version2) {
-    int32_t result = 0;
-    int i;
-    
-    for (i = 0; i < U_MAX_VERSION_LENGTH; i++) {
-        if (version1[i] != version2[i]) {
-            if (version1[i] < version2[i]) {
-                result = -1;
-            } else {
-                result = 1;
-            }
-            break;
-        }
-    }
-    
-    return result;
-}
-
-U_CAPI void U_EXPORT2
-u_versionCopy(UVersionInfo versionDest, UVersionInfo versionSrc) {
-    int i;
-    for (i = 0; i < U_MAX_VERSION_LENGTH; i++) {
-        versionDest[i] = versionSrc[i];
-    }
-}
 /*
  * Hey, Emacs, please set the following:
  *
