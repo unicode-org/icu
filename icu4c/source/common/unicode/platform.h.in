@@ -28,9 +28,9 @@
  * \brief Basic types for the platform 
  */
 
-/* This file should be included before uverdefs.h. */
-#if defined(UVERDEFS_H)
-# error Do not include unicode/uverdefs.h before #including unicode/platform.h.  Instead of unicode/uverdefs,h, #include unicode/uversion.h
+/* This file should be included before uvernum.h. */
+#if defined(UVERNUM_H)
+# error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
 #endif
 
 /* Determine wheter to enable auto cleanup of libraries. */
