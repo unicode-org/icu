@@ -1765,7 +1765,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\unicode\uverdefs.h"
+				RelativePath=".\unicode\uvernum.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
