@@ -49,8 +49,7 @@
 #endif
 #   include "unicode/pwin32.h"
 #else
-#   include "unicode/platform.h"
-#   include "unicode/ptypes.h"
+#   include "unicode/ptypes.h" /* platform.h is included in ptypes.h */
 #endif
 
 /*

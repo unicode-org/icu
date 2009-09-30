@@ -4,7 +4,7 @@
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  uverdefs.h
+*   file name:  uvernum.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -15,8 +15,8 @@
 *  Gets included by utypes.h and Windows .rc files
 */
 
-#ifndef UVERDEFS_H
-#define UVERDEFS_H
+#ifndef UVERNUM_H
+#define UVERNUM_H
 
 /** The standard copyright notice that gets compiled into each library. 
  *  This value will change in the subsequent releases of ICU
@@ -63,8 +63,8 @@
  *  Note that if present, platform.h may contain an earlier definition of this macro.
  *  @draft ICU 4.2
  */
-#ifndef U_ICU_FUNCTION_RENAME
-#define U_ICU_FUNCTION_RENAME(x)    x ## _4_3
+#ifndef U_ICU_ENTRY_POINT_RENAME
+#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _43
 #endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
@@ -84,70 +84,6 @@
  *  * @draft ICU 4.4
  *   */
 #define U_ICU_DATA_VERSION "4.3.2"
-
-/*===========================================================================*/
-/* C++ namespace if supported. Versioned unless versioning is disabled.      */
-/*===========================================================================*/
-
-/**
- * \def U_NAMESPACE_BEGIN
- * This is used to begin a declaration of a public ICU C++ API.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_END
- * This is used to end a declaration of a public ICU C++ API 
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_USE
- * This is used to specify that the rest of the code uses the
- * public ICU C++ API namespace.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_QUALIFIER
- * This is used to qualify that a function or class is part of
- * the public ICU C++ API namespace.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/* Define namespace symbols if the compiler supports it. */
-#if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#   if U_DISABLE_RENAMING
-#       define U_ICU_NAMESPACE icu
-        namespace U_ICU_NAMESPACE { }
-#   else
-#       define U_ICU_NAMESPACE icu_4_3
-        namespace U_ICU_NAMESPACE { }
-        namespace icu = U_ICU_NAMESPACE;
-#   endif
-
-#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
-#   define U_NAMESPACE_END  }
-#   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
-#   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
-
-#   ifndef U_USING_ICU_NAMESPACE
-#       define U_USING_ICU_NAMESPACE 1
-#   endif
-#   if U_USING_ICU_NAMESPACE
-        U_NAMESPACE_USE
-#   endif
-#else
-#   define U_NAMESPACE_BEGIN
-#   define U_NAMESPACE_END
-#   define U_NAMESPACE_USE
-#   define U_NAMESPACE_QUALIFIER
-#endif
-
 
 /*===========================================================================
  * ICU collation framework version information                               

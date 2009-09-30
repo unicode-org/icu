@@ -45,8 +45,8 @@
 
 #include "unicode/umachine.h"
 
-/* Actual version info lives in uverdefs.h */
-#include "unicode/uverdefs.h"
+/* Actual version info lives in uvernum.h */
+#include "unicode/uvernum.h"
 
 /** Maximum length of the copyright string.
  *  @stable ICU 2.4
