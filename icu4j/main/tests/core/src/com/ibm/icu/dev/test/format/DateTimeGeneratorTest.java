@@ -938,4 +938,45 @@ public class DateTimeGeneratorTest extends TestFmwk {
               }
           }
       }
+
+      /*
+       * Test case for DateFormatPatternGenerator threading problem #7169
+       */
+      public void TestT7169() {
+          Thread[] workers = new Thread[10];
+          for (int i = 0 ; i < workers.length; i++) {
+              workers[i] = new Thread(new Runnable() {
+                  public void run() {
+                      try {
+                          for (int i = 0; i < 50; i++) {
+                              DateTimePatternGenerator patternGenerator =
+                                  DateTimePatternGenerator.getFrozenInstance(ULocale.US);
+                              patternGenerator.getBestPattern("MMMMd");
+                          }
+                      } catch (Exception e) {
+                          errln("FAIL: Caught an exception (frozen)" + e);
+                      }
+                      try {
+                          for (int i = 0; i < 50; i++) {
+                              DateTimePatternGenerator patternGenerator =
+                                  DateTimePatternGenerator.getInstance(ULocale.US);
+                              patternGenerator.getBestPattern("MMMMd");
+                          }
+                      } catch (Exception e) {
+                          errln("FAIL: Caught an exception " + e);
+                      }
+                  }
+              });
+          }
+          for (Thread wk : workers) {
+              wk.start();
+          }
+          for (Thread wk : workers) {
+              try {
+                  wk.join();
+              } catch (InterruptedException ie) {
+                  
+              }
+          }
+      }
 }
