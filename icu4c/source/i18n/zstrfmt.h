@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,7 +13,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
-#include "hash.h"
+#include "uhash.h"
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN
@@ -75,6 +75,40 @@ public:
     virtual ~TextTrieMapSearchResultHandler(); //added to avoid warning
 };
 
+
+/*
+ * ZSFStringPool   Pool of (UChar *) strings.  Provides for sharing of repeated
+ *                 strings within ZoneStringFormats.
+ */
+class ZSFStringPoolChunk;
+class ZSFStringPool: public UMemory {
+  public:
+    ZSFStringPool(UErrorCode &status);
+    ~ZSFStringPool();
+
+    /* Get the pooled string that is equal to the supplied string s.
+     * Copy the string into the pool if it is not already present.
+     *
+     * Life time of the returned string is that of the pool.
+     */
+    const UChar *get(const UChar *s, UErrorCode &status);
+
+    /* Get the pooled string that is equal to the supplied string s.
+     * Copy the string into the pool if it is not already present.
+     */
+    const UChar *get(const UnicodeString &s, UErrorCode &status);
+
+    /* Freeze the string pool.  Discards the hash table that is used
+     * for looking up a string.  All pointers to pooled strings remain valid.
+     */
+    void freeze();
+
+  private:
+    ZSFStringPoolChunk   *fChunks;
+    UHashtable           *fHash;
+};
+
+
 /**
  * TextTrieMap is a trie implementation for supporting
  * fast prefix match for the string key.
@@ -84,10 +118,10 @@ public:
     TextTrieMap(UBool ignoreCase);
     virtual ~TextTrieMap();
 
-    void put(const UnicodeString &key, void *value, UErrorCode &status);
+    void put(const UnicodeString &key, void *value, ZSFStringPool &sp, UErrorCode &status);
     void search(const UnicodeString &text, int32_t start,
         TextTrieMapSearchResultHandler *handler, UErrorCode& status) const;
-    inline int32_t isEmpty() const;
+    int32_t isEmpty() const;
 
 private:
     UBool           fIgnoreCase;
@@ -95,17 +129,19 @@ private:
     int32_t         fNodesCapacity;
     int32_t         fNodesCount;
 
+    UVector         *fLazyContents;
+    UBool           fIsEmpty;      
+
     UBool growNodes();
     CharacterNode* addChildNode(CharacterNode *parent, UChar c, UErrorCode &status);
     CharacterNode* getChildNode(CharacterNode *parent, UChar c) const;
 
+    void putImpl(const UnicodeString &key, void *value, UErrorCode &status);
+    void buildTrie(UErrorCode &status);
     void search(CharacterNode *node, const UnicodeString &text, int32_t start,
         int32_t index, TextTrieMapSearchResultHandler *handler, UErrorCode &status) const;
 };
 
-inline UChar32 TextTrieMap::isEmpty(void) const {
-    return fNodes == NULL;
-}
 
 // Name types, these bit flag are used for zone string lookup
 enum TimeZoneTranslationType {
@@ -133,6 +169,7 @@ enum TimeZoneTranslationTypeIndex {
 
 class MessageFormat;
 
+
 /*
  * ZoneStringInfo is a class holding a localized zone string
  * information.
@@ -151,19 +188,20 @@ private:
     friend class ZoneStringFormat;
     friend class ZoneStringSearchResultHandler;
 
-    ZoneStringInfo(const UnicodeString &id, const UnicodeString &str, TimeZoneTranslationType type);
+    ZoneStringInfo(const UnicodeString &id, const UnicodeString &str, 
+                   TimeZoneTranslationType type, ZSFStringPool &sp, UErrorCode &status);
 
-    UnicodeString   fId;
-    UnicodeString   fStr;
+    const UChar   *fId;
+    const UChar   *fStr;
     TimeZoneTranslationType fType;
 };
 
 inline UnicodeString& ZoneStringInfo::getID(UnicodeString &result) const {
-    return result.setTo(fId);
+    return result.setTo(fId, -1);
 }
 
 inline UnicodeString& ZoneStringInfo::getString(UnicodeString &result) const {
-    return result.setTo(fStr);
+    return result.setTo(fStr, -1);
 }
 
 inline UBool ZoneStringInfo::isStandard(void) const {
@@ -186,6 +224,7 @@ public:
     ZoneStringFormat(const Locale& locale, UErrorCode &status);
     virtual ~ZoneStringFormat();
 
+    /* Gets zone string format from cache if available, create it if not cached. */
     static SafeZoneStringFormatPtr* getZoneStringFormat(const Locale& locale, UErrorCode &status);
 
     /*
@@ -193,6 +232,7 @@ public:
      */
     UnicodeString** createZoneStringsArray(UDate date, int32_t &rowCount, int32_t &colCount, UErrorCode &status) const;
 
+    /* TODO:  There is no implementation for this function.  Delete declaration? */
     const UnicodeString** getZoneStrings(int32_t &rowCount, int32_t &columnCount) const;
 
     UnicodeString& getSpecificLongString(const Calendar &cal,
@@ -242,9 +282,11 @@ public:
 
 private:
     Locale      fLocale;
-    Hashtable   fTzidToStrings;
-    Hashtable   fMzidToStrings;
+    UHashtable   *fTzidToStrings;
+    UHashtable   *fMzidToStrings;
+
     TextTrieMap fZoneStringsTrie;
+    ZSFStringPool  fStringPool;
 
     /*
      * Private method to get a zone string except generic partial location types.
@@ -359,24 +401,30 @@ ZoneStringFormat::getGenericLocation(const UnicodeString &tzid, UnicodeString &r
 
 
 /*
- * ZooneStrings is a container of localized zone strings used by ZoneStringFormat
+ * ZoneStrings is a container of localized zone strings used by ZoneStringFormat
  */
 class ZoneStrings : public UMemory {
 public:
-    ZoneStrings(UnicodeString *strings, int32_t stringsCount, UBool commonlyUsed,
-        UnicodeString **genericPartialLocationStrings, int32_t genericRowCount, int32_t genericColCount);
-    virtual ~ZoneStrings();
+    ZoneStrings(UnicodeString *strings, 
+                int32_t        stringsCount, 
+                UBool          commonlyUsed,
+                UnicodeString **genericPartialLocationStrings, 
+                int32_t        genericRowCount, 
+                int32_t        genericColCount,
+                ZSFStringPool &sp,
+                UErrorCode    &status);
+    virtual         ~ZoneStrings();
 
-    UnicodeString& getString(int32_t typeIdx, UnicodeString &result) const;
-    inline UBool isShortFormatCommonlyUsed(void) const;
-    UnicodeString& getGenericPartialLocationString(const UnicodeString &mzid, UBool isShort,
-        UBool commonlyUsedOnly, UnicodeString &result) const;
+    UnicodeString&   getString(int32_t typeIdx, UnicodeString &result) const;
+    inline UBool     isShortFormatCommonlyUsed(void) const;
+    UnicodeString&   getGenericPartialLocationString(const UnicodeString &mzid, UBool isShort,
+                                        UBool commonlyUsedOnly, UnicodeString &result) const;
 
 private:
-    UnicodeString   *fStrings;
+    const UChar   **fStrings;
     int32_t         fStringsCount;
     UBool           fIsCommonlyUsed;
-    UnicodeString   **fGenericPartialLocationStrings;
+    const UChar * **fGenericPartialLocationStrings;
     int32_t         fGenericPartialLocationRowCount;
     int32_t         fGenericPartialLocationColCount;
 };
