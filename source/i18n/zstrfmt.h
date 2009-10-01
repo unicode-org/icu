@@ -98,6 +98,11 @@ class ZSFStringPool: public UMemory {
      */
     const UChar *get(const UnicodeString &s, UErrorCode &status);
 
+    /* Adopt a string into the pool, without copying it.
+     * Used for strings from resource bundles, which will persist without copying.
+     */
+    const UChar *adopt(const UChar *s, UErrorCode &status);
+
     /* Freeze the string pool.  Discards the hash table that is used
      * for looking up a string.  All pointers to pooled strings remain valid.
      */
@@ -281,12 +286,16 @@ public:
     inline UnicodeString& getGenericLocation(const UnicodeString &tzid, UnicodeString &result) const;
 
 private:
-    Locale      fLocale;
-    UHashtable   *fTzidToStrings;
-    UHashtable   *fMzidToStrings;
+    Locale           fLocale;
+    UHashtable      *fTzidToStrings;
+    UHashtable      *fMzidToStrings;
 
-    TextTrieMap fZoneStringsTrie;
-    ZSFStringPool  fStringPool;
+    TextTrieMap      fZoneStringsTrie;
+    ZSFStringPool    fStringPool;
+
+    UResourceBundle *fZoneStringsArray;
+    UResourceBundle *fMetazoneItem;
+    UResourceBundle *fZoneItem;
 
     /*
      * Private method to get a zone string except generic partial location types.
@@ -340,7 +349,7 @@ private:
 
     static MessageFormat* getFallbackFormat(const Locale &locale, UErrorCode &status);
     static MessageFormat* getRegionFormat(const Locale &locale, UErrorCode &status);
-    static const UChar* getZoneStringFromBundle(const UResourceBundle *zoneitem, const char *key);
+    const UChar* getZoneStringFromBundle(const UResourceBundle *zoneitem, const char *key);
     static UBool isCommonlyUsed(const UResourceBundle *zoneitem);
     static UnicodeString& getLocalizedCountry(const UnicodeString &countryCode, const Locale &locale,
         UnicodeString &displayCountry);
