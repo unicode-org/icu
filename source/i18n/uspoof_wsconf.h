@@ -29,11 +29,15 @@
 #include "uspoof_impl.h"
 #include "utrie2.h"
 
+
+U_NAMESPACE_BEGIN
+
 //
 // class BuilderScriptSet.   Represents the set of scripts (Script Codes)
 //             containing characters that are confusable with one specific
 //             code point.
 //
+
 class BuilderScriptSet: public UMemory {
   public:
     UChar32      codePoint;       // The source code point.
@@ -54,6 +58,8 @@ class BuilderScriptSet: public UMemory {
     BuilderScriptSet();
     ~BuilderScriptSet();
 };
+
+U_NAMESPACE_END
 
 void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
           int32_t confusablesWSLen, UParseError *pe, UErrorCode &status); 
