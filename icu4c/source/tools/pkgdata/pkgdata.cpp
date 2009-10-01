@@ -519,7 +519,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
         uprv_strcat(datFileNamePath, datFileName);
 
-        result = writePackageDatFile(datFileNamePath, o->comment, o->srcDir, o->fileListFiles->str, NULL, U_IS_BIG_ENDIAN ? 'b' : 'l');
+        result = writePackageDatFile(datFileNamePath, o->comment, o->srcDir, o->fileListFiles->str, NULL, U_CHARSET_FAMILY ? 'e' :  U_IS_BIG_ENDIAN ? 'b' : 'l');
         if (result != 0) {
             fprintf(stderr,"Error writing package dat file.\n");
             return result;
