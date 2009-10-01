@@ -25,6 +25,8 @@
 
 #include "uspoof_impl.h"
 
+U_NAMESPACE_BEGIN
+
 // SPUString
 //              Holds a string that is the result of one of the mappings defined
 //              by the confusable mapping data (confusables.txt from Unicode.org)
@@ -123,6 +125,7 @@ class ConfusabledataBuilder : public UMemory {
     static void buildConfusableData(SpoofImpl *spImpl, const char * confusables,
         int32_t confusablesLen, int32_t *errorType, UParseError *pe, UErrorCode &status);
 };
+U_NAMESPACE_END
 
 #endif
 #endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS 
