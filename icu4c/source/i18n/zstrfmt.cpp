@@ -531,7 +531,10 @@ ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
   fTzidToStrings(NULL),
   fMzidToStrings(NULL),
   fZoneStringsTrie(TRUE),
-  fStringPool(status)
+  fStringPool(status),
+  fZoneStringsArray(NULL),
+  fMetazoneItem(NULL),
+  fZoneItem(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -624,7 +627,10 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
   fTzidToStrings(NULL),
   fMzidToStrings(NULL),
   fZoneStringsTrie(TRUE),
-  fStringPool(status)
+  fStringPool(status),
+  fZoneStringsArray(NULL),
+  fMetazoneItem(NULL),
+  fZoneItem(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -640,24 +646,21 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
     uhash_setValueDeleter(fTzidToStrings, deleteZoneStrings);
     uhash_setValueDeleter(fMzidToStrings, deleteZoneStrings);
 
-    UResourceBundle *zoneStringsArray = ures_open(NULL, locale.getName(), &status);
-    zoneStringsArray = ures_getByKeyWithFallback(zoneStringsArray, gZoneStringsTag, zoneStringsArray, &status);
+    fZoneStringsArray = ures_open(NULL, locale.getName(), &status);
+    fZoneStringsArray = ures_getByKeyWithFallback(fZoneStringsArray, gZoneStringsTag, fZoneStringsArray, &status);
     if (U_FAILURE(status)) {
         // If no locale bundles are available, zoneStrings will be null.
         // We still want to go through the rest of zone strings initialization,
         // because generic location format is generated from tzid for the case.
         // The rest of code should work even zoneStrings is null.
         status = U_ZERO_ERROR;
-        ures_close(zoneStringsArray);
-        zoneStringsArray = NULL;
+        ures_close(fZoneStringsArray);
+        fZoneStringsArray = NULL;
     }
 
     StringEnumeration *tzids = NULL;
     MessageFormat *fallbackFmt = NULL;
     MessageFormat *regionFmt = NULL;
-
-    UResourceBundle *zoneItem = NULL;
-    UResourceBundle *metazoneItem = NULL;
 
     char zidkey[ZID_KEY_MAX];
     const UChar *zstrarray[ZSIDX_COUNT];
@@ -708,21 +711,21 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             p++;
         }
 
-        if (zoneStringsArray != NULL) {
-            zoneItem = ures_getByKeyWithFallback(zoneStringsArray, zidkey, zoneItem, &status);
+        if (fZoneStringsArray != NULL) {
+            fZoneItem = ures_getByKeyWithFallback(fZoneStringsArray, zidkey, fZoneItem, &status);
             if (U_FAILURE(status)) {
                 // If failed to open the zone item, create only location string
-                ures_close(zoneItem);
-                zoneItem = NULL;
+                ures_close(fZoneItem);
+                fZoneItem = NULL;
                 status = U_ZERO_ERROR;
             }
         }
-        zstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneItem, gLongStandardTag);
-        zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneItem, gShortStandardTag);
-        zstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneItem, gLongDaylightTag);
-        zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneItem, gShortDaylightTag);
-        zstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneItem, gLongGenericTag);
-        zstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneItem, gShortGenericTag);
+        zstrarray[ZSIDX_LONG_STANDARD]  = getZoneStringFromBundle(fZoneItem, gLongStandardTag);
+        zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(fZoneItem, gShortStandardTag);
+        zstrarray[ZSIDX_LONG_DAYLIGHT]  = getZoneStringFromBundle(fZoneItem, gLongDaylightTag);
+        zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(fZoneItem, gShortDaylightTag);
+        zstrarray[ZSIDX_LONG_GENERIC]   = getZoneStringFromBundle(fZoneItem, gLongGenericTag);
+        zstrarray[ZSIDX_SHORT_GENERIC]  = getZoneStringFromBundle(fZoneItem, gShortGenericTag);
 
         // Compose location format string
         UnicodeString location;
@@ -731,7 +734,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         UnicodeString countryCode;
         ZoneMeta::getCanonicalCountry(utzid, countryCode);
         if (!countryCode.isEmpty()) {
-            const UChar* tmpCity = getZoneStringFromBundle(zoneItem, gExemplarCityTag);
+            const UChar* tmpCity = getZoneStringFromBundle(fZoneItem, gExemplarCityTag);
             if (tmpCity != NULL) {
                 city.setTo(TRUE, tmpCity, -1);
             } else {
@@ -798,7 +801,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             }
         }
 
-        UBool commonlyUsed = isCommonlyUsed(zoneItem);
+        UBool commonlyUsed = isCommonlyUsed(fZoneItem);
 
         // Resolve metazones used by this zone
         int32_t mzPartialLocIdx = 0;
@@ -815,20 +818,20 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                     char mzidkey[ZID_KEY_MAX];
                     uprv_strcpy(mzidkey, gMetazoneIdPrefix);
                     u_UCharsToChars(mzmap->mzid, mzidkey + MZID_PREFIX_LEN, u_strlen(mzmap->mzid) + 1);
-                    metazoneItem = ures_getByKeyWithFallback(zoneStringsArray, mzidkey, metazoneItem, &status);
+                    fMetazoneItem = ures_getByKeyWithFallback(fZoneStringsArray, mzidkey, fMetazoneItem, &status);
                     if (U_FAILURE(status)) {
                         // No resources available for this metazone
                         // Resource bundle will be cleaned up after end of the loop.
                         status = U_ZERO_ERROR;
                         continue;
                     }
-                    UBool mzCommonlyUsed = isCommonlyUsed(metazoneItem);
-                    mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(metazoneItem, gLongStandardTag);
-                    mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(metazoneItem, gShortStandardTag);
-                    mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(metazoneItem, gLongDaylightTag);
-                    mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(metazoneItem, gShortDaylightTag);
-                    mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(metazoneItem, gLongGenericTag);
-                    mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(metazoneItem, gShortGenericTag);
+                    UBool mzCommonlyUsed = isCommonlyUsed(fMetazoneItem);
+                    mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(fMetazoneItem, gLongStandardTag);
+                    mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(fMetazoneItem, gShortStandardTag);
+                    mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(fMetazoneItem, gLongDaylightTag);
+                    mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(fMetazoneItem, gShortDaylightTag);
+                    mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(fMetazoneItem, gLongGenericTag);
+                    mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(fMetazoneItem, gShortGenericTag);
                     mzstrarray[ZSIDX_LOCATION] = NULL;
 
                     int32_t lastNonNullIdx = ZSIDX_COUNT - 1;
@@ -1039,15 +1042,15 @@ error_cleanup:
     if (tzids != NULL) {
         delete tzids;
     }
-    ures_close(zoneItem);
-    ures_close(metazoneItem);
-    ures_close(zoneStringsArray);
     fStringPool.freeze();
 }
 
 ZoneStringFormat::~ZoneStringFormat() {
     uhash_close(fTzidToStrings);
     uhash_close(fMzidToStrings);
+    ures_close(fZoneItem);
+    ures_close(fMetazoneItem);
+    ures_close(fZoneStringsArray);
 }
 
 SafeZoneStringFormatPtr*
@@ -1583,6 +1586,7 @@ ZoneStringFormat::getZoneStringFromBundle(const UResourceBundle *zoneitem, const
         UErrorCode status = U_ZERO_ERROR;
         int32_t len;
         str = ures_getStringByKeyWithFallback(zoneitem, key, &len, &status);
+        str = fStringPool.adopt(str, status);
         if (U_FAILURE(status)) {
             str = NULL;
         }
@@ -1997,6 +2001,27 @@ const UChar *ZSFStringPool::get(const UChar *s, UErrorCode &status) {
 }        
 
 
+//
+//  ZSFStringPool::adopt()   Put a string into the hash, but do not copy the string data
+//                           into the pool's storage.  Used for strings from resource bundles,
+//                           which will perisist for the life of the zone string formatter, and
+//                           therefore can be used directly without copying.
+const UChar *ZSFStringPool::adopt(const UChar * s, UErrorCode &status) {
+    const UChar *pooledString;
+    if (U_FAILURE(status)) {
+        return &EmptyString;
+    }
+    if (s != NULL) {
+        pooledString = static_cast<UChar *>(uhash_get(fHash, s));
+        if (pooledString == NULL) {
+            UChar *ncs = const_cast<UChar *>(s);
+            uhash_put(fHash, ncs, ncs, &status);
+        }
+    }
+    return s;
+}
+
+    
 const UChar *ZSFStringPool::get(const UnicodeString &s, UErrorCode &status) {
     UnicodeString &nonConstStr = const_cast<UnicodeString &>(s);
     return this->get(nonConstStr.getTerminatedBuffer(), status);
