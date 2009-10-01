@@ -395,7 +395,7 @@ void
 TextTrieMap::search(const UnicodeString &text, int32_t start,
                   TextTrieMapSearchResultHandler *handler, UErrorCode &status) const {
     UBool trieNeedsInitialization = FALSE;
-    UMTX_CHECK(TextTrieMutex, fLazyContents != NULL, trieNeedsInitialization);
+    UMTX_CHECK(&TextTrieMutex, fLazyContents != NULL, trieNeedsInitialization);
     if (trieNeedsInitialization) {
         TextTrieMap *nonConstThis = const_cast<TextTrieMap *>(this);
         nonConstThis->buildTrie(status);
