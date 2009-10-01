@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Wed Sep  9 14:44:58 2009
+// Build date: Wed Sep 30 17:45:21 2009
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2009m
+// Olson version: 2009n
 // ICU version: 4.3.2
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
@@ -13,7 +13,7 @@
 //---------------------------------------------------------
 
 zoneinfo:table(nofallback) {
- TZVersion { "2009m" }
+ TZVersion { "2009n" }
  Zones:array { 
   /* ACT */ :int { 331 } //Z#0
 ,  /* AET */ :int { 343 } //Z#1
@@ -1406,7 +1406,7 @@ zoneinfo:table(nofallback) {
     :intvector { 43200, 1997 }
   } //Z#260
 ,  /* Asia/Karachi */ :array {
-    :intvector { -2147483648, -1988166492, -862637400, -764145000, -576135000, 38775600, 1018119660, 1033840860, 1212260400, 1225476000, 1239735600, 1257012000 }
+    :intvector { -2147483648, -1988166492, -862637400, -764145000, -576135000, 38775600, 1018119660, 1033840860, 1212260400, 1225476000, 1239735600, 1254333600 }
     :intvector { 16092, 0, 18000, 0, 18000, 3600, 19800, 0, 19800, 3600 }
     :bin { "000304030101020102010201" }
     :intvector { 261, 519 }
