@@ -13,7 +13,7 @@ en_GB{
         "#,##0%",
         "#E0",
     }
-    Version{"1.65"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

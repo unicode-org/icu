@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/hi.xml
+ *  ICU <specials > source: <path>/xml/rbnf/hi.xml
  */
 hi{
     RBNFRules{
@@ -134,5 +134,5 @@ hi{
             "1000000000000000000: =#,##,##0=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

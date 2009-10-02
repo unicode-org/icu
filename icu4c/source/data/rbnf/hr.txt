@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/hr.xml
+ *  ICU <specials > source: <path>/xml/rbnf/hr.xml
  */
 hr{
     RBNFRules{
@@ -155,5 +155,5 @@ hr{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/he.xml
+ *  ICU <specials > source: <path>/xml/rbnf/he.xml
  */
 he{
     RBNFRules{
@@ -383,5 +383,5 @@ he{
             "11: =%spellout-numbering=;",
         }
     }
-    Version{"1.10"}
+    Version{"4138"}
 }

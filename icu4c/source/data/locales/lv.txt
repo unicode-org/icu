@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lv.xml
+ *  ICU <specials > source: <path>/xml/main/lv.xml
  */
 lv{
     AuxExemplarCharacters{"[y q w x]"}
@@ -325,7 +325,7 @@ lv{
             "Argentīnas peso",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Austrijas šiliņš",
         }
         AUD{
@@ -425,7 +425,7 @@ lv{
             "Kolumbijas peso",
         }
         COU{
-            "COU",
+            "COU" /** ===  */,
             "Kolumbijas reāls",
         }
         CRC{
@@ -657,7 +657,7 @@ lv{
             "Lietuvas lits",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Luksemburgas franks",
         }
         LVL{
@@ -665,7 +665,7 @@ lv{
             "Latvijas lats",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Latvijas rublis",
         }
         LYD{
@@ -689,7 +689,7 @@ lv{
             "Maķedonijas denārs",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "CFA (Āfrikas) franks",
         }
         MMK{
@@ -737,7 +737,7 @@ lv{
             "Malaizijas ringits",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Mozambikas eskudo",
         }
         MZN{
@@ -853,7 +853,7 @@ lv{
             "Sv.Helēnas salas mārciņa",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Slovēnijas tolars",
         }
         SKK{
@@ -949,7 +949,7 @@ lv{
             "Uzbekistānas sums",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Venecuēlas bolivārs",
         }
         VEF{
@@ -989,7 +989,7 @@ lv{
             "Speciālās aizņēmuma tiesības",
         }
         XEU{
-            "XEU",
+            "XEU" /** ===  */,
             "Eiropas norēķinu vienība",
         }
         XFO{
@@ -1658,7 +1658,7 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.97"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

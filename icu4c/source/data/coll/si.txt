@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/si.xml
+ *  ICU <specials > source: <path>/xml/collation/si.xml
  */
 si{
-    Version{"1.2"}
+    Version{"2.0.41.26"}
     collations{
         dictionary{
             Sequence{" [normalization on ]&෴<අ&ඖ<ං<ඃ&ෳ<්&ෘ<ෲ<ෟ<ෳ&ජ්ඤ<<ඥ"}

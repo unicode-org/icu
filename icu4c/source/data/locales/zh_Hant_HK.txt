@@ -13,7 +13,7 @@ zh_Hant_HK{
             "澳元",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "波斯尼亞-黑塞哥維那第納爾",
         }
         BAM{
@@ -82,7 +82,7 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOLBA{"Stolvizza/Solbica 方言"}
     }
-    Version{"1.78"}
+    Version{"2.0.41.78"}
     calendar{
         chinese{
             availableFormats{

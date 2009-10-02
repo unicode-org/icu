@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ru.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ru.xml
  */
 ru{
     RBNFRules{
@@ -142,5 +142,5 @@ ru{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

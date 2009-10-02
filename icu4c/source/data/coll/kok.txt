@@ -7,8 +7,14 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/kok.xml
+ *  ICU <specials > source: <path>/xml/collation/kok.xml
  */
 kok{
-    Version{"1.7"}
+    Version{"2.0.42.63"}
+    collations{
+        standard{
+            Sequence{" [normalization on ]&ॐ<ं<<ँ<ः&ह<ळ<क्ष"}
+            Version{"1.7"}
+        }
+    }
 }

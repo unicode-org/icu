@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/om.xml
+ *  ICU <specials > source: <path>/xml/main/om.xml
  */
 om{
     Countries{
@@ -27,7 +27,7 @@ om{
         "#,##0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

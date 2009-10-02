@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/da.xml
+ *  ICU <specials > source: <path>/xml/rbnf/da.xml
  */
 da{
     RBNFRules{
@@ -78,5 +78,5 @@ da{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ja.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ja.xml
  */
 ja{
     RBNFRules{
@@ -73,5 +73,5 @@ ja{
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"1.7"}
+    Version{"4126"}
 }

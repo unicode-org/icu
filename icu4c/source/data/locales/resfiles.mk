@@ -4,7 +4,7 @@ GENRB_CLDR_VERSION = 1.7
 # A list of txt's to build
 # Note: 
 #
-#   If you are thinking of modifying this file, READ THIS. 
+#   If you are thinking of modifying this file, READ THIS.
 #
 # Instead of changing this file [unless you want to check it back in],
 # you should consider creating a 'reslocal.mk' file in this same directory.

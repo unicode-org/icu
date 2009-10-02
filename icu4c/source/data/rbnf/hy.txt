@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/hy.xml
+ *  ICU <specials > source: <path>/xml/rbnf/hy.xml
  */
 hy{
     RBNFRules{
@@ -48,5 +48,5 @@ hy{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

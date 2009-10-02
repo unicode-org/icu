@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/vi.xml
+ *  ICU <specials > source: <path>/xml/rbnf/vi.xml
  */
 vi{
     RBNFRules{
@@ -47,5 +47,5 @@ vi{
             "0: th\u1EE9 =%spellout-cardinal=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

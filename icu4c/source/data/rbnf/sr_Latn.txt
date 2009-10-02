@@ -7,9 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/sr_Latn.xml
+ *  ICU <specials > source: <path>/xml/rbnf/sr_Latn.xml
  */
 sr_Latn{
+    %%ParentIsRoot:int{1}
     RBNFRules{
         SpelloutRules{
             "%spellout-numbering-year:",
@@ -155,5 +156,5 @@ sr_Latn{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/haw.xml
+ *  ICU <specials > source: <path>/xml/main/haw.xml
  */
 haw{
     AuxExemplarCharacters{"[b-d f g j q-t v x-z]"}
@@ -46,7 +46,7 @@ haw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.45"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

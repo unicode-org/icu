@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gu.xml
+ *  ICU <specials > source: <path>/xml/main/gu.xml
  */
 gu{
     AuxExemplarCharacters{"[\u200C \u200D]"}
@@ -955,7 +955,7 @@ gu{
         Zyyy{"સામાન્ય"}
         Zzzz{"અજ્ઞાત અથવા અમાન્ય લિપિ"}
     }
-    Version{"1.73"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

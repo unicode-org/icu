@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ur_IN.xml
+ *  ICU <specials > source: <path>/xml/main/ur_IN.xml
  */
 ur_IN{
     NumberPatterns{
@@ -16,7 +16,7 @@ ur_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.16"}
+    Version{"2.0.41.23"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

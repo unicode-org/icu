@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/as.xml
+ *  ICU <specials > source: <path>/xml/main/as.xml
  */
 as{
     AuxExemplarCharacters{"[\u200C \u200D ৲]"}
@@ -82,7 +82,7 @@ as{
             traditional{"পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
         }
     }
-    Version{"1.58"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

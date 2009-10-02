@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/root.xml
+ *  ICU <specials > source: <path>/xml/main/root.xml
  */
 root{
     AuxExemplarCharacters{"[]"}
@@ -25,15 +25,15 @@ root{
             "AOA",
         }
         ARA{
-            "₳",
+            "₳" /** ===  */,
             "ARA",
         }
         ARL{
-            "$L",
+            "$L" /** ===  */,
             "ARL",
         }
         ARM{
-            "m$n",
+            "m$n" /** ===  */,
             "ARM",
         }
         ARS{
@@ -65,7 +65,7 @@ root{
             "BDT",
         }
         BEF{
-            "BF",
+            "BF" /** ===  */,
             "BEF",
         }
         BHD{
@@ -89,7 +89,7 @@ root{
             "BOB",
         }
         BOP{
-            "$b.",
+            "$b." /** ===  */,
             "BOP",
         }
         BRL{
@@ -125,7 +125,7 @@ root{
             "CHF",
         }
         CLE{
-            "Eº",
+            "Eº" /** ===  */,
             "CLE",
         }
         CLP{
@@ -157,7 +157,7 @@ root{
             "CVE",
         }
         CYP{
-            "CY£",
+            "CY£" /** ===  */,
             "CYP",
         }
         CZK{
@@ -165,7 +165,7 @@ root{
             "CZK",
         }
         DEM{
-            "DM",
+            "DM" /** ===  */,
             "DEM",
         }
         DJF{
@@ -197,7 +197,7 @@ root{
             "ERN",
         }
         ESP{
-            "Pts",
+            "Pts" /** ===  */,
             "ESP",
         }
         ETB{
@@ -209,7 +209,7 @@ root{
             "EUR",
         }
         FIM{
-            "mk",
+            "mk" /** ===  */,
             "FIM",
         }
         FJD{
@@ -221,7 +221,7 @@ root{
             "FKP",
         }
         FRF{
-            "₣",
+            "₣" /** ===  */,
             "FRF",
         }
         GBP{
@@ -229,7 +229,7 @@ root{
             "GBP",
         }
         GHC{
-            "₵",
+            "₵" /** ===  */,
             "GHC",
         }
         GHS{
@@ -249,7 +249,7 @@ root{
             "GNF",
         }
         GRD{
-            "₯",
+            "₯" /** ===  */,
             "GRD",
         }
         GTQ{
@@ -285,11 +285,11 @@ root{
             "IDR",
         }
         IEP{
-            "IR£",
+            "IR£" /** ===  */,
             "IEP",
         }
         ILP{
-            "I£",
+            "I£" /** ===  */,
             "ILP",
         }
         ILS{
@@ -305,7 +305,7 @@ root{
             "ISK",
         }
         ITL{
-            "IT₤",
+            "IT₤" /** ===  */,
             "ITL",
         }
         JMD{
@@ -389,11 +389,11 @@ root{
             "MRO",
         }
         MTL{
-            "Lm",
+            "Lm" /** ===  */,
             "MTL",
         }
         MTP{
-            "MT£",
+            "MT£" /** ===  */,
             "MTP",
         }
         MUR{
@@ -401,7 +401,7 @@ root{
             "MUR",
         }
         MXP{
-            "MX$",
+            "MX$" /** ===  */,
             "MXP",
         }
         MYR{
@@ -413,7 +413,7 @@ root{
             "MZM",
         }
         MZN{
-            "MTn",
+            "MTn" /** ===  */,
             "MZN",
         }
         NAD{
@@ -429,7 +429,7 @@ root{
             "NIO",
         }
         NLG{
-            "fl",
+            "fl" /** ===  */,
             "NLG",
         }
         NOK{
@@ -449,7 +449,7 @@ root{
             "PAB",
         }
         PEI{
-            "I/.",
+            "I/." /** ===  */,
             "PEI",
         }
         PEN{
@@ -473,7 +473,7 @@ root{
             "PLN",
         }
         PTE{
-            "Esc",
+            "Esc" /** ===  */,
             "PTE",
         }
         PYG{
@@ -485,11 +485,11 @@ root{
             "QAR",
         }
         RHD{
-            "RH$",
+            "RH$" /** ===  */,
             "RHD",
         }
         RON{
-            "RON",
+            "RON" /** ===  */,
             "RON",
         }
         RSD{
@@ -509,7 +509,7 @@ root{
             "SCR",
         }
         SDD{
-            "LSd",
+            "LSd" /** ===  */,
             "SDD",
         }
         SEK{
@@ -541,7 +541,7 @@ root{
             "SRD",
         }
         SRG{
-            "Sf",
+            "Sf" /** ===  */,
             "SRG",
         }
         STD{
@@ -577,7 +577,7 @@ root{
             "TOP",
         }
         TRL{
-            "TRL",
+            "TRL" /** ===  */,
             "TRL",
         }
         TRY{
@@ -657,11 +657,11 @@ root{
             "ZMK",
         }
         ZRN{
-            "NZ",
+            "NZ" /** ===  */,
             "ZRN",
         }
         ZRZ{
-            "ZRZ",
+            "ZRZ" /** ===  */,
             "ZRZ",
         }
         ZWD{
@@ -701,7 +701,7 @@ root{
         297,
         210,
     }
-    Version{"1.193"}
+    Version{"2.0.42.82"}
     calendar{
         buddhist{
             AmPmMarkers{

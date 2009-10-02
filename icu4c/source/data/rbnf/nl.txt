@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/nl.xml
+ *  ICU <specials > source: <path>/xml/rbnf/nl.xml
  */
 nl{
     RBNFRules{
@@ -104,5 +104,5 @@ nl{
             "1000000000000000000: =#,##0=.;",
         }
     }
-    Version{"1.7"}
+    Version{"4126"}
 }

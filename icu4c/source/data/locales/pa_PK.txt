@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pa_PK.xml
+ *  ICU <specials > source: <path>/xml/main/pa_PK.xml
  */
 pa_PK{
     "%%ALIAS"{"pa_Arab_PK"}

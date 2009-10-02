@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/am.xml
+ *  ICU <specials > source: <path>/xml/rbnf/am.xml
  */
 am{
     RBNFRules{
@@ -64,5 +64,5 @@ am{
             "0: =%spellout-numbering=\u129B;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

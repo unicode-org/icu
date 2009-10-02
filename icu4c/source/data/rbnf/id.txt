@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/id.xml
+ *  ICU <specials > source: <path>/xml/rbnf/id.xml
  */
 id{
     RBNFRules{
@@ -53,5 +53,5 @@ id{
             "0: ke=%spellout-cardinal=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

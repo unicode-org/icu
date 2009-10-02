@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/no.xml
+ *  ICU <specials > source: <path>/xml/main/no.xml
  */
 no{
     "%%ALIAS"{"nb"}

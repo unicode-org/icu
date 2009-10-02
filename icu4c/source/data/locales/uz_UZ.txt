@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uz_UZ.xml
+ *  ICU <specials > source: <path>/xml/main/uz_UZ.xml
  */
 uz_UZ{
     "%%ALIAS"{"uz_Cyrl_UZ"}

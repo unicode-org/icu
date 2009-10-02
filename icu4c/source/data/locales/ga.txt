@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ga.xml
+ *  ICU <specials > source: <path>/xml/main/ga.xml
  */
 ga{
     AuxExemplarCharacters{"[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]"}
@@ -278,7 +278,7 @@ ga{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Peseta Andóra",
         }
         AED{
@@ -286,7 +286,7 @@ ga{
             "Dirham Aontas na nÉimíríochtaí Arabacha",
         }
         AFA{
-            "AFA",
+            "AFA" /** ===  */,
             "Afgainí (1927-2002)",
         }
         AFN{
@@ -310,15 +310,15 @@ ga{
             "Kwanza Angólach",
         }
         AOK{
-            "AOK",
+            "AOK" /** ===  */,
             "Kwanza Angólach (1977-1990)",
         }
         AON{
-            "AON",
+            "AON" /** ===  */,
             "Kwanza Nua Angólach (1990-2000)",
         }
         AOR{
-            "AOR",
+            "AOR" /** ===  */,
             "Kwanza Reajustado Angólach (1995-1999)",
         }
         ARA{
@@ -326,7 +326,7 @@ ga{
             "Austral Airgintíneach",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Peso na Airgintíne (1983-1985)",
         }
         ARS{
@@ -334,7 +334,7 @@ ga{
             "Peso na Airgintíne",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Scilling Ostarach",
         }
         AUD{
@@ -350,7 +350,7 @@ ga{
             "Manat Asarbaiseánach",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Dínear Bhoisnia-Heirseagaivéin",
         }
         BAM{
@@ -366,7 +366,7 @@ ga{
             "Taka Bhanglaidéiseach",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Franc Beilgeach (inathraithe)",
         }
         BEF{
@@ -374,11 +374,11 @@ ga{
             "Franc Beilgeach",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Franc Beilgeach (airgeadúil)",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Lev Bulgárach Crua",
         }
         BGN{
@@ -410,19 +410,19 @@ ga{
             "Peso na Bolaive",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "Mvdol Bolavach",
         }
         BRB{
-            "BRB",
+            "BRB" /** ===  */,
             "Cruzeiro Novo Brasaíleach (1967-1986)",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Cruzado Brasaíleach",
         }
         BRE{
-            "BRE",
+            "BRE" /** ===  */,
             "Cruzeiro Brasaíleach (1990-1993)",
         }
         BRL{
@@ -430,11 +430,11 @@ ga{
             "Real Brasaíleach",
         }
         BRN{
-            "BRN",
+            "BRN" /** ===  */,
             "Cruzado Novo Brasaíleach",
         }
         BRR{
-            "BRR",
+            "BRR" /** ===  */,
             "Cruzeiro Brasaíleach",
         }
         BSD{
@@ -446,7 +446,7 @@ ga{
             "Ngultrum Bútánach",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Kyat Burmach",
         }
         BWP{
@@ -454,7 +454,7 @@ ga{
             "Pula Botsuánach",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Rúbal Nua Béalarúiseach (1994-1999)",
         }
         BYR{
@@ -478,7 +478,7 @@ ga{
             "Franc na hEilvéise",
         }
         CLF{
-            "CLF",
+            "CLF" /** ===  */,
             "Unidades de Fomento na Sile",
         }
         CLP{
@@ -498,7 +498,7 @@ ga{
             "Colon Chósta Ríce",
         }
         CSK{
-            "CSK",
+            "CSK" /** ===  */,
             "Koruna Crua na Seicslóvaice",
         }
         CUP{
@@ -518,7 +518,7 @@ ga{
             "Koruna Phoblacht na Seice",
         }
         DDM{
-            "DDM",
+            "DDM" /** ===  */,
             "Ostmark na hOirGhearmáine",
         }
         DEM{
@@ -542,11 +542,11 @@ ga{
             "Dínear na hAilgéire",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Sucre Eacuadóir",
         }
         ECV{
-            "ECV",
+            "ECV" /** ===  */,
             "Unidad de Valor Constante (UVC) Eacuadóir",
         }
         EEK{
@@ -590,7 +590,7 @@ ga{
             "Punt Steirling",
         }
         GEK{
-            "GEK",
+            "GEK" /** ===  */,
             "Kupon Larit na Grúise",
         }
         GEL{
@@ -614,11 +614,11 @@ ga{
             "Franc Guine",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Syli Guine",
         }
         GQE{
-            "GQE",
+            "GQE" /** ===  */,
             "Ekwele Guineana na Guine Meánchriosaí",
         }
         GRD{
@@ -630,11 +630,11 @@ ga{
             "Quetzal Guatamala",
         }
         GWE{
-            "GWE",
+            "GWE" /** ===  */,
             "Escudo na Guine Portaingéalaí",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Peso Guine-Bhissau",
         }
         GYD{
@@ -650,7 +650,7 @@ ga{
             "Lempira Hondúrais",
         }
         HRD{
-            "HRD",
+            "HRD" /** ===  */,
             "Dínear na Cróite",
         }
         HRK{
@@ -774,11 +774,11 @@ ga{
             "Lita Liotuánach",
         }
         LTT{
-            "LTT",
+            "LTT" /** ===  */,
             "Talonas Liotuánach",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Franc Lucsamburg",
         }
         LVL{
@@ -786,7 +786,7 @@ ga{
             "Lats Laitviach",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Rúbal Laitviach",
         }
         LYD{
@@ -798,7 +798,7 @@ ga{
             "Dirham Mharacó",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Franc Mharacó",
         }
         MDL{
@@ -810,7 +810,7 @@ ga{
             "Ariary Madagascar",
         }
         MGF{
-            "MGF",
+            "MGF" /** ===  */,
             "Franc Madagascar",
         }
         MKD{
@@ -818,7 +818,7 @@ ga{
             "Denar na Macadóine",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "Franc Mhailí",
         }
         MMK{
@@ -866,7 +866,7 @@ ga{
             "Peso Airgid Meicsiceo (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Unidad de Inversion (UDI) Meicsiceo",
         }
         MYR{
@@ -874,7 +874,7 @@ ga{
             "Ringgit Malaeisia",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Escudo Mósaimbíce",
         }
         MZM{
@@ -890,7 +890,7 @@ ga{
             "Naira Nígéarach",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Cordoba Nicearagua",
         }
         NIO{
@@ -930,7 +930,7 @@ ga{
             "Sol Nuevo Pheiriú",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Sol Pheiriú",
         }
         PGK{
@@ -950,7 +950,7 @@ ga{
             "Zloty Polannach",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Zloty Polannach (1950-1995)",
         }
         PTE{
@@ -974,7 +974,7 @@ ga{
             "Rúbal Rúiseach",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Rúbal Rúiseach (1991-1998)",
         }
         RWF{
@@ -998,7 +998,7 @@ ga{
             "Dínear na Súdáine",
         }
         SDP{
-            "SDP",
+            "SDP" /** ===  */,
             "Punt na Súdáine",
         }
         SEK{
@@ -1014,7 +1014,7 @@ ga{
             "Punt San Héilin",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Tolar Slóvénach",
         }
         SKK{
@@ -1038,7 +1038,7 @@ ga{
             "Dobra Sao Tome agus Principe",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Rúbal Sóvéadach",
         }
         SVC{
@@ -1058,7 +1058,7 @@ ga{
             "Baht na Téalainne",
         }
         TJR{
-            "TJR",
+            "TJR" /** ===  */,
             "Rúbal na Táidsíceastáine",
         }
         TJS{
@@ -1078,7 +1078,7 @@ ga{
             "Paʻanga Tonga",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Escudo Tíomóir",
         }
         TRL{
@@ -1102,11 +1102,11 @@ ga{
             "Hryvnia Úcránach",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Karbovanetz Úcránach",
         }
         UGS{
-            "UGS",
+            "UGS" /** ===  */,
             "Scilling Uganda (1966-1987)",
         }
         UGX{
@@ -1118,15 +1118,15 @@ ga{
             "Dollar S.A.M.",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "Dollar S.A.M. (an chéad lá eile)",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "Dollar S.A.M. (an la céanna)",
         }
         UYP{
-            "UYP",
+            "UYP" /** ===  */,
             "Peso Uragua (1975-1993)",
         }
         UYU{
@@ -1138,7 +1138,7 @@ ga{
             "Sum na hÚisbéiceastáine",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Bolivar Veiniséala",
         }
         VND{
@@ -1186,7 +1186,7 @@ ga{
             "Cearta Speisialta Tarraingthe",
         }
         XEU{
-            "XEU",
+            "XEU" /** ===  */,
             "Aonad Airgeadra Eorpach",
         }
         XFO{
@@ -1206,7 +1206,7 @@ ga{
             "CFP Franc",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "Dínear Éimin",
         }
         YER{
@@ -1214,19 +1214,19 @@ ga{
             "Rial Éimin",
         }
         YUD{
-            "YUD",
+            "YUD" /** ===  */,
             "Dínear Crua Iúgslavach",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Noviy Dinar Iúgslavach",
         }
         YUN{
-            "YUN",
+            "YUN" /** ===  */,
             "Dínear Inathraithe Iúgslavach",
         }
         ZAL{
-            "ZAL",
+            "ZAL" /** ===  */,
             "Rand na hAfraice Theas (airgeadúil)",
         }
         ZAR{
@@ -1407,7 +1407,7 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.78"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{
