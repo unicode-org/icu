@@ -64,7 +64,7 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isMo
     if (U_SUCCESS(*status)) {
         u_versionFromString(wiredVersion, U_ICU_DATA_VERSION);
         
-        if (uprv_memcmp(dataVersion, wiredVersion, sizeof(UVersionInfo)) != -1) {
+        if (uprv_memcmp(dataVersion, wiredVersion, sizeof(UVersionInfo)) >= 0) {
             result = FALSE;
         }
         
