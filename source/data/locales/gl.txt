@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gl.xml
+ *  ICU <specials > source: <path>/xml/main/gl.xml
  */
 gl{
     AuxExemplarCharacters{"[ª à â ä ã ç è ê-ì î ï º ò ô ö õ ù û]"}
@@ -295,11 +295,11 @@ gl{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "peseta andorrana",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Peso arxentino (1983-1985)",
         }
         ARS{
@@ -307,7 +307,7 @@ gl{
             "Peso arxentino",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Franco belga (convertible)",
         }
         BEF{
@@ -315,7 +315,7 @@ gl{
             "Franco belga",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Franco belga (financeiro)",
         }
         BOB{
@@ -327,19 +327,19 @@ gl{
             "Peso boliviano",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "MVDOL boliviano",
         }
         BRB{
-            "BRB",
+            "BRB" /** ===  */,
             "Cruzeiro novo brasileiro (1967-1986)",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Cruzado brasileiro",
         }
         BRE{
-            "BRE",
+            "BRE" /** ===  */,
             "Cruzeiro brasileiro (1990-1993)",
         }
         BRL{
@@ -347,11 +347,11 @@ gl{
             "Real brasileiro",
         }
         BRN{
-            "BRN",
+            "BRN" /** ===  */,
             "Cruzado novo brasileiro",
         }
         BRR{
-            "BRR",
+            "BRR" /** ===  */,
             "Cruzeiro brasileiro",
         }
         CAD{
@@ -363,7 +363,7 @@ gl{
             "Franco suizo",
         }
         CLF{
-            "CLF",
+            "CLF" /** ===  */,
             "Unidades de fomento chilenas",
         }
         CLP{
@@ -399,19 +399,19 @@ gl{
             "Peso dominicano",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Sucre ecuatoriano",
         }
         ECV{
-            "ECV",
+            "ECV" /** ===  */,
             "Unidade de valor constante ecuatoriana",
         }
         ESA{
-            "ESA",
+            "ESA" /** ===  */,
             "Peseta española (conta A)",
         }
         ESB{
-            "ESB",
+            "ESB" /** ===  */,
             "Peseta española (conta convertible)",
         }
         ESP{
@@ -447,11 +447,11 @@ gl{
             "Franco guineano",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Syli guineano",
         }
         GQE{
-            "GQE",
+            "GQE" /** ===  */,
             "Ekwele guineana",
         }
         GRD{
@@ -491,15 +491,15 @@ gl{
             "Ien xaponés",
         }
         LUC{
-            "LUC",
+            "LUC" /** ===  */,
             "Franco convertible luxemburgués",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Franco luxemburgués",
         }
         LUL{
-            "LUL",
+            "LUL" /** ===  */,
             "Franco financeiro luxemburgués",
         }
         MAD{
@@ -507,7 +507,7 @@ gl{
             "Dirham marroquí",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Franco marroquí",
         }
         MXN{
@@ -519,11 +519,11 @@ gl{
             "Peso de prata mexicano (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Unidade de inversión mexicana",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Córdoba nicaragüense",
         }
         NIO{
@@ -551,7 +551,7 @@ gl{
             "Sol novo peruano",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Sol peruano",
         }
         PHP{
@@ -571,7 +571,7 @@ gl{
             "Rublo ruso",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Rublo ruso (1991-1998)",
         }
         SEK{
@@ -579,7 +579,7 @@ gl{
             "Coroa sueca",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Rublo soviético",
         }
         SVC{
@@ -591,11 +591,11 @@ gl{
             "Dólar estadounidense",
         }
         UYI{
-            "UYI",
+            "UYI" /** ===  */,
             "Peso en unidades indexadas uruguaio",
         }
         UYP{
-            "UYP",
+            "UYP" /** ===  */,
             "Peso uruguaio (1975-1993)",
         }
         UYU{
@@ -603,7 +603,7 @@ gl{
             "Peso uruguaio",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Bolívar venezolano",
         }
         VEF{
@@ -1003,7 +1003,7 @@ gl{
             traditional{"orde tradicional"}
         }
     }
-    Version{"1.68"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

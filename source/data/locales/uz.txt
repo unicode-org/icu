@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uz.xml
+ *  ICU <specials > source: <path>/xml/main/uz.xml
  */
 uz{
     AuxExemplarCharacters{"[ц щ ы ь]"}
@@ -21,7 +21,7 @@ uz{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.53"}
+    Version{"2.0.42.82"}
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}

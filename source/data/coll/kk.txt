@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/kk.xml
+ *  ICU <specials > source: <path>/xml/collation/kk.xml
  */
 kk{
-    Version{"1.25"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{" [normalization on ][suppressContractions [Ѐ-џ] ]&[before 1]ү<ұ<<<Ұ"}

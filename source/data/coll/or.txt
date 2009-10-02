@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/or.xml
+ *  ICU <specials > source: <path>/xml/collation/or.xml
  */
 or{
-    Version{"1.12"}
+    Version{"2.0.42.63"}
     collations{
         standard{
             Sequence{" [normalization on ]&ହ<କ୍ଷ<ଡ଼<ଢ଼<ୟ<ୱ<ଵ<ଂ<ଃ<ଁ<୍<଼"}

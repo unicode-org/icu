@@ -14,7 +14,7 @@ sv_FI{
     Variants{
         1996{"1996 års stavning"}
     }
-    Version{"1.60"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             fields{

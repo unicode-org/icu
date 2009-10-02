@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/ko.xml
+ *  ICU <specials > source: <path>/xml/collation/ko.xml
  */
 ko{
-    Version{"1.29"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{

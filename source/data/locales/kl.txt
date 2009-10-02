@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kl.xml
+ *  ICU <specials > source: <path>/xml/main/kl.xml
  */
 kl{
     Countries{
@@ -46,7 +46,7 @@ kl{
         "#,##0%",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

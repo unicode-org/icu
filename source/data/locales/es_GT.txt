@@ -27,7 +27,7 @@ es_GT{
         "NaN",
         "+",
     }
-    Version{"1.59"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

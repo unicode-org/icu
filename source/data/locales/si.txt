@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/si.xml
+ *  ICU <specials > source: <path>/xml/main/si.xml
  */
 si{
     AuxExemplarCharacters{"[\u200B-\u200D ඎ-ඐ ඦ ෳ]"}
@@ -46,7 +46,7 @@ si{
             gregorian{"දිනදසුන"}
         }
     }
-    Version{"1.7"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

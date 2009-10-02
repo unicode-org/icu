@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/vi.xml
+ *  ICU <specials > source: <path>/xml/main/vi.xml
  */
 vi{
     AuxExemplarCharacters{"[]"}
@@ -344,7 +344,7 @@ vi{
             "Franc Guinea",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Syli Guinea",
         }
         GRD{
@@ -356,7 +356,7 @@ vi{
             "Quetzal Guatemala",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Peso Guinea-Bissau",
         }
         GYD{
@@ -504,7 +504,7 @@ vi{
             "Đô-la Singapore",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Tôla Xlôvênia",
         }
         SKK{
@@ -536,7 +536,7 @@ vi{
             "Đô-la Mỹ",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Bôliva Vênêduêla",
         }
         VND{
@@ -707,7 +707,7 @@ vi{
             gregorian{"gregorian"}
         }
     }
-    Version{"1.86"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

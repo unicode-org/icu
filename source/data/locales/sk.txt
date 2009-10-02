@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sk.xml
+ *  ICU <specials > source: <path>/xml/main/sk.xml
  */
 sk{
     AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
@@ -299,7 +299,7 @@ sk{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Andorská peseta",
         }
         AED{
@@ -323,15 +323,15 @@ sk{
             "Angolská kwanza",
         }
         AOK{
-            "AOK",
+            "AOK" /** ===  */,
             "Angolská kwanza (1977-1990)",
         }
         AON{
-            "AON",
+            "AON" /** ===  */,
             "Angolská nová kwanza (1990-2000)",
         }
         AOR{
-            "AOR",
+            "AOR" /** ===  */,
             "Angolská kwanza Reajustado (1995-1999)",
         }
         ARA{
@@ -339,7 +339,7 @@ sk{
             "Argentinský austral",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Argentinské peso (1983-1985)",
         }
         ARS{
@@ -347,7 +347,7 @@ sk{
             "Argentinské peso",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Rakúsky šiling",
         }
         AUD{
@@ -363,7 +363,7 @@ sk{
             "Azerbaidžanský manat",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Bosnianský dinár",
         }
         BAM{
@@ -379,7 +379,7 @@ sk{
             "Bangladéšska taka",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Belgický frank (konvertibilný)",
         }
         BEF{
@@ -387,11 +387,11 @@ sk{
             "Belgický frank",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Belgický frank (finančný)",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Bulharský leva",
         }
         BGN{
@@ -419,19 +419,19 @@ sk{
             "Bolivíjske peso",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "Bolivíjske mvdol",
         }
         BRB{
-            "BRB",
+            "BRB" /** ===  */,
             "Bolivíjske Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Bolivíjske cruzado",
         }
         BRE{
-            "BRE",
+            "BRE" /** ===  */,
             "Bolivíjske cruzeiro (1990-1993)",
         }
         BRL{
@@ -439,11 +439,11 @@ sk{
             "Bolivíjsky real",
         }
         BRN{
-            "BRN",
+            "BRN" /** ===  */,
             "Brazílske Cruzado Novo",
         }
         BRR{
-            "BRR",
+            "BRR" /** ===  */,
             "Brazílske cruzeiro",
         }
         BSD{
@@ -455,7 +455,7 @@ sk{
             "Bhutansky ngultrum",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Burmese Kyat",
         }
         BWP{
@@ -463,7 +463,7 @@ sk{
             "Botswanan Pula",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Belarussian nový rubeľ (1994-1999)",
         }
         BYR{
@@ -487,7 +487,7 @@ sk{
             "Švajčiarský frank",
         }
         CLF{
-            "CLF",
+            "CLF" /** ===  */,
             "Čílske Unidades de Fomento",
         }
         CLP{
@@ -507,7 +507,7 @@ sk{
             "Kostarikský colon",
         }
         CSK{
-            "CSK",
+            "CSK" /** ===  */,
             "Československá koruna",
         }
         CUP{
@@ -527,7 +527,7 @@ sk{
             "Česká koruna",
         }
         DDM{
-            "DDM",
+            "DDM" /** ===  */,
             "Východonemecká marka",
         }
         DEM{
@@ -551,11 +551,11 @@ sk{
             "Alžírsky dinár",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Ekuadorský sucre",
         }
         ECV{
-            "ECV",
+            "ECV" /** ===  */,
             "Ekuadorský Unidad de Valor Constante (UVC)",
         }
         EEK{
@@ -603,7 +603,7 @@ sk{
             "Britská libra",
         }
         GEK{
-            "GEK",
+            "GEK" /** ===  */,
             "Gruzínsky Kupon Larit",
         }
         GEL{
@@ -627,11 +627,11 @@ sk{
             "Guinejský frank",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Guinejský syli",
         }
         GQE{
-            "GQE",
+            "GQE" /** ===  */,
             "Rovníková Guinea Ekwele Guineana",
         }
         GRD{
@@ -643,11 +643,11 @@ sk{
             "Guatemalský quetzal",
         }
         GWE{
-            "GWE",
+            "GWE" /** ===  */,
             "Portugalská Guinea eskudo",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Guinea-Bissau peso",
         }
         GYD{
@@ -663,7 +663,7 @@ sk{
             "Hoduraská lempira",
         }
         HRD{
-            "HRD",
+            "HRD" /** ===  */,
             "Chorvátsky dinár",
         }
         HRK{
@@ -787,11 +787,11 @@ sk{
             "Litevská lita",
         }
         LTT{
-            "LTT",
+            "LTT" /** ===  */,
             "Litevský talonas",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Luxemburský frank",
         }
         LVL{
@@ -799,7 +799,7 @@ sk{
             "Lotyšský lats",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Lotyšský rubeľ",
         }
         LYD{
@@ -811,7 +811,7 @@ sk{
             "Marocký dirham",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Marocký frank",
         }
         MDL{
@@ -823,7 +823,7 @@ sk{
             "Madagaskarský ariary",
         }
         MGF{
-            "MGF",
+            "MGF" /** ===  */,
             "Madagaskarský frank",
         }
         MKD{
@@ -831,7 +831,7 @@ sk{
             "Macedónsky denár",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "Malský frank",
         }
         MMK{
@@ -879,7 +879,7 @@ sk{
             "Mexické striborné peso (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Mexické Unidad de Inversion (UDI)",
         }
         MYR{
@@ -887,7 +887,7 @@ sk{
             "Malajský ringgit",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Mozambijské eskudo",
         }
         MZM{
@@ -903,7 +903,7 @@ sk{
             "Nigerská naira",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Nikaragujská cordoba",
         }
         NIO{
@@ -943,7 +943,7 @@ sk{
             "Peruvský sol Nuevo",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Peruvský sol",
         }
         PGK{
@@ -963,7 +963,7 @@ sk{
             "Polský zloty",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Polský zloty (1950-1995)",
         }
         PTE{
@@ -987,7 +987,7 @@ sk{
             "Ruský rubeľ",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Ruský rubeľ (1991-1998)",
         }
         RWF{
@@ -1011,7 +1011,7 @@ sk{
             "Sudánsky dinár",
         }
         SDP{
-            "SDP",
+            "SDP" /** ===  */,
             "Sudánska libra",
         }
         SEK{
@@ -1027,7 +1027,7 @@ sk{
             "Libra",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Slovinský Tolar",
         }
         SKK{
@@ -1051,7 +1051,7 @@ sk{
             "Sao Tome a Principe dobra",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Sovietský rubeľ",
         }
         SVC{
@@ -1071,7 +1071,7 @@ sk{
             "Thajský bát",
         }
         TJR{
-            "TJR",
+            "TJR" /** ===  */,
             "Tadžikistanský rubeľ",
         }
         TJS{
@@ -1091,7 +1091,7 @@ sk{
             "Tonga Paʻanga",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Timorské eskudo",
         }
         TRL{
@@ -1115,11 +1115,11 @@ sk{
             "Ukrainská hrivna",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Ukrainský karbovanetz",
         }
         UGS{
-            "UGS",
+            "UGS" /** ===  */,
             "Ugandan šiling (1966-1987)",
         }
         UGX{
@@ -1131,15 +1131,15 @@ sk{
             "US dolár",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "US dolár (Next day)",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "US dolár (Same day)",
         }
         UYP{
-            "UYP",
+            "UYP" /** ===  */,
             "Uruguajské peso (1975-1993)",
         }
         UYU{
@@ -1151,7 +1151,7 @@ sk{
             "Uzbekistanský sum",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Venezuelský bolivar",
         }
         VND{
@@ -1199,7 +1199,7 @@ sk{
             "CFP frank",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "Jemenský dinár",
         }
         YER{
@@ -1207,19 +1207,19 @@ sk{
             "Jemenský rial",
         }
         YUD{
-            "YUD",
+            "YUD" /** ===  */,
             "Juhoslávsky dinár [YUD]",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Juhoslávsky Noviy dinár",
         }
         YUN{
-            "YUN",
+            "YUN" /** ===  */,
             "Juhoslávsky dinár",
         }
         ZAL{
-            "ZAL",
+            "ZAL" /** ===  */,
             "Juhoafrický rand (financial)",
         }
         ZAR{
@@ -1605,7 +1605,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.101"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

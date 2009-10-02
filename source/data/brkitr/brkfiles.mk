@@ -4,7 +4,7 @@ BRK_RES_CLDR_VERSION = 1.7
 # A list of txt's to build
 # Note: 
 #
-#   If you are thinking of modifying this file, READ THIS. 
+#   If you are thinking of modifying this file, READ THIS.
 #
 # Instead of changing this file [unless you want to check it back in],
 # you should consider creating a 'brklocal.mk' file in this same directory.
@@ -38,9 +38,10 @@ BRK_CTD_SOURCE = thaidict.txt
 
 
 # List of break iterator files (brk).
-BRK_SOURCE = word_POSIX.txt word_ja.txt sent_el.txt char_th.txt char.txt word.txt line.txt sent.txt title.txt 
+BRK_SOURCE = char.txt word.txt line.txt sent.txt title.txt word_ja.txt word_POSIX.txt sent_el.txt char_th.txt 
 
 
 # Ordinary resources
-BRK_RES_SOURCE = el.txt en.txt en_US.txt en_US_POSIX.txt ja.txt th.txt
+BRK_RES_SOURCE = el.txt en.txt en_US.txt en_US_POSIX.txt\
+ ja.txt th.txt
 

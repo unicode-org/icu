@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/is.xml
+ *  ICU <specials > source: <path>/xml/main/is.xml
  */
 is{
     AuxExemplarCharacters{"[c q w z]"}
@@ -292,7 +292,7 @@ is{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Andorrskur peseti",
         }
         AED{
@@ -316,7 +316,7 @@ is{
             "Argentine Austral",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Argentískur pesi (1983-1985)",
         }
         ARS{
@@ -324,7 +324,7 @@ is{
             "Argentískur pesi",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Austurrískur skildingur",
         }
         AUD{
@@ -340,7 +340,7 @@ is{
             "Belgískur franki",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Lef",
         }
         BGN{
@@ -360,7 +360,7 @@ is{
             "Bólivískur pesi",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "Bolivian Mvdol",
         }
         BRL{
@@ -372,7 +372,7 @@ is{
             "Bahameyskur dalur",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Búrmverskt kjat",
         }
         BZD{
@@ -388,7 +388,7 @@ is{
             "Svissneskur franki",
         }
         CLF{
-            "CLF",
+            "CLF" /** ===  */,
             "Chilean Unidades de Fomento",
         }
         CLP{
@@ -404,7 +404,7 @@ is{
             "Kólumbískur pesi",
         }
         CSK{
-            "CSK",
+            "CSK" /** ===  */,
             "Tékknesk króna, eldri",
         }
         CUP{
@@ -424,7 +424,7 @@ is{
             "Tékknesk króna",
         }
         DDM{
-            "DDM",
+            "DDM" /** ===  */,
             "Austurþýskt mark",
         }
         DEM{
@@ -444,7 +444,7 @@ is{
             "Dóminískur pesi",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Ecuador Sucre",
         }
         EEK{
@@ -500,7 +500,7 @@ is{
             "Guatemala Quetzal",
         }
         GWE{
-            "GWE",
+            "GWE" /** ===  */,
             "Portúgalskur, gíneskur skúti",
         }
         GYD{
@@ -612,11 +612,11 @@ is{
             "Lít",
         }
         LTT{
-            "LTT",
+            "LTT" /** ===  */,
             "Lithuanian Talonas",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Lúxemborgarfranki",
         }
         LVL{
@@ -624,7 +624,7 @@ is{
             "Lat",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Lettnesk rúbla",
         }
         LYD{
@@ -636,7 +636,7 @@ is{
             "Marokkóskt dírham",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Marokkóskur franki",
         }
         MGA{
@@ -644,7 +644,7 @@ is{
             "Madagascar Ariary",
         }
         MGF{
-            "MGF",
+            "MGF" /** ===  */,
             "Madagaskur franki",
         }
         MKD{
@@ -652,7 +652,7 @@ is{
             "Makedónskur denari",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "Malískur franki",
         }
         MMK{
@@ -688,7 +688,7 @@ is{
             "Mexíkóskur silfurpesi (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Mexíkóskur pesi, UDI",
         }
         MYR{
@@ -696,7 +696,7 @@ is{
             "Malaysian Ringgit",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Mósambískur skúti",
         }
         NAD{
@@ -732,7 +732,7 @@ is{
             "Pakistönsk rúpía",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Slot",
         }
         PTE{
@@ -744,7 +744,7 @@ is{
             "Rúmenskt lei",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Rússnesk rúbla (1991-1998)",
         }
         RWF{
@@ -768,7 +768,7 @@ is{
             "Súdanskur denari",
         }
         SDP{
-            "SDP",
+            "SDP" /** ===  */,
             "Súdanskt pund",
         }
         SEK{
@@ -784,7 +784,7 @@ is{
             "Helenskt pund",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Slóvenskur dalur",
         }
         SKK{
@@ -800,7 +800,7 @@ is{
             "Sao Tome and Principe Dobra",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Soviet Rouble",
         }
         SVC{
@@ -816,7 +816,7 @@ is{
             "Bat",
         }
         TJR{
-            "TJR",
+            "TJR" /** ===  */,
             "Tadsjiksk rúbla",
         }
         TJS{
@@ -828,7 +828,7 @@ is{
             "Túrkmenskt manat",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Tímorskur skúti",
         }
         TRL{
@@ -856,7 +856,7 @@ is{
             "Hrinja",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Ukrainian Karbovanetz",
         }
         USD{
@@ -864,15 +864,15 @@ is{
             "Bandaríkjadalur",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "Bandaríkjadalur (næsta dag)",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "Bandaríkjadalur (sama dag)",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Venezuelan Bolivar",
         }
         VUV{
@@ -912,7 +912,7 @@ is{
             "Óþekktur eða ógildur gjaldeyrir",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "Jemenskur denari",
         }
         YER{
@@ -920,11 +920,11 @@ is{
             "Jemenskt ríal",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Júgóslavneskur denari",
         }
         ZAL{
-            "ZAL",
+            "ZAL" /** ===  */,
             "Rand (viðskipta)",
         }
         ZMK{
@@ -1504,7 +1504,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.100"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

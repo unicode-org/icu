@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sh.xml
+ *  ICU <specials > source: <path>/xml/main/sh.xml
  */
 sh{
     "%%ALIAS"{"sr_Latn"}

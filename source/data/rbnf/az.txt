@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/az.xml
+ *  ICU <specials > source: <path>/xml/rbnf/az.xml
  */
 az{
     RBNFRules{
@@ -99,5 +99,5 @@ az{
             "1000000000000000000: =#,##0='inci;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

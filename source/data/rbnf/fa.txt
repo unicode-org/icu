@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/fa.xml
+ *  ICU <specials > source: <path>/xml/rbnf/fa.xml
  */
 fa{
     RBNFRules{
@@ -62,5 +62,5 @@ fa{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ko.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ko.xml
  */
 ko{
     RBNFRules{
@@ -77,5 +77,5 @@ ko{
             "0: \uC81C =%spellout-cardinal-sinokorean=;",
         }
     }
-    Version{"1.7"}
+    Version{"4126"}
 }

@@ -27,7 +27,7 @@ es_HN{
         "NaN",
         "+",
     }
-    Version{"1.60"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

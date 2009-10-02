@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/th.xml
+ *  ICU <specials > source: <path>/xml/rbnf/th.xml
  */
 th{
     RBNFRules{
@@ -52,5 +52,5 @@ th{
             "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/te.xml
+ *  ICU <specials > source: <path>/xml/main/te.xml
  */
 te{
     AuxExemplarCharacters{"[\u200C \u200D ౦-౯ b c e g m q t]"}
@@ -974,7 +974,7 @@ te{
         1996{"1996 ఙర్మన వర్ణక్రమం"}
         REVISED{"సవరించబడిన వర్ణక్రమం"}
     }
-    Version{"1.81"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

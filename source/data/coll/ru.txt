@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/ru.xml
+ *  ICU <specials > source: <path>/xml/collation/ru.xml
  */
 ru{
-    Version{"1.25"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{"[suppressContractions [Ѐ-ЗК-зк-џ] ]"}

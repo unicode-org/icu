@@ -8,7 +8,7 @@
 // ***************************************************************************
 supplementalData:table(nofallback){
     /**
-     * Map from ISO 3166 country codes to ISO 4217 currency codes 
+     * Map from ISO 3166 country codes to ISO 4217 currency codes
      * NOTE: This is not true locale data; it exists only in ROOT
      */
     CurrencyMap{
@@ -4332,13 +4332,13 @@ supplementalData:table(nofallback){
         }
     }
     /**
-     * Currency metadata.  Unlike the "Currencies" element, this is 
-     * NOT true locale data.  It exists only in root.  The two 
-     * integers are the fraction digits for each currency, and the 
-     * rounding increment.  The fraction digits must be an integer 
-     * from 0..9.  If there is no rounding, the rounding increment is 
-     * zero.  Otherwise the rounding increment is given in units of 
-     * 10^(-fraction_digits).  The special tag "DEFAULT" gives the 
+     * Currency metadata.  Unlike the "Currencies" element, this is
+     * NOT true locale data.  It exists only in root.  The two
+     * integers are the fraction digits for each currency, and the
+     * rounding increment.  The fraction digits must be an integer
+     * from 0..9.  If there is no rounding, the rounding incrementis 
+     * zero.  Otherwise the rounding increment is given in units of
+     * 10^(-fraction_digits).  The special tag "DEFAULT" gives the
      * meta data for all currencies not otherwise listed.
      */
     CurrencyMeta{
@@ -5353,6 +5353,7 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
+                    "NA",
                     "ZA",
                 }
             }
@@ -6330,6 +6331,7 @@ supplementalData:table(nofallback){
                     "DE",
                     "LI",
                     "LU",
+                    "NA",
                 }
             }
             secondary{
@@ -7781,8 +7783,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-            }
-            secondary{
                 territories{
                     "NA",
                 }
@@ -7963,6 +7963,11 @@ supplementalData:table(nofallback){
             }
         }
         kri{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "SL",
@@ -8231,8 +8236,12 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "CD",
                     "CG",
+                }
+            }
+            secondary{
+                territories{
+                    "CD",
                 }
             }
         }
@@ -8796,8 +8805,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-            }
-            secondary{
                 territories{
                     "ZW",
                 }
@@ -8814,6 +8821,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "DE",
                 }
             }
         }
@@ -9100,6 +9112,9 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Arab",
+                }
+                territories{
+                    "PK",
                 }
             }
         }
@@ -9704,8 +9719,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-            }
-            secondary{
                 territories{
                     "ZW",
                 }
@@ -9895,7 +9908,6 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "CD",
-                    "SO",
                 }
             }
         }

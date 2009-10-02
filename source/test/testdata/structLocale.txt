@@ -10,6 +10,7 @@
 // root can't be used to validate the structure.
 // This file was generated from en.txt, and all ".*" were replaced with "".
 structLocale:table(nofallback){
+    %%ParentIsRoot:int{0}
     BreakDictionaryData:bin {00}
     Countries{
         001{""}

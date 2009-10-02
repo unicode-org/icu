@@ -31,7 +31,7 @@ bn_IN{
         tut{"আলটাইক"}
         zbl{"ব্লিসসিম্বলস"}
     }
-    Version{"1.61"}
+    Version{"2.0.41.23"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

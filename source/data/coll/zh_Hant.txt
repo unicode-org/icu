@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/zh_Hant.xml
+ *  ICU <specials > source: <path>/xml/collation/zh_Hant.xml
  */
 zh_Hant{
-    Version{"1.12"}
+    Version{"2.0.41.26"}
     collations{
         default{"stroke"}
     }

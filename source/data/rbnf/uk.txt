@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/uk.xml
+ *  ICU <specials > source: <path>/xml/rbnf/uk.xml
  */
 uk{
     RBNFRules{
@@ -157,5 +157,5 @@ uk{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

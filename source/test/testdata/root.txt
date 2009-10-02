@@ -12,7 +12,7 @@ root
 {
     Version { 44.0 }
     ExpectCLDRVersionAtLeast { 1.7 } // 'base' cldr version. Allow up to version =.=.* of this
-    CurrentCLDRVersion { 1.7 } // Current CLDR version as of the test update. Warn if not an exact match.
+    CurrentCLDRVersion { 1.7.1 } // Current CLDR version as of the test update. Warn if not an exact match.
 
     ShortLanguage { xxx }
 

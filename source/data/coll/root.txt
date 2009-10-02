@@ -7,11 +7,11 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/root.xml
+ *  ICU <specials > source: <path>/xml/collation/root.xml
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"1.29"}
+    Version{"2.0.42.8"}
     collations{
         default{"standard"}
         standard{

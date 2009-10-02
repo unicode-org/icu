@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/ja.xml
+ *  ICU <specials > source: <path>/xml/collation/ja.xml
  */
 ja{
-    Version{"1.31"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{

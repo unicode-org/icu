@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sq.xml
+ *  ICU <specials > source: <path>/xml/main/sq.xml
  */
 sq{
     AuxExemplarCharacters{"[w]"}
@@ -256,7 +256,7 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur ose i pavlefshëm"}
     }
-    Version{"1.81"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

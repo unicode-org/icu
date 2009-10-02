@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/eu.xml
+ *  ICU <specials > source: <path>/xml/main/eu.xml
  */
 eu{
     AuxExemplarCharacters{"[]"}
@@ -213,7 +213,7 @@ eu{
             "CNY",
         }
         ESP{
-            "₧",
+            "₧" /** ===  */,
             "ESP",
             {
                 /**
@@ -249,11 +249,11 @@ eu{
             "USD",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "USN",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "USS",
         }
         XAG{
@@ -285,7 +285,7 @@ eu{
             "XDR",
         }
         XEU{
-            "XEU",
+            "XEU" /** ===  */,
             "XEU",
         }
         XFO{
@@ -305,7 +305,7 @@ eu{
             "XPT",
         }
         XRE{
-            "XRE",
+            "XRE" /** ===  */,
             "XRE",
         }
         XTS{
@@ -573,7 +573,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"1.78"}
+    Version{"2.0.42.82"}
     calendar{
         buddhist{
             eras{
