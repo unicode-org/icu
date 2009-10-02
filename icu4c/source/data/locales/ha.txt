@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ha.xml
+ *  ICU <specials > source: <path>/xml/main/ha.xml
  */
 ha{
     AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r\u0303} ú ù û v x ƴ]"}
@@ -43,7 +43,7 @@ ha{
         "#,##0%",
         "#E0",
     }
-    Version{"1.38"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

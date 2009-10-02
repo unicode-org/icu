@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fo.xml
+ *  ICU <specials > source: <path>/xml/main/fo.xml
  */
 fo{
     AuxExemplarCharacters{"[c q w z]"}
@@ -170,7 +170,7 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"1.72"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

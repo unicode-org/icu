@@ -7,9 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
+ *  ICU <specials > source: <path>/xml/main/az_Cyrl.xml
  */
 az_Cyrl{
+    %%ParentIsRoot:int{1}
     AuxExemplarCharacters{"[ц щ ъ ь-я]"}
     Countries{
         AZ{"Азәрбајҹан"}
@@ -45,7 +46,7 @@ az_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.31"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

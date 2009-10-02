@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/zu.xml
+ *  ICU <specials > source: <path>/xml/main/zu.xml
  */
 zu{
     Countries{
@@ -54,7 +54,7 @@ zu{
         "#,##0%",
         "#E0",
     }
-    Version{"1.31"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

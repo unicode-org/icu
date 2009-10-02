@@ -50,6 +50,9 @@ README text !eol
 
 icu4c/icu4c.css -text
 icu4c/source/data/locales/pool.res -text
+icu4c/source/data/xml/collation/ha.xml -text
+icu4c/source/data/xml/collation/hy.xml -text
+icu4c/source/data/xml/collation/sw.xml -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/intltest/simplethread.cpp -text
 icu4c/source/test/intltest/simplethread.h -text

@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/ur.xml
+ *  ICU <specials > source: <path>/xml/collation/ur.xml
  */
 ur{
-    Version{"1.4"}
+    Version{"2.0.41.26"}
     collations{
         default{"standard"}
         standard{

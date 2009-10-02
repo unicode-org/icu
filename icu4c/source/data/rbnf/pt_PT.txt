@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/pt_PT.xml
+ *  ICU <specials > source: <path>/xml/rbnf/pt_PT.xml
  */
 pt_PT{
     RBNFRules{
@@ -197,5 +197,5 @@ pt_PT{
             "1000000000000000000: =#,##0=\u1D43;",
         }
     }
-    Version{"1.7"}
+    Version{"4126"}
 }

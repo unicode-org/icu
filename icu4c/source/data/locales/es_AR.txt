@@ -16,7 +16,7 @@ es_AR{
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.63"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

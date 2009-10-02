@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ca.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ca.xml
  */
 ca{
     RBNFRules{
@@ -264,5 +264,5 @@ ca{
             "1000000000000000000: =#,##0=ena;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

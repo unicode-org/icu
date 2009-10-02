@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/id.xml
+ *  ICU <specials > source: <path>/xml/main/id.xml
  */
 id{
     Countries{
@@ -498,7 +498,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.77"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

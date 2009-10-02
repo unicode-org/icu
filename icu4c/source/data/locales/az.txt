@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az.xml
+ *  ICU <specials > source: <path>/xml/main/az.xml
  */
 az{
     AuxExemplarCharacters{"[w]"}
@@ -296,7 +296,7 @@ az{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Andora pesetası",
         }
         AED{
@@ -304,7 +304,7 @@ az{
             "Birləşmiş ərəb emiratlar dirhamı",
         }
         AFA{
-            "AFA",
+            "AFA" /** ===  */,
             "Əfgəni (AFA)",
         }
         AFN{
@@ -328,15 +328,15 @@ az{
             "Anqola kvanzası",
         }
         AOK{
-            "AOK",
+            "AOK" /** ===  */,
             "Anqola kvanzasi (1977-1990)",
         }
         AON{
-            "AON",
+            "AON" /** ===  */,
             "Anqola yeni kvanzası (1990-2000)",
         }
         AOR{
-            "AOR",
+            "AOR" /** ===  */,
             "Anqola kvanzası (1995-1999)",
         }
         ARA{
@@ -344,7 +344,7 @@ az{
             "Argentina avstralı",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Argentina pesosu (1983-1985)",
         }
         ARS{
@@ -352,7 +352,7 @@ az{
             "Argentina pesosu",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Avstriya şilingi",
         }
         AUD{
@@ -372,7 +372,7 @@ az{
             "Azərbaycan manatı",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Bosniya-Herzeqovina dinarı",
         }
         BAM{
@@ -388,7 +388,7 @@ az{
             "Banqladeş takası",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Belçika frankı (deyşirik)",
         }
         BEF{
@@ -396,11 +396,11 @@ az{
             "Belçika frankı",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Belçika frankı (finans)",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Bolqariya levası",
         }
         BGN{
@@ -432,19 +432,19 @@ az{
             "Boliviya pesosu",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "Boliviya mvdolı",
         }
         BRB{
-            "BRB",
+            "BRB" /** ===  */,
             "Braziliya kruzeyro novası",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Braziliya kruzadosu",
         }
         BRE{
-            "BRE",
+            "BRE" /** ===  */,
             "Braziliya kruzeyrosu (1990-1993)",
         }
         BRL{
@@ -452,11 +452,11 @@ az{
             "Braziliya realı",
         }
         BRN{
-            "BRN",
+            "BRN" /** ===  */,
             "Braziliya kruzado novası",
         }
         BRR{
-            "BRR",
+            "BRR" /** ===  */,
             "Braziliya kruzeyrosu",
         }
         BSD{
@@ -468,7 +468,7 @@ az{
             "Butan ngultrumu",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Burmis kyatı",
         }
         BWP{
@@ -476,7 +476,7 @@ az{
             "Botsvana pulası",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Belarusiya yeni rublu",
         }
         BYR{
@@ -496,7 +496,7 @@ az{
             "Konqoliz frank konqolaysı",
         }
         CHE{
-            "CHE",
+            "CHE" /** ===  */,
             "WIR Yevrosu",
         }
         CHF{
@@ -504,7 +504,7 @@ az{
             "İsveçriya frankası",
         }
         CHW{
-            "CHW",
+            "CHW" /** ===  */,
             "WIR frankası",
         }
         CLP{
@@ -524,11 +524,11 @@ az{
             "Kosta rika kolonu",
         }
         CSD{
-            "CSD",
+            "CSD" /** ===  */,
             "Qədimi Serb dinarı",
         }
         CSK{
-            "CSK",
+            "CSK" /** ===  */,
             "Çexoslavakiya korunası",
         }
         CUP{
@@ -548,7 +548,7 @@ az{
             "Çex respublikası korunası",
         }
         DDM{
-            "DDM",
+            "DDM" /** ===  */,
             "şərq almaniya ostmarkı",
         }
         DEM{
@@ -572,7 +572,7 @@ az{
             "Alcəzir dinarı",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "ekvador sukresi",
         }
         EEK{
@@ -588,11 +588,11 @@ az{
             "Eirtreya nakfası",
         }
         ESA{
-            "ESA",
+            "ESA" /** ===  */,
             "İspan pesetası (A)",
         }
         ESB{
-            "ESB",
+            "ESB" /** ===  */,
             "İspan pesetası (dəyşirik)",
         }
         ESP{
@@ -628,7 +628,7 @@ az{
             "Britaniya paund sterlingi",
         }
         GEK{
-            "GEK",
+            "GEK" /** ===  */,
             "Gürcüstan kupon lariti",
         }
         GEL{
@@ -656,11 +656,11 @@ az{
             "Qvineya frankası",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Qvineya sulisi",
         }
         GQE{
-            "GQE",
+            "GQE" /** ===  */,
             "Ekvatoriya Gvineya ekvele quneanası",
         }
         GRD{
@@ -672,11 +672,11 @@ az{
             "Qvatemala küetzalı",
         }
         GWE{
-            "GWE",
+            "GWE" /** ===  */,
             "Portugal Qvineya eskudosu",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Qvineya-Bisau pesosu",
         }
         GYD{
@@ -692,7 +692,7 @@ az{
             "Honduras lempirası",
         }
         HRD{
-            "HRD",
+            "HRD" /** ===  */,
             "Xorvatiya dinarı",
         }
         HRK{
@@ -816,19 +816,19 @@ az{
             "Litva litası",
         }
         LTT{
-            "LTT",
+            "LTT" /** ===  */,
             "Litva talonası",
         }
         LUC{
-            "LUC",
+            "LUC" /** ===  */,
             "Luksemburq frankası (dəyişik)",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Luksemburq frankası",
         }
         LUL{
-            "LUL",
+            "LUL" /** ===  */,
             "Luksemburq frankası (finans)",
         }
         LVL{
@@ -836,7 +836,7 @@ az{
             "Latviya latsı",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Latviya rublu",
         }
         LYD{
@@ -848,7 +848,7 @@ az{
             "Morokko dirhamı",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Morokko frankası",
         }
         MDL{
@@ -860,7 +860,7 @@ az{
             "Madaqaskar ariarisi",
         }
         MGF{
-            "MGF",
+            "MGF" /** ===  */,
             "Madaqaskar frankası",
         }
         MKD{
@@ -868,7 +868,7 @@ az{
             "Masedoniya denarı",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "Mali frankı",
         }
         MMK{
@@ -916,7 +916,7 @@ az{
             "Malaysiya rinqiti",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Mozambik eskudosu",
         }
         MZM{
@@ -936,7 +936,7 @@ az{
             "Nigeriya nairi",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Nikaraqua kordobu",
         }
         NLG{
@@ -972,7 +972,7 @@ az{
             "Peru sol nuyevosu",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Peru solu",
         }
         PGK{
@@ -992,7 +992,7 @@ az{
             "Polsha zlotisi",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Polsha zlotisi (1950-1995)",
         }
         PTE{
@@ -1028,7 +1028,7 @@ az{
             "Rusiya rublu",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Rusiya rublu (1991-1998)",
         }
         RWF{
@@ -1060,7 +1060,7 @@ az{
             "Sinqapur dolları",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Sloveniya toları",
         }
         SKK{
@@ -1076,7 +1076,7 @@ az{
             "Surinam dolları",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Sovet rublu",
         }
         SVC{
@@ -1096,7 +1096,7 @@ az{
             "tay bahtı",
         }
         TJR{
-            "TJR",
+            "TJR" /** ===  */,
             "Tacikistan rublu",
         }
         TJS{
@@ -1116,7 +1116,7 @@ az{
             "Tonqa panqası",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Timor eskudu",
         }
         TRL{
@@ -1140,11 +1140,11 @@ az{
             "Ukraina hrivnyası",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Ukraina karbovenesası",
         }
         UGS{
-            "UGS",
+            "UGS" /** ===  */,
             "Uqanda şelingi (1966-1987)",
         }
         UGX{
@@ -1156,19 +1156,19 @@ az{
             "ABŞ dolları",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "ABŞ dolları (yeni gün)",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "ABŞ dolları (həmin gün)",
         }
         UYI{
-            "UYI",
+            "UYI" /** ===  */,
             "Uruqvay pesosu Unidades Indexadas",
         }
         UYP{
-            "UYP",
+            "UYP" /** ===  */,
             "Uruqvay pesosu (1975-1993)",
         }
         UYU{
@@ -1180,7 +1180,7 @@ az{
             "özbəkistan sumu",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "venesuela bolivarı",
         }
         VEF{
@@ -1236,7 +1236,7 @@ az{
             "bilinməyən vəya gəcərsiz",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "yemen dinarı",
         }
         YER{
@@ -1244,19 +1244,19 @@ az{
             "yemen rialı",
         }
         YUD{
-            "YUD",
+            "YUD" /** ===  */,
             "Yuqoslaviya dinarı (hard)",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Yuqoslaviya yeni dinarı (hard)",
         }
         YUN{
-            "YUN",
+            "YUN" /** ===  */,
             "Yuqoslaviya dinarı (dəyişik)",
         }
         ZAL{
-            "ZAL",
+            "ZAL" /** ===  */,
             "Cənub afrika randı (finans)",
         }
         ZAR{
@@ -2689,7 +2689,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"1.77"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

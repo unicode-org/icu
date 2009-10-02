@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pt.xml
+ *  ICU <specials > source: <path>/xml/main/pt.xml
  */
 pt{
     AuxExemplarCharacters{"[ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
@@ -297,7 +297,7 @@ pt{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Peseta de Andorra",
         }
         AED{
@@ -305,7 +305,7 @@ pt{
             "Dirém dos Emirados Árabes Unidos",
         }
         AFA{
-            "AFA",
+            "AFA" /** ===  */,
             "Afegane (1927-2002)",
         }
         AFN{
@@ -329,15 +329,15 @@ pt{
             "Cuanza angolano",
         }
         AOK{
-            "AOK",
+            "AOK" /** ===  */,
             "Cuanza angolano (1977-1990)",
         }
         AON{
-            "AON",
+            "AON" /** ===  */,
             "Novo cuanza angolano (1990-2000)",
         }
         AOR{
-            "AOR",
+            "AOR" /** ===  */,
             "Cuanza angolano reajustado (1995-1999)",
         }
         ARA{
@@ -345,7 +345,7 @@ pt{
             "Austral argentino",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Peso argentino (1983-1985)",
         }
         ARS{
@@ -353,7 +353,7 @@ pt{
             "Peso argentino",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Xelim austríaco",
         }
         AUD{
@@ -373,7 +373,7 @@ pt{
             "Manat do Azerbaijão",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Dinar da Bósnia-Herzegovina",
         }
         BAM{
@@ -389,7 +389,7 @@ pt{
             "Taka de Bangladesh",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Franco belga (conversível)",
         }
         BEF{
@@ -397,11 +397,11 @@ pt{
             "Franco belga",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Franco belga (financeiro)",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Lev forte búlgaro",
         }
         BGN{
@@ -433,19 +433,19 @@ pt{
             "Peso boliviano",
         }
         BOV{
-            "BOV",
+            "BOV" /** ===  */,
             "Mvdol boliviano",
         }
         BRB{
-            "BRB",
+            "BRB" /** ===  */,
             "Cruzeiro novo brasileiro (1967-1986)",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Cruzado brasileiro",
         }
         BRE{
-            "BRE",
+            "BRE" /** ===  */,
             "Cruzeiro brasileiro (1990-1993)",
         }
         BRL{
@@ -453,11 +453,11 @@ pt{
             "Real brasileiro",
         }
         BRN{
-            "BRN",
+            "BRN" /** ===  */,
             "Cruzado novo brasileiro",
         }
         BRR{
-            "BRR",
+            "BRR" /** ===  */,
             "Cruzeiro brasileiro",
         }
         BSD{
@@ -469,7 +469,7 @@ pt{
             "Ngultrum do Butão",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Kyat birmanês",
         }
         BWP{
@@ -477,7 +477,7 @@ pt{
             "Pula botsuanesa",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Rublo novo bielo-russo (1994-1999)",
         }
         BYR{
@@ -497,7 +497,7 @@ pt{
             "Franco congolês",
         }
         CHE{
-            "CHE",
+            "CHE" /** ===  */,
             "Euro WIR",
         }
         CHF{
@@ -505,11 +505,11 @@ pt{
             "Franco suíço",
         }
         CHW{
-            "CHW",
+            "CHW" /** ===  */,
             "Franco WIR",
         }
         CLF{
-            "CLF",
+            "CLF" /** ===  */,
             "Unidades de Fomento chilenas",
         }
         CLP{
@@ -525,7 +525,7 @@ pt{
             "Peso colombiano",
         }
         COU{
-            "COU",
+            "COU" /** ===  */,
             "Unidade de Valor Real",
         }
         CRC{
@@ -533,11 +533,11 @@ pt{
             "Colon da Costa Rica",
         }
         CSD{
-            "CSD",
+            "CSD" /** ===  */,
             "Dinar sérvio antigo",
         }
         CSK{
-            "CSK",
+            "CSK" /** ===  */,
             "Coroa Forte checoslovaca",
         }
         CUP{
@@ -557,7 +557,7 @@ pt{
             "Coroa checa",
         }
         DDM{
-            "DDM",
+            "DDM" /** ===  */,
             "Ostmark da Alemanha Oriental",
         }
         DEM{
@@ -581,11 +581,11 @@ pt{
             "Dinar argelino",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Sucre equatoriano",
         }
         ECV{
-            "ECV",
+            "ECV" /** ===  */,
             "Unidade de Valor Constante (UVC) do Equador",
         }
         EEK{
@@ -601,11 +601,11 @@ pt{
             "Nakfa da Eritreia",
         }
         ESA{
-            "ESA",
+            "ESA" /** ===  */,
             "Peseta espanhola (conta A)",
         }
         ESB{
-            "ESB",
+            "ESB" /** ===  */,
             "Peseta espanhola (conta conversível)",
         }
         ESP{
@@ -641,7 +641,7 @@ pt{
             "Libra esterlina britânica",
         }
         GEK{
-            "GEK",
+            "GEK" /** ===  */,
             "Cupom Lari georgiano",
         }
         GEL{
@@ -669,11 +669,11 @@ pt{
             "Franco de Guiné",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Syli da Guiné",
         }
         GQE{
-            "GQE",
+            "GQE" /** ===  */,
             "Ekwele da Guiné Equatorial",
         }
         GRD{
@@ -685,11 +685,11 @@ pt{
             "Quetçal da Guatemala",
         }
         GWE{
-            "GWE",
+            "GWE" /** ===  */,
             "Escudo da Guiné Portuguesa",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Peso da Guiné-Bissau",
         }
         GYD{
@@ -705,7 +705,7 @@ pt{
             "Lempira de Honduras",
         }
         HRD{
-            "HRD",
+            "HRD" /** ===  */,
             "Dinar croata",
         }
         HRK{
@@ -837,19 +837,19 @@ pt{
             "Lita lituano",
         }
         LTT{
-            "LTT",
+            "LTT" /** ===  */,
             "Talonas lituano",
         }
         LUC{
-            "LUC",
+            "LUC" /** ===  */,
             "Franco conversível de Luxemburgo",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Franco luxemburguês",
         }
         LUL{
-            "LUL",
+            "LUL" /** ===  */,
             "Franco financeiro de Luxemburgo",
         }
         LVL{
@@ -857,7 +857,7 @@ pt{
             "Lats letão",
         }
         LVR{
-            "LVR",
+            "LVR" /** ===  */,
             "Rublo letão",
         }
         LYD{
@@ -869,7 +869,7 @@ pt{
             "Dirém marroquino",
         }
         MAF{
-            "MAF",
+            "MAF" /** ===  */,
             "Franco marroquino",
         }
         MDL{
@@ -881,7 +881,7 @@ pt{
             "Ariary de Madagascar",
         }
         MGF{
-            "MGF",
+            "MGF" /** ===  */,
             "Franco de Madagascar",
         }
         MKD{
@@ -889,7 +889,7 @@ pt{
             "Dinar macedônio",
         }
         MLF{
-            "MLF",
+            "MLF" /** ===  */,
             "Franco de Mali",
         }
         MMK{
@@ -937,7 +937,7 @@ pt{
             "Peso Prata mexicano (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Unidade Mexicana de Investimento (UDI)",
         }
         MYR{
@@ -945,7 +945,7 @@ pt{
             "Ringgit malaio",
         }
         MZE{
-            "MZE",
+            "MZE" /** ===  */,
             "Escudo de Moçambique",
         }
         MZM{
@@ -965,7 +965,7 @@ pt{
             "Naira nigeriana",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Córdoba nicaraguense",
         }
         NIO{
@@ -1005,7 +1005,7 @@ pt{
             "Sol Novo peruano",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Sol peruano",
         }
         PGK{
@@ -1025,7 +1025,7 @@ pt{
             "Zloti polonês",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Zloti polonês (1950-1995)",
         }
         PTE{
@@ -1061,7 +1061,7 @@ pt{
             "Rublo russo",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Rublo russo (1991-1998)",
         }
         RWF{
@@ -1089,7 +1089,7 @@ pt{
             "Libra sudanesa",
         }
         SDP{
-            "SDP",
+            "SDP" /** ===  */,
             "Libra sudanesa antiga",
         }
         SEK{
@@ -1105,7 +1105,7 @@ pt{
             "Libra de Santa Helena",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Tolar Bons esloveno",
         }
         SKK{
@@ -1133,7 +1133,7 @@ pt{
             "Dobra de São Tomé e Príncipe",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "Rublo soviético",
         }
         SVC{
@@ -1153,7 +1153,7 @@ pt{
             "Baht tailandês",
         }
         TJR{
-            "TJR",
+            "TJR" /** ===  */,
             "Rublo do Tadjiquistão",
         }
         TJS{
@@ -1173,7 +1173,7 @@ pt{
             "Paʻanga de Tonga",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Escudo timorense",
         }
         TRL{
@@ -1201,11 +1201,11 @@ pt{
             "Hryvnia ucraniano",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Karbovanetz ucraniano",
         }
         UGS{
-            "UGS",
+            "UGS" /** ===  */,
             "Xelim ugandense (1966-1987)",
         }
         UGX{
@@ -1217,19 +1217,19 @@ pt{
             "Dólar norte-americano",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "Dólar norte-americano (Dia seguinte)",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "Dólar norte-americano (Mesmo dia)",
         }
         UYI{
-            "UYI",
+            "UYI" /** ===  */,
             "Peso uruguaio en unidades indexadas",
         }
         UYP{
-            "UYP",
+            "UYP" /** ===  */,
             "Peso uruguaio (1975-1993)",
         }
         UYU{
@@ -1241,7 +1241,7 @@ pt{
             "Sum do Usbequistão",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Bolívar venezuelano",
         }
         VEF{
@@ -1297,7 +1297,7 @@ pt{
             "Direitos Especiais de Giro",
         }
         XEU{
-            "XEU",
+            "XEU" /** ===  */,
             "Unidade de Moeda Europeia",
         }
         XFO{
@@ -1325,7 +1325,7 @@ pt{
             "Platina",
         }
         XRE{
-            "XRE",
+            "XRE" /** ===  */,
             "Fundos RINET",
         }
         XTS{
@@ -1337,7 +1337,7 @@ pt{
             "Moeda Desconhecida ou Inválida",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "Dinar iemenita",
         }
         YER{
@@ -1345,19 +1345,19 @@ pt{
             "Rial iemenita",
         }
         YUD{
-            "YUD",
+            "YUD" /** ===  */,
             "Dinar forte iugoslavo",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Dinar noviy iugoslavo",
         }
         YUN{
-            "YUN",
+            "YUN" /** ===  */,
             "Dinar conversível iugoslavo",
         }
         ZAL{
-            "ZAL",
+            "ZAL" /** ===  */,
             "Rand sul-africano (financeiro)",
         }
         ZAR{
@@ -3191,7 +3191,7 @@ pt{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valenciano"}
     }
-    Version{"1.126"}
+    Version{"2.0.42.82"}
     calendar{
         buddhist{
             DateTimePatterns{

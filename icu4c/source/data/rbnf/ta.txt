@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ta.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ta.xml
  */
 ta{
     RBNFRules{
@@ -68,5 +68,5 @@ ta{
             "1000000000000000000: =#,##,##0=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

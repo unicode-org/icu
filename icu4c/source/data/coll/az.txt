@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/az.xml
+ *  ICU <specials > source: <path>/xml/collation/az.xml
  */
 az{
-    Version{"1.3"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{

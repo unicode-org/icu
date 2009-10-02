@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/et.xml
+ *  ICU <specials > source: <path>/xml/main/et.xml
  */
 et{
     AuxExemplarCharacters{"[á à â å ā æ ç é è ê ë ē í ì î ï ī ñ ó ò ŏ ô ø ō œ ß ú ù û ū]"}
@@ -295,7 +295,7 @@ et{
     }
     Currencies{
         ADP{
-            "ADP",
+            "ADP" /** ===  */,
             "Andorra peseeta",
         }
         AED{
@@ -303,7 +303,7 @@ et{
             "Araabia Ühendemiraatide dirhem",
         }
         AFA{
-            "AFA",
+            "AFA" /** ===  */,
             "Afganistani afgaani, 1927-2002",
         }
         AFN{
@@ -327,15 +327,15 @@ et{
             "Angola kvanza",
         }
         AOK{
-            "AOK",
+            "AOK" /** ===  */,
             "Angola kvanza, 1977-1990",
         }
         AON{
-            "AON",
+            "AON" /** ===  */,
             "Angola kvanza, 1990-2000",
         }
         AOR{
-            "AOR",
+            "AOR" /** ===  */,
             "Angola reformitud kvanza, 1995-1999",
         }
         ARA{
@@ -343,7 +343,7 @@ et{
             "Argentina austral",
         }
         ARP{
-            "ARP",
+            "ARP" /** ===  */,
             "Argentina peeso, 1983-1985",
         }
         ARS{
@@ -351,7 +351,7 @@ et{
             "Argentina peeso",
         }
         ATS{
-            "ATS",
+            "ATS" /** ===  */,
             "Austria šilling",
         }
         AUD{
@@ -371,7 +371,7 @@ et{
             "Aserbaidžaani manat",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Bosnia-Hertsegoviina dinaar",
         }
         BAM{
@@ -387,7 +387,7 @@ et{
             "Bangladeshi taka",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Belgia konverteeritav frank",
         }
         BEF{
@@ -395,11 +395,11 @@ et{
             "Belgia frank",
         }
         BEL{
-            "BEL",
+            "BEL" /** ===  */,
             "Belgia arveldusfrank",
         }
         BGL{
-            "BGL",
+            "BGL" /** ===  */,
             "Bulgaaria püsiv leev",
         }
         BGN{
@@ -431,7 +431,7 @@ et{
             "Boliivia peeso",
         }
         BRC{
-            "BRC",
+            "BRC" /** ===  */,
             "Brasiilia krusado",
         }
         BRL{
@@ -439,7 +439,7 @@ et{
             "Brasiilia reaal",
         }
         BUK{
-            "BUK",
+            "BUK" /** ===  */,
             "Birma kjatt",
         }
         BWP{
@@ -447,7 +447,7 @@ et{
             "Botswana pula",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Valgevene uus rubla, 1994-1999",
         }
         BYR{
@@ -475,7 +475,7 @@ et{
             "Kolumbia peeso",
         }
         CSD{
-            "CSD",
+            "CSD" /** ===  */,
             "Serbia vana dinaar",
         }
         CYP{
@@ -499,7 +499,7 @@ et{
             "Alžeeria dinaar",
         }
         ECS{
-            "ECS",
+            "ECS" /** ===  */,
             "Ecuadori sukre",
         }
         EEK{
@@ -570,7 +570,7 @@ et{
             "Gambia dalasi",
         }
         GNS{
-            "GNS",
+            "GNS" /** ===  */,
             "Guinea syli",
         }
         GRD{
@@ -582,7 +582,7 @@ et{
             "Guatemala ketsal",
         }
         GWP{
-            "GWP",
+            "GWP" /** ===  */,
             "Guinea-Bissau peeso",
         }
         GYD{
@@ -694,7 +694,7 @@ et{
             "Leedu litt",
         }
         LUF{
-            "LUF",
+            "LUF" /** ===  */,
             "Luksemburgi frank",
         }
         LVL{
@@ -762,7 +762,7 @@ et{
             "Nigeeria naira",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Nicaragua kordoba",
         }
         NIO{
@@ -802,7 +802,7 @@ et{
             "Peruu uus soll",
         }
         PES{
-            "PES",
+            "PES" /** ===  */,
             "Peruu soll",
         }
         PGK{
@@ -822,7 +822,7 @@ et{
             "Poola zlott",
         }
         PLZ{
-            "PLZ",
+            "PLZ" /** ===  */,
             "Poola zlott, 1950-1995",
         }
         PTE{
@@ -854,7 +854,7 @@ et{
             "Venemaa rubla",
         }
         RUR{
-            "RUR",
+            "RUR" /** ===  */,
             "Venemaa rubla, 1991-1998",
         }
         RWF{
@@ -874,7 +874,7 @@ et{
             "Seišelli saarte ruupia",
         }
         SDP{
-            "SDP",
+            "SDP" /** ===  */,
             "Sudaani nael",
         }
         SEK{
@@ -890,7 +890,7 @@ et{
             "Saint Helena nael",
         }
         SIT{
-            "SIT",
+            "SIT" /** ===  */,
             "Sloveenia tolar",
         }
         SKK{
@@ -914,7 +914,7 @@ et{
             "São Tomé ja Príncipe dobra",
         }
         SUR{
-            "SUR",
+            "SUR" /** ===  */,
             "NSVL rubla",
         }
         SVC{
@@ -946,7 +946,7 @@ et{
             "Tonga pa'anga",
         }
         TPE{
-            "TPE",
+            "TPE" /** ===  */,
             "Timori eskuudo",
         }
         TRL{
@@ -970,7 +970,7 @@ et{
             "Ukraina grivna",
         }
         UAK{
-            "UAK",
+            "UAK" /** ===  */,
             "Ukraina karbovanets",
         }
         UGX{
@@ -982,11 +982,11 @@ et{
             "USA dollar",
         }
         USN{
-            "USN",
+            "USN" /** ===  */,
             "USA järgmise päeva dollar",
         }
         USS{
-            "USS",
+            "USS" /** ===  */,
             "USA sama päeva dollar",
         }
         UYU{
@@ -998,7 +998,7 @@ et{
             "Usbekistani somm",
         }
         VEB{
-            "VEB",
+            "VEB" /** ===  */,
             "Venezuela boliivar",
         }
         VND{
@@ -1034,7 +1034,7 @@ et{
             "Ida-Kariibi dollar",
         }
         XEU{
-            "XEU",
+            "XEU" /** ===  */,
             "eküü",
         }
         XFO{
@@ -1058,15 +1058,15 @@ et{
             "määramata",
         }
         YDD{
-            "YDD",
+            "YDD" /** ===  */,
             "Jeemeni dinaar",
         }
         YUM{
-            "YUM",
+            "YUM" /** ===  */,
             "Jugoslaavia uus dinaar",
         }
         YUN{
-            "YUN",
+            "YUN" /** ===  */,
             "Jugoslaavia konverteeritav dinaar",
         }
         ZAR{
@@ -1731,7 +1731,7 @@ et{
         ROZAJ{"Resia murre"}
         SAAHO{"saho murre"}
     }
-    Version{"1.95"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             DateTimePatterns{

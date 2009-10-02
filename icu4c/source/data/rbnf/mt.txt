@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/mt.xml
+ *  ICU <specials > source: <path>/xml/rbnf/mt.xml
  */
 mt{
     RBNFRules{
@@ -425,5 +425,5 @@ mt{
             "10000000000: <#,##0<<;",
         }
     }
-    Version{"1.7"}
+    Version{"4138"}
 }

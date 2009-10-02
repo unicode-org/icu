@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/cy.xml
+ *  ICU <specials > source: <path>/xml/main/cy.xml
  */
 cy{
     AuxExemplarCharacters{"[j k q v x z]"}
@@ -149,7 +149,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.66"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

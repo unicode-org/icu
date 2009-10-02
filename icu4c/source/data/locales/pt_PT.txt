@@ -71,11 +71,11 @@ pt_PT{
     }
     Currencies{
         AFA{
-            "AFA",
+            "AFA" /** ===  */,
             "Afeghani (1927-2002)",
         }
         BAD{
-            "BAD",
+            "BAD" /** ===  */,
             "Dinar da Bósnia-Herzegóvina",
         }
         BAM{
@@ -83,11 +83,11 @@ pt_PT{
             "Marco bósnio-herzegóvino conversível",
         }
         BEC{
-            "BEC",
+            "BEC" /** ===  */,
             "Franco belga (convertível)",
         }
         BYB{
-            "BYB",
+            "BYB" /** ===  */,
             "Rublo novo bielorusso (1994-1999)",
         }
         CYP{
@@ -99,7 +99,7 @@ pt_PT{
             "Coroa da República Checa",
         }
         ECV{
-            "ECV",
+            "ECV" /** ===  */,
             "Unidad de Valor Constante (UVC) do Equador",
         }
         KYD{
@@ -115,11 +115,11 @@ pt_PT{
             "Peso Plata mexicano (1861-1992)",
         }
         MXV{
-            "MXV",
+            "MXV" /** ===  */,
             "Unidad de Inversion (UDI) mexicana",
         }
         NIC{
-            "NIC",
+            "NIC" /** ===  */,
             "Córdoba nicaraguano",
         }
         NIO{
@@ -261,7 +261,7 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.85"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             DateTimePatterns{

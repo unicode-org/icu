@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/en.xml
+ *  ICU <specials > source: <path>/xml/collation/en.xml
  */
 en{
-    Version{"1.24"}
+    Version{"2.0.41.26"}
     collations{
         standard{
             Sequence{"&ae<<æ<<<Æ"}

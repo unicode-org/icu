@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/sk.xml
+ *  ICU <specials > source: <path>/xml/rbnf/sk.xml
  */
 sk{
     RBNFRules{
@@ -113,5 +113,5 @@ sk{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

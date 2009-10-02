@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az_AZ.xml
+ *  ICU <specials > source: <path>/xml/main/az_AZ.xml
  */
 az_AZ{
     "%%ALIAS"{"az_Latn_AZ"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/ms.xml
+ *  ICU <specials > source: <path>/xml/rbnf/ms.xml
  */
 ms{
     RBNFRules{
@@ -56,5 +56,5 @@ ms{
             "2: ke=%spellout-cardinal=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

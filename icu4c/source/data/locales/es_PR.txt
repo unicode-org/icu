@@ -31,7 +31,7 @@ es_PR{
         279,
         216,
     }
-    Version{"1.61"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

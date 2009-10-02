@@ -7,11 +7,11 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kk_Cyrl.xml
+ *  ICU <specials > source: <path>/xml/main/kk_Cyrl.xml
  */
 kk_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.3"}
+    Version{"2.0.41.23"}
 }

@@ -7,9 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pa_Arab.xml
+ *  ICU <specials > source: <path>/xml/main/pa_Arab.xml
  */
 pa_Arab{
+    %%ParentIsRoot:int{1}
     AuxExemplarCharacters{"[أ ٻ ة ٺ ټ ٽ]"}
     Countries{
         PK{"پکستان"}
@@ -35,11 +36,25 @@ pa_Arab{
     LocaleScript{
         "Arab",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "٠",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Scripts{
         Arab{"العربية"}
         Guru{"گُرمُکھی"}
     }
-    Version{"1.25"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

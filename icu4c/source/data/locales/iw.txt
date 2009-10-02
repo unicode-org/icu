@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/iw.xml
+ *  ICU <specials > source: <path>/xml/main/iw.xml
  */
 iw{
     "%%ALIAS"{"he"}

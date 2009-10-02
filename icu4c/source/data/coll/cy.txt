@@ -7,8 +7,23 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/cy.xml
+ *  ICU <specials > source: <path>/xml/collation/cy.xml
  */
 cy{
-    Version{"1.4"}
+    Version{"2.0.42.8"}
+    collations{
+        standard{
+            Sequence{
+                "&C<ch<<<Ch<<<CH"
+                "&D<dd<<<Dd<<<DD"
+                "&F<ff<<<Ff<<<FF"
+                "&G<ng<<<Ng<<<NG"
+                "&L<ll<<<Ll<<<LL"
+                "&P<ph<<<Ph<<<PH"
+                "&R<rh<<<Rh<<<RH"
+                "&T<th<<<Th<<<TH"
+            }
+            Version{"1.7"}
+        }
+    }
 }

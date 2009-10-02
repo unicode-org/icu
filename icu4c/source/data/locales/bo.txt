@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bo.xml
+ *  ICU <specials > source: <path>/xml/main/bo.xml
  */
 bo{
     AuxExemplarCharacters{"[ༀ]"}
@@ -69,7 +69,7 @@ bo{
     Scripts{
         Tibt{"བོད་ཡིག་"}
     }
-    Version{"1.15"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

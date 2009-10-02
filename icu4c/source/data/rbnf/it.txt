@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/it.xml
+ *  ICU <specials > source: <path>/xml/rbnf/it.xml
  */
 it{
     RBNFRules{
@@ -217,5 +217,5 @@ it{
             "2: =%%msco-with-o=;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

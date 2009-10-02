@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/bg.xml
+ *  ICU <specials > source: <path>/xml/rbnf/bg.xml
  */
 bg{
     RBNFRules{
@@ -103,5 +103,5 @@ bg{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.2"}
+    Version{"4126"}
 }

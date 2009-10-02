@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/ml.xml
+ *  ICU <specials > source: <path>/xml/collation/ml.xml
  */
 ml{
-    Version{"1.14"}
+    Version{"2.0.42.63"}
     collations{
         standard{
             Sequence{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/kl.xml
+ *  ICU <specials > source: <path>/xml/rbnf/kl.xml
  */
 kl{
     RBNFRules{
@@ -79,5 +79,5 @@ kl{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

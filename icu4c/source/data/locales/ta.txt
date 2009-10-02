@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ta.xml
+ *  ICU <specials > source: <path>/xml/main/ta.xml
  */
 ta{
     AuxExemplarCharacters{"[a g i m t]"}
@@ -942,7 +942,7 @@ ta{
         Zyyy{"சாதரண"}
         Zzzz{"தெரியாத அல்லது செல்லாத ஸ்கிரிப்ட்"}
     }
-    Version{"1.83"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             AmPmMarkers{

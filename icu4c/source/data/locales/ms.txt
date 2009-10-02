@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ms.xml
+ *  ICU <specials > source: <path>/xml/main/ms.xml
  */
 ms{
     Countries{
@@ -324,7 +324,7 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"1.69"}
+    Version{"2.0.42.82"}
     calendar{
         gregorian{
             dayNames{

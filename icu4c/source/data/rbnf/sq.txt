@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/sq.xml
+ *  ICU <specials > source: <path>/xml/rbnf/sq.xml
  */
 sq{
     RBNFRules{
@@ -72,5 +72,5 @@ sq{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"1.5"}
+    Version{"4126"}
 }

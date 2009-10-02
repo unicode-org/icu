@@ -7,9 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/zh_Hant.xml
+ *  ICU <specials > source: <path>/xml/rbnf/zh_Hant.xml
  */
 zh_Hant{
+    %%ParentIsRoot:int{1}
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
@@ -129,5 +130,5 @@ zh_Hant{
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"1.9"}
+    Version{"4126"}
 }

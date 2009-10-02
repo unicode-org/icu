@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/eo.xml
+ *  ICU <specials > source: <path>/xml/rbnf/eo.xml
  */
 eo{
     RBNFRules{
@@ -49,5 +49,5 @@ eo{
             "0: =%spellout-cardinal=a;",
         }
     }
-    Version{"1.6"}
+    Version{"4126"}
 }

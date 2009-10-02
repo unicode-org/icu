@@ -7,9 +7,9 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/sr_Latn.xml
+ *  ICU <specials > source: <path>/xml/collation/sr_Latn.xml
  */
 sr_Latn{
-    Version{"1.4"}
+    Version{"2.0.41.26"}
     collations:alias{"hr/collations"}
 }

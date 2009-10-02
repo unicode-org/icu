@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/in.xml
+ *  ICU <specials > source: <path>/xml/main/in.xml
  */
 in{
     "%%ALIAS"{"id"}

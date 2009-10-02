@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/collation/haw.xml
+ *  ICU <specials > source: <path>/xml/collation/haw.xml
  */
 haw{
     Version{"1.5"}
