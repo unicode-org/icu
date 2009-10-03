@@ -5,7 +5,7 @@
 package com.ibm.icu.dev.test.util;
 
 public class DebugUtilitiesData extends Object {
-    public static final String ICU4C_VERSION="4.2";
+    public static final String ICU4C_VERSION="4.3.2";
     public static final int UDebugEnumType = 0;
     public static final int UCalendarDateFields = 1;
     public static final int UCalendarMonths = 2;
@@ -136,7 +136,7 @@ public class DebugUtilitiesData extends Object {
            com.ibm.icu.util.Calendar.EXTENDED_YEAR, /* 19 */
            com.ibm.icu.util.Calendar.JULIAN_DAY, /* 20 */
            com.ibm.icu.util.Calendar.MILLISECONDS_IN_DAY, /* 21 */
-           com.ibm.icu.util.Calendar.IS_LEAP_MONTH, /* 22 */
+           com.ibm.icu.util.ChineseCalendar.IS_LEAP_MONTH, /* 22 */
         },
         /* UCalendarMonths, 2 */
         { 
