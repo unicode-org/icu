@@ -1809,13 +1809,12 @@ UnicodeStringTest::TestUTF32() {
 // TODO(markus): Temporary test code to see if all relevant compilers support templates.
 /**
  * Does not throw exceptions.
- * Consider declaring private new and new[] operators to enforce usage as stack objects.
  */
 template<class T>
-class LocalPointer {
+class /* U_COMMON_API */ LocalPointer {
 public:
     // Takes ownership.
-    explicit LocalPointer(T *p=NULL) : ptr(p);
+    explicit LocalPointer(T *p=NULL) : ptr(p) {}
     // Deletes the object it owns.
     ~LocalPointer() {
         delete ptr;
@@ -1846,6 +1845,12 @@ private:
     // No ownership transfer: No copy constructor, no assignment operator.
     LocalPointer(const LocalPointer &other);
     void operator=(const LocalPointer &other);
+    // No heap allocation. Use only on the stack.
+    static void * U_EXPORT2 operator new(size_t size);
+    static void * U_EXPORT2 operator new[](size_t size);
+#if U_HAVE_PLACEMENT_NEW
+    static void * U_EXPORT2 operator new(size_t, void *ptr);
+#endif
 };
 
 void
@@ -1917,7 +1922,7 @@ UnicodeStringTest::TestUTF8() {
 
     // TODO(markus): Temporary test code to see if all relevant compilers support templates.
     LocalPointer<UnicodeString> lp(new UnicodeString("abc123"));
-    if(lp->length()!=6 || lp.getAlias->length()!=6) {
+    if(lp.isNull() || lp->length()!=6 || lp.getAlias()->length()!=6) {
         errln("Trouble with LocalPointer.");
     }
 }
