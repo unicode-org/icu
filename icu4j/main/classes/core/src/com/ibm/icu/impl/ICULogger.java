@@ -94,15 +94,19 @@ public class ICULogger extends Logger {
      * return true if it is otherwise return false.
      */
     private static LOGGER_STATUS checkGlobalLoggingFlag() {
-        String prop = System.getProperty(SYSTEM_PROP_LOGGER);
-        
-        if (prop != null) {
-            if (prop.equals(GLOBAL_FLAG_TURN_ON_LOGGING)) {
-                return LOGGER_STATUS.ON;
+        try {
+            String prop = System.getProperty(SYSTEM_PROP_LOGGER);
+
+            if (prop != null) {
+                if (prop.equals(GLOBAL_FLAG_TURN_ON_LOGGING)) {
+                    return LOGGER_STATUS.ON;
+                }
+                return LOGGER_STATUS.OFF;
             }
-            return LOGGER_STATUS.OFF;
+        } catch (SecurityException e) {
+            // Ignore the security exception and fall-through
         }
-        
+
         return LOGGER_STATUS.NULL;
     }
     
