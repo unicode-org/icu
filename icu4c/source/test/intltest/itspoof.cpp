@@ -168,27 +168,27 @@ void IntlTestSpoof::testSkeleton() {
         CHECK_SKELETON(SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647");
 
         // This mapping exists in the ML and MA tables, does not exist in SL, SA
-        //0C83 ;	0C03 ;	ML	# ( ಃ → ః ) KANNADA SIGN VISARGA → TELUGU SIGN VISARGA	# {source:513}
+        //0C83 ;	0C03 ;	
         CHECK_SKELETON(SL, "\\u0C83", "\\u0C83");
         CHECK_SKELETON(SA, "\\u0C83", "\\u0C83");
         CHECK_SKELETON(ML, "\\u0C83", "\\u0C03");
         CHECK_SKELETON(MA, "\\u0C83", "\\u0C03");
         
-        // 0391 ; 0041 ; MA # ( Α → A ) GREEK CAPITAL LETTER ALPHA to LATIN CAPITAL LETTER A 
+        // 0391 ; 0041 ;
         // This mapping exists only in the MA table.
         CHECK_SKELETON(MA, "\\u0391", "A");
         CHECK_SKELETON(SA, "\\u0391", "\\u0391");
         CHECK_SKELETON(ML, "\\u0391", "\\u0391");
         CHECK_SKELETON(SL, "\\u0391", "\\u0391");
 
-        // 13CF ;  0062 ;  MA  #  CHEROKEE LETTER SI to LATIN SMALL LETTER B  
+        // 13CF ;  0062 ; 
         // This mapping exists in the ML and MA tables
         CHECK_SKELETON(ML, "\\u13CF", "b");
         CHECK_SKELETON(MA, "\\u13CF", "b");
         CHECK_SKELETON(SL, "\\u13CF", "\\u13CF");
         CHECK_SKELETON(SA, "\\u13CF", "\\u13CF");
 
-        // 0022 ;  02B9 02B9 ;  SA  #*  QUOTATION MARK to MODIFIER LETTER PRIME, MODIFIER LETTER PRIME 
+        // 0022 ;  02B9 02B9 ; 
         // all tables.
         CHECK_SKELETON(SL, "\\u0022", "\\u02B9\\u02B9");
         CHECK_SKELETON(SA, "\\u0022", "\\u02B9\\u02B9");

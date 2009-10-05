@@ -828,7 +828,7 @@ void bundle_write(struct SRBRoot *bundle,
 
 /* Opening Functions */
 
-/* gcc 4.2 complained "no previous prototype for ‘res_open’" without this prototype... */
+/* gcc 4.2 complained "no previous prototype for res_open" without this prototype... */
 struct SResource* res_open(struct SRBRoot *bundle, const char *tag,
                            const struct UString* comment, UErrorCode* status);
 
