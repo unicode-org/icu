@@ -436,7 +436,7 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         String[] tzids = getTestZIDs();
         for (int i = 0; i < tzids.length; i++) {
-            if (skipIfBeforeICU(4,3,1) && tzids[i].equals("Asia/Amman")) {
+            if (skipIfBeforeICU(4,3,2) && tzids[i].equals("Asia/Amman")) {
                 // See #7008
                 continue;
             }
@@ -514,7 +514,7 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int n = 0; n < startTimes.length; n++) {
             long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                if (skipIfBeforeICU(4,3,1) && tzids[i].equals("Asia/Amman")) {
+                if (skipIfBeforeICU(4,3,2) && tzids[i].equals("Asia/Amman")) {
                     // See #7008
                     continue;
                 }
