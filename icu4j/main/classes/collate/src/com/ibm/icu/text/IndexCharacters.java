@@ -83,11 +83,11 @@ public class IndexCharacters {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale) {
         this(locale, LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD), Collator.getInstance(locale));
     }
-    
+
+    @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale, UnicodeSet exemplarSet, Collator collator) {
         this.locale = locale;
         try {
@@ -99,7 +99,7 @@ public class IndexCharacters {
 
         // get the exemplars, and handle special cases
 
-        UnicodeSet exemplars = (UnicodeSet) exemplarSet.cloneAsThawed();
+        UnicodeSet exemplars = exemplarSet.cloneAsThawed();
         // question: should we add auxiliary exemplars?
         if (exemplars.containsSome(CORE_LATIN)) {
             exemplars.addAll(CORE_LATIN);
