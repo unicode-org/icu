@@ -4439,7 +4439,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "1.00 Afghan Afghanis random",
         "1.00 Albanian Lek random",
         "1.00 Albanian lek random",
-        "1.00 Albanian lekë random",
+        "1.00 Albanian lek\\u00eb random",
         "1.00 Algerian Dinar random",
         "1.00 Algerian dinar random",
         "1.00 Algerian dinars random",
