@@ -4115,19 +4115,16 @@ fi
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "unknown"; then
-        { { $as_echo "$as_me:$LINENO: error: Unable to determine binary format." >&5
-$as_echo "$as_me: error: Unable to determine binary format." >&2;}
-   { (exit 1); exit 1; }; }
-        # cross compiling?
-        #BITS_GOT=unknown
-        #case "$BITS_REQ" in
-        #    64|64else32) BITS_OK=no
-        #    BITS_CHECK_32=yes
-        #    BITS_CHECK_64=yes
-        #    32) BITS_OK=no;;
-        #    nochange) ;;
-        #    *) ;;
-        #esac
+        # cross compiling.
+        BITS_GOT=unknown
+        case "$BITS_REQ" in
+            64|64else32) BITS_OK=no
+            BITS_CHECK_32=yes
+            BITS_CHECK_64=yes ;;
+            32) BITS_OK=no;;
+            nochange) ;;
+            *) ;;
+        esac
     fi
 
     { $as_echo "$as_me:$LINENO: result: $DEFAULT_64BIT" >&5
