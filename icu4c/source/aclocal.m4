@@ -191,17 +191,16 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "unknown"; then
-        AC_MSG_ERROR([Unable to determine binary format.])
-        # cross compiling?
-        #BITS_GOT=unknown
-        #case "$BITS_REQ" in
-        #    64|64else32) BITS_OK=no
-        #    BITS_CHECK_32=yes
-        #    BITS_CHECK_64=yes
-        #    32) BITS_OK=no;;
-        #    nochange) ;;
-        #    *) ;;
-        #esac
+        # cross compiling.
+        BITS_GOT=unknown
+        case "$BITS_REQ" in
+            64|64else32) BITS_OK=no
+            BITS_CHECK_32=yes
+            BITS_CHECK_64=yes ;;
+            32) BITS_OK=no;;
+            nochange) ;;
+            *) ;;
+        esac
     fi
             
     AC_MSG_RESULT($DEFAULT_64BIT);
