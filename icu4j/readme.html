@@ -12,10 +12,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.4M1</h3>
+<h3>Read Me for ICU4J 4.4M2</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-July 22, 2009<br>
+October 5, 2009<br>
 </p>
 
 <p><b>Note:</b> This is a development milestone release of ICU4J 4.4.
@@ -129,10 +129,10 @@ current and complete version is always found in ICU4J.</p>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
 <p>
-See the <a href="http://www.icu-project.org/download/">ICU 4.2 download page</a> about
+See the <a href="http://www.icu-project.org/download/latest_milestone.html">ICU 4.4 milestone download page</a> about
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-2/APIChangeReport.html">here</a>.
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-4-3-2/APIChangeReport.html">here</a>.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -174,50 +174,33 @@ used by the ICU development team.
 <table bgcolor="#CCCCFF">
 <tr>
   <th rowspan="2" bgcolor="#FFFFFF">Operating System</th>
-  <th colspan="3" bgcolor="#FFFFFF">Sun Java SE</th>
-  <th colspan="3" bgcolor="#FFFFFF">IBM Java SE</th>
+  <th colspan="2" bgcolor="#FFFFFF">Sun Java SE</th>
+  <th colspan="2" bgcolor="#FFFFFF">IBM Java SE</th>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">1.6.0</th>
   <th bgcolor="#FFFFFF">1.5.0</th>
-  <th bgcolor="#FFFFFF">1.4.2</th>
   <th bgcolor="#FFFFFF">1.6.0</th>
   <th bgcolor="#FFFFFF">1.5.0</th>
-  <th bgcolor="#FFFFFF">1.4.2</th>
-</tr>
-<tr>
-  <th bgcolor="#FFFFFF">AIX 5.2</th>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">AIX 5.3</th>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">AIX 6.1</th>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">HP-UX 11 (PA-RISC)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
 </tr>
@@ -225,8 +208,6 @@ used by the ICU development team.
   <th bgcolor="#FFFFFF">HP-UX 11 (IA64)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
 </tr>
@@ -234,26 +215,20 @@ used by the ICU development team.
   <th bgcolor="#FFFFFF">Redhat Enterprise Linux 4 (x86)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr bgcolor="#FFFFFF">
   <th>Redhat Enterprise Linux 5 (x86)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr bgcolor="#FFFFFF">
   <th>Solaris 9 (SPARC)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
 </tr>
@@ -261,8 +236,6 @@ used by the ICU development team.
   <th>Solaris 10 (SPARC)</th>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
 </tr>
@@ -270,28 +243,22 @@ used by the ICU development team.
   <th bgcolor="#FFFFFF">Windows XP</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">Windows Vista</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">Windows 2008 Server</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 </table>
 
