@@ -972,7 +972,11 @@ uprv_tzname(int n)
 #endif
 
 #ifdef U_TZNAME
-#if !defined(U_WINDOWS)
+#ifdef U_WINDOWS
+    /* The return value is free'd in timezone.cpp on Windows because
+     * the other code path returns a pointer to a heap location. */
+    return uprv_strdup(U_TZNAME[n]);
+#else
     /*
     U_TZNAME is usually a non-unique abbreviation, which isn't normally usable.
     So we remap the abbreviation to an olson ID.
@@ -996,8 +1000,8 @@ uprv_tzname(int n)
             return tzid;
         }
     }
-#endif
     return U_TZNAME[n];
+#endif
 #else
     return "";
 #endif
