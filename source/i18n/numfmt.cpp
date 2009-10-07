@@ -109,7 +109,7 @@ static UHashtable * NumberingSystem_cache = NULL;
 static UMTX nscacheMutex = NULL;
 
 #if !UCONFIG_NO_SERVICE
-static ICULocaleService* gService = NULL;
+static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
 #endif
 
 /** 
@@ -118,7 +118,7 @@ static ICULocaleService* gService = NULL;
 U_CDECL_BEGIN 
 static void U_CALLCONV
 deleteNumberingSystem(void *obj) {
-    delete (NumberingSystem *)obj;
+    delete (U_NAMESPACE_QUALIFIER NumberingSystem *)obj;
 }
 
 static UBool U_CALLCONV numfmt_cleanup(void) {
