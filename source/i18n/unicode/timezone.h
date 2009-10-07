@@ -615,8 +615,19 @@ public:
      * @draft ICU 4.4
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
-
+    
+    /**
+     * Sets default time zone name style.
+     * @param sytle EDisplayType to set as default
+     * @draft ICU 4.4
+     */
     void setDefaultTimeZoneNameStyle(EDisplayType style);
+    
+    /**
+     * Get default time zone name style.
+     * @return      Default name style for the time zone.  
+     * @draft ICU 4.4
+     */
     EDisplayType getDefaultTimeZoneNameStyle();
 
     /**
