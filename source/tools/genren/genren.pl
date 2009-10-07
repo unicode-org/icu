@@ -100,23 +100,12 @@ print HEADER <<"EndOfHeaderComment";
 
 #if !U_DISABLE_RENAMING
 
-/* We need the U_ICU_ENTRY_POINT_RENAME definition. There's a default one in unicode/uvernum.h we can use, but we will give 
+/* We need the U_ICU_ENTRY_POINT_RENAME definition. There's a default one in unicode/uvernum.h we can use, but we will give
    the platform a chance to define it first.
    Normally (if utypes.h or umachine.h was included first) this will not be necessary as it will already be defined.
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-/**
- * Are we using platform.h? If so, include platform.h here. 
- * NOTE: this logic was copied from umachine.h and must be kept in sync with it.
- */
-#if defined(U_PALMOS)
-   /* No equivalent platform.h.  Was: include "unicode/ppalmos.h" */
-#elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
-   /* No equivalent platform.h.  Was: include "unicode/pwin32.h" */
-#else
-#   include "unicode/platform.h"  /* platform.h is 'pure defines' */
-   /* Do not include "unicode/ptypes.h" - ptypes.h contains typedefs and other includes */
-#endif
+#include "unicode/umachine.h"
 #endif
 
 /* If we still don't have U_ICU_ENTRY_POINT_RENAME use the default. */
