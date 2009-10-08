@@ -82,6 +82,10 @@ U_NAMESPACE_BEGIN
 #define	C_DOTTED_CIRCLE 0x25CC
 #define NO_GLYPH 0xFFFF
 
+// Some level of debate as to the proper value for MAX_CONSONANTS_PER_SYLLABLE.  Ticket 5588 states that 4
+// is the magic number according to ISCII, but 5 seems to be the more consistent with XP.
+#define MAX_CONSONANTS_PER_SYLLABLE 5
+
 #define INDIC_BLOCK_SIZE 0x7F
 
 class IndicReorderingOutput : public UMemory {
@@ -594,9 +598,17 @@ le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const 
 {
     le_int32 cursor = prev;
     le_int8 state = 0;
+    le_int8 consonant_count = 0;
 
     while (cursor < charCount) {
         IndicClassTable::CharClass charClass = classTable->getCharClass(chars[cursor]);
+        
+        if ( IndicClassTable::isConsonant(charClass) ) {
+            consonant_count++;
+            if ( consonant_count > MAX_CONSONANTS_PER_SYLLABLE ) {
+                break;
+            }
+        }
 
         state = stateTable[state][charClass & CF_CLASS_MASK];
 
