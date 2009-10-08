@@ -1785,6 +1785,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t start = pos;
 
     UBool ambiguousYear[] = { FALSE };
+    int32_t saveHebrewMonth = -1;
     int32_t count = 0;
 
     // hack, reset tztype, cast away const
@@ -1888,7 +1889,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, *workCal, i);
+                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -1903,7 +1904,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // fields.
             else {
                 int32_t s = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, *workCal, i);
+                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i);
 
                 if (s < 0) {
                     status = U_PARSE_ERROR;
@@ -2347,7 +2348,7 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  * indicating matching failure, otherwise.
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                           UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal,
+                           UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
                            int32_t patLoc) const
 {
     Formattable number;
@@ -2357,7 +2358,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     UDateFormatField patternCharIndex;
     NumberFormat *currentNumberFormat;
     UnicodeString temp;
-    static UBool DelayedHebrewMonthCheck = FALSE;
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
 
 #if defined (U_DEBUG_CAL)
@@ -2479,13 +2479,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         cal.set(UCAL_YEAR, value);
 
         // Delayed checking for adjustment of Hebrew month numbers in non-leap years.  
-        if (DelayedHebrewMonthCheck) {
+        if (saveHebrewMonth >= 0) {
             HebrewCalendar *hc = (HebrewCalendar*)&cal;
-            UErrorCode status = U_ZERO_ERROR;
-            if (!hc->isLeapYear(value)) {
-               cal.add(UCAL_MONTH,1,status);
+            if (!hc->isLeapYear(value) && saveHebrewMonth >= 6) {
+               cal.set(UCAL_MONTH,saveHebrewMonth);
+            } else {
+               cal.set(UCAL_MONTH,saveHebrewMonth-1);
             }
-            DelayedHebrewMonthCheck = FALSE;
+            saveHebrewMonth = -1;
         }
         return pos.getIndex();
 
@@ -2507,23 +2508,26 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case UDAT_MONTH_FIELD:
         if (count <= 2) // i.e., M or MM.
         {
-            // Don't want to parse the month if it is a string
-            // while pattern uses numeric style: M or MM.
-            // [We computed 'value' above.]
-            cal.set(UCAL_MONTH, value - 1);
             // When parsing month numbers from the Hebrew Calendar, we might need to adjust the month depending on whether
             // or not it was a leap year.  We may or may not yet know what year it is, so might have to delay checking until
             // the year is parsed.
-            if (!strcmp(cal.getType(),"hebrew") && value >= 6) {
+            if (!strcmp(cal.getType(),"hebrew")) {
                 HebrewCalendar *hc = (HebrewCalendar*)&cal;
                 if (cal.isSet(UCAL_YEAR)) {
                    UErrorCode status = U_ZERO_ERROR;
-                   if (!hc->isLeapYear(hc->get(UCAL_YEAR,status))) {
+                   if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6) {
                        cal.set(UCAL_MONTH, value);
+                   } else {
+                       cal.set(UCAL_MONTH, value - 1);
                    }
                 } else {
-                    DelayedHebrewMonthCheck = TRUE;
+                    saveHebrewMonth = value;
                 } 
+            } else {
+                // Don't want to parse the month if it is a string
+                // while pattern uses numeric style: M or MM.
+                // [We computed 'value' above.]
+                cal.set(UCAL_MONTH, value - 1);
             }
             return pos.getIndex();
         } else {

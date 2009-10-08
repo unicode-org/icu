@@ -846,13 +846,14 @@ private:
      * @param count the count of a pattern character.
      * @param obeyCount if true then the count is strictly obeyed.
      * @param ambiguousYear If true then the two-digit year == the default start year.
+     * @param saveHebrewMonth Used to hang onto month until year is known.
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                     UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal,
+                     UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
                      int32_t patLoc) const;
 
     void parseInt(const UnicodeString& text,
