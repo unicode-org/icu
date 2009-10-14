@@ -152,9 +152,7 @@ public final class CharsetProviderICU extends CharsetProvider{
         * Note: getJavaCanonicalName() may eventually call this method so skip the concatenation part
         * during getJavaCanonicalName() call.
         */
-       if (gettingJavaCanonicalName) {
-           gettingJavaCanonicalName = false;
-       } else if (optionsString != null) {
+       if (!gettingJavaCanonicalName && optionsString != null) {
            icuCanonicalName = icuCanonicalName.concat(optionsString);
            optionsString = null;
        }
@@ -223,9 +221,12 @@ public final class CharsetProviderICU extends CharsetProvider{
              * we have to try to use a java compatible name.
              */
             if (cName != null) {
-                gettingJavaCanonicalName = true;
-                if (Charset.isSupported(cName)) {
-                    cName = Charset.forName(cName).name();
+                if (!gettingJavaCanonicalName) {
+                    gettingJavaCanonicalName = true;
+                    if (Charset.isSupported(cName)) {
+                        cName = Charset.forName(cName).name();
+                    }
+                    gettingJavaCanonicalName = false;
                 }
             }
             return cName;
