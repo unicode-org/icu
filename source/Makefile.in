@@ -225,7 +225,7 @@ $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config
 	echo "# Rebuilt on "`date` >> $@
 	chmod u-w $@
 
-config.status: $(srcdir)/configure $(srcdir)/common/unicode/uversion.h
+config.status: $(srcdir)/configure $(srcdir)/common/unicode/uvernum.h
 	@echo
 	@echo
 	@echo "*** config.status has become stale ***"
