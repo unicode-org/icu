@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -34,4 +34,13 @@ UnicodeString TestUtility::hex(const UnicodeString& s, UChar sep) {
         result.append(hex(s.charAt(i)));
     }
     return result;
+}
+
+UnicodeString TestUtility::hex(const uint8_t* bytes, int32_t len) {
+	UnicodeString buf;
+	for (int32_t i = 0; i < len; ++i) {
+		buf.append(HEX[0x0F & (bytes[i] >> 4)]);
+		buf.append(HEX[0x0F & bytes[i]]);
+	}
+	return buf;
 }
