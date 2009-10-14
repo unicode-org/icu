@@ -6280,6 +6280,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
             uint8_t caseBits = 0;
 
             for(;;) {
+                U_ASSERT(caseShift >= 0 && caseShift <= UCOL_CASE_SHIFT_START);
                 if(i == count) {
                     goto saveState;
                 }
@@ -6328,6 +6329,11 @@ ucol_nextSortKeyPart(const UCollator *coll,
                         // this copies the case level logic from the
                         // sort key generation code
                         if(CE != 0) {
+                            if (caseShift == 0) {
+                                dest[i++] = caseByte;
+                                caseShift = UCOL_CASE_SHIFT_START;
+                                caseByte = UCOL_CASE_BYTE_START;
+                            }
                             if(coll->caseFirst == UCOL_UPPER_FIRST) {
                                 if((caseBits & 0xC0) == 0) {
                                     caseByte |= 1 << (--caseShift);

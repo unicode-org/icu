@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -223,6 +223,11 @@ public:
     // RuleBasedCollator doesn't use getCollationElementIterator internally
     //
     void Test4146160(/* char* par */);
+
+	// Ticket 7189
+	//
+	// nextSortKeyPart incorrect for EO_S1 collation
+	void TestT7189();
 
 private:
     //------------------------------------------------------------------------
