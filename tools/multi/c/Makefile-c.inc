@@ -4,7 +4,6 @@ include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
 C_GOOD:=$(shell [ -d $(C_INS) ] && (cd $(C_INS) ; ls -d */$(S_INS) | cut -d/ -f1))
 
-
 C_CLEAN_TARGET=$(C_GOOD:%=$(C_INS)/%/bin/$(TARGET))
 
 SOURCES=$(C_SOURCES) $(CXX_SOURCES)
@@ -12,6 +11,12 @@ C_OBJECTS=$(C_SOURCES:%.c=%.o)
 CXX_OBJECTS=$(CXX_SOURCES:%.cpp=%.o)
 OBJECTS=$(C_OBJECTS) $(CXX_OBJECTS)
 DEBUGOPT=-g
+
+# list of ICUs to be built	
+ICU_TARBALLS=$(shell cd $(ICUS) ; ls icu4c-*-src.tgz)
+# list of versions ( form "3_8  4_0" etc. )
+ICU_TARBALLS_VERS=$(ICU_TARBALLS:icu4c-%-src.tgz=%)
+
 
 $(C_INS)/%/bin/$(TARGET):	$(SOURCES) $(HEADERS)
 	-rm -rf $(C_INS)/$*/tmp
