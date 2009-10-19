@@ -785,6 +785,7 @@ icu4j/tools/misc/out
 tools/multi/packages/*.jar
 tools/multi/packages/*.tgz
 tools/multi/proj/chello/out
+tools/multi/proj/provider/out
 tools/multi/tmp
 tools/release/java/APIChangeReport.html
 tools/release/java/Makefile.local

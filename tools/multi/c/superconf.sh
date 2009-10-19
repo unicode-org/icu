@@ -7,6 +7,8 @@
 # input variables;
 # $ICU_VER  - the ICU version in underscore format (4_2_0_1)
 
+ICU_SRC="$1"
+ICU_VER="$2"
 
 U_HOST=`hostname`
 U_SYS=`uname || echo unknown`
@@ -51,13 +53,13 @@ case $HOST in
                 rcs='LinuxRedHat'
                 ;;
         *)
-		echo sh ./configure
+		echo sh ${ICU_SRC}/configure
                 #echo Unknown host $HOST, edit $0
                 exit 0
                 ;;
 esac
 
-echo sh ./runConfigureICU "${rcs}"
+echo sh ${ICU_SRC}/runConfigureICU "${rcs}"
 
 
 
