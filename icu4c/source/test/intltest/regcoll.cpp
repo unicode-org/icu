@@ -15,6 +15,7 @@
 #include "regcoll.h"
 #include "sfwdchit.h"
 #include "testutil.h"
+#include "cmemory.h"
 
 #define ARRAY_LENGTH(array) ((int32_t)(sizeof array / sizeof array[0]))
 
@@ -1081,86 +1082,79 @@ void CollationRegressionTest::Test4146160(/* char* par */)
 //
 // nextSortKeyPart incorrect for EO_S1 collation
 static int32_t calcKeyIncremental(UCollator *coll, const UChar* text, int32_t len, uint8_t *keyBuf, int32_t keyBufLen, UErrorCode& status) {
-	UCharIterator uiter;
-	uint32_t state[2] = {0, 0};
-	int32_t keyLen;
-	int32_t count = 8;
+    UCharIterator uiter;
+    uint32_t state[2] = { 0, 0 };
+    int32_t keyLen;
+    int32_t count = 8;
 
-	uiter_setString(&uiter, text, len);
-	keyLen = 0;
-	while (TRUE) {
-		int32_t keyPartLen = ucol_nextSortKeyPart(coll, &uiter, state, &keyBuf[keyLen], count, &status);
-		if (U_FAILURE(status)) {
-			return -1;
-		}
-		if (keyPartLen == 0) {
-			break;
-		}
-		keyLen += keyPartLen;
-	}
-	return keyLen;
+    uiter_setString(&uiter, text, len);
+    keyLen = 0;
+    while (TRUE) {
+        int32_t keyPartLen = ucol_nextSortKeyPart(coll, &uiter, state, &keyBuf[keyLen], count, &status);
+        if (U_FAILURE(status)) {
+            return -1;
+        }
+        if (keyPartLen == 0) {
+            break;
+        }
+        keyLen += keyPartLen;
+    }
+    return keyLen;
 }
 
-void CollationRegressionTest::TestT7189()
-{
-	UErrorCode status = U_ZERO_ERROR;
-	UCollator *coll;
-	uint32_t i;
+void CollationRegressionTest::TestT7189() {
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll;
+    uint32_t i;
 
-	static const UChar text1[][CollationRegressionTest::MAX_TOKEN_LEN] = {
-		// "Achter De Hoven"
-		{0x41, 0x63, 0x68, 0x74, 0x65, 0x72, 0x20, 0x44, 0x65, 0x20, 0x48, 0x6F, 0x76, 0x65, 0x6E, 0x00},
-		// "ABC"
-		{0x41, 0x42, 0x43, 0x00},
-		// "HELLO world!"
-		{0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21, 0x00}
-	};
+    static const UChar text1[][CollationRegressionTest::MAX_TOKEN_LEN] = {
+    // "Achter De Hoven"
+        { 0x41, 0x63, 0x68, 0x74, 0x65, 0x72, 0x20, 0x44, 0x65, 0x20, 0x48, 0x6F, 0x76, 0x65, 0x6E, 0x00 },
+        // "ABC"
+        { 0x41, 0x42, 0x43, 0x00 },
+        // "HELLO world!"
+        { 0x48, 0x45, w0x4C, 0x4C, 0x4F, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21, 0x00 }
+    };
 
-	static const UChar text2[][CollationRegressionTest::MAX_TOKEN_LEN] = {
-		// "Achter de Hoven"
-		{0x41, 0x63, 0x68, 0x74, 0x65, 0x72, 0x20, 0x64, 0x65, 0x20, 0x48, 0x6F, 0x76, 0x65, 0x6E, 0x00},
-		// "abc"
-		{0x61, 0x62, 0x63, 0x00},
-		// "hello world!"
-		{0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21, 0x00}
-	};
+    static const UChar text2[][CollationRegressionTest::MAX_TOKEN_LEN] = {
+    // "Achter de Hoven"
+        { 0x41, 0x63, 0x68, 0x74, 0x65, 0x72, 0x20, 0x64, 0x65, 0x20, 0x48, 0x6F, 0x76, 0x65, 0x6E, 0x00 },
+        // "abc"
+        { 0x61, 0x62, 0x63, 0x00 },
+        // "hello world!"
+        { 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21, 0x00 }
+    };
 
-	// Open the collator
-	coll = ucol_openFromShortString("EO_S1", FALSE, NULL, &status);
-	if (U_FAILURE(status)) {
-		errln("Failed to create a collator for short string EO_S1");
-		return;
-	}
+    // Open the collator
+    coll = ucol_openFromShortString("EO_S1", FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Failed to create a collator for short string EO_S1");
+        return;
+    }
 
-	for (i = 0; i < sizeof(text1)/(CollationRegressionTest::MAX_TOKEN_LEN * sizeof(UChar)); i++) {
-		uint8_t key1[100], key2[100];
-		int32_t len1, len2;
+    for (i = 0; i < sizeof(text1) / (CollationRegressionTest::MAX_TOKEN_LEN * sizeof(UChar)); i++) {
+        uint8_t key1[100], key2[100];
+        int32_t len1, len2;
 
-		len1 = calcKeyIncremental(coll, text1[i], -1, key1, sizeof(key1), status);
-		if (U_FAILURE(status)) {
-			errln(UnicodeString("Failed to get a partial collation key for ") + text1[i]);
-			break;
-		}
-		len2 = calcKeyIncremental(coll, text2[i], -1, key2, sizeof(key2), status);
-		if (U_FAILURE(status)) {
-			errln(UnicodeString("Failed to get a partial collation key for ") + text2[i]);
-			break;
-		}
+        len1 = calcKeyIncremental(coll, text1[i], -1, key1, sizeof(key1), status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Failed to get a partial collation key for ") + text1[i]);
+            break;
+        }
+        len2 = calcKeyIncremental(coll, text2[i], -1, key2, sizeof(key2), status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Failed to get a partial collation key for ") + text2[i]);
+            break;
+        }
 
-		if (len1 == len2 && memcmp(key1, key2, len1) == 0) {
-			errln(UnicodeString("Failed: Identical key\n") +
-				"    text1: " + text1[i] + "\n" +
-				"    text2: " + text2[i] + "\n" +
-				"    key  : " + TestUtility::hex(key1, len1));
-		} else {
-			logln(UnicodeString("Keys produced -\n") +
-				"    text1: " + text1[i] + "\n" +
-				"    key1 : " + TestUtility::hex(key1, len1) + "\n" +
-				"    text2: " + text2[i] + "\n" +
-				"    key2 : " + TestUtility::hex(key2, len2));
-		}
-	}
-	ucol_close(coll);
+        if (len1 == len2 && uprv_memcmp(key1, key2, len1) == 0) {
+            errln(UnicodeString("Failed: Identical key\n") + "    text1: " + text1[i] + "\n" + "    text2: " + text2[i] + "\n" + "    key  : " + TestUtility::hex(key1, len1));
+        } else {
+            logln(UnicodeString("Keys produced -\n") + "    text1: " + text1[i] + "\n" + "    key1 : " + TestUtility::hex(key1, len1) + "\n" + "    text2: " + text2[i] + "\n" + "    key2 : "
+                    + TestUtility::hex(key2, len2));
+        }
+    }
+    ucol_close(coll);
 }
 
 void CollationRegressionTest::compareArray(Collator &c,
