@@ -6,46 +6,44 @@
  */
 package com.ibm.icu.impl.locale;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
-public final class InternalLocaleBuilder {
+import com.ibm.icu.impl.locale.LanguageTag.ParseStatus;
 
-    public static final char PRIVATEUSEKEY = 'x';
+public final class InternalLocaleBuilder {
 
     private String _language = "";
     private String _script = "";
     private String _region = "";
     private String _variant = "";
+    private SortedMap<Character, Extension> _extMap;
 
-    private FieldHandler _handler = FieldHandler.DEFAULT;
+    private final boolean _lenientVariant;
 
-    private HashMap<Character, String> _extMap;
-    private HashMap<String, String> _kwdMap;
-
-    private static final char LDMLSINGLETON = 'u';
-
-    private static final String LANGTAGSEP = "-";
     private static final String LOCALESEP = "_";
 
-    private static final int DEFAULTMAPCAPACITY = 4;
-
     public InternalLocaleBuilder() {
+        this(false);
     }
 
-    public InternalLocaleBuilder(FieldHandler handler) {
-        _handler = handler;
+    public InternalLocaleBuilder(boolean lenientVariant) {
+        _lenientVariant = lenientVariant;
+    }
+
+    public boolean isLenientVariant() {
+        return _lenientVariant;
     }
 
     public InternalLocaleBuilder setLanguage(String language) throws LocaleSyntaxException {
         String newval = "";
         if (language.length() > 0) {
-            newval = _handler.process(FieldType.LANGUAGE, language);
-            if (newval == null) {
-                throw new LocaleSyntaxException("Ill-formed language: " + language);
+            if (!LanguageTag.isLanguage(language)) {
+                throw new LocaleSyntaxException("Ill-formed language: " + language, 0);
             }
+            newval = LanguageTag.canonicalizeLanguage(language);
         }
         _language = newval;
         return this;
@@ -54,10 +52,10 @@ public final class InternalLocaleBuilder {
     public InternalLocaleBuilder setScript(String script) throws LocaleSyntaxException {
         String newval = "";
         if (script.length() > 0) {
-            newval = _handler.process(FieldType.SCRIPT, script);
-            if (newval == null) {
-                throw new LocaleSyntaxException("Ill-formed script: " + script);
+            if (!LanguageTag.isScript(script)) {
+                throw new LocaleSyntaxException("Ill-formed script: " + script, 0);
             }
+            newval = LanguageTag.canonicalizeScript(script);
         }
         _script = newval;
         return this;
@@ -66,10 +64,10 @@ public final class InternalLocaleBuilder {
     public InternalLocaleBuilder setRegion(String region) throws LocaleSyntaxException {
         String newval = "";
         if (region.length() > 0) {
-            newval = _handler.process(FieldType.REGION, region);
-            if (newval == null) {
+            if (!LanguageTag.isRegion(region)) {
                 throw new LocaleSyntaxException("Ill-formed region: " + region);
             }
+            newval = LanguageTag.canonicalizeRegion(region);
         }
         _region = newval;
         return this;
@@ -78,96 +76,160 @@ public final class InternalLocaleBuilder {
     public InternalLocaleBuilder setVariant(String variant) throws LocaleSyntaxException {
         String newval = "";
         if (variant.length() > 0) {
-            newval = _handler.process(FieldType.VARIANT, variant);
-            if (newval == null) {
-                throw new LocaleSyntaxException("Ill-formed variant: " + variant);
+            if (_lenientVariant) {
+                newval = variant;
+            } else {
+                newval = processVariant(variant);
             }
         }
         _variant = newval;
         return this;
     }
 
-    public InternalLocaleBuilder setLDMLExtensionValue(String key, String type) throws LocaleSyntaxException {
+    public InternalLocaleBuilder setUnicodeLocaleExtension(String key, String type) throws LocaleSyntaxException {
         if (key.length() == 0) {
-            throw new LocaleSyntaxException("Empty LDML extension key");
+            throw new LocaleSyntaxException("Empty Unicode locale extension key");
         }
-        String kwdkey = _handler.process(FieldType.LDMLKEY, key);
-        if (kwdkey == null) {
-            throw new LocaleSyntaxException("Ill-formed LDML extension key: " + key);
+        if (!UnicodeLocaleExtension.isKey(key)) {
+            throw new LocaleSyntaxException("Ill-formed Unicode locale extension key: " + key, 0);
+        }
+
+        key = UnicodeLocaleExtension.canonicalizeKey(key);
+
+        UnicodeLocaleExtension ulext = null;
+        if (_extMap != null) {
+            ulext = (UnicodeLocaleExtension)_extMap.get(Character.valueOf(UnicodeLocaleExtension.SINGLETON));
         }
 
         if (type.length() == 0) {
-            if (_kwdMap != null) {
-                _kwdMap.remove(kwdkey);
+            if (ulext != null) {
+                ulext.remove(key);
             }
         } else {
-            String kwdtype = _handler.process(FieldType.LDMLTYPE, type);
-            if (kwdtype == null) {
-                throw new LocaleSyntaxException("Ill-formed LDML extension value: " + type);
+            StringBuilder buf = new StringBuilder();
+            StringTokenIterator sti = new StringTokenIterator(type, LanguageTag.SEP);
+            for (String subtag = sti.first(); !sti.isDone(); subtag = sti.next()) {
+                if (!UnicodeLocaleExtension.isTypeSubtag(subtag)) {
+                    throw new LocaleSyntaxException("Ill-formed Unicode locale extension type: " + type, sti.currentStart());
+                }
+                if (buf.length() > 0) {
+                    buf.append(LanguageTag.SEP);
+                }
+                buf.append(UnicodeLocaleExtension.canonicalizeTypeSubtag(subtag));
             }
-            if (_kwdMap == null) {
-                _kwdMap = new HashMap<String, String>(DEFAULTMAPCAPACITY);
+            if (ulext == null) {
+                SortedMap<String, String> ktmap = new TreeMap<String, String>();
+                ktmap.put(key, buf.toString());
+                ulext = new UnicodeLocaleExtension(ktmap);
+                if (_extMap == null) {
+                    _extMap = new TreeMap<Character, Extension>();
+                }
+                _extMap.put(Character.valueOf(UnicodeLocaleExtension.SINGLETON), ulext);
+            } else {
+                ulext.put(key, buf.toString());
             }
-            _kwdMap.put(kwdkey, kwdtype);
         }
 
         return this;
     }
 
     public InternalLocaleBuilder setExtension(char singleton, String value) throws LocaleSyntaxException {
-        if (!LocaleExtensions.isValidExtensionKey(singleton)) {
+        String strSingleton = String.valueOf(singleton);
+        if (!LanguageTag.isExtensionSingleton(strSingleton) && !LanguageTag.isPrivateuseSingleton(strSingleton)) {
             throw new LocaleSyntaxException("Ill-formed extension key: " + singleton);
         }
 
-        // singleton char to lower case
-        singleton = AsciiUtil.toLower(singleton);
+        strSingleton = LanguageTag.canonicalizeExtensionSingleton(strSingleton);
+        Character key = Character.valueOf(strSingleton.charAt(0));
 
-        if (singleton == LDMLSINGLETON) {
-            // 'u' extension reserved for locale keywords
-            if (_kwdMap != null) {
-                // blow out the keywords currently set
-                _kwdMap.clear();
-            }
-            // parse locale keyword extension subtags
-            String[] kwdtags = (value.replaceAll(LOCALESEP, LANGTAGSEP)).split(LANGTAGSEP);
-            if ((kwdtags.length % 2) != 0) {
-                // number of keyword subtags must be even number
-                throw new LocaleSyntaxException("Ill-formed LDML extension key/value pairs: " + value);
-            }
-            int idx = 0;
-            while (idx < kwdtags.length) {
-                String kwdkey = _handler.process(FieldType.LDMLKEY, kwdtags[idx++]);
-                String kwdtype = _handler.process(FieldType.LDMLTYPE, kwdtags[idx++]);
-                if (kwdkey == null || kwdkey.length() == 0
-                        || kwdtype == null || kwdtype.length() == 0) {
-                    throw new LocaleSyntaxException("Ill-formed LDML extension key/value pairs: " + value);
-                }
-                if (_kwdMap == null) {
-                    _kwdMap = new HashMap<String, String>(kwdtags.length / 2);
-                }
-                String prevVal = _kwdMap.put(kwdkey, kwdtype);
-                if (prevVal != null) {
-                    throw new LocaleSyntaxException("Ill-formed LDML extension containing duplicated keys: " + value);
-                }
+        if (value.length() == 0) {
+            if (_extMap != null) {
+                _extMap.remove(key);
             }
         } else {
-            // other extensions including privateuse
-            if (value.length() == 0) {
-                if (_extMap != null) {
-                    _extMap.remove(Character.valueOf(singleton));
-                }
-            } else {
-                FieldType ftype = (singleton == PRIVATEUSEKEY) ? FieldType.PRIVATEUSE : FieldType.EXTENSION;
-                String extval = _handler.process(ftype, value);
-                if (extval == null) {
-                    throw new LocaleSyntaxException("Ill-formed LDML extension value: " + value);
-                }
-                if (_extMap == null) {
-                    _extMap = new HashMap<Character, String>(DEFAULTMAPCAPACITY);
-                }
-                _extMap.put(Character.valueOf(singleton), extval);
+            StringTokenIterator sti = new StringTokenIterator(value, LanguageTag.SEP);
+            ParseStatus sts = new ParseStatus();
+
+            Extension ext = Extension.create(key.charValue(), sti, sts);
+            if (sts.isError()) {
+                throw new LocaleSyntaxException(sts.errorMsg, sts.errorIndex);
+            }
+            if (sts.parseLength != value.length() || ext == null) {
+                throw new LocaleSyntaxException("Ill-formed extension value: " + value, sti.currentStart());
+            }
+            if (_extMap == null) {
+                _extMap = new TreeMap<Character, Extension>();
+            }
+            _extMap.put(key, ext);
+        }
+        return this;
+    }
+
+    public InternalLocaleBuilder setLocale(BaseLocale base, LocaleExtensions extensions) throws LocaleSyntaxException {
+        String language = base.getLanguage();
+        String script = base.getScript();
+        String region = base.getRegion();
+        String variant = base.getVariant();
+
+        // Validate base locale fields before updating internal state.
+        // LocaleExtensions always store validated/canonicalized values,
+        // so no checks are necessary.
+        if (language.length() > 0) {
+            if (!LanguageTag.isLanguage(language)) {
+                throw new LocaleSyntaxException("Ill-formed language: " + language);
+            }
+            language = LanguageTag.canonicalizeLanguage(language);
+        }
+        if (script.length() > 0) {
+            if (!LanguageTag.isScript(script)) {
+                throw new LocaleSyntaxException("Ill-formed script: " + script);
+            }
+            script = LanguageTag.canonicalizeScript(script);
+        }
+        if (region.length() > 0) {
+            if (!LanguageTag.isRegion(region)) {
+                throw new LocaleSyntaxException("Ill-formed region: " + region);
+            }
+            region = LanguageTag.canonicalizeRegion(region);
+        }
+        if (_lenientVariant) {
+            // In lenient variant mode, parse special private use value
+            // reserved for Java Locale.
+            String privuse = extensions.getExtensionValue(Character.valueOf(LanguageTag.PRIVATEUSE.charAt(0)));
+            if (privuse != null) {
+                variant = LanguageTag.getJavaCompatibleVariant(variant, privuse);
+            }
+        } else {
+            if (variant.length() > 0) {
+                variant = processVariant(variant);
             }
         }
+
+        // update builder's internal fields
+        _language = language;
+        _script = script;
+        _region = region;
+        _variant = variant;
+
+        // empty extensions
+        if (_extMap == null) {
+            _extMap = new TreeMap<Character, Extension>();
+        } else {
+            _extMap.clear();
+        }
+
+        Set<Character> extKeys = extensions.getKeys();
+        for (Character key : extKeys) {
+            Extension ext = extensions.getExtension(key);
+            if (_lenientVariant && (ext instanceof PrivateuseExtension)) {
+                String modPrivuse = LanguageTag.getJavaCompatiblePrivateuse(ext.getValue());
+                if (!modPrivuse.equals(ext.getValue())) {
+                    ext = new PrivateuseExtension(modPrivuse);
+                }
+            }
+            _extMap.put(key, ext);
+        }
+
         return this;
     }
 
@@ -184,9 +246,6 @@ public final class InternalLocaleBuilder {
         if (_extMap != null) {
             _extMap.clear();
         }
-        if (_kwdMap != null) {
-            _kwdMap.clear();
-        }
         return this;
     }
 
@@ -195,155 +254,28 @@ public final class InternalLocaleBuilder {
     }
 
     public LocaleExtensions getLocaleExtensions() {
-        TreeMap<Character, String> extMap = null;
-        TreeMap<String, String> kwdMap = null;
-
-        // process keywords
-        if (_kwdMap != null && _kwdMap.size() > 0) {
-            Set<Map.Entry<String, String>> kwds = _kwdMap.entrySet();
-            for (Map.Entry<String, String> kwd : kwds) {
-                String key = kwd.getKey();
-                String type = kwd.getValue();
-                if (kwdMap == null) {
-                    kwdMap = new TreeMap<String, String>();
-                }
-                kwdMap.put(key.intern(), type.intern());
-            }
+        if (_extMap != null && _extMap.size() > 0) {
+            return LocaleExtensions.getInstance(_extMap);
         }
-
-        // process extensions and privateuse
-        if (_extMap != null) {
-            Set<Map.Entry<Character, String>> exts = _extMap.entrySet();
-            for (Map.Entry<Character, String> ext : exts) {
-                Character key = ext.getKey();
-                String value = ext.getValue();
-                if (extMap == null) {
-                    extMap = new TreeMap<Character, String>();
-                }
-                extMap.put(key, value.intern());
-            }
-        }
-
-        // set canonical locale keyword extension string to the extension map
-        if (kwdMap != null) {
-            StringBuilder buf = new StringBuilder();
-            LocaleExtensions.keywordsToString(kwdMap, buf);
-            if (extMap == null) {
-                extMap = new TreeMap<Character, String>();
-            }
-            extMap.put(Character.valueOf(LDMLSINGLETON), buf.toString().intern());
-        }
-
-        return LocaleExtensions.getInstance(extMap, kwdMap);
+        return LocaleExtensions.EMPTY_EXTENSIONS;
     }
 
-    protected enum FieldType {
-        LANGUAGE,
-        SCRIPT,
-        REGION,
-        VARIANT,
-        LDMLKEY,
-        LDMLTYPE,
-        EXTENSION,
-        PRIVATEUSE
-    }
+    private String processVariant(String variant) throws LocaleSyntaxException {
+        StringTokenIterator sti = new StringTokenIterator(variant, LOCALESEP);
+        ParseStatus sts = new ParseStatus();
 
-    public static class FieldHandler {
-        public static FieldHandler DEFAULT = new FieldHandler();
-
-        protected FieldHandler() {
+        List<String> variants = LanguageTag.DEFAULT_PARSER.parseVariants(sti, sts);
+        if (sts.parseLength != variant.length()) {
+            throw new LocaleSyntaxException("Ill-formed variant: " + variant, sti.currentStart());
         }
 
-        public String process(FieldType type, String value) {
-            value = map(type, value);
-            if (value.length() > 0 && !validate(type, value)) {
-                return null;
+        StringBuilder buf = new StringBuilder();
+        for (String var : variants) {
+            if (buf.length() != 0) {
+                buf.append(LOCALESEP);
             }
-            return value;
+            buf.append(var);
         }
-
-        protected String map(FieldType type, String value) {
-            switch (type) {
-            case LANGUAGE:
-                value = AsciiUtil.toLowerString(value);
-                break;
-            case SCRIPT:
-                if (value.length() > 0) {
-                    StringBuilder buf = new StringBuilder();
-                    buf.append(AsciiUtil.toUpper(value.charAt(0)));
-                    for (int i = 1; i < value.length(); i++) {
-                        buf.append(AsciiUtil.toLower(value.charAt(i)));
-                    }
-                    value = buf.toString();
-                }
-                break;
-            case REGION:
-                value = AsciiUtil.toUpperString(value);
-                break;
-            case VARIANT:
-                // Java variant is case sensitive - so no case mapping here
-                value = value.replaceAll(LANGTAGSEP, LOCALESEP);
-                break;
-            case LDMLKEY:
-            case LDMLTYPE:
-            case EXTENSION:
-            case PRIVATEUSE:
-                value = AsciiUtil.toLowerString(value).replaceAll(LOCALESEP, LANGTAGSEP);
-                break;
-            }
-            return value;
-        }
-
-        protected boolean validate(FieldType type, String value) {
-            boolean isValid = false;
-            String[] subtags;
-
-            switch (type) {
-            case LANGUAGE:
-                isValid = LanguageTag.isLanguageSubtag(value);
-                break;
-            case SCRIPT:
-                isValid = LanguageTag.isScriptSubtag(value);
-                break;
-            case REGION:
-                isValid = LanguageTag.isRegionSubtag(value);
-                break;
-            case VARIANT:
-                // variant field could have multiple subtags
-                subtags = value.split(LOCALESEP);
-                for (String subtag : subtags) {
-                    isValid = LanguageTag.isVariantSubtag(subtag);
-                    if (!isValid) {
-                        break;
-                    }
-                }
-                break;
-            case LDMLKEY:
-                isValid = LocaleExtensions.isValidLDMLKey(value);
-                break;
-            case LDMLTYPE:
-                isValid = LocaleExtensions.isValidLDMLType(value);
-                break;
-            case EXTENSION:
-                subtags = value.split(LANGTAGSEP);
-                for (String subtag : subtags) {
-                    isValid = LanguageTag.isExtensionSubtag(subtag);
-                    if (!isValid) {
-                        break;
-                    }
-                }
-                break;
-            case PRIVATEUSE:
-                subtags = value.split(LANGTAGSEP);
-                for (String subtag : subtags) {
-                    isValid = LanguageTag.isPrivateuseValueSubtag(subtag);
-                    if (!isValid) {
-                        break;
-                    }
-                }
-                break;
-            }
-            return isValid;
-        }
+        return buf.toString();
     }
 }

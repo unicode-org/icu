@@ -86,6 +86,9 @@ public final class AsciiUtil {
     }
 
     public static String toTitleString(String s) {
+        if (s.length() == 0) {
+            return s;
+        }
         int idx = 0;
         char c = s.charAt(idx);
         if (!(c >= 'a' && c <= 'z')) {
