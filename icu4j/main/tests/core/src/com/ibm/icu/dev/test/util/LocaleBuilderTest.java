@@ -23,6 +23,7 @@ public class LocaleBuilderTest extends TestFmwk {
     }
 
     public void TestLocaleBuilder() {
+        // First String "st": strict (default) / "lv": lenient variant
         // "L": +1 = language
         // "S": +1 = script
         // "R": +1 = region
@@ -33,31 +34,42 @@ public class LocaleBuilderTest extends TestFmwk {
         // "X": indicates an exception must be thrown
         // "T": +1 = expected language tag
         String[][] TESTCASE = {
-            {"L", "en", "R", "us", "T", "en-US", "en_US"},
-            {"L", "en", "R", "FR", "L", "fr", "T", "fr-FR", "fr_FR"},
-            {"L", "123", "X"},
-            {"R", "us", "T", "und-US", "_US"},
-            {"R", "usa", "X"},
-            {"R", "123", "L", "en", "T", "en-123", "en_123"},
-            {"S", "LATN", "L", "DE", "T", "de-Latn", "de_Latn"},
-            {"S", "latin", "X"},
-            {"L", "th", "R", "th", "K", "nu", "thai", "T", "th-TH-u-nu-thai", "th_TH@numbers=thai"},
-            {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
-            {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
-            {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-u-ca-japanese", "ja_JP@calendar=japanese"},
-            {"K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
-            {"E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
-            {"E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
-            {"L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc", "en_US@timezone=america/new_york"},
-            {"L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk", "true", "T", "de-u-co-phonebk-kk-true-ks-level1", "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
-//          {"L", "en", "V", "foooo_barrr", "T", "en-foooo-barrr", "en__FOOOO_BARRR"},
+            {"st", "L", "en", "R", "us", "T", "en-US", "en_US"},
+            {"st", "L", "en", "R", "FR", "L", "fr", "T", "fr-FR", "fr_FR"},
+            {"st", "L", "123", "X"},
+            {"st", "R", "us", "T", "und-US", "_US"},
+            {"st", "R", "usa", "X"},
+            {"st", "R", "123", "L", "en", "T", "en-123", "en_123"},
+            {"st", "S", "LATN", "L", "DE", "T", "de-Latn", "de_Latn"},
+            {"st", "S", "latin", "X"},
+            {"st", "L", "th", "R", "th", "K", "nu", "thai", "T", "th-TH-u-nu-thai", "th_TH@numbers=thai"},
+            {"st", "E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
+            {"st", "L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
+            {"st", "L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-u-ca-japanese", "ja_JP@calendar=japanese"},
+            {"st", "K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
+            {"st", "E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
+            {"st", "E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
+            {"st", "L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc", "en_US@timezone=america/new_york"},
+            {"st", "L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk", "true", "T", "de-u-co-phonebk-kk-true-ks-level1", "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
+            {"lv", "L", "en", "R", "us", "V", "Windows_XP", "T", "en-US-windows-x-variant-xp", "en_US_WINDOWS_XP"},
         };
 
-        Builder bld = new Builder();
+        Builder bld_st = new Builder();
+        Builder bld_lv = new Builder(true);
+
         for (int tidx = 0; tidx < TESTCASE.length; tidx++) {
-            bld.clear();
             int i = 0;
             String[] expected = null;
+
+            Builder bld = bld_st;
+            String bldType = TESTCASE[tidx][i++];
+
+            if (bldType.equals("lv")) {
+                bld = bld_lv;
+            }
+
+            bld.clear();
+
             while (true) {
                 String method = TESTCASE[tidx][i++];
                 try {
@@ -72,7 +84,7 @@ public class LocaleBuilderTest extends TestFmwk {
                     } else if (method.equals("K")) {
                         String key = TESTCASE[tidx][i++];
                         String type = TESTCASE[tidx][i++];
-                        bld.setLDMLExtensionValue(key, type);
+                        bld.setUnicodeLocaleKeyword(key, type);
                     } else if (method.equals("E")) {
                         String key = TESTCASE[tidx][i++];
                         String value = TESTCASE[tidx][i++];
@@ -99,7 +111,7 @@ public class LocaleBuilderTest extends TestFmwk {
                 }
             }
             if (expected != null) {
-                ULocale loc = bld.create();
+                ULocale loc = bld.build();
                 if (!expected[1].equals(loc.toString())) {
                     errln("FAIL: Wrong locale ID - " + loc + 
                             " for test case: " + Arrays.toString(TESTCASE[tidx]));
@@ -122,13 +134,13 @@ public class LocaleBuilderTest extends TestFmwk {
         Builder bld = new Builder();
         try {
             bld.setLocale(loc);
-            ULocale loc1 = bld.create();
+            ULocale loc1 = bld.build();
             if (!loc.equals(loc1)) {
                 errln("FAIL: Locale loc1 " + loc1 + " was returned by the builder.  Expected " + loc);
             }
-            bld.setLanguage("").setLDMLExtensionValue("ca", "buddhist")
-                .setLanguage("TH").setLDMLExtensionValue("ca", "gregory");
-            ULocale loc2 = bld.create();
+            bld.setLanguage("").setUnicodeLocaleKeyword("ca", "buddhist")
+                .setLanguage("TH").setUnicodeLocaleKeyword("ca", "gregory");
+            ULocale loc2 = bld.build();
             if (!loc.equals(loc2)) {
                 errln("FAIL: Locale loc2 " + loc2 + " was returned by the builder.  Expected " + loc);
             }            

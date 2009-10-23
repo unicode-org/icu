@@ -22,15 +22,14 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
+import com.ibm.icu.impl.locale.Extension;
 import com.ibm.icu.impl.locale.InternalLocaleBuilder;
 import com.ibm.icu.impl.locale.LanguageTag;
 import com.ibm.icu.impl.locale.LocaleExtensions;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
-import com.ibm.icu.impl.locale.LanguageTag.Extension;
-
+import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
 import com.ibm.icu.text.MessageFormat;
 
 /**
@@ -247,12 +246,19 @@ public final class ULocale implements Serializable {
     /**
      * Cache the locale.
      */
-    private transient Locale locale;
+    private transient volatile Locale locale;
 
     /**
      * The raw localeID that we were passed in.
      */
     private String localeID;
+
+    /**
+     * Cache the locale data container fields.
+     * In future, we want to use them as the primary locale identifier storage.
+     */
+    private transient volatile BaseLocale baseLocale;
+    private transient volatile LocaleExtensions extensions;
 
     /**
      * Tables used in normalizing portions of the id.
@@ -861,7 +867,7 @@ public final class ULocale implements Serializable {
     }
 
     private static String lscvToID(String lang, String script, String country, String variant) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
      
         if (lang != null && lang.length() > 0) {
             buf.append(lang);
@@ -2723,8 +2729,8 @@ public final class ULocale implements Serializable {
 
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
 
-        StringBuffer buf0 = new StringBuffer();
-        StringBuffer buf1 = new StringBuffer();
+        StringBuilder buf0 = new StringBuilder();
+        StringBuilder buf1 = new StringBuilder();
 
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
@@ -2844,8 +2850,8 @@ public final class ULocale implements Serializable {
 
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
 
-        StringBuffer buf0 = new StringBuffer();
-        StringBuffer buf1 = new StringBuffer();
+        StringBuilder buf0 = new StringBuilder();
+        StringBuilder buf1 = new StringBuilder();
 
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
@@ -3126,8 +3132,8 @@ public final class ULocale implements Serializable {
 
         // parse out the acceptLanguage into an array
         TreeMap<ULocaleAcceptLanguageQ, ULocale> map = new TreeMap<ULocaleAcceptLanguageQ, ULocale>();
-        StringBuffer languageRangeBuf = new StringBuffer();
-        StringBuffer qvalBuf = new StringBuffer();
+        StringBuilder languageRangeBuf = new StringBuilder();
+        StringBuilder qvalBuf = new StringBuilder();
         int state = 0;
         acceptLanguage += ","; // append comma to simplify the parsing code
         int n;
@@ -3562,7 +3568,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Append a tag to a StringBuffer, adding the separator if necessary.The tag must
+     * Append a tag to a StringBuilder, adding the separator if necessary.The tag must
      * not be a zero-length string.
      *
      * @param tag The tag to add.
@@ -3571,7 +3577,7 @@ public final class ULocale implements Serializable {
     private static void
     appendTag(
         String tag,
-        StringBuffer buffer) {
+        StringBuilder buffer) {
     
         if (buffer.length() != 0) {
             buffer.append(UNDERSCORE);
@@ -3607,7 +3613,7 @@ public final class ULocale implements Serializable {
         IDParser parser = null;
         boolean regionAppended = false;
 
-        StringBuffer tag = new StringBuffer();
+        StringBuilder tag = new StringBuilder();
     
         if (!isEmptyString(lang)) {
             appendTag(
@@ -3971,8 +3977,9 @@ public final class ULocale implements Serializable {
     // --------------------------------
 
     /**
-     * The key for private use locale extension.
-     * @see #getExtension(char)
+     * The key for the private use locale extension ('x').
+     * 
+     * @see #getExtension(char) 
      * @see Builder#setExtension(char, String)
      * 
      * @draft ICU 4.2
@@ -3981,302 +3988,340 @@ public final class ULocale implements Serializable {
     static public final char PRIVATE_USE_EXTENSION = 'x';
 
     /**
-     * The key for LDML extension.
+     * The key for Unicode locale extension ('u').
+     * 
      * @see #getExtension(char)
      * @see Builder#setExtension(char, String)
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    static public final char LDML_EXTENSION = 'u';
+    static public final char UNICODE_LOCALE_EXTENSION = 'u';
 
     /**
-     * Returns the extension associated with the specified extension key, or
-     * null if there is no extension associated with the key.  The key must
-     * be one of <code>[0-9A-Za-z]</code>.
-     * <BR><STRONG>Note:</STRONG>Extension key 'x' and 'X' is reserved for BCP47
-     * private use.  To get the private use value, use <code>PRIVATE_USE_KEY</code>.
-     * <p>
+     * Returns the extension (or private use) value associated with
+     * the specified singleton key, or null if there is no extension
+     * associated with the key.  To be valid, the key must be one
+     * of <code>[0-9A-Za-z]</code>.  Keys are case-insensitive, so
+     * for example 'z' and 'Z' represent the same extension.
+     * 
      * @param key the extension key
-     * @return the extension, or null if this locale 
-     * defines no extension for the specified key.
-     * @throws IllegalArgumentException if the key is not valid.
+     * @return the extension, or null if this locale defines no 
+     * extension for the specified key
+     * @throws IllegalArgumentException if the key is not valid
      * @see #PRIVATE_USE_EXTENSION
+     * @see #UNICODE_LOCALE_EXTENSION
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public String getExtension(char key) {
-        if (!LocaleExtensions.isValidExtensionKey(key)) {
-            throw new IllegalArgumentException("Invalid extension key: " + key);
+        String strKey = String.valueOf(key);
+        if (!LocaleExtensions.isValidKey(strKey)) {
+            throw new IllegalArgumentException("Invalid extension key: " + strKey);
         }
         return extensions().getExtensionValue(key);
     }
 
     /**
-     * Returns the set of extension keys associated with this locale, or null
-     * if it has no extensions.  The returned set is immutable.
-     * @return the set of extension keys, or null if this locale has
-     * no extensions.
+     * Returns the set of extension keys associated with this locale, or the
+     * empty set if it has no extensions.  The returned set is unmodifiable.
+     *
+     * @return the set of extension keys, or the empty set if this locale has
+     * no extensions
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public Set<Character> getExtensionKeys() {
-        return extensions().getExtensionKeys();
+        return extensions().getKeys();
     }
 
     /**
-     * Returns the LDML keyword value ('type') associated with
-     * the specified LDML key for this locale.  LDML keywords are specified
+     * Returns the Unicode locale type associated with the specified Unicode
+     * locale key for this locale.  Unicode locale keywrods are specified
      * by the 'u' extension and consist of key/type pairs.  The key must be
      * two alphanumeric characters in length, or an IllegalArgumentException
      * is thrown.
-     * @param key the LDML key
-     * @return the value ('type') associated with the key, or null if the 
+     * @param key the Unicode locale key
+     * @return the Unicode locale type associated with the key, or null if the 
      * locale does not define a value for the key.
      * @throws IllegalArgumentException if the key is not valid.
      * 
-     * @draft ICU 4.2
+     * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    public String getLDMLExtensionValue(String key) {
-        if (!LocaleExtensions.isValidLDMLKey(key)) {
-            throw new IllegalArgumentException("Invalid LDML key: " + key);
+    public String getUnicodeLocaleType(String key) {
+        if (!LocaleExtensions.isValidKey(key)) {
+            throw new IllegalArgumentException("Invalid Unicode locale key: " + key);
         }
-        return extensions().getLDMLKeywordType(key);
+        return extensions().getUnicodeLocaleType(key);
     }
 
     /**
-     * Returns the set of keys for LDML keywords defined by this locale, or
-     * null if this locale has no locale extension.  The returned set is
+     * Returns the set of keys for Unicode locale keywords defined by this locale,
+     * or null if this locale has no locale extension.  The returned set is
      * immutable.
-     * @return The set of the LDML keys, or null
      * 
-     * @draft ICU 4.2
+     * @return the set of the Unicode locale keys, or null
+     * 
+     * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    public Set<String> getLDMLExtensionKeys() {
-        return extensions().getLDMLKeywordKeys();
+    public Set<String> getUnicodeLocaleKeys() {
+        return extensions().getUnicodeLocaleKeys();
     }
 
     /**
-     * Returns a well-formed language tag representing this locale.
+     * Returns a well-formed IETF BCP 47 language tag representing
+     * this locale.
+     * 
      * <p>
-     * <b>Note</b>: If the language, country, or variant fields do
-     * not satisfy BCP47 language tag syntax requirements, they are
-     * omitted from the result.  For example, using the constructor it
-     * is possible to create a Locale instance with digits in the
-     * language field, or only two characters in the variant field.
-     * Since these are not well-formed BCP47 language tag syntax, they
-     * cannot be expressed in BCP47.  Since such 'legacy' locales lose
-     * information when converting to BCP47, it is
-     * recommended that clients switch to conforming locales.
+     * If this <code>ULocale</code> object has language, country, or variant
+     * that does not satisfy the IETF BCP 47 language tag syntax requirements,
+     * this method handles these fields as described below:
      * <p>
-     * <b>Note</b>: Underscores in the variant tag are normalized to
-     * hyphen, and all fields, keys, and values are normalized to
-     * lower case.
-     * @return a BCP47 language tag representing the locale.
+     * <b>Language:</b> If language is empty or ill-formed (for example "a" or "e2"),
+     * it will be emitted as "und" (Undetermined).
+     * <p>
+     * <b>Country:</b> If country is ill-formed (for example "12" or "USA"), it
+     * will be omitted.
+     * <p>
+     * <b>Variant:</b> Variant is treated as consisting of subtags separated by
+     * underscore and converted to lower case letters.  'Well-formed' subtags
+     * consist of either an ASCII letter followed by 4-7 ASCII characters, or an
+     * ASCII digit followed by 3-7 ASCII characters.  If well-formed, the variant
+     * is emitted as each subtag in order (separated by hyphen).  Otherwise:
+     * <ul>
+     * <li>if all sub-segments consist of 1 to 8 ASCII alphanumerics (for example
+     * "WIN", "WINDOWS_XP", "SOLARIS_10"), the first ill-formed variant subtag
+     * and all following sub-segments will be emitted as private use subtags prefixed
+     * by the special private use subtag "variant" followed by each subtag in order
+     * (separated by hyphen).  For example, locale "en_US_WIN" is converted to language
+     * tag "en-US-x-variant-win", locale "de_WINDOWS_XP" is converted to language tag
+     * "de-windows-x-variant-xp".  If this locale has a private use extension value,
+     * the special private use subtags prefixed by "variant" are appended after the
+     * locale's private use value.
+     * <li>if any subtag does not consist of 1 to 8 ASCII alphanumerics, the
+     * variant will be truncated and the problematic subtag and all following
+     * sub-segments will be omitted.  If the remainder is non-empty, it will be
+     * emitted as a private use subtag as above (even if the remainder turns out
+     * to be well-formed).  For example, "Solaris_isjustthecoolestthing" is emitted
+     * as "x-jvariant-Solaris", not as "solaris".</li>
+     * </ul>
+     * 
+     * <p><b>Note:</b> Although the language tag created by this method
+     * satisfies the syntax requirements defined by the IETF BCP 47
+     * specification, it is not always a valid BCP 47 language tag.
+     * For example,
+     * <pre>
+     *   new ULocale("xx_YY").toLanguageTag();
+     * </pre>
+     * will return "xx-YY", but the language subtag "xx" and the region subtag "YY"
+     * are invalid because they are not registered in the
+     * <a href="http://www.iana.org/assignments/language-subtag-registry">
+     * IANA Language Subtag Registry</a>.
+     * 
+     * @return a BCP47 language tag representing the locale
+     * @see #forLanguageTag(String)
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public String toLanguageTag() {
-        return LanguageTag.toLanguageTag(base(), extensions());
+        LanguageTag tag = LanguageTag.parseLocale(base(), extensions());
+        return tag.getID();
     }
 
     /**
-     * Returns a locale for the specified language tag string.  If the
-     * specified language tag contains any ill-formed subtags, the first
-     * such subtag and all following subtags are ignored.
-     * <p>
-     * This implements the 'Language-Tag' production of BCP47, and so supports
-     * grandfathered (regular and irregular) as well as private use language
-     * tags.  Private use tags are represented as 'und-x-whatever', and 
-     * grandfathered tags are converted to their canonical replacements where
-     * they exist.  Note that a few grandfathered tags have no modern replacement,
-     * these will be converted using the fallback described in the first paragraph,
-     * so some information might be lost.
-     * <p>
-     * For a list of grandfathered tags, see 
-     * <a href="http://www.ietf.org/internet-drafts/draft-ietf-ltru-4646bis-21.txt">
-     * RFC4646</a> 
-     * (<span style="background-color: #00ccff; font-weight: bold">Currently Draft, 
-     * remove or reference final version before release.</span>)
-     * @param langtag the language tag
+     * Returns a locale for the specified IETF BCP 47 language tag string.
+     * If the specified language tag contains any ill-formed subtags,
+     * the first such subtag and all following subtags are ignored.
+     * 
+     * <p>This implements the 'Language-Tag' production of BCP47, and
+     * so supports grandfathered (regular and irregular) as well as
+     * private use language tags.  Stand alone private use tags are
+     * represented as empty language and extension 'x-whatever',
+     * and grandfathered tags are converted to their canonical replacements
+     * where they exist.  Note that a few grandfathered tags have no
+     * modern replacement; these will be converted using the fallback
+     * described above so some information might be lost.
+     * 
+     * <p>For a list of grandfathered tags, see the
+     * <a href="http://www.iana.org/assignments/language-subtag-registry">
+     * IANA Language Subtag Registry</a>.
+     * 
+     * <p><b>Notes:</b> This method converts private use subtags prefixed
+     * by "variant" to variant field in the result locale.  For example,
+     * the code below will return "POSIX".
+     * <pre>
+     *   ULocale.forLanguageTag("en-US-x-variant-posix).getVariant();
+     * </pre>
+     *
+     * @param languageTag the language tag
      * @return the locale that best represents the language tag
+     * @exception NullPointerException if <code>languageTag</code> is <code>null</code>
+     * @see #toLanguageTag()
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static ULocale forLanguageTag(String langtag) {
-//        ULocale locale = ULocale.ROOT;
-        ULocale locale = new ULocale("");
-        LanguageTag tag = null;
-        while (true) {
-            try {
-                tag = LanguageTag.parse(langtag);
-
-                Builder bldr = new Builder();
-
-                String extlang = tag.getExtlang(0);
-                String language = (extlang == null) ? tag.getLanguage() : extlang;
-                // do nothing with language code "und"
-                if (!language.equals("und")) {
-                    bldr.setLanguage(language);
-                }
-
-                bldr.setScript(tag.getScript())
-                    .setRegion(tag.getRegion()).setVariant(tag.getVariant());
-
-                // setExtension may throw an exception if
-                // it contains malformed LDML keys.
-                Set<Extension> exts = tag.getExtensions();
-                if (exts != null) {
-                    for (Extension e : exts) {
-                        bldr.setExtension(e.getSingleton(), e.getValue());
-                    }
-                }
-                bldr.setExtension(PRIVATE_USE_EXTENSION, tag.getPrivateUse());
-                locale = bldr.create();
-                break;
-            } catch (LocaleSyntaxException e) {
-                // this exception was thrown by LanguageTag#parse
-                // - fall through
-            } catch (IllformedLocaleException e) {
-                // this expection was thrown by setExtension with
-                // malformed LDML keys - fall through
-            }
-            // remove the last subtag and try it again
-            int idx = langtag.lastIndexOf('-');
-            if (idx == -1) {
-                // no more subtags
-                break;
-            }
-            langtag = langtag.substring(0, idx);
-        }
-
-        return locale;
+    public static ULocale forLanguageTag(String languageTag) {
+        LanguageTag tag = LanguageTag.parse(languageTag, true);
+        return getInstance(tag.getBaseLocale(), tag.getLocaleExtensions());
     }
 
 
     /**
-     * Builder is used to build instances of Locale from values 
-     * configured by the setter.  
+     * <code>Builder</code> is used to build instances of <code>ULocale</code>
+     * from values configured by the setter.  Unlike the <code>ULocale</code>
+     * constructors, the <code>Builder</code> checks if a value configured by a
+     * setter satisfies the syntactical requirements defined by the <code>ULocale</code>
+     * class.  A <code>ULocale</code> object created by a <code>Builder</code> is
+     * well-formed and can be transformed to a well-formed IETF BCP 47 language tag
+     * without losing information.
+     * 
      * <p>
-     * Builder supports the 'langtag' production of RFC 4646.
-     * Language tags consist of the ASCII digits, upper and lower case
-     * letters, and hyphen (which appears only as a field separator).
-     * As a convenience, underscores are accepted and normalized to
-     * hyphen.  Values with any other character are ill-formed.  Since
-     * language tags are case-insensitive, they are normalized
-     * to lower case, case distinctions are <b>not</b>
-     * preserved by the builder.
+     * <b>Note:</b> The <code>ULocale</code> class does not provide
+     * any syntactical restrictions on variant, while BCP 47
+     * requires each variant subtag to be 5 to 8 alphanumeric letters or a single
+     * numeric letter followed by 3 alphanumeric letters.  By default,
+     * the <code>setVariant</code> method throws <code>IllformedLocaleException</code>
+     * for a variant that does not satisfy the syntax above.  If it is
+     * necessary to support such a variant, you could use the constructor <code>
+     * Builder(boolean isLenientVariant)</code> passing <code>true</code> to
+     * skip the syntax validation for variant.  However, you should keep in
+     * mind that a <code>Locale</code> object created this way might lose
+     * the variant information when transformed to a BCP 47 language tag.
+     * 
      * <p>
-     * Note that since this implements 'langtag' and not 'Language-Tag',
-     * grandfathered language tags are not supported by the builder.
-     * Clients should use {@link #forLanguageTag} instead.
-     * <p> 
-     * Builders can be reused; <code>clear()</code> resets all fields
-     * to their default values.
-     * @see Builder#create
-     * @see Builder#clear
+     * The following example shows how to create a <code>ULocale</code> object
+     * with the <code>Builder</code>.
+     * <blockquote>
+     * <pre>
+     *     ULocale aLocale = new Builder().setLanguage("sr").setScript("Latn").setRegion("RS").build();
+     * </pre>
+     * </blockquote>
+     * 
+     * <p>Builders can be reused; <code>clear()</code> resets all
+     * fields to their default values.
+     * 
+     * @see ULocale#toLanguageTag()
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public static final class Builder {
 
-        private InternalLocaleBuilder _locbld = new InternalLocaleBuilder();
+        private final InternalLocaleBuilder _locbld;
 
         /**
-         * Constructs an empty Builder.
-         * The default values of all fields, extensions, and private
-         * use information are empty, the language is undefined.
+         * Constructs an empty Builder. The default value of all
+         * fields, extensions, and private use information is the
+         * empty string.
          * 
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder() {
+            this(false);
         }
 
         /**
-         * Resets the builder to match the provided locale.  The previous state
-         * of the builder is discarded.  Fields that do not
-         * conform to BCP47 syntax are ill-formed.
-         * @param loc the locale
+         * Constructs an empty Builder with an option whether to allow
+         * <code>setVariant</code> to accept a value that does not
+         * conform to the IETF BCP 47 variant subtag's syntax requirements.
+         * 
+         * @param isLenientVariant When true, this <code>Builder</code>
+         * will accept an ill-formed variant.
+         * @see #setVariant(String)
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder(boolean isLenientVariant) {
+            _locbld = new InternalLocaleBuilder(isLenientVariant);
+        }
+
+        /**
+         * Returns true if this <code>Builder</code> accepts a value that does
+         * not conform to the IETF BCP 47 variant subtag's syntax requirements
+         * in <code>setVariant</code>
+         * 
+         * @return true if this <code>Build</code> accepts an ill-formed variant.
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public boolean isLenientVariant() {
+            return _locbld.isLenientVariant();
+        }
+
+
+        /**
+         * Resets the <code>Builder</code> to match the provided <code>locale</code>.
+         * The previous state of the builder is discarded.  Fields that do
+         * not conform to the <code>ULocale</code> class specification, for example,
+         * a single letter language, are ill-formed.
+         *
+         * @param locale the locale
          * @return this builder
-         * @throws IllformedLocaleException if <code>loc</code> has any ill-formed
-         * fields.
+         * @throws IllformedLocaleException if <code>locale</code> has
+         * any ill-formed fields.
          * 
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
-        public Builder setLocale(ULocale loc) {
-            clear();
-            setLanguage(loc.getLanguage())
-                .setScript(loc.getScript())
-                .setRegion(loc.getCountry())
-                .setVariant(loc.getVariant());
-
-            Set<Character> extKeys = loc.getExtensionKeys();
-            if (extKeys != null) {
-                for (Character k : extKeys) {
-                    char key = k.charValue();
-                    String value = loc.getExtension(key);
-                    if (value != null && value.length() > 0) {
-                        setExtension(key, value);
-                    }
-                }
+        public Builder setLocale(ULocale locale) {
+            try {
+                _locbld.setLocale(locale.base(), locale.extensions());
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
             }
             return this;
         }
 
         /**
-         * Resets the builder to match the provided language tag.  The previous state
-         * of the builder is discarded.
-         * @param langtag the language tag
+         * Resets the builder to match the provided IETF BCP 47 language tag.
+         * The previous state of the builder is discarded.
+         *
+         * @param languageTag the language tag
          * @return this builder
-         * @throws IllformedLocaleException if <code>langtag</code> is ill-formed.
-         * @see #forLanguageTag(String)
+         * @throws IllformedLocaleException if <code>languageTag</code> is ill-formed.
+         * @throws NullPointerException if <code>languageTag</code> is null.
+         * @see ULocale#forLanguageTag(String)
          * 
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
-        public Builder setLanguageTag(String langtag) {
-            clear();
+        public Builder setLanguageTag(String languageTag) {
             LanguageTag tag = null;
             try {
-                tag = LanguageTag.parse(langtag);
+                tag = LanguageTag.parseStrict(languageTag, _locbld.isLenientVariant());
             } catch (LocaleSyntaxException e) {
                 throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
             }
 
-            // base locale fields
-            String extlang = tag.getExtlang(0);
-            String language = extlang == null ? tag.getLanguage() : extlang;
-            setLanguage(language.equals("und") ? "": language).setScript(tag.getScript())
-                .setRegion(tag.getRegion()).setVariant(tag.getVariant());
-
-            // extensions
-            Set<Extension> exts = tag.getExtensions();
-            if (exts != null) {
-                for (Extension e : exts) {
-                    setExtension(e.getSingleton(), e.getValue());
-                    //TODO: setExtension may throw an IllformedLocaleException.
-                    //      In this csae, error index must be recalculated.
-                }
+            try {
+                _locbld.setLocale(tag.getBaseLocale(),tag.getLocaleExtensions());
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
             }
-            // private use
-            setExtension(PRIVATE_USE_EXTENSION, tag.getPrivateUse());
+
             return this;
         }
 
         /**
-         * Sets the language.  If language is the empty string,
-         * the language is defaulted.  Language should be a two or 
-         * three-letter language code as defined in ISO639.
-         * Well-formed values are any string of two to eight ASCII letters.
+         * Sets the language.  If <code>language</code> is the empty string,
+         * the language in this <code>Builder</code> will be removed.
+         * Typical language value is a two or three-letter language
+         * code as defined in ISO639.
+         * Well-formed values are any string of two to eight alpha
+         * letters.  This method accepts upper case alpha letters
+         * [A-Z], but the language value in the <code>ULocale</code>
+         * created by the <code>Builder</code> is always normalized
+         * to lower case letters.
+         *
          * @param language the language
          * @return this builder
          * @throws IllformedLocaleException if <code>language</code> is ill-formed
@@ -4294,10 +4339,15 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Sets the script.  If script is 
-         * the empty string, the script is defaulted.  Scripts should
-         * be a four-letter script code as defined in ISO 15924.
-         * Well-formed values are any string of four ASCII letters.
+         * Sets the script.  If <code>script</code> is the empty string,
+         * the script in this <code>Builder</code> is removed.
+         * Typical script value is a four-letter script code as defined by ISO 15924.
+         * Well-formed values are any string of four alpha letters.
+         * This method accepts both upper and lower case alpha letters [a-zA-Z],
+         * but the script value in the <code>ULocale</code> created by the
+         * <code>Builder</code> is always normalized to title case
+         * (the first letter is upper case and the rest of letters are lower case).
+         *
          * @param script the script
          * @return this builder
          * @throws IllformedLocaleException if <code>script</code> is ill-formed
@@ -4315,11 +4365,14 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Sets the region.  If region is
-         * the empty string, the region is defaulted.  Regions should
-         * be a two-letter ISO 3166 code or a three-digit M. 49 code.
-         * Well-formed values are any two-letter or three-digit
-         * string.
+         * Sets the region.  If region is the empty string, the region
+         * in this <code>Builder</code> is removed.
+         * Typical region value is a two-letter ISO 3166 code or a three-digit UN M.49
+         * area code.  Well-formed values are any two-letter or three-digit string.
+         * This method accepts lower case letters [a-z], but the country value in
+         * the <code>ULocale</code> created by the <code>Builder</code> is always
+         * normalized to upper case.
+         *
          * @param region the region
          * @return this builder
          * @throws IllformedLocaleException if <code>region</code> is ill-formed
@@ -4337,14 +4390,16 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Sets the variant.  If variant is
-         * or the empty string, the variant is defaulted.  Variants
-         * should be registered variants (see 
-         * <a href="http://www.iana.org/assignments/language-subtag-registry">
-         * IANA Language Subtag Registry</a>) for the prefix.  Well-formed
-         * variants are any series of fields of either four characters
-         * starting with a digit, or five to eight alphanumeric
-         * characters, separated by hyphen or underscore.
+         * Sets the variant.  If variant is the empty string, the
+         * variant in this <code>Builder</code> is removed.
+         * <p>
+         * <b>Note:</b> By default, this method checks if <code>variant</code>
+         * satisfies the IETF BCP 47 variant subtag's syntax requirements.
+         * However, the <code>ULocale</code> class itself does not impose any syntactical
+         * restriction on variant.  When a <code>Builder</code> is created by the
+         * constructor <code>Builder(boolean isLenientVariant)</code>
+         * with <code>true</code>, this method skips the syntax check.
+         *
          * @param variant the variant
          * @return this builder
          * @throws IllformedLocaleException if <code>variant</code> is ill-formed
@@ -4362,26 +4417,35 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Sets the extension for the given key.  If the value is
-         * the empty string, the extension is removed.  Legal
-         * keys are the <code>[0-9A-WY-Za-wy-z]</code>.  Well-formed
-         * values are any series of fields of two to eight
-         * alphanumeric characters, separated by hyphen or underscore.
-         * <p>
-         * <b>note</b>:The extension 'u' is used for LDML Keywords.
-         * Setting the 'u' extension replaces any existing LDML
-         * keywords with those defined in the extension.  To be
-         * well-formed, a value for the 'u' extension must meet the
-         * additional constraint that the number of fields be even
-         * (fields represent key value pairs, where the value is
-         * mandatory), and that the keys and values be legal locale
-         * extension keys and values.
+         * Sets the extension for the given key. If the value is the
+         * empty string, the extension is removed. Legal keys are
+         * characters in the ranges <code>[0-9A-Za-z]</code>.  Keys
+         * are case-insensitive, so for example 'z' and 'Z' represent
+         * the same extension. In general, well-formed values are any
+         * series of fields of two to eight alphanumeric characters,
+         * separated by hyphen or underscore.
+         *
+         * <p><b>Note:</b> The key {@link ULocale#UNICODE_LOCALE_EXTENSION
+         * UNICODE_LOCALE_EXTENSION} ('u') is used for the Unicode locale extension.
+         * Setting a value for this key replaces any existing Unicode locale key/type
+         * pairs with those defined in the extension.
+         * To be well-formed, a value for this extension must meet the additional
+         * constraints that each locale key is two alphanumeric characters,
+         * followed by at least one locale type subtag represented by
+         * three to eight alphanumeric characters, and that the keys and types
+         * be legal Unicode locale keys and values.
+         *
+         * <p><b>Note:</b> The key {@link ULocale#PRIVATE_USE_EXTENSION
+         * PRIVATE_USE_EXTENSION} ('x') is used for the private use code. To be
+         * well-formed, the value for this key needs only to have fields of one to
+         * eight alphanumeric characters, not two to eight as in the general case.
+         *
          * @param key the extension key
          * @param value the extension value
          * @return this builder
          * @throws IllformedLocaleException if <code>key</code> is illegal 
          * or <code>value</code> is ill-formed
-         * @see #setLDMLExtensionValue
+         * @see #setUnicodeLocaleKeyword(String, String)
          * 
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
@@ -4396,26 +4460,27 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Sets the LDML keyword value ('type') for the given key.  If the
-         * value is the empty string, the LDML keyword is removed.
-         * Well-formed keys are strings of two alphanumeric characters. Well-formed
-         * values are strings of three to eight alphanumeric characters.
+         * Sets the Unicode locale keyword type for the given key.  If the
+         * value is the empty string, the Unicode keyword is removed.
+         * Well-formed keys are strings of two alphanumeric characters.
+         * Well-formed types are one or more subtags where each of them is
+         * three to eight alphanumeric characters.
          * <p>
-         * <b>Note</b>:Setting the 'u' extension replaces all LDML
+         * <b>Note</b>:Setting the 'u' extension replaces all Unicode locale
          * keywords with those defined in the extension.
-         * @param key the LDML extension key
-         * @param value the LDML extension value
+         * @param key the Unicode locale key
+         * @param type the Unicode locale type
          * @return this builder
-         * @throws IllformedLocaleException if <code>key</code> or <code>value</code>
+         * @throws IllformedLocaleException if <code>key</code> or <code>type</code>
          * is ill-formed
          * @see #setExtension(char, String)
          * 
-         * @draft ICU 4.2
+         * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public Builder setLDMLExtensionValue(String key, String value) {
+        public Builder setUnicodeLocaleKeyword(String key, String type) {
             try {
-                _locbld.setLDMLExtensionValue(key, value);
+                _locbld.setUnicodeLocaleExtension(key, type);
             } catch (LocaleSyntaxException e) {
                 throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
             }
@@ -4423,7 +4488,8 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Resets the builder to its initial, default state.
+         * Resets the builder to its initial, empty state.
+         *
          * @return this builder
          * 
          * @draft ICU 4.2
@@ -4435,8 +4501,9 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Resets the extensions to their initial, default state.
+         * Resets the extensions to their initial, empty state.
          * Language, script, region and variant are unchanged.
+         *
          * @return this builder
          * @see #setExtension(char, String)
          * 
@@ -4449,143 +4516,110 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Returns an instance of locale created from the fields set
+         * Returns an instance of Locale created from the fields set
          * on this builder.
-         * @return a new locale
+         *
+         * @return a new Locale
          * 
-         * @draft ICU 4.2
+         * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public ULocale create() {
+        public ULocale build() {
             return getInstance(_locbld.getBaseLocale(), _locbld.getLocaleExtensions());
         }
     }
 
-    private static ULocale getInstance(BaseLocale base, LocaleExtensions ext) {
-        StringBuffer id = new StringBuffer(base.getID());
+    private static ULocale getInstance(BaseLocale base, LocaleExtensions exts) {
+        String id = lscvToID(base.getLanguage(), base.getScript(), base.getRegion(), base.getVariant());
 
-        TreeMap<String, String> kwds = null;
-        Set<Character> extKeys = ext.getExtensionKeys();
-        if (extKeys != null) {
-            // legacy locale ID assume LDML keywords and
+        Set<Character> extKeys = exts.getKeys();
+        if (!extKeys.isEmpty()) {
+            // legacy locale ID assume Unicode locale keywords and
             // other extensions are at the same level.
             // e.g. @a=ext-for-aa;calendar=japanese;m=ext-for-mm;x=priv-use
-            kwds = new TreeMap<String, String>();
-            boolean hasLDMLKeywords = false;
-            for (Character key : extKeys) {
-                if (key.charValue() == 'u') {
-                    // LDML keywords
-                    hasLDMLKeywords = true;
-                    continue;
-                }
-                String value = ext.getExtensionValue(key.charValue());
-                kwds.put(String.valueOf(key), value);
-            }
 
-            if (hasLDMLKeywords) {
-                Set<String> ldmlKeys = ext.getLDMLKeywordKeys();
-                if (ldmlKeys != null) {
-                    for (String bcpKey : ldmlKeys) {
-                        String bcpValue = ext.getLDMLKeywordType(bcpKey);
-                        // transform to legacy key/type
+            TreeMap<String, String> kwds = new TreeMap<String, String>();
+            for (Character key : extKeys) {
+                Extension ext = exts.getExtension(key);
+                if (ext instanceof UnicodeLocaleExtension) {
+                    UnicodeLocaleExtension uext = (UnicodeLocaleExtension)ext;
+                    Set<String> ukeys = uext.getKeys();
+                    for (String bcpKey : ukeys) {
+                        String bcpType = uext.getType(bcpKey);
+                        // convert to legacy key/type
                         String lkey = bcp47ToLDMLKey(bcpKey);
-                        String ltype = bcp47ToLDMLType(lkey, bcpValue);
+                        String ltype = bcp47ToLDMLType(lkey, bcpType);
                         kwds.put(lkey, ltype);
                     }
+                } else {
+                    kwds.put(String.valueOf(key), ext.getValue());
                 }
             }
 
-            if (kwds.size() > 0) {
-                id.append("@");
+            if (!kwds.isEmpty()) {
+                StringBuilder buf = new StringBuilder(id);
+                buf.append("@");
                 Set<Map.Entry<String, String>> kset = kwds.entrySet();
                 boolean insertSep = false;
                 for (Map.Entry<String, String> kwd : kset) {
                     if (insertSep) {
-                        id.append(";");
+                        buf.append(";");
                     } else {
                         insertSep = true;
                     }
-                    id.append(kwd.getKey());
-                    id.append("=");
-                    id.append(kwd.getValue());
+                    buf.append(kwd.getKey());
+                    buf.append("=");
+                    buf.append(kwd.getValue());
                 }
+
+                id = buf.toString();
             }
         }
-
-        return new ULocale(id.toString());
+        return new ULocale(id);
     }
 
     private BaseLocale base() {
-        String language = getLanguage();
-        if (equals(ULocale.ROOT)) {
-            language = "";
+        if (baseLocale == null) {
+            String language = getLanguage();
+            if (equals(ULocale.ROOT)) {
+                language = "";
+            }
+            baseLocale = BaseLocale.getInstance(language, getScript(), getCountry(), getVariant());
         }
-        return BaseLocale.getInstance(language, getScript(), getCountry(), getVariant());
+        return baseLocale;
     }
 
     private LocaleExtensions extensions() {
-        Iterator<String> kwitr = getKeywords();
-        if (kwitr == null) {
-            return LocaleExtensions.EMPTY_EXTENSIONS;
-        }
-
-        TreeMap<Character, String> extMap = null;
-        TreeMap<String, String> ldmlKwMap = null;
-
-        while (kwitr.hasNext()) {
-            String key = kwitr.next();
-            String value = getKeywordValue(key);
-            if (key.length() == 1) {
-                // non LDML extension or private use
-                // We want to keep only valid subtags
-                boolean isPrivUse = (key.charAt(0) == PRIVATE_USE_EXTENSION);
-                if (isPrivUse || LanguageTag.isExtensionSingleton(key)) {
-                    boolean isValid = true;
-                    String[] subtags = Utility.split(value, '-');
-                    for (int i = 0; i < subtags.length; i++) {
-                        if (isPrivUse) {
-                            if (!LanguageTag.isPrivateuseValueSubtag(subtags[i])) {
-                                isValid = false;
-                                break;
-                            }
-                        } else {
-                            if (!LanguageTag.isExtensionSubtag(subtags[i])) {
-                                isValid = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (isValid) {
-                        if (extMap == null) {
-                            extMap = new TreeMap<Character, String>();
-                        }
-                        extMap.put(new Character(key.charAt(0)), value.intern());
-                    }
-                }
+        if (extensions == null) {
+            Iterator<String> kwitr = getKeywords();
+            if (kwitr == null) {
+                extensions = LocaleExtensions.EMPTY_EXTENSIONS;
             } else {
-                // LDML keyword
-                String bcpKey = ldmlKeyToBCP47(key);
-                String bcpVal = ldmlTypeToBCP47(key, value);
-                if (bcpKey != null && bcpVal != null) {
-                    if (ldmlKwMap == null) {
-                        ldmlKwMap = new TreeMap<String, String>();
+                InternalLocaleBuilder intbld = new InternalLocaleBuilder();
+                while (kwitr.hasNext()) {
+                    String key = kwitr.next();
+                    if (key.length() >= 2) {
+                        String bcpKey = ldmlKeyToBCP47(key);
+                        String bcpType = ldmlTypeToBCP47(key, getKeywordValue(key));
+                        if (bcpKey != null && bcpType != null) {
+                            try {
+                                intbld.setUnicodeLocaleExtension(bcpKey, bcpType);
+                            } catch (LocaleSyntaxException e) {
+                                // ignore and fall through
+                            }
+                        }
+                    } else if (key.length() == 1 && (key.charAt(0) != UNICODE_LOCALE_EXTENSION)) {
+                        try  {
+                            intbld.setExtension(key.charAt(0), getKeywordValue(key).replace("_", LanguageTag.SEP));
+                        } catch (LocaleSyntaxException e) {
+                            // ignore and fall through
+                        }
                     }
-                    ldmlKwMap.put(bcpKey.intern(), bcpVal.intern());
                 }
+                extensions = intbld.getLocaleExtensions();
             }
         }
-
-        if (ldmlKwMap != null) {
-            // create LDML extension string
-            StringBuilder buf = new StringBuilder();
-            LocaleExtensions.keywordsToString(ldmlKwMap, buf);
-            if (extMap == null) {
-                extMap = new TreeMap<Character, String>();
-            }
-            extMap.put(new Character('u'), buf.toString().intern());
-        }
-
-        return LocaleExtensions.getInstance(extMap, ldmlKwMap);
+        return extensions;
     }
 
     //

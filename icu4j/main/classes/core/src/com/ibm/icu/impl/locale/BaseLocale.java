@@ -8,62 +8,58 @@
 package com.ibm.icu.impl.locale;
 
 
-
 public final class BaseLocale {
+
+    private static final boolean JDKIMPL = false;
 
     private String _language = "";
     private String _script = "";
     private String _region = "";
     private String _variant = "";
 
-    private transient String _id = "";
-    private transient String _java6string = "";
-    private transient BaseLocale _parent;
+    private static final LocaleObjectCache<Key, BaseLocale> BASELOCALE_CACHE
+        = new LocaleObjectCache<Key, BaseLocale>();
 
-    private static final char SEPCHAR = '_';
-
-    private static final LocaleObjectCache<BaseLocaleKey,BaseLocale> BASELOCALECACHE
-        = new LocaleObjectCache<BaseLocaleKey,BaseLocale>();
-
-    public static final BaseLocale ROOT = new BaseLocale("", "", "", "");
+    public static final BaseLocale ROOT = BaseLocale.getInstance("", "", "", "");
 
     private BaseLocale(String language, String script, String region, String variant) {
         if (language != null) {
-            _language = language;
+            _language = AsciiUtil.toLowerString(language).intern();
         }
         if (script != null) {
-            _script = script;
+            _script = AsciiUtil.toTitleString(script).intern();
         }
         if (region != null) {
-            _region = region;
+            _region = AsciiUtil.toUpperString(region).intern();
         }
         if (variant != null) {
-            _variant = variant;
+            if (JDKIMPL) {
+                // preserve upper/lower cases
+                _variant = variant.intern();
+            } else {
+                _variant = AsciiUtil.toUpperString(variant).intern();
+            }
         }
     }
 
     public static BaseLocale getInstance(String language, String script, String region, String variant) {
-        BaseLocaleKey key = new BaseLocaleKey(language, script, region, variant);
-        BaseLocale baseLocale = BASELOCALECACHE.get(key);
+        if (JDKIMPL) {
+            // JDK uses deprecated ISO639.1 language codes for he, yi and id
+            if (AsciiUtil.caseIgnoreMatch(language, "he")) {
+                language = "iw";
+            } else if (AsciiUtil.caseIgnoreMatch(language, "yi")) {
+                language = "ji";
+            } else if (AsciiUtil.caseIgnoreMatch(language, "id")) {
+                language = "in";
+            }
+        }
+        Key key = new Key(language, script, region, variant);
+        BaseLocale baseLocale = BASELOCALE_CACHE.get(key);
         if (baseLocale == null) {
-            // Create a canonical BaseLocale instance
-            baseLocale = new BaseLocale(language, script, region, variant).canonicalize();
-            BASELOCALECACHE.put(baseLocale.createKey(), baseLocale);
+            baseLocale = new BaseLocale(language, script, region, variant);
+            BASELOCALE_CACHE.put(baseLocale.createKey(), baseLocale);
         }
         return baseLocale;
-    }
-
-    public boolean equals(Object obj) {
-        return (this == obj) ||
-                ((obj instanceof BaseLocale) && _id == (((BaseLocale)obj)._id));
-    }
-
-    public int hashCode() {
-        return _id.hashCode();
-    }
-
-    public String getJava6String() {
-        return _java6string;
     }
 
     public String getLanguage() {
@@ -82,116 +78,41 @@ public final class BaseLocale {
         return _variant;
     }
 
-    public BaseLocale getParent() {
-        return _parent;
-    }
-
-    public String getID() {
-        return _id;
-    }
-
     public String toString() {
-        return _id;
+        StringBuilder buf = new StringBuilder();
+        if (_language.length() > 0) {
+            buf.append("language=");
+            buf.append(_language);
+        }
+        if (_script.length() > 0) {
+            if (buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append("script=");
+            buf.append(_script);
+        }
+        if (_region.length() > 0) {
+            if (buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append("region=");
+            buf.append(_region);
+        }
+        if (_variant.length() > 0) {
+            if (buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append("variant=");
+            buf.append(_variant);
+        }
+        return buf.toString();
     }
 
-    private BaseLocale canonicalize() {
-
-        StringBuilder id = new StringBuilder();
-
-        int languageLen = _language.length();
-        int scriptLen = _script.length();
-        int regionLen = _region.length();
-        int variantLen = _variant.length();
-
-        if (languageLen > 0) {
-            // language to lower case
-            _language = AsciiUtil.toLowerString(_language).intern();
-
-            id.append(_language);
-        }
-
-        if (scriptLen > 0) {
-            // script - the first letter to upper case, the rest to lower case
-            _script = AsciiUtil.toTitleString(_script).intern();
-
-            id.append(SEPCHAR);
-            id.append(_script);
-        }
-
-        if (regionLen > 0) {
-            // region to upper case
-            _region = AsciiUtil.toUpperString(_region).intern();
-
-            id.append(SEPCHAR);
-            id.append(_region);
-        }
-
-        if (variantLen > 0) {
-            // variant in JDK conventionally use upper case letters,
-            // but it was actually case sensitive.  We normalize
-            // variant to upper case here, which might be breaking
-            // change.  But at least it works well for all variants
-            // defined by JDK.
-            _variant = AsciiUtil.toUpperString(_variant).intern();
-
-            if (regionLen == 0) {
-                id.append(SEPCHAR);
-            }
-            id.append(SEPCHAR);
-            id.append(_variant);
-        }
-
-        _id = id.toString().intern();
-
-        // Compose legacy JDK ID string if required
-        if (languageLen == 0 && regionLen == 0 && variantLen > 0) {
-            _java6string = "";
-        } else if (scriptLen > 0 || (regionLen == 0 && variantLen > 0)) {
-            StringBuilder buf = new StringBuilder(_language);
-            if (regionLen > 0) {
-                buf.append(SEPCHAR);
-                buf.append(_region);
-            } else if (variantLen > 0) {
-                buf.append(SEPCHAR);
-            }
-            if (variantLen > 0) {
-                buf.append(SEPCHAR);
-                buf.append(_variant);
-            }
-            _java6string = buf.toString().intern();
-        } else {
-            _java6string = _id;
-        }
-
-        // Resolve parent
-        if (variantLen > 0) {
-            // variant field in Java Locale may contain multiple
-            // subtags
-            int lastSep = _variant.lastIndexOf(SEPCHAR);
-            if (lastSep == -1) {
-                _parent = getInstance(_language, _script, _region, "");
-            } else {
-                _parent = getInstance(_language, _script, _region, _variant.substring(0, lastSep));
-            }
-        } else if (regionLen > 0) {
-            _parent = getInstance(_language, _script, "", "");
-        } else if (scriptLen > 0) {
-            _parent = getInstance(_language, "", "", "");
-        } else if (languageLen > 0) {
-            _parent = ROOT;
-        } else {
-            // This is the root
-            // We should never get here, because ROOT is pre-populated.
-            _parent = null;
-        }
-        return this;
+    private Key createKey() {
+        return new Key(_language, _script, _region, _variant);
     }
 
-    private BaseLocaleKey createKey() {
-        return new BaseLocaleKey(_language, _script, _region, _variant);
-    }
-
-    public static class BaseLocaleKey implements Comparable<BaseLocaleKey> {
+    private static class Key implements Comparable<Key> {
         private String _lang = "";
         private String _scrt = "";
         private String _regn = "";
@@ -199,7 +120,7 @@ public final class BaseLocale {
 
         private int _hash; // Default to 0
 
-        public BaseLocaleKey(String language, String script, String region, String variant) {
+        public Key(String language, String script, String region, String variant) {
             if (language != null) {
                 _lang = language;
             }
@@ -215,22 +136,34 @@ public final class BaseLocale {
         }
 
         public boolean equals(Object obj) {
+            if (JDKIMPL) {
+                return (this == obj) ||
+                        (obj instanceof Key)
+                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._lang, this._lang)
+                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._scrt, this._scrt)
+                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._regn, this._regn)
+                        && ((Key)obj)._vart.equals(_vart); // variant is case sensitive in JDK!
+            }
             return (this == obj) ||
-                    (obj instanceof BaseLocaleKey)
-                    && AsciiUtil.caseIgnoreMatch(((BaseLocaleKey)obj)._lang, this._lang)
-                    && AsciiUtil.caseIgnoreMatch(((BaseLocaleKey)obj)._scrt, this._scrt)
-                    && AsciiUtil.caseIgnoreMatch(((BaseLocaleKey)obj)._regn, this._regn)
-                    && ((BaseLocaleKey)obj)._vart.equals(_vart); // variant is case sensitive in JDK!
+                    (obj instanceof Key)
+                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._lang, this._lang)
+                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._scrt, this._scrt)
+                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._regn, this._regn)
+                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._vart, this._vart);
         }
 
-        public int compareTo(BaseLocaleKey other) {
+        public int compareTo(Key other) {
             int res = AsciiUtil.caseIgnoreCompare(this._lang, other._lang);
             if (res == 0) {
                 res = AsciiUtil.caseIgnoreCompare(this._scrt, other._scrt);
                 if (res == 0) {
                     res = AsciiUtil.caseIgnoreCompare(this._regn, other._regn);
                     if (res == 0) {
-                        res = AsciiUtil.caseIgnoreCompare(this._vart, other._vart);
+                        if (JDKIMPL) {
+                            res = this._vart.compareTo(other._vart);
+                        } else {
+                            res = AsciiUtil.caseIgnoreCompare(this._vart, other._vart);
+                        }
                     }
                 }
             }
@@ -251,7 +184,11 @@ public final class BaseLocale {
                     h = 31*h + AsciiUtil.toLower(_regn.charAt(i));
                 }
                 for (int i = 0; i < _vart.length(); i++) {
-                    h = 31*h + AsciiUtil.toLower(_vart.charAt(i));
+                    if (JDKIMPL) {
+                        h = 31*h + _vart.charAt(i);
+                    } else {
+                        h = 31*h + AsciiUtil.toLower(_vart.charAt(i));
+                    }
                 }
                 _hash = h;
             }
