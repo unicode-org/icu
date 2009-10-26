@@ -5388,7 +5388,7 @@ const char* const locale_to_langtag[][3] = {
     {"iw_IL",       "he-IL",        "he-IL"},
     {"sr_Latn_SR",  "sr-Latn-SR",   "sr-Latn-SR"},
     {"en__POSIX",   "en-posix",     "en-posix"},
-    {"en_POSIX",    "en",           NULL},
+    {"en_POSIX",    "en",           "en"},
     {"und_555",     "und-555",      "und-555"},
     {"123",         "und",          NULL},
     {"%$#&",        "und",          NULL},
