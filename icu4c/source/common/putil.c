@@ -620,6 +620,7 @@ extern U_IMPORT char *U_TZNAME[];
 #else
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
+#define TZFILE_SKIP     "posixrules"
 #endif
 #if U_HAVE_DIRENT_H
 #define SEARCH_TZFILE
@@ -841,6 +842,7 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
 #define SKIP2 ".."
 static char SEARCH_TZFILE_RESULT[MAX_PATH_SIZE] = "";
 static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
+    char curpath[MAX_PATH_SIZE];
     DIR* dirp = opendir(path);
     DIR* subDirp = NULL;
     struct dirent* dirEntry = NULL;
@@ -851,7 +853,6 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     }
 
     /* Save the current path */
-    char curpath[MAX_PATH_SIZE];
     uprv_memset(curpath, 0, MAX_PATH_SIZE);
     uprv_strcpy(curpath, path);
 
@@ -868,7 +869,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 closedir(subDirp);
                 uprv_strcat(newpath, "/");
                 result = searchForTZFile(newpath, tzInfo);
-            } else {
+            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0) {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
                     uprv_strcpy(SEARCH_TZFILE_RESULT, newpath + (sizeof(TZZONEINFO) - 1));
                     result = SEARCH_TZFILE_RESULT;
