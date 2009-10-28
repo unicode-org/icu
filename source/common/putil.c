@@ -620,9 +620,9 @@ extern U_IMPORT char *U_TZNAME[];
 #else
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
-#define TZFILE_SKIP     "posixrules"
 #endif
 #if U_HAVE_DIRENT_H
+#define TZFILE_SKIP     "posixrules" /* tz file to skip when searching. */
 #define SEARCH_TZFILE
 #include <dirent.h>  /* Needed to search through system timezone files */
 #endif
