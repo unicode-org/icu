@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2007-2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -9192,7 +9192,7 @@ supplementalData:table(nofallback){
             "meta:Arabian_QA"{"Asia/Qatar"}
             "meta:Arabian_YE"{"Asia/Aden"}
             "meta:Argentina_001"{"America/Buenos_Aires"}
-            "meta:Argentina_Western_001"{"America/Mendoza"}
+            "meta:Argentina_Western_001"{"America/Argentina/San_Luis"}
             "meta:Armenia_001"{"Asia/Yerevan"}
             "meta:Ashkhabad_001"{"Asia/Ashgabat"}
             "meta:Atlantic_001"{"America/Halifax"}
