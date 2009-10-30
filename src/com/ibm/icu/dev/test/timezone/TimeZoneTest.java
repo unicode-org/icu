@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -107,7 +107,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestShortZoneIDs() throws Exception {
 
         ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, false),
+            new ZoneDescriptor("MIT", -660, true), // updated Oct 2009 yoshito
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
@@ -118,7 +118,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("EST", -300, false),// updated Aug 2003 aliu
             new ZoneDescriptor("PRT", -240, false),
             new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, true), // updated by tzdata 2007k
+            new ZoneDescriptor("AGT", -180, false), // updated Oct 2009 yoshito
             new ZoneDescriptor("BET", -180, true),
             // new ZoneDescriptor("CAT", -60, false), // Wrong:
             // As of bug 4130885, fix CAT (Central Africa)
@@ -137,7 +137,7 @@ public class TimeZoneTest extends TestFmwk
             // PLT behaves differently under different JDKs, so we don't check it
             // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
             new ZoneDescriptor("IST", 330, false),
-            new ZoneDescriptor("BST", 360, false),
+            new ZoneDescriptor("BST", 360, true), // updated Oct 2009 yoshito
             new ZoneDescriptor("VST", 420, false),
             new ZoneDescriptor("CTT", 480, false), // updated Oct 2003 aliu
             new ZoneDescriptor("JST", 540, false),
