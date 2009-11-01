@@ -1729,9 +1729,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html"
-          todir="${eclipse.projects.dir}/features/com.ibm.icu/sourceTemplatePlugin" />
   </target>
 
   <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
@@ -1782,7 +1779,7 @@
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
     <!-- about -->
-    <copy file="${eclipse.dir}/misc/about_icu.html"
+    <copy file="${eclipse.dir}/misc/about_icu_base.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
 
     <!-- FEATURE FILES -->
@@ -1796,9 +1793,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html"
-          todir="${eclipse.projects.dir}/features/com.ibm.icu.base/sourceTemplatePlugin" />
   </target>
 
   <target name="eclipseTests"
@@ -1984,6 +1978,9 @@
     <!-- ucd terms -->
     <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
+    <!-- about -->
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about.html" />
 
     <!-- FEATURE FILES -->
     <!-- project files -->
@@ -1996,9 +1993,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about -->
-    <copy file="${eclipse.dir}/misc/about.html"
-        todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4/sourceTemplatePlugin" />
   </target>
 
   <target name="eclipseZipTestSrc" depends="eclipseMangle" description="build zip of test sources for debugging">
