@@ -218,6 +218,7 @@ public: // package
  public:
     void Test6703(void);
     void Test3785(void);
+    void Test1624(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

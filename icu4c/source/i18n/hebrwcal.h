@@ -80,7 +80,7 @@ U_NAMESPACE_BEGIN
  * <p>
  * @internal
  */
-class HebrewCalendar : public Calendar {
+class U_I18N_API HebrewCalendar : public Calendar {
 public:
   /**
    * Useful constants for HebrewCalendar.
@@ -216,7 +216,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "hebrew".
