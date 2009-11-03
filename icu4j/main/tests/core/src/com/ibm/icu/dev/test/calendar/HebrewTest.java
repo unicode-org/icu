@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -458,5 +458,42 @@ public class HebrewTest extends CalendarTest {
         }catch( MissingResourceException ex){
             warnln("Could not load the locale data. "+ ex.getMessage());
         }
+    }
+    public void Test1624() {
+
+        HebrewCalendar hc = new HebrewCalendar (5742, HebrewCalendar.AV, 22);
+        DateFormat df = hc.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, Locale.getDefault());
+        String dateString = df.format(hc.getTime());
+     
+        for (int year = 5600; year < 5800; year ++) {
+            boolean leapYear = HebrewCalendar.isLeapYear (year);
+            for (int month = HebrewCalendar.TISHRI; month <= HebrewCalendar.ELUL;month++) {
+                // skip the adar 1 month if year is not a leap year
+                if (leapYear == false && month == HebrewCalendar.ADAR_1) {
+                    continue;
+                }
+                int day = 15;
+                hc = new HebrewCalendar (year, month, day);
+
+                dateString = df.format(hc.getTime());
+                int dayHC = hc.get (HebrewCalendar.DATE);
+                int monthHC = hc.get (HebrewCalendar.MONTH);
+                int yearHC = hc.get (HebrewCalendar.YEAR);
+
+                String header = "year:" + year + " isleap:" + leapYear + " " + dateString;
+                if (dayHC != day) {
+                    errln (header + " ==> day:" + dayHC + " incorrect, should be:" + day);
+                    break;
+                }
+                if (monthHC != month) {
+                    errln (header + " ==> month:" + monthHC + " incorrect, should be:" + month);
+                    break;
+                }
+                if (yearHC != year) {
+                    errln (header + " ==> year:" + yearHC + " incorrecte, should be:" + year);
+                    break;
+                }
+            }
+        }       
     }
 }
