@@ -11,6 +11,7 @@
 #include "caltest.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/gregocal.h"
+#include "hebrwcal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
 #include "unicode/dbgutil.h"
@@ -219,6 +220,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("Test3785---"); logln("");
             Test3785();
+          }
+          break;
+        case 24:
+          name = "Test1624";
+          if(exec) {
+            logln("Test1624---"); logln("");
+            Test1624();
           }
           break;
         default: name = ""; break;
@@ -2093,12 +2101,45 @@ void CalendarTest::Test3785()
     udat_format(df, ud0, ubuffer, 1024, NULL, &status); 
     if (U_FAILURE(status)) return; 
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
-
     udat_close(df);
     return;
 }
 
+void CalendarTest::Test1624() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale loc("he_IL@calendar=hebrew");
+    HebrewCalendar hc(loc,status);
+    Calendar* cal = (Calendar *)&hc;
 
+    for (int32_t year = 5600; year < 5800; year++ ) {
+    
+        for (int32_t month = HebrewCalendar::TISHRI; month <= HebrewCalendar::ELUL; month++) {
+            // skip the adar 1 month if year is not a leap year
+            if (HebrewCalendar::isLeapYear(year) == FALSE && month == HebrewCalendar::ADAR_1) {
+                continue;
+            }
+            int32_t day = 15;
+            hc.set(year,month,day);
+            int32_t dayHC = hc.get(UCAL_DATE,status);
+            int32_t monthHC = hc.get(UCAL_MONTH,status);
+            int32_t yearHC = hc.get(UCAL_YEAR,status);
+
+            if (dayHC != day) {
+                errln(" ==> day %d incorrect, should be: %d\n",dayHC,day);
+                break;
+            }
+            if (monthHC != month) {
+                errln(" ==> month %d incorrect, should be: %d\n",monthHC,month);
+                break;
+            }
+            if (yearHC != year) {
+                errln(" ==> day %d incorrect, should be: %d\n",yearHC,year);
+                break;
+            }
+        }
+    }
+    return;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
