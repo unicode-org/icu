@@ -104,6 +104,9 @@ public final class InternalLocaleBuilder {
         if (type.length() == 0) {
             if (ulext != null) {
                 ulext.remove(key);
+                if (ulext.isEmpty()) {
+                    _extMap.remove(Character.valueOf(UnicodeLocaleExtension.SINGLETON));
+                }
             }
         } else {
             StringBuilder buf = new StringBuilder();

@@ -17,6 +17,8 @@ public final class BaseLocale {
     private String _region = "";
     private String _variant = "";
 
+    private transient volatile int _hash = 0;
+
     private static final LocaleObjectCache<Key, BaseLocale> BASELOCALE_CACHE
         = new LocaleObjectCache<Key, BaseLocale>();
 
@@ -57,7 +59,7 @@ public final class BaseLocale {
         BaseLocale baseLocale = BASELOCALE_CACHE.get(key);
         if (baseLocale == null) {
             baseLocale = new BaseLocale(language, script, region, variant);
-            BASELOCALE_CACHE.put(baseLocale.createKey(), baseLocale);
+            baseLocale = BASELOCALE_CACHE.put(baseLocale.createKey(), baseLocale);
         }
         return baseLocale;
     }
@@ -108,6 +110,27 @@ public final class BaseLocale {
         return buf.toString();
     }
 
+    public int hashCode() {
+        int h = _hash;
+        if (h == 0) {
+            // Generating a hash value from language, script, region and variant
+            for (int i = 0; i < _language.length(); i++) {
+                h = 31*h + _language.charAt(i);
+            }
+            for (int i = 0; i < _script.length(); i++) {
+                h = 31*h + _script.charAt(i);
+            }
+            for (int i = 0; i < _region.length(); i++) {
+                h = 31*h + _region.charAt(i);
+            }
+            for (int i = 0; i < _variant.length(); i++) {
+                h = 31*h + _variant.charAt(i);
+            }
+            _hash = h;
+        }
+        return h;
+    }
+
     private Key createKey() {
         return new Key(_language, _script, _region, _variant);
     }
@@ -118,7 +141,7 @@ public final class BaseLocale {
         private String _regn = "";
         private String _vart = "";
 
-        private int _hash; // Default to 0
+        private volatile int _hash; // Default to 0
 
         public Key(String language, String script, String region, String variant) {
             if (language != null) {

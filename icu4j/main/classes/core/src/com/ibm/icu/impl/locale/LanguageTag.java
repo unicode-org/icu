@@ -500,10 +500,24 @@ public class LanguageTag {
             }
             if (!varitr.isDone()) {
                 // ill-formed variant subtags
-                if (JDKIMPL) {
-                    privuseVar = variant.substring(varitr.currentStart()).replace(JAVASEP, SEP);
-                } else {
-                    privuseVar = AsciiUtil.toLowerString(variant.substring(varitr.currentStart())).replace(JAVASEP, SEP);
+                StringBuilder buf = new StringBuilder();
+                while (!varitr.isDone()) {
+                    String prvv = varitr.current();
+                    if (!isPrivateuseSubtag(prvv)) {
+                        // cannot use private use subtag - truncated
+                        break;
+                    }
+                    if (buf.length() > 0) {
+                        buf.append(SEP);
+                    }
+                    if (!JDKIMPL) {
+                        prvv = AsciiUtil.toLowerString(prvv);
+                    }
+                    buf.append(prvv);
+                    varitr.next();
+                }
+                if (buf.length() > 0) {
+                    privuseVar = buf.toString();
                 }
             }
         }

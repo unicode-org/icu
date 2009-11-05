@@ -24,6 +24,14 @@ public class Extension {
         return _value;
     }
 
+    public String getID() {
+        return _key + LanguageTag.SEP + _value;
+    }
+
+    public String toString() {
+        return getID();
+    }
+
     public static Extension create(StringTokenIterator itr, ParseStatus sts) {
         if (sts.isError() || itr.isDone()) {
             return null;
@@ -73,7 +81,6 @@ public class Extension {
 
         return ext;
     }
-
 
     protected void setExtensionValue(StringTokenIterator itr, ParseStatus sts) {
         if (sts.isError() || itr.isDone()) {
