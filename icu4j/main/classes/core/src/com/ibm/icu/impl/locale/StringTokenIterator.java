@@ -60,7 +60,7 @@ public class StringTokenIterator {
     }
 
     public StringTokenIterator setStart(int offset) {
-        if (offset >= _text.length()) {
+        if (offset > _text.length()) {
             throw new IndexOutOfBoundsException();
         }
         _start = offset;

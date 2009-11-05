@@ -17,6 +17,9 @@ import com.ibm.icu.impl.locale.LanguageTag.ParseStatus;
 public class UnicodeLocaleExtension extends Extension {
     public static final char SINGLETON = 'u';
 
+    public static final UnicodeLocaleExtension CA_JAPANESE = new UnicodeLocaleExtension().put("ca", "japanese");
+    public static final UnicodeLocaleExtension NU_THAI = new UnicodeLocaleExtension().put("nu", "thai");
+
     private SortedMap<String, String> _keyTypeMap;
 
     protected UnicodeLocaleExtension() {
@@ -83,6 +86,12 @@ public class UnicodeLocaleExtension extends Extension {
                 if (isKey(s)) {
                     if (itr.hasNext()) {
                         ukey = canonicalizeKey(s);
+                        if (keyTypeMap.containsKey(ukey)) {
+                            // duplicated key
+                            sts.errorIndex = itr.currentStart();
+                            sts.errorMsg = "Duplicate Unicode locale extension key: " + s;
+                            break;
+                        }
                         buf.setLength(0);
                         typeEnd = -1;
                     } else {
@@ -124,7 +133,7 @@ public class UnicodeLocaleExtension extends Extension {
     public String getType(String key) {
         String type = null;
         if (_keyTypeMap != null) {
-            type = _keyTypeMap.get(key);
+            type = _keyTypeMap.get(canonicalizeKey(key));
         }
 
         return (type == null ? "" : type);
@@ -158,11 +167,16 @@ public class UnicodeLocaleExtension extends Extension {
     }
 
     UnicodeLocaleExtension put(String key, String type) {
-        if (_keyTypeMap != null) {
-            _keyTypeMap.put(key, type);
-            updateStringValue();
+        if (_keyTypeMap == null) {
+            _keyTypeMap = new TreeMap<String, String>();
         }
+        _keyTypeMap.put(key, type);
+        updateStringValue();
         return this;
+    }
+
+    boolean isEmpty() {
+        return (_keyTypeMap.size() == 0);
     }
 
     private void updateStringValue() {
