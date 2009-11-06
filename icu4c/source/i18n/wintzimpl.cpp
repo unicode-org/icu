@@ -43,6 +43,7 @@ static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SY
     if (U_SUCCESS(status)) {
         if (std == NULL || dst == NULL) {
             bias = -1 * (initial->getRawOffset()/60000);
+            standardBias = 0;
             daylightBias = 0;
             // Do not use DST.  Set 0 to all stadardDate/daylightDate fields
             standardDate.wYear = standardDate.wMonth  = standardDate.wDayOfWeek = standardDate.wDay = 
@@ -54,6 +55,7 @@ static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SY
             U_ASSERT(dst->getRule()->getDateRuleType() == DateTimeRule::DOW);
 
             bias = -1 * (std->getRawOffset()/60000);
+            standardBias = 0;
             daylightBias = -1 * (dst->getDSTSavings()/60000);
             // Always use DOW type rule
             int32_t hour, min, sec, mil;

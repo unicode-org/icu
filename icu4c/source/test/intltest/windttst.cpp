@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -76,7 +76,6 @@ void Win32DateTimeTest::testLocales(TestLog *log)
     const TimeZone *tz = TimeZone::createDefault();
     TIME_ZONE_INFORMATION tzi;
 
-    uprv_memset(&tzi, 0, sizeof(tzi));
     tz->getID(zoneID);
     if (! uprv_getWindowsTimeZoneInfo(&tzi, zoneID.getBuffer(), zoneID.length())) {
         UBool found = FALSE;
@@ -114,10 +113,10 @@ void Win32DateTimeTest::testLocales(TestLog *log)
         WCHAR longDateFormat[81], longTimeFormat[81], wdBuffer[256], wtBuffer[256];
         int32_t calType = 0;
 
-		// NULL localeID means ICU didn't recognize this locale
-		if (lcidRecords[i].localeID == NULL) {
-			continue;
-		}
+        // NULL localeID means ICU didn't recognize this locale
+        if (lcidRecords[i].localeID == NULL) {
+            continue;
+        }
 
         GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_SLONGDATE,   longDateFormat, 81);
         GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_STIMEFORMAT, longTimeFormat, 81);
