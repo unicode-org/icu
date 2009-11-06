@@ -158,36 +158,45 @@ BasicTimeZone::getSimpleRulesNear(UDate date, InitialTimeZoneRule*& initial,
             // Create DOW rule
             DateTimeRule *dtr = new DateTimeRule(month, weekInMonth, dow, mid, DateTimeRule::WALL_TIME);
             tr.getTo()->getName(name);
-            ar1 = new AnnualTimeZoneRule(name, tr.getTo()->getRawOffset(), tr.getTo()->getDSTSavings(),
+
+            // Note:  SimpleTimeZone does not support raw offset change.
+            // So we always use raw offset of the given time for the rule,
+            // even raw offset is changed.  This will result that the result
+            // zone to return wrong offset after the transition.
+            // When we encounter such case, we do not inspect next next
+            // transition for another rule.
+            ar1 = new AnnualTimeZoneRule(name, initialRaw, tr.getTo()->getDSTSavings(),
                 dtr, year, AnnualTimeZoneRule::MAX_YEAR);
 
-            // Get the next next transition
-            avail = getNextTransition(nextTransitionTime, FALSE, tr);
-            if (avail) {
-                // Check if the next next transition is either DST->STD or STD->DST
-                // and within roughly 1 year from the next transition
-                if (((tr.getFrom()->getDSTSavings() == 0 && tr.getTo()->getDSTSavings() != 0)
-                      || (tr.getFrom()->getDSTSavings() != 0 && tr.getTo()->getDSTSavings() == 0))
-                     && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
+            if (tr.getTo()->getRawOffset() == initialRaw) {
+                // Get the next next transition
+                avail = getNextTransition(nextTransitionTime, FALSE, tr);
+                if (avail) {
+                    // Check if the next next transition is either DST->STD or STD->DST
+                    // and within roughly 1 year from the next transition
+                    if (((tr.getFrom()->getDSTSavings() == 0 && tr.getTo()->getDSTSavings() != 0)
+                          || (tr.getFrom()->getDSTSavings() != 0 && tr.getTo()->getDSTSavings() == 0))
+                         && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
 
-                    // Get local wall time for the next transition time
-                    Grego::timeToFields(tr.getTime() + tr.getFrom()->getRawOffset() + tr.getFrom()->getDSTSavings(),
-                        year, month, dom, dow, doy, mid);
-                    weekInMonth = Grego::dayOfWeekInMonth(year, month, dom);
-                    // Generate another DOW rule
-                    dtr = new DateTimeRule(month, weekInMonth, dow, mid, DateTimeRule::WALL_TIME);
-                    tr.getTo()->getName(name);
-                    ar2 = new AnnualTimeZoneRule(name, tr.getTo()->getRawOffset(), tr.getTo()->getDSTSavings(),
-                        dtr, year - 1, AnnualTimeZoneRule::MAX_YEAR);
+                        // Get local wall time for the next transition time
+                        Grego::timeToFields(tr.getTime() + tr.getFrom()->getRawOffset() + tr.getFrom()->getDSTSavings(),
+                            year, month, dom, dow, doy, mid);
+                        weekInMonth = Grego::dayOfWeekInMonth(year, month, dom);
+                        // Generate another DOW rule
+                        dtr = new DateTimeRule(month, weekInMonth, dow, mid, DateTimeRule::WALL_TIME);
+                        tr.getTo()->getName(name);
+                        ar2 = new AnnualTimeZoneRule(name, tr.getTo()->getRawOffset(), tr.getTo()->getDSTSavings(),
+                            dtr, year - 1, AnnualTimeZoneRule::MAX_YEAR);
 
-                    // Make sure this rule can be applied to the specified date
-                    avail = ar2->getPreviousStart(date, tr.getFrom()->getRawOffset(), tr.getFrom()->getDSTSavings(), TRUE, d);
-                    if (!avail || d > date
-                            || initialRaw != tr.getTo()->getRawOffset()
-                            || initialDst != tr.getTo()->getDSTSavings()) {
-                        // We cannot use this rule as the second transition rule
-                        delete ar2;
-                        ar2 = NULL;
+                        // Make sure this rule can be applied to the specified date
+                        avail = ar2->getPreviousStart(date, tr.getFrom()->getRawOffset(), tr.getFrom()->getDSTSavings(), TRUE, d);
+                        if (!avail || d > date
+                                || initialRaw != tr.getTo()->getRawOffset()
+                                || initialDst != tr.getTo()->getDSTSavings()) {
+                            // We cannot use this rule as the second transition rule
+                            delete ar2;
+                            ar2 = NULL;
+                        }
                     }
                 }
             }
@@ -206,7 +215,10 @@ BasicTimeZone::getSimpleRulesNear(UDate date, InitialTimeZoneRule*& initial,
                         weekInMonth = Grego::dayOfWeekInMonth(year, month, dom);
                         dtr = new DateTimeRule(month, weekInMonth, dow, mid, DateTimeRule::WALL_TIME);
                         tr.getTo()->getName(name);
-                        ar2 = new AnnualTimeZoneRule(name, tr.getTo()->getRawOffset(), tr.getTo()->getDSTSavings(),
+
+                        // second rule raw/dst offsets should match raw/dst offsets
+                        // at the given time
+                        ar2 = new AnnualTimeZoneRule(name, initialRaw, initialDst,
                             dtr, ar1->getStartYear() - 1, AnnualTimeZoneRule::MAX_YEAR);
 
                         // Check if this rule start after the first rule after the specified date
