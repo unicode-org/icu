@@ -214,7 +214,7 @@ public class TestConversion extends ModuleTest {
             }
             
         } catch (Exception e) {
-            if (skipIfBeforeICU(4,3,2)) { // TIME BOMB
+            if (skipIfBeforeICU(4,3,3)) { // TIME BOMB
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
@@ -496,7 +496,7 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(4,3,2)) {
+            if (skipIfBeforeICU(4,3,3)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
@@ -1096,7 +1096,7 @@ public class TestConversion extends ModuleTest {
 
         // test to see if the conversion matches actual results
         if (output.limit() != expected.length()) {
-            if (skipIfBeforeICU(4,3,2)) { // TIME BOMB
+            if (skipIfBeforeICU(4,3,3)) { // TIME BOMB
                 logln("Skipping test:(" + cc.charset + ") due to time bomb");
             } else {
                 errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
@@ -1120,7 +1120,7 @@ public class TestConversion extends ModuleTest {
             logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
             logln("Passed");
         }
-        else if (skipIfBeforeICU(4,3,2)) {
+        else if (skipIfBeforeICU(4,3,3)) {
             // TIME BOMB
         } else {
             errln("[" + cc.caseNr + "]:" + cc.charset);
