@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2007 International Business Machines
+﻿# Copyright (c) 2001-2009 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:
@@ -38,7 +38,7 @@
 #
 #                                   a      Use non-Anchoring Bounds.
 #                                   b      Use Transparent Bounds.
-#                                          The a and t options only make a difference if
+#                                          The a and b options only make a difference if
 #                                          a <r>region</r> has been specified in the string.
 #                                   z|Z    hitEnd was expected(z) or not expected (Z).
 #                                          With neither, hitEnd is not checked.
@@ -49,6 +49,9 @@
 
 # Look-ahead expressions
 #
+"(?!0{5})(\d{5})"              "<0><1>00001</1></0>zzzz"
+"(?!0{5})(\d{5})z"             "<0><1>00001</1>z</0>zzz"
+"(?!0{5})(\d{5})(?!y)"         "<0><1>00001</1></0>zzzz"
 "abc(?=def)"                   "<0>abc</0>def"
 "(.*)(?=c)"                    "<0><1>ab</1></0>cdef"
 
@@ -1010,6 +1013,12 @@
 "a+?"                             "<0>a</0>aaaaaaaaaaaa"
 "a+?"                          M  "<0>aaaaaaaaaaaaa</0>"
 
+#
+#   Bug 7724.  Expression to validate zip codes.
+#
+"(?!0{5})(\d{5})(?!-?0{4})(-?\d{4})?"    "<0><1>94040</1><2>-3344</2></0>"
+"(?!0{5})(\d{5})(?!-?0{4})(-?\d{4})?"    "94040-0000"
+"(?!0{5})(\d{5})(?!-?0{4})(-?\d{4})?"    "00000-3344"
 #
 #  Random debugging, Temporary
 #
