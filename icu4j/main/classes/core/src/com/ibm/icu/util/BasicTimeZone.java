@@ -382,7 +382,6 @@ public abstract class BasicTimeZone extends TimeZone {
             if (((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
                     || (tr.getFrom().getDSTSavings() != 0 && tr.getTo().getDSTSavings() == 0))
                         && date + MILLIS_PER_YEAR > nextTransitionTime) {
-                // Get the next next transition
                 annualRules = new AnnualTimeZoneRule[2];
                 // Get local wall time for the transition time
                 int dtfields[] = Grego.timeToFields(nextTransitionTime
@@ -391,38 +390,51 @@ public abstract class BasicTimeZone extends TimeZone {
                 // Create DOW rule
                 DateTimeRule dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3],
                         dtfields[5], DateTimeRule.WALL_TIME);
+
+                AnnualTimeZoneRule secondRule = null;
+
+                // Note:  SimpleTimeZone does not support raw offset change.
+                // So we always use raw offset of the given time for the rule,
+                // even raw offset is changed.  This will result that the result
+                // zone to return wrong offset after the transition.
+                // When we encounter such case, we do not inspect next next
+                // transition for another rule.
                 annualRules[0] = new AnnualTimeZoneRule(tr.getTo().getName(),
-                        tr.getTo().getRawOffset(), tr.getTo().getDSTSavings(),
+                        initialRaw, tr.getTo().getDSTSavings(),
                         dtr, dtfields[0], AnnualTimeZoneRule.MAX_YEAR);
 
-                tr = getNextTransition(nextTransitionTime, false);
-                AnnualTimeZoneRule secondRule = null;
-                if (tr != null) {
-                    // Check if the next next transition is either DST->STD or STD->DST
-                    // and within roughly 1 year from the next transition
-                    if (((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
-                            || (tr.getFrom().getDSTSavings() != 0 && tr.getTo().getDSTSavings() == 0))
-                                && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
-                        // Generate another DOW rule
-                        dtfields = Grego.timeToFields(tr.getTime()
-                                + tr.getFrom().getRawOffset() + tr.getFrom().getDSTSavings(), dtfields);
-                        weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1], dtfields[2]);
-                        dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3], dtfields[5],
-                                DateTimeRule.WALL_TIME);
-                        secondRule = new AnnualTimeZoneRule(tr.getTo().getName(),
-                                tr.getTo().getRawOffset(), tr.getTo().getDSTSavings(),
-                                dtr, dtfields[0] - 1, AnnualTimeZoneRule.MAX_YEAR);
-                        // Make sure this rule can be applied to the specified date
-                        Date d = secondRule.getPreviousStart(date, tr.getFrom().getRawOffset(),
-                                tr.getFrom().getDSTSavings(), true);
-                        if (d != null && d.getTime() <= date
-                                && initialRaw == tr.getTo().getRawOffset()
-                                && initialDst == tr.getTo().getDSTSavings()) {
-                            // We can use this rule as the second transition rule
-                            annualRules[1] = secondRule;
+                if (tr.getTo().getRawOffset() == initialRaw) {
+
+                    // Get the next next transition
+                    tr = getNextTransition(nextTransitionTime, false);
+                    if (tr != null) {
+                        // Check if the next next transition is either DST->STD or STD->DST
+                        // and within roughly 1 year from the next transition
+                        if (((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
+                                || (tr.getFrom().getDSTSavings() != 0 && tr.getTo().getDSTSavings() == 0))
+                                    && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
+                            // Generate another DOW rule
+                            dtfields = Grego.timeToFields(tr.getTime()
+                                    + tr.getFrom().getRawOffset() + tr.getFrom().getDSTSavings(), dtfields);
+                            weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1], dtfields[2]);
+                            dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3], dtfields[5],
+                                    DateTimeRule.WALL_TIME);
+                            secondRule = new AnnualTimeZoneRule(tr.getTo().getName(),
+                                    tr.getTo().getRawOffset(), tr.getTo().getDSTSavings(),
+                                    dtr, dtfields[0] - 1, AnnualTimeZoneRule.MAX_YEAR);
+                            // Make sure this rule can be applied to the specified date
+                            Date d = secondRule.getPreviousStart(date, tr.getFrom().getRawOffset(),
+                                    tr.getFrom().getDSTSavings(), true);
+                            if (d != null && d.getTime() <= date
+                                    && initialRaw == tr.getTo().getRawOffset()
+                                    && initialDst == tr.getTo().getDSTSavings()) {
+                                // We can use this rule as the second transition rule
+                                annualRules[1] = secondRule;
+                            }
                         }
                     }
                 }
+
                 if (annualRules[1] == null) {
                     // Try previous transition
                     tr = getPreviousTransition(date, true);
@@ -437,9 +449,13 @@ public abstract class BasicTimeZone extends TimeZone {
                             weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1], dtfields[2]);
                             dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3], dtfields[5],
                                     DateTimeRule.WALL_TIME);
+
+                            // second rule raw/dst offsets should match raw/dst offsets
+                            // at the given time
                             secondRule = new AnnualTimeZoneRule(tr.getTo().getName(),
-                                    tr.getTo().getRawOffset(), tr.getTo().getDSTSavings(),
+                                    initialRaw, initialDst,
                                     dtr, annualRules[0].getStartYear() - 1, AnnualTimeZoneRule.MAX_YEAR);
+
                             // Check if this rule start after the first rule after the specified date
                             Date d = secondRule.getNextStart(date,
                                     tr.getFrom().getRawOffset(), tr.getFrom().getDSTSavings(), false);
