@@ -1,8 +1,7 @@
-
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2008 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2009 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -596,7 +595,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The STATE_SAVE location
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP location
 
-            // Instructions #5 and #6 will be added when the ')' is encountered.
+            // Instructions #5 - #7 will be added when the ')' is encountered.
         }
         break;
 
@@ -2132,7 +2131,7 @@ void  RegexCompile::handleCloseParen() {
             fRXPat->fCompiledPat->addElement(op, *fStatus);
             op               = URX_BUILD(URX_BACKTRACK, 0);
             fRXPat->fCompiledPat->addElement(op, *fStatus);
-            op               = URX_BUILD(URX_LA_END, 0);
+            op               = URX_BUILD(URX_LA_END, dataLoc);
             fRXPat->fCompiledPat->addElement(op, *fStatus);
 
             // Patch the URX_SAVE near the top of the block.
