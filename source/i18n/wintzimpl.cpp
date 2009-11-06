@@ -20,6 +20,7 @@
 #include "unicode/basictz.h"
 #include "putilimp.h"
 #include "uassert.h"
+#include "cmemory.h"
 
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
@@ -123,7 +124,9 @@ static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar
         int32_t standardBias;
         SYSTEMTIME daylightDate;
         SYSTEMTIME standardDate;
+
         if (getSystemTimeInformation(tz, daylightDate, standardDate, bias, daylightBias, standardBias)) {
+            uprv_memset(zoneInfo, 0, sizeof(TIME_ZONE_INFORMATION)); // We do not set standard/daylight names, so nullify first.
             zoneInfo->Bias          = bias;
             zoneInfo->DaylightBias  = daylightBias;
             zoneInfo->StandardBias  = standardBias;
