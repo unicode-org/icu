@@ -31,4 +31,8 @@ void ErrorCode::assertSuccess() const {
     }
 }
 
+const char* ErrorCode::errorName() const {
+  return u_errorName(errorCode);
+}
+
 U_NAMESPACE_END
