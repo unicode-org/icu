@@ -109,6 +109,13 @@ public:
      * @draft ICU 4.4
      */
     void assertSuccess() const;
+    /**
+     * Return a string for the UErrorCode value.
+     * The string will be the same as the name of the error code constant
+     * in the UErrorCode enum.
+     * @draft ICU 4.4
+     */
+    const char* errorName() const;
 
 protected:
     /**
