@@ -627,7 +627,7 @@ static const UConverterImpl _UTF16BEImpl={
 static const UConverterStaticData _UTF16BEStaticData={
     sizeof(UConverterStaticData),
     "UTF-16BE",
-    1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 4,
+    1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
     { 0xff, 0xfd, 0, 0 },2,FALSE,FALSE,
     0,
     0,
@@ -1227,7 +1227,7 @@ static const UConverterImpl _UTF16LEImpl={
 static const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF-16LE",
-    1202, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 4,
+    1202, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
     { 0xfd, 0xff, 0, 0 },2,FALSE,FALSE,
     0,
     0,
@@ -1485,7 +1485,7 @@ static const UConverterStaticData _UTF16StaticData = {
     sizeof(UConverterStaticData),
     "UTF-16",
     1204, /* CCSID for BOM sensitive UTF-16 */
-    UCNV_IBM, UCNV_UTF16, 2, 4,
+    UCNV_IBM, UCNV_UTF16, 2, 2,
 #if U_IS_BIG_ENDIAN
     { 0xff, 0xfd, 0, 0 }, 2,
 #else
