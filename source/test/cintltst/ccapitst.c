@@ -2816,8 +2816,8 @@ static void TestLMBCSMaxChar(void) {
         { 1, "US-ASCII"},
         { 1, "ISO-8859-1"},
 
-        { 4, "UTF-16"},
-        { 4, "UTF-16BE"},
+        { 2, "UTF-16"},
+        { 2, "UTF-16BE"},
         { 3, "UTF-8"},
         { 3, "CESU-8"},
         { 3, "SCSU"},
