@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -52,7 +52,7 @@ class CharsetUTF16 extends CharsetICU {
             this.endianXOR = ENDIAN_XOR_LE;
         }
 
-        maxBytesPerChar = 4;
+        maxBytesPerChar = 2;
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
     }
