@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -2208,7 +2208,7 @@ int32_t UnicodeSet::spanUTF8(const char *s, int32_t length, USetSpanCondition sp
         return (int32_t)(bmpSet->spanUTF8(s0, length, spanCondition)-s0);
     }
     if(length<0) {
-        length=uprv_strlen(s);
+        length=(int32_t)uprv_strlen(s);
     }
     if(length==0) {
         return 0;
@@ -2249,7 +2249,7 @@ int32_t UnicodeSet::spanBackUTF8(const char *s, int32_t length, USetSpanConditio
         return bmpSet->spanBackUTF8(s0, length, spanCondition);
     }
     if(length<0) {
-        length=uprv_strlen(s);
+        length=(int32_t)uprv_strlen(s);
     }
     if(length==0) {
         return 0;

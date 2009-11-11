@@ -467,7 +467,7 @@ private:
     UHashtable *cache;
 };
 
-U_CFUNC void deleteChars(void */*obj*/)
+U_CFUNC void deleteChars(void * /*obj*/)
 {
     // char *chars = (char *) obj;
     // All the key strings are owned by the

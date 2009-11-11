@@ -743,7 +743,7 @@ public:
         if(index < availableLocaleListCount) {
             result = availableLocaleList[index++].getName();
             if(resultLength != NULL) {
-                *resultLength = uprv_strlen(result);
+                *resultLength = (int32_t)uprv_strlen(result);
             }
         } else {
             if(resultLength != NULL) {

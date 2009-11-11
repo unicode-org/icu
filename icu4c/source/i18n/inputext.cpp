@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -51,14 +51,14 @@ void InputText::setText(const char *in, int32_t len)
     fInputLen  = 0;
     fC1Bytes   = FALSE;
     fRawInput  = (const uint8_t *) in;
-    fRawLength = len == -1? uprv_strlen(in) : len;
+    fRawLength = len == -1? (int32_t)uprv_strlen(in) : len;
 }
 
 void InputText::setDeclaredEncoding(const char* encoding, int32_t len)
 {
     if(encoding) {
         if (len == -1) {
-            len = uprv_strlen(encoding);
+            len = (int32_t)uprv_strlen(encoding);
         }
 
         len += 1;     // to make place for the \0 at the end.

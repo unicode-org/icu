@@ -253,7 +253,7 @@ static void initCache(UErrorCode *status) {
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
 static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
-    int32_t len = uprv_strlen(name);
+    int32_t len = (int32_t)uprv_strlen(name);
     if(res->fName != NULL && res->fName != res->fNameBuffer) {
         uprv_free(res->fName);
     }

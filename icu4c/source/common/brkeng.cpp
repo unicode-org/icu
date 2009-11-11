@@ -1,6 +1,6 @@
 /**
  ************************************************************************************
- * Copyright (C) 2006-2007, International Business Machines Corporation and others. *
+ * Copyright (C) 2006-2009, International Business Machines Corporation and others. *
  * All Rights Reserved.                                                             *
  ************************************************************************************
  */
@@ -262,7 +262,7 @@ ICULanguageBreakFactory::loadDictionaryFor(UScriptCode script, int32_t /*breakTy
         UChar* extStart=u_strchr(dictfname, 0x002e);
         int len = 0;
         if(extStart!=NULL){
-            len = extStart-dictfname;
+            len = (int)(extStart-dictfname);
             u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
             u_UCharsToChars(dictfname, dictnbuff, len);
         }

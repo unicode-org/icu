@@ -827,7 +827,7 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
         char *value = NULL;
         ulist_resetList(values);
         while ((value = (char *)ulist_getNext(values)) != NULL) {
-            if (!ulist_containsString(results, value, uprv_strlen(value))) {
+            if (!ulist_containsString(results, value, (int32_t)uprv_strlen(value))) {
                 ulist_addItemEndList(results, value, FALSE, status);
                 if (U_FAILURE(*status)) {
                     break;

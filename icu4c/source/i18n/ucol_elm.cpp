@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -165,8 +165,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     /* copy UCA's maxexpansion and merge as we go along */
     if (UCA != NULL) {
         /* adding an extra initial value for easier manipulation */
-        maxet->size            = (UCA->lastEndExpansionCE - UCA->endExpansionCE) 
-            + 2;
+        maxet->size            = (int32_t)(UCA->lastEndExpansionCE - UCA->endExpansionCE) + 2;
         maxet->position        = maxet->size - 1;
         maxet->endExpansionCE  = 
             (uint32_t *)uprv_malloc(sizeof(uint32_t) * maxet->size);
@@ -497,10 +496,10 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     }
 
     if (*start == endexpansion) {
-        result = start - pendexpansionce;
+        result = (int)(start - pendexpansionce);
     }
     else if (*limit == endexpansion) {
-        result = limit - pendexpansionce;
+        result = (int)(limit - pendexpansionce);
     }
 
     if (result > -1) {
@@ -515,7 +514,7 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
         /* we'll need to squeeze the value into the array.
         initial implementation. */
         /* shifting the subarray down by 1 */
-        int      shiftsize     = (pendexpansionce + pos) - start;
+        int      shiftsize     = (int)((pendexpansionce + pos) - start);
         uint32_t *shiftpos     = start + 1;
         uint8_t  *sizeshiftpos = pexpansionsize + (shiftpos - pendexpansionce);
 

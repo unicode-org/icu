@@ -498,7 +498,7 @@ PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
         int32_t keyLen;
         resLen=0;
         s=ures_getNextString(setRes, &resLen, (const char**)&key, &errCode);
-        keyLen = uprv_strlen(key);
+        keyLen = (int32_t)uprv_strlen(key);
         u_charsToUChars(key, result+len, keyLen);
         len += keyLen;
         result[len++]=COLON;

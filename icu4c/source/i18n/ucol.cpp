@@ -190,7 +190,7 @@ inline void loadState(collIterate *data, const collIterateState *backup,
         else {
             /* backwards direction */
             uint32_t temp = backup->buffersize -
-                                  (data->pos - backup->bufferaddress);
+                                  (uint32_t)(data->pos - backup->bufferaddress);
             data->pos = data->writableBuffer + (data->writableBufSize - temp);
         }
     }
@@ -1567,7 +1567,7 @@ void collPrevIterNormalize(collIterate *data)
         pStart = data->fcdPosition + 1;
     }
 
-    normLen = unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0,
+    normLen = unorm_normalize(pStart, (int32_t)((pEnd - pStart) + 1), UNORM_NFD, 0,
                               data->writableBuffer, 0, &status);
 
     if (data->writableBufSize <= normLen) {
@@ -1589,7 +1589,7 @@ void collPrevIterNormalize(collIterate *data)
     */
     pStartNorm = data->writableBuffer + (data->writableBufSize - normLen);
     *(pStartNorm - 1) = 0;
-    unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0, pStartNorm,
+    unorm_normalize(pStart, (int32_t)((pEnd - pStart) + 1), UNORM_NFD, 0, pStartNorm,
                     normLen, &status);
 
     if (data->offsetBuffer == NULL) {
@@ -1599,7 +1599,7 @@ void collPrevIterNormalize(collIterate *data)
         data->offsetBuffer = (int32_t *) uprv_malloc(sizeof(int32_t) * len);
         data->offsetStore = data->offsetBuffer;
     } else if(data->offsetBufferSize < (int32_t) normLen) {
-        int32_t storeIX = data->offsetStore - data->offsetBuffer;
+        int32_t storeIX = (int32_t)(data->offsetStore - data->offsetBuffer);
         int32_t *tob    = (int32_t *) uprv_realloc(data->offsetBuffer, sizeof(int32_t) * (normLen + 1));
 
         if (tob != NULL) {
@@ -1625,33 +1625,33 @@ void collPrevIterNormalize(collIterate *data)
      * of the rest of the marks.
      */
     int32_t firstMarkOffset = 0;
-    int32_t trailOffset     = data->pos - data->string + 1;
+    int32_t trailOffset     = (int32_t)(data->pos - data->string + 1);
     int32_t trailCount      = normLen - 1;
 
     if (data->fcdPosition != NULL) {
-        int32_t baseOffset = data->fcdPosition - data->string;
+        int32_t baseOffset = (int32_t)(data->fcdPosition - data->string);
         UChar   baseChar   = *data->fcdPosition;
 
         firstMarkOffset = baseOffset + 1;
 
         /*
-	     * If the base character is the start of a contraction, forward processing
-	     * will normalize the marks while checking for the contraction, which means
-	     * that the offset of the first mark will the same as the other marks.
-	     * 
-	     * **** THIS IS PROBABLY NOT A COMPLETE TEST ****
-	     */
-	    if (baseChar >= 0x100) {
-		    uint32_t baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->mapping, baseChar);
+         * If the base character is the start of a contraction, forward processing
+         * will normalize the marks while checking for the contraction, which means
+         * that the offset of the first mark will the same as the other marks.
+         *
+         * **** THIS IS PROBABLY NOT A COMPLETE TEST ****
+         */
+        if (baseChar >= 0x100) {
+            uint32_t baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->mapping, baseChar);
 
-		    if (baseOrder == UCOL_NOT_FOUND && data->coll->UCA) {
-			    baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->UCA->mapping, baseChar);
-		    }
+            if (baseOrder == UCOL_NOT_FOUND && data->coll->UCA) {
+                baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->UCA->mapping, baseChar);
+            }
 
-		    if (baseOrder > UCOL_NOT_FOUND && getCETag(baseOrder) == CONTRACTION_TAG) {
-			    firstMarkOffset = trailOffset;
-		    }
-	    }
+            if (baseOrder > UCOL_NOT_FOUND && getCETag(baseOrder) == CONTRACTION_TAG) {
+                firstMarkOffset = trailOffset;
+            }
+        }
 
         *(data->offsetStore++) = baseOffset;
     }
@@ -2081,7 +2081,7 @@ static
 inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
                                int32_t length)
 {
-    uint32_t  size = pNull - data->writableBuffer;
+    uint32_t  size = (uint32_t)(pNull - data->writableBuffer);
     UChar    *newbuffer;
 
     if (data->writableBuffer + data->writableBufSize > pNull + length + 1) {
@@ -2139,7 +2139,7 @@ inline void normalizeNextContraction(collIterate *data)
 
     pEnd = data->fcdPosition;
 
-    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0,
+    normLen = unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, buffer, 0,
                               &status);
 
     if (buffersize <= normLen + strsize) {
@@ -2159,7 +2159,7 @@ inline void normalizeNextContraction(collIterate *data)
     status            = U_ZERO_ERROR;
     pStartNorm        = buffer + strsize;
     /* null-termination will be added here */
-    unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm,
+    unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, pStartNorm,
                     normLen + 1, &status);
 
     data->pos        = data->writableBuffer + strsize;
@@ -2289,7 +2289,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
             /* fcdposition shifted even when there's no normalization, if we
             don't input the rest into this, we'll get the wrong position when
             we reach the end of the writableBuffer */
-            int32_t length = data->fcdPosition - data->pos + 1;
+            int32_t length = (int32_t)(data->fcdPosition - data->pos + 1);
             data->pos = insertBufferEnd(data, pEndWritableBuffer,
                                         data->pos - 1, length);
             // Check if data->pos received a null pointer
@@ -2586,7 +2586,7 @@ inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
         pStart = data->fcdPosition + 1;
     }
 
-    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, data->writableBuffer, 0,
+    normLen = unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, data->writableBuffer, 0,
                               &localstatus);
 
     if (nulltermsize <= normLen) {
@@ -2610,7 +2610,7 @@ inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
     */
     pStartNorm   = data->writableBuffer + (nulltermsize - normLen);
     *(pStartNorm - 1) = 0;
-    unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen,
+    unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, pStartNorm, normLen,
                     status);
 
     data->pos        = data->writableBuffer + nulltermsize;
@@ -3527,7 +3527,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     /* we have exhausted the buffer */
                     int32_t newsize = 0;
                     if(source->pos) { // actually dealing with a position
-                        newsize = source->pos - source->string + 1;
+                        newsize = (int32_t)(source->pos - source->string + 1);
                     } else { // iterator
                         newsize = 4 * UCOL_MAX_BUFFER;
                     }
@@ -3573,15 +3573,15 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             temp.flags &= ~UCOL_ITER_NORM;
             temp.flags |= source->flags & UCOL_FORCE_HAN_IMPLICIT;
 
-            rawOffset = temp.pos - temp.string; // should always be zero?
+            rawOffset = (int32_t)(temp.pos - temp.string); // should always be zero?
             CE = ucol_IGetNextCE(coll, &temp, status);
 
             if (source->extendCEs) {
                 endCEBuffer = source->extendCEs + source->extendCEsSize;
-                CECount = (source->CEpos - source->extendCEs)/sizeof(uint32_t);
+                CECount = (int32_t)((source->CEpos - source->extendCEs)/sizeof(uint32_t));
             } else {
                 endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
-                CECount = (source->CEpos - source->CEs)/sizeof(uint32_t);
+                CECount = (int32_t)((source->CEpos - source->CEs)/sizeof(uint32_t));
             }
 
             if (source->offsetBuffer == NULL) {
@@ -3642,7 +3642,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 }
 
                 if (offsetBias >= 0 && source->offsetStore >= &source->offsetBuffer[source->offsetBufferSize]) {
-                    int32_t  storeIX = source->offsetStore - source->offsetBuffer;
+                    int32_t  storeIX = (int32_t)(source->offsetStore - source->offsetBuffer);
                     int32_t *tob = (int32_t *) uprv_realloc(source->offsetBuffer,
                         sizeof(int32_t) * (source->offsetBufferSize + UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
 
@@ -3665,9 +3665,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 }
 
                 if ((temp.flags & UCOL_ITER_INNORMBUF) != 0) {
-                    rawOffset = temp.fcdPosition - temp.string;
+                    rawOffset = (int32_t)(temp.fcdPosition - temp.string);
                 } else {
-                    rawOffset = temp.pos - temp.string;
+                    rawOffset = (int32_t)(temp.pos - temp.string);
                 }
 
                 CE = ucol_IGetNextCE(coll, &temp, status);
@@ -4206,7 +4206,7 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
     fprintf(stderr, ".");
 #endif
     uint8_t *newStart = NULL;
-    uint32_t offset = *secondaries-secStart;
+    uint32_t offset = (uint32_t)(*secondaries-secStart);
 
     if(secStart==second) {
         newStart=(uint8_t*)uprv_malloc(newSize);
@@ -5149,7 +5149,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     finished = TRUE;
                     break;
                 } else { /* It's much nicer if we can actually reallocate */
-                    int32_t sks = sortKeySize+(primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart)+(cases-caseStart)+(quads-quadStart);
+                    int32_t sks = sortKeySize+(int32_t)((primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart)+(cases-caseStart)+(quads-quadStart));
                     primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sks, status);
                     if(U_SUCCESS(*status)) {
                         *result = primStart;
@@ -5173,8 +5173,8 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             uint32_t frenchStartOffset = 0, frenchEndOffset = 0;
             if (frenchStartPtr != NULL) {
-                frenchStartOffset = frenchStartPtr - secStart;
-                frenchEndOffset = frenchEndPtr - secStart;
+                frenchStartOffset = (uint32_t)(frenchStartPtr - secStart);
+                frenchEndOffset = (uint32_t)(frenchEndPtr - secStart);
             }
             secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, 2*secSize, status);
             terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
@@ -5197,7 +5197,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     /* bailing out would not be too productive */
 
     if(U_SUCCESS(*status)) {
-        sortKeySize += (primaries - primStart);
+        sortKeySize += (uint32_t)(primaries - primStart);
         /* we have done all the CE's, now let's put them together to form a key */
         if(compareSec == 0) {
             if (count2 > 0) {
@@ -5207,7 +5207,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
                 *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + (count2-1));
             }
-            uint32_t secsize = secondaries-secStart;
+            uint32_t secsize = (uint32_t)(secondaries-secStart);
             if(!isFrenchSec) { // Regular situation, we know the length of secondaries
                 sortKeySize += secsize;
                 if(sortKeySize <= resultLength) {
@@ -5256,7 +5256,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         }
 
         if(doCase) {
-            uint32_t casesize = cases - caseStart;
+            uint32_t casesize = (uint32_t)(cases - caseStart);
             sortKeySize += casesize;
             if(sortKeySize <= resultLength) {
                 *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -5297,7 +5297,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     *tertiaries++ = (uint8_t)(tertiaryBottom + (count3-1));
                 }
             }
-            uint32_t tersize = tertiaries - terStart;
+            uint32_t tersize = (uint32_t)(tertiaries - terStart);
             sortKeySize += tersize;
             if(sortKeySize <= resultLength) {
                 *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -5329,7 +5329,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     }
                     *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + (count4-1));
                 }
-                uint32_t quadsize = quads - quadStart;
+                uint32_t quadsize = (uint32_t)(quads - quadStart);
                 sortKeySize += quadsize;
                 if(sortKeySize <= resultLength) {
                     *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -5662,7 +5662,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     finished = TRUE;
                     break;
                 } else { /* It's much nicer if we can actually reallocate */
-                    int32_t sks = sortKeySize+(primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart);
+                    int32_t sks = sortKeySize+(int32_t)((primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart));
                     primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sks, status);
                     if(U_SUCCESS(*status)) {
                         *result = primStart;
@@ -5692,7 +5692,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
 
     if(U_SUCCESS(*status)) {
-        sortKeySize += (primaries - primStart);
+        sortKeySize += (uint32_t)(primaries - primStart);
         /* we have done all the CE's, now let's put them together to form a key */
         if (count2 > 0) {
             while (count2 > UCOL_BOT_COUNT2) {
@@ -5701,7 +5701,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             }
             *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + (count2-1));
         }
-        uint32_t secsize = secondaries-secStart;
+        uint32_t secsize = (uint32_t)(secondaries-secStart);
         sortKeySize += secsize;
         if(sortKeySize <= resultLength) {
             *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -5740,7 +5740,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                 *tertiaries++ = (uint8_t)(tertiaryBottom + (count3-1));
             }
         }
-        uint32_t tersize = tertiaries - terStart;
+        uint32_t tersize = (uint32_t)(tertiaries - terStart);
         sortKeySize += tersize;
         if(sortKeySize <= resultLength) {
             *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -7386,9 +7386,9 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
         unorm_closeIter(sNIt);
         unorm_closeIter(tNIt);
     } else {
-        sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
+        sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(sColl->endp - sColl->string) : -1;
         sBuf = sColl->string;
-        tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
+        tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(tColl->endp - tColl->string) : -1;
         tBuf = tColl->string;
 
         if (normalize) {
@@ -7507,7 +7507,7 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci, UErrorCode *status) {
     uint32_t  *newBuf;
 
     ci->flags |= UCOL_ITER_ALLOCATED;
-    oldSize = b->pos - b->buf;
+    oldSize = (uint32_t)(b->pos - b->buf);
     newSize = oldSize * 2;
     newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
     if(newBuf == NULL) {
@@ -7549,8 +7549,8 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
     UChar *target = NULL;
     int32_t result = UCOL_EQUAL;
     UChar sStackBuf[256], tStackBuf[256];
-    int32_t sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
-    int32_t targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
+    int32_t sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(int32_t)(sColl->endp-sColl->string):-1;
+    int32_t targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(int32_t)(tColl->endp-tColl->string):-1;
 
     // TODO: Handle long strings. Do the same in ucol_checkIdent.
     if(sColl->flags & UCOL_USE_ITERATOR) {
@@ -7566,11 +7566,11 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
         while(tColl->iterator->hasNext(tColl->iterator)) {
             *tBufp++ = (UChar)tColl->iterator->next(tColl->iterator);
         }
-        sourceLength = sBufp - source;
-        targetLength = tBufp - target;
+        sourceLength = (int32_t)(sBufp - source);
+        targetLength = (int32_t)(tBufp - target);
     } else { // no iterators
-        sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
-        targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
+        sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(int32_t)(sColl->endp-sColl->string):-1;
+        targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(int32_t)(tColl->endp-tColl->string):-1;
         source = sColl->string;
         target = tColl->string;
     }
@@ -8625,7 +8625,7 @@ ucol_strcoll( const UCollator    *coll,
             UTRACE_EXIT_VALUE(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
-        equalLength = pSrc - source;
+        equalLength = (int32_t)(pSrc - source);
     }
     else
     {
@@ -8647,7 +8647,7 @@ ucol_strcoll( const UCollator    *coll,
             pSrc++;
             pTarg++;
         }
-        equalLength = pSrc - source;
+        equalLength = (int32_t)(pSrc - source);
 
         // If we made it all the way through both strings, we are done.  They are ==
         if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */

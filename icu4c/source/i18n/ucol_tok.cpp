@@ -673,7 +673,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
         break;
         }
     }
-    src->current = u_memchr(src->current, 0x005d, src->end-src->current);
+    src->current = u_memchr(src->current, 0x005d, (int32_t)(src->end-src->current));
     return result;
 }
 
