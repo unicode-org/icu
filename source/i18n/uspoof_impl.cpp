@@ -132,7 +132,7 @@ int32_t SpoofImpl::confusableLookup(UChar32 inChar, int32_t tableMask, UChar *de
     int32_t  *limit = low + fSpoofData->fRawData->fCFUKeysSize;
     UChar32   midc;
     do {
-        int32_t delta = (limit-low)/2;
+        int32_t delta = ((int32_t)(limit-low))/2;
         mid = low + delta;
         midc = *mid & 0x1fffff;
         if (inChar == midc) {
@@ -182,7 +182,7 @@ int32_t SpoofImpl::confusableLookup(UChar32 inChar, int32_t tableMask, UChar *de
 
   foundKey:
     int32_t  stringLen = USPOOF_KEY_LENGTH_FIELD(keyFlags) + 1;
-    int32_t keyTableIndex = mid - fSpoofData->fCFUKeys;
+    int32_t keyTableIndex = (int32_t)(mid - fSpoofData->fCFUKeys);
 
     // Value is either a UChar  (for strings of length 1) or
     //                 an index into the string table (for longer strings)
@@ -283,7 +283,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
         if (trimmedEnd <= locStart) {
             break;
         }
-        const char *locale = uprv_strndup(locStart, trimmedEnd + 1 - locStart);
+        const char *locale = uprv_strndup(locStart, (int32_t)(trimmedEnd + 1 - locStart));
         localeListCount++;
 
         // We have one locale from the locales list.

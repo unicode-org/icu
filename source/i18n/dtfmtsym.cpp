@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1397,7 +1397,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             } else {
                 fGmtHourFormatsCount = GMT_HOUR_COUNT;
                 fGmtHourFormats[GMT_NEGATIVE_HM].setTo(TRUE, sep + 1, -1);
-                fGmtHourFormats[GMT_POSITIVE_HM].setTo(FALSE, resStr, sep - resStr);
+                fGmtHourFormats[GMT_POSITIVE_HM].setTo(FALSE, resStr, (int32_t)(sep - resStr));
 
                 // CLDR 1.5 does not have GMT offset pattern including second field.
                 // For now, append "ss" to the end.

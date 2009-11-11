@@ -1428,7 +1428,7 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
                 if (data->currentDeltaToUnicode == PNJ_DELTA && data->prevToUnicodeStatus != 0 && uset_contains(PNJ_CONSONANT_SET, data->prevToUnicodeStatus) &&
                         (*toUnicodeStatus + PNJ_DELTA) == PNJ_SIGN_VIRAMA && (targetUniChar + PNJ_DELTA) == data->prevToUnicodeStatus) {
                     /* Consonant clusters C + HALANT + C should be encoded as ADHAK + C */
-                    offset = source-args->source - 3;
+                    offset = (int)(source-args->source - 3);
                     tempTargetUniChar = PNJ_ADHAK; /* This is necessary to avoid some compiler warnings. */
                     WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,offset,tempTargetUniChar,0,err);
                     WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,offset,data->prevToUnicodeStatus,0,err);

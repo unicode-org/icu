@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -44,7 +44,7 @@ int32_t CharsetRecog_2022::match_2022(const uint8_t *text, int32_t textLen, cons
             escN = 0;
             while(escN < escapeSequences_length) {
                 const uint8_t *seq = escapeSequences[escN];
-                int32_t seq_length = uprv_strlen((const char *) seq);
+                int32_t seq_length = (int32_t)uprv_strlen((const char *) seq);
 
                 if (textLen-i >= seq_length) {
                     j = 1;

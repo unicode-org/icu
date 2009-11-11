@@ -688,9 +688,9 @@ ZoneMeta::createMetaToOlsonMap(void) {
             int32_t mzidLen = 0;
             int32_t territoryLen = 0;
             if (territory) {
-                mzidLen = territory - mzid;
+                mzidLen = (int32_t)(territory - mzid);
                 territory++;
-                territoryLen = uprv_strlen(territory);
+                territoryLen = (int32_t)uprv_strlen(territory);
             }
             if (mzidLen > 0 && territoryLen > 0) {
                 int32_t tzidLen;

@@ -183,7 +183,7 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
   int32_t i;
   for (i = 0; i < converterListSize; i++) {
     totalSize +=
-      uprv_strlen(converterList != NULL ? converterList[i] : ucnv_getAvailableName(i)) + 1;
+      (int32_t)uprv_strlen(converterList != NULL ? converterList[i] : ucnv_getAvailableName(i)) + 1;
   }
   // 4-align the totalSize to 4-align the size of the serialized form
   int32_t encodingStrPadding = totalSize & 3;
@@ -633,7 +633,7 @@ static const char* U_CALLCONV ucnvsel_next_encoding(UEnumeration* enumerator,
   result = sel->encodings[((Enumerator*)(enumerator->context))->index[cur] ];
   ((Enumerator*)(enumerator->context))->cur++;
   if (resultLength) {
-    *resultLength = uprv_strlen(result);
+    *resultLength = (int32_t)uprv_strlen(result);
   }
   return result;
 }
@@ -799,7 +799,7 @@ ucnvsel_selectForUTF8(const UConverterSelector* sel,
   uprv_memset(mask, ~0, columns *4);
 
   if (length < 0) {
-    length = uprv_strlen(s);
+    length = (int32_t)uprv_strlen(s);
   }
   const char *limit = s + length;
 

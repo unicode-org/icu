@@ -1628,7 +1628,7 @@ _canonicalize(const char* localeID,
     if(len == I_DEFAULT_LENGTH && uprv_strncmp(origLocaleID, i_default, len) == 0) {
         const char *d = uloc_getDefault();
         
-        len = uprv_strlen(d);
+        len = (int32_t)uprv_strlen(d);
 
         if (name != NULL) {
             uprv_strncpy(name, d, len);
@@ -3427,7 +3427,7 @@ createTagStringWithAlternates(
              */
             appendTag(
                 unknownLanguage,
-                uprv_strlen(unknownLanguage),
+                (int32_t)uprv_strlen(unknownLanguage),
                 tagBuffer,
                 &tagLength);
         }
@@ -3455,7 +3455,7 @@ createTagStringWithAlternates(
                  */
                 appendTag(
                     unknownLanguage,
-                    uprv_strlen(unknownLanguage),
+                    (int32_t)uprv_strlen(unknownLanguage),
                     tagBuffer,
                     &tagLength);
             }
@@ -3728,7 +3728,7 @@ parseTagString(
         uprv_strcpy(
             lang,
             unknownLanguage);
-        *langLength = uprv_strlen(lang);
+        *langLength = (int32_t)uprv_strlen(lang);
     }
     else if (_isIDSeparator(*position)) {
         ++position;
@@ -4113,7 +4113,7 @@ _uloc_addLikelySubtags(const char*    localeID,
 
     /* Find the length of the trailing portion. */
     trailing = &localeID[trailingIndex];
-    trailingLength = uprv_strlen(trailing);
+    trailingLength = (int32_t)uprv_strlen(trailing);
 
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
 
@@ -4132,8 +4132,7 @@ _uloc_addLikelySubtags(const char*    localeID,
             err);
 
     if (resultLength == 0) {
-        const int32_t localIDLength =
-            uprv_strlen(localeID);
+        const int32_t localIDLength = (int32_t)uprv_strlen(localeID);
 
         /*
          * If we get here, we need to return localeID.
@@ -4219,7 +4218,7 @@ _uloc_minimizeSubtags(const char*    localeID,
 
     /* Find the spot where the variants begin, if any. */
     trailing = &localeID[trailingIndex];
-    trailingLength = uprv_strlen(trailing);
+    trailingLength = (int32_t)uprv_strlen(trailing);
 
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
 
@@ -4390,7 +4389,7 @@ _uloc_minimizeSubtags(const char*    localeID,
         /**
          * If we got here, return the locale ID parameter.
          **/
-        const int32_t localeIDLength = uprv_strlen(localeID);
+        const int32_t localeIDLength = (int32_t)uprv_strlen(localeID);
 
         uprv_memcpy(
             minimizedLocaleID,

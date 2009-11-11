@@ -2091,7 +2091,7 @@ escape:
                     if(myData->version==0 && myData->key==0 && U_SUCCESS(*err) && myData->isEmptySegment) {
                         *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                         args->converter->toUCallbackReason = UCNV_IRREGULAR;
-                        args->converter->toULength = toULengthBefore + (mySource - mySourceBefore);
+                        args->converter->toULength = (int8_t)(toULengthBefore + (mySource - mySourceBefore));
                     }
                 }
 
@@ -3272,7 +3272,7 @@ escape:
                     if(myData->key==0 && U_SUCCESS(*err) && myData->isEmptySegment) {
                         *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                         args->converter->toUCallbackReason = UCNV_IRREGULAR;
-                        args->converter->toULength = toULengthBefore + (mySource - mySourceBefore);
+                        args->converter->toULength = (int8_t)(toULengthBefore + (mySource - mySourceBefore));
                     }
                 }
 

@@ -784,7 +784,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
    UChar uniChar;
    ulmbcs_byte_t  LMBCS[ULMBCS_CHARSIZE_MAX];
    ulmbcs_byte_t  * pLMBCS;
-   int bytes_written;
+   int32_t bytes_written;
    UBool groups_tried[ULMBCS_GRP_LAST+1];
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
    int sourceIndex = 0; 
@@ -847,7 +847,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
          {
             pLMBCS += LMBCSConvertUni(pLMBCS,uniChar);
             
-            bytes_written = pLMBCS - LMBCS;
+            bytes_written = (int32_t)(pLMBCS - LMBCS);
          }
          else if (group == ULMBCS_GRP_CTRL)  /* (Strategy 2B) */
          {
@@ -862,12 +862,12 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                *pLMBCS++ = ULMBCS_GRP_CTRL;
                *pLMBCS++ = (ulmbcs_byte_t ) (uniChar & 0x00FF);
             }
-            bytes_written = pLMBCS - LMBCS;
+            bytes_written = (int32_t)(pLMBCS - LMBCS);
          }
          else if (group < ULMBCS_GRP_UNICODE)  /* (Strategy 2C) */
          {
             /* a specific converter has been identified - use it */
-            bytes_written = LMBCSConversionWorker (
+            bytes_written = (int32_t)LMBCSConversionWorker (
                               extraInfo, group, pLMBCS, &uniChar, 
                               &lastConverterIndex, groups_tried);
          }
@@ -879,7 +879,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
             if (extraInfo->OptGroup != 1 
                   && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup)) 
             {
-               bytes_written = LMBCSConversionWorker (extraInfo, 
+               bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
                   extraInfo->OptGroup, pLMBCS, &uniChar, 
                   &lastConverterIndex, groups_tried);
             }
@@ -888,7 +888,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                && (extraInfo->localeConverterIndex) 
                && (ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->localeConverterIndex)))
                {
-                  bytes_written = LMBCSConversionWorker (extraInfo, 
+                  bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
                      extraInfo->localeConverterIndex, pLMBCS, &uniChar, 
                      &lastConverterIndex, groups_tried);
                }
@@ -897,7 +897,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                 && (lastConverterIndex) 
                && (ULMBCS_AMBIGUOUS_MATCH(group, lastConverterIndex)))
                {
-                  bytes_written = LMBCSConversionWorker (extraInfo, 
+                  bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
                      lastConverterIndex, pLMBCS, &uniChar, 
                      &lastConverterIndex, groups_tried);
            
@@ -920,7 +920,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                {
                   if (extraInfo->OptGrpConverter [grp_ix] && !groups_tried [grp_ix])
                   {
-                     bytes_written = LMBCSConversionWorker (extraInfo, 
+                     bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
                        grp_ix, pLMBCS, &uniChar, 
                        &lastConverterIndex, groups_tried);
                   }
@@ -929,7 +929,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                      to be single byte  (Strategy 3E) */
                if (!bytes_written && grp_start == ULMBCS_GRP_L1)
                {
-                  bytes_written = LMBCSConversionWorker (extraInfo, 
+                  bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
                      ULMBCS_GRP_EXCEPT, pLMBCS, &uniChar, 
                      &lastConverterIndex, groups_tried);
                }
@@ -939,7 +939,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
             {
 
                pLMBCS += LMBCSConvertUni(pLMBCS, uniChar);
-               bytes_written = pLMBCS - LMBCS;
+               bytes_written = (int32_t)(pLMBCS - LMBCS);
             }
          }
       }
@@ -1215,7 +1215,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
             *(args->target)++ = uniChar;
             if(args->offsets)
             {
-               *(args->offsets)++ = saveSource - pStartLMBCS;
+               *(args->offsets)++ = (int32_t)(saveSource - pStartLMBCS);
             }
          }
          else if (uniChar == 0xfffe)

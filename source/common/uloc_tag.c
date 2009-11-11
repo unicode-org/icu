@@ -206,7 +206,7 @@ _isLanguageSubtag(const char* s, int32_t len) {
      *               / 5*8ALPHA            ; or registered language subtag
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len >= 2 && len <= 8 && _isAlphaString(s, len)) {
         return TRUE;
@@ -221,7 +221,7 @@ _isExtlangSubtag(const char* s, int32_t len) {
      *                 *2("-" 3ALPHA)      ; permanently reserved
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len == 3 && _isAlphaString(s, len)) {
         return TRUE;
@@ -235,7 +235,7 @@ _isScriptSubtag(const char* s, int32_t len) {
      * script        = 4ALPHA              ; ISO 15924 code
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len == 4 && _isAlphaString(s, len)) {
         return TRUE;
@@ -250,7 +250,7 @@ _isRegionSubtag(const char* s, int32_t len) {
      *               / 3DIGIT              ; UN M.49 code
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len == 2 && _isAlphaString(s, len)) {
         return TRUE;
@@ -268,7 +268,7 @@ _isVariantSubtag(const char* s, int32_t len) {
      *               / (DIGIT 3alphanum)
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len >= 5 && len <= 8 && _isAlphaString(s, len)) {
         return TRUE;
@@ -285,7 +285,7 @@ _isExtensionSingleton(const char* s, int32_t len) {
      * extension     = singleton 1*("-" (2*8alphanum))
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len == 1 && ISALPHA(*s) && (uprv_tolower(*s) != PRIVATEUSE)) {
         return TRUE;
@@ -299,7 +299,7 @@ _isExtensionSubtag(const char* s, int32_t len) {
      * extension     = singleton 1*("-" (2*8alphanum))
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len >= 2 && len <= 8 && _isAlphaNumericString(s, len)) {
         return TRUE;
@@ -313,7 +313,7 @@ _isExtensionSubtags(const char* s, int32_t len) {
     const char *pSubtag = NULL;
 
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
 
     while ((p - s) < len) {
@@ -321,7 +321,7 @@ _isExtensionSubtags(const char* s, int32_t len) {
             if (pSubtag == NULL) {
                 return FALSE;
             }
-            if (!_isExtensionSubtag(pSubtag, p - pSubtag)) {
+            if (!_isExtensionSubtag(pSubtag, (int32_t)(p - pSubtag))) {
                 return FALSE;
             }
             pSubtag = NULL;
@@ -333,7 +333,7 @@ _isExtensionSubtags(const char* s, int32_t len) {
     if (pSubtag == NULL) {
         return FALSE;
     }
-    return _isExtensionSubtag(pSubtag, p - pSubtag);
+    return _isExtensionSubtag(pSubtag, (int32_t)(p - pSubtag));
 }
 
 static UBool
@@ -342,7 +342,7 @@ _isPrivateuseValueSubtag(const char* s, int32_t len) {
      * privateuse    = "x" 1*("-" (1*8alphanum))
      */
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len >= 1 && len <= 8 && _isAlphaNumericString(s, len)) {
         return TRUE;
@@ -356,7 +356,7 @@ _isPrivateuseValueSubtags(const char* s, int32_t len) {
     const char *pSubtag = NULL;
 
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
 
     while ((p - s) < len) {
@@ -364,7 +364,7 @@ _isPrivateuseValueSubtags(const char* s, int32_t len) {
             if (pSubtag == NULL) {
                 return FALSE;
             }
-            if (!_isPrivateuseValueSubtag(pSubtag, p - pSubtag)) {
+            if (!_isPrivateuseValueSubtag(pSubtag, (int32_t)(p - pSubtag))) {
                 return FALSE;
             }
             pSubtag = NULL;
@@ -376,13 +376,13 @@ _isPrivateuseValueSubtags(const char* s, int32_t len) {
     if (pSubtag == NULL) {
         return FALSE;
     }
-    return _isPrivateuseValueSubtag(pSubtag, p - pSubtag);
+    return _isPrivateuseValueSubtag(pSubtag, (int32_t)(p - pSubtag));
 }
 
 static UBool
 _isLDMLKey(const char* s, int32_t len) {
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len == 2 && _isAlphaNumericString(s, len)) {
         return TRUE;
@@ -393,7 +393,7 @@ _isLDMLKey(const char* s, int32_t len) {
 static UBool
 _isLDMLType(const char* s, int32_t len) {
     if (len < 0) {
-        len = uprv_strlen(s);
+        len = (int32_t)uprv_strlen(s);
     }
     if (len >= 3 && len <= 8 && _isAlphaNumericString(s, len)) {
         return TRUE;
@@ -477,8 +477,8 @@ _addExtensionToList(ExtensionListEntry **first, ExtensionListEntry *ext, UBool l
                 /* special handling for locale to bcp conversion */
                 int32_t len, curlen;
 
-                len = uprv_strlen(ext->key);
-                curlen = uprv_strlen(cur->key);
+                len = (int32_t)uprv_strlen(ext->key);
+                curlen = (int32_t)uprv_strlen(cur->key);
 
                 if (len == 1 && curlen == 1) {
                     if (*(ext->key) == *(cur->key)) {
@@ -563,7 +563,7 @@ _ldmlKeyToBCP47(const char* key, int32_t keyLen,
     int32_t bcpKeyLen;
 
     if (keyLen < 0) {
-        keyLen = uprv_strlen(key);
+        keyLen = (int32_t)uprv_strlen(key);
     }
 
     if (keyLen >= sizeof(keyBuf)) {
@@ -626,7 +626,7 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
     UResourceBundle *keyMap;
 
     if (bcpKeyLen < 0) {
-        bcpKeyLen = uprv_strlen(bcpKey);
+        bcpKeyLen = (int32_t)uprv_strlen(bcpKey);
     }
 
     if (bcpKeyLen >= sizeof(bcpKeyBuf)) {
@@ -665,7 +665,7 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
         if (uprv_strcmp(bcpKeyBuf, tmpBcpKeyBuf) == 0) {
             /* found a matching BCP47 key */
             resKey = ures_getKey(keyMap);
-            resultLen = uprv_strlen(resKey);
+            resultLen = (int32_t)uprv_strlen(resKey);
             break;
         }
         if (!ures_hasNext(rb)) {
@@ -707,7 +707,7 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
     UBool isTimezone = FALSE;
 
     if (keyLen < 0) {
-        keyLen = uprv_strlen(key);
+        keyLen = (int32_t)uprv_strlen(key);
     }
     if (keyLen >= sizeof(keyBuf)) {
         /* no known valid LDML key exceeding 21 */
@@ -726,7 +726,7 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
     }
 
     if (typeLen < 0) {
-        typeLen = uprv_strlen(type);
+        typeLen = (int32_t)uprv_strlen(type);
     }
     if (typeLen >= sizeof(typeBuf)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -792,7 +792,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
     int32_t copyLen;
 
     if (keyLen < 0) {
-        keyLen = uprv_strlen(key);
+        keyLen = (int32_t)uprv_strlen(key);
     }
 
     if (keyLen >= sizeof(keyBuf)) {
@@ -810,7 +810,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
 
 
     if (bcpTypeLen < 0) {
-        bcpTypeLen = uprv_strlen(bcpType);
+        bcpTypeLen = (int32_t)uprv_strlen(bcpType);
     }
 
     if (bcpTypeLen >= sizeof(bcpTypeBuf)) {
@@ -849,7 +849,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
         if (uprv_strcmp(bcpTypeBuf, tmpBcpTypeBuf) == 0) {
             /* found a matching BCP47 type */
             resType = ures_getKey(typeMap);
-            resultLen = uprv_strlen(resType);
+            resultLen = (int32_t)uprv_strlen(resType);
             break;
         }
         if (!ures_hasNext(rb)) {
@@ -926,7 +926,7 @@ _appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         for (i = 0; DEPRECATEDLANGS[i] != NULL; i += 2) {
             if (uprv_strcmp(buf, DEPRECATEDLANGS[i]) == 0) {
                 uprv_strcpy(buf, DEPRECATEDLANGS[i + 1]);
-                len = uprv_strlen(buf);
+                len = (int32_t)uprv_strlen(buf);
                 break;
             }
         }
@@ -1111,7 +1111,7 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                         *(appendAt + reslen) = SEP;
                     }
                     reslen++;
-                    varLen = uprv_strlen(var->variant);
+                    varLen = (int32_t)uprv_strlen(var->variant);
                     if (reslen < capacity) {
                         uprv_memcpy(appendAt + reslen, var->variant, uprv_min(varLen, capacity - reslen));
                     }
@@ -1179,7 +1179,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 continue;
             }
 
-            keylen = uprv_strlen(key);
+            keylen = (int32_t)uprv_strlen(key);
             isLDMLKeyword = (keylen > 1);
 
             if (isLDMLKeyword) {
@@ -1270,7 +1270,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
             /* write out the sorted BCP47 extensions and private use */
             ext = firstExt;
             while (ext != NULL) {
-                if (uprv_strlen(ext->key) > 1 && !startLDMLExtension) {
+                if ((int32_t)uprv_strlen(ext->key) > 1 && !startLDMLExtension) {
                     /* write LDML singleton extension */
                     if (reslen < capacity) {
                         *(appendAt + reslen) = SEP;
@@ -1287,7 +1287,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     *(appendAt + reslen) = SEP;
                 }
                 reslen++;
-                len = uprv_strlen(ext->key);
+                len = (int32_t)uprv_strlen(ext->key);
                 if (reslen < capacity) {
                     uprv_memcpy(appendAt + reslen, ext->key, uprv_min(len, capacity - reslen));
                 }
@@ -1296,7 +1296,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     *(appendAt + reslen) = SEP;
                 }
                 reslen++;
-                len = uprv_strlen(ext->value);
+                len = (int32_t)uprv_strlen(ext->value);
                 if (reslen < capacity) {
                     uprv_memcpy(appendAt + reslen, ext->value, uprv_min(len, capacity - reslen));
                 }
@@ -1360,10 +1360,10 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
 
         if (pBcpKey == NULL) {
             pBcpKey = p;
-            bcpKeyLen = pSep - p;
+            bcpKeyLen = (int32_t)(pSep - p);
         } else {
             pBcpType = p;
-            bcpTypeLen = pSep - p;
+            bcpTypeLen = (int32_t)(pSep - p);
 
             /* BCP key to locale key */
             len = _bcp47ToLDMLKey(pBcpKey, bcpKeyLen, buf + bufIdx, bufSize - bufIdx - 1, status);
@@ -1474,7 +1474,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
 
     if (U_SUCCESS(*status)) {
         type = ultag_getPrivateUse(langtag);
-        if (uprv_strlen(type) > 0) {
+        if ((int32_t)uprv_strlen(type) > 0) {
             /* add private use as a keyword */
             kwd = uprv_malloc(sizeof(ExtensionListEntry));
             if (kwd == NULL) {
@@ -1506,7 +1506,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
             reslen++;
 
             /* key */
-            len = uprv_strlen(kwd->key);
+            len = (int32_t)uprv_strlen(kwd->key);
             if (reslen < capacity) {
                 uprv_memcpy(appendAt + reslen, kwd->key, uprv_min(len, capacity - reslen));
             }
@@ -1519,7 +1519,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
             reslen++;
 
             /* type */
-            len = uprv_strlen(kwd->value);
+            len = (int32_t)uprv_strlen(kwd->value);
             if (reslen < capacity) {
                 uprv_memcpy(appendAt + reslen, kwd->value, uprv_min(len, capacity - reslen));
             }
@@ -1584,7 +1584,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     }
 
     if (tagLen < 0) {
-        tagLen = uprv_strlen(tag);
+        tagLen = (int32_t)uprv_strlen(tag);
     }
 
     /* copy the entire string */
@@ -1661,7 +1661,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         } else {
             pNext = pSep + 1;
         }
-        subtagLen = pSep - pSubtag;
+        subtagLen = (int32_t)(pSep - pSubtag);
 
         if (next & LANG) {
             if (_isLanguageSubtag(pSubtag, subtagLen)) {
@@ -1884,7 +1884,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     } else {
                         pNext = pSep + 1;
                     }
-                    subtagLen = pSep - pSubtag;
+                    subtagLen = (int32_t)(pSep - pSubtag);
 
                     if (_isPrivateuseValueSubtag(pSubtag, subtagLen)) {
                         pLastGoodPosition = pSep;
@@ -1924,7 +1924,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     }
 
     if (parsedLen != NULL) {
-        *parsedLen = pLastGoodPosition - t->buf;
+        *parsedLen = (int32_t)(pLastGoodPosition - t->buf);
     }
 
     return t;
@@ -2160,7 +2160,7 @@ uloc_forLanguageTag(const char* langtag,
     /* language */
     subtag = ultag_getExtlangSize(lt) > 0 ? ultag_getExtlang(lt, 0) : ultag_getLanguage(lt);
     if (uprv_strcmp(subtag, LANG_UND) != 0) {
-        len = uprv_strlen(subtag);
+        len = (int32_t)uprv_strlen(subtag);
         if (len > 0) {
             if (reslen < localeIDCapacity) {
                 uprv_memcpy(localeID, subtag, uprv_min(len, localeIDCapacity - reslen));
@@ -2171,7 +2171,7 @@ uloc_forLanguageTag(const char* langtag,
 
     /* script */
     subtag = ultag_getScript(lt);
-    len = uprv_strlen(subtag);
+    len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
         if (reslen < localeIDCapacity) {
             *(localeID + reslen) = LOCALE_SEP;
@@ -2195,7 +2195,7 @@ uloc_forLanguageTag(const char* langtag,
 
     /* region */
     subtag = ultag_getRegion(lt);
-    len = uprv_strlen(subtag);
+    len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
         if (reslen < localeIDCapacity) {
             *(localeID + reslen) = LOCALE_SEP;
