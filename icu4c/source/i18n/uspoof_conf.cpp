@@ -416,7 +416,7 @@ void ConfusabledataBuilder::outputData(UErrorCode &status) {
         previousKey = key;
     }
     SpoofDataHeader *rawData = fSpoofImpl->fSpoofData->fRawData;
-    rawData->fCFUKeys = (char *)keys - (char *)rawData;
+    rawData->fCFUKeys = (int32_t)((char *)keys - (char *)rawData);
     rawData->fCFUKeysSize = numKeys;
     fSpoofImpl->fSpoofData->fCFUKeys = keys;
 
@@ -435,7 +435,7 @@ void ConfusabledataBuilder::outputData(UErrorCode &status) {
         values[i] = static_cast<uint16_t>(value);
     }
     rawData = fSpoofImpl->fSpoofData->fRawData;
-    rawData->fCFUStringIndex = (char *)values - (char *)rawData;
+    rawData->fCFUStringIndex = (int32_t)((char *)values - (char *)rawData);
     rawData->fCFUStringIndexSize = numValues;
     fSpoofImpl->fSpoofData->fCFUValues = values;
 
@@ -452,7 +452,7 @@ void ConfusabledataBuilder::outputData(UErrorCode &status) {
     fStringTable->extract(strings, stringsLength+1, status);
     rawData = fSpoofImpl->fSpoofData->fRawData;
     U_ASSERT(rawData->fCFUStringTable == 0);
-    rawData->fCFUStringTable = (char *)strings - (char *)rawData;
+    rawData->fCFUStringTable = (int32_t)((char *)strings - (char *)rawData);
     rawData->fCFUStringTableLen = stringsLength;
     fSpoofImpl->fSpoofData->fCFUStrings = strings;
     
@@ -480,7 +480,7 @@ void ConfusabledataBuilder::outputData(UErrorCode &status) {
         previousLength = length;
     }
     rawData = fSpoofImpl->fSpoofData->fRawData;
-    rawData->fCFUStringLengths = (char *)stringLengths - (char *)rawData;
+    rawData->fCFUStringLengths = (int32_t)((char *)stringLengths - (char *)rawData);
     // Note: StringLengthsSize in the raw data is the number of complete entries,
     //       each consisting of a pair of 16 bit values, hence the divide by 2.
     rawData->fCFUStringLengthsSize = lengthTableLength / 2;

@@ -99,10 +99,8 @@ UBool CollationElementIterator::operator==(
     // the constructor and setText always sets a length
     // and we only compare the string not the contents of the normalization
     // buffer
-    int thislength = m_data_->iteratordata_.endp -
-                     m_data_->iteratordata_.string;
-    int thatlength = that.m_data_->iteratordata_.endp -
-                     that.m_data_->iteratordata_.string;
+    int thislength = (int)(m_data_->iteratordata_.endp - m_data_->iteratordata_.string);
+    int thatlength = (int)(that.m_data_->iteratordata_.endp - that.m_data_->iteratordata_.string);
     
     if (thislength != thatlength) {
         return FALSE;
@@ -400,7 +398,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
 
         // checking only UCOL_ITER_HASLEN is not enough here as we may be in 
         // the normalization buffer
-        length = othercoliter->endp - othercoliter->string;
+        length = (int)(othercoliter->endp - othercoliter->string);
 
         ucolelem->reset_         = otherucolelem->reset_;
         ucolelem->isWritable     = TRUE;

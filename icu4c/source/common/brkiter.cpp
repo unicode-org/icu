@@ -100,7 +100,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
             UChar* extStart=u_strchr(brkfname, 0x002e);
             int len = 0;
             if(extStart!=NULL){
-                len = extStart-brkfname;
+                len = (int)(extStart-brkfname);
                 u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
                 u_UCharsToChars(brkfname, fnbuff, len);
             }

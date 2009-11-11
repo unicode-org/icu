@@ -329,7 +329,7 @@ TextTrieMap::addChildNode(CharacterNode *parent, UChar c, UErrorCode &status) {
 
     // Ensure capacity. Grow fNodes[] if needed.
     if (fNodesCount == fNodesCapacity) {
-        int32_t parentIndex = (parent - fNodes);
+        int32_t parentIndex = (int32_t)(parent - fNodes);
         if (!growNodes()) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;

@@ -2181,10 +2181,10 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
             } else {
                 hasTo = TRUE;
             }
-            if (isPrefRegion && !hasTo && !ulist_containsString(values, curID, uprv_strlen(curID))) {
+            if (isPrefRegion && !hasTo && !ulist_containsString(values, curID, (int32_t)uprv_strlen(curID))) {
                 // Currently active currency for the target country
                 ulist_addItemEndList(values, curID, TRUE, status);
-            } else if (!ulist_containsString(otherValues, curID, uprv_strlen(curID)) && !commonlyUsed) {
+            } else if (!ulist_containsString(otherValues, curID, (int32_t)uprv_strlen(curID)) && !commonlyUsed) {
                 ulist_addItemEndList(otherValues, curID, TRUE, status);
             } else {
                 uprv_free(curID);
@@ -2205,7 +2205,7 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
             char *value = NULL;
             ulist_resetList(otherValues);
             while ((value = (char *)ulist_getNext(otherValues)) != NULL) {
-                if (!ulist_containsString(values, value, uprv_strlen(value))) {
+                if (!ulist_containsString(values, value, (int32_t)uprv_strlen(value))) {
                     char *tmpValue = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
                     uprv_memcpy(tmpValue, value, uprv_strlen(value) + 1);
                     ulist_addItemEndList(values, tmpValue, TRUE, status);

@@ -1373,12 +1373,12 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
             if (src != segment) {
                 if (dest != NULL) {
                     _appendUChars(dest + i, destCapacity - i,
-                                  segment, src - segment);
+                                  segment, (int32_t)(src - segment));
                 }
-                i += src - segment;
+                i += (int32_t)(src - segment);
             }
             ++src; /* advance past '\\' */
-            c32 = u_unescapeAt(_charPtr_charAt, &lenParsed, uprv_strlen(src), (void*)src);
+            c32 = (UChar32)u_unescapeAt(_charPtr_charAt, &lenParsed, (int32_t)uprv_strlen(src), (void*)src);
             if (lenParsed == 0) {
                 goto err;
             }
@@ -1396,9 +1396,9 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
     if (src != segment) {
         if (dest != NULL) {
             _appendUChars(dest + i, destCapacity - i,
-                          segment, src - segment);
+                          segment, (int32_t)(src - segment));
         }
-        i += src - segment;
+        i += (int32_t)(src - segment);
     }
     if (dest != NULL && i < destCapacity) {
         dest[i] = 0;

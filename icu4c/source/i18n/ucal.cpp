@@ -608,7 +608,7 @@ ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool
             if (U_SUCCESS(*status) && !commonlyUsed) {
                 // If not commonlyUsed, add other available values
                 for (int32_t i = 0; CAL_TYPES[i] != NULL; i++) {
-                    if (!ulist_containsString(values, CAL_TYPES[i], uprv_strlen(CAL_TYPES[i]))) {
+                    if (!ulist_containsString(values, CAL_TYPES[i], (int32_t)uprv_strlen(CAL_TYPES[i]))) {
                         ulist_addItemEndList(values, CAL_TYPES[i], FALSE, status);
                         if (U_FAILURE(*status)) {
                             break;

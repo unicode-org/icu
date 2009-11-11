@@ -472,7 +472,7 @@ caseMap(const UCaseMap *csm,
 
     /* get the string length */
     if(srcLength==-1) {
-        srcLength=uprv_strlen((const char *)src);
+        srcLength=(int32_t)uprv_strlen((const char *)src);
     }
 
     /* check for overlapping source and destination */

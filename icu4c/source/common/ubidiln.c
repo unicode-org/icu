@@ -696,7 +696,7 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
         const UChar *start=pBiDi->text, *limit=start+pBiDi->length, *pu;
         for(pu=start; pu<limit; pu++) {
             if(IS_BIDI_CONTROL_CHAR(*pu)) {
-                runIndex=getRunFromLogicalIndex(pBiDi, pu-start, pErrorCode);
+                runIndex=getRunFromLogicalIndex(pBiDi, (int32_t)(pu-start), pErrorCode);
                 pBiDi->runs[runIndex].insertRemove--;
             }
         }
