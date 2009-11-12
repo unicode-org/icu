@@ -363,7 +363,7 @@ public final class ZoneMeta {
         if (country_code != null) {
             try {
                 ICUResourceBundle rb = 
-                    (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+                    (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_REGION_BASE_NAME, locale);
 //
 // TODO: There is a design bug in UResourceBundle and getLoadingStatus() does not work well.
 //
@@ -426,7 +426,8 @@ public final class ZoneMeta {
     public static String getTZLocalizationInfo(ULocale locale, String format) {
         String result = null;
         try {
-            ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(locale);
+            ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
             result = bundle.getStringWithFallback(ZONE_STRINGS+FORWARD_SLASH+format);
         } catch (MissingResourceException e) {
             result = null;

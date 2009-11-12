@@ -761,7 +761,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     public void TestNorwegian(){
         try{
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "no_NO_NY");
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_REGION_BASE_NAME, "no_NO_NY");
             UResourceBundle sub = rb.get("Countries");
             String s1 = sub.getString("NO");
             if(s1.equals("Noreg")){
@@ -832,28 +832,42 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 return "UNKNOWN";
         }
     }
+    
+    private void assertEqualLoadingStatus(String msg, int target, int result) {
+        if (result != target) {
+            errln(msg + " expected: "+ getLSString(target) 
+                    + " got: " + getLSString(result));
+        }        
+    }
+    
+    private void assertDefaultLoadingStatus(String msg, int result) {
+        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_DEFAULT, result);
+    }
+    
+    private void assertFallbackLoadingStatus(String msg, int result) {
+        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_FALLBACK, result);
+    }
+    
+    private void assertRootLoadingStatus(String msg, int result) {
+        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_ROOT, result);
+    }
+    
+    private void assertLocaleLoadingStatus(String msg, int result) {
+        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_LOCALE, result);
+    }
+   
     public void TestLoadingStatus(){
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "yi_IL");
-        int status = bundle.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_DEFAULT){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_DEFAULT) 
-                    + " Got: " + getLSString(status));
-        }        
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "eo_DE");
-        status = bundle.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_FALLBACK){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_FALLBACK) 
-                    + " Got: " + getLSString(status));
-        }        
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "yi_IL");
+        assertDefaultLoadingStatus("base/yi_IL", bundle.getLoadingStatus());
+
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "eo_DE");
+        assertFallbackLoadingStatus("base/eo_DE", bundle.getLoadingStatus());
         
         logln("Test to verify loading status of get(String)");
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "te_IN");
-        UResourceBundle countries = bundle.get("Countries");
-        status = ((ICUResourceBundle)countries).getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_FALLBACK){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_FALLBACK) 
-                    + " Got: " + getLSString(status));
-        }
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_LANG_BASE_NAME, "zh_Hant_TW");
+        ICUResourceBundle countries = (ICUResourceBundle) bundle.get("Languages");
+        assertFallbackLoadingStatus("lang/Languages/zh_Hant_TW", countries.getLoadingStatus());
+
         /*
         UResourceBundle auxExemplar = bundle.get("AuxExemplarCharacters");
         status = auxExemplar.getLoadingStatus();
@@ -862,35 +876,24 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     + " Got: " + getLSString(status));
         } 
         */
+        
         logln("Test to verify loading status of get(int)");
-        ICUResourceBundle ms = (ICUResourceBundle)bundle.get("MeasurementSystem");
-        status = ms.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_ROOT){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_ROOT) 
-                    + " Got: " + getLSString(status));
-        }
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "te_IN");
+        ICUResourceBundle ms = (ICUResourceBundle) bundle.get("MeasurementSystem");
+        assertRootLoadingStatus("base/MeasurementSystem/te_IN", ms.getLoadingStatus());
                 
         logln("Test to verify loading status of getwithFallback");
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "sh_YU",testLoader);
-        ICUResourceBundle temp = (ICUResourceBundle)bundle.getWithFallback("a/a2");
-        status = temp.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_LOCALE){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_LOCALE) 
-                    + " Got: " + getLSString(status));
-        }
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "sh_YU", testLoader);
+        ICUResourceBundle temp = (ICUResourceBundle) bundle.getWithFallback("a/a2");
+        assertLocaleLoadingStatus("testdata/a/a2/sh_YU", temp.getLoadingStatus());
+
         temp = bundle.getWithFallback("a/a1");
-        status = temp.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_FALLBACK){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_FALLBACK) 
-                    + " Got: " + getLSString(status));
-        }
+        assertFallbackLoadingStatus("testdata/a/a1/sh_YU", temp.getLoadingStatus());
+
         temp = bundle.getWithFallback("a/a4");
-        status = temp.getLoadingStatus();
-        if(status != ICUResourceBundle.FROM_ROOT){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_ROOT) 
-                    + " Got: " + getLSString(status));
-        }
+        assertRootLoadingStatus("testdata/a/a4/sh_YU", temp.getLoadingStatus());
     }
+    
     public void TestCoverage(){
         UResourceBundle bundle;
         bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME);

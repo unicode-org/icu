@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -237,7 +237,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
 
         MessageFormat pfmt = new MessageFormat("The disk ''{0}'' contains {1, plural,  one {one ''''{1, number, #.0}'''' widget} other {# widgets}}.");
-        System.out.println();
+        logln("");
         for (int i = 0; i < 3; ++i) {
             args[1] = new Integer(i);
             logln(pfmt.format(args));

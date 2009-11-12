@@ -2210,9 +2210,24 @@ public final class ULocale implements Serializable {
     private static String getTableString(String tableName, String subtableName, String item, String displayLocaleID) {
         try {
             if (item.length() > 0) {
-                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
-                  getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
-                return getTableString(tableName, subtableName, item, bundle);
+                // hack this for now
+                String path = null;
+                if ("currency".equals(subtableName)) {
+                    path = ICUResourceBundle.ICU_CURR_BASE_NAME;
+                } else if ("layout".equals(tableName)) {
+                    path = ICUResourceBundle.ICU_BASE_NAME;
+                } else if ("Countries".equals(tableName)) {
+                    path = ICUResourceBundle.ICU_REGION_BASE_NAME;
+                } else if ("Currencies".equals(tableName)) {
+                    path = ICUResourceBundle.ICU_CURR_BASE_NAME;
+                } else if ("locale".equals(tableName)) {
+                    path = ICUResourceBundle.ICU_BASE_NAME;
+                } else {
+                    path = ICUResourceBundle.ICU_LANG_BASE_NAME;
+                }
+                ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.
+                    getBundleInstance(path, displayLocaleID);
+                return getTableStringFromBundle(tableName, subtableName, item, bundle);
             }
         } catch (Exception e) {
 //          System.out.println("gtsu: " + e.getMessage());
@@ -2223,7 +2238,7 @@ public final class ULocale implements Serializable {
     /**
      * Utility to fetch locale display data from resource bundle tables.
      */
-    private static String getTableString(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
+    private static String getTableStringFromBundle(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
 //      System.out.println("gts table: " + tableName + 
 //                         " subtable: " + subtableName +
 //                         " item: " + item +
@@ -2727,27 +2742,33 @@ public final class ULocale implements Serializable {
 
         final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
-
         StringBuilder buf0 = new StringBuilder();
         StringBuilder buf1 = new StringBuilder();
 
+        ICUResourceBundle langBundle = (ICUResourceBundle)
+            UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_LANG_BASE_NAME, displayLocaleID);
+        ICUResourceBundle regionBundle = (ICUResourceBundle)
+            UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_REGION_BASE_NAME, displayLocaleID);
+        String sep = ", ";
+        try {
+            sep = langBundle.get("localeDisplayPattern").getString("separator");
+        } catch (MissingResourceException ex) {
+        }
+
         IDParser parser = new IDParser(localeID);
         String[] names = parser.getLanguageScriptCountryVariant();
-        
         for (int i = 0; i < names.length; ++i) {
             String name = names[i];
-            if (name.length() > 0) {               
-                name = getTableString(tableNames[i], null, name, bundle);
-                if ( i == 0 ) {
+            if (name.length() > 0) {
+                ICUResourceBundle bundle = i == 2 ? regionBundle : langBundle;
+                name = getTableStringFromBundle(tableNames[i], null, name, bundle);
+                if (i == 0) {
                     buf0.append(name);
                 } else {
                     if (buf1.length() > 0) {
-                        try {
-                            buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
-                        } catch ( MissingResourceException ex ) {
-                            buf1.append(", ");
-                        }
+                        buf1.append(sep);
                     }
                     buf1.append(name);
                 }
@@ -2758,34 +2779,35 @@ public final class ULocale implements Serializable {
         if (!m.isEmpty()) {
             for (Map.Entry<String, String> e : m.entrySet()) {
                 if (buf1.length() > 0) {
-                    try {
-                        buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
-                    } catch ( MissingResourceException ex ) {
-                        buf1.append(", ");
-                    }
+                    buf1.append(sep);
                 }
                 String key = e.getKey();
-                buf1.append(getTableString("Keys", null, key, bundle));
+                buf1.append(getTableStringFromBundle("Keys", null, key, langBundle));
                 buf1.append("=");
-                buf1.append(getTableString("Types", key, e.getValue(), bundle));
+                buf1.append(getTableStringFromBundle("Types", key, e.getValue(), langBundle));
             }
         }
 
-        String locDispPattern;
-        try {
-           locDispPattern = bundle.get("localeDisplayPattern").getString("pattern");
-        } catch ( MissingResourceException ex ) {
-           locDispPattern = "{0} ({1})";
+        if (buf0.length() > 0 && buf1.length() > 0) {
+            String locDispPattern;
+            try {
+                locDispPattern = langBundle.get("localeDisplayPattern").getString("pattern");
+            } catch (MissingResourceException ex) {
+                locDispPattern = "{0} ({1})";
+            }
+
+            Object[] args = {
+                buf0.toString(),
+                buf1.toString()
+            };
+            return MessageFormat.format(locDispPattern, args);
         }
 
-        Object[] args = { (Object)buf0.toString() , (Object)buf1.toString() };
-        if ( buf0.length() > 0 && buf1.length() > 0 ) {
-            return MessageFormat.format(locDispPattern,args);
-        } else if ( buf0.length() > 0 ) {
+        if (buf0.length() > 0) {
             return buf0.toString();
-        } else {
-            return buf1.toString();
         }
+
+        return buf1.toString();
     }
     
     /**
@@ -2848,30 +2870,34 @@ public final class ULocale implements Serializable {
 
         final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
-
         StringBuilder buf0 = new StringBuilder();
         StringBuilder buf1 = new StringBuilder();
 
-        IDParser parser = new IDParser(localeID);
-        String[] names = parser.getLanguageScriptCountryVariant();
+        ICUResourceBundle langBundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+            ICUResourceBundle.ICU_LANG_BASE_NAME, displayLocaleID);
+        ICUResourceBundle regionBundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+            ICUResourceBundle.ICU_REGION_BASE_NAME, displayLocaleID);
+
+        String sep = ", ";
+        try {
+            sep = langBundle.get("localeDisplayPattern").getString("separator");
+        } catch (MissingResourceException ex) {
+        }
 
         DisplayLanguageResult dlr = null;
-        
+        IDParser parser = new IDParser(localeID);
+        String[] names = parser.getLanguageScriptCountryVariant();
         for (int i = 0; i < names.length; ++i) {
             String name = names[i];
-            if (name.length() > 0) {               
-                if ( i == 0 ) {
-                    dlr = getDisplayLanguageWithDialectInternal(localeID,displayLocaleID);
+            if (name.length() > 0) {
+                if (i == 0) {
+                    dlr = getDisplayLanguageWithDialectInternal(localeID, displayLocaleID);
                     buf0.append(dlr.value);
-                } else if ( i > 2 || ( i == 1 && !dlr.ateScript) || ( i == 2 && !dlr.ateCountry) ) {
-                    name = getTableString(tableNames[i], null, name, bundle);
+                } else if (i > 2 || (i == 1 && !dlr.ateScript) || (i == 2 && !dlr.ateCountry)) {
+                    ICUResourceBundle bundle = i == 2 ? regionBundle : langBundle;
+                    name = getTableStringFromBundle(tableNames[i], null, name, bundle);
                     if (buf1.length() > 0) {
-                        try {
-                            buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
-                        } catch ( MissingResourceException ex ) {
-                            buf1.append(", ");
-                        }
+                        buf1.append(sep);
                     }
                     buf1.append(name);
                 }
@@ -2882,34 +2908,35 @@ public final class ULocale implements Serializable {
         if (!m.isEmpty()) {
             for (Map.Entry<String, String> e : m.entrySet()) {
                 if (buf1.length() > 0) {
-                    try {
-                        buf1.append(bundle.get("localeDisplayPattern").getString("separator"));
-                    } catch ( MissingResourceException ex ) {
-                        buf1.append(", ");
-                    }
+                    buf1.append(sep);
                 }
                 String key = e.getKey();
-                buf1.append(getTableString("Keys", null, key, bundle));
+                buf1.append(getTableStringFromBundle("Keys", null, key, langBundle));
                 buf1.append("=");
-                buf1.append(getTableString("Types", key, e.getValue(), bundle));
+                buf1.append(getTableStringFromBundle("Types", key, e.getValue(), langBundle));
             }
         }
 
-        String locDispPattern;
-        try {
-           locDispPattern = bundle.get("localeDisplayPattern").getString("pattern");
-        } catch ( MissingResourceException ex ) {
-           locDispPattern = "{0} ({1})";
+        if (buf0.length() > 0 && buf1.length() > 0) {
+            String locDispPattern;
+            try {
+                locDispPattern = langBundle.get("localeDisplayPattern").getString("pattern");
+            } catch (MissingResourceException ex) {
+                locDispPattern = "{0} ({1})";
+            }
+
+            Object[] args = {
+                buf0.toString(),
+                buf1.toString()
+            };
+            return MessageFormat.format(locDispPattern, args);
         }
 
-        Object[] args = { (Object)buf0.toString() , (Object)buf1.toString() };
-        if ( buf0.length() > 0 && buf1.length() > 0 ) {
-            return MessageFormat.format(locDispPattern,args);
-        } else if ( buf0.length() > 0 ) {
+        if (buf0.length() > 0) {
             return buf0.toString();
-        } else {
-            return buf1.toString();
         }
+
+        return buf1.toString();
     }
 
     /**

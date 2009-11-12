@@ -74,6 +74,11 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
 
+    public static final String ICU_LANG_BASE_NAME = ICU_BASE_NAME + "/lang";
+    public static final String ICU_CURR_BASE_NAME = ICU_BASE_NAME + "/curr";
+    public static final String ICU_REGION_BASE_NAME = ICU_BASE_NAME + "/region";
+    public static final String ICU_ZONE_BASE_NAME = ICU_BASE_NAME + "/zone";
+
     /**
      * The actual path of the resource
      */

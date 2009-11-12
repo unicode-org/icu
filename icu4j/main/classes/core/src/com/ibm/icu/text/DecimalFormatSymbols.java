@@ -800,6 +800,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             intlCurrencySymbol = "XXX";
             currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
+
+        ICUResourceBundle currResource = 
+            (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
         // If there is a currency decimal, use it.
         monetarySeparator = decimalSeparator;
         monetaryGroupingSeparator = groupingSeparator;
@@ -808,8 +812,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             String currencyCode = curr.getCurrencyCode();
             if(currencyCode != null) {
                 /* An explicit currency was requested */
-                ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-                ICUResourceBundle currencyRes = resource.getWithFallback("Currencies");
+                ICUResourceBundle currencyRes = currResource.getWithFallback("Currencies");
                 try{
                     currencyRes = currencyRes.getWithFallback(currencyCode);
                     if(currencyRes.getSize()>2) {
@@ -830,7 +833,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // Get Currency Spacing data. 
         currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
         currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
-        ICUResourceBundle curSpcBundle = (ICUResourceBundle)r.get(CURRENCY_SPACING);
+        ICUResourceBundle curSpcBundle = (ICUResourceBundle)currResource.get(CURRENCY_SPACING);
         if (curSpcBundle != null) {
             ICUResourceBundle beforeCurBundle = (ICUResourceBundle)curSpcBundle.get(BEFORE_CURRENCY);
             ICUResourceBundle afterCurBundle = (ICUResourceBundle)curSpcBundle.get(AFTER_CURRENCY);
