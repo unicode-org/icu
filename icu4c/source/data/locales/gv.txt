@@ -7,16 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/gv.xml
+ *  ICU <specials> source: <path>/xml/main/gv.xml
  */
 gv{
-    Countries{
-        GB{"Rywvaneth Unys"}
-    }
     ExemplarCharacters{"[a-c ç d-z]"}
-    Languages{
-        gv{"Gaelg"}
-    }
     LocaleScript{
         "Latn",
     }

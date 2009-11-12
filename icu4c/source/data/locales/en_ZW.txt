@@ -37,18 +37,4 @@ en_ZW{
             }
         }
     }
-    zoneStrings{
-        "meta:Africa_Central"{
-            cu:int{1}
-        }
-        "meta:Africa_Eastern"{
-            cu:int{1}
-        }
-        "meta:Africa_Southern"{
-            cu:int{1}
-        }
-        "meta:Africa_Western"{
-            cu:int{1}
-        }
-    }
 }

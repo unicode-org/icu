@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/bg.xml
+ *  ICU <specials> source: <path>/xml/collation/bg.xml
  */
 bg{
     Version{"2.0.41.26"}

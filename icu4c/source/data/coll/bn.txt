@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/bn.xml
+ *  ICU <specials> source: <path>/xml/collation/bn.xml
  */
 bn{
     Version{"2.0.42.71"}

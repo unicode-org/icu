@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_PK{
-    Currencies{
-        INR{
-            "INRs",
-            "Indian Rupee",
-        }
-        PKR{
-            "₨",
-            "Pakistani Rupee",
-        }
-    }
     Version{"2.0.41.78"}
     calendar{
         gregorian{

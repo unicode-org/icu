@@ -45,6 +45,7 @@
 #include "uarrsort.h"
 #include "uenumimp.h"
 #include "uassert.h"
+#include "ureslocs.h"
 
 #include <stdio.h> /* for sprintf */
 
@@ -81,6 +82,7 @@ static const char _kPattern[]         = "pattern";
 static const char _kSeparator[]       = "separator";
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
+
 
 /* ### Data tables **************************************************/
 
@@ -2133,6 +2135,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
      */
     errorCode=U_ZERO_ERROR;
     rb=ures_open(path, locale, &errorCode);
+
     if(U_FAILURE(errorCode)) {
         /* total failure, not even root could be opened */
         *pErrorCode=errorCode;
@@ -2148,6 +2151,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
         ures_initStackObject(&table);
         ures_initStackObject(&subTable);
         ures_getByKeyWithFallback(rb, tableKey, &table, &errorCode);
+
         if (subTableKey != NULL) {
             /*
             ures_getByKeyWithFallback(&table,subTableKey, &subTable, &errorCode);
@@ -2207,7 +2211,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
                 break;
             }
             ures_close(rb);
-            rb = ures_open(NULL, explicitFallbackName, &errorCode);
+            rb = ures_open(path, explicitFallbackName, &errorCode);
             if(U_FAILURE(errorCode)){
                 *pErrorCode = errorCode;
                 break;
@@ -2240,6 +2244,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
         UResourceBundle *rb;
 
         rb=ures_open(path, locale, pErrorCode);
+
         if(U_SUCCESS(*pErrorCode)) {
             s=ures_getStringByKey(rb, tableKey, &length, pErrorCode);
             /* see comment about closing rb near "return item;" in _res_getTableStringWithFallback() */
@@ -2259,6 +2264,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
                                                pErrorCode);
         }
     }
+
     if(U_SUCCESS(*pErrorCode)) {
         int32_t copyLength=uprv_min(length, destCapacity);
         if(copyLength>0 && s != NULL) {
@@ -2305,9 +2311,11 @@ _getDisplayNameForComponent(const char *locale,
         return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
-    return _getStringOrCopyKey(NULL, displayLocale,
+    char* root = tag == _kCountries ? U_ICUDATA_REGION : U_ICUDATA_LANG;
+
+    return _getStringOrCopyKey(root, displayLocale,
                                tag, NULL, localeBuffer,
-                               localeBuffer, 
+                               localeBuffer,
                                dest, destCapacity,
                                pErrorCode);
 }
@@ -2395,7 +2403,8 @@ uloc_getDisplayName(const char *locale,
         return 0;
     }
 
-    bundle    = ures_open(NULL, displayLocale, &status);
+    bundle    = ures_open(U_ICUDATA_LANG, displayLocale, &status);
+
     locdsppat = ures_getByKeyWithFallback(bundle, _kLocaleDisplayPattern, NULL, &status);
     dispLocSeparator = ures_getStringByKeyWithFallback(locdsppat, _kSeparator, &locSepLen, &status);
     dispLocPattern = ures_getStringByKeyWithFallback(locdsppat, _kPattern, &locPatLen, &status);
@@ -2648,7 +2657,7 @@ uloc_getDisplayKeyword(const char* keyword,
 
 
     /* pass itemKey=NULL to look for a top-level item */
-    return _getStringOrCopyKey(NULL, displayLocale,
+    return _getStringOrCopyKey(U_ICUDATA_LANG, displayLocale,
                                _kKeys, NULL, 
                                keyword, 
                                keyword,      
@@ -2696,7 +2705,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
         int32_t dispNameLen = 0;
         const UChar *dispName = NULL;
         
-        UResourceBundle *bundle     = ures_open(NULL, displayLocale, status);
+        UResourceBundle *bundle     = ures_open(U_ICUDATA_CURR, displayLocale, status);
         UResourceBundle *currencies = ures_getByKey(bundle, _kCurrencies, NULL, status);
         UResourceBundle *currency   = ures_getByKeyWithFallback(currencies, keywordValue, NULL, status);
         
@@ -2739,7 +2748,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
         
     }else{
 
-        return _getStringOrCopyKey(NULL, displayLocale,
+        return _getStringOrCopyKey(U_ICUDATA_LANG, displayLocale,
                                    _kTypes, keyword, 
                                    keywordValue,
                                    keywordValue,

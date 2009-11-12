@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_SG{
-    Currencies{
-        SGD{
-            "$",
-            "Singapore Dollar",
-        }
-        USD{
-            "US$",
-            "US Dollar",
-        }
-    }
     Version{"2.0.41.23"}
     calendar{
         gregorian{

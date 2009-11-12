@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 fr_LU{
-    Currencies{
-        FRF{
-            "FRF",
-            "franc français",
-        }
-        LUF{
-            "F",
-            "franc luxembourgeois",
-        }
-    }
     NumberElements{
         ",",
         ".",

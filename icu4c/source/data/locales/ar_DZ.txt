@@ -21,9 +21,6 @@ ar_DZ{
         "NaN",
         "+",
     }
-    Scripts{
-        Ital{"اللأيطالية القديمة"}
-    }
     Version{"2.0.41.78"}
     calendar{
         gregorian{

@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 es_US{
-    Currencies{
-        JPY{
-            "¥",
-            "yen japonés",
-        }
-        USD{
-            "$",
-            "dólar estadounidense",
-        }
-    }
     MeasurementSystem:int{1}
     NumberElements{
         ".",

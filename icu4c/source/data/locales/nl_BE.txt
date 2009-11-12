@@ -7,24 +7,11 @@
 // *
 // ***************************************************************************
 nl_BE{
-    Countries{
-        IM{"Het Eiland Man"}
-    }
-    Languages{
-        lv{"Lets"}
-        oc{"Occitaans (na 1500); Provençaals"}
-        sh{"Servo-Kroatisch"}
-    }
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
         "#,##0%",
         "#E0",
-    }
-    Types{
-        collation{
-            traditional{"Traditioneel"}
-        }
     }
     Version{"2.0.41.78"}
     calendar{

@@ -1,5 +1,6 @@
 <!DOCTYPE project [
     <!ENTITY icu-config SYSTEM "./icu-config.xml">
+    <!ENTITY icu-locale-deprecates SYSTEM "./icu-locale-deprecates.xml">
 ]>
 <!--
 /*
@@ -70,15 +71,17 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
           <sequential>
-            <ant target='locales'>
-            </ant>
-            <ant target='resfiles'>
-            </ant>
+            <ant target='locales' />
+            <ant target='resfiles' />
+            <ant target='resfiles_curr' />
+            <ant target='resfiles_lang' />
+            <ant target='resfiles_region' />
+            <ant target='resfiles_zone' />
           </sequential>
           <sequential>
             <ant target='collation'>
@@ -103,7 +106,8 @@
           <sequential>
             <ant target='translit'>
             </ant>
-            <!--<ant target='trnsfiles'></ant>    Not ANT-built - see note below. -->
+            <!--<ant target='trnsfiles'></ant> Not ANT-built - see
+            note below. -->
           </sequential>
         </parallel>
      </target>
@@ -118,6 +122,22 @@
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/main"/>
                     <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                 </args>
+		<remapper>
+		  <remap sourcePath="/Keys" targetDir="lang" />
+		  <remap sourcePath="/Languages" targetDir="lang" />
+		  <remap sourcePath="/LanguagesShort" targetDir="lang" />
+		  <remap sourcePath="/Scripts" targetDir="lang" />
+		  <remap sourcePath="/Types" targetDir="lang" />
+		  <remap sourcePath="/Variants" targetDir="lang" />
+		  <remap sourcePath="/codePatterns" targetDir="lang" />
+		  <remap sourcePath="/localeDisplayPattern" targetDir="lang" />
+		  <remap sourcePath="/Countries" targetDir="region" />
+		  <remap sourcePath="/Currencies" targetDir="curr" />
+		  <remap sourcePath="/CurrencyPlurals" targetDir="curr" />
+		  <remap sourcePath="/CurrencyUnitPatterns" targetDir="curr" />
+		  <remap sourcePath="/currencySpacing" targetDir="curr" />
+		  <remap sourcePath="/zoneStrings" targetDir="zone" />
+		</remapper>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
             </run>
@@ -133,46 +153,63 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.CLDR_DIR}/common/main" />
                 </args>
-                  <!-- locale aliases (main) -->
-                <deprecates>
-                    <alias from="in_ID" to="id_ID" />
-                    <alias from="iw_IL" to="he_IL" />
-                    <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/>
-                    <alias from="no_NO" to="nb_NO" />
-                    <alias from="no_NO_NY" to="nn_NO" />
-                    <alias from="en_RH" to="en_ZW" />
-                    <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" />
-                    <aliasLocale locale="az_AZ" />
-                    <aliasLocale locale="ha_GH" />
-                    <aliasLocale locale="ha_NE" />
-                    <aliasLocale locale="ha_NG" />
-                    <aliasLocale locale="kk_KZ" />
-                    <aliasLocale locale="in" />
-                    <aliasLocale locale="iw" />
-                    <aliasLocale locale="no" />
-                    <aliasLocale locale="pa_IN" />
-                    <aliasLocale locale="pa_PK" />
-                    <aliasLocale locale="sh" />
-                    <aliasLocale locale="sh_BA" />
-                    <aliasLocale locale="sh_CS" />
-                    <aliasLocale locale="sh_YU" />
-                    <aliasLocale locale="sr_BA" />
-                    <aliasLocale locale="sr_CS" />
-                    <aliasLocale locale="sr_ME" />
-                    <aliasLocale locale="sr_RS" />
-                    <aliasLocale locale="sr_YU" />
-                    <aliasLocale locale="sr_Cyrl_YU" />
-                    <aliasLocale locale="sr_Cyrl_CS" />
-                    <aliasLocale locale="sr_Latn_YU" />
-                    <aliasLocale locale="sr_Latn_CS" />
-                    <aliasLocale locale="uz_AF" />
-                    <aliasLocale locale="uz_UZ" />
-                    <aliasLocale locale="zh_CN" />
-                    <aliasLocale locale="zh_HK" />
-                    <aliasLocale locale="zh_MO" />
-                    <aliasLocale locale="zh_SG" />
-                    <aliasLocale locale="zh_TW" />
-                </deprecates>
+		&icu-locale-deprecates;
+            </run>
+        </cldr-build>
+    </target>
+    <target name="resfiles_curr" depends="init,setup" description="builds curr/resfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="resfiles.mk" noArgs="true">
+            <run>
+                <args>
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/curr" />
+                    <arg name="-s" value="${env.CLDR_DIR}/common/main" />
+                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/main"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-w" value="${env.CLDR_DIR}/common/main" />
+                </args>
+		&icu-locale-deprecates;
+            </run>
+        </cldr-build>
+    </target>
+    <target name="resfiles_lang" depends="init,setup" description="builds lang/resfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="resfiles.mk" noArgs="true">
+            <run>
+                <args>
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/lang" />
+                    <arg name="-s" value="${env.CLDR_DIR}/common/main" />
+                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/main"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-w" value="${env.CLDR_DIR}/common/main" />
+                </args>
+		&icu-locale-deprecates;
+            </run>
+        </cldr-build>
+    </target>
+    <target name="resfiles_region" depends="init,setup" description="builds region/resfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="resfiles.mk" noArgs="true">
+            <run>
+                <args>
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/region" />
+                    <arg name="-s" value="${env.CLDR_DIR}/common/main" />
+                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/main"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-w" value="${env.CLDR_DIR}/common/main" />
+                </args>
+		&icu-locale-deprecates;
+            </run>
+        </cldr-build>
+    </target>
+    <target name="resfiles_zone" depends="init,setup" description="builds zone/resfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="resfiles.mk" noArgs="true">
+            <run>
+                <args>
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/zone" />
+                    <arg name="-s" value="${env.CLDR_DIR}/common/main" />
+                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/main"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-w" value="${env.CLDR_DIR}/common/main" />
+                </args>
+		&icu-locale-deprecates;
             </run>
         </cldr-build>
     </target>
@@ -273,6 +310,10 @@
                     <arg name="-f"/>
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                 </args>
+		<remapper>
+		  <remap sourcePath="/CurrencyMap" targetDir="curr" />
+		  <remap sourcePath="/CurrencyMeta" targetDir="curr" />
+		</remapper>
             </run>
         </cldr-build>
     </target>
@@ -396,6 +437,8 @@
             <fileset id="resfiles" dir="${env.ICU4C_DIR}/source/data/locales">
                 <include name="resfiles.mk" />
             </fileset>
+            <fileset id="locales_split" dir="${env.ICU4C_DIR}/source/data" includes="curr/* lang/* region/* zone/">
+	    </fileset>
             <fileset id="collation" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="*.txt" />
             </fileset>

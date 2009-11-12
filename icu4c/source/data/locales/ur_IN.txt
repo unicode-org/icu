@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/ur_IN.xml
+ *  ICU <specials> source: <path>/xml/main/ur_IN.xml
  */
 ur_IN{
     NumberPatterns{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/az_Latn.xml
+ *  ICU <specials> source: <path>/xml/main/az_Latn.xml
  */
 az_Latn{
     LocaleScript{

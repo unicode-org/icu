@@ -7,83 +7,13 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/uz_Latn.xml
+ *  ICU <specials> source: <path>/xml/main/uz_Latn.xml
  */
 uz_Latn{
     %%ParentIsRoot:int{1}
-    Countries{
-        AF{"Afgʿoniston"}
-        BR{"Braziliya"}
-        CN{"Xitoy"}
-        DE{"Olmoniya"}
-        FR{"Fransiya"}
-        GB{"Birlashgan Qirollik"}
-        IN{"Hindiston"}
-        IT{"Italiya"}
-        JP{"Yaponiya"}
-        RU{"Rossiya"}
-        US{"Qo'shma Shtatlar"}
-        UZ{"Oʿzbekiston"}
-    }
-    Currencies{
-        BRL{
-            "R$",
-            "Brazil reali",
-        }
-        CNY{
-            "CN¥",
-            "Xitoy yuani",
-        }
-        EUR{
-            "€",
-            "Evro",
-        }
-        GBP{
-            "£",
-            "Ingliz funt sterlingi",
-        }
-        INR{
-            "Rs",
-            "Hind rupiyasi",
-        }
-        JPY{
-            "JP¥",
-            "Yapon yenasi",
-        }
-        RUB{
-            "RUB",
-            "Rus rubli",
-        }
-        USD{
-            "US$",
-            "AQSH dollari",
-        }
-        UZS{
-            "soʿm",
-            "Oʿzbekiston soʿm",
-        }
-    }
     ExemplarCharacters{"[a-v x-z ʿ]"}
-    Languages{
-        ar{"arabcha"}
-        de{"olmoncha"}
-        en{"inglizcha"}
-        es{"ispancha"}
-        fr{"fransuzcha"}
-        hi{"hindcha"}
-        it{"italyancha"}
-        ja{"yaponcha"}
-        pt{"portugalcha"}
-        ru{"ruscha"}
-        uz{"o'zbekcha"}
-        zh{"xitoycha"}
-    }
     LocaleScript{
         "Latn",
-    }
-    Scripts{
-        Cyrl{"Kiril"}
-        Latn{"Lotin"}
     }
     Version{"2.0.42.82"}
     calendar{

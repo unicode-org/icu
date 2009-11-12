@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_TT{
-    Currencies{
-        TTD{
-            "$",
-            "Trinidad and Tobago Dollar",
-        }
-        USD{
-            "US$",
-            "US Dollar",
-        }
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",

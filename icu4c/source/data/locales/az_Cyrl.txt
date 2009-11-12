@@ -7,42 +7,12 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/az_Cyrl.xml
+ *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
  */
 az_Cyrl{
     %%ParentIsRoot:int{1}
     AuxExemplarCharacters{"[ц щ ъ ь-я]"}
-    Countries{
-        AZ{"Азәрбајҹан"}
-        BR{"Бразилија"}
-        CN{"Чин"}
-        DE{"Алманија"}
-        FR{"Франса"}
-        IN{"Һиндистан"}
-        IT{"Италија"}
-        JP{"Јапонија"}
-        RU{"Русија"}
-        US{"Америка Бирләшмиш Штатлары"}
-    }
-    Currencies{
-        AZN{
-            "ман.",
-            "Azərbaycan manatı",
-        }
-    }
     ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}
-    Languages{
-        az{"Азәрбајҹан"}
-        de{"алманҹа"}
-        en{"инҝилисҹә"}
-        es{"испанҹа"}
-        fr{"франсызҹа"}
-        it{"италјанҹа"}
-        ja{"јапонҹа"}
-        pt{"португалҹа"}
-        ru{"русҹа"}
-        zh{"чинҹә"}
-    }
     LocaleScript{
         "Cyrl",
     }

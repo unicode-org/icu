@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_AU{
-    Currencies{
-        AUD{
-            "$",
-            "Australian Dollar",
-        }
-        USD{
-            "US$",
-            "US Dollar",
-        }
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
@@ -124,26 +114,6 @@ en_AU{
                     y{"d/MM/yy - d/MM/yy"}
                 }
             }
-        }
-    }
-    zoneStrings{
-        "meta:Atlantic"{
-            cu:int{0}
-        }
-        "meta:Australia_Central"{
-            cu:int{1}
-        }
-        "meta:Australia_CentralWestern"{
-            cu:int{1}
-        }
-        "meta:Australia_Eastern"{
-            cu:int{1}
-        }
-        "meta:Australia_Western"{
-            cu:int{1}
-        }
-        "meta:New_Zealand"{
-            cu:int{1}
         }
     }
 }

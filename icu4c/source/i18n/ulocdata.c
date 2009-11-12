@@ -19,6 +19,7 @@
 #include "unicode/ulocdata.h"
 #include "umutex.h"
 #include "uresimp.h"
+#include "ureslocs.h"
 
 #define MEASUREMENT_SYSTEM  "MeasurementSystem"
 #define PAPER_SIZE          "PaperSize"
@@ -37,6 +38,11 @@ struct ULocaleData {
      * Pointer to the resource bundle associated with this locale data object
      */
     UResourceBundle *bundle;
+
+    /**
+     * Pointer to the lang resource bundle associated with this locale data object
+     */
+    UResourceBundle *langBundle;
 };
 
 U_CAPI ULocaleData* U_EXPORT2
@@ -54,9 +60,11 @@ ulocdata_open(const char *localeID, UErrorCode *status)
       return(NULL);
    }
 
+   uld->langBundle = NULL;
 
    uld->noSubstitute = FALSE;
    uld->bundle = ures_open(NULL, localeID, status);
+   uld->langBundle = ures_open(U_ICUDATA_LANG, localeID, status);
 
    if (U_FAILURE(*status)) {
       uprv_free(uld);
@@ -70,6 +78,7 @@ U_CAPI void U_EXPORT2
 ulocdata_close(ULocaleData *uld)
 {
     if ( uld != NULL ) {
+       ures_close(uld->langBundle);
        ures_close(uld->bundle);
        uprv_free(uld);
     }
@@ -249,7 +258,7 @@ ulocdata_getLocaleDisplayPattern(ULocaleData *uld,
     if (U_FAILURE(*status))
         return 0;
 
-    patternBundle = ures_getByKey(uld->bundle, "localeDisplayPattern", NULL, &localStatus);
+    patternBundle = ures_getByKey(uld->langBundle, "localeDisplayPattern", NULL, &localStatus);
 
     if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
         localStatus = U_MISSING_RESOURCE_ERROR;
@@ -281,7 +290,6 @@ ulocdata_getLocaleDisplayPattern(ULocaleData *uld,
 
     u_strncpy(result, pattern, resultCapacity);
     return len;
-
 }
 
 
@@ -298,7 +306,7 @@ ulocdata_getLocaleSeparator(ULocaleData *uld,
     if (U_FAILURE(*status))
         return 0;
 
-    separatorBundle = ures_getByKey(uld->bundle, "localeDisplayPattern", NULL, &localStatus);
+    separatorBundle = ures_getByKey(uld->langBundle, "localeDisplayPattern", NULL, &localStatus);
 
     if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
         localStatus = U_MISSING_RESOURCE_ERROR;
@@ -330,5 +338,4 @@ ulocdata_getLocaleSeparator(ULocaleData *uld,
 
     u_strncpy(result, separator, resultCapacity);
     return len;
-
 }
