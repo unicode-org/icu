@@ -215,34 +215,27 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         pat.append(currency).append("#,##0.00;-").append(currency).append("#,##0.00");
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
         String s = ((NumberFormat) fmt).format(1234.56);
-        pat = new StringBuffer("");
+        pat = new StringBuffer();
         logln("Pattern \"" + fmt.toPattern() + "\"");
         logln(" Format " + 1234.56 + " . " + s);
-        if (!s.equals("$1,234.56"))
-            errln("FAIL: Expected $1,234.56");
-        s = "";
+        assertEquals("symbol, pos", "$1,234.56", s);
+        
         s = ((NumberFormat) fmt).format(-1234.56);
         logln(" Format " + Double.toString(-1234.56) + " . " + s);
-        if (!s.equals("-$1,234.56"))
-            errln("FAIL: Expected -$1,234.56");
+        assertEquals("symbol, neg", "-$1,234.56", s);
 
-        pat = new StringBuffer("");
+        pat.setLength(0);
         // "\xA4\xA4 #,##0.00;\xA4\xA4 -#,##0.00"
         pat.append(currency).append(currency).append(" #,##0.00;").append(currency).append(currency).append(" -#,##0.00");
         fmt = new DecimalFormat(pat.toString(), sym);
-        s = "";
         s = ((NumberFormat) fmt).format(1234.56);
         logln("Pattern \"" + fmt.toPattern() + "\"");
         logln(" Format " + Double.toString(1234.56) + " . " + s);
-
-        if (!s.equals("USD 1,234.56"))
-            errln("FAIL: Expected USD 1,234.56");
-        s = "";
+        assertEquals("name, pos", "USD 1,234.56", s);
+        
         s = ((NumberFormat) fmt).format(-1234.56);
         logln(" Format " + Double.toString(-1234.56) + " . " + s);
-        if (!s.equals("USD -1,234.56"))
-            errln("FAIL: Expected USD -1,234.56");
-
+        assertEquals("name, neg", "USD -1,234.56", s);
     }
 
     public void TestSpaceParsing() {
@@ -1567,12 +1560,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
                         String currAmt = tokens.next();
                         str = tokens.next();
-                        CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
+                        CurrencyAmount target = parseCurrencyAmount(currAmt, ref, '/');
+                        String formatResult = mfmt.format(target);
                         assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
-                                     str, mfmt.format(n));
-                        n = parseCurrencyAmount(tokens.next(), ref, '/');
+                                     str, formatResult);
+                        target = parseCurrencyAmount(tokens.next(), ref, '/');
+                        CurrencyAmount parseResult = (CurrencyAmount) mfmt.parseObject(str);
                         assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
-                                     n, (CurrencyAmount) mfmt.parseObject(str));
+                                     target, parseResult);
                     } catch (ParseException e) {
                         errln(where + '"' + pat + "\".parse(\"" + str +
                               "\") threw an exception");

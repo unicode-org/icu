@@ -26,6 +26,7 @@ public final class LocaleData {
     private static final String SEPARATOR           = "separator";
     private boolean noSubstitute;
     private ICUResourceBundle bundle;
+    private ICUResourceBundle langBundle;
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
@@ -144,11 +145,12 @@ public final class LocaleData {
      */
     public static final LocaleData getInstance(ULocale locale) {
        LocaleData ld = new LocaleData();
-       ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale );
+       ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+       ld.langBundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_LANG_BASE_NAME, locale);
        ld.noSubstitute = false;
        return ld;
     }
-
+    
     /**
      * Gets the LocaleData object associated with the default locale
      *
@@ -281,7 +283,7 @@ public final class LocaleData {
             return height;
         }
         /**
-         * Returns the width of hte paper
+         * Returns the width of the paper
          * @return the width
          * @stable ICU 2.8
          */
@@ -311,11 +313,7 @@ public final class LocaleData {
      * @provisional This API might change or be removed in a future release.
      */ 
     public String getLocaleDisplayPattern() {
-      if (bundle == null) {
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_BASE_NAME, ULocale.getDefault());
-      }
-      ICUResourceBundle locDispBundle = (ICUResourceBundle) bundle.get(LOCALE_DISPLAY_PATTERN);
+      ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
       String localeDisplayPattern = locDispBundle.getStringWithFallback(PATTERN);
       return localeDisplayPattern;
     }
@@ -327,11 +325,7 @@ public final class LocaleData {
      * @provisional This API might change or be removed in a future release.
      */ 
     public String getLocaleSeparator() {
-      if (bundle == null) {
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_BASE_NAME, ULocale.getDefault());
-      }
-      ICUResourceBundle locDispBundle = (ICUResourceBundle) bundle.get(LOCALE_DISPLAY_PATTERN);
+      ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
       String  localeSeparator = locDispBundle.getStringWithFallback(SEPARATOR);
       return localeSeparator;
     }

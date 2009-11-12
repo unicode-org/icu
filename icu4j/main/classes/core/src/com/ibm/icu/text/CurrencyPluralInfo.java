@@ -264,7 +264,6 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         setupCurrencyPluralPattern(uloc);
     }
 
-   
     private void setupCurrencyPluralPattern(ULocale uloc) {
         pluralCountToCurrencyUnitPattern = new HashMap<String, String>();
         Set<String> pluralCountSet = new HashSet<String>();
@@ -279,7 +278,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         }
         while (parentLocale != null) {
             try {
-                ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
+                ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle.
+                    getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, parentLocale);
                 ICUResourceBundle currencyRes = resource.getWithFallback("CurrencyUnitPatterns");
                 int size = currencyRes.getSize();
                 for (int index = 0; index < size; ++index) {
@@ -300,15 +300,14 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
                         posNegPatterns.append(";");
                         posNegPatterns.append(negWithCurrSign);
                         patternWithCurrencySign = posNegPatterns.toString();
-                        
-                    } 
+                    }
                     pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
                     pluralCountSet.add(pluralCount);
                 }
             } catch (MissingResourceException e) {
             }
             parentLocale = parentLocale.getFallback();
-        } 
+        }
     }
 
 

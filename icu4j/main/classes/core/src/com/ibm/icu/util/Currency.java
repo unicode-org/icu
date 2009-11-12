@@ -165,7 +165,7 @@ public class Currency extends MeasureUnit implements Serializable {
         Vector<String> currCodeVector = new Vector<String>();
 
         // Get supplementalData
-        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,
             "supplementalData",
             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if (bundle == null)
@@ -253,7 +253,7 @@ public class Currency extends MeasureUnit implements Serializable {
         boolean isPreEuro = variant.equals("PREEURO");
         boolean isEuro = variant.equals("EURO");
         // TODO: ICU4C has service registration, and the currency is requested from the service here.
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(bundle==null){
             //throw new MissingResourceException()
             return null;
@@ -406,7 +406,8 @@ public class Currency extends MeasureUnit implements Serializable {
         List<String> values = new ArrayList<String>();
         List<String> otherValues = new ArrayList<String>();
 
-        UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData");
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(
+            ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData");
         bundle = bundle.get("CurrencyMap");
         Enumeration<String> keyEnum = bundle.getKeys();
         boolean done = false;
@@ -580,7 +581,7 @@ public class Currency extends MeasureUnit implements Serializable {
         String s = null;
 
          try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,locale);
             ICUResourceBundle currencies = (ICUResourceBundle)rb.get("Currencies");
 
             // Fetch resource with multi-level resource inheritance fallback
@@ -677,7 +678,7 @@ public class Currency extends MeasureUnit implements Serializable {
         ICUResourceBundle isoCodeBundle;
         // search at run time, not saved in initialization
         try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,locale);
             // get handles fallback
             ICUResourceBundle currencies = (ICUResourceBundle)rb.get("CurrencyPlurals");
 
@@ -822,7 +823,7 @@ public class Currency extends MeasureUnit implements Serializable {
         HashSet<String> visited = new HashSet<String>();
         ULocale parentLocale = locale;
         while (parentLocale != null) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,parentLocale);
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,parentLocale);
             // We can't cast this to String[][]; the cast has to happen later
             try {
                 UResourceBundle currencies = rb.get("Currencies");
@@ -877,7 +878,7 @@ public class Currency extends MeasureUnit implements Serializable {
         Map<String, Set<String>> visitedInMap = new HashMap<String, Set<String>>();
         parentLocale = locale;
         while (parentLocale != null) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,parentLocale);
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,parentLocale);
             try {
                 UResourceBundle currencies;
                 currencies = rb.get("CurrencyPlurals");
@@ -1033,7 +1034,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            UResourceBundle root = ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle root = ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle currencyMeta = root.get("CurrencyMeta");
 
             //Integer[] i = null;

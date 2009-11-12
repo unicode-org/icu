@@ -232,7 +232,7 @@ public class ZoneStringFormat {
 
         ICUResourceBundle zoneStringsBundle = null;
         try {
-            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
             zoneStringsBundle = bundle.getWithFallback("zoneStrings");
         } catch (MissingResourceException e) {
             // If no locale bundles are available, zoneStringsBundle will be null.
@@ -257,7 +257,7 @@ public class ZoneStringFormat {
         }
         ICUResourceBundle zoneStringsBundle = null;
         try {
-            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
             zoneStringsBundle = bundle.getWithFallback("zoneStrings");
         } catch (MissingResourceException e) {
             // If no locale bundles are available, zoneStringsBundle will be null.
@@ -274,7 +274,7 @@ public class ZoneStringFormat {
 
         for (int i = 0; i < zoneIDs.length; i++) {
             // Skip aliases
-            String tzid = ZoneMeta.getCanonicalSystemID(zoneIDs[i]);
+             String tzid = ZoneMeta.getCanonicalSystemID(zoneIDs[i]);
             if (tzid == null || !zoneIDs[i].equals(tzid)) {
                 continue;
             }
@@ -877,7 +877,7 @@ public class ZoneStringFormat {
         String countryStr = null;
         if (countryCode != null) {
             ICUResourceBundle rb = 
-                (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+                (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_REGION_BASE_NAME, locale);
 //
 // TODO: There is a design bug in UResourceBundle and getLoadingStatus() does not work well.
 //
