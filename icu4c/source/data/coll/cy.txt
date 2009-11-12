@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/cy.xml
+ *  ICU <specials> source: <path>/xml/collation/cy.xml
  */
 cy{
     Version{"2.0.42.8"}

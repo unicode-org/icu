@@ -1,0 +1,138 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/hr.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/hr.xml
+ */
+hr{
+    Version{"2.0.42.82"}
+    zoneStrings{
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaši"}
+        }
+        "America:Anchorage"{
+            ec{"Alaska vremenska zona"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Središnja, Sjeverna Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Sjeverna Dakota"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadir"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Shanghai"{
+            ec{"Šangaj"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taškent"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azorski otoci"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarska Otočja"}
+        }
+        "Etc:Unknown"{
+            ec{"Nepoznat ili nevažeći grad"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kalinjingrad"}
+        }
+        "Europe:Kiev"{
+            ec{"Kijev"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskva"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzgorod"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
+        }
+        "Pacific:Easter"{
+            ec{"Uskrsni Otok"}
+        }
+        "meta:Acre"{
+            ld{"Acre ljetno vrijeme"}
+        }
+        "meta:Africa_Central"{
+            ls{"Središnja Afrika"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Istočna Afrika"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Južna Afrika"}
+        }
+        "meta:Africa_Western"{
+            ld{"Zapadna Afrika, ljetno vrijeme"}
+            ls{"Zapadna Afrika"}
+        }
+        "meta:America_Central"{
+            ld{"središnje dnevno vrijeme"}
+            lg{"središnje vrijeme"}
+            ls{"središnje standardno vrijeme"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"istočno dnevno vrijeme"}
+            lg{"istočno vrijeme"}
+            ls{"istočno standardno vrijeme"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"planinsko dnevno vrijeme"}
+            lg{"planinsko vrijeme"}
+            ls{"planinsko standardno vrijeme"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"pacifičko dnevno vrijeme"}
+            lg{"pacifičko vrijeme"}
+            ls{"pacifičko standardno vrijeme"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"atlantsko dnevno vrijeme"}
+            lg{"atlantsko vrijeme"}
+            ls{"atlantsko standardno vrijeme"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
+        }
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
+    }
+}

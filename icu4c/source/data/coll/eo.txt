@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/eo.xml
+ *  ICU <specials> source: <path>/xml/collation/eo.xml
  */
 eo{
     Version{"2.0.41.26"}

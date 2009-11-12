@@ -13,9 +13,6 @@ ar_SA{
         "#,##0%",
         "#E0",
     }
-    Scripts{
-        Ital{"اللأيطالية القديمة"}
-    }
     Version{"2.0.41.23"}
     calendar{
         gregorian{

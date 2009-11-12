@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_CA{
-    Currencies{
-        CAD{
-            "$",
-            "Canadian Dollar",
-        }
-        USD{
-            "US$",
-            "US Dollar",
-        }
-    }
     PaperSize:intvector{
         279,
         216,
@@ -124,11 +114,6 @@ en_CA{
                     y{"yy-MM-dd - yy-MM-dd"}
                 }
             }
-        }
-    }
-    zoneStrings{
-        "meta:Newfoundland"{
-            cu:int{1}
         }
     }
 }

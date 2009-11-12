@@ -22,6 +22,7 @@
 #include "cstring.h"
 #include "hash.h"
 #include "uresimp.h"
+#include "ureslocs.h"
 
 U_NAMESPACE_BEGIN
 
@@ -261,13 +262,14 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         }
     }
     ures_close(numberPatterns);
+    ures_close(rb);
 
     if (U_FAILURE(ec)) {
-        ures_close(rb);
         return;
     }
 
-    UResourceBundle *currencyRes = ures_getByKeyWithFallback(rb, gCurrUnitPtnTag, NULL, &ec);
+    UResourceBundle *currRb = ures_open(U_ICUDATA_CURR, loc.getName(), &ec);
+    UResourceBundle *currencyRes = ures_getByKeyWithFallback(currRb, gCurrUnitPtnTag, NULL, &ec);
     
 #ifdef CURRENCY_PLURAL_INFO_DEBUG
     std::cout << "in set up\n";
@@ -312,7 +314,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     }
     delete keywords;
     ures_close(currencyRes);
-    ures_close(rb);
+    ures_close(currRb);
 }
 
 

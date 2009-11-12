@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/sr_Cyrl.xml
+ *  ICU <specials> source: <path>/xml/main/sr_Cyrl.xml
  */
 sr_Cyrl{
     LocaleScript{

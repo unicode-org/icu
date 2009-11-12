@@ -1,0 +1,63 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ta.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ta.xml
+ */
+ta{
+    Version{"2.0.42.82"}
+    zoneStrings{
+        "America:Cambridge_Bay"{
+            ec{"கேம்பிரிட்ஜ் பே"}
+        }
+        "America:Campo_Grande"{
+            ec{"கேம்போ கிராண்டே"}
+        }
+        "America:Chicago"{
+            ec{"சிகாகோ"}
+        }
+        "America:Denver"{
+            ec{"தேன்வர்"}
+        }
+        "America:Indianapolis"{
+            ec{"இந்தியானாபோலிஸ்"}
+        }
+        "America:Los_Angeles"{
+            ec{"லாஸ் ஏஞ்சல்ஸ்"}
+        }
+        "America:New_York"{
+            ec{"நியூயார்க்"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"மையம், வடக்கு டகோடா"}
+        }
+        "America:Phoenix"{
+            ec{"ஃபோனிக்ஸ்"}
+        }
+        "Asia:Jakarta"{
+            ec{"ஜகார்த்தா"}
+        }
+        "Asia:Jayapura"{
+            ec{"ஜெயபூரா"}
+        }
+        "Australia:Brisbane"{
+            ec{"பிரிஸ்பேன்"}
+        }
+        "Pacific:Easter"{
+            ec{"ஈஸ்டர்"}
+        }
+        "meta:India"{
+            cu:int{1}
+            ls{"இந்திய நேரப்படி"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} நேரம்"}
+    }
+}

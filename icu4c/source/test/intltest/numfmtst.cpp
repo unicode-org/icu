@@ -1585,28 +1585,28 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // Test that a default or fallback warning is being returned. JB 4239.
     ucurr_getName(CAD, "es_ES", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (fallback)",
+    assertTrue("ucurr_getName (es_ES fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE, possibleDataError);
 
     ucurr_getName(CAD, "zh_TW", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (fallback)",
+    assertTrue("ucurr_getName (zh_TW fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE, possibleDataError);
 
     ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (default)",
-                    U_USING_DEFAULT_WARNING == ec, TRUE);
+    assertTrue("ucurr_getName (en_US default)",
+                    U_USING_DEFAULT_WARNING == ec || U_USING_FALLBACK_WARNING == ec, TRUE);
     
     ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (default)",
+    assertTrue("ucurr_getName (vi default)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
     
     // Test that a default warning is being returned when falling back to root. JB 4536.
     ucurr_getName(ITL, "cy", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (default to root)",
+    assertTrue("ucurr_getName (cy default to root)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
     
     // TODO add more tests later
@@ -2823,9 +2823,8 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         UErrorCode status = U_ZERO_ERROR;
         curFmt->parseObject(stringToBeParsed, result, status);
         if (U_FAILURE(status)) {
-            errln("FAIL: measure format parsing");
-        } 
-        if (result.getType() != Formattable::kObject || 
+          errln("FAIL: measure format parsing: '%s' ec: %s", formats[i], u_errorName(status));
+        } else if (result.getType() != Formattable::kObject || 
             result.getObject()->getDynamicClassID() != CurrencyAmount::getStaticClassID() ||
             ((CurrencyAmount*)result.getObject())->getNumber().getDouble() != 1234.56 ||
             UnicodeString(((CurrencyAmount*)result.getObject())->getISOCurrency()).compare(ISO_CURRENCY_USD)) {
@@ -2899,6 +2898,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         // format result using CURRENCYSTYLE,
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
+
         {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
         {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
         {"en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars"},
@@ -2990,7 +2990,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
             }
         }
         delete numFmt;
-      }  
+      }
     }
 }
 

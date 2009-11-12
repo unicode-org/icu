@@ -7,16 +7,6 @@
 // *
 // ***************************************************************************
 en_HK{
-    Currencies{
-        HKD{
-            "$",
-            "Hong Kong Dollar",
-        }
-        USD{
-            "US$",
-            "US Dollar",
-        }
-    }
     Version{"2.0.41.23"}
     calendar{
         gregorian{

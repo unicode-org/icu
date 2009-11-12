@@ -8,12 +8,6 @@
 // ***************************************************************************
 sv_FI{
     AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
-    Countries{
-        UM{"USA:s yttre öar"}
-    }
-    Variants{
-        1996{"1996 års stavning"}
-    }
     Version{"2.0.42.82"}
     calendar{
         gregorian{

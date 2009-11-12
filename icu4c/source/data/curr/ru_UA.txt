@@ -1,0 +1,25 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ru_UA.xml
+// *
+// ***************************************************************************
+ru_UA{
+    Currencies{
+        ESB{
+            "ESB" /** ===  */,
+            "ESB",
+        }
+        RHD{
+            "RH$",
+            "RHD",
+        }
+        YUM{
+            "YUM" /** ===  */,
+            "YUM",
+        }
+    }
+    Version{"2.0.41.78"}
+}

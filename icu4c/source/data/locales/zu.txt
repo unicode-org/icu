@@ -7,29 +7,13 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/zu.xml
+ *  ICU <specials> source: <path>/xml/main/zu.xml
  */
 zu{
-    Countries{
-        ZA{"iNingizimu Afrika"}
-    }
     ExemplarCharacters{
         "[a b {bh} c {ch} d {dl} {dy} e-g {gc} {gq} {gx} h {hh} {hl} i-k {kh} {kl} {k"
         "p} l-n {nc} {ngc} {ngq} {ngx} {nhl} {nk} {nkc} {nkq} {nkx} {nq} {ntsh} {nx} "
         "{ny} o p {ph} q {qh} r {rh} s {sh} t {th} {tl} {ts} {tsh} u-x {xh} y z]"
-    }
-    Languages{
-        af{"isiBhunu"}
-        ar{"isi-Alabhu"}
-        de{"isiJalimani"}
-        en{"isiNgisi"}
-        es{"isiSpeyini"}
-        fr{"isiFulentshi"}
-        hi{"isiHindi"}
-        st{"isiSuthu"}
-        sw{"isiSwahili"}
-        xh{"isiXhosa"}
-        zu{"isiZulu"}
     }
     LocaleScript{
         "Latn",

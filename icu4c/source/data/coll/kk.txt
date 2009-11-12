@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/kk.xml
+ *  ICU <specials> source: <path>/xml/collation/kk.xml
  */
 kk{
     Version{"2.0.41.26"}

@@ -1,0 +1,28 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/so.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/so.xml
+ */
+so{
+    Languages{
+        ar{"Carabi"}
+        de{"Jarmal"}
+        es{"Isbaanish"}
+        fa{"Faarisi"}
+        fr{"Faransiis"}
+        fy{"Firiisiyan Galbeed"}
+        it{"Talyaani"}
+        so{"Soomaali"}
+    }
+    Scripts{
+        Zxxx{"Aan la qorin"}
+        Zzzz{"Far aan la aqoon amase aan saxnayn"}
+    }
+    Version{"2.0.42.82"}
+}

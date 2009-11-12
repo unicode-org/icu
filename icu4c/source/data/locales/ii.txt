@@ -7,45 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/ii.xml
+ *  ICU <specials> source: <path>/xml/main/ii.xml
  */
 ii{
-    Countries{
-        BR{"ꀠꑭ"}
-        CN{"ꍏꇩ"}
-        DE{"ꄓꇩ"}
-        FR{"ꃔꇩ"}
-        GB{"ꑱꇩ"}
-        IN{"ꑴꄗ"}
-        IT{"ꑴꄊꆺ"}
-        JP{"ꏝꀪ"}
-        RU{"ꊉꇆꌦ"}
-        US{"ꂰꇩ"}
-        ZZ{"ꃅꄷꅉꀋꐚꌠ"}
-    }
-    Currencies{
-        XXX{
-            "XXX",
-            "ꅉꀋꐚꌠꌋꆀꎆꃀꀋꈁꀐꌠ",
-        }
-    }
     ExemplarCharacters{"[ꀀ-ꒌ]"}
-    Languages{
-        de{"ꄓꇩꉙ"}
-        en{"ꑱꇩꉙ"}
-        es{"ꑭꀠꑸꉙ"}
-        fr{"ꃔꇩꉙ"}
-        ii{"ꆈꌠꉙ"}
-        it{"ꑴꄊꆺꉙ"}
-        ja{"ꏝꀪꉙ"}
-        pt{"ꁍꄨꑸꉙ"}
-        pt_BR{"ꀠꑟꁍꄨꑸꉙ"}
-        ru{"ꊉꇩꉙ"}
-        und{"ꅉꀋꌠꅇꂷ"}
-        zh{"ꍏꇩꉙ"}
-        zh_Hans{"ꈝꐯꍏꇩꉙ"}
-        zh_Hant{"ꀎꋏꍏꇩꉙ"}
-    }
     LocaleScript{
         "Yiii",
     }
@@ -62,22 +27,6 @@ ii{
         "∞",
         "NaN",
         "+",
-    }
-    Scripts{
-        Arab{"ꀊꇁꀨꁱꂷ"}
-        Cyrl{"ꀊꆨꌦꇁꃚꁱꂷ"}
-        Hans{"ꈝꐯꉌꈲꁱꂷ"}
-        Hant{"ꀎꋏꉌꈲꁱꂷ"}
-        Latn{"ꇁꄀꁱꂷ"}
-        Yiii{"ꆈꌠꁱꂷ"}
-        Zxxx{"ꁱꀋꉆꌠ"}
-        Zzzz{"ꅉꀋꐚꌠꁱꂷ"}
-    }
-    Types{
-        calendar{
-            gregorian{"ꄉꉻꃅꑍ"}
-            islamic{"ꑳꌦꇂꑍꉖ"}
-        }
     }
     Version{"2.0.42.82"}
     calendar{
@@ -211,18 +160,8 @@ ii{
             }
         }
     }
-    codePatterns{
-        language{"ꅇꉙ: {0}"}
-        script{"ꇇꁱ: {0}"}
-        territory{"ꃅꄷ: {0}"}
-    }
     measurementSystemNames{
         US{"ꂰꇩ"}
         metric{"ꂰꌬꌠ"}
-    }
-    zoneStrings{
-        "Etc:Unknown"{
-            ec{"ꅉꀋꐚꌠ"}
-        }
     }
 }
