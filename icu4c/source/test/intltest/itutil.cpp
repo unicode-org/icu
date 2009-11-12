@@ -81,6 +81,9 @@ void ErrorCodeTest::TestErrorCode() {
         return;
     }
     errorCode.assertSuccess();
+    if(errorCode.errorName()!=u_errorName(U_ZERO_ERROR)) {
+        errln("ErrorCode did not format error message string properly");
+    }
     RefPlusOne(errorCode);
     if(errorCode.get()!=U_ILLEGAL_ARGUMENT_ERROR || errorCode.isSuccess() || !errorCode.isFailure()) {
         errln("ErrorCode did not yield a writable reference");
