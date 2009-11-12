@@ -7,147 +7,16 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/cy.xml
+ *  ICU <specials> source: <path>/xml/main/cy.xml
  */
 cy{
     AuxExemplarCharacters{"[j k q v x z]"}
-    Countries{
-        GB{"Prydain Fawr"}
-    }
-    Currencies{
-        BRL{
-            "R$",
-            "Real Brasil",
-        }
-        CNY{
-            "CN¥",
-            "Yuan Renminbi Tseina",
-        }
-        EUR{
-            "€",
-            "Ewro",
-        }
-        GBP{
-            "£",
-            "Punt Sterling Prydain",
-        }
-        INR{
-            "Rs",
-            "Rwpî India",
-        }
-        JPY{
-            "JP¥",
-            "Yen Siapan",
-        }
-        RUB{
-            "RUB",
-            "Rwbl Rwsia",
-        }
-        USD{
-            "US$",
-            "Doler yr UDA",
-        }
-    }
     ExemplarCharacters{
         "[a á à â ä b c {ch} d {dd} e é è ê ë f {ff} g-i í ì î ï l {ll} m n {ng} o ó "
         "ò ô ö p {ph} r {rh} s t {th} u ú ù û ü w ẃ ẁ ŵ ẅ y ý ỳ ŷ ÿ]"
     }
-    Languages{
-        af{"Affricaneg"}
-        am{"Amhareg"}
-        ar{"Arabeg"}
-        as{"Asameg"}
-        be{"Belarwsiyn"}
-        bg{"Bwlgareg"}
-        bh{"Bihari"}
-        bn{"Bengali; Bangla"}
-        br{"Llydaweg"}
-        bs{"Bosnieg"}
-        ca{"Catalaneg"}
-        cs{"Tsiec"}
-        cy{"Cymraeg"}
-        da{"Daneg"}
-        de{"Almaeneg"}
-        el{"Groeg"}
-        en{"Saesneg"}
-        eo{"Esperanto"}
-        es{"Sbaeneg"}
-        et{"Estoneg"}
-        eu{"Basgeg"}
-        fa{"Persieg"}
-        fi{"Ffineg"}
-        fil{"Tagalog"}
-        fo{"Ffaroeg"}
-        fr{"Ffrangeg"}
-        ga{"Gwyddeleg"}
-        gd{"Gaeleg yr Alban"}
-        gl{"Galiseg"}
-        he{"Hebraeg"}
-        hi{"Hindi"}
-        hr{"Croateg"}
-        hu{"Hwngareg"}
-        hy{"Armeneg"}
-        ia{"Interlingua"}
-        id{"Indonesieg"}
-        ie{"Interlingue"}
-        is{"Islandeg"}
-        it{"Eidaleg"}
-        ja{"Siapaneeg"}
-        jv{"Jafanaeg"}
-        ka{"Georgeg"}
-        km{"Cambodieg"}
-        kn{"Kannada"}
-        ko{"Corëeg"}
-        ku{"Cwrdeg"}
-        la{"Lladin"}
-        ln{"Lingala"}
-        lo{"Laoeg"}
-        lt{"Lithwaneg"}
-        lv{"Latfieg"}
-        ml{"Malayalam"}
-        mn{"Mongoleg"}
-        mr{"Marathi"}
-        ms{"Malai"}
-        mt{"Malteseg"}
-        ne{"Nepali"}
-        nl{"Iseldireg"}
-        nn{"Norwyeg (Nynorsk)"}
-        no{"Norwyeg"}
-        oc{"Ocsitaneg"}
-        or{"Oriya"}
-        pa{"Pwnjabi"}
-        pl{"Pwyleg"}
-        ps{"Pashto"}
-        pt{"Portiwgaleg"}
-        ro{"Rwmaneg"}
-        ru{"Rwsieg"}
-        sa{"Sansgrit"}
-        sd{"Sindhi"}
-        sh{"Serbo-Croateg"}
-        si{"Sinhaleg"}
-        sk{"Slofaceg"}
-        sl{"Slofeneg"}
-        so{"Somaleg"}
-        sq{"Albaneg"}
-        sr{"Serbeg"}
-        st{"Sesotheg"}
-        su{"Sundaneg"}
-        sv{"Swedeg"}
-        sw{"Swahili"}
-        ta{"Tamil"}
-        tlh{"Klingon"}
-        uk{"Wcreineg"}
-        und{"anh"}
-        uz{"Wsbeceg"}
-        vi{"Fietnameg"}
-        zh{"Tseineeg"}
-        zu{"Zwlw"}
-    }
     LocaleScript{
         "Latn",
-    }
-    Scripts{
-        Latn{"Lladin"}
     }
     Version{"2.0.42.82"}
     calendar{
@@ -460,8 +329,5 @@ cy{
     measurementSystemNames{
         US{"UD"}
         metric{"Metrig"}
-    }
-    zoneStrings{
-        hourFormat{"+HHmm;-HHmm"}
     }
 }

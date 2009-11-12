@@ -7,15 +7,6 @@
 // *
 // ***************************************************************************
 es_AR{
-    Currencies{
-        ARS{
-            "$",
-            "peso argentino",
-        }
-    }
-    Variants{
-        REVISED{"Ortografía revisada"}
-    }
     Version{"2.0.41.78"}
     calendar{
         gregorian{

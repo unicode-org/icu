@@ -7,27 +7,11 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/si.xml
+ *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
     AuxExemplarCharacters{"[\u200B-\u200D ඎ-ඐ ඦ ෳ]"}
-    Countries{
-        LK{"ශ්‍රී ලංකාව"}
-    }
-    Currencies{
-        LKR{
-            "SL Re",
-            "ලංකා රුපියල්",
-        }
-    }
     ExemplarCharacters{"[අ-ඍ එ-ඖ ං ඃ ක-ඣ ඥ ඤ ට-න ඳ-ර ල ව-ෆ ා-\u0DD4 \u0DD6 ෘ ෲ ෟ ෙ-ෞ \u0DCA]"}
-    Keys{
-        calendar{"දිනදසුන"}
-        currency{"මුදල්"}
-    }
-    Languages{
-        si{"සිංහල"}
-    }
     LocaleScript{
         "Sinh",
     }
@@ -36,15 +20,6 @@ si{
         "¤#,##,##0.00;(¤#,##,##0.00)",
         "#,##,##0%",
         "#E0",
-    }
-    Scripts{
-        Sinh{"සිංහල"}
-    }
-    Types{
-        calendar{
-            buddhist{"බුද්‍ධ දිනදසුන"}
-            gregorian{"දිනදසුන"}
-        }
     }
     Version{"2.0.42.82"}
     calendar{
@@ -184,11 +159,6 @@ si{
                     }
                 }
             }
-        }
-    }
-    zoneStrings{
-        "meta:Lanka"{
-            ls{"ශ්‍රී ලංකා වේලාව"}
         }
     }
 }

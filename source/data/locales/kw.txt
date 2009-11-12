@@ -7,16 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/kw.xml
+ *  ICU <specials> source: <path>/xml/main/kw.xml
  */
 kw{
-    Countries{
-        GB{"Rywvaneth Unys"}
-    }
     ExemplarCharacters{"[a-z]"}
-    Languages{
-        kw{"kernewek"}
-    }
     LocaleScript{
         "Latn",
     }

@@ -1,0 +1,30 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/si.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/si.xml
+ */
+si{
+    Keys{
+        calendar{"දිනදසුන"}
+        currency{"මුදල්"}
+    }
+    Languages{
+        si{"සිංහල"}
+    }
+    Scripts{
+        Sinh{"සිංහල"}
+    }
+    Types{
+        calendar{
+            buddhist{"බුද්‍ධ දිනදසුන"}
+            gregorian{"දිනදසුන"}
+        }
+    }
+    Version{"2.0.42.82"}
+}

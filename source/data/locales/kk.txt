@@ -7,23 +7,11 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/kk.xml
+ *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
     AuxExemplarCharacters{"[һ]"}
-    Countries{
-        KZ{"Қазақстан"}
-    }
-    Currencies{
-        KZT{
-            "тңг.",
-            "KZT",
-        }
-    }
     ExemplarCharacters{"[а ә б-е ё ж-й і к қ л-н ң о-у ұ ү ф-я]"}
-    Languages{
-        kk{"Қазақ"}
-    }
     LocaleScript{
         "Cyrl",
     }

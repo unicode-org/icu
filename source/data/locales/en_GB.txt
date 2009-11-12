@@ -117,15 +117,4 @@ en_GB{
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
-    zoneStrings{
-        "meta:Europe_Central"{
-            cu:int{1}
-        }
-        "meta:Europe_Eastern"{
-            cu:int{1}
-        }
-        "meta:Europe_Western"{
-            cu:int{1}
-        }
-    }
 }

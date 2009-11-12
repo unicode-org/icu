@@ -7,17 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/main/om.xml
+ *  ICU <specials> source: <path>/xml/main/om.xml
  */
 om{
-    Countries{
-        ET{"Itoophiyaa"}
-        KE{"Keeniyaa"}
-    }
     ExemplarCharacters{"[a-z]"}
-    Languages{
-        om{"Oromoo"}
-    }
     LocaleScript{
         "Latn",
     }

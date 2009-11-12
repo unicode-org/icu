@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 2002-2006, International Business Machines
+//*   Copyright (C) 2002-2009, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -32,9 +32,9 @@ testaliases:table(nofallback)
 
     // aliasing arrays
     zoneTests {
-        zoneAlias:alias { "/ICUDATA/en/zoneStrings" } // Referencing by index
-        zoneAlias1:alias { "/ICUDATA/en/zoneStrings/3" } // Referencing by index
-        zoneAlias2:alias { "/ICUDATA/en/zoneStrings/3/0" } // Referencing by index
+        zoneAlias:alias { "/ICUDATA-zone/en/zoneStrings" } // Referencing by index
+        zoneAlias1:alias { "/ICUDATA-zone/en/zoneStrings/3" } // Referencing by index
+        zoneAlias2:alias { "/ICUDATA-zone/en/zoneStrings/3/0" } // Referencing by index
     }
 
     // Test aliasing parts of an array using position

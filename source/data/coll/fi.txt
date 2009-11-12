@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/collation/fi.xml
+ *  ICU <specials> source: <path>/xml/collation/fi.xml
  */
 fi{
     Version{"2.0.41.26"}
