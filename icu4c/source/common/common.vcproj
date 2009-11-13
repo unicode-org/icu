@@ -2930,6 +2930,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ureslocs.h"
+				>
+			</File>
+			<File
 				RelativePath=".\uresimp.h"
 				>
 			</File>
