@@ -955,12 +955,15 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
 30FF          ; 3.2 #       KATAKANA DIGRAPH KOTO
 31F0..31FF    ; 3.2 #  [16] KATAKANA LETTER SMALL KU..KATAKANA LETTER SMALL RO
 
+    Unicode 5.2 added another Hiragana character:
+1F200         ; 5.2 #       SQUARE HIRAGANA HOKA
+
     We will not add them to the rules until they are more supported (e.g. in fonts on Windows)
     A bug has been filed to remind us to do this: #1979.
     */
-    
+
 static const char KATAKANA[] = "[[[:katakana:][\\u30A1-\\u30FA\\u30FC]]-[\\u30FF\\u31F0-\\u31FF]]";
-static const char HIRAGANA[] = "[[[:hiragana:][\\u3040-\\u3094]]-[\\u3095-\\u3096\\u309F-\\u30A0]]";
+static const char HIRAGANA[] = "[[[:hiragana:][\\u3040-\\u3094]]-[\\u3095-\\u3096\\u309F-\\u30A0\\U0001F200-\\U0001F2FF]]";
 static const char LENGTH[] = "[\\u30FC]";
 static const char HALFWIDTH_KATAKANA[] = "[\\uFF65-\\uFF9D]";
 static const char KATAKANA_ITERATION[] = "[\\u30FD\\u30FE]";

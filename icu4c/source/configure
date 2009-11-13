@@ -1963,7 +1963,7 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 { $as_echo "$as_me:$LINENO: result: release $VERSION, library $LIB_VERSION" >&5
 $as_echo "release $VERSION, library $LIB_VERSION" >&6; }
 
-UNICODE_VERSION="5.1"
+UNICODE_VERSION="5.2"
 
 
 # Determine the host system

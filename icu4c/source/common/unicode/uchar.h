@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "5.1"
+#define U_UNICODE_VERSION "5.2"
 
 /**
  * \file
@@ -414,8 +414,22 @@ typedef enum UProperty {
         See the uchar.h file documentation.
         @stable ICU 3.4 */
     UCHAR_POSIX_XDIGIT=48,
+    /** Binary property Cased. For Lowercase, Uppercase and Titlecase characters. @draft ICU 4.4 */
+    UCHAR_CASED=49,
+    /** Binary property Case_Ignorable. Used in context-sensitive case mappings. @draft ICU 4.4 */
+    UCHAR_CASE_IGNORABLE=50,
+    /** Binary property Changes_When_Lowercased. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_LOWERCASED=51,
+    /** Binary property Changes_When_Uppercased. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_UPPERCASED=52,
+    /** Binary property Changes_When_Titlecased. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_TITLECASED=53,
+    /** Binary property Changes_When_Casefolded. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_CASEFOLDED=54,
+    /** Binary property Changes_When_Casemapped. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_CASEMAPPED=55,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
-    UCHAR_BINARY_LIMIT=49,
+    UCHAR_BINARY_LIMIT=56,
 
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @stable ICU 2.2 */
@@ -1291,8 +1305,63 @@ enum UBlockCode {
     /** @stable ICU 4.0 */
     UBLOCK_DOMINO_TILES = 171, /*[1F030]*/
 
+    /* New blocks in Unicode 5.2 */
+
+    /** @draft ICU 4.4 */
+    UBLOCK_SAMARITAN = 172, /*[0800]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED = 173, /*[18B0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_TAI_THAM = 174, /*[1A20]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_VEDIC_EXTENSIONS = 175, /*[1CD0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_LISU = 176, /*[A4D0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_BAMUM = 177, /*[A6A0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_COMMON_INDIC_NUMBER_FORMS = 178, /*[A830]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_DEVANAGARI_EXTENDED = 179, /*[A8E0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_HANGUL_JAMO_EXTENDED_A = 180, /*[A960]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_JAVANESE = 181, /*[A980]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_MYANMAR_EXTENDED_A = 182, /*[AA60]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_TAI_VIET = 183, /*[AA80]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_MEETEI_MAYEK = 184, /*[ABC0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_HANGUL_JAMO_EXTENDED_B = 185, /*[D7B0]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_IMPERIAL_ARAMAIC = 186, /*[10840]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_OLD_SOUTH_ARABIAN = 187, /*[10A60]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_AVESTAN = 188, /*[10B00]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_INSCRIPTIONAL_PARTHIAN = 189, /*[10B40]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_INSCRIPTIONAL_PAHLAVI = 190, /*[10B60]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_OLD_TURKIC = 191, /*[10C00]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_RUMI_NUMERAL_SYMBOLS = 192, /*[10E60]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_KAITHI = 193, /*[11080]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_EGYPTIAN_HIEROGLYPHS = 194, /*[13000]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT = 195, /*[1F100]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT = 196, /*[1F200]*/
+    /** @draft ICU 4.4 */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C = 197, /*[2A700]*/
+
     /** @stable ICU 2.0 */
-    UBLOCK_COUNT = 172,
+    UBLOCK_COUNT = 198,
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1
@@ -1337,6 +1406,7 @@ typedef enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
     U_EXTENDED_CHAR_NAME,
+    U_CHAR_NAME_ALIAS,          /**< Corrected name from NameAliases.txt. @draft ICU 4.4 */
     U_CHAR_NAME_CHOICE_COUNT
 } UCharNameChoice;
 
@@ -1465,6 +1535,8 @@ typedef enum UJoiningGroup {
     U_JG_KHAPH,     /**< @stable ICU 2.6 */
     U_JG_ZHAIN,     /**< @stable ICU 2.6 */
     U_JG_BURUSHASKI_YEH_BARREE, /**< @stable ICU 4.0 */
+    U_JG_FARSI_YEH, /**< @draft ICU 4.4 */
+    U_JG_NYA,       /**< @draft ICU 4.4 */
     U_JG_COUNT
 } UJoiningGroup;
 
@@ -1584,7 +1656,8 @@ typedef enum ULineBreak {
     U_LB_JL = 33,                /*[JL]*/
     U_LB_JT = 34,                /*[JT]*/
     U_LB_JV = 35,                /*[JV]*/
-    U_LB_COUNT = 36
+    U_LB_CLOSE_PARENTHESIS = 36, /*[CP]*/ /* new in Unicode 5.2/ICU 4.4 */
+    U_LB_COUNT = 37
 } ULineBreak;
 
 /**
@@ -2456,6 +2529,9 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  * Get the ISO 10646 comment for a character.
  * The ISO 10646 comment is an informative field in the Unicode Character
  * Database (UnicodeData.txt field 11) and is from the ISO 10646 names list.
+ *
+ * Note: Unicode 5.2 removes all ISO comment data, resulting in empty strings
+ * returned for all characters.
  *
  * @param c The character (code point) for which to get the ISO comment.
  *             It must be <code>0<=c<=0x10ffff</code>.

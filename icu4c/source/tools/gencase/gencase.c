@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -96,7 +96,9 @@ propListBinaries={
 static const Binary
 derCorePropsNames[]={
     { "Lowercase",                          0, UCASE_LOWER,         UCASE_TYPE_MASK },
-    { "Uppercase",                          0, UCASE_UPPER,         UCASE_TYPE_MASK }
+    { "Uppercase",                          0, UCASE_UPPER,         UCASE_TYPE_MASK },
+    /* Unicode 5.2 adds Case_Ignorable as a public property. See comments in store.c. */
+    { "Case_Ignorable",                     1, U_MASK(UGENCASE_IS_MID_LETTER_SHIFT), U_MASK(UGENCASE_IS_MID_LETTER_SHIFT) }
 };
 
 static const Binaries
@@ -233,7 +235,7 @@ main(int argc, char* argv[]) {
     }
     if(argc<0 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         /*
-         * Broken into chucks because the C89 standard says the minimum
+         * Broken into chunks because the C89 standard says the minimum
          * required supported string length is 509 bytes.
          */
         fprintf(stderr,

@@ -62,7 +62,7 @@ U_NAMESPACE_BEGIN
  *       if(isFailure()) { handleFailure(); }
  *     }
  *   protected:
- *     virtual handleFailure() {
+ *     virtual void handleFailure() const {
  *       log_failure(u_errorName(errorCode));
  *       exit(errorCode);
  *     }

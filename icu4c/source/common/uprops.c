@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
+#include "unicode/ustring.h"
 #include "cstring.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
@@ -91,7 +92,7 @@ static const struct {
     /*
      * column and mask values for binary properties from u_getUnicodeProperties().
      * Must be in order of corresponding UProperty,
-     * and there must be exacly one entry per binary UProperty.
+     * and there must be exactly one entry per binary UProperty.
      *
      * Properties with mask 0 are handled in code.
      * For them, column is the UPropertySource value.
@@ -144,7 +145,14 @@ static const struct {
     { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_BLANK */
     { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_GRAPH */
     { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_PRINT */
-    { UPROPS_SRC_CHAR,  0 }                                     /* UCHAR_POSIX_XDIGIT */
+    { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_XDIGIT */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CASED */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CASE_IGNORABLE */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_LOWERCASED */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_UPPERCASED */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_TITLECASED */
+    { UPROPS_SRC_CASE_AND_NORM,  0 },                           /* UCHAR_CHANGES_WHEN_CASEFOLDED */
+    { UPROPS_SRC_CASE,  0 }                                     /* UCHAR_CHANGES_WHEN_CASEMAPPED */
 };
 
 U_CAPI UBool U_EXPORT2
@@ -214,16 +222,82 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                 default:
                     break;
                 }
+            } else if(column==UPROPS_SRC_CASE_AND_NORM) {
+#if !UCONFIG_NO_NORMALIZATION
+                UChar nfdBuffer[4];
+                const UChar *nfd=NULL;
+                int32_t nfdLength;
+                UErrorCode errorCode;
+                switch(which) {
+                case UCHAR_CHANGES_WHEN_CASEFOLDED:
+                    if(unorm_haveData(&errorCode)) {
+                        nfd=unorm_getCanonicalDecomposition(c, nfdBuffer, &nfdLength);
+                    }
+                    if(nfd!=NULL) {
+                        /* c has a decomposition */
+                        if(nfdLength==1) {
+                            c=nfd[0];  /* single BMP code point */
+                        } else if(nfdLength<=U16_MAX_LENGTH) {
+                            int32_t i=0;
+                            U16_NEXT(nfd, i, nfdLength, c);
+                            if(i==nfdLength) {
+                                /* single supplementary code point */
+                            } else {
+                                c=U_SENTINEL;
+                            }
+                        } else {
+                            c=U_SENTINEL;
+                        }
+                    } else if(c<0) {
+                        return FALSE;  /* protect against bad input */
+                    }
+                    errorCode=U_ZERO_ERROR;
+                    if(c>=0) {
+                        /* single code point */
+                        const UCaseProps *csp=ucase_getSingleton(&errorCode);
+                        const UChar *resultString;
+                        return (UBool)(ucase_toFullFolding(csp, c, &resultString, U_FOLD_CASE_DEFAULT)>=0);
+                    } else {
+                        /* guess some large but stack-friendly capacity */
+                        UChar dest[2*UCASE_MAX_STRING_LENGTH];
+                        int32_t destLength;
+                        destLength=u_strFoldCase(dest, LENGTHOF(dest), nfd, nfdLength, U_FOLD_CASE_DEFAULT, &errorCode);
+                        return (UBool)(U_SUCCESS(errorCode) && 0!=u_strCompare(nfd, nfdLength, dest, destLength, FALSE));
+                    }
+                default:
+                    break;
+                }
+#endif
             }
         }
     }
     return FALSE;
 }
 
+/*
+ * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
+ * Hangul_Syllable_Type is fully redundant with a subset of Grapheme_Cluster_Break.
+ */
+static const UHangulSyllableType gcbToHst[]={
+    U_HST_NOT_APPLICABLE,   /* U_GCB_OTHER */
+    U_HST_NOT_APPLICABLE,   /* U_GCB_CONTROL */
+    U_HST_NOT_APPLICABLE,   /* U_GCB_CR */
+    U_HST_NOT_APPLICABLE,   /* U_GCB_EXTEND */
+    U_HST_LEADING_JAMO,     /* U_GCB_L */
+    U_HST_NOT_APPLICABLE,   /* U_GCB_LF */
+    U_HST_LV_SYLLABLE,      /* U_GCB_LV */
+    U_HST_LVT_SYLLABLE,     /* U_GCB_LVT */
+    U_HST_TRAILING_JAMO,    /* U_GCB_T */
+    U_HST_VOWEL_JAMO        /* U_GCB_V */
+    /*
+     * Omit GCB values beyond what we need for hst.
+     * The code below checks for the array length.
+     */
+};
+
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
-    int32_t type;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -255,18 +329,22 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             return ubidi_getJoiningType(GET_BIDI_PROPS(), c);
         case UCHAR_LINE_BREAK:
             return (int32_t)(u_getUnicodeProperties(c, UPROPS_LB_VWORD)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
-        case UCHAR_NUMERIC_TYPE:
-            type=(int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
-            if(type>U_NT_NUMERIC) {
-                /* keep internal variants of U_NT_NUMERIC from becoming visible */
-                type=U_NT_NUMERIC;
-            }
-            return type;
+        case UCHAR_NUMERIC_TYPE: {
+            int32_t ntv=(int32_t)GET_NUMERIC_TYPE_VALUE(u_getUnicodeProperties(c, -1));
+            return UPROPS_NTV_GET_TYPE(ntv);
+        }
         case UCHAR_SCRIPT:
             errorCode=U_ZERO_ERROR;
             return (int32_t)uscript_getScript(c, &errorCode);
-        case UCHAR_HANGUL_SYLLABLE_TYPE:
-            return uchar_getHST(c);
+        case UCHAR_HANGUL_SYLLABLE_TYPE: {
+            /* see comments on gcbToHst[] above */
+            int32_t gcb=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_GCB_MASK)>>UPROPS_GCB_SHIFT;
+            if(gcb<LENGTHOF(gcbToHst)) {
+                return gcbToHst[gcb];
+            } else {
+                return U_HST_NOT_APPLICABLE;
+            }
+        }
 #if !UCONFIG_NO_NORMALIZATION
         case UCHAR_NFD_QUICK_CHECK:
         case UCHAR_NFKD_QUICK_CHECK:
@@ -355,6 +433,15 @@ u_getIntPropertyMaxValue(UProperty which) {
     }
 }
 
+/*
+ * TODO: Simplify, similar to binProps[].
+ * Use an array of column/source, mask, shift values to drive returning simple
+ * properties and their sources.
+ *
+ * TODO: Split the single propsvec into one per column, and have
+ * upropsvec_addPropertyStarts() pass a trie value function that gets the
+ * desired column's values.
+ */
 U_CFUNC UPropertySource U_EXPORT2
 uprops_getSource(UProperty which) {
     if(which<UCHAR_BINARY_START) {
@@ -372,9 +459,6 @@ uprops_getSource(UProperty which) {
         case UCHAR_GENERAL_CATEGORY:
         case UCHAR_NUMERIC_TYPE:
             return UPROPS_SRC_CHAR;
-
-        case UCHAR_HANGUL_SYLLABLE_TYPE:
-            return UPROPS_SRC_HST;
 
         case UCHAR_CANONICAL_COMBINING_CLASS:
         case UCHAR_NFD_QUICK_CHECK:
@@ -538,7 +622,6 @@ uprv_getInclusions(const USetAdder *sa, UErrorCode *pErrorCode) {
     unorm_addPropertyStarts(sa, pErrorCode);
 #endif
     uchar_addPropertyStarts(sa, pErrorCode);
-    uhst_addPropertyStarts(sa, pErrorCode);
     ucase_addPropertyStarts(ucase_getSingleton(pErrorCode), sa, pErrorCode);
     ubidi_addPropertyStarts(ubidi_getSingleton(pErrorCode), sa, pErrorCode);
 }

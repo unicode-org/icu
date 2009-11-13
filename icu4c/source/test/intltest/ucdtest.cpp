@@ -9,6 +9,7 @@
 #include "unicode/uniset.h"
 #include "unicode/putil.h"
 #include "cstring.h"
+#include "hash.h"
 #include "uparse.h"
 #include "ucdtest.h"
 
@@ -16,10 +17,17 @@
 
 UnicodeTest::UnicodeTest()
 {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    unknownPropertyNames=new U_NAMESPACE_QUALIFIER Hashtable(errorCode);
+    if(U_FAILURE(errorCode)) {
+        delete unknownPropertyNames;
+        unknownPropertyNames=NULL;
+    }
 }
 
 UnicodeTest::~UnicodeTest()
 {
+    delete unknownPropertyNames;
 }
 
 void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
@@ -80,7 +88,14 @@ derivedCorePropsNames[]={
     "Default_Ignorable_Code_Point",
     "Grapheme_Extend",
     "Grapheme_Link", /* Unicode 5 moves this property here from PropList.txt */
-    "Grapheme_Base"
+    "Grapheme_Base",
+    "Cased",
+    "Case_Ignorable",
+    "Changes_When_Lowercased",
+    "Changes_When_Uppercased",
+    "Changes_When_Titlecased",
+    "Changes_When_Casefolded",
+    "Changes_When_Casemapped"
 };
 
 static const UProperty
@@ -96,8 +111,19 @@ derivedCorePropsIndex[]={
     UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
     UCHAR_GRAPHEME_EXTEND,
     UCHAR_GRAPHEME_LINK,
-    UCHAR_GRAPHEME_BASE
+    UCHAR_GRAPHEME_BASE,
+    UCHAR_CASED,
+    UCHAR_CASE_IGNORABLE,
+    UCHAR_CHANGES_WHEN_LOWERCASED,
+    UCHAR_CHANGES_WHEN_UPPERCASED,
+    UCHAR_CHANGES_WHEN_TITLECASED,
+    UCHAR_CHANGES_WHEN_CASEFOLDED,
+    UCHAR_CHANGES_WHEN_CASEMAPPED
 };
+
+static int32_t numErrors[LENGTHOF(derivedCorePropsIndex)]={ 0 };
+
+enum { MAX_ERRORS=50 };
 
 U_CFUNC void U_CALLCONV
 derivedCorePropsLineFn(void *context,
@@ -117,7 +143,13 @@ derivedCorePropsLineFn(void *context,
     /* parse derived binary property name, ignore unknown names */
     i=getTokenIndex(derivedCorePropsNames, LENGTHOF(derivedCorePropsNames), fields[1][0]);
     if(i<0) {
-        me->errln("UnicodeTest warning: unknown property name '%s' in \n", fields[1][0]);
+        UnicodeString propName(fields[1][0], (int32_t)(fields[1][1]-fields[1][0]));
+        propName.trim();
+        if(me->unknownPropertyNames->find(propName)==NULL) {
+            UErrorCode errorCode=U_ZERO_ERROR;
+            me->unknownPropertyNames->puti(propName, 1, errorCode);
+            me->errln("UnicodeTest warning: unknown property name '%s' in DerivedCoreProperties.txt\n", fields[1][0]);
+        }
         return;
     }
 
@@ -172,18 +204,17 @@ void UnicodeTest::TestAdditionalProperties() {
     int32_t rangeCount, range;
     uint32_t i;
     UChar32 start, end;
-    int32_t noErrors = 0;
 
     // test all TRUE properties
     for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
         rangeCount=derivedCoreProps[i].getRangeCount();
-        for(range=0; range<rangeCount; ++range) {
+        for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
             start=derivedCoreProps[i].getRangeStart(range);
             end=derivedCoreProps[i].getRangeEnd(range);
             for(; start<=end; ++start) {
                 if(!u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
                     errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong\n", start, derivedCorePropsNames[i]);
-                    if(noErrors++ > 100) {
+                    if(++numErrors[i]>=MAX_ERRORS) {
                       errln("Too many errors, moving to the next test");
                       break;
                     }
@@ -192,7 +223,6 @@ void UnicodeTest::TestAdditionalProperties() {
         }
     }
 
-    noErrors = 0;
     // invert all properties
     for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
         derivedCoreProps[i].complement();
@@ -201,13 +231,13 @@ void UnicodeTest::TestAdditionalProperties() {
     // test all FALSE properties
     for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
         rangeCount=derivedCoreProps[i].getRangeCount();
-        for(range=0; range<rangeCount; ++range) {
+        for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
             start=derivedCoreProps[i].getRangeStart(range);
             end=derivedCoreProps[i].getRangeEnd(range);
             for(; start<=end; ++start) {
                 if(u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
                     errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==TRUE is wrong\n", start, derivedCorePropsNames[i]);
-                    if(noErrors++ > 100) {
+                    if(++numErrors[i]>=MAX_ERRORS) {
                       errln("Too many errors, moving to the next test");
                       break;
                     }

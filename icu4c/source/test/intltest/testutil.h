@@ -19,8 +19,9 @@
 class TestUtility {
 
 public:
+    static UnicodeString &appendHex(UnicodeString &buf, UChar32 ch);
 
-    static UnicodeString hex(UChar ch);
+    static UnicodeString hex(UChar32 ch);
 
     static UnicodeString hex(const UnicodeString& s);
 

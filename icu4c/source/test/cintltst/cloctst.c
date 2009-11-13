@@ -2324,7 +2324,7 @@ static void TestGetLocale(void) {
         const char *req = "es_AR_BUENOSAIRES", *valid, *actual;
         obj = ucol_open(req, &ec);
         if (U_FAILURE(ec)) {
-            log_err("ucol_open failed\n");
+            log_err("ucol_open failed - %s\n", u_errorName(ec));
             return;
         }
         valid = ucol_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);

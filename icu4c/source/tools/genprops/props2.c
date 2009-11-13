@@ -576,7 +576,6 @@ numericLineFn(void *context,
     Props newProps={ 0 };
     char *s, *numberLimit;
     uint32_t start, end, value, oldProps32;
-    int32_t oldType;
     char c;
     UBool isFraction;
 
@@ -618,16 +617,16 @@ numericLineFn(void *context,
         /* parse numeric value */
         s=(char *)u_skipWhitespace(fields[1][0]);
 
-        /* try large powers of 10 first, may otherwise overflow strtoul() */
-        if(0==uprv_strncmp(s, "10000000000", 11)) {
-            /* large powers of 10 are encoded in a special way, see store.c */
+        /* try large, single-significant-digit numbers, may otherwise overflow strtoul() */
+        if('1'<=s[0] && s[0]<='9' && s[1]=='0' && s[2]=='0') {
+            /* large integers are encoded in a special way, see store.c */
             uint8_t exp=0;
 
+            value=s[0]-'0';
             numberLimit=s;
             while(*(++numberLimit)=='0') {
                 ++exp;
             }
-            value=1;
             newProps.exponent=exp;
         } else {
             /* normal number parsing */
@@ -648,18 +647,19 @@ numericLineFn(void *context,
      * specific properties for single characters.
      */
 
-    /* set the new numeric type and value */
-    newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
+    /* set the new numeric value */
+    newProps.code=start;
     newProps.numericValue=(int32_t)value;       /* newly parsed numeric value */
     /* the exponent may have been set above */
-    value=makeProps(&newProps);
 
     for(; start<=end; ++start) {
+        uint32_t newProps32;
+        int32_t oldNtv;
         oldProps32=getProps(start);
-        oldType=(int32_t)GET_NUMERIC_TYPE(oldProps32);
+        oldNtv=(int32_t)GET_NUMERIC_TYPE_VALUE(oldProps32);
 
         if(isFraction) {
-            if(oldType!=0) {
+            if(UPROPS_NTV_FRACTION_START<=oldNtv && oldNtv<UPROPS_NTV_LARGE_START) {
                 /* this code point was already listed with its numeric value in UnicodeData.txt */
                 continue;
             } else {
@@ -672,26 +672,31 @@ numericLineFn(void *context,
          * For simplicity, and because we only expect to set numeric values for Han characters,
          * for now we only allow to set these values for Lo characters.
          */
-        if(oldType==0 && GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
+        if(oldNtv==UPROPS_NTV_NONE && GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
             fprintf(stderr, "genprops error: new numeric value for a character other than Lo in DerivedNumericValues.txt at %s\n", fields[0][0]);
             exit(U_PARSE_ERROR);
         }
 
         /* verify that we do not change an existing value (fractions were excluded above) */
-        if(oldType!=0) {
+        if(oldNtv!=UPROPS_NTV_NONE) {
             /* the code point already has a value stored */
-            if((oldProps32&0xff00)!=(value&0xff00)) {
+            newProps.numericType=UPROPS_NTV_GET_TYPE(oldNtv);
+            newProps32=makeProps(&newProps);
+            if(oldNtv!=GET_NUMERIC_TYPE_VALUE(newProps32)) {
                 fprintf(stderr, "genprops error: new numeric value differs from old one for U+%04lx\n", (long)start);
                 exit(U_PARSE_ERROR);
             }
             /* same value, continue */
         } else {
             /* the code point is getting a new numeric value */
+            newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
+            newProps32=makeProps(&newProps);
             if(beVerbose) {
-                printf("adding U+%04x numeric type %d value 0x%04x from %s\n", (int)start, U_NT_NUMERIC, (int)value, fields[0][0]);
+                printf("adding U+%04x numeric type %d encoded-numeric-type-value 0x%03x from %s\n",
+                       (int)start, U_NT_NUMERIC, (int)GET_NUMERIC_TYPE_VALUE(newProps32), fields[0][0]);
             }
 
-            addProps(start, value|GET_CATEGORY(oldProps32));
+            addProps(start, newProps32|GET_CATEGORY(oldProps32));
         }
     }
 }

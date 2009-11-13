@@ -673,21 +673,20 @@ ucase_getType(const UCaseProps *csp, UChar32 c) {
     return UCASE_GET_TYPE(props);
 }
 
-/** @return same as ucase_getType(), or <0 if c is case-ignorable */
+/** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
 U_CAPI int32_t U_EXPORT2
 ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
     int32_t type=UCASE_GET_TYPE(props);
-    if(type!=UCASE_NONE) {
-        return type;
-    } else if(
-        c==0x307 ||
-        (props&(UCASE_EXCEPTION|UCASE_CASE_IGNORABLE))==UCASE_CASE_IGNORABLE
-    ) {
-        return -1; /* case-ignorable */
-    } else {
-        return 0; /* c is neither cased nor case-ignorable */
+    if(props&UCASE_EXCEPTION) {
+        const uint16_t *pe=GET_EXCEPTIONS(csp, props);
+        if(*pe&UCASE_EXC_CASE_IGNORABLE) {
+            type|=4;
+        }
+    } else if(type==UCASE_NONE && (props&UCASE_CASE_IGNORABLE)) {
+        type|=4;
     }
+    return type;
 }
 
 /** @return UCASE_NO_DOT, UCASE_SOFT_DOTTED, UCASE_ABOVE, UCASE_OTHER_ACCENT */
@@ -889,24 +888,30 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
     return result;
 }
 
-/* Is followed by {case-ignorable}* cased  ? (dir determines looking forward/backward) */
+/*
+ * Is followed by
+ *   {case-ignorable}* cased
+ * ?
+ * (dir determines looking forward/backward)
+ * If a character is case-ignorable, it is skipped regardless of whether
+ * it is also cased or not.
+ */
 static UBool
 isFollowedByCasedLetter(const UCaseProps *csp, UCaseContextIterator *iter, void *context, int8_t dir) {
     UChar32 c;
-    uint16_t props;
 
     if(iter==NULL) {
         return FALSE;
     }
 
     for(/* dir!=0 sets direction */; (c=iter(context, dir))>=0; dir=0) {
-        props=UTRIE2_GET16(&csp->trie, c);
-        if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
-            return TRUE; /* followed by cased letter */
-        } else if(c==0x307 || (props&(UCASE_EXCEPTION|UCASE_CASE_IGNORABLE))==UCASE_CASE_IGNORABLE) {
+        int32_t type=ucase_getTypeOrIgnorable(csp, c);
+        if(type&4) {
             /* case-ignorable, continue with the loop */
+        } else if(type!=UCASE_NONE) {
+            return TRUE; /* followed by cased letter */
         } else {
-            return FALSE; /* not ignorable */
+            return FALSE; /* uncased and not case-ignorable */
         }
     }
 
@@ -1573,6 +1578,8 @@ u_foldCase(UChar32 c, uint32_t options) {
 U_CFUNC int32_t U_EXPORT2
 ucase_hasBinaryProperty(UChar32 c, UProperty which) {
     /* case mapping properties */
+    const UChar *resultString;
+    int32_t locCache;
     const UCaseProps *csp=GET_CASE_PROPS();
     if(csp==NULL) {
         return FALSE;
@@ -1586,6 +1593,38 @@ ucase_hasBinaryProperty(UChar32 c, UProperty which) {
         return ucase_isSoftDotted(csp, c);
     case UCHAR_CASE_SENSITIVE:
         return ucase_isCaseSensitive(csp, c);
+    case UCHAR_CASED:
+        return (UBool)(UCASE_NONE!=ucase_getType(csp, c));
+    case UCHAR_CASE_IGNORABLE:
+        return (UBool)(ucase_getTypeOrIgnorable(csp, c)>>2);
+    /*
+     * Note: The following Changes_When_Xyz are defined as testing whether
+     * the NFD form of the input changes when Xyz-case-mapped.
+     * However, this simpler implementation of these properties,
+     * ignoring NFD, passes the tests.
+     * The implementation needs to be changed if the tests start failing.
+     * When that happens, optimizations should be used to work with the
+     * per-single-code point ucase_toFullXyz() functions unless
+     * the NFD form has more than one code point,
+     * and the property starts set needs to be the union of the
+     * start sets for normalization and case mappings.
+     */
+    case UCHAR_CHANGES_WHEN_LOWERCASED:
+        locCache=UCASE_LOC_ROOT;
+        return (UBool)(ucase_toFullLower(csp, c, NULL, NULL, &resultString, "", &locCache)>=0);
+    case UCHAR_CHANGES_WHEN_UPPERCASED:
+        locCache=UCASE_LOC_ROOT;
+        return (UBool)(ucase_toFullUpper(csp, c, NULL, NULL, &resultString, "", &locCache)>=0);
+    case UCHAR_CHANGES_WHEN_TITLECASED:
+        locCache=UCASE_LOC_ROOT;
+        return (UBool)(ucase_toFullTitle(csp, c, NULL, NULL, &resultString, "", &locCache)>=0);
+    /* case UCHAR_CHANGES_WHEN_CASEFOLDED: -- in uprops.c */
+    case UCHAR_CHANGES_WHEN_CASEMAPPED:
+        locCache=UCASE_LOC_ROOT;
+        return (UBool)(
+            ucase_toFullLower(csp, c, NULL, NULL, &resultString, "", &locCache)>=0 ||
+            ucase_toFullUpper(csp, c, NULL, NULL, &resultString, "", &locCache)>=0 ||
+            ucase_toFullTitle(csp, c, NULL, NULL, &resultString, "", &locCache)>=0);
     default:
         return FALSE;
     }

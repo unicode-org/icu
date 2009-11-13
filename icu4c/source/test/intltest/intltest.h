@@ -62,7 +62,7 @@ UnicodeString toString(int32_t n);
         name = #test;                 \
         if (exec) {                   \
             logln(#test "---");       \
-            logln((UnicodeString)""); \
+            logln();                  \
             test();                   \
         }                             \
         break
@@ -71,6 +71,7 @@ class IntlTest : public TestLog {
 public:
 
     IntlTest();
+    // TestLog has a virtual destructor.
 
     virtual UBool runTest( char* name = NULL, char* par = NULL ); // not to be overidden
 
@@ -259,5 +260,119 @@ extern UnicodeString CharsToUnicodeString(const char* chars);
 
 /* alias for CharsToUnicodeString */
 extern UnicodeString ctou(const char* chars);
+
+// TODO(markus): Propose as public API.
+/**
+ * Does not throw exceptions.
+ * Do not use this base class directly, since it does not delete its pointer.
+ * A subclass must implement methods that delete the pointer:
+ * Destructor and adoptInstead().
+ *
+ * There is no operator T *() provided because the programmer must decide
+ * whether to use getAlias() (without transfer of ownership) or orpan()
+ * (with transfer of ownership and NULLing of the pointer).
+ */
+template<typename T>
+class /* U_COMMON_API */ LocalPointerBase {
+public:
+    // Takes ownership.
+    explicit LocalPointerBase(T *p=NULL) : ptr(p) {}
+    // Deletes the object it owns.
+    ~LocalPointerBase() { /* delete ptr; */ }
+    // NULL checks.
+    UBool isNull() const { return ptr==NULL; }
+    UBool isValid() const { return ptr!=NULL; }
+    // Comparisons with simple pointers, so that existing code
+    // with ==NULL and !=NULL need not be changed.
+    bool operator==(const T *other) const { return ptr==other; }
+    bool operator!=(const T *other) const { return ptr!=other; }
+    // Access without ownership change.
+    T *getAlias() const { return ptr; }
+    T &operator*() const { return *ptr; }
+    T *operator->() const { return ptr; }
+    // Gives up ownership; the internal pointer becomes NULL.
+    T *orphan() {
+        T *p=ptr;
+        ptr=NULL;
+        return p;
+    }
+    // Deletes the object it owns and adopt (take ownership of) the one passed in.
+    void adoptInstead(T *p) {
+        // delete ptr;
+        prt=p;
+    }
+protected:
+    T *ptr;
+private:
+    // No comparison operators with other LocalPointerBase's.
+    bool operator==(const LocalPointerBase &other);
+    bool operator!=(const LocalPointerBase &other);
+    // No ownership transfer: No copy constructor, no assignment operator.
+    LocalPointerBase(const LocalPointerBase &other);
+    void operator=(const LocalPointerBase &other);
+    // No heap allocation. Use only on the stack.
+    static void * U_EXPORT2 operator new(size_t size);
+    static void * U_EXPORT2 operator new[](size_t size);
+#if U_HAVE_PLACEMENT_NEW
+    static void * U_EXPORT2 operator new(size_t, void *ptr);
+#endif
+};
+
+// TODO: Option 1: Destructor and adoptInstead() and possible future methods
+// call a protected handleDelete() which is virtual and is the single method
+// which a subclass must override.
+// Con: Requires the LocalPointerBase class to be virtual, doubles its size,
+// and the linker picks an arbitrary .o file for the vtable.
+//    virtual void handleDelete() {
+//        delete ptr;
+//    }
+
+// Option 2: Require all subclasses to override all deleting methods
+// (destructor and adoptInstead()) if they need to use something other than
+// the delete operator.
+// Con: More methods need to be overwritten, and if we add further deleting
+// methods, then that set increases further.
+// Also, using a subclass instance via the base class API would not work,
+// but that would be outside the intended usage.
+
+template<typename T>
+class /* U_COMMON_API */ LocalPointer : public LocalPointerBase<T> {
+public:
+    explicit LocalPointer(T *p=NULL) : LocalPointerBase<T>(p) {}
+    ~LocalPointer() {
+        delete LocalPointerBase<T>::ptr;
+    }
+    void adoptInstead(T *p) {
+        delete LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=p;
+    }
+};
+
+template<typename T>
+class /* U_COMMON_API */ LocalArray : public LocalPointerBase<T> {
+public:
+    explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
+    ~LocalArray() {
+        delete[] LocalPointerBase<T>::ptr;
+    }
+    void adoptInstead(T *p) {
+        delete[] LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=p;
+    }
+    T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
+};
+
+// Requirement: The closeFunction must tolerate a NULL pointer.
+// Or, we could add a NULL check here.
+#define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
+    class /* U_COMMON_API */ LocalPointerClassName : public LocalPointerBase<Type> { \
+    public: \
+        explicit LocalPointerClassName(Type *p=NULL) : LocalPointerBase<Type>(p) {} \
+        ~LocalPointerClassName() { closeFunction(ptr); } \
+        void adoptInstead(Type *p) { \
+            closeFunction(ptr); \
+            ptr=p; \
+        } \
+    }
 
 #endif // _INTLTEST

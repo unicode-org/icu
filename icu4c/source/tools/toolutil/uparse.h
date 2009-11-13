@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -33,6 +33,15 @@ U_CDECL_BEGIN
  */
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s);
+
+/**
+ * Trim whitespace (including line endings) from the end of the string.
+ *
+ * @param s Pointer to the string.
+ * @return Pointer to the new end of the string.
+ */
+U_CAPI char * U_EXPORT2
+u_rtrim(char *s);
 
 /** Function type for u_parseDelimitedFile(). */
 typedef void U_CALLCONV

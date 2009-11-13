@@ -46,7 +46,7 @@
 typedef enum UScriptCode {
       USCRIPT_INVALID_CODE = -1,
       USCRIPT_COMMON       =  0 , /* Zyyy */
-      USCRIPT_INHERITED    =  1,  /* Qaai */
+      USCRIPT_INHERITED    =  1,  /* Zinh */ /* "Code for inherited script", for non-spacing combining marks; also Qaai */
       USCRIPT_ARABIC       =  2,  /* Arab */
       USCRIPT_ARMENIAN     =  3,  /* Armn */
       USCRIPT_BENGALI      =  4,  /* Beng */
@@ -156,7 +156,7 @@ typedef enum UScriptCode {
       USCRIPT_EASTERN_SYRIAC                = 97, /* Syrn */
       USCRIPT_TENGWAR                       = 98, /* Teng */
       USCRIPT_VAI                           = 99, /* Vaii */
-      USCRIPT_VISIBLE_SPEECH                = 100, /* Visp */
+      USCRIPT_VISIBLE_SPEECH                = 100,/* Visp */
       USCRIPT_CUNEIFORM                     = 101,/* Xsux */
       USCRIPT_UNWRITTEN_LANGUAGES           = 102,/* Zxxx */
       USCRIPT_UNKNOWN                       = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
@@ -191,8 +191,14 @@ typedef enum UScriptCode {
       USCRIPT_MATHEMATICAL_NOTATION         = 128,/* Zmth */
       USCRIPT_SYMBOLS                       = 129,/* Zsym */
 
+      /* New script codes from ISO 15924 @draft ICU 4.4 */
+      USCRIPT_BAMUM                         = 130,/* Bamu */
+      USCRIPT_LISU                          = 131,/* Lisu */
+      USCRIPT_NAKHI_GEBA                    = 132,/* Nkgb */
+      USCRIPT_OLD_SOUTH_ARABIAN             = 133,/* Sarb */
+
       /* Private use codes from Qaaa - Qabx are not supported*/
-      USCRIPT_CODE_LIMIT    = 130
+      USCRIPT_CODE_LIMIT    = 134
 } UScriptCode;
 
 /**

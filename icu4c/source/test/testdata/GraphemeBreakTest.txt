@@ -1,10 +1,10 @@
-﻿# GraphemeBreakTest-5.1.0.txt
-# Date: 2008-03-11, 02:19:22 GMT [MD]
+# GraphemeBreakTest-5.2.0.txt
+# Date: 2009-05-28, 20:37:56 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2008 Unicode, Inc.
+# Copyright (c) 1991-2009 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
-# For documentation, see UCD.html
+# For documentation, see http://www.unicode.org/reports/tr44/
 #
 # Default Grapheme Break Test
 #
