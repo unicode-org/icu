@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,12 +28,24 @@
 
 #include <stdio.h>
 
+/* Is c a whitespace character? */
+#define IS_INV_WHITESPACE(c) ((c)==' ' || (c)=='\t' || (c)=='\r' || (c)=='\n')
+
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s) {
-    while(*s==' ' || *s=='\t') {
+    while(IS_INV_WHITESPACE(*s)) {
         ++s;
     }
     return s;
+}
+
+U_CAPI char * U_EXPORT2
+u_rtrim(char *s) {
+    char *end=uprv_strchr(s, 0);
+    while(s<end && IS_INV_WHITESPACE(*(end-1))) {
+        *--end = 0;
+    }
+    return end;
 }
 
 /*
@@ -90,12 +102,8 @@ u_parseDelimitedFile(const char *filename, char delimiter,
     }
 
     while(T_FileStream_readLine(file, line, sizeof(line))!=NULL) {
-        length=(int32_t)uprv_strlen(line);
-
         /* remove trailing newline characters */
-        while(length>0 && (line[length-1]=='\r' || line[length-1]=='\n')) {
-            line[--length]=0;
-        }
+        length=(int32_t)(u_rtrim(line)-line);
 
         /*
          * detect a line with # @missing:
@@ -118,7 +126,7 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         limit=uprv_strchr(start, '#');
         if(limit!=NULL) {
             /* get white space before the pound sign */
-            while(limit>start && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+            while(limit>start && IS_INV_WHITESPACE(*(limit-1))) {
                 --limit;
             }
 
@@ -202,7 +210,7 @@ u_parseCodePoints(const char *s,
 
         /* read one code point */
         value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';' && *end!=0) || value>=0x110000) {
+        if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
             *pErrorCode=U_PARSE_ERROR;
             return 0;
         }
@@ -261,7 +269,7 @@ u_parseString(const char *s,
 
         /* read one code point */
         value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';' && *end!=0) || value>=0x110000) {
+        if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
             *pErrorCode=U_PARSE_ERROR;
             return 0;
         }
@@ -307,7 +315,7 @@ u_parseCodePointRange(const char *s,
 
     /* read the start code point */
     value=(uint32_t)uprv_strtoul(s, &end, 16);
-    if(end<=s || (*end!=' ' && *end!='\t' && *end!='.' && *end!=';') || value>=0x110000) {
+    if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!='.' && *end!=';' && *end!=0) || value>=0x110000) {
         *pErrorCode=U_PARSE_ERROR;
         return 0;
     }
@@ -327,7 +335,7 @@ u_parseCodePointRange(const char *s,
 
     /* read the end code point */
     value=(uint32_t)uprv_strtoul(s, &end, 16);
-    if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
+    if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
         *pErrorCode=U_PARSE_ERROR;
         return 0;
     }

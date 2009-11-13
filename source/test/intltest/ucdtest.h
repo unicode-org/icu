@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -16,6 +16,12 @@ U_CFUNC void U_CALLCONV
 derivedCorePropsLineFn(void *context,
                        char *fields[][2], int32_t fieldCount,
                        UErrorCode *pErrorCode);
+
+U_NAMESPACE_BEGIN
+
+class Hashtable;
+
+U_NAMESPACE_END
 
 /** 
  * Test API and functionality of class Unicode
@@ -42,5 +48,6 @@ private:
                            UErrorCode *pErrorCode);
 
     UnicodeSet derivedCoreProps[30];
+    U_NAMESPACE_QUALIFIER Hashtable *unknownPropertyNames;
 };
 

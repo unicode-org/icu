@@ -1,10 +1,10 @@
-# DerivedJoiningGroup-5.1.0.txt
-# Date: 2008-03-03, 21:57:35 GMT [MD]
+# DerivedJoiningGroup-5.2.0.txt
+# Date: 2009-05-22, 18:51:25 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2008 Unicode, Inc.
+# Copyright (c) 1991-2009 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
-# For documentation, see UCD.html
+# For documentation, see http://www.unicode.org/reports/tr44/
 
 # ================================================
 
@@ -205,10 +205,10 @@
 # ================================================
 
 0646          ; Noon # Lo       ARABIC LETTER NOON
-06B9..06BD    ; Noon # Lo   [5] ARABIC LETTER NOON WITH DOT BELOW..ARABIC LETTER NOON WITH THREE DOTS ABOVE
+06B9..06BC    ; Noon # Lo   [4] ARABIC LETTER NOON WITH DOT BELOW..ARABIC LETTER NOON WITH RING
 0767..0769    ; Noon # Lo   [3] ARABIC LETTER NOON WITH TWO DOTS BELOW..ARABIC LETTER NOON WITH SMALL V
 
-# Total code points: 9
+# Total code points: 8
 
 # ================================================
 
@@ -344,15 +344,12 @@
 # ================================================
 
 0626          ; Yeh # Lo       ARABIC LETTER YEH WITH HAMZA ABOVE
-063D..063F    ; Yeh # Lo   [3] ARABIC LETTER FARSI YEH WITH INVERTED V..ARABIC LETTER FARSI YEH WITH THREE DOTS ABOVE
 0649..064A    ; Yeh # Lo   [2] ARABIC LETTER ALEF MAKSURA..ARABIC LETTER YEH
 0678          ; Yeh # Lo       ARABIC LETTER HIGH HAMZA YEH
-06CC          ; Yeh # Lo       ARABIC LETTER FARSI YEH
-06CE          ; Yeh # Lo       ARABIC LETTER YEH WITH SMALL V
 06D0..06D1    ; Yeh # Lo   [2] ARABIC LETTER E..ARABIC LETTER YEH WITH THREE DOTS BELOW
-0775..0777    ; Yeh # Lo   [3] ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT TWO ABOVE..ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT FOUR BELOW
+0777          ; Yeh # Lo       ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT FOUR BELOW
 
-# Total code points: 14
+# Total code points: 7
 
 # ================================================
 
@@ -407,5 +404,20 @@
 077A..077B    ; Burushaski_Yeh_Barree # Lo   [2] ARABIC LETTER YEH BARREE WITH EXTENDED ARABIC-INDIC DIGIT TWO ABOVE..ARABIC LETTER YEH BARREE WITH EXTENDED ARABIC-INDIC DIGIT THREE ABOVE
 
 # Total code points: 2
+
+# ================================================
+
+063D..063F    ; Farsi_Yeh # Lo   [3] ARABIC LETTER FARSI YEH WITH INVERTED V..ARABIC LETTER FARSI YEH WITH THREE DOTS ABOVE
+06CC          ; Farsi_Yeh # Lo       ARABIC LETTER FARSI YEH
+06CE          ; Farsi_Yeh # Lo       ARABIC LETTER YEH WITH SMALL V
+0775..0776    ; Farsi_Yeh # Lo   [2] ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT TWO ABOVE..ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT THREE ABOVE
+
+# Total code points: 7
+
+# ================================================
+
+06BD          ; Nya # Lo       ARABIC LETTER NOON WITH THREE DOTS ABOVE
+
+# Total code points: 1
 
 # EOF

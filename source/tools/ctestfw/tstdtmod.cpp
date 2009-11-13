@@ -11,6 +11,33 @@
 
 TestLog::~TestLog() {}
 
+IcuTestErrorCode::~IcuTestErrorCode() {
+    // Safe because our handleFailure() does not throw exceptions.
+    if(isFailure()) { handleFailure(); }
+}
+
+UBool IcuTestErrorCode::logIfFailureAndReset(const char *s) {
+    if(isFailure()) {
+        // testClass.errln("%s %s failure - %s", testName, s, errorName());
+        UnicodeString msg(testName, -1, US_INV);
+        msg.append(0x20).append(UnicodeString(s, -1, US_INV));
+        msg.append(UNICODE_STRING_SIMPLE(" failure - ")).append(UnicodeString(errorName(), -1, US_INV));
+        testClass.errln(msg);
+        reset();
+        return TRUE;
+    } else {
+        reset();
+        return FALSE;
+    }
+}
+
+void IcuTestErrorCode::handleFailure() const {
+    // testClass.errln("%s failure - %s", testName, errorName());
+    UnicodeString msg(testName, -1, US_INV);
+    msg.append(UNICODE_STRING_SIMPLE(" failure - ")).append(UnicodeString(errorName(), -1, US_INV));
+    testClass.errln(msg);
+}
+
 TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log, UErrorCode &status)
 {
   if(U_FAILURE(status)) {

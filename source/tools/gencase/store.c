@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -46,9 +46,12 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 1.1 .
+The following is a description of format version 1.2 .
 
 Format version 1.1 adds data for case closure.
+
+Format version 1.2 adds an exception bit for case-ignorable. Needed because
+the Cased and Case_Ignorable properties are not disjoint.
 
 The file contains the following structures:
 
@@ -116,7 +119,9 @@ Bits
         1 soft-dotted character
         2 cc=230
         3 other cc
-11.. 9  reserved
+11      case-ignorable (used when the character is cased or has another exception)
+        (new in formatVersion 1.2/ICU 4.4)
+10.. 9  reserved
      8  if set, then for each optional-value slot there are 2 uint16_t values
         (high and low parts of 32-bit values)
         instead of single ones
@@ -230,7 +235,10 @@ unicodeVersions[]={
     { 3, 2, 0, 0 },
     { 4, 0, 0, 0 },
     { 4, 0, 1, 0 },
-    { 4, 1, 0, 0 }
+    { 4, 1, 0, 0 },
+    { 5, 1, 0, 0 },
+    { 5, 2, 0, 0 },
+    { 6, 0, 0, 0 }
 };
 
 int32_t ucdVersion=UNI_4_1;
@@ -288,7 +296,6 @@ setProps(Props *p) {
     UErrorCode errorCode;
     uint32_t value, oldValue;
     int32_t delta;
-    UBool isCaseIgnorable;
 
     /* get the non-UnicodeData.txt properties */
     value=oldValue=upvec_getValue(pv, p->code, 0);
@@ -346,51 +353,52 @@ setProps(Props *p) {
         }
     }
 
-    /* encode case-ignorable as delta==1 on uncased characters */
-    isCaseIgnorable=FALSE;
-    if((value&UCASE_TYPE_MASK)==UCASE_NONE) {
-        if(ucdVersion>=UNI_4_1) {
-            /*
-             * Unicode 4.1 and up: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk
-             * Unicode 5.1 and up: Word_Break=(MidLetter or MidNumLet) or Mn, Me, Cf, Lm, Sk
-             *   The UGENCASE_IS_MID_LETTER_SHIFT bit is set for both WB=MidLetter and WB=MidNumLet.
-             */
-            if(
-                (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
-                (upvec_getValue(pv, p->code, 1)&U_MASK(UGENCASE_IS_MID_LETTER_SHIFT))!=0
-            ) {
-                isCaseIgnorable=TRUE;
-            }
-        } else {
-            /* before Unicode 4.1: Mn, Me, Cf, Lm, Sk or 0027 or 00AD or 2019 */
-            if(
-                (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
-                p->code==0x27 || p->code==0xad || p->code==0x2019
-            ) {
-                isCaseIgnorable=TRUE;
-            }
+    /*
+     * Encode case-ignorable as delta==1 on uncased characters,
+     * and with an exception bit on cased characters and characters with another exception.
+     */
+    if(ucdVersion>=UNI_4_1) {
+        /*
+         * Unicode 4.1 & 5.0: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk
+         * Unicode 5.1: Word_Break=(MidLetter or MidNumLet) or Mn, Me, Cf, Lm, Sk
+         *   The UGENCASE_IS_MID_LETTER_SHIFT bit is set for both WB=MidLetter and WB=MidNumLet.
+         * Unicode 5.2: The definition (Unicode Standard Definition D121) is unchanged,
+         *   but now Case_Ignorable is a public property
+         *   with its values listed in DerivedCoreProperties.txt.
+         *   gencase.c parses those values as well, just in case the definition changes
+         *   in the future. gencase.c sets the UGENCASE_IS_MID_LETTER_SHIFT bit
+         *   for each Case_Ignorable entry. (It never resets that bit.)
+         */
+        if(
+            (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
+            (upvec_getValue(pv, p->code, 1)&U_MASK(UGENCASE_IS_MID_LETTER_SHIFT))!=0
+        ) {
+            p->isCaseIgnorable=TRUE;
+        }
+    } else {
+        /* before Unicode 4.1: Mn, Me, Cf, Lm, Sk or 0027 or 00AD or 2019 */
+        if(
+            (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
+            p->code==0x27 || p->code==0xad || p->code==0x2019
+        ) {
+            p->isCaseIgnorable=TRUE;
         }
     }
-
-    if(isCaseIgnorable && p->code!=0x307) {
-        /*
-         * We use one of the delta/exception bits, which works because we only
-         * store the case-ignorable flag for uncased characters.
-         * There is no delta for uncased characters (see checks above).
-         * If there is an exception for an uncased, case-ignorable character
-         * (although there should not be any case mappings if it's uncased)
-         * then we have a problem.
-         * There is one character which is case-ignorable but has an exception:
-         * U+0307 is uncased, Mn, has conditional special casing and
-         * is therefore handled in code instead.
-         */
-        if(value&UCASE_EXCEPTION) {
-            fprintf(stderr, "gencase error: unable to encode case-ignorable for U+%04lx with exceptions\n",
-                            (unsigned long)p->code);
-            exit(U_INTERNAL_PROGRAM_ERROR);
+    if(p->isCaseIgnorable) {
+        if((value&UCASE_TYPE_MASK)==UCASE_NONE) {
+            /*
+             * We use one of the delta/exception bits for
+             * the case-ignorable flag for uncased characters.
+             * There is no delta for uncased characters (see checks above).
+             */
+            delta=1;
+        } else {
+            /*
+             * If the character is cased or has another exception,
+             * then we store the case-ignorable flag as an exception bit.
+             */
+            value|=UCASE_EXCEPTION;
         }
-
-        delta=1;
     }
 
     /* handle exceptions */
@@ -822,20 +830,21 @@ static uint16_t
 makeException(uint32_t value, Props *p) {
     uint32_t slots[8];
     uint32_t slotBits;
-    uint16_t excWord, excIndex, excTop, i, count, length, fullLengths;
+    uint16_t excWord, i, count, length, fullLengths;
     UBool doubleSlots;
 
-    /* excIndex will be returned for storing in the trie word */
-    excIndex=exceptionsTop;
-    if(excIndex>=UCASE_MAX_EXCEPTIONS) {
+    /* exceptionsTop might be returned for storing in the trie word */
+    if(exceptionsTop>=UCASE_MAX_EXCEPTIONS) {
         fprintf(stderr, "gencase error: too many exceptions words\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
 
-    excTop=excIndex+1; /* +1 for excWord which will be stored at excIndex */
-
     /* copy and shift the soft-dotted bits */
     excWord=((uint16_t)value&UCASE_DOT_MASK)<<UCASE_EXC_DOT_SHIFT;
+
+    if(p->isCaseIgnorable) {
+        excWord|=UCASE_EXC_CASE_IGNORABLE;
+    }
 
     /* update maxFullLength */
     if(p->specialCasing!=NULL) {
@@ -962,56 +971,73 @@ makeException(uint32_t value, Props *p) {
         excWord|=U_MASK(UCASE_EXC_FULL_MAPPINGS);
     }
 
-    /* write slots */
-    doubleSlots=(UBool)(slotBits>0xffff);
-    if(!doubleSlots) {
-        for(i=0; i<count; ++i) {
-            exceptions[excTop++]=(uint16_t)slots[i];
+    if(count==0) {
+        /* No optional slots: Try to share excWord entries. */
+        uint16_t excIndex;
+        for(excIndex=0; excIndex<exceptionsTop; ++excIndex) {
+            if(excWord==exceptions[excIndex]) {
+                return excIndex;
+            }
         }
+        /* not found */
+        ++exceptionsTop;
+        exceptions[excIndex]=excWord;
+        return excIndex;
     } else {
-        excWord|=UCASE_EXC_DOUBLE_SLOTS;
-        for(i=0; i<count; ++i) {
-            exceptions[excTop++]=(uint16_t)(slots[i]>>16);
-            exceptions[excTop++]=(uint16_t)slots[i];
+        /* write slots */
+        uint16_t excIndex=exceptionsTop;
+        uint16_t excTop=excIndex+1; /* +1 for excWord which will be stored at excIndex */
+
+        doubleSlots=(UBool)(slotBits>0xffff);
+        if(!doubleSlots) {
+            for(i=0; i<count; ++i) {
+                exceptions[excTop++]=(uint16_t)slots[i];
+            }
+        } else {
+            excWord|=UCASE_EXC_DOUBLE_SLOTS;
+            for(i=0; i<count; ++i) {
+                exceptions[excTop++]=(uint16_t)(slots[i]>>16);
+                exceptions[excTop++]=(uint16_t)slots[i];
+            }
         }
-    }
 
-    /* write the full case mapping strings */
-    if(p->specialCasing!=NULL) {
-        length=(uint16_t)p->specialCasing->lowerCase[0];
-        u_memcpy((UChar *)exceptions+excTop, p->specialCasing->lowerCase+1, length);
-        excTop+=length;
-    }
-    if(p->caseFolding!=NULL) {
-        length=(uint16_t)p->caseFolding->full[0];
-        u_memcpy((UChar *)exceptions+excTop, p->caseFolding->full+1, length);
-        excTop+=length;
-    }
-    if(p->specialCasing!=NULL) {
-        length=(uint16_t)p->specialCasing->upperCase[0];
-        u_memcpy((UChar *)exceptions+excTop, p->specialCasing->upperCase+1, length);
-        excTop+=length;
-
-        length=(uint16_t)p->specialCasing->titleCase[0];
-        u_memcpy((UChar *)exceptions+excTop, p->specialCasing->titleCase+1, length);
-        excTop+=length;
-    }
-
-    /* write the closure data */
-    if(p->closure[0]!=0) {
-        UChar32 c;
-
-        for(i=0; i<LENGTHOF(p->closure) && (c=p->closure[i])!=0; ++i) {
-            U16_APPEND_UNSAFE((UChar *)exceptions, excTop, c);
+        /* write the full case mapping strings */
+        if(p->specialCasing!=NULL) {
+            length=(uint16_t)p->specialCasing->lowerCase[0];
+            u_memcpy((UChar *)exceptions+excTop, p->specialCasing->lowerCase+1, length);
+            excTop+=length;
         }
+        if(p->caseFolding!=NULL) {
+            length=(uint16_t)p->caseFolding->full[0];
+            u_memcpy((UChar *)exceptions+excTop, p->caseFolding->full+1, length);
+            excTop+=length;
+        }
+        if(p->specialCasing!=NULL) {
+            length=(uint16_t)p->specialCasing->upperCase[0];
+            u_memcpy((UChar *)exceptions+excTop, p->specialCasing->upperCase+1, length);
+            excTop+=length;
+
+            length=(uint16_t)p->specialCasing->titleCase[0];
+            u_memcpy((UChar *)exceptions+excTop, p->specialCasing->titleCase+1, length);
+            excTop+=length;
+        }
+
+        /* write the closure data */
+        if(p->closure[0]!=0) {
+            UChar32 c;
+
+            for(i=0; i<LENGTHOF(p->closure) && (c=p->closure[i])!=0; ++i) {
+                U16_APPEND_UNSAFE((UChar *)exceptions, excTop, c);
+            }
+        }
+
+        exceptionsTop=excTop;
+
+        /* write the main exceptions word */
+        exceptions[excIndex]=excWord;
+
+        return excIndex;
     }
-
-    exceptionsTop=excTop;
-
-    /* write the main exceptions word */
-    exceptions[excIndex]=excWord;
-
-    return excIndex;
 }
 
 extern void

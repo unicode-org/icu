@@ -251,8 +251,8 @@ isDataLoaded(UErrorCode *pErrorCode) {
  * field can contain ';' as part of its contents.
  * In unames.dat, it is marked as token[';']==-1 only if the
  * semicolon is used in the data file - which is iff we
- * have Unicode 1.0 names or ISO comments.
- * So, it will be token[';']==-1 if we store U1.0 names/ISO comments
+ * have Unicode 1.0 names or ISO comments or aliases.
+ * So, it will be token[';']==-1 if we store U1.0 names/ISO comments/aliases
  * although we know that it will never be part of a name.
  */
 static uint16_t
@@ -264,32 +264,26 @@ expandName(UCharNames *names,
     uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
     uint8_t c;
 
-    if(nameChoice==U_UNICODE_10_CHAR_NAME || nameChoice==U_ISO_COMMENT) {
+    if(nameChoice!=U_UNICODE_CHAR_NAME && nameChoice!=U_EXTENDED_CHAR_NAME) {
         /*
          * skip the modern name if it is not requested _and_
          * if the semicolon byte value is a character, not a token number
          */
         if((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
-            while(nameLength>0) {
-                --nameLength;
-                if(*name++==';') {
-                    break;
-                }
-            }
-            if(nameChoice==U_ISO_COMMENT) {
-                /* skip the Unicode 1.0 name as well to get the ISO comment */
+            int fieldIndex= nameChoice==U_ISO_COMMENT ? 2 : nameChoice;
+            do {
                 while(nameLength>0) {
                     --nameLength;
                     if(*name++==';') {
                         break;
                     }
                 }
-            }
+            } while(--fieldIndex>0);
         } else {
             /*
              * the semicolon byte value is a token number, therefore
              * only modern names are stored in unames.dat and there is no
-             * such requested Unicode 1.0 name here
+             * such requested alternate name here
              */
             nameLength=0;
         }
@@ -364,23 +358,26 @@ compareName(UCharNames *names,
     uint8_t c;
     const char *origOtherName = otherName;
 
-    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
+    if(nameChoice!=U_UNICODE_CHAR_NAME && nameChoice!=U_EXTENDED_CHAR_NAME) {
         /*
          * skip the modern name if it is not requested _and_
          * if the semicolon byte value is a character, not a token number
          */
         if((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
-            while(nameLength>0) {
-                --nameLength;
-                if(*name++==';') {
-                    break;
+            int fieldIndex= nameChoice==U_ISO_COMMENT ? 2 : nameChoice;
+            do {
+                while(nameLength>0) {
+                    --nameLength;
+                    if(*name++==';') {
+                        break;
+                    }
                 }
-            }
+            } while(--fieldIndex>0);
         } else {
             /*
              * the semicolon byte value is a token number, therefore
              * only modern names are stored in unames.dat and there is no
-             * such requested Unicode 1.0 name here
+             * such requested alternate name here
              */
             nameLength=0;
         }
@@ -865,13 +862,8 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength) {
     uint16_t bufferPos=0;
 
-    /*
-     * Do not write algorithmic Unicode 1.0 names because
-     * Unihan names are the same as the modern ones,
-     * extension A was only introduced with Unicode 3.0, and
-     * the Hangul syllable block was moved and changed around Unicode 1.1.5.
-     */
-    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
+    /* Only the normative character name can be algorithmic. */
+    if(nameChoice!=U_UNICODE_CHAR_NAME && nameChoice!=U_EXTENDED_CHAR_NAME) {
         /* zero-terminate */
         if(bufferLength>0) {
             *buffer=0;
@@ -957,7 +949,7 @@ enumAlgNames(AlgorithmicRange *range,
     char buffer[200];
     uint16_t length;
 
-    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
+    if(nameChoice!=U_UNICODE_CHAR_NAME && nameChoice!=U_EXTENDED_CHAR_NAME) {
         return TRUE;
     }
 
@@ -1095,7 +1087,7 @@ static UChar32
 findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName) {
     UChar32 code;
 
-    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
+    if(nameChoice!=U_UNICODE_CHAR_NAME && nameChoice!=U_EXTENDED_CHAR_NAME) {
         return 0xffff;
     }
 

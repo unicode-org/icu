@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -583,10 +583,11 @@ u_isJavaIDPart(UChar32 c) {
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c) {
     uint32_t props;
+    int32_t value;
     GET_PROPS(c, props);
-
-    if(GET_NUMERIC_TYPE(props)==1) {
-        return GET_NUMERIC_VALUE(props);
+    value=(int32_t)GET_NUMERIC_TYPE_VALUE(props)-UPROPS_NTV_DECIMAL_START;
+    if(value<=9) {
+        return value;
     } else {
         return -1;
     }
@@ -594,47 +595,32 @@ u_charDigitValue(UChar32 c) {
 
 U_CAPI double U_EXPORT2
 u_getNumericValue(UChar32 c) {
-    uint32_t props, numericType, numericValue;
+    uint32_t props;
+    int32_t ntv;
     GET_PROPS(c, props);
-    numericType=GET_NUMERIC_TYPE(props);
+    ntv=(int32_t)GET_NUMERIC_TYPE_VALUE(props);
 
-    if(numericType==0 || numericType>=UPROPS_NT_COUNT) {
+    if(ntv==UPROPS_NTV_NONE) {
         return U_NO_NUMERIC_VALUE;
-    }
-
-    numericValue=GET_NUMERIC_VALUE(props);
-
-    if(numericType<U_NT_COUNT) {
-        /* normal type, the value is stored directly */
-        return numericValue;
-    } else if(numericType==UPROPS_NT_FRACTION) {
-        /* fraction value */
-        int32_t numerator;
-        uint32_t denominator;
-
-        numerator=(int32_t)numericValue>>UPROPS_FRACTION_NUM_SHIFT;
-        denominator=(numericValue&UPROPS_FRACTION_DEN_MASK)+UPROPS_FRACTION_DEN_OFFSET;
-
-        if(numerator==0) {
-            numerator=-1;
-        }
-        return (double)numerator/(double)denominator;
-    } else /* numericType==UPROPS_NT_LARGE */ {
-        /* large value with exponent */
+    } else if(ntv<UPROPS_NTV_DIGIT_START) {
+        /* decimal digit */
+        return ntv-UPROPS_NTV_DECIMAL_START;
+    } else if(ntv<UPROPS_NTV_NUMERIC_START) {
+        /* other digit */
+        return ntv-UPROPS_NTV_DIGIT_START;
+    } else if(ntv<UPROPS_NTV_FRACTION_START) {
+        /* small integer */
+        return ntv-UPROPS_NTV_NUMERIC_START;
+    } else if(ntv<UPROPS_NTV_LARGE_START) {
+        /* fraction */
+        int32_t numerator=(ntv>>4)-12;
+        int32_t denominator=(ntv&0xf)+1;
+        return (double)numerator/denominator;
+    } else if(ntv<UPROPS_NTV_RESERVED_START) {
+        /* large, single-significant-digit integer */
         double numValue;
-        int32_t mant, exp;
-
-        mant=(int32_t)numericValue>>UPROPS_LARGE_MANT_SHIFT;
-        exp=(int32_t)numericValue&UPROPS_LARGE_EXP_MASK;
-        if(mant==0) {
-            mant=1;
-            exp+=UPROPS_LARGE_EXP_OFFSET_EXTRA;
-        } else if(mant>9) {
-            return U_NO_NUMERIC_VALUE; /* reserved mantissa value */
-        } else {
-            exp+=UPROPS_LARGE_EXP_OFFSET;
-        }
-
+        int32_t mant=(ntv>>5)-14;
+        int32_t exp=(ntv&0x1f)+2;
         numValue=mant;
 
         /* multiply by 10^exp without math.h */
@@ -658,6 +644,9 @@ u_getNumericValue(UChar32 c) {
         }
 
         return numValue;
+    } else {
+        /* reserved */
+        return U_NO_NUMERIC_VALUE;
     }
 }
 
@@ -749,43 +738,6 @@ uprv_getMaxValues(int32_t column) {
 #endif
 }
 
-/*
- * get Hangul Syllable Type
- * implemented here so that uchar.c (uhst_addPropertyStarts())
- * does not depend on uprops.c (u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE))
- */
-U_CFUNC UHangulSyllableType
-uchar_getHST(UChar32 c) {
-    /* purely algorithmic; hardcode known characters, check for assigned new ones */
-    if(c<JAMO_L_BASE) {
-        /* U_HST_NOT_APPLICABLE */
-    } else if(c<=0x11ff) {
-        /* Jamo range */
-        if(c<=0x115f) {
-            /* Jamo L range, HANGUL CHOSEONG ... */
-            if(c==0x115f || c<=0x1159 || u_charType(c)==U_OTHER_LETTER) {
-                return U_HST_LEADING_JAMO;
-            }
-        } else if(c<=0x11a7) {
-            /* Jamo V range, HANGUL JUNGSEONG ... */
-            if(c<=0x11a2 || u_charType(c)==U_OTHER_LETTER) {
-                return U_HST_VOWEL_JAMO;
-            }
-        } else {
-            /* Jamo T range */
-            if(c<=0x11f9 || u_charType(c)==U_OTHER_LETTER) {
-                return U_HST_TRAILING_JAMO;
-            }
-        }
-    } else if((c-=HANGUL_BASE)<0) {
-        /* U_HST_NOT_APPLICABLE */
-    } else if(c<HANGUL_COUNT) {
-        /* Hangul syllable */
-        return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
-    }
-    return U_HST_NOT_APPLICABLE;
-}
-
 U_CAPI void U_EXPORT2
 u_charAge(UChar32 c, UVersionInfo versionArray) {
     if(versionArray!=NULL) {
@@ -815,71 +767,6 @@ ublock_getCode(UChar32 c) {
 }
 
 /* property starts for UnicodeSet ------------------------------------------- */
-
-/* for Hangul_Syllable_Type */
-U_CFUNC void U_EXPORT2
-uhst_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
-    UChar32 c;
-    int32_t value, value2;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-#if !UCHAR_HARDCODE_DATA
-    if(!HAVE_DATA) {
-        *pErrorCode=dataErrorCode;
-        return;
-    }
-#endif
-
-    /* add code points with hardcoded properties, plus the ones following them */
-
-    /*
-     * Add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE.
-     * First, we add fixed boundaries for the blocks of Jamos.
-     * Then we check in loops to see where the current Unicode version
-     * actually stops assigning such Jamos. We start each loop
-     * at the end of the per-Jamo-block assignments in Unicode 4 or earlier.
-     * (These have not changed since Unicode 2.)
-     */
-    sa->add(sa->set, 0x1100);
-    value=U_HST_LEADING_JAMO;
-    for(c=0x115a; c<=0x115f; ++c) {
-        value2=uchar_getHST(c);
-        if(value!=value2) {
-            value=value2;
-            sa->add(sa->set, c);
-        }
-    }
-
-    sa->add(sa->set, 0x1160);
-    value=U_HST_VOWEL_JAMO;
-    for(c=0x11a3; c<=0x11a7; ++c) {
-        value2=uchar_getHST(c);
-        if(value!=value2) {
-            value=value2;
-            sa->add(sa->set, c);
-        }
-    }
-
-    sa->add(sa->set, 0x11a8);
-    value=U_HST_TRAILING_JAMO;
-    for(c=0x11fa; c<=0x11ff; ++c) {
-        value2=uchar_getHST(c);
-        if(value!=value2) {
-            value=value2;
-            sa->add(sa->set, c);
-        }
-    }
-
-    /* Add Hangul type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE. */
-    for(c=HANGUL_BASE; c<(HANGUL_BASE+HANGUL_COUNT); c+=JAMO_T_COUNT) {
-        sa->add(sa->set, c);
-        sa->add(sa->set, c+1);
-    }
-    sa->add(sa->set, c);
-}
 
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {

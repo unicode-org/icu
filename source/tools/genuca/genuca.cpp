@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -519,6 +519,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                 //consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
               //}
             } else if (vt[cnt].what_to_do == READCE) { /* vt[cnt].what_to_do == READCE */
+              // TODO: combine & clean up the two CE parsers
               pointer = strchr(buffer+vtLen, '[');
               if(pointer) {
                 pointer++;
@@ -705,6 +706,29 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
             pointer++;
         }
     }
+    // Check for valid bytes in CE weights.
+    // TODO: Tighten this so that it allows 03 & 04 in intermediate bytes
+    // but not in final bytes.
+    // See http://bugs.icu-project.org/trac/ticket/7167
+    for (i = 0; i < (int32_t)CEindex; ++i) {
+        uint32_t value = element->CEs[i];
+        uint8_t bytes[4] = {
+            (uint8_t)(value >> 24),
+            (uint8_t)(value >> 16),
+            (uint8_t)(value >> 8),
+            (uint8_t)(value & UCOL_NEW_TERTIARYORDERMASK)
+        };
+        for (int j = 0; j < 4; ++j) {
+            uint8_t maxByte =
+                (isContinuation(value) || j == 1) ?
+                    UCOL_BYTE_FIRST_TAILORED :
+                    UCOL_BYTE_COMMON;
+            if (0 != bytes[j] && bytes[j] < maxByte) {
+                fprintf(stderr, "Warning: invalid UCA weight byte %02X for %s\n", bytes[j], buffer);
+                // TODO: return NULL;
+            }
+        }
+    }
 
     if(U_FAILURE(*status)) {
         fprintf(stderr, "problem putting stuff in hash table %s\n", u_errorName(*status));
@@ -786,6 +810,14 @@ void writeOutData(UCATableHeader *data,
     }
 }
 
+enum {
+    /*
+     * Maximum number of UCA contractions we can store.
+     * May need to be increased for a new Unicode version.
+     */
+    MAX_UCA_CONTRACTION_CES=2048
+};
+
 static int32_t
 write_uca_table(const char *filename,
                 const char *outputDir,
@@ -817,8 +849,8 @@ write_uca_table(const char *filename,
         return 0;
     }
     uprv_memset(opts, 0, sizeof(UColOptionSet));
-    UChar contractionCEs[512][3];
-    uprv_memset(contractionCEs, 0, 512*3*sizeof(UChar));
+    UChar contractionCEs[MAX_UCA_CONTRACTION_CES][3];
+    uprv_memset(contractionCEs, 0, sizeof(contractionCEs));
     uint32_t noOfContractions = 0;
     UCAConstants consts;
     uprv_memset(&consts, 0, sizeof(consts));
@@ -948,6 +980,13 @@ struct {
               if(UTF_IS_LEAD(element->cPoints[0]) && UTF_IS_TRAIL(element->cPoints[1]) && element->cSize == 2) {
                 surrogateCount++;
               } else {
+                if(noOfContractions>=MAX_UCA_CONTRACTION_CES) {
+                  fprintf(stderr,
+                          "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTION_CES in genuca.cpp. "
+                          "Exiting...\n",
+                          (int)MAX_UCA_CONTRACTION_CES);
+                  exit(*status);
+                }
                 contractionCEs[noOfContractions][0] = element->cPoints[0];
                 contractionCEs[noOfContractions][1] = element->cPoints[1];
                 if(element->cSize > 2) { // the third one
@@ -967,6 +1006,13 @@ struct {
                 // contractionCEs[1]: '\0' to differentiate with contractions.
                 // contractionCEs[2]: prefix char
                 if (element->prefixSize>0) {
+                    if(noOfContractions>=MAX_UCA_CONTRACTION_CES) {
+                      fprintf(stderr,
+                              "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTION_CES in genuca.cpp. "
+                              "Exiting...\n",
+                              (int)MAX_UCA_CONTRACTION_CES);
+                      exit(*status);
+                    }
                     contractionCEs[noOfContractions][0]=element->cPoints[0];
                     contractionCEs[noOfContractions][1]='\0';
                     contractionCEs[noOfContractions][2]=element->prefixChars[0];

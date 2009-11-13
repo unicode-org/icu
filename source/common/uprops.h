@@ -48,45 +48,33 @@ enum {
 /* definitions for the main properties words */
 enum {
     /* general category shift==0                                0 (5 bits) */
-    UPROPS_NUMERIC_TYPE_SHIFT=5,                            /*  5 (3 bits) */
-    UPROPS_NUMERIC_VALUE_SHIFT=8                            /*  8 (8 bits) */
+    /* reserved                                                 5 (1 bit) */
+    UPROPS_NUMERIC_TYPE_VALUE_SHIFT=6                       /*  6 (10 bits) */
 };
 
 #define GET_CATEGORY(props) ((props)&0x1f)
 #define CAT_MASK(props) U_MASK(GET_CATEGORY(props))
 
-#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
-#define GET_NUMERIC_VALUE(props) (((props)>>UPROPS_NUMERIC_VALUE_SHIFT)&0xff)
+#define GET_NUMERIC_TYPE_VALUE(props) ((props)>>UPROPS_NUMERIC_TYPE_VALUE_SHIFT)
 
-/* internal numeric pseudo-types for special encodings of numeric values */
+/* constants for the storage form of numeric types and values */
 enum {
-    UPROPS_NT_FRACTION=4, /* ==U_NT_COUNT, must not change unless binary format version changes */
-    UPROPS_NT_LARGE,
-    UPROPS_NT_COUNT
+    UPROPS_NTV_NONE=0,
+    UPROPS_NTV_DECIMAL_START=1,
+    UPROPS_NTV_DIGIT_START=11,
+    UPROPS_NTV_NUMERIC_START=21,
+    UPROPS_NTV_FRACTION_START=0xb0,
+    UPROPS_NTV_LARGE_START=0x1e0,
+    UPROPS_NTV_RESERVED_START=0x300,
+
+    UPROPS_NTV_MAX_SMALL_INT=UPROPS_NTV_FRACTION_START-UPROPS_NTV_NUMERIC_START-1
 };
 
-/* encoding of fractional and large numbers */
-enum {
-    UPROPS_MAX_SMALL_NUMBER=0xff,
-
-    UPROPS_FRACTION_NUM_SHIFT=3,        /* numerator: bits 7..3 */
-    UPROPS_FRACTION_DEN_MASK=7,         /* denominator: bits 2..0 */
-
-    UPROPS_FRACTION_MAX_NUM=31,
-    UPROPS_FRACTION_DEN_OFFSET=2,       /* denominator values are 2..9 */
-
-    UPROPS_FRACTION_MIN_DEN=UPROPS_FRACTION_DEN_OFFSET,
-    UPROPS_FRACTION_MAX_DEN=UPROPS_FRACTION_MIN_DEN+UPROPS_FRACTION_DEN_MASK,
-
-    UPROPS_LARGE_MANT_SHIFT=4,          /* mantissa: bits 7..4 */
-    UPROPS_LARGE_EXP_MASK=0xf,          /* exponent: bits 3..0 */
-    UPROPS_LARGE_EXP_OFFSET=2,          /* regular exponents 2..17 */
-    UPROPS_LARGE_EXP_OFFSET_EXTRA=18,   /* extra large exponents 18..33 */
-
-    UPROPS_LARGE_MIN_EXP=UPROPS_LARGE_EXP_OFFSET,
-    UPROPS_LARGE_MAX_EXP=UPROPS_LARGE_MIN_EXP+UPROPS_LARGE_EXP_MASK,
-    UPROPS_LARGE_MAX_EXP_EXTRA=UPROPS_LARGE_EXP_OFFSET_EXTRA+UPROPS_LARGE_EXP_MASK
-};
+#define UPROPS_NTV_GET_TYPE(ntv) \
+    ((ntv==UPROPS_NTV_NONE) ? U_NT_NONE : \
+    (ntv<UPROPS_NTV_DIGIT_START) ?  U_NT_DECIMAL : \
+    (ntv<UPROPS_NTV_NUMERIC_START) ? U_NT_DIGIT : \
+    U_NT_NUMERIC)
 
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     3
@@ -211,13 +199,6 @@ U_CFUNC int32_t
 uprv_getMaxValues(int32_t column);
 
 /**
- * Get the Hangul Syllable Type for c.
- * @internal
- */
-U_CFUNC UHangulSyllableType
-uchar_getHST(UChar32 c);
-
-/**
  * Checks if c is alphabetic, or a decimal digit; implements UCHAR_POSIX_ALNUM.
  * @internal
  */
@@ -339,8 +320,6 @@ enum UPropertySource {
     UPROPS_SRC_CHAR,
     /** From uchar.c/uprops.icu properties vectors trie */
     UPROPS_SRC_PROPSVEC,
-    /** Hangul_Syllable_Type, from uchar.c/uprops.icu */
-    UPROPS_SRC_HST,
     /** From unames.c/unames.icu */
     UPROPS_SRC_NAMES,
     /** From unorm.cpp/unorm.icu */
@@ -351,6 +330,8 @@ enum UPropertySource {
     UPROPS_SRC_BIDI,
     /** From uchar.c/uprops.icu main trie as well as properties vectors trie */
     UPROPS_SRC_CHAR_AND_PROPSVEC,
+    /** From ucase.c/ucase.icu as well as unorm.cpp/unorm.icu */
+    UPROPS_SRC_CASE_AND_NORM,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
@@ -378,13 +359,6 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
  */
 U_CFUNC void U_EXPORT2
 upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
-
-/**
- * Same as uchar_addPropertyStarts() but only for Hangul_Syllable_Type.
- * @internal
- */
-U_CFUNC void U_EXPORT2
-uhst_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.

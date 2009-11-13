@@ -1,27 +1,38 @@
-# EastAsianWidth-5.1.0.txt
-# Date: 2006-10-26, 16:58:00 PDT [KW]
+# EastAsianWidth-5.2.0.txt
+# Date: 2009-06-09, 17:47:00 PDT [KW]
 #
 # East Asian Width Properties
 #
 # This file is an informative contributory data file in the
 # Unicode Character Database.
 #
-# Copyright (c) 1991-2007 Unicode, Inc.
+# Copyright (c) 1991-2009 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 #
 # The format is two fields separated by a semicolon.
 # Field 0: Unicode value
 # Field 1: East Asian Width property, consisting of one of the following values:
 #         "N", "A", "H", "W", "F", "Na"
-#  - All code points, assigned or unassigned, that are not listed 
+#  - All code points, assigned or unassigned, that are not listed
 #         explicitly are given the value "N".
+# The unassigned code points that default to "W" include ranges in the
+# following blocks:
+#     CJK Unified Ideographs Extension A:       U+3400..U+4DBF
+#     CJK Unified Ideographs:                   U+4E00..U+9FFF
+#     CJK Compatibility Ideographs:             U+F900..U+FAFF
+#     CJK Unified Ideographs Extension B:      U+20000..U+2A6DF
+#     CJK Unified Ideographs Extension C:      U+2A700..U+2B73F
+#     CJK Compatibility Ideographs Supplement: U+2F800..U+2FA1F
+#     and any other reserved code points on
+#         Planes 2 and 3:                      U+20000..U+2FFFD
+#                                              U+30000..U+3FFFD
 #  - Characters ranges are specified as for other property files in
 #         the Unicode Character Database.
 #
 # The Unicode name of each character is provided in a comment for help
 # in identifying the characters.
 #
-# See UAX #11: East Asian Character Width, for more information.
+# See UAX #11: East Asian Width, for more information.
 #
 # @missing: 0000..10FFFF; N
 0000..001F;N
@@ -152,7 +163,7 @@
 0410..044F;A
 0450;N
 0451;A
-0452..0523;N
+0452..0525;N
 0531..0556;N
 0559..055F;N
 0561..0587;N
@@ -168,11 +179,13 @@
 070F..074A;N
 074D..07B1;N
 07C0..07FA;N
-0901..0939;N
-093C..094D;N
-0950..0954;N
+0800..082D;N
+0830..083E;N
+0900..0939;N
+093C..094E;N
+0950..0955;N
 0958..0972;N
-097B..097F;N
+0979..097F;N
 0981..0983;N
 0985..098C;N
 098F..0990;N
@@ -186,7 +199,7 @@
 09D7;N
 09DC..09DD;N
 09DF..09E3;N
-09E6..09FA;N
+09E6..09FB;N
 0A01..0A03;N
 0A05..0A0A;N
 0A0F..0A10;N
@@ -324,14 +337,14 @@
 0F90..0F97;N
 0F99..0FBC;N
 0FBE..0FCC;N
-0FCE..0FD4;N
-1000..1099;N
-109E..10C5;N
+0FCE..0FD8;N
+1000..10C5;N
 10D0..10FC;N
-1100..1159;W
-115F;W
+1100..115F;W
 1160..11A2;N
+11A3..11A7;W
 11A8..11F9;N
+11FA..11FF;W
 1200..1248;N
 124A..124D;N
 1250..1256;N
@@ -351,8 +364,7 @@
 135F..137C;N
 1380..1399;N
 13A0..13F4;N
-1401..1676;N
-1680..169C;N
+1400..169C;N
 16A0..16F0;N
 1700..170C;N
 170E..1714;N
@@ -368,17 +380,22 @@
 1810..1819;N
 1820..1877;N
 1880..18AA;N
+18B0..18F5;N
 1900..191C;N
 1920..192B;N
 1930..193B;N
 1940;N
 1944..196D;N
 1970..1974;N
-1980..19A9;N
+1980..19AB;N
 19B0..19C9;N
-19D0..19D9;N
+19D0..19DA;N
 19DE..1A1B;N
-1A1E..1A1F;N
+1A1E..1A5E;N
+1A60..1A7C;N
+1A7F..1A89;N
+1A90..1A99;N
+1AA0..1AAD;N
 1B00..1B4B;N
 1B50..1B7C;N
 1B80..1BAA;N
@@ -386,8 +403,9 @@
 1C00..1C37;N
 1C3B..1C49;N
 1C4D..1C7F;N
+1CD0..1CF2;N
 1D00..1DE6;N
-1DFE..1F15;N
+1DFD..1F15;N
 1F18..1F1D;N
 1F20..1F45;N
 1F48..1F4D;N
@@ -438,7 +456,7 @@
 20A9;H
 20AA..20AB;N
 20AC;A
-20AD..20B5;N
+20AD..20B8;N
 20D0..20F0;N
 2100..2102;N
 2103;A
@@ -456,7 +474,7 @@
 2126;A
 2127..212A;N
 212B;A
-212C..214F;N
+212C..2152;N
 2153..2154;A
 2155..215A;N
 215B..215E;A
@@ -465,6 +483,7 @@
 216C..216F;N
 2170..2179;A
 217A..2188;N
+2189;A
 2190..2199;A
 219A..21B7;N
 21B8..21B9;A
@@ -534,7 +553,7 @@
 2312;A
 2313..2328;N
 2329..232A;W
-232B..23E7;N
+232B..23E8;N
 2400..2426;N
 2440..244A;N
 2460..24E9;A
@@ -595,8 +614,14 @@
 266E;N
 266F;A
 2670..269D;N
-26A0..26BC;N
+269E..269F;A
+26A0..26BD;N
+26BE..26BF;A
 26C0..26C3;N
+26C4..26CD;A
+26CF..26E1;A
+26E3;A
+26E8..26FF;A
 2701..2704;N
 2706..2709;N
 270C..2727;N
@@ -606,6 +631,7 @@
 274D;N
 274F..2752;N
 2756;N
+2757;A
 2758..275E;N
 2761..2775;N
 2776..277F;A
@@ -620,11 +646,10 @@
 2985..2986;Na
 2987..2B4C;N
 2B50..2B54;N
+2B55..2B59;A
 2C00..2C2E;N
 2C30..2C5E;N
-2C60..2C6F;N
-2C71..2C7D;N
-2C80..2CEA;N
+2C60..2CF1;N
 2CF9..2D25;N
 2D30..2D65;N
 2D6F;N
@@ -637,7 +662,7 @@
 2DC8..2DCE;N
 2DD0..2DD6;N
 2DD8..2DDE;N
-2DE0..2E30;N
+2DE0..2E31;N
 2E80..2E99;W
 2E9B..2EF3;W
 2F00..2FD5;W
@@ -652,37 +677,56 @@
 3190..31B7;W
 31C0..31E3;W
 31F0..321E;W
-3220..3243;W
+3220..3247;W
+3248..324F;A
 3250..32FE;W
 3300..33FF;W
 3400..4DB5;W
+4DB6..4DBF;W
 4DC0..4DFF;N
-4E00..9FC3;W
+4E00..9FCB;W
+9FCC..9FFF;W
 A000..A48C;W
 A490..A4C6;W
-A500..A62B;N
+A4D0..A62B;N
 A640..A65F;N
 A662..A673;N
 A67C..A697;N
+A6A0..A6F7;N
 A700..A78C;N
 A7FB..A82B;N
+A830..A839;N
 A840..A877;N
 A880..A8C4;N
 A8CE..A8D9;N
+A8E0..A8FB;N
 A900..A953;N
 A95F;N
+A960..A97C;W
+A980..A9CD;N
+A9CF..A9D9;N
+A9DE..A9DF;N
 AA00..AA36;N
 AA40..AA4D;N
 AA50..AA59;N
-AA5C..AA5F;N
+AA5C..AA7B;N
+AA80..AAC2;N
+AADB..AADF;N
+ABC0..ABED;N
+ABF0..ABF9;N
 AC00..D7A3;W
+D7B0..D7C6;W
+D7CB..D7FB;W
 D800..DB7F;N
 DB80..DBFF;N
 DC00..DFFF;N
 E000..F8FF;A
 F900..FA2D;W
-FA30..FA6A;W
+FA2E..FA2F;W
+FA30..FA6D;W
+FA6E..FA6F;W
 FA70..FAD9;W
+FADA..FAFF;W
 FB00..FB06;N
 FB13..FB17;N
 FB1D..FB36;N
@@ -741,8 +785,9 @@ FFFD;A
 1080A..10835;N
 10837..10838;N
 1083C;N
-1083F;N
-10900..10919;N
+1083F..10855;N
+10857..1085F;N
+10900..1091B;N
 1091F..10939;N
 1093F;N
 10A00..10A03;N
@@ -753,9 +798,18 @@ FFFD;A
 10A38..10A3A;N
 10A3F..10A47;N
 10A50..10A58;N
+10A60..10A7F;N
+10B00..10B35;N
+10B39..10B55;N
+10B58..10B72;N
+10B78..10B7F;N
+10C00..10C48;N
+10E60..10E7E;N
+11080..110C1;N
 12000..1236E;N
 12400..12462;N
 12470..12473;N
+13000..1342E;N
 1D000..1D0F5;N
 1D100..1D126;N
 1D129..1D1DD;N
@@ -785,8 +839,29 @@ FFFD;A
 1D7CE..1D7FF;N
 1F000..1F02B;N
 1F030..1F093;N
+1F100..1F10A;A
+1F110..1F12D;A
+1F12E;N
+1F131;A
+1F13D;A
+1F13F;A
+1F142;A
+1F146;A
+1F14A..1F14E;A
+1F157;A
+1F15F;A
+1F179;A
+1F17B..1F17C;A
+1F17F;A
+1F18A..1F18D;A
+1F190;A
+1F200;W
+1F210..1F231;W
+1F240..1F248;W
 20000..2A6D6;W
-2A6D7..2F7FF;W
+2A6D7..2A6FF;W
+2A700..2B734;W
+2B735..2F7FF;W
 2F800..2FA1D;W
 2FA1E..2FFFD;W
 30000..3FFFD;W

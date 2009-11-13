@@ -1619,8 +1619,8 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
            }
            if ((primary != 0 && primary < primarymax) 
                || ((primary & 0xFF) == 0xFF) || (((primary>>8) & 0xFF) == 0xFF) 
-               || ((primary & 0xFF) && ((primary & 0xFF) <= 0x03)) 
-               || (((primary>>8) & 0xFF) && ((primary>>8) & 0xFF) <= 0x03)
+               || ((primary & 0xFF) && ((primary & 0xFF) <= 2)) 
+               || (((primary>>8) & 0xFF) && ((primary>>8) & 0xFF) <= 2)
                || (primary >= 0xFE00 && !isContinuation(ce))) {
                log_err("UCA primary weight out of bounds: %04X for string starting with %04X\n", 
                    primary, codepoints[0]);
@@ -1659,6 +1659,7 @@ static void TestCEValidity()
     int         count = 0;
     int         maxCount = 0;
     UChar       contextCPs[3];
+    UChar32     c;
     UParseError parseError;
     if (U_FAILURE(status)) {
         log_err_status(status, "en_US collator creation failed -> %s\n", u_errorName(status));
@@ -1682,12 +1683,18 @@ static void TestCEValidity()
     }
 
     log_verbose("Testing UCA elements for the whole range of unicode characters\n");
-    codepoints[0] = 0;
-    while (codepoints[0] < 0xFFFF) {
-        if (u_isdefined((UChar32)codepoints[0])) {
+    for (c = 0; c <= 0xffff; ++c) {
+        if (u_isdefined(c)) {
+            codepoints[0] = (UChar)c;
             checkCEValidity(coll, codepoints, 1, 5, 86);
         }
-        codepoints[0] ++;
+    }
+    for (; c <= 0x10ffff; ++c) {
+        if (u_isdefined(c)) {
+            int32_t i = 0;
+            U16_APPEND_UNSAFE(codepoints, i, c);
+            checkCEValidity(coll, codepoints, i, 5, 86);
+        }
     }
 
     ucol_close(coll);

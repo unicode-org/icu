@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -349,7 +349,9 @@ enum {
 /* each slot is 2 uint16_t instead of 1 */
 #define UCASE_EXC_DOUBLE_SLOTS      0x100
 
-/* reserved: exception bits 11..9 */
+/* reserved: exception bits 10..9 */
+
+#define UCASE_EXC_CASE_IGNORABLE        0x800
 
 /* UCASE_EXC_DOT_MASK=UCASE_DOT_MASK<<UCASE_EXC_DOT_SHIFT */
 #define UCASE_EXC_DOT_SHIFT     8

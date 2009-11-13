@@ -304,17 +304,19 @@ void TestUScriptCodeAPI(){
          * Whenever this happens, the long script names here need to be updated.
          */
         static const char* expectedLong[] = {
-            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
-            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
+            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
+            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
             "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
-            "Carian", "Jpan", "Lana", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
-            "Moon", "Mtei",
+            "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
+            "Moon", "Meetei_Mayek",
             /* new in ICU 4.0 */
-            "Armi", "Avst", "Cakm", "Kore",
-            "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti", "Samr", "Tavt",
+            "Imperial_Aramaic", "Avestan", "Cakm", "Kore",
+            "Kaithi", "Mani", "Inscriptional_Pahlavi", "Phlp", "Phlv", "Inscriptional_Parthian", "Samaritan", "Tai_Viet",
             "Zmth", "Zsym",
+            /* new in ICU 4.4 */
+            "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -328,8 +330,14 @@ void TestUScriptCodeAPI(){
             "Armi", "Avst", "Cakm", "Kore",
             "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti", "Samr", "Tavt",
             "Zmth", "Zsym",
+            /* new in ICU 4.4 */
+            "Bamu", "Lisu", "Nkgb", "Sarb",
         };
         int32_t j = 0;
+        if(LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
+            log_err("need to add new script codes in cucdapi.c!\n");
+            return;
+        }
         for(i=USCRIPT_BALINESE; (UScriptCode)i<USCRIPT_CODE_LIMIT; i++, j++){
             const char* name = uscript_getName((UScriptCode)i);
             if(name==NULL || strcmp(name,expectedLong[j])!=0){

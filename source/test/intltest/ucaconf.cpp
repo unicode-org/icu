@@ -158,10 +158,14 @@ void UCAConformanceTest::testConformance(UCollator *coll)
     int32_t line = 0;
 
     UChar b1[1024], b2[1024];
-    char lineB[1024];
     UChar *buffer = b1, *oldB = NULL;
+
+    char lineB1[1024], lineB2[1024];
+    char *lineB = lineB1, *oldLineB = lineB2;
+
     uint8_t sk1[1024], sk2[1024];
     uint8_t *oldSk = NULL, *newSk = sk1;
+
     int32_t resLen = 0, oldLen = 0;
     int32_t buflen = 0, oldBlen = 0;
     uint32_t first = 0;
@@ -170,6 +174,8 @@ void UCAConformanceTest::testConformance(UCollator *coll)
 
 
     while (fgets(lineB, 1024, testFile) != NULL) {
+        // remove trailing whitespace
+        u_rtrim(lineB);
         offset = 0;
 
         line++;
@@ -177,6 +183,11 @@ void UCAConformanceTest::testConformance(UCollator *coll)
             continue;
         }
         offset = u_parseString(lineB, buffer, 1024, &first, &status);
+        if(U_FAILURE(status)) {
+            errln("Error parsing line %ld (%s): %s\n",
+                  (long)line, u_errorName(status), lineB);
+            status = U_ZERO_ERROR;
+        }
         buflen = offset;
         buffer[offset++] = 0;
 
@@ -195,34 +206,46 @@ void UCAConformanceTest::testConformance(UCollator *coll)
 
             if(((res&0x80000000) != (cmpres&0x80000000)) || (res == 0 && cmpres != 0) || (res != 0 && cmpres == 0)) {
                 errln("Difference between ucol_strcoll and sortkey compare on line %i", line);
-                logln("Data line %s", lineB);
+                errln("  Previous data line %s", oldLineB);
+                errln("  Current data line  %s", lineB);
             }
 
             if(res > 0) {
                 errln("Line %i is not greater or equal than previous line", line);
-                logln("Data line %s", lineB);
+                errln("  Previous data line %s", oldLineB);
+                errln("  Current data line  %s", lineB);
                 prettify(CollationKey(oldSk, oldLen), oldS);
                 prettify(CollationKey(newSk, resLen), newS);
-                logln("Keys: "+oldS+" and "+newS);
+                errln("  Previous key: "+oldS);
+                errln("  Current key:  "+newS);
             } else if(res == 0) { /* equal */
                 res = u_strcmpCodePointOrder(oldB, buffer);
                 if (res == 0) {
                     errln("Probable error in test file on line %i (comparing identical strings)", line);
-                    logln("Data line %s", lineB);
+                    errln("  Data line %s", lineB);
                 } else if (res > 0) {
                     errln("Sortkeys are identical, but code point comapare gives >0 on line %i", line);
-                    logln("Data line %s", lineB);
+                    errln("  Previous data line %s", oldLineB);
+                    errln("  Current data line  %s", lineB);
                 }
             }
         }
 
-        oldSk = newSk;
-        oldLen = resLen;
-
-        newSk = (newSk == sk1)?sk2:sk1;
+        // swap buffers
+        oldLineB = lineB;
         oldB = buffer;
+        oldSk = newSk;
+        if(lineB == lineB1) {
+            lineB = lineB2;
+            buffer = b2;
+            newSk = sk2;
+        } else {
+            lineB = lineB1;
+            buffer = b1;
+            newSk = sk1;
+        }
+        oldLen = resLen;
         oldBlen = buflen;
-        buffer = (buffer == b1)?b2:b1;
     }
 }
 
