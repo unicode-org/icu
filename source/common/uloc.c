@@ -2290,6 +2290,7 @@ _getDisplayNameForComponent(const char *locale,
     char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
     int32_t length;
     UErrorCode localStatus;
+    char* root = NULL;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -2311,7 +2312,7 @@ _getDisplayNameForComponent(const char *locale,
         return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
-    char* root = tag == _kCountries ? U_ICUDATA_REGION : U_ICUDATA_LANG;
+    root = tag == _kCountries ? U_ICUDATA_REGION : U_ICUDATA_LANG;
 
     return _getStringOrCopyKey(root, displayLocale,
                                tag, NULL, localeBuffer,
