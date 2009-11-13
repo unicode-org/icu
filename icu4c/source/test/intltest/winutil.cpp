@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -17,6 +17,7 @@
 
 #include "winutil.h"
 #include "locmap.h"
+#include "unicode/uloc.h"
 
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
@@ -50,6 +51,11 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
     sscanf(lpLocaleString, "%8x", &lcidRecords[lcidCount].lcid);
 
     lcidRecords[lcidCount].localeID = uprv_convertToPosix(lcidRecords[lcidCount].lcid, &status);
+
+    /* This ensures that lcid used will be consistent because uprv_convertToPosix only cares
+     * about the language id in the lcid.
+     */
+    lcidRecords[lcidCount].lcid = uloc_getLCID(lcidRecords[lcidCount].localeID);
 
     lcidCount += 1;
 
