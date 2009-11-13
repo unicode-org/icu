@@ -35,6 +35,8 @@
 #include "convtest.h"
 #include "csdetest.h"
 
+extern IntlTest *createBiDiConformanceTest();
+
 #define CASE_SUITE(id, suite) case id:                  \
                           name = #suite;                \
                           if(exec) {                    \
@@ -191,6 +193,16 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #else
                 name = "skip";
 #endif
+                break;
+
+            case 15: name = "bidi";
+                if (exec) {
+                    logln("TestSuite bidi---"); logln();
+                    IntlTest *test = createBiDiConformanceTest();
+                    callTest(*test, par);
+                    delete test;
+                }
+
                 break;
 
         default: name = ""; break;

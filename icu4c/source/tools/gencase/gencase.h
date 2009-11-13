@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -36,6 +36,9 @@ enum {
     UNI_4_0,
     UNI_4_0_1,
     UNI_4_1,
+    UNI_5_1,
+    UNI_5_2,
+    UNI_6_0,
     UNI_VER_COUNT
 };
 
@@ -87,6 +90,7 @@ typedef struct {
     SpecialCasing *specialCasing;
     CaseFolding *caseFolding;
     uint8_t gc, cc;
+    UBool isCaseIgnorable;
 } Props;
 
 /* global flags */

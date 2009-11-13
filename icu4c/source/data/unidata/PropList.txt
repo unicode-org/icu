@@ -1,10 +1,10 @@
-# PropList-5.1.0.txt
-# Date: 2008-03-20, 17:55:27 GMT [MD]
+# PropList-5.2.0.txt
+# Date: 2009-08-22, 04:58:40 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2008 Unicode, Inc.
+# Copyright (c) 1991-2009 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
-# For documentation, see UCD.html
+# For documentation, see http://www.unicode.org/reports/tr44/
 
 # ================================================
 
@@ -41,6 +41,7 @@
 002D          ; Dash
 058A          ; Dash
 05BE          ; Dash
+1400          ; Dash
 1806          ; Dash
 2010..2015    ; Dash
 2053          ; Dash
@@ -57,7 +58,7 @@ FE58          ; Dash
 FE63          ; Dash
 FF0D          ; Dash
 
-# Total code points: 24
+# Total code points: 25
 
 # ================================================
 
@@ -124,6 +125,7 @@ FF63          ; Quotation_Mark
 0700..070A    ; Terminal_Punctuation
 070C          ; Terminal_Punctuation
 07F8..07F9    ; Terminal_Punctuation
+0830..083E    ; Terminal_Punctuation
 0964..0965    ; Terminal_Punctuation
 0E5A..0E5B    ; Terminal_Punctuation
 0F08          ; Terminal_Punctuation
@@ -137,6 +139,7 @@ FF63          ; Quotation_Mark
 1802..1805    ; Terminal_Punctuation
 1808..1809    ; Terminal_Punctuation
 1944..1945    ; Terminal_Punctuation
+1AA8..1AAB    ; Terminal_Punctuation
 1B5A..1B5B    ; Terminal_Punctuation
 1B5D..1B5F    ; Terminal_Punctuation
 1C3B..1C3F    ; Terminal_Punctuation
@@ -145,11 +148,16 @@ FF63          ; Quotation_Mark
 2047..2049    ; Terminal_Punctuation
 2E2E          ; Terminal_Punctuation
 3001..3002    ; Terminal_Punctuation
+A4FE..A4FF    ; Terminal_Punctuation
 A60D..A60F    ; Terminal_Punctuation
+A6F3..A6F7    ; Terminal_Punctuation
 A876..A877    ; Terminal_Punctuation
 A8CE..A8CF    ; Terminal_Punctuation
 A92F          ; Terminal_Punctuation
+A9C7..A9C9    ; Terminal_Punctuation
 AA5D..AA5F    ; Terminal_Punctuation
+AADF          ; Terminal_Punctuation
+ABEB          ; Terminal_Punctuation
 FE50..FE52    ; Terminal_Punctuation
 FE54..FE57    ; Terminal_Punctuation
 FF01          ; Terminal_Punctuation
@@ -161,10 +169,13 @@ FF61          ; Terminal_Punctuation
 FF64          ; Terminal_Punctuation
 1039F         ; Terminal_Punctuation
 103D0         ; Terminal_Punctuation
+10857         ; Terminal_Punctuation
 1091F         ; Terminal_Punctuation
+10B3A..10B3F  ; Terminal_Punctuation
+110BE..110C1  ; Terminal_Punctuation
 12470..12473  ; Terminal_Punctuation
 
-# Total code points: 119
+# Total code points: 161
 
 # ================================================
 
@@ -347,11 +358,17 @@ FF41..FF46    ; Hex_Digit
 0711          ; Other_Alphabetic
 0730..073F    ; Other_Alphabetic
 07A6..07B0    ; Other_Alphabetic
-0901..0902    ; Other_Alphabetic
+0816..0817    ; Other_Alphabetic
+081B..0823    ; Other_Alphabetic
+0825..0827    ; Other_Alphabetic
+0829..082C    ; Other_Alphabetic
+0900..0902    ; Other_Alphabetic
 0903          ; Other_Alphabetic
 093E..0940    ; Other_Alphabetic
 0941..0948    ; Other_Alphabetic
 0949..094C    ; Other_Alphabetic
+094E          ; Other_Alphabetic
+0955          ; Other_Alphabetic
 0962..0963    ; Other_Alphabetic
 0981          ; Other_Alphabetic
 0982..0983    ; Other_Alphabetic
@@ -454,6 +471,8 @@ FF41..FF46    ; Hex_Digit
 1082          ; Other_Alphabetic
 1083..1084    ; Other_Alphabetic
 1085..1086    ; Other_Alphabetic
+109C          ; Other_Alphabetic
+109D          ; Other_Alphabetic
 135F          ; Other_Alphabetic
 1712..1713    ; Other_Alphabetic
 1732..1733    ; Other_Alphabetic
@@ -476,6 +495,16 @@ FF41..FF46    ; Hex_Digit
 19C8..19C9    ; Other_Alphabetic
 1A17..1A18    ; Other_Alphabetic
 1A19..1A1B    ; Other_Alphabetic
+1A55          ; Other_Alphabetic
+1A56          ; Other_Alphabetic
+1A57          ; Other_Alphabetic
+1A58..1A5E    ; Other_Alphabetic
+1A61          ; Other_Alphabetic
+1A62          ; Other_Alphabetic
+1A63..1A64    ; Other_Alphabetic
+1A65..1A6C    ; Other_Alphabetic
+1A6D..1A72    ; Other_Alphabetic
+1A73..1A74    ; Other_Alphabetic
 1B00..1B03    ; Other_Alphabetic
 1B04          ; Other_Alphabetic
 1B35          ; Other_Alphabetic
@@ -494,6 +523,7 @@ FF41..FF46    ; Hex_Digit
 1C24..1C2B    ; Other_Alphabetic
 1C2C..1C33    ; Other_Alphabetic
 1C34..1C35    ; Other_Alphabetic
+1CF2          ; Other_Alphabetic
 24B6..24E9    ; Other_Alphabetic
 2DE0..2DFF    ; Other_Alphabetic
 A823..A824    ; Other_Alphabetic
@@ -504,6 +534,14 @@ A8B4..A8C3    ; Other_Alphabetic
 A926..A92A    ; Other_Alphabetic
 A947..A951    ; Other_Alphabetic
 A952          ; Other_Alphabetic
+A980..A982    ; Other_Alphabetic
+A983          ; Other_Alphabetic
+A9B3          ; Other_Alphabetic
+A9B4..A9B5    ; Other_Alphabetic
+A9B6..A9B9    ; Other_Alphabetic
+A9BA..A9BB    ; Other_Alphabetic
+A9BC          ; Other_Alphabetic
+A9BD..A9BF    ; Other_Alphabetic
 AA29..AA2E    ; Other_Alphabetic
 AA2F..AA30    ; Other_Alphabetic
 AA31..AA32    ; Other_Alphabetic
@@ -512,12 +550,25 @@ AA35..AA36    ; Other_Alphabetic
 AA43          ; Other_Alphabetic
 AA4C          ; Other_Alphabetic
 AA4D          ; Other_Alphabetic
+AAB0          ; Other_Alphabetic
+AAB2..AAB4    ; Other_Alphabetic
+AAB7..AAB8    ; Other_Alphabetic
+AABE          ; Other_Alphabetic
+ABE3..ABE4    ; Other_Alphabetic
+ABE5          ; Other_Alphabetic
+ABE6..ABE7    ; Other_Alphabetic
+ABE8          ; Other_Alphabetic
+ABE9..ABEA    ; Other_Alphabetic
 FB1E          ; Other_Alphabetic
 10A01..10A03  ; Other_Alphabetic
 10A05..10A06  ; Other_Alphabetic
 10A0C..10A0F  ; Other_Alphabetic
+11082         ; Other_Alphabetic
+110B0..110B2  ; Other_Alphabetic
+110B3..110B6  ; Other_Alphabetic
+110B7..110B8  ; Other_Alphabetic
 
-# Total code points: 663
+# Total code points: 759
 
 # ================================================
 
@@ -526,14 +577,15 @@ FB1E          ; Other_Alphabetic
 3021..3029    ; Ideographic
 3038..303A    ; Ideographic
 3400..4DB5    ; Ideographic
-4E00..9FC3    ; Ideographic
+4E00..9FCB    ; Ideographic
 F900..FA2D    ; Ideographic
-FA30..FA6A    ; Ideographic
+FA30..FA6D    ; Ideographic
 FA70..FAD9    ; Ideographic
 20000..2A6D6  ; Ideographic
+2A700..2B734  ; Ideographic
 2F800..2FA1D  ; Ideographic
 
-# Total code points: 71248
+# Total code points: 75408
 
 # ================================================
 
@@ -577,6 +629,7 @@ FA70..FAD9    ; Ideographic
 07A6..07B0    ; Diacritic
 07EB..07F3    ; Diacritic
 07F4..07F5    ; Diacritic
+0818..0819    ; Diacritic
 093C          ; Diacritic
 094D          ; Diacritic
 0951..0954    ; Diacritic
@@ -611,25 +664,35 @@ FA70..FAD9    ; Ideographic
 1087..108C    ; Diacritic
 108D          ; Diacritic
 108F          ; Diacritic
+109A..109B    ; Diacritic
 17C9..17D3    ; Diacritic
 17DD          ; Diacritic
 1939..193B    ; Diacritic
+1A75..1A7C    ; Diacritic
+1A7F          ; Diacritic
 1B34          ; Diacritic
 1B44          ; Diacritic
 1B6B..1B73    ; Diacritic
 1BAA          ; Diacritic
 1C36..1C37    ; Diacritic
 1C78..1C7D    ; Diacritic
+1CD0..1CD2    ; Diacritic
+1CD3          ; Diacritic
+1CD4..1CE0    ; Diacritic
+1CE1          ; Diacritic
+1CE2..1CE8    ; Diacritic
+1CED          ; Diacritic
 1D2C..1D61    ; Diacritic
 1D62..1D6A    ; Diacritic
 1DC4..1DCF    ; Diacritic
-1DFE..1DFF    ; Diacritic
+1DFD..1DFF    ; Diacritic
 1FBD          ; Diacritic
 1FBF..1FC1    ; Diacritic
 1FCD..1FCF    ; Diacritic
 1FDD..1FDF    ; Diacritic
 1FED..1FEF    ; Diacritic
 1FFD..1FFE    ; Diacritic
+2CEF..2CF1    ; Diacritic
 2E2F          ; Diacritic
 302A..302F    ; Diacritic
 3099..309A    ; Diacritic
@@ -638,13 +701,24 @@ FA70..FAD9    ; Ideographic
 A66F          ; Diacritic
 A67C..A67D    ; Diacritic
 A67F          ; Diacritic
+A6F0..A6F1    ; Diacritic
 A717..A71F    ; Diacritic
 A720..A721    ; Diacritic
 A788          ; Diacritic
 A8C4          ; Diacritic
+A8E0..A8F1    ; Diacritic
 A92B..A92D    ; Diacritic
 A92E          ; Diacritic
 A953          ; Diacritic
+A9B3          ; Diacritic
+A9C0          ; Diacritic
+AA7B          ; Diacritic
+AABF          ; Diacritic
+AAC0          ; Diacritic
+AAC1          ; Diacritic
+AAC2          ; Diacritic
+ABEC          ; Diacritic
+ABED          ; Diacritic
 FB1E          ; Diacritic
 FE20..FE26    ; Diacritic
 FF3E          ; Diacritic
@@ -652,13 +726,14 @@ FF40          ; Diacritic
 FF70          ; Diacritic
 FF9E..FF9F    ; Diacritic
 FFE3          ; Diacritic
+110B9..110BA  ; Diacritic
 1D167..1D169  ; Diacritic
 1D16D..1D172  ; Diacritic
 1D17B..1D182  ; Diacritic
 1D185..1D18B  ; Diacritic
 1D1AA..1D1AD  ; Diacritic
 
-# Total code points: 565
+# Total code points: 639
 
 # ================================================
 
@@ -669,6 +744,7 @@ FFE3          ; Diacritic
 0E46          ; Extender
 0EC6          ; Extender
 1843          ; Extender
+1AA7          ; Extender
 1C36          ; Extender
 1C7B          ; Extender
 3005          ; Extender
@@ -677,9 +753,12 @@ FFE3          ; Diacritic
 30FC..30FE    ; Extender
 A015          ; Extender
 A60C          ; Extender
+A9CF          ; Extender
+AA70          ; Extender
+AADD          ; Extender
 FF70          ; Extender
 
-# Total code points: 24
+# Total code points: 28
 
 # ================================================
 
@@ -774,7 +853,7 @@ FF9E..FF9F    ; Other_Grapheme_Extend
 # ================================================
 
 3400..4DB5    ; Unified_Ideograph
-4E00..9FC3    ; Unified_Ideograph
+4E00..9FCB    ; Unified_Ideograph
 FA0E..FA0F    ; Unified_Ideograph
 FA11          ; Unified_Ideograph
 FA13..FA14    ; Unified_Ideograph
@@ -783,8 +862,9 @@ FA21          ; Unified_Ideograph
 FA23..FA24    ; Unified_Ideograph
 FA27..FA29    ; Unified_Ideograph
 20000..2A6D6  ; Unified_Ideograph
+2A700..2B734  ; Unified_Ideograph
 
-# Total code points: 70237
+# Total code points: 74394
 
 # ================================================
 
@@ -803,14 +883,17 @@ E01F0..E0FFF  ; Other_Default_Ignorable_Code_Point
 
 # ================================================
 
-0340..0341    ; Deprecated
-17A3          ; Deprecated
-17D3          ; Deprecated
+0149          ; Deprecated
+0F77          ; Deprecated
+0F79          ; Deprecated
+17A3..17A4    ; Deprecated
 206A..206F    ; Deprecated
+2329          ; Deprecated
+232A          ; Deprecated
 E0001         ; Deprecated
 E0020..E007F  ; Deprecated
 
-# Total code points: 107
+# Total code points: 110
 
 # ================================================
 
@@ -852,8 +935,11 @@ E0020..E007F  ; Deprecated
 
 0E40..0E44    ; Logical_Order_Exception
 0EC0..0EC4    ; Logical_Order_Exception
+AAB5..AAB6    ; Logical_Order_Exception
+AAB9          ; Logical_Order_Exception
+AABB..AABC    ; Logical_Order_Exception
 
-# Total code points: 10
+# Total code points: 15
 
 # ================================================
 
@@ -899,19 +985,25 @@ E0020..E007F  ; Deprecated
 2047..2049    ; STerm
 2E2E          ; STerm
 3002          ; STerm
+A4FF          ; STerm
 A60E..A60F    ; STerm
+A6F3          ; STerm
+A6F7          ; STerm
 A876..A877    ; STerm
 A8CE..A8CF    ; STerm
 A92F          ; STerm
+A9C8..A9C9    ; STerm
 AA5D..AA5F    ; STerm
+ABEB          ; STerm
 FE52          ; STerm
 FE56..FE57    ; STerm
 FF01          ; STerm
 FF0E          ; STerm
 FF1F          ; STerm
 FF61          ; STerm
+110BE..110C1  ; STerm
 
-# Total code points: 56
+# Total code points: 66
 
 # ================================================
 
@@ -1024,8 +1116,8 @@ E0100..E01EF  ; Variation_Selector
 239B..23B3    ; Pattern_Syntax
 23B4..23DB    ; Pattern_Syntax
 23DC..23E1    ; Pattern_Syntax
-23E2..23E7    ; Pattern_Syntax
-23E8..23FF    ; Pattern_Syntax
+23E2..23E8    ; Pattern_Syntax
+23E9..23FF    ; Pattern_Syntax
 2400..2426    ; Pattern_Syntax
 2427..243F    ; Pattern_Syntax
 2440..244A    ; Pattern_Syntax
@@ -1038,12 +1130,14 @@ E0100..E01EF  ; Variation_Selector
 25F8..25FF    ; Pattern_Syntax
 2600..266E    ; Pattern_Syntax
 266F          ; Pattern_Syntax
-2670..269D    ; Pattern_Syntax
-269E..269F    ; Pattern_Syntax
-26A0..26BC    ; Pattern_Syntax
-26BD..26BF    ; Pattern_Syntax
-26C0..26C3    ; Pattern_Syntax
-26C4..2700    ; Pattern_Syntax
+2670..26CD    ; Pattern_Syntax
+26CE          ; Pattern_Syntax
+26CF..26E1    ; Pattern_Syntax
+26E2          ; Pattern_Syntax
+26E3          ; Pattern_Syntax
+26E4..26E7    ; Pattern_Syntax
+26E8..26FF    ; Pattern_Syntax
+2700          ; Pattern_Syntax
 2701..2704    ; Pattern_Syntax
 2705          ; Pattern_Syntax
 2706..2709    ; Pattern_Syntax
@@ -1056,9 +1150,7 @@ E0100..E01EF  ; Variation_Selector
 274E          ; Pattern_Syntax
 274F..2752    ; Pattern_Syntax
 2753..2755    ; Pattern_Syntax
-2756          ; Pattern_Syntax
-2757          ; Pattern_Syntax
-2758..275E    ; Pattern_Syntax
+2756..275E    ; Pattern_Syntax
 275F..2760    ; Pattern_Syntax
 2761..2767    ; Pattern_Syntax
 2768          ; Pattern_Syntax
@@ -1138,8 +1230,8 @@ E0100..E01EF  ; Variation_Selector
 2B45..2B46    ; Pattern_Syntax
 2B47..2B4C    ; Pattern_Syntax
 2B4D..2B4F    ; Pattern_Syntax
-2B50..2B54    ; Pattern_Syntax
-2B55..2BFF    ; Pattern_Syntax
+2B50..2B59    ; Pattern_Syntax
+2B5A..2BFF    ; Pattern_Syntax
 2E00..2E01    ; Pattern_Syntax
 2E02          ; Pattern_Syntax
 2E03          ; Pattern_Syntax
@@ -1171,8 +1263,8 @@ E0100..E01EF  ; Variation_Selector
 2E29          ; Pattern_Syntax
 2E2A..2E2E    ; Pattern_Syntax
 2E2F          ; Pattern_Syntax
-2E30          ; Pattern_Syntax
-2E31..2E7F    ; Pattern_Syntax
+2E30..2E31    ; Pattern_Syntax
+2E32..2E7F    ; Pattern_Syntax
 3001..3003    ; Pattern_Syntax
 3008          ; Pattern_Syntax
 3009          ; Pattern_Syntax

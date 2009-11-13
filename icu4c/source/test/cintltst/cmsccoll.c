@@ -3618,9 +3618,16 @@ static void TestRuleOptions(void) {
       { "b", "\\u02d0", "a", "\\u02d1"}, 4
     },
 
+    /*
+     * The character in the second ordering test string
+     * has to match the character that has the [last regular] weight
+     * which changes with each UCA version.
+     * See the bottom of FractionalUCA.txt which says something like
+     *   [last regular [CE 27, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
+     */
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
-        { "b", "\\uD808\\uDF6E", "a", "\\u4e00" }, 4
+        { "b", "\\U0001342E", "a", "\\u4e00" }, 4
     },
 
     { "&[before 1][first implicit]<b"
@@ -4721,34 +4728,6 @@ static void TestTailorNULL( void ) {
 }
 
 static void
-TestThaiSortKey(void)
-{
-  UChar yamakan = 0x0E4E;
-  UErrorCode status = U_ZERO_ERROR;
-  uint8_t key[256];
-  int32_t keyLen = 0;
-  /* NOTE: there is a Thai tailoring that moves Yammakan. It should not move it, */
-  /* since it stays in the same relative position. This should be addressed in CLDR */
-  /* UCA 4.0 uint8_t expectedKey[256] = { 0x01, 0xd9, 0xb2, 0x01, 0x05, 0x00 }; */
-  /* UCA 4.1 uint8_t expectedKey[256] = { 0x01, 0xdb, 0x3a, 0x01, 0x05, 0x00 }; */
-  /* UCA 5.0 uint8_t expectedKey[256] = { 0x01, 0xdc, 0xce, 0x01, 0x05, 0x00 }; */
-  /* UCA 5.1 moves Yammakan */
-  uint8_t expectedKey[256] = { 0x01, 0xe0, 0x4e, 0x01, 0x05, 0x00 };
-  UCollator *coll = ucol_open("th", &status);
-  if(U_FAILURE(status)) {
-    log_err_status(status, "Could not open a collator, exiting (%s)\n", u_errorName(status));
-    return;
-  }
-
-  keyLen = ucol_getSortKey(coll, &yamakan, 1, key, 256);
-  if(strcmp((char *)key, (char *)expectedKey)) {
-    log_err("Yammakan key is different from ICU 4.0!\n");
-  }
-
-  ucol_close(coll);
-}
-
-static void
 TestUpperFirstQuaternary(void)
 {
   const char* tests[] = { "B", "b", "Bb", "bB" };
@@ -5050,11 +5029,14 @@ TestTailor6179(void)
             { 0xFDD0,0x009E, 0}
      };
 
-    /* UCA5.1, the value may increase in later version. */
+    /*
+     * These values from FractionalUCA.txt will change,
+     * and need to be updated here.
+     */
     uint8_t firstPrimaryIgnCE[6]={1, 87, 1, 5, 1, 0};
-    uint8_t lastPrimaryIgnCE[6]={1, 0xE7, 0xB9, 1, 5, 0};
+    uint8_t lastPrimaryIgnCE[6]={1, 0xE3, 0xC9, 1, 5, 0};
     uint8_t firstSecondaryIgnCE[6]={1, 1, 0x3f, 0x03, 0};
-    uint8_t lastSecondaryIgnCE[6]={1, 1, 0x05, 0};
+    uint8_t lastSecondaryIgnCE[6]={1, 1, 0x3f, 0x03, 0};
 
     /* Test [Last Primary ignorable] */
 
@@ -5508,7 +5490,6 @@ void addMiscCollTest(TestNode** root)
     TEST(TestBeforeTightening);
     /*TEST(TestMoreBefore);*/
     TEST(TestTailorNULL);
-    TEST(TestThaiSortKey);
     TEST(TestUpperFirstQuaternary);
     TEST(TestJ4960);
     TEST(TestJ5223);

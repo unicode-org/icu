@@ -5,7 +5,7 @@
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
-#         Unicode Standard Annex #14 Revision 22 for Unicode 5.1
+#         Unicode Standard Annex #14 Revision 24 for Unicode 5.2
 #         http://www.unicode.org/reports/tr14/
 
 
@@ -61,12 +61,9 @@ $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
-
-# Unicode 5.2 changes.  Fix once line break property data is updated.
-$CP = [\u0029 \u005d];    #  Right Parenthesis and right square bracket.
-$CL = [[:LineBreak =  Close_Punctuation:] - $CP];
-
+$CL = [:LineBreak =  Close_Punctuation:];
 $CM = [:LineBreak =  Combining_Mark:];
+$CP = [:LineBreak =  Close_Parenthesis:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EX = [:LineBreak =  Exclamation:];
 $GL = [:LineBreak =  Glue:];

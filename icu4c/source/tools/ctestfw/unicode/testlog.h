@@ -11,6 +11,7 @@
 #ifndef U_TESTFW_TESTLOG
 #define U_TESTFW_TESTLOG
 
+#include "unicode/errorcode.h"
 #include "unicode/unistr.h"
 #include "unicode/testtype.h"
 
@@ -27,5 +28,18 @@ public:
     virtual const char* getTestDataPath(UErrorCode& err) = 0;
 };
 
+class T_CTEST_EXPORT_API IcuTestErrorCode : public ErrorCode {
+public:
+    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName) :
+        testClass(callingTestClass), testName(callingTestName) {}
+    virtual ~IcuTestErrorCode();
+    // Returns TRUE if isFailure().
+    UBool logIfFailureAndReset(const char *s);
+protected:
+    virtual void handleFailure() const;
+private:
+    TestLog &testClass;
+    const char *const testName;
+};
 
 #endif

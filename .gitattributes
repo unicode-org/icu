@@ -1155,8 +1155,6 @@ icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/README -text
 icu4c/source/test/perf/collationperf/readme.html svneol=native#text/html
-icu4c/source/test/testdata/CollationTest_NON_IGNORABLE_STUB.txt svneol=native#text/plain
-icu4c/source/test/testdata/CollationTest_SHIFTED_STUB.txt svneol=native#text/plain
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt svneol=native#text/plain
 icu4c/source/test/testdata/DataDrivenCollationTest.txt svneol=native#text/plain
 icu4c/source/test/testdata/GraphemeBreakTest.txt svneol=native#text/plain

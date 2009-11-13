@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -169,11 +169,12 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 uchar_addPropertyStarts(&sa, &status);
                 upropsvec_addPropertyStarts(&sa, &status);
                 break;
-            case UPROPS_SRC_HST:
-                uhst_addPropertyStarts(&sa, &status);
-                break;
 #if !UCONFIG_NO_NORMALIZATION
             case UPROPS_SRC_NORM:
+                unorm_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_CASE_AND_NORM:
+                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
                 unorm_addPropertyStarts(&sa, &status);
                 break;
 #endif

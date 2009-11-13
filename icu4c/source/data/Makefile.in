@@ -499,8 +499,8 @@ $(COLBLDDIR)/ucadata.icu $(COLBLDDIR)/invuca.icu: $(UNICODEDATADIR)/FractionalUC
 	$(INVOKE) $(TOOLBINDIR)/genuca -s $(UNICODEDATADIR) -d $(COLBLDDIR) -i $(BUILDDIR) 
 
 # unames.icu
-$(BUILDDIR)/unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLBINDIR)/gennames$(TOOLEXEEXT)
-	$(INVOKE) $(TOOLBINDIR)/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+$(BUILDDIR)/unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/NameAliases.txt $(TOOLBINDIR)/gennames$(TOOLEXEEXT)
+	$(INVOKE) $(TOOLBINDIR)/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/NameAliases.txt -u $(UNICODE_VERSION)
 
 # cnvalias.icu
 $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLBINDIR)/gencnval$(TOOLEXEEXT)

@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2008, International Business Machines Corporation and
+# Copyright (c) 2002-2009, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -804,7 +804,7 @@ sub read_PropertyAliases {
         if (/^\s*(.+?)\s*;/) {
             my $short = $1;
             my @fields = /;\s*([^\s;]+)/g;
-            if (@fields < 1 || @fields > 2) {
+            if (@fields < 1) {
                 my $number = @fields;
                 die "Error: Wrong number of fields ($number) in $filename at $_";
             }

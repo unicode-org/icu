@@ -91,7 +91,7 @@ uprops_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x50 &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6f &&
-        (pInfo->formatVersion[0]==3 || pInfo->formatVersion[0]==4 || pInfo->formatVersion[0]==5) &&
+        (3<=pInfo->formatVersion[0] && pInfo->formatVersion[0]<=6) &&
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     )) {

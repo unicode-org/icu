@@ -1806,53 +1806,6 @@ UnicodeStringTest::TestUTF32() {
     }
 }
 
-// TODO(markus): Temporary test code to see if all relevant compilers support templates.
-/**
- * Does not throw exceptions.
- */
-template<class T>
-class /* U_COMMON_API */ LocalPointer {
-public:
-    // Takes ownership.
-    explicit LocalPointer(T *p=NULL) : ptr(p) {}
-    // Deletes the object it owns.
-    ~LocalPointer() {
-        delete ptr;
-    }
-    // NULL checks.
-    UBool isNull() const { return ptr==NULL; }
-    UBool isValid() const { return ptr!=NULL; }
-    // Access without ownership change.
-    T *getAlias() const { return ptr; }
-    T &operator*() const { return *ptr; }
-    T *operator->() const { return ptr; }
-    // Give up ownership; the internal pointer becomes NULL;
-    T *orphan() {
-        T *p=ptr;
-        ptr=NULL;
-        return p;
-    }
-    // Delete the object it owns and adopt (take ownership of) the one passed in.
-    void adoptInstead(T *p) {
-        delete ptr;
-        ptr=p;
-    }
-private:
-    T *ptr;
-    // No comparison operators.
-    bool operator==(const LocalPointer &other);
-    bool operator!=(const LocalPointer &other);
-    // No ownership transfer: No copy constructor, no assignment operator.
-    LocalPointer(const LocalPointer &other);
-    void operator=(const LocalPointer &other);
-    // No heap allocation. Use only on the stack.
-    static void * U_EXPORT2 operator new(size_t size);
-    static void * U_EXPORT2 operator new[](size_t size);
-#if U_HAVE_PLACEMENT_NEW
-    static void * U_EXPORT2 operator new(size_t, void *ptr);
-#endif
-};
-
 void
 UnicodeStringTest::TestUTF8() {
     static const uint8_t utf8[] = {
@@ -1919,10 +1872,4 @@ UnicodeStringTest::TestUTF8() {
         errln("UnicodeString::toUTF8String() did not create the expected string.");
     }
 #endif
-
-    // TODO(markus): Temporary test code to see if all relevant compilers support templates.
-    LocalPointer<UnicodeString> lp(new UnicodeString("abc123"));
-    if(lp.isNull() || lp->length()!=6 || lp.getAlias()->length()!=6) {
-        errln("Trouble with LocalPointer.");
-    }
 }

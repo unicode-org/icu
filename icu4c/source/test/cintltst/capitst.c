@@ -284,20 +284,17 @@ void TestProperty()
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
     /*
-      All the collations have the same version in an ICU
-      version.
-      ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
-      ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
-      ICU 2.2 currVersionArray = {0x21, 0x40, 0x04, 0x04};
-      ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
-      ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
-      ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};
-      ICU 3.4 currVersionArray = {0x31, 0xC0, 0x00, 0x04};
-    */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x29};
-    /* ICU 3.4 had UCA 4.1 */
-    /*UVersionInfo currUCAVersionArray = {4, 1, 0, 0};*/
-    UVersionInfo currUCAVersionArray = {5, 1, 0, 0};
+     * Expected version of the English collator.
+     * Currently, the major/minor version numbers change when the builder code
+     * changes,
+     * number 2 is from the tailoring data version and
+     * number 3 is the UCA version.
+     * This changes with every UCA version change, and the expected value
+     * needs to be adjusted.
+     * Same in intltest/apicoll.cpp.
+     */
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x2A};
+    UVersionInfo currUCAVersionArray = {5, 2, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
 
@@ -886,7 +883,7 @@ void TestOpenVsOpenRules(){
     int32_t sortKeyLen1, sortKeyLen2;
     uint8_t *sortKey1 = NULL, *sortKey2 = NULL;
     ULocaleData *uld;
-    uint32_t x, y, z;
+    int32_t x, y, z;
     USet *eSet;
     int32_t eSize;
     int strSize;
@@ -998,36 +995,6 @@ void TestOpenVsOpenRules(){
 void TestSortKey()
 {
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
-    uint8_t sortk2_compat[] = {
-        /* 3.9 key, from UCA 5.1 */
-        0x2c, 0x2e, 0x30, 0x32, 0x2c, 0x01,
-        0x09, 0x01, 0x09, 0x01, 0x2b, 0x01,
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x0
-
-        /* 3.6 key, from UCA 5.0 */
-        /*
-        0x29, 0x2b, 0x2d, 0x2f, 0x29, 0x01,
-        0x09, 0x01, 0x09, 0x01, 0x28, 0x01,
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-	*/
-        /* 3.4 key, from UCA 4.1 */
-        /* 0x28, 0x2a, 0x2c, 0x2e, 0x28, 0x01, 0x09, 0x01, 0x09, 0x01, 0x27, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00 */
-        /* 2.6.1 key */
-        /* 0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00 */
-        /* 2.2 key */
-        /*0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01, 0x09, 0x01, 0x09, 0x01, 0x1C, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
-        /* 2.0 key */
-        /*0x19, 0x1B, 0x1D, 0x1F, 0x19, 0x01, 0x09, 0x01, 0x09, 0x01, 0x18, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
-        /* 1.8.1 key.*/
-        /*0x19, 0x1B, 0x1D, 0x1F, 0x19, 0x01, 0x0A, 0x01, 0x0A, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
-        /*this is a 1.8 sortkey */
-        /*0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00*/
-        /*this is a 1.7 sortkey */
-        /*0x02, 0x54, 0x02, 0x55, 0x02, 0x56, 0x02, 0x57, 0x02, 0x54, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x00*/
-        /* this is a 1.6 sortkey */
-      /*0x00, 0x53, 0x00, 0x54, 0x00, 0x55, 0x00, 0x56, 0x00, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00*/
-    };
-
     int32_t sortklen, osortklen;
     uint32_t toStringLen=0;
     UCollator *col;
@@ -1104,9 +1071,7 @@ void TestSortKey()
     doAssert( (memcmp(sortk2, sortk1, sortklen) < 0), "Result should be \"abcda\" < \"Abcda\"");
     doAssert( (memcmp(sortk2, sortk3, sortklen) == 0), "Result should be \"abcda\" ==  \"abcda\"");
 
-    doAssert( (memcmp(sortk2, sortk2_compat, sortklen) == 0), "Binary format for 'abcda' sortkey different!");
-
-    resultP = ucol_sortKeyToString(col, sortk2_compat, toStringBuffer, &toStringLen);
+    resultP = ucol_sortKeyToString(col, sortk3, toStringBuffer, &toStringLen);
     doAssert( (resultP != 0), "sortKeyToString failed!");
 
 #if 1 /* verobse log of sortkeys */
@@ -1978,7 +1943,17 @@ static void TestShortString(void)
         int32_t    expectedOffset;
         uint32_t   expectedIdentifier;
     } testCases[] = {
-        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2C00_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        /*
+         * The following expectedOutput contains a collation weight (2D00 from UCA 5.2)
+         * which is the primary weight for the T character (U+0041) in the input.
+         * When that character gets a different weight in FractionalUCA.txt,
+         * the expectedOutput needs to be adjusted.
+         * That is, when we upgrade to a new UCA version or change collation
+         * in such a way that the absolute weight for 'A' changes,
+         * we will get a test failure here and need to adjust the test case.
+         */
+        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2D00_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+
         {"LEN_RUS_NO_AS_S4","AS_LEN_NO_S4", NULL, U_USING_FALLBACK_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },

@@ -636,6 +636,46 @@
 			Name="configuration"
 			>
 			<File
+				RelativePath=".\simplethread.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\simplethread.h"
+				>
+			</File>
+			<File
 				RelativePath=".\strtest.cpp"
 				>
 				<FileConfiguration
@@ -1597,46 +1637,14 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\simplethread.cpp"
+		<Filter
+			Name="bidi"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
+			<File
+				RelativePath=".\bidiconf.cpp"
 				>
-				<Tool
-					Name="VCCLCompilerTool"
-					DisableLanguageExtensions="false"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					DisableLanguageExtensions="false"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|x64"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					DisableLanguageExtensions="false"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|x64"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					DisableLanguageExtensions="false"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\simplethread.h"
-			>
-		</File>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

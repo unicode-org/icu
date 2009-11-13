@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -164,6 +164,7 @@ enum {
     UNI_4_1,
     UNI_5_0,
     UNI_5_1,
+    UNI_5_2,
     UNI_VER_COUNT
 };
 
@@ -179,10 +180,11 @@ unicodeVersions[]={
     { 4, 0, 1, 0 },
     { 4, 1, 0, 0 },
     { 5, 0, 0, 0 },
-    { 5, 1, 0, 0 }
+    { 5, 1, 0, 0 },
+    { 5, 2, 0, 0 }
 };
 
-static int32_t ucdVersion=UNI_5_1;
+static int32_t ucdVersion=UNI_5_2;
 
 static int32_t
 findUnicodeVersion(const UVersionInfo version) {
@@ -222,6 +224,19 @@ typedef struct Options {
     UBool storeISOComments;
 } Options;
 
+/*
+ * Pair of code point and name alias.
+ * Try to keep sizeof(CpNameAlias) a multiple of 4 to avoid padding.
+ */
+typedef struct CpNameAlias {
+    uint32_t code;
+    char nameAlias[124];
+} CpNameAlias;
+
+static CpNameAlias cpNameAliases[50];
+
+static uint32_t cpNameAliasesIndex=0, cpNameAliasesTop=0;
+
 static uint8_t stringStore[STRING_STORE_SIZE],
                groupStore[GROUP_STORE_SIZE],
                lineLengths[LINES_PER_GROUP];
@@ -257,6 +272,9 @@ static uint32_t tokenCount;
 
 static void
 init(void);
+
+static void
+parseNameAliases(const char *filename, Options *options);
 
 static void
 parseDB(const char *filename, Options *options);
@@ -388,13 +406,15 @@ main(int argc, char* argv[]) {
          * required supported string length is 509 bytes.
          */
         fprintf(stderr,
-            "Usage: %s [-1[+|-]] [-v[+|-]] [-c[+|-]] filename\n"
+            "Usage: %s [-1[+|-]] [-v[+|-]] [-c[+|-]] [filename_ud [filename_na]]\n"
             "\n"
             "Read the UnicodeData.txt file and \n"
             "create a binary file " DATA_NAME "." DATA_TYPE " with the character names\n"
             "\n"
-            "\tfilename  absolute path/filename for the Unicode database text file\n"
-            "\t\t(default: standard input)\n"
+            "\tfilename_ud  absolute path/filename for the UnicodeData.txt file\n"
+            "\t             (default: standard input)\n"
+            "\tfilename_na  absolute path/filename for the NameAliases.txt file\n"
+            "\t             (default: no name aliases)\n"
             "\n",
             argv[0]);
         fprintf(stderr,
@@ -429,6 +449,9 @@ main(int argc, char* argv[]) {
     ucdVersion=findUnicodeVersion(version);
 
     init();
+    if(argc>=3) {
+        parseNameAliases(argv[2], &moreOptions);
+    }
     parseDB(argc>=2 ? argv[1] : "-", &moreOptions);
     compress();
     generateData(options[DESTDIR].value, &moreOptions);
@@ -465,12 +488,67 @@ getName(char **pStart, char *limit) {
 }
 
 static void U_CALLCONV
+nameAliasesLineFn(void *context,
+       char *fields[][2], int32_t fieldCount,
+       UErrorCode *pErrorCode) {
+    char *name;
+    int16_t length=0;
+    static uint32_t prevCode=0;
+    uint32_t code=0;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+    /* get the character code */
+    code=uprv_strtoul(fields[0][0], NULL, 16);
+
+    /* get the character name */
+    name=fields[1][0];
+    length=getName(&name, fields[1][1]);
+    if(length==0 || length>=sizeof(cpNameAliases[cpNameAliasesTop].nameAlias)) {
+        fprintf(stderr, "gennames: error - name alias %s empty or too long for code point U+%04lx\n",
+                name, (unsigned long)code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* check for non-character code points */
+    if(!U_IS_UNICODE_CHAR(code)) {
+        fprintf(stderr, "gennames: error - name alias for non-character code point U+%04lx\n",
+                (unsigned long)code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* check that the code points (code) are in ascending order */
+    if(code<=prevCode && code>0) {
+        fprintf(stderr, "gennames: error - NameAliases entries out of order, U+%04lx after U+%04lx\n",
+                (unsigned long)code, (unsigned long)prevCode);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    prevCode=code;
+
+    if(cpNameAliasesTop>=LENGTHOF(cpNameAliases)) {
+        fprintf(stderr, "gennames: error - too many name aliases\n");
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    cpNameAliases[cpNameAliasesTop].code=code;
+    uprv_memcpy(cpNameAliases[cpNameAliasesTop].nameAlias, name, length);
+    cpNameAliases[cpNameAliasesTop].nameAlias[length]=0;
+    ++cpNameAliasesTop;
+
+    parseName(name, length);
+}
+
+static void U_CALLCONV
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
        UErrorCode *pErrorCode) {
     Options *storeOptions=(Options *)context;
-    char *names[3];
-    int16_t lengths[3]={ 0, 0, 0 };
+    char *names[4];
+    int16_t lengths[4]={ 0, 0, 0, 0 };
     static uint32_t prevCode=0;
     uint32_t code=0;
 
@@ -532,20 +610,53 @@ lineFn(void *context,
     parseName(names[1], lengths[1]);
     parseName(names[2], lengths[2]);
 
+    if(cpNameAliasesIndex<cpNameAliasesTop && code>=cpNameAliases[cpNameAliasesIndex].code) {
+        if(code==cpNameAliases[cpNameAliasesIndex].code) {
+            names[3]=cpNameAliases[cpNameAliasesIndex].nameAlias;
+            lengths[3]=(int16_t)uprv_strlen(cpNameAliases[cpNameAliasesIndex].nameAlias);
+            ++cpNameAliasesIndex;
+        } else {
+            fprintf(stderr, "gennames: error - NameAlias but no UnicodeData entry for U+%04lx\n",
+                    (unsigned long)code);
+            *pErrorCode=U_PARSE_ERROR;
+            exit(U_PARSE_ERROR);
+        }
+    }
+
     /*
      * set the count argument to
      * 1: only store regular names, or only store ISO 10646 comments
      * 2: store regular and 1.0 names
      * 3: store names and ISO 10646 comment
+     * 4: also store name alias
      *
      * addLine() will ignore empty trailing names
      */
     if(storeOptions->storeNames) {
         /* store names and comments as parsed according to storeOptions */
-        addLine(code, names, lengths, 3);
+        addLine(code, names, lengths, LENGTHOF(names));
     } else {
         /* store only ISO 10646 comments */
         addLine(code, names+2, lengths+2, 1);
+    }
+}
+
+static void
+parseNameAliases(const char *filename, Options *storeOptions) {
+    char *fields[2][2];
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    if(!storeOptions->storeNames) {
+        return;
+    }
+    u_parseDelimitedFile(filename, ';', fields, 2, nameAliasesLineFn, NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+
+    if(!beQuiet) {
+        printf("number of name aliases: %lu\n", (unsigned long)cpNameAliasesTop);
     }
 }
 
@@ -558,6 +669,11 @@ parseDB(const char *filename, Options *storeOptions) {
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
         exit(errorCode);
+    }
+    if(cpNameAliasesIndex<cpNameAliasesTop) {
+        fprintf(stderr, "gennames: error - NameAlias but no UnicodeData entry for U+%04lx\n",
+                (unsigned long)cpNameAliases[cpNameAliasesIndex].code);
+        exit(U_PARSE_ERROR);
     }
 
     if(!beQuiet) {
@@ -1099,6 +1215,11 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
         0, 5,
         sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
     };
+    static AlgorithmicRange cjkExtC={
+        0x2a700, 0x2b734,
+        0, 5,
+        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
+    };
 
     static char jamo[]=
         "HANGUL SYLLABLE \0"
@@ -1131,7 +1252,10 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
 
     size=0;
 
-    if(ucdVersion>=UNI_5_1) {
+    if(ucdVersion>=UNI_5_2) {
+        /* Unicode 5.2 and up has a longer CJK Unihan range than before */
+        cjk.rangeEnd=0x9FCB;
+    } else if(ucdVersion>=UNI_5_1) {
         /* Unicode 5.1 and up has a longer CJK Unihan range than before */
         cjk.rangeEnd=0x9FC3;
     } else if(ucdVersion>=UNI_4_1) {
@@ -1142,6 +1266,9 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
     /* number of ranges of algorithmic names */
     if(!storeOptions->storeNames) {
         countAlgRanges=0;
+    } else if(ucdVersion>=UNI_5_2) {
+        /* Unicode 5.2 and up has 5 ranges including CJK Extension C */
+        countAlgRanges=5;
     } else if(ucdVersion>=UNI_3_1) {
         /* Unicode 3.1 and up has 4 ranges including CJK Extension B */
         countAlgRanges=4;
@@ -1209,6 +1336,19 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
     if(countAlgRanges>=4) {
         if(pData!=NULL) {
             udata_writeBlock(pData, &cjkExtB, sizeof(AlgorithmicRange));
+            udata_writeString(pData, prefix, PREFIX_LENGTH);
+            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
+                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            }
+        } else {
+            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
+        }
+    }
+
+    /* range 4: cjk extension c */
+    if(countAlgRanges>=5) {
+        if(pData!=NULL) {
+            udata_writeBlock(pData, &cjkExtC, sizeof(AlgorithmicRange));
             udata_writeString(pData, prefix, PREFIX_LENGTH);
             if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
                 udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);

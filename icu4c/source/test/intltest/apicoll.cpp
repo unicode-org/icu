@@ -94,17 +94,16 @@ CollationAPITest::TestProperty(/* char* par */)
     UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
     /*
-      All the collations have the same version in an ICU
-      version.
-      ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
-      ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
-      ICU 2.2 currVersionArray = {0x21, 0x40, 0x04, 0x04};
-      ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
-      ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
-      ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};
-      ICU 3.4 currVersionArray = {0x31, 0xC0, 0x00, 0x04};
-    */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x29};
+     * Expected version of the English collator.
+     * Currently, the major/minor version numbers change when the builder code
+     * changes,
+     * number 2 is from the tailoring data version and
+     * number 3 is the UCA version.
+     * This changes with every UCA version change, and the expected value
+     * needs to be adjusted.
+     * Same in cintltst/capitst.c.
+     */
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x2A};
     UVersionInfo versionArray;
     int i = 0;
 
@@ -126,7 +125,7 @@ CollationAPITest::TestProperty(/* char* par */)
     col->getVersion(versionArray);
     for (i=0; i<4; ++i) {
       if (versionArray[i] != currVersionArray[i]) {
-        errln("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d",
+        errln("Testing Collator::getVersion() - unexpected result: %02x.%02x.%02x.%02x",
             versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
         break;
       }
@@ -593,16 +592,6 @@ CollationAPITest::TestCollationKey(/* char* par */)
     const uint8_t* byteArray1 = sortk1.getByteArray(cnt1);
     const uint8_t* byteArray2 = sortk2.getByteArray(cnt2);
 
-    /*
-    this is a bad test since it is dependent on the version of uca data,
-    which changes
-    will remove it.
-    const char sortk2_compat[] = {
-        // this is a 1.8 sortkey
-        0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00
-    };
-    */
-
     const uint8_t* byteArray3 = 0;
     byteArray3 = sortk1.getByteArray(cnt3);
 
@@ -612,10 +601,6 @@ CollationAPITest::TestCollationKey(/* char* par */)
     CollationKey sortk4(byteArray1, cnt1), sortk5(byteArray2, cnt2);
     CollationKey sortk6(byteArray3, cnt3), sortk7(byteArray4, cnt4);
 
-    /*
-    doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0,
-             "Binary format for 'abcda' sortkey different!");
-    */
     doAssert(sortk1.compareTo(sortk4) == Collator::EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
     doAssert(sortk2.compareTo(sortk5) == Collator::EQUAL, "CollationKey::toByteArray(sortk2) Failed.");
     doAssert(sortk4.compareTo(sortk5) == Collator::GREATER, "sortk4 >>> sortk5 Failed");
@@ -1119,53 +1104,6 @@ void CollationAPITest::TestSortKey()
     /* Need to use identical strength */
     col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
 
-    uint8_t key2compat[] = {
-        /* 3.9 key, from UCA 5.1 */
-        0x2c, 0x2e, 0x30, 0x32, 0x2c, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x2b, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x0
-
-        /* 3.6 key, from UCA 5.0 */
-	/*
-        0x29, 0x2b, 0x2d, 0x2f, 0x29, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x28, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-        */
-        /* 3.4 key, from UCA 4.1 */
-        /*
-        0x28, 0x2a, 0x2c, 0x2e, 0x28, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x27, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-        */
-        /* 2.6.1 key */
-        /*
-        0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
-        */
-        /* 2.2 key */
-        /*
-        0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
-        0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-        */
-        /* 2.0 key */
-        /*
-        0x19, 0x1B, 0x1D, 0x1F, 0x19,
-        0x01, 0x09, 0x01, 0x09, 0x01,
-        0x18, 0x01,
-        0x92, 0x93, 0x94, 0x95, 0x92,
-        0x00
-        */
-        /* 1.8.1 key.*/
-        /*
-        0x19, 0x1B, 0x1D, 0x1F, 0x19,
-        0x01, 0x0A, 0x01, 0x0A, 0x01,
-        0x92, 0x93, 0x94, 0x95, 0x92,
-        0x00 
-        */
-    };
-
     UChar test1[6] = {0x41, 0x62, 0x63, 0x64, 0x61, 0},
           test2[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0},
           test3[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0};
@@ -1192,10 +1130,11 @@ void CollationAPITest::TestSortKey()
     doAssert(key2.compareTo(key3) == Collator::EQUAL,
         "Result should be \"abcda\" ==  \"abcda\"");
 
+    // Clone the key2 sortkey for later.
     int32_t keylength = 0;
-    doAssert(strcmp((const char *)(key2.getByteArray(keylength)),
-                    (const char *)key2compat) == 0,
-        "Binary format for 'abcda' sortkey different!");
+    const uint8_t *key2primary_alias = key2.getByteArray(keylength);
+    LocalArray<uint8_t> key2primary(new uint8_t[keylength]);
+    memcpy(key2primary.getAlias(), key2primary_alias, keylength);
 
     col->getSortKey(test1, sortkey1, 64);
     col->getSortKey(test2, sortkey2, 64);
@@ -1255,8 +1194,8 @@ void CollationAPITest::TestSortKey()
         "Result should be \"abcda\" ==  \"abcda\"");
 
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, key2compat, keylength - 1) == 0,
-             "Binary format for 'abcda' sortkey different!");
+    doAssert(memcmp(tempkey, key2primary.getAlias(), keylength - 1) == 0,
+             "Binary format for 'abcda' sortkey different for secondary strength!");
 
     col->getSortKey(test1, sortkey1, 64);
     col->getSortKey(test2, sortkey2, 64);

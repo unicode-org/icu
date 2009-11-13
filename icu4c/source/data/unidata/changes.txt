@@ -1,4 +1,4 @@
-* Copyright (C) 2004-2008, International Business Machines
+* Copyright (C) 2004-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *
 *   file name:  changes.txt
@@ -10,6 +10,250 @@
 *   created by: Markus W. Scherer
 *
 * change log for Unicode updates
+
+---------------------------------------------------------------------------- ***
+
+Unicode 5.2 update
+
+*** related ICU Trac tickets
+
+7084 Unicode 5.2
+
+7167 verify collation bytes
+7235 Java test NAME_ALIAS
+7236 Java DerivedCoreProperties.txt test
+7237 Java BidiTest.txt
+7238 UTrie2 in core unidata
+7239 test for tailoring gaps
+7240 Java fix CollationMiscTest
+7243 update layout engine for Unicode 5.2
+
+*** Unicode version numbers
+- makedata.mak
+- uchar.h
+- configure.in & configure
+- update ucdVersion in gennames.c if an algorithmic range changes
+
+*** data files & enums & parser code
+
+* file preparation
+
+python source\tools\genprops\misc\ucdcopy.py "C:\Documents and Settings\mscherer\My Documents\unicode\ucd\5.2.0" C:\svn\icuproj\icu\trunk\source\data\unidata
+- includes finding files regardless of version numbers,
+  copying them, and performing the equivalent processing of the
+  ucdstrip and ucdmerge tools on the desired set of files
+
+* notes on changes
+- PropertyAliases.txt
+  moved from numeric to enumerated:
+    ccc       ; Canonical_Combining_Class
+  new string properties:
+    NFKC_CF   ; NFKC_Casefold
+    Name_Alias; Name_Alias
+  new binary properties:
+    Cased     ; Cased
+    CI        ; Case_Ignorable
+    CWCF      ; Changes_When_Casefolded
+    CWCM      ; Changes_When_Casemapped
+    CWKCF     ; Changes_When_NFKC_Casefolded
+    CWL       ; Changes_When_Lowercased
+    CWT       ; Changes_When_Titlecased
+    CWU       ; Changes_When_Uppercased
+  new CJK Unihan properties (not supported by ICU)
+- PropertyValueAliases.txt
+  new block names
+  new scripts
+  one script code change:
+    sc ; Qaai      ; Inherited
+    ->
+    sc ; Zinh      ; Inherited                        ; Qaai
+  new Line_Break (lb) value:
+    lb ; CP        ; Close_Parenthesis
+  new Joining_Group (jg) values: Farsi_Yeh, Nya
+  other new values:
+    ccc; 214; ATA  ; Attached_Above
+- DerivedBidiClass.txt
+  new default-R range: U+1E800 - U+1EFFF
+- UnicodeData.txt
+  all of the ISO comments are gone
+  new CJK block end:
+    9FC3;<CJK Ideograph, Last> -> 9FCB;<CJK Ideograph, Last>
+  new CJK block:
+    2A700;<CJK Ideograph Extension C, First>;Lo;0;L;;;;;N;;;;;
+    2B734;<CJK Ideograph Extension C, Last>;Lo;0;L;;;;;N;;;;;
+
+* genpname
+- run preparse.pl
+  + cd \svn\icuproj\icu\trunk\source\tools\genpname
+  + make sure that data.h is writable
+  + perl preparse.pl \svn\icuproj\icu\trunk > out.txt
+  + preparse.pl complains with errors like the following:
+      Error: sc:Egyp already set to Egyptian_Hieroglyphs, cannot set to Egyp at preparse.pl line 1322, <GEN6> line 34.
+    This is because ICU 4.0 had scripts from ISO 15924 which are now
+    added to Unicode 5.2, and the Perl script shows a conflict between SyntheticPropertyValueAliases.txt
+    and PropertyValueAliases.txt.
+    -> Removed duplicate script entries from SyntheticPropertyValueAliases.txt:
+       Egyp, Java, Lana, Mtei, Orkh, Armi, Avst, Kthi, Phli, Prti, Samr, Tavt
+  + preparse.pl complains with errors about block names missing from uchar.h; add them
+
+* uchar.h & uscript.h & uprops.h & uprops.c & genprops
+- new block & script values
+  + 26 new blocks
+    copy new blocks from Blocks.txt
+    MS VC++ 2008 regular expression:
+      find "^{[0-9A-F]+}\.\.{[0-9A-F]+}; {[A-Z].+}$"
+      replace with "    UBLOCK_\3 = 172, /*[\1]*/"
+  + several new script values already added in ICU 4.0 for ISO 15924 coverage
+    (removed from SyntheticPropertyValueAliases.txt, see genpname notes above)
+  + 3 new script values added for ISO 15924 and Unicode 5.2 coverage
+  + 1 new script value added for ISO 15924 coverage (not in Unicode 5.2)
+    (added to SyntheticPropertyValueAliases.txt)
+- new Joining Group (JG) values: Farsi_Yeh, Nya
+- new Line_Break (lb) value:
+    lb ; CP        ; Close_Parenthesis
+
+* hardcoded Unihan range end/limit
+- Unihan range end moves from 9FC3 to 9FCB
+  search for both 9FC3 (end) and 9FC4 (limit) (regex 9FC[34], case-insensitive)
+  + do change gennames.c
+
+* Compare definitions of new binary properties with what we used to use
+  in algorithms, to see if the definitions changed.
+- Verified that definitions for Cased and Case_Ignorable are unchanged.
+  The gencase tool now parses the newly public Case_Ignorable values
+  in case the definition changes in the future.
+
+* uchar.c & uprops.h & uprops.c & genprops
+- new numeric values that didn't exist in Unicode data before:
+    1/7, 1/9, 1/10, 3/10, 1/16, 3/16
+  the ones with denominators >9 cannot be supported by uprops.icu formatVersion 5,
+  therefore redesign the encoding of numeric types and values for formatVersion 6;
+  design for simple numbers up to at least 144 ("one gross"),
+  large values up to at least 10^20,
+  and fractions with numerators -1..17 and denominators 1..16
+  to cover current and expected future values
+  (e.g., more Han numeric values, Meroitic twelfths)
+
+* reimplement Hangul_Syllable_Type for new Jamo characters
+- the old code assumed that all Jamo characters are in the 11xx block
+- Unicode 5.2 fills holes there and adds new Jamo characters in
+    A960..A97F; Hangul Jamo Extended-A
+  and in
+    D7B0..D7FF; Hangul Jamo Extended-B
+- Hangul_Syllable_Type can be trivially derived from a subset of
+  Grapheme_Cluster_Break values
+
+* build Unicode data source code for hardcoding core data
+C:\svn\icuproj\icu\trunk\source\data>NMAKE /f makedata.mak ICUMAKE=\svn\icuproj\icu\trunk\source\data\ CFG=x86\release uni-core-data
+
+ICU data make path is \svn\icuproj\icu\trunk\source\data\
+ICU root path is \svn\icuproj\icu\trunk
+Information: cannot find "ucmlocal.mk". Not building user-additional converter files.
+Information: cannot find "brklocal.mk". Not building user-additional break iterator files.
+Information: cannot find "reslocal.mk". Not building user-additional resource bundle files.
+Information: cannot find "collocal.mk". Not building user-additional resource bundle files.
+Information: cannot find "rbnflocal.mk". Not building user-additional resource bundle files.
+Information: cannot find "trnslocal.mk". Not building user-additional transliterator files.
+Information: cannot find "misclocal.mk". Not building user-additional miscellaenous files.
+Information: cannot find "spreplocal.mk". Not building user-additional stringprep files.
+Creating data file for Unicode Property Names
+Creating data file for Unicode Character Properties
+Creating data file for Unicode Case Mapping Properties
+Creating data file for Unicode BiDi/Shaping Properties
+Creating data file for Unicode Normalization
+Unicode .icu files built to "\svn\icuproj\icu\trunk\source\data\out\build\icudt43l"
+Unicode .c source files built to "\svn\icuproj\icu\trunk\source\data\out\tmp"
+
+- copy the .c source files to C:\svn\icuproj\icu\trunk\source\common
+  and rebuild the common library
+
+*** UCA
+
+- update FractionalUCA.txt with new canonical closure (output from Mark's Unicode tools)
+- update source/data/unidata/UCARules.txt with UCA_Rules_SHORT.txt from Mark's Unicode tools
+- update source/test/testdata/CollationTest_*.txt with output from Mark's Unicode tools
+[ Begin obsolete instructions:
+  Starting with UCA 5.2, we use the CollationTest_*_SHORT.txt files not the *_STUB.txt files.
+    - generate the source/test/testdata/CollationTest_*_STUB.txt files via source/tools/genuca/genteststub.py
+      on Windows:
+        python C:\svn\icuproj\icu\trunk\source\tools\genuca\genteststub.py CollationTest_NON_IGNORABLE_SHORT.txt CollationTest_NON_IGNORABLE_STUB.txt
+        python C:\svn\icuproj\icu\trunk\source\tools\genuca\genteststub.py CollationTest_SHIFTED_SHORT.txt CollationTest_SHIFTED_STUB.txt
+  End obsolete instructions]
+- run all tests with the *_SHORT.txt or the full files (the full ones have comments)
+  not just the *_STUB.txt files
+- note on intltest: if collate/UCAConformanceTest fails, then
+  utility/MultithreadTest/TestCollators will fail as well;
+  fix the conformance test before looking into the multi-thread test
+
+*** Implement Cased & Case_Ignorable properties
+- via UProperty; call ucase.h functions ucase_getType() and ucase_getTypeOrIgnorable()
+- Problem: These properties should be disjoint, but aren't
+- UTC 2009nov decision: skip all Case_Ignorable regardless of whether they are Cased or not
+- change ucase.icu to be able to store any combination of Cased and Case_Ignorable
+
+*** Implement Changes_When_Xyz properties
+- without stored data
+
+*** Implement Name_Alias property
+- add it as another name field in unames.icu
+- make it available via u_charName() and UCharNameChoice and
+- consider it in u_charFromName()
+
+*** Break iterators
+
+* Update break iterator rules to new UAX versions and new property values
+* Update source/test/testdata/<boundary>Test.txt files from <unicode.org ucd>/ucd/auxiliary
+
+*** new BidiTest file
+- review format and data
+- copy BidiTest.txt to source/test/testdata
+- write test code using this data
+- fix ICU code where it fails the conformance test
+
+*** Java
+- generally, find and update code corresponding to C/C++
+- UCharacter.UnicodeBlock constants:
+  a) add an _ID integer per new block, update COUNT
+  b) add a class instance per new block
+     Visual Studio regex:
+        find            UBLOCK_{[^ ]+} = [0-9]+, {/.+}
+        replace with    public static final UnicodeBlock \1 = new UnicodeBlock("\1", \1_ID); \2
+- CHAR_NAME_ALIAS -> UCharacter.getNameAlias() and getCharFromNameAlias()
+
+- port test changes to Java
+
+>> DONE with the above, TODO the following <<
+
+*** LayoutEngine script information
+* Run ICU4J com.ibm.icu.dev.tool.layout.ScriptNameBuilder. This generates LEScripts.h, LELanguage.h,
+ScriptAndLanguageTags.h and ScriptAndLanguageTags.cpp in the working directory. (it also generates
+ScriptRunData.cpp, which is no longer needed.)
+
+The generated files have a current copyright date and "@draft" statement.
+
+-> Eric Mader wrote in email on 20090930:
+    "I think the tool has been modified to update @draft to @stable for
+     older scripts and to add @draft for new scripts.
+     (I worked with an intern on this last year.)
+     You should check the output after you run it."
+
+* copy the above files into <icu>/source/layout, replacing the old files.
+
+Add new default entries to the indicClassTables array in <icu>/source/layout/IndicClassTables.cpp
+and the complexTable array in <icu>/source/layoutex/ParagraphLayout.cpp. (This step should be automated...)
+
+-> Eric Mader wrote in email on 20090930:
+    "This is just a matter of making sure that all the per-script tables have
+     entries for any new scripts that were added.
+     If any new Indic characters were added, then the class tables in
+     IndicClassTables.cpp should be updated to reflect this.
+     John Emmons should know how to do this if it's required."
+
+* rebuild the layout and layoutex libraries.
+
+*** Documentation
+- Update User Guide
+  + Jamo_Short_Name, sfc->scf, binary property value aliases
 
 ---------------------------------------------------------------------------- ***
 
