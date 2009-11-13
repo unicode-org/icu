@@ -299,7 +299,7 @@ public:
     // Deletes the object it owns and adopt (take ownership of) the one passed in.
     void adoptInstead(T *p) {
         // delete ptr;
-        prt=p;
+        ptr=p;
     }
 protected:
     T *ptr;
