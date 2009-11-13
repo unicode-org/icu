@@ -90,18 +90,18 @@ public final class UCharacterProperty
     public static final int SRC_CHAR=1;
     /** From uchar.c/uprops.icu properties vectors trie */
     public static final int SRC_PROPSVEC=2;
-    /** Hangul_Syllable_Type, from uchar.c/uprops.icu */
-    public static final int SRC_HST=3;
     /** From unames.c/unames.icu */
-    public static final int SRC_NAMES=4;
+    public static final int SRC_NAMES=3;
     /** From unorm.cpp/unorm.icu */
-    public static final int SRC_NORM=5;
+    public static final int SRC_NORM=4;
     /** From ucase.c/ucase.icu */
-    public static final int SRC_CASE=6;
+    public static final int SRC_CASE=5;
     /** From ubidi_props.c/ubidi.icu */
-    public static final int SRC_BIDI=7;
+    public static final int SRC_BIDI=6;
     /** From uchar.c/uprops.icu main trie as well as properties vectors trie */
-    public static final int SRC_CHAR_AND_PROPSVEC=8;
+    public static final int SRC_CHAR_AND_PROPSVEC=7;
+    /** From ucase.c/ucase.icu as well as unorm.cpp/unorm.icu */
+    public static final int SRC_CASE_AND_NORM=8;
     /** One more than the highest UPropertySource (SRC_) constant. */
     public static final int SRC_COUNT=9;
 
@@ -166,33 +166,6 @@ public final class UCharacterProperty
 
         // this all is an inlined form of return m_trie_.getCodePointValue(ch);
     }
-
-    /*
-    * Getting the signed numeric value of a character embedded in the property
-    * argument
-    * @param prop the character
-    * @return signed numberic value
-    */
-//    public static int getSignedValue(int prop)
-//    {
-//        return ((short)prop >> VALUE_SHIFT_);
-//    }
-
-    /**
-    * Getting the unsigned numeric value of a character embedded in the property
-    * argument
-    * @param prop the character
-    * @return unsigned numberic value
-    */
-    public static int getUnsignedValue(int prop)
-    {
-        return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
-    }
-
-    /* internal numeric pseudo-types for special encodings of numeric values */
-    public static final int NT_FRACTION=4; /* ==UCharacter.NumericType.COUNT, must not change unless binary format version changes */
-    public static final int NT_LARGE=5;
-    public static final int NT_COUNT=6;
 
     /**
      * Gets the unicode additional properties.
@@ -279,7 +252,7 @@ public final class UCharacterProperty
        /*
         * column and mask values for binary properties from u_getUnicodeProperties().
         * Must be in order of corresponding UProperty,
-        * and there must be exacly one entry per binary UProperty.
+        * and there must be exactly one entry per binary UProperty.
         */
        new BinaryProperties(  1,                (  1 << ALPHABETIC_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << ASCII_HEX_DIGIT_PROPERTY_) ),
@@ -329,7 +302,14 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_BLANK */
        new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_GRAPH */
        new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_PRINT */
-       new BinaryProperties( SRC_CHAR,  0 )                                         /* UCHAR_POSIX_XDIGIT */
+       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_XDIGIT */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CASED */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CASE_IGNORABLE */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_LOWERCASED */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_UPPERCASED */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_TITLECASED */
+       new BinaryProperties( SRC_CASE_AND_NORM,  0 ),                               /* UCHAR_CHANGES_WHEN_CASEFOLDED */
+       new BinaryProperties( SRC_CASE,  0 )                                         /* UCHAR_CHANGES_WHEN_CASEMAPPED */
    };
 
 
@@ -372,23 +352,10 @@ public final class UCharacterProperty
             } else {
                 if(column==SRC_CASE) {
                     /* case mapping properties */
-                    UCaseProps csp;
                     try {
-                        csp = UCaseProps.getSingleton();
+                        return UCaseProps.getSingleton().hasBinaryProperty(codepoint, property);
                     } catch (IOException e) {
                         return false;
-                    }
-                    switch(property) {
-                    case UProperty.LOWERCASE:
-                        return UCaseProps.LOWER==csp.getType(codepoint);
-                    case UProperty.UPPERCASE:
-                        return UCaseProps.UPPER==csp.getType(codepoint);
-                    case UProperty.SOFT_DOTTED:
-                        return csp.isSoftDotted(codepoint);
-                    case UProperty.CASE_SENSITIVE:
-                        return csp.isCaseSensitive(codepoint);
-                    default:
-                        break;
                     }
                 } else if(column==SRC_NORM) {
                     /* normalization properties from unorm.icu */
@@ -466,6 +433,47 @@ public final class UCharacterProperty
                     default:
                         break;
                     }
+                } else if(column==SRC_CASE_AND_NORM) {
+                    // Need a bigger buffer in Java than in C because long decompositions are copied here,
+                    // where the C code would just return a pointer.
+                    char nfd[]=new char[32];
+                    switch(property) {
+                    case UProperty.CHANGES_WHEN_CASEFOLDED:
+                        int nfdLength=NormalizerImpl.getDecomposition(codepoint, false, nfd, 0, nfd.length);
+                        if(nfdLength>0) {
+                            /* c has a decomposition */
+                            if(nfdLength==1) {
+                                codepoint=nfd[0];  /* single BMP code point */
+                            } else if(nfdLength<=2) {
+                                codepoint=Character.codePointAt(nfd, 0);
+                                if(Character.charCount(codepoint)==nfdLength) {
+                                    /* single supplementary code point */
+                                } else {
+                                    codepoint=-1;
+                                }
+                            } else {
+                                codepoint=-1;
+                            }
+                        } else if(codepoint<0) {
+                            return false;  /* protect against bad input */
+                        }
+                        if(codepoint>=0) {
+                            /* single code point */
+                            try {
+                                UCaseProps csp=UCaseProps.getSingleton();
+                                UCaseProps.dummyStringBuffer.setLength(0);
+                                return csp.toFullFolding(codepoint, UCaseProps.dummyStringBuffer, UCharacter.FOLD_CASE_DEFAULT)>=0;
+                            } catch (IOException e) {
+                                return false;
+                            }
+                        } else {
+                            String nfdString=new String(nfd, 0, nfdLength);
+                            String folded=UCharacter.foldCase(nfdString, true);
+                            return folded!=nfdString;
+                        }
+                    default:
+                        break;
+                    }
                 }
             }
         }
@@ -488,9 +496,6 @@ public final class UCharacterProperty
             case UProperty.GENERAL_CATEGORY:
             case UProperty.NUMERIC_TYPE:
                 return SRC_CHAR;
-
-            case UProperty.HANGUL_SYLLABLE_TYPE:
-                return SRC_HST;
 
             case UProperty.CANONICAL_COMBINING_CLASS:
             case UProperty.NFD_QUICK_CHECK:
@@ -745,26 +750,6 @@ public final class UCharacterProperty
     private static final int DATA_BUFFER_SIZE_ = 25000;
 
     /**
-    * Numeric value shift
-    */
-    private static final int VALUE_SHIFT_ = 8;
-
-    /**
-    * Mask to be applied after shifting to obtain an unsigned numeric value
-    */
-    private static final int UNSIGNED_VALUE_MASK_AFTER_SHIFT_ = 0xFF;
-
-    /*
-     *
-     */
-    //private static final int NUMERIC_TYPE_SHIFT = 5;
-
-    /*
-    * To get the last 5 bits out from a data type
-    */
-    //private static final int LAST_5_BIT_MASK_ = 0x1F;
-
-    /**
     * Shift value for lead surrogate to form a supplementary character.
     */
     private static final int LEAD_SURROGATE_SHIFT_ = 10;
@@ -903,58 +888,6 @@ public final class UCharacterProperty
     private static final int U_FW_f  = 0xff46;
     private static final int U_FW_z  = 0xff5a;
     private static final int ZWNBSP  = 0xfeff;
-
-    /* for Hangul_Syllable_Type */
-    public void uhst_addPropertyStarts(UnicodeSet set) {
-        /* add code points with hardcoded properties, plus the ones following them */
-
-        /*
-         * Add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE.
-         * First, we add fixed boundaries for the blocks of Jamos.
-         * Then we check in loops to see where the current Unicode version
-         * actually stops assigning such Jamos. We start each loop
-         * at the end of the per-Jamo-block assignments in Unicode 4 or earlier.
-         * (These have not changed since Unicode 2.)
-         */
-        int c, value, value2;
-
-        set.add(0x1100);
-        value=UCharacter.HangulSyllableType.LEADING_JAMO;
-        for(c=0x115a; c<=0x115f; ++c) {
-            value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-        set.add(0x1160);
-        value=UCharacter.HangulSyllableType.VOWEL_JAMO;
-        for(c=0x11a3; c<=0x11a7; ++c) {
-            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-        set.add(0x11a8);
-        value=UCharacter.HangulSyllableType.TRAILING_JAMO;
-        for(c=0x11fa; c<=0x11ff; ++c) {
-            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-        /* Add Hangul type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE. */
-        for(c=NormalizerImpl.HANGUL_BASE; c<(NormalizerImpl.HANGUL_BASE+NormalizerImpl.HANGUL_COUNT); c+=NormalizerImpl.JAMO_T_COUNT) {
-            set.add(c);
-            set.add(c+1);
-        }
-        set.add(c);
-    }
 
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of the main trie */

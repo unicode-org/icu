@@ -31,6 +31,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 
 public final class UCaseProps {
     // constructors etc. --------------------------------------------------- ***
@@ -495,20 +496,18 @@ public final class UCaseProps {
         return getTypeFromProps(trie.getCodePointValue(c));
     }
 
-    /** @return same as getType(), or <0 if c is case-ignorable */
+    /** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
     public final int getTypeOrIgnorable(int c) {
         int props=trie.getCodePointValue(c);
         int type=getTypeFromProps(props);
-        if(type!=NONE) {
-            return type;
-        } else if(
-            c==0x307 ||
-            (props&(EXCEPTION|CASE_IGNORABLE))==CASE_IGNORABLE
-        ) {
-            return -1; /* case-ignorable */
-        } else {
-            return 0; /* c is neither cased nor case-ignorable */
+        if(propsHasException(props)) {
+            if((exceptions[getExceptionsOffset(props)]&EXC_CASE_IGNORABLE)!=0) {
+                type|=4;
+            }
+        } else if(type==NONE && (props&CASE_IGNORABLE)!=0) {
+            type|=4;
         }
+        return type;
     }
 
     /** @return NO_DOT, SOFT_DOTTED, ABOVE, OTHER_ACCENT */
@@ -688,20 +687,19 @@ public final class UCaseProps {
     /* Is followed by {case-ignorable}* cased  ? (dir determines looking forward/backward) */
     private final boolean isFollowedByCasedLetter(ContextIterator iter, int dir) {
         int c;
-        int props;
 
         if(iter==null) {
             return false;
         }
 
         for(iter.reset(dir); (c=iter.next())>=0;) {
-            props=trie.getCodePointValue(c);
-            if(getTypeFromProps(props)!=NONE) {
-                return true; /* followed by cased letter */
-            } else if(c==0x307 || (props&(EXCEPTION|CASE_IGNORABLE))==CASE_IGNORABLE) {
+            int type=getTypeOrIgnorable(c);
+            if((type&4)!=0) {
                 /* case-ignorable, continue with the loop */
+            } else if(type!=NONE) {
+                return true; /* followed by cased letter */
             } else {
-                return false; /* not ignorable */
+                return false; /* uncased and not case-ignorable */
             }
         }
 
@@ -1287,6 +1285,68 @@ public final class UCaseProps {
         return (result==c) ? ~result : result;
     }
 
+    /* case mapping properties API ---------------------------------------------- */
+
+    private static final ULocale rootLocale = new ULocale("");
+    private static final int[] rootLocCache = { LOC_ROOT };
+    /*
+     * We need a StringBuffer for multi-code point output from the
+     * full case mapping functions. However, we do not actually use that output,
+     * we just check whether the input character was mapped to anything else.
+     * We use a shared StringBuffer to avoid allocating a new one in each call.
+     * We remove its contents each time so that it does not grow large over time.
+     *
+     * @internal
+     */
+    public static final StringBuffer dummyStringBuffer = new StringBuffer();
+
+    public final boolean hasBinaryProperty(int c, int which) {
+        switch(which) {
+        case UProperty.LOWERCASE:
+            return LOWER==getType(c);
+        case UProperty.UPPERCASE:
+            return UPPER==getType(c);
+        case UProperty.SOFT_DOTTED:
+            return isSoftDotted(c);
+        case UProperty.CASE_SENSITIVE:
+            return isCaseSensitive(c);
+        case UProperty.CASED:
+            return NONE!=getType(c);
+        case UProperty.CASE_IGNORABLE:
+            return (getTypeOrIgnorable(c)>>2)!=0;
+        /*
+         * Note: The following Changes_When_Xyz are defined as testing whether
+         * the NFD form of the input changes when Xyz-case-mapped.
+         * However, this simpler implementation of these properties,
+         * ignoring NFD, passes the tests.
+         * The implementation needs to be changed if the tests start failing.
+         * When that happens, optimizations should be used to work with the
+         * per-single-code point ucase_toFullXyz() functions unless
+         * the NFD form has more than one code point,
+         * and the property starts set needs to be the union of the
+         * start sets for normalization and case mappings.
+         */
+        case UProperty.CHANGES_WHEN_LOWERCASED:
+            dummyStringBuffer.setLength(0);
+            return toFullLower(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+        case UProperty.CHANGES_WHEN_UPPERCASED:
+            dummyStringBuffer.setLength(0);
+            return toFullUpper(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+        case UProperty.CHANGES_WHEN_TITLECASED:
+            dummyStringBuffer.setLength(0);
+            return toFullTitle(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+        /* case UProperty.CHANGES_WHEN_CASEFOLDED: -- in UCharacterProperty.java */
+        case UProperty.CHANGES_WHEN_CASEMAPPED:
+            dummyStringBuffer.setLength(0);
+            return
+                toFullLower(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0 ||
+                toFullUpper(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0 ||
+                toFullTitle(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+        default:
+            return false;
+        }
+    }
+
     // data members -------------------------------------------------------- ***
     private int indexes[];
     private char exceptions[];
@@ -1368,7 +1428,9 @@ public final class UCaseProps {
     /* each slot is 2 uint16_t instead of 1 */
     private static final int EXC_DOUBLE_SLOTS=          0x100;
 
-    /* reserved: exception bits 11..9 */
+    /* reserved: exception bits 10..9 */
+
+    private static final int EXC_CASE_IGNORABLE=        0x800;
 
     /* EXC_DOT_MASK=DOT_MASK<<EXC_DOT_SHIFT */
     private static final int EXC_DOT_SHIFT=8;

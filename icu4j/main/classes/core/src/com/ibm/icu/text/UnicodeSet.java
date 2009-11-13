@@ -3086,39 +3086,36 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         if(INCLUSIONS[src] == null) {
             UnicodeSet incl = new UnicodeSet();
-            switch(src) {
-            case UCharacterProperty.SRC_CHAR:
-                UCharacterProperty.getInstance().addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_PROPSVEC:
-                UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
-                UCharacterProperty.getInstance().addPropertyStarts(incl);
-                UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_HST:
-                UCharacterProperty.getInstance().uhst_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_NORM:
-                NormalizerImpl.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_CASE:
-                try {
+            try {
+                switch(src) {
+                case UCharacterProperty.SRC_CHAR:
+                    UCharacterProperty.getInstance().addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_PROPSVEC:
+                    UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
+                    UCharacterProperty.getInstance().addPropertyStarts(incl);
+                    UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NORM:
+                    NormalizerImpl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_CASE_AND_NORM:
+                    NormalizerImpl.addPropertyStarts(incl);
                     UCaseProps.getSingleton().addPropertyStarts(incl);
-                } catch(IOException e) {
-                    throw new MissingResourceException(e.getMessage(),"","");
-                }
-                break;
-            case UCharacterProperty.SRC_BIDI:
-                try {
+                    break;
+                case UCharacterProperty.SRC_CASE:
+                    UCaseProps.getSingleton().addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_BIDI:
                     UBiDiProps.getSingleton().addPropertyStarts(incl);
-                } catch(IOException e) {
-                    throw new MissingResourceException(e.getMessage(),"","");
+                    break;
+                default:
+                    throw new IllegalStateException("UnicodeSet.getInclusions(unknown src "+src+")");
                 }
-                break;
-            default:
-                throw new IllegalStateException("UnicodeSet.getInclusions(unknown src "+src+")");
+            } catch(IOException e) {
+                throw new MissingResourceException(e.getMessage(),"","");
             }
             INCLUSIONS[src] = incl;
         }

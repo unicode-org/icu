@@ -215,8 +215,9 @@ public class UnicodeSetTest extends TestFmwk {
 
         s.clear();
         s.applyPropertyAlias("nv", "0.5");
-        expectToPattern(s, "[\\u00BD\\u0D74\\u0F2A\\u2CFD\\U00010141\\U00010175\\U00010176]", null);
+        expectToPattern(s, "[\\u00BD\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176\\U00010E7B]", null);
         // Unicode 5.1 adds Malayalam 1/2 (\u0D74)
+        // Unicode 5.2 adds U+A831 NORTH INDIC FRACTION ONE HALF and U+10E7B RUMI FRACTION ONE HALF
 
         s.clear();
         s.applyPropertyAlias("gc", "Lu");

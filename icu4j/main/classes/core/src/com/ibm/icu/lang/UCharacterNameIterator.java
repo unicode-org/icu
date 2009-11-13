@@ -38,7 +38,9 @@ class UCharacterNameIterator implements ValueIterator
             return false;
         }
 
-        if (m_choice_ != UCharacterNameChoice.UNICODE_10_CHAR_NAME) {
+        if (m_choice_ == UCharacterNameChoice.UNICODE_CHAR_NAME ||
+            m_choice_ == UCharacterNameChoice.EXTENDED_CHAR_NAME
+        ) {
             int length = m_name_.getAlgorithmLength();
             if (m_algorithmIndex_ < length) {
                 while (m_algorithmIndex_ < length) {

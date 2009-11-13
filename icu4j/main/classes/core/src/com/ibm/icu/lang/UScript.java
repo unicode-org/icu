@@ -37,7 +37,7 @@ public final class UScript {
      * Inherited
      * @stable ICU 2.4
      */
-    public static final int INHERITED    =  1;  /* Qaai */
+    public static final int INHERITED    =  1;  /* Zinh */ /* "Code for inherited script", for non-spacing combining marks; also Qaai */
     /**
      * Arabic
      * @stable ICU 2.4
@@ -718,11 +718,34 @@ public final class UScript {
      * @stable ICU 4.0
      */
     public static final int SYMBOLS                       = 129;/* Zsym */
+
+    /* New script codes from ISO 15924 @draft ICU 4.4 */
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.4
+     */
+    public static final int BAMUM                         = 130;/* Bamu */
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.4
+     */
+    public static final int LISU                          = 131;/* Lisu */
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.4
+     */
+    public static final int NAKHI_GEBA                    = 132;/* Nkgb */
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.4
+     */
+    public static final int OLD_SOUTH_ARABIAN             = 133;/* Sarb */
+
     /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 130;
+    public static final int CODE_LIMIT   = 134;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();

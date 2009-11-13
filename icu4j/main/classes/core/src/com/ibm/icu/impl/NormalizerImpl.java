@@ -1737,7 +1737,7 @@ public final class NormalizerImpl {
                         starterIsSupplementary=false;
                         starter=args.start-1;
                     } else {
-                        starterIsSupplementary=false;
+                        starterIsSupplementary=true;
                         starter=args.start-2;
                     }
                     combineFwdIndex=combineBackIndex;

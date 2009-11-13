@@ -128,7 +128,9 @@ public final class UCharacterName
         // try algorithmic names first, if fails then try group names
         // int result = getAlgorithmChar(choice, uppercasename);
 
-        if (choice != UCharacterNameChoice.UNICODE_10_CHAR_NAME) {
+        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME ||
+            choice == UCharacterNameChoice.EXTENDED_CHAR_NAME
+        ) {
             int count = 0;
             if (m_algorithm_ != null) {
                 count = m_algorithm_.length;
@@ -146,7 +148,11 @@ public final class UCharacterName
                                   UCharacterNameChoice.UNICODE_CHAR_NAME);
             if (result == -1) {
                 result = getGroupChar(upperCaseName,
-                                  UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+                                      UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+            }
+            if (result == -1) {
+                result = getGroupChar(upperCaseName,
+                                      UCharacterNameChoice.CHAR_NAME_ALIAS);
             }
         }
         else {
@@ -225,8 +231,8 @@ public final class UCharacterName
     * UnicodeData.txt uses ';' as a field separator, so no field can contain
     * ';' as part of its contents. In unames.icu, it is marked as
     * token[';'] == -1 only if the semicolon is used in the data file - which
-    * is iff we have Unicode 1.0 names or ISO comments.
-    * So, it will be token[';'] == -1 if we store U1.0 names/ISO comments
+    * is iff we have Unicode 1.0 names or ISO comments or aliases.
+    * So, it will be token[';'] == -1 if we store U1.0 names/ISO comments/aliases
     * although we know that it will never be part of a name.
     * Equivalent to ICU4C's expandName.
     * @param index of the group name string in byte count
@@ -236,26 +242,26 @@ public final class UCharacterName
     */
     public String getGroupName(int index, int length, int choice)
     {
-        if (choice == UCharacterNameChoice.UNICODE_10_CHAR_NAME
-            || choice == UCharacterNameChoice.ISO_COMMENT_) {
+        if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME &&
+            choice != UCharacterNameChoice.EXTENDED_CHAR_NAME
+        ) {
             if (';' >= m_tokentable_.length || m_tokentable_[';'] == 0xFFFF) {
-                // skip the modern name
-                int oldindex = index;
-                index += UCharacterUtility.skipByteSubString(m_groupstring_,
-                                                   index, length, (byte)';');
-                length -= (index - oldindex);
-                if (choice == UCharacterNameChoice.ISO_COMMENT_) {
-                    // skips the 1.0 Name to the iso comment part
-                    oldindex = index;
+                /*
+                 * skip the modern name if it is not requested _and_
+                 * if the semicolon byte value is a character, not a token number
+                 */
+                int fieldIndex= choice==UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
+                do {
+                    int oldindex = index;
                     index += UCharacterUtility.skipByteSubString(m_groupstring_,
-                                                    index, length, (byte)';');
+                                                       index, length, (byte)';');
                     length -= (index - oldindex);
-                }
+                } while(--fieldIndex>0);
             }
             else {
                 // the semicolon byte is a token number, therefore only modern
                 // names are stored in unames.dat and there is no such
-                // requested Unicode 1.0 name here
+                // requested alternate name here
                 length = 0;
             }
         }
@@ -1202,11 +1208,10 @@ public final class UCharacterName
     */
     private String getAlgName(int ch, int choice)
     {
-        // Do not write algorithmic Unicode 1.0 names because Unihan names are
-        // the same as the modern ones, extension A was only introduced with
-        // Unicode 3.0, and the Hangul syllable block was moved and changed
-        // around Unicode 1.1.5.
-        if (choice != UCharacterNameChoice.UNICODE_10_CHAR_NAME) {
+        /* Only the normative character name can be algorithmic. */
+        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME ||
+            choice == UCharacterNameChoice.EXTENDED_CHAR_NAME
+        ) {
             // index in terms integer index
             synchronized (m_utilStringBuffer_) {
                 m_utilStringBuffer_.delete(0, m_utilStringBuffer_.length());
@@ -1272,11 +1277,20 @@ public final class UCharacterName
             nindex = 0;
             len = length[result];
 
-            if (choice == UCharacterNameChoice.UNICODE_10_CHAR_NAME) {
-                int oldindex = index;
-                index += UCharacterUtility.skipByteSubString(m_groupstring_,
-                                                     index, len, (byte)';');
-                len -= (index - oldindex);
+            if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME &&
+                choice != UCharacterNameChoice.EXTENDED_CHAR_NAME
+            ) {
+                /*
+                 * skip the modern name if it is not requested _and_
+                 * if the semicolon byte value is a character, not a token number
+                 */
+                int fieldIndex= choice==UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
+                do {
+                    int oldindex = index;
+                    index += UCharacterUtility.skipByteSubString(m_groupstring_,
+                                                         index, len, (byte)';');
+                    len -= (index - oldindex);
+                } while(--fieldIndex>0);
             }
 
             // number of tokens is > the length of the name

@@ -978,7 +978,7 @@ public final class Utility {
      * digits.  E.g., hex('ab') => "0041,0042".
      */
     public static String hex(CharSequence s) {
-        return hex(s, 4, ",", false, new StringBuilder()).toString();
+        return hex(s, 4, ",", true, new StringBuilder()).toString();
     }
 
     /**
