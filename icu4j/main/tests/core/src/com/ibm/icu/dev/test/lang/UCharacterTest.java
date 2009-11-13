@@ -23,6 +23,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.lang.UCharacterEnums;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UTF16;
@@ -46,7 +47,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.1.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.2.0.0");
 
     // constructor ===================================================
 
@@ -206,7 +207,7 @@ public final class UCharacterTest extends TestFmwk
     */
     public void TestDefined()
     {
-        int undefined[] = {0xfff1, 0xfff7, 0xfa6b};
+        int undefined[] = {0xfff1, 0xfff7, 0xfa6e};
         int defined[] = {0x523E, 0x004f88, 0x00fffd};
 
         int size = undefined.length;
@@ -1321,7 +1322,7 @@ public final class UCharacterTest extends TestFmwk
     }
 
     /**
-    * This method is alittle different from the type test in icu4c.
+    * This method is a little different from the type test in icu4c.
     * But combined with testUnicodeData, they basically do the same thing.
     */
     public void TestIteration()
@@ -1336,7 +1337,8 @@ public final class UCharacterTest extends TestFmwk
                         {0xeffff, UCharacterCategory.UNASSIGNED}};
 
         // default Bidi classes for unassigned code points
-        int defaultBidi[][]={{ 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
+        int defaultBidi[][]={
+            { 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x0600, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x0900, UCharacterDirection.RIGHT_TO_LEFT },
@@ -1347,7 +1349,10 @@ public final class UCharacterTest extends TestFmwk
             { 0xFF00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x10800, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x11000, UCharacterDirection.RIGHT_TO_LEFT },
-            { 0x110000, UCharacterDirection.LEFT_TO_RIGHT }};
+            { 0x1E800, UCharacterDirection.LEFT_TO_RIGHT },  /* new default-R range in Unicode 5.2: U+1E800 - U+1EFFF */
+            { 0x1F000, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x110000, UCharacterDirection.LEFT_TO_RIGHT }
+        };
 
         RangeValueIterator iterator = UCharacter.getTypeIterator();
         RangeValueIterator.Element result = new RangeValueIterator.Element();
@@ -1642,8 +1647,10 @@ public final class UCharacterTest extends TestFmwk
             { 0xfe02, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 1 },
             { 0x1801, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 0 },
 
-            { 0x0341, UProperty.DEPRECATED, 1 },
+            { 0x0149, UProperty.DEPRECATED, 1 },         /* changed in Unicode 5.2 */
+            { 0x0341, UProperty.DEPRECATED, 0 },        /* changed in Unicode 5.2 */
             { 0xe0041, UProperty.DEPRECATED, 1 },       /* Changed from Unicode 5 to 5.1 */
+            { 0xe0100, UProperty.DEPRECATED, 0 },
 
             { 0x00a0, UProperty.GRAPHEME_BASE, 1 },
             { 0x0a4d, UProperty.GRAPHEME_BASE, 0 },
@@ -1753,7 +1760,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x10EEEE, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.AMBIGUOUS },
 
             /* UProperty.GENERAL_CATEGORY tested for assigned characters in TestUnicodeData() */
-            { 0xd7d7, UProperty.GENERAL_CATEGORY, 0 },
+            { 0xd7c7, UProperty.GENERAL_CATEGORY, 0 },
+            { 0xd7d7, UProperty.GENERAL_CATEGORY, UCharacterEnums.ECharacterCategory.OTHER_LETTER },     /* changed in Unicode 5.2 */
 
             { 0x0444, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.NO_JOINING_GROUP },
             { 0x0639, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.AIN },
@@ -1792,27 +1800,43 @@ public final class UCharacterTest extends TestFmwk
 
             /* UProperty.SCRIPT tested in TestUScriptCodeAPI() */
 
+            { 0x10ff, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
             { 0x1100, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
             { 0x1111, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
             { 0x1159, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+            { 0x115a, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },     /* changed in Unicode 5.2 */
+            { 0x115e, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },     /* changed in Unicode 5.2 */
             { 0x115f, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+
+            { 0xa95f, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+            { 0xa960, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },     /* changed in Unicode 5.2 */
+            { 0xa97c, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },     /* changed in Unicode 5.2 */
+            { 0xa97d, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
 
             { 0x1160, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
             { 0x1161, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
             { 0x1172, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
             { 0x11a2, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
+            { 0x11a3, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },       /* changed in Unicode 5.2 */
+            { 0x11a7, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },       /* changed in Unicode 5.2 */
+
+            { 0xd7af, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+            { 0xd7b0, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },       /* changed in Unicode 5.2 */
+            { 0xd7c6, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },       /* changed in Unicode 5.2 */
+            { 0xd7c7, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
 
             { 0x11a8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
             { 0x11b8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
             { 0x11c8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
             { 0x11f9, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
+            { 0x11fa, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },    /* changed in Unicode 5.2 */
+            { 0x11ff, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },    /* changed in Unicode 5.2 */
+            { 0x1200, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
 
-            { 0x115a, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
-            { 0x115e, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
-            { 0x11a3, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
-            { 0x11a7, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
-            { 0x11fa, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
-            { 0x11ff, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+            { 0xd7ca, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+            { 0xd7cb, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },    /* changed in Unicode 5.2 */
+            { 0xd7fb, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },    /* changed in Unicode 5.2 */
+            { 0xd7fc, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
 
             { 0xac00, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
             { 0xac1c, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
@@ -1945,39 +1969,47 @@ public final class UCharacterTest extends TestFmwk
 
         // test hasBinaryProperty()
         for (int i = 0; i < props.length; ++ i) {
+            int which = props[i][1];
             if (props[i][0] < 0) {
-                if (version.compareTo(VersionInfo.getInstance(props[i][1] >> 8,
-                                                          (props[i][1] >> 4) & 0xF,
-                                                          props[i][1] & 0xF,
+                if (version.compareTo(VersionInfo.getInstance(which >> 8,
+                                                          (which >> 4) & 0xF,
+                                                          which & 0xF,
                                                           0)) < 0) {
                     break;
                 }
                 continue;
             }
+            String whichName;
+            try {
+                whichName = UCharacter.getPropertyName(which, UProperty.NameChoice.LONG);
+            } catch(IllegalArgumentException e) {
+                // There are intentionally invalid property integer values ("which").
+                // Catch and ignore the exception from getPropertyName().
+                whichName = "undefined UProperty value";
+            }
             boolean expect = true;
             if (props[i][2] == 0) {
                 expect = false;
             }
-            if (props[i][1] < UProperty.INT_START) {
-                if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
+            if (which < UProperty.INT_START) {
+                if (UCharacter.hasBinaryProperty(props[i][0], which)
                     != expect) {
-                    errln("error: UCharacter.hasBinaryProperty(\\u" +
-                          Integer.toHexString(props[i][0]) + ", " +
-                          Integer.toHexString(props[i][1])
-                          + ") has an error expected " + props[i][2]);
+                    errln("error: UCharacter.hasBinaryProperty(U+" +
+                            Utility.hex(props[i][0], 4) + ", " +
+                          whichName + ") has an error, expected=" + expect);
                 }
             }
 
-            int retVal = UCharacter.getIntPropertyValue(props[i][0], props[i][1]);
+            int retVal = UCharacter.getIntPropertyValue(props[i][0], which);
             if (retVal != props[i][2]) {
-                errln("error: UCharacter.getIntPropertyValue(\\u" +
+                errln("error: UCharacter.getIntPropertyValue(U+" +
                       Utility.hex(props[i][0], 4) +
-                      ", " + props[i][1] + " is wrong, should be "
-                      + props[i][2] + " not " + retVal);
+                      ", " + whichName + ") is wrong, expected="
+                      + props[i][2] + " actual=" + retVal);
             }
 
             // test separate functions, too
-            switch (props[i][1]) {
+            switch (which) {
             case UProperty.ALPHABETIC:
                 if (UCharacter.isUAlphabetic(props[i][0]) != expect) {
                     errln("error: UCharacter.isUAlphabetic(\\u" +
@@ -2015,116 +2047,76 @@ public final class UCharacterTest extends TestFmwk
     public void TestNumericProperties()
     {
         // see UnicodeData.txt, DerivedNumericValues.txt
-        int testvar[][] = {
-            { 0x0F33, UCharacter.NumericType.NUMERIC },
-            { 0x0C66, UCharacter.NumericType.DECIMAL },
-            { 0x2159, UCharacter.NumericType.NUMERIC },
-            { 0x00BD, UCharacter.NumericType.NUMERIC },
-            { 0x0031, UCharacter.NumericType.DECIMAL },
-            { 0x10320, UCharacter.NumericType.NUMERIC },
-            { 0x0F2B, UCharacter.NumericType.NUMERIC },
-            { 0x00B2, UCharacter.NumericType.DIGIT }, /* Unicode 4.0 change */
-            { 0x1813, UCharacter.NumericType.DECIMAL },
-            { 0x2173, UCharacter.NumericType.NUMERIC },
-            { 0x278E, UCharacter.NumericType.DIGIT },
-            { 0x1D7F2, UCharacter.NumericType.DECIMAL },
-            { 0x247A, UCharacter.NumericType.DIGIT },
-            { 0x1372, UCharacter.NumericType.NUMERIC },
-            { 0x216B, UCharacter.NumericType.NUMERIC },
-            { 0x16EE, UCharacter.NumericType.NUMERIC },
-            { 0x249A, UCharacter.NumericType.NUMERIC },
-            { 0x303A, UCharacter.NumericType.NUMERIC },
-            { 0x32B2, UCharacter.NumericType.NUMERIC },
-            { 0x1375, UCharacter.NumericType.NUMERIC },
-            { 0x10323, UCharacter.NumericType.NUMERIC },
-            { 0x0BF1, UCharacter.NumericType.NUMERIC },
-            { 0x217E, UCharacter.NumericType.NUMERIC },
-            { 0x2180, UCharacter.NumericType.NUMERIC },
-            { 0x2181, UCharacter.NumericType.NUMERIC },
-            { 0x137C, UCharacter.NumericType.NUMERIC },
-            { 0x61, UCharacter.NumericType.NONE },
-            { 0x3000, UCharacter.NumericType.NONE },
-            { 0xfffe, UCharacter.NumericType.NONE },
-            { 0x10301, UCharacter.NumericType.NONE },
-            { 0xe0033, UCharacter.NumericType.NONE },
-            { 0x10ffff, UCharacter.NumericType.NONE },
-            /* Unicode 4.0 Changes */
-            { 0x96f6,  UCharacter.NumericType.NUMERIC },
-            { 0x4e00,  UCharacter.NumericType.NUMERIC },
-            { 0x58f1,  UCharacter.NumericType.NUMERIC },
-            { 0x5f10,  UCharacter.NumericType.NUMERIC },
-            { 0x5f0e,  UCharacter.NumericType.NUMERIC },
-            { 0x8086,  UCharacter.NumericType.NUMERIC },
-            { 0x7396,  UCharacter.NumericType.NUMERIC },
-            { 0x5345,  UCharacter.NumericType.NUMERIC },
-            { 0x964c,  UCharacter.NumericType.NUMERIC },
-            { 0x4edf,  UCharacter.NumericType.NUMERIC },
-            { 0x4e07,  UCharacter.NumericType.NUMERIC },
-            { 0x4ebf,  UCharacter.NumericType.NUMERIC },
-            { 0x5146,  UCharacter.NumericType.NUMERIC }
+        double values[][] = {
+            { 0x0F33, UCharacter.NumericType.NUMERIC, -1./2. },
+            { 0x0C66, UCharacter.NumericType.DECIMAL, 0 },
+            { 0x96f6, UCharacter.NumericType.NUMERIC, 0 },
+            { 0xa833, UCharacter.NumericType.NUMERIC, 1./16. },
+            { 0x2152, UCharacter.NumericType.NUMERIC, 1./10. },
+            { 0x2151, UCharacter.NumericType.NUMERIC, 1./9. },
+            { 0x1245f, UCharacter.NumericType.NUMERIC, 1./8. },
+            { 0x2150, UCharacter.NumericType.NUMERIC, 1./7. },
+            { 0x2159, UCharacter.NumericType.NUMERIC, 1./6. },
+            { 0x09f6, UCharacter.NumericType.NUMERIC, 3./16. },
+            { 0x2155, UCharacter.NumericType.NUMERIC, 1./5. },
+            { 0x00BD, UCharacter.NumericType.NUMERIC, 1./2. },
+            { 0x0031, UCharacter.NumericType.DECIMAL, 1. },
+            { 0x4e00, UCharacter.NumericType.NUMERIC, 1. },
+            { 0x58f1, UCharacter.NumericType.NUMERIC, 1. },
+            { 0x10320, UCharacter.NumericType.NUMERIC, 1. },
+            { 0x0F2B, UCharacter.NumericType.NUMERIC, 3./2. },
+            { 0x00B2, UCharacter.NumericType.DIGIT, 2. }, /* Unicode 4.0 change */
+            { 0x5f10, UCharacter.NumericType.NUMERIC, 2. },
+            { 0x1813, UCharacter.NumericType.DECIMAL, 3. },
+            { 0x5f0e, UCharacter.NumericType.NUMERIC, 3. },
+            { 0x2173, UCharacter.NumericType.NUMERIC, 4. },
+            { 0x8086, UCharacter.NumericType.NUMERIC, 4. },
+            { 0x278E, UCharacter.NumericType.DIGIT, 5. },
+            { 0x1D7F2, UCharacter.NumericType.DECIMAL, 6. },
+            { 0x247A, UCharacter.NumericType.DIGIT, 7. },
+            { 0x7396, UCharacter.NumericType.NUMERIC, 9. },
+            { 0x1372, UCharacter.NumericType.NUMERIC, 10. },
+            { 0x216B, UCharacter.NumericType.NUMERIC, 12. },
+            { 0x16EE, UCharacter.NumericType.NUMERIC, 17. },
+            { 0x249A, UCharacter.NumericType.NUMERIC, 19. },
+            { 0x303A, UCharacter.NumericType.NUMERIC, 30. },
+            { 0x5345, UCharacter.NumericType.NUMERIC, 30. },
+            { 0x32B2, UCharacter.NumericType.NUMERIC, 37. },
+            { 0x1375, UCharacter.NumericType.NUMERIC, 40. },
+            { 0x10323, UCharacter.NumericType.NUMERIC, 50. },
+            { 0x0BF1, UCharacter.NumericType.NUMERIC, 100. },
+            { 0x964c, UCharacter.NumericType.NUMERIC, 100. },
+            { 0x217E, UCharacter.NumericType.NUMERIC, 500. },
+            { 0x2180, UCharacter.NumericType.NUMERIC, 1000. },
+            { 0x4edf, UCharacter.NumericType.NUMERIC, 1000. },
+            { 0x2181, UCharacter.NumericType.NUMERIC, 5000. },
+            { 0x137C, UCharacter.NumericType.NUMERIC, 10000. },
+            { 0x4e07, UCharacter.NumericType.NUMERIC, 10000. },
+            { 0x4ebf, UCharacter.NumericType.NUMERIC, 100000000. },
+            { 0x5146, UCharacter.NumericType.NUMERIC, 1000000000000. },
+            { -1, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x61, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x3000, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0xfffe, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x10301, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0xe0033, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x10ffff, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x110000, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE }
         };
 
-        double expected[] = {-1/(double)2,
-                             0,
-                             1/(double)6,
-                             1/(double)2,
-                             1,
-                             1,
-                             3/(double)2,
-                             2,
-                             3,
-                             4,
-                             5,
-                             6,
-                             7,
-                             10,
-                             12,
-                             17,
-                             19,
-                             30,
-                             37,
-                             40,
-                             50,
-                             100,
-                             500,
-                             1000,
-                             5000,
-                             10000,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE,
-                             0 ,
-                             1 ,
-                             1 ,
-                             2 ,
-                             3 ,
-                             4 ,
-                             9 ,
-                             30 ,
-                             100 ,
-                             1000 ,
-                             10000 ,
-                             100000000 ,
-                             1000000000000.00
-        };
-
-
-        for (int i = 0; i < testvar.length; ++ i) {
-            int c = testvar[i][0];
+        for (int i = 0; i < values.length; ++ i) {
+            int c = (int)values[i][0];
             int type = UCharacter.getIntPropertyValue(c,
                                                       UProperty.NUMERIC_TYPE);
             double nv = UCharacter.getUnicodeNumericValue(c);
 
-            if (type != testvar[i][1]) {
+            if (type != values[i][1]) {
                 errln("UProperty.NUMERIC_TYPE(\\u" + Utility.hex(c, 4)
-                       + ") = " + type + " should be " + testvar[i][1]);
+                       + ") = " + type + " should be " + (int)values[i][1]);
             }
-            if (0.000001 <= Math.abs(nv - expected[i])) {
+            if (0.000001 <= Math.abs(nv - values[i][2])) {
                 errln("UCharacter.getNumericValue(\\u" + Utility.hex(c, 4)
-                        + ") = " + nv + " should be " + expected[i]);
+                        + ") = " + nv + " should be " + values[i][2]);
             }
         }
     }
@@ -3184,21 +3176,27 @@ public final class UCharacterTest extends TestFmwk
         int[] radixResult = {
                 10,11,12,13,14,15,16,17,18,19,20,21,22,
                 23,24,25,26,27,28,29,30,31,32,33,34,35};
-        int[] radixCase1 = {0,1,5,10};
-        int[] radixCase2 = {100,250,500,1000};
+        // Invalid and too-small-for-these-digits radix values. 
+        int[] radixCase1 = {0,1,5,10,100};
+        // Radix values that work for at least some of the "digits".
+        int[] radixCase2 = {12,16,20,36};
         
         for(int i=0xFF41; i<=0xFF5A; i++){
             for(int j=0; j < radixCase1.length; j++){
                 if(UCharacter.digit(i, radixCase1[j]) != -1){
-                    errln("UCharacter.digit(int,int) was suppose to return -1 for radix " + radixCase1[j]
-                            + ". Value passed: " + i + ". Got: " + UCharacter.digit(i, radixCase1[j]));
+                    errln("UCharacter.digit(int,int) was supposed to return -1 for radix " + radixCase1[j]
+                            + ". Value passed: U+" + Integer.toHexString(i) + ". Got: " + UCharacter.digit(i, radixCase1[j]));
                 }
             }
             for(int j=0; j < radixCase2.length; j++){
-                if(UCharacter.digit(i, radixCase2[j]) != radixResult[i-0xFF41]){
-                    errln("UCharacter.digit(int,int) was suppose to return " +
-                            radixResult[i-0xFF41] + " for radix " + radixCase2[j] +
-                            ". Value passed: " + i + ". Got: " + UCharacter.digit(i, radixCase2[j]));
+                int radix = radixCase2[j];
+                int expected = (radixResult[i-0xFF41] < radix) ? radixResult[i-0xFF41] : -1;
+                int actual = UCharacter.digit(i, radix);
+                if(actual != expected){
+                    errln("UCharacter.digit(int,int) was supposed to return " +
+                            expected + " for radix " + radix +
+                            ". Value passed: U+" + Integer.toHexString(i) + ". Got: " + actual);
+                    break;
                 }
             }
         }

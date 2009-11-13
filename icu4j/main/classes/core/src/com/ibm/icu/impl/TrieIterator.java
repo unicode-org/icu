@@ -193,7 +193,6 @@ public class TrieIterator implements RangeValueIterator
     */
     private final boolean calculateNextBMPElement(Element element)
     {
-        int currentBlock    = m_nextBlock_;
         int currentValue    = m_nextValue_;
         m_currentCodepoint_ = m_nextCodepoint_;
         m_nextCodepoint_ ++;
@@ -221,7 +220,7 @@ public class TrieIterator implements RangeValueIterator
             }
             
             m_nextBlockIndex_ = 0;
-            if (!checkBlock(currentBlock, currentValue)) {
+            if (!checkBlock(currentValue)) {
                 setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                           currentValue);
                 return true;
@@ -252,7 +251,6 @@ public class TrieIterator implements RangeValueIterator
     private final void calculateNextSupplementaryElement(Element element)
     {
         int currentValue = m_nextValue_;
-        int currentBlock = m_nextBlock_;
         m_nextCodepoint_ ++;
         m_nextBlockIndex_ ++;
         
@@ -269,7 +267,7 @@ public class TrieIterator implements RangeValueIterator
             // we have cleared one block
             m_nextIndex_ ++;
             m_nextTrailIndexOffset_ ++;
-            if (!checkTrailBlock(currentBlock, currentValue)) {
+            if (!checkTrailBlock(currentValue)) {
                 setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                           currentValue);
                 m_currentCodepoint_ = m_nextCodepoint_;
@@ -328,7 +326,7 @@ public class TrieIterator implements RangeValueIterator
                 m_nextCodepoint_ += TRAIL_SURROGATE_COUNT_;
             } else {
                 m_nextTrailIndexOffset_ = 0;
-                if (!checkTrailBlock(currentBlock, currentValue)) {
+                if (!checkTrailBlock(currentValue)) {
                     setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                               currentValue);
                     m_currentCodepoint_ = m_nextCodepoint_;
@@ -381,8 +379,9 @@ public class TrieIterator implements RangeValueIterator
     * @return true if the whole block has the same value as currentValue or if
     *              the whole block has been calculated, false otherwise.
     */
-    private final boolean checkBlock(int currentBlock, int currentValue) 
+    private final boolean checkBlock(int currentValue) 
     {
+        int currentBlock = m_nextBlock_;
         m_nextBlock_ = m_trie_.m_index_[m_nextIndex_] << 
                                                   Trie.INDEX_STAGE_2_SHIFT_;
         if (m_nextBlock_ == currentBlock &&
@@ -415,13 +414,11 @@ public class TrieIterator implements RangeValueIterator
     * Will call checkBlock() for internal block checks.
     * Note m_*_ variables at this point is the next codepoint whose value
     * has not been calculated.
-    * @param currentBlock the initial block containing all currentValue
     * @param currentValue the value which other codepoints are tested against
     * @return true if the whole block has the same value as currentValue or if
     *              the whole block has been calculated, false otherwise.
     */
-    private final boolean checkTrailBlock(int currentBlock,
-                                          int currentValue)
+    private final boolean checkTrailBlock(int currentValue)
     {
         // enumerate code points for this lead surrogate
         while (m_nextTrailIndexOffset_ < TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_) 
@@ -429,7 +426,7 @@ public class TrieIterator implements RangeValueIterator
             // if we ever reach here, we are at the start of a new block
             m_nextBlockIndex_ = 0;
             // copy of most of the body of the BMP loop
-            if (!checkBlock(currentBlock, currentValue)) {
+            if (!checkBlock(currentValue)) {
                 return false;
             }
             m_nextTrailIndexOffset_ ++;

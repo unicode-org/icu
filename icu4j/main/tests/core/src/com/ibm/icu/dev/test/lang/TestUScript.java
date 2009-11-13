@@ -360,17 +360,20 @@ public class TestUScript extends TestFmwk {
          * Whenever this happens, the long script names here need to be updated.
          */
         String[] expectedLong = new String[]{
-            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
-            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
+            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
+            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
             "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
-            "Carian", "Jpan", "Lana", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
-            "Moon", "Mtei",
+            "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
+            "Moon", "Meetei_Mayek",
 
             // ICU 4.0
-            "Armi", "Avst", "Cakm", "Kore", "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti",
-            "Samr", "Tavt", "Zmth", "Zsym",
+            "Imperial_Aramaic", "Avestan", "Cakm", "Kore",
+            "Kaithi", "Mani", "Inscriptional_Pahlavi", "Phlp", "Phlv", "Inscriptional_Parthian", "Samaritan", "Tai_Viet",
+            "Zmth", "Zsym",
+            /* new in ICU 4.4 */
+            "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -384,7 +387,13 @@ public class TestUScript extends TestFmwk {
             // ICU 4.0
             "Armi", "Avst", "Cakm", "Kore", "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti",
             "Samr", "Tavt", "Zmth", "Zsym",
+            /* new in ICU 4.4 */
+            "Bamu", "Lisu", "Nkgb", "Sarb", 
         };
+        if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
+            errln("need to add new script codes in lang.TestUScript.java!");
+            return;
+        }
         int j = 0;
         int i = 0;
         for(i=UScript.BALINESE; i<UScript.CODE_LIMIT; i++, j++){

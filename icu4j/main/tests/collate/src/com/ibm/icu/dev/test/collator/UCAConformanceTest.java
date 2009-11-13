@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -155,24 +155,25 @@ public class UCAConformanceTest extends TestFmwk {
     
     private String parseString(String line) {
         int i = 0, value;
-        StringBuffer result = new StringBuffer(), buffer = new StringBuffer();
-        
+        StringBuilder result = new StringBuilder(), buffer = new StringBuilder();
+
         for(;;) {
-            while(Character.isWhitespace(line.charAt(i))) {
+            while(i < line.length() && Character.isWhitespace(line.charAt(i))) {
                 i++;
             }
-            if(line.charAt(i) == ';' || i == line.length()) {
-                return result.toString();
-            }
-            while(Character.isLetterOrDigit(line.charAt(i))) {
+            while(i < line.length() && Character.isLetterOrDigit(line.charAt(i))) {
                 buffer.append(line.charAt(i));
                 i++;
             }
+            if(buffer.length() == 0) {
+                // We hit something that was not whitespace/letter/digit.
+                // Should be ';' or end of string.
+                return result.toString();
+            }
             /* read one code point */
             value = Integer.parseInt(buffer.toString(), 16);
-            buffer.delete(0, buffer.length());
-            
-            UTF16.append(result, value);
+            buffer.setLength(0);
+            result.appendCodePoint(value);
         }
         
     }

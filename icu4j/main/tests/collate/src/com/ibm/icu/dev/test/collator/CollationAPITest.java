@@ -90,67 +90,6 @@ public class CollationAPITest extends TestFmwk {
         // Need to use identical strength
         col.setStrength(Collator.IDENTICAL);
 
-        byte key2compat[] = {
-            // 3.9 key, UCA 5.1
-            (byte) 0x2c, (byte) 0x2e, (byte) 0x30,
-            (byte) 0x32, (byte) 0x2c, (byte) 0x01,
-            (byte) 0x09, (byte) 0x01, (byte) 0x09,
-            (byte) 0x01, (byte) 0x2b, (byte) 0x01,
-            (byte) 0x92, (byte) 0x93, (byte) 0x94,
-            (byte) 0x95, (byte) 0x92, (byte) 0x00
-
-            // 3.6 key, UCA 5.0
-            /*
-            (byte) 0x29, (byte) 0x2b, (byte) 0x2d,
-            (byte) 0x2f, (byte) 0x29, (byte) 0x01,
-            (byte) 0x09, (byte) 0x01, (byte) 0x09,
-            (byte) 0x01, (byte) 0x28, (byte) 0x01,
-            (byte) 0x92, (byte) 0x93, (byte) 0x94,
-            (byte) 0x95, (byte) 0x92, (byte) 0x00
-            */
-
-            // 3.4 key UCA 4.1
-            /*
-            (byte) 0x28, (byte) 0x2a, (byte) 0x2c, 
-            (byte) 0x2e, (byte) 0x28, (byte) 0x01, 
-            (byte) 0x09, (byte) 0x01, (byte) 0x09, 
-            (byte) 0x01, (byte) 0x27, (byte) 0x01, 
-            (byte) 0x92, (byte) 0x93, (byte) 0x94, 
-            (byte) 0x95, (byte) 0x92, (byte) 0x00        
-            */ 
-            
-            //          2.6.1 key
-            /*
-            0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
-            0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
-            0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
-            */
-            
-            // 2.2 key
-            /*
-            0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
-            0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
-            0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-            */
-            
-            // 2.0 key
-            /*
-            0x19, 0x1B, 0x1D, 0x1F, 0x19,
-            0x01, 0x09, 0x01, 0x09, 0x01,
-            0x18, 0x01,
-            0x92, 0x93, 0x94, 0x95, 0x92,
-            0x00
-            */
-            
-            // 1.8.1 key.
-            /*
-            0x19, 0x1B, 0x1D, 0x1F, 0x19,
-            0x01, 0x0A, 0x01, 0x0A, 0x01,
-            0x92, 0x93, 0x94, 0x95, 0x92,
-            0x00 
-            */
-        };
-
         CollationKey key1 = col.getCollationKey(test1);
         CollationKey key2 = col.getCollationKey(test2);
         CollationKey key3 = col.getCollationKey(test2);
@@ -162,8 +101,7 @@ public class CollationAPITest extends TestFmwk {
         doAssert(key2.compareTo(key3) == 0,
                 "Result should be \"abcda\" ==  \"abcda\"");
      
-        doAssert(Arrays.equals(key2.toByteArray(), key2compat),
-                 "Binary format for 'abcda' sortkey different for identical strength!");
+        byte key2identical[] = key2.toByteArray();
     
         logln("Use secondary comparision level testing ...");
         col.setStrength(Collator.SECONDARY);
@@ -179,7 +117,7 @@ public class CollationAPITest extends TestFmwk {
     
         byte tempkey[] = key2.toByteArray();
         byte subkey2compat[] = new byte[tempkey.length];
-        System.arraycopy(key2compat, 0, subkey2compat, 0, tempkey.length);
+        System.arraycopy(key2identical, 0, subkey2compat, 0, tempkey.length);
         subkey2compat[subkey2compat.length - 1] = 0;
         doAssert(Arrays.equals(tempkey, subkey2compat),
                  "Binary format for 'abcda' sortkey different for secondary strength!");
@@ -492,7 +430,7 @@ public class CollationAPITest extends TestFmwk {
         doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
         
         logln("Test getUCAVersion");
-        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x05, 1, 0, 0);
+        VersionInfo expectedUCAVersion = VersionInfo.getInstance(5, 2, 0, 0);
         doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
         
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
