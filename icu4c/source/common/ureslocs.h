@@ -9,7 +9,7 @@
 #define __URESLOCS_H__
 
 #include "unicode/utypes.h"
-#include <unicode/udata.h>
+#include "unicode/udata.h"
 
 U_CDECL_BEGIN
 
