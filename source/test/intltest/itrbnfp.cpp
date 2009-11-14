@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@
         name = #test;                 \
         if (exec) {                   \
             logln(#test "---");       \
-            logln((UnicodeString)""); \
+            logln();                  \
             test();                   \
         }                             \
         break
