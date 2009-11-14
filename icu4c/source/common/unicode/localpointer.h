@@ -252,5 +252,5 @@ public:
 
 U_NAMESPACE_END
 
-#endif  // XP_CPLUSPLUS
-#endif  // __LOCALPOINTER_H__
+#endif  /* XP_CPLUSPLUS */
+#endif  /* __LOCALPOINTER_H__ */
