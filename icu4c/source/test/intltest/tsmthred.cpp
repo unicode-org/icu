@@ -18,6 +18,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uparse.h"
+#include "unicode/localpointer.h"
 #include "unicode/resbund.h"
 #include "unicode/udata.h"
 #include "unicode/uloc.h"

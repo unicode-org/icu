@@ -20,6 +20,7 @@
 #include "unicode/ures.h"
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
+#include "unicode/localpointer.h"
 
 /**
  * \file
@@ -73,6 +74,25 @@ ulocdata_open(const char *localeID, UErrorCode *status);
  */
 U_STABLE void U_EXPORT2
 ulocdata_close(ULocaleData *uld);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalULocaleDataPointer
+ * "Smart pointer" class, closes a ULocaleData via ulocdata_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalULocaleDataPointer, ULocaleData, ulocdata_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Sets the "no Substitute" attribute of the locale data

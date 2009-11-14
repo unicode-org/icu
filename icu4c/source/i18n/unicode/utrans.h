@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -15,6 +15,7 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
+#include "unicode/localpointer.h"
 #include "unicode/urep.h"
 #include "unicode/parseerr.h"
 #include "unicode/uenum.h"
@@ -234,6 +235,25 @@ utrans_clone(const UTransliterator* trans,
  */
 U_STABLE void U_EXPORT2 
 utrans_close(UTransliterator* trans);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUTransliteratorPointer
+ * "Smart pointer" class, closes a UTransliterator via utrans_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUTransliteratorPointer, UTransliterator, utrans_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Return the programmatic identifier for this transliterator.

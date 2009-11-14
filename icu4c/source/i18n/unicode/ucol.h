@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/unorm.h"
+#include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
@@ -374,6 +375,25 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
  */
 U_STABLE void U_EXPORT2 
 ucol_close(UCollator *coll);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUCollatorPointer
+ * "Smart pointer" class, closes a UCollator via ucol_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCollatorPointer, UCollator, ucol_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Compare two strings.

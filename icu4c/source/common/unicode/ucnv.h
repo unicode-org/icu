@@ -49,6 +49,7 @@
 
 #include "unicode/ucnv_err.h"
 #include "unicode/uenum.h"
+#include "unicode/localpointer.h"
 
 #ifndef __USET_H__
 
@@ -522,6 +523,25 @@ ucnv_safeClone(const UConverter *cnv,
  */
 U_STABLE void  U_EXPORT2
 ucnv_close(UConverter * converter);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUConverterPointer
+ * "Smart pointer" class, closes a UConverter via ucnv_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUConverterPointer, UConverter, ucnv_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Fills in the output parameter, subChars, with the substitution characters

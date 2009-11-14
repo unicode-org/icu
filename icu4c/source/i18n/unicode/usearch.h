@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2009 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  06/28/2001   synwee      Creation.
@@ -13,6 +13,7 @@
 
 #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
 
+#include "unicode/localpointer.h"
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/ubrk.h"
@@ -248,6 +249,25 @@ U_STABLE UStringSearch * U_EXPORT2 usearch_openFromCollator(
 * @stable ICU 2.4
 */
 U_STABLE void U_EXPORT2 usearch_close(UStringSearch *searchiter);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUStringSearchPointer
+ * "Smart pointer" class, closes a UStringSearch via usearch_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUStringSearchPointer, UStringSearch, usearch_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /* get and set methods -------------------------------------------------- */
 

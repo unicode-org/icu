@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2009, International Business Machines
 *   Corporation, Google and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,7 @@
 #include "unicode/utf16.h"
 #include "unicode/uenum.h"
 #include "unicode/ucnv.h"
+#include "unicode/localpointer.h"
 
 /**
  * \file
@@ -86,6 +87,25 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
  */
 U_CAPI void U_EXPORT2
 ucnvsel_close(UConverterSelector *sel);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUConverterSelectorPointer
+ * "Smart pointer" class, closes a UConverterSelector via ucnvsel_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUConverterSelectorPointer, UConverterSelector, ucnvsel_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a selector from its serialized form.
