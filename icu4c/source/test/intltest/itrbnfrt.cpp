@@ -21,7 +21,7 @@
         name = #test;                 \
         if (exec) {                   \
             logln(#test "---");       \
-            logln((UnicodeString)""); \
+            logln();                  \
             test();                   \
         }                             \
         break
