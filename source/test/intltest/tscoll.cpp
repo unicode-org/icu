@@ -19,6 +19,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/localpointer.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 

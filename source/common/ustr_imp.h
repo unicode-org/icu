@@ -22,7 +22,7 @@
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
-    typedef void UBreakIterator;
+    typedef struct UBreakIterator UBreakIterator;
 #endif
 
 /**

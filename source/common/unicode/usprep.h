@@ -23,6 +23,8 @@
  */
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
+
 /**
  *
  * StringPrep API implements the StingPrep framework as described by RFC 3454.
@@ -205,6 +207,24 @@ usprep_openByType(UStringPrepProfileType type,
 U_STABLE void U_EXPORT2
 usprep_close(UStringPrepProfile* profile);
 
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUStringPrepProfilePointer
+ * "Smart pointer" class, closes a UStringPrepProfile via usprep_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUStringPrepProfilePointer, UStringPrepProfile, usprep_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Prepare the input buffer for use in applications with the given profile. This operation maps, normalizes(NFKC),

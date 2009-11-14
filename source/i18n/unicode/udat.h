@@ -12,6 +12,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/localpointer.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 /**
@@ -534,6 +535,25 @@ udat_open(UDateFormatStyle  timeStyle,
 */
 U_STABLE void U_EXPORT2 
 udat_close(UDateFormat* format);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUDateFormatPointer
+ * "Smart pointer" class, closes a UDateFormat via udat_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateFormatPointer, UDateFormat, udat_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a copy of a UDateFormat.

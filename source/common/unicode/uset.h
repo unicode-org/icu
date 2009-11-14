@@ -29,6 +29,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/localpointer.h"
 
 #ifndef UCNV_H
 struct USet;
@@ -298,6 +299,25 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
  */
 U_STABLE void U_EXPORT2
 uset_close(USet* set);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUSetPointer
+ * "Smart pointer" class, closes a USet via uset_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUSetPointer, USet, uset_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Returns a copy of this object.

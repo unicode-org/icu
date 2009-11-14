@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/localpointer.h"
 
 /**
  *\file
@@ -518,6 +519,25 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
  */
 U_STABLE void U_EXPORT2
 ubidi_close(UBiDi *pBiDi);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUBiDiPointer
+ * "Smart pointer" class, closes a UBiDi via ubidi_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUBiDiPointer, UBiDi, ubidi_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Modify the operation of the Bidi algorithm such that it

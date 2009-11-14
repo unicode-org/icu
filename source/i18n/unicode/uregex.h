@@ -27,6 +27,7 @@
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
+#include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
 
 struct URegularExpression;
@@ -176,6 +177,25 @@ uregex_openC( const char           *pattern,
   */
 U_STABLE void U_EXPORT2 
 uregex_close(URegularExpression *regexp);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalURegularExpressionPointer
+ * "Smart pointer" class, closes a URegularExpression via uregex_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalURegularExpressionPointer, URegularExpression, uregex_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Make a copy of a compiled regular expression.  Cloning a regular

@@ -31,6 +31,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/localpointer.h"
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"

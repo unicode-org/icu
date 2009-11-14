@@ -14,6 +14,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
@@ -97,23 +98,21 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
         buffer[count] = '\0'; // Make sure it is null terminated.
         return NumberingSystem::createInstanceByName(buffer,status);
     } else { // Find the default numbering system for this locale.
-        UResourceBundle *resource = ures_open(NULL,inLocale.getName(),&status);
+        LocalUResourceBundlePointer resource(ures_open(NULL, inLocale.getName(), &status));
         if (U_FAILURE(status)) {
             status = U_USING_FALLBACK_WARNING;
             NumberingSystem *ns = new NumberingSystem();
-            ures_close(resource);
             return ns;
         } 
-        const UChar *defaultNSName = ures_getStringByKeyWithFallback(resource,gDefaultNumberingSystem,&count,&status);
+        const UChar *defaultNSName =
+            ures_getStringByKeyWithFallback(resource.getAlias(), gDefaultNumberingSystem, &count, &status);
         if ( count > 0 && count < ULOC_KEYWORDS_CAPACITY ) { // Default numbering system found
            u_UCharsToChars(defaultNSName,buffer,count); 
            buffer[count] = '\0'; // Make sure it is null terminated.
-           ures_close(resource);
            return NumberingSystem::createInstanceByName(buffer,status);
         } else {
             status = U_USING_FALLBACK_WARNING;
             NumberingSystem *ns = new NumberingSystem();
-            ures_close(resource);
             return ns;
         }
         
