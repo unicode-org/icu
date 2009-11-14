@@ -16,6 +16,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/localpointer.h"
 #include "unicode/uloc.h"
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
@@ -253,6 +254,25 @@ unum_open(  UNumberFormatStyle    style,
 */
 U_STABLE void U_EXPORT2 
 unum_close(UNumberFormat* fmt);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUNumberFormatPointer
+ * "Smart pointer" class, closes a UNumberFormat via unum_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUNumberFormatPointer, UNumberFormat, unum_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a copy of a UNumberFormat.

@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/localpointer.h"
 
 /**
  * \file
@@ -75,6 +76,25 @@ ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode);
  */
 U_STABLE void U_EXPORT2
 ucasemap_close(UCaseMap *csm);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUCaseMapPointer
+ * "Smart pointer" class, closes a UCaseMap via ucasemap_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCaseMapPointer, UCaseMap, ucasemap_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Get the locale ID that is used for language-dependent case mappings.

@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
+#include "unicode/localpointer.h"
 
 /**
  * \file
@@ -129,6 +130,25 @@ udatpg_openEmpty(UErrorCode *pErrorCode);
   */
 U_DRAFT void U_EXPORT2
 udatpg_close(UDateTimePatternGenerator *dtpg);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUDateTimePatternGeneratorPointer
+ * "Smart pointer" class, closes a UDateTimePatternGenerator via udatpg_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateTimePatternGeneratorPointer, UDateTimePatternGenerator, udatpg_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
   * Create a copy pf a generator.

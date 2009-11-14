@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation
+* Copyright (C) 1996-2009, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 *
@@ -23,6 +23,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/localpointer.h"
 #include "unicode/uloc.h"
 #include "unicode/parseerr.h"
 #include <stdarg.h>
@@ -452,6 +453,25 @@ umsg_open(  const UChar     *pattern,
  */
 U_STABLE void U_EXPORT2 
 umsg_close(UMessageFormat* format);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUMessageFormatPointer
+ * "Smart pointer" class, closes a UMessageFormat via umsg_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUMessageFormatPointer, UMessageFormat, umsg_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a copy of a UMessageFormat.

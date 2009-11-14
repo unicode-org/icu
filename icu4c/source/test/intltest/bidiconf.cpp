@@ -21,6 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ubidi.h"
 #include "unicode/errorcode.h"
+#include "unicode/localpointer.h"
 #include "unicode/putil.h"
 #include "unicode/unistr.h"
 #include "intltest.h"
@@ -112,7 +113,6 @@ char *BiDiConformanceTest::getUnidataPath(char path[]) {
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUBiDiPointer, UBiDi, ubidi_close);
 
 // TODO: Make "public" in uparse.h.
 #define U_IS_INV_WHITESPACE(c) ((c)==' ' || (c)=='\t' || (c)=='\r' || (c)=='\n')

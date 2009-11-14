@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
 #include "unicode/uloc.h"
+#include "unicode/localpointer.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -643,6 +644,25 @@ ucal_open(const UChar*   zoneID,
  */
 U_STABLE void U_EXPORT2 
 ucal_close(UCalendar *cal);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUCalendarPointer
+ * "Smart pointer" class, closes a UCalendar via ucal_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCalendarPointer, UCalendar, ucal_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a copy of a UCalendar.

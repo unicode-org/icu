@@ -28,6 +28,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/utrans.h"
+#include "unicode/localpointer.h"
 
 /*
     TODO
@@ -283,6 +284,25 @@ u_fstropen(UChar      *stringBuf,
  */
 U_DRAFT void U_EXPORT2
 u_fclose(UFILE *file);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUFILEPointer
+ * "Smart pointer" class, closes a UFILE via u_fclose().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUFILEPointer, UFILE, u_fclose);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Tests if the UFILE is at the end of the file stream.

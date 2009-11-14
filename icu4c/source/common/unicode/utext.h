@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -137,6 +137,7 @@
 
 #include "unicode/utypes.h"
 #ifdef XP_CPLUSPLUS
+#include "unicode/localpointer.h"
 #include "unicode/rep.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
@@ -179,6 +180,24 @@ typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
 U_STABLE UText * U_EXPORT2
 utext_close(UText *ut);
 
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUTextPointer
+ * "Smart pointer" class, closes a UText via utext_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUTextPointer, UText, utext_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Open a read-only UText implementation for UTF-8 strings.

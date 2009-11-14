@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2007, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   file name:  ucsdet.h
@@ -22,6 +22,8 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_CONVERSION
+
+#include "unicode/localpointer.h"
 #include "unicode/uenum.h"
 
 /**
@@ -81,6 +83,25 @@ ucsdet_open(UErrorCode   *status);
   */
 U_STABLE void U_EXPORT2
 ucsdet_close(UCharsetDetector *ucsd);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUCharsetDetectorPointer
+ * "Smart pointer" class, closes a UCharsetDetector via ucsdet_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCharsetDetectorPointer, UCharsetDetector, ucsdet_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
   * Set the input byte data whose charset is to detected.

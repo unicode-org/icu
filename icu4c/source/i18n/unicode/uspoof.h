@@ -25,7 +25,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
 #include "unicode/parseerr.h"
-
+#include "unicode/localpointer.h"
 
 #if !UCONFIG_NO_NORMALIZATION
 
@@ -289,6 +289,25 @@ uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
   */
 U_DRAFT void U_EXPORT2
 uspoof_close(USpoofChecker *sc);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUSpoofCheckerPointer
+ * "Smart pointer" class, closes a USpoofChecker via uspoof_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUSpoofCheckerPointer, USpoofChecker, uspoof_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Clone a Spoof Checker.  The clone will be set to perform the same checks

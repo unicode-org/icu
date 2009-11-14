@@ -458,7 +458,11 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
 void
 StringCaseTest::TestCasing() {
     UErrorCode status = U_ZERO_ERROR;
+#if UCONFIG_NO_BREAK_ITERATION
     void *iter;
+#else
+    UBreakIterator *iter;
+#endif
     char cLocaleID[100];
     UnicodeString locale, input, output, optionsString, result;
     uint32_t options;
