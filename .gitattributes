@@ -301,6 +301,16 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.i
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.2.1/com.ibm.icu.util.VTimeZone.dat -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.16.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.32.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges3.16.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges3.32.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.16.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.32.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.16.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.32.tri2 -text
 icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
