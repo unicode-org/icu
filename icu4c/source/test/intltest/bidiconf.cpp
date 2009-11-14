@@ -17,6 +17,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/ubidi.h"
