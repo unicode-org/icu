@@ -26,6 +26,7 @@ public class TestAll extends TestGroup {
             "CurrencyTest",
             "UtilityTest",
             "TrieTest",
+            "Trie2Test",
             "LocaleDataTest",
             "ULocaleTest",
             "LocaleAliasTest",
