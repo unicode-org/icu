@@ -114,8 +114,8 @@
 
     <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n -e10 Core/Format/DateFormat/TimeZoneFormatTest"/>
-            <param name="runcheck.jvmarg" value="${jvm_options} -DTimeZoneRoundTripAll=true"/>
+            <param name="runcheck.arg" value="-n -prop:TimeZoneRoundTripAll=true Core/Format/DateFormat/TimeZoneFormatTest"/>
+            <param name="runcheck.jvmarg" value="${jvm_options}"/>
         </antcall>
     </target>
 
