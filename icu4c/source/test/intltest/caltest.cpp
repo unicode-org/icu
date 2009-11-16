@@ -506,7 +506,7 @@ CalendarTest::TestGenericAPI()
 
     StringEnumeration *en = Calendar::getKeywordValuesForLocale(NULL, Locale::getDefault(),FALSE, status);
     if (en == NULL || U_FAILURE(status)) {
-        errln("FAIL: getKeywordValuesForLocale for Calendar.");
+        dataerrln("FAIL: getKeywordValuesForLocale for Calendar. : %s", u_errorName(status));
     }
     delete en;
     delete cal;

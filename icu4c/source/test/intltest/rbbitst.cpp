@@ -2012,18 +2012,21 @@ void RBBITest::TestDictRules() {
     UParseError parseError;
 
     RuleBasedBreakIterator bi(rules, parseError, status);
-    TEST_ASSERT_SUCCESS(status);
-    UnicodeString utext = text;
-    bi.setText(utext);
-    int32_t position;
-    int32_t loops;
-    for (loops = 0; loops<10; loops++) {
-        position = bi.next();
-        if (position == RuleBasedBreakIterator::DONE) {
-            break;
+    if (U_SUCCESS(status)) {
+        UnicodeString utext = text;
+        bi.setText(utext);
+        int32_t position;
+        int32_t loops;
+        for (loops = 0; loops<10; loops++) {
+            position = bi.next();
+            if (position == RuleBasedBreakIterator::DONE) {
+                break;
+            }
         }
+        TEST_ASSERT(loops == 1);
+    } else {
+        dataerrln("Error creating RuleBasedBreakIterator: %s", u_errorName(status));
     }
-    TEST_ASSERT(loops == 1);
 }
 
 
