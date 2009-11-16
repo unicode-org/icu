@@ -25,7 +25,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 #define HOUR (60*60*1000)
 
-static const UVersionInfo ICU_433 = {4,3,3,0};
+static const UVersionInfo ICU_434 = {4,3,4,0};
 
 static const char *const TESTZIDS[] = {
         "AGT",
@@ -775,7 +775,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_433)) {
+        if (!isICUVersionAtLeast(ICU_434)) {
             // See ticket#7008
             if (*tzid == UnicodeString("Asia/Amman")) {
                 continue;
@@ -874,7 +874,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_433)) {
+        if (!isICUVersionAtLeast(ICU_434)) {
             // See ticket#7008
             if (*tzid == UnicodeString("Asia/Amman")) {
                 continue;
