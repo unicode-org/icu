@@ -1881,7 +1881,7 @@ public void TestWordMonkey() {
 }
 
 public void TestLineMonkey() {
-    if(skipIfBeforeICU(4, 3, 4)) {
+    if(skipIfBeforeICU(4,3,3)) {
         return;  // TODO: Fix me!
     }
     int        loopCount = 500;
@@ -1961,7 +1961,7 @@ public void TestRTWordMonkey() {
 }
 
 public void TestRTLineMonkey() {
-    if(skipIfBeforeICU(4, 3, 4)) {
+    if(skipIfBeforeICU(4,3,3)) {
         return;  // TODO: Fix me!
     }
     int        loopCount = 200;

@@ -130,7 +130,7 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     public void TestRuleOptions() {
-        if(skipIfBeforeICU(4, 3, 4)) {
+        if(skipIfBeforeICU(4,3,3)) {
             return;  // TODO: Fix me!
         }
         // values here are hardcoded and are correct for the current UCA when 
@@ -304,7 +304,7 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     public void TestBeforePrefixFailure() {
-        if(skipIfBeforeICU(4, 3, 4)) {
+        if(skipIfBeforeICU(4,3,3)) {
             return;  // TODO: Fix me!
         }
         String[] rules = {
