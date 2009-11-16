@@ -101,8 +101,8 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     else {
          dataerrln("ERROR: PluralFormat constructor failed! - [0]%s [1]%s", u_errorName(status[0]), u_errorName(status[1]));
     }
-    plFmt[2]= new PluralFormat(locale, status[1]);
-    if ( U_SUCCESS(status[1]) ) {
+    plFmt[2]= new PluralFormat(locale, status[2]);
+    if ( U_SUCCESS(status[2]) ) {
         *plFmt[1] = *plFmt[2];
         if (plFmt[1]!=NULL) {
             if ( *plFmt[1] != *plFmt[2] ) {
@@ -113,14 +113,17 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     else {
          dataerrln("ERROR: PluralFormat constructor failed! - %s", u_errorName(status[1]));
     }
-    plFmt[3] = (PluralFormat*) plFmt[1]->clone();
+
     if ( U_SUCCESS(status[1]) ) {
+        plFmt[3] = (PluralFormat*) plFmt[1]->clone();
+
         if (plFmt[1]!=NULL) {
             if ( *plFmt[1] != *plFmt[3] ) {
                 errln("ERROR:  clone function test failed!");
             }
         }
         delete plFmt[1];
+        delete plFmt[3];
     }
     else {
          dataerrln("ERROR: PluralFormat clone failed! - %s", u_errorName(status[1]));
@@ -128,7 +131,6 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
 
     delete plFmt[0];
     delete plFmt[2];
-    delete plFmt[3];
     delete numFmt;
     delete plRules;
 
@@ -139,7 +141,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     ParsePosition *pp = new ParsePosition();
     pf->parseObject((UnicodeString)"",*f,*pp);
     if(U_FAILURE(stat)) {
-        errln("ERROR: PluralFormat::parseObject");
+        dataerrln("ERROR: PluralFormat::parseObject: %s", u_errorName(stat));
     }
     delete pf;
     delete f;

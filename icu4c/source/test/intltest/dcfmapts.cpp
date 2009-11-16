@@ -403,7 +403,7 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
 
     DecimalFormat *df = new DecimalFormat(status);
     if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: Couldn't create a DecimalFormat");
+        errcheckln(status, "ERROR: Could not create DecimalFormat - %s", u_errorName(status));
     }
 
     df->adoptCurrencyPluralInfo(cpi);
