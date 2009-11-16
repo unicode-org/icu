@@ -1354,7 +1354,7 @@ void TestMessageFormat::testCoverage(void) {
     UnicodeString testformat("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat *msgfmt = new MessageFormat(testformat, Locale("fr"), status);
     if (msgfmt == NULL || U_FAILURE(status)) {
-        errln("FAIL: Unable to create MessageFormat.");
+        dataerrln("FAIL: Unable to create MessageFormat.: %s", u_errorName(status));
         return;
     }
     if (!msgfmt->usesNamedArguments()) {
