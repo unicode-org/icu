@@ -416,11 +416,11 @@ UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t 
         UnicodeString els("Expected levels:   ");
         int32_t i;
         for(i=0; i<levelsCount; ++i) {
-            els.append(0x20).append(printLevel(levels[i]));
+            els.append((UChar)0x20).append(printLevel(levels[i]));
         }
         UnicodeString als("Actual   levels:   ");
         for(i=0; i<actualCount; ++i) {
-            als.append(0x20).append(printLevel(actualLevels[i]));
+            als.append((UChar)0x20).append(printLevel(actualLevels[i]));
         }
         errln(els);
         errln(als);
@@ -468,13 +468,13 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi, const char *paraLevelName
         printErrorLine(paraLevelName);
         UnicodeString eord("Expected ordering: ");
         for(i=0; i<orderingCount; ++i) {
-            eord.append(0x20).append(0x30+ordering[i]);
+            eord.append((UChar)0x20).append((UChar)(0x30+ordering[i]));
         }
         UnicodeString aord("Actual   ordering: ");
         for(i=0; i<resultLength; ++i) {
             int32_t logicalIndex=ubidi_getLogicalIndex(ubidi, i, errorCode);
             if(levels[logicalIndex]<UBIDI_DEFAULT_LTR) {
-                aord.append(0x20).append(0x30+logicalIndex);
+                aord.append((UChar)0x20).append((UChar)(0x30+logicalIndex));
             }
         }
         errln(eord);

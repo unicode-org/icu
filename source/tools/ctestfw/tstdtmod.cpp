@@ -20,7 +20,7 @@ UBool IcuTestErrorCode::logIfFailureAndReset(const char *s) {
     if(isFailure()) {
         // testClass.errln("%s %s failure - %s", testName, s, errorName());
         UnicodeString msg(testName, -1, US_INV);
-        msg.append(0x20).append(UnicodeString(s, -1, US_INV));
+        msg.append((UChar)0x20).append(UnicodeString(s, -1, US_INV));
         msg.append(UNICODE_STRING_SIMPLE(" failure - ")).append(UnicodeString(errorName(), -1, US_INV));
         testClass.errln(msg);
         reset();
