@@ -1943,7 +1943,7 @@ $as_echo_n "checking for ICU version numbers... " >&6; }
 geticuversion() {
     sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
 }
-VERSION=`geticuversion $srcdir/common/unicode/uversion.h`
+VERSION=`geticuversion $srcdir/common/unicode/uvernum.h`
 if test x"$VERSION" = x; then
     VERSION=`geticuversion $srcdir/common/unicode/*.h`
     if test x"$VERSION" = x; then
