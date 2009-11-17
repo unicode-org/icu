@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.2</title>
+<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.3</title>
 <!-- Copyright 2009, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.2</h1>
+<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.3</h1>
 
 <hr/>
 <h2>Removed from ICU4J 4.2.1</h2>
@@ -56,7 +56,15 @@ GlobalizationPreferences
 </ul>
 ULocale
 <ul>
+<li>(draft)      public static final char LDML_EXTENSION</li>
 <li>(draft)      public static VersionInfo <i>getCLDRVersion</i>()</li>
+<li>(draft)      public java.util.Set <i>getLDMLExtensionKeys</i>()</li>
+<li>(draft)      public java.lang.String <i>getLDMLExtensionValue</i>(java.lang.String)</li>
+</ul>
+ULocale.Builder
+<ul>
+<li>(draft)      public ULocale <i>create</i>()</li>
+<li>(draft)      public ULocale.Builder <i>setLDMLExtensionValue</i>(java.lang.String, java.lang.String)</li>
 </ul>
 UResourceBundle
 <ul>
@@ -75,11 +83,11 @@ VersionInfo
 
 
 <hr/>
-<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.3.2</h2>
+<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.3.3</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 4.3.2 (old, new)</h2>
+<h2>Changed in ICU4J 4.3.3 (old, new)</h2>
 
 <h3>Package com.ibm.icu.charset</h3>
 <ul>
@@ -149,11 +157,11 @@ VersionInfo
 
 
 <hr/>
-<h2>Promoted to stable in ICU4J 4.3.2</h2>
+<h2>Promoted to stable in ICU4J 4.3.3</h2>
 <p>(no API promoted)</p>
 
 <hr/>
-<h2>Added in ICU4J 4.3.2</h2>
+<h2>Added in ICU4J 4.3.3</h2>
 
 <h3>Package com.ibm.icu.charset</h3>
 <ul>
@@ -239,6 +247,14 @@ CharsetDecoderICU
 <li>(draft)      public class <i>TimeZoneAdapter</i></li>
 <li>(draft)      public abstract class <i>Trie</i></li>
 <li>(draft)      public static interface <i>Trie.DataManipulate</i></li>
+<li>(draft)      public abstract class <i>Trie2</i></li>
+<li>(draft)      public class <i>Trie2.CharSequenceIterator</i></li>
+<li>(draft)      public static class <i>Trie2.CharSequenceValues</i></li>
+<li>(draft)      public static class <i>Trie2.Range</i></li>
+<li>(draft)      public static interface <i>Trie2.ValueMapper</i></li>
+<li>(draft)      public class <i>Trie2Writable</i></li>
+<li>(draft)      public final class <i>Trie2_16</i></li>
+<li>(draft)      public class <i>Trie2_32</i></li>
 <li>(draft)      public class <i>TrieBuilder</i></li>
 <li>(draft)      public static interface <i>TrieBuilder.DataManipulate</i></li>
 <li>(draft)      public class <i>TrieIterator</i></li>
@@ -265,9 +281,92 @@ CharsetDecoderICU
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
+UCharacter
+<ul>
+<li>(draft)      public static int <i>getCharFromNameAlias</i>(java.lang.String)</li>
+<li>(draft)      public static java.lang.String <i>getNameAlias</i>(int)</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+<li>(draft)      public static final int FARSI_YEH</li>
+<li>(draft)      public static final int NYA</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+<li>(draft)      public static final int CLOSE_PARENTHESIS</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li>(draft)      public static final UCharacter.UnicodeBlock AVESTAN</li>
+<li>(draft)      public static final int AVESTAN_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock BAMUM</li>
+<li>(draft)      public static final int BAMUM_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C</li>
+<li>(draft)      public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock COMMON_INDIC_NUMBER_FORMS</li>
+<li>(draft)      public static final int COMMON_INDIC_NUMBER_FORMS_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock DEVANAGARI_EXTENDED</li>
+<li>(draft)      public static final int DEVANAGARI_EXTENDED_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock EGYPTIAN_HIEROGLYPHS</li>
+<li>(draft)      public static final int EGYPTIAN_HIEROGLYPHS_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock ENCLOSED_ALPHANUMERIC_SUPPLEMENT</li>
+<li>(draft)      public static final int ENCLOSED_ALPHANUMERIC_SUPPLEMENT_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock ENCLOSED_IDEOGRAPHIC_SUPPLEMENT</li>
+<li>(draft)      public static final int ENCLOSED_IDEOGRAPHIC_SUPPLEMENT_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock HANGUL_JAMO_EXTENDED_A</li>
+<li>(draft)      public static final int HANGUL_JAMO_EXTENDED_A_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock HANGUL_JAMO_EXTENDED_B</li>
+<li>(draft)      public static final int HANGUL_JAMO_EXTENDED_B_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock IMPERIAL_ARAMAIC</li>
+<li>(draft)      public static final int IMPERIAL_ARAMAIC_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock INSCRIPTIONAL_PAHLAVI</li>
+<li>(draft)      public static final int INSCRIPTIONAL_PAHLAVI_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock INSCRIPTIONAL_PARTHIAN</li>
+<li>(draft)      public static final int INSCRIPTIONAL_PARTHIAN_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock JAVANESE</li>
+<li>(draft)      public static final int JAVANESE_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock KAITHI</li>
+<li>(draft)      public static final int KAITHI_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock LISU</li>
+<li>(draft)      public static final int LISU_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock MEETEI_MAYEK</li>
+<li>(draft)      public static final int MEETEI_MAYEK_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock MYANMAR_EXTENDED_A</li>
+<li>(draft)      public static final int MYANMAR_EXTENDED_A_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock OLD_SOUTH_ARABIAN</li>
+<li>(draft)      public static final int OLD_SOUTH_ARABIAN_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock OLD_TURKIC</li>
+<li>(draft)      public static final int OLD_TURKIC_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock RUMI_NUMERAL_SYMBOLS</li>
+<li>(draft)      public static final int RUMI_NUMERAL_SYMBOLS_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock SAMARITAN</li>
+<li>(draft)      public static final int SAMARITAN_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock TAI_THAM</li>
+<li>(draft)      public static final int TAI_THAM_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock TAI_VIET</li>
+<li>(draft)      public static final int TAI_VIET_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED</li>
+<li>(draft)      public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_ID</li>
+<li>(draft)      public static final UCharacter.UnicodeBlock VEDIC_EXTENSIONS</li>
+<li>(draft)      public static final int VEDIC_EXTENSIONS_ID</li>
+</ul>
 UProperty
 <ul>
+<li>(draft)      public static final int CASED</li>
+<li>(draft)      public static final int CASE_IGNORABLE</li>
+<li>(draft)      public static final int CHANGES_WHEN_CASEFOLDED</li>
+<li>(draft)      public static final int CHANGES_WHEN_CASEMAPPED</li>
+<li>(draft)      public static final int CHANGES_WHEN_LOWERCASED</li>
+<li>(draft)      public static final int CHANGES_WHEN_TITLECASED</li>
+<li>(draft)      public static final int CHANGES_WHEN_UPPERCASED</li>
 <li><span style='color:red'>*internal*  </span>public static final int UNDEFINED</li>
+</ul>
+UScript
+<ul>
+<li>(draft)      public static final int BAMUM</li>
+<li>(draft)      public static final int LISU</li>
+<li>(draft)      public static final int NAKHI_GEBA</li>
+<li>(draft)      public static final int OLD_SOUTH_ARABIAN</li>
 </ul>
 </ul>
 
@@ -374,6 +473,7 @@ TimeZone
 </ul>
 ULocale
 <ul>
+<li>(draft)      public static final char UNICODE_LOCALE_EXTENSION</li>
 <li>(draft)      public java.lang.String <i>getDisplayLanguageWithDialect</i>()</li>
 <li>(draft)      public java.lang.String <i>getDisplayLanguageWithDialect</i>(ULocale)</li>
 <li>(draft)      public static java.lang.String <i>getDisplayLanguageWithDialect</i>(java.lang.String, ULocale)</li>
@@ -382,6 +482,15 @@ ULocale
 <li>(draft)      public java.lang.String <i>getDisplayNameWithDialect</i>(ULocale)</li>
 <li>(draft)      public static java.lang.String <i>getDisplayNameWithDialect</i>(java.lang.String, ULocale)</li>
 <li>(draft)      public static java.lang.String <i>getDisplayNameWithDialect</i>(java.lang.String, java.lang.String)</li>
+<li>(draft)      public java.util.Set <i>getUnicodeLocaleKeys</i>()</li>
+<li>(draft)      public java.lang.String <i>getUnicodeLocaleType</i>(java.lang.String)</li>
+</ul>
+ULocale.Builder
+<ul>
+<li>(draft)      public <i>ULocale.Builder</i>(boolean)</li>
+<li>(draft)      public ULocale <i>build</i>()</li>
+<li>(draft)      public boolean <i>isLenientVariant</i>()</li>
+<li>(draft)      public ULocale.Builder <i>setUnicodeLocaleKeyword</i>(java.lang.String, java.lang.String)</li>
 </ul>
 UResourceBundle
 <ul>
@@ -392,10 +501,11 @@ UResourceBundle
 VersionInfo
 <ul>
 <li><span style='color:red'>*internal*  </span>public static final java.lang.String ICU_DATA_VERSION_PATH</li>
+<li>(draft)      public static final VersionInfo UNICODE_5_2</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Oct 05 17:16:53 EDT 2009<br/>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Nov 17 10:17:13 EST 2009<br/>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
