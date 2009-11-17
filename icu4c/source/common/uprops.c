@@ -227,7 +227,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                 UChar nfdBuffer[4];
                 const UChar *nfd=NULL;
                 int32_t nfdLength;
-                UErrorCode errorCode;
+                UErrorCode errorCode = U_ZERO_ERROR;
                 switch(which) {
                 case UCHAR_CHANGES_WHEN_CASEFOLDED:
                     if(unorm_haveData(&errorCode)) {
