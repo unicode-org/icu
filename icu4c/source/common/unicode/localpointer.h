@@ -132,7 +132,7 @@ public:
 protected:
     T *ptr;
 private:
-    // No comparison operators with other LocalPointerBase's.
+    // No comparison operators with other LocalPointerBases.
     bool operator==(const LocalPointerBase &other);
     bool operator!=(const LocalPointerBase &other);
     // No ownership transfer: No copy constructor, no assignment operator.
