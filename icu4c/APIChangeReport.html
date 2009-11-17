@@ -8,7 +8,7 @@
 </head>
 <body>
 <a name="_top"></a>
-<h1>ICU4C API Comparison: 4.2.1 with 4.4(4.3.2/M2)</h1>
+<h1>ICU4C API Comparison: 4.2.1 with 4.4(4.3.3/M3)</h1>
 <ul>
 <li>
 <a href="#removed">Removed from 4.2.1</a>
@@ -78,11 +78,11 @@
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">timezone.h</td><td class="proto">UnicodeString&amp; TimeZone::getDisplayName(UBool , EDisplayType , const Locale &amp;, UnicodeString &amp;) const</td><td class="stabchange">Stable<br>2.0</td><td>Draft<br>
+<td class="file">timezone.h</td><td class="proto">UnicodeString&amp; TimeZone::getDisplayName(UBool , EDisplayType , UnicodeString &amp;) const</td><td class="stabchange">Stable<br>2.0</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto">UnicodeString&amp; TimeZone::getDisplayName(UBool , EDisplayType , UnicodeString &amp;) const</td><td class="stabchange">Stable<br>2.0</td><td>Draft<br>
+<td class="file">timezone.h</td><td class="proto">UnicodeString&amp; TimeZone::getDisplayName(UBool , EDisplayType , const Locale &amp;, UnicodeString &amp;) const</td><td class="stabchange">Stable<br>2.0</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
 </table>
@@ -112,12 +112,12 @@
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">errorcode.h</td><td class="proto">void ErrorCode::assertSuccess() const</td><td class="">None<br>
+<td class="file">errorcode.h</td><td class="proto">const char* ErrorCode::errorName() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.4</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">icudataver.h</td><td class="proto">UBool u_isDataOlder(UVersionInfo , UBool *, UErrorCode *)</td><td class="">None<br>
+<td class="file">errorcode.h</td><td class="proto">void ErrorCode::assertSuccess() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.4</span></span></td>
 </tr>
@@ -127,7 +127,7 @@
 <span class=""><span>4.4</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto">EDisplayType TimeZone::getDefaultTimeZoneNameStyle()</td><td class="">None<br>
+<td class="file">icudataver.h</td><td class="proto">UBool u_isDataOlder(UVersionInfo , UBool *, UErrorCode *)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.4</span></span></td>
 </tr>
@@ -137,6 +137,11 @@
 <span class=""><span>4.4</span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">timezone.h</td><td class="proto">EDisplayType TimeZone::getDefaultTimeZoneNameStyle()</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">tmutfmt.h</td><td class="proto">UBool tmutfmtHashTableValueComparator(UHashTok , UHashTok )</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>4.2</span></span></td>
@@ -156,21 +161,21 @@
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">UBool CheckedArrayByteSink::Overflowed() const</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">char* CheckedArrayByteSink::GetAppendBuffer(int32_t , int32_t , char *, int32_t , int32_t *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">bytestream.h</td><td class="proto">ByteSink::ByteSink()</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">char* ByteSink::GetAppendBuffer(int32_t , int32_t , char *, int32_t , int32_t *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">char* ByteSink::GetAppendBuffer(int32_t , int32_t , char *, int32_t , int32_t *)</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">void ByteSink::Append(const char *, int32_t )=0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -184,7 +189,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">ByteSink::~ByteSink()</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">ByteSink::ByteSink()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -198,21 +203,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">char* CheckedArrayByteSink::GetAppendBuffer(int32_t , int32_t , char *, int32_t , int32_t *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">bytestream.h</td><td class="proto">void ByteSink::Append(const char *, int32_t )=0</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">StringByteSink&lt; StringClass &gt;::StringByteSink(StringClass *)</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">ByteSink::~ByteSink()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -226,7 +217,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">bytestream.h</td><td class="proto">void CheckedArrayByteSink::Append(const char *, int32_t )</td><td class="" colspan="
+<td class="file">bytestream.h</td><td class="proto">StringByteSink&lt; StringClass &gt;::StringByteSink(StringClass *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -234,6 +225,20 @@
 </tr>
 <tr class="row0">
 <td class="file">bytestream.h</td><td class="proto">int32_t CheckedArrayByteSink::NumberOfBytesWritten() const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">bytestream.h</td><td class="proto">void CheckedArrayByteSink::Append(const char *, int32_t )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">bytestream.h</td><td class="proto">UBool CheckedArrayByteSink::Overflowed() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -268,21 +273,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setPluralRules(const UnicodeString &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">currpinf.h</td><td class="proto">const Locale&amp; CurrencyPluralInfo::getLocale() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">UnicodeString&amp; CurrencyPluralInfo::getCurrencyPluralPattern(const UnicodeString &amp;, UnicodeString &amp;) const</td><td class="" colspan="
+<td class="file">currpinf.h</td><td class="proto">UClassID CurrencyPluralInfo::getDynamicClassID() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -296,49 +287,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setLocale(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">currpinf.h</td><td class="proto">UClassID CurrencyPluralInfo::getDynamicClassID() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::CurrencyPluralInfo(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
 <td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo&amp; CurrencyPluralInfo::operator=(const CurrencyPluralInfo &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::CurrencyPluralInfo(UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setCurrencyPluralPattern(const UnicodeString &amp;, const UnicodeString &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">static UClassID CurrencyPluralInfo::getStaticClassID()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -352,14 +301,14 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::~CurrencyPluralInfo()</td><td class="" colspan="
+<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setCurrencyPluralPattern(const UnicodeString &amp;, const UnicodeString &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">currpinf.h</td><td class="proto">const PluralRules* CurrencyPluralInfo::getPluralRules() const</td><td class="" colspan="
+<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setPluralRules(const UnicodeString &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -373,7 +322,63 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
+<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::CurrencyPluralInfo(UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">currpinf.h</td><td class="proto">UBool CurrencyPluralInfo::operator!=(const CurrencyPluralInfo &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">currpinf.h</td><td class="proto">const Locale&amp; CurrencyPluralInfo::getLocale() const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::CurrencyPluralInfo(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">currpinf.h</td><td class="proto">CurrencyPluralInfo::~CurrencyPluralInfo()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">currpinf.h</td><td class="proto">UnicodeString&amp; CurrencyPluralInfo::getCurrencyPluralPattern(const UnicodeString &amp;, UnicodeString &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">currpinf.h</td><td class="proto">void CurrencyPluralInfo::setLocale(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">currpinf.h</td><td class="proto">static UClassID CurrencyPluralInfo::getStaticClassID()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">currpinf.h</td><td class="proto">const PluralRules* CurrencyPluralInfo::getPluralRules() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -394,21 +399,21 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">decimfmt.h</td><td class="proto">void DecimalFormat::adoptCurrencyPluralInfo(CurrencyPluralInfo *)</td><td class="" colspan="
+<td class="file">decimfmt.h</td><td class="proto">const CurrencyPluralInfo* DecimalFormat::getCurrencyPluralInfo(void) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">decimfmt.h</td><td class="proto">void DecimalFormat::setCurrencyPluralInfo(const CurrencyPluralInfo &amp;)</td><td class="" colspan="
+<td class="file">decimfmt.h</td><td class="proto">void DecimalFormat::adoptCurrencyPluralInfo(CurrencyPluralInfo *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">decimfmt.h</td><td class="proto">const CurrencyPluralInfo* DecimalFormat::getCurrencyPluralInfo(void) const</td><td class="" colspan="
+<td class="file">decimfmt.h</td><td class="proto">void DecimalFormat::setCurrencyPluralInfo(const CurrencyPluralInfo &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -436,35 +441,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">errorcode.h</td><td class="proto">ErrorCode::operator UErrorCode &amp;()</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">errorcode.h</td><td class="proto">UBool ErrorCode::isFailure() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">errorcode.h</td><td class="proto">ErrorCode::ErrorCode()</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
 <td class="file">errorcode.h</td><td class="proto">ErrorCode::~ErrorCode()</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">errorcode.h</td><td class="proto">UErrorCode ErrorCode::reset()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -478,7 +455,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">errorcode.h</td><td class="proto">void ErrorCode::set(UErrorCode )</td><td class="" colspan="
+<td class="file">errorcode.h</td><td class="proto">UBool ErrorCode::isFailure() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -486,6 +463,34 @@
 </tr>
 <tr class="row0">
 <td class="file">errorcode.h</td><td class="proto">ErrorCode::operator UErrorCode *()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">errorcode.h</td><td class="proto">void ErrorCode::set(UErrorCode )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">errorcode.h</td><td class="proto">UErrorCode ErrorCode::reset()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">errorcode.h</td><td class="proto">ErrorCode::operator UErrorCode &amp;()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">errorcode.h</td><td class="proto">ErrorCode::ErrorCode()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -520,7 +525,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">numsys.h</td><td class="proto">static StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &amp;)</td><td class="" colspan="
+<td class="file">numsys.h</td><td class="proto">NumberingSystem::~NumberingSystem()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -534,34 +539,6 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">numsys.h</td><td class="proto">static NumberingSystem* NumberingSystem::createInstance(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">numsys.h</td><td class="proto">NumberingSystem::~NumberingSystem()</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">numsys.h</td><td class="proto">static UClassID NumberingSystem::getStaticClassID(void)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">numsys.h</td><td class="proto">UBool NumberingSystem::isAlgorithmic() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">numsys.h</td><td class="proto">static NumberingSystem* NumberingSystem::createInstance(UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -569,7 +546,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">numsys.h</td><td class="proto">NumberingSystem::NumberingSystem()</td><td class="" colspan="
+<td class="file">numsys.h</td><td class="proto">static NumberingSystem* NumberingSystem::createInstance(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -583,14 +560,28 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">numsys.h</td><td class="proto">UnicodeString NumberingSystem::getDescription()</td><td class="" colspan="
+<td class="file">numsys.h</td><td class="proto">UBool NumberingSystem::isAlgorithmic() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">numsys.h</td><td class="proto">UClassID NumberingSystem::getDynamicClassID() const</td><td class="" colspan="
+<td class="file">numsys.h</td><td class="proto">UnicodeString NumberingSystem::getDescription()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">numsys.h</td><td class="proto">NumberingSystem::NumberingSystem()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">numsys.h</td><td class="proto">static UClassID NumberingSystem::getStaticClassID(void)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -604,35 +595,35 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">smpdtfmt.h</td><td class="proto">SimpleDateFormat::SimpleDateFormat(const UnicodeString &amp;, const UnicodeString &amp;, const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
+<td class="file">numsys.h</td><td class="proto">static StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
+<td class="file">numsys.h</td><td class="proto">UClassID NumberingSystem::getDynamicClassID() const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">smpdtfmt.h</td><td class="proto">SimpleDateFormat::SimpleDateFormat(const UnicodeString &amp;, const UnicodeString &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const char *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
 <tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const U_STD_NSQ string &amp;)</td><td class="" colspan="
+<td class="file">smpdtfmt.h</td><td class="proto">SimpleDateFormat::SimpleDateFormat(const UnicodeString &amp;, const UnicodeString &amp;, const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const StringPiece &amp;, int32_t )</td><td class="" colspan="
+<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const StringPiece &amp;, int32_t , int32_t )</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -646,7 +637,63 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const char *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const StringPiece &amp;, int32_t )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">void StringPiece::remove_suffix(int32_t )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">int32_t StringPiece::length() const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">UBool StringPiece::empty() const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const U_STD_NSQ string &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">void StringPiece::remove_prefix(int32_t )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">int32_t StringPiece::size() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -660,49 +707,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">void StringPiece::remove_prefix(int32_t )</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">StringPiece::StringPiece(const StringPiece &amp;, int32_t , int32_t )</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">StringPiece StringPiece::substr(int32_t , int32_t len=) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">int32_t StringPiece::length() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">void StringPiece::remove_suffix(int32_t )</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">int32_t StringPiece::size() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">UBool StringPiece::empty() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -723,35 +728,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmunit.h</td><td class="proto">static UClassID TimeUnit::getStaticClassID()</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">tmunit.h</td><td class="proto">static TimeUnit* TimeUnit::createInstance(UTimeUnitFields , UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmunit.h</td><td class="proto">UTimeUnitFields TimeUnit::getTimeUnitField() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">tmunit.h</td><td class="proto">UClassID TimeUnit::getDynamicClassID() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmunit.h</td><td class="proto">UObject* TimeUnit::clone() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -765,21 +742,35 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmunit.h</td><td class="proto">TimeUnit&amp; TimeUnit::operator=(const TimeUnit &amp;)</td><td class="" colspan="
+<td class="file">tmunit.h</td><td class="proto">UObject* TimeUnit::clone() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">tmunit.h</td><td class="proto">UBool TimeUnit::operator!=(const UObject &amp;) const</td><td class="" colspan="
+<td class="file">tmunit.h</td><td class="proto">static UClassID TimeUnit::getStaticClassID()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmunit.h</td><td class="proto">TimeUnit::TimeUnit(const TimeUnit &amp;)</td><td class="" colspan="
+<td class="file">tmunit.h</td><td class="proto">static TimeUnit* TimeUnit::createInstance(UTimeUnitFields , UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">tmunit.h</td><td class="proto">TimeUnit&amp; TimeUnit::operator=(const TimeUnit &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmunit.h</td><td class="proto">UTimeUnitFields TimeUnit::getTimeUnitField() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -793,42 +784,28 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmutamt.h</td><td class="proto">TimeUnitAmount::TimeUnitAmount(const TimeUnitAmount &amp;)</td><td class="" colspan="
+<td class="file">tmunit.h</td><td class="proto">TimeUnit::TimeUnit(const TimeUnit &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">tmutamt.h</td><td class="proto">TimeUnit::UTimeUnitFields TimeUnitAmount::getTimeUnitField() const</td><td class="" colspan="
+<td class="file">tmunit.h</td><td class="proto">UBool TimeUnit::operator!=(const UObject &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmutamt.h</td><td class="proto">UBool TimeUnitAmount::operator==(const UObject &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">tmutamt.h</td><td class="proto">TimeUnitAmount::~TimeUnitAmount()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
-<td class="file">tmutamt.h</td><td class="proto">UBool TimeUnitAmount::operator!=(const UObject &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
 <tr class="row1">
-<td class="file">tmutamt.h</td><td class="proto">TimeUnitAmount::TimeUnitAmount(double , TimeUnit::UTimeUnitFields , UErrorCode &amp;)</td><td class="" colspan="
+<td class="file">tmutamt.h</td><td class="proto">UClassID TimeUnitAmount::getDynamicClassID(void) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -842,7 +819,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">tmutamt.h</td><td class="proto">static UClassID TimeUnitAmount::getStaticClassID(void)</td><td class="" colspan="
+<td class="file">tmutamt.h</td><td class="proto">TimeUnitAmount::TimeUnitAmount(double , TimeUnit::UTimeUnitFields , UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -863,56 +840,42 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmutamt.h</td><td class="proto">UClassID TimeUnitAmount::getDynamicClassID(void) const</td><td class="" colspan="
+<td class="file">tmutamt.h</td><td class="proto">UBool TimeUnitAmount::operator==(const UObject &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">tmutamt.h</td><td class="proto">TimeUnitAmount::TimeUnitAmount(const TimeUnitAmount &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmutamt.h</td><td class="proto">UBool TimeUnitAmount::operator!=(const UObject &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">tmutamt.h</td><td class="proto">static UClassID TimeUnitAmount::getStaticClassID(void)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
 <td class="file">tmutamt.h</td><td class="proto">const TimeUnit&amp; TimeUnitAmount::getTimeUnit() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat&amp; TimeUnitFormat::operator=(const TimeUnitFormat &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
 <tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">UnicodeString&amp; TimeUnitFormat::format(const Formattable &amp;, UnicodeString &amp;, FieldPosition &amp;, UErrorCode &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">UClassID TimeUnitFormat::getDynamicClassID(void) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::setLocale(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
+<td class="file">tmutamt.h</td><td class="proto">TimeUnit::UTimeUnitFields TimeUnitAmount::getTimeUnitField() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -926,6 +889,20 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">tmutfmt.h</td><td class="proto">UnicodeString&amp; TimeUnitFormat::format(const Formattable &amp;, UnicodeString &amp;, FieldPosition &amp;, UErrorCode &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat&amp; TimeUnitFormat::operator=(const TimeUnitFormat &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">tmutfmt.h</td><td class="proto">static UClassID TimeUnitFormat::getStaticClassID(void)</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -933,35 +910,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">UBool TimeUnitFormat::operator==(const Format &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">Format* TimeUnitFormat::clone(void) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::parseObject(const UnicodeString &amp;, Formattable &amp;, ParsePosition &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::setNumberFormat(const NumberFormat &amp;, UErrorCode &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">tmutfmt.h</td><td class="proto">UBool TimeUnitFormat::operator!=(const Format &amp;) const</td><td class="" colspan="
+<td class="file">tmutfmt.h</td><td class="proto">UClassID TimeUnitFormat::getDynamicClassID(void) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -975,28 +924,84 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(const TimeUnitFormat &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::parseObject(const UnicodeString &amp;, Formattable &amp;, ParsePosition &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto">UEnumeration* ucal_getKeywordValuesForLocale(const char *, const char *, UBool , UErrorCode *)</td><td class="" colspan="
+<td class="file">tmutfmt.h</td><td class="proto">UBool TimeUnitFormat::operator!=(const Format &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto">const char* ucal_getType(const UCalendar *, UErrorCode *)</td><td class="" colspan="
+<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::setLocale(const Locale &amp;, UErrorCode &amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">ucnvsel.h</td><td class="proto">UConverterSelector* ucnvsel_openFromSerialized(const void *, int32_t , UErrorCode *)</td><td class="" colspan="
+<td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">void TimeUnitFormat::setNumberFormat(const NumberFormat &amp;, UErrorCode &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">tmutfmt.h</td><td class="proto">UBool TimeUnitFormat::operator==(const Format &amp;) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">Format* TimeUnitFormat::clone(void) const</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">ucal.h</td><td class="proto">const char* ucal_getType(const UCalendar *, UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">ucal.h</td><td class="proto">UEnumeration* ucal_getKeywordValuesForLocale(const char *, const char *, UBool , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">ucnvsel.h</td><td class="proto">void ucnvsel_close(UConverterSelector *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1010,6 +1015,20 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">ucnvsel.h</td><td class="proto">UEnumeration* ucnvsel_selectForUTF8(const UConverterSelector *, const char *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">ucnvsel.h</td><td class="proto">UEnumeration* ucnvsel_selectForString(const UConverterSelector *, const UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
 <td class="file">ucnvsel.h</td><td class="proto">int32_t ucnvsel_serialize(const UConverterSelector *, void *, int32_t , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -1017,21 +1036,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">ucnvsel.h</td><td class="proto">UEnumeration* ucnvsel_selectForUTF8(const UConverterSelector *, const char *, int32_t , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">ucnvsel.h</td><td class="proto">UEnumeration* ucnvsel_selectForString(const UConverterSelector *, const UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">ucnvsel.h</td><td class="proto">void ucnvsel_close(UConverterSelector *)</td><td class="" colspan="
+<td class="file">ucnvsel.h</td><td class="proto">UConverterSelector* ucnvsel_openFromSerialized(const void *, int32_t , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1059,28 +1064,14 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">uloc.h</td><td class="proto">int32_t uloc_toLanguageTag(const char *, char *, int32_t , UBool , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">uloc.h</td><td class="proto">int32_t uloc_forLanguageTag(const char *, char *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
-<td class="file">ulocdata.h</td><td class="proto">int32_t ulocdata_getLocaleDisplayPattern(ULocaleData *, UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
 <tr class="row1">
-<td class="file">ulocdata.h</td><td class="proto">int32_t ulocdata_getLocaleSeparator(ULocaleData *, UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
+<td class="file">uloc.h</td><td class="proto">int32_t uloc_toLanguageTag(const char *, char *, int32_t , UBool , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1088,6 +1079,34 @@
 </tr>
 <tr class="row0">
 <td class="file">ulocdata.h</td><td class="proto">void ulocdata_getCLDRVersion(UVersionInfo , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocdata.h</td><td class="proto">int32_t ulocdata_getLocaleDisplayPattern(ULocaleData *, UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocdata.h</td><td class="proto">int32_t ulocdata_getLocaleSeparator(ULocaleData *, UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">uniset.h</td><td class="proto">USet * UnicodeSet::toUSet()</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">uniset.h</td><td class="proto">const USet * UnicodeSet::toUSet() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1108,21 +1127,7 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">uniset.h</td><td class="proto">const USet * UnicodeSet::toUSet() const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
 <td class="file">uniset.h</td><td class="proto">const UnicodeSet * UnicodeSet::fromUSet(const USet *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">uniset.h</td><td class="proto">USet * UnicodeSet::toUSet()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1136,20 +1141,6 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">unistr.h</td><td class="proto">StringClass&amp; UnicodeString::toUTF8String(StringClass &amp;) const</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">unistr.h</td><td class="proto">static UnicodeString UnicodeString::fromUTF8(const StringPiece &amp;)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">unistr.h</td><td class="proto">int32_t UnicodeString::toUTF32(UChar32 *, int32_t , UErrorCode &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -1157,14 +1148,28 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">unistr.h</td><td class="proto">void UnicodeString::toUTF8(ByteSink &amp;) const</td><td class="" colspan="
+<td class="file">unistr.h</td><td class="proto">StringClass&amp; UnicodeString::toUTF8String(StringClass &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">unistr.h</td><td class="proto">static UnicodeString UnicodeString::fromUTF8(const StringPiece &amp;)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
 <td class="file">unistr.h</td><td class="proto">static UnicodeString UnicodeString::fromUTF32(const UChar32 *, int32_t )</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">unistr.h</td><td class="proto">void UnicodeString::toUTF8(ByteSink &amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1192,14 +1197,28 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_checkUTF8(const USpoofChecker *, const char *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getSkeleton(const USpoofChecker *, uint32_t , const UChar *, int32_t , UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_openFromSource(const char *, int32_t , const char *, int32_t , int32_t *, UParseError *, UErrorCode *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_serialize(USpoofChecker *, void *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_openFromSerialized(const void *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_checkUTF8(const USpoofChecker *, const char *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1220,70 +1239,14 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_serialize(USpoofChecker *, void *, int32_t , UErrorCode *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">void uspoof_close(USpoofChecker *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">const USet* uspoof_getAllowedChars(const USpoofChecker *, UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
 <td class="file">uspoof.h</td><td class="proto">int32_t uspoof_check(const USpoofChecker *, const UChar *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_openFromSerialized(const void *, int32_t , int32_t *, UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">void uspoof_setAllowedLocales(USpoofChecker *, const char *, UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">const char* uspoof_getAllowedLocales(USpoofChecker *, UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">void uspoof_setChecks(USpoofChecker *, int32_t , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_open(UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getSkeletonUTF8(const USpoofChecker *, uint32_t , const char *, int32_t , char *, int32_t , UErrorCode *)</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_areConfusableUTF8(const USpoofChecker *, const char *, int32_t , const char *, int32_t , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1297,21 +1260,63 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">void uspoof_close(USpoofChecker *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">void uspoof_setChecks(USpoofChecker *, int32_t , UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">uspoof.h</td><td class="proto">void uspoof_setAllowedChars(USpoofChecker *, const USet *, UErrorCode *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">const USet* uspoof_getAllowedChars(const USpoofChecker *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getSkeleton(const USpoofChecker *, uint32_t , const UChar *, int32_t , UChar *, int32_t , UErrorCode *)</td><td class="" colspan="
+<td class="file">uspoof.h</td><td class="proto">void uspoof_setAllowedChars(USpoofChecker *, const USet *, UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_areConfusableUTF8(const USpoofChecker *, const char *, int32_t , const char *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_openFromSource(const char *, int32_t , const char *, int32_t , int32_t *, UParseError *, UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">const char* uspoof_getAllowedLocales(USpoofChecker *, UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getSkeletonUTF8(const USpoofChecker *, uint32_t , const char *, int32_t , char *, int32_t , UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">USpoofChecker* uspoof_open(UErrorCode *)</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">void uspoof_setAllowedLocales(USpoofChecker *, const char *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1325,14 +1330,14 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
-<td class="file">ustring.h</td><td class="proto">UChar32* u_strToUTF32WithSub(UChar32 *, int32_t , int32_t *, const UChar *, int32_t , UChar32 , int32_t *, UErrorCode *)</td><td class="" colspan="
+<td class="file">ustring.h</td><td class="proto">UChar* u_strFromUTF32WithSub(UChar *, int32_t , int32_t *, const UChar32 *, int32_t , UChar32 , int32_t *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
-<td class="file">ustring.h</td><td class="proto">UChar* u_strFromUTF32WithSub(UChar *, int32_t , int32_t *, const UChar32 *, int32_t , UChar32 , int32_t *, UErrorCode *)</td><td class="" colspan="
+<td class="file">ustring.h</td><td class="proto">UChar32* u_strToUTF32WithSub(UChar32 *, int32_t , int32_t *, const UChar *, int32_t , UChar32 , int32_t *, UErrorCode *)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1351,7 +1356,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Wed Oct 07 14:20:00 GMT-08:00 2009<br>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI tool on Tue Nov 17 09:04:21 GMT-08:00 2009<br>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
