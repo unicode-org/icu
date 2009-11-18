@@ -1989,6 +1989,7 @@ icu4j/main/classes/core/src/com/ibm/icu/math/package.html svneol=native#text/htm
 icu4j/main/classes/core/src/com/ibm/icu/text/BaseFormat.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/Formatter.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/Parser.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#text/plain
