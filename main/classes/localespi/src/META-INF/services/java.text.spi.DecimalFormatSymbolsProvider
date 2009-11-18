@@ -1,0 +1,3 @@
+# Copyright (C) 2008, International Business Machines Corporation and others. All Rights Reserved.
+# icu4j decimal format symbols
+com.ibm.icu.impl.javaspi.text.DecimalFormatSymbolsProviderICU
