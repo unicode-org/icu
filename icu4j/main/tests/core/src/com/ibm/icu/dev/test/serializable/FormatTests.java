@@ -2153,6 +2153,16 @@ public class FormatTests
         }
     }
 
+    public static class SelectFormatHandler implements SerializableTest.Handler {
+        // TODO - add real test case here!
+        public Object[] getTestObjects() {
+            return new Object[] { new TimeUnitFormat().setLocale(ULocale.ENGLISH) };
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            return true;
+        }
+    }
+
     public static void main(String[] args)
     {
         // nothing needed...

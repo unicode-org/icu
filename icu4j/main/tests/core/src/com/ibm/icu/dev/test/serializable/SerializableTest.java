@@ -671,6 +671,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.PluralFormat", new FormatTests.PluralFormatHandler());
         map.put("com.ibm.icu.text.PluralRules", new FormatTests.PluralRulesHandler());
         map.put("com.ibm.icu.text.TimeUnitFormat", new FormatTests.TimeUnitFormatHandler());
+        map.put("com.ibm.icu.text.SelectFormat", new FormatTests.SelectFormatHandler());
 
         map.put("com.ibm.icu.util.Calendar", new CalendarTests.CalendarHandler());
         map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarTests.BuddhistCalendarHandler());
