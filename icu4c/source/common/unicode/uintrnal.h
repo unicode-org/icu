@@ -4,7 +4,7 @@
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  
+*   file name:  uintrnal.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -25,14 +25,11 @@
 
 #    if U_DISABLE_RENAMING
 #        define RegexPatternDump RegexPatternDump_INTERNAL_API_DO_NOT_USE
-#        define bms.h bms.h_INTERNAL_API_DO_NOT_USE
 #        define bms_empty bms_empty_INTERNAL_API_DO_NOT_USE
 #        define bms_getData bms_getData_INTERNAL_API_DO_NOT_USE
 #        define bms_open bms_open_INTERNAL_API_DO_NOT_USE
 #        define bms_search bms_search_INTERNAL_API_DO_NOT_USE
 #        define bms_setTargetString bms_setTargetString_INTERNAL_API_DO_NOT_USE
-#        define bmsearch.h bmsearch.h_INTERNAL_API_DO_NOT_USE
-#        define colldata.h colldata.h_INTERNAL_API_DO_NOT_USE
 #        define decimfmtAffixPatternValueComparator decimfmtAffixPatternValueComparator_INTERNAL_API_DO_NOT_USE
 #        define decimfmtAffixValueComparator decimfmtAffixValueComparator_INTERNAL_API_DO_NOT_USE
 #        define dtitvinfHashTableValueComparator dtitvinfHashTableValueComparator_INTERNAL_API_DO_NOT_USE
@@ -120,14 +117,11 @@
 #        define utf8_prevCharSafeBody utf8_prevCharSafeBody_INTERNAL_API_DO_NOT_USE
 #    else
 #        define RegexPatternDump_4_2 RegexPatternDump_INTERNAL_API_DO_NOT_USE
-#        define bms.h_4_2 bms.h_INTERNAL_API_DO_NOT_USE
 #        define bms_empty_4_2 bms_empty_INTERNAL_API_DO_NOT_USE
 #        define bms_getData_4_2 bms_getData_INTERNAL_API_DO_NOT_USE
 #        define bms_open_4_2 bms_open_INTERNAL_API_DO_NOT_USE
 #        define bms_search_4_2 bms_search_INTERNAL_API_DO_NOT_USE
 #        define bms_setTargetString_4_2 bms_setTargetString_INTERNAL_API_DO_NOT_USE
-#        define bmsearch.h_4_2 bmsearch.h_INTERNAL_API_DO_NOT_USE
-#        define colldata.h_4_2 colldata.h_INTERNAL_API_DO_NOT_USE
 #        define decimfmtAffixPatternValueComparator_4_2 decimfmtAffixPatternValueComparator_INTERNAL_API_DO_NOT_USE
 #        define decimfmtAffixValueComparator_4_2 decimfmtAffixValueComparator_INTERNAL_API_DO_NOT_USE
 #        define dtitvinfHashTableValueComparator_4_2 dtitvinfHashTableValueComparator_INTERNAL_API_DO_NOT_USE
