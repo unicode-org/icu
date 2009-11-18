@@ -519,12 +519,13 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
     }
     
 
-    /** Create an iterator that will produce the values from the Trie2 for
+    /**
+     *  Create an iterator that will produce the values from the Trie2 for
      *  the sequence of code points in an input text.
      *  
      * @param text A text string to be iterated over.
      * @param index The starting iteration position within the input text.
-     * @return
+     * @return An iterator
      */
     public CharSequenceIterator charSequenceIterator(CharSequence text, int index) {
         return new CharSequenceIterator(text, index);
@@ -608,7 +609,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             
         /** 
          * Iterator.remove() is not supported by Trie2.CharSequenceIterator.
-         * @throws UnsupportedOperationException
+         * @throws UnsupportedOperationException Always thrown because this operation is not supported
          * @see java.util.Iterator#remove()
          */
         public void remove() {

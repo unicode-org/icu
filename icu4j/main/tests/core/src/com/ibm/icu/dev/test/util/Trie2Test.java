@@ -8,17 +8,15 @@ package com.ibm.icu.dev.test.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Trie2;
+import com.ibm.icu.impl.Trie2Writable;
 import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.impl.Trie2_32;
-import com.ibm.icu.impl.Trie2Writable;
 
 public class Trie2Test extends TestFmwk {
     /**
@@ -501,6 +499,7 @@ public class Trie2Test extends TestFmwk {
          { 0x110000, 0 }
      };
 
+/*
      private static int[] [] checkRanges2_d800={
          { 0x10000,  0 },
          { 0x10400,  0 }
@@ -528,6 +527,7 @@ public class Trie2Test extends TestFmwk {
          { 0x10fc00, 0 },
          { 0x110000, 0 }
      };
+*/
 
      /* use a non-zero initial value */
      private static int[][] setRanges3={
@@ -648,7 +648,7 @@ public class Trie2Test extends TestFmwk {
              while(start<limit) {
                  value2=trie.get(start);
                  if(value!=value2) {
-                     errln(testName + ".get(" + Integer.toHexString(start) +") == " + 
+                     errln("error: " + typeName + "(" + testName + ").get(" + Integer.toHexString(start) +") == " + 
                              Integer.toHexString(value2) + " instead of " + Integer.toHexString(value));
                  }
                  ++start;
