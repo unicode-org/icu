@@ -1815,7 +1815,7 @@ void RBBITest::TestThaiBreaks() {
     UChar c[]= { 
             0x0E01, 0x0E39, 0x0020, 0x0E01, 0x0E34, 0x0E19, 0x0E01, 0x0E38, 0x0E49, 0x0E07, 0x0020, 0x0E1B, 
             0x0E34, 0x0E49, 0x0E48, 0x0E07, 0x0E2D, 0x0E22, 0x0E39, 0x0E48, 0x0E43, 0x0E19, 
-            0x0E16, 0x0E49, 0x0E33
+            0x0E16, 0x0E49, 0x0E33, 0x0000
     };
     int32_t expectedWordResult[] = {
             2, 3, 6, 10, 11, 15, 17, 20, 22
@@ -1823,7 +1823,8 @@ void RBBITest::TestThaiBreaks() {
     int32_t expectedLineResult[] = {
             3, 6, 11, 15, 17, 20, 22
     };
-    int32_t size = sizeof(c)/sizeof(UChar);
+
+    int32_t size = u_strlen(c);
     UnicodeString text=UnicodeString(c);
     
     b = BreakIterator::createWordInstance(locale, status);
