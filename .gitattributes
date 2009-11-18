@@ -74,6 +74,7 @@ icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java -text
 icu4j/main/classes/localespi/.classpath -text
 icu4j/main/classes/localespi/.project -text
 icu4j/main/classes/localespi/.settings/org.eclipse.jdt.core.prefs -text
