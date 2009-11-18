@@ -1,0 +1,116 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/eo.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/eo.xml
+ */
+eo{
+    AuxExemplarCharacters{"[q w-y]"}
+    ExemplarCharacters{"[a-c ĉ d-g ĝ h ĥ i j ĵ k-p r s ŝ t u ŭ v z]"}
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "atm",
+                "ptm",
+            }
+            DateTimePatterns{
+                "H-'a' 'horo' 'kaj' m:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d-'a' 'de' MMMM y",
+                "y-MMMM-dd",
+                "y-MMM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "di",
+                        "lu",
+                        "ma",
+                        "me",
+                        "ĵa",
+                        "ve",
+                        "sa",
+                    }
+                    wide{
+                        "dimanĉo",
+                        "lundo",
+                        "mardo",
+                        "merkredo",
+                        "ĵaŭdo",
+                        "vendredo",
+                        "sabato",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "aK",
+                    "pK",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aŭg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januaro",
+                        "februaro",
+                        "marto",
+                        "aprilo",
+                        "majo",
+                        "junio",
+                        "julio",
+                        "aŭgusto",
+                        "septembro",
+                        "oktobro",
+                        "novembro",
+                        "decembro",
+                    }
+                }
+            }
+        }
+    }
+}
