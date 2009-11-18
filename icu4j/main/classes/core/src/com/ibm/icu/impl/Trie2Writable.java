@@ -19,8 +19,8 @@ public class Trie2Writable extends Trie2 {
     /**
      * Create a new, empty, writable Trie2. At build time, 32-bit data values are used.
      *
-     * @param initialValue the initial value that is set for all code points
-     * @param errorValue the value for out-of-range code points and illegal UTF-8
+     * @param initialValueP the initial value that is set for all code points
+     * @param errorValueP the value for out-of-range code points and illegal UTF-8
      */
     public  Trie2Writable(int initialValueP, int errorValueP) {       
         // This constructor corresponds to utrie2_open() in ICU4C.
@@ -138,7 +138,7 @@ public class Trie2Writable extends Trie2 {
     /**
      * Create a new build time (modifiable) Trie2 whose contents are the same as the source Trie.
      * 
-     * @param source
+     * @param source the source Trie
      */
     public Trie2Writable(Trie2 source) {
         init(source.initialValue, source.errorValue);
@@ -552,7 +552,7 @@ public class Trie2Writable extends Trie2 {
       * TODO:  ICU4C restricts this function to lead surrogates only.
       *        Should ICU4J match, or should ICU4C be loosened? 
       *
-      * @param lead A UTF-16 code unit. 
+      * @param codeUnit A UTF-16 code unit. 
       * @param value the value
       */
      public Trie2Writable setForLeadSurrogateCodeUnit(char codeUnit, int value) {
@@ -565,7 +565,6 @@ public class Trie2Writable extends Trie2 {
      /**
       * Get the value for a code point as stored in the trie.
       *
-      * @param trie the trie
       * @param codePoint the code point
       * @return the value
       */
@@ -607,7 +606,6 @@ public class Trie2Writable extends Trie2 {
      * surrogate range.  This function returns the alternate value,
      * while Trie2.get() returns the main value.
      * 
-     * @param trie the trie
      * @param c the code point or lead surrogate value.
      * @return the value
      */

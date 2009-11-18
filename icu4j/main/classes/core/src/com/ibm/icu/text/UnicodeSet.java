@@ -2355,7 +2355,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param options a bit mask of zero or more of the following:
      * IGNORE_SPACE, CASE.
      */
-    @SuppressWarnings("fallthrough")
     void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
             StringBuffer rebuiltPat, int options) {
 

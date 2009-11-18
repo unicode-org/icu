@@ -119,7 +119,7 @@ public final class Trie2_16 extends Trie2 {
      * surrogate range.  This function returns the alternate value,
      * while Trie2.get() returns the main value.
      * 
-     * @param c a 16 bit code unit or lead surrogate value.
+     * @param codeUnit a 16 bit code unit or lead surrogate value.
      * @return the value
      */
     @Override
