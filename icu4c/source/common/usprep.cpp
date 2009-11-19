@@ -632,20 +632,9 @@ static int32_t
 usprep_normalize(   const UChar* src, int32_t srcLength, 
                     UChar* dest, int32_t destCapacity,
                     UErrorCode* status ){
-    /*
-     * Option UNORM_BEFORE_PRI_29:
-     *
-     * IDNA as interpreted by IETF members (see unicode mailing list 2004H1)
-     * requires strict adherence to Unicode 3.2 normalization,
-     * including buggy composition from before fixing Public Review Issue #29.
-     * Note that this results in some valid but nonsensical text to be
-     * either corrupted or rejected, depending on the text.
-     * See http://www.unicode.org/review/resolved-pri.html#pri29
-     * See unorm.cpp and cnormtst.c
-     */
     return unorm_normalize(
         src, srcLength,
-        UNORM_NFKC, UNORM_UNICODE_3_2|UNORM_BEFORE_PRI_29,
+        UNORM_NFKC, UNORM_UNICODE_3_2,
         dest, destCapacity,
         status);
 }

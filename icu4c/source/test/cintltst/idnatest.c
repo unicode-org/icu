@@ -33,7 +33,6 @@ static void TestToASCII(void);
 static void TestIDNToUnicode(void);
 static void TestIDNToASCII(void);
 static void TestCompare(void);
-static void TestUnicode32Norm(void);
 static void TestJB4490(void);
 static void TestJB4475(void); 
 static void TestLength(void);
@@ -61,7 +60,6 @@ addIDNATest(TestNode** root)
    addTest(root, &TestIDNToUnicode, "idna/TestIDNToUnicode");
    addTest(root, &TestIDNToASCII,   "idna/TestIDNToASCII");
    addTest(root, &TestCompare,      "idna/TestCompare");
-   addTest(root, &TestUnicode32Norm,"idna/TestUnicode32Norm");
    addTest(root, &TestJB4490,       "idna/TestJB4490");
    addTest(root, &TestJB4475,       "idna/TestJB4475");
    addTest(root, &TestLength,       "idna/TestLength");
@@ -636,30 +634,6 @@ TestCompare(){
             testCompareWithSrc(src,srcLen,ascii0,u_strlen(ascii0),testName, func,FALSE);
         }
 
-    }
-}
-
-static void TestUnicode32Norm() {
-    /*
-     * test Unicode 3.2 normalization, before Public Review Issue #29
-     * see cnormtst.c TestComposition()
-     */
-    static const UChar strings[][8]={
-        { 0x1100, 0x0300, 0x1161, 0x0327 },
-        { 0x0b47, 0x0300, 0x0b3e, 0x0327 }
-    };
-
-    UChar ascii[20], unicode[20];
-    int32_t i, length;
-    UErrorCode errorCode;
-
-    for(i=0; i<LENGTHOF(strings); ++i) {
-        errorCode=U_ZERO_ERROR;
-        length=uidna_toASCII(strings[i], -1, ascii, LENGTHOF(ascii), 0, NULL, &errorCode);
-        length=uidna_toUnicode(ascii, length, unicode, LENGTHOF(unicode), 0, NULL, &errorCode);
-        if(u_strncmp(ascii, unicode, length)!=0) {
-            log_err("Did not get the correct output\n");
-        }
     }
 }
 
