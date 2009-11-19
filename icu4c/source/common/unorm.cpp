@@ -2087,58 +2087,60 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
 
     for(;;) {
         combineFlags=_getNextCombining(p, limit, c, c2, combineBackIndex, cc, nx);
-        if((combineFlags&_NORM_COMBINES_BACK) && starter!=NULL) {
+        if(
+            // this character combines backward and
+            (combineFlags&_NORM_COMBINES_BACK) &&
+            // we have seen a starter that combines forward and
+            starter!=NULL &&
+            // the backward-combining character is not blocked
+            (prevCC<cc || prevCC==0)
+        ) {
             if(combineBackIndex&0x8000) {
                 /* c is a Jamo V/T, see if we can compose it with the previous character */
-                /* check that there is no intervening combining mark */
-                if(prevCC==0) {
-                    pRemove=NULL; /* NULL while no Hangul composition */
-                    combineFlags=0;
-                    c2=*starter;
-                    if(combineBackIndex==0xfff2) {
-                        /* Jamo V, compose with previous Jamo L and following Jamo T */
-                        c2=(UChar)(c2-JAMO_L_BASE);
-                        if(c2<JAMO_L_COUNT) {
-                            pRemove=p-1;
-                            c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
-                            if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT) {
-                                ++p;
-                                c+=c2;
+                pRemove=NULL; /* NULL while no Hangul composition */
+                combineFlags=0;
+                c2=*starter;
+                if(combineBackIndex==0xfff2) {
+                    /* Jamo V, compose with previous Jamo L and following Jamo T */
+                    c2=(UChar)(c2-JAMO_L_BASE);
+                    if(c2<JAMO_L_COUNT) {
+                        pRemove=p-1;
+                        c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
+                        if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT) {
+                            ++p;
+                            c+=c2;
+                        }
+                        if(!nx_contains(nx, c)) {
+                            *starter=c;
+                        } else {
+                            /* excluded */
+                            if(!isHangulWithoutJamoT(c)) {
+                                --p; /* undo the ++p from reading the Jamo T */
                             }
-                            if(!nx_contains(nx, c)) {
-                                *starter=c;
-                            } else {
-                                /* excluded */
-                                if(!isHangulWithoutJamoT(c)) {
-                                    --p; /* undo the ++p from reading the Jamo T */
-                                }
-                                /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
-                                pRemove=NULL;
-                            }
+                            /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
+                            pRemove=NULL;
                         }
                     }
-                    /*
-                     * No "else" for Jamo T:
-                     * Since the input is in NFD, there are no Hangul LV syllables that
-                     * a Jamo T could combine with.
-                     * All Jamo Ts are combined above when handling Jamo Vs.
-                     */
-
-                    if(pRemove!=NULL) {
-                        /* remove the Jamo(s) */
-                        q=pRemove;
-                        r=p;
-                        while(r<limit) {
-                            *q++=*r++;
-                        }
-                        p=pRemove;
-                        buffer.setLimit(limit=q);
-                    }
-
-                    c2=0; /* c2 held *starter temporarily */
-                } else {
-                    prevCC=0;
                 }
+                /*
+                 * No "else" for Jamo T:
+                 * Since the input is in NFD, there are no Hangul LV syllables that
+                 * a Jamo T could combine with.
+                 * All Jamo Ts are combined above when handling Jamo Vs.
+                 */
+
+                if(pRemove!=NULL) {
+                    /* remove the Jamo(s) */
+                    q=pRemove;
+                    r=p;
+                    while(r<limit) {
+                        *q++=*r++;
+                    }
+                    p=pRemove;
+                    buffer.setLimit(limit=q);
+                }
+
+                c2=0; /* c2 held *starter temporarily */
 
                 /* done? */
                 if(p==limit) {
@@ -2150,8 +2152,6 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
             } else if(
                 /* the starter is not a Hangul LV or Jamo V/T and */
                 !(combineFwdIndex&0x8000) &&
-                /* the combining mark is not blocked and */
-                (prevCC<cc || prevCC==0) &&
                 /* the starter and the combining mark (c, c2) do combine and */
                 0!=(result=_combine(combiningTable+combineFwdIndex, combineBackIndex, value, value2)) &&
                 /* the composition result is not excluded */
