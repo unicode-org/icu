@@ -2090,8 +2090,8 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
         if((combineFlags&_NORM_COMBINES_BACK) && starter!=NULL) {
             if(combineBackIndex&0x8000) {
                 /* c is a Jamo V/T, see if we can compose it with the previous character */
-                /* for the PRI #29 fix, check that there is no intervening combining mark */
-                if((options&UNORM_BEFORE_PRI_29) || prevCC==0) {
+                /* check that there is no intervening combining mark */
+                if(prevCC==0) {
                     pRemove=NULL; /* NULL while no Hangul composition */
                     combineFlags=0;
                     c2=*starter;
@@ -2104,9 +2104,6 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
                             if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT) {
                                 ++p;
                                 c+=c2;
-                            } else {
-                                /* the result is an LV syllable, which is a starter (unlike LVT) */
-                                combineFlags=_NORM_COMBINES_FWD;
                             }
                             if(!nx_contains(nx, c)) {
                                 *starter=c;
@@ -2119,26 +2116,13 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
                                 pRemove=NULL;
                             }
                         }
-
+                    }
                     /*
-                     * Normally, the following can not occur:
+                     * No "else" for Jamo T:
                      * Since the input is in NFD, there are no Hangul LV syllables that
                      * a Jamo T could combine with.
                      * All Jamo Ts are combined above when handling Jamo Vs.
-                     *
-                     * However, before the PRI #29 fix, this can occur due to
-                     * an intervening combining mark between the Hangul LV and the Jamo T.
                      */
-                    } else {
-                        /* Jamo T, compose with previous Hangul that does not have a Jamo T */
-                        if(isHangulWithoutJamoT(c2)) {
-                            c2+=(UChar)(c-JAMO_T_BASE);
-                            if(!nx_contains(nx, c2)) {
-                                pRemove=p-1;
-                                *starter=c2;
-                            }
-                        }
-                    }
 
                     if(pRemove!=NULL) {
                         /* remove the Jamo(s) */
@@ -2152,41 +2136,22 @@ _recompose(UCharBuffer &buffer, int32_t options, const UnicodeSet *nx) {
                     }
 
                     c2=0; /* c2 held *starter temporarily */
-
-                    if(combineFlags!=0) {
-                        /*
-                         * not starter=NULL because the composition is a Hangul LV syllable
-                         * and might combine once more (but only before the PRI #29 fix)
-                         */
-
-                        /* done? */
-                        if(p==limit) {
-                            return prevCC;
-                        }
-
-                        /* the composition is a Hangul LV syllable which is a starter that combines forward */
-                        combineFwdIndex=0xfff0;
-
-                        /* we combined; continue with looking for compositions */
-                        continue;
-                    }
+                } else {
+                    prevCC=0;
                 }
 
-                /*
-                 * now: cc==0 and the combining index does not include "forward" ->
-                 * the rest of the loop body will reset starter to NULL;
-                 * technically, a composed Hangul syllable is a starter, but it
-                 * does not combine forward now that we have consumed all eligible Jamos;
-                 * for Jamo V/T, combineFlags does not contain _NORM_COMBINES_FWD
-                 */
+                /* done? */
+                if(p==limit) {
+                    return prevCC;
+                }
 
+                starter=NULL;
+                continue;
             } else if(
                 /* the starter is not a Hangul LV or Jamo V/T and */
                 !(combineFwdIndex&0x8000) &&
                 /* the combining mark is not blocked and */
-                ((options&UNORM_BEFORE_PRI_29) ?
-                    (prevCC!=cc || prevCC==0) :
-                    (prevCC<cc || prevCC==0)) &&
+                (prevCC<cc || prevCC==0) &&
                 /* the starter and the combining mark (c, c2) do combine and */
                 0!=(result=_combine(combiningTable+combineFwdIndex, combineBackIndex, value, value2)) &&
                 /* the composition result is not excluded */

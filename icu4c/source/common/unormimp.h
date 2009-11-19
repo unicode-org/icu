@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -188,15 +188,6 @@ enum {
     UNORM_NX_HANGUL=1,
     /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
     UNORM_NX_CJK_COMPAT=2,
-    /**
-     * Options bit 8, use buggy recomposition described in
-     * Unicode Public Review Issue #29
-     * at http://www.unicode.org/review/resolved-pri.html#pri29
-     *
-     * Used in IDNA implementation according to strict interpretation
-     * of IDNA definition based on Unicode 3.2 which predates PRI #29.
-     */
-    UNORM_BEFORE_PRI_29=0x100
 };
 
 /**
