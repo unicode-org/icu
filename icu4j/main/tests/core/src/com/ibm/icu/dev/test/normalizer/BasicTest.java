@@ -2936,18 +2936,14 @@ public class BasicTest extends TestFmwk {
         final TestCompositionCase cases[]=new TestCompositionCase[]{
             /*
              * special cases for UAX #15 bug
-             * see Unicode Public Review Issue #29
-             * at http://www.unicode.org/review/resolved-pri.html#pri29
+             * see Unicode Corrigendum #5: Normalization Idempotency
+             * at http://unicode.org/versions/corrigendum5.html
+             * (was Public Review Issue #29)
              */
             new TestCompositionCase(Normalizer.NFC, 0, "\u1100\u0300\u1161\u0327",      "\u1100\u0300\u1161\u0327"),
             new TestCompositionCase(Normalizer.NFC, 0, "\u1100\u0300\u1161\u0327\u11a8","\u1100\u0300\u1161\u0327\u11a8"),
             new TestCompositionCase(Normalizer.NFC, 0, "\uac00\u0300\u0327\u11a8",      "\uac00\u0327\u0300\u11a8"),
             new TestCompositionCase(Normalizer.NFC, 0, "\u0b47\u0300\u0b3e",            "\u0b47\u0300\u0b3e"),
-
-            new TestCompositionCase(Normalizer.NFC, NormalizerImpl.BEFORE_PRI_29, "\u1100\u0300\u1161\u0327",       "\uac00\u0300\u0327"),
-            new TestCompositionCase(Normalizer.NFC, NormalizerImpl.BEFORE_PRI_29, "\u1100\u0300\u1161\u0327\u11a8", "\uac01\u0300\u0327"),
-            new TestCompositionCase(Normalizer.NFC, NormalizerImpl.BEFORE_PRI_29, "\uac00\u0300\u0327\u11a8",       "\uac01\u0327\u0300"),
-            new TestCompositionCase(Normalizer.NFC, NormalizerImpl.BEFORE_PRI_29, "\u0b47\u0300\u0b3e",             "\u0b4b\u0300")
 
             /* TODO: add test cases for UNORM_FCC here (j2151) */
         };

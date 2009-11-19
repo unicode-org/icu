@@ -1536,125 +1536,83 @@ public final class NormalizerImpl {
             combineBackIndex=ncArg.combiningIndex;
             args.start = ncArg.start;
                         
-            if(((combineFlags&COMBINES_BACK)!=0) && starter!=-1) {
+            if(
+                // this character combines backward and
+                ((combineFlags&COMBINES_BACK)!=0) &&
+                // we have seen a starter that combines forward and
+                starter>=0 &&
+                // the backward-combining character is not blocked
+                (prevCC<ncArg.cc || prevCC==0)
+            ) {
                 if((combineBackIndex&0x8000)!=0) {
-                    /* c is a Jamo V/T, see if we can compose it with the 
-                     * previous character 
-                     */
-                    /* for the PRI #29 fix, check that there is no intervening combining mark */
-                    if((options&BEFORE_PRI_29)!=0 || prevCC==0) {
-                        remove=-1; /* NULL while no Hangul composition */
-                        combineFlags=0;
-                        ncArg.c2=args.source[starter];
-                        if(combineBackIndex==0xfff2) {
-                            /* Jamo V, compose with previous Jamo L and following 
-                             * Jamo T 
-                             */
-                            ncArg.c2=(char)(ncArg.c2-JAMO_L_BASE);
-                            if(ncArg.c2<JAMO_L_COUNT) {
-                                remove=args.start-1;
-                                ncArg.c=(char)(HANGUL_BASE+(ncArg.c2*JAMO_V_COUNT+
-                                               (ncArg.c-JAMO_V_BASE))*JAMO_T_COUNT);
-                                if(args.start!=args.limit && 
-                                            (ncArg.c2=(char)(args.source[args.start]
-                                             -JAMO_T_BASE))<JAMO_T_COUNT) {
-                                    ++args.start;
-                                    ncArg.c+=ncArg.c2;
-                                 } else {
-                                     /* the result is an LV syllable, which is a starter (unlike LVT) */
-                                     combineFlags=COMBINES_FWD;
+                    /* c is a Jamo V/T, see if we can compose it with the previous character */
+                    remove=-1; /* NULL while no Hangul composition */
+                    combineFlags=0;
+                    ncArg.c2=args.source[starter];
+                    if(combineBackIndex==0xfff2) {
+                        /* Jamo V, compose with previous Jamo L and following Jamo T */
+                        ncArg.c2=(char)(ncArg.c2-JAMO_L_BASE);
+                        if(ncArg.c2<JAMO_L_COUNT) {
+                            remove=args.start-1;
+                            ncArg.c=(char)(HANGUL_BASE+(ncArg.c2*JAMO_V_COUNT+
+                                           (ncArg.c-JAMO_V_BASE))*JAMO_T_COUNT);
+                            if(args.start!=args.limit && 
+                                        (ncArg.c2=(char)(args.source[args.start]
+                                         -JAMO_T_BASE))<JAMO_T_COUNT) {
+                                ++args.start;
+                                ncArg.c+=ncArg.c2;
+                            }
+                            if(!nx_contains(nx, ncArg.c)) {
+                                args.source[starter]=ncArg.c;
+                            } else {
+                                /* excluded */
+                                if(!isHangulWithoutJamoT(ncArg.c)) {
+                                    --args.start; /* undo the ++args.start from reading the Jamo T */
                                 }
-                                if(!nx_contains(nx, ncArg.c)) {
-                                    args.source[starter]=ncArg.c;
-                                   } else {
-                                    /* excluded */
-                                    if(!isHangulWithoutJamoT(ncArg.c)) {
-                                        --args.start; /* undo the ++args.start from reading the Jamo T */
-                                    }
-                                    /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
-                                    remove=args.start;
-                                }
+                                /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
+                                remove=-1;
                             }
-
-                        /*
-                         * Normally, the following can not occur:
-                         * Since the input is in NFD, there are no Hangul LV syllables that
-                         * a Jamo T could combine with.
-                         * All Jamo Ts are combined above when handling Jamo Vs.
-                         *
-                         * However, before the PRI #29 fix, this can occur due to
-                         * an intervening combining mark between the Hangul LV and the Jamo T.
-                         */
-                        } else {
-                            /* Jamo T, compose with previous Hangul that does not have a Jamo T */
-                            if(isHangulWithoutJamoT(ncArg.c2)) {
-                                ncArg.c2+=ncArg.c-JAMO_T_BASE;
-                                if(!nx_contains(nx, ncArg.c2)) {
-                                    remove=args.start-1;
-                                    args.source[starter]=ncArg.c2;
-                                }
-                            }
-                        }
-        
-                        if(remove!=-1) {
-                            /* remove the Jamo(s) */
-                            q=remove;
-                            r=args.start;
-                            while(r<args.limit) {
-                                args.source[q++]=args.source[r++];
-                            }
-                            args.start=remove;
-                            args.limit=q;
-                        }
-        
-                        ncArg.c2=0; /* c2 held *starter temporarily */
-
-                        if(combineFlags!=0) {
-                            /*
-                             * not starter=NULL because the composition is a Hangul LV syllable
-                             * and might combine once more (but only before the PRI #29 fix)
-                             */
-
-                            /* done? */
-                            if(args.start==args.limit) {
-                                return (char)prevCC;
-                            }
-
-                            /* the composition is a Hangul LV syllable which is a starter that combines forward */
-                            combineFwdIndex=0xfff0;
-
-                            /* we combined; continue with looking for compositions */
-                            continue;
                         }
                     }
-
                     /*
-                     * now: cc==0 and the combining index does not include 
-                     * "forward" -> the rest of the loop body will reset starter
-                     * to NULL; technically, a composed Hangul syllable is a 
-                     * starter, but it does not combine forward now that we have
-                     * consumed all eligible Jamos; for Jamo V/T, combineFlags 
-                     * does not contain _NORM_COMBINES_FWD
+                     * No "else" for Jamo T:
+                     * Since the input is in NFD, there are no Hangul LV syllables that
+                     * a Jamo T could combine with.
+                     * All Jamo Ts are combined above when handling Jamo Vs.
                      */
+
+                    if(remove>=0) {
+                        /* remove the Jamo(s) */
+                        q=remove;
+                        r=args.start;
+                        while(r<args.limit) {
+                            args.source[q++]=args.source[r++];
+                        }
+                        args.start=remove;
+                        args.limit=q;
+                    }
     
+                    ncArg.c2=0; /* c2 held *starter temporarily */
+
+                    /* done? */
+                    if(args.start==args.limit) {
+                        return (char)prevCC;
+                    }
+
+                    starter=-1;
+                    continue;
                 } else if(
                     /* the starter is not a Hangul LV or Jamo V/T and */
                     !((combineFwdIndex&0x8000)!=0) &&
-                    /* the combining mark is not blocked and */
-                    ((options&BEFORE_PRI_29)!=0 ?
-                        (prevCC!=ncArg.cc || prevCC==0) :
-                        (prevCC<ncArg.cc || prevCC==0)) &&
                     /* the starter and the combining mark (c, c2) do combine */
                     0!=(result=combine(combiningTable,combineFwdIndex, 
                                        combineBackIndex, outValues)) &&
                     /* the composition result is not excluded */
-                    !nx_contains(nx, (char)value, (char)value2)
+                    !nx_contains(nx, (char)outValues[0], (char)outValues[1])
                 ) {
                     value=outValues[0];
                     value2=outValues[1];
-                    /* replace the starter with the composition, remove the 
-                     * combining mark 
-                     */
+                    /* replace the starter with the composition, remove the combining mark */
                     remove= ncArg.c2==0 ? args.start-1 : args.start-2; /* index to the combining mark */
     
                     /* replace the starter with the composition */
@@ -3687,17 +3645,6 @@ public final class NormalizerImpl {
      * Options bit 1, do not decompose CJK compatibility characters.
      */
     private static final int NX_CJK_COMPAT=2;
-    /**
-     * Options bit 8, use buggy recomposition described in
-     * Unicode Public Review Issue #29
-     * at http://www.unicode.org/review/resolved-pri.html#pri29
-     *
-     * Used in IDNA implementation according to strict interpretation
-     * of IDNA definition based on Unicode 3.2 which predates PRI #29.
-     *
-     * See ICU4C unormimp.h
-     */
-    public static final int BEFORE_PRI_29=0x100;
 
     /*
      * The following options are used only in some composition functions.
