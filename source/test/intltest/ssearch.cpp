@@ -155,9 +155,9 @@ void SSearchTest::searchTest()
         return; /* Couldn't get path: error message already output. */
     }
 
-    UXMLParser  *parser = UXMLParser::createParser(status);
+    LocalPointer<UXMLParser> parser(UXMLParser::createParser(status));
     TEST_ASSERT_SUCCESS(status);
-    UXMLElement *root   = parser->parseFile(testFilePath, status);
+    LocalPointer<UXMLElement> root(parser->parseFile(testFilePath, status));
     TEST_ASSERT_SUCCESS(status);
     if (U_FAILURE(status)) {
         return;
@@ -289,20 +289,18 @@ void SSearchTest::searchTest()
         //   obtained from the XML.
         //
         status = U_ZERO_ERROR;
-        UCollator *collator = ucol_open(clocale, &status);
-        ucol_setStrength(collator, collatorStrength);
-        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
-        ucol_setAttribute(collator, UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
-        UStringSearch *uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
-                                         target.getBuffer(), target.length(),
-                                         collator,
-                                         NULL,     // the break iterator
-                                         &status);
+        LocalUCollatorPointer collator(ucol_open(clocale, &status));
+        ucol_setStrength(collator.getAlias(), collatorStrength);
+        ucol_setAttribute(collator.getAlias(), UCOL_NORMALIZATION_MODE, normalize, &status);
+        ucol_setAttribute(collator.getAlias(), UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
+        LocalUStringSearchPointer uss(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
+                                                               target.getBuffer(), target.length(),
+                                                               collator.getAlias(),
+                                                               NULL,     // the break iterator
+                                                               &status));
 
         TEST_ASSERT_SUCCESS(status);
         if (U_FAILURE(status)) {
-            usearch_close(uss);
-            ucol_close(collator);
             continue;
         }
 
@@ -313,7 +311,7 @@ void SSearchTest::searchTest()
         //
         // Do the search, check the match result against the expected results.
         //
-        foundMatch= usearch_search(uss, 0, &foundStart, &foundLimit, &status);
+        foundMatch= usearch_search(uss.getAlias(), 0, &foundStart, &foundLimit, &status);
         TEST_ASSERT_SUCCESS(status);
         if ((foundMatch && expectedMatchStart<0) ||
             (foundStart != expectedMatchStart)   ||
@@ -330,21 +328,19 @@ void SSearchTest::searchTest()
             expectedMatchStart = foundStart;
             expectedMatchLimit = foundLimit;
 
-            foundMatch = usearch_search(uss, foundLimit, &foundStart, &foundLimit, &status);
+            foundMatch = usearch_search(uss.getAlias(), foundLimit, &foundStart, &foundLimit, &status);
         }
 
-        usearch_close(uss);
-
-        uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
+        uss.adoptInstead(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
             target.getBuffer(), target.length(),
-            collator,
+            collator.getAlias(),
             NULL,
-            &status);
+            &status));
 
         //
         // Do the backwards search, check the match result against the expected results.
         //
-        foundMatch= usearch_searchBackwards(uss, target.length(), &foundStart, &foundLimit, &status);
+        foundMatch= usearch_searchBackwards(uss.getAlias(), target.length(), &foundStart, &foundLimit, &status);
         TEST_ASSERT_SUCCESS(status);
         if ((foundMatch && expectedMatchStart<0) ||
             (foundStart != expectedMatchStart)   ||
@@ -354,13 +350,7 @@ void SSearchTest::searchTest()
                        "Found, expected backwards match limit = %d, %d",
                 foundStart, expectedMatchStart, foundLimit, expectedMatchLimit);
         }
-
-        usearch_close(uss);
-        ucol_close(collator);
     }
-
-    delete root;
-    delete parser;
 #endif
 }
 
@@ -1603,21 +1593,21 @@ const char *cPattern = "maketh houndes ete hem";
     UErrorCode status = U_ZERO_ERROR;
 
 
-    UCollator *collator = ucol_open("en", &status);
-    CollData *data = CollData::open(collator, status);
-    if (U_FAILURE(status) || collator == NULL || data == NULL) {
+    LocalUCollatorPointer collator(ucol_open("en", &status));
+    CollData *data = CollData::open(collator.getAlias(), status);
+    if (U_FAILURE(status) || collator.isNull() || data == NULL) {
         errcheckln(status, "Unable to open UCollator or CollData. - %s", u_errorName(status));
         return;
     } 
-    //ucol_setStrength(collator, collatorStrength);
-    //ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+    //ucol_setStrength(collator.getAlias(), collatorStrength);
+    //ucol_setAttribute(collator.getAlias(), UCOL_NORMALIZATION_MODE, normalize, &status);
     UnicodeString uPattern = cPattern;
 #ifndef TEST_BOYER_MOORE
-    UStringSearch *uss = usearch_openFromCollator(uPattern.getBuffer(), uPattern.length(),
-                                        target.getBuffer(), target.length(),
-                                        collator,
-                                        NULL,     // the break iterator
-                                        &status);
+    LocalUStringSearchPointer uss(usearch_openFromCollator(uPattern.getBuffer(), uPattern.length(),
+                                                           target.getBuffer(), target.length(),
+                                                           collator.getAlias(),
+                                                           NULL,     // the break iterator
+                                                           &status));
     TEST_ASSERT_SUCCESS(status);
 #else
     BoyerMooreSearch bms(data, uPattern, &target, status);
@@ -1635,7 +1625,7 @@ const char *cPattern = "maketh houndes ete hem";
     int32_t  icuMatchPos;
     int32_t  icuMatchEnd;
 #ifndef TEST_BOYER_MOORE
-    usearch_search(uss, 0, &icuMatchPos, &icuMatchEnd, &status);
+    usearch_search(uss.getAlias(), 0, &icuMatchPos, &icuMatchEnd, &status);
     TEST_ASSERT_SUCCESS(status);
 #else
     found = bms.search(0, icuMatchPos, icuMatchEnd);
@@ -1649,15 +1639,15 @@ const char *cPattern = "maketh houndes ete hem";
     //   to get runtimes of at least several seconds.
     for (i=0; i<10000; i++) {
 #ifndef TEST_BOYER_MOORE
-        found = usearch_search(uss, 0, &icuMatchPos, &icuMatchEnd, &status);
+        found = usearch_search(uss.getAlias(), 0, &icuMatchPos, &icuMatchEnd, &status);
 #else
         found = bms.search(0, icuMatchPos, icuMatchEnd);
 #endif
         //TEST_ASSERT_SUCCESS(status);
         //TEST_ASSERT(found);
 
-        // usearch_setOffset(uss, 0, &status);
-        // icuMatchPos = usearch_next(uss, &status);
+        // usearch_setOffset(uss.getAlias(), 0, &status);
+        // icuMatchPos = usearch_next(uss.getAlias(), &status);
 
          // The i+j stuff is to confuse the optimizer and get it to actually leave the
          //   call to strstr in place.
@@ -1666,12 +1656,9 @@ const char *cPattern = "maketh houndes ete hem";
     }
 
     printf("%ld, %d\n", pm-longishText, j);
-#ifndef TEST_BOYER_MOORE
-    usearch_close(uss);
-#else
+#ifdef TEST_BOYER_MOORE
     CollData::close(data);
 #endif
-    ucol_close(collator);
 }
 #endif
 
@@ -2086,16 +2073,16 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
   //int32_t expectedStart = prefix.length(), expectedEnd = prefix.length() + altPattern.length();
     int32_t expectedStart = -1, expectedEnd = -1;
     int32_t notFoundCount = 0;
-    UStringSearch *uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
-                                testCase.getBuffer(), testCase.length(),
-                                coll,
-                                NULL,     // the break iterator
-                                &status);
+    LocalUStringSearchPointer uss(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
+                                                           testCase.getBuffer(), testCase.length(),
+                                                           coll,
+                                                           NULL,     // the break iterator
+                                                           &status));
 
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, pattern, expectedStart, expectedEnd);
 
-    usearch_search(uss, 0, &actualStart, &actualEnd, &status);
+    usearch_search(uss.getAlias(), 0, &actualStart, &actualEnd, &status);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
         errln("Search for <pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
@@ -2110,9 +2097,9 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, altPattern, expectedStart, expectedEnd);
 
-    usearch_setPattern(uss, altPattern.getBuffer(), altPattern.length(), &status);
+    usearch_setPattern(uss.getAlias(), altPattern.getBuffer(), altPattern.length(), &status);
 
-    usearch_search(uss, 0, &actualStart, &actualEnd, &status);
+    usearch_search(uss.getAlias(), 0, &actualStart, &actualEnd, &status);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
         errln("Search for <alt_pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
@@ -2123,8 +2110,6 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
     if (expectedStart == -1 && actualStart == -1) {
         notFoundCount += 1;
     }
-
-    usearch_close(uss);
 
     return notFoundCount;
 }

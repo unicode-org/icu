@@ -6,6 +6,8 @@
 
 /* Created by weiv 05/09/2002 */
 
+#include <stdarg.h>
+
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
 
@@ -16,12 +18,16 @@ IcuTestErrorCode::~IcuTestErrorCode() {
     if(isFailure()) { handleFailure(); }
 }
 
-UBool IcuTestErrorCode::logIfFailureAndReset(const char *s) {
+UBool IcuTestErrorCode::logIfFailureAndReset(const char *fmt, ...) {
     if(isFailure()) {
-        // testClass.errln("%s %s failure - %s", testName, s, errorName());
+        char buffer[4000];
+        va_list ap;
+        va_start(ap, fmt);
+        vsprintf(buffer, fmt, ap);
+        va_end(ap);
         UnicodeString msg(testName, -1, US_INV);
-        msg.append((UChar)0x20).append(UnicodeString(s, -1, US_INV));
-        msg.append(UNICODE_STRING_SIMPLE(" failure - ")).append(UnicodeString(errorName(), -1, US_INV));
+        msg.append(UNICODE_STRING_SIMPLE(" failure: ")).append(UnicodeString(errorName(), -1, US_INV));
+        msg.append(UNICODE_STRING_SIMPLE(" - ")).append(UnicodeString(buffer, -1, US_INV));
         testClass.errln(msg);
         reset();
         return TRUE;

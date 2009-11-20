@@ -179,22 +179,20 @@ IntlTestRBNF::TestAPI() {
   // test rule constructor
   {
     logln("Testing rule constructor");
-    UResourceBundle *en = ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "rbnf", "en", &status);
+    LocalUResourceBundlePointer en(ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "rbnf", "en", &status));
     if(U_FAILURE(status)) {
       errln("Unable to access resource bundle with data!");
     } else {
       int32_t ruleLen = 0;
       int32_t len = 0;
-      UResourceBundle *rbnfRules = ures_getByKey(en, "RBNFRules", NULL, &status);
-      UResourceBundle *ruleSets = ures_getByKey(rbnfRules, "SpelloutRules", NULL, &status);
+      LocalUResourceBundlePointer rbnfRules(ures_getByKey(en.getAlias(), "RBNFRules", NULL, &status));
+      LocalUResourceBundlePointer ruleSets(ures_getByKey(rbnfRules.getAlias(), "SpelloutRules", NULL, &status));
       UnicodeString desc;
-      while (ures_hasNext(ruleSets)) {
-           const UChar* currentString = ures_getNextString(ruleSets,&len,NULL,&status);
+      while (ures_hasNext(ruleSets.getAlias())) {
+           const UChar* currentString = ures_getNextString(ruleSets.getAlias(), &len, NULL, &status);
            ruleLen += len;
            desc.append(currentString);
       }
-      ures_close(ruleSets);
-      ures_close(rbnfRules);
 
       const UChar *spelloutRules = desc.getTerminatedBuffer();
 
@@ -213,7 +211,6 @@ IntlTestRBNF::TestAPI() {
           errln("Formatter constructed from the original rules should be semantically equivalent to the original!");
         }
       }
-      ures_close(en);
     }
   }
 

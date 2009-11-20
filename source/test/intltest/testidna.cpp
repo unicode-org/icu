@@ -417,7 +417,7 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
     UErrorCode prepStatus  = U_ZERO_ERROR;
     NamePrepTransform* trans = NamePrepTransform::createInstance(parseError,transStatus);
     int32_t prepOptions = (((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0);
-    UStringPrepProfile* prep = usprep_openByType(USPREP_RFC3491_NAMEPREP,&prepStatus);
+    LocalUStringPrepProfilePointer prep(usprep_openByType(USPREP_RFC3491_NAMEPREP,&prepStatus));
     UChar *transOut=NULL, *prepOut=NULL;
     int32_t transOutLength=0, prepOutLength=0;
     
@@ -429,12 +429,12 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
         transOutLength = trans->process(src,srcLength,transOut, transOutLength, prepOptions>0, &parseError, transStatus);
     }
 
-    prepOutLength  = usprep_prepare(prep, src, srcLength, prepOut, 0, prepOptions, &parseError, &prepStatus);
+    prepOutLength  = usprep_prepare(prep.getAlias(), src, srcLength, prepOut, 0, prepOptions, &parseError, &prepStatus);
 
     if( prepStatus == U_BUFFER_OVERFLOW_ERROR){
         prepStatus = U_ZERO_ERROR;
         prepOut    = (UChar*) malloc(U_SIZEOF_UCHAR * prepOutLength);
-        prepOutLength  = usprep_prepare(prep, src, srcLength, prepOut, prepOutLength, prepOptions, &parseError, &prepStatus);
+        prepOutLength  = usprep_prepare(prep.getAlias(), src, srcLength, prepOut, prepOutLength, prepOptions, &parseError, &prepStatus);
     }
 
     if(UnicodeString(transOut,transOutLength)!= UnicodeString(prepOut, prepOutLength)){
@@ -444,7 +444,6 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
     free(transOut);
     free(prepOut);
     delete trans;
-
 }
 
 void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* testName, 

@@ -127,6 +127,27 @@ public:
         LocalPointerBase<T>::ptr=p;
     }
     /**
+     * Deletes the array it owns, allocates a new one and reset its bytes to 0.
+     * Returns the new array pointer.
+     * If the allocation fails, then the current array is unchanged and
+     * this method returns NULL.
+     * @param newCapacity must be >0
+     * @return the allocated array pointer, or NULL if the allocation failed
+     */
+    inline T *allocateInsteadAndReset(int32_t newCapacity=1);
+    /**
+     * Deletes the array it owns and allocates a new one, copying length T items.
+     * Returns the new array pointer.
+     * If the allocation fails, then the current array is unchanged and
+     * this method returns NULL.
+     * @param newCapacity must be >0
+     * @param length number of T items to be copied from the old array to the new one;
+     *               must be no more than the capacity of the old array,
+     *               which the caller must track because the LocalMemory does not track it
+     * @return the allocated array pointer, or NULL if the allocation failed
+     */
+    inline T *allocateInsteadAndCopy(int32_t newCapacity=1, int32_t length=0);
+    /**
      * Array item access (writable).
      * No index bounds check.
      * @param i array index
@@ -205,29 +226,7 @@ public:
      * @param length number of T items to be copied from the old array to the new one
      * @return the allocated array pointer, or NULL if the allocation failed
      */
-    T *resize(int32_t newCapacity, int32_t length=0) {
-        if(newCapacity>0) {
-            T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
-            if(p!=NULL) {
-                if(length>0) {
-                    if(length>capacity) {
-                        length=capacity;
-                    }
-                    if(length>newCapacity) {
-                        length=newCapacity;
-                    }
-                    uprv_memcpy(p, ptr, length*sizeof(T));
-                }
-                releaseArray();
-                ptr=p;
-                capacity=newCapacity;
-                needToRelease=TRUE;
-            }
-            return p;
-        } else {
-            return NULL;
-        }
-    }
+    inline T *resize(int32_t newCapacity, int32_t length=0);
     /**
      * Gives up ownership of the array if owned, or else clones it,
      * copying length T items; resets itself to the internal stack array.
@@ -239,28 +238,7 @@ public:
      *         caller becomes responsible for deleting the array
      * @draft ICU 4.4
      */
-    T *orphanOrClone(int32_t length, int32_t &resultCapacity) {
-        T *p;
-        if(needToRelease) {
-            p=ptr;
-        } else if(length<=0) {
-            return NULL;
-        } else {
-            if(length>capacity) {
-                length=capacity;
-            }
-            p=(T *)uprv_malloc(length*sizeof(T));
-            if(p==NULL) {
-                return NULL;
-            }
-            uprv_memcpy(p, ptr, length*sizeof(T));
-        }
-        resultCapacity=length;
-        ptr=stackArray;
-        capacity=stackCapacity;
-        needToRelease=FALSE;
-        return p;
-    }
+    inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
 private:
     T *ptr;
     int32_t capacity;
@@ -284,6 +262,91 @@ private:
     static void * U_EXPORT2 operator new(size_t, void *ptr);
 #endif
 };
+
+template<typename T>
+inline T *LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) {
+    if(newCapacity>0) {
+        T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
+        if(p!=NULL) {
+            uprv_memset(p, 0, newCapacity*sizeof(T));
+            uprv_free(LocalPointerBase<T>::ptr);
+            LocalPointerBase<T>::ptr=p;
+        }
+        return p;
+    } else {
+        return NULL;
+    }
+}
+
+
+template<typename T>
+inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t length) {
+    if(newCapacity>0) {
+        T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
+        if(p!=NULL) {
+            if(length>0) {
+                if(length>newCapacity) {
+                    length=newCapacity;
+                }
+                uprv_memcpy(p, LocalPointerBase<T>::ptr, length*sizeof(T));
+            }
+            uprv_free(LocalPointerBase<T>::ptr);
+            LocalPointerBase<T>::ptr=p;
+        }
+        return p;
+    } else {
+        return NULL;
+    }
+}
+
+template<typename T, int32_t stackCapacity>
+inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
+    if(newCapacity>0) {
+        T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
+        if(p!=NULL) {
+            if(length>0) {
+                if(length>capacity) {
+                    length=capacity;
+                }
+                if(length>newCapacity) {
+                    length=newCapacity;
+                }
+                uprv_memcpy(p, ptr, length*sizeof(T));
+            }
+            releaseArray();
+            ptr=p;
+            capacity=newCapacity;
+            needToRelease=TRUE;
+        }
+        return p;
+    } else {
+        return NULL;
+    }
+}
+
+template<typename T, int32_t stackCapacity>
+inline T *MaybeStackArray<T, stackCapacity>::orphanOrClone(int32_t length, int32_t &resultCapacity) {
+    T *p;
+    if(needToRelease) {
+        p=ptr;
+    } else if(length<=0) {
+        return NULL;
+    } else {
+        if(length>capacity) {
+            length=capacity;
+        }
+        p=(T *)uprv_malloc(length*sizeof(T));
+        if(p==NULL) {
+            return NULL;
+        }
+        uprv_memcpy(p, ptr, length*sizeof(T));
+    }
+    resultCapacity=length;
+    ptr=stackArray;
+    capacity=stackCapacity;
+    needToRelease=FALSE;
+    return p;
+}
 
 U_NAMESPACE_END
 

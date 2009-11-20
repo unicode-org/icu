@@ -2077,31 +2077,30 @@ void CalendarTest::Test6703()
 void CalendarTest::Test3785()
 {
     UErrorCode status = U_ZERO_ERROR; 
-    UChar uzone[] = {'E', 'u', 'r', 'o', 'p', 'e', '/', 'P', 'a', 'r', 'i', 's', 0}; 
+    UnicodeString uzone = UNICODE_STRING_SIMPLE("Europe/Paris");
 
-    UDateFormat * df = udat_open(UDAT_NONE, UDAT_NONE, "en@calendar=islamic", uzone, 
-                               u_strlen(uzone), NULL, 0, &status);
-    if (NULL == df || U_FAILURE(status)) return;
+    LocalUDateFormatPointer df(udat_open(UDAT_NONE, UDAT_NONE, "en@calendar=islamic", uzone.getTerminatedBuffer(), 
+                                         uzone.length(), NULL, 0, &status));
+    if (df.isNull() || U_FAILURE(status)) return;
 
     UChar upattern[64];   
     u_uastrcpy(upattern, "EEE d MMMM y G, HH:mm:ss"); 
-    udat_applyPattern(df, FALSE, upattern, u_strlen(upattern));
+    udat_applyPattern(df.getAlias(), FALSE, upattern, u_strlen(upattern));
 
     UChar ubuffer[1024]; 
     UDate ud0 = 1337557623000.0;
 
     status = U_ZERO_ERROR; 
-    udat_format(df, ud0, ubuffer, 1024, NULL, &status); 
+    udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status); 
     if (U_FAILURE(status)) return; 
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
 
     ud0 += 1000.0; // add one second
 
     status = U_ZERO_ERROR; 
-    udat_format(df, ud0, ubuffer, 1024, NULL, &status); 
+    udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status); 
     if (U_FAILURE(status)) return; 
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
-    udat_close(df);
     return;
 }
 
