@@ -26,16 +26,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class Trie2 implements Iterable<Trie2.Range> {
 
-   /**
-    * Selectors for the width of a UTrie2 data value.
-    * TODO: this can probably be removed.  It's no longer used in the
-    *       primary API
-    */   
-    enum ValueWidth {
-        BITS_16,
-        BITS_32
-    }
-    
+   
     /**
      * Create a Trie2 from its serialized form.  Inverse of utrie2_serialize().
      * The serialized format is identical between ICU4C and ICU4J, so this function
@@ -215,16 +206,14 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
      *
      * @param is   an InputStream containing the serialized form
      *             of a UTrie, version 1 or 2.  The stream must support mark() and reset().
-     *             TODO:  is requiring mark and reset ok?
      *             The position of the input stream will be left unchanged.
-     * @param anyEndianOk If FALSE, only big-endian (Java native) serialized forms are recognized.
+     * @param littleEndianOk If FALSE, only big-endian (Java native) serialized forms are recognized.
      *                    If TRUE, little-endian serialized forms are recognized as well.
-     *             TODO:  dump this option, always allow either endian?  Or allow only big endian?
      * @return     the Trie version of the serialized form, or 0 if it is not
      *             recognized as a serialized UTrie
      * @throws     IOException on errors in reading from the input stream.
      */
-    public static int getVersion(InputStream is, boolean anyEndianOk) throws IOException {
+    public static int getVersion(InputStream is, boolean littleEndianOk) throws IOException {
         if (! is.markSupported()) {
             throw new IllegalArgumentException("Input stream must support mark().");
             }
@@ -239,7 +228,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
         if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='2') {
             return 2;
         }
-        if (anyEndianOk) {
+        if (littleEndianOk) {
             if (sig[0]=='e' && sig[1]=='i' && sig[2]=='r' && sig[3]=='T') {
                 return 1;
             }
@@ -525,7 +514,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
      *  
      * @param text A text string to be iterated over.
      * @param index The starting iteration position within the input text.
-     * @return An iterator
+     * @return the CharSequenceIterator
      */
     public CharSequenceIterator charSequenceIterator(CharSequence text, int index) {
         return new CharSequenceIterator(text, index);
@@ -626,6 +615,14 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
     
     
     /**
+     * Selectors for the width of a UTrie2 data value.
+     */   
+     enum ValueWidth {
+         BITS_16,
+         BITS_32
+     }
+  
+     /**
      * Trie2 data structure in serialized form:
      *
      * UTrie2Header header;
@@ -899,7 +896,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
                 // Iteration over code point values.
                 val = get(nextStart);
                 mappedVal = mapper.map(val);
-                endOfRange = rangeEnd(nextStart);
+                endOfRange = rangeEnd(nextStart, limitCP, val);
                 // Loop once for each range in the Trie2 with the same raw (unmapped) value.
                 // Loop continues so long as the mapped values are the same.
                 for (;;) {
@@ -910,7 +907,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
                     if (mapper.map(val) != mappedVal) {
                         break;
                     }
-                    endOfRange = rangeEnd(endOfRange+1);
+                    endOfRange = rangeEnd(endOfRange+1, limitCP, val);
                 }
             } else {
                 // Iteration over the alternate lead surrogate values.
@@ -949,37 +946,18 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             throw new UnsupportedOperationException();
         }
         
-        
-        /**
-         * Find the last character in a contiguous range of characters with the
-         * same Trie2 value as the input character.
-         * 
-         * @param c  The character to begin with.
-         * @return   The last contiguous character with the same value.
-         */
-        private int rangeEnd(int startingC) {
-            // TODO: add optimizations
-            int c;
-            int val = get(startingC);
-            int limit = Math.min(highStart, limitCP);
-            
-            for (c = startingC+1; c < limit; c++) {
-                if (get(c) != val) {
-                    break;
-                }
-            }
-            if (c >= highStart) {
-                c = limitCP;
-            }
-            return c - 1;
-        }
-                
+                 
         /**
          * Find the last lead surrogate in a contiguous range  with the
          * same Trie2 value as the input character.
          * 
          * Use the alternate Lead Surrogate values from the Trie2,
          * not the code-point values.
+         * 
+         * Note: Trie2_16 and Trie2_32 override this implementation with optimized versions,
+         *       meaning that the implementation here is only being used with
+         *       Trie2Writable.  The code here is logically correct with any type
+         *       of Trie2, however.
          * 
          * @param c  The character to begin with.
          * @return   The last contiguous character with the same value.
@@ -989,7 +967,6 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
                 return 0xdbff;
             }
             
-            // TODO: add optimizations
             int c;
             int val = getFromU16SingleLead(startingLS);
             for (c = startingLS+1; c <= 0x0dbff; c++) {
@@ -1020,6 +997,28 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
         private boolean        doLeadSurrogates = true;
     }
     
+    /**
+     * Find the last character in a contiguous range of characters with the
+     * same Trie2 value as the input character.
+     * 
+     * @param c  The character to begin with.
+     * @return   The last contiguous character with the same value.
+     */
+    int rangeEnd(int start, int limitp, int val) {
+        int c;
+        int limit = Math.min(highStart, limitp);
+        
+        for (c = start+1; c < limit; c++) {
+            if (get(c) != val) {
+                break;
+            }
+        }
+        if (c >= highStart) {
+            c = limitp;
+        }
+        return c - 1;
+    }
+            
     
     //
     //  Hashing implementation functions.  FNV hash.  Respected public domain algorithm.

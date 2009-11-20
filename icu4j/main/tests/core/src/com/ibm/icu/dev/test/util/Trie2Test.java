@@ -55,7 +55,7 @@ public class Trie2Test extends TestFmwk {
              ByteArrayOutputStream os = new ByteArrayOutputStream();
              trie.toTrie2_16().serialize(os);
              ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-             assertEquals(where(), 2, Trie2.getVersion(is, true));
+             assertEquals(null, 2, Trie2.getVersion(is, true));
          } catch (IOException e) {
              errln(where() + e.toString());            
          }
@@ -67,18 +67,18 @@ public class Trie2Test extends TestFmwk {
              Trie2Writable trieWB = new Trie2Writable(0,0);
              Trie2 trieA = trieWA;
              Trie2 trieB = trieWB;
-             assertTrue(where(), trieA.equals(trieB));
-             assertEquals(where(), trieA, trieB);
-             assertEquals(where(), trieA.hashCode(), trieB.hashCode());
+             assertTrue("", trieA.equals(trieB));
+             assertEquals("", trieA, trieB);
+             assertEquals("", trieA.hashCode(), trieB.hashCode());
              trieWA.set(500, 2);
-             assertNotEquals(where(), trieA, trieB);
+             assertNotEquals("", trieA, trieB);
              // Note that the hash codes do not strictly need to be different,
              //   but it's highly likely that something is wrong if they are the same.
-             assertNotEquals(where(), trieA.hashCode(), trieB.hashCode());
+             assertNotEquals("", trieA.hashCode(), trieB.hashCode());
              trieWB.set(500, 2);
              trieA = trieWA.toTrie2_16();
-             assertEquals(where(), trieA, trieB);
-             assertEquals(where(), trieA.hashCode(), trieB.hashCode());
+             assertEquals("", trieA, trieB);
+             assertEquals("", trieA.hashCode(), trieB.hashCode());
          }
          
          // 
@@ -90,32 +90,32 @@ public class Trie2Test extends TestFmwk {
              it = trie.iterator();
              
              Trie2.Range r = it.next();
-             assertEquals(where(), 0, r.startCodePoint);
-             assertEquals(where(), 0x10ffff, r.endCodePoint);
-             assertEquals(where(), 17, r.value);
-             assertEquals(where(), false, r.leadSurrogate);
+             assertEquals("", 0, r.startCodePoint);
+             assertEquals("", 0x10ffff, r.endCodePoint);
+             assertEquals("", 17, r.value);
+             assertEquals("", false, r.leadSurrogate);
              
              r = it.next();
-             assertEquals(where(), 0xd800, r.startCodePoint);
-             assertEquals(where(), 0xdbff, r.endCodePoint);
-             assertEquals(where(), 17, r.value);
-             assertEquals(where(), true, r.leadSurrogate);
+             assertEquals("", 0xd800, r.startCodePoint);
+             assertEquals("", 0xdbff, r.endCodePoint);
+             assertEquals("", 17, r.value);
+             assertEquals("", true, r.leadSurrogate);
              
         
              int i = 0;
              for (Trie2.Range rr: trie) {
                  switch (i) {
                  case 0:
-                     assertEquals(where(), 0, rr.startCodePoint);
-                     assertEquals(where(), 0x10ffff, rr.endCodePoint);
-                     assertEquals(where(), 17, rr.value);
-                     assertEquals(where(), false, rr.leadSurrogate);
+                     assertEquals("", 0, rr.startCodePoint);
+                     assertEquals("", 0x10ffff, rr.endCodePoint);
+                     assertEquals("", 17, rr.value);
+                     assertEquals("", false, rr.leadSurrogate);
                      break;
                  case 1:
-                     assertEquals(where(), 0xd800, rr.startCodePoint);
-                     assertEquals(where(), 0xdbff, rr.endCodePoint);
-                     assertEquals(where(), 17, rr.value);
-                     assertEquals(where(), true, rr.leadSurrogate);
+                     assertEquals("", 0xd800, rr.startCodePoint);
+                     assertEquals("", 0xdbff, rr.endCodePoint);
+                     assertEquals("", 17, rr.value);
+                     assertEquals("", true, rr.leadSurrogate);
                      break;
                  default:
                      errln(where() + " Unexpected iteration result");
@@ -140,10 +140,10 @@ public class Trie2Test extends TestFmwk {
              };
              Iterator<Trie2.Range> it = trie.iterator(vm);
              Trie2.Range r = it.next();
-             assertEquals(where(), 0, r.startCodePoint);
-             assertEquals(where(), 0x10ffff, r.endCodePoint);
-             assertEquals(where(), 42, r.value);
-             assertEquals(where(), false, r.leadSurrogate);
+             assertEquals("", 0, r.startCodePoint);
+             assertEquals("", 0x10ffff, r.endCodePoint);
+             assertEquals("", 42, r.value);
+             assertEquals("", false, r.leadSurrogate);
          }
          
          
@@ -154,24 +154,24 @@ public class Trie2Test extends TestFmwk {
              trie.set(0x2f810, 10);
              Iterator<Trie2.Range> it = trie.iteratorForLeadSurrogate((char)0xd87e);
              Trie2.Range r = it.next();
-             assertEquals(where(), 0x2f800,  r.startCodePoint);
-             assertEquals(where(), 0x2f80f,  r.endCodePoint);
-             assertEquals(where(), 0xdefa17, r.value);
-             assertEquals(where(), false,    r.leadSurrogate);
+             assertEquals("", 0x2f800,  r.startCodePoint);
+             assertEquals("", 0x2f80f,  r.endCodePoint);
+             assertEquals("", 0xdefa17, r.value);
+             assertEquals("", false,    r.leadSurrogate);
              
              r = it.next();
-             assertEquals(where(), 0x2f810, r.startCodePoint);
-             assertEquals(where(), 0x2f810, r.endCodePoint);
-             assertEquals(where(), 10,      r.value);
-             assertEquals(where(), false,   r.leadSurrogate);
+             assertEquals("", 0x2f810, r.startCodePoint);
+             assertEquals("", 0x2f810, r.endCodePoint);
+             assertEquals("", 10,      r.value);
+             assertEquals("", false,   r.leadSurrogate);
 
              r = it.next();
-             assertEquals(where(), 0x2f811,  r.startCodePoint);
-             assertEquals(where(), 0x2fbff,  r.endCodePoint);
-             assertEquals(where(), 0xdefa17, r.value);
-             assertEquals(where(), false,    r.leadSurrogate);
+             assertEquals("", 0x2f811,  r.startCodePoint);
+             assertEquals("", 0x2fbff,  r.endCodePoint);
+             assertEquals("", 0xdefa17, r.value);
+             assertEquals("", false,    r.leadSurrogate);
              
-             assertFalse(where(), it.hasNext());
+             assertFalse("", it.hasNext());
          }
          
          // Iteration over a leading surrogate range with a ValueMapper.
@@ -189,12 +189,12 @@ public class Trie2Test extends TestFmwk {
              };
              Iterator<Trie2.Range> it = trie.iteratorForLeadSurrogate((char)0xd87e, m);
              Trie2.Range r = it.next();
-             assertEquals(where(), 0x2f800,  r.startCodePoint);
-             assertEquals(where(), 0x2fbff,  r.endCodePoint);
-             assertEquals(where(), 0xdefa17, r.value);
-             assertEquals(where(), false,    r.leadSurrogate);
+             assertEquals("", 0x2f800,  r.startCodePoint);
+             assertEquals("", 0x2fbff,  r.endCodePoint);
+             assertEquals("", 0xdefa17, r.value);
+             assertEquals("", false,    r.leadSurrogate);
 
-             assertFalse(where(), it.hasNext());
+             assertFalse("", it.hasNext());
          }
          
          // Trie2.serialize()
@@ -206,23 +206,23 @@ public class Trie2Test extends TestFmwk {
              trie.set(0xffee, 300);
              Trie2_16 frozen16 = trie.toTrie2_16();
              Trie2_32 frozen32 = trie.toTrie2_32();
-             assertEquals(where(), trie, frozen16);
-             assertEquals(where(), trie, frozen32);
-             assertEquals(where(), frozen16, frozen32);
+             assertEquals("", trie, frozen16);
+             assertEquals("", trie, frozen32);
+             assertEquals("", frozen16, frozen32);
              ByteArrayOutputStream os = new ByteArrayOutputStream();
              try {
                  frozen16.serialize(os);
                  ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
                  Trie2 unserialized16 = Trie2.createFromSerialized(is);
-                 assertEquals(where(), trie, unserialized16);
-                 assertEquals(where(), Trie2_16.class, unserialized16.getClass());
+                 assertEquals("", trie, unserialized16);
+                 assertEquals("", Trie2_16.class, unserialized16.getClass());
                  
                  os.reset();
                  frozen32.serialize(os);
                  is = new ByteArrayInputStream(os.toByteArray());
                  Trie2 unserialized32 = Trie2.createFromSerialized(is);
-                 assertEquals(where(), trie, unserialized32);
-                 assertEquals(where(), Trie2_32.class, unserialized32.getClass());
+                 assertEquals("", trie, unserialized32);
+                 assertEquals("", Trie2_32.class, unserialized32.getClass());
              } catch (IOException e) {
                  errln(where() + " Unexpected exception:  " + e);
              }
@@ -243,28 +243,28 @@ public class Trie2Test extends TestFmwk {
          
          // Constructor from another Trie2
          Trie2 t2 = new Trie2Writable(t1);
-         assertTrue(where(), t1.equals(t2));
+         assertTrue("", t1.equals(t2));
          
          // Set / Get
          Trie2Writable t1w = new Trie2Writable(10, 666);
          t1w.set(0x4567, 99);
-         assertEquals(where(), 10, t1w.get(0x4566));
-         assertEquals(where(), 99, t1w.get(0x4567));
-         assertEquals(where(), 666, t1w.get(-1));
-         assertEquals(where(), 666, t1w.get(0x110000));
+         assertEquals("", 10, t1w.get(0x4566));
+         assertEquals("", 99, t1w.get(0x4567));
+         assertEquals("", 666, t1w.get(-1));
+         assertEquals("", 666, t1w.get(0x110000));
          
          
          // SetRange
          t1w = new Trie2Writable(10, 666);
          t1w.setRange(13 /*start*/, 6666 /*end*/, 7788 /*value*/, false  /*overwrite */);
          t1w.setRange(6000, 7000, 9900, true);
-         assertEquals(where(),   10, t1w.get(12));
-         assertEquals(where(), 7788, t1w.get(13));
-         assertEquals(where(), 7788, t1w.get(5999));
-         assertEquals(where(), 9900, t1w.get(6000));
-         assertEquals(where(), 9900, t1w.get(7000));
-         assertEquals(where(),   10, t1w.get(7001));
-         assertEquals(where(),  666, t1w.get(0x110000));
+         assertEquals("",   10, t1w.get(12));
+         assertEquals("", 7788, t1w.get(13));
+         assertEquals("", 7788, t1w.get(5999));
+         assertEquals("", 9900, t1w.get(6000));
+         assertEquals("", 9900, t1w.get(7000));
+         assertEquals("",   10, t1w.get(7001));
+         assertEquals("",  666, t1w.get(0x110000));
          
          // setRange from a Trie2.Range
          //    (Ranges are more commonly created by iterating over a Trie2,
@@ -276,19 +276,19 @@ public class Trie2Test extends TestFmwk {
          r.leadSurrogate  = false;
          t1w = new Trie2Writable(0, 0xbad);
          t1w.setRange(r, true);
-         assertEquals(where(), 0, t1w.get(49));
-         assertEquals(where(), 0x12345678, t1w.get(50));
-         assertEquals(where(), 0x12345678, t1w.get(52));
-         assertEquals(where(), 0, t1w.get(53));
+         assertEquals(null, 0, t1w.get(49));
+         assertEquals("", 0x12345678, t1w.get(50));
+         assertEquals("", 0x12345678, t1w.get(52));
+         assertEquals("", 0, t1w.get(53));
          
          
          // setForLeadSurrogateCodeUnit / getFromU16SingleLead
          t1w = new Trie2Writable(10, 0xbad);
-         assertEquals(where(), 10, t1w.getFromU16SingleLead((char)0x0d801));
+         assertEquals("", 10, t1w.getFromU16SingleLead((char)0x0d801));
          t1w.setForLeadSurrogateCodeUnit((char)0xd801, 5000);
          t1w.set(0xd801, 6000);
-         assertEquals(where(), 5000, t1w.getFromU16SingleLead((char)0x0d801));
-         assertEquals(where(), 6000, t1w.get(0x0d801));
+         assertEquals("", 5000, t1w.getFromU16SingleLead((char)0x0d801));
+         assertEquals("", 6000, t1w.get(0x0d801));
          
          // get().  Is covered by nearly every other test.
                  
@@ -298,12 +298,12 @@ public class Trie2Test extends TestFmwk {
          t1w.set(42, 5555);
          t1w.set(0x1ff00, 224);
          Trie2_16 t1_16 = t1w.toTrie2_16();
-         assertTrue(where(), t1w.equals(t1_16));
+         assertTrue("", t1w.equals(t1_16));
          // alter the writable Trie2 and then re-freeze.
          t1w.set(152, 129);
          t1_16 = t1w.toTrie2_16();
-         assertTrue(where(), t1w.equals(t1_16));
-         assertEquals(where(), 129, t1w.get(152));
+         assertTrue("", t1w.equals(t1_16));
+         assertEquals("", 129, t1w.get(152));
          
          // Trie2_32 getAsFrozen_32()
          //
@@ -311,13 +311,13 @@ public class Trie2Test extends TestFmwk {
          t1w.set(42, 5555);
          t1w.set(0x1ff00, 224);
          Trie2_32 t1_32 = t1w.toTrie2_32();
-         assertTrue(where(), t1w.equals(t1_32));
+         assertTrue("", t1w.equals(t1_32));
          // alter the writable Trie2 and then re-freeze.
          t1w.set(152, 129);
-         assertNotEquals(where(), t1_32, t1w);
+         assertNotEquals("", t1_32, t1w);
          t1_32 = t1w.toTrie2_32();
-         assertTrue(where(), t1w.equals(t1_32));
-         assertEquals(where(), 129, t1w.get(152));
+         assertTrue("", t1w.equals(t1_32));
+         assertEquals("", 129, t1w.get(152));
          
          
          // serialize(OutputStream os, ValueWidth width)
@@ -336,22 +336,22 @@ public class Trie2Test extends TestFmwk {
              int serializedLen = t1w.toTrie2_16().serialize(os);
              // Fragile test.  Serialized length could change with changes to compaction.
              //                But it should not change unexpectedly.
-             assertEquals(where(), 3508, serializedLen);
+             assertEquals("", 3508, serializedLen);
              ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
              Trie2 t1ws16 = Trie2.createFromSerialized(is);
-             assertEquals(where(), t1ws16.getClass(), Trie2_16.class);
-             assertEquals(where(), t1w, t1ws16);
+             assertEquals("", t1ws16.getClass(), Trie2_16.class);
+             assertEquals("", t1w, t1ws16);
              
              // Serialize to 32 bits
              os.reset();
              serializedLen = t1w.toTrie2_32().serialize(os);
              // Fragile test.  Serialized length could change with changes to compaction.
              //                But it should not change unexpectedly.
-             assertEquals(where(), 4332, serializedLen);
+             assertEquals("", 4332, serializedLen);
              is = new ByteArrayInputStream(os.toByteArray());
              Trie2 t1ws32 = Trie2.createFromSerialized(is);
-             assertEquals(where(), t1ws32.getClass(), Trie2_32.class);
-             assertEquals(where(), t1w, t1ws32);
+             assertEquals("", t1ws32.getClass(), Trie2_32.class);
+             assertEquals("", t1w, t1ws32);
          } catch (IOException e) {
              errln(where() + e.toString());
          }
@@ -377,14 +377,14 @@ public class Trie2Test extends TestFmwk {
          for (i=0; it.hasNext(); i++) {
              ir = it.next();
              int expectedCP = Character.codePointAt(text, i);
-             assertEquals(where() + " i="+i, expectedCP,     ir.codePoint);
-             assertEquals(where() + " i="+i, i,              ir.index);
-             assertEquals(where() + " i="+i, vals.charAt(i), ir.value);
+             assertEquals("" + " i="+i, expectedCP,     ir.codePoint);
+             assertEquals("" + " i="+i, i,              ir.index);
+             assertEquals("" + " i="+i, vals.charAt(i), ir.value);
              if (expectedCP >= 0x10000) {
                  i++;
              }
          }
-         assertEquals(where(), text.length(), i);
+         assertEquals("", text.length(), i);
          
          // Check reverse iteration, starting at an intermediate point.
          it.set(5);
@@ -392,11 +392,11 @@ public class Trie2Test extends TestFmwk {
              ir = it.previous();
              int expectedCP = Character.codePointBefore(text, i);
              i -= (expectedCP < 0x10000? 1 : 2);            
-             assertEquals(where() + " i="+i, expectedCP,     ir.codePoint);
-             assertEquals(where() + " i="+i, i,              ir.index);
-             assertEquals(where() + " i="+i, vals.charAt(i), ir.value);
+             assertEquals("" + " i="+i, expectedCP,     ir.codePoint);
+             assertEquals("" + " i="+i, i,              ir.index);
+             assertEquals("" + " i="+i, vals.charAt(i), ir.value);
          }
-         assertEquals(where(), 0, i);
+         assertEquals("", 0, i);
          
      }
      
@@ -628,10 +628,6 @@ public class Trie2Test extends TestFmwk {
          int start, limit;
          int i, countSpecials;
 
-         boolean isFrozen = trie instanceof Trie2_16 || trie instanceof Trie2_32;
-
-         String typeName= isFrozen ? "frozen trie" : "newTrie";
-
          countSpecials=0;  /*getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);*/
          errorValue = 0x0bad;
          initialValue = 0;
@@ -647,9 +643,10 @@ public class Trie2Test extends TestFmwk {
 
              while(start<limit) {
                  value2=trie.get(start);
-                 if(value!=value2) {
-                     errln("error: " + typeName + "(" + testName + ").get(" + Integer.toHexString(start) +") == " + 
-                             Integer.toHexString(value2) + " instead of " + Integer.toHexString(value));
+                 if (value != value2) {
+                     // The redundant if, outside of the assert, is for speed.  
+                     // It makes a significant difference for this test.
+                     assertEquals("wrong value for " + testName + " of " + Integer.toHexString(start), value, value2);
                  }
                  ++start;
              }
@@ -699,25 +696,15 @@ public class Trie2Test extends TestFmwk {
          
          // Check that Trie enumeration produces the same contents as simple get()
          for (Trie2.Range range: trie) {
-             if (false) {
-                 System.out.println("(start, end, value) = ("    + Integer.toHexString(range.startCodePoint) +
-                                                            ", " + Integer.toHexString(range.endCodePoint) + 
-                                                            ", " + Integer.toHexString(range.value) + ")");
-             }
-             String wa = where() + "a";  // TODO:  fix asserts to do where only on error.
-             String wb = where() + "b";
-             String wc = where() + "c";
              for (int cp=range.startCodePoint; cp<=range.endCodePoint; cp++) {
                  if (range.leadSurrogate) {
-                     assertTrue(wa, cp>=(char)0xd800 && cp<(char)0xdc00);
-                     assertEquals(wb, range.value, trie.getFromU16SingleLead((char)cp));
+                     assertTrue(testName, cp>=(char)0xd800 && cp<(char)0xdc00);
+                     assertEquals(testName, range.value, trie.getFromU16SingleLead((char)cp));
                  } else {
-                     assertEquals(wc, range.value, trie.get(cp));
+                     assertEquals(testName, range.value, trie.get(cp));
                  }
              }
          }
-         if (false) System.out.println("\n\n");
-         
      }
                      
      // Was testTrieRanges in ICU4C.  Renamed to not conflict with ICU4J test framework.
@@ -742,8 +729,8 @@ public class Trie2Test extends TestFmwk {
          // Run the same tests against locally contructed Tries.
          Trie2Writable trieW = genTrieFromSetRanges(setRanges);
          trieGettersTest(testName, trieW,  checkRanges);
-         assertEquals(where(), trieW, trie16);   // Locally built tries must be
-         assertEquals(where(), trieW, trie32);   //   the same as those imported from ICU4C
+         assertEquals("", trieW, trie16);   // Locally built tries must be
+         assertEquals("", trieW, trie32);   //   the same as those imported from ICU4C
          
          
          Trie2_32 trie32a = trieW.toTrie2_32();
@@ -751,6 +738,7 @@ public class Trie2Test extends TestFmwk {
 
          Trie2_16 trie16a = trieW.toTrie2_16();
          trieGettersTest(testName, trie16a, checkRanges);
+         
      }
      
      // Was "TrieTest" in trie2test.c 
@@ -765,8 +753,6 @@ public class Trie2Test extends TestFmwk {
      }
 
      
-     
-     // TODO: push this where() function up into the test framework implementation of assert
      private String where() {
          StackTraceElement[] st = new Throwable().getStackTrace();
          String w = "File: " + st[1].getFileName() + ", Line " + st[1].getLineNumber();
