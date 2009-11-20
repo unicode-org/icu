@@ -15,6 +15,7 @@
 ***********************************************************************/
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "itmajor.h"
 
 #include "itutil.h"
@@ -198,9 +199,8 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
             case 15: name = "bidi";
                 if (exec) {
                     logln("TestSuite bidi---"); logln();
-                    IntlTest *test = createBiDiConformanceTest();
+                    LocalPointer<IntlTest> test(createBiDiConformanceTest());
                     callTest(*test, par);
-                    delete test;
                 }
 
                 break;

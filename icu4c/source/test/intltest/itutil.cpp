@@ -11,6 +11,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/errorcode.h"
+#include "unicode/localpointer.h"
 #include "itutil.h"
 #include "strtest.h"
 #include "loctest.h"
@@ -28,6 +29,7 @@
 #include "aliastst.h"
 #include "usettest.h"
 
+static IntlTest *createLocalPointerTest();
 
 #define CASE(id, test) case id:                               \
                           name = #test;                       \
@@ -58,6 +60,14 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(13, LocaleAliasTest); 
         CASE(14, UnicodeSetTest);
         CASE(15, ErrorCodeTest);
+        case 16:
+            name = "LocalPointerTest";
+            if (exec) {
+                logln("TestSuite LocalPointerTest---"); logln();
+                LocalPointer<IntlTest> test(createLocalPointerTest());
+                callTest(*test, par);
+            }
+            break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -175,5 +185,208 @@ void ErrorCodeTest::TestSubclass() {
     }
     if(countDests!=1) {
         errln("MyErrorCode destructor failed to detect failure");
+    }
+}
+
+class LocalPointerTest : public IntlTest {
+public:
+    LocalPointerTest() {}
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+
+    void TestLocalPointer();
+    void TestLocalArray();
+    void TestLocalXyzPointer();
+    void TestLocalXyzPointerNull();
+};
+
+static IntlTest *createLocalPointerTest() {
+    return new LocalPointerTest();
+}
+
+void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
+    if(exec) {
+        logln("TestSuite LocalPointerTest: ");
+    }
+    switch (index) {
+        TESTCASE(0, TestLocalPointer);
+        TESTCASE(1, TestLocalArray);
+        TESTCASE(2, TestLocalXyzPointer);
+        TESTCASE(3, TestLocalXyzPointerNull);
+        default:
+            name="";
+            break; // needed to end the loop
+    }
+}
+
+// Exercise every LocalPointer and LocalPointerBase method.
+void LocalPointerTest::TestLocalPointer() {
+    // constructor
+    LocalPointer<UnicodeString> s(new UnicodeString((UChar32)0x50005));
+    // isNULL(), isValid(), operator==(), operator!=()
+    if(s.isNull() || !s.isValid() || s==NULL || !(s!=NULL)) {
+        errln("LocalPointer constructor or NULL test failure");
+        return;
+    }
+    // getAlias(), operator->, operator*
+    if(s.getAlias()->length()!=2 || s->length()!=2 || (*s).length()!=2) {
+        errln("LocalPointer access failure");
+    }
+    // adoptInstead(), orphan()
+    s.adoptInstead(new UnicodeString((UChar)0xfffc));
+    if(s->length()!=1) {
+        errln("LocalPointer adoptInstead(U+FFFC) failure");
+    }
+    UnicodeString *orphan=s.orphan();
+    if(orphan==NULL || orphan->length()!=1 || s.isValid() || s!=NULL) {
+        errln("LocalPointer orphan() failure");
+    }
+    // destructor
+    s.adoptInstead(new UnicodeString());
+    if(s->length()!=0) {
+        errln("LocalPointer adoptInstead(empty) failure");
+    }
+}
+
+// Exercise every LocalArray method (but not LocalPointerBase).
+void LocalPointerTest::TestLocalArray() {
+    // constructor
+    LocalArray<UnicodeString> a(new UnicodeString[2]);
+    // operator[]()
+    a[0].append((UChar)0x61);
+    a[1].append((UChar32)0x60006);
+    if(a[0].length()!=1 || a[1].length()!=2) {
+        errln("LocalArray access failure");
+    }
+    // adoptInstead()
+    a.adoptInstead(new UnicodeString[4]);
+    a[3].append((UChar)0x62).append((UChar)0x63).reverse();
+    if(a[3].length()!=2 || a[3][1]!=0x62) {
+        errln("LocalArray adoptInstead() failure");
+    }
+    // destructor
+}
+
+#include "unicode/ucnvsel.h"
+#include "unicode/ucal.h"
+#include "unicode/udatpg.h"
+#include "unicode/umsg.h"
+#include "unicode/uregex.h"
+#include "unicode/utrans.h"
+
+// Use LocalXyzPointer types that are not covered elsewhere in the intltest suite.
+void LocalPointerTest::TestLocalXyzPointer() {
+    IcuTestErrorCode errorCode(*this, "TestLocalXyzPointer");
+
+    static const char *const encoding="ISO-8859-1";
+    LocalUConverterSelectorPointer sel(
+        ucnvsel_open(&encoding, 1, NULL, UCNV_ROUNDTRIP_SET, errorCode));
+    if(errorCode.logIfFailureAndReset("ucnvsel_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalUConverterSelectorPointer failure");
+        return;
+    }
+
+    LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
+    if(errorCode.logIfFailureAndReset("ucal_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalUCalendarPointer failure");
+        return;
+    }
+
+    LocalUDateTimePatternGeneratorPointer patgen(udatpg_open("root", errorCode));
+    if(errorCode.logIfFailureAndReset("udatpg_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalUDateTimePatternGeneratorPointer failure");
+        return;
+    }
+
+    UnicodeString hello=UNICODE_STRING_SIMPLE("Hello {0}!");
+    LocalUMessageFormatPointer msg(
+        umsg_open(hello.getBuffer(), hello.length(), "root", NULL, errorCode));
+    if(errorCode.logIfFailureAndReset("umsg_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalUMessageFormatPointer failure");
+        return;
+    }
+
+    UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
+    LocalURegularExpressionPointer regex(
+        uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
+    if(errorCode.logIfFailureAndReset("uregex_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalURegularExpressionPointer failure");
+        return;
+    }
+
+    UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
+    LocalUTransliteratorPointer trans(
+        utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
+    if(errorCode.logIfFailureAndReset("utrans_open()")) {
+        return;
+    }
+    if(sel.isNull()) {
+        errln("LocalUTransliteratorPointer failure");
+        return;
+    }
+
+    // destructors
+}
+
+// Try LocalXyzPointer types with NULL pointers.
+void LocalPointerTest::TestLocalXyzPointerNull() {
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUConverterSelectorPointer");
+        static const char *const encoding="ISO-8859-1";
+        LocalUConverterSelectorPointer null;
+        LocalUConverterSelectorPointer sel(
+            ucnvsel_open(&encoding, 1, NULL, UCNV_ROUNDTRIP_SET, errorCode));
+        sel.adoptInstead(NULL);
+    }
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUCalendarPointer");
+        LocalUCalendarPointer null;
+        LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
+        cal.adoptInstead(NULL);
+    }
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUDateTimePatternGeneratorPointer");
+        LocalUDateTimePatternGeneratorPointer null;
+        LocalUDateTimePatternGeneratorPointer patgen(udatpg_open("root", errorCode));
+        patgen.adoptInstead(NULL);
+    }
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUMessageFormatPointer");
+        UnicodeString hello=UNICODE_STRING_SIMPLE("Hello {0}!");
+        LocalUMessageFormatPointer null;
+        LocalUMessageFormatPointer msg(
+            umsg_open(hello.getBuffer(), hello.length(), "root", NULL, errorCode));
+        msg.adoptInstead(NULL);
+    }
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalURegularExpressionPointer");
+        UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
+        LocalURegularExpressionPointer null;
+        LocalURegularExpressionPointer regex(
+            uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
+        regex.adoptInstead(NULL);
+    }
+    {
+        IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUTransliteratorPointer");
+        UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
+        LocalUTransliteratorPointer null;
+        LocalUTransliteratorPointer trans(
+            utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
+        trans.adoptInstead(NULL);
     }
 }
