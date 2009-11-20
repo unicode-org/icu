@@ -94,7 +94,7 @@ void CollationServiceTest::TestRegister()
     // recreate frcol
     frcol = Collator::createInstance(FR, status);
 
-    UCollator* frFR = ucol_open("fr_FR", &status);
+    LocalUCollatorPointer frFR(ucol_open("fr_FR", &status));
 
     { // try create collator for new locale
         Locale fu_FU_FOO("fu", "FU", "FOO");
@@ -162,11 +162,11 @@ void CollationServiceTest::TestRegister()
         }
 
         // test ucol_open
-        UCollator* fufu = ucol_open("fu_FU_FOO", &status);
-        if (!fufu) {
+        LocalUCollatorPointer fufu(ucol_open("fu_FU_FOO", &status));
+        if (fufu.isNull()) {
             errln("could not open fu_FU_FOO with ucol_open");
         } else {
-            if (!ucol_equals(fufu, frFR)) {
+            if (!ucol_equals(fufu.getAlias(), frFR.getAlias())) {
                 errln("collator fufu != collator frFR");
             }
         }
@@ -183,14 +183,12 @@ void CollationServiceTest::TestRegister()
         }
         delete ncol; ncol = NULL;
 
-        if (fufu) {
-            const char* nlocstr = ucol_getLocaleByType(fufu, ULOC_VALID_LOCALE, &status);
+        if (fufu.isValid()) {
+            const char* nlocstr = ucol_getLocaleByType(fufu.getAlias(), ULOC_VALID_LOCALE, &status);
             if (uprv_strcmp(nlocstr, "fu_FU") != 0) {
                 errln(UnicodeString("asked for uloc valid locale after close and got ") + nlocstr);
             }
-            ucol_close(fufu);
         }
-        ucol_close(frFR);
 
         ncol = Collator::createInstance(fu_FU, status);
         if (*fucol != *ncol) {

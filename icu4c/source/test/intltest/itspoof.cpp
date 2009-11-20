@@ -307,6 +307,8 @@ static void appendHexUChar(UnicodeString &dest, UChar32 c) {
     dest.append((UChar)0x20);
 }
 
+U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
+
 //  testConfData - Check each data item from the Unicode confusables.txt file,
 //                 verify that it transforms correctly in a skeleton.
 //
@@ -319,27 +321,24 @@ void IntlTestSpoof::testConfData() {
     uprv_strcpy(buffer, testDataDir);
     uprv_strcat(buffer, "confusables.txt");
 
-    FILE     *f = NULL;
-    f = fopen(buffer, "rb");
-    if (f == 0) {
+    LocalStdioFilePointer f(fopen(buffer, "rb"));
+    if (f.isNull()) {
         errln("Skipping test spoof/testConfData.  File confusables.txt not accessible.");
         return;
     }
-    fseek(f, 0, SEEK_END);
-    int32_t  fileSize = ftell(f);
-    char *fileBuf = new char[fileSize];
-    fseek(f, 0, SEEK_SET);
-    int32_t amt_read = fread(fileBuf, 1, fileSize, f);
+    fseek(f.getAlias(), 0, SEEK_END);
+    int32_t  fileSize = ftell(f.getAlias());
+    LocalArray<char> fileBuf(new char[fileSize]);
+    fseek(f.getAlias(), 0, SEEK_SET);
+    int32_t amt_read = fread(fileBuf.getAlias(), 1, fileSize, f.getAlias());
     TEST_ASSERT_EQ(amt_read, fileSize);
     TEST_ASSERT(fileSize>0);
     if (amt_read != fileSize || fileSize <=0) {
-        delete [] fileBuf;
         return;
     }
-    fclose(f);
-    UnicodeString confusablesTxt = UnicodeString::fromUTF8(StringPiece(fileBuf, fileSize));
+    UnicodeString confusablesTxt = UnicodeString::fromUTF8(StringPiece(fileBuf.getAlias(), fileSize));
 
-    USpoofChecker *sc = uspoof_open(&status);
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
     TEST_ASSERT_SUCCESS(status);
 
     // Parse lines from the confusables.txt file.  Example Line:
@@ -377,7 +376,7 @@ void IntlTestSpoof::testConfData() {
         }
 
         UnicodeString actual;
-        uspoof_getSkeletonUnicodeString(sc, skeletonType, from, actual, &status);
+        uspoof_getSkeletonUnicodeString(sc.getAlias(), skeletonType, from, actual, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(actual == expected);
         if (actual != expected) {
@@ -394,9 +393,6 @@ void IntlTestSpoof::testConfData() {
             break;
         }
     }
-
-    uspoof_close(sc);
-    delete [] fileBuf;
 }
 #endif // UCONFIG_NO_REGULAR_EXPRESSIONS
 

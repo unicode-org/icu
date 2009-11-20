@@ -300,18 +300,18 @@ IntlTestNumberFormatAPI::testRegistration()
 #if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
     
-    NumberFormat* f0 = NumberFormat::createInstance(SWAP_LOC, status);
-    NumberFormat* f1 = NumberFormat::createInstance(SRC_LOC, status);
-    NumberFormat* f2 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
+    LocalPointer<NumberFormat> f0(NumberFormat::createInstance(SWAP_LOC, status));
+    LocalPointer<NumberFormat> f1(NumberFormat::createInstance(SRC_LOC, status));
+    LocalPointer<NumberFormat> f2(NumberFormat::createCurrencyInstance(SRC_LOC, status));
     URegistryKey key = NumberFormat::registerFactory(new NFTestFactory(), status);
-    NumberFormat* f3 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
-    NumberFormat* f3a = NumberFormat::createCurrencyInstance(SRC_LOC, status);
-    NumberFormat* f4 = NumberFormat::createInstance(SRC_LOC, status);
+    LocalPointer<NumberFormat> f3(NumberFormat::createCurrencyInstance(SRC_LOC, status));
+    LocalPointer<NumberFormat> f3a(NumberFormat::createCurrencyInstance(SRC_LOC, status));
+    LocalPointer<NumberFormat> f4(NumberFormat::createInstance(SRC_LOC, status));
 
     StringEnumeration* locs = NumberFormat::getAvailableLocales();
 
-    UNumberFormat* uf3 = unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(),NULL, &status);
-    UNumberFormat* uf4 = unum_open(UNUM_DEFAULT, NULL, 0, SRC_LOC.getName(), NULL, &status);
+    LocalUNumberFormatPointer uf3(unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(), NULL, &status));
+    LocalUNumberFormatPointer uf4(unum_open(UNUM_DEFAULT, NULL, 0, SRC_LOC.getName(), NULL, &status));
 
     const UnicodeString* res;
     for (res = locs->snext(status); res; res = locs->snext(status)) {
@@ -319,8 +319,8 @@ IntlTestNumberFormatAPI::testRegistration()
     }
 
     NumberFormat::unregister(key, status); // restore for other tests
-    NumberFormat* f5 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
-    UNumberFormat* uf5 = unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(),NULL, &status);
+    LocalPointer<NumberFormat> f5(NumberFormat::createCurrencyInstance(SRC_LOC, status));
+    LocalUNumberFormatPointer uf5(unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(), NULL, &status));
 
     if (U_FAILURE(status)) {
         dataerrln("Error creating instnaces.");
@@ -339,9 +339,9 @@ IntlTestNumberFormatAPI::testRegistration()
         f4->format(n, res4);
         f5->format(n, res5);
 
-        unum_formatDouble(uf3, n, ures3, 50, NULL, &status);
-        unum_formatDouble(uf4, n, ures4, 50, NULL, &status);
-        unum_formatDouble(uf5, n, ures5, 50, NULL, &status);
+        unum_formatDouble(uf3.getAlias(), n, ures3, 50, NULL, &status);
+        unum_formatDouble(uf4.getAlias(), n, ures4, 50, NULL, &status);
+        unum_formatDouble(uf5.getAlias(), n, ures5, 50, NULL, &status);
 
         logln((UnicodeString)"f0 swap int: " + res0);
         logln((UnicodeString)"f1 src int: " + res1);
@@ -356,10 +356,9 @@ IntlTestNumberFormatAPI::testRegistration()
         log("uf5 ureg cur: ");
         logln(ures5);
 
-        if (f3 == f3a) {
+        if (f3.getAlias() == f3a.getAlias()) {
             errln("did not get new instance from service");
-        } else {
-            delete f3a;
+            f3a.orphan();
         }
         if (res3 != res0) {
             errln("registered service did not match");
@@ -381,16 +380,6 @@ IntlTestNumberFormatAPI::testRegistration()
             errln("unregistered service did not match original / unum");
         }
     }
-
-    unum_close(uf5);
-    delete f5;
-    unum_close(uf4);
-    unum_close(uf3);
-    delete f4;
-    delete f3;
-    delete f2;
-    delete f1;
-    delete f0;
 
     for (res = locs->snext(status); res; res = locs->snext(status)) {
         errln(*res); // service should be out of synch

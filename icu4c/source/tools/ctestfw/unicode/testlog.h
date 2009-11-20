@@ -34,7 +34,7 @@ public:
         testClass(callingTestClass), testName(callingTestName) {}
     virtual ~IcuTestErrorCode();
     // Returns TRUE if isFailure().
-    UBool logIfFailureAndReset(const char *s);
+    UBool logIfFailureAndReset(const char *fmt, ...);
 protected:
     virtual void handleFailure() const;
 private:

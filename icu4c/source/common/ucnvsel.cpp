@@ -157,13 +157,13 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
   }
 
   // allocate a new converter
-  UConverterSelector* newSelector =
-    (UConverterSelector*)uprv_malloc(sizeof(UConverterSelector));
-  if (!newSelector) {
+  LocalUConverterSelectorPointer newSelector(
+    (UConverterSelector*)uprv_malloc(sizeof(UConverterSelector)));
+  if (newSelector.isNull()) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
   }
-  uprv_memset(newSelector, 0, sizeof(UConverterSelector));
+  uprv_memset(newSelector.getAlias(), 0, sizeof(UConverterSelector));
 
   if (converterListSize == 0) {
     converterList = NULL;
@@ -173,7 +173,6 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
     (char**)uprv_malloc(converterListSize * sizeof(char*));
   if (!newSelector->encodings) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(newSelector);
     return NULL;
   }
   newSelector->encodings[0] = NULL;  // now we can call ucnvsel_close()
@@ -194,7 +193,6 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
   char* allStrings = (char*) uprv_malloc(totalSize);
   if (!allStrings) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    ucnvsel_close(newSelector);
     return NULL;
   }
 
@@ -212,15 +210,14 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
   newSelector->ownEncodingStrings = TRUE;
   newSelector->encodingsCount = converterListSize;
   UPropsVectors *upvec = upvec_open((converterListSize+31)/32, status);
-  generateSelectorData(newSelector, upvec, excludedCodePoints, whichSet, status);
+  generateSelectorData(newSelector.getAlias(), upvec, excludedCodePoints, whichSet, status);
   upvec_close(upvec);
 
   if (U_FAILURE(*status)) {
-    ucnvsel_close(newSelector);
     return NULL;
   }
 
-  return newSelector;
+  return newSelector.orphan();
 }
 
 /* close opened selector */
