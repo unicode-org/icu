@@ -20,6 +20,20 @@
 /**
  * \file 
  * \brief C++ API: "Smart pointers" for use with and in ICU4C C++ code.
+ *
+ * These classes are inspired by
+ * - std::auto_ptr
+ * - boost::scoped_ptr & boost::scoped_array
+ * - Taligent Safe Pointers (TOnlyPointerTo)
+ *
+ * but none of those provide for all of the goals for ICU smart pointers:
+ * - Smart pointer owns the object and releases it when it goes out of scope.
+ * - No transfer of ownership via copy/assignment to reduce misuse. Simpler & more robust.
+ * - ICU-compatible: No exceptions.
+ * - Need to be able to orphan/release the pointer and its ownership.
+ * - Need variants for normal C++ object pointers, C++ arrays, and ICU C service objects.
+ *
+ * For details see http://site.icu-project.org/design/cpp/scoped_ptr
  */
 
 #include "unicode/utypes.h"
@@ -150,6 +164,17 @@ private:
  * "Smart pointer" class, deletes objects via the standard C++ delete operator.
  * For most methods see the LocalPointerBase base class.
  *
+ * Usage example:
+ * \code
+ * LocalPointer<UnicodeString> s(new UnicodeString((UChar32)0x50005));
+ * int32_t length=s->length();  // 2
+ * UChar lead=s->charAt(0);  // 0xd900
+ * if(some condition) { return; }  // no need to explicitly delete the pointer
+ * s.adoptInstead(new UnicodeString((UChar)0xfffc));
+ * length=s->length();  // 1
+ * // no need to explicitly delete the pointer
+ * \endcode
+ *
  * @see LocalPointerBase
  * @draft ICU 4.4
  */
@@ -185,6 +210,16 @@ public:
  * "Smart pointer" class, deletes objects via the C++ array delete[] operator.
  * For most methods see the LocalPointerBase base class.
  * Adds operator[] for array item access.
+ *
+ * Usage example:
+ * \code
+ * LocalArray<UnicodeString> a(new UnicodeString[2]);
+ * a[0].append((UChar)0x61);
+ * if(some condition) { return; }  // no need to explicitly delete the array
+ * a.adoptInstead(new UnicodeString[4]);
+ * a[3].append((UChar)0x62).append((UChar)0x63).reverse();
+ * // no need to explicitly delete the array
+ * \endcode
  *
  * @see LocalPointerBase
  * @draft ICU 4.4
@@ -234,6 +269,15 @@ public:
  *
  * Requirement: The closeFunction must tolerate a NULL pointer.
  * (We could add a NULL check here but it is normally redundant.)
+ *
+ * Usage example:
+ * \code
+ * LocalUCaseMapPointer csm(ucasemap_open(localeID, options, &errorCode));
+ * utf8OutLength=ucasemap_utf8ToLower(csm.getAlias(),
+ *     utf8Out, (int32_t)sizeof(utf8Out),
+ *     utf8In, utf8InLength, &errorCode);
+ * if(U_FAILURE(errorCode)) { return; }  // no need to explicitly delete the UCaseMap
+ * \endcode
  *
  * @see LocalPointerBase
  * @see LocalPointer
