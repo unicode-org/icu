@@ -155,5 +155,94 @@ public class Trie2_32 extends Trie2 {
         bytesWritten += dataLength*4;
         return bytesWritten;
     }
+    
+    
+    /**
+     * Given a starting code point, find the last in a range of code points,
+     * all with the same value.
+     * 
+     * This function is part of the implementation of iterating over the
+     * Trie2's contents.
+     * @param startingCP The code point at which to begin looking.
+     * @return The last code point with the same value as the starting code point.
+     */
+    @Override
+    int rangeEnd(int startingCP, int limit, int value) {
+        int   cp = startingCP;
+        int   block = 0;
+        int   index2Block = 0;
+        
+        // Loop runs once for each of
+        //   - a partial data block
+        //   - a reference to the null (default) data block.
+        //   - a reference to the index2 null block
+        
+      outerLoop:
+        for (;;) {
+            if (cp >= limit) {
+                break;
+            }
+            if (cp < 0x0d800 || (cp > 0x0dbff && cp <= 0x0ffff)) {
+                // Ordinary BMP code point, excluding leading surrogates.
+                // BMP uses a single level lookup.  BMP index starts at offset 0 in the Trie2 index.
+                // 16 bit data is stored in the index array itself.
+                index2Block = 0;
+                block       = index[cp >> UTRIE2_SHIFT_2] << UTRIE2_INDEX_SHIFT;
+            } else if (cp < 0xffff) {
+                // Lead Surrogate Code Point, 0xd800 <= cp < 0xdc00
+                index2Block = UTRIE2_LSCP_INDEX_2_OFFSET;
+                block       = index[index2Block + ((cp - 0xd800) >> UTRIE2_SHIFT_2)] << UTRIE2_INDEX_SHIFT;
+            } else if (cp < highStart) {
+                // Supplemental code point, use two-level lookup.
+                int ix = (UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH) + (cp >> UTRIE2_SHIFT_1);
+                index2Block = index[ix];
+                block = index[index2Block + ((cp >> UTRIE2_SHIFT_2) & UTRIE2_INDEX_2_MASK)] << UTRIE2_INDEX_SHIFT;
+            } else  {
+                // Code point above highStart.
+                if (value == data32[highValueIndex]) {
+                    cp = limit;
+                }
+                break;
+            } 
+            
+            if (index2Block == index2NullOffset) {
+                if (value != initialValue) {
+                    break;
+                }
+                cp += UTRIE2_CP_PER_INDEX_1_ENTRY;
+            } else if (block == dataNullOffset) {
+                // The block at dataNullOffset has all values == initialValue.
+                // Because Trie2 iteration always proceeds in ascending order, we will always
+                //   encounter a null block at its beginning, and can skip over
+                //   a number of code points equal to the length of the block.
+                if (value != initialValue) {
+                    break;
+                }
+                cp += UTRIE2_DATA_BLOCK_LENGTH;
+            } else {
+                // Current position refers to an ordinary data block.
+                // Walk over the data entries, checking the values.
+                int startIx = block + (cp & UTRIE2_DATA_MASK);
+                int limitIx = block + UTRIE2_DATA_BLOCK_LENGTH;
+                for (int ix = startIx; ix<limitIx; ix++) {
+                    if (data32[ix] != value) {
+                        // We came to an entry with a different value.
+                        //   We are done.
+                        cp += (ix - startIx);
+                        break outerLoop;
+                    }
+                }
+                // The ordinary data block contained our value until its end.
+                //  Advance the current code point, and continue the outer loop.
+                cp += limitIx - startIx;
+            }
+        }
+        if (cp > limit) {
+            cp = limit;
+        }
+    
+        return cp - 1;
+    }
+
 }
 
