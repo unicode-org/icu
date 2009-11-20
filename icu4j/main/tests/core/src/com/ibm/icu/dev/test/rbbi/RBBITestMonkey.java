@@ -470,8 +470,6 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
  
-    // TODO:  for class fCP, fCL: when Unicode 5.2 properties become available, change the definitions of
-    //        these classes to use them.
     static class RBBILineMonkey extends RBBIMonkeyKind {
         
         List        fSets;
@@ -538,9 +536,8 @@ public class RBBITestMonkey extends TestFmwk {
             fBA    = new UnicodeSet("[\\p{Line_break=BA}]");
             fBB    = new UnicodeSet("[\\p{Line_break=BB}]");
             fHY    = new UnicodeSet("[\\p{Line_break=HY}]");
-            fCL    = new UnicodeSet("[[\\p{Line_break=CL}]-[\\u0029\\u005d]]");
-            fCP    = new UnicodeSet("[\\u0029\\u005d]");
-            // fCP    = new UnicodeSet("[\\p{Line_break=CP}]");
+            fCL    = new UnicodeSet("[\\p{Line_break=CL}]");
+            fCP    = new UnicodeSet("[\\p{Line_break=CP}]");
             fEX    = new UnicodeSet("[\\p{Line_break=EX}]");
             fIN    = new UnicodeSet("[\\p{Line_break=IN}]");
             fNS    = new UnicodeSet("[\\p{Line_break=NS}]");
@@ -1081,10 +1078,10 @@ public class RBBITestMonkey extends TestFmwk {
                             matchState = 9;
                             break;                           
                         }
-                        //if (cLBType == UCharacter.LineBreak.CLOSE_PARENTHESIS) {
-                        //    matchState = 9;
-                        //    break;                           
-                        //}
+                        if (cLBType == UCharacter.LineBreak.CLOSE_PARENTHESIS) {
+                            matchState = 9;
+                            break;                           
+                        }
                         if (cLBType == UCharacter.LineBreak.POSTFIX_NUMERIC) {
                             matchState = 11;
                             break;                           
@@ -1881,9 +1878,6 @@ public void TestWordMonkey() {
 }
 
 public void TestLineMonkey() {
-    if(skipIfBeforeICU(4,3,3)) {
-        return;  // TODO: Fix me!
-    }
     int        loopCount = 500;
     int        seed      = 1;
     
@@ -1961,9 +1955,6 @@ public void TestRTWordMonkey() {
 }
 
 public void TestRTLineMonkey() {
-    if(skipIfBeforeICU(4,3,3)) {
-        return;  // TODO: Fix me!
-    }
     int        loopCount = 200;
     int        seed      = 1;
     
