@@ -395,47 +395,44 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
     int32_t utf8InLength, utf8OutLength, resultLength;
     UChar *buffer;
 
-    UCaseMap *csm;
-    UErrorCode errorCode;
-
-    errorCode=U_ZERO_ERROR;
-    csm=ucasemap_open(localeID, options, &errorCode);
+    IcuTestErrorCode errorCode(*this, "TestCasingImpl");
+    LocalUCaseMapPointer csm(ucasemap_open(localeID, options, errorCode));
 #if !UCONFIG_NO_BREAK_ITERATION
     if(iter!=NULL) {
         // Clone the break iterator so that the UCaseMap can safely adopt it.
         int32_t size=1;  // Not 0 because that only gives preflighting.
-        UBreakIterator *clone=ubrk_safeClone((UBreakIterator *)iter, NULL, &size, &errorCode);
-        ucasemap_setBreakIterator(csm, clone, &errorCode);
+        UBreakIterator *clone=ubrk_safeClone((UBreakIterator *)iter, NULL, &size, errorCode);
+        ucasemap_setBreakIterator(csm.getAlias(), clone, errorCode);
     }
 #endif
 
-    u_strToUTF8(utf8In, (int32_t)sizeof(utf8In), &utf8InLength, input.getBuffer(), input.length(), &errorCode);
+    u_strToUTF8(utf8In, (int32_t)sizeof(utf8In), &utf8InLength, input.getBuffer(), input.length(), errorCode);
     switch(whichCase) {
     case TEST_LOWER:
         name="ucasemap_utf8ToLower";
-        utf8OutLength=ucasemap_utf8ToLower(csm,
+        utf8OutLength=ucasemap_utf8ToLower(csm.getAlias(),
                     utf8Out, (int32_t)sizeof(utf8Out),
-                    utf8In, utf8InLength, &errorCode);
+                    utf8In, utf8InLength, errorCode);
         break;
     case TEST_UPPER:
         name="ucasemap_utf8ToUpper";
-        utf8OutLength=ucasemap_utf8ToUpper(csm,
+        utf8OutLength=ucasemap_utf8ToUpper(csm.getAlias(),
                     utf8Out, (int32_t)sizeof(utf8Out),
-                    utf8In, utf8InLength, &errorCode);
+                    utf8In, utf8InLength, errorCode);
         break;
 #if !UCONFIG_NO_BREAK_ITERATION
     case TEST_TITLE:
         name="ucasemap_utf8ToTitle";
-        utf8OutLength=ucasemap_utf8ToTitle(csm,
+        utf8OutLength=ucasemap_utf8ToTitle(csm.getAlias(),
                     utf8Out, (int32_t)sizeof(utf8Out),
-                    utf8In, utf8InLength, &errorCode);
+                    utf8In, utf8InLength, errorCode);
         break;
 #endif
     case TEST_FOLD:
         name="ucasemap_utf8FoldCase";
-        utf8OutLength=ucasemap_utf8FoldCase(csm,
+        utf8OutLength=ucasemap_utf8FoldCase(csm.getAlias(),
                     utf8Out, (int32_t)sizeof(utf8Out),
-                    utf8In, utf8InLength, &errorCode);
+                    utf8In, utf8InLength, errorCode);
         break;
     default:
         name="";
@@ -443,31 +440,29 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
         break; // won't happen
     }
     buffer=result.getBuffer(utf8OutLength);
-    u_strFromUTF8(buffer, result.getCapacity(), &resultLength, utf8Out, utf8OutLength, &errorCode);
-    result.releaseBuffer(U_SUCCESS(errorCode) ? resultLength : 0);
+    u_strFromUTF8(buffer, result.getCapacity(), &resultLength, utf8Out, utf8OutLength, errorCode);
+    result.releaseBuffer(errorCode.isSuccess() ? resultLength : 0);
 
-    if(U_FAILURE(errorCode)) {
+    if(errorCode.isFailure()) {
         errcheckln(errorCode, "error: %s() got an error for a test case from casing.res - %s", name, u_errorName(errorCode));
+        errorCode.reset();
     } else if(result!=output) {
         errln("error: %s() got a wrong result for a test case from casing.res", name);
         errln("expected \"" + output + "\" got \"" + result + "\"" );
     }
-    ucasemap_close(csm);
 }
 
 void
 StringCaseTest::TestCasing() {
     UErrorCode status = U_ZERO_ERROR;
-#if UCONFIG_NO_BREAK_ITERATION
-    void *iter;
-#else
-    UBreakIterator *iter;
+#if !UCONFIG_NO_BREAK_ITERATION
+    LocalUBreakIteratorPointer iter;
 #endif
     char cLocaleID[100];
     UnicodeString locale, input, output, optionsString, result;
     uint32_t options;
     int32_t whichCase, type;
-    TestDataModule *driver = TestDataModule::getTestDataModule("casing", *this, status);
+    LocalPointer<TestDataModule> driver(TestDataModule::getTestDataModule("casing", *this, status));
     if(U_SUCCESS(status)) {
         for(whichCase=0; whichCase<TEST_COUNT; ++whichCase) {
 #if UCONFIG_NO_BREAK_ITERATION
@@ -475,7 +470,7 @@ StringCaseTest::TestCasing() {
                 continue;
             }
 #endif
-            TestData *casingTest = driver->createTestData(dataNames[whichCase], status);
+            LocalPointer<TestData> casingTest(driver->createTestData(dataNames[whichCase], status));
             if(U_FAILURE(status)) {
                 errln("TestCasing failed to createTestData(%s) - %s", dataNames[whichCase], u_errorName(status));
                 break;
@@ -490,18 +485,17 @@ StringCaseTest::TestCasing() {
                 }
                 locale.extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
 
-                iter=NULL;
 #if !UCONFIG_NO_BREAK_ITERATION
                 if(whichCase==TEST_TITLE) {
                     type = myCase->getInt("Type", status);
                     if(type>=0) {
-                        iter=ubrk_open((UBreakIteratorType)type, cLocaleID, NULL, 0, &status);
+                        iter.adoptInstead(ubrk_open((UBreakIteratorType)type, cLocaleID, NULL, 0, &status));
                     } else if(type==-2) {
                         // Open a trivial break iterator that only delivers { 0, length }
                         // or even just { 0 } as boundaries.
                         static const UChar rules[] = { 0x2e, 0x2a, 0x3b };  // ".*;"
                         UParseError parseError;
-                        iter=ubrk_openRules(rules, LENGTHOF(rules), NULL, 0, &parseError, &status);
+                        iter.adoptInstead(ubrk_openRules(rules, LENGTHOF(rules), NULL, 0, &parseError, &status));
                     }
                 }
 #endif
@@ -523,19 +517,18 @@ StringCaseTest::TestCasing() {
                     dataerrln("error: TestCasing() setup failed for %s test case from casing.res: %s", dataNames[whichCase],  u_errorName(status));
                     status = U_ZERO_ERROR;
                 } else {
-                    TestCasingImpl(input, output, whichCase, iter, cLocaleID, options);
+#if UCONFIG_NO_BREAK_ITERATION
+                    LocalPointer<UMemory> iter;
+#endif
+                    TestCasingImpl(input, output, whichCase, iter.getAlias(), cLocaleID, options);
                 }
 
 #if !UCONFIG_NO_BREAK_ITERATION
-                if(iter!=NULL) {
-                    ubrk_close(iter);
-                }
+                iter.adoptInstead(NULL);
 #endif
             }
-            delete casingTest;
         }
     }
-    delete driver;
 
 #if !UCONFIG_NO_BREAK_ITERATION
     // more tests for API coverage

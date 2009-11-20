@@ -1052,25 +1052,16 @@ static void writeStringInU8(FILE *out, const UnicodeString &s) {
 
 void TransliteratorRoundTripTest::TestHan() {
     UErrorCode  status = U_ZERO_ERROR;
-
-    // TODO:  getExemplars() exists only as a C API, taking a USet.
-    //        The set API we need to use exists only on UnicodeSet, not on USet.
-    //        Do a hacky cast, knowing that a USet is really a UnicodeSet in
-    //        the implementation.  Once USet gets the missing API, switch back
-    //        to using that.
-    USet       *USetExemplars = NULL;
-    ULocaleData *uld = ulocdata_open("zh",&status);
-    USetExemplars = uset_open(0, 0);
-    USetExemplars = ulocdata_getExemplarSet(uld, USetExemplars, 0, ULOCDATA_ES_STANDARD, &status);
+    LocalULocaleDataPointer uld(ulocdata_open("zh",&status));
+    LocalUSetPointer USetExemplars(ulocdata_getExemplarSet(uld.getAlias(), uset_openEmpty(), 0, ULOCDATA_ES_STANDARD, &status));
     ASSERT_SUCCESS(status);
-    ulocdata_close(uld);
 
     UnicodeString source;
     UChar32       c;
     int           i;
     for (i=0; ;i++) {
         // Add all of the Chinese exemplar chars to the string "source".
-        c = uset_charAt(USetExemplars, i);
+        c = uset_charAt(USetExemplars.getAlias(), i);
         if (c == (UChar32)-1) {
             break;
         }
@@ -1131,7 +1122,6 @@ void TransliteratorRoundTripTest::TestHan() {
     delete pn;
     delete nfd;
     delete np;
-    uset_close(USetExemplars);
 }
 
 

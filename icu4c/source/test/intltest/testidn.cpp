@@ -63,7 +63,6 @@ static TestIDNA* pTestIDNA =NULL;
 static const char* fileNames[] = {
                                     "rfc3491.txt"
                                  };
-static       UStringPrepProfile *profile = NULL;
 static const UTrie *idnTrie              = NULL;
 static const int32_t *indexes            = NULL;
 static const uint16_t *mappingData       = NULL;
@@ -80,7 +79,7 @@ testData(TestIDNA& test) {
     UErrorCode errorCode=U_ZERO_ERROR;
     char *saveBasename =NULL;
 
-    profile = usprep_openByType(USPREP_RFC3491_NAMEPREP, &errorCode);
+    LocalUStringPrepProfilePointer profile(usprep_openByType(USPREP_RFC3491_NAMEPREP, &errorCode));
     if(U_FAILURE(errorCode)){
         test.errcheckln(errorCode, "Failed to load IDNA data file. " + UnicodeString(u_errorName(errorCode)));
         return errorCode;
@@ -132,7 +131,6 @@ testData(TestIDNA& test) {
 
     testAllCodepoints(test);
 
-    usprep_close(profile);
     pTestIDNA = NULL;
     free(filename);
     return errorCode;
