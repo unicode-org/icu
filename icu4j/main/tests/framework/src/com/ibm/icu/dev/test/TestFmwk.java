@@ -1775,18 +1775,18 @@ public class TestFmwk extends AbstractTestLog {
         boolean result = !(expected == null ? actual == null : expected
                 .equals(actual));
         return handleAssert(result, message, stringFor(expected),
-                stringFor(actual), "not equal to", true);
+                stringFor(actual), "not equal to", true, 3);
     }
 
     protected boolean assertSame(String message, Object expected, Object actual) {
         return handleAssert(expected == actual, message, stringFor(expected),
-                stringFor(actual), "==", false);
+                stringFor(actual), "==", false, 3);
     }
 
     protected boolean assertNotSame(String message, Object expected,
             Object actual) {
         return handleAssert(expected != actual, message, stringFor(expected),
-                stringFor(actual), "!=", true);
+                stringFor(actual), "!=", true, 3);
     }
 
     protected boolean assertNull(String message, Object actual) {
@@ -1795,7 +1795,7 @@ public class TestFmwk extends AbstractTestLog {
 
     protected boolean assertNotNull(String message, Object actual) {
         return handleAssert(actual != null, message, null, stringFor(actual),
-                "!=", true);
+                "!=", true, 3);
     }
 
     protected void fail(String message) {
@@ -1804,21 +1804,27 @@ public class TestFmwk extends AbstractTestLog {
 
     private boolean handleAssert(boolean result, String message,
             String expected, String actual) {
-        return handleAssert(result, message, expected, actual, null, false);
+        return handleAssert(result, message, expected, actual, null, false, 4);
     }
 
     public boolean handleAssert(boolean result, String message,
-            Object expected, Object actual, String relation, boolean flip) {
+            Object expected, Object actual, String relation, boolean flip, int callDepth) {
         if (!result || isVerbose()) {
-            message = message == null ? "" : " " + message;
+            String testLocation = sourceLocation(callDepth);
+            if (message == null) {
+                message = "";
+            }
+            if (!message.equals("")) {
+                message = ": " + message;
+            }
             relation = relation == null ? ", got " : " " + relation + " ";
             if (result) {
-                logln("OK" + message + ": "
+                logln("OK " + testLocation + message + ": "
                         + (flip ? expected + relation + actual : expected));
             } else {
                 // assert must assume errors are true errors and not just warnings
                 // so cannot warnln here
-                errln(message
+                errln(testLocation + message
                         + ": expected"
                         + (flip ? relation + expected : " " + expected
                                 + (actual != null ? relation + actual : "")));
@@ -1834,6 +1840,15 @@ public class TestFmwk extends AbstractTestLog {
             return "\"" + obj + '"';
         return obj.getClass().getName() + "<" + obj + ">";
     }
+    
+    // Return the source code location of the caller located callDepth frames up the stack.
+    private String sourceLocation(int callDepth) {
+        StackTraceElement[] st = new Throwable().getStackTrace();
+        String w = "File "   + st[callDepth].getFileName() + 
+                   ", Line " + st[callDepth].getLineNumber();
+        return w;
+    }
+
 
     // End JUnit-like assertions
 

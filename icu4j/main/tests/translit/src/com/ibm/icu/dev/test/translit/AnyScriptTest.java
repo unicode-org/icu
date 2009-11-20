@@ -132,11 +132,11 @@ public class AnyScriptTest extends TestFmwk {
 
     // might want to add to TestFmwk
     private void assertContainsAll(String message, UnicodeSet set, String string) {
-        handleAssert(set.containsAll(string), message, set, string, "contains all of", false);
+        handleAssert(set.containsAll(string), message, set, string, "contains all of", false, 3);
     }
 
     private void assertContainsNone(String message, UnicodeSet set, String string) {
-        handleAssert(set.containsNone(string), message, set, string, "contains none of", false);
+        handleAssert(set.containsNone(string), message, set, string, "contains none of", false, 3);
     }
 
     // might want to add to UnicodeSet
