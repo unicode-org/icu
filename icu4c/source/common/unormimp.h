@@ -187,7 +187,7 @@ enum {
     /** Options bit 0, do not decompose Hangul syllables. @draft ICU 2.6 */
     UNORM_NX_HANGUL=1,
     /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
-    UNORM_NX_CJK_COMPAT=2,
+    UNORM_NX_CJK_COMPAT=2
 };
 
 /**
