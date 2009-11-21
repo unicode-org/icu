@@ -130,9 +130,6 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     public void TestRuleOptions() {
-        if(skipIfBeforeICU(4,3,3)) {
-            return;  // TODO: Fix me!
-        }
         // values here are hardcoded and are correct for the current UCA when 
         // the UCA changes, one might be forced to change these values. 
         // (\\u02d0, \\U00010FFFC etc...) 
@@ -169,7 +166,12 @@ public class CollationMiscTest extends TestFmwk {
             {"c", "b", "\\u0009", "a", "\\u000a"},
             {"c", "b", "\\uD834\\uDF71", "a", "\\u02d0"},
             {"b", "\\u02d0", "a", "\\u02d1"},
-            {"b", "\\ud808\\udf6e", "a", "\\u4e00"},
+            // The character in the second ordering test string
+            // has to match the character that has the [last regular] weight
+            // which changes with each UCA version.
+            // See the bottom of FractionalUCA.txt which says something like
+            // [last regular [CE 27, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
+            {"b", "\\U0001342E", "a", "\\u4e00"},
             {"b", "\\u4e00", "a", "\\u4e01"},
             {"b", "\\U0010FFFD", "a"},
             {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
@@ -304,9 +306,6 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     public void TestBeforePrefixFailure() {
-        if(skipIfBeforeICU(4,3,3)) {
-            return;  // TODO: Fix me!
-        }
         String[] rules = {
             "&g <<< a&[before 3]\uff41 <<< x",
             "&\u30A7=\u30A7=\u3047=\uff6a&\u30A8=\u30A8=\u3048=\uff74&[before 3]\u30a7<<<\u30a9",
@@ -2602,4 +2601,3 @@ public class CollationMiscTest extends TestFmwk {
         }
     }
 }
-

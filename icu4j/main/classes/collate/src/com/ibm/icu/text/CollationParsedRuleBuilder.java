@@ -147,8 +147,8 @@ final class CollationParsedRuleBuilder {
             if (s1 == t1 && s2 == t2) {
                 return 0;
             }
-            s = (s1 & 0xFFFF0000) | ((s2 & 0xFFFF0000) >> 16);
-            t = (t1 & 0xFFFF0000) | ((t2 & 0xFFFF0000) >> 16);
+            s = (s1 & 0xFFFF0000) | ((s2 & 0xFFFF0000) >>> 16);
+            t = (t1 & 0xFFFF0000) | ((t2 & 0xFFFF0000) >>> 16);
             if (s == t) {
                 s = (s1 & 0x0000FF00) | (s2 & 0x0000FF00) >> 8;
                 t = (t1 & 0x0000FF00) | (t2 & 0x0000FF00) >> 8;
