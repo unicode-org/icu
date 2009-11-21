@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -534,8 +534,7 @@ unorm_compare(const UChar *s1, int32_t length1,
               const UChar *s2, int32_t length2,
               uint32_t options,
               UErrorCode *pErrorCode) {
-    UChar fcd1[300], fcd2[300];
-    UChar *d1, *d2;
+    MaybeStackArray<UChar, 300> fcd1, fcd2;
     const UnicodeSet *nx;
     UNormalizationMode mode;
     int32_t normOptions;
@@ -563,7 +562,6 @@ unorm_compare(const UChar *s1, int32_t length1,
         return 0;
     }
 
-    d1=d2=0;
     options|=_COMPARE_EQUIV;
     result=0;
 
@@ -616,58 +614,50 @@ unorm_compare(const UChar *s1, int32_t length1,
          */
 
         if(!isFCD1) {
-            _len1=unorm_internalNormalizeWithNX(fcd1, LENGTHOF(fcd1),
+            _len1=unorm_internalNormalizeWithNX(fcd1.getAlias(), fcd1.getCapacity(),
                                                 s1, length1,
                                                 mode, normOptions, nx,
                                                 pErrorCode);
-            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                s1=fcd1;
-            } else {
-                d1=(UChar *)uprv_malloc(_len1*U_SIZEOF_UCHAR);
-                if(d1==0) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                if(fcd1.resize(_len1)==NULL) {
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    goto cleanup;
+                    return result;
                 }
 
                 *pErrorCode=U_ZERO_ERROR;
-                _len1=unorm_internalNormalizeWithNX(d1, _len1,
+                _len1=unorm_internalNormalizeWithNX(fcd1.getAlias(), fcd1.getCapacity(),
                                                     s1, length1,
                                                     mode, normOptions, nx,
                                                     pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    goto cleanup;
+                    return result;
                 }
-
-                s1=d1;
             }
+            s1=fcd1.getAlias();
             length1=_len1;
         }
 
         if(!isFCD2) {
-            _len2=unorm_internalNormalizeWithNX(fcd2, LENGTHOF(fcd2),
+            _len2=unorm_internalNormalizeWithNX(fcd2.getAlias(), fcd2.getCapacity(),
                                                 s2, length2,
                                                 mode, normOptions, nx,
                                                 pErrorCode);
-            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                s2=fcd2;
-            } else {
-                d2=(UChar *)uprv_malloc(_len2*U_SIZEOF_UCHAR);
-                if(d2==0) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                if(fcd2.resize(_len2)==NULL) {
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    goto cleanup;
+                    return result;
                 }
 
                 *pErrorCode=U_ZERO_ERROR;
-                _len2=unorm_internalNormalizeWithNX(d2, _len2,
+                _len2=unorm_internalNormalizeWithNX(fcd2.getAlias(), fcd2.getCapacity(),
                                                     s2, length2,
                                                     mode, normOptions, nx,
                                                     pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    goto cleanup;
+                    return result;
                 }
-
-                s2=d2;
             }
+            s2=fcd2.getAlias();
             length2=_len2;
         }
     }
@@ -675,15 +665,6 @@ unorm_compare(const UChar *s1, int32_t length1,
     if(U_SUCCESS(*pErrorCode)) {
         result=unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);
     }
-
-cleanup:
-    if(d1!=0) {
-        uprv_free(d1);
-    }
-    if(d2!=0) {
-        uprv_free(d2);
-    }
-
     return result;
 }
 
