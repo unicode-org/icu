@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -598,8 +598,6 @@ PropertyAliases::swap(const UDataSwapper *ds,
     ValueMap *outValueMaps;
     ValueMap valueMap;
 
-    uint8_t *temp;
-
     int32_t i;
 
     inAliases=(const PropertyAliases *)inBytes;
@@ -647,26 +645,25 @@ PropertyAliases::swap(const UDataSwapper *ds,
          *     resort strings in name->enum maps
          * swap value maps
          */
-        temp=(uint8_t *)uprv_malloc(aliases.total_size);
-        if(temp==NULL) {
+        LocalMemory<uint8_t> temp;
+        if(temp.allocateInsteadAndReset(aliases.total_size)==NULL) {
             udata_printError(ds, "upname_swap(): unable to allocate temp memory (%d bytes)\n",
                              aliases.total_size);
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
-        uprv_memset(temp, 0, aliases.total_size);
 
         /* swap properties->name groups map */
         NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
-                                        temp, aliases.enumToName_offset, pErrorCode);
+                                        temp.getAlias(), aliases.enumToName_offset, pErrorCode);
 
         /* swap name->properties map */
         NameToEnum::swap(ds, inBytes, length, outBytes,
-                         temp, aliases.nameToEnum_offset, pErrorCode);
+                         temp.getAlias(), aliases.nameToEnum_offset, pErrorCode);
 
         /* swap properties->value maps map */
         NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
-                                        temp, aliases.enumToValue_offset, pErrorCode);
+                                        temp.getAlias(), aliases.enumToValue_offset, pErrorCode);
 
         /* enumerate all ValueMaps and swap them */
         inValueMaps=(const ValueMap *)(inBytes+aliases.valueMap_offset);
@@ -679,16 +676,16 @@ PropertyAliases::swap(const UDataSwapper *ds,
 
             if(valueMap.enumToName_offset!=0) {
                 EnumToOffset::swap(ds, inBytes, length, outBytes,
-                                   temp, valueMap.enumToName_offset,
+                                   temp.getAlias(), valueMap.enumToName_offset,
                                    pErrorCode);
             } else if(valueMap.ncEnumToName_offset!=0) {
                 NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
-                                                temp, valueMap.ncEnumToName_offset,
+                                                temp.getAlias(), valueMap.ncEnumToName_offset,
                                                 pErrorCode);
             }
             if(valueMap.nameToEnum_offset!=0) {
                 NameToEnum::swap(ds, inBytes, length, outBytes,
-                                 temp, valueMap.nameToEnum_offset,
+                                 temp.getAlias(), valueMap.nameToEnum_offset,
                                  pErrorCode);
             }
         }
@@ -698,9 +695,6 @@ PropertyAliases::swap(const UDataSwapper *ds,
                            outValueMaps, pErrorCode);
 
         /* name groups and strings were swapped above */
-
-        /* release temp */
-        uprv_free(temp);
     }
 
     return aliases.total_size;

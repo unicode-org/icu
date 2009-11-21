@@ -330,89 +330,64 @@ usprep_getProfile(const char* path,
     /* fetch the data from the cache */
     umtx_lock(&usprepMutex);
     profile = (UStringPrepProfile*) (uhash_get(SHARED_DATA_HASHTABLE,&stackKey));
+    if(profile != NULL) {
+        profile->refCount++;
+    }
     umtx_unlock(&usprepMutex);
     
-    if(profile == NULL){
-        UStringPrepKey* key   = (UStringPrepKey*) uprv_malloc(sizeof(UStringPrepKey));
-        if(key == NULL){
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
+    if(profile == NULL) {
         /* else load the data and put the data in the cache */
-        profile = (UStringPrepProfile*) uprv_malloc(sizeof(UStringPrepProfile));
-        if(profile == NULL){
+        LocalMemory<UStringPrepProfile> newProfile;
+        if(newProfile.allocateInsteadAndReset() == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            uprv_free(key);
             return NULL;
         }
-
-        /* initialize the data struct members */
-        uprv_memset(profile->indexes,0,sizeof(profile->indexes));
-        profile->mappingData = NULL;
-        profile->sprepData   = NULL;
-        profile->refCount    = 0;
-    
-        /* initialize the  key memebers */
-        key->name  = (char*) uprv_malloc(uprv_strlen(name)+1);
-        if(key->name == NULL){
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            uprv_free(key);
-            uprv_free(profile);
-            return NULL;
-        }
-
-        uprv_strcpy(key->name, name);
-        
-        key->path=NULL;
-
-        if(path != NULL){
-            key->path      = (char*) uprv_malloc(uprv_strlen(path)+1);
-            if(key->path == NULL){
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                uprv_free(key->name);
-                uprv_free(key);
-                uprv_free(profile);
-                return NULL;
-            }
-            uprv_strcpy(key->path, path);
-        }        
 
         /* load the data */
-        if(!loadData(profile, path, name, _SPREP_DATA_TYPE, status) || U_FAILURE(*status) ){
-            uprv_free(key->path);
-            uprv_free(key->name);
-            uprv_free(key);
-            uprv_free(profile);
+        if(!loadData(newProfile.getAlias(), path, name, _SPREP_DATA_TYPE, status) || U_FAILURE(*status) ){
             return NULL;
         }
         
         /* get the options */
-        profile->doNFKC            = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
-        profile->checkBiDi         = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
+        newProfile->doNFKC = (UBool)((newProfile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
+        newProfile->checkBiDi = (UBool)((newProfile->indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
 
-        if(profile->checkBiDi) {
-            profile->bdp = ubidi_getSingleton(status);
+        if(newProfile->checkBiDi) {
+            newProfile->bdp = ubidi_getSingleton(status);
             if(U_FAILURE(*status)) {
-                usprep_unload(profile);
-                uprv_free(key->path);
-                uprv_free(key->name);
-                uprv_free(key);
-                uprv_free(profile);
+                usprep_unload(newProfile.getAlias());
                 return NULL;
             }
-        } else {
-            profile->bdp = NULL;
         }
-        
+
+        LocalMemory<UStringPrepKey> key;
+        LocalMemory<char> keyName;
+        LocalMemory<char> keyPath;
+        if( key.allocateInsteadAndReset() == NULL ||
+            keyName.allocateInsteadAndCopy(uprv_strlen(name)+1) == NULL ||
+            (path != NULL &&
+             keyPath.allocateInsteadAndCopy(uprv_strlen(path)+1) == NULL)
+         ) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            usprep_unload(newProfile.getAlias());
+            return NULL;
+        }
+
+        /* initialize the key members */
+        key->name = keyName.orphan();
+        uprv_strcpy(key->name, name);
+        if(path != NULL){
+            key->path = keyPath.orphan();
+            uprv_strcpy(key->path, path);
+        }        
+
+        profile = newProfile.orphan();
         umtx_lock(&usprepMutex);
         /* add the data object to the cache */
-        uhash_put(SHARED_DATA_HASHTABLE, key, profile, status);
+        profile->refCount = 1;
+        uhash_put(SHARED_DATA_HASHTABLE, key.orphan(), profile, status);
         umtx_unlock(&usprepMutex);
     }
-    umtx_lock(&usprepMutex);
-    /* increment the refcount */
-    profile->refCount++;
-    umtx_unlock(&usprepMutex);
 
     return profile;
 }

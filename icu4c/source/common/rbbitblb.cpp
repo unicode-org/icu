@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2008, International Business Machines
+*   Copyright (c) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -955,74 +955,56 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     int32_t destOriginalSize = dest->size();
     int32_t sourceSize       = source->size();
     int32_t di           = 0;
-    void *(destS[16]), *(sourceS[16]);  // Handle small cases without malloc
-    void **destH = 0, **sourceH = 0;
-    void **destBuff, **sourceBuff;
+    MaybeStackArray<void *, 16> destArray, sourceArray;  // Handle small cases without malloc
+    void **destPtr, **sourcePtr;
     void **destLim, **sourceLim;
 
-    if (destOriginalSize > (int32_t)(sizeof(destS)/sizeof(destS[0]))) {
-        destH = (void **)uprv_malloc(sizeof(void *) * destOriginalSize);
-        destBuff = destH;
-    }
-    else {
-        destBuff = destS;
-    }
-    if (destBuff == 0) {
-        return;
-    }
-    destLim = destBuff + destOriginalSize;
-
-    if (sourceSize > (int32_t)(sizeof(sourceS)/sizeof(sourceS[0]))) {
-        sourceH = (void **)uprv_malloc(sizeof(void *) * sourceSize);
-        sourceBuff = sourceH;
-    }
-    else {
-        sourceBuff = sourceS;
-    }
-    if (sourceBuff == 0) {
-        if (destH) {
-            uprv_free(destH);
+    if (destOriginalSize > destArray.getCapacity()) {
+        if (destArray.resize(destOriginalSize) == NULL) {
+            return;
         }
-        return;
     }
-    sourceLim = sourceBuff + sourceSize;
+    destPtr = destArray.getAlias();
+    destLim = destPtr + destOriginalSize;  // destArray.getArrayLimit()?
+
+    if (sourceSize > sourceArray.getCapacity()) {
+        if (sourceArray.resize(sourceSize) == NULL) {
+            return;
+        }
+    }
+    sourcePtr = sourceArray.getAlias();
+    sourceLim = sourcePtr + sourceSize;  // sourceArray.getArrayLimit()?
 
     // Avoid multiple "get element" calls by getting the contents into arrays
-    (void) dest->toArray(destBuff);
-    (void) source->toArray(sourceBuff);
+    (void) dest->toArray(destPtr);
+    (void) source->toArray(sourcePtr);
 
     dest->setSize(sourceSize+destOriginalSize, *fStatus);
 
-    while (sourceBuff < sourceLim && destBuff < destLim) {
-        if (*destBuff == *sourceBuff) {
-            dest->setElementAt(*sourceBuff++, di++);
-            destBuff++;
+    while (sourcePtr < sourceLim && destPtr < destLim) {
+        if (*destPtr == *sourcePtr) {
+            dest->setElementAt(*sourcePtr++, di++);
+            destPtr++;
         }
         // This check is required for machines with segmented memory, like i5/OS.
         // Direct pointer comparison is not recommended.
-        else if (uprv_memcmp(destBuff, sourceBuff, sizeof(void *)) < 0) {
-            dest->setElementAt(*destBuff++, di++);
+        else if (uprv_memcmp(destPtr, sourcePtr, sizeof(void *)) < 0) {
+            dest->setElementAt(*destPtr++, di++);
         }
-        else { /* *sourceBuff < *destBuff */
-            dest->setElementAt(*sourceBuff++, di++);
+        else { /* *sourcePtr < *destPtr */
+            dest->setElementAt(*sourcePtr++, di++);
         }
     }
 
     // At most one of these two cleanup loops will execute
-    while (destBuff < destLim) {
-        dest->setElementAt(*destBuff++, di++);
+    while (destPtr < destLim) {
+        dest->setElementAt(*destPtr++, di++);
     }
-    while (sourceBuff < sourceLim) {
-        dest->setElementAt(*sourceBuff++, di++);
+    while (sourcePtr < sourceLim) {
+        dest->setElementAt(*sourcePtr++, di++);
     }
 
     dest->setSize(di, *fStatus);
-    if (destH) {
-        uprv_free(destH);
-    }
-    if (sourceH) {
-        uprv_free(sourceH);
-    }
 }
 
 

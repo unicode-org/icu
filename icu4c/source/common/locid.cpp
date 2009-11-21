@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2008, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -320,9 +320,7 @@ Locale::Locale( const   char * newLanguage,
     }
     else
     {
-        char togo_stack[ULOC_FULLNAME_CAPACITY];
-        char *togo;
-        char *togo_heap = NULL;
+        MaybeStackArray<char, ULOC_FULLNAME_CAPACITY> togo;
         int32_t size = 0;
         int32_t lsize = 0;
         int32_t csize = 0;
@@ -389,24 +387,18 @@ Locale::Locale( const   char * newLanguage,
 
         /*if the whole string is longer than our internal limit, we need
         to go to the heap for temporary buffers*/
-        if (size >= ULOC_FULLNAME_CAPACITY)
+        if (size >= togo.getCapacity())
         {
-            togo_heap = (char *)uprv_malloc(sizeof(char)*(size+1));
             // If togo_heap could not be created, initialize with default settings.
-            if (togo_heap == NULL) {
+            if (togo.resize(size+1) == NULL) {
                 init(NULL, FALSE);
             }
-            togo = togo_heap;
-        }
-        else
-        {
-            togo = togo_stack;
         }
 
         togo[0] = 0;
 
         // Now, copy it back.
-        p = togo;
+        p = togo.getAlias();
         if ( lsize != 0 )
         {
             uprv_strcpy(p, newLanguage);
@@ -450,11 +442,7 @@ Locale::Locale( const   char * newLanguage,
 
         // Parse it, because for example 'language' might really be a complete
         // string.
-        init(togo, FALSE);
-
-        if (togo_heap) {
-            uprv_free(togo_heap);
-        }
+        init(togo.getAlias(), FALSE);
     }
 }
 
