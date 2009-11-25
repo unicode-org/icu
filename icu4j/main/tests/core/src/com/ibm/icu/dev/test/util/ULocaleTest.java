@@ -977,7 +977,7 @@ public class ULocaleTest extends TestFmwk {
                 String country = l.getDisplayCountry();
                 String variant = l.getDisplayVariant();
 
-                checkName(name, language, script, country, variant);
+                checkName(name, language, script, country, variant, ULocale.getDefault());
 
                 for (int j = 0; j < locales.length; ++j) {
                     ULocale dl = locales[j];
@@ -988,7 +988,7 @@ public class ULocaleTest extends TestFmwk {
                     country = l.getDisplayCountry(dl);
                     variant = l.getDisplayVariant(dl);
 
-                    if (!checkName(name, language, script, country, variant)) {
+                    if (!checkName(name, language, script, country, variant, dl)) {
                         break;
                     }
                 }
@@ -1023,21 +1023,21 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
-    private boolean checkName(String name, String language, String script, String country, String variant) {
+    private boolean checkName(String name, String language, String script, String country, String variant, ULocale dl) {
         if (language.length() > 0 && name.indexOf(language) == -1) {
-            errln("name '" + name + "' does not contain language '" + language + "'");
+            errln("loc: " + dl + " name '" + name + "' does not contain language '" + language + "'");
             return false;
         }
         if (script.length() > 0 && name.indexOf(script) == -1) {
-            errln("name '" + name + "' does not contain script '" + script + "'");
+            errln("loc: " + dl + " name '" + name + "' does not contain script '" + script + "'");
             return false;
         }
         if (country.length() > 0 && name.indexOf(country) == -1) {
-            errln("name '" + name + "' does not contain country '" + country + "'");
+            errln("loc: " + dl + " name '" + name + "' does not contain country '" + country + "'");
             return false;
         }
         if (variant.length() > 0 && name.indexOf(variant) == -1) {
-            errln("name '" + name + "' does not contain variant '" + variant + "'");
+            errln("loc: " + dl + " name '" + name + "' does not contain variant '" + variant + "'");
             return false;
         }
         return true;
@@ -1061,7 +1061,7 @@ public class ULocaleTest extends TestFmwk {
                 country = ULocale.getDisplayCountry(localeID, testLocale);
                 variant = ULocale.getDisplayVariant(localeID, testLocale);
 
-                if (!checkName(name, language, script, country, variant)) {
+                if (!checkName(name, language, script, country, variant, new ULocale(testLocale))) {
                     break;
                 }
             }
@@ -1078,7 +1078,7 @@ public class ULocaleTest extends TestFmwk {
                 country = ULocale.getDisplayCountry(localeID, loc);
                 variant = ULocale.getDisplayVariant(localeID, loc);
 
-                if (!checkName(name, language, script, country, variant)) {
+                if (!checkName(name, language, script, country, variant, loc)) {
                     break;
                 }
             }
