@@ -2514,6 +2514,13 @@ TestAdditionalProperties() {
         { 0xff63, UCHAR_SENTENCE_BREAK, U_SB_CLOSE },
         { 0x2028, UCHAR_SENTENCE_BREAK, U_SB_SEP },
 
+        { -1, 0x520, 0 }, /* version break for Unicode 5.2 */
+
+        /* test some script codes >127 */
+        { 0xa6e6,  UCHAR_SCRIPT, USCRIPT_BAMUM },
+        { 0xa4d0,  UCHAR_SCRIPT, USCRIPT_LISU },
+        { 0x10a7f,  UCHAR_SCRIPT, USCRIPT_OLD_SOUTH_ARABIAN },
+
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },
         { 0x234bc, 0x15ed, 0 }
