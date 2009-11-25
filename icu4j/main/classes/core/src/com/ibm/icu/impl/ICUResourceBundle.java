@@ -26,6 +26,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
 import com.ibm.icu.util.StringTokenizer;
@@ -677,19 +678,27 @@ public  class ICUResourceBundle extends UResourceBundle {
             requested = actualBundle;
         }
         while (actualBundle != null) {
-            StringTokenizer st = new StringTokenizer(path, "/");
             ICUResourceBundle current = (ICUResourceBundle) actualBundle;
-            while (st.hasMoreTokens()) {
-                String subKey = st.nextToken();
-                sub =  (ICUResourceBundle)current.handleGet(subKey, null, requested);
-                if (sub == null) {
+            if (path.indexOf('/') == -1) { // skip the tokenizer
+                sub = (ICUResourceBundle) current.handleGet(path, null, requested);
+                if (sub != null) {
+                    current = sub;
                     break;
                 }
-                current = sub;
-            }
-            if (sub != null) {
-                //we found it
-                break;
+            } else {
+                StringTokenizer st = new StringTokenizer(path, "/");
+                while (st.hasMoreTokens()) {
+                    String subKey = st.nextToken();
+                    sub = (ICUResourceBundle) current.handleGet(subKey, null, requested);
+                    if (sub == null) {
+                        break;
+                    }
+                    current = sub;
+                }
+                if (sub != null) {
+                    //we found it
+                    break;
+                }
             }
             if (((ICUResourceBundle)actualBundle).resPath.length() != 0) {
                 path = ((ICUResourceBundle)actualBundle).resPath + "/" + path;
@@ -904,22 +913,42 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public static final int ARRAY16 = 9;
 
-    /**
-     *
-     * @param baseName The name for the bundle.
-     * @param localeID The locale identification.
-     * @param root The ClassLoader object root.
-     * @return the new bundle
-     */
-    public static ICUResourceBundle createBundle(String baseName,
-            String localeID, ClassLoader root) {
-        String resolvedName = getFullName(baseName, localeID);
-        ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(resolvedName, root);
-        // could not open the .res file so return null
-        if (reader == null) {
-            return null;
+    private static final ConcurrentHashMap<String, ICUResourceBundle> cache = 
+        new ConcurrentHashMap<String, ICUResourceBundle>();
+    private static final ICUResourceBundle NULL_BUNDLE = 
+        new ICUResourceBundle(null, null, null, 0, null) {
+        public int hashCode() {
+            return 0;
         }
-        return getBundle(reader, baseName, localeID, root);
+        public boolean equals(Object rhs) {
+            return this == rhs;
+        }
+    };
+    
+   /**
+    *
+    * @param baseName The name for the bundle.
+    * @param localeID The locale identification.
+    * @param root The ClassLoader object root.
+    * @return the new bundle
+    */
+    public static ICUResourceBundle createBundle(String baseName, String localeID, 
+            ClassLoader root) {
+        
+        String resKey = Integer.toHexString(root.hashCode()) + baseName + localeID;
+        ICUResourceBundle b = cache.get(resKey);
+        if (b == null) {
+            String resolvedName = getFullName(baseName, localeID);
+            ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(resolvedName, root);
+            // could not open the .res file so return null
+            if (reader == null) {
+                b = NULL_BUNDLE;
+            } else {
+                b = getBundle(reader, baseName, localeID, root);
+            }
+            cache.put(resKey, b);
+        }
+        return b == NULL_BUNDLE ? null : b;
     }
 
     protected String getLocaleID() {
