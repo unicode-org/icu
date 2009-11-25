@@ -6371,7 +6371,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Integer properties mask and shift values for scripts.
      * Equivalent to icu4c UPROPS_SHIFT_MASK
      */    
-    private static final int SCRIPT_MASK_ = 0x000000ff;
+    static final int SCRIPT_MASK_ = 0x000000ff;
                            
     // private constructor -----------------------------------------------
     ///CLOVER:OFF  
