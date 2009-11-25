@@ -747,7 +747,6 @@ public final class UScript {
      */
     public static final int CODE_LIMIT   = 134;
 
-    private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
     private static final String kLocaleScript = "LocaleScript";
     
@@ -873,7 +872,7 @@ public final class UScript {
      */
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
-            return (prop.getAdditional(codepoint,0) & SCRIPT_MASK);
+            return (prop.getAdditional(codepoint,0) & UCharacter.SCRIPT_MASK_);
         }else{
             throw new IllegalArgumentException(Integer.toString(codepoint));
         }

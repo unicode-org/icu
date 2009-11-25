@@ -1894,6 +1894,13 @@ public final class UCharacterTest extends TestFmwk
             { 0xff63, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.CLOSE },
             { 0x2028, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.SEP },
 
+            { -1, 0x520, 0 }, /* version break for Unicode 5.2 */
+
+            /* test some script codes >127 */
+            { 0xa6e6,  UProperty.SCRIPT, UScript.BAMUM },
+            { 0xa4d0,  UProperty.SCRIPT, UScript.LISU },
+            { 0x10a7f,  UProperty.SCRIPT, UScript.OLD_SOUTH_ARABIAN },
+
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },
             { 0x234bc, 0x15ed, 0 }
