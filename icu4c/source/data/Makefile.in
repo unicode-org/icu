@@ -698,7 +698,9 @@ $(BUILDDIR)/pool.res: $(LOCSRCDIR)/pool.res
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(LOCSRCDIR)/pool.res $(BUILDDIR)/pool.res
 
 # if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
+ifeq ($(TZDATA),)
 TZDATA = $(firstword $(wildcard $(top_builddir)/tools/tzcode/tzdata*.tar.gz) $(wildcard $(top_srcdir)/tools/tzcode/tzdata*.tar.gz))
+endif
 
 ifneq ($(TZDATA),)
 
