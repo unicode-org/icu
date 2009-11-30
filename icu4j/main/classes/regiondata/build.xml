@@ -4,7 +4,7 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
-<project name="core" default="build" basedir=".">
+<project name="regiondata" default="build" basedir=".">
     <property file="build-local.properties"/>
     <property file="build.properties"/>
     <import file="${shared.dir}/build/common-targets.xml"/>
@@ -12,7 +12,7 @@
     <path id="javac.classpathref">
         <path refid="javac.classpathref.${ant.project.name}"/>
     </path>
-    <property name="jar.file" value="${icu4j.core.jar}"/>
+    <property name="jar.file" value="${icu4j.regiondata.jar}"/>
 
     <target name="build" depends="compile, copy, jar" description="Build the project"/>
 
@@ -26,16 +26,9 @@
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="copy-data" description="Extract pre-built ICU core data files and copy them to the project's binary directory">
+    <target name="copy-data" description="Extract pre-built ICU region data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
-            <patternset>
-	        <exclude name="**/coll/*"/>
-                <exclude name="**/*.cnv"/>
-                <exclude name="**/convalias.icu"/>
-	        <exclude name="**/lang/*"/>
-	        <exclude name="**/region/*"/>
-	        <exclude name="**/translit/*"/>
-            </patternset>
+            <patternset includes="**/region/*"/>
         </unjar>
     </target>
 
