@@ -323,6 +323,19 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         static final DataTables impl = DataTables.load("com.ibm.icu.impl.ICURegionDataTables");
     }
 
+    public static enum DataTableType {
+        LANG, REGION;
+    }
+
+    public static boolean haveData(DataTableType type) {
+        switch (type) {
+        case LANG: return LangDataTables.impl instanceof ICUDataTables;
+        case REGION: return RegionDataTables.impl instanceof ICUDataTables;
+        default:
+            throw new IllegalArgumentException("unknown type: " + type);
+        }
+    }
+
     static class Appender {
         private final String sep;
 

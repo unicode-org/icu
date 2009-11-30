@@ -99,6 +99,15 @@
         <ant dir="${icu4j.charset.dir}" inheritAll="false"/>
     </target>
 
+    <!-- langdata -->
+    <path id="javac.classpathref.langdata">
+        <pathelement location="${icu4j.core.jar}"/>
+    </path>
+
+    <target name="_all.langdata" depends="_all.core">
+        <ant dir="${icu4j.langdata.dir}" inheritAll="false"/>
+    </target>
+
     <!-- localespi -->
     <path id="javac.classpathref.localespi">
         <pathelement location="${icu4j.core.jar}"/>
@@ -107,6 +116,15 @@
 
     <target name="_all.localespi" depends="_all.core, _all.collate">
         <ant dir="${icu4j.localespi.dir}" inheritAll="false"/>
+    </target>
+
+    <!-- regiondata -->
+    <path id="javac.classpathref.regiondata">
+        <pathelement location="${icu4j.core.jar}"/>
+    </path>
+
+    <target name="_all.regiondata" depends="_all.core">
+        <ant dir="${icu4j.regiondata.dir}" inheritAll="false"/>
     </target>
 
     <!-- translit -->
@@ -170,6 +188,17 @@
 
     <target name="_all.localespi-tests" depends="_all.core, _all.collate, _all.localespi, _all.test-framework">
         <ant dir="${icu4j.localespi-tests.dir}" inheritAll="false"/>
+    </target>
+
+    <!-- packaging-tests -->
+    <path id="javac.classpathref.packaging-tests">
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.charset.jar}"/>
+        <pathelement location="${icu4j.test-framework.jar}"/>
+    </path>
+
+    <target name="_all.packaging-tests" depends="_all.core, _all.charset, _all.test-framework">
+        <ant dir="${icu4j.packaging-tests.dir}" inheritAll="false"/>
     </target>
 
     <!-- translit-tests -->

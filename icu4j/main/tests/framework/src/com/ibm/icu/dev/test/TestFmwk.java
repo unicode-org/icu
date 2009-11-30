@@ -74,7 +74,8 @@ public class TestFmwk extends AbstractTestLog {
             msg = "";
         }
         //System.err.println("TF handleException msg: " + msg);
-        if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError || msg.indexOf("java.util.MissingResourceException")>=0) {
+        if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError ||
+                msg.indexOf("java.util.MissingResourceException") >= 0) {
             if (params.warnings || params.nodata) {
                 warnln(msg);
             } else if (params.nothrow) {
@@ -103,16 +104,16 @@ public class TestFmwk extends AbstractTestLog {
 
     /**
      * A test that has no test methods itself, but instead runs other tests.
-     * 
+     *
      * This overrides methods are getTargets and getSubtest from TestFmwk.
-     * 
+     *
      * If you want the default behavior, pass an array of class names and an
      * optional description to the constructor. The named classes must extend
      * TestFmwk. If a provided name doesn't include a ".", package name is
      * prefixed to it (the package of the current test is used if none was
      * provided in the constructor). The resulting full name is used to
      * instantiate an instance of the class using the default constructor.
-     * 
+     *
      * Class names are resolved to classes when getTargets or getSubtest is
      * called. This allows instances of TestGroup to be compiled and run without
      * all the targets they would normally invoke being available.
@@ -495,10 +496,10 @@ public class TestFmwk extends AbstractTestLog {
 
     protected TestFmwk() {
     }
-    
+
     protected void init() throws Exception{
     }
-    
+
     /**
      * Parse arguments into a TestParams object and a collection of target
      * paths. If there was an error parsing the TestParams, print usage and exit
@@ -506,13 +507,13 @@ public class TestFmwk extends AbstractTestLog {
      * and run the returned target. After the last test returns, if prompt is
      * set, prompt and wait for input from stdin. Finally, exit with number of
      * errors.
-     * 
+     *
      * This method never returns, since it always exits with System.exit();
      */
     public void run(String[] args) {
         System.exit(run(args, new PrintWriter(System.out)));
      }
-    
+
     /**
      * Like run(String[]) except this allows you to specify the error log.
      * Unlike run(String[]) this returns the error code as a result instead of
@@ -535,14 +536,14 @@ public class TestFmwk extends AbstractTestLog {
         while (wx < args.length) {
             args[wx++] = null;
         }
-        
+
         TestParams localParams = TestParams.create(args, log);
         if (localParams == null) {
             return -1;
         }
-        
+
         int errorCount = runTests(localParams, args);
-        
+
         if (localParams.seed != 0) {
             localParams.log.println("-random:" + localParams.seed);
             localParams.log.flush();
@@ -574,7 +575,7 @@ public class TestFmwk extends AbstractTestLog {
 
     public int runTests(TestParams _params, String[] tests) {
         int ec = 0;
-        
+
         StringBuffer summary = null;
         try {
             if (tests.length == 0 || tests[0] == null) { // no args
@@ -584,7 +585,7 @@ public class TestFmwk extends AbstractTestLog {
             } else {
                 for (int i = 0; i < tests.length ; ++i) {
                     if (tests[i] == null) continue;
-                    
+
                     if (i > 0) {
                         _params.log.println();
                     }
@@ -592,7 +593,7 @@ public class TestFmwk extends AbstractTestLog {
                     _params.init();
                     resolveTarget(_params, tests[i]).run();
                     ec += _params.errorCount;
-                    
+
                     if (_params.errorSummary != null && _params.errorSummary.length() > 0) {
                         if (summary == null) {
                             summary = new StringBuffer();
@@ -608,10 +609,10 @@ public class TestFmwk extends AbstractTestLog {
             _params.log.println(e.getMessage());
             _params.log.println("encountered exception, exiting");
         }
-        
+
         return ec;
     }
-    
+
     /**
      * Return a ClassTarget for this test. Params is set on this test.
      */
@@ -692,7 +693,7 @@ public class TestFmwk extends AbstractTestLog {
      * Return the targets for this test. If targetName is null, return all
      * targets, otherwise return a target for just that name. The returned
      * target can be null.
-     * 
+     *
      * The default implementation returns a MethodTarget for each public method
      * of the object's class whose name starts with "Test" or "test".
      */
@@ -830,7 +831,7 @@ public class TestFmwk extends AbstractTestLog {
     public void usage() {
         usage(new PrintWriter(System.out), getClass().getName());
     }
-    
+
     public static void usage(PrintWriter pw, String className) {
         pw.println("Usage: " + className + " option* target*");
         pw.println();
@@ -966,7 +967,7 @@ public class TestFmwk extends AbstractTestLog {
      * Return a Date given a year, month, and day of month. This is similar to
      * new Date(y-1900, m, d). It uses the default time zone at the time this
      * method is first called.
-     * 
+     *
      * @param year
      *            use 2000 for 2000, unlike new Date()
      * @param month
@@ -1094,7 +1095,7 @@ public class TestFmwk extends AbstractTestLog {
 
         private TestParams() {
         }
-        
+
         public static TestParams create(String arglist, PrintWriter log) {
             String[] args = null;
             if (arglist != null && arglist.length() > 0) {
@@ -1102,7 +1103,7 @@ public class TestFmwk extends AbstractTestLog {
             }
             return create(args, log);
         }
-        
+
         /**
          * Create a TestParams from a list of arguments.  If successful, return the params object,
          * else return null.  Error messages will be reported on errlog if it is not null.
@@ -1114,13 +1115,13 @@ public class TestFmwk extends AbstractTestLog {
          */
         public static TestParams create(String[] args, PrintWriter log) {
             TestParams params = new TestParams();
-            
+
             if(log == null){
                 params.log = new NullWriter();
             }else{
                 params.log =  new ASCIIWriter(log, true);
             }
-            
+
             boolean usageError = false;
             String filter = null;
             String fmt = "#,##0.000s";
@@ -1179,8 +1180,8 @@ public class TestFmwk extends AbstractTestLog {
                             }
                         } else if (arg.startsWith("-e")) {
                             // see above
-                            params.inclusion = (arg.length() == 2) 
-                                ? 5 
+                            params.inclusion = (arg.length() == 2)
+                                ? 5
                                 : Integer.parseInt(arg.substring(2));
                             if (params.inclusion < 0 || params.inclusion > 10) {
                                 usageError = true;
@@ -1262,10 +1263,10 @@ public class TestFmwk extends AbstractTestLog {
             }
 
             params.init();
-            
+
             return params;
         }
-        
+
         public String errorSummary() {
             return errorSummary == null ? "" : errorSummary.toString();
         }
@@ -1427,11 +1428,11 @@ public class TestFmwk extends AbstractTestLog {
         public void write(String msg) {
             write(msg, false);
         }
-        
+
         public void writeln(String msg) {
             write(msg, true);
         }
-        
+
         private void write(String msg, boolean newln) {
             if (!suppressIndent) {
                 if (needLineFeed) {
@@ -1442,12 +1443,12 @@ public class TestFmwk extends AbstractTestLog {
             }
             log.print(msg);
             if (newln) {
-                log.println(); 
+                log.println();
             }
             log.flush();
             suppressIndent = !newln;
         }
-        
+
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
             if (level == WARN && (!warnings && !nodata)){
@@ -1482,7 +1483,7 @@ public class TestFmwk extends AbstractTestLog {
                 if (!nothrow) {
                     throw new RuntimeException(message);
                 }
-                if (!suppressIndent && errorSummary != null && stack !=null 
+                if (!suppressIndent && errorSummary != null && stack !=null
                         && (errorCount == stack.ec + 1)) {
                     stack.appendPath(errorSummary);
                     errorSummary.append("\n");
@@ -1636,7 +1637,7 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * Check the given array to see that all the strings in the expected array
      * are present.
-     * 
+     *
      * @param msg
      *            string message, for log output
      * @param array
@@ -1684,7 +1685,7 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * Check the given array to see that all the locales in the expected array
      * are present.
-     * 
+     *
      * @param msg
      *            string message, for log output
      * @param array
@@ -1703,7 +1704,7 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * Check the given array to see that all the locales in the expected array
      * are present.
-     * 
+     *
      * @param msg
      *            string message, for log output
      * @param array
@@ -1840,11 +1841,11 @@ public class TestFmwk extends AbstractTestLog {
             return "\"" + obj + '"';
         return obj.getClass().getName() + "<" + obj + ">";
     }
-    
+
     // Return the source code location of the caller located callDepth frames up the stack.
     private String sourceLocation(int callDepth) {
         StackTraceElement[] st = new Throwable().getStackTrace();
-        String w = "File "   + st[callDepth].getFileName() + 
+        String w = "File "   + st[callDepth].getFileName() +
                    ", Line " + st[callDepth].getLineNumber();
         return w;
     }
@@ -1867,5 +1868,5 @@ public class TestFmwk extends AbstractTestLog {
     protected TestParams params = null;
 
     private final static String spaces = "                                          ";
-    
+
 }
