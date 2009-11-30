@@ -1,4 +1,4 @@
-# Some Portions Copyright (c) 2006-2007 IBM and others. All Rights Reserved.
+# Some Portions Copyright (c) 2006-2009 IBM and others. All Rights Reserved.
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -9,9 +9,12 @@ subdir = tools/tzcode
 
 include $(top_builddir)/icudefs.mk
 
-OBJECTS= zic.o localtime.o asctime.o scheck.o ialloc.o
+ifeq ($(TZDATA),)
 TZDATA = $(firstword $(wildcard ./tzdata*.tar.gz) $(wildcard $(srcdir)/tzdata*.tar.gz))
+endif
+ifeq ($(TZCODE),)
 TZCODE = $(firstword $(wildcard ./tzcode*.tar.gz) $(wildcard $(srcdir)/tzcode*.tar.gz))
+endif
 
 TZORIG=./tzorig
 TZORIG_TZDIR=./tzorig/tzdir
@@ -26,6 +29,15 @@ ICUZDUMPOUT=$(shell pwd)/icuzdumpout
 
 ZDUMP_OPTS= -v -a -d $(ZDUMPOUT) -c 1902,2038 -i
 ICUZDUMP_OPTS= -a -d $(ICUZDUMPOUT)
+
+# Executables & objects
+OBJECTS= zic.o localtime.o asctime.o scheck.o ialloc.o
+ZICTARG=$(BINDIR)/zic$(EXEEXT)
+ZICEXEC=$(TOOLBINDIR)/zic$(TOOLEXEEXT)
+TZ2ICUTARG=$(BINDIR)/tz2icu$(EXEEXT)
+TZ2ICUEXEC=$(TOOLBINDIR)/tz2icu$(TOOLEXEEXT)
+ICUZDUMPTARG=$(BINDIR)/icuzdump$(EXEEXT)
+ICUZDUMPEXEC=$(TOOLBINDIR)/icuzdump$(TOOLEXEEXT)
 
 ifeq ($(TZDATA),)
 all: 
@@ -74,10 +86,10 @@ check-dump: dump-out
 endif
 endif
 
-$(ICUZDUMPOUT): icuzdump$(EXEEXT)
+$(ICUZDUMPOUT): $(ICUZDUMPEXEC)
 	-$(RMV) $(ICUZDUMPOUT)
 	-mkdir $(ICUZDUMPOUT)
-	$(INVOKE) ./icuzdump $(ICUZDUMP_OPTS)
+	$(INVOKE) $(ICUZDUMPEXEC) $(ICUZDUMP_OPTS)
 
 
 #
@@ -93,7 +105,6 @@ SDATA=		solar87 solar88 solar89
 TDATA=		$(YDATA) $(NDATA) $(SDATA) 
 YEARISTYPE=     ./yearistype
 
-ZIC = ./zic
 TZDIR=zoneinfo
 
 CFLAGS+=-D_POSIX_C_SOURCE
@@ -103,40 +114,42 @@ CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
 ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
 
-zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
+$(ZICTARG):		$(OBJECTS) $(TDATA) yearistype $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(TZORIG_EXTRA_CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
-tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
+$(TZ2ICUTARG):	$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
 		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/tz2icu.cpp -o $@
 
-icuzdump${EXEEXT}:	$(srcdir)/icuzdump.cpp
+$(ICUZDUMPTARG):	$(srcdir)/icuzdump.cpp
 		$(LINK.cc)  -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/io  -pedantic $(srcdir)/icuzdump.cpp $(LIBICUUC) $(LIBICUDT) $(LIBICUI18N) $(LIBICUIO) $(LIBICUTOOLUTIL) -o $@
 
 
-#		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/icuzdump.cpp -o $@
+$(TDATA): tdatamarker
 
-yearistype.sh: $(TZDATA)
+tdatamarker: $(TZDATA)
 	gunzip -d < $(TZDATA) | tar xf -
+	touch $@
 
 yearistype:	yearistype.sh
 		cp yearistype.sh yearistype
 		chmod +x yearistype
 
-posix_only:	zic $(TDATA) $(srcdir)/icuzones
-		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA) $(srcdir)/icuzones
+posix_only:	$(ZICEXEC) $(TDATA) $(srcdir)/icuzones
+		$(ZICEXEC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA) $(srcdir)/icuzones
 
 
-icu_data:	tz2icu posix_only
-		./tz2icu $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
+icu_data:	$(TZ2ICUEXEC) posix_only
+		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
 
 clean:
-		-rm -f core *.o *.out zdump${EXEEXT} zic${EXEEXT} yearistype date tz2icu${EXEEXT}
+		-rm -f core *.o *.out zdump${EXEEXT} $(ZICTARG) yearistype date $(TZ2ICUTARG)
 		@echo ICU specific cleanup:
 		-rm -f $(ICUDATA)
 		-rm -rf $(TZDIR)
-		-$(RMV) icuzdump${EXEEXT} tzorig ./zdumpout/ ./icuzdumpout/
+		-$(RMV) $(ICUZDUMPTARG) tzorig ./zdumpout/ ./icuzdumpout/
 ifneq ($(TZDATA),)
 		-rm -rf `gunzip -d < $(TZDATA) | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
+		-rm tdatamarker
 endif
 
 checkclean:
