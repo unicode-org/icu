@@ -113,6 +113,10 @@ Cleanly installed Solaris can use this #define.
 #include <sys/neutrino.h>
 #endif
 
+#if defined(U_DARWIN)
+#include <TargetConditionals.h>
+#endif
+
 #ifndef U_WINDOWS
 #include <sys/time.h>
 #endif
@@ -1106,6 +1110,10 @@ uprv_pathIsAbsolute(const char *path)
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
+#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
+    const char *simulator_root = NULL;
+    char datadir_path_buffer[PATH_MAX];
+#endif
 
     /* if we have the directory, then return it immediately */
     UMTX_CHECK(NULL, gDataDirectory, path);
@@ -1136,6 +1144,14 @@ u_getDataDirectory(void) {
 #   ifdef ICU_DATA_DIR
     if(path==NULL || *path==0) {
         path=ICU_DATA_DIR;
+#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
+        simulator_root=getenv("IPHONE_SIMULATOR_ROOT");
+        if (simulator_root != NULL) {
+            (void) strlcpy(datadir_path_buffer, simulator_root, PATH_MAX);
+            (void) strlcat(datadir_path_buffer, path, PATH_MAX);
+            path=datadir_path_buffer;
+        }
+#endif
     }
 #   endif
 
