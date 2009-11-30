@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -82,6 +82,9 @@
 #       define U_ICUDATA_ENTRY_NAME "icudt" U_ICU_VERSION_SHORT U_LIB_SUFFIX_C_NAME_STRING "_dat"
 #   else
 #       define MAP_IMPLEMENTATION MAP_POSIX
+#       if defined(U_DARWIN)
+#           include <TargetConditionals.h>
+#       endif
 #   endif
 
 #else /* unknown platform, no memory map implementation: use stdio.h and uprv_malloc() instead */
@@ -222,6 +225,9 @@
         pData->map = (char *)data + length;
         pData->pHeader=(const DataHeader *)data;
         pData->mapAddr = data;
+#if defined(U_DARWIN) && TARGET_OS_IPHONE
+        madvise(data, length, MADV_RANDOM);
+#endif
         return TRUE;
     }
 
