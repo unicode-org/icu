@@ -485,7 +485,12 @@ public  class ICUResourceBundle extends UResourceBundle {
         UResourceBundleIterator iter = bundle.getIterator();
         iter.reset();
         while (iter.hasNext()) {
-            locales[i++] = new ULocale(iter.next().getKey());
+            String locstr = iter.next().getKey();
+            if (locstr.equals("root")) {
+                locales[i++] = ULocale.ROOT;
+            } else {
+                locales[i++] = new ULocale(locstr);
+            }
         }
         bundle = null;
         return locales;
@@ -506,7 +511,12 @@ public  class ICUResourceBundle extends UResourceBundle {
         UResourceBundleIterator iter = bundle.getIterator();
         iter.reset();
         while (iter.hasNext()) {
-            locales[i++] = iter.next().getKey();
+            String locstr = iter.next(). getKey();
+            if (locstr.equals("root")) {
+                locales[i++] = ULocale.ROOT.toString();
+            } else {
+                locales[i++] = locstr;
+            }
         }
         bundle = null;
         return locales;
@@ -533,7 +543,11 @@ public  class ICUResourceBundle extends UResourceBundle {
                             String line;
                             while ((line = br.readLine()) != null) {
                                 if (line.length() != 0 && !line.startsWith("#")) {
-                                    lst.add(line);
+                                    if (line.equalsIgnoreCase("root")) {
+                                        lst.add(ULocale.ROOT.toString());
+                                    } else {
+                                        lst.add(line);
+                                    }
                                 }
                             }
                             return lst;
@@ -552,7 +566,12 @@ public  class ICUResourceBundle extends UResourceBundle {
                                 URLVisitor v = new URLVisitor() {
                                         public void visit(String s) {
                                             if (s.endsWith(".res") && !"res_index.res".equals(s)) {
-                                                lst.add(s.substring(0, s.length() - 4)); // strip '.res'
+                                                String locstr = s.substring(0, s.length() - 4);
+                                                if (locstr.equalsIgnoreCase("root")) {
+                                                    lst.add(ULocale.ROOT.toString());
+                                                } else {
+                                                    lst.add(locstr);
+                                                }
                                             }
                                         }
                                     };

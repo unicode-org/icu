@@ -180,9 +180,6 @@ public class ICULocaleService extends ICUService {
             if (primaryID == null) {
                 return null;
             }
-            if (primaryID.length() == 0) {
-                primaryID = "root";
-            }
             String canonicalPrimaryID = ULocale.getName(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
@@ -206,21 +203,26 @@ public class ICULocaleService extends ICUService {
          */
         protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID, int kind) {
             super(primaryID);
-
             this.kind = kind;
-            if (canonicalPrimaryID == null) {
+
+            if (canonicalPrimaryID == null || canonicalPrimaryID.equalsIgnoreCase("root")) {
                 this.primaryID = "";
-            } else {
-                this.primaryID = canonicalPrimaryID;
-                this.varstart = this.primaryID.indexOf('@');
-            }
-            if (this.primaryID == "") {
                 this.fallbackID = null;
             } else {
-                if (canonicalFallbackID == null || this.primaryID.equals(canonicalFallbackID)) {
-                    this.fallbackID = "";
+                int idx = canonicalPrimaryID.indexOf('@');
+                if (idx == 4 && canonicalPrimaryID.regionMatches(true, 0, "root", 0, 4)) {
+                    this.primaryID = canonicalPrimaryID.substring(4);
+                    this.varstart = 0;
+                    this.fallbackID = null;
                 } else {
-                    this.fallbackID = canonicalFallbackID;
+                    this.primaryID = canonicalPrimaryID;
+                    this.varstart = idx;
+
+                    if (canonicalFallbackID == null || this.primaryID.equals(canonicalFallbackID)) {
+                        this.fallbackID = "";
+                    } else {
+                        this.fallbackID = canonicalFallbackID;
+                    }
                 }
             }
 
@@ -299,8 +301,8 @@ public class ICULocaleService extends ICUService {
          * otherwise return false.</p>
          *
          * <p>First falls back through the primary ID, then through
-         * the fallbackID.  The final fallback is "root"
-         * unless the primary id was "root", in which case
+         * the fallbackID.  The final fallback is "" (root)
+         * unless the primary id was "" (root), in which case
          * there is no fallback.  
          */
         public boolean fallback() {
@@ -312,11 +314,10 @@ public class ICULocaleService extends ICUService {
                 return true;
             }
             if (fallbackID != null) {
+                currentID = fallbackID;
                 if (fallbackID.length() == 0) {
-                    currentID = "root";
                     fallbackID = null;
                 } else {
-                    currentID = fallbackID;
                     fallbackID = "";
                 }
                 return true;
@@ -548,7 +549,6 @@ public class ICULocaleService extends ICUService {
          * Return the supported IDs.  This is the set of all locale names for the bundleName.
          */
         protected Set<String> getSupportedIDs() {
-            // note: "root" is one of the ids, but "" is not.  Must convert ULocale.ROOT.
             return ICUResourceBundle.getFullLocaleNameSet(bundleName, loader()); 
         }
 

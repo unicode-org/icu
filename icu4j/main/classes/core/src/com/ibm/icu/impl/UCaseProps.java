@@ -1287,7 +1287,6 @@ public final class UCaseProps {
 
     /* case mapping properties API ---------------------------------------------- */
 
-    private static final ULocale rootLocale = new ULocale("");
     private static final int[] rootLocCache = { LOC_ROOT };
     /*
      * We need a StringBuffer for multi-code point output from the
@@ -1328,20 +1327,20 @@ public final class UCaseProps {
          */
         case UProperty.CHANGES_WHEN_LOWERCASED:
             dummyStringBuffer.setLength(0);
-            return toFullLower(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+            return toFullLower(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
         case UProperty.CHANGES_WHEN_UPPERCASED:
             dummyStringBuffer.setLength(0);
-            return toFullUpper(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+            return toFullUpper(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
         case UProperty.CHANGES_WHEN_TITLECASED:
             dummyStringBuffer.setLength(0);
-            return toFullTitle(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+            return toFullTitle(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
         /* case UProperty.CHANGES_WHEN_CASEFOLDED: -- in UCharacterProperty.java */
         case UProperty.CHANGES_WHEN_CASEMAPPED:
             dummyStringBuffer.setLength(0);
             return
-                toFullLower(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0 ||
-                toFullUpper(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0 ||
-                toFullTitle(c, null, dummyStringBuffer, rootLocale, rootLocCache)>=0;
+                toFullLower(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0 ||
+                toFullUpper(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0 ||
+                toFullTitle(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
         default:
             return false;
         }

@@ -241,7 +241,7 @@ public final class ULocale implements Serializable {
      * The root ULocale.
      * @stable ICU 2.8
      */
-    public static final ULocale ROOT = new ULocale("root", EMPTY_LOCALE);
+    public static final ULocale ROOT = new ULocale("", EMPTY_LOCALE);
 
     private static final SimpleCache<Locale, ULocale> CACHE = new SimpleCache<Locale, ULocale>();
 
@@ -761,15 +761,23 @@ public final class ULocale implements Serializable {
      * Return the given (canonical) locale id minus the last part before the tags.
      */
     private static String getFallbackString(String fallback) {
-        int limit = fallback.indexOf('@');
-        if (limit == -1) {
-            limit = fallback.length();
+        int extStart = fallback.indexOf('@');
+        if (extStart == -1) {
+            extStart = fallback.length();
         }
-        int start = fallback.lastIndexOf('_', limit);
-        if (start == -1) {
-            start = 0;
+        int last = fallback.lastIndexOf('_', extStart);
+        if (last == -1) {
+            last = 0;
+        } else {
+            // truncate empty segment
+            while (last > 0) {
+                if (fallback.charAt(last - 1) != '_') {
+                    break;
+                }
+                last--;
+            }
         }
-        return fallback.substring(0, start) + fallback.substring(limit);
+        return fallback.substring(0, last) + fallback.substring(extStart);
     }
 
     /**

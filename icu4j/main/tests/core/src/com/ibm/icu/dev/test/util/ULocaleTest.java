@@ -3875,4 +3875,40 @@ public class ULocaleTest extends TestFmwk {
         }  
     }
 
+    public void TestGetFallback() {
+        // Testing static String getFallback(String)
+        final String[][] TESTIDS =
+        {
+            {"en_US", "en", "", ""},    // ULocale.getFallback("") should return ""
+            {"EN_us_Var", "en_US", "en", ""},   // Case is always normalized
+            {"de_DE@collation=phonebook", "de@collation=phonebook", "@collation=phonebook", "@collation=phonebook"},    // Keyword is preserved
+            {"en__POSIX", "en", ""},    // Trailing empty segment should be truncated
+            {"_US_POSIX", "_US", ""},   // Same as above
+            {"root", ""},               // No canonicalization
+        };
+
+        for (String[] chain : TESTIDS) {
+            for (int i = 1; i < chain.length; i++) {
+                String fallback = ULocale.getFallback(chain[i-1]);
+                assertEquals("getFallback(\"" + chain[i-1] + "\")", chain[i], fallback);
+            }
+        }
+
+        // Testing ULocale getFallback()
+        final ULocale[][] TESTLOCALES = 
+        {
+            {new ULocale("en_US"), new ULocale("en"), ULocale.ROOT, null},
+            {new ULocale("en__POSIX"), new ULocale("en"), ULocale.ROOT, null},
+            {new ULocale("de_DE@collation=phonebook"), new ULocale("de@collation=phonebook"), new ULocale("@collation=phonebook"), null},
+            {new ULocale("_US_POSIX"), new ULocale("_US"), ULocale.ROOT, null},
+            {new ULocale("root"), ULocale.ROOT, null},
+        };
+
+        for(ULocale[] chain : TESTLOCALES) {
+            for (int i = 1; i < chain.length; i++) {
+                ULocale fallback = chain[i-1].getFallback();
+                assertEquals("ULocale(" + chain[i-1] + ").getFallback()", chain[i], fallback);
+            }
+        }
+    }
 }
