@@ -226,7 +226,7 @@
         pData->pHeader=(const DataHeader *)data;
         pData->mapAddr = data;
 #if defined(U_DARWIN) && TARGET_OS_IPHONE
-        madvise(data, length, MADV_RANDOM);
+        posix_madvise(data, length, POSIX_MADV_RANDOM);
 #endif
         return TRUE;
     }
