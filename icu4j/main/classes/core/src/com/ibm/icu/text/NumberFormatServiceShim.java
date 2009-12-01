@@ -84,9 +84,6 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 //          }
 
         ULocale[] actualLoc = new ULocale[1];
-        if (desiredLocale.equals(ULocale.ROOT)) {
-            desiredLocale = ULocale.ROOT;
-        }
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
         if (fmt == null) {

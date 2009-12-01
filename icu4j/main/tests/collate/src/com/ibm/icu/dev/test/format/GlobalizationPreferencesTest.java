@@ -792,8 +792,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocale(new ULocale("zun"));
         coll = gp.getCollator();
         locStr = coll.getLocale(ULocale.VALID_LOCALE).toString();
-        if (!locStr.equals("root")) {
-            errln("FAIL: Collator locale is " + locStr + " Expected: root");
+        if (!locStr.equals("")) {
+            errln("FAIL: Collator locale is \"" + locStr + "\" Expected: \"\"(empty)");
         }
 
         // Set locales - en_JP, fr, en_US, fr_FR
