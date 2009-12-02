@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -210,18 +210,20 @@ u_frewind(UFILE *file)
 U_CAPI void U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fclose(UFILE *file)
 {
-    u_fflush(file);
-    ufile_close_translit(file);
+    if (file) {
+        u_fflush(file);
+        ufile_close_translit(file);
 
-    if(file->fOwnFile)
-        fclose(file->fFile);
+        if(file->fOwnFile)
+            fclose(file->fFile);
 
 #if !UCONFIG_NO_FORMATTING
-    u_locbund_close(&file->str.fBundle);
+        u_locbund_close(&file->str.fBundle);
 #endif
 
-    ucnv_close(file->fConverter);
-    uprv_free(file);
+        ucnv_close(file->fConverter);
+        uprv_free(file);
+    }
 }
 
 U_CAPI FILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
