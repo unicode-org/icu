@@ -249,13 +249,13 @@ private:
             uprv_free(ptr);
         }
     }
-    // No comparison operators with other MaybeStackArray's.
+    /* No comparison operators with other MaybeStackArray's. */
     bool operator==(const MaybeStackArray &other);
     bool operator!=(const MaybeStackArray &other);
-    // No ownership transfer: No copy constructor, no assignment operator.
+    /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackArray(const MaybeStackArray &other);
     void operator=(const MaybeStackArray &other);
-    // No heap allocation. Use only on the stack.
+    /* No heap allocation. Use only on the stack. */
     static void * U_EXPORT2 operator new(size_t size);
     static void * U_EXPORT2 operator new[](size_t size);
 #if U_HAVE_PLACEMENT_NEW
