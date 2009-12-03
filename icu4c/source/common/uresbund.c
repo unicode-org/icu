@@ -520,7 +520,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         if(r != NULL) { /* if there is one real locale, we can look for parents. */
             t1 = r;
             hasRealData = TRUE;
-            if ( usingUSRData ) {  // This code inserts user override data into the inheritance chain
+            if ( usingUSRData ) {  /* This code inserts user override data into the inheritance chain */
                u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
                if ( u1 != NULL && u1->fBogus == U_ZERO_ERROR) {
                    u1->fParent = t1;
@@ -530,7 +530,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
                 /* insert regular parents */
                 t2 = init_entry(name, t1->fPath, &parentStatus);
-                if ( usingUSRData ) {  // This code inserts user override data into the inheritance chain
+                if ( usingUSRData ) {  /* This code inserts user override data into the inheritance chain */
                     usrStatus = U_ZERO_ERROR;
                     u2 = init_entry(name, usrDataPath, &usrStatus);
                 }
