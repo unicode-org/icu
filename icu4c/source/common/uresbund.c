@@ -478,15 +478,20 @@ U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
     UErrorCode intStatus = U_ZERO_ERROR;
     UErrorCode parentStatus = U_ZERO_ERROR;
+    UErrorCode usrStatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
+    UResourceDataEntry *u1 = NULL;
+    UResourceDataEntry *u2 = NULL;
     UBool isDefault = FALSE;
     UBool isRoot = FALSE;
     UBool hasRealData = FALSE;
     UBool hasChopped = TRUE;
+    UBool usingUSRData = U_USE_USRDATA && ( path == NULL || uprv_strncmp(path,U_ICUDATA_NAME,8) == 0);
 
     char name[96];
+    char usrDataPath[96];
 
     initCache(status);
 
@@ -496,6 +501,17 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
 
     uprv_strcpy(name, localeID);
 
+    if ( usingUSRData ) {
+        if ( path == NULL ) {
+           uprv_strcpy(usrDataPath,U_USRDATA_NAME);
+        } else {
+           uprv_strcpy(usrDataPath,path);
+           usrDataPath[0] = 'u';
+           usrDataPath[1] = 's';
+           usrDataPath[2] = 'r';
+        }
+    }
+ 
     umtx_lock(&resbMutex);
     { /* umtx_lock */
         /* We're going to skip all the locales that do not have any data */
@@ -504,18 +520,33 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         if(r != NULL) { /* if there is one real locale, we can look for parents. */
             t1 = r;
             hasRealData = TRUE;
+            if ( usingUSRData ) {  // This code inserts user override data into the inheritance chain
+               u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
+               if ( u1 != NULL && u1->fBogus == U_ZERO_ERROR) {
+                   u1->fParent = t1;
+                   r = u1;
+               }
+            }
             while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
                 /* insert regular parents */
-                t2 = init_entry(name, r->fPath, &parentStatus);
-
+                t2 = init_entry(name, t1->fPath, &parentStatus);
+                if ( usingUSRData ) {  // This code inserts user override data into the inheritance chain
+                    usrStatus = U_ZERO_ERROR;
+                    u2 = init_entry(name, usrDataPath, &usrStatus);
+                }
                 /* Check for null pointer. */
-                if (t2 == NULL) {
+                if (t2 == NULL || ( usingUSRData && u2 == NULL)) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     goto finishUnlock;
                 }
                 
                 if ( res_getResource(&t1->fData,"%%ParentIsRoot") == RES_BOGUS) {
-                    t1->fParent = t2;
+                    if ( usingUSRData && u2->fBogus == U_ZERO_ERROR ) {
+                        t1->fParent = u2;
+                        u2->fParent = t2;
+                    } else {
+                        t1->fParent = t2;
+                    }
                     t1 = t2;
                 }
                 hasChopped = chopLocale(name);
@@ -535,7 +566,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                 isDefault = TRUE;
                 while (hasChopped && t1->fParent == NULL) {
                     /* insert chopped defaults */
-                    t2 = init_entry(name, r->fPath, &parentStatus);
+                    t2 = init_entry(name, t1->fPath, &parentStatus);
                     /* Check for null pointer. */
                     if (t2 == NULL) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -566,7 +597,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             }
         } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL && !r->fData.noFallback) {
             /* insert root locale */
-            t2 = init_entry(kRootLocaleName, r->fPath, &parentStatus);
+            t2 = init_entry(kRootLocaleName, t1->fPath, &parentStatus);
             /* Check for null pointer. */
             if (t2 == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
@@ -1611,6 +1642,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
                 dataEntry = dataEntry->fParent;
                 rootRes = dataEntry->fData.rootRes;
+
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
                     uprv_strncpy(path, resPath, len);
                     uprv_strcpy(path+len, inKey);
