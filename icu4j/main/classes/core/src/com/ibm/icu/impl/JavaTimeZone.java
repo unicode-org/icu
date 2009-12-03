@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TreeSet;
 
 import com.ibm.icu.util.TimeZone;
@@ -30,8 +31,7 @@ public class JavaTimeZone extends TimeZone {
     private static final TreeSet<String> AVAILABLESET;
 
     private java.util.TimeZone javatz;
-    private transient java.util.Calendar javacal;
-
+    
     static {
         AVAILABLESET = new TreeSet<String>();
         String[] availableIds = java.util.TimeZone.getAvailableIDs();
@@ -46,7 +46,6 @@ public class JavaTimeZone extends TimeZone {
     public JavaTimeZone() {
         javatz = java.util.TimeZone.getDefault();
         setID(javatz.getID());
-        javacal = new java.util.GregorianCalendar(javatz);
     }
 
     /**
@@ -82,7 +81,6 @@ public class JavaTimeZone extends TimeZone {
             javatz = java.util.TimeZone.getTimeZone(id);
         }
         setID(id);
-        javacal = new java.util.GregorianCalendar(javatz);
     }
 
     /* (non-Javadoc)
@@ -96,45 +94,32 @@ public class JavaTimeZone extends TimeZone {
      * @see com.ibm.icu.util.TimeZone#getOffset(long, boolean, int[])
      */
     public void getOffset(long date, boolean local, int[] offsets) {
-        synchronized (javacal) {
-            if (local) {
-                int fields[] = new int[6];
-                Grego.timeToFields(date, fields);
-                int hour, min, sec, mil;
-                int tmp = fields[5];
-                mil = tmp % 1000;
-                tmp /= 1000;
-                sec = tmp % 60;
-                tmp /= 60;
-                min = tmp % 60;
-                hour = tmp / 60;
-                javacal.clear();
-                javacal.set(fields[0], fields[1], fields[2], hour, min, sec);
-                javacal.set(java.util.Calendar.MILLISECOND, mil);
-
-                int doy1, hour1, min1, sec1, mil1;
-                doy1 = javacal.get(java.util.Calendar.DAY_OF_YEAR);
-                hour1 = javacal.get(java.util.Calendar.HOUR_OF_DAY);
-                min1 = javacal.get(java.util.Calendar.MINUTE);
-                sec1 = javacal.get(java.util.Calendar.SECOND);
-                mil1 = javacal.get(java.util.Calendar.MILLISECOND);
-
-                if (fields[4] != doy1 || hour != hour1 || min != min1 || sec != sec1 || mil != mil1) {
-                    // Calendar field(s) were changed due to the adjustment for non-existing time
-                    // Note: This code does not support non-existing local time at year boundary properly.
-                    // But, it should work fine for real timezones.
-                    int dayDelta = Math.abs(doy1 - fields[4]) > 1 ? 1 : doy1 - fields[4];
-                    int delta = ((((dayDelta * 24) + hour1 - hour) * 60 + min1 - min) * 60 + sec1 - sec) * 1000 + mil1 - mil;
-
-                    // In this case, we use the offsets before the transition
-                   javacal.setTimeInMillis(javacal.getTimeInMillis() - delta - 1);
-                }
-            } else {
-                javacal.setTimeInMillis(date);
+        int offset;
+        int dstOffset = 0;
+        
+        if (local) {
+            int fields[] = new int[6];
+            Grego.timeToFields(date, fields);
+            
+            int era = GregorianCalendar.AD;
+            int year = fields[0];
+            if (year <= 0) {
+                era = GregorianCalendar.BC;
+                year = 1 - year;
             }
-            offsets[0] = javacal.get(java.util.Calendar.ZONE_OFFSET);
-            offsets[1] = javacal.get(java.util.Calendar.DST_OFFSET);
+            
+            offset = javatz.getOffset(era, year, fields[1], fields[2], fields[3], fields[5]);
+            
+        } else {
+            offset = javatz.getOffset(date);
         }
+        
+        if (javatz.inDaylightTime(new Date(date))) {
+            dstOffset = javatz.getDSTSavings();
+        }
+        
+        offsets[0] = offset - dstOffset;
+        offsets[1] = dstOffset;
     }
 
     /* (non-Javadoc)
@@ -204,6 +189,5 @@ public class JavaTimeZone extends TimeZone {
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
-        javacal = new java.util.GregorianCalendar(javatz);
     }
 }
