@@ -1452,7 +1452,7 @@ Optional Features:
   --enable-debug          build debug libraries default=no
   --enable-release        build release libraries default=yes
   --enable-auto-cleanup   enable auto cleanup of libraries default=no
-  --enable-draft          enable draft APIs default=yes
+  --enable-draft          enable draft APIs (and internal APIs) default=yes
   --enable-renaming       add a version suffix to symbols default=yes
   --enable-tracing        enable function and data tracing default=no
   --enable-rpath          use rpath when linking default is only if necessary
