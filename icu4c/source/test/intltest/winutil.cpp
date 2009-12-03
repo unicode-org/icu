@@ -52,11 +52,6 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 
     lcidRecords[lcidCount].localeID = uprv_convertToPosix(lcidRecords[lcidCount].lcid, &status);
 
-    /* This ensures that lcid used will be consistent because uprv_convertToPosix only cares
-     * about the language id in the lcid.
-     */
-    lcidRecords[lcidCount].lcid = uloc_getLCID(lcidRecords[lcidCount].localeID);
-
     lcidCount += 1;
 
     return TRUE;
