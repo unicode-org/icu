@@ -10,6 +10,7 @@
 
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
+#include <stdio.h>
 
 TestLog::~TestLog() {}
 
