@@ -197,7 +197,7 @@ ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status){
 
     bundle = ures_open(NULL, localeID, status);
 
-    measurement = ures_getByKey(bundle, MEASUREMENT_SYSTEM, NULL, status);
+    measurement = ures_getByKeyWithFallback(bundle, MEASUREMENT_SYSTEM, NULL, status);
 
     system = (UMeasurementSystem) ures_getInt(measurement, status);
 
@@ -220,7 +220,7 @@ ulocdata_getPaperSize(const char* localeID, int32_t *height, int32_t *width, UEr
     }
 
     bundle = ures_open(NULL, localeID, status);
-    paperSizeBundle = ures_getByKey(bundle, PAPER_SIZE, NULL, status);
+    paperSizeBundle = ures_getByKeyWithFallback(bundle, PAPER_SIZE, NULL, status);
     paperSize = ures_getIntVector(paperSizeBundle, &len,  status);
 
     if(U_SUCCESS(*status)){
