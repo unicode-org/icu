@@ -3127,6 +3127,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\vzone.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\vzone.h"
+				>
+			</File>
+			<File
 				RelativePath=".\windtfmt.cpp"
 				>
 				<FileConfiguration
@@ -3255,11 +3263,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\zrule.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\zrule.h"
+				>
+			</File>
+			<File
 				RelativePath=".\zstrfmt.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\zstrfmt.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ztrans.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\ztrans.h"
 				>
 			</File>
 		</Filter>
@@ -3947,19 +3971,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\uspoof_wsconf.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\uspoof_wsconf.h"
-				>
-			</File>
-			<File
 				RelativePath=".\uspoof_impl.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\uspoof_impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\uspoof_wsconf.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\uspoof_wsconf.h"
 				>
 			</File>
 		</Filter>

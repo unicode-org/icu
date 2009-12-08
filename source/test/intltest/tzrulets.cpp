@@ -21,6 +21,9 @@
 #include "unicode/tztrans.h"
 #include "unicode/vtzone.h"
 #include "tzrulets.h"
+#include "unicode/zrule.h"
+#include "unicode/ztrans.h"
+#include "unicode/vzone.h"
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 #define HOUR (60*60*1000)
@@ -129,6 +132,7 @@ void TimeZoneRuleTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(13, TestVTimeZoneParse);
         CASE(14, TestT6216);
         CASE(15, TestT6669);
+        CASE(16, TestVTimeZoneWrapper);
         default: name = ""; break;
     }
 }
@@ -2113,6 +2117,117 @@ TimeZoneRuleTest::TestT6669(void) {
         errln((UnicodeString)"FAIL: Wrong transition time returned by getPreviousTransition - "
             + tzt.getTime() + " Expected: " + expectedPrev);
     }
+}
+
+void
+TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
+
+    // local variables
+    UBool b;
+    UChar * data = NULL;
+    int32_t length = 0;
+    int32_t i;
+    UDate result;
+    UDate base = 1231027200000.0; //2009-01-04T00:00:00
+    UErrorCode status;
+
+    UClassID cid1;
+    UClassID cid2;
+
+    ZRule * r;
+    IZRule* ir1;
+    IZRule* ir2;
+    ZTrans* zt1;
+    ZTrans* zt2;
+    VZone*  v1;
+    VZone*  v2;
+
+    // create rules
+    ir1 = izrule_open((UChar*)("Test Initial"), 13, 2*HOUR, 0);
+    ir2 = izrule_clone(ir1);
+
+    // test equality
+    b = izrule_equals(ir1, ir2);
+    b = izrule_isEquivalentTo(ir1, ir2);
+
+    // test accessors
+    izrule_getName(ir1, data, length);
+    i = izrule_getRawOffset(ir1);
+    i = izrule_getDSTSavings(ir1);
+
+    b = izrule_getFirstStart(ir1, 2*HOUR, 0, result);
+    b = izrule_getFinalStart(ir1, 2*HOUR, 0, result);
+    b = izrule_getNextStart(ir1, base , 2*HOUR, 0, true, result);
+    b = izrule_getPreviousStart(ir1, base, 2*HOUR, 0, true, result);
+
+    // test class ids
+    cid1 = izrule_getStaticClassID(ir1);
+    cid2 = izrule_getDynamicClassID(ir1);
+
+    // test transitions
+    zt1 = ztrans_open(base, ir1, ir2);
+    zt2 = ztrans_clone(zt1);
+    zt2 = ztrans_openEmpty();
+
+    // test equality
+    b = ztrans_equals(zt1, zt2);
+
+    // test accessors
+    result = ztrans_getTime(zt1);
+    ztrans_setTime(zt1, result);
+
+    r = (ZRule*)ztrans_getFrom(zt1);
+    ztrans_setFrom(zt1, (void*)ir1);
+    ztrans_adoptFrom(zt1, (void*)ir1);
+
+    r = (ZRule*)ztrans_getTo(zt1);
+    ztrans_setTo(zt1, (void*)ir2);
+    ztrans_adoptTo(zt1, (void*)ir2);
+
+    // test class ids
+    cid1 = ztrans_getStaticClassID(zt1);
+    cid2 = ztrans_getDynamicClassID(zt2);
+
+    // test vzone
+    v1 = vzone_openID((UChar*)"America/Chicago", sizeof("America/Chicago"));
+    v2 = vzone_clone(v1);
+    //v2 = vzone_openData(const UChar* vtzdata, int32_t vtzdataLength, UErrorCode& status);
+
+    // test equality
+    b = vzone_equals(v1, v2);
+    b = vzone_hasSameRules(v1, v2);
+
+    // test accessors
+    b = vzone_getTZURL(v1, data, length);
+    vzone_setTZURL(v1, data, length);
+    
+    b = vzone_getLastModified(v1, result);
+    vzone_setLastModified(v1, result);
+    
+    // test writers
+    vzone_write(v1, data, length, status);
+    vzone_writeFromStart(v1, result, data, length, status);
+    vzone_writeSimple(v1, result, data, length, status);
+
+    // test more accessors
+    i = vzone_getRawOffset(v1);
+    vzone_setRawOffset(v1, i);
+
+    b = vzone_useDaylightTime(v1);
+    b = vzone_inDaylightTime(v1, result, status);
+
+    b = vzone_getNextTransition(v1, result, false, zt1);
+    b = vzone_getPreviousTransition(v1, result, false, zt1);
+    i = vzone_countTransitionRules(v1, status);
+
+    cid1 = vzone_getStaticClassID(v1);
+    cid2 = vzone_getDynamicClassID(v1);
+
+    // cleanup
+    vzone_close(v1);
+    vzone_close(v2);
+    ztrans_close(zt1);
+    ztrans_close(zt2);
 }
 
 //----------- private test helpers -------------------------------------------------
