@@ -36,6 +36,7 @@ public:
     void TestVTimeZoneParse(void);
     void TestT6216(void);
     void TestT6669(void);
+    void TestVTimeZoneWrapper(void);
 
 private:
     void verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end);

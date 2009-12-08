@@ -1497,6 +1497,7 @@
 #define utrie_swap U_ICU_ENTRY_POINT_RENAME(utrie_swap)
 #define utrie_unserialize U_ICU_ENTRY_POINT_RENAME(utrie_unserialize)
 #define utrie_unserializeDummy U_ICU_ENTRY_POINT_RENAME(utrie_unserializeDummy)
+
 /* C++ class names renaming defines */
 
 #ifdef XP_CPLUSPLUS
