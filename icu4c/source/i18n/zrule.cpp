@@ -90,7 +90,7 @@ izrule_getName(IZRule* rule, UChar* & name, int32_t & nameLength) {
     UnicodeString s;
     ((InitialTimeZoneRule*)rule)->InitialTimeZoneRule::getName(s);
     nameLength = s.length();
-    name = (UChar*)malloc(nameLength);
+    name = (UChar*)uprv_malloc(nameLength);
     memcpy(name, s.getBuffer(), nameLength);
     return;
 }
