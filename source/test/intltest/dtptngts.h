@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2001,2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -24,6 +24,7 @@ private:
      * Performs tests on many API functions, see detailed comments in source code
      **/
     void testAPI(/* char* par */);
+    void testOptions(/* char* par */);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
