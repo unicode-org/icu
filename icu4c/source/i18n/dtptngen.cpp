@@ -740,6 +740,11 @@ DateTimePatternGenerator::getAppendName(UDateTimePatternField field, UnicodeStri
 
 UnicodeString
 DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErrorCode& status) {
+    return getBestPattern(patternForm, UDATPG_MATCH_NO_OPTIONS, status);
+}
+
+UnicodeString
+DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDateTimePatternMatchOptions options, UErrorCode& status) {
     const UnicodeString *bestPattern=NULL;
     UnicodeString dtFormat;
     UnicodeString resultPattern;
@@ -755,13 +760,13 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
     const PtnSkeleton* specifiedSkeleton=NULL;
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo, &specifiedSkeleton);
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
-        resultPattern = adjustFieldTypes(*bestPattern, specifiedSkeleton, FALSE);
+        resultPattern = adjustFieldTypes(*bestPattern, specifiedSkeleton, FALSE, options);
 
         return resultPattern;
     }
     int32_t neededFields = dtMatcher->getFieldMask();
-    UnicodeString datePattern=getBestAppending(neededFields & dateMask);
-    UnicodeString timePattern=getBestAppending(neededFields & timeMask);
+    UnicodeString datePattern=getBestAppending(neededFields & dateMask, options);
+    UnicodeString timePattern=getBestAppending(neededFields & timeMask, options);
     if (datePattern.length()==0) {
         if (timePattern.length()==0) {
             resultPattern.remove();
@@ -784,9 +789,17 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
 UnicodeString
 DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern,
                                             const UnicodeString& skeleton,
+                                            UErrorCode& status) {
+    return replaceFieldTypes(pattern, skeleton, UDATPG_MATCH_NO_OPTIONS, status);
+}
+
+UnicodeString
+DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern,
+                                            const UnicodeString& skeleton,
+                                            UDateTimePatternMatchOptions options,
                                             UErrorCode& /*status*/) {
     dtMatcher->set(skeleton, fp);
-    UnicodeString result = adjustFieldTypes(pattern, NULL, FALSE);
+    UnicodeString result = adjustFieldTypes(pattern, NULL, FALSE, options);
     return result;
 }
 
@@ -983,7 +996,8 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
 UnicodeString
 DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                                            const PtnSkeleton* specifiedSkeleton,
-                                           UBool fixFractionalSeconds) {
+                                           UBool fixFractionalSeconds,
+                                           UDateTimePatternMatchOptions options) {
     UnicodeString newPattern;
     fp->set(pattern);
     for (int32_t i=0; i < fp->itemNumber; i++) {
@@ -1022,16 +1036,23 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     // which case it should consist of characters from the found pattern.
                     //
                     // The length of the adjusted field (adjFieldLen) should match that in the originally
-                    // requested skeleton, except that if there is a specified skeleton for the found pattern
-                    // and one of the following is true, then the length of the adjusted field should match
-                    // that in the found pattern (i.e. the length of this pattern field should not be adjusted):
-                    // a) The length of the field in the skeleton (skelFieldLen) is equal to reqFieldLen.
-                    // b) The pattern field is numeric and the skeleton field is not, or vice versa.
+                    // requested skeleton, except that in the following cases the length of the adjusted field
+                    // should match that in the found pattern (i.e. the length of this pattern field should
+                    // not be adjusted):
+                    // 1. typeValue is UDATPG_HOUR_FIELD and the corresponding bit in options is not set (ticket
+                    //    #7180). Note, we may want to implement a similar change for other numeric fields (MM,
+                    //    dd, etc.) so the default behavior is to get locale preference for field length, but
+                    //    options bits can be used to override this.
+                    // 2. There is a specified skeleton for the found pattern and one of the following is true:
+                    //    a) The length of the field in the skeleton (skelFieldLen) is equal to reqFieldLen.
+                    //    b) The pattern field is numeric and the skeleton field is not, or vice versa.
 
                     UnicodeString reqField = dtMatcher->skeleton.original[typeValue];
                     int32_t reqFieldLen = reqField.length();
                     int32_t adjFieldLen = reqFieldLen;
-                    if (specifiedSkeleton) {
+                    if (typeValue==UDATPG_HOUR_FIELD && (options & UDATPG_MATCH_HOUR_FIELD_LENGTH)==0) {
+                         adjFieldLen = field.length();
+                    } else if (specifiedSkeleton) {
                         UnicodeString skelField = specifiedSkeleton->original[typeValue];
                         int32_t skelFieldLen = skelField.length();
                         UBool patFieldIsNumeric = (row->type > 0);
@@ -1055,7 +1076,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
 }
 
 UnicodeString
-DateTimePatternGenerator::getBestAppending(int32_t missingFields) {
+DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatternMatchOptions options) {
     UnicodeString  resultPattern, tempPattern, formattedPattern;
     UErrorCode err=U_ZERO_ERROR;
     int32_t lastMissingFieldMask=0;
@@ -1063,7 +1084,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields) {
         resultPattern=UnicodeString();
         const PtnSkeleton* specifiedSkeleton=NULL;
         tempPattern = *getBestRaw(*dtMatcher, missingFields, distanceInfo, &specifiedSkeleton);
-        resultPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE);
+        resultPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE, options);
         if ( distanceInfo->missingFieldMask==0 ) {
             return resultPattern;
         }
@@ -1073,14 +1094,14 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields) {
             }
             if (((distanceInfo->missingFieldMask & UDATPG_SECOND_AND_FRACTIONAL_MASK)==UDATPG_FRACTIONAL_MASK) &&
                 ((missingFields & UDATPG_SECOND_AND_FRACTIONAL_MASK) == UDATPG_SECOND_AND_FRACTIONAL_MASK)) {
-                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, FALSE);
+                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, FALSE, options);
                 //resultPattern = tempPattern;
                 distanceInfo->missingFieldMask &= ~UDATPG_FRACTIONAL_MASK;
                 continue;
             }
             int32_t startingMask = distanceInfo->missingFieldMask;
             tempPattern = *getBestRaw(*dtMatcher, distanceInfo->missingFieldMask, distanceInfo, &specifiedSkeleton);
-            tempPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE);
+            tempPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE, options);
             int32_t foundMask=startingMask& ~distanceInfo->missingFieldMask;
             int32_t topField=getTopBitNumber(foundMask);
             UnicodeString appendName;

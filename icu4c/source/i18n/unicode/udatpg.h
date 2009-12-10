@@ -88,6 +88,22 @@ typedef enum UDateTimePatternField {
 } UDateTimePatternField;
 
 /**
+ * Masks to control forcing the length of specified fields in the returned
+ * pattern to match those in the skeleton (when this would not happen
+ * otherwise). These may be combined to force the length of multiple fields.
+ * Used with udatpg_getBestPatternWithOptions, udatpg_replaceFieldTypesWithOptions.
+ * @draft ICU 4.4
+ */
+typedef enum UDateTimePatternMatchOptions {
+    /** @draft ICU 4.4 */
+    UDATPG_MATCH_NO_OPTIONS = 0,
+    /** @draft ICU 4.4 */
+    UDATPG_MATCH_HOUR_FIELD_LENGTH = 1 << UDATPG_HOUR_FIELD,
+    /** @draft ICU 4.4 */
+    UDATPG_MATCH_ALL_FIELDS_LENGTH = (1 << UDATPG_FIELD_COUNT) - 1
+} UDateTimePatternMatchOptions;
+
+/**
  * Status return values from udatpg_addPattern().
  * @stable ICU 3.8
  */
@@ -189,6 +205,43 @@ udatpg_getBestPattern(UDateTimePatternGenerator *dtpg,
                       const UChar *skeleton, int32_t length,
                       UChar *bestPattern, int32_t capacity,
                       UErrorCode *pErrorCode);
+
+/**
+ * Get the best pattern matching the input skeleton. It is guaranteed to
+ * have all of the fields in the skeleton.
+ * 
+ * Note that this function uses a non-const UDateTimePatternGenerator:
+ * It uses a stateful pattern parser which is set up for each generator object,
+ * rather than creating one for each function call.
+ * Consecutive calls to this function do not affect each other,
+ * but this function cannot be used concurrently on a single generator object.
+ * 
+ * @param dtpg a pointer to UDateTimePatternGenerator.
+ * @param skeleton
+ *            The skeleton is a pattern containing only the variable fields.
+ *            For example, "MMMdd" and "mmhh" are skeletons.
+ * @param length the length of skeleton
+ * @param options
+ *            Options for forcing the length of specified fields in the
+ *            returned pattern to match those in the skeleton (when this
+ *            would not happen otherwise). For default behavior, use
+ *            UDATPG_MATCH_NO_OPTIONS.
+ * @param bestPattern
+ *            The best pattern found from the given skeleton.
+ * @param capacity
+ *            the capacity of bestPattern.
+ * @param pErrorCode
+ *            a pointer to the UErrorCode which must not indicate a
+ *            failure before the function call.
+ * @return the length of bestPattern.
+ * @draft ICU 4.4
+ */
+U_DRAFT int32_t U_EXPORT2
+udatpg_getBestPatternWithOptions(UDateTimePatternGenerator *dtpg,
+                                 const UChar *skeleton, int32_t length,
+                                 UDateTimePatternMatchOptions options,
+                                 UChar *bestPattern, int32_t capacity,
+                                 UErrorCode *pErrorCode);
 
 /**
   * Get a unique skeleton from a given pattern. For example,
@@ -445,6 +498,44 @@ udatpg_replaceFieldTypes(UDateTimePatternGenerator *dtpg,
                          const UChar *skeleton, int32_t skeletonLength,
                          UChar *dest, int32_t destCapacity,
                          UErrorCode *pErrorCode);
+
+/**
+ * Adjusts the field types (width and subtype) of a pattern to match what is
+ * in a skeleton. That is, if you supply a pattern like "d-M H:m", and a
+ * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
+ * "dd-MMMM hh:mm". This is used internally to get the best match for the
+ * input skeleton, but can also be used externally.
+ *
+ * Note that this function uses a non-const UDateTimePatternGenerator:
+ * It uses a stateful pattern parser which is set up for each generator object,
+ * rather than creating one for each function call.
+ * Consecutive calls to this function do not affect each other,
+ * but this function cannot be used concurrently on a single generator object.
+ *
+ * @param dtpg a pointer to UDateTimePatternGenerator.
+ * @param pattern Input pattern
+ * @param patternLength the length of input pattern.
+ * @param skeleton
+ * @param skeletonLength the length of input skeleton.
+ * @param options
+ *            Options controlling whether the length of specified fields in the
+ *            pattern are adjusted to match those in the skeleton (when this
+ *            would not happen otherwise). For default behavior, use
+ *            UDATPG_MATCH_NO_OPTIONS.
+ * @param dest  pattern adjusted to match the skeleton fields widths and subtypes.
+ * @param destCapacity the capacity of dest.
+ * @param pErrorCode a pointer to the UErrorCode which must not indicate a
+ *                  failure before the function call.
+ * @return the length of dest.
+ * @draft ICU 4.4
+ */
+U_DRAFT int32_t U_EXPORT2
+udatpg_replaceFieldTypesWithOptions(UDateTimePatternGenerator *dtpg,
+                                    const UChar *pattern, int32_t patternLength,
+                                    const UChar *skeleton, int32_t skeletonLength,
+                                    UDateTimePatternMatchOptions options,
+                                    UChar *dest, int32_t destCapacity,
+                                    UErrorCode *pErrorCode);
 
 /**
  * Return a UEnumeration list of all the skeletons in canonical form.

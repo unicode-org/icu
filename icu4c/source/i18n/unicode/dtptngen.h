@@ -254,6 +254,30 @@ public:
 
 
     /**
+     * Return the best pattern matching the input skeleton. It is guaranteed to
+     * have all of the fields in the skeleton.
+     *
+     * @param skeleton
+     *            The skeleton is a pattern containing only the variable fields.
+     *            For example, "MMMdd" and "mmhh" are skeletons.
+     * @param options
+     *            Options for forcing the length of specified fields in the
+     *            returned pattern to match those in the skeleton (when this
+     *            would not happen otherwise). For default behavior, use
+     *            UDATPG_MATCH_NO_OPTIONS.
+     * @param status
+     *            Output param set to success/failure code on exit,
+     *            which must not indicate a failure before the function call.
+     * @return bestPattern
+     *            The best pattern found from the given skeleton.
+     * @draft ICU 4.4
+     */
+     UnicodeString getBestPattern(const UnicodeString& skeleton,
+                                  UDateTimePatternMatchOptions options,
+                                  UErrorCode& status);
+
+
+    /**
      * Adjusts the field types (width and subtype) of a pattern to match what is
      * in a skeleton. That is, if you supply a pattern like "d-M H:m", and a
      * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
@@ -271,6 +295,33 @@ public:
      */
      UnicodeString replaceFieldTypes(const UnicodeString& pattern, 
                                      const UnicodeString& skeleton, 
+                                     UErrorCode& status);
+
+    /**
+     * Adjusts the field types (width and subtype) of a pattern to match what is
+     * in a skeleton. That is, if you supply a pattern like "d-M H:m", and a
+     * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
+     * "dd-MMMM hh:mm". This is used internally to get the best match for the
+     * input skeleton, but can also be used externally.
+     *
+     * @param pattern Input pattern
+     * @param skeleton
+     *            The skeleton is a pattern containing only the variable fields.
+     *            For example, "MMMdd" and "mmhh" are skeletons.
+     * @param options
+     *            Options controlling whether the length of specified fields in the
+     *            pattern are adjusted to match those in the skeleton (when this
+     *            would not happen otherwise). For default behavior, use
+     *            UDATPG_MATCH_NO_OPTIONS.
+     * @param status
+     *            Output param set to success/failure code on exit,
+     *            which must not indicate a failure before the function call.
+     * @return pattern adjusted to match the skeleton fields widths and subtypes.
+     * @draft ICU 4.4
+     */
+     UnicodeString replaceFieldTypes(const UnicodeString& pattern, 
+                                     const UnicodeString& skeleton, 
+                                     UDateTimePatternMatchOptions options,
                                      UErrorCode& status);
 
     /**
@@ -409,8 +460,8 @@ private:
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
     int32_t getCanonicalIndex(const UnicodeString& field);
     const UnicodeString* getBestRaw(DateTimeMatcher& source, int32_t includeMask, DistanceInfo* missingFields, const PtnSkeleton** specifiedSkeletonPtr = 0);
-    UnicodeString adjustFieldTypes(const UnicodeString& pattern, const PtnSkeleton* specifiedSkeleton, UBool fixFractionalSeconds);
-    UnicodeString getBestAppending(int32_t missingFields);
+    UnicodeString adjustFieldTypes(const UnicodeString& pattern, const PtnSkeleton* specifiedSkeleton, UBool fixFractionalSeconds, UDateTimePatternMatchOptions options = UDATPG_MATCH_NO_OPTIONS);
+    UnicodeString getBestAppending(int32_t missingFields, UDateTimePatternMatchOptions options = UDATPG_MATCH_NO_OPTIONS);
     int32_t getTopBitNumber(int32_t foundMask);
     void setAvailableFormat(const UnicodeString &key, UErrorCode& status);
     UBool isAvailableFormatSet(const UnicodeString &key) const;

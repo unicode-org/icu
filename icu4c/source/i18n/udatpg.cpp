@@ -58,6 +58,17 @@ udatpg_getBestPattern(UDateTimePatternGenerator *dtpg,
                       const UChar *skeleton, int32_t length,
                       UChar *bestPattern, int32_t capacity,
                       UErrorCode *pErrorCode) {
+    return udatpg_getBestPatternWithOptions(dtpg, skeleton, length,
+                                            UDATPG_MATCH_NO_OPTIONS,
+                                            bestPattern, capacity, pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+udatpg_getBestPatternWithOptions(UDateTimePatternGenerator *dtpg,
+                                 const UChar *skeleton, int32_t length,
+                                 UDateTimePatternMatchOptions options,
+                                 UChar *bestPattern, int32_t capacity,
+                                 UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -66,7 +77,7 @@ udatpg_getBestPattern(UDateTimePatternGenerator *dtpg,
         return 0;
     }
     UnicodeString skeletonString((UBool)(length<0), skeleton, length);
-    UnicodeString result=((DateTimePatternGenerator *)dtpg)->getBestPattern(skeletonString, *pErrorCode);
+    UnicodeString result=((DateTimePatternGenerator *)dtpg)->getBestPattern(skeletonString, options, *pErrorCode);
     return result.extract(bestPattern, capacity, *pErrorCode);
 }
 
@@ -206,6 +217,18 @@ udatpg_replaceFieldTypes(UDateTimePatternGenerator *dtpg,
                          const UChar *skeleton, int32_t skeletonLength,
                          UChar *dest, int32_t destCapacity,
                          UErrorCode *pErrorCode) {
+    return udatpg_replaceFieldTypesWithOptions(dtpg, pattern, patternLength, skeleton, skeletonLength,
+                                               UDATPG_MATCH_NO_OPTIONS,
+                                               dest, destCapacity, pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+udatpg_replaceFieldTypesWithOptions(UDateTimePatternGenerator *dtpg,
+                                    const UChar *pattern, int32_t patternLength,
+                                    const UChar *skeleton, int32_t skeletonLength,
+                                    UDateTimePatternMatchOptions options,
+                                    UChar *dest, int32_t destCapacity,
+                                    UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -215,7 +238,7 @@ udatpg_replaceFieldTypes(UDateTimePatternGenerator *dtpg,
     }
     UnicodeString patternString((UBool)(patternLength<0), pattern, patternLength);
     UnicodeString skeletonString((UBool)(skeletonLength<0), skeleton, skeletonLength);
-    UnicodeString result=((DateTimePatternGenerator *)dtpg)->replaceFieldTypes(patternString, skeletonString, *pErrorCode);
+    UnicodeString result=((DateTimePatternGenerator *)dtpg)->replaceFieldTypes(patternString, skeletonString, options, *pErrorCode);
     return result.extract(dest, destCapacity, *pErrorCode);
 }
 
