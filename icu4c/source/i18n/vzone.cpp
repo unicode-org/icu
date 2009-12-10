@@ -81,7 +81,7 @@ vzone_write(VZone* zone, UChar* & result, int32_t & resultLength, UErrorCode& st
     ((VTimeZone*)zone)->VTimeZone::write(s, status);
 
     resultLength = s.length();
-    result = (UChar*)malloc(resultLength);
+    result = (UChar*)uprv_malloc(resultLength);
     memcpy(result,s.getBuffer(),resultLength);
 
     return;
@@ -93,7 +93,7 @@ vzone_writeFromStart(VZone* zone, UDate start, UChar* & result, int32_t & result
     ((VTimeZone*)zone)->VTimeZone::write(start, s, status);
 
     resultLength = s.length();
-    result = (UChar*)malloc(resultLength);
+    result = (UChar*)uprv_malloc(resultLength);
     memcpy(result,s.getBuffer(),resultLength);
 
     return;
@@ -105,7 +105,7 @@ vzone_writeSimple(VZone* zone, UDate time, UChar* & result, int32_t & resultLeng
     ((VTimeZone*)zone)->VTimeZone::writeSimple(time, s, status);
 
     resultLength = s.length();
-    result = (UChar*)malloc(resultLength);
+    result = (UChar*)uprv_malloc(resultLength);
     memcpy(result,s.getBuffer(),resultLength);
 
     return;
