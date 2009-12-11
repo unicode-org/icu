@@ -771,6 +771,7 @@ icu4j/doc
 icu4j/main/classes/charset/out
 icu4j/main/classes/collate/out
 icu4j/main/classes/core/out
+icu4j/main/classes/currdata/out
 icu4j/main/classes/langdata/out
 icu4j/main/classes/localespi/out
 icu4j/main/classes/regiondata/out

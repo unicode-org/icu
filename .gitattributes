@@ -1996,7 +1996,6 @@ icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#te
 icu4j/main/classes/core/src/com/ibm/icu/util/LocalePriorityList.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
-icu4j/main/classes/currdata/.externalToolBuilders/copy-data-langdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/currdata/currdata-build.launch -text
