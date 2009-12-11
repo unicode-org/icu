@@ -8,25 +8,21 @@ package com.ibm.icu.text;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
 
-import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
- * This class represents the information needed by 
- * DecimalFormat to format currency plural, 
- * such as "3.00 US dollars" or "1.00 US dollar". 
+ * This class represents the information needed by
+ * DecimalFormat to format currency plural,
+ * such as "3.00 US dollars" or "1.00 US dollar".
  * DecimalFormat creates for itself an instance of
- * CurrencyPluralInfo from its locale data.  
+ * CurrencyPluralInfo from its locale data.
  * If you need to change any of these symbols, you can get the
- * CurrencyPluralInfo object from your 
+ * CurrencyPluralInfo object from your
  * DecimalFormat and modify it.
  *
  * Following are the information needed for currency plural format and parse:
@@ -47,7 +43,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public CurrencyPluralInfo() {
-        initialize( ULocale.getDefault() );
+        initialize(ULocale.getDefault());
     }
 
     /**
@@ -56,8 +52,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public CurrencyPluralInfo( Locale locale ) {
-        initialize( ULocale.forLocale(locale) );
+    public CurrencyPluralInfo(Locale locale) {
+        initialize(ULocale.forLocale(locale));
     }
 
     /**
@@ -66,13 +62,13 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public CurrencyPluralInfo( ULocale locale ) {
-        initialize( locale );
+    public CurrencyPluralInfo(ULocale locale) {
+        initialize(locale);
     }
 
     /**
      * Gets a CurrencyPluralInfo instance for the default locale.
-     * 
+     *
      * @return A CurrencyPluralInfo instance.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
@@ -83,7 +79,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
 
     /**
      * Gets a CurrencyPluralInfo instance for the given locale.
-     * 
+     *
      * @param locale the locale.
      * @return A CurrencyPluralInfo instance.
      * @draft ICU 4.2
@@ -95,7 +91,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
 
     /**
      * Gets a CurrencyPluralInfo instance for the given locale.
-     * 
+     *
      * @param locale the locale.
      * @return A CurrencyPluralInfo instance.
      * @draft ICU 4.2
@@ -117,7 +113,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Given a plural count, gets currency plural pattern of this locale, 
+     * Given a plural count, gets currency plural pattern of this locale,
      * used for currency plural format
      *
      * @param  pluralCount currency plural count
@@ -133,8 +129,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
                 currencyPluralPattern = pluralCountToCurrencyUnitPattern.get("other");
             }
             if (currencyPluralPattern == null) {
-                // no currencyUnitPatterns defined, 
-                // fallback to predefined defult.
+                // no currencyUnitPatterns defined,
+                // fallback to predefined default.
                 // This should never happen when ICU resource files are
                 // available, since currencyUnitPattern of "other" is always
                 // defined in root.
@@ -145,7 +141,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Get locale 
+     * Get locale
      *
      * @return locale
      *
@@ -157,11 +153,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set plural rules.
-     * The plural rule is set when CurrencyPluralInfo
-     * instance is created.
-     * You can call this method to reset plural rules only if you want
-     * to modify the default plural rule of the locale.
+     * Set plural rules.  These are initially set in the constructor based on the locale, 
+     * and usually do not need to be changed.
      *
      * @param ruleDescription new plural rule description
      * @draft ICU 4.2
@@ -172,13 +165,10 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set currency plural patterns.
-     * The currency plural pattern is set when CurrencyPluralInfo
-     * instance is created.
-     * You can call this method to reset currency plural patterns only if 
-     * you want to modify the default currency plural pattern of the locale.
+     * Set currency plural patterns.  These are initially set in the constructor based on the
+     * locale, and usually do not need to be changed.
      *
-     * @param pluralCount the plural count for which the currency pattern will 
+     * @param pluralCount the plural count for which the currency pattern will
      *                    be overridden.
      * @param pattern     the new currency plural pattern
      * @draft ICU 4.2
@@ -189,7 +179,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set locale
+     * Set locale.  This also sets both the plural rules and the currency plural patterns to be
+     * the defaults for the locale.
      *
      * @param loc the new locale to set
      * @draft ICU 4.2
@@ -235,15 +226,15 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     public boolean equals(Object a) {
         if (a instanceof CurrencyPluralInfo) {
             CurrencyPluralInfo other = (CurrencyPluralInfo)a;
-            return pluralRules.equals(other.pluralRules) && 
+            return pluralRules.equals(other.pluralRules) &&
                    pluralCountToCurrencyUnitPattern.equals(other.pluralCountToCurrencyUnitPattern);
         }
         return false;
     }
 
     /**
-     * Given a number, returns the keyword of the first rule that applies 
-     * to the number
+     * Given a number, returns the keyword of the first rule that applies
+     * to the number.
      */
     String select(double number) {
         return pluralRules.select(number);
@@ -252,7 +243,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     /**
      * Currency plural pattern iterator.
      *
-     * @return a iterator on currency plural pattern key set.
+     * @return a iterator on the currency plural pattern key set.
      */
     Iterator<String> pluralPatternIterator() {
         return pluralCountToCurrencyUnitPattern.keySet().iterator();
@@ -266,8 +257,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
 
     private void setupCurrencyPluralPattern(ULocale uloc) {
         pluralCountToCurrencyUnitPattern = new HashMap<String, String>();
-        Set<String> pluralCountSet = new HashSet<String>();
-        ULocale parentLocale = uloc;
+        
         String numberStylePattern = NumberFormat.getPattern(uloc, NumberFormat.NUMBERSTYLE);
         // Split the number style pattern into pos and neg if applicable
         int separatorIndex = numberStylePattern.indexOf(";");
@@ -276,40 +266,27 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
             negNumberPattern = numberStylePattern.substring(separatorIndex + 1);
             numberStylePattern = numberStylePattern.substring(0, separatorIndex);
         }
-        while (parentLocale != null) {
-            try {
-                ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle.
-                    getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, parentLocale);
-                ICUResourceBundle currencyRes = resource.getWithFallback("CurrencyUnitPatterns");
-                int size = currencyRes.getSize();
-                for (int index = 0; index < size; ++index) {
-                    String pluralCount = currencyRes.get(index).getKey();
-                    if (pluralCountSet.contains(pluralCount)) {
-                        continue;
-                    }
-                    String pattern = currencyRes.get(index).getString();
-                    // replace {0} with numberStylePattern
-                    // and {1} with triple currency sign
-                    String patternWithNumber = pattern.replace("{0}", numberStylePattern);
-                    String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
-                    if (separatorIndex != -1) {
-                        String negPattern = pattern;
-                        String negWithNumber = negPattern.replace("{0}", negNumberPattern); 
-                        String negWithCurrSign = negWithNumber.replace("{1}", tripleCurrencyStr); 
-                        StringBuffer posNegPatterns = new StringBuffer(patternWithCurrencySign);
-                        posNegPatterns.append(";");
-                        posNegPatterns.append(negWithCurrSign);
-                        patternWithCurrencySign = posNegPatterns.toString();
-                    }
-                    pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
-                    pluralCountSet.add(pluralCount);
-                }
-            } catch (MissingResourceException e) {
+        Map<String, String> map = CurrencyData.provider.getInstance(uloc, true).getUnitPatterns();
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            String pluralCount = e.getKey();
+            String pattern = e.getValue();
+            
+            // replace {0} with numberStylePattern
+            // and {1} with triple currency sign
+            String patternWithNumber = pattern.replace("{0}", numberStylePattern);
+            String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
+            if (separatorIndex != -1) {
+                String negPattern = pattern;
+                String negWithNumber = negPattern.replace("{0}", negNumberPattern);
+                String negWithCurrSign = negWithNumber.replace("{1}", tripleCurrencyStr);
+                StringBuffer posNegPatterns = new StringBuffer(patternWithCurrencySign);
+                posNegPatterns.append(";");
+                posNegPatterns.append(negWithCurrSign);
+                patternWithCurrencySign = posNegPatterns.toString();
             }
-            parentLocale = parentLocale.getFallback();
+            pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
         }
     }
-
 
 
     //-------------------- private data member ---------------------
@@ -325,15 +302,15 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
 
     // map from plural count to currency plural pattern, for example
-    // one (plural count) --> {0} {1} (currency plural pattern, 
-    // in which, {0} is the amount number, and {1} is the currency plural name.
+    // one (plural count) --> {0} {1} (currency plural pattern,
+    // in which {0} is the amount number, and {1} is the currency plural name).
     private Map<String, String> pluralCountToCurrencyUnitPattern = null;
 
     /*
      * The plural rule is used to format currency plural name,
      * for example: "3.00 US Dollars".
-     * If there are 3 currency signs in the currency patttern,
-     * the 3 currency signs will be replaced by currency plural name.
+     * If there are 3 currency signs in the currency pattern,
+     * the 3 currency signs will be replaced by the currency plural name.
      */
     private PluralRules pluralRules = null;
 

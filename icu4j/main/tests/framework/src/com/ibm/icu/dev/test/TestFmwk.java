@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
@@ -1763,6 +1764,13 @@ public class TestFmwk extends AbstractTestLog {
                 .valueOf(actual));
     }
 
+    protected <T> boolean assertEquals(String message, T[] expected, T[] actual) {
+        // Use toString on a List to get useful, readable messages
+        String expectedString = expected == null ? "null" : Arrays.asList(expected).toString();
+        String actualString = actual == null ? "null" : Arrays.asList(actual).toString();
+        return assertEquals(message, expectedString, actualString);
+    }
+    
     protected boolean assertEquals(String message, Object expected,
             Object actual) {
         boolean result = expected == null ? actual == null : expected
@@ -1776,18 +1784,18 @@ public class TestFmwk extends AbstractTestLog {
         boolean result = !(expected == null ? actual == null : expected
                 .equals(actual));
         return handleAssert(result, message, stringFor(expected),
-                stringFor(actual), "not equal to", true, 3);
+                stringFor(actual), "not equal to", true);
     }
 
     protected boolean assertSame(String message, Object expected, Object actual) {
         return handleAssert(expected == actual, message, stringFor(expected),
-                stringFor(actual), "==", false, 3);
+                stringFor(actual), "==", false);
     }
 
     protected boolean assertNotSame(String message, Object expected,
             Object actual) {
         return handleAssert(expected != actual, message, stringFor(expected),
-                stringFor(actual), "!=", true, 3);
+                stringFor(actual), "!=", true);
     }
 
     protected boolean assertNull(String message, Object actual) {
@@ -1796,7 +1804,7 @@ public class TestFmwk extends AbstractTestLog {
 
     protected boolean assertNotNull(String message, Object actual) {
         return handleAssert(actual != null, message, null, stringFor(actual),
-                "!=", true, 3);
+                "!=", true);
     }
 
     protected void fail(String message) {
@@ -1805,13 +1813,13 @@ public class TestFmwk extends AbstractTestLog {
 
     private boolean handleAssert(boolean result, String message,
             String expected, String actual) {
-        return handleAssert(result, message, expected, actual, null, false, 4);
+        return handleAssert(result, message, expected, actual, null, false);
     }
 
     public boolean handleAssert(boolean result, String message,
-            Object expected, Object actual, String relation, boolean flip, int callDepth) {
+            Object expected, Object actual, String relation, boolean flip) {
         if (!result || isVerbose()) {
-            String testLocation = sourceLocation(callDepth);
+            String testLocation = sourceLocation();
             if (message == null) {
                 message = "";
             }
@@ -1835,19 +1843,25 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     private final String stringFor(Object obj) {
-        if (obj == null)
+        if (obj == null) {
             return "null";
-        if (obj instanceof String)
+        }
+        if (obj instanceof String) {
             return "\"" + obj + '"';
+        }
         return obj.getClass().getName() + "<" + obj + ">";
     }
 
     // Return the source code location of the caller located callDepth frames up the stack.
-    private String sourceLocation(int callDepth) {
+    private String sourceLocation() {
+        // Walk up the stack to the first call site outside this file
         StackTraceElement[] st = new Throwable().getStackTrace();
-        String w = "File "   + st[callDepth].getFileName() +
-                   ", Line " + st[callDepth].getLineNumber();
-        return w;
+        for (int i = 0; i < st.length; ++i) {
+            if (!"TestFmwk.java".equals(st[i].getFileName())) {
+                return "File "   + st[i].getFileName() + ", Line " + st[i].getLineNumber();
+            }
+        }
+        throw new InternalError();
     }
 
 

@@ -99,6 +99,15 @@
         <ant dir="${icu4j.charset.dir}" inheritAll="false"/>
     </target>
 
+    <!-- currdata -->
+    <path id="javac.classpathref.currdata">
+        <pathelement location="${icu4j.core.jar}"/>
+    </path>
+
+    <target name="_all.currdata" depends="_all.core">
+        <ant dir="${icu4j.currdata.dir}" inheritAll="false"/>
+    </target>
+
     <!-- langdata -->
     <path id="javac.classpathref.langdata">
         <pathelement location="${icu4j.core.jar}"/>

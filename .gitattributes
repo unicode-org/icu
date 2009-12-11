@@ -75,6 +75,11 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
 icu4j/main/classes/core/src/com/ibm/icu/text/SelectFormat.java -text
+icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
+icu4j/main/classes/currdata/.externalToolBuilders/copy-data-langdata.launch -text
+icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/classes/currdata/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/classes/currdata/currdata-build.launch -text
 icu4j/main/classes/langdata/.externalToolBuilders/copy-data-langdata.launch -text
 icu4j/main/classes/langdata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/langdata/.settings/org.eclipse.jdt.ui.prefs -text

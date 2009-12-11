@@ -153,8 +153,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the locale
      * @internal ICU 3.0
      */
-    public static final ULocale getFunctionalEquivalent(String baseName,
-                                                        ClassLoader loader,
+    public static final ULocale getFunctionalEquivalent(String baseName, ClassLoader loader,
             String resName, String keyword, ULocale locID,
             boolean isAvailable[], boolean omitDefault) {
         String kwVal = locID.getKeywordValue(keyword);
@@ -337,12 +336,11 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return resource represented by the key
      * @exception MissingResourceException If a resource was not found.
      */
-    public ICUResourceBundle getWithFallback(String path)
-            throws MissingResourceException {
+    public ICUResourceBundle getWithFallback(String path) throws MissingResourceException {
         ICUResourceBundle result = null;
         ICUResourceBundle actualBundle = this;
 
-        // now recuse to pick up sub levels of the items
+        // now recurse to pick up sub levels of the items
         result = findResourceWithFallback(path, actualBundle, null);
 
         if (result == null) {
@@ -352,6 +350,38 @@ public  class ICUResourceBundle extends UResourceBundle {
                 path, getKey());
         }
         return result;
+    }
+    
+    public ICUResourceBundle at(int index) {
+        return (ICUResourceBundle) handleGet(index, null, this);
+    }
+    
+    public ICUResourceBundle at(String key) {
+        // don't ever presume the key is an int in disguise, like ResourceArray does.
+        if (this instanceof ICUResourceBundleImpl.ResourceTable) {
+            return (ICUResourceBundle) handleGet(key, null, this);
+        }
+        return null;
+    }
+    
+    @Override
+    public ICUResourceBundle findTopLevel(int index) {
+        return (ICUResourceBundle) super.findTopLevel(index);
+    }
+    
+    @Override
+    public ICUResourceBundle findTopLevel(String aKey) {
+        return (ICUResourceBundle) super.findTopLevel(aKey);
+    }
+    
+    /**
+     * Like getWithFallback, but returns null if the resource is not found instead of
+     * throwing an exception.
+     * @param path the path to the resource
+     * @return the resource, or null
+     */
+    public ICUResourceBundle findWithFallback(String path) {
+        return findResourceWithFallback(path, this, null);
     }
 
     // will throw type mismatch exception if the resource is not a string

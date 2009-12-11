@@ -12,9 +12,12 @@ import java.io.Serializable;
 import java.text.ChoiceFormat;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
+import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
+import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -572,17 +575,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
     
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
-    public static final int CURRENCT_SPC_SURROUNDING_MATCH = 1;
+    public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
     public static final int CURRENCY_SPC_INSERT = 2;
-
-    private static final String CURRENCY_SPACING = "currencySpacing";
-    private static final String BEFORE_CURRENCY = "beforeCurrency";
-    private static final String AFTER_CURRENCY = "afterCurrency";
-    private static final String[] CURRENCY_SPACING_KEYS = 
-        { "currencyMatch", "surroundingMatch" ,"insertBetween"};
-    private static final String DEFAULT_SPC_MATCH = "[:letter:]";
-    private static final String DEFAULT_SPC_INSERT = " ";
-    private static final String DEFAULT_SPC_SUR_MATCH = "[:digit:]";
 
     private String[] currencySpcBeforeSym; // before currency symbol.
     private String[] currencySpcAfterSym; // after currency symbol.
@@ -780,6 +774,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             zeroDigit = ns.getDescription().charAt(0);
         }
 
+        CurrencyDisplayInfo info = CurrencyData.provider.getInstance(locale, true);
+
         // Obtain currency data from the currency API.  This is strictly
         // for backward compatibility; we don't use DecimalFormatSymbols
         // for currency data anymore.
@@ -801,48 +797,33 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
 
-        ICUResourceBundle currResource = 
-            (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
-        // If there is a currency decimal, use it.
+        
+        // Get currency pattern/separator overrides if they exist.
         monetarySeparator = decimalSeparator;
         monetaryGroupingSeparator = groupingSeparator;
         Currency curr = Currency.getInstance(locale);
-        if(curr!=null){
-            String currencyCode = curr.getCurrencyCode();
-            if(currencyCode != null) {
-                /* An explicit currency was requested */
-                ICUResourceBundle currencyRes = currResource.getWithFallback("Currencies");
-                try{
-                    currencyRes = currencyRes.getWithFallback(currencyCode);
-                    if(currencyRes.getSize()>2) {
-                        currencyRes = (ICUResourceBundle)currencyRes.get(2);
-                        currencyPattern = currencyRes.getString(0);
-                        monetarySeparator = currencyRes.getString(1).charAt(0);
-                        monetaryGroupingSeparator = currencyRes.getString(2).charAt(0);
-                    }
-                }catch(MissingResourceException ex){
-                    /* else An explicit currency was requested and is unknown or locale data is malformed. */
-                    /* decimal format API will get the correct value later on. */
-                }
-            }
-            /* else no currency keyword used. */
-        }
-        //monetarySeparator = numberElements[11].charAt(0);
-        
-        // Get Currency Spacing data. 
-        currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
-        currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
-        ICUResourceBundle curSpcBundle = (ICUResourceBundle)currResource.get(CURRENCY_SPACING);
-        if (curSpcBundle != null) {
-            ICUResourceBundle beforeCurBundle = (ICUResourceBundle)curSpcBundle.get(BEFORE_CURRENCY);
-            ICUResourceBundle afterCurBundle = (ICUResourceBundle)curSpcBundle.get(AFTER_CURRENCY);
-            for (int i = CURRENCY_SPC_CURRENCY_MATCH; i <= CURRENCY_SPC_INSERT; i++) {
-                currencySpcBeforeSym[i] = beforeCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
-                currencySpcAfterSym[i] = afterCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+        if (curr != null){
+            CurrencyFormatInfo fmtInfo = info.getFormatInfo(curr.getCurrencyCode());
+            if (fmtInfo != null) {
+                currencyPattern = fmtInfo.currencyPattern;
+                monetarySeparator = fmtInfo.monetarySeparator;
+                monetaryGroupingSeparator = fmtInfo.monetaryGroupingSeparator;
             }
         }
-        
+
+        // Get currency spacing data. 
+        currencySpcBeforeSym = new String[3];
+        currencySpcAfterSym = new String[3];
+        initSpacingInfo(info.getSpacingInfo());
+    }
+    
+    private void initSpacingInfo(CurrencySpacingInfo spcInfo) {
+        currencySpcBeforeSym[CURRENCY_SPC_CURRENCY_MATCH] = spcInfo.beforeCurrencyMatch;
+        currencySpcBeforeSym[CURRENCY_SPC_SURROUNDING_MATCH] = spcInfo.beforeContextMatch;
+        currencySpcBeforeSym[CURRENCY_SPC_INSERT] = spcInfo.beforeInsert;
+        currencySpcAfterSym[CURRENCY_SPC_CURRENCY_MATCH] = spcInfo.afterCurrencyMatch;
+        currencySpcAfterSym[CURRENCY_SPC_SURROUNDING_MATCH] = spcInfo.afterContextMatch;
+        currencySpcAfterSym[CURRENCY_SPC_INSERT] = spcInfo.afterInsert;
     }
 
     /**
@@ -902,12 +883,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             if (currencySpcAfterSym == null) {
                 currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
             }
-            currencySpcBeforeSym[CURRENCY_SPC_CURRENCY_MATCH] = 
-                currencySpcAfterSym[CURRENCY_SPC_CURRENCY_MATCH] = DEFAULT_SPC_MATCH;
-            currencySpcBeforeSym[CURRENCT_SPC_SURROUNDING_MATCH] = 
-                currencySpcAfterSym[CURRENCT_SPC_SURROUNDING_MATCH] = DEFAULT_SPC_SUR_MATCH;
-            currencySpcBeforeSym[CURRENCY_SPC_INSERT] = 
-                currencySpcAfterSym[CURRENCY_SPC_INSERT] = DEFAULT_SPC_INSERT;
+            initSpacingInfo(CurrencyData.CurrencySpacingInfo.DEFAULT);
         }
         serialVersionOnStream = currentSerialVersion;
 

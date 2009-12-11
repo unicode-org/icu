@@ -11,10 +11,13 @@
 
 package com.ibm.icu.dev.test.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -196,216 +199,63 @@ public class CurrencyTest extends TestFmwk {
         }
     }
 
-    public void TestAvailableCurrencyCodes()
-    {
-        // local Variables
-        String[] currency;
-
-        // Cycle through historical currencies 
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AM"), new Date(-630720000000L)); // pre 1961
-        if (currency != null)
-        {
-            errln("FAIL: didn't return null for eo_AM");
+    public void TestAvailableCurrencyCodes() {
+        String[][] tests = {
+            { "eo_AM", "1950-01-05" },
+            { "eo_AM", "1969-12-31", "SUR" },
+            { "eo_AM", "1991-12-26", "RUR" },
+            { "eo_AM", "2000-12-23", "AMD" },
+            { "eo_AD", "2000-12-23", "EUR", "ESP", "FRF", "ADP" },
+            { "eo_AD", "1969-12-31", "ESP", "FRF", "ADP" },
+            { "eo_AD", "1950-01-05", "ESP", "ADP" },
+            { "eo_AD", "1900-01-17", "ESP" },
+            { "eo_UA", "1994-12-25" },
+            { "eo_QQ", "1969-12-31" },
+            { "eo_AO", "2000-12-23", "AOA" },
+            { "eo_AO", "1995-12-25", "AOR", "AON" },
+            { "eo_AO", "1990-12-26", "AON", "AOK" },
+            { "eo_AO", "1979-12-29", "AOK" },
+            { "eo_AO", "1969-12-31" },
+            { "eo_DE@currency=DEM", "2000-12-23", "EUR", "DEM" },
+            { "en_US", null, "USD" },
+            { "en_US_PREEURO", null, "USD" },
+            { "en_US_Q", null, "USD" },
+        };
+        
+        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        for (String[] test : tests) {
+            ULocale locale = new ULocale(test[0]);
+            String timeString = test[1];
+            Date date;
+            if (timeString == null) {
+                date = new Date();
+                timeString = "today";
+            } else {
+                try {
+                    date = fmt.parse(timeString);
+                } catch (Exception e) {
+                    fail("could not parse date: " + timeString);
+                    continue;
+                }
+            }
+            String[] expected = null;
+            if (test.length > 2) {
+                expected = new String[test.length - 2];
+                System.arraycopy(test, 2, expected, 0, expected.length);
+            }
+            String[] actual = Currency.getAvailableCurrencyCodes(locale, date);
+            
+            // Order is not important as of 4.4.  We never documented that it was.
+            Set<String> expectedSet = new HashSet<String>();
+            if (expected != null) {
+                expectedSet.addAll(Arrays.asList(expected));
+            }
+            Set<String> actualSet = new HashSet<String>();
+            if (actual != null) {
+                actualSet.addAll(Arrays.asList(actual));
+            }
+            assertEquals(locale + " on " + timeString, expectedSet, actualSet);
         }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AM"), new Date(0L)); // 1970
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AM returned: " + currency.length);
-        }
-        if (!"SUR".equals(currency[0]))
-        {
-            errln("didn't return SUR for eo_AM returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AM"), new Date(693792000000L)); // 1992
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AM returned: " + currency.length);
-        }
-        if (!"RUR".equals(currency[0]))
-        {
-            errln("didn't return RUR for eo_AM returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AM"), new Date(977616000000L)); // post 1993
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AM returned: " + currency.length);
-        }
-        if (!"AMD".equals(currency[0]))
-        {
-            errln("didn't return AMD for eo_AM returned: " + currency[0]);
-        }
-
-        // Locale AD has multiple currencies at once
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AD"), new Date(977616000000L)); // 2001
-        if (currency.length != 4)
-        {
-            errln("FAIL: didn't return 4 for eo_AD returned: " + currency.length);
-        }
-        if (!"EUR".equals(currency[0]))
-        {
-            errln("didn't return EUR for eo_AD returned: " + currency[0]);
-        }
-        if (!"ESP".equals(currency[1]))
-        {
-            errln("didn't return ESP for eo_AD returned: " + currency[1]);
-        }
-        if (!"FRF".equals(currency[2]))
-        {
-            errln("didn't return FRF for eo_AD returned: " + currency[2]);
-        }
-        if (!"ADP".equals(currency[3]))
-        {
-            errln("didn't return ADP for eo_AD returned: " + currency[3]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AD"), new Date(0L)); // 1970
-        if (currency.length != 3)
-        {
-            errln("FAIL: didn't return 3 for eo_AD returned: " + currency.length);
-        }
-        if (!"ESP".equals(currency[0]))
-        {
-            errln("didn't return ESP for eo_AD returned: " + currency[0]);
-        }
-        if (!"FRF".equals(currency[1]))
-        {
-            errln("didn't return FRF for eo_AD returned: " + currency[1]);
-        }
-        if (!"ADP".equals(currency[2]))
-        {
-            errln("didn't return ADP for eo_AD returned: " + currency[2]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AD"), new Date(-630720000000L)); // 1950
-        if (currency.length != 2)
-        {
-            errln("FAIL: didn't return 2 for eo_AD returned: " + currency.length);
-        }
-        if (!"ESP".equals(currency[0]))
-        {
-            errln("didn't return ESP for eo_AD returned: " + currency[0]);
-        }
-        if (!"ADP".equals(currency[1]))
-        {
-            errln("didn't return ADP for eo_AD returned: " + currency[1]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AD"), new Date(-2207520000000L)); // 1900
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AD returned: " + currency.length);
-        }
-        if (!"ESP".equals(currency[0]))
-        {
-            errln("didn't return ESP for eo_AD returned: " + currency[0]);
-        }
-
-        // Locale UA has gap between years 1994 - 1996
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_UA"), new Date(788400000000L));
-        if (currency != null)
-        {
-            errln("FAIL: didn't return null for eo_UA");
-        }
-
-        // Test for bogus locale
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_QQ"), new Date(0L));
-        if (currency != null)
-        {
-            errln("FAIL: didn't return null for eo_QQ");
-        }
-
-        // Cycle through historical currencies
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AO"), new Date(977616000000L)); // 2001
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AO returned: " + currency.length);
-        }
-        if (!"AOA".equals(currency[0]))
-        {
-            errln("didn't return AOA for eo_AO returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AO"), new Date(819936000000L)); // 1996
-        if (currency.length != 2)
-        {
-            errln("FAIL: didn't return 2 for eo_AO returned: " + currency.length);
-        }
-        if (!"AOR".equals(currency[0]))
-        {
-            errln("didn't return AOR for eo_AO returned: " + currency[0]);
-        }
-        if (!"AON".equals(currency[1]))
-        {
-            errln("didn't return AON for eo_AO returned: " + currency[1]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AO"), new Date(662256000000L)); // 
-        if (currency.length != 2)
-        {
-            errln("FAIL: didn't return 2 for eo_AO returned: " + currency.length);
-        }
-        if (!"AON".equals(currency[0]))
-        {
-            errln("didn't return AON for eo_AO returned: " + currency[0]);
-        }
-        if (!"AOK".equals(currency[1]))
-        {
-            errln("didn't return AOK for eo_AO returned: " + currency[1]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AO"), new Date(315360000000L)); // 1980
-        if (currency.length != 1)
-        {
-            errln("FAIL: didn't return 1 for eo_AO returned: " + currency.length);
-        }
-        if (!"AOK".equals(currency[0]))
-        {
-            errln("didn't return AOK for eo_AO returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AO"), new Date(0L)); // 1970
-        if (currency != null)
-        {
-            errln("FAIL: didn't return null for eo_AO");
-        }
-
-        // Test with currency keyword override
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_DE@currency=DEM"), new Date(977616000000L)); // 2001
-        if (currency.length != 2)
-        {
-            errln("FAIL: didn't return 2 for eo_DE@currency=DEM returned: " + currency.length);
-        }
-        if (!"EUR".equals(currency[0]))
-        {
-            errln("didn't return EUR for eo_DE@currency=DEM returned: " + currency[0]);
-        }
-        if (!"DEM".equals(currency[1]))
-        {
-            errln("didn't return DEM for eo_DE@currency=DEM returned: " + currency[1]);
-        }
-
-        // Test Euro Support
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("en_US"), new Date(System.currentTimeMillis()));
-        if (!"USD".equals(currency[0]))
-        {
-            errln("didn't return USD for en_US returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("en_US_PREEURO"), new Date(System.currentTimeMillis()));
-        if (!"USD".equals(currency[0]))
-        {
-            errln("didn't return USD for en_US_PREEURO returned: " + currency[0]);
-        }
-
-        currency = Currency.getAvailableCurrencyCodes(new ULocale("en_US_Q"), new Date(System.currentTimeMillis()));
-        if (!"USD".equals(currency[0]))
-        {
-            errln("didn't return USD for en_US_Q returned: " + currency[0]);
-        }
-
     }
 
     public void TestDeprecatedCurrencyFormat() {
@@ -427,14 +277,15 @@ public class CurrencyTest extends TestFmwk {
     public void TestGetKeywordValues(){
 
         final String[][] PREFERRED = {
-            {"root",            "USD"},
-            {"und",             "USD"},
-            {"und_ZZ",          "USD"},
+            {"root",                 },
+            {"und",                  },
+            {"und_ZZ",               },
             {"en_US",           "USD"},
-            {"en_029",          "USD"},
+            {"en_029",               },
             {"en_TH",           "THB"},
             {"de",              "EUR"},
             {"de_DE",           "EUR"},
+            {"de_ZZ",                },
             {"ar",              "EGP"},
             {"ar_PS",           "JOD", "ILS"},
             {"en@currency=CAD",     "USD"},
@@ -447,42 +298,20 @@ public class CurrencyTest extends TestFmwk {
         for (int i = 0; i < ALL.length; i++) {
             ALLSET.add(ALL[i]);
         }
-
+        
         for (int i = 0; i < PREFERRED.length; i++) {
             ULocale loc = new ULocale(PREFERRED[i][0]);
             String[] expected = new String[PREFERRED[i].length - 1];
             System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
-
             String[] pref = Currency.getKeywordValuesForLocale("currency", loc, true);
-            boolean matchPref = false;
-            if (pref.length == expected.length) {
-                matchPref = true;
-                for (int j = 0; j < pref.length; j++) {
-                    if (!pref[j].equals(expected[j])) {
-                        matchPref = false;
-                    }
-                }
-            }
-            if (!matchPref) {
-                errln("FAIL: Preferred values for locale " + loc 
-                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
-            }
+            assertEquals(loc.toString(), expected, pref);
 
             String[] all = Currency.getKeywordValuesForLocale("currency", loc, false);
-            boolean matchAll = false;
-            if (all.length == ALLSET.size()) {
-                matchAll = true;
-                for (int j = 0; j < all.length; j++) {
-                    if (!ALLSET.contains(all[j])) {
-                        matchAll = false;
-                        break;
-                    }
-                }
-            }
-            if (!matchAll) {
-                errln("FAIL: All values for locale " + loc
-                        + " got:" + Arrays.toString(all)); 
-            }
+            // The items in the two collections should match (ignore order, 
+            // behavior change from 4.3.3)
+            Set<String> returnedSet = new HashSet<String>();
+            returnedSet.addAll(Arrays.asList(all));
+            assertEquals(loc.toString(), ALLSET, returnedSet);
         }
     }
 }
