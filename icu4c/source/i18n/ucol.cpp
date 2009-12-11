@@ -6280,7 +6280,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
             uint8_t caseBits = 0;
 
             for(;;) {
-                U_ASSERT(caseShift >= 0 && caseShift <= UCOL_CASE_SHIFT_START);
+                U_ASSERT(caseShift <= UCOL_CASE_SHIFT_START);
                 if(i == count) {
                     goto saveState;
                 }
