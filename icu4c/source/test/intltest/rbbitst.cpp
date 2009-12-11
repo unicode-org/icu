@@ -3316,8 +3316,7 @@ RBBILineMonkey::RBBILineMonkey()
     fHY    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=HY}]"), status);
     fH2    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H2}]"), status);
     fH3    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H3}]"), status);
-    fCL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Line_break=CL}]-[\\u0029\\u005d]]"), status); // TODO: fix when props are updated.
-    fCP    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u0029\\u005d]"), status);
+    fCL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CL}]"), status);
     fCP    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CP}]"), status);
     fEX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EX}]"), status);
     fIN    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=IN}]"), status);
