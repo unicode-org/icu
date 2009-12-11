@@ -2290,7 +2290,7 @@ _getDisplayNameForComponent(const char *locale,
     char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
     int32_t length;
     UErrorCode localStatus;
-    char* root = NULL;
+    const char* root = NULL;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
