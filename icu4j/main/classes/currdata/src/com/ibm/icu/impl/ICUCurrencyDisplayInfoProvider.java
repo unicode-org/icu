@@ -26,7 +26,6 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
     }
 
     public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
-        // this is a test
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
                 ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
         if (!withFallback) {
