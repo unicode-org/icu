@@ -7,26 +7,24 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
-import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
 import java.util.Vector;
 
+import com.ibm.icu.impl.CurrencyDisplayNames;
+import com.ibm.icu.impl.CurrencyMetaInfo;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TextTrieMap;
+import com.ibm.icu.impl.CurrencyMetaInfo.CurrencyDigits;
+import com.ibm.icu.impl.CurrencyMetaInfo.CurrencyFilter;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
@@ -148,140 +146,51 @@ public class Currency extends MeasureUnit implements Serializable {
 
     /**
      * Returns an array of Strings which contain the currency
-     * identifiers which are valid for the given locale on the 
-     * given date.
+     * identifiers that are valid for the given locale on the 
+     * given date.  If there are no such identifiers, returns null.
+     * Returned identifiers are in preference order.
      * @param loc the locale for which to retrieve currency codes.
      * @param d the date for which to retrieve currency codes for the given locale.
      * @return The array of ISO currency codes.
      * @stable ICU 4.0
      */
-    public static String[] getAvailableCurrencyCodes(ULocale loc, Date d) 
-    {
-        // local variables
-        String country = loc.getCountry();
-        long dateL = d.getTime();
-        long mask = 4294967295L;
-
-        Vector<String> currCodeVector = new Vector<String>();
-
-        // Get supplementalData
-        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,
-            "supplementalData",
-            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        if (bundle == null)
-        {
-            // no data
+    public static String[] getAvailableCurrencyCodes(ULocale loc, Date d) {
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        CurrencyFilter filter = CurrencyFilter.onDate(d).withRegion(loc.getCountry());
+        List<String> list = info.currencies(filter);
+        // Note: Prior to 4.4 the spec didn't say that we return null if there are no results, but 
+        // the test assumed it did.  Kept the behavior and amended the spec.
+        if (list.isEmpty()) {
             return null;
         }
-
-        // Work with the supplementalData
-        try
-        {
-            // Process each currency to see which one is valid for the given date.
-            // Some regions can have more than one current currency in use for
-            // a given date.
-            UResourceBundle cm = bundle.get("CurrencyMap");
-            UResourceBundle countryArray = cm.get(country);
-
-            // Get valid currencies
-            for (int i = 0; i < countryArray.getSize(); i++)
-            {
-                // get the currency resource
-                UResourceBundle currencyReq = countryArray.get(i);
-                String curriso = null;
-                curriso = currencyReq.getString("id");
-
-                // get the from date
-                long fromDate = 0;
-                UResourceBundle fromRes = currencyReq.get("from");
-                int[] fromArray = fromRes.getIntVector();
-                fromDate = (long)fromArray[0] << 32;
-                fromDate |= ((long)fromArray[1] & mask);
-
-                // get the to date and check the date range
-                if (currencyReq.getSize() > 2)
-                {
-                    long toDate = 0;
-                    UResourceBundle toRes = currencyReq.get("to");
-                    int[] toArray = toRes.getIntVector();
-                    toDate = (long)toArray[0] << 32;
-                    toDate |= ((long)toArray[1] & mask);
-
-                    if ((fromDate <= dateL) && (dateL < toDate))
-                    {
-                        currCodeVector.addElement(curriso);
-                    }
-                }
-                else
-                {
-                    if (fromDate <= dateL)
-                    {
-                        currCodeVector.addElement(curriso);
-                    }
-                }
-
-            }  // end For loop
-
-            // return the String array if we have matches
-            currCodeVector.trimToSize();
-            if (currCodeVector.size() != 0)
-            {
-                return currCodeVector.toArray(new String[0]);
-            }
-
-        }
-        catch (MissingResourceException ex)
-        {
-            // We don't know about this region.
-            // As of CLDR 1.5.1, the data includes deprecated region history too.
-            // So if we get here, either the region doesn't exist, or the data is really bad.
-            // Deprecated regions should return the last valid currency for that region in the data.
-            // We don't try to resolve it to a new region.
-        }
-
-        // if we get this far, return nothing
-        return null;
+        return list.toArray(new String[list.size()]);
     }
 
     private static final String EUR_STR = "EUR";
+    
     /**
-     * Instantiate a currency from a resource bundle found in Locale loc.
+     * Instantiate a currency from resource data.
      */
     /* package */ static Currency createCurrency(ULocale loc) {
-        String country = loc.getCountry();
         String variant = loc.getVariant();
-        boolean isPreEuro = variant.equals("PREEURO");
-        boolean isEuro = variant.equals("EURO");
-        // TODO: ICU4C has service registration, and the currency is requested from the service here.
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        if(bundle==null){
-            //throw new MissingResourceException()
-            return null;
+        if ("EURO".equals(variant)) {
+            return new Currency(EUR_STR);
         }
-        try {
-            UResourceBundle cm = bundle.get("CurrencyMap");
-            String curriso = null;
-            UResourceBundle countryArray = cm.get(country);
-            // Some regions can have more than one current currency in use.
-            // The latest default currency is always the first one.
-            UResourceBundle currencyReq = countryArray.get(0);
-            curriso = currencyReq.getString("id");
-            if (isPreEuro && curriso.equals(EUR_STR)) {
-                currencyReq = countryArray.get(1);
-                curriso = currencyReq.getString("id");
+        
+        String country = loc.getCountry();
+        
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        List<String> list = info.currencies(CurrencyFilter.onRegion(country));
+        if (list.size() > 0) {
+            String code = list.get(0);
+            boolean isPreEuro = "PREEURO".equals(variant);
+            if (isPreEuro && EUR_STR.equals(code)) {
+                if (list.size() < 2) {
+                    return null;
+                }
+                code = list.get(1);
             }
-            else if (isEuro) {
-                curriso = EUR_STR;
-            }
-            if (curriso != null) {
-                return new Currency(curriso);
-            }
-        } catch (MissingResourceException ex) {
-            // We don't know about this region.
-            // As of CLDR 1.5.1, the data includes deprecated region history too.
-            // So if we get here, either the region doesn't exist, or the data is really bad.
-            // Deprecated regions should return the last valid currency for that region in the data.
-            // We don't try to resolve it to a new region.
+            return new Currency(code);
         }
         return null;
     }
@@ -379,88 +288,76 @@ public class Currency extends MeasureUnit implements Serializable {
     // end registry stuff
 
     /**
-     * Given a key and a locale, returns an array of string values in a preferred
-     * order that would make a difference. These are all and only those values where
-     * the open (creation) of the service with the locale formed from the input locale
-     * plus input keyword and that value has different behavior than creation with the
-     * input locale alone.
-     * @param key           one of the keys supported by this service.  For now, only
-     *                      "currency" is supported.
+     * Given a key and a locale, returns an array of values for the key for which data
+     * exists.  If commonlyUsed is true, these are the values that typically are used
+     * with this locale, otherwise these are all values for which data exists.  
+     * This is a common service API.
+     * <p>
+     * The only supported key is "currency", other values return an empty array.
+     * <p>
+     * Currency information is based on the region of the locale.  If the locale does not
+     * indicate a region, {@link ULocale#addLikelySubtags(ULocale)} is used to infer a region,
+     * except for the 'und' locale.
+     * <p>
+     * If commonlyUsed is true, only the currencies known to be in use as of the current date
+     * are returned.  When there are more than one, these are returned in preference order
+     * (typically, this occurs when a country is transitioning to a new currency, and the
+     * newer currency is preferred), see 
+     * <a href="http://unicode.org/reports/tr35/#Supplemental_Currency_Data">Unicode TR#35 Sec. C1</a>.  
+     * If commonlyUsed is false, all currencies ever used in any locale are returned, in no
+     * particular order.
+     * 
+     * @param key           key whose values to look up.  the only recognized key is "currency"
      * @param locale        the locale
-     * @param commonlyUsed  if set to true it will return only commonly used values
-     *                      with the given locale in preferred order.  Otherwise,
-     *                      it will return all the available values for the locale.
-     * @return an array of string values for the given key and the locale.
+     * @param commonlyUsed  if true, return only values that are currently used in the locale.
+     *                      Otherwise returns all values.
+     * @return an array of values for the given key and the locale.  If there is no data, the
+     *   array will be empty.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, boolean commonlyUsed) {
-        // Resolve region
+    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, 
+            boolean commonlyUsed) {
+        
+        // The only keyword we recognize is 'currency'
+        if (!"currency".equals(key)) {
+            return EMPTY_STRING_ARRAY;
+        }
+        
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        if (!commonlyUsed) {
+            // Behavior change from 4.3.3, no longer sort the currencies
+            List<String> result = info.currencies(null);
+            return result.toArray(new String[result.size()]);
+        }
+        
+        // Don't resolve region if the requested locale is 'und', it will resolve to US
+        // which we don't want.
         String prefRegion = locale.getCountry();
-        if (prefRegion.length() == 0){
+        if (prefRegion.length() == 0) {
+            if (UND.equals(locale)) {
+                return EMPTY_STRING_ARRAY;
+            }
             ULocale loc = ULocale.addLikelySubtags(locale);
             prefRegion = loc.getCountry();
+       }
+
+        CurrencyFilter filter = CurrencyFilter.now().withRegion(prefRegion);
+        
+        // currencies are in region's preferred order when we're filtering on region, which
+        // matches our spec
+        List<String> result = info.currencies(filter);
+        
+        // No fallback anymore (change from 4.3.3)
+        if (result.size() == 0) {
+            return EMPTY_STRING_ARRAY;
         }
 
-        // Read values from supplementalData
-        List<String> values = new ArrayList<String>();
-        List<String> otherValues = new ArrayList<String>();
-
-        UResourceBundle bundle = UResourceBundle.getBundleInstance(
-            ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData");
-        bundle = bundle.get("CurrencyMap");
-        Enumeration<String> keyEnum = bundle.getKeys();
-        boolean done = false;
-        while (keyEnum.hasMoreElements() && !done) {
-            String region = keyEnum.nextElement();
-            boolean isPrefRegion = prefRegion.equals(region);
-            if (!isPrefRegion && commonlyUsed) {
-                // With commonlyUsed=true, we do not put
-                // currencies for other regions in the
-                // result list.
-                continue;
-            }
-            UResourceBundle regbndl = bundle.get(region);
-            for (int i = 0; i < regbndl.getSize(); i++) {
-                UResourceBundle curbndl = regbndl.get(i);
-                if (curbndl.getType() != UResourceBundle.TABLE) {
-                    // Currently, an empty ARRAY is mixed in..
-                    continue;
-                }
-                String curID = curbndl.getString("id");
-                boolean hasTo = false;
-                try {
-                    UResourceBundle to = curbndl.get("to");
-                    if (to != null) {
-                        hasTo = true;
-                    }
-                } catch (MissingResourceException e) {
-                    // Do nothing here...
-                }
-                if (isPrefRegion && !hasTo && !values.contains(curID)) {
-                    // Currently active currency for the target country
-                    values.add(curID);
-                } else if (!otherValues.contains(curID) && !commonlyUsed){
-                    otherValues.add(curID);
-                }
-            }
-        }
-        if (commonlyUsed) {
-            if (values.size() == 0) {
-                // This could happen if no valid region is supplied in the input
-                // locale.  In this case, we use the CLDR's default.
-                return getKeywordValuesForLocale(key, new ULocale("und"), true);
-            }
-        } else {
-            // Consolidate the list
-            for (String curID : otherValues) {
-                if (!values.contains(curID)) {
-                    values.add(curID);
-                }
-            }
-        }
-        return values.toArray(new String[values.size()]);
+        return result.toArray(new String[result.size()]);
     }
+    
+    private static final ULocale UND = new ULocale("und");
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * Return a hashcode for this currency.
@@ -554,79 +451,39 @@ public class Currency extends MeasureUnit implements Serializable {
      * @return display string for this currency.  If the resource data
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
-     * ChoiceFormat pattern.  Otherwise it is a static string.
+     * ChoiceFormat pattern.  Otherwise it is a static string. <b>Note:</b>
+     * as of ICU 4.4, choice formats are not used, and the value returned
+     * in isChoiceFormat is always false.
+     * <p>
      * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME
      *                                    or LONG_NAME.
+     * @see #getName(ULocale, int, String, boolean[])
      * @stable ICU 3.2
      */
-    public String getName(ULocale locale,
-                          int nameStyle,
-                          boolean[] isChoiceFormat) {
-
-        // Look up the Currencies resource for the given locale.  The
-        // Currencies locale data looks like this:
-        //|en {
-        //|  Currencies {
-        //|    USD { "US$", "US Dollar" }
-        //|    CHF { "Sw F", "Swiss Franc" }
-        //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
-        //|    //...
-        //|  }
-        //|}
-
-        if (nameStyle < 0 || nameStyle > 1) {
-            throw new IllegalArgumentException();
+    public String getName(ULocale locale, int nameStyle, boolean[] isChoiceFormat) {
+        if (!(nameStyle == SYMBOL_NAME || nameStyle == LONG_NAME)) {
+            throw new IllegalArgumentException("bad name style: " + nameStyle);
         }
 
-        String s = null;
-
-         try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,locale);
-            ICUResourceBundle currencies = (ICUResourceBundle)rb.get("Currencies");
-
-            // Fetch resource with multi-level resource inheritance fallback
-            s = currencies.getWithFallback(isoCode).getString(nameStyle);
-        }catch (MissingResourceException e) {
-            //TODO what should be done here?
+        // We no longer support choice format data in names.  Data should not contain
+        // choice patterns.
+        if (isChoiceFormat != null) {
+            isChoiceFormat[0] = false;
         }
 
-        // Determine if this is a ChoiceFormat pattern.  One leading mark
-        // indicates a ChoiceFormat.  Two indicates a static string that
-        // starts with a mark.  In either case, the first mark is ignored,
-        // if present.  Marks in the rest of the string have no special
-        // meaning.
-        isChoiceFormat[0] = false;
-        if (s != null) {
-            int i=0;
-            while (i < s.length() && s.charAt(i) == '=' && i < 2) {
-                ++i;
-            }
-            isChoiceFormat[0]= (i == 1);
-            if (i != 0) {
-                // Skip over first mark
-                s = s.substring(1);
-            }
-            return s;
-        }
-
-        // If we fail to find a match, use the ISO 4217 code
-        return isoCode;
+        CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
+        return nameStyle == SYMBOL_NAME ? names.getSymbol(isoCode) : names.getName(isoCode);
     }
 
     /**
-     * Returns the display name for the given currency in the
-     * given locale.  
-     * This is a convenient method of 
-     * getName(ULocale, int, String, boolean[]);
+     * Returns the display name for the given currency in the given locale.  
+     * This is a convenience overload of getName(ULocale, int, String, boolean[]);
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public String getName(Locale locale,
-                          int nameStyle,
-                          String pluralCount,
-                          boolean[] isChoiceFormat) {
-        return getName(ULocale.forLocale(locale), nameStyle, 
-                       pluralCount, isChoiceFormat);
+    public String getName(Locale locale, int nameStyle, String pluralCount,
+            boolean[] isChoiceFormat) {
+        return getName(ULocale.forLocale(locale), nameStyle, pluralCount, isChoiceFormat);
     }
 
     /**
@@ -646,68 +503,27 @@ public class Currency extends MeasureUnit implements Serializable {
      * @return display string for this currency.  If the resource data
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
-     * ChoiceFormat pattern.  Otherwise it is a static string.
-     * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME
-     *                                    or LONG_NAME, or PLURAL_LONG_NAME.
+     * ChoiceFormat pattern.  Otherwise it is a static string. <b>Note:</b>
+     * as of ICU 4.4, choice formats are not used, and the value returned
+     * in isChoiceFormat is always false.
+     * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME,
+     *                                    LONG_NAME, or PLURAL_LONG_NAME.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public String getName(ULocale locale,
-                          int nameStyle,
-                          String pluralCount,
-                          boolean[] isChoiceFormat) {
+    public String getName(ULocale locale, int nameStyle, String pluralCount,
+            boolean[] isChoiceFormat) {
         if (nameStyle != PLURAL_LONG_NAME) {
             return getName(locale, nameStyle, isChoiceFormat);
         }
 
-        // Look up the CurrencyPlurals resource for the given locale.  The
-        // CurrencyPlurals locale data looks like this:
-        //|en {
-        //|  CurrencyPlurals {
-        //|    USD{
-        //|      one{"US dollar"}
-        //|      other{"US dollars"}
-        //|    }
-        //|    ...
-        //|  }
-        //|}
-        // 
-        // Algorithm detail: http://unicode.org/reports/tr35/#Currencies
-        // especially the fallback rule.
-        String s = null;
-        ICUResourceBundle isoCodeBundle;
-        // search at run time, not saved in initialization
-        try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,locale);
-            // get handles fallback
-            ICUResourceBundle currencies = (ICUResourceBundle)rb.get("CurrencyPlurals");
-
-            // Fetch resource with multi-level resource inheritance fallback
-            isoCodeBundle = currencies.getWithFallback(isoCode);
-        } catch (MissingResourceException e) {
-            // if there is no CurrencyPlurals defined or no plural long names
-            // defined in the locale chain, fall back to long name.
-            return getName(locale, LONG_NAME, isChoiceFormat);
+        // We no longer support choice format
+        if (isChoiceFormat != null) {
+            isChoiceFormat[0] = false;
         }
-        try {
-            s = isoCodeBundle.getStringWithFallback(pluralCount);
-        } catch (MissingResourceException e1) {
-            try {
-                // if there is no name corresponding to 'pluralCount' defined,
-                // fall back to name corresponding to "other".
-                s = isoCodeBundle.getStringWithFallback("other");
-            } catch (MissingResourceException e) {
-                // if there is no name corresponding to plural count "other",
-                // fall back to long name.
-                return getName(locale, LONG_NAME, isChoiceFormat);
-            }
-        }
-        // No support for choice format for getting plural currency names.
-        if (s != null) {
-            return s;
-        }
-        // If we fail to find a match, use the ISO 4217 code
-        return isoCode;
+        
+        CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
+        return names.getPluralName(isoCode, pluralCount);
     }
 
     /**
@@ -734,8 +550,10 @@ public class Currency extends MeasureUnit implements Serializable {
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
         Vector<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
         if (currencyTrieVec == null) {
-            TextTrieMap<CurrencyStringInfo> currencyNameTrie = new TextTrieMap<CurrencyStringInfo>(true);
-            TextTrieMap<CurrencyStringInfo> currencySymbolTrie = new TextTrieMap<CurrencyStringInfo>(false);
+            TextTrieMap<CurrencyStringInfo> currencyNameTrie = 
+                new TextTrieMap<CurrencyStringInfo>(true);
+            TextTrieMap<CurrencyStringInfo> currencySymbolTrie = 
+                new TextTrieMap<CurrencyStringInfo>(false);
             currencyTrieVec = new Vector<TextTrieMap<CurrencyStringInfo>>();
             currencyTrieVec.addElement(currencySymbolTrie);
             currencyTrieVec.addElement(currencyNameTrie);
@@ -784,126 +602,22 @@ public class Currency extends MeasureUnit implements Serializable {
         return isoResult;
     }
 
-    private static void setupCurrencyTrieVec(ULocale locale, Vector<TextTrieMap<CurrencyStringInfo>> trieVec) {
-        // Look up the Currencies resource for the given locale.  The
-        // Currencies locale data looks like this:
-        //|en {
-        //|  Currencies {
-        //|    USD { "US$", "US Dollar" }
-        //|    CHF { "Sw F", "Swiss Franc" }
-        //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
-        //|    //...
-        //|  }
-        //|}
-
-        // In the future, resource bundles may implement multi-level
-        // fallback.  That is, if a currency is not found in the en_US
-        // Currencies data, then the en Currencies data will be searched.
-        // Currently, if a Currencies datum exists in en_US and en, the
-        // en_US entry hides that in en.
-
-        // We want multi-level fallback for this resource, so we implement
-        // it manually.
-
-        // Multi-level resource inheritance fallback loop
-
-        /*
-        1. Look at the Currencies array from the locale
-            1a. Iterate through it, and check each row to see if row[1] matches
-                1a1. If row[1] is a pattern, use ChoiceFormat to attempt a parse
-            1b. Upon a match, return the ISO code stored at row[0]
-        2. If there is no match, fall back to "en" and try again
-        3. If there is no match, fall back to root and try again
-        4. If still no match, parse 3-letter ISO {this code is probably unchanged}.
-        */
+    private static void setupCurrencyTrieVec(ULocale locale, 
+            Vector<TextTrieMap<CurrencyStringInfo>> trieVec) {
 
         TextTrieMap<CurrencyStringInfo> symTrie = trieVec.elementAt(0);
         TextTrieMap<CurrencyStringInfo> trie = trieVec.elementAt(1);
 
-        HashSet<String> visited = new HashSet<String>();
-        ULocale parentLocale = locale;
-        while (parentLocale != null) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,parentLocale);
-            // We can't cast this to String[][]; the cast has to happen later
-            try {
-                UResourceBundle currencies = rb.get("Currencies");
-                // Do a linear search
-                for (int i=0; i<currencies.getSize(); ++i) {
-                    UResourceBundle item = currencies.get(i);
-                    String ISOCode = item.getKey();
-                    if (!visited.contains(ISOCode)) {
-                        CurrencyStringInfo info = new CurrencyStringInfo(ISOCode, ISOCode);
-                        symTrie.put(ISOCode, info);
-
-                        String name = item.getString(0);
-                        if (name.length() > 1 && name.charAt(0) == '=' &&
-                            name.charAt(1) != '=') {
-                            // handle choice format here
-                            name = name.substring(1);
-                            ChoiceFormat choice = new ChoiceFormat(name);
-                            Object[] names = choice.getFormats();
-                            for (int nameIndex = 0; nameIndex < names.length;
-                                 ++nameIndex) {
-                                info = new CurrencyStringInfo(ISOCode, 
-                                                      (String)names[nameIndex]);
-                                symTrie.put((String)names[nameIndex], info);
-                            }
-                        } else {
-                            info = new CurrencyStringInfo(ISOCode, name);
-                            symTrie.put(name, info);
-                        }
-
-                        info = new CurrencyStringInfo(ISOCode, item.getString(1));
-                        trie.put(item.getString(1), info);
-                        visited.add(ISOCode);
-                    }
-                }
-            }
-            catch (MissingResourceException e) {}
-
-            parentLocale = parentLocale.getFallback();
+        CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
+        for (Map.Entry<String, String> e : names.symbolMap().entrySet()) {
+            String symbol = e.getKey();
+            String isoCode = e.getValue();
+            symTrie.put(symbol, new CurrencyStringInfo(isoCode, symbol));
         }
-        // Look up the CurrencyPlurals resource for the given locale.  The
-        // CurrencyPlurals locale data looks like this:
-        //|en {
-        //|  CurrencyPlurals {
-        //|    USD { 
-        //|      one{"US Dollar"}  
-        //|      other{"US dollars"} 
-        //|    }
-        //|    //...
-        //|  }
-        //|}
-
-        Map<String, Set<String>> visitedInMap = new HashMap<String, Set<String>>();
-        parentLocale = locale;
-        while (parentLocale != null) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME,parentLocale);
-            try {
-                UResourceBundle currencies;
-                currencies = rb.get("CurrencyPlurals");
-                for (int i=0; i<currencies.getSize(); ++i) {
-                    UResourceBundle item = currencies.get(i);
-                    String ISOCode = item.getKey();
-                    Set<String> visitPluralCount = visitedInMap.get(ISOCode);
-                    if (visitPluralCount == null) {
-                        visitPluralCount = new HashSet<String>();
-                        visitedInMap.put(ISOCode, visitPluralCount);
-                    }
-                    for (int j=0; j<item.getSize(); ++j) {
-                        String count = item.get(j).getKey();
-                        if (!visitPluralCount.contains(count)) {
-                            CurrencyStringInfo info = new CurrencyStringInfo(ISOCode, item.get(j).getString());
-
-                            trie.put(item.get(j).getString(), info);
-                            visitPluralCount.add(count);
-                        }
-                    }
-                }
-            }
-            catch (MissingResourceException e) {}
-
-            parentLocale = parentLocale.getFallback();
+        for (Map.Entry<String, String> e : names.nameMap().entrySet()) {
+            String name = e.getKey();
+            String isoCode = e.getValue();
+            trie.put(name, new CurrencyStringInfo(isoCode, name));
         }
     }
 
@@ -925,7 +639,8 @@ public class Currency extends MeasureUnit implements Serializable {
         }
     }
 
-    private static class CurrencyNameResultHandler implements TextTrieMap.ResultHandler<CurrencyStringInfo> {
+    private static class CurrencyNameResultHandler 
+            implements TextTrieMap.ResultHandler<CurrencyStringInfo> {
         private ArrayList<CurrencyStringInfo> resultList;
     
         public boolean handlePrefixMatch(int matchLength, Iterator<CurrencyStringInfo> values) {
@@ -971,7 +686,9 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.2
      */
     public int getDefaultFractionDigits() {
-        return (findData())[0];
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        CurrencyDigits digits = info.currencyDigits(isoCode);
+        return digits.fractionDigits;
     }
 
     /**
@@ -981,9 +698,10 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.2
      */
     public double getRoundingIncrement() {
-        int[] data = findData();
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        CurrencyDigits digits = info.currencyDigits(isoCode);
 
-        int data1 = data[1]; // rounding increment
+        int data1 = digits.roundingIncrement;
 
         // If there is no rounding return 0.0 to indicate no rounding.
         // This is the high-runner case, by far.
@@ -991,7 +709,7 @@ public class Currency extends MeasureUnit implements Serializable {
             return 0.0;
         }
 
-        int data0 = data[0]; // fraction digits
+        int data0 = digits.fractionDigits;
 
         // If the meta data is invalid, return 0.0 to indicate no rounding.
         if (data0 < 0 || data0 >= POW10.length) {
@@ -1022,67 +740,10 @@ public class Currency extends MeasureUnit implements Serializable {
         isoCode = theISOCode;
     }
 
-    /**
-     * Internal function to look up currency data.  Result is an array of
-     * two Integers.  The first is the fraction digits.  The second is the
-     * rounding increment, or 0 if none.  The rounding increment is in
-     * units of 10^(-fraction_digits).
-     */
-    private int[] findData() {
-
-        try {
-            // Get CurrencyMeta resource out of root locale file.  [This may
-            // move out of the root locale file later; if it does, update this
-            // code.]
-            UResourceBundle root = ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle currencyMeta = root.get("CurrencyMeta");
-
-            //Integer[] i = null;
-            //int defaultPos = -1;
-            int[] i = currencyMeta.get(isoCode).getIntVector();
-
-            // Do a linear search for isoCode.  At the same time,
-            // record the position of the DEFAULT meta data.  If the
-            // meta data becomes large, make this faster.
-            /*for (int j=0; j<currencyMeta.length; ++j) {
-                Object[] row = currencyMeta[j];
-                String s = (String) row[0];
-                int c = isoCode.compareToIgnoreCase(s);
-                if (c == 0) {
-                    i = (Integer[]) row[1];
-                    break;
-                }
-                if ("DEFAULT".equalsIgnoreCase(s)) {
-                    defaultPos = j;
-                }
-                if (c < 0 && defaultPos >= 0) {
-                    break;
-                }
-            }
-            */
-            if (i == null) {
-                i = currencyMeta.get("DEFAULT").getIntVector();
-            }
-
-            if (i != null && i.length >= 2) {
-                return i;
-            }
-        }
-        catch (MissingResourceException e) {}
-
-        // Config/build error; return hard-coded defaults
-        return LAST_RESORT_DATA;
-    }
-
-    // Default currency meta data of last resort.  We try to use the
-    // defaults encoded in the meta data resource bundle.  If there is a
-    // configuration/build error and these are not available, we use these
-    // hard-coded defaults (which should be identical).
-    private static final int[] LAST_RESORT_DATA = new int[] { 2, 0 };
-
     // POW10[i] = 10^i
-    private static final int[] POW10 = { 1, 10, 100, 1000, 10000, 100000,
-                                1000000, 10000000, 100000000, 1000000000 };
+    private static final int[] POW10 = { 
+        1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 
+    };
 
     // -------- BEGIN ULocale boilerplate --------
 

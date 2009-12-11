@@ -653,22 +653,37 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public UResourceBundle get(String aKey) {
-        UResourceBundle obj = handleGet(aKey, null, this);
+        UResourceBundle obj = findTopLevel(aKey);
         if (obj == null) {
-            UResourceBundle res = this;
-            while ((res = res.getParent()) != null && obj == null) {
-                //call the get method to recursively fetch the resource
-                obj = res.handleGet(aKey, null, this);
-            }
-            if (obj == null) {
-                String fullName = ICUResourceBundle.getFullName(getBaseName(), getLocaleID());
-                throw new MissingResourceException(
-                        "Can't find resource for bundle " + fullName + ", key "
-                                + aKey, this.getClass().getName(), aKey);
+            String fullName = ICUResourceBundle.getFullName(getBaseName(), getLocaleID());
+            throw new MissingResourceException(
+                    "Can't find resource for bundle " + fullName + ", key "
+                    + aKey, this.getClass().getName(), aKey);
+        }
+        return obj;
+    }
+    
+    /**
+     * Returns a resource in a given resource that has a given key, or null if the
+     * resource is not found.
+     *
+     * @param aKey the key associated with the wanted resource
+     * @return the resource, or null
+     * @internal ICU internal use only
+     * @see #get(String)
+     */
+    protected UResourceBundle findTopLevel(String aKey) {
+        // NOTE: this only works for top-level resources.  For resources at lower 
+        // levels, it fails when you fall back to the parent, since you're now
+        // looking at root resources, not at the corresponding nested resource.
+        for (UResourceBundle res = this; res != null; res = res.getParent()) {
+            UResourceBundle obj = res.handleGet(aKey, null, this);
+            if (obj != null) {
+                ((ICUResourceBundle) obj).setLoadingStatus(getLocaleID());
+                return obj;
             }
         }
-        ((ICUResourceBundle)obj).setLoadingStatus(getLocaleID());
-        return obj;
+        return null;
     }
 
     /**
@@ -713,6 +728,33 @@ public abstract class UResourceBundle extends ResourceBundle{
         ((ICUResourceBundle)obj).setLoadingStatus(getLocaleID());
         return obj;
     }
+    
+    /**
+     * Returns a resource in a given resource that has a given index, or null if the
+     * resource is not found.
+     *
+     * @param aKey the key associated with the wanted resource
+     * @return the resource, or null
+     * @see #get(int)
+     * @internal ICU internal use only
+     */
+    protected UResourceBundle findTopLevel(int index) {
+        // NOTE: this _barely_ works for top-level resources.  For resources at lower 
+        // levels, it fails when you fall back to the parent, since you're now
+        // looking at root resources, not at the corresponding nested resource.
+        // Not only that, but unless the indices correspond 1-to-1, the index will
+        // lose meaning.  Essentially this only works if the child resource arrays
+        // are prefixes of their parent arrays.
+        for (UResourceBundle res = this; res != null; res = res.getParent()) {
+            UResourceBundle obj = res.handleGet(index, null, this);
+            if (obj != null) {
+                ((ICUResourceBundle) obj).setLoadingStatus(getLocaleID());
+                return obj;
+            }
+        }
+        return null;
+    }
+    
     /**
      * Returns the keys in this bundle as an enumeration
      * @return an enumeration containing key strings,
@@ -754,6 +796,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
         return keys;
     }
+    
     private Set<String> keys = null;
     /**
      * Returns a Set of the keys contained <i>only</i> in this ResourceBundle.
