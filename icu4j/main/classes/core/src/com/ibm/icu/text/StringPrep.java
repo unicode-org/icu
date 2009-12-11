@@ -15,7 +15,6 @@ import java.lang.ref.WeakReference;
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacterDirection;

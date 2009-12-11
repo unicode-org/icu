@@ -24,7 +24,7 @@ public class LocaleIDs {
      */
     public static String[] getISOCountries() {
         initCountryTables();
-        return (String[])_countries.clone();
+        return _countries.clone();
     }
 
     /**
@@ -37,7 +37,7 @@ public class LocaleIDs {
      */
     public static String[] getISOLanguages() {
         initLanguageTables();
-        return (String[])_languages.clone();
+        return _languages.clone();
     }
 
     /**
