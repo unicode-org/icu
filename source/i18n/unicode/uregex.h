@@ -805,25 +805,9 @@ uregex_appendTail(URegularExpression    *regexp,
    *  fields themselves.
    * <p>
    *  Each of the fields is copied from the input string to the destination
-   *  buffer, and the NUL terminated.  The position of each field within
+   *  buffer, and NUL terminated.  The position of each field within
    *  the destination buffer is returned in the destFields array.
    *
-   *  Note:  another choice for the design of this function would be to not
-   *         copy the resulting fields at all, but to return indexes and
-   *         lengths within the source text.  
-   *           Advantages would be
-   *             o  Faster.  No Copying.
-   *             o  Nothing extra needed when field data may contain embedded NUL chars.
-   *             o  Less memory needed if working on large data.
-   *           Disadvantages
-   *             o  Less consistent with C++ split, which copies into an
-   *                array of UnicodeStrings.
-   *             o  No NUL termination, extracted fields would be less convenient
-   *                to use in most cases.
-   *             o  Possible problems in the future, when support Unicode Normalization
-   *                could cause the fields to not correspond exactly to
-   *                a range of the source text.
-   * 
    *    @param   regexp      The compiled regular expression.
    *    @param   destBuf     A (UChar *) buffer to receive the fields that
    *                         are extracted from the input string. These
