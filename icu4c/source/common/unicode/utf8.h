@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,6 +45,11 @@
  * \var utf8_countTrailBytes
  * Internal array with numbers of trail bytes for any given byte used in
  * lead byte position.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is called by public macros in this file and thus must remain stable,
+ * and should not be hidden when other internal functions are hidden (otherwise
+ * public macros would fail to compile).
  * @internal
  */
 #ifdef U_UTF8_IMPL
@@ -58,42 +63,68 @@ utf8_countTrailBytes[256];
 
 /**
  * Count the trail bytes for a UTF-8 lead byte.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is called by public macros in this file and thus must remain stable.
  * @internal
  */
 #define U8_COUNT_TRAIL_BYTES(leadByte) (utf8_countTrailBytes[(uint8_t)leadByte])
 
 /**
  * Mask a UTF-8 lead byte, leave only the lower bits that form part of the code point value.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is called by public macros in this file and thus must remain stable.
  * @internal
  */
 #define U8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
 /**
  * Function for handling "next code point" with error-checking.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * file and thus must remain stable, and should not be hidden when other internal
+ * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_INTERNAL UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
 
 /**
  * Function for handling "append code point" with error-checking.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * file and thus must remain stable, and should not be hidden when other internal
+ * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_INTERNAL int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError);
 
 /**
  * Function for handling "previous code point" with error-checking.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * file and thus must remain stable, and should not be hidden when other internal
+ * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_INTERNAL UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict);
 
 /**
  * Function for handling "skip backward one code point" with error-checking.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * file and thus must remain stable, and should not be hidden when other internal
+ * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_INTERNAL int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* single-code point definitions -------------------------------------------- */
