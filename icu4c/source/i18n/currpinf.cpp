@@ -36,8 +36,6 @@ U_CDECL_BEGIN
  */
 static UBool U_CALLCONV ValueComparator(UHashTok val1, UHashTok val2);
 
-U_CDECL_END
-
 UBool
 U_CALLCONV ValueComparator(UHashTok val1, UHashTok val2) {
     const UnicodeString* affix_1 = (UnicodeString*)val1.pointer;
@@ -45,6 +43,7 @@ U_CALLCONV ValueComparator(UHashTok val1, UHashTok val2) {
     return  *affix_1 == *affix_2;
 }
 
+U_CDECL_END
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CurrencyPluralInfo)

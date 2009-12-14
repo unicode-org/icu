@@ -577,8 +577,6 @@ U_CDECL_BEGIN
  */
 UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2);
 
-U_CDECL_END
-
 UBool 
 U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const UnicodeString* pattern1 = (UnicodeString*)val1.pointer;
@@ -591,6 +589,7 @@ U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) {
     return ret;
 }
 
+U_CDECL_END
 
 
 Hashtable*
