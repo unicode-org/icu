@@ -802,14 +802,14 @@ U_CDECL_BEGIN
  */
 UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
 
-U_CDECL_END
-
 UBool 
 U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const MessageFormat** pattern1 = (const MessageFormat**)val1.pointer;
     const MessageFormat** pattern2 = (const MessageFormat**)val2.pointer;
     return *pattern1[0] == *pattern2[0] && *pattern1[1] == *pattern2[1];
 }
+
+U_CDECL_END
 
 
 Hashtable*

@@ -76,7 +76,6 @@ UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
  */
 UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
-U_CDECL_END
 
 UBool
 U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) {
@@ -107,6 +106,8 @@ U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) {
            affix_2->posSuffixPatternForCurrency &&
            affix_1->patternType == affix_2->patternType;
 }
+
+U_CDECL_END
 
 
 //#define FMT_DEBUG
