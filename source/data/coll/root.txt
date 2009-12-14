@@ -11,7 +11,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"1.29"}
+    Version{"2.0.41.26"}
     collations{
         default{"standard"}
         standard{

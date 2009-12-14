@@ -536,7 +536,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.93"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             DateTimePatterns{

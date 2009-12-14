@@ -70,7 +70,7 @@ pa{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.76"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             AmPmMarkers{

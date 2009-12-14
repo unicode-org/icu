@@ -39,7 +39,7 @@ pa_Arab{
         Arab{"العربية"}
         Guru{"گُرمُکھی"}
     }
-    Version{"1.25"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             dayNames{

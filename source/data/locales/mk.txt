@@ -1610,7 +1610,7 @@ mk{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.90"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

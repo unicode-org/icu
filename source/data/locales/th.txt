@@ -2080,7 +2080,7 @@ th{
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"1.136"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             AmPmMarkers{

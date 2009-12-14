@@ -3163,7 +3163,7 @@ fr{
         TARASK{"orthographe taraskievica"}
         VALENCIA{"valencien"}
     }
-    Version{"1.148"}
+    Version{"2.0.41.83"}
     calendar{
         buddhist{
             DateTimePatterns{

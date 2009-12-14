@@ -10,6 +10,6 @@
  *  ICU <specials> source: <path>/xml/collation/sr.xml
  */
 sr{
-    Version{"1.24"}
+    Version{"2.0.41.26"}
     collations:alias{"ru/collations"}
 }

@@ -955,7 +955,7 @@ gu{
         Zyyy{"સામાન્ય"}
         Zzzz{"અજ્ઞાત અથવા અમાન્ય લિપિ"}
     }
-    Version{"1.73"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

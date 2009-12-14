@@ -498,7 +498,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.77"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

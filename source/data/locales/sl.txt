@@ -2082,7 +2082,7 @@ sl{
         TARASK{"Taraškievičeva beloruska slovnica"}
         VALENCIA{"valencijski pravopis"}
     }
-    Version{"1.114"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             AmPmMarkers{

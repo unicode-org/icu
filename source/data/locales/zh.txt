@@ -2099,7 +2099,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.164"}
+    Version{"2.0.41.99"}
     calendar{
         gregorian{
             AmPmMarkers{

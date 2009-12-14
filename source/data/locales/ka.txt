@@ -1312,7 +1312,7 @@ ka{
             traditional{"ტრადიციული"}
         }
     }
-    Version{"1.67"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             availableFormats{

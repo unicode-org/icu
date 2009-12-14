@@ -1658,7 +1658,7 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.97"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             DateTimePatterns{

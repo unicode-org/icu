@@ -2106,7 +2106,7 @@ ja{
         SCOUSE{"リバプール方言"}
         VALENCIA{"バレンシア方言"}
     }
-    Version{"1.173"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

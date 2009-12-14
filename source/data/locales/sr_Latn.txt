@@ -3709,7 +3709,7 @@ sr_Latn{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"1.91"}
+    Version{"2.0.41.84"}
     calendar{
         buddhist{
             AmPmMarkers{

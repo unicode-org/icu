@@ -47,7 +47,7 @@ kk{
         "#,##0%",
         "#E0",
     }
-    Version{"1.67"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

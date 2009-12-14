@@ -33,7 +33,7 @@ ms_BN{
         "#,##0%",
         "#E0",
     }
-    Version{"1.52"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

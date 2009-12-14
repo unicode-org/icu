@@ -2245,7 +2245,7 @@ lt{
     Variants{
         POSIX{"Kompiuteris"}
     }
-    Version{"1.111"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             AmPmMarkers{

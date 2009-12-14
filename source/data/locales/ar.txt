@@ -1907,7 +1907,7 @@ ar{
         REVISED{"تهجئة تم مراجعتها"}
         VALENCIA{"بلنسية"}
     }
-    Version{"1.126"}
+    Version{"2.0.41.90"}
     calendar{
         buddhist{
             eras{

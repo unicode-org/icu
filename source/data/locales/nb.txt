@@ -2893,7 +2893,7 @@ nb{
         SOLBA{"stolvizza- og solbicadialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.120"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             DateTimePatterns{

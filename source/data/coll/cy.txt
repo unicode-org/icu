@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/collation/cy.xml
  */
 cy{
-    Version{"1.4"}
+    Version{"2.0.41.26"}
 }

@@ -1504,7 +1504,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.100"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

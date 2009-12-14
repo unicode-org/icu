@@ -1546,7 +1546,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"1.115"}
+    Version{"2.0.41.82"}
     calendar{
         gregorian{
             AmPmMarkers{

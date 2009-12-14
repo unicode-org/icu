@@ -13,5 +13,5 @@ kk_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.3"}
+    Version{"2.0.41.23"}
 }

@@ -46,7 +46,7 @@ uz_Arab{
         "NaN",
         "+",
     }
-    Version{"1.38"}
+    Version{"2.0.41.82"}
     defaultNumberingSystem{"arabext"}
     layout{
         characters{"right-to-left"}

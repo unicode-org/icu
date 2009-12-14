@@ -3157,7 +3157,7 @@ el{
         TARASK{"Ταρασκιεβική ορθογραφία"}
         VALENCIA{"Βαλενθιανά"}
     }
-    Version{"1.116"}
+    Version{"2.0.41.84"}
     calendar{
         buddhist{
             AmPmMarkers{

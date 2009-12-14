@@ -3735,7 +3735,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"1.125"}
+    Version{"2.0.41.83"}
     calendar{
         buddhist{
             AmPmMarkers{

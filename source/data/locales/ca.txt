@@ -3199,7 +3199,7 @@ ca{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valencià"}
     }
-    Version{"1.109"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -4616,9 +4616,10 @@ supplementalData:table(nofallback){
             yes{"true"}
         }
         collation{
-            digits-after{"digitaft"}
+            dictionary{"dict"}
             gb2312han{"gb2312"}
             phonebook{"phonebk"}
+            traditional{"trad"}
         }
         colnormalization{
             no{"false"}
@@ -4898,6 +4899,7 @@ supplementalData:table(nofallback){
             "asia:manila"{"phmnl"}
             "asia:muscat"{"ommct"}
             "asia:nicosia"{"cynic"}
+            "asia:novokuznetsk"{"runoz"}
             "asia:novosibirsk"{"ruovb"}
             "asia:omsk"{"ruoms"}
             "asia:oral"{"kzura"}
@@ -14091,6 +14093,10 @@ supplementalData:table(nofallback){
             aliases{
                 "Europe/Nicosia",
             }
+        }
+        "Asia:Novokuznetsk"{
+            canonical{"Asia/Novokuznetsk"}
+            territory{"RU"}
         }
         "Asia:Novosibirsk"{
             canonical{"Asia/Novosibirsk"}

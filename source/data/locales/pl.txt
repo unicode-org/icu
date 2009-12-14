@@ -2222,7 +2222,7 @@ pl{
         TARASK{"ortografia taraszkiewicka"}
         VALENCIA{"walencki"}
     }
-    Version{"1.122"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             DateTimePatterns{

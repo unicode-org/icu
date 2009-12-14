@@ -2062,7 +2062,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.124"}
+    Version{"2.0.41.84"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -324,7 +324,7 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"1.69"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             dayNames{

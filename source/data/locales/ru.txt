@@ -2117,7 +2117,7 @@ ru{
         TARASK{"Тарашкевица"}
         VALENCIA{"Валенсийский"}
     }
-    Version{"1.144"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{

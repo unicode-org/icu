@@ -3163,7 +3163,7 @@ ml{
         POSIX{"കമ്പ്യൂട്ടര്‍"}
         REVISED{"പരിഷ്ക്കരിച്ച ലിപി"}
     }
-    Version{"1.81"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             AmPmMarkers{

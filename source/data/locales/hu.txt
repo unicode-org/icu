@@ -2306,7 +2306,7 @@ hu{
         TARASK{"Taraskijevica helyesírás"}
         VALENCIA{"Valencia"}
     }
-    Version{"1.122"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             eras{

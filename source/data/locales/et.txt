@@ -1731,7 +1731,7 @@ et{
         ROZAJ{"Resia murre"}
         SAAHO{"saho murre"}
     }
-    Version{"1.95"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

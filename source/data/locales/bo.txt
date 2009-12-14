@@ -69,7 +69,7 @@ bo{
     Scripts{
         Tibt{"བོད་ཡིག་"}
     }
-    Version{"1.15"}
+    Version{"2.0.41.79"}
     calendar{
         gregorian{
             AmPmMarkers{

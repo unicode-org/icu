@@ -2689,7 +2689,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"1.77"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             DateTimePatterns{

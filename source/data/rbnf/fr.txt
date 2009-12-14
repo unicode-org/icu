@@ -135,5 +135,5 @@ fr{
             "2: =%spellout-cardinal-masculine=i\u00E8me;",
         }
     }
-    Version{"1.7"}
+    Version{"2.0.41.26"}
 }

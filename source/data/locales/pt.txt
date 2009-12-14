@@ -3191,7 +3191,7 @@ pt{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valenciano"}
     }
-    Version{"1.126"}
+    Version{"2.0.41.78"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -2202,7 +2202,7 @@ uk{
         TARASK{"Орфографія Тараскевича"}
         VALENCIA{"Валенсійська"}
     }
-    Version{"1.131"}
+    Version{"2.0.41.78"}
     calendar{
         coptic{
             monthNames{

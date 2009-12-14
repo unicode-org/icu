@@ -77,5 +77,5 @@ ko{
             "0: \uC81C =%spellout-cardinal-sinokorean=;",
         }
     }
-    Version{"1.7"}
+    Version{"2.0.41.26"}
 }

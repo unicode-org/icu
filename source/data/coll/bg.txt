@@ -10,6 +10,6 @@
  *  ICU <specials> source: <path>/xml/collation/bg.xml
  */
 bg{
-    Version{"1.20"}
+    Version{"2.0.41.26"}
     collations:alias{"ru/collations"}
 }

@@ -2100,7 +2100,7 @@ tr{
         TARASK{"Taraskievica Yazım Kuralları"}
         VALENCIA{"Valensiyaca"}
     }
-    Version{"1.126"}
+    Version{"2.0.41.78"}
     calendar{
         chinese{
             availableFormats{

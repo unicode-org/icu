@@ -3182,7 +3182,7 @@ sv{
         TARASK{"Taraskievika-stavning"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.151"}
+    Version{"2.0.41.78"}
     calendar{
         gregorian{
             AmPmMarkers{
