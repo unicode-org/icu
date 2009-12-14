@@ -81,14 +81,22 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 /**
  * \def U_NAMESPACE_BEGIN
  * This is used to begin a declaration of a public ICU C++ API.
- * If the compiler doesn't support namespaces, this does nothing.
+ * When not compiling for C++, it does nothing.
+ * When compiling for C++, it begins an extern "C++" linkage block (to protect
+ * against cases in which an external client includes ICU header files inside
+ * an extern "C" linkage block).
+ * If the C++ compiler supports namespaces, it also begins a namespace block.
  * @stable ICU 2.4
  */
 
 /**
  * \def U_NAMESPACE_END
- * This is used to end a declaration of a public ICU C++ API
- * If the compiler doesn't support namespaces, this does nothing.
+ * This is used to end a declaration of a public ICU C++ API.
+ * When not compiling for C++, it does nothing.
+ * When compiling for C++, it ends the extern "C++" block begun by
+ * U_NAMESPACE_BEGIN.
+ * If the C++ compiler supports namespaces, it also ends the namespace block
+ * begun by U_NAMESPACE_BEGIN.
  * @stable ICU 2.4
  */
 
@@ -109,7 +117,8 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
  */
 
 /* Define namespace symbols if the compiler supports it. */
-#if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
+#ifdef XP_CPLUSPLUS
+#if U_HAVE_NAMESPACE
 #   if U_DISABLE_RENAMING
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
@@ -119,8 +128,8 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
         namespace icu = U_ICU_NAMESPACE;
 #   endif
 
-#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
-#   define U_NAMESPACE_END  }
+#   define U_NAMESPACE_BEGIN extern "C++" { namespace U_ICU_NAMESPACE {
+#   define U_NAMESPACE_END } }
 #   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
 #   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
 
@@ -130,6 +139,12 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 #   if U_USING_ICU_NAMESPACE
         U_NAMESPACE_USE
 #   endif
+#else
+#   define U_NAMESPACE_BEGIN extern "C++" {
+#   define U_NAMESPACE_END }
+#   define U_NAMESPACE_USE
+#   define U_NAMESPACE_QUALIFIER
+#endif
 #else
 #   define U_NAMESPACE_BEGIN
 #   define U_NAMESPACE_END
