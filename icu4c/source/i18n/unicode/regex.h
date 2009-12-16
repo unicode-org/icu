@@ -78,6 +78,7 @@ class  RegexCImpl;
 U_INTERNAL void U_EXPORT2
     RegexPatternDump(const RegexPattern *pat);
 #else
+    #undef RegexPatternDump
     #define RegexPatternDump(pat)
 #endif
 
