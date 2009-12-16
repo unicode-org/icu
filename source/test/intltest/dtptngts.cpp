@@ -727,29 +727,28 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
  *      hm{"h.mm a"}
  *      hms{"h.mm.ss a"}
  */
+typedef struct DTPtnGenOptionsData {
+    const char *locale;
+    const char *skel;
+    const char *expectedPattern;
+    UDateTimePatternMatchOptions    options;
+} DTPtnGenOptionsData;
 void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
 {
-    typedef struct DTPtnGenOptionsData {
-        Locale                         locale;
-        UnicodeString                   skel;
-        UDateTimePatternMatchOptions    options;
-        UnicodeString                   expectedPattern;
-    } DTPtnGenOptionsData;
-
     DTPtnGenOptionsData testData[] = {
-        //      locale                 skel                 options                     expectedPattern
-        { Locale("en"), UnicodeString("Hmm"),  UDATPG_MATCH_NO_OPTIONS,        UnicodeString("H:mm")    },
-        { Locale("en"), UnicodeString("HHmm"), UDATPG_MATCH_NO_OPTIONS,        UnicodeString("H:mm")    },
-        { Locale("en"), UnicodeString("hhmm"), UDATPG_MATCH_NO_OPTIONS,        UnicodeString("h:mm a")  },
-        { Locale("en"), UnicodeString("Hmm"),  UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("H:mm")    },
-        { Locale("en"), UnicodeString("HHmm"), UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("HH:mm")   },
-        { Locale("en"), UnicodeString("hhmm"), UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("hh:mm a") },
-        { Locale("nb"), UnicodeString("Hmm"),  UDATPG_MATCH_NO_OPTIONS,        UnicodeString("HH.mm")   },
-        { Locale("nb"), UnicodeString("HHmm"), UDATPG_MATCH_NO_OPTIONS,        UnicodeString("HH.mm")   },
-        { Locale("nb"), UnicodeString("hhmm"), UDATPG_MATCH_NO_OPTIONS,        UnicodeString("h.mm a")  },
-        { Locale("nb"), UnicodeString("Hmm"),  UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("H.mm")    },
-        { Locale("nb"), UnicodeString("HHmm"), UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("HH.mm")   },
-        { Locale("nb"), UnicodeString("hhmm"), UDATPG_MATCH_HOUR_FIELD_LENGTH, UnicodeString("hh.mm a") },
+    //   locale  skel   expectedPattern     options
+        { "en", "Hmm",  "H:mm",    UDATPG_MATCH_NO_OPTIONS        },
+        { "en", "HHmm", "H:mm",    UDATPG_MATCH_NO_OPTIONS        },
+        { "en", "hhmm", "h:mm a",  UDATPG_MATCH_NO_OPTIONS        },
+        { "en", "Hmm",  "H:mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "en", "HHmm", "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "en", "hhmm", "hh:mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "nb", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "nb", "HHmm", "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "nb", "hhmm", "h.mm a",  UDATPG_MATCH_NO_OPTIONS        },
+        { "nb", "Hmm",  "H.mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "nb", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "nb", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
     };
     
     int count = sizeof(testData) / sizeof(testData[0]);
@@ -757,13 +756,19 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
     
     for (; count-- > 0; ++testDataPtr) {
         UErrorCode status = U_ZERO_ERROR;
-        DateTimePatternGenerator * dtpgen = DateTimePatternGenerator::createInstance(testDataPtr->locale, status);
-        UnicodeString pattern = dtpgen->getBestPattern(testDataPtr->skel, testDataPtr->options, status);
-        if (pattern.compare(testDataPtr->expectedPattern) != 0) {
-            errln( UnicodeString("ERROR in getBestPattern, locale ") + UnicodeString(testDataPtr->locale.getName()) +
-                   UnicodeString(", skeleton ") + testDataPtr->skel +
-                   ((testDataPtr->options)?UnicodeString(", options!=0"):UnicodeString(", options==0")) +
-                   UnicodeString(", expected pattern ") + testDataPtr->expectedPattern +
+
+        Locale locale(testDataPtr->locale);
+        UnicodeString skel(testDataPtr->skel);
+        UnicodeString expectedPattern(testDataPtr->expectedPattern);
+        UDateTimePatternMatchOptions options = testDataPtr->options;
+
+        DateTimePatternGenerator * dtpgen = DateTimePatternGenerator::createInstance(locale, status);
+        UnicodeString pattern = dtpgen->getBestPattern(skel, options, status);
+        if (pattern.compare(expectedPattern) != 0) {
+            errln( UnicodeString("ERROR in getBestPattern, locale ") + UnicodeString(testDataPtr->locale) +
+                   UnicodeString(", skeleton ") + skel +
+                   ((options)?UnicodeString(", options!=0"):UnicodeString(", options==0")) +
+                   UnicodeString(", expected pattern ") + expectedPattern +
                    UnicodeString(", got ") + pattern );
         }
         delete dtpgen;
