@@ -27,6 +27,7 @@
 #   define NOMCX
 #   include <windows.h>
 #   include <stdio.h>
+#   include <string.h>
 
 static Win32Utilities::LCIDRecord *lcidRecords = NULL;
 static int32_t lcidCount  = 0;
@@ -34,6 +35,7 @@ static int32_t lcidMax = 0;
 
 BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 {
+    const char* localeID = NULL;
     UErrorCode status = U_ZERO_ERROR;
 
     if (lcidCount >= lcidMax) {
@@ -50,7 +52,11 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 
     sscanf(lpLocaleString, "%8x", &lcidRecords[lcidCount].lcid);
 
-    lcidRecords[lcidCount].localeID = uprv_convertToPosix(lcidRecords[lcidCount].lcid, &status);
+    localeID = uprv_convertToPosix(lcidRecords[lcidCount].lcid, &status);
+
+    lcidRecords[lcidCount].localeID = new char[strlen(localeID)];
+
+    strcpy(lcidRecords[lcidCount].localeID, localeID);
 
     lcidCount += 1;
 
@@ -74,6 +80,9 @@ Win32Utilities::LCIDRecord *Win32Utilities::getLocales(int32_t &localeCount)
 
 void Win32Utilities::freeLocales(LCIDRecord *records)
 {
+    for (int i = 0; i < lcidCount; i++) {
+        delete lcidRecords[i].localeID;
+    }
     delete[] records;
 }
 

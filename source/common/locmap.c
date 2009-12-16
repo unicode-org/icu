@@ -26,7 +26,18 @@
  */
 
 #include "locmap.h"
+#include "uloc.h"
 #include "cstring.h"
+#include "cmemory.h"
+
+#if defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1500)
+#define USE_WINDOWS_LOCALE_API
+#endif
+
+#ifdef USE_WINDOWS_LOCALE_API
+#include <windows.h>
+#include <winnls.h>
+#endif
 
 /*
  * Note:
@@ -572,10 +583,10 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0434, xh, xh_ZA)
 ILCID_POSIX_ELEMENT_ARRAY(0x046a, yo, yo_NG)
 
 static const ILcidPosixElement zh[] = {
-    {0x04,   "zh"},
-    {0x0804, "zh_Hans_CN"},
-    {0x0804, "zh_Hans"},
+    {0x0004, "zh_Hans"},
+    {0x7804, "zh"},
     {0x0804, "zh_CN"},
+    {0x0804, "zh_Hans_CN"},
     {0x0c04, "zh_Hant_HK"},
     {0x0c04, "zh_HK"},
     {0x1404, "zh_Hant_MO"},
@@ -583,7 +594,7 @@ static const ILcidPosixElement zh[] = {
     {0x1004, "zh_Hans_SG"},
     {0x1004, "zh_SG"},
     {0x0404, "zh_Hant_TW"},
-    {0x0404, "zh_Hant"},
+    {0x7c04, "zh_Hant"},
     {0x0404, "zh_TW"},
     {0x30404,"zh_Hant_TW"},     /* Bopomofo order */
     {0x30404,"zh_TW"},          /* Bopomofo order */
@@ -640,6 +651,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(fr),    /*  fr  French                    0x0c */
     ILCID_POSIX_MAP(fy),    /*  fy  Frisian                   0x62 */
     ILCID_POSIX_MAP(ga),    /*  *   Gaelic (Ireland,Scotland) 0x3c */
+    ILCID_POSIX_MAP(gd),    /*  gd  Gaelic (United Kingdom)   0x91 */
     ILCID_POSIX_MAP(gl),    /*  gl  Galician                  0x56 */
     ILCID_POSIX_MAP(gn),    /*  gn  Guarani                   0x74 */
     ILCID_POSIX_MAP(gsw),   /*  gsw Alemanic/Alsatian/Swiss German 0x84 */
@@ -826,12 +838,51 @@ getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 //
 /////////////////////////////////////
 */
+#ifdef USE_WINDOWS_LOCALE_API
+/*
+ * Change the tag separator from '-' to '_'
+ */
+#define FIX_LOCALE_ID_TAG_SEPARATOR(buffer, len, i) \
+    for(i = 0; i < len; i++) \
+        if (buffer[i] == '-') buffer[i] = '_';
 
+/*
+ * Various language tags needs to be changed:
+ * quz -> qu
+ * prs -> fa
+ */
+#define FIX_LANGUAGE_ID_TAG(buffer, len) \
+    if (len >= 3) { \
+        if (buffer[0] == 'q' && buffer[1] == 'u' && buffer[2] == 'z') {\
+            buffer[2] = 0; \
+            uprv_strcat(buffer, buffer+3); \
+        } else if (buffer[0] == 'p' && buffer[1] == 'r' && buffer[2] == 's') {\
+            buffer[0] = 'f'; buffer[1] = 'a'; buffer[2] = 0; \
+            uprv_strcat(buffer, buffer+3); \
+        } \
+    }
+
+static char gPosixFromLCID[ULOC_FULLNAME_CAPACITY];
+#endif
 U_CAPI const char *
 uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 {
-    uint16_t langID = LANGUAGE_LCID(hostid);
+    uint16_t langID;
     uint32_t localeIndex;
+#ifdef USE_WINDOWS_LOCALE_API
+    int32_t ret = 0;
+
+    uprv_memset(gPosixFromLCID, 0, sizeof(gPosixFromLCID));
+
+    ret = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)gPosixFromLCID, sizeof(gPosixFromLCID));
+    if (ret > 1) {
+        FIX_LOCALE_ID_TAG_SEPARATOR(gPosixFromLCID, ret, localeIndex)
+        FIX_LANGUAGE_ID_TAG(gPosixFromLCID, ret)
+
+        return gPosixFromLCID;
+    }
+#endif
+    langID = LANGUAGE_LCID(hostid);
 
     for (localeIndex = 0; localeIndex < gLocaleCount; localeIndex++)
     {
