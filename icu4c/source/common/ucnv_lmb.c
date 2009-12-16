@@ -37,6 +37,10 @@
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 
+#ifdef EBCDIC_RTL
+    #include "ascii_a.h"
+#endif
+
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
@@ -279,13 +283,14 @@ ambiguous mappings: */
 #define ULMBCS_AMBIGUOUS_MBCS   0x81   /* could fit in more than one 
                                           LMBCS mbcs native encoding 
                                           (example: Unihan) */
-
+#define ULMBCS_AMBIGUOUS_ALL   0x82
 /* And here's a simple way to see if a group falls in an appropriate range */
 #define ULMBCS_AMBIGUOUS_MATCH(agroup, xgroup) \
                   ((((agroup) == ULMBCS_AMBIGUOUS_SBCS) && \
                   (xgroup) < ULMBCS_DOUBLEOPTGROUP_START) || \
                   (((agroup) == ULMBCS_AMBIGUOUS_MBCS) && \
-                  (xgroup) >= ULMBCS_DOUBLEOPTGROUP_START))
+                  (xgroup) >= ULMBCS_DOUBLEOPTGROUP_START)) || \
+                  ((agroup) == ULMBCS_AMBIGUOUS_ALL)
 
 
 /* The table & some code to use it: */
@@ -300,85 +305,143 @@ static const struct _UniLMBCSGrpMap
 =
 {
 
-   {0x0001, 0x001F,  ULMBCS_GRP_CTRL},
-   {0x0080, 0x009F,  ULMBCS_GRP_CTRL},
-   {0x00A0, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x01CE, 0x01CE,  ULMBCS_GRP_TW }, 
-   {0x01CF, 0x02B9,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x02BA, 0x02BA,  ULMBCS_GRP_CN},
-   {0x02BC, 0x02C8,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x02C9, 0x02D0,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x02D8, 0x02DD,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x0384, 0x03CE,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x0400, 0x044E,  ULMBCS_GRP_RU},
-   {0x044F, 0x044F,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x0450, 0x0491,  ULMBCS_GRP_RU},
-   {0x05B0, 0x05F2,  ULMBCS_GRP_HE},
-   {0x060C, 0x06AF,  ULMBCS_GRP_AR}, 
-   {0x0E01, 0x0E5B,  ULMBCS_GRP_TH},
-   {0x200C, 0x200F,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2010, 0x2010,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2013, 0x2015,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2016, 0x2016,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2017, 0x2024,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2025, 0x2025,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2026, 0x2026,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2027, 0x2027,  ULMBCS_GRP_CN},
-   {0x2030, 0x2033,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2035, 0x2035,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2039, 0x203A,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x203B, 0x203B,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2074, 0x2074,  ULMBCS_GRP_KO},
-   {0x207F, 0x207F,  ULMBCS_GRP_EXCEPT},
-   {0x2081, 0x2084,  ULMBCS_GRP_KO},
-   {0x20A4, 0x20AC,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2103, 0x2109,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2111, 0x2126,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x212B, 0x212B,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2135, 0x2135,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2153, 0x2154,  ULMBCS_GRP_KO},
-   {0x215B, 0x215E,  ULMBCS_GRP_EXCEPT},
-   {0x2160, 0x2179,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2190, 0x2195,  ULMBCS_GRP_EXCEPT},
-   {0x2196, 0x2199,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x21A8, 0x21A8,  ULMBCS_GRP_EXCEPT},
-   {0x21B8, 0x21B9,  ULMBCS_GRP_CN},
-   {0x21D0, 0x21D5,  ULMBCS_GRP_EXCEPT},
-   {0x21E7, 0x21E7,  ULMBCS_GRP_CN},
-   {0x2200, 0x220B,  ULMBCS_GRP_EXCEPT},
-   {0x220F, 0x2215,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2219, 0x2220,  ULMBCS_GRP_EXCEPT},
-   {0x2223, 0x2228,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2229, 0x222B,  ULMBCS_GRP_EXCEPT},
-   {0x222C, 0x223D,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2245, 0x2248,  ULMBCS_GRP_EXCEPT},
-   {0x224C, 0x224C,  ULMBCS_GRP_TW},
-   {0x2252, 0x2252,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2260, 0x2265,  ULMBCS_GRP_EXCEPT},
-   {0x2266, 0x226F,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2282, 0x2297,  ULMBCS_GRP_EXCEPT},
-   {0x2299, 0x22BF,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x22C0, 0x22C0,  ULMBCS_GRP_EXCEPT},
-   {0x2310, 0x2310,  ULMBCS_GRP_EXCEPT},
-   {0x2312, 0x2312,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2318, 0x2321,  ULMBCS_GRP_EXCEPT},
-   {0x2318, 0x2321,  ULMBCS_GRP_CN},
-   {0x2460, 0x24E9,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2500, 0x2500,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2501, 0x2501,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2502, 0x2502,  ULMBCS_AMBIGUOUS_SBCS},
-   {0x2503, 0x2503,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2504, 0x2505,  ULMBCS_GRP_TW},
-   {0x2506, 0x2665,  ULMBCS_AMBIGUOUS_MBCS},
-   {0x2666, 0x2666,  ULMBCS_GRP_EXCEPT},
-   {0x2666, 0x2666,  ULMBCS_GRP_EXCEPT},
-   {0x2667, 0x2E7F,  ULMBCS_AMBIGUOUS_SBCS}, 
-   {0x2E80, 0xF861,  ULMBCS_AMBIGUOUS_MBCS},
-   {0xF862, 0xF8FF,  ULMBCS_GRP_EXCEPT}, 
-   {0xF900, 0xFA2D,  ULMBCS_AMBIGUOUS_MBCS}, 
-   {0xFB00, 0xFEFF,  ULMBCS_AMBIGUOUS_SBCS}, 
-   {0xFF01, 0xFFEE,  ULMBCS_AMBIGUOUS_MBCS}, 
-   {0xFFFF, 0xFFFF,  ULMBCS_GRP_UNICODE}
+    {0x0001, 0x001F,  ULMBCS_GRP_CTRL},
+    {0x0080, 0x009F,  ULMBCS_GRP_CTRL},
+    {0x00A0, 0x00A6,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00A7, 0x00A8,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00A9, 0x00AF,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00B0, 0x00B1,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00B2, 0x00B3,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00B4, 0x00B4,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00B5, 0x00B5,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00B6, 0x00B6,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00B7, 0x00D6,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00D7, 0x00D7,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00D8, 0x00F6,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x00F7, 0x00F7,  ULMBCS_AMBIGUOUS_ALL},
+    {0x00F8, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x01CE, 0x01CE,  ULMBCS_GRP_TW },
+    {0x01CF, 0x02B9,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x02BA, 0x02BA,  ULMBCS_GRP_CN},
+    {0x02BC, 0x02C8,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x02C9, 0x02D0,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x02D8, 0x02DD,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x0384, 0x0390,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x0391, 0x03A9,  ULMBCS_AMBIGUOUS_ALL},
+    {0x03AA, 0x03B0,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x03B1, 0x03C9,  ULMBCS_AMBIGUOUS_ALL},
+    {0x03CA, 0x03CE,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x0400, 0x0400,  ULMBCS_GRP_RU},
+    {0x0401, 0x0401,  ULMBCS_AMBIGUOUS_ALL},
+    {0x0402, 0x040F,  ULMBCS_GRP_RU},
+    {0x0410, 0x0431,  ULMBCS_AMBIGUOUS_ALL},
+    {0x0432, 0x044E,  ULMBCS_GRP_RU},
+    {0x044F, 0x044F,  ULMBCS_AMBIGUOUS_ALL},
+    {0x0450, 0x0491,  ULMBCS_GRP_RU},
+    {0x05B0, 0x05F2,  ULMBCS_GRP_HE},
+    {0x060C, 0x06AF,  ULMBCS_GRP_AR},
+    {0x0E01, 0x0E5B,  ULMBCS_GRP_TH},
+    {0x200C, 0x200F,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2010, 0x2010,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2013, 0x2014,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2015, 0x2015,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2016, 0x2016,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2017, 0x2017,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2018, 0x2019,  ULMBCS_AMBIGUOUS_ALL},
+    {0x201A, 0x201B,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x201C, 0x201D,  ULMBCS_AMBIGUOUS_ALL},
+    {0x201E, 0x201F,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2020, 0x2021,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2022, 0x2024,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2025, 0x2025,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2026, 0x2026,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2027, 0x2027,  ULMBCS_GRP_TW},
+    {0x2030, 0x2030,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2031, 0x2031,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2032, 0x2033,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2035, 0x2035,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2039, 0x203A,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x203B, 0x203B,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x203C, 0x203C,  ULMBCS_GRP_EXCEPT},
+    {0x2074, 0x2074,  ULMBCS_GRP_KO},
+    {0x207F, 0x207F,  ULMBCS_GRP_EXCEPT},
+    {0x2081, 0x2084,  ULMBCS_GRP_KO},
+    {0x20A4, 0x20AC,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2103, 0x2109,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2111, 0x2120,  ULMBCS_AMBIGUOUS_SBCS},
+    /*zhujin: upgrade, for regressiont test, spr HKIA4YHTSU*/
+    {0x2121, 0x2121,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2122, 0x2126,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x212B, 0x212B,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2135, 0x2135,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2153, 0x2154,  ULMBCS_GRP_KO},
+    {0x215B, 0x215E,  ULMBCS_GRP_EXCEPT},
+    {0x2160, 0x2179,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2190, 0x2193,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2194, 0x2195,  ULMBCS_GRP_EXCEPT},
+    {0x2196, 0x2199,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x21A8, 0x21A8,  ULMBCS_GRP_EXCEPT},
+    {0x21B8, 0x21B9,  ULMBCS_GRP_CN},
+    {0x21D0, 0x21D1,  ULMBCS_GRP_EXCEPT},
+    {0x21D2, 0x21D2,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x21D3, 0x21D3,  ULMBCS_GRP_EXCEPT},
+    {0x21D4, 0x21D4,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x21D5, 0x21D5,  ULMBCS_GRP_EXCEPT},
+    {0x21E7, 0x21E7,  ULMBCS_GRP_CN},
+    {0x2200, 0x2200,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2201, 0x2201,  ULMBCS_GRP_EXCEPT},
+    {0x2202, 0x2202,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2203, 0x2203,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2204, 0x2206,  ULMBCS_GRP_EXCEPT},
+    {0x2207, 0x2208,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2209, 0x220A,  ULMBCS_GRP_EXCEPT},
+    {0x220B, 0x220B,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x220F, 0x2215,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2219, 0x2219,  ULMBCS_GRP_EXCEPT},
+    {0x221A, 0x221A,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x221B, 0x221C,  ULMBCS_GRP_EXCEPT},
+    {0x221D, 0x221E,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x221F, 0x221F,  ULMBCS_GRP_EXCEPT},
+    {0x2220, 0x2220,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2223, 0x222A,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x222B, 0x223D,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2245, 0x2248,  ULMBCS_GRP_EXCEPT},
+    {0x224C, 0x224C,  ULMBCS_GRP_TW},
+    {0x2252, 0x2252,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2260, 0x2261,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2262, 0x2265,  ULMBCS_GRP_EXCEPT},
+    {0x2266, 0x226F,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2282, 0x2283,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2284, 0x2285,  ULMBCS_GRP_EXCEPT},
+    {0x2286, 0x2287,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2288, 0x2297,  ULMBCS_GRP_EXCEPT},
+    {0x2299, 0x22BF,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x22C0, 0x22C0,  ULMBCS_GRP_EXCEPT},
+    {0x2310, 0x2310,  ULMBCS_GRP_EXCEPT},
+    {0x2312, 0x2312,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2318, 0x2321,  ULMBCS_GRP_EXCEPT},
+    {0x2318, 0x2321,  ULMBCS_GRP_CN},
+    {0x2460, 0x24E9,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2500, 0x2500,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2501, 0x2501,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2502, 0x2502,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2503, 0x2503,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x2504, 0x2505,  ULMBCS_GRP_TW},
+    {0x2506, 0x2665,  ULMBCS_AMBIGUOUS_ALL},
+    {0x2666, 0x2666,  ULMBCS_GRP_EXCEPT},
+    {0x2667, 0x2669,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x266A, 0x266A,  ULMBCS_AMBIGUOUS_ALL},
+    {0x266B, 0x266C,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x266D, 0x266D,  ULMBCS_AMBIGUOUS_MBCS},
+    {0x266E, 0x266E,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x266F, 0x266F,  ULMBCS_GRP_JA},
+    {0x2670, 0x2E7F,  ULMBCS_AMBIGUOUS_SBCS},
+    {0x2E80, 0xF861,  ULMBCS_AMBIGUOUS_MBCS},
+    {0xF862, 0xF8FF,  ULMBCS_GRP_EXCEPT},
+    {0xF900, 0xFA2D,  ULMBCS_AMBIGUOUS_MBCS},
+    {0xFB00, 0xFEFF,  ULMBCS_AMBIGUOUS_SBCS},
+    {0xFF01, 0xFFEE,  ULMBCS_AMBIGUOUS_MBCS},
+    {0xFFFF, 0xFFFF,  ULMBCS_GRP_UNICODE}
 };
    
 static ulmbcs_byte_t 
@@ -594,11 +657,11 @@ _LMBCSOpenWorker(UConverter*  _this,
         }
         extraInfo->OptGroup = OptGroup;
         extraInfo->localeConverterIndex = FindLMBCSLocale(pArgs->locale);
-   } 
-   else
-   {
-       *err = U_MEMORY_ALLOCATION_ERROR;
-   }
+    }
+    else
+    {
+        *err = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 static void 
@@ -666,6 +729,8 @@ _LMBCSSafeClone(const UConverter *cnv,
  * However, it turns out that windows-950 has roundtrips for all of U+F6xx
  * which means that LMBCS can convert all Unicode code points after all.
  * We now simply use ucnv_getCompleteUnicodeSet().
+ *
+ * This may need to be looked at again as Lotus uses _LMBCSGetUnicodeSet(). (091216)
  */
 
 /* 
@@ -789,7 +854,6 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
    int sourceIndex = 0; 
 
-
    /* Basic strategy: attempt to fill in local LMBCS 1-char buffer.(LMBCS)
       If that succeeds, see if it will all fit into the target & copy it over 
       if it does.
@@ -813,8 +877,14 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
       4. And as a grand fallback: Unicode
    */
 
+    /*Fix for SPR#DJOE66JFN3 (Lotus)*/
+    ulmbcs_byte_t OldConverterIndex = 0;
+
    while (args->source < args->sourceLimit && !U_FAILURE(*err))
    {
+      /*Fix for SPR#DJOE66JFN3 (Lotus)*/
+      OldConverterIndex = extraInfo->localeConverterIndex;
+
       if (args->target >= args->targetLimit)
       {
          *err = U_BUFFER_OVERFLOW_ERROR;
@@ -827,7 +897,13 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
       /* check cases in rough order of how common they are, for speed */
 
       /* single byte matches: strategy 1 */
-
+      /*Fix for SPR#DJOE66JFN3 (Lotus)*/
+      if((uniChar>=0x80) && (uniChar<=0xff)
+      /*Fix for SPR#JUYA6XAERU and TSAO7GL5NK (Lotus)*/ &&(uniChar!=0xB1) &&(uniChar!=0xD7) &&(uniChar!=0xF7)
+        &&(uniChar!=0xB0) &&(uniChar!=0xB4) &&(uniChar!=0xB6) &&(uniChar!=0xA7) &&(uniChar!=0xA8))
+      {
+            extraInfo->localeConverterIndex = ULMBCS_GRP_L1;
+      }
       if (((uniChar > ULMBCS_C0END) && (uniChar < ULMBCS_C1START)) ||
           uniChar == 0 || uniChar == ULMBCS_HT || uniChar == ULMBCS_CR || 
           uniChar == ULMBCS_LF || uniChar == ULMBCS_123SYSTEMRANGE 
@@ -875,33 +951,50 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
          {
             uprv_memset(groups_tried, 0, sizeof(groups_tried));
 
-         /* check for non-default optimization group (Strategy 3A )*/
-            if (extraInfo->OptGroup != 1 
-                  && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup)) 
+            /* check for non-default optimization group (Strategy 3A )*/
+            if (extraInfo->OptGroup != 1 && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup))
             {
-               bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
-                  extraInfo->OptGroup, pLMBCS, &uniChar, 
-                  &lastConverterIndex, groups_tried);
+                /*zhujin: upgrade, merge #39299 here (Lotus) */
+                /*To make R5 compatible translation, look for exceptional group first for non-DBCS*/
+
+                if(extraInfo->localeConverterIndex < ULMBCS_DOUBLEOPTGROUP_START)
+                {
+                  bytes_written = LMBCSConversionWorker (extraInfo,
+                     ULMBCS_GRP_L1, pLMBCS, &uniChar,
+                     &lastConverterIndex, groups_tried);
+
+                  if(!bytes_written)
+                  {
+                     bytes_written = LMBCSConversionWorker (extraInfo,
+                         ULMBCS_GRP_EXCEPT, pLMBCS, &uniChar,
+                         &lastConverterIndex, groups_tried);
+                  }
+                  if(!bytes_written)
+                  {
+                      bytes_written = LMBCSConversionWorker (extraInfo,
+                          extraInfo->localeConverterIndex, pLMBCS, &uniChar,
+                          &lastConverterIndex, groups_tried);
+                  }
+                }
+                else
+                {
+                     bytes_written = LMBCSConversionWorker (extraInfo,
+                         extraInfo->localeConverterIndex, pLMBCS, &uniChar,
+                         &lastConverterIndex, groups_tried);
+                }
             }
             /* check for locale optimization group (Strategy 3B) */
-            if (!bytes_written 
-               && (extraInfo->localeConverterIndex) 
-               && (ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->localeConverterIndex)))
-               {
-                  bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
-                     extraInfo->localeConverterIndex, pLMBCS, &uniChar, 
-                     &lastConverterIndex, groups_tried);
-               }
+            if (!bytes_written && (extraInfo->localeConverterIndex) && (ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->localeConverterIndex)))
+            {
+                bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
+                        extraInfo->localeConverterIndex, pLMBCS, &uniChar, &lastConverterIndex, groups_tried);
+            }
             /* check for last optimization group used for this string (Strategy 3C) */
-            if (!bytes_written 
-                && (lastConverterIndex) 
-               && (ULMBCS_AMBIGUOUS_MATCH(group, lastConverterIndex)))
-               {
-                  bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
-                     lastConverterIndex, pLMBCS, &uniChar, 
-                     &lastConverterIndex, groups_tried);
-           
-               }
+            if (!bytes_written && (lastConverterIndex) && (ULMBCS_AMBIGUOUS_MATCH(group, lastConverterIndex)))
+            {
+                bytes_written = (int32_t)LMBCSConversionWorker (extraInfo,
+                        lastConverterIndex, pLMBCS, &uniChar, &lastConverterIndex, groups_tried);
+            }
             if (!bytes_written)
             {
                /* just check every possible matching converter (Strategy 3D) */ 
@@ -914,6 +1007,11 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                grp_end = (ulmbcs_byte_t)((group == ULMBCS_AMBIGUOUS_MBCS) 
                         ? ULMBCS_GRP_LAST 
                         :  ULMBCS_GRP_TH);
+               if(group == ULMBCS_AMBIGUOUS_ALL)
+               {
+                   grp_start = ULMBCS_GRP_L1;
+                   grp_end = ULMBCS_GRP_LAST;
+               }
                for (grp_ix = grp_start;
                    grp_ix <= grp_end && !bytes_written; 
                     grp_ix++)
@@ -970,6 +1068,8 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
             *pErrorBuffer++ = *pLMBCS++;
          }
       }
+      /*Fix for SPR#DJOE66JFN3 (Lotus)*/
+      extraInfo->localeConverterIndex = OldConverterIndex;
    }     
 }
 
