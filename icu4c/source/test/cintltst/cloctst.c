@@ -54,7 +54,7 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
     {   "en",   "fr",   "ca",   "el",   "no",   "zh",   "de",   "es",  "ja"    },
     /* script code */
-    {   "",     "",     "",     "",     "",     "Hans", "", "", ""  },
+    {   "",     "",     "",     "",     "",     "", "", "", ""  },
     /* country code */
     {   "US",   "FR",   "ES",   "GR",   "NO",   "CN", "DE", "", "JP"    },
     /* variant code */

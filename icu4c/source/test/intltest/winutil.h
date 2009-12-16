@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -29,7 +29,7 @@ public:
     struct LCIDRecord
     {
         int32_t lcid;
-        const char *localeID;
+        char *localeID;
     };
 
     static LCIDRecord *getLocales(int32_t &localeCount);
