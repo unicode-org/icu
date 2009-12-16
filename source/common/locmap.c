@@ -26,7 +26,7 @@
  */
 
 #include "locmap.h"
-#include "uloc.h"
+#include "unicode/uloc.h"
 #include "cstring.h"
 #include "cmemory.h"
 
