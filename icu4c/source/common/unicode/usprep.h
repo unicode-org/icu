@@ -207,7 +207,7 @@ usprep_openByType(UStringPrepProfileType type,
 U_STABLE void U_EXPORT2
 usprep_close(UStringPrepProfile* profile);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

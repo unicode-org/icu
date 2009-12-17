@@ -645,7 +645,7 @@ ucal_open(const UChar*   zoneID,
 U_STABLE void U_EXPORT2 
 ucal_close(UCalendar *cal);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

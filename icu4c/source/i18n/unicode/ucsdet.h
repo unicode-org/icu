@@ -84,7 +84,7 @@ ucsdet_open(UErrorCode   *status);
 U_STABLE void U_EXPORT2
 ucsdet_close(UCharsetDetector *ucsd);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
