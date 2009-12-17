@@ -257,7 +257,7 @@ udata_openChoice(const char *path, const char *type, const char *name,
 U_STABLE void U_EXPORT2
 udata_close(UDataMemory *pData);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

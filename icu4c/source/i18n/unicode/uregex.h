@@ -178,7 +178,7 @@ uregex_openC( const char           *pattern,
 U_STABLE void U_EXPORT2 
 uregex_close(URegularExpression *regexp);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

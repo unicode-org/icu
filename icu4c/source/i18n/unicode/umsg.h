@@ -454,7 +454,7 @@ umsg_open(  const UChar     *pattern,
 U_STABLE void U_EXPORT2 
 umsg_close(UMessageFormat* format);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

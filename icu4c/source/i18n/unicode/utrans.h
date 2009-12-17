@@ -236,7 +236,7 @@ utrans_clone(const UTransliterator* trans,
 U_STABLE void U_EXPORT2 
 utrans_close(UTransliterator* trans);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

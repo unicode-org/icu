@@ -285,7 +285,7 @@ u_fstropen(UChar      *stringBuf,
 U_DRAFT void U_EXPORT2
 u_fclose(UFILE *file);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

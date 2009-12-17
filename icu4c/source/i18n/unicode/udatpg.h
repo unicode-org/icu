@@ -147,7 +147,7 @@ udatpg_openEmpty(UErrorCode *pErrorCode);
 U_DRAFT void U_EXPORT2
 udatpg_close(UDateTimePatternGenerator *dtpg);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

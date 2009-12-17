@@ -75,7 +75,7 @@ ulocdata_open(const char *localeID, UErrorCode *status);
 U_STABLE void U_EXPORT2
 ulocdata_close(ULocaleData *uld);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

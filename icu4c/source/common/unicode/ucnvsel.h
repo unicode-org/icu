@@ -88,7 +88,7 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
 U_CAPI void U_EXPORT2
 ucnvsel_close(UConverterSelector *sel);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
