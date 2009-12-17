@@ -273,9 +273,104 @@ NumberFormat::operator==(const Format& that) const
               u_strcmp(fCurrency, other->fCurrency) == 0)));
 }
 
+// -------------------------------------
+// Default implementation sets unsupported error; subclasses should
+// override.
+
+UnicodeString&
+NumberFormat::format(double /* unused number */,
+                     UnicodeString& toAppendTo,
+                     FieldPositionIterator& /* unused posIter */,
+                     UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return toAppendTo;
+}
+
+// -------------------------------------
+// Default implementation sets unsupported error; subclasses should
+// override.
+
+UnicodeString&
+NumberFormat::format(int32_t /* unused number */,
+                     UnicodeString& toAppendTo,
+                     FieldPositionIterator& /* unused posIter */,
+                     UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return toAppendTo;
+}
+
+// -------------------------------------
+// Default implementation sets unsupported error; subclasses should
+// override.
+
+UnicodeString&
+NumberFormat::format(int64_t /* unused number */,
+                     UnicodeString& toAppendTo,
+                     FieldPositionIterator& /* unused posIter */,
+                     UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return toAppendTo;
+}
+
 // -------------------------------------x
 // Formats the number object and save the format
 // result in the toAppendTo string buffer.
+
+// utility to save/restore state, used in two overloads 
+// of format(const Formattable&...) below.
+
+class ArgExtractor {
+  NumberFormat *ncnf;
+  const Formattable* num;
+  UBool setCurr;
+  UChar save[4];
+
+ public:
+  ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& status);
+  ~ArgExtractor();
+
+  const Formattable* number(void) const;
+};
+
+inline const Formattable*
+ArgExtractor::number(void) const {
+  return num;
+}
+
+ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& status) 
+    : ncnf((NumberFormat*) &nf), num(&obj), setCurr(FALSE) {
+
+    const UObject* o = obj.getObject(); // most commonly o==NULL
+    if (o != NULL &&
+        o->getDynamicClassID() == CurrencyAmount::getStaticClassID()) {
+        // getISOCurrency() returns a pointer to internal storage, so we
+        // copy it to retain it across the call to setCurrency().
+        const CurrencyAmount* amt = (const CurrencyAmount*) o;
+        const UChar* curr = amt->getISOCurrency();
+        u_strcpy(save, nf.getCurrency());
+        setCurr = (u_strcmp(curr, save) != 0);
+        if (setCurr) {
+            ncnf->setCurrency(curr, status);
+        }
+        num = &amt->getNumber();
+    }
+}
+
+ArgExtractor::~ArgExtractor() {
+    if (setCurr) {
+        UErrorCode ok = U_ZERO_ERROR;
+        ncnf->setCurrency(save, ok); // always restore currency
+    }
+}
 
 UnicodeString&
 NumberFormat::format(const Formattable& obj,
@@ -285,25 +380,8 @@ NumberFormat::format(const Formattable& obj,
 {
     if (U_FAILURE(status)) return appendTo;
 
-    NumberFormat* nonconst = (NumberFormat*) this;
-    const Formattable* n = &obj;
-
-    UChar save[4];
-    UBool setCurr = FALSE;
-    const UObject* o = obj.getObject(); // most commonly o==NULL
-    if (o != NULL &&
-        o->getDynamicClassID() == CurrencyAmount::getStaticClassID()) {
-        // getISOCurrency() returns a pointer to internal storage, so we
-        // copy it to retain it across the call to setCurrency().
-        const CurrencyAmount* amt = (const CurrencyAmount*) o;
-        const UChar* curr = amt->getISOCurrency();
-        u_strcpy(save, getCurrency());
-        setCurr = (u_strcmp(curr, save) != 0);
-        if (setCurr) {
-            nonconst->setCurrency(curr, status);
-        }
-        n = &amt->getNumber();
-    }
+    ArgExtractor arg(*this, obj, status);
+    const Formattable *n = arg.number();
 
     switch (n->getType()) {
     case Formattable::kDouble:
@@ -320,10 +398,39 @@ NumberFormat::format(const Formattable& obj,
         break;
     }
 
-    if (setCurr) {
-        UErrorCode ok = U_ZERO_ERROR;
-        nonconst->setCurrency(save, ok); // always restore currency
+    return appendTo;
+}
+
+// -------------------------------------x
+// Formats the number object and save the format
+// result in the toAppendTo string buffer.
+
+UnicodeString&
+NumberFormat::format(const Formattable& obj,
+                        UnicodeString& appendTo,
+                        FieldPositionIterator& posIter,
+                        UErrorCode& status) const
+{
+    if (U_FAILURE(status)) return appendTo;
+
+    ArgExtractor arg(*this, obj, status);
+    const Formattable *n = arg.number();
+
+    switch (n->getType()) {
+    case Formattable::kDouble:
+        format(n->getDouble(), appendTo, posIter, status);
+        break;
+    case Formattable::kLong:
+        format(n->getLong(), appendTo, posIter, status);
+        break;
+    case Formattable::kInt64:
+        format(n->getInt64(), appendTo, posIter, status);
+        break;
+    default:
+        status = U_INVALID_FORMAT_ERROR;
+        break;
     }
+
     return appendTo;
 }
 

@@ -142,10 +142,17 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestCurrencyIsoPluralFormat();
     void TestCurrencyParsing();
     void TestParseCurrencyInUCurr();
+    void TestFormatAttributes();
 
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
+
+    void expectPositions(FieldPositionIterator& iter, int32_t *values, int32_t tupleCount,
+                         const UnicodeString& str);
+
+    void expectPosition(FieldPosition& pos, int32_t id, int32_t start, int32_t limit,
+                        const UnicodeString& str);
 
     void expect2(NumberFormat& fmt, const Formattable& n, const UnicodeString& str);
 
