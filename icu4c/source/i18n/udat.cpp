@@ -38,6 +38,50 @@ static void verifyIsSimpleDateFormat(const UDateFormat* fmt, UErrorCode *status)
    }
 }
 
+// This mirrors the correspondence between the
+// SimpleDateFormat::fgPatternIndexToDateFormatField and
+// SimpleDateFormat::fgPatternIndexToCalendarField arrays.
+static UCalendarDateFields gDateFieldMapping[] = {
+    UCAL_ERA,                  // UDAT_ERA_FIELD = 0
+    UCAL_YEAR,                 // UDAT_YEAR_FIELD = 1
+    UCAL_MONTH,                // UDAT_MONTH_FIELD = 2
+    UCAL_DATE,                 // UDAT_DATE_FIELD = 3
+    UCAL_HOUR_OF_DAY,          // UDAT_HOUR_OF_DAY1_FIELD = 4
+    UCAL_HOUR_OF_DAY,          // UDAT_HOUR_OF_DAY0_FIELD = 5
+    UCAL_MINUTE,               // UDAT_MINUTE_FIELD = 6
+    UCAL_SECOND,               // UDAT_SECOND_FIELD = 7
+    UCAL_MILLISECOND,          // UDAT_FRACTIONAL_SECOND_FIELD = 8
+    UCAL_DAY_OF_WEEK,          // UDAT_DAY_OF_WEEK_FIELD = 9
+    UCAL_DAY_OF_YEAR,          // UDAT_DAY_OF_YEAR_FIELD = 10
+    UCAL_DAY_OF_WEEK_IN_MONTH, // UDAT_DAY_OF_WEEK_IN_MONTH_FIELD = 11
+    UCAL_WEEK_OF_YEAR,         // UDAT_WEEK_OF_YEAR_FIELD = 12
+    UCAL_WEEK_OF_MONTH,        // UDAT_WEEK_OF_MONTH_FIELD = 13
+    UCAL_AM_PM,                // UDAT_AM_PM_FIELD = 14
+    UCAL_HOUR,                 // UDAT_HOUR1_FIELD = 15
+    UCAL_HOUR,                 // UDAT_HOUR0_FIELD = 16
+    UCAL_ZONE_OFFSET,          // UDAT_TIMEZONE_FIELD = 17
+    UCAL_YEAR_WOY,             // UDAT_YEAR_WOY_FIELD = 18
+    UCAL_DOW_LOCAL,            // UDAT_DOW_LOCAL_FIELD = 19
+    UCAL_EXTENDED_YEAR,        // UDAT_EXTENDED_YEAR_FIELD = 20
+    UCAL_JULIAN_DAY,           // UDAT_JULIAN_DAY_FIELD = 21
+    UCAL_MILLISECONDS_IN_DAY,  // UDAT_MILLISECONDS_IN_DAY_FIELD = 22
+    UCAL_ZONE_OFFSET,          // UDAT_TIMEZONE_RFC_FIELD = 23
+    // UCAL_DST_OFFSET also
+    UCAL_ZONE_OFFSET,          // UDAT_TIMEZONE_GENERIC_FIELD = 24
+    UCAL_DOW_LOCAL,            // UDAT_STANDALONE_DAY_FIELD = 25
+    UCAL_MONTH,                // UDAT_STANDALONE_MONTH_FIELD = 26
+    UCAL_MONTH,                // UDAT_QUARTER_FIELD = 27
+    UCAL_MONTH,                // UDAT_STANDALONE_QUARTER_FIELD = 28
+    UCAL_ZONE_OFFSET,          // UDAT_TIMEZONE_SPECIAL_FIELD = 29
+    UCAL_FIELD_COUNT,          // UDAT_FIELD_COUNT = 30
+    // UCAL_IS_LEAP_MONTH is not the target of a mapping
+};
+
+U_CAPI UCalendarDateFields U_EXPORT2
+udat_toCalendarDateField(UDateFormatField field) {
+  return gDateFieldMapping[field];
+}
+
 U_CAPI UDateFormat* U_EXPORT2
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,

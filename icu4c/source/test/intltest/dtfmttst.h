@@ -16,7 +16,7 @@
 #include "caltztst.h"
 
 /** 
- * Performs many different tests for DataeFormat and SimpleDateFormat
+ * Performs many different tests for DateFormat and SimpleDateFormat
  **/
 class DateFormatTest: public CalendarTimeZoneTest {
     // IntlTest override
