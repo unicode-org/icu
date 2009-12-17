@@ -6,6 +6,6 @@
 // ***************************************************************************
 
 icuver:table(nofallback){ 
-    DataVersion { "4.3.3.0" }
-    ICUVersion  { "4.3.3.0" }
+    DataVersion { "4.3.4.0" }
+    ICUVersion  { "4.3.4.0" }
 }
