@@ -38,7 +38,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
@@ -296,5 +296,5 @@ public:
 
 U_NAMESPACE_END
 
-#endif  /* XP_CPLUSPLUS */
+#endif  /* U_SHOW_CPLUSPLUS_API */
 #endif  /* __LOCALPOINTER_H__ */

@@ -136,7 +136,7 @@
 
 
 #include "unicode/utypes.h"
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 #include "unicode/localpointer.h"
 #include "unicode/rep.h"
 #include "unicode/unistr.h"
@@ -180,7 +180,7 @@ typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
 U_STABLE UText * U_EXPORT2
 utext_close(UText *ut);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
@@ -242,7 +242,7 @@ U_STABLE UText * U_EXPORT2
 utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
 
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 /**
  * Open a writable UText for a non-const UnicodeString. 
  * 

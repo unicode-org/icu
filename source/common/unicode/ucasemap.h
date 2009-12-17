@@ -77,7 +77,7 @@ ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode);
 U_STABLE void U_EXPORT2
 ucasemap_close(UCaseMap *csm);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

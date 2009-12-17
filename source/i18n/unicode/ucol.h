@@ -376,7 +376,7 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
 U_STABLE void U_EXPORT2 
 ucol_close(UCollator *coll);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

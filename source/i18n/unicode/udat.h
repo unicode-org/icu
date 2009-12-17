@@ -536,7 +536,7 @@ udat_open(UDateFormatStyle  timeStyle,
 U_STABLE void U_EXPORT2 
 udat_close(UDateFormat* format);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

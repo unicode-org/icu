@@ -239,7 +239,7 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
 U_STABLE void U_EXPORT2 
 ures_close(UResourceBundle* resourceBundle);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
@@ -776,7 +776,7 @@ ures_getUTF8StringByKey(const UResourceBundle *resB,
                         UBool forceCopy,
                         UErrorCode *status);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN

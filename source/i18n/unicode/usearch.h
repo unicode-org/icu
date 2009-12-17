@@ -250,7 +250,7 @@ U_STABLE UStringSearch * U_EXPORT2 usearch_openFromCollator(
 */
 U_STABLE void U_EXPORT2 usearch_close(UStringSearch *searchiter);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

@@ -300,7 +300,7 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 U_STABLE void U_EXPORT2
 uset_close(USet* set);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 

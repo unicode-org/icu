@@ -524,7 +524,7 @@ ucnv_safeClone(const UConverter *cnv,
 U_STABLE void  U_EXPORT2
 ucnv_close(UConverter * converter);
 
-#ifdef XP_CPLUSPLUS
+#if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
