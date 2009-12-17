@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -142,6 +142,55 @@ DateFormat::format(const Formattable& obj,
 //----------------------------------------------------------------------
 
 UnicodeString&
+DateFormat::format(const Formattable& obj,
+                   UnicodeString& appendTo,
+                   FieldPositionIterator& posIter,
+                   UErrorCode& status) const
+{
+    if (U_FAILURE(status)) return appendTo;
+
+    // if the type of the Formattable is double or long, treat it as if it were a Date
+    UDate date = 0;
+    switch (obj.getType())
+    {
+    case Formattable::kDate:
+        date = obj.getDate();
+        break;
+    case Formattable::kDouble:
+        date = (UDate)obj.getDouble();
+        break;
+    case Formattable::kLong:
+        date = (UDate)obj.getLong();
+        break;
+    default:
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+
+    // Is this right?
+    //if (fieldPosition.getBeginIndex() == fieldPosition.getEndIndex())
+    //  status = U_ILLEGAL_ARGUMENT_ERROR;
+
+    return format(date, appendTo, posIter, status);
+}
+
+//----------------------------------------------------------------------
+
+// Default implementation for backwards compatibility, subclasses should implement.
+UnicodeString&
+DateFormat::format(Calendar& /* unused cal */,
+                   UnicodeString& appendTo,
+                   FieldPositionIterator& /* unused posIter */,
+                   UErrorCode& status) const {
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return appendTo;
+}
+
+//----------------------------------------------------------------------
+
+UnicodeString&
 DateFormat::format(UDate date, UnicodeString& appendTo, FieldPosition& fieldPosition) const {
     if (fCalendar != NULL) {
         // Use our calendar instance
@@ -149,6 +198,20 @@ DateFormat::format(UDate date, UnicodeString& appendTo, FieldPosition& fieldPosi
         fCalendar->setTime(date, ec);
         if (U_SUCCESS(ec)) {
             return format(*fCalendar, appendTo, fieldPosition);
+        }
+    }
+    return appendTo;
+}
+
+//----------------------------------------------------------------------
+
+UnicodeString&
+DateFormat::format(UDate date, UnicodeString& appendTo, FieldPositionIterator& posIter,
+                   UErrorCode& status) const {
+    if (fCalendar != NULL) {
+        fCalendar->setTime(date, status);
+        if (U_SUCCESS(status)) {
+            return format(*fCalendar, appendTo, posIter, status);
         }
     }
     return appendTo;

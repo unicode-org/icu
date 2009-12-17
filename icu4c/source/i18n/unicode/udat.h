@@ -444,15 +444,15 @@ typedef enum UDateFormatField {
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
     /**
      * FieldPosition selector for 'c' field alignment,
-     * corresponding to the {@link #UCAL_DATE} field. 
+     * corresponding to the {@link #UCAL_DOW_LOCAL} field.
      * This displays the stand alone day name, if available.
      * @stable ICU 3.4
      */
     UDAT_STANDALONE_DAY_FIELD = 25,
-    
+
     /**
      * FieldPosition selector for 'L' field alignment,
-     * corresponding to the {@link #UCAL_MONTH} field.  
+     * corresponding to the {@link #UCAL_MONTH} field.
      * This displays the stand alone month name, if available.
      * @stable ICU 3.4
      */
@@ -484,7 +484,7 @@ typedef enum UDateFormatField {
     UDAT_TIMEZONE_SPECIAL_FIELD = 29,
 
    /**
-     * Number of FieldPosition and UFieldPosition selectors for 
+     * Number of FieldPosition and UFieldPosition selectors for
      * DateFormat and UDateFormat.
      * Valid selectors range from 0 to UDAT_FIELD_COUNT-1.
      * This value is subject to change if new fields are defined
@@ -494,6 +494,19 @@ typedef enum UDateFormatField {
     UDAT_FIELD_COUNT = 30
 
 } UDateFormatField;
+
+
+/**
+ * Maps from a UDateFormatField to the corresponding UCalendarDateFields.
+ * Note: since the mapping is many-to-one, there is no inverse mapping.
+ * @param field the UDateFormatField.
+ * @return the UCalendarDateField.  This will be UCAL_FIELD_COUNT in case
+ * of error (e.g., the input field is UDAT_FIELD_COUNT).
+ * @draft ICU 4.4
+ */
+U_DRAFT UCalendarDateFields U_EXPORT2
+udat_toCalendarDateField(UDateFormatField field);
+
 
 /**
  * Open a new UDateFormat for formatting and parsing dates and times.
@@ -976,6 +989,7 @@ udat_applyPatternRelative(UDateFormat *format,
                           const UChar *timePattern,
                           int32_t     timePatternLength,
                           UErrorCode  *status);
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

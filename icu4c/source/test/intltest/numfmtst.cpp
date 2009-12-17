@@ -109,6 +109,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(42,TestCurrencyIsoPluralFormat);
         CASE(43,TestCurrencyParsing);
         CASE(44,TestParseCurrencyInUCurr);
+        CASE(45,TestFormatAttributes);
         default: name = ""; break;
     }
 }
@@ -5778,6 +5779,158 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       }
       delete numFmt;
     }
+}
+
+const char* attrString(int32_t);
+
+// UnicodeString s; 
+//  std::string ss;
+//  std::cout << s.toUTF8String(ss)
+void NumberFormatTest::expectPositions(FieldPositionIterator& iter, int32_t *values, int32_t tupleCount, 
+                                       const UnicodeString& str)  {
+  UBool found[10];
+  FieldPosition fp;
+
+  if (tupleCount > 10) {
+    assertTrue("internal error, tupleCount too large", FALSE);
+  } else {
+    for (int i = 0; i < tupleCount; ++i) {
+      found[i] = FALSE;
+    }
+  }
+
+  logln(str);
+  while (iter.next(fp)) {
+    UBool ok = FALSE;
+    int32_t id = fp.getField();
+    int32_t start = fp.getBeginIndex();
+    int32_t limit = fp.getEndIndex();
+
+    // is there a logln using printf?
+    char buf[128];
+    sprintf(buf, "%24s %3d %3d %3d", attrString(id), id, start, limit);
+    logln(buf);
+
+    for (int i = 0; i < tupleCount; ++i) {
+      if (found[i]) {
+        continue;
+      }
+      if (values[i*3] == id &&
+          values[i*3+1] == start &&
+          values[i*3+2] == limit) {
+        found[i] = ok = TRUE;
+        break;
+      }
+    }
+
+    assertTrue((UnicodeString)"found [" + id + "," + start + "," + limit + "]", ok);
+  }
+
+  // check that all were found
+  UBool ok = TRUE;
+  for (int i = 0; i < tupleCount; ++i) {
+    if (!found[i]) {
+      ok = FALSE;
+      assertTrue((UnicodeString) "missing [" + values[i*3] + "," + values[i*3+1] + "," + values[i*3+2] + "]", found[i]);
+    }
+  }
+  assertTrue("no expected values were missing", ok);
+}
+
+void NumberFormatTest::expectPosition(FieldPosition& pos, int32_t id, int32_t start, int32_t limit,
+                                       const UnicodeString& str)  {
+  logln(str);
+  assertTrue((UnicodeString)"id " + id + " == " + pos.getField(), id == pos.getField());
+  assertTrue((UnicodeString)"begin " + start + " == " + pos.getBeginIndex(), start == pos.getBeginIndex());
+  assertTrue((UnicodeString)"end " + limit + " == " + pos.getEndIndex(), limit == pos.getEndIndex());
+}
+
+void NumberFormatTest::TestFormatAttributes() {
+  Locale locale("en_US");
+  UErrorCode status = U_ZERO_ERROR;
+  DecimalFormat *decFmt = (DecimalFormat *) NumberFormat::createInstance(locale, NumberFormat::kCurrencyStyle, status);
+  double val = 12345.67;
+
+  {
+    int32_t expected[] = { 
+      NumberFormat::kCurrencyField, 0, 1,
+      NumberFormat::kGroupingSeparatorField, 3, 4,
+      NumberFormat::kIntegerField, 1, 7,
+      NumberFormat::kDecimalSeparatorField, 7, 8,
+      NumberFormat::kFractionField, 8, 10,
+    };
+    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+
+    FieldPositionIterator posIter;
+    UnicodeString result;
+    decFmt->format(val, result, posIter, status);
+    expectPositions(posIter, expected, tupleCount, result);
+  }
+  {
+    FieldPosition fp(NumberFormat::kIntegerField);
+    UnicodeString result;
+    decFmt->format(val, result, fp);
+    expectPosition(fp, NumberFormat::kIntegerField, 1, 7, result);
+  }
+  {
+    FieldPosition fp(NumberFormat::kFractionField);
+    UnicodeString result;
+    decFmt->format(val, result, fp);
+    expectPosition(fp, NumberFormat::kFractionField, 8, 10, result);
+  }
+  delete decFmt;
+
+  decFmt = (DecimalFormat *) NumberFormat::createInstance(locale, NumberFormat::kScientificStyle, status);
+  val = -0.0000123;
+  {
+    int32_t expected[] = {
+      NumberFormat::kSignField, 0, 1,
+      NumberFormat::kIntegerField, 1, 2,
+      NumberFormat::kDecimalSeparatorField, 2, 3,
+      NumberFormat::kFractionField, 3, 5,
+      NumberFormat::kExponentSymbolField, 5, 6,
+      NumberFormat::kExponentSignField, 6, 7,
+      NumberFormat::kExponentField, 7, 8
+    };
+    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+
+    FieldPositionIterator posIter;
+    UnicodeString result;
+    decFmt->format(val, result, posIter, status);
+    expectPositions(posIter, expected, tupleCount, result);
+  }
+  {
+    FieldPosition fp(NumberFormat::kIntegerField);
+    UnicodeString result;
+    decFmt->format(val, result, fp);
+    expectPosition(fp, NumberFormat::kIntegerField, 1, 2, result);
+  }
+  {
+    FieldPosition fp(NumberFormat::kFractionField);
+    UnicodeString result;
+    decFmt->format(val, result, fp);
+    expectPosition(fp, NumberFormat::kFractionField, 3, 5, result);
+  }
+  delete decFmt;
+
+  fflush(stderr);
+}
+
+const char* attrString(int32_t attrId) {
+  switch (attrId) {
+    case NumberFormat::kIntegerField: return "integer";
+    case NumberFormat::kFractionField: return "fraction";
+    case NumberFormat::kDecimalSeparatorField: return "decimal separator";
+    case NumberFormat::kExponentSymbolField: return "exponent symbol";
+    case NumberFormat::kExponentSignField: return "exponent sign";
+    case NumberFormat::kExponentField: return "exponent";
+    case NumberFormat::kGroupingSeparatorField: return "grouping separator";
+    case NumberFormat::kCurrencyField: return "currency";
+    case NumberFormat::kPercentField: return "percent";
+    case NumberFormat::kPermillField: return "permille";
+    case NumberFormat::kSignField: return "sign";
+    default: return "";
+  }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

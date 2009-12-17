@@ -407,6 +407,7 @@ void DateFormatTest::TestFieldPosition() {
         }
         logln((UnicodeString)"  Result = " + df->format(aug13, buf.remove()));
 
+        int32_t expBase = exp; // save for later
         for (i = 0; i < UDAT_FIELD_COUNT; ++i, ++exp) {
             FieldPosition pos(i);
             buf.remove();
@@ -415,6 +416,24 @@ void DateFormatTest::TestFieldPosition() {
             buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), field);
             assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
                          ctou(EXPECTED[exp]), field);
+        }
+
+        // test FieldPositionIterator API
+        logln("FieldPositionIterator");
+        {
+          UErrorCode status = U_ZERO_ERROR;
+          FieldPositionIterator posIter;
+          FieldPosition fp;
+
+          buf.remove();
+          df->format(aug13, buf, posIter, status);
+          while (posIter.next(fp)) {
+            int32_t i = fp.getField();
+            UnicodeString field;
+            buf.extractBetween(fp.getBeginIndex(), fp.getEndIndex(), field);
+            assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
+                         ctou(EXPECTED[expBase + i]), field);
+          }
         }
     }
 

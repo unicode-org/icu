@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -108,7 +108,23 @@ Format::format(const Formattable& obj,
 
     return format(obj, toAppendTo, pos, status);
 }
-  
+
+// -------------------------------------
+// Default implementation sets unsupported error; subclasses should
+// override.
+
+UnicodeString&
+Format::format(const Formattable& /* unused obj */,
+               UnicodeString& toAppendTo,
+               FieldPositionIterator& /* unused posIter */,
+               UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+      status = U_UNSUPPORTED_ERROR;
+    }
+    return toAppendTo;
+}
+
 // -------------------------------------
 // Parses the source string and create the corresponding 
 // result object.  Checks the parse position for errors.
