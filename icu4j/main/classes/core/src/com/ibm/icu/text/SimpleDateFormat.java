@@ -835,7 +835,7 @@ public class SimpleDateFormat extends DateFormat {
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "' in \"" +
-                                               new String(pattern) + '"');
+                                               pattern + '"');
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
@@ -2918,7 +2918,7 @@ public class SimpleDateFormat extends DateFormat {
             if (patternCharIndex == -1) {
                 throw new IllegalArgumentException("Illegal pattern character " +
                                                    "'" + ch + "' in \"" +
-                                                   new String(pattern) + '"');
+                                                   pattern + '"');
             }
     
             if ( patternCharIndex < highestLevel ) {
@@ -3028,7 +3028,7 @@ public class SimpleDateFormat extends DateFormat {
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "' in \"" +
-                                               new String(pattern) + '"');
+                                               pattern + '"');
         }
   
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
@@ -3070,7 +3070,7 @@ public class SimpleDateFormat extends DateFormat {
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "' in \"" +
-                                               new String(pattern) + '"');
+                                               pattern + '"');
         }
     
         if ( patternCharIndex >= level ) {

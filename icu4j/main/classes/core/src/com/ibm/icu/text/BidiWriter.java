@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -42,8 +42,8 @@ final class BidiWriter {
         /* optimize for several combinations of options */
         switch(options&(Bidi.REMOVE_BIDI_CONTROLS|Bidi.DO_MIRRORING)) {
         case 0: {
-            /* simply copy the LTR run to the destination */
-            return new String(src);
+            /* simply return the LTR run */
+            return src;
         }
         case Bidi.DO_MIRRORING: {
             StringBuffer dest = new StringBuffer(src.length());

@@ -316,12 +316,8 @@ public final class CanonicalIterator {
                     // there were some matches, so add all the possibilities to the set.
                     String prefix= segment.substring(0,i);
                     prefix += UTF16.valueOf(cp2);
-                    //int el = -1;
                     for (String item : remainder) {
-                        String toAdd = new String(prefix);
-                        toAdd += item;
-                        result.add(toAdd);
-                        //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*toAdd)));
+                        result.add(prefix + item);
                     }
                 }
             }

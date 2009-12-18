@@ -1317,7 +1317,7 @@ class FractionalPartSubstitution extends NFSubstitution {
         // upperBound to 10 when calling doParse() ) until we reach
         // nonmatching text
         } else {
-            String workText = new String(text);
+            String workText = text;
             ParsePosition workPos = new ParsePosition(1);
             double result = 0;
         int digit;
@@ -1645,7 +1645,7 @@ class NumeratorSubstitution extends NFSubstitution {
         // and use that to adjust the parse result
         int zeroCount = 0;
         if (withZeros) {
-            String workText = new String(text);
+            String workText = text;
             ParsePosition workPos = new ParsePosition(1);
             //int digit;
 
