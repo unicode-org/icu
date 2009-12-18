@@ -988,7 +988,7 @@ public final class UCaseProps {
                     excOffset=(int)(value>>32)+1;
 
                     /* set the output pointer to the lowercase mapping */
-                    out.append(new String(exceptions, excOffset, full));
+                    out.append(exceptions, excOffset, full);
 
                     /* return the string length */
                     return full;
@@ -1078,7 +1078,7 @@ public final class UCaseProps {
 
                 if(full!=0) {
                     /* set the output pointer to the result string */
-                    out.append(new String(exceptions, excOffset, full));
+                    out.append(exceptions, excOffset, full);
 
                     /* return the string length */
                     return full;
@@ -1271,7 +1271,7 @@ public final class UCaseProps {
 
                 if(full!=0) {
                     /* set the output pointer to the result string */
-                    out.append(new String(exceptions, excOffset, full));
+                    out.append(exceptions, excOffset, full);
 
                     /* return the string length */
                     return full;
