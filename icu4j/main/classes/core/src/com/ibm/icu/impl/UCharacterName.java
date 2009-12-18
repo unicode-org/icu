@@ -36,6 +36,21 @@ public final class UCharacterName
 {
     // public data members ----------------------------------------------
 
+    /*
+     * public singleton instance
+     */
+    public static final UCharacterName INSTANCE;
+
+    static {
+        try {
+            INSTANCE = new UCharacterName();
+        } catch (IOException e) {
+            ///CLOVER:OFF
+            throw new MissingResourceException("Could not construct UCharacterName. Missing unames.icu","","");
+            ///CLOVER:ON
+        }
+    }
+
     /**
     * Number of lines per group
     * 1 << GROUP_SHIFT_
@@ -47,26 +62,6 @@ public final class UCharacterName
     public int m_groupcount_ = 0;
 
     // public methods ---------------------------------------------------
-
-    /**
-     * Gets the only instance of UCharacterName
-     * @return only instance of UCharacterName
-     * @exception MissingResourceException thrown when reading of name data fails
-     */
-    public static UCharacterName getInstance()
-    {
-        if (INSTANCE_ == null) {
-            try {
-                INSTANCE_ = new UCharacterName();
-            }catch(IOException e){
-                throw new MissingResourceException("Could not construct UCharacterName. Missing unames.icu","","");
-            }
-            catch (Exception e) {
-                throw new MissingResourceException(e.getMessage(),"","");
-            }
-        }
-        return INSTANCE_;
-    }
 
     /**
     * Retrieve the name of a Unicode code point.
@@ -1118,10 +1113,6 @@ public final class UCharacterName
      * Maximum name length
      */
     private int m_maxNameLength_;
-    /**
-     * Singleton instance
-     */
-    private static UCharacterName INSTANCE_ = null;
     /**
      * Type names used for extended names
      */

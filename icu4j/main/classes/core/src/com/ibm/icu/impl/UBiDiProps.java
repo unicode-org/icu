@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -35,14 +35,20 @@ public final class UBiDiProps {
     // constructors etc. --------------------------------------------------- ***
 
     // port of ubidi_openProps()
-    public UBiDiProps() throws IOException{
+    private UBiDiProps() throws IOException{
         InputStream is=ICUData.getStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
         BufferedInputStream b=new BufferedInputStream(is, 4096 /* data buffer size */);
         readData(b);
         b.close();
         is.close();
-
     }
+
+    private UBiDiProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
+        indexes=new int[IX_TOP];
+        indexes[0]=IX_TOP;
+        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
+    }
+
 
     private void readData(InputStream is) throws IOException {
         DataInputStream inputStream=new DataInputStream(is);
@@ -91,24 +97,18 @@ public final class UBiDiProps {
         }
     }
 
-    // UBiDiProps singleton
-    private static UBiDiProps gBdp=null;
-
     // port of ubidi_getSingleton()
-    public static final synchronized UBiDiProps getSingleton() throws IOException {
-        if(gBdp==null) {
-            gBdp=new UBiDiProps();
+    //
+    // Note: Do we really need this API?
+    public static UBiDiProps getSingleton() throws IOException {
+        if (FULL_INSTANCE == null) {
+            synchronized (UBiDiProps.class) {
+                if (FULL_INSTANCE == null) {
+                    FULL_INSTANCE = new UBiDiProps();
+                }
+            }
         }
-        return gBdp;
-    }
-
-    // UBiDiProps dummy singleton
-    private static UBiDiProps gBdpDummy=null;
-
-    private UBiDiProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
-        indexes=new int[IX_TOP];
-        indexes[0]=IX_TOP;
-        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
+        return FULL_INSTANCE;
     }
 
     /**
@@ -117,11 +117,16 @@ public final class UBiDiProps {
      * Using the dummy can reduce checks for available data after an initial failure.
      * Port of ucase_getDummy().
      */
-    public static final synchronized UBiDiProps getDummy() {
-        if(gBdpDummy==null) {
-            gBdpDummy=new UBiDiProps(true);
+    // Note: do we really need this API?
+    public static UBiDiProps getDummy() {
+        if (DUMMY_INSTANCE == null) {
+            synchronized (UBiDiProps.class) {
+                if (DUMMY_INSTANCE == null) {
+                    DUMMY_INSTANCE = new UBiDiProps(true);
+                }
+            }
         }
-        return gBdpDummy;
+        return DUMMY_INSTANCE;
     }
 
     // set of property starts for UnicodeSet ------------------------------- ***
@@ -322,5 +327,29 @@ public final class UBiDiProps {
     }
     private static final int getMirrorIndex(int m) {
         return m>>>MIRROR_INDEX_SHIFT;
+    }
+
+
+    /*
+     * public singleton instance
+     */
+    public static final UBiDiProps INSTANCE;
+
+    private static volatile UBiDiProps FULL_INSTANCE;
+    private static volatile UBiDiProps DUMMY_INSTANCE;
+
+    // This static initializer block must be placed after
+    // other static member initialization
+    static {
+        UBiDiProps bp;
+        try {
+            bp = new UBiDiProps();
+            FULL_INSTANCE = bp;
+        } catch (IOException e) {
+            // creating dummy
+            bp = new UBiDiProps(true);
+            DUMMY_INSTANCE = bp;
+        }
+        INSTANCE = bp;
     }
 }

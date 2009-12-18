@@ -34,15 +34,22 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
 public final class UCaseProps {
+
     // constructors etc. --------------------------------------------------- ***
 
     // port of ucase_openProps()
-    public UCaseProps() throws IOException {
+    private UCaseProps() throws IOException {
         InputStream is=ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
         BufferedInputStream b=new BufferedInputStream(is, 4096 /* data buffer size */);
         readData(b);
         b.close();
         is.close();
+    }
+
+    private UCaseProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
+        indexes=new int[IX_TOP];
+        indexes[0]=IX_TOP;
+        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
     }
 
     private final void readData(InputStream is) throws IOException {
@@ -94,24 +101,18 @@ public final class UCaseProps {
         }
     }
 
-    // UCaseProps singleton
-    private static UCaseProps gCsp=null;
-
     // port of ucase_getSingleton()
-    public static final synchronized UCaseProps getSingleton() throws IOException {
-        if(gCsp==null) {
-            gCsp=new UCaseProps();
+    //
+    // Note: Do we really need this API?
+    public static UCaseProps getSingleton() throws IOException {
+        if (FULL_INSTANCE == null) {
+            synchronized (UCaseProps.class) {
+                if (FULL_INSTANCE == null) {
+                    FULL_INSTANCE = new UCaseProps();
+                }
+            }
         }
-        return gCsp;
-    }
-
-    // UCaseProps dummy singleton
-    private static UCaseProps gCspDummy=null;
-
-    private UCaseProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
-        indexes=new int[IX_TOP];
-        indexes[0]=IX_TOP;
-        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
+        return FULL_INSTANCE;
     }
 
     /**
@@ -120,11 +121,16 @@ public final class UCaseProps {
      * Using the dummy can reduce checks for available data after an initial failure.
      * Port of ucase_getDummy().
      */
-    public static final synchronized UCaseProps getDummy() {
-        if(gCspDummy==null) {
-            gCspDummy=new UCaseProps(true);
+    // Note: do we really need this API?
+    public static UCaseProps getDummy() {
+        if (DUMMY_INSTANCE == null) {
+            synchronized (UCaseProps.class) {
+                if (DUMMY_INSTANCE == null) {
+                    DUMMY_INSTANCE = new UCaseProps(true);
+                }
+            }
         }
-        return gCspDummy;
+        return DUMMY_INSTANCE;
     }
 
     // set of property starts for UnicodeSet ------------------------------- ***
@@ -1459,4 +1465,28 @@ public final class UCaseProps {
     private static final int UNFOLD_ROWS=0;
     private static final int UNFOLD_ROW_WIDTH=1;
     private static final int UNFOLD_STRING_WIDTH=2;
+
+
+    /*
+     * public singleton instance
+     */
+    public static final UCaseProps INSTANCE;
+
+    private static volatile UCaseProps FULL_INSTANCE;
+    private static volatile UCaseProps DUMMY_INSTANCE;
+
+    // This static initializer block must be placed after
+    // other static member initialization
+    static {
+        UCaseProps cp;
+        try {
+            cp = new UCaseProps();
+            FULL_INSTANCE = cp;
+        } catch (IOException e) {
+            // creating dummy
+            cp = new UCaseProps(true);
+            DUMMY_INSTANCE = cp;
+        }
+        INSTANCE = cp;
+    }
 }

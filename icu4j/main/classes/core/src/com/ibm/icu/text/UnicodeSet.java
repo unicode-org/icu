@@ -3088,14 +3088,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             try {
                 switch(src) {
                 case UCharacterProperty.SRC_CHAR:
-                    UCharacterProperty.getInstance().addPropertyStarts(incl);
+                    UCharacterProperty.INSTANCE.addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_PROPSVEC:
-                    UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
+                    UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
-                    UCharacterProperty.getInstance().addPropertyStarts(incl);
-                    UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
+                    UCharacterProperty.INSTANCE.addPropertyStarts(incl);
+                    UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_NORM:
                     NormalizerImpl.addPropertyStarts(incl);
@@ -3231,7 +3231,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (prop == UProperty.GENERAL_CATEGORY_MASK) {
             applyFilter(new GeneralCategoryMaskFilter(value), UCharacterProperty.SRC_CHAR);
         } else {
-            applyFilter(new IntPropertyFilter(prop, value), UCharacterProperty.getInstance().getSource(prop));
+            applyFilter(new IntPropertyFilter(prop, value), UCharacterProperty.INSTANCE.getSource(prop));
         }
         return this;
     }
@@ -3371,7 +3371,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // valueAlias is empty.  Interpret as General Category, Script,
             // Binary property, or ANY or ASCII.  Upon success, p and v will
             // be set.
-            UPropertyAliases pnames = UPropertyAliases.getInstance();
+            UPropertyAliases pnames = UPropertyAliases.INSTANCE;
             p = UProperty.GENERAL_CATEGORY_MASK;
             v = pnames.getPropertyValueEnum(p, propertyAlias);
             if (v == UProperty.UNDEFINED) {
