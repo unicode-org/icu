@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -155,7 +155,7 @@ InitialTimeZoneRule::getFinalStart(int32_t /*prevRawOffset*/,
 }
 
 UBool
-InitialTimeZoneRule::getNextStart(const UDate /*base*/,
+InitialTimeZoneRule::getNextStart(UDate /*base*/,
                                  int32_t /*prevRawOffset*/,
                                  int32_t /*prevDSTSavings*/,
                                  UBool /*inclusive*/,
@@ -164,7 +164,7 @@ InitialTimeZoneRule::getNextStart(const UDate /*base*/,
 }
 
 UBool
-InitialTimeZoneRule::getPreviousStart(const UDate /*base*/,
+InitialTimeZoneRule::getPreviousStart(UDate /*base*/,
                                      int32_t /*prevRawOffset*/,
                                      int32_t /*prevDSTSavings*/,
                                      UBool /*inclusive*/,
@@ -348,7 +348,7 @@ AnnualTimeZoneRule::getFinalStart(int32_t prevRawOffset,
 }
 
 UBool
-AnnualTimeZoneRule::getNextStart(const UDate base,
+AnnualTimeZoneRule::getNextStart(UDate base,
                                  int32_t prevRawOffset,
                                  int32_t prevDSTSavings,
                                  UBool inclusive,
@@ -372,7 +372,7 @@ AnnualTimeZoneRule::getNextStart(const UDate base,
 }
 
 UBool
-AnnualTimeZoneRule::getPreviousStart(const UDate base,
+AnnualTimeZoneRule::getPreviousStart(UDate base,
                                      int32_t prevRawOffset,
                                      int32_t prevDSTSavings,
                                      UBool inclusive,
@@ -540,7 +540,7 @@ TimeArrayTimeZoneRule::getFinalStart(int32_t prevRawOffset,
 }
 
 UBool
-TimeArrayTimeZoneRule::getNextStart(const UDate base,
+TimeArrayTimeZoneRule::getNextStart(UDate base,
                                     int32_t prevRawOffset,
                                     int32_t prevDSTSavings,
                                     UBool inclusive,
@@ -560,7 +560,7 @@ TimeArrayTimeZoneRule::getNextStart(const UDate base,
 }
 
 UBool
-TimeArrayTimeZoneRule::getPreviousStart(const UDate base,
+TimeArrayTimeZoneRule::getPreviousStart(UDate base,
                                         int32_t prevRawOffset,
                                         int32_t prevDSTSavings,
                                         UBool inclusive,
