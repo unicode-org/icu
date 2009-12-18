@@ -42,6 +42,20 @@ public final class UCharacterProperty
 {
     // public data members -----------------------------------------------
 
+    /*
+     * public singleton instance
+     */
+    public static final UCharacterProperty INSTANCE;
+
+    static {
+        try {
+            INSTANCE = new UCharacterProperty();
+        }
+        catch (IOException e) {
+            throw new MissingResourceException(e.getMessage(),"","");
+        }
+    }
+
     /**
     * Trie data
     */
@@ -568,23 +582,6 @@ public final class UCharacterProperty
     }
 
     /**
-    * Loads the property data and initialize the UCharacterProperty instance.
-    * @throws MissingResourceException when data is missing or data has been corrupted
-    */
-    public static UCharacterProperty getInstance()
-    {
-        if(INSTANCE_ == null) {
-            try {
-                INSTANCE_ = new UCharacterProperty();
-            }
-            catch (Exception e) {
-                throw new MissingResourceException(e.getMessage(),"","");
-            }
-        }
-        return INSTANCE_;
-    }
-
-    /**
      * <p>
      * Unicode property names and property value names are compared
      * "loosely". Property[Value]Aliases.txt say:
@@ -733,11 +730,6 @@ public final class UCharacterProperty
      */
      int m_maxJTGValue_;
     // private variables -------------------------------------------------
-
-      /**
-     * UnicodeData.txt property object
-     */
-    private static UCharacterProperty INSTANCE_ = null;
 
     /**
     * Default name of the datafile

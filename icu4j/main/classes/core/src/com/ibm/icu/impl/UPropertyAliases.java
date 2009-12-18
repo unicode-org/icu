@@ -118,7 +118,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      * DATA_FILE_NAME is read from the jar/classpath and unflattened
      * into member variables of this object.
      */
-    public UPropertyAliases() throws IOException {
+    private UPropertyAliases() throws IOException {
 
         // Open the .icu file from the jar/classpath
         InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME);
@@ -204,19 +204,16 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     //----------------------------------------------------------------
     // Public API
 
-    public static UPropertyAliases INSTANCE_;
+    public static final UPropertyAliases INSTANCE;
 
-    public static synchronized UPropertyAliases getInstance() {
-        if (INSTANCE_ == null) {
-            try {
-                INSTANCE_ = new UPropertyAliases();
-            } catch(IOException e){
-                ///CLOVER:OFF
-                throw new MissingResourceException("Could not construct UPropertyAliases. Missing pnames.icu","","");
-                ///CLOVER:ON
-            }
+    static {
+        try {
+            INSTANCE = new UPropertyAliases();
+        } catch(IOException e) {
+            ///CLOVER:OFF
+            throw new MissingResourceException("Could not construct UPropertyAliases. Missing pnames.icu","","");
+            ///CLOVER:ON
         }
-        return INSTANCE_;
     }
 
     /**

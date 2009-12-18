@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -479,7 +479,7 @@ public final class TrieTest extends TestFmwk
     {
         CharTrie trie = null;
         try {
-             trie = UCharacterProperty.getInstance().m_trie_;
+             trie = UCharacterProperty.INSTANCE.m_trie_;
         } catch (Exception e) {
             warnln("Error creating ucharacter trie");
             return;

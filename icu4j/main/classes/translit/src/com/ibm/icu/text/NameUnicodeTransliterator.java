@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2004, International Business Machines Corporation and
+ * Copyright (C) 1996-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
@@ -49,13 +49,13 @@ class NameUnicodeTransliterator extends Transliterator {
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
 
-        int maxLen = UCharacterName.getInstance().getMaxCharNameLength() + 1; // allow for temporary trailing space
+        int maxLen = UCharacterName.INSTANCE.getMaxCharNameLength() + 1; // allow for temporary trailing space
 
         StringBuffer name = new StringBuffer(maxLen);
 
         // Get the legal character set
         UnicodeSet legal = new UnicodeSet();
-        UCharacterName.getInstance().getCharNameCharacters(legal);
+        UCharacterName.INSTANCE.getCharNameCharacters(legal);
 
         int cursor = offsets.start;
         int limit = offsets.limit;
