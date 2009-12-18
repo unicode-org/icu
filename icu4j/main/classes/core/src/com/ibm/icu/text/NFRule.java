@@ -737,13 +737,12 @@ final class NFRule {
         // internally we operate on a copy of the string being parsed
         // (because we're going to change it) and use our own ParsePosition
         ParsePosition pp = new ParsePosition(0);
-        String workText = new String(text);
 
         // check to see whether the text before the first substitution
         // matches the text at the beginning of the string being
         // parsed.  If it does, strip that off the front of workText;
         // otherwise, dump out with a mismatch
-        workText = stripPrefix(workText, ruleText.substring(0, sub1.getPos()), pp);
+        String workText = stripPrefix(text, ruleText.substring(0, sub1.getPos()), pp);
         int prefixLength = text.length() - workText.length();
 
         if (pp.getIndex() == 0 && sub1.getPos() != 0) {

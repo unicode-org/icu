@@ -254,26 +254,26 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     private static void hackTimes(DateTimePatternGenerator result, PatternInfo returnInfo, String hackPattern) {
         result.fp.set(hackPattern);
-        String mmss = new String();
+        StringBuilder mmss = new StringBuilder();
         // to get mm:ss, we strip all but mm literal ss
         boolean gotMm = false;
         for (int i = 0; i < result.fp.items.size(); ++i) {
             Object item = result.fp.items.get(i);
             if (item instanceof String) {
                 if (gotMm) {
-                    mmss += result.fp.quoteLiteral(item.toString());
+                    mmss.append(result.fp.quoteLiteral(item.toString()));
                 }
             } else {
                 char ch = item.toString().charAt(0);
                 if (ch == 'm') {
                     gotMm = true;
-                    mmss += item;
+                    mmss.append(item);
                 } else if (ch == 's') {
                     if (!gotMm) {
                         break; // failed
                     }
-                    mmss += item;
-                    result.addPattern(mmss, false, returnInfo);
+                    mmss.append(item);
+                    result.addPattern(mmss.toString(), false, returnInfo);
                     break;
                 } else if (gotMm || ch == 'z' || ch == 'Z' || ch == 'v' || ch == 'V') {
                     break; // failed
@@ -303,17 +303,17 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     private static String getFilteredPattern(FormatParser fp, BitSet nuke) {
-        String result = new String();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < fp.items.size(); ++i) {
             if (nuke.get(i)) continue;
             Object item = fp.items.get(i);
             if (item instanceof String) {
-                result += fp.quoteLiteral(item.toString());
+                result.append(fp.quoteLiteral(item.toString()));
             } else {
-                result += item.toString();
+                result.append(item.toString());
             }
         }
-        return result;
+        return result.toString();
     }
 
     /*private static int getAppendNameNumber(String string) {

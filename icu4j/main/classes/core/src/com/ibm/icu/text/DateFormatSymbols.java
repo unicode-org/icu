@@ -893,7 +893,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public String getLocalPatternChars() {
-        return new String(localPatternChars);
+        return localPatternChars;
     }
 
     /**

@@ -4790,7 +4790,7 @@ public class Bidi {
         verifyValidParaOrLine();
         if (length == 0) {
             /* nothing to do */
-            return new String("");
+            return "";
         }
 
         return BidiWriter.writeReordered(this, options);
@@ -4844,7 +4844,7 @@ public class Bidi {
             return BidiWriter.writeReverse(src, options);
         } else {
             /* nothing to do */
-            return new String("");
+            return "";
         }
     }
 

@@ -115,10 +115,10 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         fBeginWordSet = new UnicodeSet();
         fSuffixSet = new UnicodeSet();
 
-        fThaiWordSet.applyPattern(new String("[[:Thai:]&[:LineBreak=SA:]]"));
+        fThaiWordSet.applyPattern("[[:Thai:]&[:LineBreak=SA:]]");
         fThaiWordSet.compact();
 
-        fMarkSet.applyPattern(new String("[[:Thai:]&[:LineBreak=SA:]&[:M:]]"));
+        fMarkSet.applyPattern("[[:Thai:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
         fEndWordSet = fThaiWordSet;
         fEndWordSet.remove(0x0E31); // MAI HAN-AKAT
