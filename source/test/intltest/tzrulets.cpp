@@ -18,12 +18,14 @@
 #include "unicode/gregocal.h"
 #include "unicode/ucal.h"
 #include "unicode/unistr.h"
+#include "unicode/ustring.h"
 #include "unicode/tztrans.h"
 #include "unicode/vtzone.h"
 #include "tzrulets.h"
 #include "unicode/zrule.h"
 #include "unicode/ztrans.h"
 #include "unicode/vzone.h"
+#include "cmemory.h"
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 #define HOUR (60*60*1000)
@@ -2131,6 +2133,9 @@ TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
     UDate base = 1231027200000.0; //2009-01-04T00:00:00
     UErrorCode status;
 
+    const char *name = "Test Initial";
+    UChar uname[20];
+
     UClassID cid1;
     UClassID cid2;
 
@@ -2142,8 +2147,11 @@ TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
     VZone*  v1;
     VZone*  v2;
 
+    uprv_memset(uname, 0, sizeof(uname));
+    u_uastrcpy(uname, name);
+
     // create rules
-    ir1 = izrule_open((UChar*)("Test Initial"), 13, 2*HOUR, 0);
+    ir1 = izrule_open(uname, 13, 2*HOUR, 0);
     ir2 = izrule_clone(ir1);
 
     // test equality
