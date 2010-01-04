@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1894,7 +1894,7 @@ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
             len = U_MAX_VERSION_STRING_LENGTH;
         }
         u_UCharsToChars(versionString, versionChars, len);
-        versionChars[U_MAX_VERSION_STRING_LENGTH]=0;
+        versionChars[len]=0;
         u_versionFromString(versionArray, versionChars);
     }
 }
