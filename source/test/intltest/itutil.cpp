@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -241,6 +241,7 @@ void LocalPointerTest::TestLocalPointer() {
     if(orphan==NULL || orphan->length()!=1 || s.isValid() || s!=NULL) {
         errln("LocalPointer orphan() failure");
     }
+    delete orphan;
     // destructor
     s.adoptInstead(new UnicodeString());
     if(s->length()!=0) {
