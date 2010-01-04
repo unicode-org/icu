@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2009, International Business Machines
+ *   Copyright (C) 2002-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -625,9 +625,14 @@ le_int32 ParagraphLayout::getLeading() const
     return fLeading;
 }
 
+le_bool ParagraphLayout::isDone() const
+{
+    return fLineEnd >= fCharCount;
+}
+
 ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
 {
-    if (fLineEnd >= fCharCount) {
+    if (isDone()) {
         return NULL;
     }
 
