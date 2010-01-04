@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -477,7 +477,7 @@ public class ICUServiceThreadTest extends TestFmwk
         new UnregisterFactoryThread("", service, 500, this).start();
 
         // yoweee!!!
-        runThreads(10000);
+        runThreads(9500);
         if (PRINTSTATS) System.out.println(service.stats());
     }
 }
