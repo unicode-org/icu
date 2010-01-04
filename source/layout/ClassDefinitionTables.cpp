@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
  *
  */
 
@@ -68,7 +68,7 @@ le_int32 ClassDefFormat1Table::getGlyphClass(LEGlyphID glyphID) const
     TTGlyphID firstGlyph = SWAPW(startGlyph);
     TTGlyphID lastGlyph  = firstGlyph + SWAPW(glyphCount);
 
-    if (ttGlyphID > firstGlyph && ttGlyphID < lastGlyph) {
+    if (ttGlyphID >= firstGlyph && ttGlyphID < lastGlyph) {
         return SWAPW(classValueArray[ttGlyphID - firstGlyph]);
     }
 
