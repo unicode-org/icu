@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2005, International Business Machines
+ *   Copyright (C) 2002-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -498,6 +498,15 @@ public:
      * @stable ICU 3.2
      */
     inline void reflow();
+    /**
+     *
+     * Convenience method for determining if paragraph layout processing is complete ( i.e. there
+     * are no more lines left to process. )
+     *
+     * @return true if there are no more lines to be processed
+     *
+     * @draft ICU 4.4     */
+    inline le_bool isDone() const;
 
     /**
      * Return a <code>ParagraphLayout::Line</code> object which represents next line
