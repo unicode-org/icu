@@ -4,8 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.impl;
+package com.ibm.icu.text;
 
+import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.util.ULocale;
 import java.util.Map;
 

@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.CurrencyDisplayNames;
 import java.util.Collections;
 import java.util.Map;
 

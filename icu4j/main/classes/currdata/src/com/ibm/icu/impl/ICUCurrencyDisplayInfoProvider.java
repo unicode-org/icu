@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -36,7 +36,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         }
         return new ICUCurrencyDisplayInfo(rb, withFallback);
     }
-    
+
     public boolean hasData() {
         return true;
     }
@@ -48,7 +48,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         private final ICUResourceBundle plurals;
         private SoftReference<Map<String, String>> _symbolMapRef;
         private SoftReference<Map<String, String>> _nameMapRef;
-        
+
         public ICUCurrencyDisplayInfo(ICUResourceBundle rb, boolean fallback) {
             this.fallback = fallback;
             this.rb = rb;
@@ -70,14 +70,14 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         public String getSymbol(String isoCode) {
             return getName(isoCode, true);
         }
-        
+
         private String getName(String isoCode, boolean symbolName) {
             if (currencies != null) {
                 ICUResourceBundle result = currencies.findWithFallback(isoCode);
                 if (result != null) {
                     if (!fallback) {
                         int status = result.getLoadingStatus();
-                        if (status == ICUResourceBundle.FROM_DEFAULT || 
+                        if (status == ICUResourceBundle.FROM_DEFAULT ||
                                 status == ICUResourceBundle.FROM_ROOT) {
                             return null;
                         }
@@ -108,10 +108,10 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                     return pluralBundle.getString();
                 }
             }
-            
+
             return fallback ? getName(isoCode) : null;
         }
-        
+
         @Override
         public Map<String, String> symbolMap() {
             Map<String, String> map = _symbolMapRef == null ? null : _symbolMapRef.get();
@@ -122,7 +122,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             }
             return map;
         }
-        
+
         @Override
         public Map<String, String> nameMap() {
             Map<String, String> map = _nameMapRef == null ? null : _nameMapRef.get();
@@ -133,11 +133,11 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             }
             return map;
         }
-        
+
        @Override
         public Map<String, String> getUnitPatterns() {
             Map<String, String> result = new HashMap<String, String>();
-            
+
             ULocale locale = rb.getULocale();
             for (;locale != null; locale = locale.getFallback()) {
                 ICUResourceBundle r = (ICUResourceBundle) UResourceBundle.getBundleInstance(
@@ -158,12 +158,12 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                     result.put(key, b.getString());
                 }
             }
-            
+
             // Default result is the empty map. Callers who require a pattern will have to
             // supply a default.
             return Collections.unmodifiableMap(result);
         }
-        
+
         @Override
         public CurrencyFormatInfo getFormatInfo(String isoCode) {
             ICUResourceBundle crb = currencies.findWithFallback(isoCode);
@@ -192,7 +192,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                     String afterCurrencyMatch = arb.findWithFallback("currencyMatch").getString();
                     String afterContextMatch = arb.findWithFallback("surroundingMatch").getString();
                     String afterInsert = arb.findWithFallback("insertBetween").getString();
-                    
+
                     return new CurrencySpacingInfo(
                             beforeCurrencyMatch, beforeContextMatch, beforeInsert,
                             afterCurrencyMatch, afterContextMatch, afterInsert);
@@ -200,10 +200,10 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             }
             return fallback ? CurrencySpacingInfo.DEFAULT : null;
         }
-    
+
         private Map<String, String> _createSymbolMap() {
             Map<String, String> result = new HashMap<String, String>();
-            
+
             for (ULocale locale = rb.getULocale(); locale != null; locale = locale.getFallback()) {
                 ICUResourceBundle bundle = (ICUResourceBundle)
                     UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
@@ -223,14 +223,14 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                     }
                 }
             }
-            
+
             return Collections.unmodifiableMap(result);
         }
-        
+
         private Map<String, String> _createNameMap() {
             // ignore case variants
             Map<String, String> result = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
-            
+
             Set<String> visited = new HashSet<String>();
             Map<String, Set<String>> visitedPlurals = new HashMap<String, Set<String>>();
             for (ULocale locale = rb.getULocale(); locale != null; locale = locale.getFallback()) {
@@ -249,7 +249,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                         }
                     }
                 }
-                
+
                 ICUResourceBundle plurals = bundle.findTopLevel("CurrencyPlurals");
                 if (plurals != null) {
                     for (int i = 0; i < plurals.getSize(); ++i) {
@@ -272,7 +272,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                     }
                 }
             }
-            
+
             return Collections.unmodifiableMap(result);
         }
     }
