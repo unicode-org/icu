@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -332,6 +332,12 @@ enum UPropertySource {
     UPROPS_SRC_CHAR_AND_PROPSVEC,
     /** From ucase.c/ucase.icu as well as unorm.cpp/unorm.icu */
     UPROPS_SRC_CASE_AND_NORM,
+    /** From normalizer2impl.cpp/nfc.nrm */
+    UPROPS_SRC_NFC,
+    /** From normalizer2impl.cpp/nfkc.nrm */
+    UPROPS_SRC_NFKC,
+    /** From normalizer2impl.cpp/nfkc_cf.nrm */
+    UPROPS_SRC_NFKC_CF,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
@@ -389,5 +395,19 @@ U_CAPI int32_t U_EXPORT2
 uchar_swapNames(const UDataSwapper *ds,
                 const void *inData, int32_t length, void *outData,
                 UErrorCode *pErrorCode);
+
+#ifdef XP_CPLUSPLUS
+
+U_NAMESPACE_BEGIN
+
+class UnicodeSet;
+
+// implemented in uniset_props.cpp
+U_CFUNC UnicodeSet *
+uniset_getUnicode32Instance(UErrorCode &errorCode);
+
+U_NAMESPACE_END
+
+#endif
 
 #endif

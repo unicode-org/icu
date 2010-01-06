@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -12,37 +12,43 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "unicode/uniset.h"
-#include "unicode/uiter.h"
+#include "unicode/normalizer2.h"
+#include "cstring.h"
 #include "nortrans.h"
-#include "unormimp.h"
-#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NormalizationTransliterator)
 
+static inline Transliterator::Token cstrToken(const char *s) {
+    return Transliterator::pointerToken((void *)s);
+}
+
 /**
  * System registration hook.
  */
 void NormalizationTransliterator::registerIDs() {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    if(!unorm_haveData(&errorCode)) {
-        return;
-    }
-
+    // In the Token, the byte after the NUL is the UNormalization2Mode.
     Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-NFC"),
-                                     _create, integerToken(UNORM_NFC));
+                                     _create, cstrToken("nfc\0\0"));
     Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-NFKC"),
-                                     _create, integerToken(UNORM_NFKC));
+                                     _create, cstrToken("nfkc\0\0"));
     Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-NFD"),
-                                     _create, integerToken(UNORM_NFD));
+                                     _create, cstrToken("nfc\0\1"));
     Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-NFKD"),
-                                     _create, integerToken(UNORM_NFKD));
+                                     _create, cstrToken("nfkc\0\1"));
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-FCD"),
+                                     _create, cstrToken("nfc\0\2"));
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-FCC"),
+                                     _create, cstrToken("nfc\0\3"));
     Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("NFC"),
                                             UNICODE_STRING_SIMPLE("NFD"), TRUE);
     Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("NFKC"),
                                             UNICODE_STRING_SIMPLE("NFKD"), TRUE);
+    Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("FCC"),
+                                            UNICODE_STRING_SIMPLE("NFD"), FALSE);
+    Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("FCD"),
+                                            UNICODE_STRING_SIMPLE("FCD"), FALSE);
 }
 
 /**
@@ -50,19 +56,23 @@ void NormalizationTransliterator::registerIDs() {
  */
 Transliterator* NormalizationTransliterator::_create(const UnicodeString& ID,
                                                      Token context) {
-    return new NormalizationTransliterator(ID, (UNormalizationMode) context.integer, 0);
+    const char *name = (const char *)context.pointer;
+    UNormalization2Mode mode = (UNormalization2Mode)uprv_strchr(name, 0)[1];
+    UErrorCode errorCode = U_ZERO_ERROR;
+    const Normalizer2 *norm2 = Normalizer2::getInstance(NULL, name, mode, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return new NormalizationTransliterator(ID, *norm2);
+    } else {
+        return NULL;
+    }
 }
 
 /**
  * Constructs a transliterator.
  */
-NormalizationTransliterator::NormalizationTransliterator(
-                                 const UnicodeString& id,
-                                 UNormalizationMode mode, int32_t opt) :
-    Transliterator(id, 0) {
-    fMode = mode;
-    options = opt;
-}
+NormalizationTransliterator::NormalizationTransliterator(const UnicodeString& id,
+                                                         const Normalizer2 &norm2) :
+    Transliterator(id, 0), fNorm2(norm2) {}
 
 /**
  * Destructor.
@@ -74,20 +84,7 @@ NormalizationTransliterator::~NormalizationTransliterator() {
  * Copy constructor.
  */
 NormalizationTransliterator::NormalizationTransliterator(const NormalizationTransliterator& o) :
-Transliterator(o) {
-    fMode = o.fMode;
-    options = o.options;
-}
-
-/**
- * Assignment operator.
- */
-/*NormalizationTransliterator& NormalizationTransliterator::operator=(const NormalizationTransliterator& o) {
-    Transliterator::operator=(o);
-    fMode = o.fMode;
-    options = o.options;
-    return *this;
-}*/
+    Transliterator(o), fNorm2(o.fNorm2) {}
 
 /**
  * Transliterator API.
@@ -104,22 +101,9 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
     // start and limit of the input range
     int32_t start = offsets.start;
     int32_t limit = offsets.limit;
-    int32_t length, delta;
-
     if(start >= limit) {
         return;
     }
-
-    // a C code unit iterator, implemented around the Replaceable
-    UCharIterator iter;
-    uiter_setReplaceable(&iter, &text);
-
-    // the output string and buffer pointer
-    UnicodeString output;
-    UChar *buffer;
-    UBool neededToNormalize;
-
-    UErrorCode errorCode;
 
     /*
      * Normalize as short chunks at a time as possible even in
@@ -129,101 +113,62 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
      *
      * If it was known that the input text is not styled, then
      * a bulk mode normalization could look like this:
-     *
 
-    UChar staticChars[256];
-    UnicodeString input;
-
-    length = limit - start;
-    input.setTo(staticChars, 0, sizeof(staticChars)/U_SIZEOF_UCHAR); // writable alias
-
+    UnicodeString input, normalized;
+    int32_t length = limit - start;
     _Replaceable_extractBetween(text, start, limit, input.getBuffer(length));
     input.releaseBuffer(length);
 
     UErrorCode status = U_ZERO_ERROR;
-    Normalizer::normalize(input, fMode, options, output, status);
+    fNorm2.normalize(input, normalized, status);
 
-    text.handleReplaceBetween(start, limit, output);
+    text.handleReplaceBetween(start, limit, normalized);
 
-    int32_t delta = output.length() - length;
+    int32_t delta = normalized.length() - length;
     offsets.contextLimit += delta;
     offsets.limit += delta;
     offsets.start = limit + delta;
 
-     *
      */
-    while(start < limit) {
-        // set the iterator limits for the remaining input range
-        // this is a moving target because of the replacements in the text object
-        iter.start = iter.index = start;
-        iter.limit = limit;
-
-        // incrementally normalize a small chunk of the input
-        buffer = output.getBuffer(-1);
-        errorCode = U_ZERO_ERROR;
-        length = unorm_next(&iter, buffer, output.getCapacity(),
-                            fMode, 0,
-                            TRUE, &neededToNormalize,
-                            &errorCode);
-        output.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
-
-        if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
-            // use a larger output string buffer and do it again from the start
-            iter.index = start;
-            buffer = output.getBuffer(length);
-            errorCode = U_ZERO_ERROR;
-            length = unorm_next(&iter, buffer, output.getCapacity(),
-                                fMode, 0,
-                                TRUE, &neededToNormalize,
-                                &errorCode);
-            output.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UnicodeString segment;
+    UnicodeString normalized;
+    UChar32 c = text.char32At(start);
+    do {
+        int32_t prev = start;
+        // Skip at least one character so we make progress.
+        // c holds the character at start.
+        segment.setTo(c);
+        start += U16_LENGTH(c);
+        while(start < limit && !fNorm2.hasBoundaryBefore(c = text.char32At(start))) {
+            segment.append(c);
+            start += U16_LENGTH(c);
         }
-
-        if(U_FAILURE(errorCode)) {
-            break;
-        }
-
-        limit = iter.index;
-        if(isIncremental && limit == iter.limit) {
+        if(start == limit && isIncremental && !fNorm2.hasBoundaryAfter(c)) {
             // stop in incremental mode when we reach the input limit
             // in case there are additional characters that could change the
             // normalization result
-
-            // UNLESS all characters in the result of the normalization of
-            // the last run are in the skippable set
-            const UChar *s=output.getBuffer();
-            int32_t i=0, outLength=output.length();
-            UChar32 c;
-
-            while(i<outLength) {
-                U16_NEXT(s, i, outLength, c);
-                if(!unorm_isNFSkippable(c, fMode)) {
-                    outLength=-1; // I wish C++ had labeled loops and break outer; ...
-                    break;
-                }
-            }
-            if (outLength<0) {
-                break;
-            }
+            start=prev;
+            break;
         }
-
-        if(neededToNormalize) {
+        fNorm2.normalize(segment, normalized, errorCode);
+        if(U_FAILURE(errorCode)) {
+            break;
+        }
+        if(segment != normalized) {
             // replace the input chunk with its normalized form
-            text.handleReplaceBetween(start, limit, output);
+            text.handleReplaceBetween(prev, start, normalized);
 
             // update all necessary indexes accordingly
-            delta = length - (limit - start);   // length change in the text object
-            start = limit += delta;             // the next chunk starts where this one ends, with adjustment
-            limit = offsets.limit += delta;     // set the iteration limit to the adjusted end of the input range
-            offsets.contextLimit += delta;
-        } else {
-            // delta == 0
-            start = limit;
-            limit = offsets.limit;
+            int32_t delta = normalized.length() - (start - prev);
+            start += delta;
+            limit += delta;
         }
-    }
+    } while(start < limit);
 
     offsets.start = start;
+    offsets.contextLimit += limit - offsets.limit;
+    offsets.limit = limit;
 }
 
 U_NAMESPACE_END

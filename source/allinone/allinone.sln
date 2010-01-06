@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\samples\cal\cal.vcproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
@@ -255,6 +255,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gencfu", "..\tools\gencfu\gencfu.vcproj", "{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gennorm2", "..\tools\gennorm2\gennorm2.vcproj", "{C7891A65-80AB-4245-912E-5F1E17B0E6C4}"
+	ProjectSection(ProjectDependencies) = postProject
 		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
@@ -555,6 +561,14 @@ Global
 		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|Win32.Build.0 = Release|Win32
 		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|x64.ActiveCfg = Release|x64
 		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|x64.Build.0 = Release|x64
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Debug|Win32.Build.0 = Debug|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Debug|x64.ActiveCfg = Debug|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Debug|x64.Build.0 = Debug|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|Win32.ActiveCfg = Release|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|Win32.Build.0 = Release|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|x64.ActiveCfg = Release|Win32
+		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|x64.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

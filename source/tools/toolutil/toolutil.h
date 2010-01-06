@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,6 +20,33 @@
 #define __TOOLUTIL_H__
 
 #include "unicode/utypes.h"
+
+#ifdef XP_CPLUSPLUS
+
+#include "unicode/errorcode.h"
+
+U_NAMESPACE_BEGIN
+
+/**
+ * ErrorCode subclass for use in ICU command-line tools.
+ * The destructor calls handleFailure() which calls exit(errorCode) when isFailure().
+ */
+class U_TOOLUTIL_API IcuToolErrorCode : public ErrorCode {
+public:
+    /**
+     * @param loc A short string describing where the IcuToolErrorCode is used.
+     */
+    IcuToolErrorCode(const char *loc) : location(loc) {}
+    virtual ~IcuToolErrorCode();
+protected:
+    virtual void handleFailure() const;
+private:
+    const char *location;
+};
+
+U_NAMESPACE_END
+
+#endif
 
 /*
  * For Windows, a path/filename may be the short (8.3) version

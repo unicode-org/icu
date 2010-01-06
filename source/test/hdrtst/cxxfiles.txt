@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2009 International Business Machines 
+# Copyright (c) 2001-20109 International Business Machines 
 # Corporation and others. All Rights Reserved.
 # common & i18n
 bidi.h
@@ -38,6 +38,7 @@ measfmt.h
 measunit.h
 measure.h
 msgfmt.h
+normalizer2.h
 normlzr.h
 numfmt.h
 numsys.h

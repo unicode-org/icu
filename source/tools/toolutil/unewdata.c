@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999,2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -14,6 +14,7 @@
 *   created by: Markus W. Scherer
 */
 
+#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
@@ -160,6 +161,33 @@ udata_finish(UNewDataMemory *pData, UErrorCode *pErrorCode) {
     }
 
     return fileLength;
+}
+
+/* dummy UDataInfo cf. udata.h */
+static const UDataInfo dummyDataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    { 0, 0, 0, 0 },                 /* dummy dataFormat */
+    { 0, 0, 0, 0 },                 /* dummy formatVersion */
+    { 0, 0, 0, 0 }                  /* dummy dataVersion */
+};
+
+U_CAPI void U_EXPORT2
+udata_createDummy(const char *dir, const char *type, const char *name, UErrorCode *pErrorCode) {
+    if(U_SUCCESS(*pErrorCode)) {
+        udata_finish(udata_create(dir, type, name, &dummyDataInfo, NULL, pErrorCode), pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            fprintf(stderr, "error %s writing dummy data file %s" U_FILE_SEP_STRING "%s.%s\n",
+                    u_errorName(*pErrorCode), dir, name, type);
+            exit(*pErrorCode);
+        }
+    }
 }
 
 U_CAPI void U_EXPORT2

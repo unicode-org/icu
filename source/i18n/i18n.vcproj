@@ -895,7 +895,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ucol_wgt.c"
+				RelativePath=".\ucol_wgt.cpp"
 				>
 			</File>
 			<File

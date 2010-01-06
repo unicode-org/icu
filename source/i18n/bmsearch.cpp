@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2009, International Business Machines                 *
+ *   Copyright (C) 1996-2010, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -27,7 +27,7 @@
 #include "hash.h"
 #include "uhash.h"
 #include "ucol_imp.h"
-#include "unormimp.h"
+#include "normalizer2impl.h"
 
 #include "unicode/colldata.h"
 #include "unicode/bmsearch.h"
@@ -81,6 +81,7 @@ private:
     uint32_t variableTop;
     UBool toShift;
     UCollator *coll;
+    const Normalizer2 &nfd;
 
     const UnicodeString *targetString;
     const UChar *targetBuffer;
@@ -93,6 +94,7 @@ private:
 Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength, UErrorCode &status)
     : bufferSize(0), bufferMin(0), bufferMax(0),
       strengthMask(0), strength(UCOL_PRIMARY), variableTop(0), toShift(FALSE), coll(theCollator),
+      nfd(*Normalizer2Factory::getNFDInstance(status)),
       targetString(NULL), targetBuffer(NULL), targetLength(0), elements(NULL), charBreakIterator(NULL)
 {
     strength = ucol_getStrength(coll);
@@ -348,63 +350,14 @@ UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
         return TRUE;
     }
 
-    UChar t2[32], p2[32];
-    const UChar *pBuffer = pattern.getBuffer();
-    int32_t pLength = pattern.length();
-    int32_t length = end - start;
-
-    UErrorCode status = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
-
-    int32_t decomplength = unorm_decompose(t2, ARRAY_SIZE(t2),
-                                       targetBuffer + start, length,
-                                       FALSE, 0, &status);
-
-    // use separate status2 in case of buffer overflow
-    if (decomplength != unorm_decompose(p2, ARRAY_SIZE(p2),
-                                        pBuffer, pLength,
-                                        FALSE, 0, &status2)) {
-        return FALSE; // lengths are different
-    }
-
-    // compare contents
-    UChar *text, *pat;
-
-    if(U_SUCCESS(status)) {
-        text = t2;
-        pat = p2;
-    } else if(status == U_BUFFER_OVERFLOW_ERROR) {
-        status = U_ZERO_ERROR;
-
-        // allocate one buffer for both decompositions
-        text = NEW_ARRAY(UChar, decomplength * 2);
-
-        // Check for allocation failure.
-        if (text == NULL) {
-        	return FALSE;
-        }
-
-        pat = text + decomplength;
-
-        unorm_decompose(text, decomplength, targetBuffer + start,
-                        length, FALSE, 0, &status);
-
-        unorm_decompose(pat, decomplength, pBuffer,
-                        pLength, FALSE, 0, &status);
-    } else {
-        // NFD failed, make sure that u_memcmp() does not overrun t2 & p2
-        // and that we don't uprv_free() an undefined text pointer
-        text = pat = t2;
-        decomplength = 0;
-    }
-
-    UBool result = (UBool)(u_memcmp(pat, text, decomplength) == 0);
-
-    if(text != t2) {
-        DELETE_ARRAY(text);
-    }
-
+    // Note: We could use Normalizer::compare() or similar, but for short strings
+    // which may not be in FCD it might be faster to just NFD them.
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString t2, p2;
+    nfd.normalize(UnicodeString(FALSE, targetBuffer + start, end - start), t2, status);
+    nfd.normalize(pattern, p2, status);
     // return FALSE if NFD failed
-    return U_SUCCESS(status) && result;
+    return U_SUCCESS(status) && t2 == p2;
 }
 
 #define HASH_TABLE_SIZE 257

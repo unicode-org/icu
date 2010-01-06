@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -21,11 +21,6 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include "unicode/utypes.h"
-#include "unicode/putil.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "toolutil.h"
-#include "unicode/ucal.h"
 
 #ifdef U_WINDOWS
 #   define VC_EXTRALEAN
@@ -41,6 +36,27 @@
 #   include <sys/types.h>
 #endif
 #include <errno.h>
+
+#include "unicode/errorcode.h"
+#include "unicode/putil.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "toolutil.h"
+#include "unicode/ucal.h"
+
+U_NAMESPACE_BEGIN
+
+IcuToolErrorCode::~IcuToolErrorCode() {
+    // Safe because our handleFailure() does not throw exceptions.
+    if(isFailure()) { handleFailure(); }
+}
+
+void IcuToolErrorCode::handleFailure() const {
+    fprintf(stderr, "error at %s: %s\n", location, errorName());
+    exit(errorCode);
+}
+
+U_NAMESPACE_END
 
 static int32_t currentYear = -1;
 
@@ -235,6 +251,7 @@ utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
             fprintf(stderr, "error: %s - out of memory\n", mem->name);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
+        mem->capacity=newCapacity;
     }
 
     return TRUE;
@@ -242,9 +259,11 @@ utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
 
 U_CAPI void * U_EXPORT2
 utm_alloc(UToolMemory *mem) {
-    char *p=(char *)mem->array+mem->idx*mem->size;
-    int32_t newIndex=mem->idx+1;
+    char *p=NULL;
+    int32_t oldIndex=mem->idx;
+    int32_t newIndex=oldIndex+1;
     if(utm_hasCapacity(mem, newIndex)) {
+        p=(char *)mem->array+oldIndex*mem->size;
         mem->idx=newIndex;
         uprv_memset(p, 0, mem->size);
     }
@@ -253,9 +272,11 @@ utm_alloc(UToolMemory *mem) {
 
 U_CAPI void * U_EXPORT2
 utm_allocN(UToolMemory *mem, int32_t n) {
-    char *p=(char *)mem->array+mem->idx*mem->size;
-    int32_t newIndex=mem->idx+n;
+    char *p=NULL;
+    int32_t oldIndex=mem->idx;
+    int32_t newIndex=oldIndex+n;
     if(utm_hasCapacity(mem, newIndex)) {
+        p=(char *)mem->array+oldIndex*mem->size;
         mem->idx=newIndex;
         uprv_memset(p, 0, n*mem->size);
     }

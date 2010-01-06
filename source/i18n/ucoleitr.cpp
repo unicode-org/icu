@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-20109, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *
@@ -313,19 +313,16 @@ ucol_openElements(const UCollator  *coll,
                         int32_t    textLength,
                         UErrorCode *status)
 {
-    UCollationElements *result;
-
     if (U_FAILURE(*status)) {
         return NULL;
     }
 
-    result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
-    /* test for NULL */
+    UCollationElements *result = new UCollationElements;
     if (result == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    
+
     result->reset_ = TRUE;
     result->isWritable = FALSE;
     result->pce = NULL;
@@ -333,7 +330,7 @@ ucol_openElements(const UCollator  *coll,
     if (text == NULL) {
         textLength = 0;
     }
-    uprv_init_collIterate(coll, text, textLength, &result->iteratordata_);
+    uprv_init_collIterate(coll, text, textLength, &result->iteratordata_, status);
 
     return result;
 }
@@ -345,30 +342,24 @@ ucol_closeElements(UCollationElements *elems)
 	if (elems != NULL) {
 	  collIterate *ci = &elems->iteratordata_;
 
-	  if (ci != NULL) {
-		  if (ci->writableBuffer != ci->stackWritableBuffer) {
-			uprv_free(ci->writableBuffer);
-		  }
+	  if (ci->extendCEs) {
+		  uprv_free(ci->extendCEs);
+	  }
 
-		  if (ci->extendCEs) {
-			  uprv_free(ci->extendCEs);
-		  }
-
-		  if (ci->offsetBuffer) {
-			  uprv_free(ci->offsetBuffer);
-		  }
+	  if (ci->offsetBuffer) {
+		  uprv_free(ci->offsetBuffer);
 	  }
 
 	  if (elems->isWritable && elems->iteratordata_.string != NULL)
 	  {
-		uprv_free(elems->iteratordata_.string);
+		uprv_free((UChar *)elems->iteratordata_.string);
 	  }
 
 	  if (elems->pce != NULL) {
 		  delete elems->pce;
 	  }
 
-	  uprv_free(elems);
+	  delete elems;
 	}
 }
 
@@ -387,11 +378,7 @@ ucol_reset(UCollationElements *elems)
         ci->flags |= UCOL_ITER_NORM;
     }
 
-    if (ci->stackWritableBuffer != ci->writableBuffer) {
-        uprv_free(ci->writableBuffer);
-        ci->writableBuffer = ci->stackWritableBuffer;
-        ci->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE;
-    }
+    ci->writableBuffer.remove();
     ci->fcdPosition = NULL;
 
   //ci->offsetReturn = ci->offsetStore = NULL;
@@ -686,7 +673,7 @@ ucol_setText(      UCollationElements *elems,
 
     if (elems->isWritable && elems->iteratordata_.string != NULL)
     {
-        uprv_free(elems->iteratordata_.string);
+        uprv_free((UChar *)elems->iteratordata_.string);
     }
 
     if (text == NULL) {
@@ -698,7 +685,7 @@ ucol_setText(      UCollationElements *elems,
     /* free offset buffer to avoid memory leak before initializing. */
     ucol_freeOffsetBuffer(&(elems->iteratordata_));
     uprv_init_collIterate(elems->iteratordata_.coll, text, textLength, 
-                          &elems->iteratordata_);
+                          &elems->iteratordata_, status);
 
     elems->reset_   = TRUE;
 }

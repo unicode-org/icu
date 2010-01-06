@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2006, International Business Machines Corporation and
+ * Copyright (c) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  */
@@ -18,20 +18,21 @@
  
 #if !UCONFIG_NO_NORMALIZATION
 
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
 #include "unicode/chariter.h"
+#include "unicode/normalizer2.h"
+#include "unicode/unistr.h"
 #include "unicode/unorm.h"
-
-
-struct UCharIterator;
-typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @stable ICU 2.1 */
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 /**
  * The Normalizer class supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
  * Unicode Standard Annex #15: Unicode Normalization Forms</a>.
+ *
+ * Note: This API has been replaced by the Normalizer2 class and is only available
+ * for backward compatibility. This class simply delegates to the Normalizer2 class.
+ * There is one exception: The new API does not provide a replacement for Normalizer::compare().
  *
  * The Normalizer class consists of two parts:
  * - static functions that normalize strings or test if strings are normalized
@@ -40,13 +41,11 @@ U_NAMESPACE_BEGIN
  *
  * The Normalizer class is not suitable for subclassing.
  *
- * The static functions are basically wrappers around the C implementation,
- * using UnicodeString instead of UChar*.
  * For basic information about normalization forms and details about the C API
  * please see the documentation in unorm.h.
  *
  * The iterator API with the Normalizer constructors and the non-static functions
- * uses a CharacterIterator as input. It is possible to pass a string which
+ * use a CharacterIterator as input. It is possible to pass a string which
  * is then internally wrapped in a CharacterIterator.
  * The input text is not normalized all at once, but incrementally where needed
  * (providing efficient random access).
@@ -287,7 +286,7 @@ public:
    * @see isNormalized
    * @stable ICU 2.6
    */
-  static inline UNormalizationCheckResult
+  static UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, int32_t options, UErrorCode &status);
 
   /**
@@ -328,7 +327,7 @@ public:
    * @see quickCheck
    * @stable ICU 2.6
    */
-  static inline UBool
+  static UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, int32_t options, UErrorCode &errorCode);
 
   /**
@@ -726,18 +725,20 @@ private:
   UBool nextNormalize();
   UBool previousNormalize();
 
-  void    init(CharacterIterator *iter);
+  void    init();
   void    clearBuffer(void);
 
   //-------------------------------------------------------------------------
   // Private data
   //-------------------------------------------------------------------------
 
+  FilteredNormalizer2*fFilteredNorm2;  // owned if not NULL
+  const Normalizer2  *fNorm2;  // not owned; may be equal to fFilteredNorm2
   UNormalizationMode  fUMode;
   int32_t             fOptions;
 
   // The input text and our position in it
-  UCharIterator       *text;
+  CharacterIterator  *text;
 
   // The normalization buffer is the result of normalization
   // of the source in [currentIndex..nextIndex[ .
@@ -746,7 +747,6 @@ private:
   // A buffer for holding intermediate results
   UnicodeString       buffer;
   int32_t         bufferPos;
-
 };
 
 //-------------------------------------------------------------------------
@@ -761,48 +761,14 @@ inline UNormalizationCheckResult
 Normalizer::quickCheck(const UnicodeString& source,
                        UNormalizationMode mode,
                        UErrorCode &status) {
-    if(U_FAILURE(status)) {
-        return UNORM_MAYBE;
-    }
-
-    return unorm_quickCheck(source.getBuffer(), source.length(),
-                            mode, &status);
-}
-
-inline UNormalizationCheckResult
-Normalizer::quickCheck(const UnicodeString& source,
-                       UNormalizationMode mode, int32_t options,
-                       UErrorCode &status) {
-    if(U_FAILURE(status)) {
-        return UNORM_MAYBE;
-    }
-
-    return unorm_quickCheckWithOptions(source.getBuffer(), source.length(),
-                                       mode, options, &status);
+    return quickCheck(source, mode, 0, status);
 }
 
 inline UBool
 Normalizer::isNormalized(const UnicodeString& source,
                          UNormalizationMode mode,
                          UErrorCode &status) {
-    if(U_FAILURE(status)) {
-        return FALSE;
-    }
-
-    return unorm_isNormalized(source.getBuffer(), source.length(),
-                              mode, &status);
-}
-
-inline UBool
-Normalizer::isNormalized(const UnicodeString& source,
-                         UNormalizationMode mode, int32_t options,
-                         UErrorCode &status) {
-    if(U_FAILURE(status)) {
-        return FALSE;
-    }
-
-    return unorm_isNormalizedWithOptions(source.getBuffer(), source.length(),
-                                         mode, options, &status);
+    return isNormalized(source, mode, 0, status);
 }
 
 inline int32_t

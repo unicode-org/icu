@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -82,6 +82,9 @@ setCompositionExclusion(uint32_t code);
 
 U_CFUNC void
 setFNC(uint32_t c, UChar *s);
+
+extern void
+writeNorm2(const char *dataDir);
 
 extern void
 processData(void);

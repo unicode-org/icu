@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -52,7 +52,6 @@
 #include "calldata.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "ucol_imp.h"
 
 /* set to 1 to test offsets in backAndForth() */
 #define TEST_OFFSETS 0
@@ -148,13 +147,14 @@ static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sor
     int32_t strength = UCOL_PRIMARY;
     uint32_t res_size = 0;
     UBool doneCase = FALSE;
+    UErrorCode errorCode = U_ZERO_ERROR;
 
     char *current = buffer;
     const uint8_t *currentSk = sortkey;
 
     uprv_strcpy(current, "[");
 
-    while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
+    while(strength <= UCOL_QUATERNARY && strength <= ucol_getStrength(coll)) {
         if(strength > UCOL_PRIMARY) {
             uprv_strcat(current, " . ");
         }
@@ -162,20 +162,20 @@ static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sor
             uprv_appendByteToHexString(current, *currentSk++);
             uprv_strcat(current, " ");
         }
-        if(coll->caseLevel == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
+        if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
             doneCase = TRUE;
-        } else if(coll->caseLevel == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
+        } else if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
             strength ++;
         }
         if (*currentSk) {
             uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
         }
-        if(strength == UCOL_QUATERNARY && coll->alternateHandling == UCOL_NON_IGNORABLE) {
+        if(strength == UCOL_QUATERNARY && ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, &errorCode) == UCOL_NON_IGNORABLE) {
             break;
         }
     }
 
-    if(coll->strength == UCOL_IDENTICAL) {
+    if(ucol_getStrength(coll) == UCOL_IDENTICAL) {
         uprv_strcat(current, " . ");
         while(*currentSk != 0) {
             uprv_appendByteToHexString(current, *currentSk++);
@@ -214,7 +214,7 @@ UBool hasCollationElements(const char *locName) {
 
   UErrorCode status = U_ZERO_ERROR;
 
-  UResourceBundle *loc = ures_open(U_ICUDATA_COLL, locName, &status);;
+  UResourceBundle *loc = ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "coll", locName, &status);;
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;

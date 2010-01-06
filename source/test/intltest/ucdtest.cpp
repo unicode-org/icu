@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -15,6 +15,19 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
+static const char *ignorePropNames[]={
+    "FC_NFKC",
+    "NFD_QC",
+    "NFC_QC",
+    "NFKD_QC",
+    "NFKC_QC",
+    "Expands_On_NFD",
+    "Expands_On_NFC",
+    "Expands_On_NFKD",
+    "Expands_On_NFKC",
+    "NFKC_CF"
+};
+
 UnicodeTest::UnicodeTest()
 {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -22,6 +35,10 @@ UnicodeTest::UnicodeTest()
     if(U_FAILURE(errorCode)) {
         delete unknownPropertyNames;
         unknownPropertyNames=NULL;
+    }
+    // Ignore some property names altogether.
+    for(int32_t i=0; i<LENGTHOF(ignorePropNames); ++i) {
+        unknownPropertyNames->puti(UnicodeString(ignorePropNames[i], -1, US_INV), 1, errorCode);
     }
 }
 
@@ -76,7 +93,7 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
 }
 
 static const char *const
-derivedCorePropsNames[]={
+derivedPropsNames[]={
     "Math",
     "Alphabetic",
     "Lowercase",
@@ -86,6 +103,7 @@ derivedCorePropsNames[]={
     "XID_Start",
     "XID_Continue",
     "Default_Ignorable_Code_Point",
+    "Full_Composition_Exclusion",
     "Grapheme_Extend",
     "Grapheme_Link", /* Unicode 5 moves this property here from PropList.txt */
     "Grapheme_Base",
@@ -95,11 +113,12 @@ derivedCorePropsNames[]={
     "Changes_When_Uppercased",
     "Changes_When_Titlecased",
     "Changes_When_Casefolded",
-    "Changes_When_Casemapped"
+    "Changes_When_Casemapped",
+    "Changes_When_NFKC_Casefolded"
 };
 
 static const UProperty
-derivedCorePropsIndex[]={
+derivedPropsIndex[]={
     UCHAR_MATH,
     UCHAR_ALPHABETIC,
     UCHAR_LOWERCASE,
@@ -109,6 +128,7 @@ derivedCorePropsIndex[]={
     UCHAR_XID_START,
     UCHAR_XID_CONTINUE,
     UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
+    UCHAR_FULL_COMPOSITION_EXCLUSION,
     UCHAR_GRAPHEME_EXTEND,
     UCHAR_GRAPHEME_LINK,
     UCHAR_GRAPHEME_BASE,
@@ -118,17 +138,18 @@ derivedCorePropsIndex[]={
     UCHAR_CHANGES_WHEN_UPPERCASED,
     UCHAR_CHANGES_WHEN_TITLECASED,
     UCHAR_CHANGES_WHEN_CASEFOLDED,
-    UCHAR_CHANGES_WHEN_CASEMAPPED
+    UCHAR_CHANGES_WHEN_CASEMAPPED,
+    UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
 };
 
-static int32_t numErrors[LENGTHOF(derivedCorePropsIndex)]={ 0 };
+static int32_t numErrors[LENGTHOF(derivedPropsIndex)]={ 0 };
 
 enum { MAX_ERRORS=50 };
 
 U_CFUNC void U_CALLCONV
-derivedCorePropsLineFn(void *context,
-                        char *fields[][2], int32_t /* fieldCount */,
-                        UErrorCode *pErrorCode)
+derivedPropsLineFn(void *context,
+                   char *fields[][2], int32_t /* fieldCount */,
+                   UErrorCode *pErrorCode)
 {
     UnicodeTest *me=(UnicodeTest *)context;
     uint32_t start, end;
@@ -136,35 +157,35 @@ derivedCorePropsLineFn(void *context,
 
     u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
-        me->errln("UnicodeTest: syntax error in DerivedCoreProperties.txt field 0 at %s\n", fields[0][0]);
+        me->errln("UnicodeTest: syntax error in DerivedCoreProperties.txt or DerivedNormalizationProps.txt field 0 at %s\n", fields[0][0]);
         return;
     }
 
     /* parse derived binary property name, ignore unknown names */
-    i=getTokenIndex(derivedCorePropsNames, LENGTHOF(derivedCorePropsNames), fields[1][0]);
+    i=getTokenIndex(derivedPropsNames, LENGTHOF(derivedPropsNames), fields[1][0]);
     if(i<0) {
         UnicodeString propName(fields[1][0], (int32_t)(fields[1][1]-fields[1][0]));
         propName.trim();
         if(me->unknownPropertyNames->find(propName)==NULL) {
             UErrorCode errorCode=U_ZERO_ERROR;
             me->unknownPropertyNames->puti(propName, 1, errorCode);
-            me->errln("UnicodeTest warning: unknown property name '%s' in DerivedCoreProperties.txt\n", fields[1][0]);
+            me->errln("UnicodeTest warning: unknown property name '%s' in DerivedCoreProperties.txt or DerivedNormalizationProps.txt\n", fields[1][0]);
         }
         return;
     }
 
-    me->derivedCoreProps[i].add(start, end);
+    me->derivedProps[i].add(start, end);
 }
 
 void UnicodeTest::TestAdditionalProperties() {
-    // test DerivedCoreProperties.txt
-    if(LENGTHOF(derivedCoreProps)<LENGTHOF(derivedCorePropsNames)) {
-        errln("error: UnicodeTest::derivedCoreProps[] too short, need at least %d UnicodeSets\n",
-              LENGTHOF(derivedCorePropsNames));
+    // test DerivedCoreProperties.txt and DerivedNormalizationProps.txt
+    if(LENGTHOF(derivedProps)<LENGTHOF(derivedPropsNames)) {
+        errln("error: UnicodeTest::derivedProps[] too short, need at least %d UnicodeSets\n",
+              LENGTHOF(derivedPropsNames));
         return;
     }
-    if(LENGTHOF(derivedCorePropsIndex)!=LENGTHOF(derivedCorePropsNames)) {
-        errln("error in ucdtest.cpp: LENGTHOF(derivedCorePropsIndex)!=LENGTHOF(derivedCorePropsNames)\n");
+    if(LENGTHOF(derivedPropsIndex)!=LENGTHOF(derivedPropsNames)) {
+        errln("error in ucdtest.cpp: LENGTHOF(derivedPropsIndex)!=LENGTHOF(derivedPropsNames)\n");
         return;
     }
 
@@ -188,14 +209,23 @@ void UnicodeTest::TestAdditionalProperties() {
     strcat(backupPath, U_FILE_SEP_STRING);
     strcat(backupPath, "unidata" U_FILE_SEP_STRING "DerivedCoreProperties.txt");
 
-    u_parseDelimitedFile(newPath, ';', fields, 2, derivedCorePropsLineFn, this, &errorCode);
+    char *path=newPath;
+    u_parseDelimitedFile(newPath, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
 
     if(errorCode==U_FILE_ACCESS_ERROR) {
         errorCode=U_ZERO_ERROR;
-        u_parseDelimitedFile(backupPath, ';', fields, 2, derivedCorePropsLineFn, this, &errorCode);
+        path=backupPath;
+        u_parseDelimitedFile(backupPath, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         errln("error parsing DerivedCoreProperties.txt: %s\n", u_errorName(errorCode));
+        return;
+    }
+    char *basename=path+strlen(path)-strlen("DerivedCoreProperties.txt");
+    strcpy(basename, "DerivedNormalizationProps.txt");
+    u_parseDelimitedFile(path, ';', fields, 2, derivedPropsLineFn, this, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        errln("error parsing DerivedNormalizationProps.txt: %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -206,14 +236,14 @@ void UnicodeTest::TestAdditionalProperties() {
     UChar32 start, end;
 
     // test all TRUE properties
-    for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
-        rangeCount=derivedCoreProps[i].getRangeCount();
+    for(i=0; i<LENGTHOF(derivedPropsNames); ++i) {
+        rangeCount=derivedProps[i].getRangeCount();
         for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
-            start=derivedCoreProps[i].getRangeStart(range);
-            end=derivedCoreProps[i].getRangeEnd(range);
+            start=derivedProps[i].getRangeStart(range);
+            end=derivedProps[i].getRangeEnd(range);
             for(; start<=end; ++start) {
-                if(!u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
-                    errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong\n", start, derivedCorePropsNames[i]);
+                if(!u_hasBinaryProperty(start, derivedPropsIndex[i])) {
+                    errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong\n", start, derivedPropsNames[i]);
                     if(++numErrors[i]>=MAX_ERRORS) {
                       errln("Too many errors, moving to the next test");
                       break;
@@ -224,19 +254,19 @@ void UnicodeTest::TestAdditionalProperties() {
     }
 
     // invert all properties
-    for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
-        derivedCoreProps[i].complement();
+    for(i=0; i<LENGTHOF(derivedPropsNames); ++i) {
+        derivedProps[i].complement();
     }
 
     // test all FALSE properties
-    for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
-        rangeCount=derivedCoreProps[i].getRangeCount();
+    for(i=0; i<LENGTHOF(derivedPropsNames); ++i) {
+        rangeCount=derivedProps[i].getRangeCount();
         for(range=0; range<rangeCount && numErrors[i]<MAX_ERRORS; ++range) {
-            start=derivedCoreProps[i].getRangeStart(range);
-            end=derivedCoreProps[i].getRangeEnd(range);
+            start=derivedProps[i].getRangeStart(range);
+            end=derivedProps[i].getRangeEnd(range);
             for(; start<=end; ++start) {
-                if(u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
-                    errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==TRUE is wrong\n", start, derivedCorePropsNames[i]);
+                if(u_hasBinaryProperty(start, derivedPropsIndex[i])) {
+                    errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==TRUE is wrong\n", start, derivedPropsNames[i]);
                     if(++numErrors[i]>=MAX_ERRORS) {
                       errln("Too many errors, moving to the next test");
                       break;

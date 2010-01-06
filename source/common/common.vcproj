@@ -769,7 +769,7 @@
 			Name="collation"
 			>
 			<File
-				RelativePath=".\ucol_swp.c"
+				RelativePath=".\ucol_swp.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -961,7 +961,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\utrie2.c"
+				RelativePath=".\utrie2.cpp"
 				>
 			</File>
 			<File
@@ -1170,6 +1170,10 @@
 			</File>
 			<File
 				RelativePath=".\locmap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\mutex.cpp"
 				>
 			</File>
 			<File
@@ -3058,6 +3062,62 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\filterednormalizer2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\normalizer2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\normalizer2.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\normalizer2impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\normalizer2impl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\normlzr.cpp"
 				>
 			</File>
@@ -3107,6 +3167,46 @@
 			</File>
 			<File
 				RelativePath=".\unicode\unorm.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\unorm2.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3470,7 +3570,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\uprops.c"
+				RelativePath=".\uprops.cpp"
 				>
 			</File>
 			<File
