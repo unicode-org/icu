@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -443,6 +443,19 @@ public:
      * @stable ICU 2.8
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
+
+    /**
+     * Set the value for a keyword.
+     *
+     * @param keywordName name of the keyword to be set. Case insensitive.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     *
+     * @stable ICU 2.8
+     */
+    void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
 
     /**
      * returns the locale's three-letter language code, as specified

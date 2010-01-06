@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -75,6 +75,9 @@ public:
 
    /* Test getting keyword values */
    void TestKeywordVariantParsing(void);
+
+   /* Test setting keyword values */
+   void TestSetKeywordValue(void);
 
    /* Test getting the locale base name */
    void TestGetBaseName(void);
