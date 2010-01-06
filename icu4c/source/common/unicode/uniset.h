@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2009, International Business Machines Corporation
+* Copyright (C) 1999-2010, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -862,6 +862,20 @@ public:
     int32_t span(const UChar *s, int32_t length, USetSpanCondition spanCondition) const;
 
     /**
+     * Returns the end of the substring of the input string according to the USetSpanCondition.
+     * Same as <code>start+span(s.getBuffer()+start, s.length()-start, spanCondition)</code>
+     * after pinning start to 0<=start<=s.length().
+     * @param s the string
+     * @param start the start index in the string for the span operation
+     * @param spanCondition specifies the containment condition
+     * @return the exclusive end of the substring according to the spanCondition;
+     *         the substring s.tempSubStringBetween(start, end) fulfills the spanCondition
+     * @draft ICU 4.4
+     * @see USetSpanCondition
+     */
+    inline int32_t span(const UnicodeString &s, int32_t start, USetSpanCondition spanCondition) const;
+
+    /**
      * Returns the start of the trailing substring of the input string which
      * consists only of characters and strings that are contained in this set
      * (USET_SPAN_CONTAINED, USET_SPAN_SIMPLE),
@@ -879,6 +893,21 @@ public:
      * @see USetSpanCondition
      */
     int32_t spanBack(const UChar *s, int32_t length, USetSpanCondition spanCondition) const;
+
+    /**
+     * Returns the start of the substring of the input string according to the USetSpanCondition.
+     * Same as <code>spanBack(s.getBuffer(), limit, spanCondition)</code>
+     * after pinning limit to 0<=end<=s.length().
+     * @param s the string
+     * @param limit the exclusive-end index in the string for the span operation
+     *              (use s.length() or INT32_MAX for spanning back from the end of the string)
+     * @param spanCondition specifies the containment condition
+     * @return the start of the substring according to the spanCondition;
+     *         the substring s.tempSubStringBetween(start, limit) fulfills the spanCondition
+     * @draft ICU 4.4
+     * @see USetSpanCondition
+     */
+    inline int32_t spanBack(const UnicodeString &s, int32_t limit, USetSpanCondition spanCondition) const;
 
     /**
      * Returns the length of the initial substring of the input string which
@@ -1617,6 +1646,26 @@ inline USet *UnicodeSet::toUSet() {
 
 inline const USet *UnicodeSet::toUSet() const {
     return reinterpret_cast<const USet *>(this);
+}
+
+inline int32_t UnicodeSet::span(const UnicodeString &s, int32_t start, USetSpanCondition spanCondition) const {
+    int32_t sLength=s.length();
+    if(start<0) {
+        start=0;
+    } else if(start>sLength) {
+        start=sLength;
+    }
+    return start+span(s.getBuffer()+start, sLength-start, spanCondition);
+}
+
+inline int32_t UnicodeSet::spanBack(const UnicodeString &s, int32_t limit, USetSpanCondition spanCondition) const {
+    int32_t sLength=s.length();
+    if(limit<0) {
+        limit=0;
+    } else if(limit>sLength) {
+        limit=sLength;
+    }
+    return spanBack(s.getBuffer(), limit, spanCondition);
 }
 
 U_NAMESPACE_END

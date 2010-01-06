@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,12 +25,12 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
+#include "normalizer2impl.h"
 #include "ucol_bld.h"
 #include "ucol_elm.h"
 #include "ucol_cnt.h"
 #include "ucln_in.h"
 #include "umutex.h"
-#include "unormimp.h"
 #include "cmemory.h"
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
@@ -626,7 +626,7 @@ uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t l
     nLen = unorm_normalize(src, len, UNORM_NFKD, 0, n, 128, status);
     if(U_SUCCESS(*status)) {
         for(i = 0; i < nLen; i++) {
-            uprv_init_collIterate(UCA, &n[i], 1, &s);
+            uprv_init_collIterate(UCA, &n[i], 1, &s, status);
             order = ucol_getNextCE(UCA, &s, status);
             if(isContinuation(order)) {
                 *status = U_INTERNAL_PROGRAM_ERROR;
@@ -878,7 +878,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
                     /* then pick CEs out until there is no more and stuff them into expansion */
                     collIterate s;
                     uint32_t order = 0;
-                    uprv_init_collIterate(src->UCA, expOffset + src->source, 1, &s);
+                    uprv_init_collIterate(src->UCA, expOffset + src->source, 1, &s, status);
 
                     for(;;) {
                         order = ucol_getNextCE(src->UCA, &s, status);
@@ -1045,7 +1045,7 @@ ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
                 // it doesn't make any difference whether we have to go to the UCA
                 // or not.
                 {
-                    uprv_init_collIterate(src->UCA, el.uchars, el.cSize, &colIt);
+                    uprv_init_collIterate(src->UCA, el.uchars, el.cSize, &colIt, status);
                     while(CE != UCOL_NO_MORE_CES) {
                         CE = ucol_getNextCE(src->UCA, &colIt, status);
                         if(CE != UCOL_NO_MORE_CES) {

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -106,11 +106,13 @@ static UToolMemory *normMem, *utf32Mem, *extraMem, *combiningTriplesMem;
 
 static Norm *norms;
 
+#if GENNORM_OBSOLETE
 /*
  * set a flag for each code point that was seen in decompositions -
  * avoid to decompose ones that have not been used before
  */
 static uint32_t haveSeenFlags[256];
+#endif
 
 /* set of characters with NFD_QC=No (i.e., those with canonical decompositions) */
 static USet *nfdQCNoSet;
@@ -192,8 +194,10 @@ init() {
     /* allocate UTF-32 string memory */
     utf32Mem=utm_open("gennorm UTF-32 strings", 30000, 30000, 4);
 
+#if GENNORM_OBSOLETE
     /* reset all "have seen" flags */
     uprv_memset(haveSeenFlags, 0, sizeof(haveSeenFlags));
+#endif
 
     /* open an empty set */
     nfdQCNoSet=uset_open(1, 0);
@@ -289,6 +293,7 @@ enumTrie(EnumTrieFn *fn, void *context) {
     return count;
 }
 
+#if GENNORM_OBSOLETE
 static void
 setHaveSeenString(const uint32_t *s, int32_t length) {
     uint32_t c;
@@ -301,6 +306,7 @@ setHaveSeenString(const uint32_t *s, int32_t length) {
 }
 
 #define HAVE_SEEN(c) (haveSeenFlags[((c)>>5)&0xff]&(1<<((c)&0x1f)))
+#endif
 
 /* handle combining data ---------------------------------------------------- */
 
@@ -410,6 +416,7 @@ findCombiningCP(uint32_t code, UBool isLead) {
     return 0xffff;
 }
 
+#if GENNORM_OBSOLETE
 static void
 addCombiningTriple(uint32_t lead, uint32_t trail, uint32_t combined) {
     CombiningTriple *triple;
@@ -434,6 +441,7 @@ addCombiningTriple(uint32_t lead, uint32_t trail, uint32_t combined) {
     triple->trail=trail;
     triple->combined=combined;
 }
+#endif
 
 static int
 compareTriples(const void *l, const void *r) {
@@ -560,6 +568,7 @@ processCombining() {
 
 /* processing incoming normalization data ----------------------------------- */
 
+#if GENNORM_OBSOLETE
 /*
  * Decompose Hangul syllables algorithmically and fill a pseudo-Norm struct.
  * c must be a Hangul syllable code point.
@@ -594,6 +603,7 @@ getHangulDecomposition(uint32_t c, Norm *pHangulNorm, uint32_t hangulBuffer[3]) 
         pHangulNorm->lenNFKD=length;
     }
 }
+#endif
 
 /*
  * decompose the one decomposition further, may generate two decompositions
@@ -601,6 +611,20 @@ getHangulDecomposition(uint32_t c, Norm *pHangulNorm, uint32_t hangulBuffer[3]) 
  */
 static void
 decompStoreNewNF(uint32_t code, Norm *norm) {
+#if !GENNORM_OBSOLETE
+    /* always allocate the original string */
+    uint32_t *s32;
+    uint8_t length;
+    if((length=norm->lenNFD)!=0) {
+        s32=utm_allocN(utf32Mem, norm->lenNFD);
+        uprv_memcpy(s32, norm->nfd, norm->lenNFD*4);
+        norm->nfd=s32;
+    } else if((length=norm->lenNFKD)!=0) {
+        s32=utm_allocN(utf32Mem, norm->lenNFKD);
+        uprv_memcpy(s32, norm->nfkd, norm->lenNFKD*4);
+        norm->nfkd=s32;
+    }
+#else
     uint32_t nfd[40], nfkd[40], hangulBuffer[3];
     Norm hangulNorm;
 
@@ -695,8 +719,10 @@ decompStoreNewNF(uint32_t code, Norm *norm) {
         norm->nfkd=s32;
         setHaveSeenString(nfkd, lenNFKD);
     }
+#endif
 }
 
+#if GENNORM_OBSOLETE
 typedef struct DecompSingle {
     uint32_t c;
     Norm *norm;
@@ -800,6 +826,7 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
         norm->nfkd=s32;
     }
 }
+#endif
 
 /*
  * process the data for one code point listed in UnicodeData;
@@ -807,7 +834,9 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
  */
 extern void
 storeNorm(uint32_t code, Norm *norm) {
+#if GENNORM_OBSOLETE
     DecompSingle decompSingle;
+#endif
     Norm *p;
 
     if(DO_NOT_STORE(UGENNORM_STORE_COMPAT)) {
@@ -826,6 +855,7 @@ storeNorm(uint32_t code, Norm *norm) {
         /* decompose this one decomposition further, may generate two decompositions */
         decompStoreNewNF(code, norm);
 
+#if GENNORM_OBSOLETE
         /* has this code point been used in previous decompositions? */
         if(HAVE_SEEN(code)) {
             /* use this decomposition to decompose other decompositions further */
@@ -833,6 +863,7 @@ storeNorm(uint32_t code, Norm *norm) {
             decompSingle.norm=norm;
             enumTrie(decompWithSingleFn, &decompSingle);
         }
+#endif
     }
 
     /* store the data */
@@ -1814,6 +1845,144 @@ getFoldingAuxOffset(uint32_t data) {
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
+
+static void
+writeAllCC(FILE *f) {
+    uint32_t i;
+    UChar32 prevCode, code;
+    uint8_t prevCC, cc;
+    UBool isInBlockZero;
+
+    fprintf(f, "# Canonical_Combining_Class (ccc) values\n");
+    prevCode=0;
+    prevCC=0;
+    for(code=0; code<=0x110000;) {
+        if(code==0x110000) {
+            cc=0;
+        } else {
+            i=utrie_get32(normTrie, code, &isInBlockZero);
+            if(i==0 || isInBlockZero) {
+                cc=0;
+            } else {
+                cc=norms[i].udataCC;
+            }
+        }
+        if(prevCC!=cc) {
+            if(prevCC!=0) {
+                uint32_t lastCode=code-1;
+                if(prevCode==lastCode) {
+                    fprintf(f, "%04lX:%d\n", (long)lastCode, prevCC);
+                } else {
+                    fprintf(f, "%04lX..%04lX:%d\n",
+                            (long)prevCode, (long)lastCode, prevCC);
+                }
+            }
+            prevCode=code;
+            prevCC=cc;
+        }
+        if(isInBlockZero) {
+            code+=UTRIE_DATA_BLOCK_LENGTH;
+        } else {
+            ++code;
+        }
+    }
+}
+
+static UBool
+hasMapping(uint32_t code) {
+    Norm *norm=norms+utrie_get32(normTrie, code, NULL);
+    return norm->lenNFD!=0 || norm->lenNFKD!=0;
+}
+
+static UBool
+hasOneWayMapping(uint32_t code, UBool withCompat) {
+    for(;;) {
+        Norm *norm=norms+utrie_get32(normTrie, code, NULL);
+        uint8_t length;
+        if((length=norm->lenNFD)!=0) {
+            /*
+             * The canonical decomposition is a one-way mapping if
+             * - it does not map to exactly two code points
+             * - the code has ccc!=0
+             * - the code has the Composition_Exclusion property
+             * - its starter has a one-way mapping (loop for this)
+             * - its non-starter decomposes
+             */
+            if( length!=2 ||
+                norm->udataCC!=0 ||
+                norm->combiningFlags&0x80 ||
+                hasMapping(norm->nfd[1])
+            ) {
+                return TRUE;
+            }
+            code=norm->nfd[0];  /* continue */
+        } else if(withCompat && norm->lenNFKD!=0) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+}
+
+static void
+writeAllMappings(FILE *f, UBool withCompat) {
+    uint32_t i, code;
+    UBool isInBlockZero;
+
+    if(withCompat) {
+        fprintf(f, "\n# Canonical and compatibility decomposition mappings\n");
+    } else {
+        fprintf(f, "\n# Canonical decomposition mappings\n");
+    }
+    for(code=0; code<=0x10ffff;) {
+        i=utrie_get32(normTrie, code, &isInBlockZero);
+        if(isInBlockZero) {
+            code+=UTRIE_DATA_BLOCK_LENGTH;
+        } else {
+            if(i!=0) {
+                uint32_t *s32;
+                uint8_t length;
+                char separator;
+                if((length=norms[i].lenNFD)!=0) {
+                    s32=norms[i].nfd;
+                    separator= hasOneWayMapping(code, withCompat) ? '>' : '=';
+                } else if(withCompat && (length=norms[i].lenNFKD)!=0) {
+                    s32=norms[i].nfkd;
+                    separator='>';
+                }
+                if(length!=0) {
+                    uint8_t j;
+                    fprintf(f, "%04lX%c", (long)code, separator);
+                    for(j=0; j<length; ++j) {
+                        if(j!=0) {
+                            fputc(' ', f);
+                        }
+                        fprintf(f, "%04lX", (long)s32[j]);
+                    }
+                    fputc('\n', f);
+                }
+            }
+            ++code;
+        }
+    }
+}
+
+static void
+writeNorm2TextFile(const char *path, const char *filename, UBool withCompat) {
+    FILE *f=usrc_createTextData(path, filename);
+    if(f==NULL) {
+        exit(U_FILE_ACCESS_ERROR);
+    }
+    writeAllCC(f);
+    writeAllMappings(f, withCompat);
+    fclose(f);
+}
+
+extern void
+writeNorm2(const char *dataDir) {
+    writeNorm2TextFile(dataDir, "nfc.txt", FALSE);
+    writeNorm2TextFile(dataDir, "nfkc.txt", TRUE);
+}
 
 extern void
 generateData(const char *dataDir, UBool csource) {

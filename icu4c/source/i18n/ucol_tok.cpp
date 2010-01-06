@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1108,7 +1108,7 @@ reset may be null.
 handled.
 */
 
-static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint32_t *expandNext,
+static UColToken *ucol_tok_initAReset(UColTokenParser *src, const UChar *expand, uint32_t *expandNext,
                                       UParseError *parseError, UErrorCode *status)
 {
     if(src->resultLen == src->listCapacity) {
@@ -1200,9 +1200,12 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     uint32_t CE, SecondCE;
     uint32_t invPos;
     if(sourceToken != NULL) {
-        uprv_init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s);
+        uprv_init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s, status);
     } else {
-        uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset /**charsOffset*/, 1, &s);
+        uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset /**charsOffset*/, 1, &s, status);
+    }
+    if(U_FAILURE(*status)) {
+        return NULL;
     }
 
     baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
@@ -1684,10 +1687,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                         collIterate s;
                         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
-                        uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset, src->parsedToken.charsLen, &s);
+                        uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset, src->parsedToken.charsLen, &s, status);
 
                         CE = ucol_getNextCE(src->UCA, &s, status);
-                        UChar *expand = s.pos;
+                        const UChar *expand = s.pos;
                         SecondCE = ucol_getNextCE(src->UCA, &s, status);
 
                         ListList[src->resultLen].baseCE = CE & 0xFFFFFF3F;

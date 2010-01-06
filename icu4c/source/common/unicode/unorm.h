@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2007, International Business Machines Corporation
+* Copyright (c) 1996-2010, International Business Machines Corporation
 *               and others. All Rights Reserved.
 *******************************************************************************
 * File unorm.h
@@ -20,12 +20,18 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/uiter.h"
+#include "unicode/unorm2.h"
 
 /**
  * \file
  * \brief C API: Unicode Normalization 
  *
  * <h2>Unicode normalization API</h2>
+ *
+ * Note: This API has been replaced by the unorm2.h API and is only available
+ * for backward compatibility. The functions here simply delegate to the
+ * unorm2.h functions, for example unorm2_getInstance() and unorm2_normalize().
+ * There is one exception: The new API does not provide a replacement for unorm_compare().
  *
  * <code>unorm_normalize</code> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
@@ -202,28 +208,7 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
                 UNormalizationMode mode, int32_t options,
                 UChar *result, int32_t resultLength,
                 UErrorCode *status);
-#endif
-/**
- * Result values for unorm_quickCheck().
- * For details see Unicode Technical Report 15.
- * @stable ICU 2.0
- */
-typedef enum UNormalizationCheckResult {
-  /** 
-   * Indicates that string is not in the normalized format
-   */
-  UNORM_NO,
-  /** 
-   * Indicates that string is in the normalized format
-   */
-  UNORM_YES,
-  /** 
-   * Indicates that string cannot be determined if it is in the normalized 
-   * format without further thorough checks.
-   */
-  UNORM_MAYBE
-} UNormalizationCheckResult;
-#if !UCONFIG_NO_NORMALIZATION
+
 /**
  * Performing quick check on a string, to quickly determine if the string is 
  * in a particular normalization format.

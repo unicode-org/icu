@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -122,9 +122,9 @@ UBool CollationElementIterator::operator==(
         }
         // both are in the normalization buffer
         if (m_data_->iteratordata_.pos 
-            - m_data_->iteratordata_.writableBuffer 
+            - m_data_->iteratordata_.writableBuffer.getBuffer()
             != that.m_data_->iteratordata_.pos 
-            - that.m_data_->iteratordata_.writableBuffer) {
+            - that.m_data_->iteratordata_.writableBuffer.getBuffer()) {
             // not in the same position in the normalization buffer
             return FALSE;
         }
@@ -176,7 +176,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
     int32_t length = source.length();
     UChar *string = NULL;
     if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
-        uprv_free(m_data_->iteratordata_.string);
+        uprv_free((UChar *)m_data_->iteratordata_.string);
     }
     m_data_->isWritable = TRUE;
     if (length > 0) {
@@ -200,7 +200,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
     /* Free offsetBuffer before initializing it. */
     ucol_freeOffsetBuffer(&(m_data_->iteratordata_));
     uprv_init_collIterate(m_data_->iteratordata_.coll, string, length, 
-        &m_data_->iteratordata_);
+        &m_data_->iteratordata_, &status);
 
     m_data_->reset_   = TRUE;
 }
@@ -241,13 +241,13 @@ void CollationElementIterator::setText(CharacterIterator& source,
     }
 
     if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
-        uprv_free(m_data_->iteratordata_.string);
+        uprv_free((UChar *)m_data_->iteratordata_.string);
     }
     m_data_->isWritable = TRUE;
     /* Free offsetBuffer before initializing it. */
     ucol_freeOffsetBuffer(&(m_data_->iteratordata_));
     uprv_init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
-        &m_data_->iteratordata_);
+        &m_data_->iteratordata_, &status);
     m_data_->reset_   = TRUE;
 }
 
@@ -407,7 +407,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
         if (length > 0) {
             coliter->string = (UChar *)uprv_malloc(length * U_SIZEOF_UCHAR);
             if(coliter->string != NULL) {
-                uprv_memcpy(coliter->string, othercoliter->string,
+                uprv_memcpy((UChar *)coliter->string, othercoliter->string,
                     length * U_SIZEOF_UCHAR);
             } else { // Error: couldn't allocate memory. No copying should be done
                 length = 0;
@@ -423,27 +423,8 @@ const CollationElementIterator& CollationElementIterator::operator=(
         /* handle writable buffer here */
 
         if (othercoliter->flags & UCOL_ITER_INNORMBUF) {
-            uint32_t wlength = u_strlen(othercoliter->writableBuffer) + 1;
-            if (wlength < coliter->writableBufSize) {
-                uprv_memcpy(coliter->stackWritableBuffer, 
-                    othercoliter->stackWritableBuffer, 
-                    wlength * U_SIZEOF_UCHAR);
-            }
-            else {
-                if (coliter->writableBuffer != coliter->stackWritableBuffer) {
-                    uprv_free(coliter->writableBuffer);
-                }
-                coliter->writableBuffer = (UChar *)uprv_malloc(
-                    wlength * U_SIZEOF_UCHAR);
-                if(coliter->writableBuffer != NULL) {
-                    uprv_memcpy(coliter->writableBuffer, 
-                        othercoliter->writableBuffer,
-                        wlength * U_SIZEOF_UCHAR);
-                    coliter->writableBufSize = wlength;
-                } else { // Error: couldn't allocate memory for writableBuffer
-                    coliter->writableBufSize = 0;
-                }
-            }
+            coliter->writableBuffer = othercoliter->writableBuffer;
+            coliter->writableBuffer.getTerminatedBuffer();
         }
 
         /* current position */
@@ -453,13 +434,9 @@ const CollationElementIterator& CollationElementIterator::operator=(
             coliter->pos = coliter->string + 
                 (othercoliter->pos - othercoliter->string);
         }
-        else if (coliter->writableBuffer != NULL) {
-            coliter->pos = coliter->writableBuffer + 
-                (othercoliter->pos - othercoliter->writableBuffer);
-        }
         else {
-            // Error: couldn't allocate memory for writableBuffer
-            coliter->pos = NULL;
+            coliter->pos = coliter->writableBuffer.getTerminatedBuffer() + 
+                (othercoliter->pos - othercoliter->writableBuffer.getBuffer());
         }
 
         /* CE buffer */

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,12 +22,13 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
-#include "unicode/ustring.h"
 #include "unicode/unorm.h"
-#include "unicode/uniset.h"
-#include "unormimp.h"
-#include "ucase.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
+#include "normalizer2impl.h"
+#include "ucase.h"
+#include "uprops.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_USE
 
@@ -134,12 +135,19 @@ struct CmpEquivLevel {
 };
 typedef struct CmpEquivLevel CmpEquivLevel;
 
+/**
+ * Internal option for unorm_cmpEquivFold() for decomposing.
+ * If not set, just do strcasecmp().
+ */
+#define _COMPARE_EQUIV 0x80000
+
 /* internal function */
 static int32_t
 unorm_cmpEquivFold(const UChar *s1, int32_t length1,
                    const UChar *s2, int32_t length2,
                    uint32_t options,
                    UErrorCode *pErrorCode) {
+    const Normalizer2Impl *nfcImpl;
     const UCaseProps *csp;
 
     /* current-level start/limit - s1/s2 as current */
@@ -152,7 +160,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     /* stacks of previous-level start/current/limit */
     CmpEquivLevel stack1[2], stack2[2];
 
-    /* decomposition buffers for Hangul */
+    /* buffers for algorithmic decompositions */
     UChar decomp1[4], decomp2[4];
 
     /* case folding buffers, only use current-level start/limit */
@@ -173,18 +181,18 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
      */
 
     /* normalization/properties data loaded? */
-    if( ((options&_COMPARE_EQUIV)!=0 && !unorm_haveData(pErrorCode)) ||
-        U_FAILURE(*pErrorCode)
-    ) {
-        return 0;
+    if((options&_COMPARE_EQUIV)!=0) {
+        nfcImpl=Normalizer2Factory::getNFCImpl(*pErrorCode);
+    } else {
+        nfcImpl=NULL;
     }
     if((options&U_COMPARE_IGNORE_CASE)!=0) {
         csp=ucase_getSingleton(pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            return 0;
-        }
     } else {
         csp=NULL;
+    }
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
     }
 
     /* initialize */
@@ -404,7 +412,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         }
 
         if( level1<2 && (options&_COMPARE_EQUIV) &&
-            0!=(p=unorm_getCanonicalDecomposition((UChar32)cp1, decomp1, &length))
+            0!=(p=nfcImpl->getDecomposition((UChar32)cp1, decomp1, length))
         ) {
             /* cp1 decomposes into p[length] */
             if(U_IS_SURROGATE(c1)) {
@@ -445,7 +453,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         }
 
         if( level2<2 && (options&_COMPARE_EQUIV) &&
-            0!=(p=unorm_getCanonicalDecomposition((UChar32)cp2, decomp2, &length))
+            0!=(p=nfcImpl->getDecomposition((UChar32)cp2, decomp2, length))
         ) {
             /* cp2 decomposes into p[length] */
             if(U_IS_SURROGATE(c2)) {
@@ -534,14 +542,8 @@ unorm_compare(const UChar *s1, int32_t length1,
               const UChar *s2, int32_t length2,
               uint32_t options,
               UErrorCode *pErrorCode) {
-    MaybeStackArray<UChar, 300> fcd1, fcd2;
-    const UnicodeSet *nx;
-    UNormalizationMode mode;
-    int32_t normOptions;
-    int32_t result;
-
     /* argument checking */
-    if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
     if(s1==0 || length1<-1 || s2==0 || length2<-1) {
@@ -549,21 +551,9 @@ unorm_compare(const UChar *s1, int32_t length1,
         return 0;
     }
 
-    if(!unorm_haveData(pErrorCode)) {
-        return 0;
-    }
-    if(!uprv_haveProperties(pErrorCode)) {
-        return 0;
-    }
-
-    normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
-    nx=unorm_getNX(normOptions, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
+    UnicodeString fcd1, fcd2;
+    int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
     options|=_COMPARE_EQUIV;
-    result=0;
 
     /*
      * UAX #21 Case Mappings, as fixed for Unicode version 4
@@ -586,20 +576,30 @@ unorm_compare(const UChar *s1, int32_t length1,
      * are first decomposed or not, so an FCD check - a check only for
      * canonical order - is not sufficient.
      */
-    if(options&U_FOLD_CASE_EXCLUDE_SPECIAL_I) {
-        mode=UNORM_NFD;
-        options&=~UNORM_INPUT_IS_FCD;
-    } else {
-        mode=UNORM_FCD;
-    }
-
-    if(!(options&UNORM_INPUT_IS_FCD)) {
-        int32_t _len1, _len2;
-        UBool isFCD1, isFCD2;
+    if(!(options&UNORM_INPUT_IS_FCD) || (options&U_FOLD_CASE_EXCLUDE_SPECIAL_I)) {
+        const Normalizer2 *n2;
+        if(options&U_FOLD_CASE_EXCLUDE_SPECIAL_I) {
+            n2=Normalizer2Factory::getNFDInstance(*pErrorCode);
+        } else {
+            n2=Normalizer2Factory::getFCDInstance(*pErrorCode);
+        }
 
         // check if s1 and/or s2 fulfill the FCD conditions
-        isFCD1= UNORM_YES==unorm_internalQuickCheck(s1, length1, mode, TRUE, nx, pErrorCode);
-        isFCD2= UNORM_YES==unorm_internalQuickCheck(s2, length2, mode, TRUE, nx, pErrorCode);
+        const UnicodeSet *uni32;
+        if(normOptions&UNORM_UNICODE_3_2) {
+            uni32=uniset_getUnicode32Instance(*pErrorCode);
+        } else {
+            uni32=NULL;  // unused
+        }
+        FilteredNormalizer2 fn2(*n2, *uni32);
+        if(normOptions&UNORM_UNICODE_3_2) {
+            n2=&fn2;
+        }
+
+        UnicodeString str1(length1<0, s1, length1);
+        UnicodeString str2(length2<0, s2, length2);
+        int32_t spanQCYes1=n2->spanQuickCheckYes(str1, *pErrorCode);
+        int32_t spanQCYes2=n2->spanQuickCheckYes(str2, *pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             return 0;
         }
@@ -613,59 +613,27 @@ unorm_compare(const UChar *s1, int32_t length1,
          * Therefore, ICU 2.6 removes that optimization.
          */
 
-        if(!isFCD1) {
-            _len1=unorm_internalNormalizeWithNX(fcd1.getAlias(), fcd1.getCapacity(),
-                                                s1, length1,
-                                                mode, normOptions, nx,
-                                                pErrorCode);
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                if(fcd1.resize(_len1)==NULL) {
-                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    return result;
-                }
-
-                *pErrorCode=U_ZERO_ERROR;
-                _len1=unorm_internalNormalizeWithNX(fcd1.getAlias(), fcd1.getCapacity(),
-                                                    s1, length1,
-                                                    mode, normOptions, nx,
-                                                    pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    return result;
-                }
-            }
-            s1=fcd1.getAlias();
-            length1=_len1;
+        if(spanQCYes1<str1.length()) {
+            UnicodeString unnormalized=str1.tempSubString(spanQCYes1);
+            fcd1.setTo(FALSE, str1.getBuffer(), spanQCYes1);
+            n2->normalizeSecondAndAppend(fcd1, unnormalized, *pErrorCode);
+            s1=fcd1.getBuffer();
+            length1=fcd1.length();
         }
-
-        if(!isFCD2) {
-            _len2=unorm_internalNormalizeWithNX(fcd2.getAlias(), fcd2.getCapacity(),
-                                                s2, length2,
-                                                mode, normOptions, nx,
-                                                pErrorCode);
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                if(fcd2.resize(_len2)==NULL) {
-                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    return result;
-                }
-
-                *pErrorCode=U_ZERO_ERROR;
-                _len2=unorm_internalNormalizeWithNX(fcd2.getAlias(), fcd2.getCapacity(),
-                                                    s2, length2,
-                                                    mode, normOptions, nx,
-                                                    pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    return result;
-                }
-            }
-            s2=fcd2.getAlias();
-            length2=_len2;
+        if(spanQCYes2<str2.length()) {
+            UnicodeString unnormalized=str2.tempSubString(spanQCYes2);
+            fcd2.setTo(FALSE, str2.getBuffer(), spanQCYes2);
+            n2->normalizeSecondAndAppend(fcd2, unnormalized, *pErrorCode);
+            s2=fcd2.getBuffer();
+            length2=fcd2.length();
         }
     }
 
     if(U_SUCCESS(*pErrorCode)) {
-        result=unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);
+        return unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);
+    } else {
+        return 0;
     }
-    return result;
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

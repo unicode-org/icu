@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -28,7 +28,6 @@
 #include "ucln_cmn.h"
 #include "utrie2.h"
 #include "udataswp.h"
-#include "unormimp.h" /* JAMO_L_BASE etc. */
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -649,10 +648,6 @@ u_getNumericValue(UChar32 c) {
         return U_NO_NUMERIC_VALUE;
     }
 }
-
-/* ICU 3.4: bidi/shaping properties moved to ubidi_props.c */
-
-/* ICU 2.1: u_getCombiningClass() moved to unorm.cpp */
 
 U_CAPI int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix) {

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1332,17 +1332,6 @@ TestNextPrevious() {
                       &errorCode);
     if(errorCode!=U_MISPLACED_QUANTIFIER) {
         log_err("error unorm_next(U_MISPLACED_QUANTIFIER) %s\n", u_errorName(errorCode));
-        return;
-    }
-
-    /* missing pErrorCode */
-    buffer[0]=5;
-    iter.index=1;
-    length=unorm_next(&iter, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
-                      UNORM_NFD, 0, TRUE, NULL,
-                      NULL);
-    if(iter.index!=1 || buffer[0]!=5) {
-        log_err("error unorm_next(pErrorCode==NULL) %s\n", u_errorName(errorCode));
         return;
     }
 }

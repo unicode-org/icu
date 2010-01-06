@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -33,12 +33,15 @@
 #include "uvector.h"
 #include "uprops.h"
 #include "propname.h"
+#include "normalizer2impl.h"
 #include "unormimp.h"
 #include "ucase.h"
 #include "ubidi_props.h"
 #include "uinvchar.h"
+#include "uprops.h"
 #include "charstr.h"
 #include "cstring.h"
+#include "mutex.h"
 #include "umutex.h"
 #include "uassert.h"
 #include "hash.h"
@@ -91,9 +94,42 @@ static const char ASSIGNED[] = "Assigned"; // [:^Cn:]
  */
 //static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
+// Cached sets ------------------------------------------------------------- ***
+
+U_CDECL_BEGIN
+static UBool U_CALLCONV uset_cleanup();
+U_CDECL_END
+
+// Not a TriStateSingletonWrapper because we think the UnicodeSet constructor
+// can only fail with an out-of-memory error
+// if we have a correct pattern and the properties data is hardcoded and always available.
+class UnicodeSetSingleton : public SimpleSingletonWrapper<UnicodeSet> {
+public:
+    UnicodeSetSingleton(SimpleSingleton &s, const char *pattern) :
+            SimpleSingletonWrapper<UnicodeSet>(s), fPattern(pattern) {}
+    UnicodeSet *getInstance(UErrorCode &errorCode) {
+        return SimpleSingletonWrapper<UnicodeSet>::getInstance(createInstance, fPattern, errorCode);
+    }
+private:
+    static void *createInstance(const void *context, UErrorCode &errorCode) {
+        UnicodeString pattern((const char *)context, -1, US_INV);
+        UnicodeSet *set=new UnicodeSet(pattern, errorCode);
+        if(set==NULL) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+        }
+        set->freeze();
+        ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
+        return set;
+    }
+
+    const char *fPattern;
+};
+
 U_CDECL_BEGIN
 
 static UnicodeSet *INCLUSIONS[UPROPS_SRC_COUNT] = { NULL }; // cached getInclusions()
+
+STATIC_SIMPLE_SINGLETON(uni32Singleton);
 
 //----------------------------------------------------------------
 // Inclusions list
@@ -128,7 +164,7 @@ static UBool U_CALLCONV uset_cleanup(void) {
             INCLUSIONS[i] = NULL;
         }
     }
-
+    UnicodeSetSingleton(uni32Singleton, NULL).deleteInstance();
     return TRUE;
 }
 
@@ -177,6 +213,27 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
                 unorm_addPropertyStarts(&sa, &status);
                 break;
+            case UPROPS_SRC_NFC: {
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(status);
+                if(U_SUCCESS(status)) {
+                    impl->addPropertyStarts(&sa, status);
+                }
+                break;
+            }
+            case UPROPS_SRC_NFKC: {
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFKCImpl(status);
+                if(U_SUCCESS(status)) {
+                    impl->addPropertyStarts(&sa, status);
+                }
+                break;
+            }
+            case UPROPS_SRC_NFKC_CF: {
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFKC_CFImpl(status);
+                if(U_SUCCESS(status)) {
+                    impl->addPropertyStarts(&sa, status);
+                }
+                break;
+            }
 #endif
             case UPROPS_SRC_CASE:
                 ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
@@ -205,6 +262,13 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
         }
     }
     return INCLUSIONS[src];
+}
+
+// Cache some sets for other services -------------------------------------- ***
+
+U_CFUNC UnicodeSet *
+uniset_getUnicode32Instance(UErrorCode &errorCode) {
+    return UnicodeSetSingleton(uni32Singleton, "[:age=3.2:]").getInstance(errorCode);
 }
 
 // helper functions for matching of pattern syntax pieces ------------------ ***

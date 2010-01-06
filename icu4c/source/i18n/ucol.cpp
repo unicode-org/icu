@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -28,6 +28,7 @@
 #include "ucol_imp.h"
 #include "bocsu.h"
 
+#include "normalizer2impl.h"
 #include "unormimp.h"
 #include "unorm_it.h"
 #include "umutex.h"
@@ -43,6 +44,8 @@
 #endif
 
 U_NAMESPACE_USE
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define LAST_BYTE_MASK_           0xFF
 #define SECOND_LAST_BYTE_SHIFT_   8
@@ -82,9 +85,10 @@ U_CDECL_END
 
 static
 inline void IInit_collIterate(const UCollator *collator, const UChar *sourceString,
-                              int32_t sourceLen, collIterate *s)
+                              int32_t sourceLen, collIterate *s,
+                              UErrorCode *status)
 {
-    (s)->string = (s)->pos = (UChar *)(sourceString);
+    (s)->string = (s)->pos = sourceString;
     (s)->origFlags = 0;
     (s)->flags = 0;
     if (sourceLen >= 0) {
@@ -102,9 +106,8 @@ inline void IInit_collIterate(const UCollator *collator, const UChar *sourceStri
     (s)->offsetBufferSize = 0;
     (s)->offsetReturn = (s)->offsetStore = NULL;
     (s)->offsetRepeatCount = (s)->offsetRepeatValue = 0;
-    (s)->writableBuffer = (s)->stackWritableBuffer;
-    (s)->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE;
     (s)->coll = (collator);
+    (s)->nfd = Normalizer2Factory::getNFDInstance(*status);
     (s)->fcdPosition = 0;
     if(collator->normalizationMode == UCOL_ON) {
         (s)->flags |= UCOL_ITER_NORM;
@@ -118,9 +121,33 @@ inline void IInit_collIterate(const UCollator *collator, const UChar *sourceStri
 
 U_CAPI void  U_EXPORT2
 uprv_init_collIterate(const UCollator *collator, const UChar *sourceString,
-                             int32_t sourceLen, collIterate *s){
+                             int32_t sourceLen, collIterate *s,
+                             UErrorCode *status) {
     /* Out-of-line version for use from other files. */
-    IInit_collIterate(collator, sourceString, sourceLen, s);
+    IInit_collIterate(collator, sourceString, sourceLen, s, status);
+}
+
+U_CAPI collIterate * U_EXPORT2 
+uprv_new_collIterate(UErrorCode *status) {
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    collIterate *s = new collIterate;
+    if(s == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    return s;
+}
+
+U_CAPI void U_EXPORT2 
+uprv_delete_collIterate(collIterate *s) {
+    delete s;
+}
+
+U_CAPI UBool U_EXPORT2
+uprv_collIterateAtEnd(collIterate *s) {
+    return s == NULL || s->pos == s->endp;
 }
 
 /**
@@ -135,8 +162,8 @@ inline void backupState(const collIterate *data, collIterateState *backup)
     backup->flags       = data->flags;
     backup->origFlags   = data->origFlags;
     backup->pos         = data->pos;
-    backup->bufferaddress = data->writableBuffer;
-    backup->buffersize    = data->writableBufSize;
+    backup->bufferaddress = data->writableBuffer.getBuffer();
+    backup->buffersize    = data->writableBuffer.length();
     backup->iteratorMove = 0;
     backup->iteratorIndex = 0;
     if(data->iterator != NULL) {
@@ -177,21 +204,21 @@ inline void loadState(collIterate *data, const collIterateState *backup,
     data->pos         = backup->pos;
 
     if ((data->flags & UCOL_ITER_INNORMBUF) &&
-        data->writableBuffer != backup->bufferaddress) {
+        data->writableBuffer.getBuffer() != backup->bufferaddress) {
         /*
         this is when a new buffer has been reallocated and we'll have to
         calculate the new position.
         note the new buffer has to contain the contents of the old buffer.
         */
         if (forwards) {
-            data->pos = data->writableBuffer +
+            data->pos = data->writableBuffer.getTerminatedBuffer() +
                                          (data->pos - backup->bufferaddress);
         }
         else {
             /* backwards direction */
-            uint32_t temp = backup->buffersize -
-                                  (uint32_t)(data->pos - backup->bufferaddress);
-            data->pos = data->writableBuffer + (data->writableBufSize - temp);
+            int32_t temp = backup->buffersize -
+                                  (int32_t)(data->pos - backup->bufferaddress);
+            data->pos = data->writableBuffer.getTerminatedBuffer() + (data->writableBuffer.length() - temp);
         }
     }
     if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
@@ -211,6 +238,50 @@ inline void loadState(collIterate *data, const collIterateState *backup,
     }
 }
 
+static UBool
+reallocCEs(collIterate *data, int32_t newCapacity) {
+    uint32_t *oldCEs = data->extendCEs;
+    if(oldCEs == NULL) {
+        oldCEs = data->CEs;
+    }
+    int32_t length = data->CEpos - oldCEs;
+    uint32_t *newCEs = (uint32_t *)uprv_malloc(newCapacity * 4);
+    if(newCEs == NULL) {
+        return FALSE;
+    }
+    uprv_memcpy(newCEs, oldCEs, length * 4);
+    uprv_free(data->extendCEs);
+    data->extendCEs = newCEs;
+    data->extendCEsSize = newCapacity;
+    data->CEpos = newCEs + length;
+    return TRUE;
+}
+
+static UBool
+increaseCEsCapacity(collIterate *data) {
+    int32_t oldCapacity;
+    if(data->extendCEs != NULL) {
+        oldCapacity = data->extendCEsSize;
+    } else {
+        oldCapacity = LENGTHOF(data->CEs);
+    }
+    return reallocCEs(data, 2 * oldCapacity);
+}
+
+static UBool
+ensureCEsCapacity(collIterate *data, int32_t minCapacity) {
+    int32_t oldCapacity;
+    if(data->extendCEs != NULL) {
+        oldCapacity = data->extendCEsSize;
+    } else {
+        oldCapacity = LENGTHOF(data->CEs);
+    }
+    if(minCapacity <= oldCapacity) {
+        return TRUE;
+    }
+    oldCapacity *= 2;
+    return reallocCEs(data, minCapacity > oldCapacity ? minCapacity : oldCapacity);
+}
 
 /*
 * collIter_eos()
@@ -289,20 +360,6 @@ inline UBool collIter_SimpleBos(collIterate *source) {
   return FALSE;
 }*/
     //return (data->pos == data->string) ||
-
-
-/**
-* Checks and free writable buffer if it is not the original stack buffer
-* in collIterate. This function does not reassign the writable buffer.
-* @param data collIterate struct to determine and free the writable buffer
-*/
-static
-inline void freeHeapWritableBuffer(collIterate *data)
-{
-    if (data->writableBuffer != data->stackWritableBuffer) {
-        uprv_free(data->writableBuffer);
-    }
-}
 
 
 /****************************************************************************/
@@ -1190,44 +1247,20 @@ static
 void collIterNormalize(collIterate *collationSource)
 {
     UErrorCode  status = U_ZERO_ERROR;
+    const UChar *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
+    const UChar *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
 
-    int32_t    normLen;
-    UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
-    UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
-
-    normLen = unorm_decompose(collationSource->writableBuffer, (int32_t)collationSource->writableBufSize,
-                              srcP, (int32_t)(endP - srcP),
-                              FALSE, 0,
-                              &status);
-    if(status == U_BUFFER_OVERFLOW_ERROR || status == U_STRING_NOT_TERMINATED_WARNING) {
-        // reallocate and terminate
-        if(!u_growBufferFromStatic(collationSource->stackWritableBuffer,
-                                   &collationSource->writableBuffer,
-                                   (int32_t *)&collationSource->writableBufSize, normLen + 1,
-                                   0)
-        ) {
-#ifdef UCOL_DEBUG
-            fprintf(stderr, "collIterNormalize(), out of memory\n");
-#endif
-            return;
-        }
-        status = U_ZERO_ERROR;
-        normLen = unorm_decompose(collationSource->writableBuffer, (int32_t)collationSource->writableBufSize,
-                                  srcP, (int32_t)(endP - srcP),
-                                  FALSE, 0,
-                                  &status);
-    }
+    collationSource->nfd->normalize(UnicodeString(FALSE, srcP, (int32_t)(endP - srcP)),
+                                    collationSource->writableBuffer,
+                                    status);
     if (U_FAILURE(status)) {
 #ifdef UCOL_DEBUG
-        fprintf(stderr, "collIterNormalize(), unorm_decompose() failed, status = %s\n", u_errorName(status));
+        fprintf(stderr, "collIterNormalize(), NFD failed, status = %s\n", u_errorName(status));
 #endif
         return;
     }
 
-    if(collationSource->writableBuffer != collationSource->stackWritableBuffer) {
-        collationSource->flags |= UCOL_ITER_ALLOCATED;
-    }
-    collationSource->pos        = collationSource->writableBuffer;
+    collationSource->pos        = collationSource->writableBuffer.getTerminatedBuffer();
     collationSource->origFlags  = collationSource->flags;
     collationSource->flags     |= UCOL_ITER_INNORMBUF;
     collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
@@ -1415,7 +1448,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
                     // Usually this means the end of the normalized data,
                     // except for one odd case: a null followed by combining chars,
                     //   which is the case if we are at the start of the buffer.
-                    if (collationSource->pos == collationSource->writableBuffer+1) {
+                    if (collationSource->pos == collationSource->writableBuffer.getBuffer()+1) {
                         break;
                     }
 
@@ -1554,10 +1587,8 @@ static
 void collPrevIterNormalize(collIterate *data)
 {
     UErrorCode status  = U_ZERO_ERROR;
-    UChar      *pEnd   = data->pos;         /* End normalize + 1 */
-    UChar      *pStart;
-    uint32_t    normLen;
-    UChar      *pStartNorm;
+    const UChar *pEnd   = data->pos;  /* End normalize + 1 */
+    const UChar *pStart;
 
     /* Start normalize */
     if (data->fcdPosition == NULL) {
@@ -1567,30 +1598,19 @@ void collPrevIterNormalize(collIterate *data)
         pStart = data->fcdPosition + 1;
     }
 
-    normLen = unorm_normalize(pStart, (int32_t)((pEnd - pStart) + 1), UNORM_NFD, 0,
-                              data->writableBuffer, 0, &status);
-
-    if (data->writableBufSize <= normLen) {
-            freeHeapWritableBuffer(data);
-            data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) *
-                                                        sizeof(UChar));
-            if(data->writableBuffer == NULL) { // something is wrong here, return
-                data->writableBufSize = 0;     // Reset writableBufSize
-                return;
-            }
-            data->flags |= UCOL_ITER_ALLOCATED;
-            /* to handle the zero termination */
-            data->writableBufSize = normLen + 1;
+    int32_t normLen =
+        data->nfd->normalize(UnicodeString(FALSE, pStart, (int32_t)((pEnd - pStart) + 1)),
+                             data->writableBuffer,
+                             status).
+        length();
+    if(U_FAILURE(status)) {
+        return;
     }
-            status = U_ZERO_ERROR;
     /*
     this puts the null termination infront of the normalized string instead
     of the end
     */
-    pStartNorm = data->writableBuffer + (data->writableBufSize - normLen);
-    *(pStartNorm - 1) = 0;
-    unorm_normalize(pStart, (int32_t)((pEnd - pStart) + 1), UNORM_NFD, 0, pStartNorm,
-                    normLen, &status);
+    data->writableBuffer.insert(0, (UChar)0);
 
     if (data->offsetBuffer == NULL) {
         int32_t len = normLen >= UCOL_EXPAND_CE_BUFFER_SIZE ? normLen + 1 : UCOL_EXPAND_CE_BUFFER_SIZE;
@@ -1598,7 +1618,7 @@ void collPrevIterNormalize(collIterate *data)
         data->offsetBufferSize = len;
         data->offsetBuffer = (int32_t *) uprv_malloc(sizeof(int32_t) * len);
         data->offsetStore = data->offsetBuffer;
-    } else if(data->offsetBufferSize < (int32_t) normLen) {
+    } else if(data->offsetBufferSize < normLen) {
         int32_t storeIX = (int32_t)(data->offsetStore - data->offsetBuffer);
         int32_t *tob    = (int32_t *) uprv_realloc(data->offsetBuffer, sizeof(int32_t) * (normLen + 1));
 
@@ -1669,7 +1689,7 @@ void collPrevIterNormalize(collIterate *data)
         data->offsetStore = data->offsetBuffer;
     }
 
-    data->pos        = data->writableBuffer + data->writableBufSize;
+    data->pos        = data->writableBuffer.getTerminatedBuffer() + 1 + normLen;
     data->origFlags  = data->flags;
     data->flags     |= UCOL_ITER_INNORMBUF;
     data->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
@@ -2019,92 +2039,40 @@ ucol_getPrevCE(const UCollator *coll, collIterate *data,
 U_CFUNC uint32_t  U_EXPORT2
 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
     collIterate colIt;
-    uint32_t order;
-    IInit_collIterate(coll, &u, 1, &colIt);
-    order = ucol_IGetNextCE(coll, &colIt, status);
-    /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
-    return order;
+    IInit_collIterate(coll, &u, 1, &colIt, status);
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+    return ucol_IGetNextCE(coll, &colIt, status);
 }
 
 /**
 * Inserts the argument character into the end of the buffer pushing back the
 * null terminator.
 * @param data collIterate struct data
-* @param pNull pointer to the null termination
 * @param ch character to be appended
 * @return the position of the new addition
 */
 static
-inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
+inline const UChar * insertBufferEnd(collIterate *data, UChar ch)
 {
-    uint32_t  size    = data->writableBufSize;
-    UChar    *newbuffer;
-    static const uint32_t  INCSIZE = 5;
-
-    if ((data->writableBuffer + size) > (pNull + 1)) {
-        *pNull = ch;
-        *(pNull + 1) = 0;
-        return pNull;
-    }
-
-    /*
-    buffer will always be null terminated at the end.
-    giving extra space since it is likely that more characters will be added.
-    */
-    size += INCSIZE;
-    newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
-    if(newbuffer != NULL) { // something wrong, but no status
-        uprv_memcpy(newbuffer, data->writableBuffer,
-            data->writableBufSize * sizeof(UChar));
-
-        freeHeapWritableBuffer(data);
-        data->writableBufSize = size;
-        data->writableBuffer  = newbuffer;
-
-        newbuffer        = newbuffer + data->writableBufSize;
-        *newbuffer       = ch;
-        *(newbuffer + 1) = 0;
-    }
-    return newbuffer;
+    int32_t oldLength = data->writableBuffer.length();
+    return data->writableBuffer.append(ch).getTerminatedBuffer() + oldLength;
 }
 
 /**
 * Inserts the argument string into the end of the buffer pushing back the
 * null terminator.
 * @param data collIterate struct data
-* @param pNull pointer to the null termination
 * @param string to be appended
 * @param length of the string to be appended
 * @return the position of the new addition
 */
 static
-inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
-                               int32_t length)
+inline const UChar * insertBufferEnd(collIterate *data, const UChar *str, int32_t length)
 {
-    uint32_t  size = (uint32_t)(pNull - data->writableBuffer);
-    UChar    *newbuffer;
-
-    if (data->writableBuffer + data->writableBufSize > pNull + length + 1) {
-        uprv_memcpy(pNull, str, length * sizeof(UChar));
-        *(pNull + length) = 0;
-        return pNull;
-    }
-
-    /*
-    buffer will always be null terminated at the end.
-    giving extra space since it is likely that more characters will be added.
-    */
-    newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * (size + length + 1));
-    if(newbuffer != NULL) {
-      uprv_memcpy(newbuffer, data->writableBuffer, size * sizeof(UChar));
-      uprv_memcpy(newbuffer + size, str, length * sizeof(UChar));
-
-      freeHeapWritableBuffer(data);
-      data->writableBufSize = size + length + 1;
-      data->writableBuffer  = newbuffer;
-    }
-
-    return newbuffer;
+    int32_t oldLength = data->writableBuffer.length();
+    return data->writableBuffer.append(str, length).getTerminatedBuffer() + oldLength;
 }
 
 /**
@@ -2119,50 +2087,29 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
 static
 inline void normalizeNextContraction(collIterate *data)
 {
-    UChar      *buffer     = data->writableBuffer;
-    uint32_t    buffersize = data->writableBufSize;
-    uint32_t    strsize;
+    int32_t     strsize;
     UErrorCode  status     = U_ZERO_ERROR;
     /* because the pointer points to the next character */
-    UChar      *pStart     = data->pos - 1;
-    UChar      *pEnd;
-    uint32_t    normLen;
-    UChar      *pStartNorm;
+    const UChar *pStart    = data->pos - 1;
+    const UChar *pEnd;
 
     if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
-        *data->writableBuffer = *(pStart - 1);
+        data->writableBuffer.setTo(*(pStart - 1));
         strsize               = 1;
     }
     else {
-        strsize = u_strlen(data->writableBuffer);
+        strsize = data->writableBuffer.length();
     }
 
     pEnd = data->fcdPosition;
 
-    normLen = unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, buffer, 0,
-                              &status);
-
-    if (buffersize <= normLen + strsize) {
-        uint32_t  size = strsize + normLen + 1;
-        UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
-        if(temp != NULL) {
-          uprv_memcpy(temp, buffer, sizeof(UChar) * strsize);
-          freeHeapWritableBuffer(data);
-          data->writableBuffer = temp;
-          data->writableBufSize = size;
-          data->flags |= UCOL_ITER_ALLOCATED;
-        } else {
-            return; // Avoid writing past bound of buffer->writableBuffer.
-        }
+    data->writableBuffer.append(
+        data->nfd->normalize(UnicodeString(FALSE, pStart, (int32_t)(pEnd - pStart)), status));
+    if(U_FAILURE(status)) {
+        return;
     }
 
-    status            = U_ZERO_ERROR;
-    pStartNorm        = buffer + strsize;
-    /* null-termination will be added here */
-    unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, pStartNorm,
-                    normLen + 1, &status);
-
-    data->pos        = data->writableBuffer + strsize;
+    data->pos        = data->writableBuffer.getTerminatedBuffer() + strsize;
     data->origFlags  = data->flags;
     data->flags     |= UCOL_ITER_INNORMBUF;
     data->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
@@ -2202,7 +2149,6 @@ inline UChar getNextNormalizedChar(collIterate *data)
       //normalizeIterator(data);
     //}
 
-    UChar  *pEndWritableBuffer = NULL;
     UBool  innormbuf = (UBool)(data->flags & UCOL_ITER_INNORMBUF);
     if ((innormbuf && *data->pos != 0) ||
         (data->fcdPosition != NULL && !innormbuf &&
@@ -2241,15 +2187,13 @@ inline UChar getNextNormalizedChar(collIterate *data)
             if (*(data->fcdPosition + 1) == 0 ||
                 data->fcdPosition + 1 == data->endp) {
                 /* at the end of the string, dump it into the normalizer */
-                data->pos = insertBufferEnd(data, data->pos,
-                                            *(data->fcdPosition)) + 1;
+                data->pos = insertBufferEnd(data, *(data->fcdPosition)) + 1;
                 // Check if data->pos received a null pointer
                 if (data->pos == NULL) {
                     return (UChar)-1; // Return to indicate error.
                 }
                 return *(data->fcdPosition ++);
             }
-            pEndWritableBuffer = data->pos;
             data->pos = data->fcdPosition;
           } else if(data->origFlags & UCOL_USE_ITERATOR) {
             // if we are here, we're using a normalizing iterator.
@@ -2290,8 +2234,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
             don't input the rest into this, we'll get the wrong position when
             we reach the end of the writableBuffer */
             int32_t length = (int32_t)(data->fcdPosition - data->pos + 1);
-            data->pos = insertBufferEnd(data, pEndWritableBuffer,
-                                        data->pos - 1, length);
+            data->pos = insertBufferEnd(data, data->pos - 1, length);
             // Check if data->pos received a null pointer
             if (data->pos == NULL) {
                 return (UChar)-1; // Return to indicate error.
@@ -2305,7 +2248,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         no normalization is to be done hence only one character will be
         appended to the buffer.
         */
-        data->pos = insertBufferEnd(data, pEndWritableBuffer, ch) + 1;
+        data->pos = insertBufferEnd(data, ch) + 1;
         // Check if data->pos received a null pointer
         if (data->pos == NULL) {
             return (UChar)-1; // Return to indicate error.
@@ -2323,11 +2266,9 @@ inline UChar getNextNormalizedChar(collIterate *data)
 * the correct position
 * @param source data string source
 * @param buffer character buffer
-* @param tempdb current position in buffer that has been used up
 */
 static
-inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
-                                     UChar *tempdb)
+inline void setDiscontiguosAttribute(collIterate *source, const UnicodeString &buffer)
 {
     /* okay confusing part here. to ensure that the skipped characters are
     considered later, we need to place it in the appropriate position in the
@@ -2338,30 +2279,19 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
     to the start of the normalization buffer. why am i doing these copies?
     well, so that the whole chunk of codes in the getNextCE, ucol_prv_getSpecialCE does
     not require any changes, which be really painful. */
-    uint32_t length = u_strlen(buffer);;
     if (source->flags & UCOL_ITER_INNORMBUF) {
-        u_strcpy(tempdb, source->pos);
+        int32_t replaceLength = source->pos - source->writableBuffer.getBuffer();
+        source->writableBuffer.replace(0, replaceLength, buffer);
     }
     else {
         source->fcdPosition  = source->pos;
         source->origFlags    = source->flags;
         source->flags       |= UCOL_ITER_INNORMBUF;
         source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
+        source->writableBuffer = buffer;
     }
 
-    if (length >= source->writableBufSize) {
-        freeHeapWritableBuffer(source);
-        source->writableBuffer =
-                     (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
-        if(source->writableBuffer == NULL) {
-            source->writableBufSize = 0; // Reset size
-            return;
-        }
-        source->writableBufSize = length;
-    }
-
-    u_strcpy(source->writableBuffer, buffer);
-    source->pos = source->writableBuffer;
+    source->pos = source->writableBuffer.getTerminatedBuffer();
 }
 
 /**
@@ -2378,20 +2308,16 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
 {
     /* source->pos currently points to the second combining character after
        the start character */
-          UChar   *temppos      = source->pos;
-          UChar    buffer[4*UCOL_MAX_BUFFER];
-          UChar   *tempdb       = buffer;
+          const UChar *temppos      = source->pos;
+          UnicodeString buffer;
     const UChar   *tempconstart = constart;
           uint8_t  tempflags    = source->flags;
           UBool    multicontraction = FALSE;
-          UChar   *tempbufferpos = 0;
           collIterateState discState;
 
           backupState(source, &discState);
 
-    //*tempdb = *(source->pos - 1);
-    *tempdb = peekCharacter(source, -1);
-    tempdb++;
+    buffer.setTo(peekCharacter(source, -1));
     for (;;) {
         UChar    *UCharOffset;
         UChar     schar,
@@ -2413,9 +2339,8 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
                  //u_getCombiningClass(*(source->pos)) == 0) {
             //constart = (UChar *)coll->image + getContractOffset(CE);
             if (multicontraction) {
-                *tempbufferpos = 0;
                 source->pos    = temppos - 1;
-                setDiscontiguosAttribute(source, buffer, tempdb);
+                setDiscontiguosAttribute(source, buffer);
                 return *(coll->contractionCEs +
                                     (tempconstart - coll->contractionIndex));
             }
@@ -2433,22 +2358,19 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
         if (schar != tchar) {
             /* not the correct codepoint. we stuff the current codepoint into
             the discontiguos buffer and try the next character */
-            *tempdb = schar;
-            tempdb ++;
+            buffer.append(schar);
             continue;
         }
         else {
             if (u_getCombiningClass(schar) ==
                 u_getCombiningClass(peekCharacter(source, -2))) {
                 //u_getCombiningClass(*(source->pos - 2))) {
-                *tempdb = schar;
-                tempdb ++;
+                buffer.append(schar);
                 continue;
             }
             result = *(coll->contractionCEs +
                                       (UCharOffset - coll->contractionIndex));
         }
-        *tempdb = 0;
 
         if (result == UCOL_NOT_FOUND) {
           break;
@@ -2459,10 +2381,9 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
                 != UCOL_NOT_FOUND) {
                 multicontraction = TRUE;
                 temppos       = source->pos + 1;
-                tempbufferpos = buffer + u_strlen(buffer);
             }
         } else {
-            setDiscontiguosAttribute(source, buffer, tempdb);
+            setDiscontiguosAttribute(source, buffer);
             return result;
         }
     }
@@ -2503,44 +2424,12 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
 * Inserts the argument character into the front of the buffer replacing the
 * front null terminator.
 * @param data collation element iterator data
-* @param pNull pointer to the null terminator
 * @param ch character to be appended
-* @return positon of added character
 */
 static
-inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
+inline void insertBufferFront(collIterate *data, UChar ch)
 {
-    uint32_t  size    = data->writableBufSize;
-    UChar    *end;
-    UChar    *newbuffer;
-    static const uint32_t  INCSIZE = 5;
-
-    if (pNull > data->writableBuffer + 1) {
-        *pNull       = ch;
-        *(pNull - 1) = 0;
-        return pNull;
-    }
-
-    /*
-    buffer will always be null terminated infront.
-    giving extra space since it is likely that more characters will be added.
-    */
-    size += INCSIZE;
-    newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
-    if(newbuffer == NULL) {
-        return NULL;
-    }
-    end = newbuffer + INCSIZE;
-    uprv_memcpy(end, data->writableBuffer,
-                data->writableBufSize * sizeof(UChar));
-    *end       = ch;
-    *(end - 1) = 0;
-
-    freeHeapWritableBuffer(data);
-
-    data->writableBufSize = size;
-    data->writableBuffer  = newbuffer;
-    return end;
+    data->pos = data->writableBuffer.setCharAt(0, ch).insert(0, (UChar)0).getTerminatedBuffer() + 2;
 }
 
 /**
@@ -2555,65 +2444,42 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 static
 inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
 {
-    uint32_t    nulltermsize;
-    UErrorCode  localstatus = U_ZERO_ERROR;
-    UChar      *pEnd       = data->pos + 1;         /* End normalize + 1 */
-    UChar      *pStart;
-    uint32_t    normLen;
-    UChar      *pStartNorm;
+    const UChar *pEnd = data->pos + 1;         /* End normalize + 1 */
+    const UChar *pStart;
 
+    UnicodeString endOfBuffer;
     if (data->flags & UCOL_ITER_HASLEN) {
         /*
         normalization buffer not used yet, we'll pull down the next
         character into the end of the buffer
         */
-        *(data->writableBuffer + (data->writableBufSize - 1)) = *(data->pos + 1);
-        nulltermsize                  = data->writableBufSize - 1;
+        endOfBuffer.setTo(*pEnd);
     }
     else {
-        nulltermsize = data->writableBufSize;
-        UChar *temp = data->writableBuffer + (nulltermsize - 1);
-        while (*(temp --) != 0) {
-            nulltermsize --;
-        }
+        endOfBuffer.setTo(data->writableBuffer, 1);  // after the leading NUL
     }
 
-    /* Start normalize */
     if (data->fcdPosition == NULL) {
         pStart = data->string;
     }
     else {
         pStart = data->fcdPosition + 1;
     }
-
-    normLen = unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, data->writableBuffer, 0,
-                              &localstatus);
-
-    if (nulltermsize <= normLen) {
-        uint32_t  size = data->writableBufSize - nulltermsize + normLen + 1;
-        UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
-        if (temp == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        nulltermsize   = normLen + 1;
-        uprv_memcpy(temp + normLen, data->writableBuffer,
-                    sizeof(UChar) * (data->writableBufSize - nulltermsize));
-        freeHeapWritableBuffer(data);
-        data->writableBuffer = temp;
-        data->writableBufSize = size;
+    int32_t normLen =
+        data->nfd->normalize(UnicodeString(FALSE, pStart, (int32_t)(pEnd - pStart)),
+                             data->writableBuffer,
+                             *status).
+        length();
+    if(U_FAILURE(*status)) {
+        return;
     }
-
     /*
     this puts the null termination infront of the normalized string instead
     of the end
     */
-    pStartNorm   = data->writableBuffer + (nulltermsize - normLen);
-    *(pStartNorm - 1) = 0;
-    unorm_normalize(pStart, (int32_t)(pEnd - pStart), UNORM_NFD, 0, pStartNorm, normLen,
-                    status);
-
-    data->pos        = data->writableBuffer + nulltermsize;
+    data->pos =
+        data->writableBuffer.insert(0, (UChar)0).append(endOfBuffer).getTerminatedBuffer() +
+        1 + normLen;
     data->origFlags  = data->flags;
     data->flags     |= UCOL_ITER_INNORMBUF;
     data->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
@@ -2637,9 +2503,8 @@ inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
 {
     UChar  prevch;
     UChar  ch;
-    UChar *start;
+    const UChar *start;
     UBool  innormbuf = (UBool)(data->flags & UCOL_ITER_INNORMBUF);
-    UChar *pNull = NULL;
     if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 ||
         (innormbuf && *(data->pos - 1) != 0)) {
         /*
@@ -2672,11 +2537,10 @@ inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
         */
         if (data->fcdPosition == data->string) {
             /* at the start of the string, just dump it into the normalizer */
-            insertBufferFront(data, data->pos - 1, *(data->fcdPosition));
+            insertBufferFront(data, *(data->fcdPosition));
             data->fcdPosition = NULL;
             return *(data->pos - 1);
         }
-        pNull  = data->pos - 1;
         start  = data->fcdPosition;
         ch     = *start;
         prevch = *(start - 1);
@@ -2692,7 +2556,7 @@ inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
         Need a more complete FCD check and possible normalization.
         normalize substring will be appended to buffer
         */
-        UChar *backuppos = data->pos;
+        const UChar *backuppos = data->pos;
         data->pos = start;
         if (collPrevIterFCD(data)) {
             normalizePrevContraction(data, status);
@@ -2707,7 +2571,7 @@ inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
     no normalization is to be done hence only one character will be
     appended to the buffer.
     */
-        insertBufferFront(data, pNull, ch);
+        insertBufferFront(data, ch);
         data->fcdPosition --;
     }
 
@@ -3251,18 +3115,21 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                         source->pos = NULL;
                     }
                     // Move Jamos into normalization buffer
-                    source->writableBuffer[0] = (UChar)L;
-                    source->writableBuffer[1] = (UChar)V;
+                    UChar *buffer = source->writableBuffer.getBuffer(4);
+                    int32_t bufferLength;
+                    buffer[0] = (UChar)L;
+                    buffer[1] = (UChar)V;
                     if (T != TBase) {
-                        source->writableBuffer[2] = (UChar)T;
-                        source->writableBuffer[3] = 0;
+                        buffer[2] = (UChar)T;
+                        bufferLength = 3;
                     } else {
-                        source->writableBuffer[2] = 0;
+                        bufferLength = 2;
                     }
+                    source->writableBuffer.releaseBuffer(bufferLength);
 
                     source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
                     //   after exhausting the writableBuffer
-                    source->pos   = source->writableBuffer;
+                    source->pos   = source->writableBuffer.getTerminatedBuffer();
                     source->origFlags   = source->flags;
                     source->flags       |= UCOL_ITER_INNORMBUF;
                     source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
@@ -3490,7 +3357,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 break;
             }
 
-        case CONTRACTION_TAG:
+        case CONTRACTION_TAG: {
             /* to ensure that the backwards and forwards iteration matches, we
             take the current region of most possible match and pass it through
             the forward iteration. this will ensure that the obstinate problem of
@@ -3569,7 +3436,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             collIterate temp;
             int32_t rawOffset;
 
-            IInit_collIterate(coll, UCharOffset, noChars, &temp);
+            IInit_collIterate(coll, UCharOffset, noChars, &temp, status);
+            if(U_FAILURE(*status)) {
+                return UCOL_NULLORDER;
+            }
             temp.flags &= ~UCOL_ITER_NORM;
             temp.flags |= source->flags & UCOL_FORCE_HAN_IMPLICIT;
 
@@ -3603,33 +3473,8 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     If reallocation fails, reset pointers and bail out,
                     there's no guarantee of the right character position after
                     this bail*/
-                    if (source->extendCEs == NULL) {
-                        source->extendCEs = (uint32_t *)uprv_malloc(sizeof(uint32_t) *
-                            (source->extendCEsSize =UCOL_EXPAND_CE_BUFFER_SIZE + UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
-                        if (source->extendCEs == NULL) {
-                            // Handle error later.
-                            CECount = -1;
-                        } else {
-                            source->extendCEs = (uint32_t *)uprv_memcpy(source->extendCEs, source->CEs, UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
-                        }
-                    } else {
-                        uint32_t *tempBufCE = (uint32_t *)uprv_realloc(source->extendCEs,
-                            sizeof(uint32_t) * (source->extendCEsSize += UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
-                        if (tempBufCE == NULL) {
-                            // Handle error later.
-                            CECount = -1;
-                        }
-                        else {
-                            source->extendCEs = tempBufCE;
-                        }
-                    }
-
-                    if (CECount == -1) {
+                    if (!increaseCEsCapacity(source)) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
-                        source->extendCEsSize = 0;
-                        source->CEpos = source->CEs;
-                        freeHeapWritableBuffer(&temp);
-
                         if (strbuffer != buffer) {
                             uprv_free(strbuffer);
                         }
@@ -3637,7 +3482,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                         return (uint32_t)UCOL_NULLORDER;
                     }
 
-                    source->CEpos = source->extendCEs + CECount;
                     endCEBuffer = source->extendCEs + source->extendCEsSize;
                 }
 
@@ -3654,7 +3498,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                         // memory error...
                         *status = U_MEMORY_ALLOCATION_ERROR;
                         source->CEpos = source->CEs;
-                        freeHeapWritableBuffer(&temp);
 
                         if (strbuffer != buffer) {
                             uprv_free(strbuffer);
@@ -3682,8 +3525,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 }
 			}
 
-            freeHeapWritableBuffer(&temp);
-
             if (strbuffer != buffer) {
                 uprv_free(strbuffer);
             }
@@ -3701,7 +3542,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             }
 
             return *(source->toReturn);
-
+        }
         case LONG_PRIMARY_TAG:
             {
                 *(source->CEpos++) = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
@@ -3810,7 +3651,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 We do a check to see if we want to collate digits as numbers; if so we generate
                 a custom collation key. Otherwise we pull out the value stored in the expansion table.
                 */
-                //uint32_t size;
                 uint32_t i;    /* general counter */
 
                 if (source->coll->numericCollation == UCOL_ON){
@@ -4013,8 +3853,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     numTempBuf[1] = (uint8_t)(0x80 + (exponent & 0x7F));
 
                     // Now transfer the collation key to our collIterate struct.
-                    // The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
-                    //size = ((endIndex+1) & ~1)/2;
+                    // The total size for our collation key is half of endIndex, rounded up.
+                    int32_t size = (endIndex+1)/2;
+                    if(!ensureCEsCapacity(source, size)) {
+                        return UCOL_NULLORDER;
+                    }
                     *(source->CEpos++) = (((numTempBuf[0] << 8) | numTempBuf[1]) << UCOL_PRIMARYORDERSHIFT) | //Primary weight
                         (UCOL_BYTE_COMMON << UCOL_SECONDARYORDERSHIFT) | // Secondary weight
                         UCOL_BYTE_COMMON; // Tertiary weight.
@@ -4101,19 +3944,18 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     Move the Jamos into the
                     normalization buffer
                     */
-                    UChar *tempbuffer = source->writableBuffer +
-                        (source->writableBufSize - 1);
-                    *(tempbuffer) = 0;
+                    UChar *tempbuffer = source->writableBuffer.getBuffer(5);
+                    int32_t tempbufferLength;
+                    tempbuffer[0] = 0;
+                    tempbuffer[1] = (UChar)L;
+                    tempbuffer[2] = (UChar)V;
                     if (T != TBase) {
-                        *(tempbuffer - 1) = (UChar)T;
-                        *(tempbuffer - 2) = (UChar)V;
-                        *(tempbuffer - 3) = (UChar)L;
-                        *(tempbuffer - 4) = 0;
+                        tempbuffer[3] = (UChar)T;
+                        tempbufferLength = 4;
                     } else {
-                        *(tempbuffer - 1) = (UChar)V;
-                        *(tempbuffer - 2) = (UChar)L;
-                        *(tempbuffer - 3) = 0;
+                        tempbufferLength = 3;
                     }
+                    source->writableBuffer.releaseBuffer(tempbufferLength);
 
                     /*
                     Indicate where to continue in main input string after exhausting
@@ -4125,7 +3967,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                         source->fcdPosition       = source->pos-1;
                     }
 
-                    source->pos               = tempbuffer;
+                    source->pos               = source->writableBuffer.getTerminatedBuffer() + tempbufferLength;
                     source->origFlags         = source->flags;
                     source->flags            |= UCOL_ITER_INNORMBUF;
                     source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
@@ -4154,12 +3996,12 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             {
                 UChar32 cp = 0;
                 UChar  prevChar;
-                UChar *prev;
+                const UChar *prev;
                 if (isAtStartPrevIterate(source)) {
                     /* we are at the start of the string, wrong place to be at */
                     return 0;
                 }
-                if (source->pos != source->writableBuffer) {
+                if (source->pos != source->writableBuffer.getBuffer()) {
                     prev     = source->pos - 1;
                 } else {
                     prev     = source->fcdPosition;
@@ -4789,9 +4631,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     uint32_t sortKeySize = 1; /* it is always \0 terminated */
 
-    UChar normBuffer[UCOL_NORMALIZATION_MAX_BUFFER];
-    UChar *normSource = normBuffer;
-    int32_t normSourceLen = UCOL_NORMALIZATION_MAX_BUFFER;
+    UnicodeString normSource;
 
     int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
@@ -4827,52 +4667,36 @@ ucol_calcSortKey(const    UCollator    *coll,
     sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + /*(qShifted?1:0)*/(compareQuad?0:1) + (compareIdent?1:0));
 
     /* If we need to normalize, we'll do it all at once at the beginning! */
-    UNormalizationMode normMode;
+    const Normalizer2 *norm2;
     if(compareIdent) {
-        normMode = UNORM_NFD;
+        norm2 = Normalizer2Factory::getNFDInstance(*status);
     } else if(coll->normalizationMode != UCOL_OFF) {
-        normMode = UNORM_FCD;
+        norm2 = Normalizer2Factory::getFCDInstance(*status);
     } else {
-        normMode = UNORM_NONE;
+        norm2 = NULL;
     }
-
-    if(normMode != UNORM_NONE && UNORM_YES != unorm_quickCheck(source, len, normMode, status)) {
-        len = unorm_internalNormalize(normSource, normSourceLen,
-                                      source, len,
-                                      normMode, FALSE,
-                                      status);
-        if(*status == U_BUFFER_OVERFLOW_ERROR) {
-            normSourceLen = len;
-            normSource = (UChar *)uprv_malloc(len*U_SIZEOF_UCHAR);
-            if(normSource == NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-            *status = U_ZERO_ERROR;
-            len = unorm_internalNormalize(normSource, normSourceLen,
-                                          source, len,
-                                          normMode, FALSE,
-                                          status);
+    if(norm2 != NULL) {
+        normSource.setTo(FALSE, source, len);
+        int32_t qcYesLength = norm2->spanQuickCheckYes(normSource, *status);
+        if(qcYesLength != len) {
+            UnicodeString unnormalized = normSource.tempSubString(qcYesLength);
+            normSource.truncate(qcYesLength);
+            norm2->normalizeSecondAndAppend(normSource, unnormalized, *status);
+            source = normSource.getBuffer();
+            len = normSource.length();
         }
-
-        if(U_FAILURE(*status)) {
-            return 0;
-        }
-        source = normSource;
     }
-
     collIterate s;
-    IInit_collIterate(coll, (UChar *)source, len, &s);
-    if(source == normSource) {
+    IInit_collIterate(coll, source, len, &s, status);
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+    if(source == normSource.getBuffer()) {
         s.flags &= ~UCOL_ITER_NORM;
     }
 
     if(resultLength == 0 || primaries == NULL) {
-        int32_t keyLen = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-        if(normSource != normBuffer) {
-            uprv_free(normSource);
-        }
-        return keyLen;
+        return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 1;
     if(strength > UCOL_PRIMARY) {
@@ -5140,8 +4964,13 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
                 if(allocateSKBuffer == FALSE) { /* need to save our butts if we cannot reallocate */
-                    IInit_collIterate(coll, (UChar *)source, len, &s);
-                    if(source == normSource) {
+                    IInit_collIterate(coll, (UChar *)source, len, &s, status);
+                    if(U_FAILURE(*status)) {
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                        finished = TRUE;
+                        break;
+                    }
+                    if(source == normSource.getBuffer()) {
                         s.flags &= ~UCOL_ITER_NORM;
                     }
                     sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
@@ -5409,10 +5238,6 @@ cleanup:
     /* To avoid memory leak, free the offset buffer if necessary. */
     ucol_freeOffsetBuffer(&s);
 
-    if(normSource != normBuffer) {
-        uprv_free(normSource);
-    }
-
     return sortKeySize;
 }
 
@@ -5449,55 +5274,34 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     uint32_t sortKeySize = 3; /* it is always \0 terminated plus separators for secondary and tertiary */
 
-    UChar normBuffer[UCOL_NORMALIZATION_MAX_BUFFER];
-    UChar *normSource = normBuffer;
-    int32_t normSourceLen = UCOL_NORMALIZATION_MAX_BUFFER;
+    UnicodeString normSource;
 
     int32_t len =  sourceLength;
 
     /* If we need to normalize, we'll do it all at once at the beginning! */
-    if(coll->normalizationMode != UCOL_OFF && UNORM_YES != unorm_quickCheck(source, len, UNORM_FCD, status)) {
-        len = unorm_internalNormalize(normSource, normSourceLen,
-                                      source, len,
-                                      UNORM_FCD, FALSE,
-                                      status);
-        if(*status == U_BUFFER_OVERFLOW_ERROR) {
-            normSourceLen = len;
-            normSource = (UChar *)uprv_malloc(len*U_SIZEOF_UCHAR);
-            if(normSource == NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-            *status = U_ZERO_ERROR;
-            len = unorm_internalNormalize(normSource, normSourceLen,
-                                          source, len,
-                                          UNORM_FCD, FALSE,
-                                          status);
-            if(U_FAILURE(*status)) {
-                /* Should never happen. */
-                uprv_free(normSource);
-                normSource = normBuffer;
-            }
+    if(coll->normalizationMode != UCOL_OFF) {
+        normSource.setTo(len < 0, source, len);
+        const Normalizer2 *norm2 = Normalizer2Factory::getFCDInstance(*status);
+        int32_t qcYesLength = norm2->spanQuickCheckYes(normSource, *status);
+        if(qcYesLength != normSource.length()) {
+            UnicodeString unnormalized = normSource.tempSubString(qcYesLength);
+            normSource.truncate(qcYesLength);
+            norm2->normalizeSecondAndAppend(normSource, unnormalized, *status);
+            source = normSource.getBuffer();
+            len = normSource.length();
         }
-
-        if(U_FAILURE(*status)) {
-            return 0;
-        }
-        source = normSource;
     }
-
     collIterate s;
-    IInit_collIterate(coll, (UChar *)source, len, &s);
-    if(source == normSource) {
+    IInit_collIterate(coll, (UChar *)source, len, &s, status);
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+    if(source == normSource.getBuffer()) {
         s.flags &= ~UCOL_ITER_NORM;
     }
 
     if(resultLength == 0 || primaries == NULL) {
-        int32_t t = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
-        if(normSource != normBuffer) {
-            uprv_free(normSource);
-        }
-        return t;
+        return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
     }
 
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
@@ -5653,8 +5457,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
             if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
                 if(allocateSKBuffer == FALSE) { /* need to save our butts if we cannot reallocate */
-                    IInit_collIterate(coll, (UChar *)source, len, &s);
-                    if(source == normSource) {
+                    IInit_collIterate(coll, (UChar *)source, len, &s, status);
+                    if(U_FAILURE(*status)) {
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                        finished = TRUE;
+                        break;
+                    }
+                    if(source == normSource.getBuffer()) {
                         s.flags &= ~UCOL_ITER_NORM;
                     }
                     sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
@@ -5793,10 +5602,6 @@ cleanup:
     /* To avoid memory leak, free the offset buffer if necessary. */
     ucol_freeOffsetBuffer(&s);
     
-    if(normSource != normBuffer) {
-        uprv_free(normSource);
-    }
-
     return sortKeySize;
 }
 
@@ -5996,7 +5801,11 @@ ucol_nextSortKeyPart(const UCollator *coll,
     uint32_t CE = UCOL_NO_MORE_CES;
 
     collIterate s;
-    IInit_collIterate(coll, NULL, -1, &s);
+    IInit_collIterate(coll, NULL, -1, &s, status);
+    if(U_FAILURE(*status)) {
+        UTRACE_EXIT_STATUS(*status);
+        return 0;
+    }
     s.iterator = iter;
     s.flags |= UCOL_USE_ITERATOR;
     // This variable tells us whether we have produced some other levels in this iteration
@@ -7042,7 +6851,10 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
     }
 
     collIterate s;
-    IInit_collIterate(coll, varTop, len, &s);
+    IInit_collIterate(coll, varTop, len, &s, status);
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
 
     uint32_t CE = ucol_IGetNextCE(coll, &s, status);
 
@@ -7339,42 +7151,24 @@ ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
 
 /*  ucol_checkIdent    internal function.  Does byte level string compare.   */
 /*                     Used by strcoll if strength == identical and strings  */
-/*                     are otherwise equal.  Moved out-of-line because this  */
-/*                     is a rare case.                                       */
+/*                     are otherwise equal.                                  */
 /*                                                                           */
 /*                     Comparison must be done on NFD normalized strings.    */
 /*                     FCD is not good enough.                               */
-/*                                                                           */
-/*      TODO:  make an incremental NFD Comparison function, which could      */
-/*             be of general use                                             */
 
 static
 UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBool normalize, UErrorCode *status)
 {
-
-  // TODO: When we have an UChar iterator, we need to access the whole string. One
-  // useful modification would be a UChar iterator extract API, since reset next next...
-  // is not optimal.
-  // TODO: Handle long strings. Do the same in compareUsingSortKeys.
-
-  // When we arrive here, we can have normal strings or UCharIterators. Currently they are both
-  // of same type, but that doesn't really mean that it will stay that way.
-
-    // The division for the array length may truncate the array size to
-    // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
-    // for all platforms anyway.
-    UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
-    UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
-    //UChar sStackBuf[256], tStackBuf[256];
-    //int32_t sBufSize = 256, tBufSize = 256;
+    // When we arrive here, we can have normal strings or UCharIterators. Currently they are both
+    // of same type, but that doesn't really mean that it will stay that way.
     int32_t            comparison;
-    int32_t          sLen        = 0;
-    UChar            *sBuf       = NULL;
-    int32_t          tLen        = 0;
-    UChar            *tBuf       = NULL;
-    UBool freeSBuf = FALSE, freeTBuf = FALSE;
 
     if (sColl->flags & UCOL_USE_ITERATOR) {
+        // The division for the array length may truncate the array size to
+        // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
+        // for all platforms anyway.
+        UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
+        UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
         UNormIterator *sNIt = NULL, *tNIt = NULL;
         sNIt = unorm_openIter(stackNormIter1, sizeof(stackNormIter1), status);
         tNIt = unorm_openIter(stackNormIter2, sizeof(stackNormIter2), status);
@@ -7386,90 +7180,30 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
         unorm_closeIter(sNIt);
         unorm_closeIter(tNIt);
     } else {
-        sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(sColl->endp - sColl->string) : -1;
-        sBuf = sColl->string;
-        tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(tColl->endp - tColl->string) : -1;
-        tBuf = tColl->string;
+        int32_t sLen      = (sColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(sColl->endp - sColl->string) : -1;
+        const UChar *sBuf = sColl->string;
+        int32_t tLen      = (tColl->flags & UCOL_ITER_HASLEN) ? (int32_t)(tColl->endp - tColl->string) : -1;
+        const UChar *tBuf = tColl->string;
 
         if (normalize) {
             *status = U_ZERO_ERROR;
-            if (unorm_quickCheck(sBuf, sLen, UNORM_NFD, status) != UNORM_YES) {
-                sLen = unorm_decompose(sColl->writableBuffer, (int32_t)sColl->writableBufSize,
-                                    sBuf, sLen,
-                                    FALSE, 0,
-                                    status);
-                if(*status == U_BUFFER_OVERFLOW_ERROR) {
-                    if(!u_growBufferFromStatic(sColl->stackWritableBuffer,
-                        &sColl->writableBuffer,
-                        (int32_t *)&sColl->writableBufSize, sLen,
-                        0)
-                        )
-                    {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        return UCOL_LESS; /* TODO set *status = U_MEMORY_ALLOCATION_ERROR; */
-                    }
-                    *status = U_ZERO_ERROR;
-                    sLen = unorm_decompose(sColl->writableBuffer, (int32_t)sColl->writableBufSize,
-                                        sBuf, sLen,
-                                        FALSE, 0,
-                                        status);
-                }
-                if(freeSBuf) {
-                    uprv_free(sBuf);
-                    freeSBuf = FALSE;
-                }
-                sBuf = sColl->writableBuffer;
-                if (sBuf != sColl->stackWritableBuffer) {
-                    sColl->flags |= UCOL_ITER_ALLOCATED;
-                }
+            // Note: We could use Normalizer::compare() or similar, but for short strings
+            // which may not be in FCD it might be faster to just NFD them.
+            // Note: spanQuickCheckYes() + normalizeSecondAndAppend() rather than
+            // NFD'ing immediately might be faster for long strings,
+            // but string comparison is usually done on relatively short strings.
+            sColl->nfd->normalize(UnicodeString((sColl->flags & UCOL_ITER_HASLEN) == 0, sBuf, sLen),
+                                  sColl->writableBuffer,
+                                  *status);
+            tColl->nfd->normalize(UnicodeString((tColl->flags & UCOL_ITER_HASLEN) == 0, tBuf, tLen),
+                                  tColl->writableBuffer,
+                                  *status);
+            if(U_FAILURE(*status)) {
+                return UCOL_LESS;
             }
-
-            *status = U_ZERO_ERROR;
-            if (unorm_quickCheck(tBuf, tLen, UNORM_NFD, status) != UNORM_YES) {
-                tLen = unorm_decompose(tColl->writableBuffer, (int32_t)tColl->writableBufSize,
-                                    tBuf, tLen,
-                                    FALSE, 0,
-                                    status);
-                if(*status == U_BUFFER_OVERFLOW_ERROR) {
-                    if(!u_growBufferFromStatic(tColl->stackWritableBuffer,
-                        &tColl->writableBuffer,
-                        (int32_t *)&tColl->writableBufSize, tLen,
-                        0)
-                        )
-                    {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        return UCOL_LESS; /* TODO set *status = U_MEMORY_ALLOCATION_ERROR; */
-                    }
-                    *status = U_ZERO_ERROR;
-                    tLen = unorm_decompose(tColl->writableBuffer, (int32_t)tColl->writableBufSize,
-                                        tBuf, tLen,
-                                        FALSE, 0,
-                                        status);
-                }
-                if(freeTBuf) {
-                    uprv_free(tBuf);
-                    freeTBuf = FALSE;
-                }
-                tBuf = tColl->writableBuffer;
-                if (tBuf != tColl->stackWritableBuffer) {
-                    tColl->flags |= UCOL_ITER_ALLOCATED;
-                }
-            }
-        }
-
-        if (sLen == -1 && tLen == -1) {
-            comparison = u_strcmpCodePointOrder(sBuf, tBuf);
+            comparison = sColl->writableBuffer.compareCodePointOrder(tColl->writableBuffer);
         } else {
-            if (sLen == -1) {
-                sLen = u_strlen(sBuf);
-            }
-            if (tLen == -1) {
-                tLen = u_strlen(tBuf);
-            }
-            comparison = u_memcmpCodePointOrder(sBuf, tBuf, uprv_min(sLen, tLen));
-            if (comparison == 0) {
-                comparison = sLen - tLen;
-            }
+            comparison = u_strCompare(sBuf, sLen, tBuf, tLen, TRUE);
         }
     }
 
@@ -7545,29 +7279,27 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
     uint8_t *targetKeyP = targetKey;
     int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
     const UCollator *coll = sColl->coll;
-    UChar *source = NULL;
-    UChar *target = NULL;
+    const UChar *source = NULL;
+    const UChar *target = NULL;
     int32_t result = UCOL_EQUAL;
-    UChar sStackBuf[256], tStackBuf[256];
-    int32_t sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(int32_t)(sColl->endp-sColl->string):-1;
-    int32_t targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(int32_t)(tColl->endp-tColl->string):-1;
+    UnicodeString sourceString, targetString;
+    int32_t sourceLength;
+    int32_t targetLength;
 
-    // TODO: Handle long strings. Do the same in ucol_checkIdent.
     if(sColl->flags & UCOL_USE_ITERATOR) {
         sColl->iterator->move(sColl->iterator, 0, UITER_START);
         tColl->iterator->move(tColl->iterator, 0, UITER_START);
-        source = sStackBuf;
-        UChar *sBufp = source;
-        target = tStackBuf;
-        UChar *tBufp = target;
-        while(sColl->iterator->hasNext(sColl->iterator)) {
-            *sBufp++ = (UChar)sColl->iterator->next(sColl->iterator);
+        UChar32 c;
+        while((c=sColl->iterator->next(sColl->iterator))>=0) {
+            sourceString.append((UChar)c);
         }
-        while(tColl->iterator->hasNext(tColl->iterator)) {
-            *tBufp++ = (UChar)tColl->iterator->next(tColl->iterator);
+        while((c=tColl->iterator->next(tColl->iterator))>=0) {
+            targetString.append((UChar)c);
         }
-        sourceLength = (int32_t)(sBufp - source);
-        targetLength = (int32_t)(tBufp - target);
+        source = sourceString.getBuffer();
+        sourceLength = sourceString.length();
+        target = targetString.getBuffer();
+        targetLength = targetString.length();
     } else { // no iterators
         sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(int32_t)(sColl->endp-sColl->string):-1;
         targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(int32_t)(tColl->endp-tColl->string):-1;
@@ -7618,14 +7350,8 @@ cleanup_and_do_compare:
 }
 
 
-static inline UCollationResult
-ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
-//              const UCollator    *coll,
-//              const UChar        *source,
-//              int32_t            sourceLength,
-//              const UChar        *target,
-//              int32_t            targetLength,
-              UErrorCode *status)
+static UCollationResult
+ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
 {
     U_ALIGN_CODE(16);
 
@@ -8088,9 +7814,6 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
 
 commonReturn:
     if ((sColl->flags | tColl->flags) & UCOL_ITER_ALLOCATED) {
-        freeHeapWritableBuffer(sColl);
-        freeHeapWritableBuffer(tColl);
-
         if (sCEs.buf != sCEs.localArray ) {
             uprv_free(sCEs.buf);
         }
@@ -8102,6 +7825,20 @@ commonReturn:
     return result;
 }
 
+static UCollationResult
+ucol_strcollRegular(const UCollator *coll,
+                    const UChar *source, int32_t sourceLength,
+                    const UChar *target, int32_t targetLength,
+                    UErrorCode *status) {
+    collIterate sColl, tColl;
+    // Preparing the context objects for iterating over strings
+    IInit_collIterate(coll, source, sourceLength, &sColl, status);
+    IInit_collIterate(coll, target, targetLength, &tColl, status);
+    if(U_FAILURE(*status)) {
+        return UCOL_LESS;
+    }
+    return ucol_strcollRegular(&sColl, &tColl, status);
+}
 
 static inline uint32_t
 ucol_getLatinOneContraction(const UCollator *coll, int32_t strength,
@@ -8162,7 +7899,7 @@ ucol_getLatinOneContraction(const UCollator *coll, int32_t strength,
  * doesn't understand something, it will go to the regular
  * strcoll.
  */
-static inline UCollationResult
+static UCollationResult
 ucol_strcollUseLatin1( const UCollator    *coll,
               const UChar        *source,
               int32_t            sLen,
@@ -8203,8 +7940,7 @@ ucol_strcollUseLatin1( const UCollator    *coll,
             }
             if(sChar&0xFF00) { // if we encounter non-latin-1, we bail out (sChar > 0xFF, but this is faster on win32)
                 //fprintf(stderr, "R");
-                goto returnRegular;
-                //return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
+                return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
             }
             sOrder = elements[sChar];
             if(sOrder >= UCOL_NOT_FOUND) { // if we got a special
@@ -8218,8 +7954,7 @@ ucol_strcollUseLatin1( const UCollator    *coll,
                 }
                 if(sOrder >= UCOL_NOT_FOUND /*== UCOL_BAIL_OUT_CE*/) {
                     //fprintf(stderr, "S");
-                    goto returnRegular;
-                    //return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
+                    return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
                 }
             }
         }
@@ -8251,8 +7986,7 @@ ucol_strcollUseLatin1( const UCollator    *coll,
             }
             if(tChar&0xFF00) { // if we encounter non-latin-1, we bail out (sChar > 0xFF, but this is faster on win32)
                 //fprintf(stderr, "R");
-                goto returnRegular;
-                //return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
+                return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
             }
             tOrder = elements[tChar];
             if(tOrder >= UCOL_NOT_FOUND) {
@@ -8263,8 +7997,7 @@ ucol_strcollUseLatin1( const UCollator    *coll,
                 }
                 if(tOrder >= UCOL_NOT_FOUND /*== UCOL_BAIL_OUT_CE*/) {
                     //fprintf(stderr, "S");
-                    goto returnRegular;
-                    //return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
+                    return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
                 }
             }
         }
@@ -8359,8 +8092,7 @@ endOfPrimLoop:
         } else { // French
             if(haveContractions) { // if we have contractions, we have to bail out
                 // since we don't really know how to handle them here
-                goto returnRegular;
-                //return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
+                return ucol_strcollRegular(coll, source, sLen, target, tLen, status);
             }
             // For French, we go backwards
             sIndex = sLen; tIndex = tLen;
@@ -8462,14 +8194,6 @@ endOfSecLoop:
         }
     }
     return UCOL_EQUAL;
-
-returnRegular:
-    // Preparing the context objects for iterating over strings
-    collIterate sColl, tColl;
-
-    IInit_collIterate(coll, source, sLen, &sColl);
-    IInit_collIterate(coll, target, tLen, &tColl);
-    return ucol_strcollRegular(&sColl, &tColl, status);
 }
 
 
@@ -8500,6 +8224,12 @@ ucol_strcollIter( const UCollator    *coll,
 
     // Preparing the context objects for iterating over strings
     collIterate sColl, tColl;
+    IInit_collIterate(coll, NULL, -1, &sColl, status);
+    IInit_collIterate(coll, NULL, -1, &tColl, status);
+    if(U_FAILURE(*status)) {
+        UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status)
+        return UCOL_EQUAL;
+    }
     // The division for the array length may truncate the array size to
     // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
     // for all platforms anyway.
@@ -8507,10 +8237,8 @@ ucol_strcollIter( const UCollator    *coll,
     UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     UNormIterator *sNormIter = NULL, *tNormIter = NULL;
 
-    IInit_collIterate(coll, NULL, -1, &sColl);
     sColl.iterator = sIter;
     sColl.flags |= UCOL_USE_ITERATOR;
-    IInit_collIterate(coll, NULL, -1, &tColl);
     tColl.flags |= UCOL_USE_ITERATOR;
     tColl.iterator = tIter;
 
@@ -8692,11 +8420,7 @@ ucol_strcoll( const UCollator    *coll,
     UErrorCode status = U_ZERO_ERROR;
     UCollationResult returnVal;
     if(!coll->latinOneUse || (sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) {
-        collIterate sColl, tColl;
-        // Preparing the context objects for iterating over strings
-        IInit_collIterate(coll, source, sourceLength, &sColl);
-        IInit_collIterate(coll, target, targetLength, &tColl);
-        returnVal = ucol_strcollRegular(&sColl, &tColl, &status);
+        returnVal = ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
     } else {
         returnVal = ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);
     }

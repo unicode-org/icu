@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -61,7 +61,8 @@ enum {
     UNICODE_VERSION,
     ICUDATADIR,
     CSOURCE,
-    STORE_FLAGS
+    STORE_FLAGS,
+    WRITE_NORM2
 };
 
 static UOption options[]={
@@ -74,7 +75,8 @@ static UOption options[]={
     UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
     UOPTION_ICUDATADIR,
     UOPTION_DEF("csource", 'C', UOPT_NO_ARG),
-    UOPTION_DEF("prune", 'p', UOPT_REQUIRES_ARG)
+    UOPTION_DEF("prune", 'p', UOPT_REQUIRES_ARG),
+    UOPTION_DEF("write-norm2", '\1', UOPT_NO_ARG)
 };
 
 extern int
@@ -140,6 +142,8 @@ main(int argc, char* argv[]) {
             "\t                    to the source file basenames before opening;\n"
             "\t                    'gennorm new' will read UnicodeData-new.txt etc.\n",
             u_getDataDirectory());
+        fprintf(stderr,
+            "\t--write-norm2      write nfc.txt and nfkc.txt files for gennorm2\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
@@ -243,7 +247,7 @@ main(int argc, char* argv[]) {
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
     basename=filename+uprv_strlen(filename);
-    if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
+    if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR && *(basename-1)!=U_FILE_ALT_SEP_CHAR) {
         *basename++=U_FILE_SEP_CHAR;
     }
 
@@ -286,6 +290,10 @@ main(int argc, char* argv[]) {
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
+        if(options[WRITE_NORM2].doesOccur) {
+            writeNorm2(destDir);
+        }
+
         processData();
 
         /* write the properties data file */

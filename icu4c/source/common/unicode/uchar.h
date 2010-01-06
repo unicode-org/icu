@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -321,51 +321,29 @@ typedef enum UProperty {
     /** Binary property NFD_Inert.
         ICU-specific property for characters that are inert under NFD,
         i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-
-        There is one such property per normalization form.
-        These properties are computed as follows - an inert character is:
-        a) unassigned, or ALL of the following:
-        b) of combining class 0.
-        c) not decomposed by this normalization form.
-        AND if NFC or NFKC,
-        d) can never compose with a previous character.
-        e) can never compose with a following character.
-        f) can never change if another character is added.
-           Example: a-breve might satisfy all but f, but if you
-           add an ogonek it changes to a-ogonek + breve
-
-        See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
-        and icu/source/common/unormimp.h .
+        See the documentation for the Normalizer2 class and the
+        Normalizer2::isInert() method.
         @stable ICU 3.0 */
     UCHAR_NFD_INERT=37,
     /** Binary property NFKD_Inert.
         ICU-specific property for characters that are inert under NFKD,
         i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see UCHAR_NFD_INERT
+        See the documentation for the Normalizer2 class and the
+        Normalizer2::isInert() method.
         @stable ICU 3.0 */
     UCHAR_NFKD_INERT=38,
     /** Binary property NFC_Inert.
         ICU-specific property for characters that are inert under NFC,
         i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see UCHAR_NFD_INERT
+        See the documentation for the Normalizer2 class and the
+        Normalizer2::isInert() method.
         @stable ICU 3.0 */
     UCHAR_NFC_INERT=39,
     /** Binary property NFKC_Inert.
         ICU-specific property for characters that are inert under NFKC,
         i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see UCHAR_NFD_INERT
+        See the documentation for the Normalizer2 class and the
+        Normalizer2::isInert() method.
         @stable ICU 3.0 */
     UCHAR_NFKC_INERT=40,
     /** Binary Property Segment_Starter.
@@ -428,8 +406,10 @@ typedef enum UProperty {
     UCHAR_CHANGES_WHEN_CASEFOLDED=54,
     /** Binary property Changes_When_Casemapped. @draft ICU 4.4 */
     UCHAR_CHANGES_WHEN_CASEMAPPED=55,
+    /** Binary property Changes_When_NFKC_Casefolded. @draft ICU 4.4 */
+    UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED=56,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
-    UCHAR_BINARY_LIMIT=56,
+    UCHAR_BINARY_LIMIT=57,
 
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @stable ICU 2.2 */

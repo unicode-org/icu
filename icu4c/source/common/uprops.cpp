@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  uprops.h
+*   file name:  uprops.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -26,6 +26,7 @@
 #include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
+#include "normalizer2impl.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "unormimp.h"
@@ -106,7 +107,7 @@ static const struct {
     {  1,               U_MASK(UPROPS_DEPRECATED) },
     {  1,               U_MASK(UPROPS_DIACRITIC) },
     {  1,               U_MASK(UPROPS_EXTENDER) },
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_FULL_COMPOSITION_EXCLUSION */
+    { UPROPS_SRC_NFC,  0 },                                     /* UCHAR_FULL_COMPOSITION_EXCLUSION */
     {  1,               U_MASK(UPROPS_GRAPHEME_BASE) },
     {  1,               U_MASK(UPROPS_GRAPHEME_EXTEND) },
     {  1,               U_MASK(UPROPS_GRAPHEME_LINK) },
@@ -134,10 +135,10 @@ static const struct {
     { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CASE_SENSITIVE */
     {  1,               U_MASK(UPROPS_S_TERM) },
     {  1,               U_MASK(UPROPS_VARIATION_SELECTOR) },
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFD_INERT */
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKD_INERT */
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFC_INERT */
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKC_INERT */
+    { UPROPS_SRC_NFC,   0 },                                    /* UCHAR_NFD_INERT */
+    { UPROPS_SRC_NFKC,  0 },                                    /* UCHAR_NFKD_INERT */
+    { UPROPS_SRC_NFC,   0 },                                    /* UCHAR_NFC_INERT */
+    { UPROPS_SRC_NFKC,  0 },                                    /* UCHAR_NFKC_INERT */
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_SEGMENT_STARTER */
     {  1,               U_MASK(UPROPS_PATTERN_SYNTAX) },
     {  1,               U_MASK(UPROPS_PATTERN_WHITE_SPACE) },
@@ -152,7 +153,8 @@ static const struct {
     { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_UPPERCASED */
     { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_TITLECASED */
     { UPROPS_SRC_CASE_AND_NORM,  0 },                           /* UCHAR_CHANGES_WHEN_CASEFOLDED */
-    { UPROPS_SRC_CASE,  0 }                                     /* UCHAR_CHANGES_WHEN_CASEMAPPED */
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CHANGES_WHEN_CASEMAPPED */
+    { UPROPS_SRC_NFKC_CF, 0 }                                   /* UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED */
 };
 
 U_CAPI UBool U_EXPORT2
@@ -173,17 +175,55 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 #if !UCONFIG_NO_NORMALIZATION
                 /* normalization properties from unorm.icu */
                 switch(which) {
-                case UCHAR_FULL_COMPOSITION_EXCLUSION:
-                    return unorm_internalIsFullCompositionExclusion(c);
-                case UCHAR_NFD_INERT:
-                case UCHAR_NFKD_INERT:
-                case UCHAR_NFC_INERT:
-                case UCHAR_NFKC_INERT:
-                    return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD));
                 case UCHAR_SEGMENT_STARTER:
                     return unorm_isCanonSafeStart(c);
                 default:
                     break;
+                }
+#endif
+            } else if(column==UPROPS_SRC_NFC || column==UPROPS_SRC_NFKC) {
+#if !UCONFIG_NO_NORMALIZATION
+                UErrorCode errorCode=U_ZERO_ERROR;
+                switch(which) {
+                case UCHAR_FULL_COMPOSITION_EXCLUSION: {
+                    // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
+                    const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
+                    if(U_SUCCESS(errorCode)) {
+                        return impl->isCompNo(impl->getNorm16(c));
+                    }
+                    break;
+                }
+                default: {
+                    // UCHAR_NF..._INERT properties
+                    const Normalizer2 *norm2=Normalizer2Factory::getInstance(
+                        (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD), errorCode);
+                    if(U_SUCCESS(errorCode)) {
+                        return norm2->isInert(c);
+                    }
+                    break;
+                }
+                }
+#endif
+            } else if(column==UPROPS_SRC_NFKC_CF) {
+                // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
+#if !UCONFIG_NO_NORMALIZATION
+                UErrorCode errorCode=U_ZERO_ERROR;
+                const Normalizer2Impl *kcf=Normalizer2Factory::getNFKC_CFImpl(errorCode);
+                if(U_SUCCESS(errorCode)) {
+                    UnicodeString src(c);
+                    UnicodeString dest;
+                    {
+                        // The ReorderingBuffer must be in a block because its destructor
+                        // needs to release dest's buffer before we look at its contents.
+                        ReorderingBuffer buffer(*kcf, dest);
+                        // Small destCapacity for NFKC_CF(c).
+                        if(U_SUCCESS(errorCode) && buffer.init(5, errorCode)) {
+                            const UChar *srcArray=src.getBuffer();
+                            kcf->compose(srcArray, srcArray+src.length(), FALSE,
+                                         TRUE, buffer, errorCode);
+                        }
+                    }
+                    return U_SUCCESS(errorCode) && dest!=src;
                 }
 #endif
             } else if(column==UPROPS_SRC_BIDI) {
@@ -225,14 +265,16 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
             } else if(column==UPROPS_SRC_CASE_AND_NORM) {
 #if !UCONFIG_NO_NORMALIZATION
                 UChar nfdBuffer[4];
-                const UChar *nfd=NULL;
+                const UChar *nfd;
                 int32_t nfdLength;
-                UErrorCode errorCode = U_ZERO_ERROR;
+                UErrorCode errorCode=U_ZERO_ERROR;
+                const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
+                if(U_FAILURE(errorCode)) {
+                    return FALSE;
+                }
                 switch(which) {
                 case UCHAR_CHANGES_WHEN_CASEFOLDED:
-                    if(unorm_haveData(&errorCode)) {
-                        nfd=unorm_getCanonicalDecomposition(c, nfdBuffer, &nfdLength);
-                    }
+                    nfd=nfcImpl->getDecomposition(c, nfdBuffer, nfdLength);
                     if(nfd!=NULL) {
                         /* c has a decomposition */
                         if(nfdLength==1) {
@@ -274,6 +316,32 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     return FALSE;
 }
 
+#if !UCONFIG_NO_NORMALIZATION
+
+U_CAPI uint8_t U_EXPORT2
+u_getCombiningClass(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return impl->getCC(impl->getNorm16(c));
+    } else {
+        return 0;
+    }
+}
+
+static uint16_t
+getFCD16(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UTrie2 *trie=Normalizer2Factory::getFCDTrie(errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return UTRIE2_GET16(trie, c);
+    } else {
+        return 0;
+    }
+}
+
+#endif
+
 /*
  * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
  * Hangul_Syllable_Type is fully redundant with a subset of Grapheme_Cluster_Break.
@@ -311,11 +379,9 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             return (int32_t)u_charDirection(c);
         case UCHAR_BLOCK:
             return (int32_t)ublock_getCode(c);
-        case UCHAR_CANONICAL_COMBINING_CLASS:
 #if !UCONFIG_NO_NORMALIZATION
+        case UCHAR_CANONICAL_COMBINING_CLASS:
             return u_getCombiningClass(c);
-#else
-            return 0;
 #endif
         case UCHAR_DECOMPOSITION_TYPE:
             return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_DT_MASK);
@@ -352,9 +418,9 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_NFKC_QUICK_CHECK:
             return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
         case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
-            return unorm_getFCD16FromCodePoint(c)>>8;
+            return getFCD16(c)>>8;
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
-            return unorm_getFCD16FromCodePoint(c)&0xff;
+            return getFCD16(c)&0xff;
 #endif
         case UCHAR_GRAPHEME_CLUSTER_BREAK:
             return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_GCB_MASK)>>UPROPS_GCB_SHIFT;
@@ -462,12 +528,13 @@ uprops_getSource(UProperty which) {
 
         case UCHAR_CANONICAL_COMBINING_CLASS:
         case UCHAR_NFD_QUICK_CHECK:
-        case UCHAR_NFKD_QUICK_CHECK:
         case UCHAR_NFC_QUICK_CHECK:
-        case UCHAR_NFKC_QUICK_CHECK:
         case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
-            return UPROPS_SRC_NORM;
+            return UPROPS_SRC_NFC;
+        case UCHAR_NFKD_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+            return UPROPS_SRC_NFKC;
 
         case UCHAR_BIDI_CLASS:
         case UCHAR_JOINING_GROUP:
