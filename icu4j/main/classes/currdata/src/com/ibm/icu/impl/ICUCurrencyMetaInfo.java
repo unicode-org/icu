@@ -1,10 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
+
+import com.ibm.icu.text.CurrencyMetaInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,7 @@ import java.util.Set;
 public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     private ICUResourceBundle regionInfo;
     private ICUResourceBundle digitInfo;
-    
+
     public ICUCurrencyMetaInfo() {
         ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
             ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData",
@@ -26,22 +28,22 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         regionInfo = bundle.findTopLevel("CurrencyMap");
         digitInfo = bundle.findTopLevel("CurrencyMeta");
     }
-    
+
     @Override
     public List<CurrencyInfo> currencyInfo(CurrencyFilter filter) {
         return collect(new InfoCollector(), filter);
     }
-    
+
     @Override
     public List<String> currencies(CurrencyFilter filter) {
         return collect(new CurrencyCollector(), filter);
    }
-    
+
     @Override
     public List<String> regions(CurrencyFilter filter) {
         return collect(new RegionCollector(), filter);
     }
-    
+
     @Override
     public CurrencyDigits currencyDigits(String isoCode) {
         ICUResourceBundle b = digitInfo.findWithFallback(isoCode);
@@ -51,12 +53,12 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         int[] data = b.getIntVector();
         return new CurrencyDigits(data[0], data[1]);
     }
-    
+
     private <T> List<T> collect(Collector<T> collector, CurrencyFilter filter) {
-        // We rely on the fact that the data lists the regions in order, and the 
+        // We rely on the fact that the data lists the regions in order, and the
         // priorities in order within region.  This means we don't need
         // to sort the results to ensure the ordering matches the spec.
-        
+
         if (filter == null) {
             filter = CurrencyFilter.all();
         }
@@ -70,7 +72,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         if (filter.from != Long.MIN_VALUE || filter.to != Long.MAX_VALUE) {
             needed |= Date;
         }
-        
+
         if (needed != 0) {
             if (filter.region != null) {
                 ICUResourceBundle b = regionInfo.findWithFallback(filter.region);
@@ -83,13 +85,13 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
                 }
             }
         }
-        
+
         return collector.getList();
     }
-    
-    private <T> void collectRegion(Collector<T> collector, CurrencyFilter filter, 
+
+    private <T> void collectRegion(Collector<T> collector, CurrencyFilter filter,
             int needed, ICUResourceBundle b) {
-        
+
         String region = b.getKey();
         if ((needed & nonRegion) == 0) {
             collector.collect(b.getKey(), null, 0, 0, -1);
@@ -107,7 +109,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             String currency = null;
             long from = Long.MIN_VALUE;
             long to = Long.MAX_VALUE;
-            
+
             if ((needed & Currency) != 0) {
                 ICUResourceBundle currBundle = r.at("id");
                 currency = currBundle.getString();
@@ -115,7 +117,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
                     continue;
                 }
             }
-            
+
             if ((needed & Date) != 0) {
                 from = getDate(r.at("from"), Long.MIN_VALUE);
                 to = getDate(r.at("to"), Long.MAX_VALUE);
@@ -130,12 +132,12 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
                     continue;
                 }
             }
-            
+
             // data lists elements in priority order, so 'i' suffices
             collector.collect(region, currency, from, to, i);
         }
     }
-    
+
     private static final long MASK = 4294967295L;
     private long getDate(ICUResourceBundle b, long defaultValue) {
         if (b == null) {
@@ -144,34 +146,34 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         int[] values = b.getIntVector();
         return ((long) values[0] << 32) | ((long) values[1] & MASK);
     }
-    
+
     // Utility, just because I don't like the n^2 behavior of using list.contains to build a
     // list of unique items.  If we used java 6 we could use their class for this.
     private static class UniqueList<T> {
         private Set<T> seen = new HashSet<T>();
         private List<T> list = new ArrayList<T>();
-        
+
         private static <T> UniqueList<T> create() {
             return new UniqueList<T>();
         }
-        
+
         void add(T value) {
             if (!seen.contains(value)) {
                 list.add(value);
                 seen.add(value);
             }
         }
-        
+
         List<T> list() {
             return Collections.unmodifiableList(list);
         }
     }
-    
+
     private static class InfoCollector implements Collector<CurrencyInfo> {
         // Data is already unique by region/priority, so we don't need to be concerned
         // about duplicates.
         private List<CurrencyInfo> result = new ArrayList<CurrencyInfo>();
-        
+
         public void collect(String region, String currency, long from, long to, int priority) {
             result.add(new CurrencyInfo(region, currency, from, to, priority));
         }
@@ -184,10 +186,10 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             return Region | Currency | Date;
         }
     }
-    
+
     private static class RegionCollector implements Collector<String> {
         private final UniqueList<String> result = UniqueList.create();
-        
+
         public void collect(String region, String currency, long from, long to, int priority) {
             result.add(region);
         }
@@ -200,10 +202,10 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             return result.list();
         }
     }
-  
+
     private static class CurrencyCollector implements Collector<String> {
         private final UniqueList<String> result = UniqueList.create();
-        
+
         public void collect(String region, String currency, long from, long to, int priority) {
             result.add(currency);
         }
@@ -216,20 +218,20 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             return result.list();
         }
     }
-    
+
     private static final int Region = 1;
     private static final int Currency = 2;
     private static final int Date = 4;
-    
+
     private static final int nonRegion = Currency | Date;
-    
+
     private static interface Collector<T> {
         /**
          * A bitmask of Region/Currency/Date indicating which features we collect.
          * @return the bitmask
          */
         int collects();
-        
+
         /**
          * Called with data passed by filter.  Values not collected by filter should be ignored.
          * @param region the region code (null if ignored)
@@ -239,7 +241,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
          * @param priority priority (-1 if ignored)
          */
         void collect(String region, String currency, long from, long to, int priority);
-        
+
         /**
          * Return the list of unique items in the order in which we encountered them for the
          * first time.  The returned list is unmodifiable.

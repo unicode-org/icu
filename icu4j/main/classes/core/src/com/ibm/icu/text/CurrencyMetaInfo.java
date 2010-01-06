@@ -4,7 +4,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.impl;
+package com.ibm.icu.text;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

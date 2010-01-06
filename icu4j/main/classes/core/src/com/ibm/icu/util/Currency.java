@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,15 +16,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import com.ibm.icu.impl.CurrencyDisplayNames;
-import com.ibm.icu.impl.CurrencyMetaInfo;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TextTrieMap;
-import com.ibm.icu.impl.CurrencyMetaInfo.CurrencyDigits;
-import com.ibm.icu.impl.CurrencyMetaInfo.CurrencyFilter;
+
+import com.ibm.icu.text.CurrencyDisplayNames;
+import com.ibm.icu.text.CurrencyMetaInfo;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
