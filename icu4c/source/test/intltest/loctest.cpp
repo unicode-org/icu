@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -212,13 +212,14 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         TESTCASE(23, TestParallelAPIValues);
         TESTCASE(24, TestKeywordVariants);
         TESTCASE(25, TestKeywordVariantParsing);
-        TESTCASE(26, TestGetBaseName);
+        TESTCASE(26, TestSetKeywordValue);
+        TESTCASE(27, TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
-        TESTCASE(27, TestGetLocale);
+        TESTCASE(28, TestGetLocale);
 #endif
-        TESTCASE(28, TestVariantWithOutCountry);
-        TESTCASE(29, TestCanonicalization);
-        TESTCASE(30, TestCurrencyByDate);
+        TESTCASE(29, TestVariantWithOutCountry);
+        TESTCASE(30, TestCanonicalization);
+        TESTCASE(31, TestCurrencyByDate);
 
         // keep the last index in sync with the condition in default:
 
@@ -1686,6 +1687,40 @@ LocaleTest::TestKeywordVariantParsing(void) {
         if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
             err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+        }
+    }
+}
+
+void
+LocaleTest::TestSetKeywordValue(void) {
+    static const struct {
+        const char *keyword;
+        const char *value;
+    } testCases[] = {
+        { "collation", "phonebook" },
+        { "currency", "euro" },
+        { "calendar", "buddhist" }
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+
+    int32_t i = 0;
+    int32_t resultLen = 0;
+    char buffer[256];
+
+    Locale l(Locale::getGerman());
+
+    for(i = 0; i < (int32_t)(sizeof(testCases)/sizeof(testCases[0])); i++) {
+        l.setKeywordValue(testCases[i].keyword, testCases[i].value, status);
+        if(U_FAILURE(status)) {
+            err("FAIL: Locale::setKeywordValue failed - %s\n", u_errorName(status));
+        }
+
+        *buffer = 0;
+        resultLen = l.getKeywordValue(testCases[i].keyword, buffer, 256, status);
+        if(uprv_strcmp(testCases[i].value, buffer) != 0) {
+            err("Expected to extract \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+                testCases[i].value, testCases[i].keyword, buffer);
         }
     }
 }

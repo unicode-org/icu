@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2009, International Business Machines
+ *   Copyright (C) 1997-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -1300,6 +1300,12 @@ int32_t
 Locale::getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, UErrorCode &status) const
 {
     return uloc_getKeywordValue(fullName, keywordName, buffer, bufLen, &status);
+}
+
+void
+Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status)
+{
+    uloc_setKeywordValue(keywordName, keywordValue, fullName, ULOC_FULLNAME_CAPACITY, &status);
 }
 
 const char *
