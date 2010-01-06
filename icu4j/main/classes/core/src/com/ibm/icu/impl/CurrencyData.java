@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,31 +13,31 @@ import com.ibm.icu.util.ULocale;
 
 public class CurrencyData {
     public static final CurrencyDisplayInfoProvider provider;
-    
+
     public static interface CurrencyDisplayInfoProvider {
         CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback);
         boolean hasData();
     }
-    
+
     public static abstract class CurrencyDisplayInfo extends CurrencyDisplayNames {
         public abstract Map<String, String> getUnitPatterns();
         public abstract CurrencyFormatInfo getFormatInfo(String isoCode);
         public abstract CurrencySpacingInfo getSpacingInfo();
     }
-    
+
     public static final class CurrencyFormatInfo {
         public final String currencyPattern;
         public final char monetarySeparator;
         public final char monetaryGroupingSeparator;
 
-        public CurrencyFormatInfo(String currencyPattern, char monetarySeparator, 
+        public CurrencyFormatInfo(String currencyPattern, char monetarySeparator,
                 char monetaryGroupingSeparator) {
             this.currencyPattern = currencyPattern;
             this.monetarySeparator = monetarySeparator;
             this.monetaryGroupingSeparator = monetaryGroupingSeparator;
         }
     }
-    
+
     public static final class CurrencySpacingInfo {
         public final String beforeCurrencyMatch;
         public final String beforeContextMatch;
@@ -45,7 +45,7 @@ public class CurrencyData {
         public final String afterCurrencyMatch;
         public final String afterContextMatch;
         public final String afterInsert;
-        
+
         public CurrencySpacingInfo(
                 String beforeCurrencyMatch, String beforeContextMatch, String beforeInsert,
                 String afterCurrencyMatch, String afterContextMatch, String afterInsert) {
@@ -56,8 +56,8 @@ public class CurrencyData {
             this.afterContextMatch = afterContextMatch;
             this.afterInsert = afterInsert;
         }
-        
-        
+
+
         private static final String DEFAULT_CUR_MATCH = "[:letter:]";
         private static final String DEFAULT_CTX_MATCH = "[:digit:]";
         private static final String DEFAULT_INSERT = " ";
@@ -66,7 +66,7 @@ public class CurrencyData {
                 DEFAULT_CUR_MATCH, DEFAULT_CTX_MATCH, DEFAULT_INSERT,
                 DEFAULT_CUR_MATCH, DEFAULT_CTX_MATCH, DEFAULT_INSERT);
     }
-    
+
     static {
         CurrencyDisplayInfoProvider temp = null;
         try {
@@ -77,7 +77,7 @@ public class CurrencyData {
                 public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
                     return DefaultInfo.getWithFallback(withFallback);
                 }
-                
+
                 public boolean hasData() {
                     return false;
                 }
@@ -85,10 +85,10 @@ public class CurrencyData {
         }
         provider = temp;
     }
-    
+
     public static class DefaultInfo extends CurrencyDisplayInfo {
         private final boolean fallback;
-        
+
         private DefaultInfo(boolean fallback) {
             this.fallback = fallback;
         }
@@ -96,7 +96,7 @@ public class CurrencyData {
         public static final CurrencyDisplayInfo getWithFallback(boolean fallback) {
             return fallback ? FALLBACK_INSTANCE : NO_FALLBACK_INSTANCE;
         }
-        
+
         @Override
         public String getName(String isoCode) {
             return fallback ? isoCode : null;
@@ -116,7 +116,7 @@ public class CurrencyData {
         public Map<String, String> symbolMap() {
             return Collections.emptyMap();
         }
-        
+
         @Override
         public Map<String, String> nameMap() {
             return Collections.emptyMap();
@@ -129,7 +129,7 @@ public class CurrencyData {
 
         @Override
         public Map<String, String> getUnitPatterns() {
-            if  (fallback) {
+            if (fallback) {
                 return Collections.emptyMap();
             }
             return null;
@@ -144,7 +144,7 @@ public class CurrencyData {
         public CurrencySpacingInfo getSpacingInfo() {
             return fallback ? CurrencySpacingInfo.DEFAULT : null;
         }
-        
+
         private static final CurrencyDisplayInfo FALLBACK_INSTANCE = new DefaultInfo(true);
         private static final CurrencyDisplayInfo NO_FALLBACK_INSTANCE = new DefaultInfo(false);
     }
