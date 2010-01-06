@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -776,38 +776,10 @@ void BasicNormalizerTest::TestConcatenate() {
         },
         /* ### TODO: add more interesting cases */
         {
-            "D", 
-            "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958" 
-            "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC" 
-            "\\u09DD\\u09DF\\u0A33\\u0A36\\u0A59\\u0A5A\\u0A5B\\u0A5E" 
-            "\\u0B5C\\u0B5D\\u0F43\\u0F4D\\u0F52\\u0F57\\u0F5C\\u0F69" 
-            "\\u0F73\\u0F75\\u0F76\\u0F78\\u0F81\\u0F93\\u0F9D\\u0FA2" 
-            "\\u0FA7\\u0FAC\\u0FB9\\u1F71\\u1F73\\u1F75\\u1F77\\u1F79" 
-            "\\u1F7B\\u1F7D\\u1FBB\\u1FBE\\u1FC9\\u1FCB\\u1FD3\\u1FDB",
-            
-            "\\u1FE3\\u1FEB\\u1FEE\\u1FEF\\u1FF9\\u1FFB\\u1FFD\\u2000" 
-            "\\u2001\\u2126\\u212A\\u212B\\u2329\\u232A\\uF900\\uFA10" 
-            "\\uFA12\\uFA15\\uFA20\\uFA22\\uFA25\\uFA26\\uFA2A\\uFB1F" 
-            "\\uFB2A\\uFB2B\\uFB2C\\uFB2D\\uFB2E\\uFB2F\\uFB30\\uFB31" 
-            "\\uFB32\\uFB33\\uFB34\\uFB35\\uFB36\\uFB38\\uFB39\\uFB3A" 
-            "\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46" 
-            "\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B\\uFB4C\\uFB4D\\uFB4E",
-           
-            "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958"
-            "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC"
-            "\\u09DD\\u09DF\\u0A33\\u0A36\\u0A59\\u0A5A\\u0A5B\\u0A5E"
-            "\\u0B5C\\u0B5D\\u0F43\\u0F4D\\u0F52\\u0F57\\u0F5C\\u0F69"
-            "\\u0F73\\u0F75\\u0F76\\u0F78\\u0F81\\u0F93\\u0F9D\\u0FA2"
-            "\\u0FA7\\u0FAC\\u0FB9\\u1F71\\u1F73\\u1F75\\u1F77\\u1F79"
-            "\\u1F7B\\u1F7D\\u1FBB\\u1FBE\\u1FC9\\u1FCB\\u1FD3\\u0399"
-            "\\u0301\\u03C5\\u0308\\u0301\\u1FEB\\u1FEE\\u1FEF\\u1FF9"
-            "\\u1FFB\\u1FFD\\u2000\\u2001\\u2126\\u212A\\u212B\\u2329"
-            "\\u232A\\uF900\\uFA10\\uFA12\\uFA15\\uFA20\\uFA22\\uFA25"
-            "\\uFA26\\uFA2A\\uFB1F\\uFB2A\\uFB2B\\uFB2C\\uFB2D\\uFB2E"
-            "\\uFB2F\\uFB30\\uFB31\\uFB32\\uFB33\\uFB34\\uFB35\\uFB36"
-            "\\uFB38\\uFB39\\uFB3A\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41"
-            "\\uFB43\\uFB44\\uFB46\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B"
-            "\\uFB4C\\uFB4D\\uFB4E"
+            "D",
+            "\\u03B1\\u0345",
+            "\\u0C4D\\U000110BA\\U0001D169",
+            "\\u03B1\\U0001D169\\U000110BA\\u0C4D\\u0345"
         }
     };
 
@@ -1743,72 +1715,23 @@ U_CDECL_END
 
 void
 BasicNormalizerTest::TestSkippable() {
-    UnicodeSet starts, diff, skipSets[UNORM_MODE_COUNT], expectSets[UNORM_MODE_COUNT];
-    UnicodeSet *startsPtr = &starts;
+    UnicodeSet diff, skipSets[UNORM_MODE_COUNT], expectSets[UNORM_MODE_COUNT];
     UnicodeString s, pattern;
-    UChar32 start, limit, rangeStart, rangeEnd;
-    int32_t i, range, count;
-
-    UErrorCode status;
 
     /* build NF*Skippable sets from runtime data */
-    status=U_ZERO_ERROR;
-    USetAdder sa = {
-        (USet *)startsPtr,
-        _set_add,
-        _set_addRange,
-        _set_addString,
-        NULL, // don't need remove()
-        NULL
-    };
-    unorm_addPropertyStarts(&sa, &status);
-    if(U_FAILURE(status)) {
-        errln("unable to load normalization data for unorm_addPropertyStarts(() - %s\n", u_errorName(status));
+    IcuTestErrorCode errorCode(*this, "TestSkippable");
+    skipSets[UNORM_NFD].applyPattern(UNICODE_STRING_SIMPLE("[:NFD_Inert:]"), errorCode);
+    skipSets[UNORM_NFKD].applyPattern(UNICODE_STRING_SIMPLE("[:NFKD_Inert:]"), errorCode);
+    skipSets[UNORM_NFC].applyPattern(UNICODE_STRING_SIMPLE("[:NFC_Inert:]"), errorCode);
+    skipSets[UNORM_NFKC].applyPattern(UNICODE_STRING_SIMPLE("[:NFKC_Inert:]"), errorCode);
+    if(errorCode.logIfFailureAndReset("UnicodeSet(NF..._Inert) failed")) {
         return;
-    }
-    count=starts.getRangeCount();
-
-    start=limit=0;
-    rangeStart=rangeEnd=0;
-    range=0;
-    for(;;) {
-        if(start<limit) {
-            /* get properties for start and apply them to [start..limit[ */
-            if(unorm_isNFSkippable(start, UNORM_NFD)) {
-                skipSets[UNORM_NFD].add(start, limit-1);
-            }
-            if(unorm_isNFSkippable(start, UNORM_NFKD)) {
-                skipSets[UNORM_NFKD].add(start, limit-1);
-            }
-            if(unorm_isNFSkippable(start, UNORM_NFC)) {
-                skipSets[UNORM_NFC].add(start, limit-1);
-            }
-            if(unorm_isNFSkippable(start, UNORM_NFKC)) {
-                skipSets[UNORM_NFKC].add(start, limit-1);
-            }
-        }
-
-        /* go to next range of same properties */
-        start=limit;
-        if(++limit>rangeEnd) {
-            if(range<count) {
-                limit=rangeStart=starts.getRangeStart(range);
-                rangeEnd=starts.getRangeEnd(range);
-                ++range;
-            } else if(range==count) {
-                /* additional range to complete the Unicode code space */
-                limit=rangeStart=rangeEnd=0x110000;
-                ++range;
-            } else {
-                break;
-            }
-        }
     }
 
     /* get expected sets from hardcoded patterns */
     initExpectedSkippables(expectSets);
 
-    for(i=UNORM_NONE; i<UNORM_MODE_COUNT; ++i) {
+    for(int32_t i=UNORM_NONE; i<UNORM_MODE_COUNT; ++i) {
         if(skipSets[i]!=expectSets[i]) {
             errln("error: TestSkippable skipSets[%d]!=expectedSets[%d]\n"
                   "may need to update hardcoded UnicodeSet patterns in\n"

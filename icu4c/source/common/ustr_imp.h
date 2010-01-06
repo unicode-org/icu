@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_imp.h
@@ -24,6 +24,23 @@
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
     typedef struct UBreakIterator UBreakIterator;
 #endif
+
+#ifndef U_COMPARE_IGNORE_CASE
+/* see also unorm.h */
+/**
+ * Option bit for unorm_compare:
+ * Perform case-insensitive comparison.
+ * @draft ICU 2.2
+ */
+#define U_COMPARE_IGNORE_CASE       0x10000
+#endif
+
+/**
+ * Internal option for unorm_cmpEquivFold() for strncmp style.
+ * If set, checks for both string length and terminating NUL.
+ * @internal
+ */
+#define _STRNCMP_STYLE 0x1000
 
 /**
  * Compare two strings in code point order or code unit order.

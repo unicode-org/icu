@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -65,6 +65,10 @@ udata_create(const char *dir, const char *type, const char *name,
 /** @memo Close a newly written binary file. */
 U_CAPI uint32_t U_EXPORT2
 udata_finish(UNewDataMemory *pData, UErrorCode *pErrorCode);
+
+/** @memo Write a dummy data file. */
+U_CAPI void U_EXPORT2
+udata_createDummy(const char *dir, const char *type, const char *name, UErrorCode *pErrorCode);
 
 /** @memo Write an 8-bit byte to the file. */
 U_CAPI void U_EXPORT2

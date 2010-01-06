@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -15,7 +15,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/translit.h"
-#include "unicode/normlzr.h"
+#include "unicode/normalizer2.h"
 
 U_NAMESPACE_BEGIN
 
@@ -24,16 +24,7 @@ U_NAMESPACE_BEGIN
  * @author Alan Liu
  */
 class NormalizationTransliterator : public Transliterator {
-
-    /**
-     * The normalization mode of this transliterator.
-     */
-    UNormalizationMode fMode;
-
-    /**
-     * Normalization options for this transliterator.
-     */
-    int32_t options;
+    const Normalizer2 &fNorm2;
 
  public:
 
@@ -93,8 +84,7 @@ class NormalizationTransliterator : public Transliterator {
      * Constructs a transliterator.  This method is private.
      * Public users must use the factory method createInstance().
      */
-    NormalizationTransliterator(const UnicodeString& id,
-                                UNormalizationMode mode, int32_t opt);
+    NormalizationTransliterator(const UnicodeString& id, const Normalizer2 &norm2);
 
 private:
     /**

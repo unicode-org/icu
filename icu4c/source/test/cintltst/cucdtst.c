@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -22,6 +22,7 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "unicode/unorm2.h"
 
 #include "cintltst.h"
 #include "putilimp.h"
@@ -2942,6 +2943,7 @@ TestConsistency() {
     UErrorCode errorCode;
 
 #if !UCONFIG_NO_NORMALIZATION
+    const UNormalizer2 *norm2;
     USerializedSet sset;
 #endif
     UChar32 start, end;
@@ -3070,15 +3072,26 @@ TestConsistency() {
      * In general, the set for the middle such character should be a subset
      * of the set for the first.
      */
+    errorCode=U_ZERO_ERROR;
+    norm2=unorm2_getInstance(NULL, "nfc", UNORM2_DECOMPOSE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unorm2_getInstance(NFD) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+
     set1=uset_open(1, 0);
     set2=uset_open(1, 0);
 
     if (unorm_getCanonStartSet(0x49, &sset)) {
+        UChar source[1];
+
         _setAddSerialized(set1, &sset);
 
         /* enumerate all characters that are plausible to be latin letters */
         for(start=0xa0; start<0x2000; ++start) {
-            if(unorm_getDecomposition(start, FALSE, buffer16, LENGTHOF(buffer16))>1 && buffer16[0]==0x49) {
+            source[0]=(UChar)start;
+            length=unorm2_normalize(norm2, source, 1, buffer16, LENGTHOF(buffer16), &errorCode);
+            if(length>1 && buffer16[0]==0x49) {
                 uset_add(set2, start);
             }
         }

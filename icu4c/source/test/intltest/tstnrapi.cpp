@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -162,25 +162,6 @@ BasicNormalizerTest::TestNormalizerAPI() {
     Normalizer::concatenate(s, s, s, UNORM_NFC, 0, status);
     if(s.charAt(1)!=0xe4) {
         errln("error in Normalizer::decompose(self)");
-    }
-
-    // test internal normalization exclusion options
-    // s contains a compatibility CJK character and a Hangul syllable
-    s=UnicodeString("a\\uFACE\\uD7A3b", -1, US_INV).unescape();
-    status=U_ZERO_ERROR;
-    Normalizer::decompose(s, FALSE, UNORM_NX_HANGUL, out, status);
-    if(U_FAILURE(status) || out!=UNICODE_STRING_SIMPLE("a\\u9F9C\\uD7A3b").unescape()) {
-        errln("Normalizer::decompose(UNORM_NX_HANGUL) failed - %s", u_errorName(status));
-    }
-    status=U_ZERO_ERROR;
-    Normalizer::decompose(s, FALSE, UNORM_NX_CJK_COMPAT, out, status);
-    if(U_FAILURE(status) || out!=UNICODE_STRING_SIMPLE("a\\uFACE\\u1112\\u1175\\u11c2b").unescape()) {
-        errln("Normalizer::decompose(UNORM_NX_CJK_COMPAT) failed - %s", u_errorName(status));
-    }
-    status=U_ZERO_ERROR;
-    Normalizer::decompose(s, FALSE, UNORM_NX_CJK_COMPAT|UNORM_NX_HANGUL, out, status);
-    if(U_FAILURE(status) || out!=UNICODE_STRING_SIMPLE("a\\uFACE\\uD7A3b").unescape()) {
-        errln("Normalizer::decompose(UNORM_NX_CJK_COMPAT|UNORM_NX_HANGUL) failed - %s", u_errorName(status));
     }
 }
 

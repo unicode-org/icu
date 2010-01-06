@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -126,6 +126,16 @@ u_parseCodePointRange(const char *s,
                       uint32_t *pStart, uint32_t *pEnd,
                       UErrorCode *pErrorCode);
 
+/**
+ * Same as u_parseCodePointRange() but the range may be terminated by
+ * any character. The position of the terminating character is returned via
+ * the *terminator output parameter.
+ */
+U_CAPI int32_t U_EXPORT2
+u_parseCodePointRangeAnyTerminator(const char *s,
+                                   uint32_t *pStart, uint32_t *pEnd,
+                                   const char **terminator,
+                                   UErrorCode *pErrorCode);
 
 U_CAPI int32_t U_EXPORT2
 u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, UErrorCode *status);

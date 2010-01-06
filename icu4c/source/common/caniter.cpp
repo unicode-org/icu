@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and  *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -12,6 +12,7 @@
 #include "unicode/uset.h"
 #include "unicode/ustring.h"
 #include "hash.h"
+#include "normalizer2impl.h"
 #include "unormimp.h"
 #include "unicode/caniter.h"
 #include "unicode/normlzr.h"
@@ -68,7 +69,8 @@ CanonicalIterator::CanonicalIterator(const UnicodeString &sourceStr, UErrorCode 
     pieces_length(0),
     pieces_lengths(NULL),
     current(NULL),
-    current_length(0)
+    current_length(0),
+    nfd(*Normalizer2Factory::getNFDInstance(status))
 {
     if(U_SUCCESS(status)) {
       setSource(sourceStr, status);
@@ -499,73 +501,39 @@ Hashtable *CanonicalIterator::extract(Hashtable *fillinResult, UChar32 comp, con
         return NULL;
     }
 
-    const int32_t bufSize = 256;
-    int32_t bufLen = 0;
-    UChar temp[bufSize];
-
-    int32_t inputLen = 0, decompLen;
-    UChar stackBuffer[4];
-    const UChar *decomp;
-
-    U16_APPEND_UNSAFE(temp, inputLen, comp);
-    decomp = unorm_getCanonicalDecomposition(comp, stackBuffer, &decompLen);
-    if(decomp == NULL) {
-        /* copy temp */
-        stackBuffer[0] = temp[0];
-        if(inputLen > 1) {
-            stackBuffer[1] = temp[1];
-        }
-        decomp = stackBuffer;
-        decompLen = inputLen;
-    }
-
-    UChar *buff = temp+inputLen;
+    UnicodeString temp(comp);
+    int32_t inputLen=temp.length();
+    UnicodeString decompString;
+    nfd.normalize(temp, decompString, status);
+    const UChar *decomp=decompString.getBuffer();
+    int32_t decompLen=decompString.length();
 
     // See if it matches the start of segment (at segmentPos)
     UBool ok = FALSE;
     UChar32 cp;
     int32_t decompPos = 0;
     UChar32 decompCp;
-    UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
+    U16_NEXT(decomp, decompPos, decompLen, decompCp);
 
-    int32_t i;
-    UBool overflow = FALSE;
-
-    i = segmentPos;
+    int32_t i = segmentPos;
     while(i < segLen) {
-        UTF_NEXT_CHAR(segment, i, segLen, cp);
+        U16_NEXT(segment, i, segLen, cp);
 
         if (cp == decompCp) { // if equal, eat another cp from decomp
 
             //if (PROGRESS) printf("  matches: %s\n", UToS(Tr(UnicodeString(cp))));
 
             if (decompPos == decompLen) { // done, have all decomp characters!
-                //u_strcat(buff+bufLen, segment+i);
-                uprv_memcpy(buff+bufLen, segment+i, (segLen-i)*sizeof(UChar));
-                bufLen+=segLen-i;
-
+                temp.append(segment+i, segLen-i);
                 ok = TRUE;
                 break;
             }
-            UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
+            U16_NEXT(decomp, decompPos, decompLen, decompCp);
         } else {
             //if (PROGRESS) printf("  buffer: %s\n", UToS(Tr(UnicodeString(cp))));
 
             // brute force approach
-
-            U16_APPEND(buff, bufLen, bufSize, cp, overflow);
-
-            if(overflow) {
-                /*
-                 * ### TODO handle buffer overflow
-                 * The buffer is large, but an overflow may still happen with
-                 * unusual input (many combining marks?).
-                 * Reallocate buffer and continue.
-                 * markus 20020929
-                 */
-
-                overflow = FALSE;
-            }
+            temp.append(cp);
 
             /* TODO: optimize
             // since we know that the classes are monotonically increasing, after zero
@@ -585,25 +553,20 @@ Hashtable *CanonicalIterator::extract(Hashtable *fillinResult, UChar32 comp, con
 
     //if (PROGRESS) printf("Matches\n");
 
-    if (bufLen == 0) {
+    if (inputLen == temp.length()) {
         fillinResult->put(UnicodeString(), new UnicodeString(), status);
         return fillinResult; // succeed, but no remainder
     }
 
     // brute force approach
     // check to make sure result is canonically equivalent
-    int32_t tempLen = inputLen + bufLen;
-
-    UChar trial[bufSize];
-    unorm_decompose(trial, bufSize, temp, tempLen, FALSE, 0, &status);
-
-    if(U_FAILURE(status)
-        || uprv_memcmp(segment+segmentPos, trial, (segLen - segmentPos)*sizeof(UChar)) != 0)
-    {
+    UnicodeString trial;
+    nfd.normalize(temp, trial, status);
+    if(U_FAILURE(status) || trial.compare(segment+segmentPos, segLen - segmentPos) != 0) {
         return NULL;
     }
 
-    return getEquivalents2(fillinResult, buff, bufLen, status);
+    return getEquivalents2(fillinResult, temp.getBuffer()+inputLen, temp.length()-inputLen, status);
 }
 
 U_NAMESPACE_END

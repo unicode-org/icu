@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -605,7 +605,69 @@ utrie2_set32ForLeadSurrogateCodeUnit(UTrie2 *trie,
  */
 #define UTRIE2_GET32_FROM_SUPP(trie, c) _UTRIE2_GET_FROM_SUPP((trie), data32, c)
 
+U_CDECL_END
+
+/* C++ convenience wrappers ------------------------------------------------- */
+
+#ifdef XP_CPLUSPLUS
+
+#include "mutex.h"
+
+U_NAMESPACE_BEGIN
+
+// Use the Forward/Backward subclasses below.
+class UTrie2StringIterator : public UMemory {
+public:
+    UTrie2StringIterator(const UTrie2 *t, const UChar *p) :
+        trie(t), codePointStart(p), codePointLimit(p), codePoint(U_SENTINEL) {}
+
+    const UTrie2 *trie;
+    const UChar *codePointStart, *codePointLimit;
+    UChar32 codePoint;
+};
+
+class BackwardUTrie2StringIterator : public UTrie2StringIterator {
+public:
+    BackwardUTrie2StringIterator(const UTrie2 *t, const UChar *s, const UChar *p) :
+        UTrie2StringIterator(t, p), start(s) {}
+
+    uint16_t previous16();
+
+    const UChar *start;
+};
+
+class ForwardUTrie2StringIterator : public UTrie2StringIterator {
+public:
+    // Iteration limit l can be NULL.
+    // In that case, the caller must detect c==0 and stop.
+    ForwardUTrie2StringIterator(const UTrie2 *t, const UChar *p, const UChar *l) :
+        UTrie2StringIterator(t, p), limit(l) {}
+
+    uint16_t next16();
+
+    const UChar *limit;
+};
+
+class UTrie2Singleton {
+public:
+    UTrie2Singleton(SimpleSingleton &s) : singleton(s) {}
+    void deleteInstance() {
+        utrie2_close((UTrie2 *)singleton.fInstance);
+        singleton.reset();
+    }
+    UTrie2 *getInstance(InstantiatorFn *instantiator, const void *context,
+                        UErrorCode &errorCode);
+private:
+    SimpleSingleton &singleton;
+};
+
+U_NAMESPACE_END
+
+#endif
+
 /* Internal definitions ----------------------------------------------------- */
+
+U_CDECL_BEGIN
 
 /** Build-time trie structure. */
 struct UNewTrie2;

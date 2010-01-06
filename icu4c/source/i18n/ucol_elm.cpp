@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,6 +31,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/normlzr.h"
+#include "normalizer2impl.h"
 #include "ucol_elm.h"
 #include "ucol_tok.h"
 #include "ucol_cnt.h"
@@ -1602,6 +1603,7 @@ struct enumStruct {
     tempUCATable *t;
     UCollator *tempColl;
     UCollationElements* colEl;
+    const Normalizer2Impl *nfcImpl;
     int32_t noOfClosures;
     UErrorCode *status;
 };
@@ -1615,7 +1617,8 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
         UCollator *tempColl = ((enumStruct *)context)->tempColl;
         UCollationElements* colEl = ((enumStruct *)context)->colEl;
         UCAElements el;
-        UChar decomp[256] = { 0 };
+        UChar decompBuffer[4];
+        const UChar *decomp;
         int32_t noOfDec = 0;
 
         UChar32 u32 = 0;
@@ -1623,13 +1626,14 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
         uint32_t len = 0;
 
         for(u32 = start; u32 < limit; u32++) {
-            noOfDec = unorm_getDecomposition(u32, FALSE, decomp, 256);
+            decomp = ((enumStruct *)context)->nfcImpl->
+                getDecomposition(u32, decompBuffer, noOfDec);
             //if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
             //|| (noOfDec == 1 && *decomp != (UChar)u32))
-            if(noOfDec > 0) // if we're positive, that means there is no decomposition
+            if(decomp != NULL)
             {
                 len = 0;
-                UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
+                U16_APPEND_UNSAFE(comp, len, u32);
                 if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
 #ifdef UCOL_DEBUG
                     fprintf(stderr, "Closure: %08X -> ", u32);
@@ -1640,7 +1644,7 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
                     fprintf(stderr, "\n");
 #endif
                     ((enumStruct *)context)->noOfClosures++;
-                    el.cPoints = decomp;
+                    el.cPoints = (UChar *)decomp;
                     el.cSize = noOfDec;
                     el.noOfCEs = 0;
                     el.prefix = el.prefixChars;
@@ -1938,7 +1942,7 @@ uprv_uca_canonicalClosure(tempUCATable *t,
     UChar  baseChar, firstCM;
     UChar32 fcdHighStart;
     const uint16_t *fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
-
+    context.nfcImpl=Normalizer2Factory::getNFCImpl(*status);
     if(U_FAILURE(*status)) {
         return 0;
     }

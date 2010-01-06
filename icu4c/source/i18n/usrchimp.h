@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  08/13/2001   synwee      Creation.
@@ -13,6 +13,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/normalizer2.h"
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/ubrk.h"
@@ -59,6 +60,7 @@ struct UStringSearch {
     struct USearch            *search;
     struct UPattern            pattern;
     const  UCollator          *collator;
+    const  Normalizer2        *nfd;
     // positions within the collation element iterator is used to determine
     // if we are at the start of the text.
            UCollationElements *textIter;

@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  utrie2.c
+*   file name:  utrie2.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -423,7 +423,7 @@ utrie2_swap(const UDataSwapper *ds,
     trie.indexLength=ds->readUInt16(inTrie->indexLength);
     trie.shiftedDataLength=ds->readUInt16(inTrie->shiftedDataLength);
 
-    valueBits=trie.options&UTRIE2_OPTIONS_VALUE_BITS_MASK;
+    valueBits=(UTrie2ValueBits)(trie.options&UTRIE2_OPTIONS_VALUE_BITS_MASK);
     dataLength=(int32_t)trie.shiftedDataLength<<UTRIE2_INDEX_SHIFT;
 
     if( trie.signature!=UTRIE2_SIG ||
@@ -696,3 +696,39 @@ utrie2_enumForLeadSurrogate(const UTrie2 *trie, UChar32 lead,
     lead=(lead-0xd7c0)<<10;   /* start code point */
     enumEitherTrie(trie, lead, lead+0x400, enumValue, enumRange, context);
 }
+
+/* C++ convenience wrappers ------------------------------------------------- */
+
+U_NAMESPACE_BEGIN
+
+uint16_t BackwardUTrie2StringIterator::previous16() {
+    codePointLimit=codePointStart;
+    if(start>=codePointStart) {
+        codePoint=U_SENTINEL;
+        return 0;
+    }
+    uint16_t result;
+    UTRIE2_U16_PREV16(trie, start, codePointStart, codePoint, result);
+    return result;
+}
+
+uint16_t ForwardUTrie2StringIterator::next16() {
+    codePointStart=codePointLimit;
+    if(codePointLimit==limit) {
+        codePoint=U_SENTINEL;
+        return 0;
+    }
+    uint16_t result;
+    UTRIE2_U16_NEXT16(trie, codePointLimit, limit, codePoint, result);
+    return result;
+}
+
+UTrie2 *UTrie2Singleton::getInstance(InstantiatorFn *instantiator, const void *context,
+                                     UErrorCode &errorCode) {
+    void *duplicate;
+    UTrie2 *instance=(UTrie2 *)singleton.getInstance(instantiator, context, duplicate, errorCode);
+    utrie2_close((UTrie2 *)duplicate);
+    return instance;
+}
+
+U_NAMESPACE_END

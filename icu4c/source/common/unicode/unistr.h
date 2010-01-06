@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1567,6 +1567,33 @@ public:
 #endif
 
   /**
+   * Create a temporary substring for the specified range.
+   * Unlike the substring constructor and setTo() functions,
+   * the object returned here will be a read-only alias (using getBuffer())
+   * rather than copying the text.
+   * As a result, this substring operation is much faster but requires
+   * that the original string not be modified or deleted during the lifetime
+   * of the returned substring object.
+   * @param start offset of the first character visible in the substring
+   * @param length length of the substring
+   * @return a read-only alias UnicodeString object for the substring
+   * @draft ICU 4.4
+   */
+  UnicodeString tempSubString(int32_t start=0, int32_t length=INT32_MAX) const;
+
+  /**
+   * Create a temporary substring for the specified range.
+   * Same as tempSubString(start, length) except that the substring range
+   * is specified as a (start, limit) pair (with an exclusive limit index)
+   * rather than a (start, length) pair.
+   * @param start offset of the first character visible in the substring
+   * @param limit offset immediately following the last character visible in the substring
+   * @return a read-only alias UnicodeString object for the substring
+   * @draft ICU 4.4
+   */
+  inline UnicodeString tempSubStringBetween(int32_t start, int32_t limit=INT32_MAX) const;
+
+  /**
    * Convert the UnicodeString to UTF-8 and write the result
    * to a ByteSink. This is called by toUTF8String().
    * Unpaired surrogates are replaced with U+FFFD.
@@ -2396,6 +2423,16 @@ public:
   inline UnicodeString& removeBetween(int32_t start,
                                       int32_t limit = (int32_t)INT32_MAX);
 
+  /**
+   * Retain only the characters in the range
+   * [<code>start</code>, <code>limit</code>) from the UnicodeString object.
+   * Removes characters before <code>start</code> and at and after <code>limit</code>.
+   * @param start the offset of the first character to retain
+   * @param limit the offset immediately following the range to retain
+   * @return a reference to this
+   * @draft ICU 4.4
+   */
+  inline UnicodeString &retainBetween(int32_t start, int32_t limit = INT32_MAX);
 
   /* Length operations */
 
@@ -4068,6 +4105,11 @@ UnicodeString::extractBetween(int32_t start,
   doExtract(start, limit - start, dst, dstStart);
 }
 
+inline UnicodeString
+UnicodeString::tempSubStringBetween(int32_t start, int32_t limit) const {
+    return tempSubString(start, limit - start);
+}
+
 inline UChar
 UnicodeString::doCharAt(int32_t offset) const
 {
@@ -4161,7 +4203,13 @@ UnicodeString::getTerminatedBuffer() {
   } else {
     UChar *array = getArrayStart();
     int32_t len = length();
-    if(len < getCapacity()) {
+    if(len < getCapacity() && ((fFlags&kRefCounted) == 0 || refCount() == 1)) {
+      /*
+       * kRefCounted: Do not write the NUL if the buffer is shared.
+       * That is mostly safe, except when the length of one copy was modified
+       * without copy-on-write, e.g., via truncate(newLength) or remove(void).
+       * Then the NUL would be written into the middle of another copy's string.
+       */
       if(!(fFlags&kBufferIsReadonly)) {
         /*
          * We must not write to a readonly buffer, but it is known to be
@@ -4332,10 +4380,12 @@ inline UnicodeString&
 UnicodeString::remove()
 {
   // remove() of a bogus string makes the string empty and non-bogus
-  if(isBogus()) {
-    unBogus();
+  // we also un-alias a read-only alias to deal with NUL-termination
+  // issues with getTerminatedBuffer()
+  if(fFlags & (kIsBogus|kBufferIsReadonly)) {
+    setToEmpty();
   } else {
-    setLength(0);
+    fShortLength = 0;
   }
   return *this;
 }
@@ -4356,6 +4406,12 @@ UnicodeString::removeBetween(int32_t start,
                 int32_t limit)
 { return doReplace(start, limit - start, NULL, 0, 0); }
 
+inline UnicodeString &
+UnicodeString::retainBetween(int32_t start, int32_t limit) {
+  truncate(limit);
+  return doReplace(0, start, NULL, 0, 0);
+}
+
 inline UBool
 UnicodeString::truncate(int32_t targetLength)
 {
@@ -4365,6 +4421,9 @@ UnicodeString::truncate(int32_t targetLength)
     return FALSE;
   } else if((uint32_t)targetLength < (uint32_t)length()) {
     setLength(targetLength);
+    if(fFlags&kBufferIsReadonly) {
+      fUnion.fFields.fCapacity = targetLength;  // not NUL-terminated any more
+    }
     return TRUE;
   } else {
     return FALSE;

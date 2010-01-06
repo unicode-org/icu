@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2009, International Business Machines
+#   Copyright (C) 1999-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -78,7 +78,8 @@ ucat.o locmap.o uloc.o locid.o locutil.o \
 bytestream.o stringpiece.o \
 ustr_cnv.o unistr_cnv.o unistr.o unistr_case.o unistr_props.o \
 utf_impl.o ustring.o ustrcase.o ucasemap.o cstring.o ustrfmt.o ustrtrns.o ustr_wcs.o utext.o \
-normlzr.o unorm.o unormcmp.o unorm_it.o chariter.o schriter.o uchriter.o uiter.o \
+normalizer2impl.o normalizer2.o filterednormalizer2.o normlzr.o unorm.o unormcmp.o unorm_it.o \
+chariter.o schriter.o uchriter.o uiter.o \
 uchar.o uprops.o ucase.o propname.o ubidi_props.o ubidi.o ubidiwrt.o ubidiln.o ushape.o \
 uscript.o usc_impl.o unames.o \
 utrie.o utrie2.o utrie2_builder.o bmpset.o unisetspan.o uset_props.o uniset_props.o uset.o uniset.o usetiter.o ruleiter.o caniter.o unifilt.o unifunct.o \

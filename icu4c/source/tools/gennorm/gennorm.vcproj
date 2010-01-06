@@ -389,33 +389,18 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="Source Files"
-			Filter="c;cpp;rc"
+		<File
+			RelativePath=".\gennorm.c"
 			>
-			<File
-				RelativePath=".\gennorm.c"
-				>
-			</File>
-			<File
-				RelativePath=".\store.c"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h"
+		</File>
+		<File
+			RelativePath=".\gennorm.h"
 			>
-			<File
-				RelativePath=".\gennorm.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+		</File>
+		<File
+			RelativePath=".\store.c"
 			>
-		</Filter>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

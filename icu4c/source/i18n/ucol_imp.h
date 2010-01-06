@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,6 +41,10 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#ifdef XP_CPLUSPLUS
+#include "unicode/normalizer2.h"
+#include "unicode/unistr.h"
+#endif
 #include "unicode/ucol.h"
 #include "utrie.h"
 #include "cmemory.h"
@@ -264,12 +268,14 @@ minimum number for special Jamo
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
-typedef struct collIterate {
-  UChar *string; /* Original string */
+#ifdef XP_CPLUSPLUS
+
+typedef struct collIterate : public UMemory {
+  const UChar *string; /* Original string */
   /* UChar *start;  Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
-  UChar *endp;   /* string end ptr.  Is undefined for null terminated strings */
-  UChar *pos; /* This is position in the string.  Can be to original or writable buf */
+  const UChar *endp; /* string end ptr.  Is undefined for null terminated strings */
+  const UChar *pos; /* This is position in the string.  Can be to original or writable buf */
 
   uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
   uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
@@ -279,16 +285,15 @@ typedef struct collIterate {
   int32_t offsetRepeatCount;  /* Repeat stored offset if non-zero */
   int32_t offsetRepeatValue;  /* offset value to repeat */
 
-  UChar *writableBuffer;
-  uint32_t writableBufSize;
-  UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
+  UnicodeString writableBuffer;
+  const UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
   const UCollator *coll;
+  const Normalizer2 *nfd;
   uint8_t   flags;
   uint8_t   origFlags;
   uint32_t *extendCEs; /* This is use if CEs is not big enough */
   int32_t extendCEsSize; /* Holds the size of the dynamic CEs buffer */
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
-  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
 
   int32_t *offsetBuffer;    /* A dynamic buffer to hold offsets */
   int32_t offsetBufferSize; /* The size of the offset buffer */
@@ -296,6 +301,12 @@ typedef struct collIterate {
   UCharIterator *iterator;
   /*int32_t iteratorIndex;*/
 } collIterate;
+
+#else
+
+typedef struct collIterate collIterate;
+
+#endif
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
@@ -305,19 +316,34 @@ struct used internally in getSpecial*CE.
 data similar to collIterate.
 */
 struct collIterateState {
-    UChar    *pos; /* This is position in the string.  Can be to original or writable buf */
-    UChar    *returnPos;
-    UChar    *fcdPosition; /* Position in the original string to continue FCD check from. */
-    UChar    *bufferaddress; /* address of the normalization buffer */
-    uint32_t  buffersize;
+    const UChar *pos; /* This is position in the string.  Can be to original or writable buf */
+    const UChar *returnPos;
+    const UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
+    const UChar *bufferaddress; /* address of the normalization buffer */
+    int32_t  buffersize;
     uint8_t   flags;
     uint8_t   origFlags;
     uint32_t   iteratorIndex;
     int32_t    iteratorMove;
 };
 
-U_CAPI void U_EXPORT2 
-uprv_init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
+U_CAPI void U_EXPORT2
+uprv_init_collIterate(const UCollator *collator,
+                      const UChar *sourceString, int32_t sourceLen,
+                      collIterate *s, UErrorCode *status);
+
+/* Internal functions for C test code. */
+U_CAPI collIterate * U_EXPORT2
+uprv_new_collIterate(UErrorCode *status);
+
+U_CAPI void U_EXPORT2
+uprv_delete_collIterate(collIterate *s);
+
+/* @return s->pos == s->endp */
+U_CAPI UBool U_EXPORT2
+uprv_collIterateAtEnd(collIterate *s);
+
+#ifdef XP_CPLUSPLUS
 
 U_NAMESPACE_BEGIN
 
@@ -326,7 +352,7 @@ typedef struct UCollationPCE UCollationPCE;
 
 U_NAMESPACE_END
 
-struct UCollationElements
+struct UCollationElements : public UMemory
 {
   /**
   * Struct wrapper for source data
@@ -350,6 +376,8 @@ struct UCollationElements
 
 U_CAPI void U_EXPORT2
 uprv_init_pce(const struct UCollationElements *elems);
+
+#endif
 
 #define UCOL_LEVELTERMINATOR 1
 
@@ -1065,7 +1093,6 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
 /* The offsetBuffer in collIterate might need to be freed to avoid memory leaks. */
 void ucol_freeOffsetBuffer(collIterate *s); 
-
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 

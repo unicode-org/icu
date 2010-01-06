@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,8 +24,8 @@
 #include "cstring.h"
 #include "writesrc.h"
 
-U_CAPI FILE * U_EXPORT2
-usrc_create(const char *path, const char *filename) {
+static FILE *
+usrc_createWithHeader(const char *path, const char *filename, const char *header) {
     char buffer[1024];
     const char *p;
     char *q;
@@ -55,19 +55,7 @@ usrc_create(const char *path, const char *filename) {
         lt=localtime(&t);
         strftime(year, sizeof(year), "%Y", lt);
         strftime(buffer, sizeof(buffer), "%Y-%m-%d", lt);
-        fprintf(
-            f,
-            "/*\n"
-            " * Copyright (C) 1999-%s, International Business Machines\n"
-            " * Corporation and others.  All Rights Reserved.\n"
-            " *\n"
-            " * file name: %s\n"
-            " *\n"
-            " * machine-generated on: %s\n"
-            " */\n\n",
-            year,
-            filename,
-            buffer);
+        fprintf(f, header, year, filename, buffer);
     } else {
         fprintf(
             stderr,
@@ -75,6 +63,33 @@ usrc_create(const char *path, const char *filename) {
             path!=NULL ? path : "", filename);
     }
     return f;
+}
+
+U_CAPI FILE * U_EXPORT2
+usrc_create(const char *path, const char *filename) {
+    const char *header=
+        "/*\n"
+        " * Copyright (C) 1999-%s, International Business Machines\n"
+        " * Corporation and others.  All Rights Reserved.\n"
+        " *\n"
+        " * file name: %s\n"
+        " *\n"
+        " * machine-generated on: %s\n"
+        " */\n\n";
+    return usrc_createWithHeader(path, filename, header);
+}
+
+U_CAPI FILE * U_EXPORT2
+usrc_createTextData(const char *path, const char *filename) {
+    const char *header=
+        "# Copyright (C) 1999-%s, International Business Machines\n"
+        "# Corporation and others.  All Rights Reserved.\n"
+        "#\n"
+        "# file name: %s\n"
+        "#\n"
+        "# machine-generated on: %s\n"
+        "#\n\n";
+    return usrc_createWithHeader(path, filename, header);
 }
 
 U_CAPI void U_EXPORT2

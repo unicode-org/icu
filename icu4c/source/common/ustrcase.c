@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,7 +25,6 @@
 #include "unicode/ubrk.h"
 #include "cmemory.h"
 #include "ucase.h"
-#include "unormimp.h"
 #include "ustr_imp.h"
 
 /* string casing ------------------------------------------------------------ */

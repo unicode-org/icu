@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,9 +25,17 @@
 
 /**
  * Create a source text file and write a header comment with the ICU copyright.
+ * Writes a C/Java-style comment.
  */
 U_CAPI FILE * U_EXPORT2
 usrc_create(const char *path, const char *filename);
+
+/**
+ * Create a source text file and write a header comment with the ICU copyright.
+ * Writes the comment with # lines, as used in scripts and text data.
+ */
+U_CAPI FILE * U_EXPORT2
+usrc_createTextData(const char *path, const char *filename);
 
 /**
  * Write the contents of an array of 8/16/32-bit words.

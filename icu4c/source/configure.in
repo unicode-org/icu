@@ -1,5 +1,5 @@
 	# -*-autoconf-*-
-AC_COPYRIGHT([ Copyright (c) 1999-2009, International Business Machines Corporation and others. All Rights Reserved. ])
+AC_COPYRIGHT([ Copyright (c) 1999-2010, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
@@ -1223,6 +1223,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		tools/gennames/Makefile \
 		tools/gentest/Makefile \
 		tools/gennorm/Makefile \
+		tools/gennorm2/Makefile \
 		tools/genprops/Makefile \
 		tools/gencase/Makefile \
 		tools/genbidi/Makefile \
