@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,9 @@ package com.ibm.icu.util;
 import java.util.Date;
 
 /**
+ * <b>Note:</b> The Holiday framework is a technology preview.
+ * Despite its age, is still draft API, and clients should treat it as such.
+ * 
  * A Holiday subclass which represents holidays that occur
  * a fixed number of days before or after Easter.  Supports both the
  * Western and Orthodox methods for calculating Easter.

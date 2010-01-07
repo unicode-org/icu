@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,9 @@ package com.ibm.icu.util;
 import java.util.Date;
 
 /**
+ * <b>Note:</b> The Holiday framework is a technology preview.
+ * Despite its age, is still draft API, and clients should treat it as such.
+ * 
  * Simple implementation of DateRule.
  * @draft ICU 2.8 (retainAll)
  * @provisional This API might change or be removed in a future release.
