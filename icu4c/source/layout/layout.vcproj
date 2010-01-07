@@ -779,10 +779,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Features.h"
-				>
-			</File>
-			<File
 				RelativePath=".\GDEFMarkFilter.h"
 				>
 			</File>
@@ -828,6 +824,10 @@
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ICUFeatures.h"
 				>
 			</File>
 			<File
