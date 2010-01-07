@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,9 @@ package com.ibm.icu.util;
 import java.util.Date;
 
 /**
+ * <b>Note:</b> The Holiday framework is a technology preview.
+ * Despite its age, is still draft API, and clients should treat it as such.
+ *
  * DateRule is an interface for calculating the date of an event.
  * It supports both recurring events and those which occur only once.
  * DateRule is useful for storing information about holidays,

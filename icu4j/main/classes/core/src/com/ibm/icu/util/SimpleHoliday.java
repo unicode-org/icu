@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,6 +12,9 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 
 /**
+ * <b>Note:</b> The Holiday framework is a technology preview.
+ * Despite its age, is still draft API, and clients should treat it as such.
+ * 
  * A holiday whose date can be represented by a month, day, and optionally day of week
  * in the Gregorian calendar.
  *

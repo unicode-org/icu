@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
+ * <b>Note:</b> The Holiday framework is a technology preview.
+ * Despite its age, is still draft API, and clients should treat it as such.
+ * 
  * An abstract class representing a holiday.
  * @draft ICU 2.8 (retainAll)
  * @provisional This API might change or be removed in a future release.
