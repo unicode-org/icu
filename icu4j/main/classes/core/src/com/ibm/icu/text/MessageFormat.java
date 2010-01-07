@@ -36,54 +36,67 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 /**
- * <code>MessageFormat</code> provides a means to produce concatenated
- * messages in language-neutral way. Use this to construct messages
- * displayed for end users.
+ * MessageFormat produces concatenated messages in a language-neutral
+ * way. Use this whenever concatenating strings that are displayed to
+ * end users.
  *
- * <p>
- * <code>MessageFormat</code> takes a set of objects, formats them, then
- * inserts the formatted strings into the pattern at the appropriate places.
+ * <p>A MessageFormat contains an array of <em>subformats</em> arranged
+ * within a <em>template string</em>.  Together, the subformats and
+ * template string determine how the MessageFormat will operate during
+ * formatting and parsing.
+ * 
+ * <p>Typically, both the subformats and the template string are
+ * specified at once in a <em>pattern</em>.  By using different
+ * patterns for different locales, messages may be localized.
+ * 
+ * <p>When formatting, MessageFormat takes a collection of arguments
+ * and produces a user-readable string.  The arguments may be passed
+ * as an array or as a Map.  Each argument is matched up with its
+ * corresponding subformat, which then formats it into a string.  The
+ * resulting strings are then assembled within the string template of
+ * the MessageFormat to produce the final output string.
  *
- * <p>
- * <strong>Note:</strong>
+ * <p><strong>Note:</strong>
  * <code>MessageFormat</code> differs from the other <code>Format</code>
  * classes in that you create a <code>MessageFormat</code> object with one
  * of its constructors (not with a <code>getInstance</code> style factory
  * method). The factory methods aren't necessary because <code>MessageFormat</code>
- * itself doesn't implement locale specific behavior. Any locale specific
- * behavior is defined by the pattern that you provide as well as the
+ * itself doesn't implement locale-specific behavior. Any locale-specific
+ * behavior is defined by the pattern that you provide and the
  * subformats used for inserted arguments.
  *
- * <p>
- * <strong>Note:</strong>
+ * <p><strong>Note:</strong>
  * In ICU 3.8 MessageFormat supports named arguments.  If a named argument
  * is used, all arguments must be named.  Names start with a character in
  * <code>:ID_START:</code> and continue with characters in <code>:ID_CONTINUE:</code>,
  * in particular they do not start with a digit.  If named arguments
  * are used, {@link #usesNamedArguments()} will return true.
- * <p>
- * The other new APIs supporting named arguments are
+ * 
+ * <p>The other new methods supporting named arguments are
  * {@link #setFormatsByArgumentName(Map)},
  * {@link #setFormatByArgumentName(String, Format)},
  * {@link #format(Map, StringBuffer, FieldPosition)},
  * {@link #format(String, Map)}, {@link #parseToMap(String, ParsePosition)},
- * and {@link #parseToMap(String)}.  These APIs are all compatible
+ * and {@link #parseToMap(String)}.  These methods are all compatible
  * with patterns that do not used named arguments-- in these cases
  * the keys in the input or output <code>Map</code>s use
  * <code>String</code>s that name the argument indices, e.g. "0",
  * "1", "2"... etc.
- * <p>
- * When named arguments are used, certain APIs on Message that take or
+ * 
+ * <p>When named arguments are used, certain methods on MessageFormat that take or
  * return arrays will throw an exception, since it is not possible to
- * identify positions in an array using a name.  These APIs are {@link
- * #setFormatsByArgumentIndex(Format[])}, {@link #getFormatsByArgumentIndex()},
+ * identify positions in an array using a name.  These methods are 
+ * {@link #setFormatsByArgumentIndex(Format[])}, 
+ * {@link #setFormatByArgumentIndex(int, Format)},
+ * {@link #getFormatsByArgumentIndex()},
+ * {@link #getFormats()},
  * {@link #format(Object[], StringBuffer, FieldPosition)},
- * {@link #format(String, Object[])},{@link #parse(String, ParsePosition)},
- * and {@link #parse(String)}.
+ * {@link #format(String, Object[])},
+ * {@link #parse(String, ParsePosition)}, and
+ * {@link #parse(String)}.
  * These APIs all have corresponding new versions as listed above.
- * <p>
-
- * The API {@link #format(Object, StringBuffer, FieldPosition)} has
+ * 
+ * <p>The API {@link #format(Object, StringBuffer, FieldPosition)} has
  * been modified so that the <code>Object</code> argument can be
  * either an <code>Object</code> array or a <code>Map</code>.  If this
  * format uses named arguments, this argument must not be an
@@ -799,7 +812,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      *
      * @param argumentIndex the argument index for which to use the new format
      * @param newFormat the new format to use
-     * @exception IllegalArgumentException if alphanumeric arguments where used in MessageFormat.
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public void setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
@@ -928,6 +941,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
      * argument names. Otherwise an IllegalArgumentException is thrown.
      *
      * @return the formats used for the format elements in the pattern
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public Format[] getFormats() {
