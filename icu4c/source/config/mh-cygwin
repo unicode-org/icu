@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin-specific setup
-## Copyright (c) 2001-2009, International Business Machines Corporation and
+## Copyright (c) 2001-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -57,11 +57,6 @@ STATIC_O = ao
 LIBICU = cyg$(ICUPREFIX)
 ## To have an import library is better on Cygwin
 IMPORT_LIB_EXT = .dll.a
-
-# Change the stubnames so that poorly working FAT disks and installation programs can work.
-# This is also for backwards compatibility.
-DATA_STUBNAME = dt
-I18N_STUBNAME = in
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
