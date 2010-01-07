@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2009, International Business Machines
+ *   Copyright (C) 2000-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.c
@@ -692,9 +692,9 @@ static void createFileNames(const char mode, const char *version_major, const ch
                     version_major,
                     pkgDataFlags[SO_EXT]);
 
-            sprintf(pkgDataFlags[SO_EXT], "%s.%s",
-                    pkgDataFlags[SO_EXT],
-                    pkgDataFlags[A_EXT]);
+            uprv_strcat(pkgDataFlags[SO_EXT], ".");
+            uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
+
 #elif defined(OS400) || defined(_AIX)
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                     libFileNames[LIB_FILE],
@@ -1185,9 +1185,9 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             break;
         }
 
-        sprintf(buffer, "%s %s",
-                buffer,
-                tempObjectFile);
+        uprv_strcat(buffer, " ");
+        uprv_strcat(buffer, tempObjectFile);
+
 #endif
         
         if (i > 0) {
@@ -1211,9 +1211,8 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     
     result = runCommand(cmd);
     if (result == 0) {
-        sprintf(buffer, "%s %s",
-            buffer,
-            tempObjectFile);
+        uprv_strcat(buffer, " ");
+        uprv_strcat(buffer, tempObjectFile);
     }
 #endif
 
@@ -1266,7 +1265,8 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         uprv_strcpy(libFilePath, dllFilePath);
 
 #ifdef CYGWINMSVC
-        sprintf(libFilePath, "%s%s.lib", libFilePath, o->libName);
+        uprv_strcat(libFilePath, o->libName);
+        uprv_strcat(libFilePath, ".lib");
         
         uprv_strcat(dllFilePath, o->libName);
         uprv_strcat(dllFilePath, o->version);
