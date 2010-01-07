@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
  *
  */
 
@@ -102,7 +102,9 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
 
     fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
     
-    if (gposTable != NULL && gposTable->coversScriptAndLanguage(fScriptTag, fLangSysTag)) {
+// JK patch, 2008-05-30 - see Sinhala bug report and LKLUG font
+//    if (gposTable != NULL && gposTable->coversScriptAndLanguage(fScriptTag, fLangSysTag)) {
+    if (gposTable != NULL && gposTable->coversScript(fScriptTag)) {
         fGPOSTable = gposTable;
     }
 }
@@ -198,7 +200,16 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_i
             return 0;
         }
 
+        if (LE_FAILURE(success)) {
+            LE_DELETE_ARRAY(outChars);
+            return 0;
+        }
+
         CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, outChars, glyphStorage);
+    }
+
+    if (LE_FAILURE(success)) {
+        return 0;
     }
 
     glyphStorage.allocateGlyphArray(count, rightToLeft, success);
@@ -338,8 +349,11 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
     }
 
     le_int32 glyphCount = glyphStorage.getGlyphCount();
+    if (glyphCount == 0) {
+        return;
+    }
 
-    if (glyphCount > 0 && fGPOSTable != NULL) {
+    if (fGPOSTable != NULL) {
         GlyphPositionAdjustments *adjustments = new GlyphPositionAdjustments(glyphCount);
         le_int32 i;
 
@@ -409,6 +423,9 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         glyphStorage.adjustPosition(glyphCount, xAdjust, -yAdjust, success);
 
         delete adjustments;
+    } else {
+        // if there was no GPOS table, maybe there's non-OpenType kerning we can use
+        LayoutEngine::adjustGlyphPositions(chars, offset, count, reverse, glyphStorage, success);        
     }
 
     LEGlyphID zwnj  = fFontInstance->mapCharToGlyph(0x200C);
