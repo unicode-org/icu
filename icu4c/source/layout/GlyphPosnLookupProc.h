@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
  *
  */
 
@@ -15,7 +15,7 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "Lookups.h"
-#include "Features.h"
+#include "ICUFeatures.h"
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 #include "GlyphIterator.h"
