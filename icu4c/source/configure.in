@@ -1,4 +1,4 @@
-	# -*-autoconf-*-
+# -*-autoconf-*-
 AC_COPYRIGHT([ Copyright (c) 1999-2010, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
@@ -229,7 +229,7 @@ AC_MSG_CHECKING([whether to enable draft APIs])
 enabled=yes
 U_DEFAULT_SHOW_DRAFT=1
 AC_ARG_ENABLE(draft,
-    [  --enable-draft          enable draft APIs [default=yes]],
+    [  --enable-draft          enable draft APIs (and internal APIs) [default=yes]],
     [ case "${enableval}" in
          no) enabled=no; U_DEFAULT_SHOW_DRAFT=0 ;;
          *) ;;
