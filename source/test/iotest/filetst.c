@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2004-2008, International Business Machines
+ *   Copyright (C) 2004-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   file name:  filetst.c
@@ -321,6 +321,10 @@ static void TestFile(void) {
     standardFile = fopen(STANDARD_TEST_FILE, "wb");
     TestFileFromICU(u_finit(standardFile, NULL, NULL));
     fclose(standardFile);
+
+    log_verbose("Testing u_fadopt\n");
+    standardFile = fopen(STANDARD_TEST_FILE, "wb");
+    TestFileFromICU(u_fadopt(standardFile, NULL, NULL));
 */
 }
 #endif
