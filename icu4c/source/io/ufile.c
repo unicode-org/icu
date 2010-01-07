@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -42,10 +42,12 @@
 #define fileno _fileno
 #endif
 
-U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_finit(FILE        *f,
-        const char    *locale,
-        const char    *codepage)
+static UFILE*
+finit_owner(FILE         *f,
+              const char *locale,
+              const char *codepage,
+              UBool       takeOwnership
+              )
 {
     UErrorCode status = U_ZERO_ERROR;
     UFILE     *result;
@@ -94,7 +96,10 @@ u_finit(FILE        *f,
     }
     /* else result->fConverter is already memset'd to NULL. */
 
-    if(U_FAILURE(status)) {
+    if(U_SUCCESS(status)) {
+        result->fOwnFile = takeOwnership;
+    }
+    else {
 #if !UCONFIG_NO_FORMATTING
         u_locbund_close(&result->str.fBundle);
 #endif
@@ -104,6 +109,22 @@ u_finit(FILE        *f,
     }
 
     return result;
+}
+
+U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_finit(FILE          *f,
+        const char    *locale,
+        const char    *codepage)
+{
+    return finit_owner(f, locale, codepage, FALSE);
+}
+
+U_CAPI UFILE* U_EXPORT2
+u_fadopt(FILE         *f,
+        const char    *locale,
+        const char    *codepage)
+{
+    return finit_owner(f, locale, codepage, TRUE);
 }
 
 U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
@@ -118,12 +139,9 @@ u_fopen(const char    *filename,
         return 0;
     }
 
-    result = u_finit(systemFile, locale, codepage);
+    result = finit_owner(systemFile, locale, codepage, TRUE);
 
-    if (result) {
-        result->fOwnFile = TRUE;
-    }
-    else {
+    if (!result) {
         /* Something bad happened.
            Maybe the converter couldn't be opened. */
         fclose(systemFile);

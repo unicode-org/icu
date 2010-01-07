@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -241,8 +241,11 @@ u_fopen(const char    *filename,
     const char    *codepage);
 
 /**
- * Open a UFILE on top of an existing FILE* stream.
- * @param f The FILE* to which this UFILE will attach.
+ * Open a UFILE on top of an existing FILE* stream. The FILE* stream
+ * ownership remains with the caller. To have the UFILE take over
+ * ownership and responsibility for the FILE* stream, use the
+ * function u_fadopt.
+ * @param f The FILE* to which this UFILE will attach and use.
  * @param locale The locale whose conventions will be used to format 
  * and parse output. If this parameter is NULL, the default locale will 
  * be used.
@@ -255,6 +258,27 @@ u_fopen(const char    *filename,
  */
 U_DRAFT UFILE* U_EXPORT2
 u_finit(FILE        *f,
+    const char    *locale,
+    const char    *codepage);
+
+/**
+ * Open a UFILE on top of an existing FILE* stream. The FILE* stream
+ * ownership is transferred to the new UFILE. It will be closed when the
+ * UFILE is closed.
+ * @param f The FILE* which this UFILE will take ownership of.
+ * @param locale The locale whose conventions will be used to format
+ * and parse output. If this parameter is NULL, the default locale will
+ * be used.
+ * @param codepage The codepage in which data will be written to and
+ * read from the file. If this paramter is NULL, data will be written and
+ * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
+ * is NULL, in which case the system default codepage will be used.
+ * @return A new UFILE, or NULL if an error occurred. If an error occurs
+ * the ownership of the FILE* stream remains with the caller.
+ * @draft ICU 4.4
+ */
+U_DRAFT UFILE* U_EXPORT2
+u_fadopt(FILE     *f,
     const char    *locale,
     const char    *codepage);
 
