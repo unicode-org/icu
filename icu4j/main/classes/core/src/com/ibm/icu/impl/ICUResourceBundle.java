@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  * *****************************************************************************
  */
@@ -91,8 +91,16 @@ public  class ICUResourceBundle extends UResourceBundle {
     public static final ClassLoader ICU_DATA_CLASS_LOADER;
     static {
         ClassLoader loader = ICUData.class.getClassLoader();
-        if (loader == null) { // boot class loader
-            loader = ClassLoader.getSystemClassLoader();
+        if (loader == null) {
+            loader = Thread.currentThread().getContextClassLoader();
+            if (loader == null) {
+                loader = ClassLoader.getSystemClassLoader();
+                if (loader == null) {
+                    //TODO It is not guaranteed that we can get non-null class loader
+                    // by the Java specification.
+                    throw new RuntimeException("No accessible class loader is available for ICUData");
+                }
+            }
         }
         ICU_DATA_CLASS_LOADER = loader;
     }

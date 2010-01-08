@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -573,15 +573,17 @@ public class ICULocaleService extends ICUService {
         protected ClassLoader loader() {
             ClassLoader cl = getClass().getClassLoader();
             if (cl == null) {
-                cl = ClassLoader.getSystemClassLoader();
+                cl = Thread.currentThread().getContextClassLoader();
                 if (cl == null) {
-                    //TODO It is not guaranteed that we can get non-null class loader
-                    // by Class#getClassLoader() and ClassLoader#getSystemClassLoader()
-                    // if the class is loaded by the bootstrap class loader.  We should
-                    // figure out what to do for such case.
-                    throw new RuntimeException("No accessible class loader is available for loading ICU resource bundles.");
+                    cl = ClassLoader.getSystemClassLoader();
+                    if (cl == null) {
+                        //TODO It is not guaranteed that we can get non-null class loader
+                        // by the Java specification.
+                        throw new RuntimeException("No accessible class loader is available for loading ICU resource bundles.");
+                    }
                 }
             }
+
             return cl;
         }
 

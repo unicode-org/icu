@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2009, International Business Machines Corporation and   *
+* Copyright (C) 2004-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -112,8 +112,15 @@ public class ResourceBundleWrapper extends UResourceBundle {
      protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
                                                                     ClassLoader root, boolean disableFallback) {
         if (root == null) {
-            // we're on the bootstrap
-            root = ClassLoader.getSystemClassLoader();
+            root = Thread.currentThread().getContextClassLoader();
+            if (root == null) {
+                root = ClassLoader.getSystemClassLoader();
+                if (root == null) {
+                    //TODO It is not guaranteed that we can get non-null class loader
+                    // by the Java specification.
+                    throw new RuntimeException("No accessible class loader is available for resource bundle " + baseName);
+                }
+            }
         }
         final ClassLoader cl = root;
         String name = baseName;

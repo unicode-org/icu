@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -34,9 +34,17 @@ public abstract class URLHandler {
         
         try {
             InputStream is = URLHandler.class.getResourceAsStream(PROPNAME);
-            
             if (is == null) {
-                is = ClassLoader.getSystemClassLoader().getResourceAsStream(PROPNAME);
+                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                if (loader == null) {
+                    loader = ClassLoader.getSystemClassLoader();
+                    if (loader == null) {
+                        //TODO It is not guaranteed that we can get non-null class loader
+                        // by the Java specification.
+                        throw new RuntimeException("No accessible class loader is available for URLHandler");
+                    }
+                }
+                is = loader.getResourceAsStream(PROPNAME);
             }
             
             if (is != null) {
