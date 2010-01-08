@@ -37,7 +37,7 @@ public abstract class CurrencyDisplayNames {
 
     /**
      * Returns the locale used to determine how to translate the currency names.
-     * This is not necessarily the same locale passed to {@link #getInstance(Ulocale)}.
+     * This is not necessarily the same locale passed to {@link #getInstance(ULocale)}.
      * If hasData is false, returns {@link com.ibm.icu.util.ULocale#ROOT}.
      * @return the display locale
      * @draft ICU 4.4
