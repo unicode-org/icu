@@ -19,7 +19,7 @@ import com.ibm.icu.util.ULocale;
  */
 public abstract class LocaleDisplayNames {
     /**
-     * Enum used in {@link #getInstance}.
+     * Enum used in {@link #getInstance(ULocale, DialectHandling)}.
      * @draft ICU 4.4
      */
     public enum DialectHandling {
@@ -39,7 +39,7 @@ public abstract class LocaleDisplayNames {
 
     // factory methods
     /**
-     * Convenience overload of {@link #getInstance(Ulocale, DialectHandling)} that specifies
+     * Convenience overload of {@link #getInstance(ULocale, DialectHandling)} that specifies
      * STANDARD dialect handling.
      * @param locale the display locale
      * @return a LocaleDisplayNames instance
