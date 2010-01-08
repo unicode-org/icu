@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -733,7 +733,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Returns a resource in a given resource that has a given index, or null if the
      * resource is not found.
      *
-     * @param aKey the key associated with the wanted resource
+     * @param index the index of the resource
      * @return the resource, or null
      * @see #get(int)
      * @internal ICU internal use only
