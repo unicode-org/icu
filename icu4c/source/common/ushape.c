@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2000-2009, International Business Machines
+ *   Copyright (C) 2000-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -1167,7 +1167,6 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
             }
             
             uprv_memcpy(dest, tempbuffer, destSize*U_SIZEOF_UCHAR);
-            destSize = sourceLength;
         }
     }
     
