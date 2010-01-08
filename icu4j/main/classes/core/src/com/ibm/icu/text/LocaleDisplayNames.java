@@ -80,6 +80,7 @@ public abstract class LocaleDisplayNames {
     // names for entire locales
     /**
      * Returns the display name of the provided ulocale.
+     * @param locale the locale whose display name to return
      * @return the display name of the provided locale
      * @draft ICU 4.4
      */
@@ -87,6 +88,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided locale.
+     * @param locale the locale whose display name to return
      * @return the display name of the provided locale
      * @draft ICU 4.4
      */
@@ -94,6 +96,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided locale id.
+     * @param localeId the id of the locale whose display name to return
      * @return the display name of the provided locale
      * @draft ICU 4.4
      */
@@ -102,6 +105,7 @@ public abstract class LocaleDisplayNames {
     // names for components of a locale id
     /**
      * Returns the display name of the provided language code.
+     * @param lang the language code
      * @return the display name of the provided language code
      * @draft ICU 4.4
      */
@@ -109,6 +113,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided script code.
+     * @param script the script code
      * @return the display name of the provided script code
      * @draft ICU 4.4
      */
@@ -117,6 +122,7 @@ public abstract class LocaleDisplayNames {
     /**
      * Returns the display name of the provided script code.  See
      * {@link com.ibm.icu.lang.UScript} for recognized script codes.
+     * @param scriptCode the script code number
      * @return the display name of the provided script code
      * @draft ICU 4.4
      */
@@ -124,6 +130,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided region code.
+     * @param region the region code
      * @return the display name of the provided region code
      * @draft ICU 4.4
      */
@@ -131,6 +138,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided variant.
+     * @param variant the variant string
      * @return the display name of the provided variant
      * @draft ICU 4.4
      */
@@ -138,6 +146,7 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided locale key.
+     * @param key the locale key name
      * @return the display name of the provided locale key
      * @draft ICU 4.4
      */
@@ -145,6 +154,8 @@ public abstract class LocaleDisplayNames {
 
     /**
      * Returns the display name of the provided value (used with the provided key).
+     * @param key the locale key name
+     * @param value the locale key's value
      * @return the display name of the provided value
      * @draft ICU 4.4
      */
