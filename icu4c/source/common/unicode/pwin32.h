@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1997-2009, International Business Machines
+ *   Copyright (C) 1997-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -298,6 +298,11 @@ Intel can define _M_IX86 or _M_X64
 
 #define U_HAVE_MMAP 0
 #define U_HAVE_POPEN 0
+
+#ifndef U_ENABLE_DYLOAD
+#define U_ENABLE_DYLOAD 1
+#endif
+
 
 /** @} */
 

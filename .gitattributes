@@ -1944,6 +1944,9 @@ icu4c/source/test/thaitest/space.txt svneol=native#text/plain
 icu4c/source/tools/gendraft/exclude.txt svneol=native#text/plain
 icu4c/source/tools/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
 icu4c/source/tools/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
+icu4c/source/tools/icuinfo/icuinfo.vcproj -text
+icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt -text
+icu4c/source/tools/icuinfo/testplug.vcproj -text
 icu4c/source/tools/tzcode/readme.txt svneol=native#text/plain
 icu4c/unicode-license.txt svneol=native#text/plain
 icu4j/APIChangeReport.html svneol=native#text/html

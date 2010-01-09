@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -178,6 +178,16 @@
 #ifndef U_ENABLE_TRACING
 #define U_ENABLE_TRACING @U_ENABLE_TRACING@
 #endif
+
+/* dynamic loading */
+#ifndef U_ENABLE_DYLOAD
+#define U_ENABLE_DYLOAD @U_ENABLE_DYLOAD@
+#endif
+
+#ifndef U_CHECK_DYLOAD
+#define U_CHECK_DYLOAD @U_CHECK_DYLOAD@
+#endif
+
 
 /* Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
