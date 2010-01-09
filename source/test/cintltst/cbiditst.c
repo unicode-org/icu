@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -2180,6 +2180,8 @@ doArabicShapingTest(void) {
         0x661, 0x627, 0x32, 0x6f3, 0x61, 0x34, 0
     }, reverse_alen2an_init_al[]={
         0x6f1, 0x627, 0x32, 0x6f3, 0x61, 0x6f4, 0
+    }, lamalef[]={
+        0xfefb, 0
     };
     UChar dest[8];
     UErrorCode errorCode;
@@ -2339,6 +2341,16 @@ doArabicShapingTest(void) {
                          &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("failure in u_shapeArabic(U_SHAPE_DIGIT_TYPE_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(lamalef, LENGTHOF(lamalef),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_UNSHAPE | U_SHAPE_LENGTH_GROW_SHRINK | U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length == LENGTHOF(lamalef)) {
+        log_err("failure in u_shapeArabic(U_SHAPE_LETTERS_UNSHAPE | U_SHAPE_LENGTH_GROW_SHRINK | U_SHAPE_TEXT_DIRECTION_VISUAL_LTR)\n");
+        log_err("returned %s instead of U_ZERO_ERROR or returned length %d instead of 3\n", u_errorName(errorCode), length);
     }
 }
 
