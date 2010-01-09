@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
+* Copyright (C) 2001-2010, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -25,6 +25,9 @@
 #include "ucln.h"
 #include "cmemory.h"
 #include "uassert.h"
+#include "unicode/icuplug.h"
+#include "icuplugimp.h"
+
 
 static UBool gICUInitialized = FALSE;
 static UMTX  gICUInitMutex   = NULL;
@@ -62,6 +65,9 @@ u_cleanup(void)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     UTRACE_ENTRY_OC(UTRACE_U_INIT);
+    /* initialize plugins */
+    uplug_init(status);
+
     umtx_lock(&gICUInitMutex);
     if (gICUInitialized || U_FAILURE(*status)) {
         umtx_unlock(&gICUInitMutex);
@@ -109,6 +115,7 @@ u_init(UErrorCode *status) {
     unorm_haveData(status);
 #endif
 #endif
+
     gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
     umtx_unlock(&gICUInitMutex);
     UTRACE_EXIT_STATUS(*status);

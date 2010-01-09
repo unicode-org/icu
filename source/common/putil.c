@@ -1960,6 +1960,168 @@ U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray) {
     u_versionFromString(versionArray, U_ICU_VERSION);
 }
+
+/**
+ * icucfg.h dependent code 
+ */
+
+#if U_ENABLE_DYLOAD
+ 
+#if defined(HAVE_CONFIG_H)
+#include "icucfg.h"
+#endif
+
+#if defined(U_CHECK_DYLOAD)
+
+#if defined(HAVE_DLOPEN) 
+
+#ifdef HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif
+
+U_INTERNAL void * U_EXPORT2
+uprv_dl_open(const char *libName, UErrorCode *status) {
+    void *ret = NULL;
+    if(U_FAILURE(*status)) return ret;
+    ret =  dlopen(libName, RTLD_NOW|RTLD_GLOBAL);
+    if(ret==NULL) {
+        perror("dlopen");
+        *status = U_MISSING_RESOURCE_ERROR;
+        /* TODO: read errno and translate. */
+    }
+    return ret;
+}
+
+U_INTERNAL void U_EXPORT2
+uprv_dl_close(void *lib, UErrorCode *status) {
+    if(U_FAILURE(*status)) return;
+    dlclose(lib);
+    /* TODO: translate errno? */
+}
+
+U_INTERNAL void* U_EXPORT2
+uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
+    void *ret = NULL;
+    if(U_FAILURE(*status)) return ret;
+    ret = dlsym(lib, sym);
+    if(ret == NULL) {
+        *status = U_MISSING_RESOURCE_ERROR;
+        /* TODO: translate errno? */
+    }
+    return ret;
+}
+
+#else
+
+/* null (nonexistent) implementation. */
+
+U_INTERNAL void * U_EXPORT2
+uprv_dl_open(const char *libName, UErrorCode *status) {
+    if(U_FAILURE(*status)) return NULL;
+    *status = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
+U_INTERNAL void U_EXPORT2
+uprv_dl_close(void *lib, UErrorCode *status) {
+    if(U_FAILURE(*status)) return;
+    *status = U_UNSUPPORTED_ERROR;
+    return;
+}
+
+
+U_INTERNAL void* U_EXPORT2
+uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
+    if(U_FAILURE(*status)) return NULL;
+    *status = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
+
+
+#endif
+
+#elif defined U_WINDOWS
+
+U_INTERNAL void * U_EXPORT2
+uprv_dl_open(const char *libName, UErrorCode *status) {
+   	HMODULE lib = NULL;
+
+	if(U_FAILURE(*status)) return NULL;
+    
+	lib = LoadLibrary(libName);
+
+	if(lib==NULL) {
+		*status = U_MISSING_RESOURCE_ERROR;
+	}
+
+    return (void*)lib;
+}
+
+U_INTERNAL void U_EXPORT2
+uprv_dl_close(void *lib, UErrorCode *status) {
+	HMODULE handle = (HMODULE)lib;
+    if(U_FAILURE(*status)) return;
+    
+	FreeLibrary(handle);
+
+    return;
+}
+
+
+U_INTERNAL void* U_EXPORT2
+uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
+	HMODULE handle = (HMODULE)lib;
+	void * addr = NULL;
+
+	if(U_FAILURE(*status) || lib==NULL) return NULL;
+   
+	addr = GetProcAddress(handle, sym);
+
+	if(addr==NULL) {
+		DWORD lastError = GetLastError();
+		if(lastError == ERROR_PROC_NOT_FOUND) {
+			*status = U_MISSING_RESOURCE_ERROR;
+		} else {
+			*status = U_UNSUPPORTED_ERROR; /* other unknown error. */
+		}
+	}
+
+    return addr;
+}
+
+
+#else
+
+/* No dynamic loading set. */
+
+U_INTERNAL void * U_EXPORT2
+uprv_dl_open(const char *libName, UErrorCode *status) {
+    if(U_FAILURE(*status)) return NULL;
+    *status = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
+U_INTERNAL void U_EXPORT2
+uprv_dl_close(void *lib, UErrorCode *status) {
+    if(U_FAILURE(*status)) return;
+    *status = U_UNSUPPORTED_ERROR;
+    return;
+}
+
+
+U_INTERNAL void* U_EXPORT2
+uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
+    if(U_FAILURE(*status)) return NULL;
+    *status = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
+
+#endif
+
+#endif /* U_ENABLE_DYLOAD */
+
 /*
  * Hey, Emacs, please set the following:
  *

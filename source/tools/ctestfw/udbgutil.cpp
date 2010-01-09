@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2009, International Business Machines Corporation and
+ * Copyright (c) 2007-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -177,6 +177,26 @@ static const Field names_UColAttributeValue[]  = {
 
 #endif
 
+
+#include "unicode/icuplug.h"
+
+#define LEN_UPLUG_REASON 13 /* UPLUG_REASON_ */
+static const int32_t count_UPlugReason = UPLUG_REASON_COUNT;
+static const Field names_UPlugReason[]  = {
+   FIELD_NAME_STR( LEN_UPLUG_REASON, UPLUG_REASON_QUERY ),
+   FIELD_NAME_STR( LEN_UPLUG_REASON, UPLUG_REASON_LOAD ),
+   FIELD_NAME_STR( LEN_UPLUG_REASON, UPLUG_REASON_UNLOAD ),
+};
+
+#define LEN_UPLUG_LEVEL 12 /* UPLUG_LEVEL_ */
+static const int32_t count_UPlugLevel = UPLUG_LEVEL_COUNT;
+static const Field names_UPlugLevel[]  = {
+   FIELD_NAME_STR( LEN_UPLUG_LEVEL, UPLUG_LEVEL_INVALID ),
+   FIELD_NAME_STR( LEN_UPLUG_LEVEL, UPLUG_LEVEL_UNKNOWN ),
+   FIELD_NAME_STR( LEN_UPLUG_LEVEL, UPLUG_LEVEL_LOW ),
+   FIELD_NAME_STR( LEN_UPLUG_LEVEL, UPLUG_LEVEL_HIGH ),
+};
+
 #define LEN_UDBG 5 /* "UDBG_" */
 static const int32_t count_UDebugEnumType = UDBG_ENUM_COUNT;
 static const Field names_UDebugEnumType[] = 
@@ -187,6 +207,8 @@ static const Field names_UDebugEnumType[] =
     FIELD_NAME_STR( LEN_UDBG, UDBG_UCalendarMonths ),
     FIELD_NAME_STR( LEN_UDBG, UDBG_UDateFormatStyle ),
 #endif
+    FIELD_NAME_STR( LEN_UDBG, UDBG_UPlugReason ),
+    FIELD_NAME_STR( LEN_UDBG, UDBG_UPlugLevel ),
     FIELD_NAME_STR( LEN_UDBG, UDBG_UAcceptResult ),
 #if !UCONFIG_NO_COLLATION
     FIELD_NAME_STR( LEN_UDBG, UDBG_UColAttributeValue ),
@@ -216,6 +238,8 @@ static int32_t _udbg_enumCount(UDebugEnumType type, UBool actual) {
 		COUNT_CASE(UCalendarMonths)
 		COUNT_CASE(UDateFormatStyle)
 #endif
+        COUNT_CASE(UPlugReason)
+        COUNT_CASE(UPlugLevel)
         COUNT_CASE(UAcceptResult)
 #if !UCONFIG_NO_COLLATION
         COUNT_CASE(UColAttributeValue)
@@ -234,6 +258,8 @@ static const Field* _udbg_enumFields(UDebugEnumType type) {
 		FIELD_CASE(UCalendarMonths)
 		FIELD_CASE(UDateFormatStyle)
 #endif
+        FIELD_CASE(UPlugReason)
+        FIELD_CASE(UPlugLevel)
         FIELD_CASE(UAcceptResult)
 		// FIELD_FAIL_CASE(UNonExistentEnum)
 #if !UCONFIG_NO_COLLATION
