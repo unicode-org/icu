@@ -62,6 +62,9 @@ icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/iscii.bin -text
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/tools/icuinfo/icuinfo.vcproj -text
+icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt -text
+icu4c/source/tools/icuinfo/testplug.vcproj -text
 icu4j/build.properties -text
 icu4j/demos/manifest.stub -text
 icu4j/icu-eclipse/misc/ICUConfig.properties -text

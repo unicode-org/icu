@@ -1,61 +1,115 @@
-/* common/icucfg.h.in.  Generated automatically from configure.in by autoheader.  */
+/*
+******************************************************************************
+*
+*   Copyright (C) 1999-2010, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*/
 
-/* Define if you have the ANSI C header files.  */
-#undef STDC_HEADERS
+/* common/icucfg.h.in.  Generated from configure.in by autoheader.  */
 
-/* Define if your processor stores words with the most significant
-   byte first (like Motorola and SPARC, unlike Intel and VAX).  */
-#undef WORDS_BIGENDIAN
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
 
-/* Copyright (c) 1999-2000, International Business Machines Corporation and
-   others. All Rights Reserved. */
-/* Define to signed char if not in <sys/types.h> */
-#undef int8_t
+/* Define to 1 if you have the <dirent.h> header file. */
+#undef HAVE_DIRENT_H
 
-/* Define to unsigned char if not in <sys/types.h> */
-#undef uint8_t 
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
 
-/* Define to signed short if not in <sys/types.h> */
-#undef int16_t 
+/* Define to 1 if you have the `dlopen' function. */
+#undef HAVE_DLOPEN
 
-/* Define to unsigned short if not in <sys/types.h> */
-#undef uint16_t 
-
-/* Define to signed long if not in <sys/types.h> */
-#undef int32_t 
-
-/* Define to unsigned long if not in <sys/types.h> */
-#undef uint32_t 
-
-/* Define to signed char if not in <sys/types.h> */
-#undef bool_t 
-
-/* Define if your system has <wchar.h> */
-#undef HAVE_WCHAR_H
-
-/* Define to the size of wchar_t */
-#undef SIZEOF_WCHAR_T
-
-/* Define if you have the <inttypes.h> header file.  */
+/* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define if you have the cma library (-lcma).  */
-#undef HAVE_LIBCMA
-
-/* Define if you have the dl library (-ldl).  */
-#undef HAVE_LIBDL
-
-/* Define if you have the dld library (-ldld).  */
-#undef HAVE_LIBDLD
-
-/* Define if you have the m library (-lm).  */
+/* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
-/* Define if you have the pthread library (-lpthread).  */
+/* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
 
-/* Define if you have the pthreads library (-lpthreads).  */
-#undef HAVE_LIBPTHREADS
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
 
-/* Define if you have the wcs library (-lwcs).  */
-#undef HAVE_LIBWCS
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Uncomment This to run Autoheader */
+#undef HAVE_WCHAR_H
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* The size of `wchar_t', as computed by sizeof. */
+#undef SIZEOF_WCHAR_T
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
+
+/* Define to `signed short' if <sys/types.h> does not define. */
+#undef int16_t
+
+/* Define to `signed long' if <sys/types.h> does not define. */
+#undef int32_t
+
+/* Define to `signed long long' if <sys/types.h> does not define. */
+#undef int64_t
+
+/* Define to `signed char' if <sys/types.h> does not define. */
+#undef int8_t
+
+/* Define to `unsigned short' if <sys/types.h> does not define. */
+#undef uint16_t
+
+/* Define to `unsigned long' if <sys/types.h> does not define. */
+#undef uint32_t
+
+/* Define to `unsigned long long' if <sys/types.h> does not define. */
+#undef uint64_t
+
+/* Define to `unsigned char' if <sys/types.h> does not define. */
+#undef uint8_t

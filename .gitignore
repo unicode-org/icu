@@ -668,6 +668,15 @@ icu4c/source/tools/genuca/genuca.vcproj.*.*.user
 icu4c/source/tools/genuca/release
 icu4c/source/tools/genuca/x64
 icu4c/source/tools/genuca/x86
+icu4c/source/tools/icuinfo/*.d
+icu4c/source/tools/icuinfo/*.dylib
+icu4c/source/tools/icuinfo/*.o
+icu4c/source/tools/icuinfo/*.so
+icu4c/source/tools/icuinfo/Makefile
+icu4c/source/tools/icuinfo/Makefile.local
+icu4c/source/tools/icuinfo/icuinfo
+icu4c/source/tools/icuinfo/icuinfo.exe
+icu4c/source/tools/icuinfo/icuplugins*.txt
 icu4c/source/tools/icupkg/*.8
 icu4c/source/tools/icupkg/*.d
 icu4c/source/tools/icupkg/*.ncb

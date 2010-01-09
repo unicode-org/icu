@@ -265,7 +265,25 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gennorm2", "..\tools\gennor
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icuinfo", "..\tools\icuinfo\icuinfo.vcproj", "{E7611F49-F088-4175-9446-6111444E72C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
+		{ECA6B435-B4FA-4F9F-BF95-F451D078FC47} = {ECA6B435-B4FA-4F9F-BF95-F451D078FC47}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testplug", "..\tools\icuinfo\testplug.vcproj", "{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECA6B435-B4FA-4F9F-BF95-F451D078FC47} = {ECA6B435-B4FA-4F9F-BF95-F451D078FC47}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
@@ -569,6 +587,22 @@ Global
 		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|Win32.Build.0 = Release|Win32
 		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|x64.ActiveCfg = Release|x64
 		{C7891A65-80AB-4245-912E-5F1E17B0E6C4}.Release|x64.Build.0 = Release|x64
+		{E7611F49-F088-4175-9446-6111444E72C8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E7611F49-F088-4175-9446-6111444E72C8}.Debug|Win32.Build.0 = Debug|Win32
+		{E7611F49-F088-4175-9446-6111444E72C8}.Debug|x64.ActiveCfg = Debug|x64
+		{E7611F49-F088-4175-9446-6111444E72C8}.Debug|x64.Build.0 = Debug|x64
+		{E7611F49-F088-4175-9446-6111444E72C8}.Release|Win32.ActiveCfg = Release|Win32
+		{E7611F49-F088-4175-9446-6111444E72C8}.Release|Win32.Build.0 = Release|Win32
+		{E7611F49-F088-4175-9446-6111444E72C8}.Release|x64.ActiveCfg = Release|x64
+		{E7611F49-F088-4175-9446-6111444E72C8}.Release|x64.Build.0 = Release|x64
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Debug|Win32.Build.0 = Debug|Win32
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Debug|x64.ActiveCfg = Debug|x64
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Debug|x64.Build.0 = Debug|x64
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Release|Win32.ActiveCfg = Release|Win32
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Release|Win32.Build.0 = Release|Win32
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Release|x64.ActiveCfg = Release|x64
+		{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

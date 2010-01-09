@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
+* Copyright (C) 2001-2010, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -52,6 +52,7 @@
  */
 typedef enum ECleanupLibraryType {
     UCLN_START = -1,
+    UCLN_UPLUG,     /* ICU plugins */
     UCLN_CUSTOM,    /* Custom is for anyone else. */
     UCLN_CTESTFW,
     UCLN_LAYOUTEX,

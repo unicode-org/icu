@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -26,7 +26,8 @@ _uErrorInfoName[U_ERROR_WARNING_LIMIT-U_ERROR_WARNING_START]={
     "U_STRING_NOT_TERMINATED_WARNING",
     "U_SORT_KEY_TOO_SHORT_WARNING",
     "U_AMBIGUOUS_ALIAS_WARNING",
-    "U_DIFFERENT_UCA_VERSION"
+    "U_DIFFERENT_UCA_VERSION",
+    "U_PLUGIN_CHANGED_LEVEL_WARNING",
 };
 
 static const char * const
@@ -175,6 +176,12 @@ _uIDNAErrorName[U_IDNA_ERROR_LIMIT - U_IDNA_ERROR_START] = {
      "U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR"
 };
 
+static const char * const
+_uPluginErrorName[U_PLUGIN_ERROR_LIMIT - U_PLUGIN_ERROR_START] = {
+     "U_PLUGIN_TOO_HIGH",
+     "U_PLUGIN_DIDNT_SET_LEVEL",
+};
+
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code) {
     if(U_ZERO_ERROR <= code && code < U_STANDARD_ERROR_LIMIT) {
@@ -191,6 +198,8 @@ u_errorName(UErrorCode code) {
         return _uRegexErrorName[code - U_REGEX_ERROR_START];
     } else if(U_IDNA_ERROR_START <= code && code < U_IDNA_ERROR_LIMIT) {
         return _uIDNAErrorName[code - U_IDNA_ERROR_START];
+    } else if(U_PLUGIN_ERROR_START <= code && code < U_PLUGIN_ERROR_LIMIT) {
+        return _uPluginErrorName[code - U_PLUGIN_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
     }
