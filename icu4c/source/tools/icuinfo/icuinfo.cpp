@@ -42,6 +42,7 @@ static UOption options[]={
   /*2*/ UOPTION_DEF("interactive", 'i', UOPT_NO_ARG),
   /*3*/ UOPTION_VERBOSE,
   /*4*/ UOPTION_DEF("list-plugins", 'L', UOPT_NO_ARG),
+  /*5*/ UOPTION_DEF("milisecond-time", 'm', UOPT_NO_ARG),
 };
 
 
@@ -245,6 +246,8 @@ cmd_help()
 #endif
 */
     fprintf(stderr, "No help available yet, sorry. \n");
+    fprintf(stderr, "\t -m\n"
+                    "\t --millisecond-time   - Print the current UTC time in milliseconds.\n");
 }
 
 const char *prettyDir(const char *d)
@@ -252,6 +255,11 @@ const char *prettyDir(const char *d)
     if(d == NULL) return "<NULL>";
     if(*d == 0) return "<EMPTY>";
     return d;
+}
+
+void cmd_millis()
+{
+  printf("Milliseconds since Epoch: %.0f\n", uprv_getUTCtime());
 }
 
 void cmd_version(UBool noLoad)
@@ -671,6 +679,9 @@ main(int argc, char* argv[]) {
     
     if(options[2].doesOccur) {
         doInteractive();
+    } else if(options[5].doesOccur) {
+      cmd_millis();
+      didSomething=TRUE;
     } else {
         if(options[3].doesOccur) {
             cmd_version(FALSE);

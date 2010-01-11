@@ -9,6 +9,7 @@ icu4c/source/README
 icu4c/source/allinone/*.ncb
 icu4c/source/allinone/*.opt
 icu4c/source/allinone/*.suo
+icu4c/source/autom4te.cache
 icu4c/source/bin
 icu4c/source/common/*.ao
 icu4c/source/common/*.d

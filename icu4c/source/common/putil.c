@@ -37,6 +37,14 @@
 ******************************************************************************
 */
 
+/**
+ * Simple things (presence of functions, etc) should just go in configure.in and be added to 
+ * icucfg.h via autoheader.
+ */
+#if defined(HAVE_CONFIG_H)
+#include "icucfg.h"
+#endif
+
 /* Define _XOPEN_SOURCE for Solaris and friends. */
 /* NetBSD needs it to be >= 4 */
 #if !defined(_XOPEN_SOURCE)
@@ -270,14 +278,17 @@ uprv_getUTCtime()
     GetSystemTimeAsFileTime(&winTime.fileTime);
     return (UDate)((winTime.int64 - EPOCH_BIAS) / HECTONANOSECOND_PER_MILLISECOND);
 #else
-/*
+
+#if defined(HAVE_GETTIMEOFDAY)
     struct timeval posixTime;
     gettimeofday(&posixTime, NULL);
     return (UDate)(((int64_t)posixTime.tv_sec * U_MILLIS_PER_SECOND) + (posixTime.tv_usec/1000));
-*/
+#else
     time_t epochtime;
     time(&epochtime);
     return (UDate)epochtime * U_MILLIS_PER_SECOND;
+#endif
+
 #endif
 }
 
@@ -1967,10 +1978,6 @@ u_getVersion(UVersionInfo versionArray) {
 
 #if U_ENABLE_DYLOAD
  
-#if defined(HAVE_CONFIG_H)
-#include "icucfg.h"
-#endif
-
 #if defined(U_CHECK_DYLOAD)
 
 #if defined(HAVE_DLOPEN) 

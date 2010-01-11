@@ -358,6 +358,13 @@ if test "$enabled" = "check"; then
 fi
 AC_SUBST(U_CHECK_DYLOAD)
 
+# Check for miscellanous functions.
+# These only go into common/icucfg.h and are NOT exported with ICU builds.
+# So, use for putil / tools only.
+# Note that this will generate HAVE_GETTIMEOFDAY, not U_HAVE_GETTIMEOFDAY
+# rerun 'autoheader' to regenerate icucfg.h.in
+AC_CHECK_FUNCS([gettimeofday])
+
 # Check whether to use the evil rpath or not
 AC_ARG_ENABLE(rpath,
     [  --enable-rpath          use rpath when linking [default is only if necessary]],
@@ -896,7 +903,6 @@ HAVE_UINT64_T=1
 fi
 AC_SUBST(HAVE_UINT64_T)
 
-#AC_DEFINE([HAVE_WCHAR_H], [], [Uncomment This to run Autoheader])
 # Do various wchar_t related checks
 AC_CHECK_HEADER(wchar.h)
 if test "$ac_cv_header_wchar_h" = no
@@ -904,7 +910,7 @@ then
     U_HAVE_WCHAR_H=0
     U_HAVE_WCSCPY=0
 else
-    AC_DEFINE(HAVE_WCHAR_H)
+    AC_DEFINE([HAVE_WCHAR_H], [1], [wchar.h was found.])
     U_HAVE_WCHAR_H=1
     # Some broken systems have wchar.h but not some of its functions...
     AC_SEARCH_LIBS(wcscpy, wcs w)
