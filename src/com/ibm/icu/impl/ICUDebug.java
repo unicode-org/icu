@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,43 +26,45 @@ public final class ICUDebug {
         }
     }
 
-    public static final String javaVersionString = System.getProperty("java.version");
+    public static final String javaVersionString = System.getProperty("java.version", "0");
     public static final boolean isJDK14OrHigher;
     public static final VersionInfo javaVersion;
 
     public static VersionInfo getInstanceLenient(String s) {
-        // clean string
-        // preserve only digits, separated by single '.' 
-        // ignore over 4 digit sequences
-        // does not test < 255, very odd...
-
-        char[] chars = s.toCharArray();
-        int r = 0, w = 0, count = 0;
-        boolean numeric = false; // ignore leading non-numerics
-        while (r < chars.length) {
-            char c = chars[r++];
+        // Extracting ASCII numbers up to 4 delimited by
+        // any non digit characters
+        int[] ver = new int[4];
+        boolean numeric = false;
+        int i = 0, vidx = 0;
+        while (i < s.length()) {
+            char c = s.charAt(i++);
             if (c < '0' || c > '9') {
                 if (numeric) {
-                    if (count == 3) {
-                        // only four digit strings allowed
+                    if (vidx == 3) {
+                        // up to 4 numbers
                         break;
                     }
                     numeric = false;
-                    chars[w++] = '.';
-                    ++count;
+                    vidx++;
                 }
             } else {
-                numeric = true;
-                chars[w++] = c;
+                if (numeric) {
+                    ver[vidx] = ver[vidx] * 10 + (c - '0');
+                    if (ver[vidx] > 255) {
+                        // VersionInfo does not support numbers
+                        // greater than 255.  In such case, we
+                        // ignore the number and the rest
+                        ver[vidx] = 0;
+                        break;
+                    }
+                } else {
+                    numeric = true;
+                    ver[vidx] = c - '0';
+                }
             }
         }
-        while (w > 0 && chars[w-1] == '.') {
-            --w;
-        }
-    
-        String vs = new String(chars, 0, w);
 
-        return VersionInfo.getInstance(vs);
+        return VersionInfo.getInstance(ver[0], ver[1], ver[2], ver[3]);
     }
 
     static {
@@ -106,18 +108,22 @@ public final class ICUDebug {
         return result;
     }
 
-    static public void main(String[] args) {
-        // test
-        String[] tests = {
-            "1.3.0",
-            "1.3.0_02",
-            "1.3.1ea",
-            "1.4.1b43",
-            "___41___5",
-            "x1.4.51xx89ea.7f"
-        };
-        for (int i = 0; i < tests.length; ++i) {
-            System.out.println(tests[i] + " => " + getInstanceLenient(tests[i]));
-        }
-    }
+//    static public void main(String[] args) {
+//        // test
+//        String[] tests = {
+//            "1.3.0",
+//            "1.3.0_02",
+//            "1.3.1ea",
+//            "1.4.1b43",
+//            "___41___5",
+//            "x1.4.51xx89ea.7f",
+//            "1.6_2009",
+//            "10-100-1000-10000",
+//            "beta",
+//            "0",
+//        };
+//        for (int i = 0; i < tests.length; ++i) {
+//            System.out.println(tests[i] + " => " + getInstanceLenient(tests[i]));
+//        }
+//    }
 }
