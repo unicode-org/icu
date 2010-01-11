@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1046,8 +1046,10 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
     }
     else {
         res->u.fBinaryValue.fData = NULL;
-        res->fRes = URES_MAKE_EMPTY_RESOURCE(URES_BINARY);
-        res->fWritten = TRUE;
+        if (gFormatVersion > 1) {
+            res->fRes = URES_MAKE_EMPTY_RESOURCE(URES_BINARY);
+            res->fWritten = TRUE;
+        }
     }
 
     return res;
