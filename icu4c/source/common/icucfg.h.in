@@ -1,12 +1,3 @@
-/*
-******************************************************************************
-*
-*   Copyright (C) 1999-2010, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-******************************************************************************
-*/
-
 /* common/icucfg.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define if building universal (internal helper macro) */
@@ -20,6 +11,9 @@
 
 /* Define to 1 if you have the `dlopen' function. */
 #undef HAVE_DLOPEN
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -54,7 +48,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Uncomment This to run Autoheader */
+/* wchar.h was found. */
 #undef HAVE_WCHAR_H
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -71,6 +65,9 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* The size of `void *', as computed by sizeof. */
+#undef SIZEOF_VOID_P
 
 /* The size of `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T
