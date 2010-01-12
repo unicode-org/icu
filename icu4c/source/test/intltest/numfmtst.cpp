@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -32,14 +32,9 @@
 #include "unicode/numsys.h"
 
 //#define NUMFMTST_CACHE_DEBUG 1
-#ifdef NUMFMTST_CACHE_DEBUG 
-#include "stdio.h"
-#endif
+#include "stdio.h" /* for sprintf */
 
 //#define NUMFMTST_DEBUG 1
-#ifdef NUMFMTST_DEBUG 
-#include "stdio.h"
-#endif
 
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
