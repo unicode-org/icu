@@ -34,6 +34,8 @@ DEPS = $(OBJECTS:.o=.d)
 
 # pass some information
 
+ICUINFO_OPTS=-i ../../data/out/build/$(ICUDATA_PLATFORM_NAME)
+
 CPPFLAGS+=  -DU_PLATFORM=\"@platform@\"  -DU_BUILD=\"@build@\" -DU_HOST=\"@host@\" -DU_CC=\"@CC@\" -DU_CXX=\"@CXX@\"
 # -DENABLE_RELEASE=@ENABLE_RELEASE@ -DENABLE_DEBUG=@ENABLE_DEBUG@ "
 

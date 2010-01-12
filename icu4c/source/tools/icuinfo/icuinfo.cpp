@@ -39,7 +39,7 @@
 static UOption options[]={
   /*0*/ UOPTION_HELP_H,
   /*1*/ UOPTION_HELP_QUESTION_MARK,
-  /*2*/ UOPTION_DEF("interactive", 'i', UOPT_NO_ARG),
+  /*2*/ UOPTION_ICUDATADIR,
   /*3*/ UOPTION_VERBOSE,
   /*4*/ UOPTION_DEF("list-plugins", 'L', UOPT_NO_ARG),
   /*5*/ UOPTION_DEF("milisecond-time", 'm', UOPT_NO_ARG),
@@ -297,8 +297,8 @@ void cmd_version(UBool noLoad)
     printf("Cygwin: CYGWINMSVC\n");
 #endif
     printf("ICUDATA: %s\n", U_ICUDATA_NAME);
-    printf("Data Directory: %s\n", u_getDataDirectory());
     u_init(&status);
+    printf("Data Directory: %s\n", u_getDataDirectory());
     printf("ICU Initialization returned: %s\n", u_errorName(status));
     printf( "Default locale: %s\n", uloc_getDefault());
     {
@@ -678,8 +678,10 @@ main(int argc, char* argv[]) {
     }
     
     if(options[2].doesOccur) {
-        doInteractive();
-    } else if(options[5].doesOccur) {
+      u_setDataDirectory(options[2].value);
+    }
+
+    if(options[5].doesOccur) {
       cmd_millis();
       didSomething=TRUE;
     } else {
