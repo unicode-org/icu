@@ -3676,6 +3676,7 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -3847,7 +3848,7 @@ if test "X$cross_buildroot" = "X"; then
         { { $as_echo "$as_me:$LINENO: error: Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root" >&5
 $as_echo "$as_me: error: Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root" >&2;}
    { (exit 1); exit 1; }; }
-    fi
+	    fi
 else
     if test -f "${cross_buildroot}/config/icucross.mk"; then
         { $as_echo "$as_me:$LINENO: result: Using cross buildroot: $cross_buildroot" >&5
@@ -6753,9 +6754,65 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
+{ $as_echo "$as_me:$LINENO: checking if we have a C++ compiler" >&5
+$as_echo_n "checking if we have a C++ compiler... " >&6; }
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  cxx_okay=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	cxx_okay=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+if test $cxx_okay = yes
+then
+	{ $as_echo "$as_me:$LINENO: result: congratulations" >&5
+$as_echo "congratulations" >&6; }
+else
+	{ $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+	{ { $as_echo "$as_me:$LINENO: error: C++ compiler $CXX does not work or no compiler found" >&5
+$as_echo "$as_me: error: C++ compiler $CXX does not work or no compiler found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 { $as_echo "$as_me:$LINENO: checking if #include <string> works" >&5
 $as_echo_n "checking if #include <string> works... " >&6; }
-
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF

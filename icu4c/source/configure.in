@@ -53,6 +53,7 @@ export _CXX_CXXSUFFIX
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
+
 AC_PROG_INSTALL
 
 AC_SUBST(cross_compiling)
@@ -81,6 +82,7 @@ AC_ARG_WITH(cross-build,
 if test "X$cross_buildroot" = "X"; then
     if test "$cross_compiling" = "yes"; then
         AC_MSG_ERROR([Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root])
+	dnl '
     fi
 else
     if test -f "${cross_buildroot}/config/icucross.mk"; then
@@ -399,6 +401,16 @@ AC_SUBST(U_INLINE)
 #
 U_HAVE_STD_STRING=0
 AC_LANG_PUSH([C++])
+AC_MSG_CHECKING([[if we have a C++ compiler]])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx_okay=yes],[cxx_okay=no])
+if test $cxx_okay = yes
+then
+	AC_MSG_RESULT([[congratulations]])
+else
+	AC_MSG_RESULT([[no]])
+	AC_MSG_ERROR([[C++ compiler $CXX does not work or no compiler found]])
+fi
+
 AC_MSG_CHECKING([[if #include <string> works]])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[]])], [ac_cv_header_stdstring=yes], [ac_cv_header_stdstring=no])
 AC_MSG_RESULT($ac_cv_header_stdstring)
