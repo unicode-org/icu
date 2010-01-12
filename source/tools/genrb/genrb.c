@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -395,7 +395,9 @@ main(int argc,
         setUsePoolBundle(TRUE);
     }
 
-    printf("genrb number of files: %d\n", argc - 1);
+    if((argc-1)!=1) {
+    	printf("genrb number of files: %d\n", argc - 1);
+    }
     /* generate the binary files */
     for(i = 1; i < argc; ++i) {
         status = U_ZERO_ERROR;
