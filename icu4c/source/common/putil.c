@@ -119,7 +119,12 @@ Cleanly installed Solaris can use this #define.
 #include <unistd.h>
 #elif defined(U_QNX)
 #include <sys/neutrino.h>
+#elif defined(U_SOLARIS)
+# ifndef _XPG4_2
+#  define _XPG4_2
+# endif
 #endif
+
 
 #if defined(U_DARWIN)
 #include <TargetConditionals.h>
