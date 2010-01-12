@@ -246,7 +246,7 @@ array_write16(struct SRBRoot *bundle, struct SResource *res,
         res_write16(bundle, current, status);
         res16 |= makeRes16(current->fRes);
     }
-    if (U_SUCCESS(*status) && res->u.fArray.fCount <= 0xffff && res16 >= 0) {
+    if (U_SUCCESS(*status) && res->u.fArray.fCount <= 0xffff && res16 >= 0 && gFormatVersion > 1) {
         uint16_t *p16 = reserve16BitUnits(bundle, 1 + res->u.fArray.fCount, status);
         if (U_SUCCESS(*status)) {
             res->fRes = URES_MAKE_RESOURCE(URES_ARRAY16, bundle->f16BitUnitsLength);
@@ -309,7 +309,7 @@ table_write16(struct SRBRoot *bundle, struct SResource *res,
         (!hasLocalKeys || maxKey < bundle->fLocalKeyLimit) &&
         (!hasPoolKeys || maxPoolKey < (0x10000 - bundle->fLocalKeyLimit))
     ) {
-        if (res16 >= 0) {
+        if (res16 >= 0 && gFormatVersion > 1) {
             uint16_t *p16 = reserve16BitUnits(bundle, 1 + res->u.fTable.fCount * 2, status);
             if (U_SUCCESS(*status)) {
                 /* 16-bit count, key offsets and values */
