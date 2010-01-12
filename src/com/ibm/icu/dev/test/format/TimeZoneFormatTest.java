@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2009, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2010, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -131,6 +131,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                     final String[] excludedTZIDs = {
                                         "America/Argentina/Salta", "America/Santarem",
                                         "Asia/Riyadh87", "Asia/Riyadh88", "Asia/Riyadh89",
+                                        "Asia/Novokuznetsk",
                                     };
                                     for (int i = 0; i < excludedTZIDs.length; i++) {
                                         if (canonicalID.equals(excludedTZIDs[i])) {
