@@ -37,14 +37,6 @@
 ******************************************************************************
 */
 
-/**
- * Simple things (presence of functions, etc) should just go in configure.in and be added to 
- * icucfg.h via autoheader.
- */
-#if defined(HAVE_CONFIG_H)
-#include "icucfg.h"
-#endif
-
 /* Define _XOPEN_SOURCE for Solaris and friends. */
 /* NetBSD needs it to be >= 4 */
 #if !defined(_XOPEN_SOURCE)
@@ -142,6 +134,14 @@ Cleanly installed Solaris can use this #define.
 
 #if U_HAVE_NL_LANGINFO_CODESET
 #include <langinfo.h>
+#endif
+
+/**
+ * Simple things (presence of functions, etc) should just go in configure.in and be added to
+ * icucfg.h via autoheader.
+ */
+#if defined(HAVE_CONFIG_H)
+#include "icucfg.h"
 #endif
 
 /* Define the extension for data files, again... */
