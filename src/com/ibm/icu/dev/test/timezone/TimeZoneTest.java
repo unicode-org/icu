@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -107,7 +107,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestShortZoneIDs() throws Exception {
 
         ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, true), // updated Oct 2009 yoshito
+            new ZoneDescriptor("MIT", -660, false), // updated to false when merging 2009u
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
