@@ -1,11 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (c) 2004-2010, International Business Machines
+ * Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *
  */
-
 package com.ibm.icu.dev.test.serializable;
 
 import java.text.AttributedCharacterIterator;
@@ -25,6 +24,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DurationFormat;
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.SelectFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
@@ -2087,6 +2087,23 @@ public class FormatTests
         }
     }
 
+    public static class SelectFormatHandler implements SerializableTest.Handler {
+
+        public Object[] getTestObjects() {
+            SelectFormat[] selfmts = {new SelectFormat("keyword{phrase} other{otherPhrase}")};
+
+            return selfmts;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b) {
+            SelectFormat sfa = (SelectFormat) a;
+            SelectFormat sfb = (SelectFormat) b;
+            String argument = "keyword";
+
+            return sfa.format(argument) != sfb.format(argument);
+        }
+    }
+
     public static class PluralFormatHandler implements SerializableTest.Handler {
         public Object[] getTestObjects() {
             Locale[] locales = { Locale.US }; // main test is in plural rules handler
@@ -2150,16 +2167,6 @@ public class FormatTests
             String resb = tufb.format(amount);
 
             return resa.equals(resb);
-        }
-    }
-
-    public static class SelectFormatHandler implements SerializableTest.Handler {
-        // TODO - add real test case here!
-        public Object[] getTestObjects() {
-            return new Object[] { new TimeUnitFormat().setLocale(ULocale.ENGLISH) };
-        }
-        public boolean hasSameBehavior(Object a, Object b) {
-            return true;
         }
     }
 

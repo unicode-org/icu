@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2009, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1323,6 +1323,174 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
       }
     }
   }
+
+    /**
+     * This tests SelectFormats used inside MessageFormats.
+     */
+    public void testSelectFormat() {
+        String pattern = null; 
+        MessageFormat msgFmt = null ;
+
+        //Create the MessageFormat with simple French pattern  
+        pattern = "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris."; 
+        msgFmt = new MessageFormat(pattern);
+        assertNotNull( "ERROR:Failure in constructing with simple French pattern", msgFmt);
+
+        //Format 
+        Object testArgs[][] ={ 
+            {"Kirti","female"} ,
+            {"Victor","other"} ,
+            {"Ash","unknown"} ,
+        };
+        String exp[] = {
+            "Kirti est all\\u00E9e \\u00E0 Paris." ,
+            "Victor est all\\u00E9 \\u00E0 Paris.",
+            "Ash est all\\u00E9 \\u00E0 Paris."
+        };
+        for ( int i=0; i< 3; i++){
+            assertEquals("ERROR:Failure in format with simple French Pattern" ,
+                      exp[i] , msgFmt.format(testArgs[i]) ); 
+        }
+
+        //Create the MessageFormat with Quoted French Pattern
+        pattern = "{0} est {1, select, female {all\\u00E9e c''est} other {all\\u00E9 c''est}} \\u00E0 Paris.";
+        msgFmt = new MessageFormat(pattern);
+        assertNotNull( "ERROR:Failure in constructing with quoted French pattern", msgFmt);
+
+        //Format 
+        Object testArgs1[][] ={ 
+            {"Kirti","female"} ,
+            {"Victor","other"} ,
+            {"Ash","male"} ,
+        };
+        String exp1[] = {
+            "Kirti est all\\u00E9e c'est \\u00E0 Paris." ,
+            "Victor est all\\u00E9 c'est \\u00E0 Paris.",
+            "Ash est all\\u00E9 c'est \\u00E0 Paris."
+        };
+        for ( int i=0; i< 3; i++){
+            assertEquals("ERROR:Failure in format with quoted French Pattern" ,
+                          exp1[i] , msgFmt.format(testArgs1[i]) ); 
+        }
+
+        //Nested patterns with plural, number ,choice ,select format etc.
+        //Select Format with embedded number format
+        pattern = "{0} est {1, select, female {{2,number,integer} all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.";
+        msgFmt = new MessageFormat(pattern);
+        assertNotNull( "ERROR:Failure in constructing with nested pattern 1", msgFmt);
+
+        //Format 
+        Object testArgs3[][] ={ 
+            {"Kirti", "female", 6} ,
+            {"Kirti", "female", 100.100} ,
+            {"Kirti", "other", 6} , 
+        };
+        String exp3[] = {
+            "Kirti est 6 all\\u00E9e \\u00E0 Paris." ,
+            "Kirti est 100 all\\u00E9e \\u00E0 Paris.",
+            "Kirti est all\\u00E9 \\u00E0 Paris."
+        };
+
+        for ( int i=0; i< 3; i++){
+            assertEquals("ERROR:Failure in format with nested Pattern 1" ,
+                          exp3[i] , msgFmt.format(testArgs3[i]) ); 
+        }
+
+        //Plural format with embedded select format
+        pattern = "{0} {1, plural, one {est {2, select, female {all\\u00E9e} other {all\\u00E9}}} other {sont {2, select, female {all\\u00E9es} other {all\\u00E9s}}}} \\u00E0 Paris.";
+        msgFmt = new MessageFormat(pattern);
+        assertNotNull( "ERROR:Failure in constructing with nested pattern 2", msgFmt);
+
+        //Format 
+        Object testArgs4[][] ={ 
+            {"Kirti",6,"female"},
+            {"Kirti",1,"female"},
+            {"Ash",1,"other"},
+            {"Ash",5,"other"},
+        };
+        String exp4[] = {
+            "Kirti sont all\\u00E9es \\u00E0 Paris." ,
+            "Kirti est all\\u00E9e \\u00E0 Paris.",
+            "Ash est all\\u00E9 \\u00E0 Paris.",
+            "Ash sont all\\u00E9s \\u00E0 Paris."
+        };
+        for ( int i=0; i< 4; i++){
+            assertEquals("ERROR:Failure in format with nested Pattern 2" ,
+                          exp4[i] , msgFmt.format(testArgs4[i]) ); 
+        }
+
+        //Select, plural, and number formats heavily nested 
+        pattern = "{0} und {1, select, female {{2, plural, one {{3, select, female {ihre Freundin} other {ihr Freund}} } other {ihre {2, number, integer} {3, select, female {Freundinnen} other {Freunde}} } }} other{{2, plural, one {{3, select, female {seine Freundin} other {sein Freund}}} other {seine {2, number, integer} {3, select, female {Freundinnen} other {Freunde}}}}} } gingen nach Paris.";
+        msgFmt = new MessageFormat(pattern);
+        assertNotNull( "ERROR:Failure in constructing with nested pattern 3", msgFmt);
+
+        //Format 
+        Object testArgs5[][] ={ 
+            {"Kirti","other",1,"other"},
+            {"Kirti","other",6,"other"},
+            {"Kirti","other",1,"female"},
+            {"Kirti","other",3,"female"},
+            {"Kirti","female",1,"female"},
+            {"Kirti","female",5,"female"},
+            {"Kirti","female",1,"other"},
+            {"Kirti","female",5,"other"},
+            {"Kirti","mixed",1,"mixed"},
+            {"Kirti","mixed",1,"other"},
+            {"Kirti","female",1,"mixed"},
+            {"Kirti","mixed",5,"mixed"},
+            {"Kirti","mixed",5,"other"},
+            {"Kirti","female",5,"mixed"},
+        };
+        String exp5[] = {
+            "Kirti und sein Freund gingen nach Paris." ,
+            "Kirti und seine 6 Freunde gingen nach Paris." ,
+            "Kirti und seine Freundin gingen nach Paris.",
+            "Kirti und seine 3 Freundinnen gingen nach Paris.",
+            "Kirti und ihre Freundin  gingen nach Paris.",
+            "Kirti und ihre 5 Freundinnen  gingen nach Paris.",
+            "Kirti und ihr Freund  gingen nach Paris.",
+            "Kirti und ihre 5 Freunde  gingen nach Paris.",
+            "Kirti und sein Freund gingen nach Paris.",
+            "Kirti und sein Freund gingen nach Paris.",
+            "Kirti und ihr Freund  gingen nach Paris.",
+            "Kirti und seine 5 Freunde gingen nach Paris." ,
+            "Kirti und seine 5 Freunde gingen nach Paris." ,
+            "Kirti und ihre 5 Freunde  gingen nach Paris."
+        };
+        //Format
+        for ( int i=0; i< 14; i++){
+            assertEquals("ERROR:Failure in format with nested Pattern 3" ,
+                          exp5[i] , msgFmt.format(testArgs5[i]) ); 
+        }
+    }
+
+    /**
+     * Test toPattern when there is a SelectFormat
+     */
+    public void testSelectFormatToPattern() {
+        String[] patterns = {
+          //Pattern with some text at start and at end
+          "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.",
+          //Pattern with some text at start 
+          "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}}",
+          //Pattern with some text at end
+          "{1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.",
+          //Pattern with no text at any  end
+          "{1, select, female {all\\u00E9e} other {all\\u00E9}}.",
+          //Quoted French pattern
+          "{0} est {1, select, female {all\\u00E9e c''est} other {all\\u00E9 c''est}} \\u00E0 Paris.",
+        };
+
+        for (int i = 0; i < patterns.length; ++i) {
+            String pattern = patterns[i];
+            MessageFormat mf = new MessageFormat(pattern);
+            MessageFormat mf2 = new MessageFormat(mf.toPattern());
+            if (!mf.equals(mf2)) {
+                errln("message formats not equal for pattern:\n*** '" 
+                     + pattern + "'\n*** '" + mf.toPattern() + "'");
+            }
+        }
+    }
 
     // Test case for null arguments.
     // Ticket#6361

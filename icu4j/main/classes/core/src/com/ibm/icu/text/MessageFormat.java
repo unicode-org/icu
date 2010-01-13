@@ -288,6 +288,10 @@ import com.ibm.icu.util.ULocale;
  *       <td><code>plural</code>
  *       <td><i>SubformatPattern</i>
  *       <td><code>new PluralFormat(subformatPattern)</code>
+ *    <tr>
+ *       <td><code>select</code>
+ *       <td><i>SubformatPattern</i>
+ *       <td><code>new SelectFormat(subformatPattern)</code>
  * </table>
  * <p>
  *
@@ -407,6 +411,8 @@ import com.ibm.icu.util.ULocale;
  * @see          NumberFormat
  * @see          DecimalFormat
  * @see          ChoiceFormat
+ * @see          PluralFormat
+ * @see          SelectFormat
  * @author       Mark Davis
  * @stable ICU 3.0
  */
@@ -665,21 +671,16 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
             } else if (formats[i] instanceof ChoiceFormat) {
                 result.append(",choice,"
                         + ((ChoiceFormat) formats[i]).toPattern());
-            } else if (formats[i] instanceof PluralFormat) {
-              String pat = ((PluralFormat)formats[i]).toPattern();
-              // TODO: PluralFormat doesn't do the single quote thing, just reapply
-              if (pat.indexOf('\'') != 0) {
-                StringBuffer buf = new StringBuffer();
-                for (int j = 0; j < pat.length(); ++j) {
-                  char ch = pat.charAt(j);
-                  if (ch == '\'') {
-                    buf.append(ch); // double it
-                  }
-                  buf.append(ch);
-                }
-                pat = buf.toString();
-              }
-              result.append(",plural," + pat);
+            } else if (formats[i] instanceof PluralFormat ){
+                  String pat = ((PluralFormat)formats[i]).toPattern();
+                  // TODO: PluralFormat does not do the single quote thing, just reapply
+                  pat = duplicateSingleQuotes(pat);
+                  result.append(",plural," + pat);
+            } else if (formats[i] instanceof SelectFormat) {
+                  String pat = ((SelectFormat)formats[i]).toPattern();
+                  //TODO: SelectFormat does not do the single quote thing, just reapply
+                  pat = duplicateSingleQuotes(pat);
+                  result.append(",select," + pat);
             } else {
                 //result.append(", unknown");
             }
@@ -687,6 +688,25 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
         }
         copyAndFixQuotes(pattern, lastOffset, pattern.length(), result);
         return result.toString();
+    }
+
+    /**
+      * Double every single quote
+      */
+    private String duplicateSingleQuotes(String pat){
+      String result = pat;
+      if (pat.indexOf('\'') != 0) {
+        StringBuffer buf = new StringBuffer();
+        for (int j = 0; j < pat.length(); ++j) {
+          char ch = pat.charAt(j);
+          if (ch == '\'') {
+            buf.append(ch); // double it
+          }
+          buf.append(ch);
+        }
+        result = buf.toString();
+      }
+      return result;
     }
 
     /**
@@ -1716,7 +1736,8 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
                 } else if (formats[i] != null) {
                     subFormatter = formats[i];
                     if (subFormatter instanceof ChoiceFormat
-                        || subFormatter instanceof PluralFormat) {
+                        || subFormatter instanceof PluralFormat
+                        || subFormatter instanceof SelectFormat) {
                         arg = formats[i].format(obj);
                         // TODO: This should be made more robust.
                         //       Does this work with '{' in quotes?
@@ -1820,7 +1841,7 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
 
     private static final String[] typeList =
         {"", "number", "date", "time", "choice", "spellout", "ordinal",
-         "duration", "plural"};
+         "duration", "plural", "select" };
     private static final int
         TYPE_EMPTY = 0,
         TYPE_NUMBER = 1,
@@ -1830,7 +1851,8 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
         TYPE_SPELLOUT = 5,
         TYPE_ORDINAL = 6,
         TYPE_DURATION = 7,
-        TYPE_PLURAL = 8;
+        TYPE_PLURAL = 8, 
+        TYPE_SELECT = 9;
 
     private static final String[] modifierList =
         {"", "currency", "percent", "integer"};
@@ -1912,7 +1934,8 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
 
         // now get the format
         Format newFormat = null;
-        switch (findKeyword(segments[2].toString(), typeList)) {
+        int subformatType  = findKeyword(segments[2].toString(), typeList);
+        switch (subformatType){
         case TYPE_EMPTY:
             break;
         case TYPE_NUMBER:
@@ -2036,10 +2059,11 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
             }
             break;
         case TYPE_PLURAL:
+        case TYPE_SELECT:
             {
-                // PluralFormat does not handle quotes.
+                // PluralFormat and SelectFormat does not handle quotes.
                 // Remove quotes.
-                // TODO: Should PluralFormat handle quotes?
+                // TODO: Should PluralFormat and SelectFormat handle quotes?
                 StringBuffer unquotedPattern = new StringBuffer();
                 String quotedPattern = segments[3].toString();
                 boolean inQuote = false;
@@ -2058,9 +2082,13 @@ public class MessageFormat extends UFormat implements BaseFormat<Object,StringBu
                     }
                 }
 
-                PluralFormat pls = new PluralFormat(ulocale,
+                if( subformatType == TYPE_PLURAL){
+                    PluralFormat pls = new PluralFormat(ulocale,
                                                     unquotedPattern.toString());
-                newFormat = pls;
+                    newFormat = pls;
+                }else{
+                    newFormat = new SelectFormat( unquotedPattern.toString());
+                }
             }
             break;
         default:

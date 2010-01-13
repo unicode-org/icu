@@ -1,7 +1,8 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (c) 2004-2010, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -25,10 +26,11 @@ public class TestAll extends TestGroup {
                   "TestAll$DateFormat",
                   "TestAll$DateIntervalFormat",
                   "TestAll$TimeUnitFormat",
-                  "TestAll$MessageFormat",
-                  "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
-                  "DataDrivenFormatTest"
+                  "DataDrivenFormatTest",
+                  "TestAll$PluralFormat",
+                  "TestAll$MessageFormat",
+                  "TestAll$SelectFormat"
               },
               "Formatting Tests");
     }
@@ -102,6 +104,15 @@ public class TestAll extends TestGroup {
                 "PluralFormatUnitTest",
                 "PluralFormatTest",
                 "PluralRulesTest",
+            });
+        }
+    }
+
+    public static class SelectFormat extends TestGroup {
+        public SelectFormat() {
+            super(new String[] {
+                "SelectFormatUnitTest",
+                "SelectFormatAPITest",
             });
         }
     }
