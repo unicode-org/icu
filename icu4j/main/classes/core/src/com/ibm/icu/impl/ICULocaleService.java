@@ -573,17 +573,8 @@ public class ICULocaleService extends ICUService {
         protected ClassLoader loader() {
             ClassLoader cl = getClass().getClassLoader();
             if (cl == null) {
-                cl = Thread.currentThread().getContextClassLoader();
-                if (cl == null) {
-                    cl = ClassLoader.getSystemClassLoader();
-                    if (cl == null) {
-                        //TODO It is not guaranteed that we can get non-null class loader
-                        // by the Java specification.
-                        throw new RuntimeException("No accessible class loader is available for loading ICU resource bundles.");
-                    }
-                }
+                cl = Utility.getFallbackClassLoader();
             }
-
             return cl;
         }
 

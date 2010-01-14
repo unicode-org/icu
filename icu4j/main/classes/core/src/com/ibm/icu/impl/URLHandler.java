@@ -35,18 +35,10 @@ public abstract class URLHandler {
         try {
             InputStream is = URLHandler.class.getResourceAsStream(PROPNAME);
             if (is == null) {
-                ClassLoader loader = Thread.currentThread().getContextClassLoader();
-                if (loader == null) {
-                    loader = ClassLoader.getSystemClassLoader();
-                    if (loader == null) {
-                        //TODO It is not guaranteed that we can get non-null class loader
-                        // by the Java specification.
-                        throw new RuntimeException("No accessible class loader is available for URLHandler");
-                    }
-                }
+                ClassLoader loader = Utility.getFallbackClassLoader();
                 is = loader.getResourceAsStream(PROPNAME);
             }
-            
+
             if (is != null) {
                 Class<?>[] params = { URL.class };
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
