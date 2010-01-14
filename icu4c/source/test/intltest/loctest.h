@@ -100,6 +100,8 @@ public:
 
     void TestCurrencyByDate(void);
 
+    void TestGetVariantWithKeywords(void);
+
 private:
     void _checklocs(const char* label,
                     const char* req,

@@ -948,6 +948,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\locnmtst.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\locnmtst.h"
+				>
+			</File>
+			<File
 				RelativePath=".\miscdtfm.cpp"
 				>
 			</File>

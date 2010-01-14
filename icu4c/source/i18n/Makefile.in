@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2009, International Business Machines
+#   Copyright (C) 1998-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -83,7 +83,7 @@ wintzimpl.o windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o v
 zonemeta.o zstrfmt.o plurrule.o plurfmt.o dtitvfmt.o dtitvinf.o \
 tmunit.o tmutamt.o tmutfmt.o colldata.o bmsearch.o bms.o currpinf.o \
 uspoof.o uspoof_impl.o uspoof_build.o uspoof_conf.o uspoof_wsconf.o \
-ztrans.o zrule.o vzone.o fphdlimp.o fpositer.o
+ztrans.o zrule.o vzone.o fphdlimp.o fpositer.o locdspnm.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h

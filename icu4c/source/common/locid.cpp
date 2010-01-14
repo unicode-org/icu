@@ -63,6 +63,7 @@ typedef enum ELocalePos {
     eUS,
     eCANADA,
     eCANADA_FRENCH,
+    eROOT,
 
 
     //eDEFAULT,
@@ -498,7 +499,7 @@ Locale &Locale::operator=(const Locale &other)
     uprv_strcpy(script, other.script);
     uprv_strcpy(country, other.country);
 
-    /* The variantBegin is an offset into fullName, just copy it */
+    /* The variantBegin is an offset, just copy it */
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
     return *this;
@@ -653,6 +654,10 @@ Locale::setToBogus() {
     if(fullName != fullNameBuffer) {
         uprv_free(fullName);
         fullName = fullNameBuffer;
+    }
+    if(baseName && baseName != baseNameBuffer) {
+        uprv_free(baseName);
+        baseName = NULL;
     }
     *fullNameBuffer = 0;
     *language = 0;
@@ -1002,6 +1007,12 @@ void Locale::setFromPOSIXID(const char *posixID)
 }
 
 const Locale & U_EXPORT2
+Locale::getRoot(void)
+{
+    return getLocale(eROOT);
+}
+
+const Locale & U_EXPORT2
 Locale::getEnglish(void)
 {
     return getLocale(eENGLISH);
@@ -1157,6 +1168,7 @@ Locale::getLocaleCache(void)
         if (tLocaleCache == NULL) {
             return NULL;
         }
+	tLocaleCache[eROOT]          = Locale("");
         tLocaleCache[eENGLISH]       = Locale("en");
         tLocaleCache[eFRENCH]        = Locale("fr");
         tLocaleCache[eGERMAN]        = Locale("de");
