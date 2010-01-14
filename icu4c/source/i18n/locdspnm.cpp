@@ -18,6 +18,8 @@
 #include "ulocimp.h"
 #include "ureslocs.h"
 
+#include <stdarg.h>
+
 /**
  * Concatenate a number of null-terminated strings to buffer, leaving a
  * null-terminated string.  The last argument should be the null pointer.
