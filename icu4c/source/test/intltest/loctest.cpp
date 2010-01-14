@@ -220,6 +220,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         TESTCASE(29, TestVariantWithOutCountry);
         TESTCASE(30, TestCanonicalization);
         TESTCASE(31, TestCurrencyByDate);
+	TESTCASE(32, TestGetVariantWithKeywords);
 
         // keep the last index in sync with the condition in default:
 
@@ -2491,4 +2492,12 @@ void LocaleTest::TestCurrencyByDate(void)
     }
     status = U_ZERO_ERROR; // reset
 #endif
+}
+
+void LocaleTest::TestGetVariantWithKeywords(void)
+{
+  Locale l("en_US_VALLEY@foo");
+  const char *variant = l.getVariant();
+  logln(variant);
+  test_assert(strcmp("VALLEY", variant) == 0);
 }

@@ -180,6 +180,8 @@
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
 public:
+    /** Useful constant for the Root locale. @draft ICU 4.4 */
+    static const Locale &U_EXPORT2 getRoot(void);
     /** Useful constant for this language. @stable ICU 2.0 */
     static const Locale &U_EXPORT2 getEnglish(void);
     /** Useful constant for this language. @stable ICU 2.0 */
@@ -425,8 +427,9 @@ public:
     /**
      * Gets the list of keywords for the specified locale.
      *
-     * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
-     * @param status Returns any error information while performing this operation.
+     * @param status the status code
+     * @return pointer to StringEnumeration class, or NULL if there are no keywords. 
+     * Client must dispose of it by calling delete.
      * @stable ICU 2.8
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
@@ -435,10 +438,10 @@ public:
      * Get the value for a keyword.
      *
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
-     * @param status Returns any error information while performing this operation.
      * @param buffer The buffer to receive the keyword value.
      * @param bufferCapacity The capacity of receiving buffer
-     * @return the length of keyword value
+     * @param status Returns any error information while performing this operation.
+     * @return the length of the keyword value
      *
      * @stable ICU 2.8
      */
@@ -758,7 +761,8 @@ Locale::getScript() const
 inline const char *
 Locale::getVariant() const
 {
-    return &fullName[variantBegin];
+    getBaseName(); // lazy init
+    return &baseName[variantBegin];
 }
 
 inline const char *
