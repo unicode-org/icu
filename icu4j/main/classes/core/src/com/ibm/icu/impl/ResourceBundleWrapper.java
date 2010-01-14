@@ -112,15 +112,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
      protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
                                                                     ClassLoader root, boolean disableFallback) {
         if (root == null) {
-            root = Thread.currentThread().getContextClassLoader();
-            if (root == null) {
-                root = ClassLoader.getSystemClassLoader();
-                if (root == null) {
-                    //TODO It is not guaranteed that we can get non-null class loader
-                    // by the Java specification.
-                    throw new RuntimeException("No accessible class loader is available for resource bundle " + baseName);
-                }
-            }
+            root = Utility.getFallbackClassLoader();
         }
         final ClassLoader cl = root;
         String name = baseName;

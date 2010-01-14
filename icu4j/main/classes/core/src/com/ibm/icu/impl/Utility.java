@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1828,5 +1828,22 @@ public final class Utility {
             buffer.appendCodePoint(cp);
         }
         return buffer.toString();
+    }
+
+    /**
+     * Return a fallback class loader for loading ICU resource
+     * @return A class loader
+     */
+    public static ClassLoader getFallbackClassLoader() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            cl = ClassLoader.getSystemClassLoader();
+            if (cl == null) {
+                //TODO It is not guaranteed that we can get non-null class loader
+                // by the Java specification.
+                throw new RuntimeException("No accessible class loader is available.");
+            }
+        }
+        return cl;
     }
 }
