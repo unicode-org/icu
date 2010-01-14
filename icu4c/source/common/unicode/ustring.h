@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1601,5 +1601,96 @@ u_strFromUTF32WithSub(UChar *dest,
                int32_t srcLength,
                UChar32 subchar, int32_t *pNumSubstitutions,
                UErrorCode *pErrorCode);
+
+/**
+ * Convert a 16-bit Unicode string to Java Modified UTF-8.
+ * See http://java.sun.com/javase/6/docs/api/java/io/DataInput.html#modified-utf-8
+ *
+ * This function behaves according to the documentation for Java DataOutput.writeUTF()
+ * except that it does not encode the output length in the destination buffer
+ * and does not have an output length restriction.
+ * See http://java.sun.com/javase/6/docs/api/java/io/DataOutput.html#writeUTF(java.lang.String)
+ *
+ * The input string need not be well-formed UTF-16.
+ * (Therefore there is no subchar parameter.)
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of chars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @draft ICU 4.4
+ * @see u_strToUTF8WithSub
+ * @see u_strFromJavaModifiedUTF8WithSub
+ */
+U_DRAFT char* U_EXPORT2 
+u_strToJavaModifiedUTF8(
+        char *dest,
+        int32_t destCapacity,
+        int32_t *pDestLength,
+        const UChar *src, 
+        int32_t srcLength,
+        UErrorCode *pErrorCode);
+
+/**
+ * Convert a Java Modified UTF-8 string to a 16-bit Unicode string.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
+ *
+ * This function behaves according to the documentation for Java DataInput.readUTF()
+ * except that it takes a length parameter rather than
+ * interpreting the first two input bytes as the length.
+ * See http://java.sun.com/javase/6/docs/api/java/io/DataInput.html#readUTF()
+ *
+ * The output string may not be well-formed UTF-16.
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param subchar       The substitution character to use in place of an illegal input sequence,
+ *                      or U_SENTINEL if the function is to return with U_INVALID_CHAR_FOUND instead.
+ *                      A substitution character can be any valid Unicode code point (up to U+10FFFF)
+ *                      except for surrogate code points (U+D800..U+DFFF).
+ *                      The recommended value is U+FFFD "REPLACEMENT CHARACTER".
+ * @param pNumSubstitutions Output parameter receiving the number of substitutions if subchar>=0.
+ *                      Set to 0 if no substitutions occur or subchar<0.
+ *                      pNumSubstitutions can be NULL.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strFromUTF8WithSub
+ * @see u_strFromUTF8Lenient
+ * @see u_strToJavaModifiedUTF8
+ * @draft ICU 4.4
+ */
+U_DRAFT UChar* U_EXPORT2
+u_strFromJavaModifiedUTF8WithSub(
+        UChar *dest,
+        int32_t destCapacity,
+        int32_t *pDestLength,
+        const char *src,
+        int32_t srcLength,
+        UChar32 subchar, int32_t *pNumSubstitutions,
+        UErrorCode *pErrorCode);
 
 #endif

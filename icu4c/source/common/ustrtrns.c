@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -396,7 +396,6 @@ u_strFromUTF8WithSub(UChar *dest,
               int32_t srcLength,
               UChar32 subchar, int32_t *pNumSubstitutions,
               UErrorCode *pErrorCode){
-
     UChar *pDest = dest;
     UChar *pDestLimit = dest+destCapacity;
     UChar32 ch;
@@ -599,12 +598,7 @@ u_strFromUTF8WithSub(UChar *dest,
                         *(pDest++)=(UChar)ch;
                     }else{
                         *(pDest++)=UTF16_LEAD(ch);
-                        if(pDest<pDestLimit){
-                            *(pDest++)=UTF16_TRAIL(ch);
-                        }else{
-                            reqLength++;
-                            break;
-                        }
+                        *(pDest++)=UTF16_TRAIL(ch);
                     }
                 }
             } while(--count > 0);
@@ -659,7 +653,7 @@ u_strFromUTF8WithSub(UChar *dest,
                 }
             }
         }
-        /* donot fill the dest buffer just count the UChars needed */
+        /* do not fill the dest buffer just count the UChars needed */
         while(pSrc < pSrcLimit){
             ch = *pSrc;
             if(ch <= 0x7f){
@@ -738,7 +732,6 @@ u_strFromUTF8Lenient(UChar *dest,
                      const char *src,
                      int32_t srcLength,
                      UErrorCode *pErrorCode) {
-
     UChar *pDest = dest;
     UChar32 ch;
     int32_t reqLength = 0;
@@ -977,7 +970,6 @@ u_strToUTF8WithSub(char *dest,
             int32_t srcLength,
             UChar32 subchar, int32_t *pNumSubstitutions,
             UErrorCode *pErrorCode){
-
     int32_t reqLength=0;
     uint32_t ch=0,ch2=0;
     uint8_t *pDest = (uint8_t *)dest;
@@ -1006,7 +998,7 @@ u_strToUTF8WithSub(char *dest,
             ++pSrc;
             if(ch <= 0x7f) {
                 if(pDest<pDestLimit) {
-                    *pDest++ = (char)ch;
+                    *pDest++ = (uint8_t)ch;
                 } else {
                     reqLength = 1;
                     break;
@@ -1100,7 +1092,7 @@ u_strToUTF8WithSub(char *dest,
             do {
                 ch=*pSrc++;
                 if(ch <= 0x7f) {
-                    *pDest++ = (char)ch;
+                    *pDest++ = (uint8_t)ch;
                 } else if(ch <= 0x7ff) {
                     *pDest++=(uint8_t)((ch>>6)|0xc0);
                     *pDest++=(uint8_t)((ch&0x3f)|0x80);
@@ -1149,7 +1141,7 @@ u_strToUTF8WithSub(char *dest,
             ch=*pSrc++;
             if(ch <= 0x7f) {
                 if(pDest<pDestLimit) {
-                    *pDest++ = (char)ch;
+                    *pDest++ = (uint8_t)ch;
                 } else {
                     reqLength = 1;
                     break;
@@ -1229,9 +1221,8 @@ u_strToUTF8WithSub(char *dest,
     }
 
     /* Terminate the buffer */
-    u_terminateChars((char*)dest,destCapacity,reqLength,pErrorCode);
-
-    return (char*)dest;
+    u_terminateChars(dest, destCapacity, reqLength, pErrorCode);
+    return dest;
 }
 
 U_CAPI char* U_EXPORT2 
@@ -1246,4 +1237,398 @@ u_strToUTF8(char *dest,
             pSrc, srcLength,
             U_SENTINEL, NULL,
             pErrorCode);
+}
+
+U_CAPI UChar* U_EXPORT2
+u_strFromJavaModifiedUTF8WithSub(
+        UChar *dest,
+        int32_t destCapacity,
+        int32_t *pDestLength,
+        const char *src,
+        int32_t srcLength,
+        UChar32 subchar, int32_t *pNumSubstitutions,
+        UErrorCode *pErrorCode) {
+    UChar *pDest = dest;
+    UChar *pDestLimit = dest+destCapacity;
+    UChar32 ch;
+    int32_t reqLength = 0;
+    const uint8_t* pSrc = (const uint8_t*) src;
+    const uint8_t *pSrcLimit;
+    int32_t count;
+    uint8_t t1, t2; /* trail bytes */
+    int32_t numSubstitutions;
+
+    /* args check */
+    if(U_FAILURE(*pErrorCode)){
+        return NULL;
+    }
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (dest==NULL && destCapacity!=0) || destCapacity<0 ||
+        subchar > 0x10ffff || U_IS_SURROGATE(subchar)
+    ) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    if(pNumSubstitutions!=NULL) {
+        *pNumSubstitutions=0;
+    }
+    numSubstitutions=0;
+
+    if(srcLength < 0) {
+        /*
+         * Transform a NUL-terminated ASCII string.
+         * Handle non-ASCII strings with slower code.
+         */
+        while(((ch = *pSrc) != 0) && ch <= 0x7f && (pDest < pDestLimit)) {
+            *pDest++=(UChar)ch;
+            ++pSrc;
+        }
+        if(ch == 0) {
+            reqLength=(int32_t)(pDest - dest);
+            if(pDestLength) {
+                *pDestLength = reqLength;
+            }
+
+            /* Terminate the buffer */
+            u_terminateUChars(dest, destCapacity, reqLength, pErrorCode);
+            return dest;
+        }
+        srcLength = uprv_strlen((const char *)pSrc);
+    }
+
+    /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
+    pSrcLimit = pSrc + srcLength;
+    for(;;) {
+        count = (int32_t)(pDestLimit - pDest);
+        srcLength = (int32_t)(pSrcLimit - pSrc);
+        if(count >= srcLength && srcLength > 0 && *pSrc <= 0x7f) {
+            /* fast ASCII loop */
+            const uint8_t *prevSrc = pSrc;
+            int32_t delta;
+            while(pSrc < pSrcLimit && (ch = *pSrc) <= 0x7f) {
+                *pDest++=(UChar)ch;
+                ++pSrc;
+            }
+            delta = (int32_t)(pSrc - prevSrc);
+            count -= delta;
+            srcLength -= delta;
+        }
+        /*
+         * Each iteration of the inner loop progresses by at most 3 UTF-8
+         * bytes and one UChar.
+         */
+        srcLength /= 3;
+        if(count > srcLength) {
+            count = srcLength; /* min(remaining dest, remaining src/3) */
+        }
+        if(count < 3) {
+            /*
+             * Too much overhead if we get near the end of the string,
+             * continue with the next loop.
+             */
+            break;
+        }
+        do {
+            ch = *pSrc;
+            if(ch <= 0x7f){
+                *pDest++=(UChar)ch;
+                ++pSrc;
+            } else {
+                if(ch >= 0xe0) {
+                    if( /* handle U+0000..U+FFFF inline */
+                        ch <= 0xef &&
+                        (t1 = (uint8_t)(pSrc[1] - 0x80)) <= 0x3f &&
+                        (t2 = (uint8_t)(pSrc[2] - 0x80)) <= 0x3f
+                    ) {
+                        /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
+                        *pDest++ = (UChar)((ch << 12) | (t1 << 6) | t2);
+                        pSrc += 3;
+                        continue;
+                    }
+                } else {
+                    if( /* handle U+0000..U+07FF inline */
+                        ch >= 0xc0 &&
+                        (t1 = (uint8_t)(pSrc[1] - 0x80)) <= 0x3f
+                    ) {
+                        *pDest++ = (UChar)(((ch & 0x1f) << 6) | t1);
+                        pSrc += 2;
+                        continue;
+                    }
+                }
+
+                if(subchar < 0) {
+                    *pErrorCode = U_INVALID_CHAR_FOUND;
+                    return NULL;
+                } else if(subchar > 0xffff && --count == 0) {
+                    /*
+                     * We need to write two UChars, adjusted count for that,
+                     * and ran out of space.
+                     */
+                    break;
+                } else {
+                    /* function call for error cases */
+                    ++pSrc; /* continue after the lead byte */
+                    utf8_nextCharSafeBodyPointer(&pSrc, pSrcLimit, ch);
+                    ++numSubstitutions;
+                    if(subchar<=0xFFFF) {
+                        *(pDest++)=(UChar)subchar;
+                    } else {
+                        *(pDest++)=U16_LEAD(subchar);
+                        *(pDest++)=U16_TRAIL(subchar);
+                    }
+                }
+            }
+        } while(--count > 0);
+    }
+
+    while((pSrc<pSrcLimit) && (pDest<pDestLimit)) {
+        ch = *pSrc;
+        if(ch <= 0x7f){
+            *pDest++=(UChar)ch;
+            ++pSrc;
+        } else {
+            if(ch >= 0xe0) {
+                if( /* handle U+0000..U+FFFF inline */
+                    ch <= 0xef &&
+                    ((pSrcLimit - pSrc) >= 3) &&
+                    (t1 = (uint8_t)(pSrc[1] - 0x80)) <= 0x3f &&
+                    (t2 = (uint8_t)(pSrc[2] - 0x80)) <= 0x3f
+                ) {
+                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
+                    *pDest++ = (UChar)((ch << 12) | (t1 << 6) | t2);
+                    pSrc += 3;
+                    continue;
+                }
+            } else {
+                if( /* handle U+0000..U+07FF inline */
+                    ch >= 0xc0 &&
+                    ((pSrcLimit - pSrc) >= 2) &&
+                    (t1 = (uint8_t)(pSrc[1] - 0x80)) <= 0x3f
+                ) {
+                    *pDest++ = (UChar)(((ch & 0x1f) << 6) | t1);
+                    pSrc += 2;
+                    continue;
+                }
+            }
+
+            if(subchar < 0) {
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            } else {
+                /* function call for error cases */
+                ++pSrc; /* continue after the lead byte */
+                utf8_nextCharSafeBodyPointer(&pSrc, pSrcLimit, ch);
+                ++numSubstitutions;
+                if(subchar<=0xFFFF) {
+                    *(pDest++)=(UChar)subchar;
+                } else {
+                    *(pDest++)=U16_LEAD(subchar);
+                    if(pDest<pDestLimit) {
+                        *(pDest++)=U16_TRAIL(subchar);
+                    } else {
+                        reqLength++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /* do not fill the dest buffer just count the UChars needed */
+    while(pSrc < pSrcLimit){
+        ch = *pSrc;
+        if(ch <= 0x7f) {
+            reqLength++;
+            ++pSrc;
+        } else {
+            if(ch >= 0xe0) {
+                if( /* handle U+0000..U+FFFF inline */
+                    ch <= 0xef &&
+                    ((pSrcLimit - pSrc) >= 3) &&
+                    (uint8_t)(pSrc[1] - 0x80) <= 0x3f &&
+                    (uint8_t)(pSrc[2] - 0x80) <= 0x3f
+                ) {
+                    reqLength++;
+                    pSrc += 3;
+                    continue;
+                }
+            } else {
+                if( /* handle U+0000..U+07FF inline */
+                    ch >= 0xc0 &&
+                    ((pSrcLimit - pSrc) >= 2) &&
+                    (uint8_t)(pSrc[1] - 0x80) <= 0x3f
+                ) {
+                    reqLength++;
+                    pSrc += 2;
+                    continue;
+                }
+            }
+
+            if(subchar < 0) {
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            } else {
+                /* function call for error cases */
+                ++pSrc; /* continue after the lead byte */
+                utf8_nextCharSafeBodyPointer(&pSrc, pSrcLimit, ch);
+                ++numSubstitutions;
+                reqLength+=U16_LENGTH(ch);
+            }
+        }
+    }
+
+    if(pNumSubstitutions!=NULL) {
+        *pNumSubstitutions=numSubstitutions;
+    }
+
+    reqLength+=(int32_t)(pDest - dest);
+    if(pDestLength) {
+        *pDestLength = reqLength;
+    }
+
+    /* Terminate the buffer */
+    u_terminateUChars(dest, destCapacity, reqLength, pErrorCode);
+    return dest;
+}
+
+U_CAPI char* U_EXPORT2 
+u_strToJavaModifiedUTF8(
+        char *dest,
+        int32_t destCapacity,
+        int32_t *pDestLength,
+        const UChar *src, 
+        int32_t srcLength,
+        UErrorCode *pErrorCode) {
+    int32_t reqLength=0;
+    uint32_t ch=0,ch2=0;
+    uint8_t *pDest = (uint8_t *)dest;
+    uint8_t *pDestLimit = pDest + destCapacity;
+    const UChar *pSrcLimit;
+    int32_t count;
+
+    /* args check */
+    if(U_FAILURE(*pErrorCode)){
+        return NULL;
+    }
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (dest==NULL && destCapacity!=0) || destCapacity<0
+    ) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    if(srcLength==-1) {
+        /* Convert NUL-terminated ASCII, then find the string length. */
+        while((ch=*src)<=0x7f && ch != 0 && pDest<pDestLimit) {
+            *pDest++ = (uint8_t)ch;
+            ++src;
+        }
+        if(ch == 0) {
+            reqLength=(int32_t)(pDest - (uint8_t *)dest);
+            if(pDestLength) {
+                *pDestLength = reqLength;
+            }
+
+            /* Terminate the buffer */
+            u_terminateChars(dest, destCapacity, reqLength, pErrorCode);
+            return dest;
+        }
+        srcLength = u_strlen(src);
+    }
+
+    /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
+    pSrcLimit = src+srcLength;
+    for(;;) {
+        count = (int32_t)(pDestLimit - pDest);
+        srcLength = (int32_t)(pSrcLimit - src);
+        if(count >= srcLength && srcLength > 0 && *src <= 0x7f) {
+            /* fast ASCII loop */
+            const UChar *prevSrc = src;
+            int32_t delta;
+            while(src < pSrcLimit && (ch = *src) <= 0x7f && ch != 0) {
+                *pDest++=(uint8_t)ch;
+                ++src;
+            }
+            delta = (int32_t)(src - prevSrc);
+            count -= delta;
+            srcLength -= delta;
+        }
+        /*
+         * Each iteration of the inner loop progresses by at most 3 UTF-8
+         * bytes and one UChar.
+         */
+        count /= 3;
+        if(count > srcLength) {
+            count = srcLength; /* min(remaining dest/3, remaining src) */
+        }
+        if(count < 3) {
+            /*
+             * Too much overhead if we get near the end of the string,
+             * continue with the next loop.
+             */
+            break;
+        }
+        do {
+            ch=*src++;
+            if(ch <= 0x7f && ch != 0) {
+                *pDest++ = (uint8_t)ch;
+            } else if(ch <= 0x7ff) {
+                *pDest++=(uint8_t)((ch>>6)|0xc0);
+                *pDest++=(uint8_t)((ch&0x3f)|0x80);
+            } else {
+                *pDest++=(uint8_t)((ch>>12)|0xe0);
+                *pDest++=(uint8_t)(((ch>>6)&0x3f)|0x80);
+                *pDest++=(uint8_t)((ch&0x3f)|0x80);
+            }
+        } while(--count > 0);
+    }
+
+    while(src<pSrcLimit) {
+        ch=*src++;
+        if(ch <= 0x7f && ch != 0) {
+            if(pDest<pDestLimit) {
+                *pDest++ = (uint8_t)ch;
+            } else {
+                reqLength = 1;
+                break;
+            }
+        } else if(ch <= 0x7ff) {
+            if((pDestLimit - pDest) >= 2) {
+                *pDest++=(uint8_t)((ch>>6)|0xc0);
+                *pDest++=(uint8_t)((ch&0x3f)|0x80);
+            } else {
+                reqLength = 2;
+                break;
+            }
+        } else {
+            if((pDestLimit - pDest) >= 3) {
+                *pDest++=(uint8_t)((ch>>12)|0xe0);
+                *pDest++=(uint8_t)(((ch>>6)&0x3f)|0x80);
+                *pDest++=(uint8_t)((ch&0x3f)|0x80);
+            } else {
+                reqLength = 3;
+                break;
+            }
+        }
+    }
+    while(src<pSrcLimit) {
+        ch=*src++;
+        if(ch <= 0x7f && ch != 0) {
+            ++reqLength;
+        } else if(ch<=0x7ff) {
+            reqLength+=2;
+        } else {
+            reqLength+=3;
+        }
+    }
+
+    reqLength+=(int32_t)(pDest - (uint8_t *)dest);
+    if(pDestLength){
+        *pDestLength = reqLength;
+    }
+
+    /* Terminate the buffer */
+    u_terminateChars(dest, destCapacity, reqLength, pErrorCode);
+    return dest;
 }
