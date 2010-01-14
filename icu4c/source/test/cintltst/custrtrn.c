@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2009, International Business Machines Corporation and
+ * Copyright (c) 2001-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
@@ -40,6 +41,8 @@ static void Test_FromUTF8Lenient(void);
 static void Test_UChar_WCHART_API(void);
 static void Test_widestrs(void);
 static void Test_WCHART_LongString(void);
+static void Test_strToJavaModifiedUTF8(void);
+static void Test_strFromJavaModifiedUTF8(void);
 
 void 
 addUCharTransformTest(TestNode** root)
@@ -56,6 +59,8 @@ addUCharTransformTest(TestNode** root)
 #if !UCONFIG_NO_FILE_IO
    addTest(root, &Test_WCHART_LongString, "custrtrn/Test_WCHART_LongString");
 #endif
+   addTest(root, &Test_strToJavaModifiedUTF8,  "custrtrn/Test_strToJavaModifiedUTF8");
+   addTest(root, &Test_strFromJavaModifiedUTF8,  "custrtrn/Test_strFromJavaModifiedUTF8");
 }
 
 static const UChar32 src32[]={
@@ -1473,3 +1478,480 @@ Test_WCHART_LongString(){
 #endif
 }
 
+static void Test_strToJavaModifiedUTF8() {
+    static const UChar src[]={
+        0x61, 0x62, 0x63, 0xe1, 0xe2, 0xe3,
+        0xe01, 0xe02, 0xe03, 0xe001, 0xe002, 0xe003,
+        0xd800, 0xdc00, 0xdc00, 0xd800, 0,
+        0xdbff, 0xdfff,
+        0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0xed, 0xe0e, 0x6f
+    };
+    static const uint8_t expected[]={
+        0x61, 0x62, 0x63, 0xc3, 0xa1, 0xc3, 0xa2, 0xc3, 0xa3,
+        0xe0, 0xb8, 0x81, 0xe0, 0xb8, 0x82, 0xe0, 0xb8, 0x83,
+        0xee, 0x80, 0x81, 0xee, 0x80, 0x82, 0xee, 0x80, 0x83,
+        0xed, 0xa0, 0x80, 0xed, 0xb0, 0x80, 0xed, 0xb0, 0x80, 0xed, 0xa0, 0x80, 0xc0, 0x80,
+        0xed, 0xaf, 0xbf, 0xed, 0xbf, 0xbf,
+        0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0xc3, 0xad, 0xe0, 0xb8, 0x8e, 0x6f
+    };
+    static const UChar shortSrc[]={
+        0xe01, 0xe1, 0x61
+    };
+    static const uint8_t shortExpected[]={
+        0xe0, 0xb8, 0x81, 0xc3, 0xa1, 0x61
+    };
+    static const UChar asciiNul[]={
+        0x61, 0x62, 0x63, 0
+    };
+    static const uint8_t asciiNulExpected[]={
+        0x61, 0x62, 0x63
+    };
+    char dest[200];
+    char *p;
+    int32_t length, expectedTerminatedLength;
+    UErrorCode errorCode;
+
+    expectedTerminatedLength=(int32_t)(strstr((const char *)expected, "\xc0\x80")-
+                                       (const char *)expected);
+
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), &length,
+                              src, LENGTHOF(src), &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(expected) || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(normal) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), NULL,
+                              src, LENGTHOF(src), &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        0!=memcmp(dest, expected, LENGTHOF(expected)) ||
+        dest[LENGTHOF(expected)]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(normal, pLength=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, LENGTHOF(expected), &length,
+                              src, LENGTHOF(src), &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING || p!=dest ||
+        length!=LENGTHOF(expected) || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=(char)0xff
+    ) {
+        log_err("u_strToJavaModifiedUTF8(tight) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), &length, src, -1, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=expectedTerminatedLength || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(NUL-terminated) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), NULL, src, -1, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        0!=memcmp(dest, expected, expectedTerminatedLength) ||
+        dest[expectedTerminatedLength]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(NUL-terminated, pLength=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, LENGTHOF(expected)/2, &length,
+                              src, LENGTHOF(src), &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=LENGTHOF(expected) || dest[LENGTHOF(expected)/2]!=(char)0xff
+    ) {
+        log_err("u_strToJavaModifiedUTF8(overflow) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(NULL, 0, &length,
+                              src, LENGTHOF(src), &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=LENGTHOF(expected) || dest[0]!=(char)0xff
+    ) {
+        log_err("u_strToJavaModifiedUTF8(pure preflighting) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), &length,
+                              shortSrc, LENGTHOF(shortSrc), &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(shortExpected) || 0!=memcmp(dest, shortExpected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(short) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), &length,
+                              asciiNul, -1, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(asciiNulExpected) || 0!=memcmp(dest, asciiNulExpected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(asciiNul) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, (int32_t)sizeof(dest), &length,
+                              NULL, 0, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=0 || dest[0]!=0
+    ) {
+        log_err("u_strToJavaModifiedUTF8(empty) failed - %s\n", u_errorName(errorCode));
+    }
+
+    /* illegal arguments */
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(NULL, sizeof(dest), &length,
+                              src, LENGTHOF(src), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=(char)0xff) {
+        log_err("u_strToJavaModifiedUTF8(dest=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, -1, &length,
+                              src, LENGTHOF(src), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=(char)0xff) {
+        log_err("u_strToJavaModifiedUTF8(destCapacity<0) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, sizeof(dest), &length,
+                              NULL, LENGTHOF(src), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=(char)0xff) {
+        log_err("u_strToJavaModifiedUTF8(src=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=-5;
+    p=u_strToJavaModifiedUTF8(dest, sizeof(dest), &length,
+                              NULL, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=(char)0xff) {
+        log_err("u_strToJavaModifiedUTF8(src=NULL, srcLength<0) failed - %s\n", u_errorName(errorCode));
+    }
+}
+
+static void Test_strFromJavaModifiedUTF8() {
+    static const uint8_t src[]={
+        0x61, 0x62, 0x63, 0xc3, 0xa1, 0xc3, 0xa2, 0xc3, 0xa3,
+        0xe0, 0xb8, 0x81, 0xe0, 0xb8, 0x82, 0xe0, 0xb8, 0x83,
+        0xee, 0x80, 0x81, 0xee, 0x80, 0x82, 0xee, 0x80, 0x83,
+        0xed, 0xa0, 0x80, 0xed, 0xb0, 0x80, 0xed, 0xb0, 0x80, 0xed, 0xa0, 0x80, 0,
+        0xed, 0xaf, 0xbf, 0xed, 0xbf, 0xbf,
+        0x81, 0xc0, 0xe0, 0xb8, 0xf0, 0x90, 0x80, 0x80,  /* invalid sequences */
+        0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b,
+        0xe0, 0x81, 0xac, 0xe0, 0x83, 0xad,  /* non-shortest forms are allowed */
+        0xe0, 0xb8, 0x8e, 0x6f
+    };
+    static const UChar expected[]={
+        0x61, 0x62, 0x63, 0xe1, 0xe2, 0xe3,
+        0xe01, 0xe02, 0xe03, 0xe001, 0xe002, 0xe003,
+        0xd800, 0xdc00, 0xdc00, 0xd800, 0,
+        0xdbff, 0xdfff,
+        0xfffd, 0xfffd, 0xfffd, 0xfffd,
+        0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b,
+        0x6c, 0xed,
+        0xe0e, 0x6f
+    };
+    static const uint8_t shortSrc[]={
+        0xe0, 0xb8, 0x81, 0xc3, 0xa1, 0x61
+    };
+    static const UChar shortExpected[]={
+        0xe01, 0xe1, 0x61
+    };
+    static const uint8_t asciiNul[]={
+        0x61, 0x62, 0x63, 0
+    };
+    static const UChar asciiNulExpected[]={
+        0x61, 0x62, 0x63
+    };
+    static const uint8_t invalid[]={
+        0x81, 0xc0, 0xe0, 0xb8, 0xf0, 0x90, 0x80, 0x80
+    };
+    static const UChar invalidExpectedFFFD[]={
+        0xfffd, 0xfffd, 0xfffd, 0xfffd
+    };
+    static const UChar invalidExpected50000[]={
+        0xd900, 0xdc00, 0xd900, 0xdc00, 0xd900, 0xdc00, 0xd900, 0xdc00
+    };
+    UChar dest[200];
+    UChar *p;
+    int32_t length, expectedTerminatedLength;
+    int32_t numSubstitutions;
+    UErrorCode errorCode;
+
+    expectedTerminatedLength=(int32_t)(u_strchr(expected, 0)-expected);
+
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(expected) || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=LENGTHOF(invalidExpectedFFFD)
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(normal) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), NULL,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        0!=memcmp(dest, expected, LENGTHOF(expected)) ||
+        dest[LENGTHOF(expected)]!=0 ||
+        numSubstitutions!=LENGTHOF(invalidExpectedFFFD)
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(normal, pLength=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, NULL, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(expected) || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(normal, pNumSubstitutions=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, LENGTHOF(expected), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING || p!=dest ||
+        length!=LENGTHOF(expected) || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0xffff ||
+        numSubstitutions!=LENGTHOF(invalidExpectedFFFD)
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(tight) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)src, -1,
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=expectedTerminatedLength || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(NUL-terminated) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), NULL,
+                                       (const char *)src, -1,
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        0!=memcmp(dest, expected, expectedTerminatedLength) ||
+        dest[expectedTerminatedLength]!=0 ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(NUL-terminated, pLength=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)src, -1,
+                                       0xfffd, NULL, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=expectedTerminatedLength || 0!=memcmp(dest, expected, length) ||
+        dest[length]!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(NUL-terminated, pNumSubstitutions=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, LENGTHOF(expected)/2, &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=LENGTHOF(expected) || dest[LENGTHOF(expected)/2]!=0xffff
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(overflow) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(NULL, 0, &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=LENGTHOF(expected) || dest[0]!=0xffff
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(pure preflighting) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)shortSrc, LENGTHOF(shortSrc),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(shortExpected) || 0!=memcmp(dest, shortExpected, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(short) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)asciiNul, -1,
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(asciiNulExpected) || 0!=memcmp(dest, asciiNulExpected, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(asciiNul) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       NULL, 0, 0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=0 || dest[0]!=0 ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(empty) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)invalid, LENGTHOF(invalid),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(invalidExpectedFFFD) || 0!=memcmp(dest, invalidExpectedFFFD, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=LENGTHOF(invalidExpectedFFFD)
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(invalid->fffd) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)invalid, LENGTHOF(invalid),
+                                       0x50000, &numSubstitutions, &errorCode);
+    if( U_FAILURE(errorCode) || p!=dest ||
+        length!=LENGTHOF(invalidExpected50000) || 0!=memcmp(dest, invalidExpected50000, length) ||
+        dest[length]!=0 ||
+        numSubstitutions!=LENGTHOF(invalidExpectedFFFD)  /* not ...50000 */
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(invalid->50000) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)invalid, LENGTHOF(invalid),
+                                       U_SENTINEL, &numSubstitutions, &errorCode);
+    if(errorCode!=U_INVALID_CHAR_FOUND || dest[0]!=0xffff || numSubstitutions!=0) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(invalid->error) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, (int32_t)sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       U_SENTINEL, &numSubstitutions, &errorCode);
+    if( errorCode!=U_INVALID_CHAR_FOUND ||
+        length>=LENGTHOF(expected) || dest[LENGTHOF(expected)-1]!=0xffff ||
+        numSubstitutions!=0
+    ) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(normal->error) failed - %s\n", u_errorName(errorCode));
+    }
+
+    /* illegal arguments */
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(NULL, sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(dest=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, -1, &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(destCapacity<0) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, sizeof(dest), &length,
+                                       NULL, LENGTHOF(src),
+                                       0xfffd, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(src=NULL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, sizeof(dest), &length,
+                                       NULL, -1, 0xfffd, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(src=NULL, srcLength<0) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0x110000, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(subchar=U_SENTINEL) failed - %s\n", u_errorName(errorCode));
+    }
+    memset(dest, 0xff, sizeof(dest));
+    errorCode=U_ZERO_ERROR;
+    length=numSubstitutions=-5;
+    p=u_strFromJavaModifiedUTF8WithSub(dest, sizeof(dest), &length,
+                                       (const char *)src, LENGTHOF(src),
+                                       0xdfff, &numSubstitutions, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(subchar is surrogate) failed - %s\n", u_errorName(errorCode));
+    }
+}
