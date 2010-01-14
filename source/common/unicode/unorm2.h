@@ -59,7 +59,7 @@ typedef enum {
     UNORM2_DECOMPOSE,
     /**
      * "Fast C or D" form.
-     * Further decomposition <i>without reordering</i>
+     * If a string is in this form, then further decomposition <i>without reordering</i>
      * would yield the same form as DECOMPOSE.
      * Text in "Fast C or D" form can be processed efficiently with data tables
      * that are "canonically closed", that is, that provide equivalent data for
@@ -304,7 +304,7 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
  *                   pass the U_SUCCESS() test, or else the function returns
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
- * @return UNormalizationCheckResult
+ * @return "yes" span end index
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
@@ -313,7 +313,8 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
                          UErrorCode *pErrorCode);
 
 /**
- * Tests if the character has a normalization boundary before it.
+ * Tests if the character always has a normalization boundary before it,
+ * regardless of context.
  * For details see the Normalizer2 base class documentation.
  * @param norm2 UNormalizer2 instance
  * @param c character to test
@@ -324,7 +325,8 @@ U_DRAFT UBool U_EXPORT2
 unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c);
 
 /**
- * Tests if the character has a normalization boundary after it.
+ * Tests if the character always has a normalization boundary after it,
+ * regardless of context.
  * For details see the Normalizer2 base class documentation.
  * @param norm2 UNormalizer2 instance
  * @param c character to test
