@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -2116,8 +2116,8 @@ uloc_setDefault(const char*   newDefaultLocale,
  * default locale because that would result in a mix of languages that is
  * unpredictable to the programmer and most likely useless.
  */
-static const UChar *
-_res_getTableStringWithFallback(const char *path, const char *locale,
+U_CAPI const UChar * U_EXPORT2
+uloc_getTableStringWithFallback(const char *path, const char *locale,
                               const char *tableKey, const char *subTableKey,
                               const char *itemKey,
                               int32_t *pLength,
@@ -2256,7 +2256,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
             *pErrorCode = U_MISSING_RESOURCE_ERROR;
         } else {
             /* second-level item, use special fallback */
-            s=_res_getTableStringWithFallback(path, locale,
+            s=uloc_getTableStringWithFallback(path, locale,
                                                tableKey, 
                                                subTableKey,
                                                itemKey,
@@ -2953,7 +2953,7 @@ _uloc_getOrientationHelper(const char* localeId,
 
         if (!U_FAILURE(*status)) {
             const UChar* const value =
-                _res_getTableStringWithFallback(
+                uloc_getTableStringWithFallback(
                     NULL,
                     localeBuffer,
                     "layout",
