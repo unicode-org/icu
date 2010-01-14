@@ -38,6 +38,17 @@ U_NAMESPACE_BEGIN
  * All instances of this class are unmodifiable/immutable.
  * Instances returned by getInstance() are singletons that must not be deleted by the caller.
  *
+ * The primary functions are to produce a normalized string and to detect whether
+ * a string is already normalized.
+ * The most commonly used normalization forms are those defined in
+ * http://www.unicode.org/unicode/reports/tr15/
+ * However, this API supports additional normalization forms for specialized purposes.
+ * For example, NFKC_Casefold is provided via getInstance("nfkc_cf", COMPOSE)
+ * and can be used in implementations of UTS #46.
+ *
+ * Not only are the standard compose and decompose modes supplied,
+ * but additional modes are provided as documented in the Mode enum.
+ *
  * Some of the functions in this class identify normalization boundaries.
  * At a normalization boundary, the portions of the string
  * before it and starting from it do not interact and can be handled independently.
@@ -46,13 +57,15 @@ U_NAMESPACE_BEGIN
  * When the goal is a normalized string, then the text before the boundary
  * can be copied, and the remainder can be processed with normalizeSecondAndAppend().
  *
- * The isBoundary() function tests whether a character is at a normalization boundary.
+ * The hasBoundaryBefore(), hasBoundaryAfter() and isInert() functions test whether
+ * a character is guaranteed to be at a normalization boundary,
+ * regardless of context.
  * This is used for moving from one normalization boundary to the next
  * or preceding boundary, and for performing iterative normalization.
  *
  * Iterative normalization is useful when only a small portion of a
  * longer string needs to be processed.
- * In ICU, iterative normalization is used by the NormalizationTransliterator
+ * For example, in ICU, iterative normalization is used by the NormalizationTransliterator
  * (to avoid replacing already-normalized text) and ucol_nextSortKeyPart()
  * (to process only the substring for which sort key bytes are computed).
  *
@@ -214,14 +227,15 @@ public:
      *                  pass the U_SUCCESS() test, or else the function returns
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
-     * @return UNormalizationCheckResult
+     * @return "yes" span end index
      * @draft ICU 4.4
      */
     virtual int32_t
     spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const = 0;
 
     /**
-     * Tests if the character has a normalization boundary before it.
+     * Tests if the character always has a normalization boundary before it,
+     * regardless of context.
      * If true, then the character does not normalization-interact with
      * preceding characters.
      * In other words, a string containing this character can be normalized
@@ -235,13 +249,15 @@ public:
     virtual UBool hasBoundaryBefore(UChar32 c) const = 0;
 
     /**
-     * Tests if the character has a normalization boundary after it.
+     * Tests if the character always has a normalization boundary after it,
+     * regardless of context.
      * If true, then the character does not normalization-interact with
      * following characters.
      * In other words, a string containing this character can be normalized
      * by processing portions up to this character and after this
      * character independently.
      * This is used for iterative normalization. See the class documentation for details.
+     * Note that this operation may be significantly slower than hasBoundaryBefore().
      * @param c character to test
      * @return TRUE if c has a normalization boundary after it
      * @draft ICU 4.4
@@ -256,6 +272,7 @@ public:
      * by processing portions before this character and after this
      * character independently.
      * This is used for iterative normalization. See the class documentation for details.
+     * Note that this operation may be significantly slower than hasBoundaryBefore().
      * @param c character to test
      * @return TRUE if c is normalization-inert
      * @draft ICU 4.4
@@ -391,14 +408,15 @@ public:
      *                  pass the U_SUCCESS() test, or else the function returns
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
-     * @return UNormalizationCheckResult
+     * @return "yes" span end index
      * @draft ICU 4.4
      */
     virtual int32_t
     spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const;
 
     /**
-     * Tests if the character has a normalization boundary before it.
+     * Tests if the character always has a normalization boundary before it,
+     * regardless of context.
      * For details see the Normalizer2 base class documentation.
      * @param c character to test
      * @return TRUE if c has a normalization boundary before it
@@ -407,7 +425,8 @@ public:
     virtual UBool hasBoundaryBefore(UChar32 c) const;
 
     /**
-     * Tests if the character has a normalization boundary after it.
+     * Tests if the character always has a normalization boundary after it,
+     * regardless of context.
      * For details see the Normalizer2 base class documentation.
      * @param c character to test
      * @return TRUE if c has a normalization boundary after it
