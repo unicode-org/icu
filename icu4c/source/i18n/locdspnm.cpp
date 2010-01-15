@@ -198,13 +198,13 @@ DefaultLocaleDisplayNames::getDialectHandling() const {
 UnicodeString& 
 DefaultLocaleDisplayNames::localeDisplayName(const Locale& locale, 
 					  UnicodeString& result) const {
-  return result.remove();
+  return result = UnicodeString(locale.getName(), -1, US_INV);
 }
 
 UnicodeString& 
 DefaultLocaleDisplayNames::localeDisplayName(const char* localeId, 
 					  UnicodeString& result) const {
-  return result.remove();
+  return result = UnicodeString(localeId, -1, US_INV);
 }
 
 UnicodeString& 
@@ -499,6 +499,180 @@ LocaleDisplayNames*
 LocaleDisplayNames::createInstance(const Locale& locale,
 				   UDialectHandling dialectHandling) {
   return new LocaleDisplayNamesImpl(locale, dialectHandling);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+U_DRAFT const ULocaleDisplayNames * U_EXPORT2
+uldn_open(const char * locale,
+	  UDialectHandling dialectHandling,
+	  UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (locale == NULL) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  return (ULocaleDisplayNames *)LocaleDisplayNames::createInstance(Locale(locale), dialectHandling);
+}
+
+U_DRAFT void U_EXPORT2
+uldn_close(ULocaleDisplayNames *ldn) {
+  delete (LocaleDisplayNames *)ldn;
+}
+
+U_DRAFT const char * U_EXPORT2
+uldn_getLocale(const ULocaleDisplayNames *ldn) {
+  if (ldn) {
+    return ((LocaleDisplayNames *)ldn)->getLocale().getName();
+  }
+  return NULL;
+}
+
+U_DRAFT UDialectHandling U_EXPORT2
+uldn_getDialectHandling(const ULocaleDisplayNames *ldn) {
+  if (ldn) {
+    return ((LocaleDisplayNames *)ldn)->getDialectHandling();
+  }
+  return ULDN_STANDARD_NAMES;
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_localeDisplayName(const ULocaleDisplayNames *ldn,
+		       const char *locale,
+		       UChar *result,
+		       int32_t maxResultSize,
+		       UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || locale == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->localeDisplayName(locale, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_languageDisplayName(const ULocaleDisplayNames *ldn,
+			 const char *lang,
+			 UChar *result,
+			 int32_t maxResultSize,
+			 UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || lang == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->languageDisplayName(lang, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_scriptDisplayName(const ULocaleDisplayNames *ldn,
+		       const char *script,
+		       UChar *result,
+		       int32_t maxResultSize,
+		       UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || script == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->scriptDisplayName(script, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_scriptCodeDisplayName(const ULocaleDisplayNames *ldn,
+			   UScriptCode scriptCode,
+			   UChar *result,
+			   int32_t maxResultSize,
+			   UErrorCode *pErrorCode) {
+  return uldn_scriptDisplayName(ldn, uscript_getName(scriptCode), result, maxResultSize, pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_regionDisplayName(const ULocaleDisplayNames *ldn,
+		       const char *region,
+		       UChar *result,
+		       int32_t maxResultSize,
+		       UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || region == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->regionDisplayName(region, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_variantDisplayName(const ULocaleDisplayNames *ldn,
+			const char *variant,
+			UChar *result,
+			int32_t maxResultSize,
+			UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || variant == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->variantDisplayName(variant, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_keyDisplayName(const ULocaleDisplayNames *ldn,
+		    const char *key,
+		    UChar *result,
+		    int32_t maxResultSize,
+		    UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || key == NULL || (result == NULL && maxResultSize > 0) || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->keyDisplayName(key, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uldn_keyValueDisplayName(const ULocaleDisplayNames *ldn,
+			 const char *key,
+			 const char *value,
+			 UChar *result,
+			 int32_t maxResultSize,
+			 UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (ldn == NULL || key == NULL || value == NULL || (result == NULL && maxResultSize > 0) 
+      || maxResultSize < 0) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  UnicodeString temp(result, 0, maxResultSize);
+  ((const LocaleDisplayNames *)ldn)->keyValueDisplayName(key, value, temp);
+  return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_NAMESPACE_END
