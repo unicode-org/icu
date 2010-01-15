@@ -1,4 +1,4 @@
-# Copyright (C) 2009 IBM and Others. All Rights Reserved
+# Copyright (C) 2009-2010 IBM and Others. All Rights Reserved
 
 #
 #
@@ -27,7 +27,8 @@ ifeq ($(NEW_ICU),)
 NOTSET:="$(NOTSET) NEW_ICU"
 endif
 
-all: $(TARGET)
+all: $(TARGET) $(LOCAL_TARGET)
+
 
 ifneq ($(NOTSET),)
 check-vars:
@@ -50,6 +51,7 @@ clean-docs: | check-vars
 	-rm -rf "$(OLD_ICU)/$(XML)" "$(NEW_ICU)/$(XML)"
 
 $(TARGET): check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML) 
+	echo "Remember to run the non-ascii file detector if you get errors."
 	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)
 
 %/source/doc/xml:	%/source/Doxyfile
