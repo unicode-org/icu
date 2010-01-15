@@ -15,31 +15,11 @@
  * \brief C++ API: Provides display names of Locale and its components.
  */
 
-
-/**
- * Enum used in LocaleDisplayNames::createInstance.
- * @draft ICU 4.4
- */
-typedef enum {
-    /**
-     * Use standard names when generating a locale name,
-     * e.g. en_GB displays as 'English (United Kingdom)'.
-     * @draft ICU 4.4
-     */
-    ULDN_STANDARD_NAMES = 0,
-    /**
-     * Use dialect names, when generating a locale name,
-     * e.g. en_GB displays as 'British English'.
-     * @draft ICU 4.4
-     */
-    ULDN_DIALECT_NAMES
-} UDialectHandling;
-
-
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/locid.h"
 #include "unicode/uscript.h"
+#include "unicode/uldnames.h"
 
 U_NAMESPACE_BEGIN
 
