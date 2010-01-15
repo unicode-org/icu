@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1181,6 +1181,17 @@ double DecimalFormat::round(double a, ERoundingMode mode, UBool isNegative) {
     }
     return 1.0;
 }
+
+UnicodeString&
+DecimalFormat::format(const StringPiece &number,
+                      UnicodeString& toAppendTo,
+                      FieldPositionIterator &fieldPositions,
+                      UErrorCode &status) const
+{
+    // TODO:  implement it.
+    return toAppendTo;
+}
+
 
 UnicodeString&
 DecimalFormat::format(  const Formattable& obj,
