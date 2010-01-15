@@ -67,6 +67,10 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE(0, TestCreate);
         TESTCASE(1, TestCreateDialect);
 	TESTCASE(2, TestWithKeywordsAndEverything);
+	TESTCASE(3, TestUldnOpen);
+	TESTCASE(4, TestUldnOpenDialect);
+	TESTCASE(5, TestUldnWithKeywordsAndEverything);
+	TESTCASE(6, TestUldnComponents);
 #endif
         default:
 	  name = "";
@@ -99,4 +103,107 @@ void LocaleDisplayNamesTest::TestWithKeywordsAndEverything() {
   ldn->localeDisplayName(locname, temp);
   delete ldn;
   test_assert_equal(target, temp);
+}
+
+void LocaleDisplayNamesTest::TestUldnOpen() {
+  UErrorCode status = U_ZERO_ERROR;
+  const int32_t kMaxResultSize = 150;  // long enough
+  UChar result[150];
+  ULocaleDisplayNames *ldn = uldn_open(Locale::getGermany().getName(), ULDN_STANDARD_NAMES, &status);
+  int32_t len = uldn_localeDisplayName(ldn, "de_DE", result, kMaxResultSize, &status);
+  uldn_close(ldn);
+  test_assert(U_SUCCESS(status));
+
+  UnicodeString str(result, len, kMaxResultSize);
+  test_assert_equal("Deutsch (Deutschland)", str);
+}
+
+void LocaleDisplayNamesTest::TestUldnOpenDialect() {
+  UErrorCode status = U_ZERO_ERROR;
+  const int32_t kMaxResultSize = 150;  // long enough
+  UChar result[150];
+  ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_DIALECT_NAMES, &status);
+  int32_t len = uldn_localeDisplayName(ldn, "en_GB", result, kMaxResultSize, &status);
+  uldn_close(ldn);
+  test_assert(U_SUCCESS(status));
+
+  UnicodeString str(result, len, kMaxResultSize);
+  test_assert_equal("British English", str);
+}
+
+void LocaleDisplayNamesTest::TestUldnWithKeywordsAndEverything() {
+  UErrorCode status = U_ZERO_ERROR;
+  const int32_t kMaxResultSize = 150;  // long enough
+  UChar result[150];
+  const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
+  const char *target = "English (Traditional Han, United States, VALLEY, "
+    "calendar=Gregorian Calendar, collation=Phonebook Sort Order)";
+  ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_STANDARD_NAMES, &status);
+  int32_t len = uldn_localeDisplayName(ldn, locname, result, kMaxResultSize, &status);
+  uldn_close(ldn);
+  test_assert(U_SUCCESS(status));
+
+  UnicodeString str(result, len, kMaxResultSize);
+  test_assert_equal(target, str);
+}
+
+void LocaleDisplayNamesTest::TestUldnComponents() {
+  UErrorCode status = U_ZERO_ERROR;
+  const int32_t kMaxResultSize = 150;  // long enough
+  UChar result[150];
+
+  ULocaleDisplayNames *ldn = uldn_open(Locale::getGermany().getName(), ULDN_STANDARD_NAMES, &status);
+  test_assert(U_SUCCESS(status));
+  if (U_FAILURE(status)) {
+    return;
+  }
+
+  // "en_Hant_US_PRE_EURO@calendar=gregorian";
+
+  {
+    int32_t len = uldn_languageDisplayName(ldn, "en", result, kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Englisch", str);
+  }
+
+
+  {
+    int32_t len = uldn_scriptDisplayName(ldn, "Hant", result, kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Traditionelle Chinesische Schrift", str);
+  }
+
+  {
+    int32_t len = uldn_scriptCodeDisplayName(ldn, USCRIPT_TRADITIONAL_HAN, result, kMaxResultSize, 
+					     &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Traditionelle Chinesische Schrift", str);
+  }
+
+  {
+    int32_t len = uldn_regionDisplayName(ldn, "US", result, kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Vereinigte Staaten", str);
+  }
+
+  {
+    int32_t len = uldn_variantDisplayName(ldn, "PRE_EURO", result, kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("PRE_EURO", str);
+  }
+
+  {
+    int32_t len = uldn_keyDisplayName(ldn, "calendar", result, kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Kalender", str);
+  }
+
+  {
+    int32_t len = uldn_keyValueDisplayName(ldn, "calendar", "gregorian", result, 
+					   kMaxResultSize, &status);
+    UnicodeString str(result, len, kMaxResultSize);
+    test_assert_equal("Gregorianischer Kalender", str);
+  }
+
+  uldn_close(ldn);
 }

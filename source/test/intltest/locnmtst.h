@@ -24,5 +24,9 @@ public:
     void TestCreate(void);
     void TestCreateDialect(void);
     void TestWithKeywordsAndEverything(void);
+    void TestUldnOpen(void);
+    void TestUldnOpenDialect(void);
+    void TestUldnWithKeywordsAndEverything(void);
+    void TestUldnComponents(void);
 #endif
 };
