@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -157,15 +157,15 @@ enum UCalendarType {
    */
   UCAL_TRADITIONAL,
   /**
-   * Unambiguously designates the Gregorian calendar for the locale.
-   * @stable ICU 2.0
-   */
-  UCAL_GREGORIAN,
-  /**
    * A better name for UCAL_TRADITIONAL.
    * @draft ICU 4.2
    */
-  UCAL_DEFAULT = UCAL_TRADITIONAL
+  UCAL_DEFAULT = UCAL_TRADITIONAL,
+  /**
+   * Unambiguously designates the Gregorian calendar for the locale.
+   * @stable ICU 2.0
+   */
+  UCAL_GREGORIAN
 };
 
 /** @stable ICU 2.0 */
@@ -1196,6 +1196,84 @@ ucal_getKeywordValuesForLocale(const char* key,
                                const char* locale,
                                UBool commonlyUsed,
                                UErrorCode* status);
+
+
+/** Weekday types, as returned by ucal_getDayOfWeekType().
+ * @draft ICU 4.4
+ */
+enum UCalendarWeekdayType {
+  /**
+   * Designates a full weekday (no part of the day is included in the weekend).
+   */
+  UCAL_WEEKDAY,
+  /**
+   * Designates a full weekend day (the entire day is included in the weekend).
+   */
+  UCAL_WEEKEND,
+  /**
+   * Designates a day that starts as a weekday and transitions to the weekend.
+   * Call ucal_getWeekendTransition() to get the time of transition.
+   */
+  UCAL_WEEKEND_ONSET,
+  /**
+   * Designates a day that starts as the weekend and transitions to a weekday.
+   * Call ucal_getWeekendTransition() to get the time of transition.
+   */
+  UCAL_WEEKEND_CEASE
+};
+
+/** @draft ICU 4.4 */
+typedef enum UCalendarWeekdayType UCalendarWeekdayType;
+
+/**
+ * Returns whether the given day of the week is a weekday, a
+ * weekend day, or a day that transitions from one to the other,
+ * in this calendar system. If a transition occurs at midnight,
+ * then the days before and after the transition will have the
+ * type UCAL_WEEKDAY or UCAL_WEEKEND. If a transition occurs at a time
+ * other than midnight, then the day of the transition will have
+ * the type UCAL_WEEKEND_ONSET or UCAL_WEEKEND_CEASE. In this case, the
+ * method getWeekendTransition() will return the point of
+ * transition.
+ * @param cal The UCalendar to query.
+ * @param dayOfWeek The day of the week whose type is desired (UCAL_SUNDAY..UCAL_SATURDAY).
+ * @param status The error code for the operation.
+ * @return The UCalendarWeekdayType for the day of the week.
+ * @draft ICU 4.4
+ */
+U_DRAFT UCalendarWeekdayType U_EXPORT2
+ucal_getDayOfWeekType(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErrorCode* status);
+
+/**
+ * Returns the time during the day at which the weekend begins or ends in
+ * this calendar system.  If ucal_getDayOfWeekType() rerturns UCAL_WEEKEND_ONSET
+ * for the specified dayOfWeek, return the time at which the weekend begins.
+ * If ucal_getDayOfWeekType() returns UCAL_WEEKEND_CEASE for the specified dayOfWeek,
+ * return the time at which the weekend ends. If ucal_getDayOfWeekType() returns
+ * some other UCalendarWeekdayType for the specified dayOfWeek, is it an error condition
+ * (U_ILLEGAL_ARGUMENT_ERROR).
+ * @param cal The UCalendar to query.
+ * @param dayOfWeek The day of the week for which the weekend transition time is
+ * desired (UCAL_SUNDAY..UCAL_SATURDAY).
+ * @param status The error code for the operation.
+ * @return The milliseconds after midnight at which the weekend begins or ends.
+ * @draft ICU 4.4
+ */
+U_DRAFT int32_t U_EXPORT2
+ucal_getWeekendTransition(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErrorCode *status);
+
+/**
+ * Returns TRUE if the given UDate is in the weekend in
+ * this calendar system.
+ * @param cal The UCalendar to query.
+ * @param date The UDate in question.
+ * @param status The error code for the operation.
+ * @return TRUE if the given UDate is in the weekend in
+ * this calendar system, FALSE otherwise.
+ * @draft ICU 4.4
+ */
+U_DRAFT UBool U_EXPORT2
+ucal_isWeekend(const UCalendar *cal, UDate date, UErrorCode *status);
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
