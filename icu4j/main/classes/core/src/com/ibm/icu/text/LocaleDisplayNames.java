@@ -28,13 +28,13 @@ public abstract class LocaleDisplayNames {
          * e.g. en_GB displays as 'English (United Kingdom)'.
          * @draft ICU 4.4
          */
-        STANDARD,
+        STANDARD_NAMES,
         /**
-         * Use dialect names, when generating a locale name,
+         * Use dialect names when generating a locale name,
          * e.g. en_GB displays as 'British English'.
          * @draft ICU 4.4
          */
-        USE_DIALECT_NAMES
+        DIALECT_NAMES
     }
 
     // factory methods
@@ -46,7 +46,7 @@ public abstract class LocaleDisplayNames {
      * @draft ICU 4.4
      */
     public static LocaleDisplayNames getInstance(ULocale locale) {
-        return getInstance(locale, DialectHandling.STANDARD);
+        return getInstance(locale, DialectHandling.STANDARD_NAMES);
     };
 
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -111,7 +111,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         boolean hasVariant = variant.length() > 0;
 
         if (hasLang) {
-            if (dialectHandling == DialectHandling.USE_DIALECT_NAMES) {
+            if (dialectHandling == DialectHandling.DIALECT_NAMES) {
                 do { // loop construct is so we can break early out of search
                     if (hasScript && hasCountry) {
                         String langScriptCountry = lang + '_' + script + '_' + country;
