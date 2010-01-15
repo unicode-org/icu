@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2009, International Business Machines
+ * Copyright (c) 2006-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-7-24 ?
@@ -258,8 +258,12 @@ public class StableAPI {
                 } else {
                     System.err.println("Note: You don't need to use  '--"+whichVer+"ver "+result+"' anymore - we detected it correctly.");
                 }
-            }
-        }
+            } else {
+		result = prevVer;
+		System.err.println("Using  '--"+whichVer+"ver "+result+"' because - we failed to detect it correctly.");
+	     }
+ 	}
+
         
         if(result == null) {
             System.err.println("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
