@@ -27,7 +27,8 @@ struct USearch {
           int32_t             textLength; // exact length
           UBool               isOverlap;
           UBool               isCanonicalMatch;
-          UBreakIterator	 *internalBreakIter;  //internal character breakiterator
+          int16_t             elementComparisonType;
+          UBreakIterator     *internalBreakIter;  //internal character breakiterator
           UBreakIterator     *breakIter;
     // value USEARCH_DONE is the default value
     // if we are not at the start of the text or the end of the text, 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2009 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  06/28/2001   synwee      Creation.
@@ -157,10 +157,17 @@ typedef enum {
     /** Option for overlapping matches */
     USEARCH_OVERLAP,
     /** 
-    Option for canonical matches. option 1 in header documentation.
-    The default value will be USEARCH_OFF
-    */
+     * Option for canonical matches. option 1 in header documentation.
+     * The default value will be USEARCH_OFF
+     */
     USEARCH_CANONICAL_MATCH,
+    /** 
+     * Option to control how collation elements are compared.
+     * The default value will be USEARCH_STANDARD_ELEMENT_COMPARISON.
+     * @draft ICU 4.4
+     */
+    USEARCH_ELEMENT_COMPARISON,
+
     USEARCH_ATTRIBUTE_COUNT
 } USearchAttribute;
 
@@ -168,12 +175,48 @@ typedef enum {
 * @stable ICU 2.4
 */
 typedef enum {
-    /** default value for any USearchAttribute */
+    /** Default value for any USearchAttribute */
     USEARCH_DEFAULT = -1,
-    /** value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
     USEARCH_OFF, 
-    /** value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
     USEARCH_ON,
+    /** 
+     * Value (default) for USEARCH_ELEMENT_COMPARISON;
+     * standard collation element comparison at the specified collator
+     * strength.
+     * @draft ICU 4.4
+     */
+    USEARCH_STANDARD_ELEMENT_COMPARISON,
+    /** 
+     * Value for USEARCH_ELEMENT_COMPARISON;
+     * collation element comparison is modified to effectively provide
+     * behavior between the specified strength and strength - 1. Collation
+     * elements in the pattern that have the base weight for the specified
+     * strength are treated as "wildcards" that match an element with any
+     * other weight at that collation level in the searched text. For
+     * example, with a secondary-strength English collator, a plain 'e' in
+     * the pattern will match a plain e or an e with any diacritic in the
+     * searched text, but an e with diacritic in the pattern will only
+     * match an e with the same diacritic in the searched text.
+     * @draft ICU 4.4
+     */
+    USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD,
+    /** 
+     * Value for USEARCH_ELEMENT_COMPARISON.
+     * collation element comparison is modified to effectively provide
+     * behavior between the specified strength and strength - 1. Collation
+     * elements in either the pattern or the searched text that have the
+     * base weight for the specified strength are treated as "wildcards"
+     * that match an element with any other weight at that collation level.
+     * For example, with a secondary-strength English collator, a plain 'e'
+     * in the pattern will match a plain e or an e with any diacritic in the
+     * searched text, but an e with diacritic in the pattern will only
+     * match an e with the same diacritic or a plain e in the searched text.
+     * @draft ICU 4.4
+     */
+    USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
+
     USEARCH_ATTRIBUTE_VALUE_COUNT
 } USearchAttributeValue;
 

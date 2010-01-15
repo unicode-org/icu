@@ -2743,6 +2743,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 
         result->search->isOverlap          = FALSE;
         result->search->isCanonicalMatch   = FALSE;
+        result->search->elementComparisonType = 0;
         result->search->isForwardSearching = TRUE;
         result->search->reset              = TRUE;
 
@@ -2835,6 +2836,13 @@ U_CAPI void U_EXPORT2 usearch_setAttribute(UStringSearch *strsrch,
             strsrch->search->isCanonicalMatch = (value == USEARCH_ON ? TRUE :
                                                                       FALSE);
             break;
+        case USEARCH_ELEMENT_COMPARISON :
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                strsrch->search->elementComparisonType = (int16_t)value;
+            } else {
+                strsrch->search->elementComparisonType = 0;
+            }
+            break;
         case USEARCH_ATTRIBUTE_COUNT :
         default:
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2857,6 +2865,15 @@ U_CAPI USearchAttributeValue U_EXPORT2 usearch_getAttribute(
         case USEARCH_CANONICAL_MATCH :
             return (strsrch->search->isCanonicalMatch == TRUE ? USEARCH_ON :
                                                                USEARCH_OFF);
+        case USEARCH_ELEMENT_COMPARISON :
+            {
+                int16_t value = strsrch->search->elementComparisonType;
+                if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                    return (USearchAttributeValue)value;
+                } else {
+                    return USEARCH_STANDARD_ELEMENT_COMPARISON;
+                }
+            }
         case USEARCH_ATTRIBUTE_COUNT :
             return USEARCH_DEFAULT;
         }
@@ -3417,6 +3434,7 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         strsrch->search->matchedIndex       = USEARCH_DONE;
         strsrch->search->isOverlap          = FALSE;
         strsrch->search->isCanonicalMatch   = FALSE;
+        strsrch->search->elementComparisonType = 0;
         strsrch->search->isForwardSearching = TRUE;
         strsrch->search->reset              = TRUE;
     }
