@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2009, International Business Machines Corporation and   *
+* Copyright (C) 2003-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -1491,7 +1491,7 @@ public final class ULocale implements Serializable {
     }
 
     private static String getDisplayNameWithDialectInternal(ULocale locale, ULocale displayLocale) {
-        return LocaleDisplayNames.getInstance(displayLocale, DialectHandling.USE_DIALECT_NAMES)
+        return LocaleDisplayNames.getInstance(displayLocale, DialectHandling.DIALECT_NAMES)
             .localeDisplayName(locale);
     }
 
