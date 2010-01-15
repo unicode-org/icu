@@ -10,14 +10,13 @@ package com.ibm.icu.dev.tools.docs;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
@@ -27,9 +26,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -72,9 +68,12 @@ public class StableAPI {
 	private static final String ICU_SPACE_PREFIX = "ICU ";
 	private static final String INITIALIZER_XPATH = "initializer";
 	private static final String NAME_XPATH = "name";
-	private static final String UVERSION = "uversion_8h.xml";
+	private static final String UVERSIONA = "uvernum_8h.xml";
+	private static final String UVERSIONB = "uversion_8h.xml";
     private static final String U_ICU_VERSION = "U_ICU_VERSION";
-	private static final String ICU_VERSION_XPATH = "/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']";
+	private static final String ICU_VERSION_XPATHA = "/doxygen/compounddef[@id='uvernum_8h'][@kind='file']/sectiondef[@kind='define']";
+	private static final String ICU_VERSION_XPATHB = "/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']";
+    private static String ICU_VERSION_XPATH = ICU_VERSION_XPATHA;
 
 	private String leftVer;
     private File leftDir = null;
@@ -99,14 +98,14 @@ public class StableAPI {
     
     private void run(String[] args) throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException {
         this.parseArgs(args);
-        Set full = new HashSet();
+        Set<JoinedFunction> full = new HashSet<JoinedFunction>();
 
         System.err.println("Reading C++...");
-        Set setCpp = this.getFullList(this.dumpCppXslt);
+        Set<JoinedFunction> setCpp = this.getFullList(this.dumpCppXslt);
         full.addAll(setCpp);
         System.out.println("read "+setCpp.size() +" C++.  Reading C:");
         
-        Set setC = this.getFullList(this.dumpCXslt);
+        Set<JoinedFunction> setC = this.getFullList(this.dumpCXslt);
         full.addAll(setC);
 
         System.out.println("read "+setC.size() +" C. Setting node:");
@@ -155,7 +154,7 @@ public class StableAPI {
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
 
-    private static Set warnSet = new HashSet(); // No Generics because we built with JDK 1.4 for now
+    private static Set<String> warnSet = new HashSet<String>(); // No Generics because we built with JDK 1.4 for now
     private static void warn(String what) {
         if(!warnSet.contains(what)) {
                System.out.println("Warning: "+what);
@@ -192,6 +191,7 @@ public class StableAPI {
     }
     
     private String setVer(String prevVer, String whichVer, File dir) {
+	    String UVERSION = UVERSIONA;
     	if(dir==null) {
     		System.out.println("--"+whichVer+"dir not set.");
     		printUsage(); /* exits */
@@ -202,12 +202,23 @@ public class StableAPI {
         String result = null;
         // looking for: <name>U_ICU_VERSION</name> in uversion_8h.xml:        <initializer>&quot;3.8.1&quot;</initializer>
         try {
-        	File verFile = new File(dir, UVERSION);
+            File verFile = new File(dir, UVERSION);
+		    if(!verFile.exists()) {
+				UVERSION=UVERSIONB;
+				ICU_VERSION_XPATH=ICU_VERSION_XPATHB;
+				verFile = new File(dir, UVERSION);
+		    } else {
+				ICU_VERSION_XPATH=ICU_VERSION_XPATHA;
+		    }
             Document doc = getDocument(verFile);
-            DOMSource uversion_h = new DOMSource(doc);
+            DOMSource uvernum_h = new DOMSource(doc);
             XPath xpath = XPathFactory.newInstance().newXPath();
 
-            Node defines = (Node)xpath.evaluate(ICU_VERSION_XPATH, uversion_h.getNode(), XPathConstants.NODE);
+            Node defines = (Node)xpath.evaluate(ICU_VERSION_XPATH, uvernum_h.getNode(), XPathConstants.NODE);
+
+	    if(defines==null) {
+	    	System.err.println("can't load from "+verFile.getName()+":"+ICU_VERSION_XPATH);
+	    }
 
             NodeList nList = defines.getChildNodes();
             for (int i = 0; result==null&& (i < nList.getLength()); i++) {
@@ -259,13 +270,13 @@ public class StableAPI {
                     System.err.println("Note: You don't need to use  '--"+whichVer+"ver "+result+"' anymore - we detected it correctly.");
                 }
             } else {
-		result = prevVer;
-		System.err.println("Using  '--"+whichVer+"ver "+result+"' because - we failed to detect it correctly.");
-	     }
- 	}
-
+                System.err.println("Note: Didn't detect version so we'll use your requested --"+whichVer+"ver "+prevVer);
+            	result = prevVer;
+            }
+        }
         
         if(result == null) {
+        	System.err.println("prevVer="+prevVer);
             System.err.println("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
             throw new InternalError("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
         }
@@ -506,7 +517,7 @@ public class StableAPI {
 //        dumpNode(res.getNode(),"");
     }
     
-    private Set getFullList(File dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
+    private Set<JoinedFunction> getFullList(File dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
         // prepare transformer
         XPath xpath = XPathFactory.newInstance().newXPath();
         String expression = "/list";
@@ -534,7 +545,9 @@ public class StableAPI {
         DOMSource rightIndex = new DOMSource(getDocument(new File(rightDir,INDEX_XML)));
         DOMResult rightResult = new DOMResult();
         transformer.setParameter(DOC_FOLDER, rightDir);
+        System.err.println("abdToLoad "+dumpXsltFile.getName());
         transformer.transform(rightIndex, rightResult);
+        System.err.println("dnlToLoad "+dumpXsltFile.getName());
         Node rightList = (Node)xpath.evaluate(expression, rightResult.getNode(), XPathConstants.NODE);
         if(rightList==null) {
         	throw new InternalError("getFullList("+dumpXsltFile.getName()+") returned a null right "+expression);
@@ -542,9 +555,9 @@ public class StableAPI {
 //        dumpNode(rightList,"");
         
         
-        Set leftSet = nodeToSet(leftList);
-        Set rightSet = nodeToSet(rightList);
-        Set joined = fullJoin(leftSet, rightSet);
+        Set<Function> leftSet = nodeToSet(leftList);
+        Set<Function> rightSet = nodeToSet(rightList);
+        Set<JoinedFunction> joined = fullJoin(leftSet, rightSet);
         return joined;
 //        joinedNode = setToNode(joined);
 //        dumpNode(joinedNode,"");
@@ -555,8 +568,8 @@ public class StableAPI {
      * @param node
      * @return      Set<Fun>
      */
-    private Set nodeToSet(Node node){
-        Set s = new HashSet();
+    private Set<Function> nodeToSet(Node node){
+        Set<Function> s = new HashSet<Function>();
         NodeList list = node.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Node n = list.item(i);
@@ -570,13 +583,13 @@ public class StableAPI {
      * @return
      * @throws ParserConfigurationException
      */
-    private Node setToNode(Set set) throws ParserConfigurationException{
+    private Node setToNode(Set<JoinedFunction> set) throws ParserConfigurationException{
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc  = dbf.newDocumentBuilder().newDocument();
         Element root = doc.createElement("list");
         doc.appendChild(root);
-        for (Iterator iter = set.iterator(); iter.hasNext();) {
-            JoinedFunction fun = (JoinedFunction) iter.next();
+        for (Iterator<JoinedFunction> iter = set.iterator(); iter.hasNext();) {
+            JoinedFunction fun = iter.next();
             root.appendChild(fun.toXml(doc));
         }
         return doc;
@@ -589,18 +602,18 @@ public class StableAPI {
      * @param right    Set<Fun>
      * @return          Set<JoinedFun>
      */
-    private static Set fullJoin(Set left, Set right){
+    private static Set<JoinedFunction> fullJoin(Set<Function> left, Set<Function> right){
 
-        Set joined = new HashSet(); //Set<JoinedFun>
-        Set common = new HashSet(); //Set<Fun>
-        for (Iterator iter1 = left.iterator(); iter1.hasNext();) {
-            Function f1 = (Function) iter1.next();
+        Set<JoinedFunction> joined = new HashSet<JoinedFunction>(); //Set<JoinedFun>
+        Set<Function> common = new HashSet<Function>(); //Set<Fun>
+        for (Iterator<Function> iter1 = left.iterator(); iter1.hasNext();) {
+            Function f1 = iter1.next();
 //            if (f1.prototype.matches(".*Transliterator::.*")){
 //                System.err.println("left: " + f1.prototype);
 //                System.err.println("left: " + f1.status);
 //            }
-            for (Iterator iter2 = right.iterator(); iter2.hasNext();) {
-                Function f2 = (Function) iter2.next();
+            for (Iterator<Function> iter2 = right.iterator(); iter2.hasNext();) {
+                Function f2 = iter2.next();
 //                if ( f1.prototype.matches(".*filteredTransliterate.*")
 //                  && f2.prototype.matches(".*filteredTransliterate.*")){
 //                    System.err.println("right: " + f2.prototype);
@@ -620,18 +633,18 @@ public class StableAPI {
             }
         }
 
-        for (Iterator iter = common.iterator(); iter.hasNext();) {
-            Function f = (Function) iter.next();
+        for (Iterator<Function> iter = common.iterator(); iter.hasNext();) {
+            Function f = iter.next();
             left.remove(f);
         }
         
-        for (Iterator iter = left.iterator(); iter.hasNext();) {
-            Function f = (Function) iter.next();
+        for (Iterator<Function> iter = left.iterator(); iter.hasNext();) {
+            Function f = iter.next();
             joined.add(JoinedFunction.fromLeftFun(f));
         }
         
-        for (Iterator iter = right.iterator(); iter.hasNext();) {
-            Function f = (Function) iter.next();
+        for (Iterator<Function> iter = right.iterator(); iter.hasNext();) {
+            Function f = iter.next();
             joined.add(JoinedFunction.fromRightFun(f));
         }
         return joined;
