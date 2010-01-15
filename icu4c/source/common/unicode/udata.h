@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -318,19 +318,26 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  * the data that has been loaded from a dll by the operating system,
  * as shown in this code:
  *
- *       extern const  char U_IMPORT U_ICUDATA_ENTRY_POINT []; 
+ *       extern const char U_IMPORT U_ICUDATA_ENTRY_POINT [];
  *        // U_ICUDATA_ENTRY_POINT is same as entry point specified to pkgdata tool
  *       UErrorCode  status = U_ZERO_ERROR;
  *
  *       udata_setCommonData(&U_ICUDATA_ENTRY_POINT, &status);
  *
- * Warning: ICU must NOT have even attempted to access its data yet
- * when this call is made, or U_USING_DEFAULT_WARNING code will
- * be returned. Be careful of UnicodeStrings in static initialization which
- * may attempt to load a converter (use the UNICODE_STRING(x) macro instead).
- *
- * Also note that it is important that the declaration be as above. The entry point
+ * It is important that the declaration be as above. The entry point
  * must not be declared as an extern void*.
+ *
+ * Starting with ICU 4.4, it is possible to set several data packages,
+ * one per call to this function.
+ * udata_open() will look for data in the multiple data packages in the order
+ * in which they were set.
+ * The position of the linked-in or default-name ICU .data package in the
+ * search list depends on when the first data item is loaded that is not contained
+ * in the already explicitly set packages.
+ * If data was loaded implicitly before the first call to this function
+ * (for example, via opening a converter, constructing a UnicodeString
+ * from default-codepage data, using formatting or collation APIs, etc.),
+ * then the default data will be first in the list.
  *
  * This function has no effect on application (non ICU) data.  See udata_setAppData()
  * for similar functionality for application data.
@@ -339,7 +346,6 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  * @param err outgoing error status <code>U_USING_DEFAULT_WARNING, U_UNSUPPORTED_ERROR</code>
  * @stable ICU 2.0
  */
-
 U_STABLE void U_EXPORT2
 udata_setCommonData(const void *data, UErrorCode *err);
 
