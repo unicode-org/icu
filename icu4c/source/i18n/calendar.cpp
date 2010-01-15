@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -2091,6 +2091,46 @@ uint8_t
 Calendar::getMinimalDaysInFirstWeek() const
 {
     return fMinimalDaysInFirstWeek;
+}
+
+// -------------------------------------
+// weekend functions, just dummy implementations for now (for API freeze)
+
+UCalendarWeekdayType
+Calendar::getDayOfWeekType(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status) const
+{
+    if (U_FAILURE(status)) {
+        return UCAL_WEEKDAY;
+    }
+    return ((dayOfWeek > UCAL_SUNDAY && dayOfWeek < UCAL_SATURDAY)? UCAL_WEEKDAY: UCAL_WEEKEND);
+}
+
+int32_t
+Calendar::getWeekendTransition(UCalendarDaysOfWeek dayOfWeek, UErrorCode &status) const
+{
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    if (dayOfWeek > UCAL_SUNDAY && dayOfWeek < UCAL_SATURDAY) {
+    	status = U_ILLEGAL_ARGUMENT_ERROR;
+    	return 0;
+    }
+    return 0;
+}
+
+UBool
+Calendar::isWeekend(UDate date, UErrorCode &status) const
+{
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+	return FALSE;
+}
+
+UBool
+Calendar::isWeekend(void) const
+{
+	return FALSE;
 }
 
 // ------------------------------------- limits

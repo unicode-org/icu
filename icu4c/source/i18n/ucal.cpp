@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -532,6 +532,34 @@ ucal_getType(const UCalendar *cal, UErrorCode* status)
     }
     return ((Calendar*)cal)->getType();
 }
+
+U_CAPI UCalendarWeekdayType U_EXPORT2
+ucal_getDayOfWeekType(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErrorCode* status)
+{
+    if (U_FAILURE(*status)) {
+        return UCAL_WEEKDAY;
+    }
+    return ((Calendar*)cal)->getDayOfWeekType(dayOfWeek, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucal_getWeekendTransition(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return ((Calendar*)cal)->getWeekendTransition(dayOfWeek, *status);
+}
+
+U_CAPI UBool U_EXPORT2
+ucal_isWeekend(const UCalendar *cal, UDate date, UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return FALSE;
+    }
+    return ((Calendar*)cal)->isWeekend(date, *status);
+}
+
 
 static const UEnumeration defaultKeywordValues = {
     NULL,
