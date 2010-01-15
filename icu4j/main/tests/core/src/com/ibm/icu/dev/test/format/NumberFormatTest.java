@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2547,5 +2547,45 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("NumberFormat.getRoundingMode() was suppose to return an exception");
         } catch (Exception e) {
         }
+    }
+
+    /*
+     * Testing lenient decimal/grouping separator parsing
+     */
+    public void TestLenientSymbolParsing() {
+        DecimalFormat fmt = new DecimalFormat();
+        DecimalFormatSymbols sym = new DecimalFormatSymbols();
+
+        expect(fmt, "12\u300234", 12.34);
+
+        // Ticket#7345 - case 1
+        // Even strict parsing, the decimal separator set in the symbols
+        // should be successfully parsed.
+
+        sym.setDecimalSeparator('\u3002');
+
+        // non-strict
+        fmt.setDecimalFormatSymbols(sym);
+
+        // strict - failed before the fix for #7345
+        fmt.setParseStrict(true);
+        expect(fmt, "23\u300245", 23.45);
+        fmt.setParseStrict(false);
+
+
+        // Ticket#7345 - case 2
+        // Decimal separator variants other than DecimalFormatSymbols.decimalSeparator
+        // should not hide the grouping separator DecimalFormatSymbols.groupingSeparator.
+        sym.setDecimalSeparator('.');
+        sym.setGroupingSeparator(',');
+        fmt.setDecimalFormatSymbols(sym);
+
+        expect(fmt, "1,234.56", 1234.56);
+
+        sym.setGroupingSeparator('\uFF61');
+        fmt.setDecimalFormatSymbols(sym);
+
+        expect(fmt, "2\uFF61345.67", 2345.67);
+
     }
 }

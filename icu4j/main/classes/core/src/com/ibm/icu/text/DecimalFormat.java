@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2033,6 +2033,8 @@ public class DecimalFormat extends NumberFormat {
                 0xFF0E, 0xFF0E,
                 0xFF61, 0xFF61).freeze();
 
+    private static final UnicodeSet EMPTY_SET = new UnicodeSet().freeze();
+
     // When parsing a number with big exponential value, it requires to transform
     // the value into a string representation to construct BigInteger instance.
     // We want to set the maximum size because it can easily trigger OutOfMemoryException.
@@ -2127,6 +2129,7 @@ public class DecimalFormat extends NumberFormat {
 
             String exponentSep = symbols.getExponentSeparator();
             boolean sawDecimal = false;
+            boolean sawGrouping = false;
             boolean sawExponent = false;
             boolean sawDigit = false;
             long exponent = 0; // Set to the exponent value, if any
@@ -2145,17 +2148,8 @@ public class DecimalFormat extends NumberFormat {
             int leadingZeroCount = 0;
 
             // equivalent grouping and decimal support
-
-            // TODO markdavis Cache these if it makes a difference in performance.
-            UnicodeSet decimalSet = new UnicodeSet(getSimilarDecimals(decimal, strictParse));
-            UnicodeSet groupingSet = new UnicodeSet(strictParse ? strictDefaultGroupingSeparators
-                    : defaultGroupingSeparators).add(grouping).removeAll(decimalSet);
-
-            // we are guaranteed that
-            // decimalSet contains the decimal, and
-            // groupingSet contains the groupingSeparator
-            // (unless decimal and grouping are the same, which should never happen. But in that case, groupingSet will
-            // just be empty.)
+            UnicodeSet decimalEquiv = getEquivalentDecimals(decimal, strictParse);
+            UnicodeSet groupEquiv = strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators;
 
             // We have to track digitCount ourselves, because digits.count will
             // pin when the maximum allowable digits is reached.
@@ -2238,7 +2232,7 @@ public class DecimalFormat extends NumberFormat {
 
                     // Cancel out backup setting (see grouping handler below)
                     backup = -1;
-                } else if (!isExponent && decimalSet.contains(ch)) {
+                } else if (!isExponent && ch == decimal) {
                     if (strictParse) {
                         if (backup != -1 || (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
                             strictFail = true;
@@ -2247,14 +2241,12 @@ public class DecimalFormat extends NumberFormat {
                     }
                     // If we're only parsing integers, or if we ALREADY saw the
                     // decimal, then don't parse this one.
-                    if (isParseIntegerOnly() || sawDecimal)
+                    if (isParseIntegerOnly() || sawDecimal) {
                         break;
+                    }
                     digits.decimalAt = digitCount; // Not digits.count!
                     sawDecimal = true;
-
-                    // Once we see a decimal character, we only accept that decimal character from then on.
-                    decimalSet.set(ch, ch);
-                } else if (!isExponent && isGroupingUsed() && groupingSet.contains(ch)) {
+                } else if (!isExponent && isGroupingUsed() && ch == grouping) {
                     if (sawDecimal) {
                         break;
                     }
@@ -2265,13 +2257,47 @@ public class DecimalFormat extends NumberFormat {
                             break;
                         }
                     }
-                    // Once we see a grouping character, we only accept that grouping character from then on.
-                    groupingSet.set(ch, ch);
+                    // Ignore grouping characters, if we are using them, but require
+                    // that they be followed by a digit. Otherwise we backup and
+                    // reprocess them.
+                    backup = position;
+                    sawGrouping = true;
+                } else if (!isExponent && !sawDecimal && decimalEquiv.contains(ch)) {
+                    if (strictParse) {
+                        if (backup != -1 || (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
+                            strictFail = true;
+                            break;
+                        }
+                    }
+                    // If we're only parsing integers, then don't parse this one.
+                    if (isParseIntegerOnly())
+                        break;
+                    digits.decimalAt = digitCount; // Not digits.count!
+
+                    // Once we see a decimal separator character, we only accept that decimal
+                    // separator character from then on.
+                    decimal = ch;
+                    sawDecimal = true;
+                } else if (!isExponent && isGroupingUsed() && !sawGrouping && groupEquiv.contains(ch)) {
+                    if (sawDecimal) {
+                        break;
+                    }
+                    if (strictParse) {
+                        if ((!sawDigit || backup != -1)) {
+                            // leading group, or two group separators in a row
+                            strictFail = true;
+                            break;
+                        }
+                    }
+                    // Once we see a grouping character, we only accept that grouping character
+                    // from then on.
+                    grouping = ch;
 
                     // Ignore grouping characters, if we are using them, but require
                     // that they be followed by a digit. Otherwise we backup and
                     // reprocess them.
                     backup = position;
+                    sawGrouping = true;
                 } else if (!isExponent && !sawExponent
                         && text.regionMatches(position, exponentSep, 0, exponentSep.length())) {
                     // Parse sign, if present
@@ -2337,8 +2363,9 @@ public class DecimalFormat extends NumberFormat {
                     }
 
                     break; // Whether we fail or succeed, we exit this loop
-                } else
+                } else {
                     break;
+                }
             }
 
             if (backup != -1)
@@ -2437,22 +2464,27 @@ public class DecimalFormat extends NumberFormat {
         return true;
     }
 
-    /**
-     * Return characters that are used where this decimal is used.
-     * 
-     * @param decimal
-     * @param strictParse
-     * @return
+    /*
+     * Return a set of characters equivalent to the given
+     * desimal separator used for parsing number.  This method
+     * may return an empty set.
      */
-    private UnicodeSet getSimilarDecimals(char decimal, boolean strictParse) {
-        if (dotEquivalents.contains(decimal)) {
-            return strictParse ? strictDotEquivalents : dotEquivalents;
+    private UnicodeSet getEquivalentDecimals(char decimal, boolean strictParse) {
+        UnicodeSet equivSet = EMPTY_SET;
+        if (strictParse) {
+            if (strictDotEquivalents.contains(decimal)) {
+                equivSet = strictDotEquivalents;
+            } else if (strictCommaEquivalents.contains(decimal)) {
+                equivSet = strictCommaEquivalents;
+            }
+        } else {
+            if (dotEquivalents.contains(decimal)) {
+                equivSet = dotEquivalents;
+            } else if (commaEquivalents.contains(decimal)) {
+                equivSet = commaEquivalents;
+            }
         }
-        if (commaEquivalents.contains(decimal)) {
-            return strictParse ? strictCommaEquivalents : commaEquivalents;
-        }
-        // if there is no match, return the character itself
-        return new UnicodeSet().add(decimal);
+        return equivSet;
     }
 
     /**
