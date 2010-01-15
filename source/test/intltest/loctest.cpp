@@ -2496,7 +2496,7 @@ void LocaleTest::TestCurrencyByDate(void)
 
 void LocaleTest::TestGetVariantWithKeywords(void)
 {
-  Locale l("en_US_VALLEY@foo");
+  Locale l("en_US_VALLEY@foo=value");
   const char *variant = l.getVariant();
   logln(variant);
   test_assert(strcmp("VALLEY", variant) == 0);
