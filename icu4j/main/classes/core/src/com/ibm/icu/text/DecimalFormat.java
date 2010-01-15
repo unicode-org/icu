@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -2148,8 +2149,12 @@ public class DecimalFormat extends NumberFormat {
             int leadingZeroCount = 0;
 
             // equivalent grouping and decimal support
-            UnicodeSet decimalEquiv = getEquivalentDecimals(decimal, strictParse);
-            UnicodeSet groupEquiv = strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators;
+            boolean skipExtendedSeparatorParsing = ICUConfig.get("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
+                .equals("true");
+
+            UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? EMPTY_SET : getEquivalentDecimals(decimal, strictParse);
+            UnicodeSet groupEquiv = skipExtendedSeparatorParsing ? EMPTY_SET :
+                (strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators);
 
             // We have to track digitCount ourselves, because digits.count will
             // pin when the maximum allowable digits is reached.

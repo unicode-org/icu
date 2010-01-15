@@ -2587,5 +2587,25 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         expect(fmt, "2\uFF61345.67", 2345.67);
 
+        // Ticket#7218
+        //
+        // Lenient separator parsing is enabled by default.
+        // A space character below is interpreted as a
+        // group separator, even ',' is used as grouping
+        // separator in the symbols.
+        sym.setGroupingSeparator(',');
+        fmt.setDecimalFormatSymbols(sym);
+
+        expect(fmt, "12 345", 12345);
+
+        // When the property SkipExtendedSeparatorParsing is true,
+        // DecimalFormat does not use the extended equivalent separator
+        // data and only uses the one in DecimalFormatSymbols.
+        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "true");
+
+        expect(fmt, "23 456", 23);
+
+        // Set the configuration back to the default
+        System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
     }
 }
