@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2008, International Business Machines
+ * Copyright (c) 2008-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -34,7 +34,7 @@ public class NonAsciiFileDetector
                 return -1;
             }
             for (int i = 0; i < str.length(); i ++) {
-                if (str.charAt(i) > 0x7f) {
+                if (str.charAt(i) > 0x7f || str.charAt(i)==0x07) {
                     System.out.println("Ascii test failed in " 
                                        + file.getAbsolutePath() + " line "
                                        + line + " string\n" + str);
@@ -98,6 +98,7 @@ public class NonAsciiFileDetector
                             + (String)nonascii.elementAt(i) + " " 
                             + ((Integer)nonascii.elementAt(i + 1)).intValue());
                 }
+                System.exit(1);
             }
         } catch (IOException e) {
             e.printStackTrace();
