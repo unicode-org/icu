@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -14,7 +14,15 @@
 *   created by: Markus W. Scherer
 */
 
-#include "unicode/utypes.h"
+#include "unicode/utypes.h"  /* U_LINUX */
+
+#ifdef U_LINUX
+/* if gcc
+#define ATTRIBUTE_WEAK __attribute__ ((weak))
+might have to #include some other header
+*/
+#endif
+
 #include "unicode/putil.h"
 #include "umutex.h"
 #include "cmemory.h"
@@ -62,19 +70,33 @@
 #   include <stdio.h>
 #endif
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /***********************************************************************
 *
 *    static (Global) data
 *
 ************************************************************************/
-static UDataMemory *gCommonICUData = NULL;    /* Pointer to the common ICU data.           */
-                                              /*   May be updated once, if we started with */
-                                              /*   a stub or subset library.               */
 
-static UDataMemory *gStubICUData   = NULL;    /* If gCommonICUData does get updated, remember */
-                                              /*   the original one so that it can be cleaned */
-                                              /*   up when ICU is shut down.                  */
+/*
+ * Pointers to the common ICU data.
+ *
+ * We store multiple pointers to ICU data packages and iterate through them
+ * when looking for a data item.
+ *
+ * It is possible to combine this with dependency inversion:
+ * One or more data package libraries may export
+ * functions that each return a pointer to their piece of the ICU data,
+ * and this file would import them as weak functions, without a
+ * strong linker dependency from the common library on the data library.
+ *
+ * Then we can have applications depend on only that part of ICU's data
+ * that they really need, reducing the size of binaries that take advantage
+ * of this.
+ */
+static UDataMemory *gCommonICUDataArray[10] = { NULL };
+
+static UBool gHaveTriedToLoadCommonData = FALSE;  /* See extendICUData(). */
 
 static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU data files.  */
 
@@ -83,21 +105,18 @@ static UDataFileAccess  gDataFileAccess = UDATA_DEFAULT_ACCESS;
 static UBool U_CALLCONV
 udata_cleanup(void)
 {
+    int32_t i;
+
     if (gCommonDataCache) {             /* Delete the cache of user data mappings.  */
         uhash_close(gCommonDataCache);  /*   Table owns the contents, and will delete them. */
         gCommonDataCache = NULL;        /*   Cleanup is not thread safe.                */
     }
 
-    if (gCommonICUData != NULL) {
-        udata_close(gCommonICUData);    /* Clean up common ICU Data             */
-        gCommonICUData = NULL;
+    for (i = 0; i < LENGTHOF(gCommonICUDataArray) && gCommonICUDataArray[i] != NULL; ++i) {
+        udata_close(gCommonICUDataArray[i]);
+        gCommonICUDataArray[i] = NULL;
     }
-
-    if (gStubICUData != NULL) {
-        udata_close(gStubICUData);      /* Clean up the stub ICU Data             */
-        gStubICUData = NULL;
-    }
-
+    gHaveTriedToLoadCommonData = FALSE;
 
     return TRUE;                   /* Everything was cleaned up */
 }
@@ -108,17 +127,17 @@ udata_cleanup(void)
 /*
  * setCommonICUData.   Set a UDataMemory to be the global ICU Data
  */
-static void
+static UBool
 setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to caller, we copy it. */
-                 UDataMemory *oldData,   /*  Old ICUData ptr.  Overwrite of this value is ok,     */
-                                         /*     of any others is not.                             */
                  UBool       warn,       /*  If true, set USING_DEFAULT warning if ICUData was    */
                                          /*    changed by another thread before we got to it.     */
                  UErrorCode *pErr)
 {
     UDataMemory  *newCommonData = UDataMemory_createNewInstance(pErr);
+    int32_t i;
+    UBool didUpdate = FALSE;
     if (U_FAILURE(*pErr)) {
-        return;
+        return FALSE;
     }
 
     /*  For the assignment, other threads must cleanly see either the old            */
@@ -127,18 +146,35 @@ setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to ca
     /*    their locals.                                                              */
     UDatamemory_assign(newCommonData, pData);
     umtx_lock(NULL);
-    if (gCommonICUData==oldData) {
-        gStubICUData   = gCommonICUData;   /* remember the old Common Data, so it can be cleaned up. */
-        gCommonICUData = newCommonData;
-        ucln_common_registerCleanup(UCLN_COMMON_UDATA, udata_cleanup);
-    }
-    else {
-        if  (warn==TRUE) {
-            *pErr = U_USING_DEFAULT_WARNING;
+    for (i = 0; i < LENGTHOF(gCommonICUDataArray); ++i) {
+        if (gCommonICUDataArray[i] == NULL) {
+            gCommonICUDataArray[i] = newCommonData;
+            ucln_common_registerCleanup(UCLN_COMMON_UDATA, udata_cleanup);
+            didUpdate = TRUE;
+            break;
+        } else if (gCommonICUDataArray[i]->pHeader == pData->pHeader) {
+            /* The same data pointer is already in the array. */
+            break;
         }
-        uprv_free(newCommonData);
     }
     umtx_unlock(NULL);
+
+    if (i == LENGTHOF(gCommonICUDataArray) && warn) {
+        *pErr = U_USING_DEFAULT_WARNING;
+    }
+    if (!didUpdate) {
+        uprv_free(newCommonData);
+    }
+    return didUpdate;
+}
+
+static UBool
+setCommonICUDataPointer(const void *pData, UBool warn, UErrorCode *pErrorCode) {
+    UDataMemory tData;
+    UDataMemory_init(&tData);
+    tData.pHeader = (const DataHeader *)pData;
+    udata_checkCommonData(&tData, pErrorCode);
+    return setCommonICUData(&tData, FALSE, pErrorCode);
 }
 
 static const char *
@@ -719,6 +755,15 @@ static void udata_pathiter_dt(UDataPathIterator *iter) {
  *----------------------------------------------------------------------*/
 extern  const DataHeader U_DATA_API U_ICUDATA_ENTRY_POINT;
 
+/*
+ * This would be a good place for weak-linkage declarations of
+ * partial-data-library access functions where each returns a pointer
+ * to its data package, if it is linked in.
+ */
+/*
+extern const void *uprv_getICUData_collation(void) ATTRIBUTE_WEAK;
+extern const void *uprv_getICUData_conversion(void) ATTRIBUTE_WEAK;
+*/
 
 /*----------------------------------------------------------------------*
  *                                                                      *
@@ -732,7 +777,7 @@ extern  const DataHeader U_DATA_API U_ICUDATA_ENTRY_POINT;
  *----------------------------------------------------------------------*/
 static UDataMemory *
 openCommonData(const char *path,          /*  Path from OpenChoice?          */
-               UBool isICUData,           /*  ICU Data true if path == NULL  */
+               int32_t commonDataIndex,   /*  ICU Data (index >= 0) if path == NULL */
                UErrorCode *pErrorCode)
 {
     UDataMemory tData;
@@ -747,16 +792,36 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
     UDataMemory_init(&tData);
 
     /* ??????? TODO revisit this */ 
-    if (isICUData) {
+    if (commonDataIndex >= 0) {
         /* "mini-cache" for common ICU data */
-        if(gCommonICUData != NULL) {
-            return gCommonICUData;
+        if(commonDataIndex >= LENGTHOF(gCommonICUDataArray)) {
+            return NULL;
         }
+        if(gCommonICUDataArray[commonDataIndex] == NULL) {
+            int32_t i;
+            for(i = 0; i < commonDataIndex; ++i) {
+                if(gCommonICUDataArray[i]->pHeader == &U_ICUDATA_ENTRY_POINT) {
+                    /* The linked-in data is already in the list. */
+                    return NULL;
+                }
+            }
 
-        tData.pHeader = &U_ICUDATA_ENTRY_POINT;
-        udata_checkCommonData(&tData, pErrorCode);
-        setCommonICUData(&tData, NULL, FALSE, pErrorCode);
-        return gCommonICUData;
+            /* Add the linked-in data to the list. */
+            /*
+             * This is where we would check and call weakly linked partial-data-library
+             * access functions.
+             */
+            /*
+            if (uprv_getICUData_collation) {
+                setCommonICUDataPointer(uprv_getICUData_collation(), FALSE, pErrorCode);
+            }
+            if (uprv_getICUData_conversion) {
+                setCommonICUDataPointer(uprv_getICUData_conversion(), FALSE, pErrorCode);
+            }
+            */
+            setCommonICUDataPointer(&U_ICUDATA_ENTRY_POINT, FALSE, pErrorCode);
+        }
+        return gCommonICUDataArray[commonDataIndex];
     }
 
 
@@ -836,13 +901,6 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
 }
 
 
-#ifdef OS390
-#   define MAX_STUB_ENTRIES 8
-#else
-#   define MAX_STUB_ENTRIES 0
-#endif
-
-
 /*----------------------------------------------------------------------*
  *                                                                      *
  *   extendICUData   If the full set of ICU data was not loaded at      *
@@ -850,60 +908,64 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
  *                   be called when the lookup of an ICU data item in   *
  *                   the common ICU data fails.                         *
  *                                                                      *
- *                   The parameter is the UDataMemory in which the      *
- *                   search for a requested item failed.                *
- *                                                                      *
  *                   return true if new data is loaded, false otherwise.*
  *                                                                      *
  *----------------------------------------------------------------------*/
-static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
+static UBool extendICUData(UErrorCode *pErr)
 {
-    /*  If the data library that we are running with turns out to be the
-     *   stub library (or, on the 390, the subset library), we will try to
-     *   load a .dat file instead.  The stub library has no entries in its
-     *   TOC, which is how we identify it here.
-     */
     UDataMemory   *pData;
     UDataMemory   copyPData;
+    UBool         didUpdate = FALSE;
 
-    if (failedData->vFuncs->NumEntries(failedData) > MAX_STUB_ENTRIES) {
-        /*  Not the stub.  We can't extend.  */
-        return FALSE;
+    /*
+     * There is a chance for a race condition here.
+     * Normally, ICU data is loaded from a DLL or via mmap() and
+     * setCommonICUData() will detect if the same address is set twice.
+     * If ICU is built with data loading via fread() then the address will
+     * be different each time the common data is loaded and we may add
+     * multiple copies of the data.
+     * In this case, use a mutex to prevent the race.
+     * Use a specific mutex to avoid nested locks of the global mutex.
+     */
+#if MAP_IMPLEMENTATION==MAP_STDIO
+    static UMTX extendICUDataMutex = NULL;
+    umtx_lock(&extendICUDataMutex);
+#endif
+    if(!gHaveTriedToLoadCommonData) {
+        gHaveTriedToLoadCommonData = TRUE;
+
+        /* See if we can explicitly open a .dat file for the ICUData. */
+        pData = openCommonData(
+                   U_ICUDATA_NAME,            /*  "icudt20l" , for example.          */
+                   -1,                        /*  Pretend we're not opening ICUData  */
+                   pErr);
+
+        /* How about if there is no pData, eh... */
+
+       UDataMemory_init(&copyPData);
+       if(pData != NULL) {
+          UDatamemory_assign(&copyPData, pData);
+          copyPData.map = 0;              /* The mapping for this data is owned by the hash table */
+          copyPData.mapAddr = 0;          /*   which will unmap it when ICU is shut down.         */
+                                          /* CommonICUData is also unmapped when ICU is shut down.*/
+                                          /* To avoid unmapping the data twice, zero out the map  */
+                                          /*   fields in the UDataMemory that we're assigning     */
+                                          /*   to CommonICUData.                                  */
+
+          didUpdate =
+              setCommonICUData(&copyPData,/*  The new common data.                                */
+                       FALSE,             /*  No warnings if write didn't happen                  */
+                       pErr);             /*  setCommonICUData honors errors; NOP if error set    */
+        }
     }
-
-    /* See if we can explicitly open a .dat file for the ICUData. */
-    pData = openCommonData(
-               U_ICUDATA_NAME,            /*  "icudt20l" , for example.          */
-               FALSE,                     /*  Pretend we're not opening ICUData  */
-               pErr);
-
-    /* How about if there is no pData, eh... */
-
-   UDataMemory_init(&copyPData);
-   if(pData != NULL) {
-      UDatamemory_assign(&copyPData, pData);
-      copyPData.map = 0;              /* The mapping for this data is owned by the hash table */
-      copyPData.mapAddr = 0;          /*   which will unmap it when ICU is shut down.         */
-                                      /* CommonICUData is also unmapped when ICU is shut down.*/
-                                      /* To avoid unmapping the data twice, zero out the map  */
-                                      /*   fields in the UDataMemory that we're assigning     */
-                                      /*   to CommonICUData.                                  */
-
-      setCommonICUData(&copyPData,    /*  The new common data.                                */
-                   failedData,        /*  Old ICUData ptr.  Overwrite of this value is ok,    */
-                   FALSE,             /*  No warnings if write didn't happen                  */
-                   pErr);             /*  setCommonICUData honors errors; NOP if error set    */
-    }
-    
-
-    return gCommonICUData != failedData;   /* Return true if ICUData pointer was updated.   */
+#if MAP_IMPLEMENTATION==MAP_STDIO
+    umtx_unlock(&extendICUDataMutex);
+#endif
+    return didUpdate;               /* Return true if ICUData pointer was updated.   */
                                     /*   (Could potentialy have been done by another thread racing */
                                     /*   us through here, but that's fine, we still return true    */
                                     /*   so that current thread will also examine extended data.   */
 }
-
-
-
 
 /*----------------------------------------------------------------------*
  *                                                                      *
@@ -923,12 +985,6 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
         return;
     }
 
-    /* do we already have common ICU data set? */
-    if(gCommonICUData != NULL) {
-        *pErrorCode=U_USING_DEFAULT_WARNING;
-        return;
-    }
-
     /* set the data pointer and test for validity */
     UDataMemory_init(&dataMemory);
     UDataMemory_setData(&dataMemory, data);
@@ -937,11 +993,8 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
 
     /* we have good data */
     /* Set it up as the ICU Common Data.  */
-    setCommonICUData(&dataMemory, NULL, TRUE, pErrorCode);
+    setCommonICUData(&dataMemory, TRUE, pErrorCode);
 }
-
-
-
 
 /*---------------------------------------------------------------------------
  *
@@ -1091,10 +1144,10 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char *pkgName,
              UErrorCode *subErrorCode,
              UErrorCode *pErrorCode)
 {
-    UDataMemory *retVal = NULL;
     UDataMemory        *pEntryData;
     const DataHeader   *pHeader;
     UDataMemory        *pCommonData;
+    int32_t            commonDataIndex;
     /* try to get common data.  The loop is for platforms such as the 390 that do
      *  not initially load the full set of ICU data.  If the lookup of an ICU data item
      *  fails, the full (but slower to load) set is loaded, the and the loop repeats,
@@ -1104,10 +1157,10 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char *pkgName,
      *  The loop also handles the fallback to a .dat file if the application linked
      *   to the stub data library rather than a real library.
      */
-    for (;;) {
-        pCommonData=openCommonData(path, isICUData, subErrorCode); /** search for pkg **/
+    for (commonDataIndex = isICUData ? 0 : -1;;) {
+        pCommonData=openCommonData(path, commonDataIndex, subErrorCode); /** search for pkg **/
 
-        if(U_SUCCESS(*subErrorCode)) {
+        if(U_SUCCESS(*subErrorCode) && pCommonData!=NULL) {
             int32_t length;
 
             /* look up the data piece in the common data */
@@ -1122,26 +1175,27 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char *pkgName,
                 fprintf(stderr, "pEntryData=%p\n", pEntryData);
 #endif
                 if (U_FAILURE(*pErrorCode)) {
-                    retVal = NULL;
-                    goto commonReturn;
+                    return NULL;
                 }
                 if (pEntryData != NULL) {
                     pEntryData->length = length;
-                    retVal =  pEntryData;
-                    goto commonReturn;
+                    return pEntryData;
                 }
             }
         }
         /* Data wasn't found.  If we were looking for an ICUData item and there is
          * more data available, load it and try again,
          * otherwise break out of this loop. */
-        if (!(isICUData && pCommonData && extendICUData(pCommonData, subErrorCode))) {
-            break;
+        if (!isICUData) {
+            return NULL;
+        } else if (pCommonData != NULL) {
+            ++commonDataIndex;  /* try the next data package */
+        } else if (extendICUData(subErrorCode)) {
+            /* try this data package slot again: it changed from NULL to non-NULL */
+        } else {
+            return NULL;
         }
     }
-
-commonReturn:
-    return retVal;
 }
 
 /*
@@ -1479,4 +1533,3 @@ U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess access, UErrorCode *st
 {
     gDataFileAccess = access;
 }
-
