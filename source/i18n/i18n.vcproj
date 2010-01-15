@@ -1415,6 +1415,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\decContext.c"
+				>
+			</File>
+			<File
+				RelativePath=".\decContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\decNumber.c"
+				>
+			</File>
+			<File
+				RelativePath=".\decNumber.h"
+				>
+			</File>
+			<File
+				RelativePath=".\decNumberLocal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\decimfmt.cpp"
 				>
 			</File>
