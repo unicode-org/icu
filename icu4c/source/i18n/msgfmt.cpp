@@ -1,23 +1,23 @@
-/*
-*******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-* File MSGFMT.CPP
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   02/19/97    aliu        Converted from java.
-*   03/20/97    helena      Finished first cut of implementation.
-*   04/10/97    aliu        Made to work on AIX.  Added stoi to replace wtoi.
-*   06/11/97    helena      Fixed addPattern to take the pattern correctly.
-*   06/17/97    helena      Fixed the getPattern to return the correct pattern.
-*   07/09/97    helena      Made ParsePosition into a class.
-*   02/22/99    stephen     Removed character literals for EBCDIC safety
-********************************************************************************
-*/
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************
+ *
+ * File MSGFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   03/20/97    helena      Finished first cut of implementation.
+ *   04/10/97    aliu        Made to work on AIX.  Added stoi to replace wtoi.
+ *   06/11/97    helena      Fixed addPattern to take the pattern correctly.
+ *   06/17/97    helena      Fixed the getPattern to return the correct pattern.
+ *   07/09/97    helena      Made ParsePosition into a class.
+ *   02/22/99    stephen     Removed character literals for EBCDIC safety
+ *   11/01/09    kirtig      Added SelectFormat  
+ ********************************************************************/
 
 #include "unicode/utypes.h"
 
@@ -29,6 +29,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/choicfmt.h"
 #include "unicode/plurfmt.h"
+#include "unicode/selfmt.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uchar.h"
@@ -40,6 +41,10 @@
 #include "uassert.h"
 #include "ustrfmt.h"
 #include "uvector.h"
+
+//Todo:remove stdio
+#include "stdio.h"
+
 
 // *****************************************************************************
 // class MessageFormat
@@ -81,6 +86,9 @@ static const UChar ID_DURATION[]  = {
 static const UChar ID_PLURAL[]  = {
     0x70, 0x6c, 0x75, 0x72, 0x61, 0x6c, 0  /* "plural" */
 };
+static const UChar ID_SELECT[]  = {
+    0x73, 0x65, 0x6C, 0x65, 0x63, 0x74, 0  /* "select" */
+};
 
 // MessageFormat Type List  Number, Date, Time or Choice
 static const UChar * const TYPE_IDS[] = {
@@ -93,6 +101,7 @@ static const UChar * const TYPE_IDS[] = {
     ID_ORDINAL,
     ID_DURATION,
     ID_PLURAL,
+    ID_SELECT,
     NULL,
 };
  
@@ -602,7 +611,7 @@ MessageFormat::applyPattern(const UnicodeString& pattern,
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
     int32_t patLen = pattern.length();
     int32_t i;
-
+        
     for (i=0; i<subformatCount; ++i) {
         delete subformats[i].format;
     }
@@ -663,6 +672,7 @@ MessageFormat::applyPattern(const UnicodeString& pattern,
                         goto SYNTAX_ERROR;
                     }
                     formatNumber++;
+
                     segments[1].remove();
                     segments[2].remove();
                     segments[3].remove();
@@ -837,6 +847,10 @@ MessageFormat::toPattern(UnicodeString& appendTo) const {
         else if (fmt->getDynamicClassID() == PluralFormat::getStaticClassID()) {
             UnicodeString buffer;
             appendTo += ((PluralFormat*)fmt)->toPattern(buffer);
+        } 
+        else if (fmt->getDynamicClassID() == SelectFormat::getStaticClassID()) {
+            UnicodeString buffer;
+            appendTo += ((SelectFormat*)fmt)->toPattern(buffer);
         } 
         else {
             //appendTo += ", unknown";
@@ -1223,16 +1237,19 @@ MessageFormat::format(const Formattable* arguments,
         Formattable::Type type = obj->getType();
 
         // Recursively calling the format process only if the current
-        // format argument refers to a ChoiceFormat object.
+        // format argument refers to either of the following:
+        // a ChoiceFormat object ,a PluralFormat object, a SelectFormat object.
         Format* fmt = subformats[i].format;
         if (fmt != NULL) {
             UnicodeString argNum;
             fmt->format(*obj, argNum, success);
 
-            // Needs to reprocess the ChoiceFormat option by using the
+            // Needs to reprocess the ChoiceFormat and PluralFormat and SelectFormat option by using the
             // MessageFormat pattern application.
             if ((fmt->getDynamicClassID() == ChoiceFormat::getStaticClassID() ||
-                 fmt->getDynamicClassID() == PluralFormat::getStaticClassID()) &&
+                 fmt->getDynamicClassID() == PluralFormat::getStaticClassID() ||
+                 fmt->getDynamicClassID() == SelectFormat::getStaticClassID()
+                 ) &&
                 argNum.indexOf(LEFT_CURLY_BRACE) >= 0) {
                 MessageFormat temp(argNum, fLocale, success);
                 // TODO: Implement recursion protection
@@ -1592,7 +1609,11 @@ MessageFormat::makeFormat(int32_t formatNumber,
         fmt = makeRBNF(URBNF_DURATION, fLocale, segments[3], ec);
         break;
     case 8: // plural
-        argType = Formattable::kDouble;
+    case 9: // Select
+        if(typeID == 8)
+            argType = Formattable::kDouble;
+        else
+            argType = Formattable::kString;
         quotedPattern = segments[3];
         for (int32_t i = 0; i < quotedPattern.length(); ++i) {
             UChar ch = quotedPattern.charAt(i);
@@ -1609,7 +1630,10 @@ MessageFormat::makeFormat(int32_t formatNumber,
                 unquotedPattern += ch;
             }
         }
-        fmt = new PluralFormat(fLocale, unquotedPattern, ec);
+        if(typeID == 8)
+            fmt = new PluralFormat(fLocale, unquotedPattern, ec);
+        else
+            fmt = new SelectFormat(unquotedPattern, ec);
         break;
     default:
         argType = Formattable::kString;
@@ -1790,8 +1814,7 @@ MessageFormat::isLegalArgName(const UnicodeString& argName) const {
 int32_t 
 MessageFormat::getArgTypeCount() const {
         return argTypeCount; 
-}
-
+} 
 
 FormatNameEnumeration::FormatNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
     pos=0;
@@ -1825,8 +1848,6 @@ FormatNameEnumeration::~FormatNameEnumeration() {
     }
     delete fFormatNames;
 }
-
-
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,20 +1,20 @@
-/*
-*******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation
-* and others. All Rights Reserved.
-*******************************************************************************
-*
-*   file name:  umsg.h
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   Change history:
-*
-*   08/5/2001  Ram         Added C wrappers for C++ API.
-*                          
-*
-*/
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc. 
+ ********************************************************************
+ *
+ *   file name:  umsg.h
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   Change history:
+ *
+ *   08/5/2001  Ram         Added C wrappers for C++ API.
+ *                          
+ ********************************************************************/
 
 #ifndef UMSG_H
 #define UMSG_H
@@ -88,8 +88,8 @@
  *     u_uastrcpy(str, "MyDisk");
  *     u_uastrcpy(pattern, "The disk {1} contains {0,choice,0#no files|1#one file|1<{0,number,integer} files}");
  *     for(i=0; i<3; i++){
- *       resultlength=0;
- *       resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, testArgs[i], str);
+ *       resultlength=0; 
+ *       resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, testArgs[i], str); 
  *       if(status==U_BUFFER_OVERFLOW_ERROR){
  *         status=U_ZERO_ERROR;
  *         resultlength=resultLengthOut+1;
@@ -106,6 +106,45 @@
  * \endcode
  *  </pre>
  *
+ *
+ * Example 3:
+ * <pre>
+ * \code
+ * UChar* str;
+ * UChar* str1;
+ * UErrorCode status = U_ZERO_ERROR;
+ * UChar *result;
+ * UChar pattern[100];
+ * UChar expected[100];
+ * int32_t resultlength,resultLengthOut;
+
+ * str=(UChar*)malloc(sizeof(UChar) * 25);
+ * u_uastrcpy(str, "Kirti");
+ * str1=(UChar*)malloc(sizeof(UChar) * 25);
+ * u_uastrcpy(str1, "female");
+ * log_verbose("Testing message format with Select test #1\n:");
+ * u_uastrcpy(pattern, "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.");
+ * u_uastrcpy(expected, "Kirti est all\\u00E9e \\u00E0 Paris.");
+ * resultlength=0;
+ * resultLengthOut=u_formatMessage( "fr", pattern, u_strlen(pattern), NULL, resultlength, &status, str , str1);
+ * if(status==U_BUFFER_OVERFLOW_ERROR)
+ *  {
+ *      status=U_ZERO_ERROR;
+ *      resultlength=resultLengthOut+1;
+ *      result=(UChar*)malloc(sizeof(UChar) * resultlength);
+ *      u_formatMessage( "fr", pattern, u_strlen(pattern), result, resultlength, &status, str , str1);
+ *      if(u_strcmp(result, expected)==0)
+ *          log_verbose("PASS: MessagFormat successful on Select test#1\n");
+ *      else{
+ *          log_err("FAIL: Error in MessageFormat on Select test#1\n GOT %s EXPECTED %s\n", austrdup(result),
+ *          austrdup(expected) );
+ *      }
+ *      free(result);
+ * }
+ * \endcode
+ *  </pre>
+ *
+
  *  The pattern is of the following form.  Legend:
  *  <pre>
  * \code
@@ -125,6 +164,7 @@
  *                      | "date" { "," datetimeStyle }
  *                      | "number" { "," numberStyle }
  *                      | "choice" "," choiceStyle
+ *                      | "select" "," selectStyle
  *
  *       datetimeStyle := "short"
  *                      | "medium"
@@ -138,6 +178,8 @@
  *                      | numberFormatPattern
  *
  *       choiceStyle :=   choiceFormatPattern
+ *
+ *       selectStyle :=   selectFormatPattern
  * \endcode
  * </pre>
  * If there is no elementFormat, then the argument must be a string,

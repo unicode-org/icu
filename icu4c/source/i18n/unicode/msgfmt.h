@@ -12,8 +12,7 @@
 *   03/20/97    helena      Finished first cut of implementation.
 *   07/22/98    stephen     Removed operator!= (defined in Format)
 *   08/19/2002  srl         Removing Javaisms
-********************************************************************************
-*/
+*******************************************************************************/
 
 #ifndef MSGFMT_H
 #define MSGFMT_H
@@ -195,6 +194,7 @@ class DateFormat;
  *                      | "ordinal" { "," spelloutStyle }
  *                      | "duration" { "," spelloutStyle }
  *                      | "plural" "," pluralStyle
+ *                      | "select" "," selectStyle
  *
  *       datetimeStyle := "short"
  *                      | "medium"
@@ -211,6 +211,8 @@ class DateFormat;
  * 
  *       pluralStyle :=   pluralFormatPattern
  *
+ *       selectStyle :=   selectFormatPattern
+ *
  *       spelloutStyle := ruleSetName
  * \endcode
  * </pre>
@@ -220,7 +222,7 @@ class DateFormat;
  * DateFormat::createTimeInstance(DateFormat::kDefault, ...) or 
  * DateFormat::createDateInstance(DateFormat::kDefault, ...). For
  * a RuleBasedNumberFormat, if there is no ruleSetName, the default 
- * rule set is used. For a ChoiceFormat or PluralFormat, the pattern 
+ * rule set is used. For a ChoiceFormat or PluralFormat or SelectFormat, the pattern 
  * must always be specified, since there is no default.
  * <P>
  * In strings, single quotes can be used to quote syntax characters.
