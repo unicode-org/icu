@@ -1,8 +1,8 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2010, International Business Machines
- * Corporation and others.  All Rights Reserved.
- * Copyright (C) 2009 , Yahoo! Inc.                                            
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009 , Yahoo! Inc.                                            *
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -10,6 +10,8 @@ package com.ibm.icu.text;
 import java.text.Format;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -167,7 +169,7 @@ public class SelectFormat extends Format{
      *  <code>String</code>(select case keyword) --&gt; <code>String</code>
      *  (message for this select case).
      */
-    private Map<String, String> parsedValues = null;
+    transient private Map<String, String> parsedValues = null;
 
     /**
      * Common name for the default select form.  This name is returned
@@ -175,12 +177,12 @@ public class SelectFormat extends Format{
      * can additionally be assigned rules of its own.
      * @draft ICU 4.4
      */
-    public static final String KEYWORD_OTHER = "other";
+    private static final String KEYWORD_OTHER = "other";
 
     /*
      * The types of character classifications 
      */
-    public enum CharacterClass {
+    private enum CharacterClass {
         T_START_KEYWORD, T_CONTINUE_KEYWORD, T_LEFT_BRACE,
         T_RIGHT_BRACE, T_SPACE, T_OTHER
     };
@@ -189,7 +191,7 @@ public class SelectFormat extends Format{
      * The different states needed in state machine
      * in applyPattern method. 
      */
-    public enum State {
+    private enum State {
        START_STATE, KEYWORD_STATE,
        PAST_KEYWORD_STATE, PHRASE_STATE      
     };
@@ -505,14 +507,6 @@ public class SelectFormat extends Format{
     }
 
     /**
-     * {@inheritDoc}
-     * @draft ICU 4.4
-     */
-    public boolean equals(Object rhs) {
-        return rhs instanceof SelectFormat && this.equals((SelectFormat) rhs);
-    }
-
-    /**
      * Returns true if this equals the provided <code>SelectFormat<code>.
      * @param rhs the SelectFormat to compare against
      * @return true if this equals rhs
@@ -533,8 +527,8 @@ public class SelectFormat extends Format{
      * @draft ICU 4.4
      */
     public int hashCode() {
-        if( parsedValues!=null){
-            return parsedValues.hashCode();
+        if( pattern!=null){
+            return pattern.hashCode();
         }
         return 0;
     }
@@ -550,5 +544,14 @@ public class SelectFormat extends Format{
         StringBuffer buf = new StringBuffer();
         buf.append("pattern='" + pattern + "'");
         return buf.toString();
+    }
+
+    private void readObject(ObjectInputStream in)
+        throws IOException, ClassNotFoundException {
+/* To Do
+        if ( pattern != null ){
+            applyPattern(pattern);
+        }
+*/
     }
 }
