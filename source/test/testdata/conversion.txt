@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2009, International Business Machines
+//   Copyright (C) 2003-2010, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -182,6 +182,8 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
+        /*
+         * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
         {
           "ISO-2022-CN-EXT",
           :bin{ 4f1b4f4f1b242b494f1b4f4f4f4f1b204f },
@@ -189,6 +191,7 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
+         */
         // Test ticket 5691: HZ with illegal tilde sequences.
         {
           "HZ",
@@ -510,6 +513,8 @@ conversion:table(nofallback) {
           :bin{ 1b2429410e4141 }, "\u4eae", :intvector{ 5 },
           :int{1}, :int{1}, "", ".", :bin{""}
         }
+        /*
+         * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
         // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
         {
           "ISO-2022-CN-EXT",
@@ -518,6 +523,7 @@ conversion:table(nofallback) {
           :intvector{ 9, 15, 19, 29, 33, 33, 35 },
           :int{1}, :int{1}, "", ".", :bin{""}
         }
+         */
 
         // illegal and unsupported escape sequences
         // SS2 without designator: illegal
@@ -887,6 +893,8 @@ conversion:table(nofallback) {
           :intvector{ 0, 2, 4, 4, 6, 9, 10, 11 },
           :int{1}, :int{0}, "", "?", :bin{""}
         }
+        /*
+         * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
         {
           "ISO-2022-CN-EXT",
           :bin{ 1b242b4d1b4f66791b242b4d1b4f216a },
@@ -894,6 +902,7 @@ conversion:table(nofallback) {
           :intvector{ 14 },
           :int{1}, :int{0}, "", "0", :bin{""}
         }
+         */
         {
           "*test1bmp",
           :bin{ 060a05 },
@@ -1425,6 +1434,8 @@ conversion:table(nofallback) {
           :int{1}, :int{1}, "", ".", ""
         }
 
+        /*
+         * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
         // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
         {
           "ISO-2022-CN-EXT",
@@ -1449,6 +1460,7 @@ conversion:table(nofallback) {
           :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4 },
           :int{0}, :int{1}, "", ".", ""
         }
+         */
 
         // windows-936 vs. ibm-1386
         {
@@ -1855,12 +1867,15 @@ conversion:table(nofallback) {
           "[\x0e\x0f\x1b\u4e29\uffe6-\U0010ffff]",
           :int{0}
         }
+        /*
+         * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
         {
           "ISO-2022-CN-EXT",
           "[\x00-\x0d\x10-\x1a\x1c-\x7f\u4e00-\u4e05\u9f98\ufe6b\u4e28-\u4e2b\U00020000\U00020003-\U00020005\U00029664]",
           "[\x0e\x0f\x1b\U00020001\U00020002\U0002a6d7-\U0010ffff]",
           :int{0}
         }
+         */
 
         // HZ
         {

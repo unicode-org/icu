@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -277,8 +277,11 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISO_2022_KR, "tsconv/nucnvtst/TestISO_2022_KR");
    addTest(root, &TestISO_2022_KR_1, "tsconv/nucnvtst/TestISO_2022_KR_1");
    addTest(root, &TestISO_2022_CN, "tsconv/nucnvtst/TestISO_2022_CN");
+   /*
+    * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
    addTest(root, &TestISO_2022_CN_EXT, "tsconv/nucnvtst/TestISO_2022_CN_EXT");
    addTest(root, &TestJitterbug915, "tsconv/nucnvtst/TestJitterbug915");
+    */
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
 #endif
 
