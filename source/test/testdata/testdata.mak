@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2009, International Business Machines Corporation
+#* Copyright (C) 1999-2010, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 #
@@ -14,14 +14,14 @@ TESTDT=$(TESTPKG)
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-# icu26_testtypes.res is there for cintltst/udatatst.c/TestSwapData()
-# I generated it with an ICU 2.6.1 build on Windows after removing
-# testincludeUTF (which made it large, unnecessarily for this test)
-# and CollationElements (which will not work with a newer swapper)
-# markus 2003nov19
+# old_l_testtypes.res is there for cintltst/udatatst.c/TestSwapData()
+# I generated it with an ICU 4.2.1 build on Linux after removing
+# testincludeUTF (which would make it large, unnecessarily for this test)
+# and renaming the collations element to avoid build CollationElements
+# (which will not work with a newer swapper)
+# markus 2010jan15
 
-# icu26e_testtypes.res is the same, but icuswapped to big-endian EBCDIC
-# markus 2003nov21
+# old_e_testtypes.res is the same, but icuswapped to big-endian EBCDIC
 
 # the following file has $(TEST_RES_SOURCE)
 !INCLUDE "$(TESTDATA)\tstfiles.mk"
@@ -31,8 +31,8 @@ TEST_RES_FILES = $(TEST_RES_SOURCE:.txt=.res)
 "$(TESTDATAOUT)\testdata.dat" : $(TEST_RES_FILES) "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\icuio.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\structLocale.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\sh.res" "$(TESTDATABLD)\sh_YU.res"  "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\te_IN_REVISED.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\iscii.res" "$(TESTDATABLD)\idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" "$(TESTDATABLD)\test.icu" "$(TESTDATABLD)\testtable32.res" "$(TESTDATABLD)\test1.cnv" "$(TESTDATABLD)\test1bmp.cnv" "$(TESTDATABLD)\test3.cnv" "$(TESTDATABLD)\test4.cnv" "$(TESTDATABLD)\test4x.cnv" "$(TESTDATABLD)\test5.cnv" "$(TESTDATABLD)\ibm9027.cnv" "$(TESTDATABLD)\nfscsi.spp" "$(TESTDATABLD)\nfscss.spp" "$(TESTDATABLD)\nfscis.spp" "$(TESTDATABLD)\nfsmxs.spp" "$(TESTDATABLD)\nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\$(TESTDT)\nam.typ"
-	@copy "$(TESTDATA)\icu26_testtypes.res" "$(TESTDATABLD)"
-	@copy "$(TESTDATA)\icu26e_testtypes.res" "$(TESTDATABLD)"
+	@copy "$(TESTDATA)\old_l_testtypes.res" "$(TESTDATABLD)"
+	@copy "$(TESTDATA)\old_e_testtypes.res" "$(TESTDATABLD)"
 	"$(ICUPBIN)\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 casing.res
 conversion.res
@@ -45,8 +45,8 @@ te.res
 te_IN.res
 te_IN_REVISED.res
 testtypes.res
-icu26_testtypes.res
-icu26e_testtypes.res
+old_l_testtypes.res
+old_e_testtypes.res
 testempty.res
 testaliases.res
 structLocale.res
