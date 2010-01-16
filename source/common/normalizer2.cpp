@@ -550,7 +550,11 @@ Normalizer2::getInstance(const char *packageName,
 
 UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(Normalizer2)
 
+U_NAMESPACE_END
+
 // C API ------------------------------------------------------------------- ***
+
+U_NAMESPACE_USE
 
 U_DRAFT const UNormalizer2 * U_EXPORT2
 unorm2_getInstance(const char *packageName,
@@ -738,7 +742,5 @@ unorm_getFCDTrieIndex(UChar32 &fcdHighStart, UErrorCode *pErrorCode) {
         return NULL;
     }
 }
-
-U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_NORMALIZATION

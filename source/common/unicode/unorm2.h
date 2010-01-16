@@ -117,7 +117,6 @@ typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer
 
 #if !UCONFIG_NO_NORMALIZATION
 
-U_NAMESPACE_BEGIN
 /**
  * Returns a UNormalizer2 instance which uses the specified data file
  * (packageName/name similar to ucnv_openPackage() and ures_open()/ResourceBundle)
@@ -346,8 +345,6 @@ unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c);
  */
 U_DRAFT UBool U_EXPORT2
 unorm2_isInert(const UNormalizer2 *norm2, UChar32 c);
-
-U_NAMESPACE_END
 
 #endif  /* !UCONFIG_NO_NORMALIZATION */
 #endif  /* __UNORM2_H__ */

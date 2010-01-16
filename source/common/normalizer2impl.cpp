@@ -1623,7 +1623,11 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
     return iter.codePointStart;
 }
 
+U_NAMESPACE_END
+
 // Normalizer2 data swapping ----------------------------------------------- ***
+
+U_NAMESPACE_USE
 
 U_CAPI int32_t U_EXPORT2
 unorm2_swap(const UDataSwapper *ds,
@@ -1721,7 +1725,5 @@ unorm2_swap(const UDataSwapper *ds,
 
     return headerSize+size;
 }
-
-U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_NORMALIZATION

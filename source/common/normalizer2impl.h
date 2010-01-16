@@ -495,6 +495,8 @@ private:
     Normalizer2Factory();  // No instantiation.
 };
 
+U_NAMESPACE_END
+
 U_CAPI int32_t U_EXPORT2
 unorm2_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
@@ -596,8 +598,6 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
     }
     return fcd;
 }
-
-U_NAMESPACE_END
 
 #endif  /* !UCONFIG_NO_NORMALIZATION */
 #endif  /* __NORMALIZER2IMPL_H__ */
