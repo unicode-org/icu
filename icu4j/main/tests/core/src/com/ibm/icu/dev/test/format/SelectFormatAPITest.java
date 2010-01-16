@@ -82,6 +82,7 @@ public class SelectFormatAPITest extends TestFmwk {
             errln("Exception encountered in TestEquals 2 " + e.getMessage());
         }
 
+/* To Do
         //Check equality for 2 objects  
         try {
             Object selFmt5 = new SelectFormat();
@@ -93,6 +94,7 @@ public class SelectFormatAPITest extends TestFmwk {
         } catch (Exception e){
             errln("Exception encountered in TestEquals 3" + e.getMessage());
         }
+*/
     }
 
     /**
