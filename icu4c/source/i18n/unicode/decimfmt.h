@@ -42,20 +42,6 @@ union UHashTok;
 
 U_NAMESPACE_BEGIN
 
-U_CDECL_BEGIN
-
-/**
- * @internal ICU 4.2
- */
-UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) ;
-
-/**
- * @internal ICU 4.2
- */
-UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) ;
-
-U_CDECL_END
-
 class DigitList;
 class ChoiceFormat;
 class CurrencyPluralInfo;
@@ -1810,8 +1796,6 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
-    friend UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
-    friend UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
     DecimalFormat(); // default constructor not implemented
 
@@ -2121,6 +2105,7 @@ private:
      * and plural currency style. And the patterns are set through applyPattern.
      */
     // TODO: innerclass?
+	/* This is not needed in the class declaration, so it is moved into decimfmp.cpp
     struct AffixPatternsForCurrency : public UMemory {
         // negative prefix pattern
         UnicodeString negPrefixPatternForCurrency;
@@ -2144,11 +2129,13 @@ private:
             patternType = type;
         }
     };
+    */
         
     /* affix for currency formatting when the currency sign in the pattern
      * equals to 3, such as the pattern contains 3 currency sign or 
      * the formatter style is currency plural format style.
      */
+	/* This is not needed in the class declaration, so it is moved into decimfmp.cpp
     struct AffixesForCurrency : public UMemory {
         // negative prefix
         UnicodeString negPrefixForCurrency;
@@ -2171,6 +2158,7 @@ private:
             posSuffixForCurrency = posSuffix;
         }
     };
+    */
 
     // Affix pattern set for currency.
     // It is a set of AffixPatternsForCurrency,
