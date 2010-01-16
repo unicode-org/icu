@@ -59,7 +59,7 @@ typedef struct ULocaleDisplayNames ULocaleDisplayNames;
  * @return a ULocaleDisplayNames instance 
  * @draft ICU 4.4
  */
-U_DRAFT ULocaleDisplayNames * U_EXPORT2
+U_DRAFT const ULocaleDisplayNames * U_EXPORT2
 uldn_open(const char * locale,
 	  UDialectHandling dialectHandling,
 	  UErrorCode *pErrorCode);
