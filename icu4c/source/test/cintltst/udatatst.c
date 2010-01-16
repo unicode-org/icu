@@ -1255,10 +1255,10 @@ static const struct {
     /* Test a 32-bit key table. This is large. */
     {"*testtable32",             "res", ures_swap},
 
-    /* ICU 2.6 resource bundle - data format 1.0, without indexes[] (little-endian ASCII) */
-    {"*icu26_testtypes",         "res", ures_swap},
+    /* ICU 4.2 resource bundle - data format 1.2 (little-endian ASCII) */
+    {"*old_l_testtypes",         "res", ures_swap},
     /* same for big-endian EBCDIC */
-    {"*icu26e_testtypes",        "res", ures_swap},
+    {"*old_e_testtypes",         "res", ures_swap},
 
 #if !UCONFIG_NO_COLLATION
     /* standalone collation data files */

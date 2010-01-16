@@ -1913,8 +1913,6 @@ icu4c/source/test/testdata/conversion.txt svneol=native#text/plain
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml
 icu4c/source/test/testdata/default.txt svneol=native#text/plain
 icu4c/source/test/testdata/format.txt svneol=native#text/plain
-icu4c/source/test/testdata/icu26_testtypes.res -text
-icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/icuio.txt svneol=native#text/plain
 icu4c/source/test/testdata/idna_conf.txt svneol=native#text/plain
 icu4c/source/test/testdata/idna_rules.txt svneol=native#text/plain
@@ -1927,6 +1925,8 @@ icu4c/source/test/testdata/nfs4_cs_prep_ci.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_cs_prep_cs.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_mixed_prep_p.txt svneol=native#text/plain
 icu4c/source/test/testdata/nfs4_mixed_prep_s.txt svneol=native#text/plain
+icu4c/source/test/testdata/old_e_testtypes.res -text
+icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/ra.txt svneol=native#text/plain
 icu4c/source/test/testdata/rbbitst.txt svneol=native#text/plain
 icu4c/source/test/testdata/re_tests.txt svneol=native#text/plain
