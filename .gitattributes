@@ -54,7 +54,12 @@ icu4c/source/data/in/nfkc.nrm -text
 icu4c/source/data/in/nfkc_cf.nrm -text
 icu4c/source/data/in/unorm.icu -text
 icu4c/source/data/locales/pool.res -text
+icu4c/source/i18n/selfmt.cpp -text
+icu4c/source/i18n/selfmtimpl.h -text
+icu4c/source/i18n/unicode/selfmt.h -text
 icu4c/source/samples/ucnv/data02.bin -text
+icu4c/source/test/intltest/selfmts.cpp -text
+icu4c/source/test/intltest/selfmts.h -text
 icu4c/source/test/perf/README -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
