@@ -1363,75 +1363,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\fphdlimp.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\fphdlimp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fpositer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\unicode\fpositer.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\decContext.c"
 				>
 			</File>
 			<File
 				RelativePath=".\decContext.h"
-				>
-			</File>
-			<File
-				RelativePath=".\decNumber.c"
-				>
-			</File>
-			<File
-				RelativePath=".\decNumber.h"
-				>
-			</File>
-			<File
-				RelativePath=".\decNumberLocal.h"
 				>
 			</File>
 			<File
@@ -1477,6 +1413,18 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\decNumber.c"
+				>
+			</File>
+			<File
+				RelativePath=".\decNumber.h"
+				>
+			</File>
+			<File
+				RelativePath=".\decNumberLocal.h"
+				>
 			</File>
 			<File
 				RelativePath=".\digitlst.cpp"
@@ -1855,6 +1803,58 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\fphdlimp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fphdlimp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fpositer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\fpositer.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\gregocal.cpp"
 				>
 			</File>
@@ -1941,46 +1941,6 @@
 			<File
 				RelativePath=".\locdspnm.cpp"
 				>
-			</File>
-			<File
-				RelativePath=".\unicode\uldnames.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\unicode\locdspnm.h"
@@ -2519,6 +2479,50 @@
 				>
 			</File>
 			<File
+				RelativePath=".\selfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\selfmt.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\simpletz.cpp"
 				>
 			</File>
@@ -3020,6 +3024,46 @@
 			</File>
 			<File
 				RelativePath=".\unicode\udatpg.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\uldnames.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
