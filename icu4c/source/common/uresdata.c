@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2009, International Business Machines Corporation        *
+* Copyright (C) 1999-2010, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -669,144 +669,7 @@ static const UChar gCollationBinKey[]={
 };
 
 /*
- * preflight one resource item and set bottom and top values;
- * length, bottom, and top count Resource item offsets (4 bytes each), not bytes
- *
- * Preflighting is only necessary for formatVersion 1.0:
- * 1.1 adds these values to the data format.
- */
-static void
-ures_preflightResource(const UDataSwapper *ds,
-                       const Resource *inBundle, int32_t length,
-                       Resource res,
-                       int32_t *pBottom, int32_t *pTop, int32_t *pMaxTableLength,
-                       UErrorCode *pErrorCode) {
-    const Resource *p;
-    int32_t offset;
-
-    if(res==0 || RES_GET_TYPE(res)==URES_INT) {
-        /* empty string or integer, nothing to do */
-        return;
-    }
-
-    /* all other types use an offset to point to their data */
-    offset=(int32_t)RES_GET_OFFSET(res);
-    if(0<=length && length<=offset) {
-        udata_printError(ds, "ures_preflightResource(res=%08x) resource offset exceeds bundle length %d\n",
-                         res, length);
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return;
-    } else if(offset<*pBottom) {
-        *pBottom=offset;
-    }
-    p=inBundle+offset;
-
-    switch(RES_GET_TYPE(res)) {
-    case URES_ALIAS:
-        /* physically same value layout as string, fall through */
-    case URES_STRING:
-        /* top=offset+1+(string length +1)/2 rounded up */
-        offset+=1+((udata_readInt32(ds, (int32_t)*p)+1)+1)/2;
-        break;
-    case URES_BINARY:
-        /* top=offset+1+(binary length)/4 rounded up */
-        offset+=1+(udata_readInt32(ds, (int32_t)*p)+3)/4;
-        break;
-    case URES_TABLE:
-    case URES_TABLE32:
-        {
-            Resource item;
-            int32_t i, count;
-
-            if(RES_GET_TYPE(res)==URES_TABLE) {
-                /* get table item count */
-                const uint16_t *pKey16=(const uint16_t *)p;
-                count=ds->readUInt16(*pKey16++);
-
-                /* top=((1+ table item count)/2 rounded up)+(table item count) */
-                offset+=((1+count)+1)/2;
-            } else {
-                /* get table item count */
-                const int32_t *pKey32=(const int32_t *)p;
-                count=udata_readInt32(ds, *pKey32++);
-
-                /* top=(1+ table item count)+(table item count) */
-                offset+=1+count;
-            }
-
-            if(count>*pMaxTableLength) {
-                *pMaxTableLength=count;
-            }
-
-            p=inBundle+offset; /* pointer to table resources */
-            offset+=count;
-
-            /* recurse */
-            if(offset<=length) {
-                for(i=0; i<count; ++i) {
-                    item=ds->readUInt32(*p++);
-                    ures_preflightResource(ds, inBundle, length, item,
-                                           pBottom, pTop, pMaxTableLength,
-                                           pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        udata_printError(ds, "ures_preflightResource(table res=%08x)[%d].recurse(%08x) failed\n",
-                                         res, i, item);
-                        break;
-                    }
-                }
-            }
-        }
-        break;
-    case URES_ARRAY:
-        {
-            Resource item;
-            int32_t i, count;
-
-            /* top=offset+1+(array length) */
-            count=udata_readInt32(ds, (int32_t)*p++);
-            offset+=1+count;
-
-            /* recurse */
-            if(offset<=length) {
-                for(i=0; i<count; ++i) {
-                    item=ds->readUInt32(*p++);
-                    ures_preflightResource(ds, inBundle, length, item,
-                                           pBottom, pTop, pMaxTableLength,
-                                           pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        udata_printError(ds, "ures_preflightResource(array res=%08x)[%d].recurse(%08x) failed\n",
-                                         res, i, item);
-                        break;
-                    }
-                }
-            }
-        }
-        break;
-    case URES_INT_VECTOR:
-        /* top=offset+1+(vector length) */
-        offset+=1+udata_readInt32(ds, (int32_t)*p);
-        break;
-    default:
-        /* also catches RES_BOGUS */
-        udata_printError(ds, "ures_preflightResource(res=%08x) unknown resource type\n", res);
-        *pErrorCode=U_UNSUPPORTED_ERROR;
-        break;
-    }
-
-    if(U_FAILURE(*pErrorCode)) {
-        /* nothing to do */
-    } else if(0<=length && length<offset) {
-        udata_printError(ds, "ures_preflightResource(res=%08x) resource limit exceeds bundle length %d\n",
-                         res, length);
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    } else if(offset>*pTop) {
-        *pTop=offset;
-    }
-}
-
-/*
  * swap one resource item
- * since preflighting succeeded, we need not check offsets against length any more
  */
 static void
 ures_swapResource(const UDataSwapper *ds,
@@ -1094,6 +957,8 @@ ures_swap(const UDataSwapper *ds,
     int32_t resort[STACK_ROW_CAPACITY];
     TempTable tempTable;
 
+    const int32_t *inIndexes;
+
     /* the following integers count Resource item offsets (4 bytes each), not bytes */
     int32_t bundleLength, indexLength, keysBottom, keysTop, resBottom, top;
 
@@ -1110,12 +975,13 @@ ures_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2)
+        ((pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]>=1) ||  /* formatVersion 1.1+ or 2.x */
+         pInfo->formatVersion[0]==2)
     )) {
-        udata_printError(ds, "ures_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not a resource bundle\n",
+        udata_printError(ds, "ures_swap(): data format %02x.%02x.%02x.%02x (format version %02x.%02x) is not a resource bundle\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
                          pInfo->dataFormat[2], pInfo->dataFormat[3],
-                         pInfo->formatVersion[0]);
+                         pInfo->formatVersion[0], pInfo->formatVersion[1]);
         *pErrorCode=U_UNSUPPORTED_ERROR;
         return 0;
     }
@@ -1128,9 +994,7 @@ ures_swap(const UDataSwapper *ds,
         bundleLength=(length-headerSize)/4;
 
         /* formatVersion 1.1 must have a root item and at least 5 indexes */
-        if( bundleLength<
-                ((pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]==0) ? 1 : 1+5)
-        ) {
+        if(bundleLength<(1+5)) {
             udata_printError(ds, "ures_swap(): too few bytes (%d after header) for a resource bundle\n",
                              length-headerSize);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -1141,55 +1005,35 @@ ures_swap(const UDataSwapper *ds,
     inBundle=(const Resource *)((const char *)inData+headerSize);
     rootRes=ds->readUInt32(*inBundle);
 
-    if(pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]==0) {
-        /* preflight to get the bottom, top and maxTableLength values */
-        indexLength=0;
-        keysBottom=1; /* just past root */
-        keysTop=0x7fffffff;
-        top=maxTableLength=0;
-        ures_preflightResource(ds, inBundle, bundleLength, rootRes,
-                               &keysTop, &top, &maxTableLength,
-                               pErrorCode);
-        resBottom=keysTop;
-        tempTable.localKeyLimit=keysTop<<2;
-        if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_preflightResource(root res=%08x) failed\n",
-                             rootRes);
-            return 0;
-        }
+    /* formatVersion 1.1 adds the indexes[] array */
+    inIndexes=(const int32_t *)(inBundle+1);
+
+    indexLength=udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH])&0xff;
+    if(indexLength<=URES_INDEX_MAX_TABLE_LENGTH) {
+        udata_printError(ds, "ures_swap(): too few indexes for a 1.1+ resource bundle\n");
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    keysBottom=1+indexLength;
+    keysTop=udata_readInt32(ds, inIndexes[URES_INDEX_KEYS_TOP]);
+    if(indexLength>URES_INDEX_16BIT_TOP) {
+        resBottom=udata_readInt32(ds, inIndexes[URES_INDEX_16BIT_TOP]);
     } else {
-        /* formatVersion 1.1 adds the indexes[] array */
-        const int32_t *inIndexes;
+        resBottom=keysTop;
+    }
+    top=udata_readInt32(ds, inIndexes[URES_INDEX_BUNDLE_TOP]);
+    maxTableLength=udata_readInt32(ds, inIndexes[URES_INDEX_MAX_TABLE_LENGTH]);
 
-        inIndexes=(const int32_t *)(inBundle+1);
-
-        indexLength=udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH])&0xff;
-        if(indexLength<=URES_INDEX_MAX_TABLE_LENGTH) {
-            udata_printError(ds, "ures_swap(): too few indexes for a 1.1+ resource bundle\n");
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
-        }
-        keysBottom=1+indexLength;
-        keysTop=udata_readInt32(ds, inIndexes[URES_INDEX_KEYS_TOP]);
-        if(indexLength>URES_INDEX_16BIT_TOP) {
-            resBottom=udata_readInt32(ds, inIndexes[URES_INDEX_16BIT_TOP]);
-        } else {
-            resBottom=keysTop;
-        }
-        top=udata_readInt32(ds, inIndexes[URES_INDEX_BUNDLE_TOP]);
-        maxTableLength=udata_readInt32(ds, inIndexes[URES_INDEX_MAX_TABLE_LENGTH]);
-
-        if(0<=bundleLength && bundleLength<top) {
-            udata_printError(ds, "ures_swap(): resource top %d exceeds bundle length %d\n",
-                             top, bundleLength);
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
-        }
-        if(keysTop>(1+indexLength)) {
-            tempTable.localKeyLimit=keysTop<<2;
-        } else {
-            tempTable.localKeyLimit=0;
-        }
+    if(0<=bundleLength && bundleLength<top) {
+        udata_printError(ds, "ures_swap(): resource top %d exceeds bundle length %d\n",
+                         top, bundleLength);
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    if(keysTop>(1+indexLength)) {
+        tempTable.localKeyLimit=keysTop<<2;
+    } else {
+        tempTable.localKeyLimit=0;
     }
 
     if(length>=0) {
