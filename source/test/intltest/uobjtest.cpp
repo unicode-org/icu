@@ -1,7 +1,8 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************/
 
 #include "uobjtest.h"
@@ -192,6 +193,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/parsepos.h"
 #include "unicode/plurrule.h"
 #include "unicode/plurfmt.h"
+#include "unicode/selfmt.h"
 #include "unicode/rbbi.h"
 #include "unicode/rbnf.h"
 #include "unicode/regex.h"
@@ -258,6 +260,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
     TESTCLASSID_CTOR(PluralFormat, (status));
     TESTCLASSID_CTOR(PluralRules, (status));
+    TESTCLASSID_CTOR(SelectFormat, (status));
     TESTCLASSID_FACTORY(DateTimePatternGenerator, DateTimePatternGenerator::createInstance(status));
     TESTCLASSID_FACTORY(RelativeDateFormat, DateFormat::createDateInstance(DateFormat::kFullRelative, Locale::getUS()));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));

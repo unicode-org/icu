@@ -1,6 +1,7 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
- * Corporation and others. All Rights Reserved.
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
  *
@@ -24,8 +25,13 @@
 #include "unicode/msgfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/choicfmt.h"
+#include "unicode/selfmt.h"
 #include "unicode/gregocal.h"
 #include <stdio.h>
+
+#define E_WITH_ACUTE ((UChar)0x00E9)
+#define A_WITH_GRAVE ((UChar)0x00E0)
+static const char E_ACCENTED[]={E_WITH_ACUTE,0};
 
 void
 TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
@@ -54,6 +60,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(20,testAutoQuoteApostrophe);
         TESTCASE(21,testMsgFormatPlural);
         TESTCASE(22,testCoverage);
+        TESTCASE(23,testMsgFormatSelect);
         default: name = ""; break;
     }
 }
@@ -611,6 +618,207 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
     delete msgFmt;
 }
 
+void TestMessageFormat::internalFormat(MessageFormat* msgFmt , 
+        Formattable* args , int32_t numOfArgs , 
+        UnicodeString expected ,char* errMsg)
+{
+        UnicodeString result;
+        FieldPosition ignore(FieldPosition::DONT_CARE);
+        UErrorCode status = U_ZERO_ERROR;
+
+        //Format with passed arguments
+        msgFmt->format( args , numOfArgs , result, ignore, status);
+        if (U_FAILURE(status)) {
+            errln( "%serror while formatting with ErrorCode as %s" ,errMsg, u_errorName(status) );
+        }
+        //Compare expected with obtained result
+        if ( result!= expected ) {
+            UnicodeString err = UnicodeString(errMsg);
+            err+= UnicodeString(":Unexpected Result \n Expected: " + expected + "\n Obtained: " + result);
+            errln(err);
+        }
+}
+
+MessageFormat* TestMessageFormat::internalCreate(
+        UnicodeString pattern ,Locale locale ,UErrorCode &status ,  char* errMsg)
+{
+    //Create the MessageFormat with simple SelectFormat
+    MessageFormat* msgFmt = new MessageFormat(pattern, locale, status);
+    if (U_FAILURE(status)) {
+        errln( "%serror while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
+        logln(UnicodeString("TestMessageFormat::testMsgFormatSelect #1 with error code ")+(int32_t)status);
+        return NULL;
+    }
+    return msgFmt;
+}
+
+void TestMessageFormat::testMsgFormatSelect(/* char* par */)
+{
+    logln("running TestMessageFormat::testMsgFormatSelect");
+
+    UErrorCode err = U_ZERO_ERROR;
+    //French Pattern
+    UnicodeString t1("{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.");
+
+    err = U_ZERO_ERROR;
+    //Create the MessageFormat with simple French pattern
+    MessageFormat* msgFmt1 = internalCreate(t1.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t1");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"Kirti","female"};    
+        Formattable testArgs11[] = {"Victor","other"};    
+        Formattable testArgs12[] = {"Ash","unknown"};    
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12};    
+        UnicodeString exp[] = {
+            "Kirti est all\\u00E9e \\u00E0 Paris." ,
+            "Victor est all\\u00E9 \\u00E0 Paris.", 
+            "Ash est all\\u00E9 \\u00E0 Paris."}; 
+        //Format
+        for( int i=0; i< 3; i++){
+            internalFormat( msgFmt1 , testArgs[i], 2, exp[i].unescape() ,(char*)"From TestMessageFormat::testSelectFormat format t1");
+        }
+    }
+    delete msgFmt1;
+
+    //Quoted French Pattern
+    UnicodeString t2("{0} est {1, select, female {all\\u00E9e c''est} other {all\\u00E9 c''est}} \\u00E0 Paris.");
+    err = U_ZERO_ERROR;
+    //Create the MessageFormat with Quoted French pattern 
+    MessageFormat* msgFmt2 = internalCreate(t2.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t2");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"Kirti","female"};    
+        Formattable testArgs11[] = {"Victor","other"};    
+        Formattable testArgs12[] = {"Ash","male"};    
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12};    
+        UnicodeString exp[] = {
+            "Kirti est all\\u00E9e c'est \\u00E0 Paris." ,
+            "Victor est all\\u00E9 c'est \\u00E0 Paris.", 
+            "Ash est all\\u00E9 c'est \\u00E0 Paris."}; 
+        //Format
+        for( int i=0; i< 3; i++){
+            internalFormat( msgFmt2 , testArgs[i], 2, exp[i].unescape() ,(char*)"From TestMessageFormat::testSelectFormat format t2");
+        }
+    }
+    delete msgFmt2;
+    
+    //English Pattern
+    UnicodeString t3("{0, select , male {MALE FR company} female {FEMALE FR company} other {FR otherValue}} published new books.");
+    err = U_ZERO_ERROR;
+    //Create the MessageFormat with English pattern 
+    MessageFormat* msgFmt3 = internalCreate(t3, Locale("en"),err,(char*)"From TestMessageFormat::TestSelectFormat create t3");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"female"};
+        Formattable testArgs11[] = {"other"};
+        Formattable testArgs12[] = {"male"};
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12};
+        UnicodeString exp[] = {
+            "FEMALE FR company published new books." ,
+            "FR otherValue published new books.",
+            "MALE FR company published new books."};
+        //Format
+        for( int i=0; i< 3; i++){
+            internalFormat( msgFmt3 , testArgs[i], 1, exp[i] ,(char*)"From TestMessageFormat::testSelectFormat format t3");
+        }
+    }
+    delete msgFmt3;
+
+    //Nested patterns with plural, number ,choice ,select format etc.
+    //Select Format with embedded number format
+    UnicodeString t4("{0} est {1, select, female {{2,number,integer} all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.");
+    //Create the MessageFormat with Select Format with embedded number format (nested pattern)
+    MessageFormat* msgFmt4 = internalCreate(t4.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t4");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"Kirti","female",6};    
+        Formattable testArgs11[] = {"Kirti","female",100.100};    
+        Formattable testArgs12[] = {"Kirti","other",6};    
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12};
+        UnicodeString exp[] = {
+            "Kirti est 6 all\\u00E9e \\u00E0 Paris." ,
+            "Kirti est 100 all\\u00E9e \\u00E0 Paris.",
+            "Kirti est all\\u00E9 \\u00E0 Paris."};
+        //Format
+        for( int i=0; i< 3; i++){
+            internalFormat( msgFmt4 , testArgs[i], 3, exp[i].unescape() ,(char*)"From TestMessageFormat::testSelectFormat format t4");
+        }
+    }
+    delete msgFmt4;
+
+    err = U_ZERO_ERROR;
+    //Plural format with embedded select format
+    UnicodeString t5("{0} {1, plural, one {est {2, select, female {all\\u00E9e} other {all\\u00E9}}} other {sont {2, select, female {all\\u00E9es} other {all\\u00E9s}}}} \\u00E0 Paris.");
+    err = U_ZERO_ERROR;
+    //Create the MessageFormat with Plural format with embedded select format(nested pattern)
+    MessageFormat* msgFmt5 = internalCreate(t5.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t5");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"Kirti",6,"female"};  
+        Formattable testArgs11[] = {"Kirti",1,"female"};  
+        Formattable testArgs12[] = {"Ash",1,"other"};
+        Formattable testArgs13[] = {"Ash",5,"other"};  
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12,testArgs13};
+        UnicodeString exp[] = {
+            "Kirti sont all\\u00E9es \\u00E0 Paris." ,
+            "Kirti est all\\u00E9e \\u00E0 Paris.",
+            "Ash est all\\u00E9 \\u00E0 Paris.",
+            "Ash sont all\\u00E9s \\u00E0 Paris."};
+        //Format
+        for( int i=0; i< 4; i++){
+            internalFormat( msgFmt5 , testArgs[i], 3, exp[i].unescape() ,(char*)"From TestMessageFormat::testSelectFormat format t5");
+        }
+    }
+    delete msgFmt5;
+
+    err = U_ZERO_ERROR;
+    //Select, plural, and number formats heavily nested 
+    UnicodeString t6("{0} und {1, select, female {{2, plural, one {{3, select, female {ihre Freundin} other {ihr Freund}} } other {ihre {2, number, integer} {3, select, female {Freundinnen} other {Freunde}} } }} other{{2, plural, one {{3, select, female {seine Freundin} other {sein Freund}}} other {seine {2, number, integer} {3, select, female {Freundinnen} other {Freunde}}}}} } gingen nach Paris.");
+    //Create the MessageFormat with Select, plural, and number formats heavily nested  
+    MessageFormat* msgFmt6 = internalCreate(t6, Locale("de"),err,(char*)"From TestMessageFormat::TestSelectFormat create t6");
+    if (!U_FAILURE(err)) {
+        //Arguments 
+        Formattable testArgs10[] = {"Kirti","other",1,"other"}; 
+        Formattable testArgs11[] = {"Kirti","other",6,"other"};
+        Formattable testArgs12[] = {"Kirti","other",1,"female"};
+        Formattable testArgs13[] = {"Kirti","other",3,"female"};
+        Formattable testArgs14[] = {"Kirti","female",1,"female"};
+        Formattable testArgs15[] = {"Kirti","female",5,"female"};
+        Formattable testArgs16[] = {"Kirti","female",1,"other"};
+        Formattable testArgs17[] = {"Kirti","female",5,"other"};
+        Formattable testArgs18[] = {"Kirti","mixed",1,"mixed"};
+        Formattable testArgs19[] = {"Kirti","mixed",1,"other"};
+        Formattable testArgs20[] = {"Kirti","female",1,"mixed"};
+        Formattable testArgs21[] = {"Kirti","mixed",5,"mixed"};
+        Formattable testArgs22[] = {"Kirti","mixed",5,"other"};
+        Formattable testArgs23[] = {"Kirti","female",5,"mixed"};
+        Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12,testArgs13,
+                                   testArgs14,testArgs15,testArgs16,testArgs17,
+                                   testArgs18,testArgs19,testArgs20,testArgs21,
+                                   testArgs22,testArgs23 };
+        UnicodeString exp[] = {
+            "Kirti und sein Freund gingen nach Paris." ,
+            "Kirti und seine 6 Freunde gingen nach Paris." ,
+            "Kirti und seine Freundin gingen nach Paris.",
+            "Kirti und seine 3 Freundinnen gingen nach Paris.",
+            "Kirti und ihre Freundin  gingen nach Paris.",
+            "Kirti und ihre 5 Freundinnen  gingen nach Paris.",
+            "Kirti und ihr Freund  gingen nach Paris.",
+            "Kirti und ihre 5 Freunde  gingen nach Paris.",
+            "Kirti und sein Freund gingen nach Paris.", 
+            "Kirti und sein Freund gingen nach Paris.", 
+            "Kirti und ihr Freund  gingen nach Paris.",
+            "Kirti und seine 5 Freunde gingen nach Paris." ,
+            "Kirti und seine 5 Freunde gingen nach Paris." ,
+            "Kirti und ihre 5 Freunde  gingen nach Paris."
+        };
+        //Format
+        for( int i=0; i< 14; i++){
+            internalFormat( msgFmt6 , testArgs[i], 4, exp[i] ,(char*)"From TestMessageFormat::testSelectFormat format t6");
+        }
+    }
+    delete msgFmt6;
+}
 
 //---------------------------------
 //  API Tests
