@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2009, International Business Machines
+ *   Copyright (C) 1997-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -342,7 +342,7 @@ public:
     /**
      * Formats a UDate into a date/time string.
      *
-     * @param date      UDate to be formatted into a date/time string.
+     * @param date      UDate to be formatted into a date/time string.
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @param posIter   On return, can be used to iterate over positions
