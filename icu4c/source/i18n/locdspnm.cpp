@@ -501,7 +501,11 @@ LocaleDisplayNames::createInstance(const Locale& locale,
   return new LocaleDisplayNamesImpl(locale, dialectHandling);
 }
 
+U_NAMESPACE_END
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+U_NAMESPACE_USE
 
 U_DRAFT const ULocaleDisplayNames * U_EXPORT2
 uldn_open(const char * locale,
@@ -674,7 +678,5 @@ uldn_keyValueDisplayName(const ULocaleDisplayNames *ldn,
   ((const LocaleDisplayNames *)ldn)->keyValueDisplayName(key, value, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
-
-U_NAMESPACE_END
 
 #endif
