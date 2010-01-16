@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation and
+* Copyright (C) 2008-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -575,15 +575,15 @@ U_CDECL_BEGIN
  * @param val2  the other value in comparison
  * @return      TRUE if 2 values are the same, FALSE otherwise
  */
-UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2);
+static UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2);
 
-UBool 
+static UBool 
 U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const UnicodeString* pattern1 = (UnicodeString*)val1.pointer;
     const UnicodeString* pattern2 = (UnicodeString*)val2.pointer;
     UBool ret = TRUE;
     int8_t i;
-    for ( i = 0; i < DateIntervalInfo::kIPI_MAX_INDEX && ret == TRUE; ++i ) {
+    for ( i = 0; i < DateIntervalInfo::kMaxIntervalPatternIndex && ret == TRUE; ++i ) {
         ret = (pattern1[i] == pattern2[i]);
     }
     return ret;

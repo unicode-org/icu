@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and
+ * Copyright (C) 2008-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -35,16 +35,6 @@ union UHashTok;
 
 
 U_NAMESPACE_BEGIN
-
-U_CDECL_BEGIN 
-
-/**
- * @internal ICU 4.0
- */
-UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) ;
-
-U_CDECL_END 
-
 
 /**
  * DateIntervalInfo is a public class for encapsulating localizable
@@ -354,8 +344,6 @@ private:
      */
     friend class DateIntervalFormat;
 
-    friend UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) ;
-
     /**
      * Following is for saving the interval patterns.
      * We only support interval patterns on
@@ -372,6 +360,16 @@ private:
         kIPI_MINUTE,
         kIPI_MAX_INDEX
     };
+public:
+    /**
+     * Max index for stored interval patterns
+     * @internal ICU 4.4 
+     */
+     enum {
+     	kMaxIntervalPatternIndex = kIPI_MAX_INDEX
+     };
+private:
+
 
     /** 
      * Initialize the DateIntervalInfo from locale

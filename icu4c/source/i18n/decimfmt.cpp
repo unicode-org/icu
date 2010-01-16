@@ -65,25 +65,83 @@
 
 
 U_NAMESPACE_BEGIN
+
+/* For currency parsing purose,
+ * Need to remember all prefix patterns and suffix patterns of 
+ * every currency format pattern, 
+ * including the pattern of default currecny style
+ * and plural currency style. And the patterns are set through applyPattern.
+ */
+struct AffixPatternsForCurrency : public UMemory {
+	// negative prefix pattern
+	UnicodeString negPrefixPatternForCurrency;
+	// negative suffix pattern
+	UnicodeString negSuffixPatternForCurrency;
+	// positive prefix pattern
+	UnicodeString posPrefixPatternForCurrency;
+	// positive suffix pattern
+	UnicodeString posSuffixPatternForCurrency;
+	int8_t patternType;
+	
+	AffixPatternsForCurrency(const UnicodeString& negPrefix, 
+							 const UnicodeString& negSuffix,
+							 const UnicodeString& posPrefix,
+							 const UnicodeString& posSuffix,
+							 int8_t type) {
+		negPrefixPatternForCurrency = negPrefix;
+		negSuffixPatternForCurrency = negSuffix;
+		posPrefixPatternForCurrency = posPrefix;
+		posSuffixPatternForCurrency = posSuffix;
+		patternType = type;
+	}
+};
+
+/* affix for currency formatting when the currency sign in the pattern
+ * equals to 3, such as the pattern contains 3 currency sign or 
+ * the formatter style is currency plural format style.
+ */
+struct AffixesForCurrency : public UMemory {
+	// negative prefix
+	UnicodeString negPrefixForCurrency;
+	// negative suffix
+	UnicodeString negSuffixForCurrency;
+	// positive prefix
+	UnicodeString posPrefixForCurrency;
+	// positive suffix
+	UnicodeString posSuffixForCurrency;
+	
+	int32_t formatWidth;
+
+	AffixesForCurrency(const UnicodeString& negPrefix,
+					   const UnicodeString& negSuffix,
+					   const UnicodeString& posPrefix,
+					   const UnicodeString& posSuffix) {
+		negPrefixForCurrency = negPrefix;
+		negSuffixForCurrency = negSuffix;
+		posPrefixForCurrency = posPrefix;
+		posSuffixForCurrency = posSuffix;
+	}
+};
+
 U_CDECL_BEGIN
 
 /**
  * @internal ICU 4.2
  */
-UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
+static UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
 
 /**
  * @internal ICU 4.2
  */
-UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
+static UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
 
-UBool
+static UBool
 U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) {
-    const DecimalFormat::AffixesForCurrency* affix_1 = 
-        (DecimalFormat::AffixesForCurrency*)val1.pointer;
-    const DecimalFormat::AffixesForCurrency* affix_2 = 
-        (DecimalFormat::AffixesForCurrency*)val2.pointer;
+    const AffixesForCurrency* affix_1 = 
+        (AffixesForCurrency*)val1.pointer;
+    const AffixesForCurrency* affix_2 = 
+        (AffixesForCurrency*)val2.pointer;
     return affix_1->negPrefixForCurrency == affix_2->negPrefixForCurrency &&
            affix_1->negSuffixForCurrency == affix_2->negSuffixForCurrency &&
            affix_1->posPrefixForCurrency == affix_2->posPrefixForCurrency &&
@@ -91,12 +149,12 @@ U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) {
 }
 
 
-UBool
+static UBool
 U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) {
-    const DecimalFormat::AffixPatternsForCurrency* affix_1 = 
-        (DecimalFormat::AffixPatternsForCurrency*)val1.pointer;
-    const DecimalFormat::AffixPatternsForCurrency* affix_2 = 
-        (DecimalFormat::AffixPatternsForCurrency*)val2.pointer;
+    const AffixPatternsForCurrency* affix_1 = 
+        (AffixPatternsForCurrency*)val1.pointer;
+    const AffixPatternsForCurrency* affix_2 = 
+        (AffixPatternsForCurrency*)val2.pointer;
     return affix_1->negPrefixPatternForCurrency == 
            affix_2->negPrefixPatternForCurrency &&
            affix_1->negSuffixPatternForCurrency == 
