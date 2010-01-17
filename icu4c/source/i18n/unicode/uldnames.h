@@ -59,7 +59,7 @@ typedef struct ULocaleDisplayNames ULocaleDisplayNames;
  * @return a ULocaleDisplayNames instance 
  * @draft ICU 4.4
  */
-U_DRAFT const ULocaleDisplayNames * U_EXPORT2
+U_DRAFT ULocaleDisplayNames * U_EXPORT2
 uldn_open(const char * locale,
 	  UDialectHandling dialectHandling,
 	  UErrorCode *pErrorCode);
@@ -82,7 +82,7 @@ uldn_close(ULocaleDisplayNames *ldn);
  * @draft ICU 4.4
  */
 U_DRAFT const char * U_EXPORT2
-uldn_getLocale(const ULocaleDisplayNames *ldn);
+uldn_getLocale(ULocaleDisplayNames *ldn);
 
 /**
  * Returns the dialect handling used in the display names.
@@ -91,7 +91,7 @@ uldn_getLocale(const ULocaleDisplayNames *ldn);
  * @draft ICU 4.4
  */
 U_DRAFT UDialectHandling U_EXPORT2
-uldn_getDialectHandling(const ULocaleDisplayNames *ldn);
+uldn_getDialectHandling(ULocaleDisplayNames *ldn);
 
 /* names for entire locales */
 
@@ -107,7 +107,7 @@ uldn_getDialectHandling(const ULocaleDisplayNames *ldn);
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_localeDisplayName(const ULocaleDisplayNames *ldn,
+uldn_localeDisplayName(ULocaleDisplayNames *ldn,
 		       const char *locale,
 		       UChar *result,
 		       int32_t maxResultSize,
@@ -127,7 +127,7 @@ uldn_localeDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_languageDisplayName(const ULocaleDisplayNames *ldn,
+uldn_languageDisplayName(ULocaleDisplayNames *ldn,
 			 const char *lang,
 			 UChar *result,
 			 int32_t maxResultSize,
@@ -145,7 +145,7 @@ uldn_languageDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_scriptDisplayName(const ULocaleDisplayNames *ldn,
+uldn_scriptDisplayName(ULocaleDisplayNames *ldn,
 		       const char *script,
 		       UChar *result,
 		       int32_t maxResultSize,
@@ -163,7 +163,7 @@ uldn_scriptDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_scriptCodeDisplayName(const ULocaleDisplayNames *ldn,
+uldn_scriptCodeDisplayName(ULocaleDisplayNames *ldn,
 			   UScriptCode scriptCode,
 			   UChar *result,
 			   int32_t maxResultSize,
@@ -181,7 +181,7 @@ uldn_scriptCodeDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_regionDisplayName(const ULocaleDisplayNames *ldn,
+uldn_regionDisplayName(ULocaleDisplayNames *ldn,
 		       const char *region,
 		       UChar *result,
 		       int32_t maxResultSize,
@@ -199,7 +199,7 @@ uldn_regionDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_variantDisplayName(const ULocaleDisplayNames *ldn,
+uldn_variantDisplayName(ULocaleDisplayNames *ldn,
 			const char *variant,
 			UChar *result,
 			int32_t maxResultSize,
@@ -217,7 +217,7 @@ uldn_variantDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_keyDisplayName(const ULocaleDisplayNames *ldn,
+uldn_keyDisplayName(ULocaleDisplayNames *ldn,
 		    const char *key,
 		    UChar *result,
 		    int32_t maxResultSize,
@@ -236,7 +236,7 @@ uldn_keyDisplayName(const ULocaleDisplayNames *ldn,
  * @draft ICU 4.4
  */
 U_DRAFT int32_t U_EXPORT2
-uldn_keyValueDisplayName(const ULocaleDisplayNames *ldn,
+uldn_keyValueDisplayName(ULocaleDisplayNames *ldn,
 			 const char *key,
 			 const char *value,
 			 UChar *result,
