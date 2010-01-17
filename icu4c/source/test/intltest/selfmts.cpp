@@ -49,7 +49,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         UNICODE_STRING_SIMPLE("odd")
     };
 
-    UnicodeString expFormatResult[EXP_FORMAT_RESULT_DATA][NUM_OF_FORMAT_ARGS] = {
+    UnicodeString expFormatResult[][NUM_OF_FORMAT_ARGS] = {
         {
             UNICODE_STRING_SIMPLE("femValue"),
             UNICODE_STRING_SIMPLE("even"),
