@@ -7,14 +7,11 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.SelectFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.SelectFormat;
 
 /**
  * @author kirtig 

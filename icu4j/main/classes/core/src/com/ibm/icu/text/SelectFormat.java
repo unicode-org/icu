@@ -7,16 +7,13 @@
  */
 package com.ibm.icu.text;
 
-import java.text.Format;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
-import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * <p><code>SelectFormat</code> supports the creation of  internationalized
