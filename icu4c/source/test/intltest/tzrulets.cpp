@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -30,7 +30,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 #define HOUR (60*60*1000)
 
-static const UVersionInfo ICU_434 = {4,3,4,0};
+static const UVersionInfo ICU_45 = {4,5,0,0};
 
 static const char *const TESTZIDS[] = {
         "AGT",
@@ -781,7 +781,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_434)) {
+        if (!isICUVersionAtLeast(ICU_45)) {
             // See ticket#7008
             if (*tzid == UnicodeString("Asia/Amman")) {
                 continue;
@@ -880,7 +880,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_434)) {
+        if (!isICUVersionAtLeast(ICU_45)) {
             // See ticket#7008
             if (*tzid == UnicodeString("Asia/Amman")) {
                 continue;
