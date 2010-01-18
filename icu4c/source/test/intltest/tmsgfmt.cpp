@@ -731,9 +731,9 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     MessageFormat* msgFmt4 = internalCreate(t4.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t4");
     if (!U_FAILURE(err)) {
         //Arguments 
-        Formattable testArgs10[] = {"Kirti","female",6};    
+        Formattable testArgs10[] = {"Kirti","female",(int32_t)6};    
         Formattable testArgs11[] = {"Kirti","female",100.100};    
-        Formattable testArgs12[] = {"Kirti","other",6};    
+        Formattable testArgs12[] = {"Kirti","other",(int32_t)6};    
         Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12};
         UnicodeString exp[] = {
             "Kirti est 6 all\\u00E9e \\u00E0 Paris." ,
@@ -754,10 +754,10 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     MessageFormat* msgFmt5 = internalCreate(t5.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t5");
     if (!U_FAILURE(err)) {
         //Arguments 
-        Formattable testArgs10[] = {"Kirti",6,"female"};  
-        Formattable testArgs11[] = {"Kirti",1,"female"};  
-        Formattable testArgs12[] = {"Ash",1,"other"};
-        Formattable testArgs13[] = {"Ash",5,"other"};  
+        Formattable testArgs10[] = {"Kirti",(int32_t)6,"female"};  
+        Formattable testArgs11[] = {"Kirti",(int32_t)1,"female"};  
+        Formattable testArgs12[] = {"Ash",(int32_t)1,"other"};
+        Formattable testArgs13[] = {"Ash",(int32_t)5,"other"};  
         Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12,testArgs13};
         UnicodeString exp[] = {
             "Kirti sont all\\u00E9es \\u00E0 Paris." ,
@@ -778,20 +778,20 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     MessageFormat* msgFmt6 = internalCreate(t6, Locale("de"),err,(char*)"From TestMessageFormat::TestSelectFormat create t6");
     if (!U_FAILURE(err)) {
         //Arguments 
-        Formattable testArgs10[] = {"Kirti","other",1,"other"}; 
-        Formattable testArgs11[] = {"Kirti","other",6,"other"};
-        Formattable testArgs12[] = {"Kirti","other",1,"female"};
-        Formattable testArgs13[] = {"Kirti","other",3,"female"};
-        Formattable testArgs14[] = {"Kirti","female",1,"female"};
-        Formattable testArgs15[] = {"Kirti","female",5,"female"};
-        Formattable testArgs16[] = {"Kirti","female",1,"other"};
-        Formattable testArgs17[] = {"Kirti","female",5,"other"};
-        Formattable testArgs18[] = {"Kirti","mixed",1,"mixed"};
-        Formattable testArgs19[] = {"Kirti","mixed",1,"other"};
-        Formattable testArgs20[] = {"Kirti","female",1,"mixed"};
-        Formattable testArgs21[] = {"Kirti","mixed",5,"mixed"};
-        Formattable testArgs22[] = {"Kirti","mixed",5,"other"};
-        Formattable testArgs23[] = {"Kirti","female",5,"mixed"};
+        Formattable testArgs10[] = {"Kirti","other",(int32_t)1,"other"}; 
+        Formattable testArgs11[] = {"Kirti","other",(int32_t)6,"other"};
+        Formattable testArgs12[] = {"Kirti","other",(int32_t)1,"female"};
+        Formattable testArgs13[] = {"Kirti","other",(int32_t)3,"female"};
+        Formattable testArgs14[] = {"Kirti","female",(int32_t)1,"female"};
+        Formattable testArgs15[] = {"Kirti","female",(int32_t)5,"female"};
+        Formattable testArgs16[] = {"Kirti","female",(int32_t)1,"other"};
+        Formattable testArgs17[] = {"Kirti","female",(int32_t)5,"other"};
+        Formattable testArgs18[] = {"Kirti","mixed",(int32_t)1,"mixed"};
+        Formattable testArgs19[] = {"Kirti","mixed",(int32_t)1,"other"};
+        Formattable testArgs20[] = {"Kirti","female",(int32_t)1,"mixed"};
+        Formattable testArgs21[] = {"Kirti","mixed",(int32_t)5,"mixed"};
+        Formattable testArgs22[] = {"Kirti","mixed",(int32_t)5,"other"};
+        Formattable testArgs23[] = {"Kirti","female",(int32_t)5,"mixed"};
         Formattable* testArgs[] = {testArgs10,testArgs11,testArgs12,testArgs13,
                                    testArgs14,testArgs15,testArgs16,testArgs17,
                                    testArgs18,testArgs19,testArgs20,testArgs21,
