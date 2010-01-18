@@ -14,6 +14,7 @@
  */
 
 #include "unicode/utypes.h"
+#include "unicode/uscript.h"
 
 /**
  * Enum used in LocaleDisplayNames::createInstance.
@@ -71,6 +72,25 @@ uldn_open(const char * locale,
  */
 U_DRAFT void U_EXPORT2
 uldn_close(ULocaleDisplayNames *ldn);
+
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalULocaleDisplayNamesPointer
+ * "Smart pointer" class, closes a ULocaleDisplayNames via uldn_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalULocaleDisplayNamesPointer, ULocaleDisplayNames, uldn_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /* getters for state */
 

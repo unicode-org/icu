@@ -204,7 +204,7 @@ static IntlTest *createLocalPointerTest() {
     return new LocalPointerTest();
 }
 
-void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
+void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char */*par*/) {
     if(exec) {
         logln("TestSuite LocalPointerTest: ");
     }
@@ -271,7 +271,9 @@ void LocalPointerTest::TestLocalArray() {
 #include "unicode/ucnvsel.h"
 #include "unicode/ucal.h"
 #include "unicode/udatpg.h"
+#include "unicode/uldnames.h"
 #include "unicode/umsg.h"
+#include "unicode/unorm2.h"
 #include "unicode/uregex.h"
 #include "unicode/utrans.h"
 
@@ -294,7 +296,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
     if(errorCode.logIfFailureAndReset("ucal_open()")) {
         return;
     }
-    if(sel.isNull()) {
+    if(cal.isNull()) {
         errln("LocalUCalendarPointer failure");
         return;
     }
@@ -303,8 +305,17 @@ void LocalPointerTest::TestLocalXyzPointer() {
     if(errorCode.logIfFailureAndReset("udatpg_open()")) {
         return;
     }
-    if(sel.isNull()) {
+    if(patgen.isNull()) {
         errln("LocalUDateTimePatternGeneratorPointer failure");
+        return;
+    }
+
+    LocalULocaleDisplayNamesPointer ldn(uldn_open("de-CH", ULDN_STANDARD_NAMES, errorCode));
+    if(errorCode.logIfFailureAndReset("uldn_open()")) {
+        return;
+    }
+    if(ldn.isNull()) {
+        errln("LocalULocaleDisplayNamesPointer failure");
         return;
     }
 
@@ -314,8 +325,19 @@ void LocalPointerTest::TestLocalXyzPointer() {
     if(errorCode.logIfFailureAndReset("umsg_open()")) {
         return;
     }
-    if(sel.isNull()) {
+    if(msg.isNull()) {
         errln("LocalUMessageFormatPointer failure");
+        return;
+    }
+
+    const UNormalizer2 *nfc=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode);
+    UnicodeSet emptySet;
+    LocalUNormalizer2Pointer fn2(unorm2_openFiltered(nfc, emptySet.toUSet(), errorCode));
+    if(errorCode.logIfFailureAndReset("unorm2_openFiltered()")) {
+        return;
+    }
+    if(fn2.isNull()) {
+        errln("LocalUNormalizer2Pointer failure");
         return;
     }
 
@@ -325,7 +347,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
     if(errorCode.logIfFailureAndReset("uregex_open()")) {
         return;
     }
-    if(sel.isNull()) {
+    if(regex.isNull()) {
         errln("LocalURegularExpressionPointer failure");
         return;
     }
@@ -336,7 +358,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
     if(errorCode.logIfFailureAndReset("utrans_open()")) {
         return;
     }
-    if(sel.isNull()) {
+    if(trans.isNull()) {
         errln("LocalUTransliteratorPointer failure");
         return;
     }
