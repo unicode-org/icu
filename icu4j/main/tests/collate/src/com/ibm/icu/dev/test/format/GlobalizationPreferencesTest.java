@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -390,11 +390,11 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
     public void TestResourceBundle() {
         // remove when we deal with the data issue
-        // System.out.println("jan 15: " + new GregorianCalendar(2010, 0, 15).getTimeInMillis());
-        if (System.currentTimeMillis() > 1263542400000L) {
-            errln("Timebomb failure: 2010/01/15");
+//        System.out.println("feb 1: " + new GregorianCalendar(2010, 1, 15).getTimeInMillis());
+        if (System.currentTimeMillis() > 1266220800000L) {
+            errln("Timebomb failure: 2010/02/01");
         } else {
-            logln("test temporarily disabled until 2010/01/05");
+            logln("test temporarily disabled until 2010/02/01");
             return;
         }
 
