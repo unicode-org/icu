@@ -70,20 +70,20 @@ class NoopNormalizer2 : public Normalizer2 {
         return first;
     }
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const {
+    isNormalized(const UnicodeString &, UErrorCode &) const {
         return TRUE;
     }
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const {
+    quickCheck(const UnicodeString &, UErrorCode &) const {
         return UNORM_YES;
     }
     virtual int32_t
-    spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const {
+    spanQuickCheckYes(const UnicodeString &s, UErrorCode &) const {
         return s.length();
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const { return TRUE; }
-    virtual UBool hasBoundaryAfter(UChar32 c) const { return TRUE; }
-    virtual UBool isInert(UChar32 c) const { return TRUE; }
+    virtual UBool hasBoundaryBefore(UChar32) const { return TRUE; }
+    virtual UBool hasBoundaryAfter(UChar32) const { return TRUE; }
+    virtual UBool isInert(UChar32) const { return TRUE; }
 
     static UClassID U_EXPORT2 getStaticClassID();
     virtual UClassID getDynamicClassID() const;
@@ -194,7 +194,7 @@ public:
     virtual const UChar *
     spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const = 0;
 
-    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const {
+    virtual UNormalizationCheckResult getQuickCheck(UChar32) const {
         return UNORM_YES;
     }
 
@@ -215,6 +215,7 @@ public:
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
         impl.decompose(src, limit, &buffer, errorCode);
     }
+    using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
@@ -224,6 +225,7 @@ public:
     spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const {
         return impl.decompose(src, limit, NULL, errorCode);
     }
+    using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const {
         return impl.isDecompYes(impl.getNorm16(c)) ? UNORM_YES : UNORM_NO;
     }
@@ -242,6 +244,7 @@ public:
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
         impl.compose(src, limit, onlyContiguous, TRUE, buffer, errorCode);
     }
+    using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
@@ -280,9 +283,10 @@ public:
         return qcResult;
     }
     virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const {
+    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const {
         return impl.composeQuickCheck(src, limit, onlyContiguous, NULL);
     }
+    using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const {
         return impl.getCompQuickCheck(impl.getNorm16(c));
     }
@@ -308,6 +312,7 @@ public:
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
         impl.makeFCD(src, limit, &buffer, errorCode);
     }
+    using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
@@ -317,6 +322,7 @@ public:
     spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const {
         return impl.makeFCD(src, limit, NULL, errorCode);
     }
+    using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UBool hasBoundaryBefore(UChar32 c) const { return impl.hasFCDBoundaryBefore(c); }
     virtual UBool hasBoundaryAfter(UChar32 c) const { return impl.hasFCDBoundaryAfter(c); }
     virtual UBool isInert(UChar32 c) const { return impl.isFCDInert(c); }
@@ -384,7 +390,7 @@ public:
         return SimpleSingletonWrapper<Normalizer2>::getInstance(createInstance, NULL, errorCode);
     }
 private:
-    static void *createInstance(const void *context, UErrorCode &errorCode) {
+    static void *createInstance(const void *, UErrorCode &errorCode) {
         Normalizer2 *noop=new NoopNormalizer2;
         if(noop==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
