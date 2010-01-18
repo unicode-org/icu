@@ -66,14 +66,14 @@ public:
   const Locale& getLocale();
 
   UnicodeString& get(const char* tableKey, const char* itemKey,
-		     UnicodeString& result) const;
+                     UnicodeString& result) const;
   UnicodeString& get(const char* tableKey, const char* subTableKey, const char* itemKey,
-		     UnicodeString& result) const;
+                     UnicodeString& result) const;
 
-  UnicodeString& getNoFallback(const char* tableKey, const char* itemKey, 
-			       UnicodeString &result) const;
+  UnicodeString& getNoFallback(const char* tableKey, const char* itemKey,
+                               UnicodeString &result) const;
   UnicodeString& getNoFallback(const char* tableKey, const char* subTableKey, const char* itemKey,
-			       UnicodeString &result) const;
+                               UnicodeString &result) const;
 };
 
 inline UnicodeString &
@@ -86,7 +86,7 @@ ICUDataTable::getNoFallback(const char* tableKey, const char* itemKey, UnicodeSt
   return getNoFallback(tableKey, NULL, itemKey, result);
 }
 
-ICUDataTable::ICUDataTable(const char* path, const Locale& locale) 
+ICUDataTable::ICUDataTable(const char* path, const Locale& locale)
   : path(NULL), locale(Locale::getRoot())
 {
   if (path) {
@@ -106,20 +106,20 @@ ICUDataTable::~ICUDataTable() {
   }
 }
 
-const Locale& 
+const Locale&
 ICUDataTable::getLocale() {
   return locale;
 }
 
 UnicodeString &
 ICUDataTable::get(const char* tableKey, const char* subTableKey, const char* itemKey,
-		  UnicodeString &result) const {
+                  UnicodeString &result) const {
   UErrorCode status = U_ZERO_ERROR;
   int32_t len = 0;
 
   const UChar *s = uloc_getTableStringWithFallback(path, locale.getName(),
-						   tableKey, subTableKey, itemKey,
-						   &len, &status);
+                                                   tableKey, subTableKey, itemKey,
+                                                   &len, &status);
   if (U_SUCCESS(status)) {
     return result.setTo(s, len);
   }
@@ -128,13 +128,13 @@ ICUDataTable::get(const char* tableKey, const char* subTableKey, const char* ite
 
 UnicodeString &
 ICUDataTable::getNoFallback(const char* tableKey, const char* subTableKey, const char* itemKey,
-			    UnicodeString& result) const {
+                            UnicodeString& result) const {
   UErrorCode status = U_ZERO_ERROR;
   int32_t len = 0;
 
   const UChar *s = uloc_getTableStringWithFallback(path, locale.getName(),
-						   tableKey, subTableKey, itemKey,
-						   &len, &status);
+                                                   tableKey, subTableKey, itemKey,
+                                                   &len, &status);
   if (U_SUCCESS(status)) {
     return result.setTo(s, len);
   }
@@ -157,25 +157,25 @@ public:
 
   virtual const Locale& getLocale() const;
   virtual UDialectHandling getDialectHandling() const;
-  virtual UnicodeString& localeDisplayName(const Locale& locale, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& localeDisplayName(const char* localeId, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& languageDisplayName(const char* lang, 
-					     UnicodeString& result) const;
-  virtual UnicodeString& scriptDisplayName(const char* script, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& scriptDisplayName(UScriptCode scriptCode, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& regionDisplayName(const char* region, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& variantDisplayName(const char* variant, 
-					    UnicodeString& result) const;
-  virtual UnicodeString& keyDisplayName(const char* key, 
-					UnicodeString& result) const;
-  virtual UnicodeString& keyValueDisplayName(const char* key, 
-					     const char* value, 
-					     UnicodeString& result) const;
+  virtual UnicodeString& localeDisplayName(const Locale& locale,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& localeDisplayName(const char* localeId,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& languageDisplayName(const char* lang,
+                                             UnicodeString& result) const;
+  virtual UnicodeString& scriptDisplayName(const char* script,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& scriptDisplayName(UScriptCode scriptCode,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& regionDisplayName(const char* region,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& variantDisplayName(const char* variant,
+                                            UnicodeString& result) const;
+  virtual UnicodeString& keyDisplayName(const char* key,
+                                        UnicodeString& result) const;
+  virtual UnicodeString& keyValueDisplayName(const char* key,
+                                             const char* value,
+                                             UnicodeString& result) const;
 };
 
 DefaultLocaleDisplayNames::DefaultLocaleDisplayNames(UDialectHandling dialectHandling)
@@ -185,43 +185,43 @@ DefaultLocaleDisplayNames::DefaultLocaleDisplayNames(UDialectHandling dialectHan
 DefaultLocaleDisplayNames::~DefaultLocaleDisplayNames() {
 }
 
-const Locale& 
+const Locale&
 DefaultLocaleDisplayNames::getLocale() const {
   return Locale::getRoot();
 }
 
-UDialectHandling 
+UDialectHandling
 DefaultLocaleDisplayNames::getDialectHandling() const {
   return dialectHandling;
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::localeDisplayName(const Locale& locale, 
-					  UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::localeDisplayName(const Locale& locale,
+                                             UnicodeString& result) const {
   return result = UnicodeString(locale.getName(), -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::localeDisplayName(const char* localeId, 
-					  UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::localeDisplayName(const char* localeId,
+                                             UnicodeString& result) const {
   return result = UnicodeString(localeId, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::languageDisplayName(const char* lang, 
-					    UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::languageDisplayName(const char* lang,
+                                               UnicodeString& result) const {
   return result = UnicodeString(lang, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::scriptDisplayName(const char* script, 
-					  UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::scriptDisplayName(const char* script,
+                                             UnicodeString& result) const {
   return result = UnicodeString(script, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::scriptDisplayName(UScriptCode scriptCode, 
-					  UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::scriptDisplayName(UScriptCode scriptCode,
+                                             UnicodeString& result) const {
   const char* name = uscript_getName(scriptCode);
   if (name) {
     return result = UnicodeString(name, -1, US_INV);
@@ -229,28 +229,28 @@ DefaultLocaleDisplayNames::scriptDisplayName(UScriptCode scriptCode,
   return result.remove();
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::regionDisplayName(const char* region, 
-					  UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::regionDisplayName(const char* region,
+                                             UnicodeString& result) const {
   return result = UnicodeString(region, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::variantDisplayName(const char* variant, 
-					   UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::variantDisplayName(const char* variant,
+                                              UnicodeString& result) const {
   return result = UnicodeString(variant, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::keyDisplayName(const char* key, 
-				       UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::keyDisplayName(const char* key,
+                                          UnicodeString& result) const {
   return result = UnicodeString(key, -1, US_INV);
 }
 
-UnicodeString& 
-DefaultLocaleDisplayNames::keyValueDisplayName(const char* /* key */, 
-					    const char* value, 
-					    UnicodeString& result) const {
+UnicodeString&
+DefaultLocaleDisplayNames::keyValueDisplayName(const char* /* key */,
+                                               const char* value,
+                                               UnicodeString& result) const {
   return result = UnicodeString(value, -1, US_INV);
 }
 
@@ -272,45 +272,45 @@ public:
   virtual const Locale& getLocale() const;
   virtual UDialectHandling getDialectHandling() const;
 
-  virtual UnicodeString& localeDisplayName(const Locale& locale, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& localeDisplayName(const char* localeId, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& languageDisplayName(const char* lang, 
-					     UnicodeString& result) const;
-  virtual UnicodeString& scriptDisplayName(const char* script, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& scriptDisplayName(UScriptCode scriptCode, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& regionDisplayName(const char* region, 
-					   UnicodeString& result) const;
-  virtual UnicodeString& variantDisplayName(const char* variant, 
-					    UnicodeString& result) const;
-  virtual UnicodeString& keyDisplayName(const char* key, 
-					UnicodeString& result) const;
-  virtual UnicodeString& keyValueDisplayName(const char* key, 
-					     const char* value, 
-					     UnicodeString& result) const;
+  virtual UnicodeString& localeDisplayName(const Locale& locale,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& localeDisplayName(const char* localeId,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& languageDisplayName(const char* lang,
+                                             UnicodeString& result) const;
+  virtual UnicodeString& scriptDisplayName(const char* script,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& scriptDisplayName(UScriptCode scriptCode,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& regionDisplayName(const char* region,
+                                           UnicodeString& result) const;
+  virtual UnicodeString& variantDisplayName(const char* variant,
+                                            UnicodeString& result) const;
+  virtual UnicodeString& keyDisplayName(const char* key,
+                                        UnicodeString& result) const;
+  virtual UnicodeString& keyValueDisplayName(const char* key,
+                                             const char* value,
+                                             UnicodeString& result) const;
 private:
   UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
 };
 
-LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale, 
-					       UDialectHandling dialectHandling)
+LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
+                                               UDialectHandling dialectHandling)
   : dialectHandling(dialectHandling)
   , langData(U_ICUDATA_LANG, locale)
   , regionData(U_ICUDATA_REGION, locale)
 {
   LocaleDisplayNamesImpl *nonConstThis = (LocaleDisplayNamesImpl *)this;
   nonConstThis->locale = langData.getLocale() == Locale::getRoot()
-    ? regionData.getLocale() 
+    ? regionData.getLocale()
     : langData.getLocale();
 
   langData.getNoFallback("localeDisplayPattern", "separator", sep);
   if (sep.isBogus()) {
     sep = UnicodeString(", ", -1, US_INV);
   }
-  
+
   UnicodeString pattern;
   langData.getNoFallback("localeDisplayPattern", "pattern", pattern);
   if (pattern.isBogus()) {
@@ -323,19 +323,19 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
 }
 
-const Locale& 
+const Locale&
 LocaleDisplayNamesImpl::getLocale() const {
   return locale;
 }
 
-UDialectHandling 
+UDialectHandling
 LocaleDisplayNamesImpl::getDialectHandling() const {
   return dialectHandling;
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale, 
-					  UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
+                                          UnicodeString& result) const {
   UnicodeString resultName;
 
   const char* lang = locale.getLanguage();
@@ -352,34 +352,34 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
     if (dialectHandling == ULDN_DIALECT_NAMES) {
       char buffer[ULOC_FULLNAME_CAPACITY];
       do { // loop construct is so we can break early out of search
-	if (hasScript && hasCountry) {
-	  ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, "_", country, (char *)0);
-	  langData.getNoFallback("Languages", buffer, resultName);
-	  if (!resultName.isBogus()) {
-	    hasScript = FALSE;
-	    hasCountry = FALSE;
-	    break;
-	  }
-	}
-	if (hasScript) {
-	  ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, (char *)0);
-	  langData.getNoFallback("Languages", buffer, resultName);
-	  if (!resultName.isBogus()) {
-	    hasScript = FALSE;
-	    break;
-	  }
-	}
-	if (hasCountry) {
-	  ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", country, (char*)0);
-	  langData.getNoFallback("Languages", buffer, resultName);
-	  if (!resultName.isBogus()) {
-	    hasCountry = FALSE;
-	    break;
-	  }
-	}
+        if (hasScript && hasCountry) {
+          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, "_", country, (char *)0);
+          langData.getNoFallback("Languages", buffer, resultName);
+          if (!resultName.isBogus()) {
+            hasScript = FALSE;
+            hasCountry = FALSE;
+            break;
+          }
+        }
+        if (hasScript) {
+          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, (char *)0);
+          langData.getNoFallback("Languages", buffer, resultName);
+          if (!resultName.isBogus()) {
+            hasScript = FALSE;
+            break;
+          }
+        }
+        if (hasCountry) {
+          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", country, (char*)0);
+          langData.getNoFallback("Languages", buffer, resultName);
+          if (!resultName.isBogus()) {
+            hasCountry = FALSE;
+            break;
+          }
+        }
       } while (FALSE);
     }
-    
+
     if (resultName.isBogus() || resultName.isEmpty()) {
       langData.get("Languages", lang, resultName);
     }
@@ -406,27 +406,27 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
       UnicodeString temp2;
       char value[ULOC_KEYWORD_AND_VALUES_CAPACITY]; // sigh, no ULOC_VALUE_CAPACITY
       const char* key;
-      while (key = e->next((int32_t *)0, status)) {
-	locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
-	appendWithSep(resultRemainder, keyDisplayName(key, temp))
-	  .append("=")
-	  .append(keyValueDisplayName(key, value, temp2));
+      while ((key = e->next((int32_t *)0, status)) != NULL) {
+        locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
+        appendWithSep(resultRemainder, keyDisplayName(key, temp))
+          .append("=")
+          .append(keyValueDisplayName(key, value, temp2));
       }
       delete e;
     }
-    
+
     if (!resultRemainder.isEmpty()) {
       if (!resultName.isEmpty()) {
-	Formattable data[] = {
-	  resultName,
-	  resultRemainder
-	};
-	FieldPosition fpos;
-	status = U_ZERO_ERROR;
-	format->format(data, 2, result, fpos, status);
-	return result;
+        Formattable data[] = {
+          resultName,
+          resultRemainder
+        };
+        FieldPosition fpos;
+        status = U_ZERO_ERROR;
+        format->format(data, 2, result, fpos, status);
+        return result;
       }
-      
+
       return result = resultRemainder;
     }
   }
@@ -434,7 +434,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
   return result = resultName;
 }
 
-UnicodeString& 
+UnicodeString&
 LocaleDisplayNamesImpl::appendWithSep(UnicodeString& buffer, const UnicodeString& src) const {
   if (!buffer.isEmpty()) {
     buffer.append(sep);
@@ -443,61 +443,61 @@ LocaleDisplayNamesImpl::appendWithSep(UnicodeString& buffer, const UnicodeString
   return buffer;
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::localeDisplayName(const char* localeId, 
-					  UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::localeDisplayName(const char* localeId,
+                                          UnicodeString& result) const {
   return localeDisplayName(Locale(localeId), result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::languageDisplayName(const char* lang, 
-					    UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
+                                            UnicodeString& result) const {
   return langData.get("Languages", lang, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::scriptDisplayName(const char* script, 
-					  UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
+                                          UnicodeString& result) const {
   return langData.get("Scripts", script, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode, 
-					  UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
+                                          UnicodeString& result) const {
   const char* name = uscript_getName(scriptCode);
   return langData.get("Scripts", name, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::regionDisplayName(const char* region, 
-					  UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::regionDisplayName(const char* region,
+                                          UnicodeString& result) const {
   return regionData.get("Countries", region, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::variantDisplayName(const char* variant, 
-					   UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
+                                           UnicodeString& result) const {
   return langData.get("Variants", variant, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::keyDisplayName(const char* key, 
-				       UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::keyDisplayName(const char* key,
+                                       UnicodeString& result) const {
   return langData.get("Keys", key, result);
 }
 
-UnicodeString& 
-LocaleDisplayNamesImpl::keyValueDisplayName(const char* key, 
-					    const char* value, 
-					    UnicodeString& result) const {
+UnicodeString&
+LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
+                                            const char* value,
+                                            UnicodeString& result) const {
   return langData.get("Types", key, value, result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LocaleDisplayNames* 
+LocaleDisplayNames*
 LocaleDisplayNames::createInstance(const Locale& locale,
-				   UDialectHandling dialectHandling) {
+                                   UDialectHandling dialectHandling) {
   return new LocaleDisplayNamesImpl(locale, dialectHandling);
 }
 
@@ -509,8 +509,8 @@ U_NAMESPACE_USE
 
 U_DRAFT ULocaleDisplayNames * U_EXPORT2
 uldn_open(const char * locale,
-	  UDialectHandling dialectHandling,
-	  UErrorCode *pErrorCode) {
+          UDialectHandling dialectHandling,
+          UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -527,27 +527,27 @@ uldn_close(ULocaleDisplayNames *ldn) {
 }
 
 U_DRAFT const char * U_EXPORT2
-uldn_getLocale(ULocaleDisplayNames *ldn) {
+uldn_getLocale(const ULocaleDisplayNames *ldn) {
   if (ldn) {
-    return ((LocaleDisplayNames *)ldn)->getLocale().getName();
+    return ((const LocaleDisplayNames *)ldn)->getLocale().getName();
   }
   return NULL;
 }
 
 U_DRAFT UDialectHandling U_EXPORT2
-uldn_getDialectHandling(ULocaleDisplayNames *ldn) {
+uldn_getDialectHandling(const ULocaleDisplayNames *ldn) {
   if (ldn) {
-    return ((LocaleDisplayNames *)ldn)->getDialectHandling();
+    return ((const LocaleDisplayNames *)ldn)->getDialectHandling();
   }
   return ULDN_STANDARD_NAMES;
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_localeDisplayName(ULocaleDisplayNames *ldn,
-		       const char *locale,
-		       UChar *result,
-		       int32_t maxResultSize,
-		       UErrorCode *pErrorCode) {
+uldn_localeDisplayName(const ULocaleDisplayNames *ldn,
+                       const char *locale,
+                       UChar *result,
+                       int32_t maxResultSize,
+                       UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -556,16 +556,16 @@ uldn_localeDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->localeDisplayName(locale, temp);
+  ((const LocaleDisplayNames *)ldn)->localeDisplayName(locale, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_languageDisplayName(ULocaleDisplayNames *ldn,
-			 const char *lang,
-			 UChar *result,
-			 int32_t maxResultSize,
-			 UErrorCode *pErrorCode) {
+uldn_languageDisplayName(const ULocaleDisplayNames *ldn,
+                         const char *lang,
+                         UChar *result,
+                         int32_t maxResultSize,
+                         UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -574,16 +574,16 @@ uldn_languageDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->languageDisplayName(lang, temp);
+  ((const LocaleDisplayNames *)ldn)->languageDisplayName(lang, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_scriptDisplayName(ULocaleDisplayNames *ldn,
-		       const char *script,
-		       UChar *result,
-		       int32_t maxResultSize,
-		       UErrorCode *pErrorCode) {
+uldn_scriptDisplayName(const ULocaleDisplayNames *ldn,
+                       const char *script,
+                       UChar *result,
+                       int32_t maxResultSize,
+                       UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -592,25 +592,25 @@ uldn_scriptDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->scriptDisplayName(script, temp);
+  ((const LocaleDisplayNames *)ldn)->scriptDisplayName(script, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_scriptCodeDisplayName(ULocaleDisplayNames *ldn,
-			   UScriptCode scriptCode,
-			   UChar *result,
-			   int32_t maxResultSize,
-			   UErrorCode *pErrorCode) {
+uldn_scriptCodeDisplayName(const ULocaleDisplayNames *ldn,
+                           UScriptCode scriptCode,
+                           UChar *result,
+                           int32_t maxResultSize,
+                           UErrorCode *pErrorCode) {
   return uldn_scriptDisplayName(ldn, uscript_getName(scriptCode), result, maxResultSize, pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_regionDisplayName(ULocaleDisplayNames *ldn,
-		       const char *region,
-		       UChar *result,
-		       int32_t maxResultSize,
-		       UErrorCode *pErrorCode) {
+uldn_regionDisplayName(const ULocaleDisplayNames *ldn,
+                       const char *region,
+                       UChar *result,
+                       int32_t maxResultSize,
+                       UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -619,16 +619,16 @@ uldn_regionDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->regionDisplayName(region, temp);
+  ((const LocaleDisplayNames *)ldn)->regionDisplayName(region, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_variantDisplayName(ULocaleDisplayNames *ldn,
-			const char *variant,
-			UChar *result,
-			int32_t maxResultSize,
-			UErrorCode *pErrorCode) {
+uldn_variantDisplayName(const ULocaleDisplayNames *ldn,
+                        const char *variant,
+                        UChar *result,
+                        int32_t maxResultSize,
+                        UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -637,16 +637,16 @@ uldn_variantDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->variantDisplayName(variant, temp);
+  ((const LocaleDisplayNames *)ldn)->variantDisplayName(variant, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_keyDisplayName(ULocaleDisplayNames *ldn,
-		    const char *key,
-		    UChar *result,
-		    int32_t maxResultSize,
-		    UErrorCode *pErrorCode) {
+uldn_keyDisplayName(const ULocaleDisplayNames *ldn,
+                    const char *key,
+                    UChar *result,
+                    int32_t maxResultSize,
+                    UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
@@ -655,27 +655,27 @@ uldn_keyDisplayName(ULocaleDisplayNames *ldn,
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->keyDisplayName(key, temp);
+  ((const LocaleDisplayNames *)ldn)->keyDisplayName(key, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
 U_DRAFT int32_t U_EXPORT2
-uldn_keyValueDisplayName(ULocaleDisplayNames *ldn,
-			 const char *key,
-			 const char *value,
-			 UChar *result,
-			 int32_t maxResultSize,
-			 UErrorCode *pErrorCode) {
+uldn_keyValueDisplayName(const ULocaleDisplayNames *ldn,
+                         const char *key,
+                         const char *value,
+                         UChar *result,
+                         int32_t maxResultSize,
+                         UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
     return 0;
   }
-  if (ldn == NULL || key == NULL || value == NULL || (result == NULL && maxResultSize > 0) 
+  if (ldn == NULL || key == NULL || value == NULL || (result == NULL && maxResultSize > 0)
       || maxResultSize < 0) {
     *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
   }
   UnicodeString temp(result, 0, maxResultSize);
-  ((LocaleDisplayNames *)ldn)->keyValueDisplayName(key, value, temp);
+  ((const LocaleDisplayNames *)ldn)->keyValueDisplayName(key, value, temp);
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
