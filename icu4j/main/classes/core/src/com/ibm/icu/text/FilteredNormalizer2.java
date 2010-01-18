@@ -126,6 +126,8 @@ public class FilteredNormalizer2 extends Normalizer2 {
         return first;
     } TODO: need UnicodeSet.span() */
 
+    @SuppressWarnings("unused")
     private Normalizer2 norm2;
+    @SuppressWarnings("unused")
     private UnicodeSet set;
 };
