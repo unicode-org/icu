@@ -171,6 +171,25 @@ unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode
 U_DRAFT void U_EXPORT2
 unorm2_close(UNormalizer2 *norm2);
 
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUNormalizer2Pointer
+ * "Smart pointer" class, closes a UNormalizer2 via unorm2_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 4.4
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUNormalizer2Pointer, UNormalizer2, unorm2_close);
+
+U_NAMESPACE_END
+
+#endif
+
 /**
  * Writes the normalized form of the source string to the destination string
  * (replacing its contents) and returns the length of the destination string.
