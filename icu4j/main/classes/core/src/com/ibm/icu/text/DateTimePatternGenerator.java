@@ -135,7 +135,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return result;
         }
         result = new DateTimePatternGenerator();
-        String lang = uLocale.getLanguage();
         PatternInfo returnInfo = new PatternInfo();
         String shortTimePattern = null;
         // first load with the ICU patterns
