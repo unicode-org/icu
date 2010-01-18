@@ -239,6 +239,12 @@ FilteredNormalizer2::isInert(UChar32 c) const {
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FilteredNormalizer2)
 
+U_NAMESPACE_END
+
+// C API ------------------------------------------------------------------- ***
+
+U_NAMESPACE_USE
+
 U_DRAFT UNormalizer2 * U_EXPORT2
 unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
@@ -255,7 +261,5 @@ unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode
     }
     return (UNormalizer2 *)fn2;
 }
-
-U_NAMESPACE_END
 
 #endif  // !UCONFIG_NO_NORMALIZATION
