@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ package com.ibm.icu.text;
  * Used by RBNF to leniently parse a string.
  *
  * @draft ICU 4.4
+ * @provisional This API might change or be removed in a future release.
  */
 public interface RbnfLenientScanner {
   /**
@@ -20,6 +21,7 @@ public interface RbnfLenientScanner {
    * @return true if the string is empty or consists entirely of
    * characters that are ignorable.
    * @draft ICU 4.4
+   * @provisional This API might change or be removed in a future release.
    */
   boolean allIgnorable(String s);
 
@@ -34,6 +36,7 @@ public interface RbnfLenientScanner {
    * @param prefix The text we're hoping to see at the beginning of "str"
    * @return the number of characters in "str" that were matched
    * @draft ICU 4.4
+   * @provisional This API might change or be removed in a future release.
    */
   public int prefixLength(String str, String prefix);
 

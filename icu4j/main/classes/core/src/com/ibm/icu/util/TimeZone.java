@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2009, International Business Machines
+ * Copyright (C) 1996-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -103,6 +103,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * A logger for TimeZone. Will be null if logging is not on by way of system property: "icu4j.debug.logging"
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static ICULogger TimeZoneLogger = ICULogger.getICULogger(TimeZone.class.getName());
 
@@ -153,7 +154,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * a short generic name, such as "PT."
      * @see #LONG_GENERIC
      * @draft ICU 4.4
-     */    
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final int SHORT_GENERIC = 2;
 
     /**
@@ -161,7 +163,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * a long generic name, such as "Pacific Time."
      * @see #SHORT_GENERIC
      * @draft ICU 4.4
-     */   
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final int LONG_GENERIC = 3;
 
     /**
@@ -169,7 +172,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * a short name derived from the timezone's offset, such as "-0800."
      * @see #LONG_GMT
      * @draft ICU 4.4
-     */       
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final int SHORT_GMT = 4;
     
     /**
@@ -177,16 +181,17 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * a long name derived from the timezone's offset, such as "GMT-08:00."
      * @see #SHORT_GMT
      * @draft ICU 4.4
-     */      
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final int LONG_GMT = 5;
     
     /**
      * A style specifier for <code>getDisplayName()</code> indicating
      * a short name derived from the timezone's short standard or daylight
      * timezone name ignoring commonlyUsed, such as "PDT."
-     * @see #GENERIC_LOCATION
      * @draft ICU 4.4
-     */   
+     * @provisional This API might change or be removed in a future release.
+     */
     
     public static final int SHORT_COMMONLY_USED = 6;
     
@@ -194,12 +199,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * A style specifier for <code>getDisplayName()</code> indicating
      * a long name derived from the timezone's fallback name, such as 
      * "United States (Los Angeles)."
-     * @see #SHORT_COMMONLY_USED
      * @draft ICU 4.4
-     */      
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final int GENERIC_LOCATION = 7;
-    
-    
+
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
      */

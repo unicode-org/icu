@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2009 International Business Machines Corporation and     *
+* Copyright (C) 2001-2010 International Business Machines Corporation and     *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -719,25 +719,24 @@ public final class UScript {
      */
     public static final int SYMBOLS                       = 129;/* Zsym */
 
-    /* New script codes from ISO 15924 @draft ICU 4.4 */
     /**
      * ISO 15924 script code
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int BAMUM                         = 130;/* Bamu */
     /**
      * ISO 15924 script code
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int LISU                          = 131;/* Lisu */
     /**
      * ISO 15924 script code
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int NAKHI_GEBA                    = 132;/* Nkgb */
     /**
      * ISO 15924 script code
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int OLD_SOUTH_ARABIAN             = 133;/* Sarb */
 

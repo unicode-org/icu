@@ -743,8 +743,7 @@ public class DecimalFormat extends NumberFormat {
      * @param symbols the set of symbols to be used
      * @param infoInput the information used for currency plural format, including currency plural patterns and plural rules.
      * @param style the decimal formatting style, it is one of the following values: NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE; NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE; NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public DecimalFormat(String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput, int style) {
         CurrencyPluralInfo info = infoInput;
@@ -3352,8 +3351,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @return desired MathContext
      * @see #getMathContext
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public MathContext getMathContextICU() {
         return mathContext;
@@ -3364,8 +3362,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @return desired MathContext
      * @see #getMathContext
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public java.math.MathContext getMathContext() {
         try {
@@ -3382,8 +3379,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @param newValue desired MathContext
      * @see #getMathContext
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public void setMathContextICU(MathContext newValue) {
         mathContext = newValue;
@@ -3394,8 +3390,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @param newValue desired MathContext
      * @see #getMathContext
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public void setMathContext(java.math.MathContext newValue) {
         mathContext = new MathContext(newValue.getPrecision(), MathContext.SCIENTIFIC, false, (newValue
@@ -3439,8 +3434,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @return desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public CurrencyPluralInfo getCurrencyPluralInfo() {
         try {
@@ -3456,8 +3450,7 @@ public class DecimalFormat extends NumberFormat {
      * 
      * @param newInfo desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
         currencyPluralInfo = (CurrencyPluralInfo) newInfo.clone();

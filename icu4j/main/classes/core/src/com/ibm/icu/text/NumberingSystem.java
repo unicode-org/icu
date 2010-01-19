@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,14 +28,14 @@ import com.ibm.icu.impl.SimpleCache;
  * as Hebrew numbering or Chinese numbering.
  *
  * @author       John Emmons
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 class NumberingSystem {
 
     /**
      * Default constructor.  Returns a numbering system that uses the Western decimal
      * digits 0 through 9.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public NumberingSystem() {
         radix = 10;
@@ -55,7 +55,7 @@ class NumberingSystem {
      * systems, the string contains the name of the RBNF ruleset in the locale's
      * NumberingSystemRules section that will be used to format numbers using
      * this numbering system.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static NumberingSystem getInstance(int radix_in, boolean isAlgorithmic_in, String desc_in ) {
         if ( radix_in < 2 ) {
@@ -76,7 +76,7 @@ class NumberingSystem {
 
     /**
      * Returns the default numbering system for the specified locale.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static NumberingSystem getInstance(Locale inLocale) {
         return getInstance(ULocale.forLocale(inLocale));
@@ -84,7 +84,7 @@ class NumberingSystem {
 
     /**
      * Returns the default numbering system for the specified ULocale.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static NumberingSystem getInstance(ULocale locale) {
 
@@ -131,7 +131,7 @@ class NumberingSystem {
 
     /**
      * Returns the default numbering system for the default locale.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static NumberingSystem getInstance() {
         return getInstance(ULocale.getDefault());
@@ -145,7 +145,7 @@ class NumberingSystem {
      * @param name The name of the desired numbering system.  Numbering system
      * names often correspond with the name of the script they are associated
      * with.  For example, "thai" for Thai digits, "hebr" for Hebrew numerals.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static NumberingSystem getInstanceByName(String name) {
         int radix;
@@ -183,7 +183,7 @@ class NumberingSystem {
     /**
      * Returns a string array containing a list of the names of numbering systems
      * currently known to ICU.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static String [] getAvailableNames() {
     
@@ -209,7 +209,7 @@ class NumberingSystem {
      * 1. It must only contain characters that are decimal digits as defined by Unicode.
      * 2. It must contain characters that are contiguous code points.
      * 3. Digits must be in Unicode's basic multilingual plane.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static boolean isValidDigitString(String str) {
 
@@ -237,7 +237,7 @@ class NumberingSystem {
 
     /**
      * Returns the radix of the current numbering system.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public int getRadix() {
         return radix;
@@ -251,7 +251,7 @@ class NumberingSystem {
      * systems, the string contains the name of the RBNF ruleset in the locale's
      * NumberingSystemRules section that will be used to format numbers using
      * this numbering system.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public String getDescription() {
         return desc;
@@ -262,7 +262,7 @@ class NumberingSystem {
      * the numbering system is algorithmic and uses an RBNF formatter to
      * format numerals.  If false, the numbering system is numeric and
      * uses a fixed set of digits. 
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public boolean isAlgorithmic() {
         return algorithmic;

@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * Returns currency names localized for a locale.
  * @draft ICU 4.4
+ * @provisional This API might change or be removed in a future release.
  */
 public abstract class CurrencyDisplayNames {
     /**
@@ -21,6 +22,7 @@ public abstract class CurrencyDisplayNames {
      * @param locale the locale into which to localize the names
      * @return a CurrencyDisplayNames
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static CurrencyDisplayNames getInstance(ULocale locale) {
         return CurrencyData.provider.getInstance(locale, true);
@@ -30,6 +32,7 @@ public abstract class CurrencyDisplayNames {
      * Returns true if currency display name data is available.
      * @return true if currency display name data is available
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static boolean hasData() {
         return CurrencyData.provider.hasData();
@@ -41,6 +44,7 @@ public abstract class CurrencyDisplayNames {
      * If hasData is false, returns {@link com.ibm.icu.util.ULocale#ROOT}.
      * @return the display locale
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract ULocale getLocale();
 
@@ -50,6 +54,7 @@ public abstract class CurrencyDisplayNames {
      * @param isoCode the three-letter ISO code.
      * @return the display name.
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getSymbol(String isoCode);
 
@@ -59,6 +64,7 @@ public abstract class CurrencyDisplayNames {
      * @param isoCode the three-letter ISO code
      * @return the display name
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getName(String isoCode);
 
@@ -70,6 +76,7 @@ public abstract class CurrencyDisplayNames {
      * @return the display name
      * @see com.ibm.icu.text.PluralRules
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getPluralName(String isoCode, String pluralKey);
 
@@ -79,6 +86,7 @@ public abstract class CurrencyDisplayNames {
      * The returned map is unmodifiable.
      * @return the map
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract Map<String, String> symbolMap();
 
@@ -88,6 +96,7 @@ public abstract class CurrencyDisplayNames {
      * The returned map is unmodifiable.
      * @return the map
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract Map<String, String> nameMap();
 }
