@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -121,7 +121,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
 
     /**
      * Unicode 5.2 version
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final VersionInfo UNICODE_5_2;
 

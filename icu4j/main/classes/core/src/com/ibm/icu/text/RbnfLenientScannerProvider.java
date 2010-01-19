@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,7 @@ import com.ibm.icu.util.ULocale;
  * A provider for an RbnfLenientScanner.
  *
  * @draft ICU 4.4
+ * @provisional This API might change or be removed in a future release.
  */
 public interface RbnfLenientScannerProvider {
   /**
@@ -23,6 +24,7 @@ public interface RbnfLenientScannerProvider {
    * @param extras extra collation rules
    * @return the lenient scanner, or null
    * @draft ICU 4.4
+   * @provisional This API might change or be removed in a future release.
    */
   RbnfLenientScanner get(ULocale locale, String extras);
 }

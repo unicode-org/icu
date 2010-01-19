@@ -1,8 +1,8 @@
 /*
- ****************************************************************************************
- * Copyright (C) 2009, Google, Inc.; International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                         *
- ****************************************************************************************
+ **************************************************************************************
+ * Copyright (C) 2009-2010, Google, Inc.; International Business Machines Corporation *
+ * and others. All Rights Reserved.                                                   *
+ **************************************************************************************
  */
 package com.ibm.icu.util;
 
@@ -309,8 +309,7 @@ public final class LocaleData {
     /**
      * Returns LocaleDisplayPattern for this locale, e.g., {0}({1})
      * @return locale display pattern as a String.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */ 
     public String getLocaleDisplayPattern() {
       ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
@@ -321,8 +320,7 @@ public final class LocaleData {
     /**
      * Returns LocaleDisplaySeparator for this locale.
      * @return locale display separator as a char.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */ 
     public String getLocaleSeparator() {
       ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
@@ -334,8 +332,7 @@ public final class LocaleData {
     
     /**
      * Returns the current CLDR version
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static VersionInfo getCLDRVersion() {
         // fetching this data should be idempotent.

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -641,8 +641,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      *                      with the given locale in preferred order.  Otherwise,
      *                      it will return all the available values for the locale.
      * @return an array of string values for the given key and the locale.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final String[] getKeywordValuesForLocale(String key, ULocale locale, boolean commonlyUsed) {
         // Note: The parameter commonlyUsed is actually not used.

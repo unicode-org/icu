@@ -79,8 +79,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Selector for getName() indicating the plural long name for a 
      * currency, such as "US dollar" for USD in "1 US dollar", 
      * and "US dollars" for USD in "2 US dollars".
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int PLURAL_LONG_NAME = 2;
 
@@ -314,8 +313,7 @@ public class Currency extends MeasureUnit implements Serializable {
      *                      Otherwise returns all values.
      * @return an array of values for the given key and the locale.  If there is no data, the
      *   array will be empty.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final String[] getKeywordValuesForLocale(String key, ULocale locale, 
             boolean commonlyUsed) {
@@ -479,8 +477,7 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Returns the display name for the given currency in the given locale.  
      * This is a convenience overload of getName(ULocale, int, String, boolean[]);
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public String getName(Locale locale, int nameStyle, String pluralCount,
             boolean[] isChoiceFormat) {
@@ -509,8 +506,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * in isChoiceFormat is always false.
      * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME,
      *                                    LONG_NAME, or PLURAL_LONG_NAME.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public String getName(ULocale locale, int nameStyle, String pluralCount,
             boolean[] isChoiceFormat) {

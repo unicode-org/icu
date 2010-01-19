@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -35,8 +35,7 @@ import com.ibm.icu.text.UnicodeSet;
  * CharSequence returns the list of names the corresponding charsets which can
  * convert the CharSequence.
  * 
- * @draft ICU 4.2
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.2
  */
 public final class CharsetSelector {
     private IntTrie trie;
@@ -161,8 +160,7 @@ public final class CharsetSelector {
      * @throws UnsupportedCharsetException
      *             If no support for the named charset is available in this
      *             instance of the Java virtual machine.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public CharsetSelector(List<String> charsetList, UnicodeSet excludedCodePoints,
             int mappingTypes) {
@@ -193,8 +191,7 @@ public final class CharsetSelector {
      *         returned encoding names and their order will be the same as
      *         supplied when building the selector.
      * 
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public List<String> selectForString(CharSequence unicodeText) {
         int columns = (encodings.length + 31) / 32;

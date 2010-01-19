@@ -384,6 +384,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *            not happen otherwise). For default behavior, use MATCH_NO_OPTIONS.
      * @return Best pattern matching the input skeleton (and options).
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public String getBestPattern(String skeleton, int options) {
         return getBestPattern(skeleton, null, options);
@@ -624,6 +625,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *            not happen otherwise). For default behavior, use MATCH_NO_OPTIONS.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public String replaceFieldTypes(String pattern, String skeleton, int options) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -834,16 +836,19 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MATCH_NO_OPTIONS = 0;
 
     /**
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MATCH_HOUR_FIELD_LENGTH = 1 << HOUR;
 
     /**
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MATCH_ALL_FIELDS_LENGTH = (1 << TYPE_LIMIT) - 1;
 

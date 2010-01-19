@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -73,104 +73,91 @@ public final class StringPrep {
     /**
      * Profile type: RFC3491 Nameprep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3491_NAMEPREP = 0;
 
     /**
      * Profile type: RFC3530 nfs4_cs_prep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3530_NFS4_CS_PREP = 1;
 
     /**
      * Profile type: RFC3530 nfs4_cs_prep with case insensitive option
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3530_NFS4_CS_PREP_CI = 2;
 
     /**
      * Profile type: RFC3530 nfs4_cis_prep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3530_NFS4_CIS_PREP = 3;
 
     /**
      * Profile type: RFC3530 nfs4_mixed_prep for prefix
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3530_NFS4_MIXED_PREP_PREFIX = 4;
 
     /**
      * Profile type: RFC3530 nfs4_mixed_prep for suffix
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3530_NFS4_MIXED_PREP_SUFFIX = 5;
 
     /**
      * Profile type: RFC3722 iSCSI
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3722_ISCSI = 6;
 
     /**
      * Profile type: RFC3920 XMPP Nodeprep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3920_NODEPREP = 7;
 
     /**
      * Profile type: RFC3920 XMPP Resourceprep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC3920_RESOURCEPREP = 8;
 
     /**
      * Profile type: RFC4011 Policy MIB Stringprep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC4011_MIB = 9;
 
     /**
      * Profile type: RFC4013 SASLprep
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC4013_SASLPREP = 10;
 
     /**
      * Profile type: RFC4505 trace
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC4505_TRACE = 11;
 
     /**
      * Profile type: RFC4518 LDAP
      * @see #getInstance(int)
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int RFC4518_LDAP = 12;
 
@@ -178,8 +165,7 @@ public final class StringPrep {
      * Profile type: RFC4518 LDAP for case ignore, numeric and stored prefix
      * matching rules
      * @see #getInstance(int)
-     * @provisional This API might change or be removed in a future release.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static final int RFC4518_LDAP_CI = 13;
 
@@ -329,8 +315,7 @@ public final class StringPrep {
      * Gets a StringPrep instance for the specified profile
      * 
      * @param profile The profile passed to find the StringPrep instance.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static StringPrep getInstance(int profile) {
         if (profile < 0 || profile > MAX_PROFILE) {
@@ -624,8 +609,7 @@ public final class StringPrep {
      *
      * @return String A String containing the output
      * @throws StringPrepParseException An exception when parsing or preparing a string is invalid.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public String prepare(String src, int options)
         throws StringPrepParseException{

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -472,38 +472,38 @@ public interface UProperty
     /**
      * Binary property Cased.
      * For Lowercase, Uppercase and Titlecase characters.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CASED=49;
     /**
      * Binary property Case_Ignorable.
      * Used in context-sensitive case mappings.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CASE_IGNORABLE=50;
     /**
      * Binary property Changes_When_Lowercased.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_LOWERCASED=51;
     /**
      * Binary property Changes_When_Uppercased.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_UPPERCASED=52;
     /**
      * Binary property Changes_When_Titlecased.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_TITLECASED=53;
     /**
      * Binary property Changes_When_Casefolded.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_CASEFOLDED=54;
     /**
      * Binary property Changes_When_Casemapped.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_CASEMAPPED=55;
 

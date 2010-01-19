@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2008-2009, Google, International Business Machines
+ * Copyright (C) 2008-2010, Google, International Business Machines
  * Corporationand others. All Rights Reserved.
  **************************************************************************
  */
@@ -59,15 +59,13 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Constant for full name style format. 
      * For example, the full name for "hour" in English is "hour" or "hours".
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int FULL_NAME = 0;
     /**
      * Constant for abbreviated name style format. 
      * For example, the abbreviated name for "hour" in English is "hr" or "hrs".
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int ABBREVIATED_NAME = 1;
 
@@ -126,8 +124,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * @param style    format style, either FULL_NAME or ABBREVIATED_NAME style.
      * @throws IllegalArgumentException if the style is not FULL_NAME or
      *                                  ABBREVIATED_NAME style.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public TimeUnitFormat(ULocale locale, int style) {
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
@@ -141,8 +138,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Create TimeUnitFormat given a Locale and a formatting style: full or
      * abbreviated.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public TimeUnitFormat(Locale locale, int style) {
         this(ULocale.forLocale(locale),  style);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -509,8 +509,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Selector code that tells the constructor to create a numbering system formatter
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final int NUMBERING_SYSTEM = 4;
 
@@ -1274,6 +1273,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @see #setLenientParseMode
      * @see #getLenientScannerProvider
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public void setLenientScannerProvider(RbnfLenientScannerProvider scannerProvider) {
         this.scannerProvider = scannerProvider;
@@ -1286,6 +1286,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      *
      * @see #setLenientScannerProvider
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public RbnfLenientScannerProvider getLenientScannerProvider() {
         // there's a potential race condition if two threads try to set/get the scanner at

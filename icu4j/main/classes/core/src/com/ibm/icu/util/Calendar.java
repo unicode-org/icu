@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -934,6 +934,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Field indicating whether or not the current month is a leap month.
      * Should have a value of 0 for non-leap months, and 1 for leap months.
      * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int IS_LEAP_MONTH = 22;
     
@@ -1908,8 +1909,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      *                      with the given locale in preferred order.  Otherwise,
      *                      it will return all the available values for the locale.
      * @return an array of string values for the given key and the locale.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final String[] getKeywordValuesForLocale(String key, ULocale locale, boolean commonlyUsed) {
         // Resolve region

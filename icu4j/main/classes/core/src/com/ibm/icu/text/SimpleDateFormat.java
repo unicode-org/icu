@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -410,8 +410,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Construct a SimpleDateFormat using the given pattern , override and locale.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public SimpleDateFormat(String pattern, String override, ULocale loc)
     {
