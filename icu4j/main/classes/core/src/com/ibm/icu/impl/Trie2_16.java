@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -158,8 +158,14 @@ public final class Trie2_16 extends Trie2 {
         bytesWritten += dataLength*2;        
         return bytesWritten;
     }
-    
-    
+
+    /**
+     * @return the number of bytes of the serialized trie
+     */
+    public int getSerializedLength() {
+        return 16+(header.indexLength+dataLength)*2;
+    }
+
     /**
      * Given a starting code point, find the last in a range of code points,
      * all with the same value.

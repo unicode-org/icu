@@ -6,9 +6,12 @@
 */
 package com.ibm.icu.impl;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.InputStream;
+import java.io.IOException;
 
-import com.ibm.icu.impl.Trie2;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
@@ -65,7 +68,7 @@ class Normalizer2Impl {
                 return 3;
             }
         }
-    };
+    }
 
     public static final class ReorderingBuffer {
         public ReorderingBuffer(Normalizer2Impl ni, StringBuilder dest) {
@@ -215,12 +218,72 @@ class Normalizer2Impl {
         }
 
         private int codePointStart, codePointLimit;
-    };
+    }
 
     public Normalizer2Impl() {}
 
-    public final void load(InputStream data, String name) {
-        // TODO
+    private static final class Reader implements ICUBinary.Authenticate {
+        // @Override when we switch to Java 6
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0]==1;
+        }
+        public VersionInfo readHeader(InputStream data) throws IOException {
+            byte[] dataVersion=ICUBinary.readHeader(data, DATA_FORMAT, this);
+            return VersionInfo.getInstance(dataVersion[0], dataVersion[1],
+                                           dataVersion[2], dataVersion[3]);
+        }
+        private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
+    }
+    private static final Reader READER=new Reader();
+    public final void load(InputStream data) throws IOException {
+        BufferedInputStream bis=new BufferedInputStream(data);
+        dataVersion=READER.readHeader(bis);
+        DataInputStream ds=new DataInputStream(bis);
+        int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
+        if(indexesLength<=IX_MIN_MAYBE_YES) {
+            throw new IOException("Normalizer2 data: not enough indexes");
+        }
+        int[] inIndexes=new int[indexesLength];
+        inIndexes[0]=indexesLength*4;
+        for(int i=1; i<indexesLength; ++i) {
+            inIndexes[i]=ds.readInt();
+        }
+
+        minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
+        minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
+
+        minYesNo=inIndexes[IX_MIN_YES_NO];
+        minNoNo=inIndexes[IX_MIN_NO_NO];
+        limitNoNo=inIndexes[IX_LIMIT_NO_NO];
+        minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
+
+        // Read the normTrie.
+        int offset=inIndexes[IX_NORM_TRIE_OFFSET];
+        int nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
+        normTrie=Trie2_16.createFromSerialized(ds);
+        int trieLength=normTrie.getSerializedLength();
+        if(trieLength>(nextOffset-offset)) {
+            throw new IOException("Normalizer2 data: not enough bytes for normTrie");
+        }
+        ds.skipBytes((nextOffset-offset)-trieLength);  // skip padding after trie bytes
+
+        // Read the composition and mapping data.
+        offset=nextOffset;
+        nextOffset=inIndexes[IX_RESERVED2_OFFSET];
+        int numChars=(nextOffset-offset)/2;
+        char[] chars;
+        if(numChars!=0) {
+            chars=new char[numChars];
+            for(int i=0; i<numChars; ++i) {
+                chars[i]=ds.readChar();
+            }
+            maybeYesCompositions=new String(chars);
+            extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
+        }
+        data.close();
+    }
+    public final void load(ClassLoader root, String name) throws IOException {
+        load(ICUData.getRequiredStream(root, name));
     }
 
     public final void addPropertyStarts(UnicodeSet sa) {
@@ -485,6 +548,6 @@ class Normalizer2Impl {
     String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
 
     Trie2_16 fcdTrie;
-};
+}
 
 // TODO: Copy parts of normalizer2impl.h starting with Normalizer2Factory??
