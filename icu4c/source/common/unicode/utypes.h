@@ -38,6 +38,16 @@
 #include "unicode/uversion.h"
 #include "unicode/uconfig.h"
 
+/*!
+ * \file
+ * \brief Basic definitions for ICU, for both C and C++ APIs
+ *
+ * This file defines basic types, constants, and enumerations directly or
+ * indirectly by including other header files, especially utf.h for the
+ * basic character and string definitions and umachine.h for consistent
+ * integer and other types.
+ */
+
 
 #ifdef XP_CPLUSPLUS
 #   ifndef U_SHOW_CPLUSPLUS_API
@@ -48,6 +58,7 @@
 #   define U_SHOW_CPLUSPLUS_API 0
 #endif
 
+/** @{ API visibility control */
 
 /**
  * \def U_HIDE_DRAFT_API
@@ -80,15 +91,8 @@
 #include "unicode/usystem.h"
 #endif
 
-/*!
- * \file
- * \brief Basic definitions for ICU, for both C and C++ APIs
- *
- * This file defines basic types, constants, and enumerations directly or
- * indirectly by including other header files, especially utf.h for the
- * basic character and string definitions and umachine.h for consistent
- * integer and other types.
- */
+/** @} */
+
 
 /*===========================================================================*/
 /* char Character set family                                                 */

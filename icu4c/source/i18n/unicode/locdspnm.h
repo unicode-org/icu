@@ -38,8 +38,8 @@ public:
     virtual ~LocaleDisplayNames();
 
     /**
-     * Convenience overload of {@link #createInstance(locale,
-     * UDialectHandling)} that specifies STANDARD dialect handling.
+     * Convenience overload of {@link #createInstance(const Locale& locale, UDialectHandling dialectHandling)} 
+     * that specifies STANDARD dialect handling.
      * @param locale the display locale 
      * @return a LocaleDisplayNames instance 
      * @draft ICU 4.4
