@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2500,7 +2500,7 @@ public final class UTF16 {
          * @return 0 returned if a == b. If a < b, a negative value is returned. Otherwise if a > b,
          *         a positive value is returned.
          * @exception ClassCastException thrown when either a or b is not a String object
-         * @stable ICU 2.4
+         * @stable ICU 4.4
          */
         public int compare(String a, String b) {
             if (a == b) {
