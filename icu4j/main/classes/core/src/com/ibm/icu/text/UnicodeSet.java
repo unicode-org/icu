@@ -3820,7 +3820,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Freeze this class, according to the Freezable interface.
      * @return this
-     * @stable ICU 3.8
+     * @stable ICU 4.4
      */
     public UnicodeSet freeze() {
         frozen = true;
@@ -3830,7 +3830,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Clone a thawed version of this class, according to the Freezable interface.
      * @return this
-     * @stable ICU 3.8
+     * @stable ICU 4.4
      */
     public UnicodeSet cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();
