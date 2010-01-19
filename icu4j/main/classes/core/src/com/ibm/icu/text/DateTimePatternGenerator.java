@@ -967,7 +967,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Boilerplate for Freezable
-     * @stable ICU 3.6
+     * @stable ICU 4.4
      */
     public DateTimePatternGenerator freeze() {
         frozen = true;
@@ -976,7 +976,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Boilerplate for Freezable
-     * @stable ICU 3.6
+     * @stable ICU 4.4
      */
     public DateTimePatternGenerator cloneAsThawed() {
         DateTimePatternGenerator result = (DateTimePatternGenerator) (this.clone());
