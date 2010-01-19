@@ -1468,6 +1468,9 @@ icu4c/source/data/unidata/WordBreakProperty.txt svneol=native#text/plain
 icu4c/source/data/unidata/changes.txt svneol=native#text/plain
 icu4c/source/data/unidata/confusables.txt svneol=native#text/plain
 icu4c/source/data/unidata/confusablesWholeScript.txt svneol=native#text/plain
+icu4c/source/data/unidata/norm2/nfc.txt svneol=native#text/plain
+icu4c/source/data/unidata/norm2/nfkc.txt svneol=native#text/plain
+icu4c/source/data/unidata/norm2/nfkc_cf.txt svneol=native#text/plain
 icu4c/source/data/unidata/ucdterms.txt svneol=native#text/plain
 icu4c/source/data/xml/brkitr/el.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
@@ -1852,9 +1855,6 @@ icu4c/source/extra/uconv/samples/utf8/simplechinese.txt svneol=native#text/plain
 icu4c/source/extra/uconv/samples/utf8/turkish.txt svneol=native#text/plain
 icu4c/source/extra/uconv/samples/utf8/utf-8-demo.txt svneol=native#text/plain
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
-icu4c/source/i18n/selfmt.cpp -text
-icu4c/source/i18n/selfmtimpl.h -text
-icu4c/source/i18n/unicode/selfmt.h -text
 icu4c/source/samples/break/readme.txt svneol=native#text/plain
 icu4c/source/samples/cal/readme.txt svneol=native#text/plain
 icu4c/source/samples/case/readme.txt svneol=native#text/plain
@@ -1887,8 +1887,6 @@ icu4c/source/test/compat/readme.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/cxxfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/dfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/pfiles.txt svneol=native#text/plain
-icu4c/source/test/intltest/selfmts.cpp -text
-icu4c/source/test/intltest/selfmts.h -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/README -text
@@ -1949,9 +1947,7 @@ icu4c/source/test/thaitest/space.txt svneol=native#text/plain
 icu4c/source/tools/gendraft/exclude.txt svneol=native#text/plain
 icu4c/source/tools/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
 icu4c/source/tools/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
-icu4c/source/tools/icuinfo/icuinfo.vcproj -text
-icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt -text
-icu4c/source/tools/icuinfo/testplug.vcproj -text
+icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt svneol=native#text/plain
 icu4c/source/tools/tzcode/readme.txt svneol=native#text/plain
 icu4c/unicode-license.txt svneol=native#text/plain
 icu4j/APIChangeReport.html svneol=native#text/html
