@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -93,7 +93,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      * @return -1, 0, or 1 as this compares less than, equal to, or
      * greater than rhs.
      * @throws ClassCastException if the other object is not a RawCollationKey.
-     * @stable ICU 3.2
+     * @stable ICU 4.4
      */
     public int compareTo(RawCollationKey rhs) {
         int result = super.compareTo(rhs);
