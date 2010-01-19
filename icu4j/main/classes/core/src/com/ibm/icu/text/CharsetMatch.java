@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2009, International Business Machines Corporation and    *
+* Copyright (C) 2005-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -205,30 +205,19 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         return fRecognizer.getLanguage();
     }
 
-//    /**
-//     * Compare to other CharsetMatch objects.
-//     * Comparison is based on the match confidence value, which 
-//     *   allows CharsetDetector.detectAll() to order its results. 
-//     *
-//     * @param o the CharsetMatch object to compare against.
-//     * @return  a negative integer, zero, or a positive integer as the 
-//     *          confidence level of this CharsetMatch
-//     *          is less than, equal to, or greater than that of
-//     *          the argument.
-//     * @throws ClassCastException if the argument is not a CharsetMatch.
-//     * @stable ICU 3.4
-//     */
-//    public int compareTo (Object o) {
-//        CharsetMatch other = (CharsetMatch)o;
-//        int compareResult = 0;
-//        if (this.fConfidence > other.fConfidence) {
-//            compareResult = 1;
-//        } else if (this.fConfidence < other.fConfidence) {
-//            compareResult = -1;
-//        }
-//        return compareResult;
-//    }
-
+    /**
+     * Compare to other CharsetMatch objects.
+     * Comparison is based on the match confidence value, which 
+     *   allows CharsetDetector.detectAll() to order its results. 
+     *
+     * @param other the CharsetMatch object to compare against.
+     * @return  a negative integer, zero, or a positive integer as the 
+     *          confidence level of this CharsetMatch
+     *          is less than, equal to, or greater than that of
+     *          the argument.
+     * @throws ClassCastException if the argument is not a CharsetMatch.
+     * @stable ICU 4.4
+     */
     public int compareTo (CharsetMatch other) {
         int compareResult = 0;
         if (this.fConfidence > other.fConfidence) {
