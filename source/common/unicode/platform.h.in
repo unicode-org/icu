@@ -33,7 +33,7 @@
 # error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
 #endif
 
-/* Determine wheter to enable auto cleanup of libraries. */
+/** Determine wheter to enable auto cleanup of libraries. */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
 #endif
@@ -41,7 +41,7 @@
 /* Need platform.h when using CYGWINMSVC to get definitions above. Ignore everything else. */
 #ifndef CYGWINMSVC
 
-/* Define the platform we're on. */
+/** Define the platform we're on. */
 #ifndef @platform@
 #define @platform@
 #endif

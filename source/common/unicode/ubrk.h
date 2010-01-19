@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and others.
+* Copyright (C) 1996-2010, International Business Machines Corporation and others.
 * All Rights Reserved.
 ******************************************************************************
 */
@@ -77,10 +77,10 @@
  * object oriented C++ API with equivalent functionality is defined in the
  * file brkiter.h.
  * <p>
- * Code snippits illustrating the use of the Break Iterator APIs
+ * Code snippets illustrating the use of the Break Iterator APIs
  * are available in the ICU User Guide,
  * http://icu-project.org/userguide/boundaryAnalysis.html
- * and in the sample program icu/source/samples/break/break.cpp"
+ * and in the sample program icu/source/samples/break/break.cpp
  */
 
 /** The possible types of text boundaries.  @stable ICU 2.0 */
