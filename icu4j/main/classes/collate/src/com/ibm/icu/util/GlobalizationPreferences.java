@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -1488,7 +1488,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * @draft ICU 3.6
+     * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences freeze() {
@@ -1497,7 +1497,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * @draft ICU 3.6
+     * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences cloneAsThawed() {
