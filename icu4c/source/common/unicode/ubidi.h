@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -811,12 +811,10 @@ typedef enum UBiDiReorderingMode {
  *
  * <li>When the reordering mode is set to
  * <code>#UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the Logical to Visual
- * Bidi algorithm used in Windows XP is used as an approximation of an
- * "inverse Bidi" algorithm.
+ * Bidi algorithm used in Windows XP is used as an approximation of an "inverse Bidi" algorithm.
  * <br>
  * For example, an LTR paragraph with the content "abc FED123" (where
- * upper case represents RTL characters) will be transformed to
- * "abc 123DEF.</li>
+ * upper case represents RTL characters) will be transformed to "abc 123DEF."</li>
  * </ul>
  *
  * <p>In all the reordering modes specifying an "inverse Bidi" algorithm

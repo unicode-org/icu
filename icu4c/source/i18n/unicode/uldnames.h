@@ -58,6 +58,7 @@ typedef struct ULocaleDisplayNames ULocaleDisplayNames;
  * @param locale the display locale 
  * @param dialectHandling how to select names for locales 
  * @return a ULocaleDisplayNames instance 
+ * @param pErrorCode the status code
  * @draft ICU 4.4
  */
 U_DRAFT ULocaleDisplayNames * U_EXPORT2

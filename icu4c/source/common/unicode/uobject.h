@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -64,9 +64,10 @@ U_NAMESPACE_BEGIN
 #endif
 
 /**
+ * @{
  * \def U_NO_THROW
  *         Define this to define the throw() specification so
-                  certain functions do not throw any exceptions
+ *                 certain functions do not throw any exceptions
  *
  *         UMemory operator new methods should have the throw() specification 
  *         appended to them, so that the compiler adds the additional NULL check 
@@ -79,6 +80,8 @@ U_NAMESPACE_BEGIN
 #ifndef U_NO_THROW
 #define U_NO_THROW throw()
 #endif
+
+/** @} */
 
 /**
  * UMemory is the common ICU base class.

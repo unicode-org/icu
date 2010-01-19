@@ -1613,7 +1613,7 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls toUTF8().
    *
-   * @param A standard string (or a compatible object)
+   * @param result A standard string (or a compatible object)
    *        to which the UTF-8 version of the string is appended.
    * @return The string object.
    * @draft ICU 4.2

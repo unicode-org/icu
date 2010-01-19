@@ -351,7 +351,7 @@ typedef enum UProperty {
         Unicode normalization and combining character sequences.
         They have ccc=0 and do not occur in non-initial position of the
         canonical decomposition of any character
-        (like " in NFD(a-umlaut) and a Jamo T in an NFD(Hangul LVT)).
+        (like a-umlaut in NFD and a Jamo T in an NFD(Hangul LVT)).
         ICU uses this property for segmenting a string for generating a set of
         canonically equivalent strings, e.g. for canonical closure while
         processing collation tailoring rules.

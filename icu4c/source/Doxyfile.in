@@ -1,7 +1,7 @@
 # Doxyfile 1.3.7
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2004-2009, International Business Machines Corporation
+#  * Copyright (c) 2004-2010, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ********************************************************************
 
@@ -9,11 +9,12 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = "ICU @VERSION@"
-PROJECT_NUMBER         = 
+PROJECT_NUMBER         = @VERSION@
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
-USE_WINDOWS_ENCODING   = YES
+#USE_WINDOWS_ENCODING   = YES
+DOXYFILE_ENCODING	= UTF-8
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       = 
@@ -25,7 +26,7 @@ STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
-DETAILS_AT_TOP         = NO
+#DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 DISTRIBUTE_GROUP_DOC   = YES
 TAB_SIZE               = 8
@@ -215,9 +216,11 @@ TEMPLATE_RELATIONS     = NO
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
 CALL_GRAPH             = NO
+CALLER_GRAPH		= NO
 GRAPHICAL_HIERARCHY    = YES
 DOT_IMAGE_FORMAT       = png
 DOT_PATH               = 
+#DOT_FONTNAME	       = FreeSans
 DOTFILE_DIRS           = 
 MAX_DOT_GRAPH_WIDTH    = 1024
 MAX_DOT_GRAPH_HEIGHT   = 1024
