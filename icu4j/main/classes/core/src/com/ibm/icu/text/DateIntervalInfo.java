@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -777,7 +777,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     
     /**
      * Boilerplate for Freezable
-     * @stable ICU 4.0
+     * @stable ICU 4.4
      */
     public DateIntervalInfo freeze() {
         frozen = true;
@@ -786,7 +786,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     
     /**
      * Boilerplate for Freezable
-     * @stable ICU 4.0
+     * @stable ICU 4.4
      */
     public DateIntervalInfo cloneAsThawed() {
         DateIntervalInfo result = (DateIntervalInfo) (this.cloneUnfrozenDII());
