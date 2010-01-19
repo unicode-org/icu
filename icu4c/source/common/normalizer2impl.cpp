@@ -197,20 +197,17 @@ uint8_t ReorderingBuffer::previousCC() {
     if(reorderStart>=codePointStart) {
         return 0;
     }
-    UChar c=*--codePointStart;
+    UChar32 c=*--codePointStart;
     if(c<Normalizer2Impl::MIN_CCC_LCCC_CP) {
         return 0;
     }
 
     UChar c2;
-    uint16_t norm16;
     if(U16_IS_TRAIL(c) && start<codePointStart && U16_IS_LEAD(c2=*(codePointStart-1))) {
         --codePointStart;
-        norm16=impl.getNorm16FromSurrogatePair(c2, c);
-    } else {
-        norm16=impl.getNorm16FromBMP(c);
+        c=U16_GET_SUPPLEMENTARY(c2, c);
     }
-    return Normalizer2Impl::getCCFromYesOrMaybe(norm16);
+    return Normalizer2Impl::getCCFromYesOrMaybe(impl.getNorm16(c));
 }
 
 // Inserts c somewhere before the last character.
@@ -299,12 +296,13 @@ Normalizer2Impl::load(const char *packageName, const char *name, UErrorCode &err
 }
 
 uint8_t Normalizer2Impl::getTrailCCFromCompYesAndZeroCC(const UChar *cpStart, const UChar *cpLimit) const {
-    uint16_t prevNorm16;
+    UChar32 c;
     if(cpStart==(cpLimit-1)) {
-        prevNorm16=getNorm16FromBMP(*cpStart);
+        c=*cpStart;
     } else {
-        prevNorm16=getNorm16FromSurrogatePair(cpStart[0], cpStart[1]);
+        c=U16_GET_SUPPLEMENTARY(cpStart[0], cpStart[1]);
     }
+    uint16_t prevNorm16=getNorm16(c);
     if(prevNorm16<=minYesNo) {
         return 0;  // yesYes and Hangul LV/LVT have ccc=tccc=0
     } else {
