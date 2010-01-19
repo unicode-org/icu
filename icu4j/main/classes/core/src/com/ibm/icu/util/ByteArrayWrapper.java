@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -245,7 +245,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @return a value <0, 0, or >0 as this compares less than, equal to, or
      * greater than other.
      * @throws ClassCastException if the other object is not a ByteArrayWrapper
-     * @stable ICU 3.2
+     * @stable ICU 4.4
      */
     public int compareTo(ByteArrayWrapper other) {
         if (this == other) return 0;
