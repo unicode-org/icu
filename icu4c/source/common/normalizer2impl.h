@@ -196,16 +196,6 @@ public:
     const UTrie2 *getFCDTrie(UErrorCode &errorCode) const ;
 
     uint16_t getNorm16(UChar32 c) const { return UTRIE2_GET16(normTrie, c); }
-    uint16_t getNorm16FromBMP(UChar c) const { return UTRIE2_GET16(normTrie, c); }
-    uint16_t getNorm16FromSingleLead(UChar c) const {
-        return UTRIE2_GET16_FROM_U16_SINGLE_LEAD(normTrie, c);
-    }
-    uint16_t getNorm16FromSupplementary(UChar32 c) const {
-        return UTRIE2_GET16_FROM_SUPP(normTrie, c);
-    }
-    uint16_t getNorm16FromSurrogatePair(UChar c, UChar c2) const {
-        return getNorm16FromSupplementary(U16_GET_SUPPLEMENTARY(c, c2));
-    }
 
     UNormalizationCheckResult getCompQuickCheck(uint16_t norm16) const {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
@@ -233,7 +223,6 @@ public:
     }
 
     uint16_t getFCD16(UChar32 c) const { return UTRIE2_GET16(fcdTrie(), c); }
-    uint16_t getFCD16FromBMP(UChar c) const { return UTRIE2_GET16(fcdTrie(), c); }
     uint16_t getFCD16FromSingleLead(UChar c) const {
         return UTRIE2_GET16_FROM_U16_SINGLE_LEAD(fcdTrie(), c);
     }
