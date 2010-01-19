@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 1998-2003, International Business Machines
+//*   Copyright (C) 1998-2010, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -8,7 +8,7 @@
 
 // This is a test resource to check new types of resources
 
-testtypes
+testtypes:table(nofallback)
 {
     zerotest { "abc\u0000def" } // The length of this string should be 7, not 3
     binarytest:bin { 000102030405060708090a0b0c0d0e } // Binary 15 bytes long 
