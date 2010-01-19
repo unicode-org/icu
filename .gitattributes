@@ -54,12 +54,7 @@ icu4c/source/data/in/nfkc.nrm -text
 icu4c/source/data/in/nfkc_cf.nrm -text
 icu4c/source/data/in/unorm.icu -text
 icu4c/source/data/locales/pool.res -text
-icu4c/source/i18n/selfmt.cpp -text
-icu4c/source/i18n/selfmtimpl.h -text
-icu4c/source/i18n/unicode/selfmt.h -text
 icu4c/source/samples/ucnv/data02.bin -text
-icu4c/source/test/intltest/selfmts.cpp -text
-icu4c/source/test/intltest/selfmts.h -text
 icu4c/source/test/perf/README -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/importtest.bin -text
@@ -67,9 +62,6 @@ icu4c/source/test/testdata/iscii.bin -text
 icu4c/source/test/testdata/old_e_testtypes.res -text
 icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text
-icu4c/source/tools/icuinfo/icuinfo.vcproj -text
-icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt -text
-icu4c/source/tools/icuinfo/testplug.vcproj -text
 icu4j/build.properties -text
 icu4j/demos/manifest.stub -text
 icu4j/icu-eclipse/misc/ICUConfig.properties -text
