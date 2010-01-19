@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.io.InputStream;
+import java.io.IOException;
 
 import com.ibm.icu.text.Normalizer;
 
@@ -130,7 +131,7 @@ public abstract class Normalizer2 {
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    public static Normalizer2 getInstance(InputStream data, String name, Mode mode) {
+    public static Normalizer2 getInstance(InputStream data, String name, Mode mode) throws IOException {
         return null;
     }
 
@@ -279,4 +280,4 @@ public abstract class Normalizer2 {
      * @provisional This API might change or be removed in a future release.
      */
     public abstract boolean isInert(int c);
-};
+}
