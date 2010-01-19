@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Thu Jan  7 17:59:47 2010
+// Build date: Mon Jan 18 16:04:02 2010
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2009u
+// Olson version: 2010a
 // ICU version: 4.3.4
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
@@ -13,7 +13,7 @@
 //---------------------------------------------------------
 
 zoneinfo:table(nofallback) {
- TZVersion { "2009u" }
+ TZVersion { "2010a" }
  Zones:array { 
   /* ACT */ :int { 332 } //Z#0
 ,  /* AET */ :int { 344 } //Z#1
@@ -1314,7 +1314,7 @@ zoneinfo:table(nofallback) {
     :intvector { 7200, 2010 }
   } //Z#244
 ,  /* Asia/Dhaka */ :array {
-    :intvector { -2147483648, -891582800, -872058600, -862637400, -576138600, 38772000, 1246294800, 1262278800, 1270054800, 1288544400 }
+    :intvector { -2147483648, -891582800, -872058600, -862637400, -576138600, 38772000, 1245430800, 1262278800, 1270054800, 1288544400 }
     :intvector { 19800, 0, 21200, 0, 21600, 0, 21600, 3600, 23400, 0 }
     :bin { "01040004020203020302" }
     "Dhaka"
