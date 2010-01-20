@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -535,6 +535,12 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
             break;
         SimpleThread::sleep(1000);
     }
+
+    for (i = 0; i < nThreads; i++) {
+        delete threads[i];
+    }
+    delete [] threads;
+
 #endif
     UDate total = 0;
     logln("### Elapsed time by patterns ###");
@@ -544,11 +550,6 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
     }
     logln((UnicodeString) "Total: " + total + "ms");
     logln((UnicodeString) "Iteration: " + data.testCounts);
-
-    for (i = 0; i < nThreads; i++) {
-        delete threads[i];
-    }
-    delete [] threads;
 
     delete cal;
 }
