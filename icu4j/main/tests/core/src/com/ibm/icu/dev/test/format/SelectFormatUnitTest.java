@@ -17,8 +17,6 @@ import com.ibm.icu.text.SelectFormat;
 public class SelectFormatUnitTest extends TestFmwk {
   
     static final String SIMPLE_PATTERN = "feminine {feminineVerbValue} other{otherVerbValue}";
-    static final int SELECT_PATTERN_DATA = 4 ;
-    static final int SELECT_SYNTAX_DATA = 10 ;
 
     public static void main(String[] args) throws Exception {
         new SelectFormatUnitTest().run(args);
@@ -59,8 +57,8 @@ public class SelectFormatUnitTest extends TestFmwk {
 
         //Test SelectFormat pattern syntax
         try {
-            SelectFormat selFmt = new SelectFormat();
-            for (int i=0; i<SELECT_SYNTAX_DATA; ++i) {
+            SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
+            for (int i=0; i<checkSyntaxData.length; ++i) {
                 try {
                     selFmt.applyPattern(checkSyntaxData[i]);
                     errln("\nERROR: Unexpected result - SelectFormat Unit Test failed "
@@ -159,14 +157,9 @@ public class SelectFormatUnitTest extends TestFmwk {
         };
 
         log("SelectFormat Unit test: Testing  applyPattern() and format() ...");
-        SelectFormat selFmt = null; 
-        try {
-            selFmt = new SelectFormat();
-        } catch (Exception e){
-            errln("Exception encountered in TestApplyFormat ");
-        }
+        SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN); 
 
-        for (int i=0; i<SELECT_PATTERN_DATA; ++i) {
+        for (int i=0; i<patternTestData.length; ++i) {
             try {
                 selFmt.applyPattern(patternTestData[i]);
             } catch (Exception e){

@@ -195,16 +195,6 @@ public class SelectFormat extends Format{
        PAST_KEYWORD_STATE, PHRASE_STATE      
     };
 
-
-    /**
-     * Creates a new <code>SelectFormat</code> 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public SelectFormat() {
-        init();
-    }
-
     /**
      * Creates a new <code>SelectFormat</code> for a given pattern string.
      * @param  pattern the pattern for this <code>SelectFormat</code>.
@@ -282,7 +272,7 @@ public class SelectFormat extends Format{
      * Patterns and their interpretation are specified in the class description.
      *
      * @param pattern the pattern for this select format.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when the pattern is not a valid select format pattern.
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
@@ -428,7 +418,7 @@ public class SelectFormat extends Format{
      *
      * @param keyword a keyword for which the select message should be formatted.
      * @return the string containing the formatted select message.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when the given keyword is not available in the select format pattern
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
@@ -458,7 +448,7 @@ public class SelectFormat extends Format{
      * @param toAppendTo the formatted message will be appended to this
      *        <code>StringBuffer</code>.
      * @param pos will be ignored by this method.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when the given keyword is not available in the select format pattern
      * @return the string buffer passed in as toAppendTo, with formatted text
      *         appended.
      * @draft ICU 4.4
@@ -475,13 +465,13 @@ public class SelectFormat extends Format{
     }
 
     /**
-     * This method is not yet supported by <code>SelectFormat</code>.
+     * This method is not supported by <code>SelectFormat</code>.
      * @param source the string to be parsed.
      * @param pos defines the position where parsing is to begin,
      * and upon return, the position where parsing left off.  If the position
      * has not changed upon return, then parsing failed.
-     * @return nothing because this method is not yet implemented.
-     * @throws UnsupportedOperationException
+     * @return nothing because this method is not supported.
+     * @throws UnsupportedOperationException thrown always.
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
