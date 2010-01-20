@@ -234,7 +234,7 @@
 
     <target name="_runLocalespiCheck" depends="localespi, localespi-tests">
         <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
-            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${java.ext.dirs}"/>
+            <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${icu4j.localespi-tests.jar}"/>
@@ -360,7 +360,7 @@
         <antcall target="_build-localespi"/>
     </target>
 
-    <target name="_build-localespi" depends="core, collate">
+    <target name="_build-localespi" depends="core, collate, currdata, langdata, regiondata">
         <ant dir="${icu4j.localespi.dir}" inheritAll="false"/>
     </target>
 
