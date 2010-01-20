@@ -43,7 +43,7 @@ import java.util.Map;
  * "das"), and adjective forms ("guter Mann", "gute Frau", "gutes  M\\u00E4dchen").
  *
  * <li>French has only two genders; as in German the gender of nouns
- * is rather arbitrary – for sun and moon, the genders
+ * is rather arbitrary - for sun and moon, the genders
  * are the opposite of those in German. The gender affects
  * pronouns ("il", "elle"), articles ("le", "la"),
  * adjective forms ("bon", "bonne"), and sometimes
