@@ -192,19 +192,21 @@
         </java>
     </target>
 
-    <target name="coreCheck" depends="info, core, core-tests" description="Run only the core tests">
+    <target name="coreCheck" depends="info, core, currdata, langdata, regiondata, core-tests" description="Run only the core tests">
         <java classname="com.ibm.icu.dev.test.TestAllCore" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
                 <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
+                <pathelement path="${icu4j.currdata.jar}"/>
+                <pathelement path="${icu4j.langdata.jar}"/>
+                <pathelement path="${icu4j.regiondata.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
                 <pathelement path="${icu4j.core-tests.jar}"/>
             </classpath>
         </java>
     </target>
 
-    <target name="collateCheck" depends="info, core, collate, collate-tests" description="Run only the collation tests">
+    <target name="collateCheck" depends="info, core, collate, currdata, langdata, regiondata, collate-tests" description="Run only the collation tests">
         <java classname="com.ibm.icu.dev.test.TestAllCollate" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
@@ -212,6 +214,11 @@
                 <pathelement path="${icu4j.collate.jar}"/>
                 <pathelement path="${icu4j.test-framework.jar}"/>
                 <pathelement path="${icu4j.collate-tests.jar}"/>
+
+                <!-- for now, collateCheck needs currdata, langdata and regiondata, because of GlobalizationPreferencesTest" -->
+                <pathelement path="${icu4j.currdata.jar}"/>
+                <pathelement path="${icu4j.langdata.jar}"/>
+                <pathelement path="${icu4j.regiondata.jar}"/>
             </classpath>
         </java>
     </target>
