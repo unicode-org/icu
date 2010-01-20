@@ -560,16 +560,14 @@
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.collate.dir}/src">
-                <include name="com/ibm/icu/**"/>
-                <exclude name="com/ibm/icu/impl/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>
-                <exclude name="com/ibm/icu/impl/**"/>
             </packageset>
             <packageset dir="${icu4j.translit.dir}/src">
-                <include name="com/ibm/icu/**"/>
-                <exclude name="com/ibm/icu/impl/**"/>
+                <include name="com/ibm/icu/text/**"/>
             </packageset>
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${icu4j.build-tools.jar}">
                 <param name="-name" value="ICU4J ${icu4j.impl.version}"/>

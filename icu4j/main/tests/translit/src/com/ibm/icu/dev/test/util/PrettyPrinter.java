@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  **********************************************************************
  * Author: Mark Davis
@@ -16,7 +16,6 @@ import java.util.TreeSet;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.Formatter;
 import com.ibm.icu.text.StringTransform;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -25,7 +24,7 @@ import com.ibm.icu.text.UTF16.StringComparator;
 
 /** Provides more flexible formatting of UnicodeSet patterns.
  */
-public class PrettyPrinter implements Formatter<UnicodeSet, Appendable>{
+public class PrettyPrinter {
     private static final StringComparator CODEPOINT_ORDER = new UTF16.StringComparator(true,false,0);
     private static final UnicodeSet PATTERN_WHITESPACE = (UnicodeSet) new UnicodeSet("[[:Cn:][:Default_Ignorable_Code_Point:][:patternwhitespace:]]").freeze();
     private static final UnicodeSet SORT_AT_END = (UnicodeSet) new UnicodeSet("[[:Cn:][:Cs:][:Co:][:Ideographic:]]").freeze();
