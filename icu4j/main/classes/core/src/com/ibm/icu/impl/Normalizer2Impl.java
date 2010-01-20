@@ -8,13 +8,9 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.Trie2_16;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.VersionInfo;
 
