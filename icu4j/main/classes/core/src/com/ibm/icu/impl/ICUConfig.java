@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,9 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.AccessControlException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
@@ -50,11 +53,20 @@ public class ICUConfig {
      */
     public static String get(String name, String def) {
         String val = null;
-        // Try the system property first
-        try {
+        final String fname = name;
+        if (System.getSecurityManager() != null) {
+            try {
+                val = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                    public String run() {
+                        return System.getProperty(fname);
+                    }
+                });
+            } catch (AccessControlException e) {
+                // ignore
+                // TODO log this message
+            }
+        } else {
             val = System.getProperty(name);
-        } catch (SecurityException e) {
-            // Ignore and fall through
         }
 
         if (val == null) {

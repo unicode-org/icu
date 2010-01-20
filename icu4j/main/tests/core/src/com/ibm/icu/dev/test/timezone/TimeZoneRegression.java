@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.AccessControlException;
 import java.util.Date;
 import java.util.Locale;
 
@@ -39,8 +40,11 @@ public class TimeZoneRegression extends TestFmwk {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
         String id = TimeZone.getDefault().getID();
         try {
-            // user.timezone is a protected system property
-            logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+            try {
+                logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+            } catch (AccessControlException e) {
+                // user.timezone is a protected system property - ignore
+            }
             logln("TimeZone.getDefault().getID(): " + id);
             logln(new Date().toString());
             logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
