@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -97,11 +97,13 @@ public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
+     * @draft ICU 4.4
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     * @draft ICU 4.4
      */
     virtual UClassID getDynamicClassID() const;
 

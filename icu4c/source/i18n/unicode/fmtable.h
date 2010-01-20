@@ -115,6 +115,7 @@ public:
      * @param status  the error code.  Possible errors include U_INVALID_FORMAT_ERROR
      *                if the format of the string does not conform to that of a
      *                decimal number.
+     * @draft ICU 4.4
      */
     Formattable(const StringPiece &number, UErrorCode &status);
 
