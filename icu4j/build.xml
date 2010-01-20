@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -987,6 +987,18 @@
             <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
             <include name="com/ibm/icu/util/CalendarServiceShim.java"/>
         </javac>
+
+        <javac srcdir="${icu4j.regiondata.dir}/src"
+                destdir="${module.bin.dir}"
+                source="${javac.source}"
+                target="${javac.target}"
+                debug="on" deprecation="off"/>
+
+        <javac srcdir="${icu4j.currdata.dir}/src"
+                destdir="${module.bin.dir}"
+                source="${javac.source}"
+                target="${javac.target}"
+                debug="on" deprecation="off"/>
 
         <!-- Format does not require BreakIterator data -->
         <unjar src="${icu4j.data.jar}" dest="${module.bin.dir}">
