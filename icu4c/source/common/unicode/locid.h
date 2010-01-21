@@ -779,4 +779,3 @@ Locale::isBogus(void) const {
 U_NAMESPACE_END
 
 #endif
-
