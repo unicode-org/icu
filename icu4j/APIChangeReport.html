@@ -107,9 +107,7 @@ CharsetProviderICU
 CharsetMatch
 <ul>
 <li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
-(draft)      public int <i>compareTo</i>(com.ibm.icu.text.CharsetMatch)</li>
-<li>    (stable)     public class <i>MessageFormat</i> extends com.ibm.icu.text.UFormat</br>
-(stable)     public class <i>MessageFormat</i> extends com.ibm.icu.text.UFormat implements com.ibm.icu.text.BaseFormat</li>
+(stable)     public int <i>compareTo</i>(com.ibm.icu.text.CharsetMatch)</li>
 </ul>
 RawCollationKey
 <ul>
@@ -117,8 +115,6 @@ RawCollationKey
 (stable)     public int <i>compareTo</i>(com.ibm.icu.text.RawCollationKey)</li>
 <li>    (stable)     public interface <i>StringTransform</i> </br>
 (stable)     public interface <i>StringTransform</i> implements com.ibm.icu.text.Transform</li>
-<li>    (draft)      public abstract class <i>UFormat</i> extends java.text.Format</br>
-(draft)      public abstract class <i>UFormat</i> extends java.text.Format implements com.ibm.icu.text.BaseFormat</li>
 </ul>
 UTF16.StringComparator
 <ul>
@@ -274,126 +270,6 @@ CharsetDecoderICU
 </ul>
 </ul>
 
-<h3>Package com.ibm.icu.impl</h3>
-<ul>
-<li>(draft)      public class <i>Assert</i></li>
-<li>(draft)      public class <i>BOCU</i></li>
-<li><span style='color:red'>*internal*  </span>public class <i>CalendarAstronomer</i></li>
-<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Ecliptic</i></li>
-<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Equatorial</i></li>
-<li><span style='color:red'>*internal*  </span>public static final class <i>CalendarAstronomer.Horizon</i></li>
-<li><span style='color:red'>*internal*  </span>public class <i>CalendarCache</i></li>
-<li><span style='color:red'>*internal*  </span>public class <i>CalendarData</i></li>
-<li>(draft)      public class <i>CalendarUtil</i></li>
-<li>(draft)      public class <i>CharTrie</i></li>
-<li>(draft)      public class <i>CharTrie.FriendAgent</i></li>
-<li>(draft)      public class <i>CharacterIteratorWrapper</i></li>
-<li>(draft)      public class <i>CurrencyData</i></li>
-<li>(draft)      public static abstract class <i>CurrencyData.CurrencyDisplayInfo</i></li>
-<li>(draft)      public static interface <i>CurrencyData.CurrencyDisplayInfoProvider</i></li>
-<li>(draft)      public static final class <i>CurrencyData.CurrencyFormatInfo</i></li>
-<li>(draft)      public static final class <i>CurrencyData.CurrencySpacingInfo</i></li>
-<li>(draft)      public static class <i>CurrencyData.DefaultInfo</i></li>
-<li>(draft)      public final class <i>DateNumberFormat</i></li>
-<li>(draft)      public final class <i>Differ</i></li>
-<li>(draft)      public class <i>Grego</i></li>
-<li>(draft)      public final class <i>ICUBinary</i></li>
-<li>(draft)      public static interface <i>ICUBinary.Authenticate</i></li>
-<li>(draft)      public interface <i>ICUCache</i></li>
-<li>(draft)      public class <i>ICUConfig</i></li>
-<li>(draft)      public final class <i>ICUData</i></li>
-<li>(draft)      public final class <i>ICUDataVersion</i></li>
-<li>(draft)      public final class <i>ICUDebug</i></li>
-<li>(draft)      public class <i>ICULocaleService</i></li>
-<li>(draft)      public static class <i>ICULocaleService.ICUResourceBundleFactory</i></li>
-<li>(draft)      public static class <i>ICULocaleService.LocaleKey</i></li>
-<li>(draft)      public static abstract class <i>ICULocaleService.LocaleKeyFactory</i></li>
-<li>(draft)      public static class <i>ICULocaleService.SimpleLocaleKeyFactory</i></li>
-<li>(draft)      public class <i>ICULogger</i></li>
-<li>(draft)      public abstract class <i>ICUNotifier</i></li>
-<li>(draft)      public class <i>ICURWLock</i></li>
-<li>(draft)      public static final class <i>ICURWLock.Stats</i></li>
-<li>(draft)      public class <i>ICUResourceBundle</i></li>
-<li>(draft)      public final class <i>ICUResourceBundleReader</i></li>
-<li>(draft)      public class <i>ICUResourceTableAccess</i></li>
-<li>(draft)      public class <i>ICUService</i></li>
-<li>(draft)      public static interface <i>ICUService.Factory</i></li>
-<li>(draft)      public static class <i>ICUService.Key</i></li>
-<li>(draft)      public static interface <i>ICUService.ServiceListener</i></li>
-<li>(draft)      public static class <i>ICUService.SimpleFactory</i></li>
-<li>(draft)      public class <i>IllegalIcuArgumentException</i></li>
-<li><span style='color:red'>*internal*  </span>public class <i>ImplicitCEGenerator</i></li>
-<li>(draft)      public class <i>IntTrie</i></li>
-<li>(draft)      public class <i>IntTrieBuilder</i></li>
-<li>(draft)      public class <i>InvalidFormatException</i></li>
-<li>(draft)      public class <i>IterableComparator</i></li>
-<li>(draft)      public class <i>JavaTimeZone</i></li>
-<li>(draft)      public class <i>LocaleDisplayNamesImpl</i></li>
-<li>(draft)      public static class <i>LocaleDisplayNamesImpl.DataTable</i></li>
-<li>(draft)      public static final class <i>LocaleDisplayNamesImpl.DataTableType</i></li>
-<li>(draft)      public final class <i>LocaleIDParser</i></li>
-<li>(draft)      public class <i>LocaleIDs</i></li>
-<li>(draft)      public class <i>LocaleUtility</i></li>
-<li>(draft)      public class <i>MultiComparator</i></li>
-<li>(draft)      public final class <i>NormalizerImpl</i></li>
-<li>(draft)      public class <i>OlsonTimeZone</i></li>
-<li>(draft)      public class <i>PVecToTrieCompactHandler</i></li>
-<li>(draft)      public class <i>PatternTokenizer</i></li>
-<li>(draft)      public class <i>PluralRulesLoader</i></li>
-<li>(draft)      public class <i>PropsVectors</i></li>
-<li>(draft)      public static interface <i>PropsVectors.CompactHandler</i></li>
-<li>(draft)      public final class <i>Punycode</i></li>
-<li>(draft)      public class <i>RelativeDateFormat</i></li>
-<li>(draft)      public class <i>RelativeDateFormat.URelativeString</i></li>
-<li>(draft)      public class <i>ReplaceableUCharacterIterator</i></li>
-<li>(draft)      public class <i>ResourceBundleWrapper</i></li>
-<li>(draft)      public class <i>Row</i></li>
-<li>(draft)      public static class <i>Row.R2</i></li>
-<li>(draft)      public static class <i>Row.R3</i></li>
-<li>(draft)      public static class <i>Row.R4</i></li>
-<li>(draft)      public static class <i>Row.R5</i></li>
-<li>(draft)      public class <i>RuleCharacterIterator</i></li>
-<li>(draft)      public class <i>SimpleCache</i></li>
-<li>(draft)      public class <i>SortedSetRelation</i></li>
-<li>(draft)      public final class <i>StringPrepDataReader</i></li>
-<li>(draft)      public final class <i>StringUCharacterIterator</i></li>
-<li>(draft)      public class <i>TextTrieMap</i></li>
-<li>(draft)      public static interface <i>TextTrieMap.ResultHandler</i></li>
-<li>(draft)      public class <i>TimeZoneAdapter</i></li>
-<li>(draft)      public abstract class <i>Trie</i></li>
-<li>(draft)      public static interface <i>Trie.DataManipulate</i></li>
-<li>(draft)      public abstract class <i>Trie2</i></li>
-<li>(draft)      public class <i>Trie2.CharSequenceIterator</i></li>
-<li>(draft)      public static class <i>Trie2.CharSequenceValues</i></li>
-<li>(draft)      public static class <i>Trie2.Range</i></li>
-<li>(draft)      public static interface <i>Trie2.ValueMapper</i></li>
-<li>(draft)      public class <i>Trie2Writable</i></li>
-<li>(draft)      public final class <i>Trie2_16</i></li>
-<li>(draft)      public class <i>Trie2_32</i></li>
-<li>(draft)      public class <i>TrieBuilder</i></li>
-<li>(draft)      public static interface <i>TrieBuilder.DataManipulate</i></li>
-<li>(draft)      public class <i>TrieIterator</i></li>
-<li>(draft)      public final class <i>UBiDiProps</i></li>
-<li>(draft)      public final class <i>UCaseProps</i></li>
-<li>(draft)      public static interface <i>UCaseProps.ContextIterator</i></li>
-<li>(draft)      public final class <i>UCharArrayIterator</i></li>
-<li>(draft)      public class <i>UCharacterIteratorWrapper</i></li>
-<li>(draft)      public final class <i>UCharacterName</i></li>
-<li>(draft)      public interface <i>UCharacterNameChoice</i></li>
-<li>(draft)      public final class <i>UCharacterProperty</i></li>
-<li>(draft)      public final class <i>UCharacterUtility</i></li>
-<li>(draft)      public final class <i>UPropertyAliases</i></li>
-<li>(draft)      public abstract class <i>URLHandler</i></li>
-<li>(draft)      public static interface <i>URLHandler.URLVisitor</i></li>
-<li><span style='color:red'>*internal*  </span>public final class <i>USerializedSet</i></li>
-<li>(draft)      public class <i>UnicodeRegex</i></li>
-<li>(draft)      public final class <i>Utility</i></li>
-<li>(draft)      public class <i>UtilityExtensions</i></li>
-<li>(draft)      public final class <i>ZoneMeta</i></li>
-<li>(draft)      public class <i>ZoneStringFormat</i></li>
-<li>(draft)      public static class <i>ZoneStringFormat.ZoneStringInfo</i></li>
-</ul>
-
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
 UCharacter
@@ -487,18 +363,15 @@ UScript
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li>(draft)      public interface <i>BaseFormat</i></li>
 <li>(draft)      public abstract class <i>CurrencyDisplayNames</i></li>
 <li>(draft)      public class <i>CurrencyMetaInfo</i></li>
 <li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyDigits</i></li>
 <li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyFilter</i></li>
 <li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyInfo</i></li>
 <li>(draft)      public class <i>FilteredNormalizer2</i></li>
-<li>(draft)      public interface <i>Formatter</i></li>
 <li>(draft)      public abstract class <i>LocaleDisplayNames</i></li>
 <li>(draft)      public static final class <i>LocaleDisplayNames.DialectHandling</i></li>
 <li>(draft)      public abstract class <i>Normalizer2</i></li>
-<li>(draft)      public interface <i>Parser</i></li>
 <li>(draft)      public interface <i>RbnfLenientScanner</i></li>
 <li>(draft)      public interface <i>RbnfLenientScannerProvider</i></li>
 <li>(draft)      public class <i>RbnfScannerProviderImpl</i></li>
@@ -646,6 +519,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Jan 19 13:57:27 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Jan 20 23:02:32 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
