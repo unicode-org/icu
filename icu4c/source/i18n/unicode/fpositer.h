@@ -40,9 +40,10 @@ U_NAMESPACE_END
 
 #include "unicode/fieldpos.h"
 #include "unicode/umisc.h"
-#include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
+
+class UVector32;
 
 /**
  * FieldPositionIterator returns the field ids and their start/limit positions generated
@@ -120,22 +121,6 @@ private:
     UVector32 *data;
     int32_t pos;
 };
-
-inline UBool FieldPositionIterator::next(FieldPosition& fp) {
-  if (pos == -1) {
-    return FALSE;
-  }
-
-  fp.setField(data->elementAti(pos++));
-  fp.setBeginIndex(data->elementAti(pos++));
-  fp.setEndIndex(data->elementAti(pos++));
-
-  if (pos == data->size()) {
-    pos = -1;
-  }
-
-  return TRUE;
-}
 
 U_NAMESPACE_END
 
