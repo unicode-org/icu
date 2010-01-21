@@ -189,7 +189,7 @@ public:
      * Creates a new <code>SelectFormat</code> .
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
-     * @draft ICU 4.4
+     * @internal This function will be removed and will not be API.
      */
     SelectFormat(UErrorCode& status);
 
