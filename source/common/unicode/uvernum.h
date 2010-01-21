@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -81,8 +81,8 @@
 #define U_ICU_VERSION_SHORT "43"
 
 /** Data version in ICU4C.
- *  * @draft ICU 4.4
- *   */
+ * @internal ICU 4.4 Internal Use Only
+ **/
 #define U_ICU_DATA_VERSION "4.3.4"
 
 /*===========================================================================
