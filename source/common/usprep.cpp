@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2009, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -34,6 +34,8 @@
 #include "ucln_cmn.h"
 #include "unormimp.h"
 #include "ubidi_props.h"
+
+U_NAMESPACE_USE
 
 U_CDECL_BEGIN
 
