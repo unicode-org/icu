@@ -39,6 +39,8 @@
 #include "unicode/caniter.h"
 #include "cmemory.h"
 
+U_NAMESPACE_USE
+
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
 U_CDECL_BEGIN
