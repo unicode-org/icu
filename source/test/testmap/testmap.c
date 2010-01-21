@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2003, International Business Machines Corporation 
+* Copyright (C) 1998-2010, International Business Machines Corporation
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -26,11 +26,7 @@ main(int argc,
      char **argv)
 {
   UConverter *c;
-
-  int32_t month = -1, year = -1;
   UErrorCode status = U_ZERO_ERROR;
-  status = U_ZERO_ERROR;
-
 
   udata_setCommonData(NULL, &status);
   printf("setCommonData(NULL) -> %s [should fail]\n",  u_errorName(status));
@@ -51,7 +47,8 @@ main(int argc,
 
   status = U_ZERO_ERROR;
   c = ucnv_open("iso-8859-7", &status);
-  printf("ucnv_open(iso-8859-7)-> %p, err = %s, name=%s\n", c, u_errorName(status), (!c)?"?":ucnv_getName(c,&status)  );
+  printf("ucnv_open(iso-8859-7)-> %p, err = %s, name=%s\n",
+         (void *)c, u_errorName(status), (!c)?"?":ucnv_getName(c,&status)  );
   if(status != U_ZERO_ERROR)
   {
     printf("\n*** FAIL: should have returned U_ZERO_ERROR;\n");
@@ -64,10 +61,10 @@ main(int argc,
 
   status = U_ZERO_ERROR;
   udata_setCommonData(U_ICUDATA_ENTRY_POINT, &status);
-  printf("setCommonData(%p) -> %s [should fail]\n", U_ICUDATA_ENTRY_POINT, u_errorName(status));
-  if ( status != U_USING_DEFAULT_WARNING )
+  printf("setCommonData(%p) -> %s [should pass]\n", U_ICUDATA_ENTRY_POINT, u_errorName(status));
+  if (U_FAILURE(status) || status == U_USING_DEFAULT_WARNING )
   {
-    printf("\n*** FAIL: should have returned U_USING_DEFAULT_ERROR\n");
+    printf("\n*** FAIL: should pass and not set U_USING_DEFAULT_ERROR\n");
     return 1;
   }
 
