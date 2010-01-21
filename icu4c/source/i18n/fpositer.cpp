@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and        *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 2009-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
 *   12/14/09    doug        Creation.
@@ -10,6 +10,7 @@
 
 #include "unicode/fpositer.h"
 #include "cmemory.h"
+#include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
 
@@ -80,6 +81,22 @@ void FieldPositionIterator::setData(UVector32 *adopt, UErrorCode& status) {
   delete data;
   data = adopt;
   pos = adopt == NULL ? -1 : 0;
+}
+
+UBool FieldPositionIterator::next(FieldPosition& fp) {
+  if (pos == -1) {
+    return FALSE;
+  }
+
+  fp.setField(data->elementAti(pos++));
+  fp.setBeginIndex(data->elementAti(pos++));
+  fp.setEndIndex(data->elementAti(pos++));
+
+  if (pos == data->size()) {
+    pos = -1;
+  }
+
+  return TRUE;
 }
 
 U_NAMESPACE_END
