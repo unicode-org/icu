@@ -24,6 +24,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final MessageFormat format;
 
     private static final Cache cache = new Cache();
+
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
         synchronized (cache) {
             return cache.get(locale, dialectHandling);
@@ -54,42 +55,28 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         this.format = new MessageFormat(pattern);
     }
 
+    @Override
     public ULocale getLocale() {
         return locale;
     }
 
+    @Override
     public DialectHandling getDialectHandling() {
         return dialectHandling;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#localeDisplayName(com.ibm.icu.util.ULocale)
-     */
     @Override
     public String localeDisplayName(ULocale locale) {
         return localeDisplayNameInternal(locale);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#localeDisplayName(java.util.Locale)
-     */
     @Override
     public String localeDisplayName(Locale locale) {
         return localeDisplayNameInternal(ULocale.forLocale(locale));
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#localeDisplayName(java.lang.String)
-     */
     @Override
     public String localeDisplayName(String localeId) {
-        // lang
-        // lang (script, country, variant, keyword=value, ...)
-        // script, country, variant, keyword=value, ...
-
-//        LocaleIDParser parser = new LocaleIDParser(localeId);
-//        String[] names = parser.getLanguageScriptCountryVariant();
-//        return localeDisplayName(names[0], names[1], names[2], names[3]);
         return localeDisplayNameInternal(new ULocale(localeId));
     }
 
@@ -101,150 +88,132 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         String resultName = null;
 
         String lang = locale.getLanguage();
+
+        // Empty basename indicates root locale (keywords are ignored for this).
+        // Our data uses 'root' to access display names for the root locale in the
+        // "Languages" table.
+        if (locale.getBaseName().length() == 0) {
+            lang = "root";
+        }
         String script = locale.getScript();
         String country = locale.getCountry();
         String variant = locale.getVariant();
 
-        boolean hasLang = lang.length() > 0;
         boolean hasScript = script.length() > 0;
         boolean hasCountry = country.length() > 0;
         boolean hasVariant = variant.length() > 0;
 
-        if (hasLang) {
-            if (dialectHandling == DialectHandling.DIALECT_NAMES) {
-                do { // loop construct is so we can break early out of search
-                    if (hasScript && hasCountry) {
-                        String langScriptCountry = lang + '_' + script + '_' + country;
-                        String result = languageDisplayName(langScriptCountry);
-                        if (!result.equals(langScriptCountry)) {
-                            resultName = result;
-                            hasScript = false;
-                            hasCountry = false;
-                            break;
-                        }
+        // always have a value for lang
+        if (dialectHandling == DialectHandling.DIALECT_NAMES) {
+            do { // loop construct is so we can break early out of search
+                if (hasScript && hasCountry) {
+                    String langScriptCountry = lang + '_' + script + '_' + country;
+                    String result = localeIdName(langScriptCountry);
+                    if (!result.equals(langScriptCountry)) {
+                        resultName = result;
+                        hasScript = false;
+                        hasCountry = false;
+                        break;
                     }
-                    if (hasScript) {
-                        String langScript = lang + '_' + script;
-                        String result = languageDisplayName(langScript);
-                        if (!result.equals(langScript)) {
-                            resultName = result;
-                            hasScript = false;
-                            break;
-                        }
-                    }
-                    if (hasCountry) {
-                        String langCountry = lang + '_' + country;
-                        String result = languageDisplayName(langCountry);
-                        if (!result.equals(langCountry)) {
-                            resultName = result;
-                            hasCountry = false;
-                            break;
-                        }
-                    }
-                } while (false);
-            }
-
-            if (resultName == null) {
-                resultName = languageDisplayName(lang);
-            }
-        }
-
-        if (true /* not language only */) {
-            StringBuilder buf = new StringBuilder();
-            if (hasScript) {
-                // first element, don't need appender
-                buf.append(scriptDisplayName(script));
-            }
-            if (hasCountry) {
-                appender.append(regionDisplayName(country), buf);
-            }
-            if (hasVariant) {
-                appender.append(variantDisplayName(variant), buf);
-            }
-
-            Iterator<String> keys = locale.getKeywords();
-            if (keys != null) {
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    String value = locale.getKeywordValue(key);
-                    appender.append(keyDisplayName(key), buf)
-                        .append("=")
-                        .append(keyValueDisplayName(key, value));
                 }
-            }
+                if (hasScript) {
+                    String langScript = lang + '_' + script;
+                    String result = localeIdName(langScript);
+                    if (!result.equals(langScript)) {
+                        resultName = result;
+                        hasScript = false;
+                        break;
+                    }
+                }
+                if (hasCountry) {
+                    String langCountry = lang + '_' + country;
+                    String result = localeIdName(langCountry);
+                    if (!result.equals(langCountry)) {
+                        resultName = result;
+                        hasCountry = false;
+                        break;
+                    }
+                }
+            } while (false);
+        }
 
-            String resultRemainder = null;
-            if (buf.length() > 0) {
-                resultRemainder = buf.toString();
-            }
+        if (resultName == null) {
+            resultName = localeIdName(lang);
+        }
 
-            if (resultName != null && resultRemainder != null) {
-                return format.format(new Object[] {resultName, resultRemainder});
-            }
+        StringBuilder buf = new StringBuilder();
+        if (hasScript) {
+            // first element, don't need appender
+            buf.append(scriptDisplayName(script));
+        }
+        if (hasCountry) {
+            appender.append(regionDisplayName(country), buf);
+        }
+        if (hasVariant) {
+            appender.append(variantDisplayName(variant), buf);
+        }
 
-            if (resultRemainder != null) {
-                return resultRemainder;
+        Iterator<String> keys = locale.getKeywords();
+        if (keys != null) {
+            while (keys.hasNext()) {
+                String key = keys.next();
+                String value = locale.getKeywordValue(key);
+                appender.append(keyDisplayName(key), buf)
+                    .append("=")
+                    .append(keyValueDisplayName(key, value));
             }
         }
 
-        if (resultName != null) {
-            return resultName;
+        String resultRemainder = null;
+        if (buf.length() > 0) {
+            resultRemainder = buf.toString();
         }
 
-        return "";
+        if (resultRemainder != null) {
+            return format.format(new Object[] {resultName, resultRemainder});
+        }
+
+        return resultName;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#languageDisplayName(java.lang.String)
-     */
+    private String localeIdName(String localeId) {
+        return langData.get("Languages", localeId);
+    }
+
     @Override
     public String languageDisplayName(String lang) {
+        // Special case to eliminate non-languages, which pollute our data.
+        if (lang.equals("root") || lang.indexOf('_') != -1) {
+            return lang;
+        }
         return langData.get("Languages", lang);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#scriptDisplayName(java.lang.String)
-     */
     @Override
     public String scriptDisplayName(String script) {
         return langData.get("Scripts", script);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#scriptDisplayName(int)
-     */
     @Override
     public String scriptDisplayName(int scriptCode) {
         return scriptDisplayName(UScript.getShortName(scriptCode));
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#regionDisplayName(java.lang.String)
-     */
     @Override
     public String regionDisplayName(String region) {
         return regionData.get("Countries", region);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#variantDisplayName(java.lang.String)
-     */
     @Override
     public String variantDisplayName(String variant) {
         return langData.get("Variants", variant);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#keyDisplayName(java.lang.String)
-     */
     @Override
     public String keyDisplayName(String key) {
         return langData.get("Keys", key);
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.YourFavoriteClassName#keyValueDisplayName(java.lang.String, java.lang.String)
-     */
     @Override
     public String keyValueDisplayName(String key, String value) {
         return langData.get("Types", key, value);
@@ -256,7 +225,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
 
         String get(String tableName, String code) {
-            return code;
+            return get(tableName, null, code);
         }
 
         String get(String tableName, String subTableName, String code) {
@@ -274,10 +243,6 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
         public ULocale getLocale() {
             return bundle.getULocale();
-        }
-
-        public String get(String tableName, String code) {
-            return get(tableName, null, code);
         }
 
         public String get(String tableName, String subTableName, String code) {
@@ -356,8 +321,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         private DialectHandling dialectHandling;
         private LocaleDisplayNames cache;
         public LocaleDisplayNames get(ULocale locale, DialectHandling dialectHandling) {
-            if (dialectHandling != this.dialectHandling ||
-                    !locale.equals(this.locale)) {
+            if (!(dialectHandling == this.dialectHandling && locale.equals(this.locale))) {
                 this.locale = locale;
                 this.dialectHandling = dialectHandling;
                 this.cache = new LocaleDisplayNamesImpl(locale, dialectHandling);
