@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -12,9 +12,19 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * @internal ICU 4.4
+ */
 #define U_ICU_VERSION_BUNDLE "icuver"
+
+/**
+ * @internal ICU 4.4
+ */
 #define U_ICU_STD_BUNDLE "icustd"
 
+/**
+ * @internal ICU 4.4
+ */
 #define U_ICU_DATA_KEY "DataVersion"
 
 /**
@@ -30,9 +40,9 @@
  *
  * @return TRUE if U_ICU_DATA_VERSION is newer than icuver, else FALSE
  * 
- * @draft ICU 4.4
+ * @internal ICU 4.4
  */
-U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status);
+U_INTERNAL UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isModifiedFillin, UErrorCode *status);
 
 /**
  * Retrieves the data version from icuver and stores it in dataVersionFillin.
@@ -40,8 +50,8 @@ U_CAPI UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *isMo
  * @param dataVersionFillin icuver data version information to be filled in if not-null
  * @param status stores the error code from the calls to resource bundle
  * 
- * @draft ICU 4.4
+ * @internal ICU 4.4
  */
-U_CAPI void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
+U_INTERNAL void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
 
 #endif
