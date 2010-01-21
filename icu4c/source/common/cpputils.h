@@ -86,7 +86,7 @@ uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart,
  * Sets U_ILLEGAL_ARGUMENT_ERROR if the string isBogus() or has an open getBuffer().
  */
 inline void
-uprv_checkCanGetBuffer(const UnicodeString &s, UErrorCode &errorCode) {
+uprv_checkCanGetBuffer(const U_NAMESPACE_QUALIFIER UnicodeString &s, UErrorCode &errorCode) {
     if(U_SUCCESS(errorCode) && s.isBogus()) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }

@@ -270,7 +270,7 @@ minimum number for special Jamo
 
 #ifdef XP_CPLUSPLUS
 
-typedef struct collIterate : public UMemory {
+typedef struct collIterate : public U_NAMESPACE_QUALIFIER UMemory {
   const UChar *string; /* Original string */
   /* UChar *start;  Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
@@ -285,10 +285,10 @@ typedef struct collIterate : public UMemory {
   int32_t offsetRepeatCount;  /* Repeat stored offset if non-zero */
   int32_t offsetRepeatValue;  /* offset value to repeat */
 
-  UnicodeString writableBuffer;
+  U_NAMESPACE_QUALIFIER UnicodeString writableBuffer;
   const UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
   const UCollator *coll;
-  const Normalizer2 *nfd;
+  const U_NAMESPACE_QUALIFIER Normalizer2 *nfd;
   uint8_t   flags;
   uint8_t   origFlags;
   uint32_t *extendCEs; /* This is use if CEs is not big enough */
@@ -352,7 +352,7 @@ typedef struct UCollationPCE UCollationPCE;
 
 U_NAMESPACE_END
 
-struct UCollationElements : public UMemory
+struct UCollationElements : public U_NAMESPACE_QUALIFIER UMemory
 {
   /**
   * Struct wrapper for source data
@@ -373,11 +373,10 @@ struct UCollationElements : public UMemory
         U_NAMESPACE_QUALIFIER UCollationPCE     *pce;
 };
 
+#endif
 
 U_CAPI void U_EXPORT2
 uprv_init_pce(const struct UCollationElements *elems);
-
-#endif
 
 #define UCOL_LEVELTERMINATOR 1
 

@@ -61,7 +61,7 @@ struct UStringSearch {
     struct USearch            *search;
     struct UPattern            pattern;
     const  UCollator          *collator;
-    const  Normalizer2        *nfd;
+    const  U_NAMESPACE_QUALIFIER Normalizer2 *nfd;
     // positions within the collation element iterator is used to determine
     // if we are at the start of the text.
            UCollationElements *textIter;
