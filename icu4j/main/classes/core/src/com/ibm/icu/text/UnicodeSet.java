@@ -8,12 +8,14 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 import java.util.TreeSet;
 
+import com.ibm.icu.impl.BMPSet;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
@@ -21,6 +23,7 @@ import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
+import com.ibm.icu.impl.UnicodeSetStringSpan;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -29,10 +32,16 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
 /**
- * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
- * represent <em>character classes</em> used in regular expressions.
- * A character specifies a subset of Unicode code points.  Legal
- * code points are U+0000 to U+10FFFF, inclusive.
+ * A mutable set of Unicode characters and multicharacter strings.
+ * Objects of this class represent <em>character classes</em> used
+ * in regular expressions. A character specifies a subset of Unicode
+ * code points.  Legal code points are U+0000 to U+10FFFF, inclusive.
+ *
+ * Note: method freeze() will not only makes the set immutable, but
+ * also makes important methods much higher performance:
+ * containsNone(...), span(...), spanBack(...) etc.
+ * After the object is frozen, any subsequent call that want to change
+ * the object will throw UnsupportedOperationException.
  *
  * <p>The UnicodeSet class is not designed to be subclassed.
  *
@@ -315,6 +324,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     private static UnicodeSet INCLUSIONS[] = null;
 
+    private BMPSet bmpSet; // The set is frozen iff either bmpSet or stringSpan is not null.
+    private UnicodeSetStringSpan stringSpan;
     //----------------------------------------------------------------
     // Public API
     //----------------------------------------------------------------
@@ -469,7 +480,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public Object clone() {
         UnicodeSet result = new UnicodeSet(this);
-        result.frozen = this.frozen;
+        result.bmpSet = this.bmpSet;
+        result.stringSpan = this.stringSpan;
         return result;
     }
 
@@ -2036,23 +2048,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public boolean containsNone(String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(s, i);
-            if (contains(cp)) {
-                return false;
-            }
-        }
-        if (strings.size() == 0) {
-            return true;
-        }
-        // do a last check to make sure no strings are in.
-        for (String item : strings) {
-            if (s.indexOf(item) >= 0) {
-                return false;
-            }
-        }
-        return true;
+        return span(s, SpanCondition.NOT_CONTAINED) == s.length();
     }
 
     /**
@@ -3806,25 +3802,187 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
-    private boolean frozen;
-
     /**
      * Is this frozen, according to the Freezable interface?
+     * 
      * @return value
      * @stable ICU 3.8
      */
     public boolean isFrozen() {
-        return frozen;
+        return (bmpSet != null || stringSpan != null);
     }
 
     /**
      * Freeze this class, according to the Freezable interface.
+     * 
      * @return this
      * @stable ICU 4.4
      */
     public UnicodeSet freeze() {
-        frozen = true;
+        if (!isFrozen()) {
+            // Do most of what compact() does before freezing because
+            // compact() will not work when the set is frozen.
+            // Small modification: Don't shrink if the savings would be tiny (<=GROW_EXTRA).
+
+            // Delete buffer first to defragment memory less.
+            buffer = null;
+            if (list.length > (len + GROW_EXTRA)) {
+                // Make the capacity equal to len or 1.
+                // We don't want to realloc of 0 size.
+                int capacity = (len == 0) ? 1 : len;
+                int[] oldList = list;
+                list = new int[capacity];
+                for (int i = capacity; i-- > 0;) {
+                    list[i] = oldList[i];
+                }
+            }
+
+            // Optimize contains() and span() and similar functions.
+            if (!strings.isEmpty()) {
+                stringSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), UnicodeSetStringSpan.ALL);
+                if (!stringSpan.needsStringSpanUTF16()) {
+                    // All strings are irrelevant for span() etc. because
+                    // all of each string's code points are contained in this set.
+                    // Do not check needsStringSpanUTF8() because UTF-8 has at most as
+                    // many relevant strings as UTF-16.
+                    // (Thus needsStringSpanUTF8() implies needsStringSpanUTF16().)
+                    stringSpan = null;
+                }
+            }
+            if (stringSpan == null) {
+                // No span-relevant strings: Optimize for code point spans.
+                bmpSet = new BMPSet(list, len);
+            }
+        }
         return this;
+    }
+
+    /**
+     * Span a string using this UnicodeSet.
+     * 
+     * @param s The string to be spanned
+     * @param spanCondition The span condition
+     * @return the length of the span
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int span(CharSequence s, SpanCondition spanCondition) {
+        return span(s, 0, spanCondition);
+    }
+
+    /**
+     * Span a string using this UnicodeSet.
+     *   If the start index is less than 0, span will start from 0.
+     *   If the start index is greater than the string length, span returns the string length.
+     * 
+     * @param s The string to be spanned
+     * @param start The start index that the span begins
+     * @param spanCondition The span condition
+     * @return the string index which ends the span (i.e. exclusive)
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int span(CharSequence s, int start, SpanCondition spanCondition) {
+        if (start < 0) {
+          start = 0;
+        } else if (start > s.length()) {
+          return s.length();
+        }
+        int end = s.length();
+        int len = end - start;
+        if (len <= 0) {
+            return start;
+        }
+        if (bmpSet != null) {
+            return start + bmpSet.span(s, start, end, spanCondition);
+        }
+
+        if (stringSpan != null) {
+            return start + stringSpan.span(s, start, len, spanCondition);
+        } else if (!strings.isEmpty()) {
+            int which = spanCondition == SpanCondition.NOT_CONTAINED ? UnicodeSetStringSpan.FWD_UTF16_NOT_CONTAINED
+                    : UnicodeSetStringSpan.FWD_UTF16_CONTAINED;
+            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), which);
+            if (strSpan.needsStringSpanUTF16()) {
+                return start + strSpan.span(s, start, len, spanCondition);
+            }
+        }
+
+        // Pin to 0/1 values.
+        boolean spanContained = (spanCondition != SpanCondition.NOT_CONTAINED);
+
+        int c;
+        int next = start;
+        do {
+            c = Character.codePointAt(s, next);
+            if (spanContained != contains(c)) {
+                break;
+            }
+            next = Character.offsetByCodePoints(s, next, 1);
+        } while (next < end);
+        return next;
+    }
+
+    /**
+     * Span a string backwards (from the end) using this UnicodeSet.
+     * 
+     * @param s The string to be spanned
+     * @param spanCondition The span condition
+     * @return The string index which starts the span (i.e. inclusive).
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int spanBack(CharSequence s, SpanCondition spanCondition) {
+      return spanBack(s, s.length(), spanCondition);
+    }
+
+    /**
+     * Span a string backwards (from the fromIndex) using this UnicodeSet.
+     *   If the fromIndex is less than 0 or greater than string length, it will span back from the string length.
+     * 
+     * @param s The string to be spanned
+     * @param fromIndex The index of the char (exclusive) that the string should be spanned backwards
+     * @param spanCondition The span condition
+     * @return The string index which starts the span (i.e. inclusive).
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int spanBack(CharSequence s, int fromIndex, SpanCondition spanCondition) {
+        if (fromIndex < 0 ||
+            fromIndex > s.length()) {
+            fromIndex = s.length();
+        }
+        if (fromIndex > 0 && bmpSet != null) {
+            return bmpSet.spanBack(s, fromIndex, spanCondition);
+        }
+        if (fromIndex == 0) {
+            return 0;
+        }
+        if (stringSpan != null) {
+            return stringSpan.spanBack(s, fromIndex, spanCondition);
+        } else if (!strings.isEmpty()) {
+            int which = (spanCondition == SpanCondition.NOT_CONTAINED)
+                    ? UnicodeSetStringSpan.BACK_UTF16_NOT_CONTAINED
+                    : UnicodeSetStringSpan.BACK_UTF16_CONTAINED;
+            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), which);
+            if (strSpan.needsStringSpanUTF16()) {
+                return strSpan.spanBack(s, fromIndex, spanCondition);
+            }
+        }
+
+        // Pin to 0/1 values.
+        boolean spanContained = (spanCondition != SpanCondition.NOT_CONTAINED);
+
+        int c;
+        int prev = fromIndex;
+        do {
+            c = Character.codePointBefore(s, prev);
+            if (spanContained != contains(c)) {
+                break;
+            }
+            prev = Character.offsetByCodePoints(s, prev, -1);
+        } while (prev > 0);
+        return prev;
     }
 
     /**
@@ -3834,13 +3992,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public UnicodeSet cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();
-        result.frozen = false;
+        result.bmpSet = null;
+        result.stringSpan = null;
         return result;
     }
 
     // internal function
     private void checkFrozen() {
-        if (frozen) {
+        if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
     }
@@ -4276,5 +4435,96 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         return result.toString();
     }
+
+    /**
+     * Argument values for whether span() and similar functions continue while the current character is contained vs.
+     * not contained in the set.
+     * 
+     * The functionality is straightforward for sets with only single code points, without strings (which is the common
+     * case): - CONTAINED and SIMPLE work the same. - span() and spanBack() partition any string the
+     * same way when alternating between span(NOT_CONTAINED) and span(either "contained" condition). - Using a
+     * complemented (inverted) set and the opposite span conditions yields the same results.
+     * 
+     * When a set contains multi-code point strings, then these statements may not be true, depending on the strings in
+     * the set (for example, whether they overlap with each other) and the string that is processed. For a set with
+     * strings: - The complement of the set contains the opposite set of code points, but the same set of strings.
+     * Therefore, complementing both the set and the span conditions may yield different results. - When starting spans
+     * at different positions in a string (span(s, ...) vs. span(s+1, ...)) the ends of the spans may be different
+     * because a set string may start before the later position. - span(SIMPLE) may be shorter than
+     * span(CONTAINED) because it will not recursively try all possible paths. For example, with a set which
+     * contains the three strings "xy", "xya" and "ax", span("xyax", CONTAINED) will return 4 but span("xyax",
+     * SIMPLE) will return 3. span(SIMPLE) will never be longer than span(CONTAINED). -
+     * With either "contained" condition, span() and spanBack() may partition a string in different ways. For example,
+     * with a set which contains the two strings "ab" and "ba", and when processing the string "aba", span() will yield
+     * contained/not-contained boundaries of { 0, 2, 3 } while spanBack() will yield boundaries of { 0, 1, 3 }.
+     * 
+     * Note: If it is important to get the same boundaries whether iterating forward or backward through a string, then
+     * either only span() should be used and the boundaries cached for backward operation, or an ICU BreakIterator could
+     * be used.
+     * 
+     * Note: Unpaired surrogates are treated like surrogate code points. Similarly, set strings match only on code point
+     * boundaries, never in the middle of a surrogate pair. Illegal UTF-8 sequences are treated like U+FFFD. When
+     * processing UTF-8 strings, malformed set strings (strings with unpaired surrogates which cannot be converted to
+     * UTF-8) are ignored.
+     * 
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum SpanCondition {
+        /**
+         * Continue a span() while there is no set element at the current position. Stops before the first set element
+         * (character or string). (For code points only, this is like while contains(current)==FALSE).
+         * 
+         * When span() returns, the substring between where it started and the position it returned consists only of
+         * characters that are not in the set, and none of its strings overlap with the span.
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        NOT_CONTAINED,
+        /**
+         * Continue a span() while there is a set element at the current position. (For characters only, this is like
+         * while contains(current)==TRUE).
+         * 
+         * When span() returns, the substring between where it started and the position it returned consists only of set
+         * elements (characters or strings) that are in the set.
+         * 
+         * If a set contains strings, then the span will be the longest substring matching any of the possible
+         * concatenations of set elements (characters or strings). (There must be a single, non-overlapping
+         * concatenation of characters or strings.) This is equivalent to a POSIX regular expression for (OR of each set
+         * element)*.
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        CONTAINED,
+        /**
+         * Continue a span() while there is a set element at the current position. (For characters only, this is like
+         * while contains(current)==TRUE).
+         * 
+         * When span() returns, the substring between where it started and the position it returned consists only of set
+         * elements (characters or strings) that are in the set.
+         * 
+         * If a set only contains single characters, then this is the same as CONTAINED.
+         * 
+         * If a set contains strings, then the span will be the longest substring with a match at each position with the
+         * longest single set element (character or string).
+         * 
+         * Use this span condition together with other longest-match algorithms, such as ICU converters
+         * (ucnv_getUnicodeSet()).
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        SIMPLE,
+        /**
+         * One more than the last span condition.
+         * 
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        CONDITION_COUNT
+    }
+
 }
 //eof
