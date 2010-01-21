@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -27,9 +27,6 @@ public final class ICUDataVersion {
      * 
      * @param dataVersionFillin icuver data version information to be filled in if not-null
      * @return TRUE if ICU_DATA_VERSION is newer than icuver, else FALSE
-     * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
      */
     public static boolean isDataOlder(VersionInfo dataVersionFillin) {
         boolean result = true;
@@ -54,9 +51,6 @@ public final class ICUDataVersion {
      * (standard ICU) will be missing, and the function will alert the caller that the data is not standard.
      *
      * @return TRUE if data has been modified, else FALSE
-     * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
      */
     public static boolean isDataModified() {
         if (hasICUSTDBundle()) {
@@ -69,9 +63,6 @@ public final class ICUDataVersion {
      * This function retrieves the data version from icuver and returns a VersionInfo object with that version information.
      *
      * @return Current icu data version
-     * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
      */
     public static VersionInfo getDataVersion() {
         UResourceBundle icudatares = null;
