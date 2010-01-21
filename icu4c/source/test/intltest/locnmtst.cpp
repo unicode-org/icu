@@ -71,6 +71,7 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
 	TESTCASE(4, TestUldnOpenDialect);
 	TESTCASE(5, TestUldnWithKeywordsAndEverything);
 	TESTCASE(6, TestUldnComponents);
+	TESTCASE(7, TestRootEtc);
 #endif
         default:
 	  name = "";
@@ -206,4 +207,21 @@ void LocaleDisplayNamesTest::TestUldnComponents() {
   }
 
   uldn_close(ldn);
+}
+
+void LocaleDisplayNamesTest::TestRootEtc() {
+  UnicodeString temp;
+  LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
+  const char *locname = "@collation=phonebook";
+  const char *target = "Root (collation=Phonebook Sort Order)";
+  ldn->localeDisplayName(locname, temp);
+  test_assert_equal(target, temp);
+
+  ldn->languageDisplayName("root", temp);
+  test_assert_equal("root", temp);
+
+  ldn->languageDisplayName("en_GB", temp);
+  test_assert_equal("en_GB", temp);
+
+  delete ldn;
 }
