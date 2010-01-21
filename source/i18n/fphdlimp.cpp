@@ -8,6 +8,7 @@
 #if !UCONFIG_NO_FORMAT
 
 #include "fphdlimp.h"
+#include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
 
