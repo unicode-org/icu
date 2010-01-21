@@ -1,13 +1,15 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2009-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
 #if !UCONFIG_NO_FORMAT
 
 #include "fphdlimp.h"
+
+U_NAMESPACE_BEGIN
 
 // utility FieldPositionHandler
 // base class, null implementation
@@ -106,5 +108,7 @@ UBool
 FieldPositionIteratorHandler::isRecording(void) {
   return U_SUCCESS(status);
 }
+
+U_NAMESPACE_END
 
 #endif /* !UCONFIG_NO_FORMAT */
