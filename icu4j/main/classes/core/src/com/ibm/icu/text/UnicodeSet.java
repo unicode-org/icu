@@ -40,7 +40,7 @@ import com.ibm.icu.util.VersionInfo;
  * Note: method freeze() will not only makes the set immutable, but
  * also makes important methods much higher performance:
  * containsNone(...), span(...), spanBack(...) etc.
- * After the object is frozen, any subsequent call that want to change
+ * After the object is frozen, any subsequent call that wants to change
  * the object will throw UnsupportedOperationException.
  *
  * <p>The UnicodeSet class is not designed to be subclassed.
@@ -4439,33 +4439,39 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Argument values for whether span() and similar functions continue while the current character is contained vs.
      * not contained in the set.
-     * 
+     * <p>
      * The functionality is straightforward for sets with only single code points, without strings (which is the common
-     * case): - CONTAINED and SIMPLE work the same. - span() and spanBack() partition any string the
-     * same way when alternating between span(NOT_CONTAINED) and span(either "contained" condition). - Using a
+     * case):
+     * <ul>
+     * <li>CONTAINED and SIMPLE work the same.
+     * <li>span() and spanBack() partition any string the
+     * same way when alternating between span(NOT_CONTAINED) and span(either "contained" condition).
+     * <li>Using a
      * complemented (inverted) set and the opposite span conditions yields the same results.
-     * 
+     * </ul>
      * When a set contains multi-code point strings, then these statements may not be true, depending on the strings in
      * the set (for example, whether they overlap with each other) and the string that is processed. For a set with
-     * strings: - The complement of the set contains the opposite set of code points, but the same set of strings.
-     * Therefore, complementing both the set and the span conditions may yield different results. - When starting spans
+     * strings:
+     * <ul>
+     * <li>The complement of the set contains the opposite set of code points, but the same set of strings.
+     * Therefore, complementing both the set and the span conditions may yield different results.
+     * <li>When starting spans
      * at different positions in a string (span(s, ...) vs. span(s+1, ...)) the ends of the spans may be different
-     * because a set string may start before the later position. - span(SIMPLE) may be shorter than
+     * because a set string may start before the later position.
+     * <li>span(SIMPLE) may be shorter than
      * span(CONTAINED) because it will not recursively try all possible paths. For example, with a set which
      * contains the three strings "xy", "xya" and "ax", span("xyax", CONTAINED) will return 4 but span("xyax",
-     * SIMPLE) will return 3. span(SIMPLE) will never be longer than span(CONTAINED). -
-     * With either "contained" condition, span() and spanBack() may partition a string in different ways. For example,
+     * SIMPLE) will return 3. span(SIMPLE) will never be longer than span(CONTAINED).
+     * <li>With either "contained" condition, span() and spanBack() may partition a string in different ways. For example,
      * with a set which contains the two strings "ab" and "ba", and when processing the string "aba", span() will yield
      * contained/not-contained boundaries of { 0, 2, 3 } while spanBack() will yield boundaries of { 0, 1, 3 }.
-     * 
+     * </ul>
      * Note: If it is important to get the same boundaries whether iterating forward or backward through a string, then
      * either only span() should be used and the boundaries cached for backward operation, or an ICU BreakIterator could
      * be used.
-     * 
+     * <p>
      * Note: Unpaired surrogates are treated like surrogate code points. Similarly, set strings match only on code point
-     * boundaries, never in the middle of a surrogate pair. Illegal UTF-8 sequences are treated like U+FFFD. When
-     * processing UTF-8 strings, malformed set strings (strings with unpaired surrogates which cannot be converted to
-     * UTF-8) are ignored.
+     * boundaries, never in the middle of a surrogate pair.
      * 
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
@@ -4474,7 +4480,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Continue a span() while there is no set element at the current position. Stops before the first set element
          * (character or string). (For code points only, this is like while contains(current)==FALSE).
-         * 
+         * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of
          * characters that are not in the set, and none of its strings overlap with the span.
          * 
@@ -4485,10 +4491,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Continue a span() while there is a set element at the current position. (For characters only, this is like
          * while contains(current)==TRUE).
-         * 
+         * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of set
          * elements (characters or strings) that are in the set.
-         * 
+         * <p>
          * If a set contains strings, then the span will be the longest substring matching any of the possible
          * concatenations of set elements (characters or strings). (There must be a single, non-overlapping
          * concatenation of characters or strings.) This is equivalent to a POSIX regular expression for (OR of each set
@@ -4501,15 +4507,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Continue a span() while there is a set element at the current position. (For characters only, this is like
          * while contains(current)==TRUE).
-         * 
+         * <p>
          * When span() returns, the substring between where it started and the position it returned consists only of set
          * elements (characters or strings) that are in the set.
-         * 
+         * <p>
          * If a set only contains single characters, then this is the same as CONTAINED.
-         * 
+         * <p>
          * If a set contains strings, then the span will be the longest substring with a match at each position with the
          * longest single set element (character or string).
-         * 
+         * <p>
          * Use this span condition together with other longest-match algorithms, such as ICU converters
          * (ucnv_getUnicodeSet()).
          * 
@@ -4525,6 +4531,5 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          */
         CONDITION_COUNT
     }
-
 }
 //eof
