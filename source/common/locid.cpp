@@ -1337,10 +1337,16 @@ Locale::getBaseName() const
             uloc_getBaseName(fullName, baseName, baseNameSize+1, &status);
         }
         baseName[baseNameSize] = 0;
+
+        // the computation of variantBegin leaves it equal to the length
+        // of fullName if there is no variant.  It should instead be
+        // the length of the baseName.  Patch around this for now.
+        if (variantBegin == uprv_strlen(fullName)) {
+          ((Locale*)this)->variantBegin = baseNameSize;
+        }
     }
     return baseName;
 }
-
 
 //eof
 U_NAMESPACE_END

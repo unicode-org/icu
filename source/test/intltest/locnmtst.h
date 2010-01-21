@@ -28,5 +28,6 @@ public:
     void TestUldnOpenDialect(void);
     void TestUldnWithKeywordsAndEverything(void);
     void TestUldnComponents(void);
+    void TestRootEtc(void);
 #endif
 };

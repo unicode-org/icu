@@ -292,6 +292,8 @@ public:
                                              const char* value,
                                              UnicodeString& result) const;
 private:
+  UnicodeString& localeIdName(const char* localeId,
+                              UnicodeString& result) const;
   UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
 };
 
@@ -339,96 +341,89 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
   UnicodeString resultName;
 
   const char* lang = locale.getLanguage();
+  if (uprv_strlen(lang) == 0) {
+    lang = "root";
+  }
   const char* script = locale.getScript();
   const char* country = locale.getCountry();
   const char* variant = locale.getVariant();
 
-  UBool hasLang = uprv_strlen(lang) > 0;
   UBool hasScript = uprv_strlen(script) > 0;
   UBool hasCountry = uprv_strlen(country) > 0;
   UBool hasVariant = uprv_strlen(variant) > 0;
 
-  if (hasLang) {
-    if (dialectHandling == ULDN_DIALECT_NAMES) {
-      char buffer[ULOC_FULLNAME_CAPACITY];
-      do { // loop construct is so we can break early out of search
-        if (hasScript && hasCountry) {
-          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, "_", country, (char *)0);
-          langData.getNoFallback("Languages", buffer, resultName);
-          if (!resultName.isBogus()) {
-            hasScript = FALSE;
-            hasCountry = FALSE;
-            break;
-          }
+  if (dialectHandling == ULDN_DIALECT_NAMES) {
+    char buffer[ULOC_FULLNAME_CAPACITY];
+    do { // loop construct is so we can break early out of search
+      if (hasScript && hasCountry) {
+        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, "_", country, (char *)0);
+        localeIdName(buffer, resultName);
+        if (!resultName.isBogus()) {
+          hasScript = FALSE;
+          hasCountry = FALSE;
+          break;
         }
-        if (hasScript) {
-          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, (char *)0);
-          langData.getNoFallback("Languages", buffer, resultName);
-          if (!resultName.isBogus()) {
-            hasScript = FALSE;
-            break;
-          }
+      }
+      if (hasScript) {
+        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, (char *)0);
+        localeIdName(buffer, resultName);
+        if (!resultName.isBogus()) {
+          hasScript = FALSE;
+          break;
         }
-        if (hasCountry) {
-          ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", country, (char*)0);
-          langData.getNoFallback("Languages", buffer, resultName);
-          if (!resultName.isBogus()) {
-            hasCountry = FALSE;
-            break;
-          }
+      }
+      if (hasCountry) {
+        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", country, (char*)0);
+        localeIdName(buffer, resultName);
+        if (!resultName.isBogus()) {
+          hasCountry = FALSE;
+          break;
         }
-      } while (FALSE);
-    }
-
-    if (resultName.isBogus() || resultName.isEmpty()) {
-      langData.get("Languages", lang, resultName);
-    }
+      }
+    } while (FALSE);
+  }
+  if (resultName.isBogus() || resultName.isEmpty()) {
+    localeIdName(lang, resultName);
   }
 
-  if (TRUE) { /* not language only */
-    UnicodeString resultRemainder;
-    UnicodeString temp;
-    StringEnumeration *e = NULL;
-    UErrorCode status = U_ZERO_ERROR;
+  UnicodeString resultRemainder;
+  UnicodeString temp;
+  StringEnumeration *e = NULL;
+  UErrorCode status = U_ZERO_ERROR;
 
-    if (hasScript) {
-      resultRemainder.append(scriptDisplayName(script, temp));
-    }
-    if (hasCountry) {
-      appendWithSep(resultRemainder, regionDisplayName(country, temp));
-    }
-    if (hasVariant) {
-      appendWithSep(resultRemainder, variantDisplayName(variant, temp));
-    }
+  if (hasScript) {
+    resultRemainder.append(scriptDisplayName(script, temp));
+  }
+  if (hasCountry) {
+    appendWithSep(resultRemainder, regionDisplayName(country, temp));
+  }
+  if (hasVariant) {
+    appendWithSep(resultRemainder, variantDisplayName(variant, temp));
+  }
 
-    e = locale.createKeywords(status);
-    if (e && U_SUCCESS(status)) {
-      UnicodeString temp2;
-      char value[ULOC_KEYWORD_AND_VALUES_CAPACITY]; // sigh, no ULOC_VALUE_CAPACITY
-      const char* key;
-      while ((key = e->next((int32_t *)0, status)) != NULL) {
-        locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
-        appendWithSep(resultRemainder, keyDisplayName(key, temp))
+  e = locale.createKeywords(status);
+  if (e && U_SUCCESS(status)) {
+    UnicodeString temp2;
+    char value[ULOC_KEYWORD_AND_VALUES_CAPACITY]; // sigh, no ULOC_VALUE_CAPACITY
+    const char* key;
+    while ((key = e->next((int32_t *)0, status)) != NULL) {
+      locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
+      appendWithSep(resultRemainder, keyDisplayName(key, temp))
           .append("=")
           .append(keyValueDisplayName(key, value, temp2));
-      }
-      delete e;
     }
+    delete e;
+  }
 
-    if (!resultRemainder.isEmpty()) {
-      if (!resultName.isEmpty()) {
-        Formattable data[] = {
-          resultName,
-          resultRemainder
-        };
-        FieldPosition fpos;
-        status = U_ZERO_ERROR;
-        format->format(data, 2, result, fpos, status);
-        return result;
-      }
-
-      return result = resultRemainder;
-    }
+  if (!resultRemainder.isEmpty()) {
+    Formattable data[] = {
+      resultName,
+      resultRemainder
+    };
+    FieldPosition fpos;
+    status = U_ZERO_ERROR;
+    format->format(data, 2, result, fpos, status);
+    return result;
   }
 
   return result = resultName;
@@ -450,8 +445,17 @@ LocaleDisplayNamesImpl::localeDisplayName(const char* localeId,
 }
 
 UnicodeString&
+LocaleDisplayNamesImpl::localeIdName(const char* localeId,
+                                     UnicodeString& result) const {
+  return langData.getNoFallback("Languages", localeId, result);
+}
+
+UnicodeString&
 LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
                                             UnicodeString& result) const {
+  if (uprv_strcmp("root", lang) == 0 || uprv_strchr(lang, '_') != NULL) {
+    return result = UnicodeString(lang, -1, US_INV);
+  }
   return langData.get("Languages", lang, result);
 }
 
