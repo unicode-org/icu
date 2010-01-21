@@ -1987,9 +1987,11 @@ icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/BMPSet.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/IterableComparator.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/MultiComparator.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/impl/Row.java svneol=native#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/impl/UnicodeSetStringSpan.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/impl/duration/impl/data/index.txt svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/package.html svneol=native#text/html
@@ -2086,6 +2088,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Han
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneAliases.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UnicodeSetStringSpanTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt svneol=native#text/plain
