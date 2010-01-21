@@ -3997,7 +3997,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * incurs a one-time initialisation cost to construct the name tables.
      * @param ch the code point for which to get the name alias
      * @return Unicode name alias, or null
-     * draft ICU 4.4
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static String getNameAlias(int ch)
     {
