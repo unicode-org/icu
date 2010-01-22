@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2009, International Business Machines Corporation and
+ * Copyright (c) 2001-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -14,8 +14,6 @@ import com.ibm.icu.impl.Assert;
 
 /**
  *   This class represents a node in the parse tree created by the RBBI Rule compiler.
- * @internal
- *
  */
 class RBBINode {
 

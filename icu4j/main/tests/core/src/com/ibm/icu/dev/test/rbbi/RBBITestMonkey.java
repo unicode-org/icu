@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009 International Business Machines Corporation and     *
+ * Copyright (C) 2003-2010 International Business Machines Corporation and     *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1482,7 +1482,6 @@ public class RBBITestMonkey extends TestFmwk {
      * return the index of the next code point in the input text.
      * @param i the preceding index
      * @return
-     * @internal
      */
     static int  nextCP(StringBuffer s, int i) {
         if (i == -1) {

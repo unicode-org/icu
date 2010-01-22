@@ -1,18 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
-
-/*
- *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
- */
-
 
 import java.util.Iterator;
 import java.util.Set;
@@ -49,7 +41,6 @@ import com.ibm.icu.text.UTF16;
  * }
  * </pre>
  * @author M. Davis
- * @stable ICU 2.0
  */
 public class UnicodeMapIterator<T> {
 
@@ -57,14 +48,12 @@ public class UnicodeMapIterator<T> {
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
-     * @stable ICU 2.0
      */
     public static int IS_STRING = -1;
 
     /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
-     * @stable ICU 2.0
      */
     public int codepoint;
 
@@ -75,7 +64,6 @@ public class UnicodeMapIterator<T> {
      * iterating over code points using <tt>next()</tt>, or if
      * <tt>codepoint == IS_STRING</tt>, then the value of
      * <tt>codepointEnd</tt> is undefined.
-     * @stable ICU 2.0
      */
     public int codepointEnd;
 
@@ -83,7 +71,6 @@ public class UnicodeMapIterator<T> {
      * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
      * to the current string.  If <tt>codepoint != IS_STRING</tt>, the
      * value of <tt>string</tt> is undefined.
-     * @stable ICU 2.0
      */
     public String string;
 
@@ -95,7 +82,6 @@ public class UnicodeMapIterator<T> {
     /**
      * Create an iterator over the given set.
      * @param set set to iterate over
-     * @stable ICU 2.0
      */
     public UnicodeMapIterator(UnicodeMap set) {
         reset(set);
@@ -105,7 +91,6 @@ public class UnicodeMapIterator<T> {
      * Create an iterator over nothing.  <tt>next()</tt> and
      * <tt>nextRange()</tt> return false. This is a convenience
      * constructor allowing the target to be set later.
-     * @stable ICU 2.0
      */
     public UnicodeMapIterator() {
         reset(new UnicodeMap());
@@ -128,7 +113,6 @@ public class UnicodeMapIterator<T> {
      *
      * @return true if there was another element in the set and this
      * object contains the element.
-     * @stable ICU 2.0
      */
     public boolean next() {
         if (nextElement <= endElement) {
@@ -170,7 +154,6 @@ public class UnicodeMapIterator<T> {
      *
      * @return true if there was another element in the set and this
      * object contains the element.
-     * @stable ICU 2.0
      */
     public boolean nextRange() {
         if (nextElement <= endElement) {
@@ -203,7 +186,6 @@ public class UnicodeMapIterator<T> {
      * resets it to the start of that set.  The iterator is valid only
      * so long as <tt>set</tt> is valid.
      * @param set the set to iterate over.
-     * @stable ICU 2.0
      */
     public void reset(UnicodeMap set) {
         this.map = set;
@@ -213,7 +195,6 @@ public class UnicodeMapIterator<T> {
     /**
      * Resets this iterator to the start of the set.
      * @return 
-     * @stable ICU 2.0
      */
     public UnicodeMapIterator<T> reset() {
         endRange = map.getRangeCount() - 1;
@@ -235,7 +216,6 @@ public class UnicodeMapIterator<T> {
 
     /**
      * Gets the current string from the iterator. Only use after calling next(), not nextRange().
-     * @internal
      */
     public String getString() {
         if (codepoint != IS_STRING) {
@@ -250,23 +230,13 @@ public class UnicodeMapIterator<T> {
     private int endRange = 0;
     private int range = 0;
     private Iterator<String> stringIterator = null;
-    /**
-     * @internal
-     */
     protected int endElement;
-    /**
-     * @internal
-     */
     protected int nextElement;
 
-    /**
+    /*
      * Invariant: stringIterator is null when there are no (more) strings remaining
      */
 
-    /**
-     * @return 
-     * @internal
-     */
     protected T loadRange(int range) {
         nextElement = map.getRangeStart(range);
         endElement = map.getRangeEnd(range);

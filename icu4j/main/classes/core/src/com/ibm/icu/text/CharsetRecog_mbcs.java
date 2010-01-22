@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  *
@@ -20,8 +20,6 @@ import java.util.Arrays;
  *                   CharsetDetector class and kept in the global list of available
  *                   encodings to be checked.  The specific encoding being recognized
  *                   is determined by subclass.
- * 
- * @internal                  
  */
 abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -189,7 +189,6 @@ public class BagFormatter {
      * Each item must not be null; its toString() is called for a printable representation
      * @param c source collection
      * @return a String representation of the list
-     * @internal
      */
     public String showSetNames(Object c) {
         StringWriter buffer = new StringWriter();
@@ -203,7 +202,6 @@ public class BagFormatter {
      * Each item must not be null; its toString() is called for a printable representation
      * @param output destination to which to write names
      * @param c source collection
-     * @internal
      */
     public void showSetNames(PrintWriter output, Object c) {
         mainVisitor.doAt(c, output);
@@ -215,7 +213,6 @@ public class BagFormatter {
      * Each item must not be null; its toString() is called for a printable representation
      * @param filename destination to which to write names
      * @param c source collection
-     * @internal
      */
     public void showSetNames(String filename, Object c) throws IOException {
         PrintWriter pw = new PrintWriter(

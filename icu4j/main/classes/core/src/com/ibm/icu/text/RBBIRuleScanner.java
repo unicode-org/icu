@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2003-2010, International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
  
@@ -17,7 +17,6 @@ import com.ibm.icu.lang.UCharacter;
   *  This class is part of the Rule Based Break Iterator rule compiler.
   *  It scans the rules and builds the parse tree.
   *  There is no public API here.
-  *  @internal
   */
 class RBBIRuleScanner {
     

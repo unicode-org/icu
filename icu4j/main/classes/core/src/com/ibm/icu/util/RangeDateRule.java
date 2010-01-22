@@ -26,9 +26,6 @@ public class RangeDateRule implements DateRule {
     public RangeDateRule() {
     }
 
-    /**
-     * @internal
-     */
     // Range is a package-private class so this should be package-private too, probably
 //    public RangeDateRule(Range[] ranges)
 //    {

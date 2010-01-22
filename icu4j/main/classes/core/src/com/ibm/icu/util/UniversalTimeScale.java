@@ -1,6 +1,6 @@
 /*
  *********************************************************************************
- * Copyright (C) 2004-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                  *
  *********************************************************************************
  *
@@ -289,9 +289,6 @@ public final class UniversalTimeScale
     /**
      * This class holds the data that describes a particular
      * time scale.
-     *
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private static final class TimeScaleData
     {
@@ -545,11 +542,7 @@ public final class UniversalTimeScale
      * scale.
      * 
      * @param scale - the time scale
-     * 
      * @return the <code>TimeScaleData</code> object for the given time scale
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private static TimeScaleData getTimeScaleData(int scale)
     {

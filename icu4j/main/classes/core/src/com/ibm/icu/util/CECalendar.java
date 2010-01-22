@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,8 +11,6 @@ import java.util.Locale;
 
 /**
  * Base class for EthiopicCalendar and CopticCalendar.
- * @internal
- * @deprecated This API is ICU internal only.
  */
 abstract class CECalendar extends Calendar {
     // jdk1.4.2 serialver

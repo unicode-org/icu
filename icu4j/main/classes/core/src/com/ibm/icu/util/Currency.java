@@ -791,8 +791,6 @@ public class Currency extends MeasureUnit implements Serializable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later

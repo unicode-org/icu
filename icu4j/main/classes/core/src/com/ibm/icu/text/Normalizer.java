@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2807,8 +2807,6 @@ public final class Normalizer implements Cloneable {
     /**
      * Fetches the Unicode version burned into the Normalization data file
      * @return VersionInfo version information of the normalizer
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     static VersionInfo getUnicodeVersion() {
         return NormalizerImpl.getUnicodeVersion();

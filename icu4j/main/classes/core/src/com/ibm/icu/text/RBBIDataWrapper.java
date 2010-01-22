@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -19,8 +19,6 @@ import com.ibm.icu.impl.CharTrie;
 * <p>Internal class used for Rule Based Break Iterators</p>
 * <p>This class provides access to the compiled break rule data, as
 * it is stored in a .brk file.  
-* @internal
-* 
 */
 final class RBBIDataWrapper {
     //
@@ -335,9 +333,7 @@ final class RBBIDataWrapper {
     ///CLOVER:ON
 
     ///CLOVER:OFF
-    /** Debug function to display the break iterator data.  
-     *  @internal
-     */
+    /* Debug function to display the break iterator data. */
     void dump() {
         System.out.println("RBBI Data Wrapper dump ...");
         System.out.println();
@@ -357,10 +353,7 @@ final class RBBIDataWrapper {
     ///CLOVER:ON
 
     ///CLOVER:OFF
-    /** Fixed width int-to-string conversion.   
-     *  @internal
-     * 
-     */
+    /* Fixed width int-to-string conversion. */
     static public String intToString(int n, int width) {
         StringBuffer  dest = new StringBuffer(width);   
         dest.append(n);
@@ -372,10 +365,7 @@ final class RBBIDataWrapper {
     ///CLOVER:ON
 
     ///CLOVER:OFF
-    /** Fixed width int-to-string conversion.   
-     *  @internal
-     * 
-     */
+    /* Fixed width int-to-string conversion. */
     static public String intToHexString(int n, int width) {
         StringBuffer  dest = new StringBuffer(width);   
         dest.append(Integer.toHexString(n));
@@ -416,7 +406,6 @@ final class RBBIDataWrapper {
      * Dump (for debug) a single row of an RBBI state table
      * @param table
      * @param state
-     * @internal
      */
     private void dumpRow(short table[], int   state) {
         StringBuffer dest = new StringBuffer(fHeader.fCatCount*5 + 20);

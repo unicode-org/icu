@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -19,8 +19,6 @@ package com.ibm.icu.text;
  * state pertaining to a specific match or detect operation.
  * The WILL be shared by multiple instances of CharsetDetector.
  * They encapsulate const charset-specific information.
- * 
- * @internal
  */
 abstract class CharsetRecognizer {
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -425,7 +425,6 @@ public abstract class BreakIterator implements Cloneable
     /** @since ICU 2.8 */
     private static final int KIND_COUNT = 5;
 
-    /** @internal */
     private static final SoftReference<?>[] iterCache = new SoftReference<?>[5];
 
     /**
@@ -845,7 +844,6 @@ s     */
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -863,7 +861,6 @@ s     */
     /**
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale validLocale;
 
@@ -871,7 +868,6 @@ s     */
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale actualLocale;
 

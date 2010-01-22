@@ -429,7 +429,7 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * @internal ICU 3.2
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc)
@@ -467,7 +467,7 @@ public class SimpleDateFormat extends DateFormat {
      * Create an instance of SimpleDateForamt for the given format configuration
      * @param formatConfig the format configuration
      * @return A SimpleDateFormat instance
-     * @internal ICU 3.8
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public static SimpleDateFormat getInstance(Calendar.FormatConfiguration formatConfig) {
@@ -811,8 +811,6 @@ public class SimpleDateFormat extends DateFormat {
      * NOTE We don't really need the beginOffset parameter, EXCEPT for
      * the need to support the slow subFormat variant (above) which
      * has to pass it in to us.
-     *
-     * TODO make this API public
      *
      * @internal
      * @deprecated This API is ICU internal only.
@@ -2792,7 +2790,6 @@ public class SimpleDateFormat extends DateFormat {
      * @param field    the calendar field need to check against
      * @return         true if the 'field' is smaller than all the fields 
      *                 covered in pattern. false otherwise.
-     * @internal ICU 4.0
      */
     static boolean isFieldUnitIgnored(String pattern, int field) {
         int fieldLevel = CALENDAR_FIELD_TO_LEVEL[field];
@@ -2849,7 +2846,8 @@ public class SimpleDateFormat extends DateFormat {
      * @exception IllegalArgumentException when there is non-recognized
      *                                     pattern letter
      * @return                  Reference to 'appendTo' parameter.
-     * @internal ICU 4.0
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public final StringBuffer intervalFormatByAlgorithm(Calendar fromCalendar,
                                                         Calendar toCalendar,

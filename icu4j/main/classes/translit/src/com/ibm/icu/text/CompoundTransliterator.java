@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,7 +26,6 @@ import com.ibm.icu.impl.UtilityExtensions;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @internal
  */
 class CompoundTransliterator extends Transliterator {
 
@@ -45,7 +44,6 @@ class CompoundTransliterator extends Transliterator {
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @internal
      */
     /*public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
@@ -62,7 +60,6 @@ class CompoundTransliterator extends Transliterator {
      * transliterators have at least two components.
      * @param transliterators array of <code>Transliterator</code>
      * objects
-     * @internal
      */
     /*public CompoundTransliterator(Transliterator[] transliterators) {
         this(transliterators, null);
@@ -74,7 +71,6 @@ class CompoundTransliterator extends Transliterator {
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
      * @param filter a global filter for this compound transliterator
      * or null
-     * @internal
      */
     /*public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
@@ -86,7 +82,6 @@ class CompoundTransliterator extends Transliterator {
      * Constructs a new compound transliterator with no filter.
      * @param ID compound ID
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
-     * @internal
      */
     /*public CompoundTransliterator(String ID, int direction) {
         this(ID, direction, null);
@@ -95,7 +90,6 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Constructs a new forward compound transliterator with no filter.
      * @param ID compound ID
-     * @internal
      */
     /*public CompoundTransliterator(String ID) {
         this(ID, FORWARD, null);
@@ -233,7 +227,6 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
-     * @internal
      */
     public int getCount() {
         return trans.length;
@@ -243,7 +236,6 @@ class CompoundTransliterator extends Transliterator {
      * Returns the transliterator at the given index in this chain.
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
-     * @internal
      */
     public Transliterator getTransliterator(int index) {
         return trans[index];
@@ -268,7 +260,6 @@ class CompoundTransliterator extends Transliterator {
      * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
      * @return the rule string
-     * @internal
      */
     public String toRules(boolean escapeUnprintable) {
         // We do NOT call toRules() on our component transliterators, in
@@ -316,7 +307,6 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Return the set of all characters that may be modified by this
      * Transliterator, ignoring the effect of our filter.
-     * @internal
      */
     protected UnicodeSet handleGetSourceSet() {
         UnicodeSet set = new UnicodeSet();
@@ -340,7 +330,6 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Returns the set of all characters that may be generated as
      * replacement text by this transliterator.
-     * @internal
      */
     public UnicodeSet getTargetSet() {
         UnicodeSet set = new UnicodeSet();
@@ -353,7 +342,6 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @internal
      */
     protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
@@ -538,8 +526,6 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Temporary hack for registry problem. Needs to be replaced by better architecture.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();

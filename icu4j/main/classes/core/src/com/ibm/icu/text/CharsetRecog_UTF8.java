@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005 - 2007, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2010, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,8 +8,6 @@ package com.ibm.icu.text;
 
 /**
  * Charset recognizer for UTF-8
- *
- * @internal
  */
 class CharsetRecog_UTF8 extends CharsetRecognizer {
 

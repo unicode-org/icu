@@ -974,8 +974,8 @@ public class MessageFormat extends UFormat {
      * Get the format argument names. For more details, see 
      * {@link #setFormatByArgumentName(String, Format)}.
      * @return List of names
-     * @deprecated This API is ICU internal only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Set<String> getFormatArgumentNames() {
         Set<String> result = new HashSet<String>();
@@ -989,8 +989,8 @@ public class MessageFormat extends UFormat {
      * Get the formats according to their argument names. For more details, see 
      * {@link #setFormatByArgumentName(String, Format)}.
      * @return format associated with the name, or null if there isn't one.
-     * @deprecated This API is ICU internal only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Format getFormatByArgumentName(String argumentName) {
         for (int i = 0; i <= maxOffset; ++i) {

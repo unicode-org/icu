@@ -301,6 +301,7 @@ public abstract class UResourceBundle extends ResourceBundle{
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static void resetBundleCache()
     {
@@ -322,7 +323,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Method used by subclasses to add a resource bundle object to the managed cache.
      * Works like a putIfAbsent(): If the cache already contains a matching bundle,
      * that one will be retained and returned.
-     * @internal revisit for ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     protected static UResourceBundle addToCache(ClassLoader cl, String fullName,
@@ -339,7 +340,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     /**
      * Method used by sub classes to load a resource bundle object from the managed cache
-     * @internal revisit for ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     protected static UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
@@ -669,8 +670,9 @@ public abstract class UResourceBundle extends ResourceBundle{
      *
      * @param aKey the key associated with the wanted resource
      * @return the resource, or null
-     * @internal ICU internal use only
      * @see #get(String)
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected UResourceBundle findTopLevel(String aKey) {
         // NOTE: this only works for top-level resources.  For resources at lower 
@@ -736,7 +738,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param index the index of the resource
      * @return the resource, or null
      * @see #get(int)
-     * @internal ICU internal use only
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected UResourceBundle findTopLevel(int index) {
         // NOTE: this _barely_ works for top-level resources.  For resources at lower 
@@ -1023,7 +1026,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * This method is for setting the loading status of the resource.
      * The status is analogous to the warning status in ICU4C.
-     * @internal ICU 3.8
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     protected abstract void setLoadingStatus(int newStatus);

@@ -3371,6 +3371,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             return pattern;
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public String getOverrideString() {
             return override;
         }
@@ -5519,7 +5523,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -5537,7 +5540,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale validLocale;
 
@@ -5545,7 +5547,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale actualLocale;
 

@@ -4354,6 +4354,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Return the value of the first code point, if the string is exactly one code point. Otherwise return Integer.MAX_VALUE.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int getSingleCodePoint(String s) {
         int length = s.length();
@@ -4371,6 +4372,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param dontCare Set with the don't-care characters for spanning
      * @return the input set, modified
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet addBridges(UnicodeSet dontCare) {
         UnicodeSet notInInput = new UnicodeSet(this).complement();
@@ -4386,10 +4388,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Find the first index at or after fromIndex where the UnicodeSet matches at that index.
      * If findNot is true, then reverse the sense of the match: find the first place where the UnicodeSet doesn't match.
      * If there is no match, length is returned.
-     * <br>TODO add strings, optimize, using ICU4C algorithms
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int findIn(CharSequence value, int fromIndex, boolean findNot) {
+        //TODO add strings, optimize, using ICU4C algorithms
         int cp;
         for (; fromIndex < value.length(); fromIndex += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(value, fromIndex);
@@ -4405,10 +4408,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * If findNot is true, then reverse the sense of the match: find the last place where the UnicodeSet doesn't match.
      * If there is no match, -1 is returned.
      * BEFORE index is not in the UnicodeSet.
-     * <br>TODO add strings, optimize, using ICU4C algorithms
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int findLastIn(CharSequence value, int fromIndex, boolean findNot) {
+        //TODO add strings, optimize, using ICU4C algorithms
         int cp;
         fromIndex -= 1;
         for (; fromIndex >= 0; fromIndex -= UTF16.getCharCount(cp)) {

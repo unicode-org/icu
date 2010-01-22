@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -769,7 +769,7 @@ public class DateIntervalFormat extends UFormat {
      *                  is supported, upon return this param is unchanged.
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.
-     * @internal ICU 4.0
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public Object parseObject(String source, ParsePosition parse_pos)

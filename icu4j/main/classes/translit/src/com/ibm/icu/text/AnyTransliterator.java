@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2009, International Business Machines Corporation
+* Copyright (c) 2002-2010, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -394,8 +394,6 @@ class AnyTransliterator extends Transliterator {
 
     /**
      * Temporary hack for registry problem. Needs to be replaced by better architecture.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();

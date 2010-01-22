@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, Google Inc, International Business Machines Corporation
+ * Copyright (C) 2008-2010, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -222,6 +222,7 @@ public class IndexCharacters {
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Map<String, Set<String>> getAlreadyIn() {
         return alreadyIn;
@@ -231,6 +232,7 @@ public class IndexCharacters {
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public List<String> getNoDistinctSorting() {
         return noDistinctSorting;
@@ -240,6 +242,7 @@ public class IndexCharacters {
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public List<String> getNotAlphabetic() {
         return notAlphabetic;

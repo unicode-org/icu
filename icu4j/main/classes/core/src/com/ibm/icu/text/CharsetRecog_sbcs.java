@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ************************************************************************** *
  *
@@ -13,8 +13,6 @@ import java.nio.ByteBuffer;
 /**
  * This class recognizes single-byte encodings. Because the encoding scheme is so
  * simple, language statistics are used to do the matching.
- * 
- * @internal
  */
 abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 

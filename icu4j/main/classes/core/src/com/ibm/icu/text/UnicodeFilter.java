@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -58,12 +58,12 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
         return U_MISMATCH;
     }
 
+    // TODO Remove this when the JDK property implements MemberDoc.isSynthetic
     /**
      * (This should not be here; it is declared to make CheckTags
      * happy.  Java inserts a synthetic constructor and CheckTags
      * can't tell that it's synthetic.)
      *
-     * TODO Remove this when the JDK property implements MemberDoc.isSynthetic
      * @internal
      * @deprecated This API is ICU internal only.
      */

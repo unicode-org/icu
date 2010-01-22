@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 
 /**
  * Post processor for RBNF output.
- * @internal
  */
 interface RBNFPostProcessor {
     /**

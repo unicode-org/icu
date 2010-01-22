@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -140,7 +140,7 @@ public final class StringTokenizer implements Enumeration<Object>
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
      * @exception NullPointerException if str is null
-     * @internal ICU 3.4.3
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims, boolean coalescedelims)
@@ -223,7 +223,7 @@ public final class StringTokenizer implements Enumeration<Object>
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
      * @exception NullPointerException if str is null
-     * @internal ICU 3.4.3
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public StringTokenizer(String str, String delim, boolean returndelims, boolean coalescedelims)
