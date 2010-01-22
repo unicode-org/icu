@@ -2747,7 +2747,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Add the contents of the collection (as strings) into this UnicodeSet.
      * @param source the collection to add
      * @return a reference to this object
-     * @stable ICU 2.8
+     * @stable ICU 4.4
      */
     public UnicodeSet add(Collection<?> source) {
         return addAll(source);
@@ -2758,7 +2758,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Uses standard naming convention.
      * @param source collection to add into
      * @return a reference to this object
-     * @stable ICU 4.2
+     * @stable ICU 4.4
      */
     public UnicodeSet addAll(Collection<?> source) {
         checkFrozen();
