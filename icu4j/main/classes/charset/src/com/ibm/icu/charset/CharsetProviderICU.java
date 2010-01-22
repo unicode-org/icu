@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -102,7 +102,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the canonical name of the converter as defined by Java
      * @param enc converter name
      * @return canonical name of the converter
-     * @internal ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
      public static final String getICUCanonicalName(String enc)
@@ -163,7 +163,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the canonical name of the converter as defined by Java
      * @param charsetName converter name
      * @return canonical name of the converter
-     * @internal ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public static String getJavaCanonicalName(String charsetName){
@@ -240,7 +240,8 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the aliases associated with the converter name
      * @param encName converter name
      * @return converter names as elements in an object array
-     * @internal ICU 3.6
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     private static final String[] getAliases(String encName)throws IOException{
         String[] ret = null;
@@ -296,7 +297,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Gets the canonical names of available converters 
      * @return array of available converter names
-     * @internal ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
      public static final String[] getAvailableNames(){
@@ -308,7 +309,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Return all names available
      * @return String[] an array of all available names
-     * @internal ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
      public static final String[] getAllNames(){

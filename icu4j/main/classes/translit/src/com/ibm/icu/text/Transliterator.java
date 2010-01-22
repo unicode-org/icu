@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -473,19 +473,16 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Delimiter between elements in a compound ID.
-     * @internal
      */
     static final char ID_DELIM = ';';
 
     /**
      * Delimiter before target in an ID.
-     * @internal
      */
     static final char ID_SEP = '-';
 
     /**
      * Delimiter before variant in an ID.
-     * @internal
      */
     static final char VARIANT_SEP = '/';
 
@@ -1664,7 +1661,6 @@ public abstract class Transliterator implements StringTransform  {
      * Register a Transliterator object with the given ID.
      * @param ID the ID of this transliterator
      * @param trans the Transliterator object
-     * @internal
      */
     static void registerInstance(Transliterator trans, boolean visible) {
         registry.put(trans.getID(), trans, visible);
@@ -1713,7 +1709,6 @@ public abstract class Transliterator implements StringTransform  {
      * Any-target.getInverse() => Any-inverseTarget
      * @param bidirectional if true, register the reverse relation
      * as well, that is, Any-inverseTarget.getInverse() => Any-target
-     * @internal
      */
     static void registerSpecialInverse(String target,
                                        String inverseTarget,

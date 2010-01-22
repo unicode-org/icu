@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,7 +25,6 @@ import com.ibm.icu.impl.UCaseProps;
  * Implementation of UCaseProps.ContextIterator, iterates over a Replaceable.
  * See casetrn.cpp/utrans_rep_caseContextIterator().
  * See also UCharacter.StringContextIterator.
- * @internal
  */
 class ReplaceableContextIterator implements UCaseProps.ContextIterator {
     /**

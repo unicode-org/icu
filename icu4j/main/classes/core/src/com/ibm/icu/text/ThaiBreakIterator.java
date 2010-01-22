@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -150,8 +150,6 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
 
     /**
      * This is the implementation function for next().
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     protected int handleNext() {
         CharacterIterator text = getText();

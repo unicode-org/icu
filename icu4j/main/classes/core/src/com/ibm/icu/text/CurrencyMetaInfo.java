@@ -46,6 +46,7 @@ public class CurrencyMetaInfo {
     /**
      * Subclass constructor.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected CurrencyMetaInfo() {
     }
@@ -438,7 +439,10 @@ public class CurrencyMetaInfo {
         return defaultDigits;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static final CurrencyDigits defaultDigits = new CurrencyDigits(2, 0);
 
     static {

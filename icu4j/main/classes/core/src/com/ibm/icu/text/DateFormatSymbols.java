@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -94,7 +94,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Constant for context.
-     * @internal revisit for ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public static final int DT_CONTEXT_COUNT = 2;
@@ -121,7 +121,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Constant for width.
-     * @internal revisit for ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public static final int DT_WIDTH_COUNT = 3;

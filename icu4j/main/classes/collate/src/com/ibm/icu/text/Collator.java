@@ -261,6 +261,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Collator setStrength2(int newStrength)
     {
@@ -1042,7 +1043,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
             this.actualLocale : this.validLocale;
     }
 
-    /**
+    /*
      * Set information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
      * both arguments should be set to null.  Otherwise, neither
@@ -1057,7 +1058,6 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -1075,18 +1075,16 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         this.actualLocale = actual;
     }
 
-    /**
+    /*
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale validLocale;
 
-    /**
+    /*
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale actualLocale;
 

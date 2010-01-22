@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,17 +28,11 @@ import com.ibm.icu.util.CompactByteArray;
  * as a two-dimensional array that can be treated as a table of state
  * transitions.  Indexes are used to compress this array, taking
  * advantage of the fact that this array will always be very sparse.
- * @internal
- * @deprecated This API is ICU internal only.
  */
-/* public */ class BreakDictionary {
+class BreakDictionary {
     //=================================================================================
     // testing and debugging
     //=================================================================================
-    /** 
-     * @internal 
-     * @deprecated This API is ICU internal only.
-     */
     ///CLOVER:OFF
     //The main method looks like it was useful once but now seems worthless. It is not used by any method or class.
     public static void main(String args[])
@@ -61,10 +55,6 @@ import com.ibm.icu.util.CompactByteArray;
     }
     ///CLOVER:ON
 
-    /** 
-     * @internal 
-     * @deprecated This API is ICU internal only.
-     */
     ///CLOVER:OFF
     /* public */ void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
@@ -167,18 +157,10 @@ import com.ibm.icu.util.CompactByteArray;
     // deserialization
     //=================================================================================
 
-    /** 
-     * @internal 
-     * @deprecated This API is ICU internal only.
-     */
     /* public */ BreakDictionary(InputStream dictionaryStream) throws IOException {
         readDictionaryFile(new DataInputStream(dictionaryStream));
     }
 
-    /** 
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
     /* public */ void readDictionaryFile(DataInputStream in) throws IOException {
         int l;
 
@@ -252,8 +234,6 @@ import com.ibm.icu.util.CompactByteArray;
      * @param row The current state
      * @param ch The character whose column we're interested in
      * @return The new state to transition to
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     /* public */ final short at(int row, char ch) {
         int col = columnMap.elementAt(ch);
@@ -270,8 +250,6 @@ import com.ibm.icu.util.CompactByteArray;
      * @param col The column number of the input character (0 means "not a
      * dictionary character")
      * @return The row number of the new state to transition to
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     /* public */ final short at(int row, int col) {
         if (cellIsPopulated(row, col)) {

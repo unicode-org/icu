@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -203,7 +203,6 @@ public final class CanonicalIterator {
 
     /*
      *@return the set of "safe starts", characters that are class zero AND are never non-initial in a decomposition.
-     *@internal
      *
     public static UnicodeSet getSafeStart() {
         return (UnicodeSet) SAFE_START.clone();
@@ -211,7 +210,6 @@ public final class CanonicalIterator {
     */
     /*
      *@return the set of characters whose decompositions start with the given character
-     *@internal
      *
     public static UnicodeSet getStarts(int cp) {
         UnicodeSet result = AT_START.get(cp);

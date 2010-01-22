@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2005 - 2008, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2010, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,8 +13,6 @@ package com.ibm.icu.text;
  *                           of encodings.
  * 
  *                           The separate classes are nested within this class.
- * 
- * @internal
  */
 abstract class CharsetRecog_2022 extends CharsetRecognizer {
 

@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -7,9 +7,6 @@ package com.ibm.icu.util;
 
 import java.io.Serializable;
 
-/**
- * @internal
- */
 final class STZInfo implements Serializable {
     private static final long serialVersionUID = -7849612037842370168L;
 

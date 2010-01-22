@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,6 @@ package com.ibm.icu.text;
 
 /**
  * A transliterator that leaves text unchanged.
- * @internal
  */
 class NullTransliterator extends Transliterator {
     /**
@@ -19,7 +18,6 @@ class NullTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.
-     * @internal
      */
     public NullTransliterator() {
         super(_ID, null);
@@ -27,7 +25,6 @@ class NullTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @internal
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {

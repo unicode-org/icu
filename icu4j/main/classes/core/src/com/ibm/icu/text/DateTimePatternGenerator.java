@@ -127,6 +127,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param uLocale The locale to pass.
      * @return A frozen DateTimePatternGenerator.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static DateTimePatternGenerator getFrozenInstance(ULocale uLocale) {
         String localeKey = uLocale.toString();
@@ -1388,8 +1389,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-    * (moved from CLDR)
+    * Used by CLDR tooling
     * @internal
+    * @deprecated This API is ICU internal only.
     */
     public boolean skeletonsAreSimilar(String id, String skeleton) {
         if (id.equals(skeleton)) {

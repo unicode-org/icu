@@ -2022,12 +2022,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                          & BLOCK_MASK_) >> BLOCK_SHIFT_);
         }
 
-        /**
+        /*
          * Internal function returning of(ch).getID().
          *
          * @param ch
          * @return numeric block value
-         * @internal
          */
         static int idOf(int ch) {
             if (ch < 0 || ch > MAX_VALUE) {

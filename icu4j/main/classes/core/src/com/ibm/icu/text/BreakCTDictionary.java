@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,11 +13,9 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.text.CharacterIterator;
 
-/**
+/*
  * This is a class used to load in the compact trie dictionary file
  * used for dictionary based break iteration. 
- * @internal
- * @deprecated This API is ICU internal only.
  */
 class BreakCTDictionary {
     private CompactTrieHeader fData;

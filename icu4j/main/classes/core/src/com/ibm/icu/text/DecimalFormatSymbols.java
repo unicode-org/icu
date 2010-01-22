@@ -459,7 +459,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Internal API for NumberFormat
      * @return String currency pattern string
-     * @internal
      */
     String getCurrencyPattern() {
         return currencyPattern;
@@ -1160,7 +1159,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -1178,7 +1176,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale validLocale;
 
@@ -1186,7 +1183,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
      */
     private ULocale actualLocale;
 

@@ -423,8 +423,6 @@ public abstract class NumberFormat extends UFormat {
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         ///CLOVER:OFF

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -95,7 +95,6 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
      *             dictionary is a possibility for that type of break.  This is just
      *             an optimization to avoid a resource lookup where no dictionary is
      *             ever possible.
-     *  @internal
      */
     private static final String[] KIND_NAMES = {
             "grapheme", "word", "line", "sentence", "title"
