@@ -367,7 +367,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * In each pair (..., si, ei, ...) it must be true that si <= ei
      * Between adjacent pairs (...ei, sj...), it must be true that ei+1 < sj
      * @param pairs pairs of character representing ranges
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet(int... pairs) {
         if ((pairs.length & 1) != 0) {
@@ -1097,7 +1098,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param start The index of where to start on adding all characters.
      * @param end The index of where to end on adding all characters.
      * @return a reference to this object
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet addAll(int start, int end) {
         checkFrozen();
@@ -4011,7 +4013,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Returns a string iterator. Uses the same order of iteration as {@link UnicodeSetIterator}.
      * @see java.util.Set#iterator()
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public Iterator<String> iterator() {
         return new UnicodeSetIterator2(this);
@@ -4096,7 +4099,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #containsAll(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean containsAll(Collection<String> collection) {
         for (String o : collection) {
@@ -4109,7 +4113,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #containsNone(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean containsNone(Collection<String> collection) {
         for (String o : collection) {
@@ -4122,7 +4127,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #containsAll(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public final boolean containsSome(Collection<String> collection) {
         return !containsNone(collection);
@@ -4130,7 +4136,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #addAll(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet addAll(String... collection) {
         checkFrozen();
@@ -4143,7 +4150,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #removeAll(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet removeAll(Collection<String> collection) {
         checkFrozen();
@@ -4155,7 +4163,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * @see #retainAll(com.ibm.icu.text.UnicodeSet)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet retainAll(Collection<String> collection) {
         checkFrozen();
@@ -4166,13 +4175,34 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return this;
     }
 
-    public enum ComparisonStyle {SHORTER_FIRST, LEXICOGRAPHIC, LONGER_FIRST}
+    /**
+     * Comparison style enums used by {@link UnicodeSet#compareTo(UnicodeSet, ComparisonStyle)}.
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum ComparisonStyle {
+        /**
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        SHORTER_FIRST,
+        /**
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        LEXICOGRAPHIC,
+        /**
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        LONGER_FIRST}
 
     /**
      * Compares UnicodeSets, where shorter come first, and otherwise lexigraphically
      * (according to the comparison of the first characters that differ).
      * @see java.lang.Comparable#compareTo(java.lang.Object)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(UnicodeSet o) {
         return compareTo(o, ComparisonStyle.SHORTER_FIRST);
@@ -4180,7 +4210,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Compares UnicodeSets, in three different ways.
      * @see java.lang.Comparable#compareTo(java.lang.Object)
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(UnicodeSet o, ComparisonStyle style) {
         if (style != ComparisonStyle.LEXICOGRAPHIC) {
@@ -4213,9 +4244,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return compare(strings, o.strings);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     * @stable ICU 4.2
+    /**
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Iterable<String> other) {
         return compare(this, other);
@@ -4226,7 +4257,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Same results as turning the code point into a string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString())
      * and comparing, but much faster (no object creation). 
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static int compare(String string, int codePoint) {
         if (codePoint < Character.MIN_CODE_POINT || codePoint > Character.MAX_CODE_POINT) {
@@ -4266,7 +4298,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Utility to compare a string to a code point.
      * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
      * Actually, there is one difference; a null compares as less.
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static int compare(int codepoint, String a) {
         return -compare(a, codepoint);
@@ -4316,7 +4349,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Utility for adding the contents of an iterable to a collection.
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static <T, U extends Collection<T>> U addAllTo(Iterable<T> source, U target) {
         for (T item : source) {
@@ -4327,7 +4361,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Utility for adding the contents of an iterable to a collection.
-     * @stable ICU 4.2
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
      */
     public static <T> T[] addAllTo(Iterable<T> source, T[] target) {
         int i = 0;
