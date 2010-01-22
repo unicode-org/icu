@@ -42,7 +42,7 @@ FieldPositionIterator::FieldPositionIterator(const FieldPositionIterator &rhs)
 }
 
 UBool FieldPositionIterator::operator==(const FieldPositionIterator &rhs) const {
-  if (rhs == *this) {
+  if (&rhs == this) {
     return TRUE;
   }
   if (pos != rhs.pos) {
