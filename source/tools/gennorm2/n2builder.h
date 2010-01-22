@@ -18,6 +18,13 @@
 #define __N2BUILDER_H__
 
 #include "unicode/utypes.h"
+#include "unicode/std_string.h"
+
+#if !U_HAVE_STD_STRING
+// The gennorm2 implementation uses STL classes like string and vector.
+#undef UCONFIG_NO_NORMALIZATION
+#define UCONFIG_NO_NORMALIZATION 1
+#endif
 
 #if !UCONFIG_NO_NORMALIZATION
 

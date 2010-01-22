@@ -17,17 +17,18 @@
 *   parses them, and builds a binary data file.
 */
 
+#include "unicode/utypes.h"
+#include "unicode/std_string.h"  // U_HAVE_STD_STRING, #include <string>
+#include "n2builder.h"  // UCONFIG_NO_NORMALIZATION=1 if !U_HAVE_STD_STRING
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
-#include "unicode/utypes.h"
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/putil.h"
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
-#include "n2builder.h"
 #include "normalizer2impl.h"
 #include "toolutil.h"
 #include "uoptions.h"
@@ -137,7 +138,7 @@ main(int argc, char* argv[]) {
     builder->setUnicodeVersion(options[UNICODE_VERSION].value);
 
     // prepare the filename beginning with the source dir
-    std::string filename(options[SOURCEDIR].value);
+    U_STD_NSQ string filename(options[SOURCEDIR].value);
     int32_t pathLength=filename.length();
     if( pathLength>0 &&
         filename[pathLength-1]!=U_FILE_SEP_CHAR &&
