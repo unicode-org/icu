@@ -134,9 +134,9 @@ UTF16.StringComparator
 UnicodeSet
 <ul>
 <li>    (stable)     public void <i>addAll</i>(java.util.Collection)</br>
-(stable)     public com.ibm.icu.text.UnicodeSet <i>addAll</i>(int, int)</li>
+(draft)      public com.ibm.icu.text.UnicodeSet <i>addAll</i>(int, int)</li>
 <li>    (stable)     public void <i>addAllTo</i>(java.util.Collection)</br>
-(stable)     public static java.lang.Object[] <i>addAllTo</i>(java.lang.Iterable, T[])</li>
+(draft)      public static java.lang.Object[] <i>addAllTo</i>(java.lang.Iterable, T[])</li>
 <li>    (stable)     public java.lang.Object <i>cloneAsThawed</i>()</br>
 (stable)     public com.ibm.icu.text.UnicodeSet <i>cloneAsThawed</i>()</li>
 <li>    (stable)     public java.lang.Object <i>freeze</i>()</br>
@@ -274,7 +274,7 @@ LocaleData
 <ul>
 CharsetDecoderICU
 <ul>
-<li>(draft)      protected static final int EXT_MAX_BYTES</li>
+<li><span style='color:red'>*internal*  </span>protected static final int EXT_MAX_BYTES</li>
 </ul>
 </ul>
 
@@ -382,7 +382,7 @@ UScript
 <li>(draft)      public abstract class <i>Normalizer2</i></li>
 <li>(draft)      public interface <i>RbnfLenientScanner</i></li>
 <li>(draft)      public interface <i>RbnfLenientScannerProvider</i></li>
-<li>(draft)      public class <i>RbnfScannerProviderImpl</i></li>
+<li><span style='color:red'>*internal*  </span>public class <i>RbnfScannerProviderImpl</i></li>
 <li>(draft)      public class <i>SelectFormat</i></li>
 <li>(draft)      public interface <i>Transform</i></li>
 <li>(draft)      public static final class <i>UnicodeSet.ComparisonStyle</i></li>
@@ -427,30 +427,30 @@ RuleBasedNumberFormat
 </ul>
 UnicodeSet
 <ul>
-<li>(stable)     public <i>UnicodeSet</i>(int[])</li>
+<li>(draft)      public <i>UnicodeSet</i>(int[])</li>
 <li>(stable)     public UnicodeSet <i>add</i>(java.util.Collection)</li>
-<li>(stable)     public UnicodeSet <i>addAll</i>(java.lang.String[])</li>
+<li>(draft)      public UnicodeSet <i>addAll</i>(java.lang.String[])</li>
 <li>(stable)     public UnicodeSet <i>addAll</i>(java.util.Collection)</li>
 <li>(draft)      public java.lang.String[] <i>addAllTo</i>(java.lang.String[])</li>
 <li>(draft)      public java.util.Collection <i>addAllTo</i>(T)</li>
-<li>(stable)     public static java.util.Collection <i>addAllTo</i>(java.lang.Iterable, U)</li>
+<li>(draft)      public static java.util.Collection <i>addAllTo</i>(java.lang.Iterable, U)</li>
 <li><span style='color:red'>*internal*  </span>public UnicodeSet <i>addBridges</i>(UnicodeSet)</li>
-<li>(stable)     public static int <i>compare</i>(int, java.lang.String)</li>
+<li>(draft)      public static int <i>compare</i>(int, java.lang.String)</li>
 <li>(draft)      public static int <i>compare</i>(java.lang.Iterable, java.lang.Iterable)</li>
-<li>(stable)     public static int <i>compare</i>(java.lang.String, int)</li>
+<li>(draft)      public static int <i>compare</i>(java.lang.String, int)</li>
 <li>(draft)      public static int <i>compare</i>(java.util.Collection, java.util.Collection, UnicodeSet.ComparisonStyle)</li>
-<li>(stable)     public int <i>compareTo</i>(UnicodeSet)</li>
-<li>(stable)     public int <i>compareTo</i>(UnicodeSet, UnicodeSet.ComparisonStyle)</li>
+<li>(draft)      public int <i>compareTo</i>(UnicodeSet)</li>
+<li>(draft)      public int <i>compareTo</i>(UnicodeSet, UnicodeSet.ComparisonStyle)</li>
 <li>(draft)      public int <i>compareTo</i>(java.lang.Iterable)</li>
-<li>(stable)     public boolean <i>containsAll</i>(java.util.Collection)</li>
-<li>(stable)     public boolean <i>containsNone</i>(java.util.Collection)</li>
-<li>(stable)     public final boolean <i>containsSome</i>(java.util.Collection)</li>
+<li>(draft)      public boolean <i>containsAll</i>(java.util.Collection)</li>
+<li>(draft)      public boolean <i>containsNone</i>(java.util.Collection)</li>
+<li>(draft)      public final boolean <i>containsSome</i>(java.util.Collection)</li>
 <li><span style='color:red'>*internal*  </span>public int <i>findIn</i>(java.lang.CharSequence, int, boolean)</li>
 <li><span style='color:red'>*internal*  </span>public int <i>findLastIn</i>(java.lang.CharSequence, int, boolean)</li>
 <li><span style='color:red'>*internal*  </span>public static int <i>getSingleCodePoint</i>(java.lang.String)</li>
-<li>(stable)     public java.util.Iterator <i>iterator</i>()</li>
-<li>(stable)     public UnicodeSet <i>removeAll</i>(java.util.Collection)</li>
-<li>(stable)     public UnicodeSet <i>retainAll</i>(java.util.Collection)</li>
+<li>(draft)      public java.util.Iterator <i>iterator</i>()</li>
+<li>(draft)      public UnicodeSet <i>removeAll</i>(java.util.Collection)</li>
+<li>(draft)      public UnicodeSet <i>retainAll</i>(java.util.Collection)</li>
 <li>(draft)      public int <i>span</i>(java.lang.CharSequence, UnicodeSet.SpanCondition)</li>
 <li>(draft)      public int <i>span</i>(java.lang.CharSequence, int, UnicodeSet.SpanCondition)</li>
 <li>(draft)      public int <i>spanBack</i>(java.lang.CharSequence, UnicodeSet.SpanCondition)</li>
@@ -478,8 +478,7 @@ GlobalizationPreferences
 </ul>
 HebrewCalendar
 <ul>
-<li>(draft)      public static final boolean <i>isLeapYear</i>(int)</li>
-<li>(draft)      public static int <i>monthsInYear</i>(int)</li>
+<li><span style='color:red'>*internal*  </span>public static boolean <i>isLeapYear</i>(int)</li>
 </ul>
 LocaleData
 <ul>
@@ -532,6 +531,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Jan 22 00:48:44 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Jan 22 16:46:37 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
