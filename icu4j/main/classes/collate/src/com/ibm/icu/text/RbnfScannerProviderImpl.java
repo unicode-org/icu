@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -15,10 +15,16 @@ import java.util.Map;
 /**
  * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat
  * implementation behind setLenientParseMode, which is based on Collator.
+ * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     private Map<String, RbnfLenientScanner> cache;
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public RbnfScannerProviderImpl() {
         cache = new HashMap<String, RbnfLenientScanner>();
     }
@@ -50,6 +56,9 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
      * It's important to emphasize that even strict parsing is relatively lenient: it
      * will accept some text that it won't produce as output.  In English, for example,
      * it will correctly parse "two hundred zero" and "fifteen hundred".
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public RbnfLenientScanner get(ULocale locale, String extras) {
         RbnfLenientScanner result = null;
@@ -67,6 +76,10 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
         return result;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected RbnfLenientScanner createScanner(ULocale locale, String extras) {
         RuleBasedCollator collator = null;
         try {
