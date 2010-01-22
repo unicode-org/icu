@@ -17,13 +17,16 @@
 * For the file format see source/common/normalizer2impl.h.
 */
 
-#include "n2builder.h"
+#include "unicode/utypes.h"
+#include "unicode/std_string.h"  // U_HAVE_STD_STRING, #include <string>
+#include "n2builder.h"  // UCONFIG_NO_NORMALIZATION=1 if !U_HAVE_STD_STRING
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if U_HAVE_STD_STRING
 #include <vector>
-#include "unicode/utypes.h"
+#endif
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/putil.h"
@@ -113,7 +116,7 @@ struct Norm {
     int32_t mappingPhase;
     MappingType mappingType;
 
-    std::vector<CompositionPair> *compositions;
+    U_STD_NSQ vector<CompositionPair> *compositions;
     uint8_t cc;
     UBool combinesBack;
     UBool hasNoCompBoundaryAfter;
@@ -340,13 +343,13 @@ Normalizer2DataBuilder::addComposition(UChar32 start, UChar32 end, uint32_t valu
         // Insert (trail, composite) pair into compositions list for the lead character.
         CompositionPair pair(trail, start);
         Norm *leadNorm=createNorm(lead);
-        std::vector<CompositionPair> *compositions=leadNorm->compositions;
+        U_STD_NSQ vector<CompositionPair> *compositions=leadNorm->compositions;
         if(compositions==NULL) {
-            compositions=leadNorm->compositions=new std::vector<CompositionPair>;
+            compositions=leadNorm->compositions=new U_STD_NSQ vector<CompositionPair>;
             compositions->push_back(pair);
         } else {
             // Insertion sort, and check for duplicate trail characters.
-            std::vector<CompositionPair>::iterator it;
+            U_STD_NSQ vector<CompositionPair>::iterator it;
             for(it=compositions->begin(); it!=compositions->end(); ++it) {
                 if(trail==it->trail) {
                     fprintf(stderr,
@@ -366,9 +369,9 @@ Normalizer2DataBuilder::addComposition(UChar32 start, UChar32 end, uint32_t valu
 
 UBool Normalizer2DataBuilder::combinesWithCCBetween(const Norm &norm,
                                                     uint8_t lowCC, uint8_t highCC) const {
-    const std::vector<CompositionPair> *compositions=norm.compositions;
+    const U_STD_NSQ vector<CompositionPair> *compositions=norm.compositions;
     if(compositions!=NULL && (highCC-lowCC)>=2) {
-        std::vector<CompositionPair>::const_iterator it;
+        U_STD_NSQ vector<CompositionPair>::const_iterator it;
         for(it=compositions->begin(); it!=compositions->end(); ++it) {
             uint8_t trailCC=getCC(it->trail);
             if(lowCC<trailCC && trailCC<highCC) {
@@ -380,9 +383,9 @@ UBool Normalizer2DataBuilder::combinesWithCCBetween(const Norm &norm,
 }
 
 UChar32 Normalizer2DataBuilder::combine(const Norm &norm, UChar32 trail) const {
-    const std::vector<CompositionPair> *compositions=norm.compositions;
+    const U_STD_NSQ vector<CompositionPair> *compositions=norm.compositions;
     if(compositions!=NULL) {
-        std::vector<CompositionPair>::const_iterator it;
+        U_STD_NSQ vector<CompositionPair>::const_iterator it;
         for(it=compositions->begin(); it!=compositions->end(); ++it) {
             if(trail==it->trail) {
                 return it->composite;
