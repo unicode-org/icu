@@ -1,8 +1,8 @@
-/********************************************************************
+/************************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
+ * Copyright (c) 1997-2010, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ************************************************************************/
 
 #ifndef _NUMBERFORMATTEST_
 #define _NUMBERFORMATTEST_
@@ -143,6 +143,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestCurrencyParsing();
     void TestParseCurrencyInUCurr();
     void TestFormatAttributes();
+    void TestFieldPositionIterator();
 
  private:
 
