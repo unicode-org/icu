@@ -1,6 +1,6 @@
 #!/bin/sh
 # Exhaust(ive, ing)  (Mean, Multi)  (Test, Trouble)
-# Copyright (c) 2002-2007 IBM All Rights Reserved
+# Copyright (c) 2002-2010 IBM All Rights Reserved
 #
 
 # Builds ICU a whole lotta times and with different options
@@ -29,7 +29,7 @@ S=$(pwd)
 BUILD_DIR=${BUILD_DIR:-${S}/uconfigtest}
 
 # the runConfigureICU platform name
-ICUPLATFORM=${ICUPLATFORM:-LinuxRedHat}
+ICUPLATFORM=${ICUPLATFORM:-Linux}
 
 # Global Config options to use
 #export COPTS=" --with-data-packaging=archive"
@@ -103,9 +103,9 @@ config()
 
     # myconfig.h
     cat > emtinc/myconfig.h <<EOF
-// NAME=${NAME}
-// UCONFIGS=${UCONFIGS}
-// CPPFLAGS=${CPPFLAGS}
+/* NAME=${NAME}            */
+/* UCONFIGS=${UCONFIGS}    */
+/* CPPFLAGS=${CPPFLAGS}    */
 #ifndef _MYCONFIG_H
 #define _MYCONFIG_H
 
@@ -129,10 +129,10 @@ bld()
 ##*##  every line:
 ##*##      . . .   2>&1 | tee -a ./bld.log | sed -e "s/^/${NAME}: /"
     cd ${BUILD_DIR}/${NAME}
-    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.all     make -k all                      
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.all     make -k -j2 all                      
     /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.install make -k install                  
     /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.il      make -k install-local            
-    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.chk     make -k check INTLTEST_OPTS=-w CINTLTST_OPTS=-w
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.chk     make -k -j2 check INTLTEST_OPTS=-w CINTLTST_OPTS=-w
     PATH=${BUILD_DIR}/I${NAME}/bin:$PATH make -C ${BUILD_DIR}/${NAME}/test/hdrtst/  check    
 }
 
