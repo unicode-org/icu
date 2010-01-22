@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU4J Base test fragment
+Bundle-SymbolicName: com.ibm.icu.base.tests
+Bundle-Version: 1.0.0
+Bundle-Vendor: IBM
+Bundle-Copyright: @COPYRIGHT@
+Fragment-Host: com.ibm.icu.base
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.3,
+ CDC-1.0/Foundation-1.0
+Require-Bundle: org.junit
