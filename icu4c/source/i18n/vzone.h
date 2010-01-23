@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@
 #define __VZONE_H
 
 #include "unicode/utypes.h"
-#include "unicode/ztrans.h"
+#include "ztrans.h"
 
 #ifndef UCNV_H
 struct VZone;
