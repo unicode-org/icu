@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation and         *
+* Copyright (C) 2008-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the XSLT for the API Report. 
@@ -65,7 +65,7 @@
     <h2>Changed in  <xsl:value-of select="$rightVer" /> (old, new)</h2>
     </a>
         <xsl:call-template name="genTable">
-            <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) )]"/>
+            <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) ) and not ( (@leftStatus = 'Draft') and (@rightStatus = 'Stable') and (@rightVersion = $rightVer) )]"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
 
@@ -161,7 +161,7 @@
                         <span>              
                             <xsl:value-of select="@rightVersion" />
                         </span>
-                        <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != '' and @rightStatus = 'Stable'">
+                        <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != '' and @rightStatus = 'Stable' and not ( (@leftStatus = 'Draft') and (@rightStatus = 'Stable') and (@rightVersion = $rightVer) )">
                             <br/><b title='A stable API changed version.' class='bigwarn'>(changed)</b>
                         </xsl:if>
                         <xsl:if test ="@rightStatus = 'Draft' and @rightVersion != $rightVer">

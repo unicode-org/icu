@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and    *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is an XSLT build file for ICU tools. 
@@ -28,6 +28,18 @@
              <xsl:copy-of select="location/@file" />
           </cppfunc>
         </xsl:for-each>
+        
+        <!--  now get #defines  -->
+        <xsl:variable name="defs_node" select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='define']" />
+        <xsl:for-each select="$defs_node">
+          <cppfunc>
+             <xsl:copy-of select="@id" />
+             <xsl:attribute name="status"><xsl:value-of select="detaileddescription/para/xrefsect/xreftitle/text()"/></xsl:attribute>
+             <xsl:attribute name="version"><xsl:value-of select="detaileddescription/para/xrefsect/xrefdescription/para/text()"/></xsl:attribute>
+             <xsl:attribute name="prototype">#define <xsl:value-of select="name/text()" /></xsl:attribute>
+             <xsl:copy-of select="location/@file" />
+          </cppfunc>
+         </xsl:for-each>
       </xsl:for-each>
   </list>
   </xsl:template>

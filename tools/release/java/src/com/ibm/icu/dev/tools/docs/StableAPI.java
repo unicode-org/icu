@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -98,7 +98,7 @@ public class StableAPI {
     
     private void run(String[] args) throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException {
         this.parseArgs(args);
-        Set<JoinedFunction> full = new HashSet<JoinedFunction>();
+        Set<JoinedFunction> full = new TreeSet<JoinedFunction>();
 
         System.err.println("Reading C++...");
         Set<JoinedFunction> setCpp = this.getFullList(this.dumpCppXslt);
@@ -154,7 +154,7 @@ public class StableAPI {
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
 
-    private static Set<String> warnSet = new HashSet<String>(); // No Generics because we built with JDK 1.4 for now
+    private static Set<String> warnSet = new TreeSet<String>(); // No Generics because we built with JDK 1.4 for now
     private static void warn(String what) {
         if(!warnSet.contains(what)) {
                System.out.println("Warning: "+what);
@@ -303,19 +303,37 @@ public class StableAPI {
     }
 
     static String getAttr(Node node, String attrName){
-        return node.getAttributes().getNamedItem(attrName).getNodeValue();
+    	if(node.getAttributes()==null && node.getNodeType()==3) {
+    		return "(text node 3)";
+//    		return node.getFirstChild().getAttributes().getNamedItem(attrName).getNodeValue();
+    	}
+    	
+        try {
+        	return node.getAttributes().getNamedItem(attrName).getNodeValue();
+        } catch(NullPointerException npe) {
+        	if(node.getAttributes()==null)  {
+        		throw new InternalError("[no attributes Can't get attr "+attrName +" out of node " + node.getNodeName()+":"+node.getNodeType()+":"+node.getNodeValue()+"@"+node.getTextContent());
+        	} else if(node.getAttributes().getNamedItem(attrName)==null) {
+        		throw new InternalError("No attribute named: "+attrName);
+        	} else {
+        		System.err.println("Can't get attr "+attrName+": "+npe.toString());
+        	}
+        	npe.printStackTrace();
+        	throw new InternalError("Can't get attr "+attrName);
+        }
     }
     
     static String getAttr(NamedNodeMap attrList, String attrName){
         return attrList.getNamedItem(attrName).getNodeValue();
     }
     
-    static class Function {
+    static class Function implements Comparable<Function> {
         public String prototype;
         public String id;
         public String status;
         public String version;
         public String file;
+        public String comparableName;
         public boolean equals(Function right){
             return this.prototype.equals(right.prototype);
         }
@@ -328,6 +346,7 @@ public class StableAPI {
             f.file = getAttr(n, "file");
             f.purifyPrototype();
             f.file = Function.getBasename(f.file);
+            f.comparableName = f.comparableName();
             return f;
         }
         
@@ -418,9 +437,15 @@ public class StableAPI {
 //            ele.setAttribute("status", status);
 //            return ele;
 //        }
+		public int compareTo(Function o) {
+			return comparableName.compareTo(((Function)o).comparableName);
+		}
+		public String comparableName() { 
+			return file+"|"+prototype+"|"+status+"|"+version+"|"+id;
+		}
     }
     
-    static class JoinedFunction {
+    static class JoinedFunction implements Comparable<JoinedFunction> {
         public String prototype;
         public String leftRefId;
         public String leftStatus;
@@ -430,6 +455,8 @@ public class StableAPI {
         public String rightRefId;
         public String rightStatus;
         public String rightFile;
+        
+        public String comparableName;
         
         static JoinedFunction fromLeftFun(Function left){
             JoinedFunction u = new JoinedFunction();
@@ -442,6 +469,7 @@ public class StableAPI {
             u.leftVersion = left.version;
             u.rightStatus = nul;
             u.rightFile = nul;
+            u.comparableName = left.comparableName;
             return u;
         }
     
@@ -456,6 +484,7 @@ public class StableAPI {
             u.rightRefId = right.id;
             u.rightStatus = right.status;
             u.rightFile = right.file;
+            u.comparableName = right.comparableName;
             return u;
         }
         
@@ -471,6 +500,7 @@ public class StableAPI {
             u.leftVersion = left.version;
             u.rightVersion = right.version;
             u.rightFile = right.file;
+            u.comparableName = left.comparableName+"+"+right.comparableName;
             return u;
         }
 
@@ -495,6 +525,10 @@ public class StableAPI {
             ele.setAttribute("file", f);
             return ele;
         }
+
+		public int compareTo(JoinedFunction o) {
+			return comparableName.compareTo(o.comparableName);
+		}
     }
 
     TransformerFactory transFac = TransformerFactory.newInstance();
@@ -569,7 +603,7 @@ public class StableAPI {
      * @return      Set<Fun>
      */
     private Set<Function> nodeToSet(Node node){
-        Set<Function> s = new HashSet<Function>();
+        Set<Function> s = new TreeSet<Function>();
         NodeList list = node.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Node n = list.item(i);
@@ -604,8 +638,8 @@ public class StableAPI {
      */
     private static Set<JoinedFunction> fullJoin(Set<Function> left, Set<Function> right){
 
-        Set<JoinedFunction> joined = new HashSet<JoinedFunction>(); //Set<JoinedFun>
-        Set<Function> common = new HashSet<Function>(); //Set<Fun>
+        Set<JoinedFunction> joined = new TreeSet<JoinedFunction>(); //Set<JoinedFun>
+        Set<Function> common = new TreeSet<Function>(); //Set<Fun>
         for (Iterator<Function> iter1 = left.iterator(); iter1.hasNext();) {
             Function f1 = iter1.next();
 //            if (f1.prototype.matches(".*Transliterator::.*")){
