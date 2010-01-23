@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2009, International Business Machines Corporation and others.
+* Copyright (c) 1996-2010, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -612,9 +612,9 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status);
  *                      it will return all the available values for the locale.
  * @param status error status
  * @return a string enumeration over keyword values for the given key and the locale.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucol_getKeywordValuesForLocale(const char* key,
                                const char* locale,
                                UBool commonlyUsed,

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation and *
+ * Copyright (C) 2009-2010, Google, International Business Machines Corporation and *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */ 
@@ -26,7 +26,7 @@ U_NAMESPACE_BEGIN
  * Express a duration as a time unit and number. Patterned after Currency.
  * @see TimeUnitAmount
  * @see TimeUnitFormat
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class U_I18N_API TimeUnitAmount: public Measure {
 public:
@@ -40,7 +40,7 @@ public:
      *                      is not valid,
      *                      then this will be set to a failing value:
      *                      U_ILLEGAL_ARGUMENT_ERROR.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitAmount(const Formattable& number, 
                    TimeUnit::UTimeUnitFields timeUnitField,
@@ -56,7 +56,7 @@ public:
      *                      If the timeUnitField is not valid,
      *                      then this will be set to a failing value:
      *                      U_ILLEGAL_ARGUMENT_ERROR.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitAmount(double amount, TimeUnit::UTimeUnitFields timeUnitField,
                    UErrorCode& status);
@@ -64,14 +64,14 @@ public:
 
     /**
      * Copy constructor 
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitAmount(const TimeUnitAmount& other);
 
 
     /**
      * Assignment operator
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitAmount& operator=(const TimeUnitAmount& other);
 
@@ -79,14 +79,14 @@ public:
     /**
      * Clone. 
      * @return a polymorphic clone of this object. The result will have the same               class as returned by getDynamicClassID().
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UObject* clone() const;
 
     
     /**
      * Destructor
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual ~TimeUnitAmount();
 
@@ -95,7 +95,7 @@ public:
      * Equality operator.  
      * @param other  the object to compare to.
      * @return       true if this object is equal to the given object.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UBool operator==(const UObject& other) const;
 
@@ -104,7 +104,7 @@ public:
      * Not-equality operator.  
      * @param other  the object to compare to.
      * @return       true if this object is not equal to the given object.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UBool operator!=(const UObject& other) const;
 
@@ -118,7 +118,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -132,7 +132,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -140,14 +140,14 @@ public:
     /**
      * Get the time unit.
      * @return time unit object.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     const TimeUnit& getTimeUnit() const;
 
     /**
      * Get the time unit field value.
      * @return time unit field value.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnit::UTimeUnitFields getTimeUnitField() const;
 };

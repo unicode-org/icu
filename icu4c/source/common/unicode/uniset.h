@@ -476,7 +476,7 @@ public:
      * @param uset a USet (the ICU plain C type for UnicodeSet)
      * @return the corresponding UnicodeSet pointer.
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     inline static UnicodeSet *fromUSet(USet *uset);
 
@@ -486,7 +486,7 @@ public:
      * @param uset a const USet (the ICU plain C type for UnicodeSet)
      * @return the corresponding UnicodeSet pointer.
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     inline static const UnicodeSet *fromUSet(const USet *uset);
     
@@ -495,7 +495,7 @@ public:
      * USet is the plain C type for UnicodeSet
      *
      * @return a USet pointer for this UnicodeSet
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     inline USet *toUSet();
 
@@ -505,7 +505,7 @@ public:
      * USet is the plain C type for UnicodeSet
      *
      * @return a const USet pointer for this UnicodeSet
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     inline const USet * toUSet() const;
 
@@ -1322,7 +1322,7 @@ public:
      * Currently only the USET_CASE bit is supported.  Any undefined bits
      * are ignored.
      * @return a reference to this set.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UnicodeSet& closeOver(int32_t attribute);
 
@@ -1330,7 +1330,7 @@ public:
      * Remove all strings from this set.
      *
      * @return a reference to this set.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UnicodeSet &removeAllStrings();
 

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2009, International Business Machines                   *
+* Copyright (C) 2003-2010, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -213,9 +213,9 @@ ulocdata_getPaperSize(const char *localeID, int32_t *height, int32_t *width, UEr
  * Return the current CLDR version used by the library.
  * @param versionArray fillin that will recieve the version number
  * @param status error code - could be U_MISSING_RESOURCE_ERROR if the version was not found.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ulocdata_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status);
 
 /**
@@ -231,9 +231,9 @@ ulocdata_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status);
  * @return the actual buffer size needed for localeDisplayPattern.  If it's greater
  * than patternCapacity, the returned pattern will be truncated.
  *
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ulocdata_getLocaleDisplayPattern(ULocaleData *uld,
                                  UChar *pattern,
                                  int32_t patternCapacity,
@@ -253,9 +253,9 @@ ulocdata_getLocaleDisplayPattern(ULocaleData *uld,
  * @return the actual buffer size needed for localeSeparator.  If it's greater
  * than separatorCapacity, the returned separator will be truncated.
  *
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ulocdata_getLocaleSeparator(ULocaleData *uld,
                             UChar *separator,
                             int32_t separatorCapacity,

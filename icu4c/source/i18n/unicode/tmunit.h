@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation and *
+ * Copyright (C) 2009-2010, Google, International Business Machines Corporation and *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -25,13 +25,13 @@ U_NAMESPACE_BEGIN
  * Measurement unit for time units.
  * @see TimeUnitAmount
  * @see TimeUnit
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class U_I18N_API TimeUnit: public MeasureUnit {
 public:
     /**
      * Constants for all the time units we supported.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     enum UTimeUnitFields {
         UTIMEUNIT_YEAR,
@@ -52,7 +52,7 @@ public:
      *                       If the timeUnitField is invalid,
      *                       then this will be set to U_ILLEGAL_ARGUMENT_ERROR.
      * @return               a TimeUnit instance
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     static TimeUnit* U_EXPORT2 createInstance(UTimeUnitFields timeUnitField,
                                               UErrorCode& status);
@@ -60,33 +60,33 @@ public:
 
     /**
      * Override clone.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     virtual UObject* clone() const;
 
     /**
      * Copy operator.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     TimeUnit(const TimeUnit& other);
 
     /**
      * Assignment operator.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     TimeUnit& operator=(const TimeUnit& other);
 
     /**
      * Equality operator. 
      * @return true if 2 objects are the same.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     virtual UBool operator==(const UObject& other) const;
 
     /**
      * Non-Equality operator. 
      * @return true if 2 objects are not the same.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     UBool operator!=(const UObject& other) const;
 
@@ -96,7 +96,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     virtual UClassID getDynamicClassID() const;
 
@@ -104,7 +104,7 @@ public:
      * Returns the class ID for this class. This is used to compare to
      * the return value of getDynamicClassID().
      * @return The class ID for all objects of this class.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
@@ -112,13 +112,13 @@ public:
     /**
      * Get time unit field.
      * @return time unit field.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     UTimeUnitFields getTimeUnitField() const;
 
     /**
      * Destructor.
-     * @draft ICU 4.2 
+     * @stable ICU 4.4 
      */
     virtual ~TimeUnit();
 
