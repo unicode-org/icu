@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -179,7 +179,7 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString);
  * @param versionString A Unicode string with dotted-decimal version
  *                      information, with up to four non-negative number
  *                      fields with values of up to 255 each.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 U_STABLE void U_EXPORT2
 u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);

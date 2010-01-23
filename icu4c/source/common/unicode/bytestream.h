@@ -1,4 +1,4 @@
-// Copyright (C) 2009, International Business Machines
+// Copyright (C) 2009-2010, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.
@@ -43,18 +43,18 @@ U_NAMESPACE_BEGIN
 
 /** 
  * A ByteSink can be filled with bytes.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class U_COMMON_API ByteSink : public UMemory {
 public:
   /**
    * Default constructor.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   ByteSink() { }
   /**
    * Virtual destructor.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */    
   virtual ~ByteSink() { }
 
@@ -62,7 +62,7 @@ public:
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual void Append(const char* bytes, int32_t n) = 0;
  
@@ -106,7 +106,7 @@ public:
    * @param result_capacity pointer to an integer which will be set to the
    *                        capacity of the returned buffer
    * @return a buffer with *result_capacity>=min_capacity
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual char* GetAppendBuffer(int32_t min_capacity,
                                 int32_t desired_capacity_hint,
@@ -118,7 +118,7 @@ public:
    * Some byte sinks use internal buffers or provide buffering
    * and require calling Flush() at the end of the stream.
    * The default implementation of Flush() does nothing.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual void Flush();
 
@@ -137,7 +137,7 @@ private:
  * If more than capacity bytes are Append()ed, then excess bytes are ignored,
  * and Overflowed() will return true.
  * Overflow does not cause a runtime error.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class U_COMMON_API CheckedArrayByteSink : public ByteSink {
 public:
@@ -145,14 +145,14 @@ public:
    * Constructs a ByteSink that will write to outbuf[0..capacity-1].
    * @param outbuf buffer to write to
    * @param capacity size of the buffer
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   CheckedArrayByteSink(char* outbuf, int32_t capacity);
   /**
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual void Append(const char* bytes, int32_t n);
   /**
@@ -167,7 +167,7 @@ public:
    * @param result_capacity pointer to an integer which will be set to the
    *                        capacity of the returned buffer
    * @return a buffer with *result_capacity>=min_capacity
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual char* GetAppendBuffer(int32_t min_capacity,
                                 int32_t desired_capacity_hint,
@@ -176,14 +176,14 @@ public:
   /**
    * Returns the number of bytes actually written to the sink.
    * @return number of bytes written to the buffer
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   int32_t NumberOfBytesWritten() const { return size_; }
   /**
    * Returns true if any bytes were discarded, i.e., if there was an
    * attempt to write more than 'capacity' bytes.
    * @return TRUE if more than 'capacity' bytes were Append()ed
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   UBool Overflowed() const { return overflowed_; }
 private:
@@ -201,7 +201,7 @@ private:
 /** 
  * Implementation of ByteSink that writes to a "string".
  * The StringClass is usually instantiated with a std::string.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 template<typename StringClass>
 class StringByteSink : public ByteSink {
@@ -209,14 +209,14 @@ class StringByteSink : public ByteSink {
   /**
    * Constructs a ByteSink that will append bytes to the dest string.
    * @param dest pointer to string object to append to
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   StringByteSink(StringClass* dest) : dest_(dest) { }
   /**
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   virtual void Append(const char* data, int32_t n) { dest_->append(data, n); }
  private:

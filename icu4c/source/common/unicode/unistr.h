@@ -1600,7 +1600,7 @@ public:
    * Calls u_strToUTF8WithSub().
    *
    * @param sink A ByteSink to which the UTF-8 version of the string is written.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    * @see toUTF8String
    */
   void toUTF8(ByteSink &sink) const;
@@ -1616,7 +1616,7 @@ public:
    * @param result A standard string (or a compatible object)
    *        to which the UTF-8 version of the string is appended.
    * @return The string object.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    * @see toUTF8
    */
   template<typename StringClass>
@@ -1641,7 +1641,7 @@ public:
    *                  function chaining. (See User Guide for details.)
    * @return The length of the UTF-32 string.
    * @see fromUTF32
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   int32_t toUTF32(UChar32 *utf32, int32_t capacity, UErrorCode &errorCode) const;
 
@@ -3049,7 +3049,7 @@ public:
    * @return A UnicodeString with equivalent UTF-16 contents.
    * @see toUTF8
    * @see toUTF8String
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   static UnicodeString fromUTF8(const StringPiece &utf8);
 
@@ -3062,7 +3062,7 @@ public:
    * @param length Length of the input string, or -1 if NUL-terminated.
    * @return A UnicodeString with equivalent UTF-16 contents.
    * @see toUTF32
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   static UnicodeString fromUTF32(const UChar32 *utf32, int32_t length);
 

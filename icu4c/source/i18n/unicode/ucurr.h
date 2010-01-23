@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -152,7 +152,7 @@ ucurr_getName(const UChar* currency,
  * @return pointer to display string of 'len' UChars.  If the resource
  * data contains no entry for 'currency', then 'currency' itself is
  * returned.  
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 U_STABLE const UChar* U_EXPORT2
 ucurr_getPluralName(const UChar* currency,
@@ -257,7 +257,7 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
  *               values are invalid.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucurr_countCurrencies(const char* locale, 
                  UDate date, 
                  UErrorCode* ec); 
@@ -281,7 +281,7 @@ ucurr_countCurrencies(const char* locale,
  *               invalid.  
  * @stable ICU 4.0 
  */ 
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucurr_forLocaleAndDate(const char* locale, 
                 UDate date, 
                 int32_t index,
@@ -303,9 +303,9 @@ ucurr_forLocaleAndDate(const char* locale,
  *                      it will return all the available values for the locale.
  * @param status error status
  * @return a string enumeration over keyword values for the given key and the locale.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucurr_getKeywordValuesForLocale(const char* key,
                                 const char* locale,
                                 UBool commonlyUsed,

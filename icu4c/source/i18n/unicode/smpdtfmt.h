@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2009, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2010, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.H
@@ -257,7 +257,7 @@ public:
      * @param pattern    the pattern for the format.
      * @param override   the override string.
      * @param status     Output param set to success/failure code.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const UnicodeString& override,
@@ -298,7 +298,7 @@ public:
      * @param override   the numbering system override.
      * @param locale     the given locale.
      * @param status     Output param set to success/failure code.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const UnicodeString& override,
