@@ -1,0 +1,169 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ne.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ne.xml
+ */
+ne{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
+    ExemplarCharacters{"[ँ-ः ०-९ अ-ऋ ए ऐ ओ-न प-र ल व-ह ा-ृ े ै ो ्]"}
+    LocaleScript{
+        "Deva",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "०",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        buddhist{
+            AmPmMarkers{
+                "पूर्व मध्यान्ह",
+                "पूर्व अपरान्ह",
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "पूर्व मध्यान्ह",
+                "उत्तर मध्यान्ह",
+            }
+            dayNames{
+                stand-alone{
+                    narrow{
+                        "१",
+                        "२",
+                        "३",
+                        "४",
+                        "५",
+                        "६",
+                        "७",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ईसा पूर्व",
+                    "CE",
+                }
+                wide{
+                    "ईसा पूर्व",
+                    "CE",
+                }
+            }
+            fields{
+                day{
+                    dn{"बार"}
+                    relative{
+                        "-1"{"हिजो"}
+                        "0"{"आज"}
+                        "1"{"भोलि"}
+                    }
+                }
+                dayperiod{
+                    dn{"पूर्व मध्यान्ह/उत्तर मध्यान्ह"}
+                }
+                era{
+                    dn{"काल"}
+                }
+                hour{
+                    dn{"घण्टा"}
+                }
+                minute{
+                    dn{"मिनेट"}
+                }
+                month{
+                    dn{"महिना"}
+                }
+                second{
+                    dn{"दोस्रो"}
+                }
+                week{
+                    dn{"हप्ता"}
+                }
+                weekday{
+                    dn{"हप्ताको बार"}
+                }
+                year{
+                    dn{"बर्ष"}
+                }
+                zone{
+                    dn{"क्षेत्र"}
+                }
+            }
+            monthNames{
+                stand-alone{
+                    narrow{
+                        "१",
+                        "२",
+                        "३",
+                        "४",
+                        "५",
+                        "६",
+                        "७",
+                        "८",
+                        "९",
+                        "१०",
+                        "११",
+                        "१२",
+                    }
+                }
+            }
+            quarters{
+                stand-alone{
+                    narrow{
+                        "१",
+                        "२",
+                        "३",
+                        "४",
+                    }
+                }
+            }
+        }
+    }
+    defaultNumberingSystem{"deva"}
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"'"}
+        quotationStart{"'"}
+    }
+    units{
+        day{
+            one{"{0} दिन"}
+        }
+        hour{
+            one{"{0} घण्टा"}
+        }
+        minute{
+            one{"{0} मिनेट"}
+        }
+        month{
+            one{"{0} महिना"}
+        }
+        second{
+            one{"{0} सेकेण्ड"}
+        }
+        week{
+            one{"{0} हप्ता"}
+        }
+        year{
+            one{"{0} बर्ष"}
+            other{"{0} बर्ष"}
+        }
+    }
+}

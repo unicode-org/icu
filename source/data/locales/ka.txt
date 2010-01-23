@@ -1,0 +1,92 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ka.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ka.xml
+ */
+ka{
+    ExemplarCharacters{
+        "[ა ⴀ ბ ⴁ გ ⴂ დ ⴃ ე ⴄ ვ ⴅ ზ ⴆ ჱ ⴡ თ ⴇ ი ⴈ კ ⴉ ლ ⴊ მ ⴋ ნ ⴌ ჲ ⴢ ო ⴍ პ ⴎ ჟ ⴏ რ ⴐ"
+        " ს ⴑ ტ ⴒ ჳ ⴣ უ ⴓ ფ ⴔ ქ ⴕ ღ ⴖ ყ ⴗ შ ⴘ ჩ ⴙ ც ⴚ ძ ⴛ წ ⴜ ჭ ⴝ ხ ⴞ ჴ ⴤ ჯ ⴟ ჰ ⴠ ჵ ⴥ"
+        " ჶ-ჺ]"
+    }
+    LocaleScript{
+        "Geor",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            availableFormats{
+                MMdd{"dd/MM"}
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "I კვ.",
+                        "II კვ.",
+                        "III კვ.",
+                        "IV კვ.",
+                    }
+                    wide{
+                        "1-ლი კვარტალი",
+                        "მე-2 კვარტალი",
+                        "მე-3 კვარტალი",
+                        "მე-4 კვარტალი",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metric"}
+    }
+    units{
+        day{
+            other{"{0} დღე"}
+        }
+        hour{
+            other{"{0} საათი"}
+        }
+        minute{
+            other{"{0} წუთი"}
+        }
+        month{
+            other{"{0} თვე"}
+        }
+        second{
+            other{"{0} წამი"}
+        }
+        week{
+            other{"{0} კვირა"}
+        }
+        year{
+            other{"{0} წელი"}
+        }
+    }
+}

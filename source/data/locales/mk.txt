@@ -1,0 +1,306 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/mk.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/mk.xml
+ */
+mk{
+    AuxExemplarCharacters{"[ѐ ѝ]"}
+    ExemplarCharacters{"[а-г ѓ д-з ѕ и ј к ќ л љ м н њ о-ч џ ш]"}
+    LocaleScript{
+        "Cyrl",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###;(#,##0.###)",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "претпладне",
+                "попладне",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, dd MMMM y",
+                "dd MMMM y",
+                "dd.M.yyyy",
+                "dd.M.yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                Mdd{"dd.M"}
+                yyQ{"Q yy"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нед.",
+                        "пон.",
+                        "вт.",
+                        "сре.",
+                        "чет.",
+                        "пет.",
+                        "саб.",
+                    }
+                    wide{
+                        "недела",
+                        "понеделник",
+                        "вторник",
+                        "среда",
+                        "четврток",
+                        "петок",
+                        "сабота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "в",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "пр.н.е.",
+                    "ае.",
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "-1"{"Вчера"}
+                        "-2"{"завчера"}
+                        "0"{"Денес"}
+                        "1"{"Утре"}
+                        "2"{"задутре"}
+                    }
+                }
+                era{
+                    dn{"Ера"}
+                }
+                hour{
+                    dn{"Час"}
+                }
+                minute{
+                    dn{"Минута"}
+                }
+                month{
+                    dn{"Месец"}
+                }
+                second{
+                    dn{"Секунда"}
+                }
+                week{
+                    dn{"Недела"}
+                }
+                weekday{
+                    dn{"Ден во неделата"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd.M - E, dd.M"}
+                    d{"E, dd.M - E, dd.M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, dd MMM - E, dd MMM"}
+                    d{"E, dd - E, dd MMM"}
+                }
+                MMMd{
+                    M{"dd MMM - dd MMM"}
+                    d{"dd-dd MMM"}
+                }
+                Md{
+                    M{"dd.M - dd.M"}
+                    d{"dd.M - dd.M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    h{"HH-HH"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M.yy - M.yy"}
+                    y{"M.yy - M.yy"}
+                }
+                yMEd{
+                    M{"E, dd.M.yy - E, dd.M.yy"}
+                    d{"E, dd.M.yy - E, dd.M.yy"}
+                    y{"E, dd.M.yy - E, dd.M.yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMd{
+                    M{"dd MMM - dd MMM y"}
+                    d{"dd-dd MMM y"}
+                    y{"dd MMM y - dd MMM y"}
+                }
+                yMd{
+                    M{"dd.M.yy - dd.M.yy"}
+                    d{"dd.M.yy - dd.M.yy"}
+                    y{"dd.M.yy - dd.M.yy"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "јан.",
+                        "фев.",
+                        "мар.",
+                        "апр.",
+                        "мај",
+                        "јун.",
+                        "јул.",
+                        "авг.",
+                        "септ.",
+                        "окт.",
+                        "ноем.",
+                        "декем.",
+                    }
+                    wide{
+                        "јануари",
+                        "февруари",
+                        "март",
+                        "април",
+                        "мај",
+                        "јуни",
+                        "јули",
+                        "август",
+                        "септември",
+                        "октомври",
+                        "ноември",
+                        "декември",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ј",
+                        "ф",
+                        "м",
+                        "а",
+                        "м",
+                        "ј",
+                        "ј",
+                        "а",
+                        "с",
+                        "о",
+                        "н",
+                        "д",
+                    }
+                }
+            }
+            quarters{
+                stand-alone{
+                    abbreviated{
+                        "јан-мар",
+                        "апр-јун",
+                        "јул-сеп",
+                        "окт-дек",
+                    }
+                    wide{
+                        "прво тромесечје",
+                        "второ тромесечје",
+                        "трето тромесечје",
+                        "четврто тромесечје",
+                    }
+                }
+            }
+        }
+    }
+    measurementSystemNames{
+        US{"Американски"}
+        metric{"Метрички"}
+    }
+    units{
+        day{
+            one{"{0} ден"}
+            other{"{0} денови"}
+        }
+        hour{
+            one{"{0} час"}
+            other{"{0} часови"}
+        }
+        minute{
+            one{"{0} минута"}
+            other{"{0} минути"}
+        }
+        month{
+            one{"{0} месец"}
+            other{"{0} месеци"}
+        }
+        second{
+            one{"{0} секунда"}
+            other{"{0} секунди"}
+        }
+        week{
+            one{"{0} недела"}
+            other{"{0} недели"}
+        }
+        year{
+            one{"{0} година"}
+            other{"{0} години"}
+        }
+    }
+}

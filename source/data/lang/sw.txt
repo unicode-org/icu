@@ -1,0 +1,26 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/sw.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/sw.xml
+ */
+sw{
+    Languages{
+        de{"kijerumani"}
+        en{"kiingereza"}
+        es{"kihispania"}
+        fr{"kifaransa"}
+        it{"kiitaliano"}
+        ja{"kijapani"}
+        pt{"kireno"}
+        ru{"kirusi"}
+        sw{"Kiswahili"}
+        zh{"kichina"}
+    }
+    Version{"2.0.42.82"}
+}

@@ -1,0 +1,121 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/hy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/hy.xml
+ */
+hy{
+    ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-ֆ]"}
+    LocaleScript{
+        "Armn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#0.###",
+        "#0.00 ¤",
+        "#0%",
+        "#E0",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "Առ․",
+                "Եր․",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y",
+                "MMMM dd, y",
+                "MMM d, y",
+                "MM/dd/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Կիր",
+                        "Երկ",
+                        "Երք",
+                        "Չոր",
+                        "Հնգ",
+                        "Ուր",
+                        "Շաբ",
+                    }
+                    wide{
+                        "Կիրակի",
+                        "Երկուշաբթի",
+                        "Երեքշաբթի",
+                        "Չորեքշաբթի",
+                        "Հինգշաբթի",
+                        "Ուրբաթ",
+                        "Շաբաթ",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "Ք․Ա․",
+                    "Ք․Ե․",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Յնր",
+                        "Փտր",
+                        "Մրտ",
+                        "Ապր",
+                        "Մյս",
+                        "Յնս",
+                        "Յլս",
+                        "Օգս",
+                        "Սեպ",
+                        "Հոկ",
+                        "Նոյ",
+                        "Դեկ",
+                    }
+                    wide{
+                        "Յունուար",
+                        "Փետրուար",
+                        "Մարտ",
+                        "Ապրիլ",
+                        "Մայիս",
+                        "Յունիս",
+                        "Յուլիս",
+                        "Օգոստոս",
+                        "Սեպտեմբեր",
+                        "Հոկտեմբեր",
+                        "Նոյեմբեր",
+                        "Դեկտեմբեր",
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/az_Cyrl.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
+ */
+az_Cyrl{
+    %%ParentIsRoot:int{1}
+    AuxExemplarCharacters{"[ц щ ъ ь-я]"}
+    ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}
+    LocaleScript{
+        "Cyrl",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    wide{
+                        "базар",
+                        "базар ертәси",
+                        "чәршәнбә ахшамы",
+                        "чәршәнбә",
+                        "ҹүмә ахшамы",
+                        "ҹүмә",
+                        "шәнбә",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "јанвар",
+                        "феврал",
+                        "март",
+                        "апрел",
+                        "май",
+                        "ијун",
+                        "ијул",
+                        "август",
+                        "сентјабр",
+                        "октјабр",
+                        "нојабр",
+                        "декабр",
+                    }
+                }
+            }
+        }
+    }
+}

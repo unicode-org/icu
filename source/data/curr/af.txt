@@ -1,0 +1,64 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/af.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/af.xml
+ */
+af{
+    Currencies{
+        CHF{
+            "Fr.",
+            "Switserse frank",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        GBP{
+            "£",
+            "Britse pond",
+        }
+        ITL{
+            "IT₤",
+            "Italiaanse lier",
+        }
+        JPY{
+            "JP¥",
+            "Japannese jen",
+        }
+        NAD{
+            "N$",
+            "Namibiese dollar",
+        }
+        RUB{
+            "RUB",
+            "Roebel",
+        }
+        TRL{
+            "TRL",
+            "Ou Turkse lier",
+        }
+        TRY{
+            "TL",
+            "Turkse lier",
+        }
+        USD{
+            "US$",
+            "Amerikaanse dollar",
+        }
+        XXX{
+            "XXX",
+            "Onbekende of ongeldige geldeenheid",
+        }
+        ZAR{
+            "R",
+            "Rand",
+        }
+    }
+    Version{"2.0.42.82"}
+}

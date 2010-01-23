@@ -1,0 +1,451 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/sv.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/sv.xml
+ */
+sv{
+    AuxExemplarCharacters{"[á â ã ā ç ë í-ï ī ñ ó ú ÿ ü æ ø]"}
+    ExemplarCharacters{"[a à b-e é f-z å ä ö]"}
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "−",
+        "×10^",
+        "‰",
+        "∞",
+        "¤¤¤",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0 %",
+        "#E0",
+    }
+    Version{"2.0.42.82"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "fm",
+                "em",
+            }
+            DateTimePatterns{
+                "'kl'. HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "yyyy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH.mm"}
+                HHmmss{"HH.mm.ss"}
+                Hm{"H.mm"}
+                M{"L"}
+                MEd{"E d/M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEEEd{"EEE d MMMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMd{"d/M"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d"}
+                hhmm{"hh.mm a"}
+                hhmmss{"h.mm.ss a"}
+                ms{"mm.ss"}
+                y{"y"}
+                yM{"yyyy-MM"}
+                yMEd{"EEE, yyyy-MM-dd"}
+                yMMM{"y MMM"}
+                yMMMEd{"EEE d MMM y"}
+                yMMMM{"y MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"y QQQ"}
+                yyMM{"yy-MM"}
+                yyMMM{"MMM -yy"}
+                yyQ{"Q yy"}
+                yyyyMM{"yyyy-MM"}
+                yyyyMMM{"MMM y"}
+                yyyyQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sön",
+                        "mån",
+                        "tis",
+                        "ons",
+                        "tors",
+                        "fre",
+                        "lör",
+                    }
+                    wide{
+                        "söndag",
+                        "måndag",
+                        "tisdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "lördag",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "f.Kr.",
+                    "e.Kr.",
+                }
+                wide{
+                    "före Kristus",
+                    "efter Kristus",
+                }
+            }
+            fields{
+                day{
+                    dn{"dag"}
+                    relative{
+                        "-1"{"igår"}
+                        "-2"{"i förrgår"}
+                        "-3"{"för tre dagar sedan"}
+                        "0"{"idag"}
+                        "1"{"imorgon"}
+                        "2"{"i övermorgon"}
+                        "3"{"om tre dagar"}
+                    }
+                }
+                dayperiod{
+                    dn{"fm/em"}
+                }
+                era{
+                    dn{"era"}
+                }
+                hour{
+                    dn{"timme"}
+                }
+                minute{
+                    dn{"minut"}
+                }
+                month{
+                    dn{"månad"}
+                }
+                second{
+                    dn{"sekund"}
+                }
+                week{
+                    dn{"vecka"}
+                }
+                weekday{
+                    dn{"veckodag"}
+                }
+                year{
+                    dn{"år"}
+                }
+                zone{
+                    dn{"tidszon"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E d/M – E d/M"}
+                    d{"E d/M – E d/M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E d MMM – E d MMM"}
+                    d{"E d – E d MMM"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d–d/M"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"HH–HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH.mm–HH.mm"}
+                    h{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
+                }
+                hmv{
+                    a{"HH.mm–HH.mm v"}
+                    h{"HH.mm–HH.mm v"}
+                    m{"HH.mm-HH.mm v"}
+                }
+                hv{
+                    a{"HH–HH v"}
+                    h{"HH–HH v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"E dd MMM–E dd MMM y"}
+                    d{"E dd MMM–E dd MMM y"}
+                    y{"E dd MMM y–E dd MMM y"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"d MMM–d MMM y"}
+                    d{"d–d MMM y"}
+                    y{"d MMM y–d MMM y"}
+                }
+                yMd{
+                    M{"yyyy-MM-dd – MM-dd"}
+                    d{"yyyy-MM-dd – dd"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januari",
+                        "februari",
+                        "mars",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "augusti",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1:a kvartalet",
+                        "2:a kvartalet",
+                        "3:e kvartalet",
+                        "4:e kvartalet",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    wide{
+                        "tishrí",
+                        "heshván",
+                        "kislév",
+                        "tevét",
+                        "shevát",
+                        "adár I",
+                        "adár",
+                        "nisán",
+                        "ijjár",
+                        "siván",
+                        "tammúz",
+                        "ab",
+                        "elúl",
+                        "adár II",
+                    }
+                }
+            }
+        }
+        indian{
+            monthNames{
+                format{
+                    wide{
+                        "chaitra",
+                        "vaishākh",
+                        "jyaishtha",
+                        "āshādha",
+                        "shrāvana",
+                        "bhādrapad",
+                        "āshwin",
+                        "kārtik",
+                        "mārgashīrsha",
+                        "paush",
+                        "māgh",
+                        "phālgun",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"’"}
+        quotationEnd{"”"}
+        quotationStart{"”"}
+    }
+    measurementSystemNames{
+        US{"engelska enheter"}
+        metric{"SI-enheter"}
+    }
+    units{
+        day{
+            one{"{0} dag"}
+            other{"{0} dagar"}
+        }
+        hour{
+            one{"{0} timme"}
+            other{"{0} timmar"}
+        }
+        minute{
+            one{"{0} minut"}
+            other{"{0} minuter"}
+        }
+        month{
+            one{"{0} månad"}
+            other{"{0} månader"}
+        }
+        second{
+            one{"{0} sekund"}
+            other{"{0} sekunder"}
+        }
+        week{
+            one{"{0} vecka"}
+            other{"{0} veckor"}
+        }
+        year{
+            one{"{0} år"}
+            other{"{0} år"}
+        }
+    }
+    unitsShort{
+        day{
+            one{"{0} dag"}
+            other{"{0} dagar"}
+        }
+        hour{
+            one{"{0} tim."}
+            other{"{0} tim."}
+        }
+        minute{
+            one{"{0} min."}
+            other{"{0} min."}
+        }
+        month{
+            one{"{0} mån."}
+            other{"{0} mån."}
+        }
+        second{
+            one{"{0} sek."}
+            other{"{0} sek."}
+        }
+        week{
+            one{"{0} v."}
+            other{"{0} v."}
+        }
+        year{
+            one{"{0} år"}
+            other{"{0} år"}
+        }
+    }
+}

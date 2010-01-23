@@ -1,0 +1,635 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/et.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/et.xml
+ */
+et{
+    Languages{
+        aa{"afari"}
+        ab{"abhaasi"}
+        ace{"atšehi"}
+        ach{"akoli"}
+        ada{"adangme"}
+        ady{"adõgee"}
+        ae{"avesta"}
+        af{"afrikaani"}
+        afa{"muu afroaasia"}
+        afh{"afrihili"}
+        ain{"ainu"}
+        ak{"akani"}
+        akk{"akadi"}
+        ale{"aleuudi"}
+        alg{"algonkini keeled"}
+        alt{"altai"}
+        am{"amhari"}
+        an{"aragoni"}
+        ang{"vanainglise"}
+        anp{"angika"}
+        apa{"apatši keeled"}
+        ar{"araabia"}
+        arc{"aramea"}
+        arn{"araukaani"}
+        arp{"arapaho"}
+        art{"muu tehiskeel"}
+        arw{"aravaki"}
+        as{"assami"}
+        ast{"astuuria"}
+        ath{"atapaski keeled"}
+        aus{"Austraalia keeled"}
+        av{"avaari"}
+        awa{"avadhi"}
+        ay{"aimara"}
+        az{"aserbaidžaani"}
+        ba{"baškiiri"}
+        bad{"banda"}
+        bai{"bamileke keeled"}
+        bal{"belutši"}
+        ban{"bali"}
+        bas{"basa"}
+        bat{"muu balti"}
+        be{"valgevene"}
+        bej{"bedža"}
+        bem{"bemba"}
+        ber{"berberi"}
+        bg{"bulgaaria"}
+        bh{"bihaari"}
+        bho{"bhodžpuri"}
+        bi{"bislama"}
+        bik{"bikoli"}
+        bin{"edo"}
+        bla{"siksika"}
+        bm{"bambara"}
+        bn{"bengali"}
+        bnt{"bantu"}
+        bo{"tiibeti"}
+        br{"bretooni"}
+        bra{"bradži"}
+        bs{"bosnia"}
+        btk{"bataki"}
+        bua{"burjaadi"}
+        bug{"bugi"}
+        byn{"bilini"}
+        ca{"katalaani"}
+        cad{"kado"}
+        cai{"muu Kesk-Ameerika indiaani"}
+        car{"kariibi"}
+        cau{"muu Kaukaasia"}
+        ce{"tšetšeeni"}
+        ceb{"sebu"}
+        cel{"muu keldi"}
+        ch{"tšamorro"}
+        chb{"tšibtša"}
+        chg{"tšagatai"}
+        chk{"tšuugi"}
+        chm{"mari"}
+        chn{"tšinuki žargoon"}
+        cho{"tšokto"}
+        chp{"tšipevai"}
+        chr{"tšerokii"}
+        chy{"šaieeni"}
+        cmc{"tšami keeled"}
+        co{"korsika"}
+        cop{"kopti"}
+        cpe{"muud inglispõhjalised kreool- ja pidžinkeeled"}
+        cpf{"muud prantsuspõhjalised kreool- ja pidžinkeeled"}
+        cpp{"muud portugalipõhjalised kreool- ja pidžinkeeled"}
+        cr{"krii"}
+        crh{"krimmitatari"}
+        crp{"muud kreool- ja pidžinkeeled"}
+        cs{"tšehhi"}
+        csb{"kašuubi"}
+        cu{"kirikuslaavi"}
+        cus{"muu kuši keel"}
+        cv{"tšuvaši"}
+        cy{"kõmri"}
+        da{"taani"}
+        dak{"siuu"}
+        dar{"dargi"}
+        day{"dajaki"}
+        de{"saksa"}
+        del{"delavari"}
+        den{"sleivi"}
+        dgr{"dogribi"}
+        din{"dinka"}
+        doi{"dogri"}
+        dra{"muu draviidi keel"}
+        dsb{"alamsorbi"}
+        dua{"duala"}
+        dum{"keskhollandi"}
+        dv{"maldiivi"}
+        dyu{"djula"}
+        dz{"bhutani"}
+        ee{"eve"}
+        efi{"ibibio"}
+        egy{"muinasegiptuse"}
+        eka{"ekadžuki"}
+        el{"kreeka"}
+        elx{"eelami"}
+        en{"inglise"}
+        enm{"keskinglise"}
+        eo{"esperanto"}
+        es{"hispaania"}
+        et{"eesti"}
+        eu{"baski"}
+        ewo{"evondo"}
+        fa{"pärsia"}
+        fan{"fangi"}
+        fat{"fanti"}
+        ff{"fulbe"}
+        fi{"soome"}
+        fil{"filipino"}
+        fiu{"muu soomeugri"}
+        fj{"fidži"}
+        fo{"fääri"}
+        fon{"foni"}
+        fr{"prantsuse"}
+        frm{"keskprantsuse"}
+        fro{"vanaprantsuse"}
+        frr{"põhjafriisi"}
+        frs{"idafriisi"}
+        fur{"friuuli"}
+        fy{"läänefriisi"}
+        ga{"iiri"}
+        gaa{"gaa"}
+        gay{"gajo"}
+        gba{"gbaja"}
+        gd{"gaeli"}
+        gem{"muu germaani"}
+        gez{"etioopia"}
+        gil{"kiribati"}
+        gl{"galeegi"}
+        gmh{"keskülemsaksa"}
+        gn{"guaranii"}
+        goh{"vanaülemsaksa"}
+        gon{"gondi"}
+        gor{"gorontalo"}
+        got{"gooti"}
+        grb{"grebo"}
+        grc{"vanakreeka"}
+        gsw{"alemanni"}
+        gu{"gudžarati"}
+        gv{"mänksi"}
+        gwi{"gvitšini"}
+        ha{"hausa"}
+        hai{"haida"}
+        haw{"havai"}
+        he{"heebrea"}
+        hi{"hindi"}
+        hil{"hiligainoni"}
+        him{"himtšali"}
+        hit{"heti"}
+        hmn{"hmongi"}
+        ho{"motu"}
+        hr{"horvaadi"}
+        hsb{"ülemsorbi"}
+        ht{"haiti"}
+        hu{"ungari"}
+        hup{"hupa"}
+        hy{"armeenia"}
+        hz{"herero"}
+        ia{"interlingua"}
+        iba{"ibani"}
+        id{"indoneesia"}
+        ie{"interlingue"}
+        ig{"ibo"}
+        ii{"Sichuani jii"}
+        ijo{"idžo"}
+        ik{"injupiaki"}
+        ilo{"iloko"}
+        inc{"muu India"}
+        ine{"muu indoeuroopa"}
+        inh{"inguši"}
+        io{"ido"}
+        ira{"muu Iraani"}
+        iro{"irokeesi keeled"}
+        is{"islandi"}
+        it{"itaalia"}
+        iu{"inuktituti"}
+        ja{"jaapani"}
+        jbo{"lojbani"}
+        jpr{"juudipärsia"}
+        jrb{"juudiaraabia"}
+        jv{"jaava"}
+        ka{"gruusia"}
+        kaa{"karakalpaki"}
+        kab{"kabiili"}
+        kac{"katšini"}
+        kam{"kamba"}
+        kar{"kareni"}
+        kaw{"kaavi"}
+        kbd{"kabardi-tšerkessi"}
+        kg{"kongo"}
+        kha{"khasi"}
+        khi{"muu khoisani"}
+        kho{"saki"}
+        ki{"kikuju"}
+        kj{"ambo"}
+        kk{"kasahhi"}
+        kl{"grööni"}
+        km{"khmeeri"}
+        kmb{"mbundu"}
+        kn{"kannada"}
+        ko{"korea"}
+        kok{"konkani"}
+        kos{"kosrae"}
+        kpe{"kpelle"}
+        kr{"kanuri"}
+        krc{"karatšai-balkaari"}
+        krl{"karjala"}
+        kro{"kruu"}
+        kru{"oraoni"}
+        ks{"kašmiiri"}
+        ku{"kurdi"}
+        kum{"kumõki"}
+        kut{"kutenai"}
+        kv{"komi"}
+        kw{"korni"}
+        ky{"kirgiisi"}
+        la{"ladina"}
+        lad{"ladiino"}
+        lah{"lahnda"}
+        lam{"lamba"}
+        lb{"letseburgi"}
+        lez{"lesgi"}
+        lg{"ganda"}
+        li{"limburgi"}
+        ln{"lingala"}
+        lo{"lao"}
+        lol{"mongo"}
+        loz{"lozi"}
+        lt{"leedu"}
+        lu{"luba"}
+        lua{"lulua"}
+        lui{"luisenjo"}
+        lun{"lunda"}
+        luo{"luo"}
+        lus{"lušei"}
+        lv{"läti"}
+        mad{"madura"}
+        mag{"magali"}
+        mai{"maithili"}
+        mak{"makassari"}
+        man{"malinke"}
+        map{"austroneesia keeled"}
+        mas{"masai"}
+        mdf{"mokša"}
+        mdr{"mandari"}
+        men{"mende"}
+        mg{"malagassi"}
+        mga{"keskiiri"}
+        mh{"maršalli"}
+        mi{"maoori"}
+        mic{"mikmaki"}
+        min{"minangkabau"}
+        mis{"üksikkeeled"}
+        mk{"makedoonia"}
+        mkh{"muu moni-khmeeri"}
+        ml{"malajalami"}
+        mn{"mongoli"}
+        mnc{"mandžu"}
+        mni{"manipuri"}
+        mno{"manobo keeled"}
+        mo{"moldova"}
+        moh{"mohoogi"}
+        mos{"more"}
+        mr{"marathi"}
+        ms{"malai"}
+        mt{"malta"}
+        mul{"mitu keelt"}
+        mun{"munda keel"}
+        mus{"maskogi"}
+        mwl{"miranda"}
+        mwr{"marvari"}
+        my{"birma"}
+        myn{"maia keeled"}
+        myv{"ersa"}
+        na{"nauru"}
+        nah{"nahua"}
+        nai{"muu Põhja-Ameerika indiaani"}
+        nap{"napoli"}
+        nb{"norra bokmål"}
+        nd{"põhjandebele"}
+        nds{"alamsaksa"}
+        ne{"nepali"}
+        new{"nevari"}
+        ng{"ndonga"}
+        nia{"niasi"}
+        nic{"muu Nigeri-Kordofani"}
+        niu{"niue"}
+        nl{"hollandi"}
+        nn{"norra nynorsk"}
+        no{"norra"}
+        nog{"nogai"}
+        non{"vanapõhjala"}
+        nqo{"nkoo"}
+        nr{"lõunandebele"}
+        nso{"pedi"}
+        nub{"Nuubia keeled"}
+        nv{"navaho"}
+        nwc{"vananevari"}
+        ny{"njandža"}
+        nym{"njamvesi"}
+        nyn{"nkole"}
+        nyo{"njoro"}
+        nzi{"nzima"}
+        oc{"oksitaani"}
+        oj{"odžibvei"}
+        om{"oromo"}
+        or{"oria"}
+        os{"osseedi"}
+        osa{"oseidži"}
+        ota{"osmanitürgi"}
+        oto{"otomi keeled"}
+        pa{"pandžabi"}
+        paa{"muu Paapua"}
+        pag{"pangasinani"}
+        pal{"pahlavi"}
+        pam{"pampanga"}
+        pap{"papiamento"}
+        pau{"belau"}
+        peo{"vanapärsia"}
+        phi{"muu Filipiini"}
+        phn{"foiniikia"}
+        pi{"paali"}
+        pl{"poola"}
+        pon{"poonpei"}
+        pra{"praakriti keeled"}
+        pro{"vanaprovansi"}
+        ps{"puštu"}
+        pt{"portugali"}
+        qu{"ketšua"}
+        raj{"radžastani"}
+        rap{"rapanui"}
+        rar{"rarotonga"}
+        rm{"retoromaani"}
+        rn{"rundi"}
+        ro{"rumeenia"}
+        roa{"muu romaani"}
+        rom{"mustlaskeel"}
+        ru{"vene"}
+        rup{"aromuuni"}
+        rw{"ruanda"}
+        sa{"sanskriti"}
+        sad{"sandave"}
+        sah{"jakuudi"}
+        sai{"muu Lõuna-Ameerika indiaani"}
+        sal{"sališi keeled"}
+        sam{"Samaaria aramea"}
+        sas{"sasaki"}
+        sat{"santali"}
+        sc{"sardiinia"}
+        scn{"sitsiilia"}
+        sco{"šoti"}
+        sd{"sindhi"}
+        se{"põhjasaami"}
+        sel{"sölkupi"}
+        sem{"muu semi"}
+        sg{"sango"}
+        sga{"vanaiiri"}
+        sgn{"viipekeeled"}
+        sh{"serbia-horvaadi"}
+        shn{"šani"}
+        si{"singali"}
+        sid{"sidamo"}
+        sio{"siuu keeled"}
+        sit{"muu Hiina-Tiibeti"}
+        sk{"slovaki"}
+        sl{"sloveeni"}
+        sla{"muu slaavi"}
+        sm{"samoa"}
+        sma{"lõunasaami"}
+        smi{"muu saami"}
+        smj{"Lule saami"}
+        smn{"Inari saami"}
+        sms{"koltasaami"}
+        sn{"šona"}
+        snk{"soninke"}
+        so{"somaali"}
+        sog{"sogdi"}
+        son{"songai"}
+        sq{"albaania"}
+        sr{"serbia"}
+        srn{"sranani"}
+        srr{"sereri"}
+        ss{"svaasi"}
+        ssa{"muu Niiluse-Sahara"}
+        st{"lõunasotho"}
+        su{"sunda"}
+        suk{"sukuma"}
+        sus{"susu"}
+        sux{"sumeri"}
+        sv{"rootsi"}
+        sw{"suahiili"}
+        syr{"süüria"}
+        ta{"tamili"}
+        tai{"muu tai keel"}
+        te{"telugu"}
+        tem{"temne"}
+        ter{"tereno"}
+        tet{"tetumi"}
+        tg{"tadžiki"}
+        th{"tai"}
+        ti{"tigrinja"}
+        tig{"tigree"}
+        tiv{"tivi"}
+        tk{"türkmeeni"}
+        tkl{"tokelau"}
+        tl{"tagalogi"}
+        tlh{"klingoni"}
+        tli{"tlingiti"}
+        tmh{"tamašeki"}
+        tn{"tsvana"}
+        to{"tonga"}
+        tog{"tšitonga"}
+        tpi{"uusmelaneesia"}
+        tr{"türgi"}
+        ts{"tsonga"}
+        tsi{"tšimši keeled"}
+        tt{"tatari"}
+        tum{"tumbuka"}
+        tup{"tupii keeled"}
+        tut{"muu Altai"}
+        tvl{"tuvalu"}
+        tw{"tvii"}
+        ty{"tahiti"}
+        tyv{"tõva"}
+        udm{"udmurdi"}
+        ug{"uiguuri"}
+        uga{"ugariti"}
+        uk{"ukraina"}
+        umb{"umbundu"}
+        und{"määramata"}
+        ur{"urdu"}
+        uz{"usbeki"}
+        vai{"vai"}
+        ve{"venda"}
+        vi{"vietnami"}
+        vo{"volapüki"}
+        vot{"vadja"}
+        wa{"vallooni"}
+        wak{"vakaši keeled"}
+        wal{"volamo"}
+        war{"varai"}
+        was{"vašo"}
+        wen{"sorbi keeled"}
+        wo{"volofi"}
+        xal{"kalmõki"}
+        xh{"koosa"}
+        yao{"jao"}
+        yap{"japi"}
+        yi{"jidiši"}
+        yo{"joruba"}
+        ypk{"jupiki keeled"}
+        za{"tšuangi"}
+        zap{"sapoteegi"}
+        zen{"zenaga"}
+        zh{"hiina"}
+        zh_Hans{"hiina keel - lihtsustatud"}
+        zh_Hant{"hiina keel - traditsiooniline"}
+        znd{"zande"}
+        zu{"suulu"}
+        zun{"sunji"}
+        zxx{"mittekeeleline"}
+    }
+    Scripts{
+        Arab{"araabia"}
+        Armn{"armeenia"}
+        Bali{"bali"}
+        Batk{"bataki"}
+        Beng{"bengali"}
+        Blis{"Blissi sümbolid"}
+        Bopo{"bopomofo"}
+        Brah{"brahmi"}
+        Brai{"punktkiri"}
+        Bugi{"bugi"}
+        Buhd{"buhidi"}
+        Cans{"Kanada põlisrahvaste ühtlustatud silpkiri"}
+        Cham{"tšami"}
+        Cher{"tšerokii"}
+        Cirt{"cirth"}
+        Copt{"kopti"}
+        Cprt{"muinasküprose"}
+        Cyrl{"kirillitsa"}
+        Cyrs{"kirikuslaavi kirillitsa"}
+        Deva{"devanaagari"}
+        Dsrt{"deseret"}
+        Egyd{"egiptuse demootiline"}
+        Egyh{"egiptuse hieraatiline"}
+        Egyp{"egiptuse hieroglüüfkiri"}
+        Ethi{"etioopia"}
+        Geok{"gruusia hutsuri"}
+        Geor{"gruusia"}
+        Glag{"glagoolitsa"}
+        Goth{"gooti"}
+        Grek{"kreeka"}
+        Gujr{"gudžarati"}
+        Guru{"gurmukhi"}
+        Hang{"hanguli"}
+        Hani{"hiina han"}
+        Hano{"hanunoo"}
+        Hans{"hiina lihtsustatud"}
+        Hant{"hiina traditsiooniline"}
+        Hebr{"heebrea"}
+        Hira{"hiragana"}
+        Hrkt{"katakana või hiragana"}
+        Hung{"vanaungari"}
+        Inds{"induse"}
+        Ital{"vanaitali"}
+        Java{"jaava"}
+        Jpan{"jaapani"}
+        Kali{"kaja li"}
+        Kana{"katakana"}
+        Khar{"kharoshthi"}
+        Khmr{"khmeeri"}
+        Knda{"kannada"}
+        Laoo{"lao"}
+        Latf{"ladina fraktuurkiri"}
+        Latg{"ladina keldi kiri"}
+        Latn{"ladina"}
+        Lepc{"leptša"}
+        Limb{"limbu"}
+        Lina{"lineaar-A"}
+        Linb{"lineaar-B"}
+        Mand{"mandea"}
+        Maya{"maaja hieroglüüfkiri"}
+        Mero{"meroe"}
+        Mlym{"malajalami"}
+        Mong{"mongoli"}
+        Mymr{"birma"}
+        Nkoo{"nkoo"}
+        Ogam{"ogam"}
+        Orkh{"orhoni"}
+        Orya{"oria"}
+        Osma{"osmanja"}
+        Perm{"vanapermi"}
+        Phag{"phags-pa"}
+        Phnx{"foiniikia"}
+        Plrd{"Pollardi miao"}
+        Qaai{"päritud"}
+        Roro{"rongorongo"}
+        Runr{"ruunikiri"}
+        Sara{"sarati"}
+        Shaw{"Shaw tähestik"}
+        Sinh{"singali"}
+        Sylo{"silotinagri"}
+        Syrc{"assüüria"}
+        Syre{"assüüria estrangelo"}
+        Syrj{"lääneassüüria"}
+        Syrn{"idaassüüria"}
+        Tagb{"tagbanwa"}
+        Tale{"tai le"}
+        Talu{"lihtsustatud tai lue"}
+        Taml{"tamili"}
+        Telu{"telugu"}
+        Teng{"tengwar"}
+        Tfng{"tifinagi"}
+        Tglg{"tagalogi"}
+        Thaa{"thaana"}
+        Thai{"tai"}
+        Tibt{"tiibeti"}
+        Ugar{"ugariti"}
+        Vaii{"vai"}
+        Visp{"häälduskiri"}
+        Xpeo{"vanapärsia"}
+        Xsux{"sumeri kiilkiri"}
+        Yiii{"jii"}
+        Zxxx{"kirjakeeleta"}
+        Zyyy{"üldine"}
+        Zzzz{"määramata"}
+    }
+    Types{
+        calendar{
+            buddhist{"budistlik kalender"}
+            chinese{"Hiina kalender"}
+            gregorian{"Gregoriuse kalender"}
+            hebrew{"juudi kalender"}
+            islamic{"islamikalender"}
+            islamic-civil{"islami ilmalik kalender"}
+            japanese{"Jaapani kalender"}
+        }
+        collation{
+            big5han{"hiina traditsiooniline - big5"}
+            direct{"lisareegliteta"}
+            gb2312han{"hiina lihtsustatud - GB2312"}
+            phonebook{"telefoniraamat"}
+            stroke{"elementide kirjutamise järjekorras"}
+            traditional{"traditsiooniline"}
+        }
+    }
+    Variants{
+        1901{"saksa traditsiooniline kirjaviis"}
+        1996{"saksa reformitud kirjaviis"}
+        NEDIS{"Natisone murre"}
+        POLYTON{"polütooniline"}
+        REVISED{"uus kirjaviis"}
+        ROZAJ{"Resia murre"}
+        SAAHO{"saho murre"}
+    }
+    Version{"2.0.42.82"}
+}

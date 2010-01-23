@@ -1,0 +1,60 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/af.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/af.xml
+ */
+af{
+    Languages{
+        af{"Afrikaans"}
+        afa{"Ander Afro-Asiaties"}
+        am{"Amharies"}
+        ar{"Arabies"}
+        arc{"Aramees"}
+        bg{"Bulgaars"}
+        cs{"Tsjeggies"}
+        da{"Deens"}
+        de{"Duits"}
+        egy{"Antieke Egipties"}
+        el{"Grieks"}
+        en{"Engels"}
+        es{"Spaans"}
+        es_419{"Latyns-Amerikaanse Spaans"}
+        et{"Estnies"}
+        fi{"Fins"}
+        fr{"Frans"}
+        got{"Goties"}
+        grc{"Antieke Grieks"}
+        he{"Hebreeus"}
+        it{"Italiaans"}
+        ja{"Japannees"}
+        ko{"Koreaans"}
+        ku{"Koerdies"}
+        nl{"Nederlands"}
+        nl_BE{"Vlaams"}
+        nn{"Noorweegse Nynorsk"}
+        nr{"Suid-Ndebele"}
+        pt{"Portugees"}
+        pt_BR{"Brasiliaanse Portugees"}
+        ro{"Roemeens"}
+        ru{"Russies"}
+        ss{"Swazi"}
+        st{"Suid-Sotho"}
+        tk{"Turkmeens"}
+        ve{"Venda"}
+        xh{"Xhosa"}
+        zh{"Sjinees"}
+        zu{"Zoeloe"}
+    }
+    Version{"2.0.42.82"}
+    codePatterns{
+        language{"Taal: {0}"}
+        script{"Skrif: {0}"}
+        territory{"Omgewing: {0}"}
+    }
+}
