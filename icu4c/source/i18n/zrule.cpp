@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,7 +13,7 @@
 #include "unicode/utypes.h"
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
-#include "unicode/zrule.h"
+#include "zrule.h"
 #include "unicode/tzrule.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
