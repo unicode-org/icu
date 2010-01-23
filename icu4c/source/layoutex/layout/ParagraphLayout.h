@@ -505,7 +505,8 @@ public:
      *
      * @return true if there are no more lines to be processed
      *
-     * @draft ICU 4.4     */
+     * @internal 
+     */
     inline le_bool isDone() const;
 
     /**
