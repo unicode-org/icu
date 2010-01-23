@@ -45,7 +45,7 @@
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
- *  @draft ICU 4.0
+ *  @stable ICU 4.0
  */
 #ifndef U_ICU_VERSION_BUILDLEVEL_NUM
 #define U_ICU_VERSION_BUILDLEVEL_NUM 0

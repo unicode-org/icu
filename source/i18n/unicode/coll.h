@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines                 *
+*   Copyright (C) 1996-2010, International Business Machines                 *
 *   Corporation and others.  All Rights Reserved.                            *
 ******************************************************************************
 */
@@ -448,7 +448,7 @@ public:
      * @param tIter the second ("target") string iterator
      * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UCollationResult compare(UCharIterator &sIter,
                                      UCharIterator &tIter,
@@ -465,7 +465,7 @@ public:
      * @param target the second UTF-8 string
      * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UCollationResult compareUTF8(const StringPiece &source,
                                          const StringPiece &target,
@@ -682,7 +682,7 @@ public:
      *                      it will return all the available values for the locale.
      * @param status ICU status
      * @return a string enumeration over keyword values for the given key and the locale.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     static StringEnumeration* U_EXPORT2 getKeywordValuesForLocale(const char* keyword, const Locale& locale,
                                                                     UBool commonlyUsed, UErrorCode& status);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -244,9 +244,9 @@ typedef struct USerializedSet {
  * Equivalent to uset_open(1, 0).
  * @return a newly created USet.  The caller must call uset_close() on
  * it when done.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT USet* U_EXPORT2
+U_STABLE USet* U_EXPORT2
 uset_openEmpty();
 
 /**
@@ -328,7 +328,7 @@ U_NAMESPACE_END
  * @see uset_cloneAsThawed
  * @stable ICU 3.8
  */
-U_DRAFT USet * U_EXPORT2
+U_STABLE USet * U_EXPORT2
 uset_clone(const USet *set);
 
 /**
@@ -340,7 +340,7 @@ uset_clone(const USet *set);
  * @see uset_cloneAsThawed
  * @stable ICU 3.8
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_isFrozen(const USet *set);
 
 /**
@@ -357,7 +357,7 @@ uset_isFrozen(const USet *set);
  * @see uset_cloneAsThawed
  * @stable ICU 3.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_freeze(USet *set);
 
 /**
@@ -370,7 +370,7 @@ uset_freeze(USet *set);
  * @see uset_clone
  * @stable ICU 3.8
  */
-U_DRAFT USet * U_EXPORT2
+U_STABLE USet * U_EXPORT2
 uset_cloneAsThawed(const USet *set);
 
 /**
@@ -727,18 +727,18 @@ uset_clear(USet* set);
  * @param attributes bitmask for attributes to close over.
  * Currently only the USET_CASE bit is supported.  Any undefined bits
  * are ignored.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_closeOver(USet* set, int32_t attributes);
 
 /**
  * Remove all strings from this set.
  *
  * @param set the set
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_removeAllStrings(USet* set);
 
 /**
@@ -922,7 +922,7 @@ uset_containsSome(const USet* set1, const USet* set2);
  * @stable ICU 3.8
  * @see USetSpanCondition
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition);
 
 /**
@@ -943,7 +943,7 @@ uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spa
  * @stable ICU 3.8
  * @see USetSpanCondition
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition);
 
 /**
@@ -965,7 +965,7 @@ uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition
  * @stable ICU 3.8
  * @see USetSpanCondition
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition);
 
 /**
@@ -986,7 +986,7 @@ uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition 
  * @stable ICU 3.8
  * @see USetSpanCondition
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uset_spanBackUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition);
 
 /**

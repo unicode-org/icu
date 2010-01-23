@@ -158,7 +158,7 @@ enum UCalendarType {
   UCAL_TRADITIONAL,
   /**
    * A better name for UCAL_TRADITIONAL.
-   * @draft ICU 4.2
+   * @stable ICU 4.4
    */
   UCAL_DEFAULT = UCAL_TRADITIONAL,
   /**
@@ -672,7 +672,7 @@ U_NAMESPACE_END
  * @return A pointer to a UCalendar identical to cal.
  * @stable ICU 4.0
  */
-U_DRAFT UCalendar* U_EXPORT2 
+U_STABLE UCalendar* U_EXPORT2 
 ucal_clone(const UCalendar* cal,
            UErrorCode*      status);
 
@@ -1141,7 +1141,7 @@ ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* 
  * @return the version string, such as "2007f"
  * @stable ICU 3.8
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ucal_getTZDataVersion(UErrorCode* status);
 
 /**
@@ -1162,7 +1162,7 @@ ucal_getTZDataVersion(UErrorCode* status);
  *                  null.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
                             UChar* result, int32_t resultCapacity, UBool *isSystemID, UErrorCode* status);
 /**
@@ -1170,9 +1170,9 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
  * @param cal The UCalendar to query.
  * @param status The error code for the operation.
  * @return The resource keyword value string.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ucal_getType(const UCalendar *cal, UErrorCode* status);
 
 /**
@@ -1189,9 +1189,9 @@ ucal_getType(const UCalendar *cal, UErrorCode* status);
  *                      it will return all the available values for the locale.
  * @param status error status
  * @return a string enumeration over keyword values for the given key and the locale.
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char* key,
                                const char* locale,
                                UBool commonlyUsed,

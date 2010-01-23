@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,7 @@ class Hashtable;
  * plural rule of the locale,
  * currency plural pattern of the locale.
  *
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class  U_I18N_API CurrencyPluralInfo : public UObject {
 public:
@@ -49,7 +49,7 @@ public:
     /**
      * Create a CurrencyPluralInfo object for the default locale.
      * @param status output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     CurrencyPluralInfo(UErrorCode& status);
 
@@ -57,14 +57,14 @@ public:
      * Create a CurrencyPluralInfo object for the given locale.
      * @param locale the locale
      * @param status output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     CurrencyPluralInfo(const Locale& locale, UErrorCode& status); 
 
     /**
      * Copy constructor
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     CurrencyPluralInfo(const CurrencyPluralInfo& info);
 
@@ -72,7 +72,7 @@ public:
     /**
      * Assignment operator
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     CurrencyPluralInfo& operator=(const CurrencyPluralInfo& info);
 
@@ -80,7 +80,7 @@ public:
     /**
      * Destructor
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual ~CurrencyPluralInfo();
 
@@ -88,7 +88,7 @@ public:
     /**
      * Equal operator.
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UBool operator==(const CurrencyPluralInfo& info) const;
 
@@ -96,7 +96,7 @@ public:
     /**
      * Not equal operator
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UBool operator!=(const CurrencyPluralInfo& info) const;
 
@@ -104,7 +104,7 @@ public:
     /**
      * Clone
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     CurrencyPluralInfo* clone() const;
 
@@ -113,7 +113,7 @@ public:
      * Gets plural rules of this locale, used for currency plural format
      *
      * @return plural rule
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     const PluralRules* getPluralRules() const;
 
@@ -124,7 +124,7 @@ public:
      * @param  pluralCount currency plural count
      * @param  result      output param to receive the pattern
      * @return a currency plural pattern based on plural count
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UnicodeString& getCurrencyPluralPattern(const UnicodeString& pluralCount,
                                             UnicodeString& result) const; 
@@ -133,7 +133,7 @@ public:
      * Get locale 
      *
      * @return locale
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     const Locale& getLocale() const;
 
@@ -146,7 +146,7 @@ public:
      *
      * @param ruleDescription new plural rule description
      * @param status output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     void setPluralRules(const UnicodeString& ruleDescription,
                         UErrorCode& status);
@@ -162,7 +162,7 @@ public:
      *                    be overridden.
      * @param pattern     the new currency plural pattern
      * @param status      output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     void setCurrencyPluralPattern(const UnicodeString& pluralCount, 
                                   const UnicodeString& pattern,
@@ -173,21 +173,21 @@ public:
      *
      * @param loc     the new locale to set
      * @param status  output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     void setLocale(const Locale& loc, UErrorCode& status);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     static UClassID U_EXPORT2 getStaticClassID();
 

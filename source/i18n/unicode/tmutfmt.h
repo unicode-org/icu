@@ -64,7 +64,7 @@ class Hashtable;
  * <P>
  * @see TimeUnitAmount
  * @see TimeUnitFormat
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
 class U_I18N_API TimeUnitFormat: public MeasureFormat {
 public:
@@ -74,7 +74,7 @@ public:
      * There are 2 styles: full name and abbreviated name.
      * For example, for English, the full name for hour duration is "3 hours",
      * and the abbreviated name is "3 hrs".
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     enum EStyle {
         kFull = 0,
@@ -85,13 +85,13 @@ public:
     /**
      * Create TimeUnitFormat with default locale, and full name style. 
      * Use setLocale and/or setFormat to modify.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitFormat(UErrorCode& status);
 
     /**
      * Create TimeUnitFormat given locale, and full name style.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitFormat(const Locale& locale, UErrorCode& status);
 
@@ -103,13 +103,13 @@ public:
 
     /**
      * Copy constructor.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitFormat(const TimeUnitFormat&);
 
     /**
      * deconstructor
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual ~TimeUnitFormat();
 
@@ -117,13 +117,13 @@ public:
      * Clone this Format object polymorphically. The caller owns the result and
      * should delete it when done.
      * @return    A copy of the object.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual Format* clone(void) const;
 
     /**
      * Assignment operator
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     TimeUnitFormat& operator=(const TimeUnitFormat& other);
 
@@ -133,7 +133,7 @@ public:
      * of different subclasses are considered unequal.
      * @param other    the object to be compared with.
      * @return         true if the given Format objects are semantically equal.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -142,7 +142,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @param other the object to be compared with.
      * @return      true if the given Format objects are not semantically equal.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     UBool operator!=(const Format& other) const;
 
@@ -150,7 +150,7 @@ public:
      * Set the locale used for formatting or parsing.
      * @param locale  the locale to be set
      * @param status  output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     void setLocale(const Locale& locale, UErrorCode& status);
 
@@ -159,7 +159,7 @@ public:
      * Set the number format used for formatting or parsing. 
      * @param format  the number formatter to be set
      * @param status  output param set to success/failure code on exit
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     void setNumberFormat(const NumberFormat& format, UErrorCode& status);
 
@@ -169,7 +169,7 @@ public:
      * or the number in time unit amount is not a double type or long type
      * numeric, it returns a failing status: U_ILLEGAL_ARGUMENT_ERROR.
      * @see Format#format(const Formattable&, UnicodeString&, FieldPosition&,  UErrorCode&) const
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(const Formattable& obj, 
                                   UnicodeString& toAppendTo,
@@ -179,7 +179,7 @@ public:
     /**
      * Parse a TimeUnitAmount.
      * @see Format#parseObject(const UnicodeString&, Formattable&, ParsePosition&) const;
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual void parseObject(const UnicodeString& source, 
                              Formattable& result,
@@ -194,7 +194,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -207,7 +207,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 4.2
+     * @stable ICU 4.4
      */
     virtual UClassID getDynamicClassID(void) const;
 
