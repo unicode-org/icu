@@ -1546,9 +1546,9 @@ u_strFromUTF32(UChar   *dest,
  * @return The pointer to destination buffer.
  * @see u_strToUTF32
  * @see u_strFromUTF32WithSub
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT UChar32* U_EXPORT2
+U_STABLE UChar32* U_EXPORT2
 u_strToUTF32WithSub(UChar32 *dest,
              int32_t destCapacity,
              int32_t *pDestLength,
@@ -1591,9 +1591,9 @@ u_strToUTF32WithSub(UChar32 *dest,
  * @return The pointer to destination buffer.
  * @see u_strFromUTF32
  * @see u_strToUTF32WithSub
- * @draft ICU 4.2
+ * @stable ICU 4.4
  */
-U_DRAFT UChar* U_EXPORT2
+U_STABLE UChar* U_EXPORT2
 u_strFromUTF32WithSub(UChar *dest,
                int32_t destCapacity,
                int32_t *pDestLength,
