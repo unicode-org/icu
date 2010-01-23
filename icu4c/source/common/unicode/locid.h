@@ -456,7 +456,7 @@ public:
      *  that keyword does not exist.
      * @param status Returns any error information while performing this operation.
      *
-     * @stable ICU 2.8
+     * @internal 
      */
     void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
 
