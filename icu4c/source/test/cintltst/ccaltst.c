@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
+ * Copyright (c) 1997-2010, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -46,6 +46,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGMTvsLocal, "tsformat/ccaltst/TestGMTvsLocal");
     addTest(root, &TestGregorianChange, "tsformat/ccaltst/TestGregorianChange");
     addTest(root, &TestGetKeywordValuesForLocale, "tsformat/ccaltst/TestGetKeywordValuesForLocale");
+    addTest(root, &TestWeekend, "tsformat/ccaltst/TestWeekend");
 }
 
 /* "GMT" */
@@ -1485,6 +1486,169 @@ static void TestGetKeywordValuesForLocale() {
         log_err_status(status, "Failed to get ALL keyword values for default locale %s: %s.\n", uloc_getDefault(), u_errorName(status));
     }
     uenum_close(ALL);
+}
+
+/*
+ * Weekend tests, ported from
+ * icu4j/trunk/main/tests/core/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java
+ * and extended a bit. Notes below from IBMCalendarTest.java ...
+ * This test tests for specific locale data. This is probably okay
+ * as far as US data is concerned, but if the Arabic/Yemen data
+ * changes, this test will have to be updated.
+ */
+
+typedef struct {
+    int32_t year;
+    int32_t month;
+    int32_t day;
+    int32_t hour;
+    int32_t millisecOffset;
+    UBool   isWeekend;
+} TestWeekendDates;
+typedef struct {
+    const char * locale;
+    const        TestWeekendDates * dates;
+    int32_t      numDates;
+} TestWeekendDatesList;
+
+static const TestWeekendDates weekendDates_en_US[] = {
+    { 2000, UCAL_MARCH, 17, 23,  0, 0 }, /* Fri 23:00        */
+    { 2000, UCAL_MARCH, 18,  0, -1, 0 }, /* Fri 23:59:59.999 */
+    { 2000, UCAL_MARCH, 18,  0,  0, 1 }, /* Sat 00:00        */
+    { 2000, UCAL_MARCH, 18, 15,  0, 1 }, /* Sat 15:00        */
+    { 2000, UCAL_MARCH, 19, 23,  0, 1 }, /* Sun 23:00        */
+    { 2000, UCAL_MARCH, 20,  0, -1, 1 }, /* Sun 23:59:59.999 */
+    { 2000, UCAL_MARCH, 20,  0,  0, 0 }, /* Mon 00:00        */
+    { 2000, UCAL_MARCH, 20,  8,  0, 0 }, /* Mon 08:00        */
+};
+static const TestWeekendDates weekendDates_ar_YE[] = {
+    { 2000, UCAL_MARCH, 15, 23,  0, 0 }, /* Wed 23:00        */
+    { 2000, UCAL_MARCH, 16,  0, -1, 0 }, /* Wed 23:59:59.999 */
+    { 2000, UCAL_MARCH, 16,  0,  0, 1 }, /* Thu 00:00        */
+    { 2000, UCAL_MARCH, 16, 15,  0, 1 }, /* Thu 15:00        */
+    { 2000, UCAL_MARCH, 17, 23,  0, 1 }, /* Fri 23:00        */
+    { 2000, UCAL_MARCH, 18,  0, -1, 1 }, /* Fri 23:59:59.999 */
+    { 2000, UCAL_MARCH, 18,  0,  0, 0 }, /* Sat 00:00        */
+    { 2000, UCAL_MARCH, 18,  8,  0, 0 }, /* Sat 08:00        */
+};
+static const TestWeekendDatesList testDates[] = {
+    { "en_US", weekendDates_en_US, sizeof(weekendDates_en_US)/sizeof(weekendDates_en_US[0]) },
+    { "ar_YE", weekendDates_ar_YE, sizeof(weekendDates_ar_YE)/sizeof(weekendDates_ar_YE[0]) },
+};
+
+typedef struct {
+    UCalendarDaysOfWeek  dayOfWeek;
+    UCalendarWeekdayType dayType;
+    int32_t              transition; /* transition time if dayType is UCAL_WEEKEND_ONSET or UCAL_WEEKEND_CEASE; else must be 0 */
+} TestDaysOfWeek;
+typedef struct {
+    const char *           locale;
+    const TestDaysOfWeek * days;
+    int32_t                numDays;
+} TestDaysOfWeekList;
+
+static const TestDaysOfWeek daysOfWeek_en_US[] = {
+    { UCAL_MONDAY,   UCAL_WEEKDAY,       0        },
+    { UCAL_FRIDAY,   UCAL_WEEKDAY,       0        },
+    { UCAL_SATURDAY, UCAL_WEEKEND,       0        },
+    { UCAL_SUNDAY,   UCAL_WEEKEND_CEASE, 86400000 },
+};
+static const TestDaysOfWeek daysOfWeek_ar_YE[] = { /* Thursday:Friday */
+    { UCAL_WEDNESDAY,UCAL_WEEKDAY,       0        },
+    { UCAL_SATURDAY, UCAL_WEEKDAY,       0        },
+    { UCAL_THURSDAY, UCAL_WEEKEND,       0        },
+    { UCAL_FRIDAY,   UCAL_WEEKEND_CEASE, 86400000 },
+};
+static const TestDaysOfWeekList testDays[] = {
+    { "en_US", daysOfWeek_en_US, sizeof(daysOfWeek_en_US)/sizeof(daysOfWeek_en_US[0]) },
+    { "ar_YE", daysOfWeek_ar_YE, sizeof(daysOfWeek_ar_YE)/sizeof(daysOfWeek_ar_YE[0]) },
+};
+
+static const UChar logDateFormat[] = { 0x0045,0x0045,0x0045,0x0020,0x004D,0x004D,0x004D,0x0020,0x0064,0x0064,0x0020,0x0079,
+                                       0x0079,0x0079,0x0079,0x0020,0x0047,0x0020,0x0048,0x0048,0x003A,0x006D,0x006D,0x003A,
+                                       0x0073,0x0073,0x002E,0x0053,0x0053,0x0053,0 }; /* "EEE MMM dd yyyy G HH:mm:ss.SSS" */
+enum { kFormattedDateMax = 2*sizeof(logDateFormat)/sizeof(logDateFormat[0]) };
+
+static void TestWeekend() {
+    const TestWeekendDatesList * testDatesPtr = testDates;
+    const TestDaysOfWeekList *   testDaysPtr = testDays;
+    int32_t count, subCount;
+
+    UErrorCode fmtStatus = U_ZERO_ERROR;
+    UDateFormat * fmt = udat_open(UDAT_NONE, UDAT_NONE, "en", NULL, 0, NULL, 0, &fmtStatus);
+    if (U_SUCCESS(fmtStatus)) {
+        udat_applyPattern(fmt, FALSE, logDateFormat, -1);
+    }
+	for (count = sizeof(testDates)/sizeof(testDates[0]); count-- > 0; ++testDatesPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+		UCalendar * cal = ucal_open(NULL, 0, testDatesPtr->locale, UCAL_GREGORIAN, &status);
+		log_verbose("locale: %s\n", testDatesPtr->locale);
+		if (U_SUCCESS(status)) {
+			const TestWeekendDates * weekendDatesPtr = testDatesPtr->dates;
+			for (subCount = testDatesPtr->numDates; subCount--; ++weekendDatesPtr) {
+				UDate dateToTest;
+				UBool isWeekend;
+				char  fmtDateBytes[kFormattedDateMax] = "<could not format test date>"; /* initialize for failure */
+
+				ucal_clear(cal);
+				ucal_setDateTime(cal, weekendDatesPtr->year, weekendDatesPtr->month, weekendDatesPtr->day,
+								 weekendDatesPtr->hour, 0, 0, &status);
+				dateToTest = ucal_getMillis(cal, &status) + weekendDatesPtr->millisecOffset;
+				isWeekend = ucal_isWeekend(cal, dateToTest, &status);
+				if (U_SUCCESS(fmtStatus)) {
+				    UChar fmtDate[kFormattedDateMax];
+				    (void)udat_format(fmt, dateToTest, fmtDate, kFormattedDateMax, NULL, &fmtStatus);
+				    if (U_SUCCESS(fmtStatus)) {
+						u_austrncpy(fmtDateBytes, fmtDate, kFormattedDateMax);
+						fmtDateBytes[kFormattedDateMax-1] = 0;
+				    } else {
+				    	fmtStatus = U_ZERO_ERROR;
+				    }
+				}
+				if ( U_FAILURE(status) ) {
+					log_err("FAIL: locale %s date %s isWeekend() status %s\n", testDatesPtr->locale, fmtDateBytes, u_errorName(status) );
+					status = U_ZERO_ERROR;
+				} else if ( (isWeekend!=0) != (weekendDatesPtr->isWeekend!=0) ) {
+					log_err("FAIL: locale %s date %s isWeekend %d, expected the opposite\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
+				} else {
+					log_verbose("OK:   locale %s date %s isWeekend %d\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
+				}
+			}
+			ucal_close(cal);
+		} else {
+			log_err("FAIL: ucal_open for locale %s failed: %s\n", testDatesPtr->locale, u_errorName(status) );
+		}
+	}
+    if (U_SUCCESS(fmtStatus)) {
+        udat_close(fmt);
+    }
+
+    for (count = sizeof(testDays)/sizeof(testDays[0]); count-- > 0; ++testDaysPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar * cal = ucal_open(NULL, 0, testDaysPtr->locale, UCAL_GREGORIAN, &status);
+        log_verbose("locale: %s\n", testDaysPtr->locale);
+        if (U_SUCCESS(status)) {
+            const TestDaysOfWeek * daysOfWeekPtr = testDaysPtr->days;
+            for (subCount = testDaysPtr->numDays; subCount--; ++daysOfWeekPtr) {
+                int32_t transition = 0;
+                UCalendarWeekdayType dayType = ucal_getDayOfWeekType(cal, daysOfWeekPtr->dayOfWeek, &status);
+                if ( dayType == UCAL_WEEKEND_ONSET || dayType == UCAL_WEEKEND_CEASE ) {
+                    transition = ucal_getWeekendTransition(cal, daysOfWeekPtr->dayOfWeek, &status); 
+                }
+                if ( U_FAILURE(status) ) {
+					log_err("FAIL: locale %s DOW %d getDayOfWeekType() status %s\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, u_errorName(status) );
+					status = U_ZERO_ERROR;
+                } else if ( dayType != daysOfWeekPtr->dayType || transition != daysOfWeekPtr->transition ) {
+					log_err("FAIL: locale %s DOW %d type %d, expected %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType, daysOfWeekPtr->dayType );
+                } else {
+					log_verbose("OK:   locale %s DOW %d type %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType );
+                }
+            }
+            ucal_close(cal);
+        } else {
+            log_err("FAIL: ucal_open for locale %s failed: %s\n", testDaysPtr->locale, u_errorName(status) );
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -60,6 +60,10 @@
      * Test getKeywordValuesForLocale API
      */
     static void TestGetKeywordValuesForLocale(void);
+    /**
+     * Test weekend-related APIs
+     */
+    static void TestWeekend(void);
 
 /*Internal functions used*/
     /**
