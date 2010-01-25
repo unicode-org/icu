@@ -6,11 +6,12 @@
 # Builds ICU a whole lotta times and with different options
 # Set the options below and execute this script with the shell.
 
-# This script is checked into tools/release/c. It assumes that the
+# This script is checked into tools/trunk/release/c. It assumes that the
 # icu directory is at the same level as the tools  directory. If this
 # is not the case, use the uconfigtest.local file to set the
-# SRC_DIR variable to point at the ICU source directory. You can
-# also use the uconfigtest.local file to override the BUILD_DIR
+# SRC_DIR variable to point at the ICU source directory. 
+# Or, alternatively, you can make a symlink tools/icu -> your_icu_dir
+# You can also use the uconfigtest.local file to override the BUILD_DIR
 # and ICUPLATFORM variables.
 
 
