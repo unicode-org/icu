@@ -48,6 +48,13 @@ public class FilteredNormalizer2 extends Normalizer2 {
         return dest;
     }
     /** {@inheritDoc}
+     * @internal ICU 4.4 TODO: propose for 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Appendable normalize(CharSequence src, Appendable dest) {
+        return dest;
+    }
+    /** {@inheritDoc}
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */

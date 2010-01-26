@@ -26,6 +26,18 @@ public final class Norm2AllModes {
             }
         }
         @Override
+        public Appendable normalize(CharSequence src, Appendable dest) {
+            if(dest!=src) {
+                try {
+                    return dest.append(src);
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+        @Override
         public StringBuilder normalizeSecondAndAppend(StringBuilder first, CharSequence second) {
             if(first!=second) {
                 return first.append(second);
@@ -70,6 +82,17 @@ public final class Norm2AllModes {
             }
             dest.delete(0, 0x7fffffff);
             normalize(src, new Normalizer2Impl.ReorderingBuffer(impl, dest, src.length()));
+            return dest;
+        }
+        @Override
+        public Appendable normalize(CharSequence src, Appendable dest) {
+            if(dest==src) {
+                throw new IllegalArgumentException();
+            }
+            Normalizer2Impl.ReorderingBuffer buffer=
+                new Normalizer2Impl.ReorderingBuffer(impl, dest, src.length());
+            normalize(src, buffer);
+            buffer.flush();
             return dest;
         }
         protected abstract void normalize(CharSequence src, Normalizer2Impl.ReorderingBuffer buffer);

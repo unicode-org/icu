@@ -1061,15 +1061,9 @@ public final class Normalizer implements Cloneable {
                                 boolean compat, int options) {
         if(!compat && options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
-            StringBuilder destBuilder = new StringBuilder();
-            Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(srcBuffer, destBuilder);
-            int length = destBuilder.length();
-            if(length<=(destLimit-destStart)) {
-                destBuilder.getChars(0, length, dest, destStart);
-                return length;
-            } else {
-                throw new IndexOutOfBoundsException(Integer.toString(length));
-            }
+            CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
+            Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(srcBuffer, app);
+            return app.length();
         }
         int[] trailCC = new int[1];
         UnicodeSet nx = NormalizerImpl.getNX(options);
@@ -1181,15 +1175,9 @@ public final class Normalizer implements Cloneable {
                                 Mode  mode, int options) {
         if(mode == NFD && options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
-            StringBuilder destBuilder = new StringBuilder();
-            Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(srcBuffer, destBuilder);
-            int length = destBuilder.length();
-            if(length<=(destLimit-destStart)) {
-                destBuilder.getChars(0, length, dest, destStart);
-                return length;
-            } else {
-                throw new IndexOutOfBoundsException(Integer.toString(length));
-            } 
+            CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
+            Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(srcBuffer, app);
+            return app.length();
         }
         int length = mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit, options);
 
@@ -2826,5 +2814,54 @@ public final class Normalizer implements Cloneable {
      */
     static VersionInfo getUnicodeVersion() {
         return NormalizerImpl.getUnicodeVersion();
+    }
+
+    /**
+     * An Appendable that writes into a char array with a capacity that may be
+     * less than array.length.
+     * (By contrast, CharBuffer will write beyond destLimit all the way up to array.length.)
+     * <p>
+     * An overflow is only reported at the end, for the old Normalizer API functions that write
+     * to char arrays.
+     */
+    private static final class CharsAppendable implements Appendable {
+        public CharsAppendable(char[] dest, int destStart, int destLimit) {
+            chars=dest;
+            start=offset=destStart;
+            limit=destLimit;
+        }
+        public int length() {
+            int len=offset-start;
+            if(offset<=limit) {
+                return len;
+            } else {
+                throw new IndexOutOfBoundsException(Integer.toString(len));
+            }
+        }
+        public Appendable append(char c) {
+            if(offset<limit) {
+                chars[offset]=c;
+            }
+            ++offset;
+            return this;
+        }
+        public Appendable append(CharSequence s) {
+            return append(s, 0, s.length());
+        }
+        public Appendable append(CharSequence s, int sStart, int sLimit) {
+            int len=sLimit-sStart;
+            if(len<=(limit-offset)) {
+                while(sStart<sLimit) {  // TODO: Is there a better way to copy the characters?
+                    chars[offset++]=s.charAt(sStart++);
+                }
+            } else {
+                offset+=len;
+            }
+            return this;
+        }
+
+        private final char[] chars;
+        private final int start, limit;
+        private int offset;
     }
 }

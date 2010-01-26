@@ -79,30 +79,59 @@ public final class Normalizer2Impl {
      * Writable buffer that takes care of canonical ordering.
      * Its Appendable methods behave like the C++ implementation's
      * appendZeroCC() methods.
+     * <p>
+     * If dest is a StringBuilder, then the buffer writes directly to it.
+     * Otherwise, the buffer maintains a StringBuilder for intermediate text segments
+     * until no further changes are necessary and whole segments are appended.
+     * append() methods that take combining-class values always write to the StringBuilder.
+     * Other append() methods flush and append to the Appendable.
      */
     public static final class ReorderingBuffer implements Appendable {
-        public ReorderingBuffer(Normalizer2Impl ni, StringBuilder dest, int destCapacity) {
+        public ReorderingBuffer(Normalizer2Impl ni, Appendable dest, int destCapacity) {
             impl=ni;
-            str=dest;
-            // In Java, the constructor subsumes public void init(int destCapacity) {
-            str.ensureCapacity(destCapacity);
-            reorderStart=0;
-            if(str.length()==0) {
-                lastCC=0;
-            } else {
-                setIterator();
-                lastCC=previousCC();
-                // Set reorderStart after the last code point with cc<=1 if there is one.
-                if(lastCC>1) {
-                    while(previousCC()>1) {}
+            app=dest;
+            if(app instanceof StringBuilder) {
+                appIsStringBuilder=writeToStringBuilder=true;
+                str=(StringBuilder)dest;
+                // In Java, the constructor subsumes public void init(int destCapacity) {
+                str.ensureCapacity(destCapacity);
+                reorderStart=0;
+                if(str.length()==0) {
+                    lastCC=0;
+                } else {
+                    setIterator();
+                    lastCC=previousCC();
+                    // Set reorderStart after the last code point with cc<=1 if there is one.
+                    if(lastCC>1) {
+                        while(previousCC()>1) {}
+                    }
+                    reorderStart=codePointLimit;
                 }
-                reorderStart=codePointLimit;
+            } else {
+                appIsStringBuilder=writeToStringBuilder=false;
+                str=new StringBuilder();
+                reorderStart=0;
+                lastCC=0;
             }
         }
 
         public boolean isEmpty() { return str.length()==0; }
         public int length() { return str.length(); }
         public int getLastCC() { return lastCC; }
+
+        public void flush() {
+            if(!appIsStringBuilder && str.length()!=0) {
+                try {
+                    app.append(str);
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+                str.delete(0, 0x7fffffff);
+                reorderStart=0;
+                lastCC=0;
+                writeToStringBuilder=appIsStringBuilder;
+            }
+        }
 
         // For Hangul composition, replacing the Leading consonant Jamo with the syllable.
         public void setLastChar(char c) {
@@ -156,44 +185,102 @@ public final class Normalizer2Impl {
         // Most of them implement Appendable interface methods.
         // @Override when we switch to Java 6
         public ReorderingBuffer append(char c) {
-            str.append(c);
+            if(writeToStringBuilder) {
+                str.append(c);
+                reorderStart=str.length();
+            } else {
+                try {
+                    app.append(str).append(c);
+                    str.delete(0, 0x7fffffff);
+                    reorderStart=0;
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            }
             lastCC=0;
-            reorderStart=str.length();
             return this;
         }
         public void appendZeroCC(int c) {
-            str.appendCodePoint(c);
+            if(writeToStringBuilder) {
+                str.appendCodePoint(c);
+                reorderStart=str.length();
+            } else {
+                try {
+                    app.append(str);
+                    if(c<=0xffff) {
+                        app.append((char)c);
+                    } else {
+                        char[] pair=Character.toChars(c);
+                        app.append(pair[0]).append(pair[1]);
+                    }
+                    str.delete(0, 0x7fffffff);
+                    reorderStart=0;
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            }
             lastCC=0;
-            reorderStart=str.length();
         }
         // @Override when we switch to Java 6
         public ReorderingBuffer append(CharSequence s) {
             if(s.length()!=0) {
-                str.append(s);
+                if(writeToStringBuilder) {
+                    str.append(s);
+                    reorderStart=str.length();
+                } else {
+                    try {
+                        app.append(str).append(s);
+                        str.delete(0, 0x7fffffff);
+                        reorderStart=0;
+                    } catch(IOException e) {
+                        throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                    }
+                }
                 lastCC=0;
-                reorderStart=str.length();
             }
             return this;
         }
         // @Override when we switch to Java 6
         public ReorderingBuffer append(CharSequence s, int start, int limit) {
             if(start!=limit) {
-                str.append(s, start, limit);
+                if(writeToStringBuilder) {
+                    str.append(s, start, limit);
+                    reorderStart=str.length();
+                } else {
+                    try {
+                        app.append(str).append(s, start, limit);
+                        str.delete(0, 0x7fffffff);
+                        reorderStart=0;
+                    } catch(IOException e) {
+                        throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                    }
+                }
                 lastCC=0;
-                reorderStart=str.length();
             }
             return this;
         }
-        public void removeZeroCCSuffix(int length) {
+        public void removeSuffix(int length) {
             int oldLength=str.length();
             str.delete(oldLength-length, oldLength);
             lastCC=0;
             reorderStart=str.length();
         }
-        public void setReorderingLimitAndLastCC(int newLimit, int newLastCC) {
+        public void forceWriteToStringBuilder() {
+            writeToStringBuilder=true;
+        }
+        public void setReorderingLimit(int newLimit) {
+            writeToStringBuilder=appIsStringBuilder;
+            if(!appIsStringBuilder) {
+                try {
+                    app.append(str, 0, newLimit);
+                    newLimit=0;
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            }
             str.delete(newLimit, 0x7fffffff);
             reorderStart=newLimit;
-            lastCC=newLastCC;
+            lastCC=0;
         }
 
         /*
@@ -227,8 +314,11 @@ public final class Normalizer2Impl {
             }
         }
 
-        private Normalizer2Impl impl;
-        private StringBuilder str;
+        private final Normalizer2Impl impl;
+        private final Appendable app;
+        private final StringBuilder str;
+        private final boolean appIsStringBuilder;
+        private boolean writeToStringBuilder;
         private int reorderStart;
         private int lastCC;
 
@@ -497,8 +587,6 @@ public final class Normalizer2Impl {
                         if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
                             --src;
                             c=Character.toCodePoint(c2, (char)c);
-                        } else {
-                            break;  // c's norm16 already failed the test
                         }
                     }
                     if(isMostDecompYesAndZeroCC(norm16=getNorm16(c))) {
@@ -550,6 +638,7 @@ public final class Normalizer2Impl {
                            boolean onlyContiguous,
                            boolean doCompose,
                            ReorderingBuffer buffer) {
+        // TODO: use forceWriteToStringBuilder()
         throw new UnsupportedOperationException();  // TODO
     }
     /**
