@@ -52,7 +52,11 @@ class NoopNormalizer2 : public Normalizer2 {
                              const UnicodeString &second,
                              UErrorCode &errorCode) const {
         if(U_SUCCESS(errorCode)) {
-            first.append(second);
+            if(&first!=&second) {
+                first.append(second);
+            } else {
+                errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            }
         }
         return first;
     }
@@ -210,6 +214,7 @@ class DecomposeNormalizer2 : public Normalizer2WithImpl {
 public:
     DecomposeNormalizer2(const Normalizer2Impl &ni) : Normalizer2WithImpl(ni) {}
 
+private:
     virtual void
     normalize(const UChar *src, const UChar *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
@@ -239,6 +244,7 @@ public:
     ComposeNormalizer2(const Normalizer2Impl &ni, UBool fcc) :
         Normalizer2WithImpl(ni), onlyContiguous(fcc) {}
 
+private:
     virtual void
     normalize(const UChar *src, const UChar *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
@@ -299,14 +305,15 @@ public:
     virtual UBool isInert(UChar32 c) const {
         return impl.hasCompBoundaryAfter(c, onlyContiguous, TRUE);
     }
-private:
-    UBool onlyContiguous;
+
+    const UBool onlyContiguous;
 };
 
 class FCDNormalizer2 : public Normalizer2WithImpl {
 public:
     FCDNormalizer2(const Normalizer2Impl &ni) : Normalizer2WithImpl(ni) {}
 
+private:
     virtual void
     normalize(const UChar *src, const UChar *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const {
