@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -246,7 +246,7 @@ uprv_detectWindowsTimeZone() {
     uprv_memcpy((char *)&tziKey.daylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
-    bundle = ures_openDirect(NULL, "supplementalData", &status);
+    bundle = ures_openDirect(NULL, "wintz", &status);
     bundle = ures_getByKey(bundle, "mapTimezones", bundle, &status);
     bundle = ures_getByKey(bundle, "windows", bundle, &status);
 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -668,7 +668,7 @@ ZoneMeta::createMetaToOlsonMap(void) {
     uhash_setKeyDeleter(metaToOlson, deleteUCharString);
     uhash_setValueDeleter(metaToOlson, deleteUVector);
 
-    metazones = ures_openDirect(NULL, gSupplementalData, &status);
+    metazones = ures_openDirect(NULL, gMetazoneInfo, &status);
     metazones = ures_getByKey(metazones, gMapTimezonesTag, metazones, &status);
     metazones = ures_getByKey(metazones, gMetazonesTag, metazones, &status);
     if (U_FAILURE(status)) {
