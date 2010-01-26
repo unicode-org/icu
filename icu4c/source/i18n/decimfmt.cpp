@@ -2077,7 +2077,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 // else ignore leading zeros in integer part of number.
                 position += U16_LENGTH(ch);
             }
-            else if (!text.compare(position, groupingLen, *grouping) && isGroupingUsed())
+            else if (groupingLen > 0 && !text.compare(position, groupingLen, *grouping) && isGroupingUsed())
             {
                 // Ignore grouping characters, if we are using them, but require
                 // that they be followed by a digit.  Otherwise we backup and
