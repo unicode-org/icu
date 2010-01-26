@@ -398,8 +398,6 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
                     if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
                         --src;
                         c=U16_GET_SUPPLEMENTARY(c2, c);
-                    } else {
-                        break;  // c's norm16 already failed the test
                     }
                 }
                 if(isMostDecompYesAndZeroCC(norm16=getNorm16(c))) {
@@ -892,8 +890,6 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                     if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
                         --src;
                         c=U16_GET_SUPPLEMENTARY(c2, c);
-                    } else {
-                        break;  // c's norm16 already failed the test
                     }
                 }
                 if(isCompYesAndZeroCC(norm16=getNorm16(c))) {
@@ -1140,8 +1136,6 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                     if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
                         --src;
                         c=U16_GET_SUPPLEMENTARY(c2, c);
-                    } else {
-                        break;  // c's norm16 already failed the test
                     }
                 }
                 if(isCompYesAndZeroCC(norm16=getNorm16(c))) {
@@ -1487,8 +1481,6 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
                     if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
                         --src;
                         c=U16_GET_SUPPLEMENTARY(c2, c);
-                    } else {
-                        break;  // c's norm16 already failed the test
                     }
                 }
                 if((fcd16=getFCD16(c))<=0xff) {
