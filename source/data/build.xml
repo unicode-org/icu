@@ -5,7 +5,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2009, International Business Machines Corporation and    *
+* Copyright (C) 2005-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -71,7 +71,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, wintz, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -331,6 +331,20 @@
             </run>
         </cldr-build>
     </target>
+    <target name="wintz" depends="init,setup" description="builds wintz.txt from wintz.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="wintz.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-i"/>
+                    <arg name="-f"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                </args>
+            </run>
+        </cldr-build>
+    </target>
     <target name="likelySubtags" depends="init,setup" description="builds likelySubtags.txt from likelySubtags.xml">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="likelySubtags.txt" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
@@ -460,6 +474,9 @@
             </fileset>
             <fileset id="metazoneInfo" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="metazoneInfo.txt" />
+            </fileset>
+            <fileset id="wintz" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="wintz.txt" />
             </fileset>
             <fileset id="likelySubtags" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="likelySubtags.txt" />
