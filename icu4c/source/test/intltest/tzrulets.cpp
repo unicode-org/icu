@@ -2123,7 +2123,7 @@ TimeZoneRuleTest::TestT6669(void) {
 
 void
 TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
-
+#if 0
     // local variables
     UBool b;
     UChar * data = NULL;
@@ -2236,6 +2236,7 @@ TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
     vzone_close(v2);
     ztrans_close(zt1);
     ztrans_close(zt2);
+#endif
 }
 
 //----------- private test helpers -------------------------------------------------

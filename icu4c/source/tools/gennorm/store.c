@@ -1856,6 +1856,7 @@ writeAllCC(FILE *f) {
     fprintf(f, "# Canonical_Combining_Class (ccc) values\n");
     prevCode=0;
     prevCC=0;
+#if !UCONFIG_NO_NORMALIZATION
     for(code=0; code<=0x110000;) {
         if(code==0x110000) {
             cc=0;
@@ -1886,8 +1887,10 @@ writeAllCC(FILE *f) {
             ++code;
         }
     }
+#endif /* UCONFIG_NO_NORMALIZATION */
 }
 
+#if !UCONFIG_NO_NORMALIZATION
 static UBool
 hasMapping(uint32_t code) {
     Norm *norm=norms+utrie_get32(normTrie, code, NULL);
@@ -1923,6 +1926,7 @@ hasOneWayMapping(uint32_t code, UBool withCompat) {
         }
     }
 }
+#endif /* !UCONFIG_NO_NORMALIZATION */
 
 static void
 writeAllMappings(FILE *f, UBool withCompat) {
@@ -1934,6 +1938,7 @@ writeAllMappings(FILE *f, UBool withCompat) {
     } else {
         fprintf(f, "\n# Canonical decomposition mappings\n");
     }
+#if !UCONFIG_NO_NORMALIZATION
     for(code=0; code<=0x10ffff;) {
         i=utrie_get32(normTrie, code, &isInBlockZero);
         if(isInBlockZero) {
@@ -1965,6 +1970,7 @@ writeAllMappings(FILE *f, UBool withCompat) {
             ++code;
         }
     }
+#endif  /* !UCONFIG_NO_NORMALIZATION */
 }
 
 static void
