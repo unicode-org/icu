@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -748,6 +748,26 @@ free(result);
     }
     else {
         log_err("Spellout format is unavailable\n");
+    }
+
+    {    /* Test for ticket #7079 */
+        UNumberFormat* dec_en;
+        UChar groupingSep[] = { 0 };
+        UChar numPercent[] = { 0x0031, 0x0032, 0x0025, 0 }; /* "12%" */
+        double parseResult = 0.0;
+        
+        status=U_ZERO_ERROR;
+        dec_en = unum_open(UNUM_DECIMAL, NULL, 0, "en_US", NULL, &status);
+        unum_setAttribute(dec_en, UNUM_LENIENT_PARSE, 0);
+        unum_setSymbol(dec_en, UNUM_GROUPING_SEPARATOR_SYMBOL, groupingSep, 0, &status);
+        parseResult = unum_parseDouble(dec_en, numPercent, -1, NULL, &status);
+        /* Without the fix in #7079, the above call will hang */
+        if ( U_FAILURE(status) || parseResult != 12.0 ) {
+            log_err("unum_parseDouble with empty groupingSep: status %s, parseResult %f not 12.0\n",
+                    myErrorName(status), parseResult);
+        } else {
+            log_verbose("unum_parseDouble with empty groupingSep: no hang, OK\n");
+        }
     }
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
