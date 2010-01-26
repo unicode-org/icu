@@ -79,6 +79,7 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
     }
 }
 
+#if !UCONFIG_NO_FORMATTING
 void LocaleDisplayNamesTest::TestCreate() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getGermany());
@@ -225,3 +226,6 @@ void LocaleDisplayNamesTest::TestRootEtc() {
 
   delete ldn;
 }
+
+#endif   /*  UCONFIG_NO_FORMATTING */
+

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -37,6 +37,7 @@ U_NAMESPACE_USE
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "unicode/unorm.h"
+#include "unicode/unorm2.h"
 
 class AliasName {
 public:

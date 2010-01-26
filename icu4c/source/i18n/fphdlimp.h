@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,7 +8,7 @@
 #ifndef FPHDLIMP_H
 #define FPHDLIMP_H
 
-#if !UCONFIG_NO_FORMAT
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
@@ -67,6 +67,6 @@ class FieldPositionIteratorHandler : public FieldPositionHandler {
 
 U_NAMESPACE_END
 
-#endif /* !UCONFIG_NO_FORMAT */
+#endif /* !UCONFIG_NO_FORMATTING */
 
 #endif /* FPHDLIMP_H */

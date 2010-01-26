@@ -894,6 +894,7 @@ void UnicodeSetTest::TestPropertySet() {
         "abc",
         "ABC",
 
+#if !UCONFIG_NO_NORMALIZATION
         // Combining class: @since ICU 2.2
         // Check both symbolic and numeric
         "\\p{ccc=Nukta}",
@@ -907,6 +908,7 @@ void UnicodeSetTest::TestPropertySet() {
         "[:c c c = iota subscript :]",
         "\\u0345",
         "xyz",
+#endif
 
         // Bidi class: @since ICU 2.2
         "\\p{bidiclass=lefttoright}",
@@ -1018,6 +1020,7 @@ void UnicodeSetTest::TestPropertySet() {
         "abcd\\uDC00",
         "ef\\uD800\\U00010000",
 
+#if !UCONFIG_NO_NORMALIZATION
         "[:^lccc=0:]", // Lead canonical class
         "\\u0300\\u0301",
         "abcd\\u00c0\\u00c5",
@@ -1037,6 +1040,7 @@ void UnicodeSetTest::TestPropertySet() {
         "[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
         "\\u0F73\\u0F75\\u0F81",
         "abcd\\u0300\\u0301\\u00c0\\u00c5",
+#endif /* !UCONFIG_NO_NORMALIZATION */
 
         "[:Assigned:]",
         "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
