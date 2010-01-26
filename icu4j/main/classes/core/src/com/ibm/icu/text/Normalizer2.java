@@ -157,6 +157,17 @@ public abstract class Normalizer2 {
      */
     public abstract StringBuilder normalize(CharSequence src, StringBuilder dest);
     /**
+     * Writes the normalized form of the source string to the destination Appendable
+     * and returns the destination Appendable.
+     * The source and destination strings must be different objects.
+     * @param src source string
+     * @param dest destination Appendable; gets normalized src appended
+     * @return dest
+     * @internal ICU 4.4 TODO: propose for 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract Appendable normalize(CharSequence src, Appendable dest);
+    /**
      * Appends the normalized form of the second string to the first string
      * (merging them at the boundary) and returns the first string.
      * The result is normalized if the first string was normalized.
