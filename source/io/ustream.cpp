@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.cpp
@@ -19,6 +19,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uchar.h"
 #include "ustr_cnv.h"
+#include "cmemory.h"
 #include <string.h>
 
 // console IO
@@ -50,6 +51,7 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
             const UChar *us = str.getBuffer();
             const UChar *uLimit = us + str.length();
             char *s, *sLimit = buffer + sizeof(buffer);
+            uprv_memset(buffer, 0, sizeof(buffer));
             do {
                 errorCode = U_ZERO_ERROR;
                 s = buffer;
@@ -57,7 +59,7 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
 
                 // write this chunk
                 if(s > buffer) {
-                    stream.write(buffer, (int32_t)(s - buffer));
+                    stream << buffer;
                 }
             } while(errorCode == U_BUFFER_OVERFLOW_ERROR);
             u_releaseDefaultConverter(converter);
