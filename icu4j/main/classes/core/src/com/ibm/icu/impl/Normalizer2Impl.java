@@ -91,7 +91,7 @@ public final class Normalizer2Impl {
             impl=ni;
             app=dest;
             if(app instanceof StringBuilder) {
-                appIsStringBuilder=writeToStringBuilder=true;
+                appIsStringBuilder=true;
                 str=(StringBuilder)dest;
                 // In Java, the constructor subsumes public void init(int destCapacity) {
                 str.ensureCapacity(destCapacity);
@@ -108,7 +108,7 @@ public final class Normalizer2Impl {
                     reorderStart=codePointLimit;
                 }
             } else {
-                appIsStringBuilder=writeToStringBuilder=false;
+                appIsStringBuilder=false;
                 str=new StringBuilder();
                 reorderStart=0;
                 lastCC=0;
@@ -119,18 +119,10 @@ public final class Normalizer2Impl {
         public int length() { return str.length(); }
         public int getLastCC() { return lastCC; }
 
-        public void flush() {
-            if(!appIsStringBuilder && str.length()!=0) {
-                try {
-                    app.append(str);
-                } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                }
-                str.delete(0, 0x7fffffff);
-                reorderStart=0;
-                lastCC=0;
-                writeToStringBuilder=appIsStringBuilder;
-            }
+        public StringBuilder getStringBuilder() { return str; }
+
+        public boolean equals(CharSequence s, int start, int limit) {
+            return UTF16Plus.equal(str, 0, str.length(), s, start, limit);
         }
 
         // For Hangul composition, replacing the Leading consonant Jamo with the syllable.
@@ -185,102 +177,86 @@ public final class Normalizer2Impl {
         // Most of them implement Appendable interface methods.
         // @Override when we switch to Java 6
         public ReorderingBuffer append(char c) {
-            if(writeToStringBuilder) {
-                str.append(c);
-                reorderStart=str.length();
-            } else {
-                try {
-                    app.append(str).append(c);
-                    str.delete(0, 0x7fffffff);
-                    reorderStart=0;
-                } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                }
-            }
+            str.append(c);
             lastCC=0;
+            reorderStart=str.length();
             return this;
         }
         public void appendZeroCC(int c) {
-            if(writeToStringBuilder) {
-                str.appendCodePoint(c);
-                reorderStart=str.length();
-            } else {
-                try {
-                    app.append(str);
-                    if(c<=0xffff) {
-                        app.append((char)c);
-                    } else {
-                        char[] pair=Character.toChars(c);
-                        app.append(pair[0]).append(pair[1]);
-                    }
-                    str.delete(0, 0x7fffffff);
-                    reorderStart=0;
-                } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                }
-            }
+            str.appendCodePoint(c);
             lastCC=0;
+            reorderStart=str.length();
         }
         // @Override when we switch to Java 6
         public ReorderingBuffer append(CharSequence s) {
             if(s.length()!=0) {
-                if(writeToStringBuilder) {
-                    str.append(s);
-                    reorderStart=str.length();
-                } else {
-                    try {
-                        app.append(str).append(s);
-                        str.delete(0, 0x7fffffff);
-                        reorderStart=0;
-                    } catch(IOException e) {
-                        throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                    }
-                }
+                str.append(s);
                 lastCC=0;
+                reorderStart=str.length();
             }
             return this;
         }
         // @Override when we switch to Java 6
         public ReorderingBuffer append(CharSequence s, int start, int limit) {
             if(start!=limit) {
-                if(writeToStringBuilder) {
-                    str.append(s, start, limit);
-                    reorderStart=str.length();
-                } else {
-                    try {
-                        app.append(str).append(s, start, limit);
-                        str.delete(0, 0x7fffffff);
-                        reorderStart=0;
-                    } catch(IOException e) {
-                        throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                    }
-                }
+                str.append(s, start, limit);
                 lastCC=0;
+                reorderStart=str.length();
             }
             return this;
+        }
+        /**
+         * Flushes from the intermediate StringBuilder to the Appendable,
+         * if they are different objects.
+         * Used after recomposition.
+         * Must be called at the end when writing to a non-StringBuilder Appendable.
+         */
+        public void flush() {
+            if(appIsStringBuilder) {
+                reorderStart=str.length();
+            } else {
+                try {
+                    app.append(str);
+                    str.delete(0, 0x7fffffff);
+                    reorderStart=0;
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            }
+            lastCC=0;
+        }
+        /**
+         * Flushes from the intermediate StringBuilder to the Appendable,
+         * if they are different objects.
+         * Then appends the new text to the Appendable or StringBuilder.
+         * Normally used after quick check loops find a non-empty sequence.
+         */
+        public ReorderingBuffer flushAndAppendZeroCC(CharSequence s, int start, int limit) {
+            if(appIsStringBuilder) {
+                str.append(s, start, limit);
+                reorderStart=str.length();
+            } else {
+                try {
+                    app.append(str).append(s, start, limit);
+                    str.delete(0, 0x7fffffff);
+                    reorderStart=0;
+                } catch(IOException e) {
+                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
+                }
+            }
+            lastCC=0;
+            return this;
+        }
+        public void remove() {
+            str.delete(0, 0x7fffffff);
+            lastCC=0;
+            reorderStart=0;
         }
         public void removeSuffix(int length) {
             int oldLength=str.length();
             str.delete(oldLength-length, oldLength);
             lastCC=0;
             reorderStart=str.length();
-        }
-        public void forceWriteToStringBuilder() {
-            writeToStringBuilder=true;
-        }
-        public void setReorderingLimit(int newLimit) {
-            writeToStringBuilder=appIsStringBuilder;
-            if(!appIsStringBuilder) {
-                try {
-                    app.append(str, 0, newLimit);
-                    newLimit=0;
-                } catch(IOException e) {
-                    throw new RuntimeException(e);  // Avoid declaring "throws IOException".
-                }
-            }
-            str.delete(newLimit, 0x7fffffff);
-            reorderStart=newLimit;
-            lastCC=0;
         }
 
         /*
@@ -318,7 +294,6 @@ public final class Normalizer2Impl {
         private final Appendable app;
         private final StringBuilder str;
         private final boolean appIsStringBuilder;
-        private boolean writeToStringBuilder;
         private int reorderStart;
         private int lastCC;
 
@@ -354,6 +329,30 @@ public final class Normalizer2Impl {
          * @draft ICU 4.6
          */
         public static boolean isSurrogateLead(int c) { return (c&0x400)==0; }
+        /**
+         * Compares two CharSequence subsequences for binary equality.
+         * @param s1 first sequence
+         * @param start1 start offset in first sequence
+         * @param limit1 limit offset in first sequence
+         * @param s2 second sequence
+         * @param start2 start offset in second sequence
+         * @param limit2 limit offset in second sequence
+         * @return true if s1.subSequence(start1, limit1) contains the same text
+         *              as s2.subSequence(start2, limit2)
+         * @draft ICU 4.6
+         */
+        public static boolean equal(CharSequence s1, int start1, int limit1,
+                                    CharSequence s2, int start2, int limit2) {
+            if((limit1-start1)!=(limit2-start2)) {
+                return false;
+            }
+            while(start1<limit1) {
+                if(s1.charAt(start1++)!=s2.charAt(start2++)) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     public Normalizer2Impl() {}
@@ -480,7 +479,6 @@ public final class Normalizer2Impl {
             int norm16;
             for(;;) {
                 if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
-                    // TODO: combine the two conditions into one in C++ as well
                     // c does not decompose
                 } else if(isHangul(norm16)) {
                     // Hangul syllable: decompose algorithmically
@@ -599,7 +597,7 @@ public final class Normalizer2Impl {
             // copy these code units all at once
             if(src!=prevSrc) {
                 if(buffer!=null) {
-                    buffer.append(s, prevSrc, src);
+                    buffer.flushAndAppendZeroCC(s, prevSrc, src);
                 } else {
                     prevCC=0;
                     prevBoundary=src;
@@ -634,14 +632,252 @@ public final class Normalizer2Impl {
                                    ReorderingBuffer buffer) {
         throw new UnsupportedOperationException();  // TODO
     }
+    // Very similar to composeQuickCheck(): Make the same changes in both places if relevant.
+    // doCompose: normalize
+    // !doCompose: isNormalized (buffer must be empty and initialized)
     public boolean compose(CharSequence s, int src, int limit,
                            boolean onlyContiguous,
                            boolean doCompose,
                            ReorderingBuffer buffer) {
-        // TODO: use forceWriteToStringBuilder()
-        throw new UnsupportedOperationException();  // TODO
+        int minNoMaybeCP=minCompNoMaybeCP;
+
+        /*
+         * prevBoundary points to the last character before the current one
+         * that has a composition boundary before it with ccc==0 and quick check "yes".
+         * Keeping track of prevBoundary saves us looking for a composition boundary
+         * when we find a "no" or "maybe".
+         *
+         * When we back out from prevSrc back to prevBoundary,
+         * then we also remove those same characters (which had been simply copied
+         * or canonically-order-inserted) from the ReorderingBuffer.
+         * Therefore, at all times, the [prevBoundary..prevSrc[ source units
+         * must correspond 1:1 to destination units at the end of the destination buffer.
+         */
+        int prevBoundary=src;
+        int prevSrc;
+        int c=0;
+        int norm16=0;
+
+        // only for isNormalized
+        int prevCC=0;
+
+        for(;;) {
+            // count code units below the minimum or with irrelevant data for the quick check
+            for(prevSrc=src; src!=limit;) {
+                if( (c=s.charAt(src))<minNoMaybeCP ||
+                    isCompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                ) {
+                    ++src;
+                } else if(!UTF16.isSurrogate((char)c)) {
+                    break;
+                } else {
+                    char c2;
+                    if(UTF16Plus.isSurrogateLead(c)) {
+                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
+                            c=Character.toCodePoint((char)c, c2);
+                        }
+                    } else /* trail surrogate */ {
+                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
+                            --src;
+                            c=Character.toCodePoint(c2, (char)c);
+                        }
+                    }
+                    if(isCompYesAndZeroCC(norm16=getNorm16(c))) {
+                        src+=Character.charCount(c);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            // copy these code units all at once
+            if(src!=prevSrc) {
+                if(src==limit) {
+                    if(doCompose) {
+                        buffer.flushAndAppendZeroCC(s, prevSrc, src);
+                    }
+                    break;
+                }
+                // Set prevBoundary to the last character in the quick check loop.
+                prevBoundary=src-1;
+                if( Character.isLowSurrogate(s.charAt(prevBoundary)) && prevSrc<prevBoundary &&
+                    Character.isHighSurrogate(s.charAt(prevBoundary-1))
+                ) {
+                    --prevBoundary;
+                }
+                if(doCompose) {
+                    // The last "quick check yes" character is excluded from the
+                    // flush-and-append call in case it needs to be modified.
+                    buffer.flushAndAppendZeroCC(s, prevSrc, prevBoundary);
+                    buffer.append(s, prevBoundary, src);
+                } else {
+                    prevCC=0;
+                }
+                // The start of the current character (c).
+                prevSrc=src;
+            } else if(src==limit) {
+                break;
+            }
+
+            src+=Character.charCount(c);
+            /*
+             * isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
+             * c is either a "noNo" (has a mapping) or a "maybeYes" (combines backward)
+             * or has ccc!=0.
+             * Check for Jamo V/T, then for regular characters.
+             * c is not a Hangul syllable or Jamo L because those have "yes" properties.
+             */
+            if(isJamoVT(norm16) && prevBoundary!=prevSrc) {
+                char prev=s.charAt(prevSrc-1);
+                boolean needToDecompose=false;
+                if(c<Hangul.JAMO_T_BASE) {
+                    // c is a Jamo Vowel, compose with previous Jamo L and following Jamo T.
+                    prev-=Hangul.JAMO_L_BASE;
+                    if(prev<Hangul.JAMO_L_COUNT) {
+                        if(!doCompose) {
+                            return false;
+                        }
+                        char syllable=(char)
+                            (Hangul.HANGUL_BASE+
+                             (prev*Hangul.JAMO_V_COUNT+(c-Hangul.JAMO_V_BASE))*
+                             Hangul.JAMO_T_COUNT);
+                        char t;
+                        if(src!=limit && (t=(char)(s.charAt(src)-Hangul.JAMO_T_BASE))<Hangul.JAMO_T_COUNT) {
+                            ++src;
+                            syllable+=t;  // The next character was a Jamo T.
+                            prevBoundary=src;
+                            buffer.setLastChar(syllable);
+                            continue;
+                        }
+                        // If we see L+V+x where x!=T then we drop to the slow path,
+                        // decompose and recompose.
+                        // This is to deal with NFKC finding normal L and V but a
+                        // compatibility variant of a T. We need to either fully compose that
+                        // combination here (which would complicate the code and may not work
+                        // with strange custom data) or use the slow path -- or else our replacing
+                        // two input characters (L+V) with one output character (LV syllable)
+                        // would violate the invariant that [prevBoundary..prevSrc[ has the same
+                        // length as what we appended to the buffer since prevBoundary.
+                        needToDecompose=true;
+                    }
+                } else if(Hangul.isHangulWithoutJamoT(prev)) {
+                    // c is a Jamo Trailing consonant,
+                    // compose with previous Hangul LV that does not contain a Jamo T.
+                    if(!doCompose) {
+                        return false;
+                    }
+                    buffer.setLastChar((char)(prev+c-Hangul.JAMO_T_BASE));
+                    prevBoundary=src;
+                    continue;
+                }
+                if(!needToDecompose) {
+                    // The Jamo V/T did not compose into a Hangul syllable.
+                    if(doCompose) {
+                        buffer.append((char)c);
+                    } else {
+                        prevCC=0;
+                    }
+                    continue;
+                }
+            }
+            /*
+             * Source buffer pointers:
+             *
+             *  all done      quick check   current char  not yet
+             *                "yes" but     (c)           processed
+             *                may combine
+             *                forward
+             * [-------------[-------------[-------------[-------------[
+             * |             |             |             |             |
+             * orig. src     prevBoundary  prevSrc       src           limit
+             *
+             *
+             * Destination buffer pointers inside the ReorderingBuffer:
+             *
+             *  all done      might take    not filled yet
+             *                characters for
+             *                reordering
+             * [-------------[-------------[-------------[
+             * |             |             |             |
+             * start         reorderStart  limit         |
+             *                             +remainingCap.+
+             */
+            if(norm16>=MIN_YES_YES_WITH_CC) {
+                int cc=norm16&0xff;  // cc!=0
+                if( onlyContiguous &&  // FCC
+                    (doCompose ? buffer.getLastCC() : prevCC)==0 &&
+                    prevBoundary<prevSrc &&
+                    // buffer.getLastCC()==0 && prevBoundary<prevSrc tell us that
+                    // [prevBoundary..prevSrc[ (which is exactly one character under these conditions)
+                    // passed the quick check "yes && ccc==0" test.
+                    // Check whether the last character was a "yesYes" or a "yesNo".
+                    // If a "yesNo", then we get its trailing ccc from its
+                    // mapping and check for canonical order.
+                    // All other cases are ok.
+                    getTrailCCFromCompYesAndZeroCC(s, prevBoundary, prevSrc)>cc
+                ) {
+                    // Fails FCD test, need to decompose and contiguously recompose.
+                    if(!doCompose) {
+                        return false;
+                    }
+                } else if(doCompose) {
+                    buffer.append(c, cc);
+                    continue;
+                } else if(prevCC<=cc) {
+                    prevCC=cc;
+                    continue;
+                } else {
+                    return false;
+                }
+            } else if(!doCompose && !isMaybeOrNonZeroCC(norm16)) {
+                return false;
+            }
+
+            /*
+             * Find appropriate boundaries around this character,
+             * decompose the source text from between the boundaries,
+             * and recompose it.
+             *
+             * We may need to remove the last few characters from the ReorderingBuffer
+             * to account for source text that was copied or appended
+             * but needs to take part in the recomposition.
+             */
+
+            /*
+             * Find the last composition boundary in [prevBoundary..src[.
+             * It is either the decomposition of the current character (at prevSrc),
+             * or prevBoundary.
+             */
+            if(hasCompBoundaryBefore(c, norm16)) {
+                prevBoundary=prevSrc;
+            } else if(doCompose) {
+                buffer.removeSuffix(prevSrc-prevBoundary);
+            }
+
+            // Find the next composition boundary in [src..limit[ -
+            // modifies src to point to the next starter.
+            src=findNextCompBoundary(s, src, limit);
+
+            // Decompose [prevBoundary..src[ into the buffer and then recompose that part of it.
+            int recomposeStartIndex=buffer.length();
+            decomposeShort(s, prevBoundary, src, buffer);
+            recompose(buffer, recomposeStartIndex, onlyContiguous);
+            if(!doCompose) {
+                if(!buffer.equals(s, prevBoundary, src)) {
+                    return false;
+                }
+                buffer.remove();
+                prevCC=0;
+            }
+
+            // Move to the next starter. We never need to look back before this point again.
+            prevBoundary=src;
+        }
+        return true;
     }
     /**
+     * Very similar to compose(): Make the same changes in both places if relevant.
+     * doSpan: spanQuickCheckYes
+     * !doSpan: quickCheck
      * @return bits 31..1: spanQuickCheckYes (==s.length() if "yes") and
      *         bit 0: set if "maybe"; if the span length&lt;s.length() and not "maybe"
      *         then the quick check result is "no"
@@ -824,12 +1060,227 @@ public final class Normalizer2Impl {
         }
     }
 
+    /*
+     * Finds the recomposition result for
+     * a forward-combining "lead" character,
+     * specified with a pointer to its compositions list,
+     * and a backward-combining "trail" character.
+     *
+     * If the lead and trail characters combine, then this function returns
+     * the following "compositeAndFwd" value:
+     * Bits 21..1  composite character
+     * Bit      0  set if the composite is a forward-combining starter
+     * otherwise it returns -1.
+     *
+     * The compositions list has (trail, compositeAndFwd) pair entries,
+     * encoded as either pairs or triples of 16-bit units.
+     * The last entry has the high bit of its first unit set.
+     *
+     * The list is sorted by ascending trail characters (there are no duplicates).
+     * A linear search is used.
+     *
+     * See normalizer2impl.h for a more detailed description
+     * of the compositions list format.
+     */
     private static int combine(CharSequence compositions, int list, int trail) {
-        throw new UnsupportedOperationException();  // TODO
+        int key1, firstUnit;
+        if(trail<COMP_1_TRAIL_LIMIT) {
+            // trail character is 0..33FF
+            // result entry may have 2 or 3 units
+            key1=(trail<<1);
+            while(key1>(firstUnit=compositions.charAt(list))) {
+                list+=2+(firstUnit&COMP_1_TRIPLE);
+            }
+            if(key1==(firstUnit&COMP_1_TRAIL_MASK)) {
+                if((firstUnit&COMP_1_TRIPLE)!=0) {
+                    return ((int)compositions.charAt(list+1)<<16)|compositions.charAt(list+2);
+                } else {
+                    return compositions.charAt(list+1);
+                }
+            }
+        } else {
+            // trail character is 3400..10FFFF
+            // result entry has 3 units
+            key1=COMP_1_TRAIL_LIMIT+((trail>>COMP_1_TRAIL_SHIFT))&~COMP_1_TRIPLE;
+            int key2=(trail<<COMP_2_TRAIL_SHIFT)&0xffff;
+            int secondUnit;
+            for(;;) {
+                if(key1>(firstUnit=compositions.charAt(list))) {
+                    list+=2+(firstUnit&COMP_1_TRIPLE);
+                } else if(key1==(firstUnit&COMP_1_TRAIL_MASK)) {
+                    if(key2>(secondUnit=compositions.charAt(list+1))) {
+                        if((firstUnit&COMP_1_LAST_TUPLE)!=0) {
+                            break;
+                        } else {
+                            list+=3;
+                        }
+                    } else if(key2==(secondUnit&COMP_2_TRAIL_MASK)) {
+                        return ((secondUnit&~COMP_2_TRAIL_MASK)<<16)|compositions.charAt(list+2);
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return -1;
     }
+    /*
+     * Recomposes the buffer text starting at recomposeStartIndex
+     * (which is in NFD - decomposed and canonically ordered),
+     * and truncates the buffer contents.
+     *
+     * Note that recomposition never lengthens the text:
+     * Any character consists of either one or two code units;
+     * a composition may contain at most one more code unit than the original starter,
+     * while the combining mark that is removed has at least one code unit.
+     */
     private void recompose(ReorderingBuffer buffer, int recomposeStartIndex,
                            boolean onlyContiguous) {
-        throw new UnsupportedOperationException();  // TODO
+        StringBuilder sb=buffer.getStringBuilder();
+        int p=recomposeStartIndex;
+        if(p==sb.length()) {
+            return;
+        }
+
+        int starter, pRemove;
+        int compositionsList;
+        int c, compositeAndFwd;
+        int norm16;
+        int cc, prevCC;
+        boolean starterIsSupplementary;
+
+        // Some of the following variables are not used until we have a forward-combining starter
+        // and are only initialized now to avoid compiler warnings.
+        compositionsList=-1;  // used as indicator for whether we have a forward-combining starter
+        starter=-1;
+        starterIsSupplementary=false;
+        prevCC=0;
+
+        for(;;) {
+            c=sb.codePointAt(p);
+            p+=Character.charCount(c);
+            norm16=getNorm16(c);
+            // TODO: use trie string iterator?? C++ uses UTRIE2_U16_NEXT16(normTrie, p, limit, c, norm16);
+            cc=getCCFromYesOrMaybe(norm16);
+            if( // this character combines backward and
+                isMaybe(norm16) &&
+                // we have seen a starter that combines forward and
+                compositionsList>=0 &&
+                // the backward-combining character is not blocked
+                (prevCC<cc || prevCC==0)
+            ) {
+                if(isJamoVT(norm16)) {
+                    // c is a Jamo V/T, see if we can compose it with the previous character.
+                    if(c<Hangul.JAMO_T_BASE) {
+                        // c is a Jamo Vowel, compose with previous Jamo L and following Jamo T.
+                        char prev=(char)(sb.charAt(starter)-Hangul.JAMO_L_BASE);
+                        if(prev<Hangul.JAMO_L_COUNT) {
+                            pRemove=p-1;
+                            char syllable=(char)
+                                (Hangul.HANGUL_BASE+
+                                 (prev*Hangul.JAMO_V_COUNT+(c-Hangul.JAMO_V_BASE))*
+                                 Hangul.JAMO_T_COUNT);
+                            char t;
+                            if(p!=sb.length() && (t=(char)(sb.charAt(p)-Hangul.JAMO_T_BASE))<Hangul.JAMO_T_COUNT) {
+                                ++p;
+                                syllable+=t;  // The next character was a Jamo T.
+                            }
+                            sb.setCharAt(starter, syllable);
+                            // remove the Jamo V/T
+                            sb.delete(pRemove, p);
+                            p=pRemove;
+                        }
+                    }
+                    /*
+                     * No "else" for Jamo T:
+                     * Since the input is in NFD, there are no Hangul LV syllables that
+                     * a Jamo T could combine with.
+                     * All Jamo Ts are combined above when handling Jamo Vs.
+                     */
+                    if(p==sb.length()) {
+                        break;
+                    }
+                    compositionsList=-1;
+                    continue;
+                } else if((compositeAndFwd=combine(maybeYesCompositions, compositionsList, c))>=0) {
+                    // The starter and the combining mark (c) do combine.
+                    int composite=compositeAndFwd>>1;
+
+                    // Remove the combining mark.
+                    pRemove=p-Character.charCount(c);  // pRemove & p: start & limit of the combining mark
+                    sb.delete(pRemove, p);
+                    p=pRemove;
+                    // Replace the starter with the composite.
+                    if(starterIsSupplementary) {
+                        if(composite>0xffff) {
+                            // both are supplementary
+                            sb.setCharAt(starter, UTF16.getLeadSurrogate(composite));
+                            sb.setCharAt(starter+1, UTF16.getTrailSurrogate(composite));
+                        } else {
+                            sb.setCharAt(starter, (char)c);
+                            sb.deleteCharAt(starter+1);
+                            // The composite is shorter than the starter,
+                            // move the intermediate characters forward one.
+                            starterIsSupplementary=false;
+                            --p;
+                        }
+                    } else if(composite>0xffff) {
+                        // The composite is longer than the starter,
+                        // move the intermediate characters back one.
+                        starterIsSupplementary=true;
+                        sb.setCharAt(starter, UTF16.getLeadSurrogate(composite));
+                        sb.insert(starter+1, UTF16.getTrailSurrogate(composite));
+                        ++p;
+                    } else {
+                        // both are on the BMP
+                        sb.setCharAt(starter, (char)composite);
+                    }
+
+                    // Keep prevCC because we removed the combining mark.
+
+                    if(p==sb.length()) {
+                        break;
+                    }
+                    // Is the composite a starter that combines forward?
+                    if((compositeAndFwd&1)!=0) {
+                        compositionsList=
+                            getCompositionsListForComposite(getNorm16(composite));
+                    } else {
+                        compositionsList=-1;
+                    }
+
+                    // We combined; continue with looking for compositions.
+                    continue;
+                }
+            }
+
+            // no combination this time
+            prevCC=cc;
+            if(p==sb.length()) {
+                break;
+            }
+
+            // If c did not combine, then check if it is a starter.
+            if(cc==0) {
+                // Found a new starter.
+                if((compositionsList=getCompositionsListForDecompYesAndZeroCC(norm16))>=0) {
+                    // It may combine with something, prepare for it.
+                    if(c<=0xffff) {
+                        starterIsSupplementary=false;
+                        starter=p-1;
+                    } else {
+                        starterIsSupplementary=true;
+                        starter=p-2;
+                    }
+                }
+            } else if(onlyContiguous) {
+                // FCC: no discontiguous compositions; any intervening character blocks.
+                compositionsList=-1;
+            }
+        }
+        buffer.flush();
     }
 
     private boolean hasCompBoundaryBefore(int c, int norm16) {
