@@ -133,11 +133,11 @@ public:
     }
     UBool appendZeroCC(UChar32 c, UErrorCode &errorCode);
     UBool appendZeroCC(const UChar *s, const UChar *sLimit, UErrorCode &errorCode);
-    void removeZeroCCSuffix(int32_t length);
-    void setReorderingLimitAndLastCC(UChar *newLimit, uint8_t newLastCC) {
+    void removeSuffix(int32_t length);
+    void setReorderingLimit(UChar *newLimit) {
         remainingCapacity+=(int32_t)(limit-newLimit);
         reorderStart=limit=newLimit;
-        lastCC=newLastCC;
+        lastCC=0;
     }
 private:
     /*

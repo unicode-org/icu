@@ -148,7 +148,7 @@ UBool ReorderingBuffer::appendZeroCC(const UChar *s, const UChar *sLimit, UError
     return TRUE;
 }
 
-void ReorderingBuffer::removeZeroCCSuffix(int32_t length) {
+void ReorderingBuffer::removeSuffix(int32_t length) {
     if(length<(limit-start)) {
         limit-=length;
         remainingCapacity+=length;
@@ -828,7 +828,7 @@ void Normalizer2Impl::recompose(ReorderingBuffer &buffer, int32_t recomposeStart
             compositionsList=NULL;
         }
     }
-    buffer.setReorderingLimitAndLastCC(limit, prevCC);
+    buffer.setReorderingLimit(limit);
 }
 
 // Very similar to composeQuickCheck(): Make the same changes in both places if relevant.
@@ -1060,7 +1060,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
         if(hasCompBoundaryBefore(c, norm16)) {
             prevBoundary=prevSrc;
         } else if(doCompose) {
-            buffer.removeZeroCCSuffix((int32_t)(prevSrc-prevBoundary));
+            buffer.removeSuffix((int32_t)(prevSrc-prevBoundary));
         }
 
         // Find the next composition boundary in [src..limit[ -
@@ -1080,7 +1080,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
             ) {
                 return FALSE;
             }
-            buffer.removeZeroCCSuffix(bufferLength);
+            buffer.removeSuffix(bufferLength);
             prevCC=0;
         }
 
@@ -1211,7 +1211,7 @@ void Normalizer2Impl::composeAndAppend(const UChar *src, const UChar *limit,
                                                                     buffer.getLimit());
             UnicodeString middle(lastStarterInDest,
                                  (int32_t)(buffer.getLimit()-lastStarterInDest));
-            buffer.removeZeroCCSuffix((int32_t)(buffer.getLimit()-lastStarterInDest));
+            buffer.removeSuffix((int32_t)(buffer.getLimit()-lastStarterInDest));
             middle.append(src, (int32_t)(firstStarterInSrc-src));
             const UChar *middleStart=middle.getBuffer();
             compose(middleStart, middleStart+middle.length(), onlyContiguous,
@@ -1547,7 +1547,7 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
              * already but is now going to be decomposed.
              * prevSrc is set to after what was copied/appended.
              */
-            buffer->removeZeroCCSuffix((int32_t)(prevSrc-prevBoundary));
+            buffer->removeSuffix((int32_t)(prevSrc-prevBoundary));
             /*
              * Find the part of the source that needs to be decomposed,
              * up to the next safe boundary.
@@ -1578,7 +1578,7 @@ void Normalizer2Impl::makeFCDAndAppend(const UChar *src, const UChar *limit,
                                                                     buffer.getLimit());
             UnicodeString middle(lastBoundaryInDest,
                                  (int32_t)(buffer.getLimit()-lastBoundaryInDest));
-            buffer.removeZeroCCSuffix((int32_t)(buffer.getLimit()-lastBoundaryInDest));
+            buffer.removeSuffix((int32_t)(buffer.getLimit()-lastBoundaryInDest));
             middle.append(src, (int32_t)(firstBoundaryInSrc-src));
             const UChar *middleStart=middle.getBuffer();
             makeFCD(middleStart, middleStart+middle.length(), &buffer, errorCode);
