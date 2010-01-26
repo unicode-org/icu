@@ -64,7 +64,6 @@ icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text
 icu4j/build.properties -text
 icu4j/demos/manifest.stub -text
-icu4j/icu-eclipse/misc/ICUConfig.properties -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
