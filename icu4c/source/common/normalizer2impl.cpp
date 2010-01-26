@@ -57,6 +57,13 @@ UBool ReorderingBuffer::init(int32_t destCapacity, UErrorCode &errorCode) {
     return TRUE;
 }
 
+UBool ReorderingBuffer::equals(const UChar *otherStart, const UChar *otherLimit) const {
+    int32_t length=(int32_t)(limit-start);
+    return
+        length==(int32_t)(otherLimit-otherStart) &&
+        0==u_memcmp(start, otherStart, length);
+}
+
 UBool ReorderingBuffer::appendSupplementary(UChar32 c, uint8_t cc, UErrorCode &errorCode) {
     if(remainingCapacity<2 && !resize(2, errorCode)) {
         return FALSE;
@@ -146,6 +153,12 @@ UBool ReorderingBuffer::appendZeroCC(const UChar *s, const UChar *sLimit, UError
     lastCC=0;
     reorderStart=limit;
     return TRUE;
+}
+
+void ReorderingBuffer::remove() {
+    reorderStart=limit=start;
+    remainingCapacity=str.getCapacity();
+    lastCC=0;
 }
 
 void ReorderingBuffer::removeSuffix(int32_t length) {
@@ -501,9 +514,7 @@ Normalizer2Impl::getDecomposition(UChar32 c, UChar buffer[4], int32_t &length) c
     const UChar *decomp=NULL;
     uint16_t norm16;
     for(;;) {
-        if(c<minDecompNoCP) {
-            return decomp;
-        } else if(isDecompYes(norm16=getNorm16(c))) {
+        if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
             // c does not decompose
             return decomp;
         } else if(isHangul(norm16)) {
@@ -657,9 +668,9 @@ int32_t Normalizer2Impl::combine(const uint16_t *list, UChar32 trail) {
 }
 
 /*
- * Recomposes the text in [p..limit[
+ * Recomposes the buffer text starting at recomposeStartIndex
  * (which is in NFD - decomposed and canonically ordered),
- * and returns how much shorter the string became.
+ * and truncates the buffer contents.
  *
  * Note that recomposition never lengthens the text:
  * Any character consists of either one or two code units;
@@ -951,7 +962,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                         ++src;
                         syllable+=t;  // The next character was a Jamo T.
                         prevBoundary=src;
-                        *(buffer.getLimit()-1)=syllable;
+                        buffer.setLastChar(syllable);
                         continue;
                     }
                     // If we see L+V+x where x!=T then we drop to the slow path,
@@ -971,7 +982,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                 if(!doCompose) {
                     return FALSE;
                 }
-                *(buffer.getLimit()-1)=(UChar)(prev+c-Hangul::JAMO_T_BASE);
+                buffer.setLastChar((UChar)(prev+c-Hangul::JAMO_T_BASE));
                 prevBoundary=src;
                 continue;
             }
@@ -1074,13 +1085,10 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
         }
         recompose(buffer, recomposeStartIndex, onlyContiguous);
         if(!doCompose) {
-            int32_t bufferLength=buffer.length();
-            if( bufferLength!=(int32_t)(src-prevBoundary) ||
-                0!=u_memcmp(buffer.getStart(), prevBoundary, bufferLength)
-            ) {
+            if(!buffer.equals(prevBoundary, src)) {
                 return FALSE;
             }
-            buffer.removeSuffix(bufferLength);
+            buffer.remove();
             prevCC=0;
         }
 
