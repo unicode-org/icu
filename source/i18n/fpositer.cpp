@@ -8,6 +8,10 @@
 ******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/fpositer.h"
 #include "cmemory.h"
 #include "uvectr32.h"
@@ -100,3 +104,6 @@ UBool FieldPositionIterator::next(FieldPosition& fp) {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
+

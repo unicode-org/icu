@@ -292,6 +292,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
         return;
     }
 
+#if !UCONFIG_NO_FORMATTING
     LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
     if(errorCode.logIfFailureAndReset("ucal_open()")) {
         return;
@@ -329,7 +330,9 @@ void LocalPointerTest::TestLocalXyzPointer() {
         errln("LocalUMessageFormatPointer failure");
         return;
     }
+#endif  /* UCONFIG_NO_FORMATTING  */
 
+#if !UCONFIG_NO_NORMALIZATION
     const UNormalizer2 *nfc=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode);
     UnicodeSet emptySet;
     LocalUNormalizer2Pointer fn2(unorm2_openFiltered(nfc, emptySet.toUSet(), errorCode));
@@ -340,7 +343,9 @@ void LocalPointerTest::TestLocalXyzPointer() {
         errln("LocalUNormalizer2Pointer failure");
         return;
     }
+#endif /* !UCONFIG_NO_NORMALIZATION */
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
     LocalURegularExpressionPointer regex(
         uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
@@ -351,7 +356,9 @@ void LocalPointerTest::TestLocalXyzPointer() {
         errln("LocalURegularExpressionPointer failure");
         return;
     }
+#endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
 
+#if !UCONFIG_NO_TRANSLITERATION
     UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
     LocalUTransliteratorPointer trans(
         utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
@@ -362,6 +369,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
         errln("LocalUTransliteratorPointer failure");
         return;
     }
+#endif /* !UCONFIG_NO_TRANSLITERATION */
 
     // destructors
 }
@@ -376,6 +384,7 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
             ucnvsel_open(&encoding, 1, NULL, UCNV_ROUNDTRIP_SET, errorCode));
         sel.adoptInstead(NULL);
     }
+#if !UCONFIG_NO_FORMATTING
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUCalendarPointer");
         LocalUCalendarPointer null;
@@ -396,6 +405,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
             umsg_open(hello.getBuffer(), hello.length(), "root", NULL, errorCode));
         msg.adoptInstead(NULL);
     }
+#endif /* !UCONFIG_NO_FORMATTING */
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalURegularExpressionPointer");
         UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
@@ -404,6 +416,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
             uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
         regex.adoptInstead(NULL);
     }
+#endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS */
+
+#if !UCONFIG_NO_TRANSLITERATION
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUTransliteratorPointer");
         UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
@@ -412,4 +427,6 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
             utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
         trans.adoptInstead(NULL);
     }
+#endif /* !UCONFIG_NO_TRANSLITERATION */
+
 }

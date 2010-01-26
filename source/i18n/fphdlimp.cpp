@@ -5,7 +5,9 @@
 *******************************************************************************
 */
 
-#if !UCONFIG_NO_FORMAT
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "fphdlimp.h"
 #include "uvectr32.h"
@@ -112,4 +114,5 @@ FieldPositionIteratorHandler::isRecording(void) {
 
 U_NAMESPACE_END
 
-#endif /* !UCONFIG_NO_FORMAT */
+#endif /* !UCONFIG_NO_FORMATTING */
+

@@ -178,6 +178,7 @@ derivedPropsLineFn(void *context,
 }
 
 void UnicodeTest::TestAdditionalProperties() {
+#if !UCONFIG_NO_NORMALIZATION
     // test DerivedCoreProperties.txt and DerivedNormalizationProps.txt
     if(LENGTHOF(derivedProps)<LENGTHOF(derivedPropsNames)) {
         errln("error: UnicodeTest::derivedProps[] too short, need at least %d UnicodeSets\n",
@@ -275,6 +276,7 @@ void UnicodeTest::TestAdditionalProperties() {
             }
         }
     }
+#endif /* !UCONFIG_NO_NORMALIZATION */
 }
 
 void UnicodeTest::TestBinaryValues() {

@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -491,8 +491,10 @@ CalendarTest::TestGenericAPI()
     }else {
         ((Calendar *)cal)->roll(UCAL_HOUR, (int32_t)100, status);
         ((Calendar *)cal)->clear(UCAL_HOUR);
+#if !UCONFIG_NO_SERVICE
         URegistryKey key = cal->registerFactory(NULL, status);
         cal->unregister(key, status);
+#endif
     }
     delete cal;
 
