@@ -8,13 +8,17 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 
+import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.impl.Trie2_16;
+import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.VersionInfo;
 
-class Normalizer2Impl {
+public final class Normalizer2Impl {
     public static final class Hangul {
         /* Korean Hangul and Jamo constants */
         public static final int JAMO_L_BASE=0x1100;     /* "lead" jamo */
@@ -33,17 +37,17 @@ class Normalizer2Impl {
         public static final int HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT;
         public static final int HANGUL_LIMIT=HANGUL_BASE+HANGUL_COUNT;
 
-        public static final boolean isHangul(int c) {
+        public static boolean isHangul(int c) {
             return HANGUL_BASE<=c && c<HANGUL_LIMIT;
         }
-        public static final boolean isHangulWithoutJamoT(char c) {
+        public static boolean isHangulWithoutJamoT(char c) {
             c-=HANGUL_BASE;
             return c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
         }
-        public static final boolean isJamoL(int c) {
+        public static boolean isJamoL(int c) {
             return JAMO_L_BASE<=c && c<JAMO_L_LIMIT;
         }
-        public static final boolean isJamoV(int c) {
+        public static boolean isJamoV(int c) {
             return JAMO_V_BASE<=c && c<JAMO_V_LIMIT;
         }
 
@@ -51,27 +55,36 @@ class Normalizer2Impl {
          * Decomposes c, which must be a Hangul syllable, into buffer
          * and returns the length of the decomposition (2 or 3).
          */
-        public static final int decompose(int c, StringBuilder buffer) {
-            c-=HANGUL_BASE;
-            int c2=c%JAMO_T_COUNT;
-            c/=JAMO_T_COUNT;
-            buffer.append((char)(JAMO_L_BASE+c/JAMO_V_COUNT));
-            buffer.append((char)(JAMO_V_BASE+c%JAMO_V_COUNT));
-            if(c2==0) {
-                return 2;
-            } else {
-                buffer.append((char)(JAMO_T_BASE+c2));
-                return 3;
+        public static int decompose(int c, Appendable buffer) {
+            try {
+                c-=HANGUL_BASE;
+                int c2=c%JAMO_T_COUNT;
+                c/=JAMO_T_COUNT;
+                buffer.append((char)(JAMO_L_BASE+c/JAMO_V_COUNT));
+                buffer.append((char)(JAMO_V_BASE+c%JAMO_V_COUNT));
+                if(c2==0) {
+                    return 2;
+                } else {
+                    buffer.append((char)(JAMO_T_BASE+c2));
+                    return 3;
+                }
+            } catch(IOException e) {
+                // Will not occur because we do not write to I/O.
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public static final class ReorderingBuffer {
-        public ReorderingBuffer(Normalizer2Impl ni, StringBuilder dest) {
+    /**
+     * Writable buffer that takes care of canonical ordering.
+     * Its Appendable methods behave like the C++ implementation's
+     * appendZeroCC() methods.
+     */
+    public static final class ReorderingBuffer implements Appendable {
+        public ReorderingBuffer(Normalizer2Impl ni, StringBuilder dest, int destCapacity) {
             impl=ni;
             str=dest;
-        }
-        public final void init(int destCapacity) {
+            // In Java, the constructor subsumes public void init(int destCapacity) {
             str.ensureCapacity(destCapacity);
             reorderStart=0;
             if(str.length()==0) {
@@ -87,11 +100,16 @@ class Normalizer2Impl {
             }
         }
 
-        public final boolean isEmpty() { return str.length()==0; }
-        public final int length() { return str.length(); }
-        public final int getLastCC() { return lastCC; }
+        public boolean isEmpty() { return str.length()==0; }
+        public int length() { return str.length(); }
+        public int getLastCC() { return lastCC; }
 
-        public final void append(int c, int cc) {
+        // For Hangul composition, replacing the Leading consonant Jamo with the syllable.
+        public void setLastChar(char c) {
+            str.setCharAt(str.length()-1, c);
+        }
+
+        public void append(int c, int cc) {
             if(lastCC<=cc || cc==0) {
                 str.appendCodePoint(c);
                 lastCC=cc;
@@ -103,21 +121,20 @@ class Normalizer2Impl {
             }
         }
         // s must be in NFD, otherwise change the implementation.
-        public final void append(CharSequence s, int start, int length,
-                                 int leadCC, int trailCC) {
-            if(length==0) {
+        public void append(CharSequence s, int start, int limit,
+                           int leadCC, int trailCC) {
+            if(start==limit) {
                 return;
             }
             if(lastCC<=leadCC || leadCC==0) {
                 if(trailCC<=1) {
-                    reorderStart=str.length()+length;
+                    reorderStart=str.length()+(limit-start);
                 } else if(leadCC<=1) {
                     reorderStart=str.length()+1;  // Ok if not a code point boundary.
                 }
-                str.append(s, start, start+length);
+                str.append(s, start, limit);
                 lastCC=trailCC;
             } else {
-                int limit=start+length;
                 int c=Character.codePointAt(s, start);
                 start+=Character.charCount(c);
                 insert(c, leadCC);  // insert first code point
@@ -126,7 +143,7 @@ class Normalizer2Impl {
                     start+=Character.charCount(c);
                     if(start<limit) {
                         // s must be in NFD, otherwise we need to use getCC().
-                        leadCC=Normalizer2Impl.getCCFromYesOrMaybe(impl.getNorm16(c));
+                        leadCC=getCCFromYesOrMaybe(impl.getNorm16(c));
                     } else {
                         leadCC=trailCC;
                     }
@@ -134,26 +151,47 @@ class Normalizer2Impl {
                 }
             }
         }
-        public final void appendZeroCC(int c) {
+        // The following append() methods work like C++ appendZeroCC().
+        // They assume that the cc or trailCC of their input is 0.
+        // Most of them implement Appendable interface methods.
+        // @Override when we switch to Java 6
+        public ReorderingBuffer append(char c) {
+            str.append(c);
+            lastCC=0;
+            reorderStart=str.length();
+            return this;
+        }
+        public void appendZeroCC(int c) {
             str.appendCodePoint(c);
             lastCC=0;
             reorderStart=str.length();
         }
-        public final void appendZeroCC(CharSequence s, int start, int length) {
-            if(length!=0) {
-                str.append(s, start, start+length);
+        // @Override when we switch to Java 6
+        public ReorderingBuffer append(CharSequence s) {
+            if(s.length()!=0) {
+                str.append(s);
                 lastCC=0;
                 reorderStart=str.length();
             }
+            return this;
         }
-        public final void removeZeroCCSuffix(int length) {
+        // @Override when we switch to Java 6
+        public ReorderingBuffer append(CharSequence s, int start, int limit) {
+            if(start!=limit) {
+                str.append(s, start, limit);
+                lastCC=0;
+                reorderStart=str.length();
+            }
+            return this;
+        }
+        public void removeZeroCCSuffix(int length) {
             int oldLength=str.length();
             str.delete(oldLength-length, oldLength);
             lastCC=0;
             reorderStart=str.length();
         }
-        public final void setReorderingLimitAndLastCC(int newLimit, int newLastCC) {
-            str.delete(newLimit, str.length());
+        public void setReorderingLimitAndLastCC(int newLimit, int newLastCC) {
+            str.delete(newLimit, 0x7fffffff);
             reorderStart=newLimit;
             lastCC=newLastCC;
         }
@@ -173,7 +211,7 @@ class Normalizer2Impl {
 
         // Inserts c somewhere before the last character.
         // Requires 0<cc<lastCC which implies reorderStart<limit.
-        private final void insert(int c, int cc) {
+        private void insert(int c, int cc) {
             for(setIterator(), skipPrevious(); previousCC()>cc;) {}
             // insert c at codePointLimit, after the character with prevCC<=cc
             if(c<=0xffff) {
@@ -207,13 +245,25 @@ class Normalizer2Impl {
             }
             int c=str.codePointBefore(codePointStart);
             codePointStart-=Character.charCount(c);
-            if(c<Normalizer2Impl.MIN_CCC_LCCC_CP) {
+            if(c<MIN_CCC_LCCC_CP) {
                 return 0;
             }
-            return Normalizer2Impl.getCCFromYesOrMaybe(impl.getNorm16(c));
+            return getCCFromYesOrMaybe(impl.getNorm16(c));
         }
 
         private int codePointStart, codePointLimit;
+    }
+
+    // TODO: Propose as public API on the UTF16 class.
+    public static final class UTF16Plus {
+        /**
+         * Assuming c is a surrogate code point (UTF16.isSurrogate(c)),
+         * is it a lead surrogate?
+         * @param c code unit or code point
+         * @return true or false
+         * @draft ICU 4.6
+         */
+        public static boolean isSurrogateLead(int c) { return (c&0x400)==0; }
     }
 
     public Normalizer2Impl() {}
@@ -231,7 +281,7 @@ class Normalizer2Impl {
         private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
     }
     private static final Reader READER=new Reader();
-    public final void load(InputStream data) throws IOException {
+    public Normalizer2Impl load(InputStream data) throws IOException {
         BufferedInputStream bis=new BufferedInputStream(data);
         dataVersion=READER.readHeader(bis);
         DataInputStream ds=new DataInputStream(bis);
@@ -277,37 +327,39 @@ class Normalizer2Impl {
             extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
         }
         data.close();
+        return this;
     }
-    public final void load(ClassLoader root, String name) throws IOException {
-        load(ICUData.getRequiredStream(root, name));
+    public Normalizer2Impl load(String name) throws IOException {
+        return load(ICUData.getRequiredStream(name));
     }
 
-    public final void addPropertyStarts(UnicodeSet sa) {
-        // TODO
+    public void addPropertyStarts(UnicodeSet sa) {
+        throw new UnsupportedOperationException();  // TODO
     }
 
     // low-level properties ------------------------------------------------ ***
 
-    public final Trie2_16 getNormTrie() { return normTrie; }
-    public final Trie2_16 getFCDTrie() {
-        return fcdTrie;  // TODO: build if necessary, with synchronization
+    public Trie2_16 getNormTrie() { return normTrie; }
+    public Trie2_16 getFCDTrie() {
+        throw new UnsupportedOperationException();  // TODO
+        // return fcdTrie;  // TODO: build if necessary, with synchronization
     }
 
-    public final int getNorm16(int c) { return normTrie.get(c); }
-/*
-    UNormalizationCheckResult getCompQuickCheck(uint16_t norm16) const {
+    public int getNorm16(int c) { return normTrie.get(c); }
+
+    public Normalizer.QuickCheckResult getCompQuickCheck(int norm16) {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
-            return UNORM_YES;
+            return Normalizer.YES;
         } else if(minMaybeYes<=norm16) {
-            return UNORM_MAYBE;
+            return Normalizer.MAYBE;
         } else {
-            return UNORM_NO;
+            return Normalizer.NO;
         }
     }
-    UBool isCompNo(uint16_t norm16) const { return minNoNo<=norm16 && norm16<minMaybeYes; }
-    UBool isDecompYes(uint16_t norm16) const { return norm16<minYesNo || minMaybeYes<=norm16; }
+    public boolean isCompNo(int norm16) { return minNoNo<=norm16 && norm16<minMaybeYes; }
+    public boolean isDecompYes(int norm16) { return norm16<minYesNo || minMaybeYes<=norm16; }
 
-    public final int getCC(int norm16) {
+    public int getCC(int norm16) {
         if(norm16>=MIN_NORMAL_MAYBE_YES) {
             return norm16&0xff;
         }
@@ -316,24 +368,14 @@ class Normalizer2Impl {
         }
         return getCCFromNoNo(norm16);
     }
-*/
-    public static final int getCCFromYesOrMaybe(int norm16) {
+    public static int getCCFromYesOrMaybe(int norm16) {
         return norm16>=MIN_NORMAL_MAYBE_YES ? norm16&0xff : 0;
     }
-/*
-    uint16_t getFCD16(UChar32 c) const { return UTRIE2_GET16(fcdTrie(), c); }
-    uint16_t getFCD16FromBMP(UChar c) const { return UTRIE2_GET16(fcdTrie(), c); }
-    uint16_t getFCD16FromSingleLead(UChar c) const {
-        return UTRIE2_GET16_FROM_U16_SINGLE_LEAD(fcdTrie(), c);
-    }
-    uint16_t getFCD16FromSupplementary(UChar32 c) const {
-        return UTRIE2_GET16_FROM_SUPP(fcdTrie(), c);
-    }
-    uint16_t getFCD16FromSurrogatePair(UChar c, UChar c2) const {
-        return getFCD16FromSupplementary(U16_GET_SUPPLEMENTARY(c, c2));
-    }
 
-    void setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
+    int getFCD16(int c) { return fcdTrie.get(c); }
+    int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
+/*
+    void setFCD16FromNorm16(int start, int end, uint16_t norm16,
                             UTrie2 *newFCDTrie) const;
 */
     /**
@@ -342,8 +384,45 @@ class Normalizer2Impl {
      * @param buffer out-only buffer gets the decomposition appended
      * @return true if c has a decomposition
      */
-    public final boolean getDecomposition(int c, StringBuilder buffer) {
-        return false; // TODO
+    public boolean getDecomposition(int c, Appendable buffer) {
+        try {
+            int decomp=-1;
+            int norm16;
+            for(;;) {
+                if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
+                    // TODO: combine the two conditions into one in C++ as well
+                    // c does not decompose
+                } else if(isHangul(norm16)) {
+                    // Hangul syllable: decompose algorithmically
+                    Hangul.decompose(c, buffer);
+                    return true;
+                } else if(isDecompNoAlgorithmic(norm16)) {
+                    decomp=c=mapAlgorithmic(c, norm16);
+                    continue;
+                } else {
+                    // c decomposes, get everything from the variable-length extra data
+                    int firstUnit=extraData.charAt(norm16++);
+                    int length=firstUnit&MAPPING_LENGTH_MASK;
+                    if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                        ++norm16;
+                    }
+                    buffer.append(extraData, norm16, norm16+length);
+                    return true;
+                }
+                if(decomp<0) {
+                    return false;
+                } else if(decomp<=0xffff) {
+                    buffer.append((char)decomp);
+                } else {
+                    char[] surrogatePair=Character.toChars(decomp);
+                    buffer.append(surrogatePair[0]).append(surrogatePair[1]);
+                }
+                return true;
+            }
+        } catch(IOException e) {
+            // Will not occur because we do not write to I/O.
+            throw new RuntimeException(e);
+        }
     }
 
     public static final int MIN_CCC_LCCC_CP=0x300;
@@ -386,147 +465,301 @@ class Normalizer2Impl {
     public static final int COMP_2_TRAIL_MASK=0xffc0;
 
     // higher-level functionality ------------------------------------------ ***
-/*
-    const UChar *decompose(const UChar *src, const UChar *limit,
-                           ReorderingBuffer *buffer) const;
-    void decomposeAndAppend(const UChar *src, const UChar *limit,
-                            UBool doDecompose,
-                            ReorderingBuffer &buffer,
-                            UErrorCode &errorCode) const;
-    UBool compose(const UChar *src, const UChar *limit,
-                  UBool onlyContiguous,
-                  UBool doCompose,
-                  ReorderingBuffer &buffer,
-                  UErrorCode &errorCode) const;
-    const UChar *composeQuickCheck(const UChar *src, const UChar *limit,
-                                   UBool onlyContiguous,
-                                   UNormalizationCheckResult *pQCResult) const;
-    void composeAndAppend(const UChar *src, const UChar *limit,
-                          UBool doCompose,
-                          UBool onlyContiguous,
-                          ReorderingBuffer &buffer,
-                          UErrorCode &errorCode) const;
-    const UChar *makeFCD(const UChar *src, const UChar *limit,
-                         ReorderingBuffer *buffer) const;
-    void makeFCDAndAppend(const UChar *src, const UChar *limit,
-                          UBool doMakeFCD,
-                          ReorderingBuffer &buffer,
-                          UErrorCode &errorCode) const;
 
-    UBool hasDecompBoundary(UChar32 c, UBool before) const;
-    UBool isDecompInert(UChar32 c) const { return isDecompYesAndZeroCC(getNorm16(c)); }
+    public int decompose(CharSequence s, int src, int limit,
+                         ReorderingBuffer buffer) {
+        int minNoCP=minDecompNoCP;
 
-    UBool hasCompBoundaryBefore(UChar32 c) const {
+        int prevSrc;
+        int c=0;
+        int norm16=0;
+
+        // only for quick check
+        int prevBoundary=src;
+        int prevCC=0;
+
+        for(;;) {
+            // count code units below the minimum or with irrelevant data for the quick check
+            for(prevSrc=src; src!=limit;) {
+                if( (c=s.charAt(src))<minNoCP ||
+                    isMostDecompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                ) {
+                    ++src;
+                } else if(!UTF16.isSurrogate((char)c)) {
+                    break;
+                } else {
+                    char c2;
+                    if(UTF16Plus.isSurrogateLead(c)) {
+                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
+                            c=Character.toCodePoint((char)c, c2);
+                        }
+                    } else /* trail surrogate */ {
+                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
+                            --src;
+                            c=Character.toCodePoint(c2, (char)c);
+                        } else {
+                            break;  // c's norm16 already failed the test
+                        }
+                    }
+                    if(isMostDecompYesAndZeroCC(norm16=getNorm16(c))) {
+                        src+=Character.charCount(c);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            // copy these code units all at once
+            if(src!=prevSrc) {
+                if(buffer!=null) {
+                    buffer.append(s, prevSrc, src);
+                } else {
+                    prevCC=0;
+                    prevBoundary=src;
+                }
+            }
+            if(src==limit) {
+                break;
+            }
+
+            // Check one above-minimum, relevant code point.
+            src+=Character.charCount(c);
+            if(buffer!=null) {
+                decompose(c, norm16, buffer);
+            } else {
+                if(isDecompYes(norm16)) {
+                    int cc=getCCFromYesOrMaybe(norm16);
+                    if(prevCC<=cc || cc==0) {
+                        prevCC=cc;
+                        if(cc<=1) {
+                            prevBoundary=src;
+                        }
+                        continue;
+                    }
+                }
+                return prevBoundary;  // "no" or cc out of order
+            }
+        }
+        return src;
+    }
+    public void decomposeAndAppend(CharSequence s, int src, int limit,
+                                   boolean doDecompose,
+                                   ReorderingBuffer buffer) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    public boolean compose(CharSequence s, int src, int limit,
+                           boolean onlyContiguous,
+                           boolean doCompose,
+                           ReorderingBuffer buffer) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    /**
+     * @return bits 31..1: spanQuickCheckYes (==s.length() if "yes") and
+     *         bit 0: set if "maybe"; if the span length&lt;s.length() and not "maybe"
+     *         then the quick check result is "no"
+     */
+    public int composeQuickCheck(CharSequence s, int src, int limit,
+                                 boolean onlyContiguous, boolean doSpan) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    public void composeAndAppend(CharSequence s, int src, int limit,
+                                 boolean doCompose,
+                                 boolean onlyContiguous,
+                                 ReorderingBuffer buffer) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    public int makeFCD(CharSequence s, int src, int limit, ReorderingBuffer buffer) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    public void makeFCDAndAppend(CharSequence s, int src, int limit,
+                                 boolean doMakeFCD,
+                                 ReorderingBuffer buffer) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+
+    public boolean hasDecompBoundary(int c, boolean before) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    public boolean isDecompInert(int c) { return isDecompYesAndZeroCC(getNorm16(c)); }
+
+    public boolean hasCompBoundaryBefore(int c) {
         return c<minCompNoMaybeCP || hasCompBoundaryBefore(c, getNorm16(c));
     }
-    UBool hasCompBoundaryAfter(UChar32 c, UBool onlyContiguous, UBool testInert) const;
+    public boolean hasCompBoundaryAfter(int c, boolean onlyContiguous, boolean testInert) {
+        throw new UnsupportedOperationException();  // TODO
+    }
 
-    UBool hasFCDBoundaryBefore(UChar32 c) const { return c<MIN_CCC_LCCC_CP || getFCD16(c)<=0xff; }
-    UBool hasFCDBoundaryAfter(UChar32 c) const {
-        uint16_t fcd16=getFCD16(c);
+    public boolean hasFCDBoundaryBefore(int c) { return c<MIN_CCC_LCCC_CP || getFCD16(c)<=0xff; }
+    public boolean hasFCDBoundaryAfter(int c) {
+        int fcd16=getFCD16(c);
         return fcd16<=1 || (fcd16&0xff)==0;
     }
-    UBool isFCDInert(UChar32 c) const { return getFCD16(c)<=1; }
-*/
-/* private ----
-    static UBool U_CALLCONV
-    isAcceptable(void *context, const char *type, const char *name, const UDataInfo *pInfo);
+    public boolean isFCDInert(int c) { return getFCD16(c)<=1; }
 
-    UBool isMaybe(uint16_t norm16) const { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
-    UBool isMaybeOrNonZeroCC(uint16_t norm16) const { return norm16>=minMaybeYes; }
-    static UBool isInert(uint16_t norm16) { return norm16==0; }
+    private boolean isMaybe(int norm16) { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
+    private boolean isMaybeOrNonZeroCC(int norm16) { return norm16>=minMaybeYes; }
+    private static boolean isInert(int norm16) { return norm16==0; }
     // static UBool isJamoL(uint16_t norm16) const { return norm16==1; }
-    static UBool isJamoVT(uint16_t norm16) { return norm16==JAMO_VT; }
-    UBool isHangul(uint16_t norm16) const { return norm16==minYesNo; }
-    UBool isCompYesAndZeroCC(uint16_t norm16) const { return norm16<minNoNo; }
+    private static boolean isJamoVT(int norm16) { return norm16==JAMO_VT; }
+    private boolean isHangul(int norm16) { return norm16==minYesNo; }
+    private boolean isCompYesAndZeroCC(int norm16) { return norm16<minNoNo; }
     // UBool isCompYes(uint16_t norm16) const {
     //     return norm16>=MIN_YES_YES_WITH_CC || norm16<minNoNo;
     // }
     // UBool isCompYesOrMaybe(uint16_t norm16) const {
     //     return norm16<minNoNo || minMaybeYes<=norm16;
     // }
-    UBool hasZeroCCFromDecompYes(uint16_t norm16) {
-        return norm16<=MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
-    }
-    UBool isDecompYesAndZeroCC(uint16_t norm16) const {
+    // private boolean hasZeroCCFromDecompYes(int norm16) {
+    //     return norm16<=MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
+    // }
+    private boolean isDecompYesAndZeroCC(int norm16) {
         return norm16<minYesNo ||
                norm16==JAMO_VT ||
                (minMaybeYes<=norm16 && norm16<=MIN_NORMAL_MAYBE_YES);
     }
-*/
     /**
      * A little faster and simpler than isDecompYesAndZeroCC() but does not include
      * the MaybeYes which combine-forward and have ccc=0.
      * (Standard Unicode 5.2 normalization does not have such characters.)
      */
-/*
-    UBool isMostDecompYesAndZeroCC(uint16_t norm16) const {
+    private boolean isMostDecompYesAndZeroCC(int norm16) {
         return norm16<minYesNo || norm16==MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
     }
-    UBool isDecompNoAlgorithmic(uint16_t norm16) const { return norm16>=limitNoNo; }
+    private boolean isDecompNoAlgorithmic(int norm16) { return norm16>=limitNoNo; }
 
     // For use with isCompYes().
     // Perhaps the compiler can combine the two tests for MIN_YES_YES_WITH_CC.
     // static uint8_t getCCFromYes(uint16_t norm16) {
     //     return norm16>=MIN_YES_YES_WITH_CC ? (uint8_t)norm16 : 0;
     // }
-    uint8_t getCCFromNoNo(uint16_t norm16) const {
-        const uint16_t *mapping=getMapping(norm16);
-        if(*mapping&MAPPING_HAS_CCC_LCCC_WORD) {
-            return (uint8_t)mapping[1];
+    private int getCCFromNoNo(int norm16) {
+        if((extraData.charAt(norm16)&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+            return extraData.charAt(norm16+1)&0xff;
         } else {
             return 0;
         }
     }
     // requires that the [cpStart..cpLimit[ character passes isCompYesAndZeroCC()
-    uint8_t getTrailCCFromCompYesAndZeroCC(const UChar *cpStart, const UChar *cpLimit) const;
+    int getTrailCCFromCompYesAndZeroCC(CharSequence s, int cpStart, int cpLimit) {
+        int c;
+        if(cpStart==(cpLimit-1)) {
+            c=s.charAt(cpStart);
+        } else {
+            c=Character.codePointAt(s, cpStart);
+        }
+        int prevNorm16=getNorm16(c);
+        if(prevNorm16<=minYesNo) {
+            return 0;  // yesYes and Hangul LV/LVT have ccc=tccc=0
+        } else {
+            return extraData.charAt(prevNorm16)>>8;  // tccc from yesNo
+        }
+    }
 
     // Requires algorithmic-NoNo.
-    UChar32 mapAlgorithmic(UChar32 c, uint16_t norm16) const {
+    private int mapAlgorithmic(int c, int norm16) {
         return c+norm16-(minMaybeYes-MAX_DELTA-1);
     }
 
     // Requires minYesNo<norm16<limitNoNo.
-    const uint16_t *getMapping(uint16_t norm16) const { return extraData+norm16; }
-    const uint16_t *getCompositionsListForDecompYesAndZeroCC(uint16_t norm16) const {
+    // private int getMapping(int norm16) { return /*extraData+*/norm16; }
+
+    /**
+     * @return index into maybeYesCompositions, or -1
+     */
+    private int getCompositionsListForDecompYesAndZeroCC(int norm16) {
         if(norm16==0 || MIN_NORMAL_MAYBE_YES<=norm16) {
-            return NULL;
-        } else if(norm16<minMaybeYes) {
-            return extraData+norm16;  // for yesYes; if Jamo L: harmless empty list
+            return -1;
         } else {
-            return maybeYesCompositions+norm16-minMaybeYes;
+            if((norm16-=minMaybeYes)<0) {
+                // norm16<minMaybeYes: index into extraData which is a substring at
+                //     maybeYesCompositions[MIN_NORMAL_MAYBE_YES-minMaybeYes]
+                // same as (MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16
+                norm16+=MIN_NORMAL_MAYBE_YES;  // for yesYes; if Jamo L: harmless empty list
+            }
+            return norm16;
         }
     }
-    const uint16_t *getCompositionsListForComposite(uint16_t norm16) const {
-        const uint16_t *list=extraData+norm16;  // composite has both mapping & compositions list
-        return list+  // mapping pointer
+    /**
+     * @return index into maybeYesCompositions
+     */
+    private int getCompositionsListForComposite(int norm16) {
+        // composite has both mapping & compositions list
+        int firstUnit=extraData.charAt(norm16);
+        return (MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16+  // mapping in maybeYesCompositions
             1+  // +1 to skip the first unit with the mapping lenth
-            (*list&MAPPING_LENGTH_MASK)+  // + mapping length
-            ((*list>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
+            (firstUnit&MAPPING_LENGTH_MASK)+  // + mapping length
+            ((firstUnit>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
     }
 
-    const UChar *copyLowPrefixFromNulTerminated(const UChar *src,
-                                                UChar32 minNeedDataCP,
-                                                ReorderingBuffer *buffer,
-                                                UErrorCode &errorCode) const;
-    UBool decomposeShort(const UChar *src, const UChar *limit,
-                         ReorderingBuffer &buffer) const;
-    UBool decompose(UChar32 c, uint16_t norm16,
-                    ReorderingBuffer &buffer) const;
+    // Decompose a short piece of text which is likely to contain characters that
+    // fail the quick check loop and/or where the quick check loop's overhead
+    // is unlikely to be amortized.
+    // Called by the compose() and makeFCD() implementations.
+    private void decomposeShort(CharSequence s, int src, int limit,
+                                ReorderingBuffer buffer) {
+        while(src<limit) {
+            // TODO: use trie string iterator?? C++ uses UTRIE2_U16_NEXT16(normTrie, src, limit, c, norm16);
+            int c=Character.codePointAt(s, src);
+            src+=Character.charCount(c);
+            decompose(c, getNorm16(c), buffer);
+        }
+    }
+    private void decompose(int c, int norm16,
+                           ReorderingBuffer buffer) {
+        // Only loops for 1:1 algorithmic mappings.
+        for(;;) {
+            // get the decomposition and the lead and trail cc's
+            if(isDecompYes(norm16)) {
+                // c does not decompose
+                buffer.append(c, getCCFromYesOrMaybe(norm16));
+            } else if(isHangul(norm16)) {
+                // Hangul syllable: decompose algorithmically
+                Hangul.decompose(c, buffer);
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                c=mapAlgorithmic(c, norm16);
+                norm16=getNorm16(c);
+                continue;
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16++);
+                int length=firstUnit&MAPPING_LENGTH_MASK;
+                int leadCC, trailCC;
+                trailCC=firstUnit>>8;
+                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                    leadCC=extraData.charAt(norm16++)>>8;
+                } else {
+                    leadCC=0;
+                }
+                buffer.append(extraData, norm16, norm16+length, leadCC, trailCC);
+            }
+            return;
+        }
+    }
 
-    static int32_t combine(const uint16_t *list, UChar32 trail);
-    void recompose(ReorderingBuffer &buffer, int32_t recomposeStartIndex,
-                   UBool onlyContiguous) const;
+    private static int combine(CharSequence compositions, int list, int trail) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    private void recompose(ReorderingBuffer buffer, int recomposeStartIndex,
+                           boolean onlyContiguous) {
+        throw new UnsupportedOperationException();  // TODO
+    }
 
-    UBool hasCompBoundaryBefore(UChar32 c, uint16_t norm16) const;
-    const UChar *findPreviousCompBoundary(const UChar *start, const UChar *p) const;
-    const UChar *findNextCompBoundary(const UChar *p, const UChar *limit) const;
+    private boolean hasCompBoundaryBefore(int c, int norm16) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    private int findPreviousCompBoundary(CharSequence s, int start, int p) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    private int findNextCompBoundary(CharSequence s, int p, int limit) {
+        throw new UnsupportedOperationException();  // TODO
+    }
 
-    const UTrie2 *fcdTrie() const { return (const UTrie2 *)fcdTrieSingleton.fInstance; }
+    private int findPreviousFCDBoundary(CharSequence s, int start, int p) {
+        throw new UnsupportedOperationException();  // TODO
+    }
+    private int findNextFCDBoundary(CharSequence s, int p, int limit) {
+        throw new UnsupportedOperationException();  // TODO
+    }
 
-    const UChar *findPreviousFCDBoundary(const UChar *start, const UChar *p) const;
-    const UChar *findNextFCDBoundary(const UChar *p, const UChar *limit) const;
-*/
     VersionInfo dataVersion;
 
     // Code point thresholds for quick check codes.
