@@ -106,6 +106,13 @@ public:
     UChar *getLimit() { return limit; }
     uint8_t getLastCC() const { return lastCC; }
 
+    UBool equals(const UChar *start, const UChar *limit) const;
+
+    // For Hangul composition, replacing the Leading consonant Jamo with the syllable.
+    void setLastChar(UChar c) {
+        *(limit-1)=c;
+    }
+
     UBool append(UChar32 c, uint8_t cc, UErrorCode &errorCode) {
         return (c<=0xffff) ?
             appendBMP((UChar)c, cc, errorCode) :
@@ -133,6 +140,7 @@ public:
     }
     UBool appendZeroCC(UChar32 c, UErrorCode &errorCode);
     UBool appendZeroCC(const UChar *s, const UChar *sLimit, UErrorCode &errorCode);
+    void remove();
     void removeSuffix(int32_t length);
     void setReorderingLimit(UChar *newLimit) {
         remainingCapacity+=(int32_t)(limit-newLimit);
