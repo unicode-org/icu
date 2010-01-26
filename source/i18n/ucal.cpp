@@ -135,6 +135,9 @@ ucal_open(  const UChar*  zoneID,
 
   if ( caltype == UCAL_GREGORIAN ) {
       char  localeBuf[ULOC_LOCALE_IDENTIFIER_CAPACITY];
+      if ( locale == NULL ) {
+          locale = uloc_getDefault();
+      }
       uprv_strncpy(localeBuf, locale, ULOC_LOCALE_IDENTIFIER_CAPACITY);
       uloc_setKeywordValue("calendar", "gregorian", localeBuf, ULOC_LOCALE_IDENTIFIER_CAPACITY, status);
       if (U_FAILURE(*status)) {

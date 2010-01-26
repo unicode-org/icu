@@ -71,6 +71,9 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { "ja_JP@calendar=japanese", UCAL_DEFAULT,   "japanese"  },
     { "th_TH",                   UCAL_GREGORIAN, "gregorian" },
     { "th_TH",                   UCAL_DEFAULT,   "buddhist"  },
+    { "ja_JP@calendar=japanese", UCAL_GREGORIAN, "gregorian" },
+    { "",                        UCAL_GREGORIAN, "gregorian" },
+    { NULL,                      UCAL_GREGORIAN, "gregorian" },
     { NULL, 0, NULL } /* terminator */
 };    
     
@@ -415,22 +418,23 @@ static void TestCalendar()
     ucal_close(calfrclone);
     
     /*testing ucal_getType, and ucal_open with UCAL_GREGORIAN*/
-    for (ucalGetTypeTestPtr = ucalGetTypeTests; ucalGetTypeTestPtr->locale != NULL; ++ucalGetTypeTestPtr) {
+    for (ucalGetTypeTestPtr = ucalGetTypeTests; ucalGetTypeTestPtr->expectedResult != NULL; ++ucalGetTypeTestPtr) {
+        const char * localeToDisplay = (ucalGetTypeTestPtr->locale != NULL)? ucalGetTypeTestPtr->locale: "<NULL>";
         status = U_ZERO_ERROR;
         caldef = ucal_open(NULL, 0, ucalGetTypeTestPtr->locale, ucalGetTypeTestPtr->calType, &status);
         if ( U_SUCCESS(status) ) {
             const char * calType = ucal_getType(caldef, &status);
             if ( U_SUCCESS(status) && calType != NULL ) {
                 if ( strcmp( calType, ucalGetTypeTestPtr->expectedResult ) != 0 ) {
-                    log_err("FAIL: ucal_open %s type %d does not return %s calendar\n", ucalGetTypeTestPtr->locale,
+                    log_err("FAIL: ucal_open %s type %d does not return %s calendar\n", localeToDisplay,
                                                 ucalGetTypeTestPtr->calType, ucalGetTypeTestPtr->expectedResult);
                 }
             } else {
-                log_err("FAIL: ucal_open %s type %d, then ucal_getType fails\n", ucalGetTypeTestPtr->locale, ucalGetTypeTestPtr->calType);
+                log_err("FAIL: ucal_open %s type %d, then ucal_getType fails\n", localeToDisplay, ucalGetTypeTestPtr->calType);
             }
             ucal_close(caldef);
         } else {
-            log_err("FAIL: ucal_open %s type %d fails\n", ucalGetTypeTestPtr->locale, ucalGetTypeTestPtr->calType);
+            log_err("FAIL: ucal_open %s type %d fails\n", localeToDisplay, ucalGetTypeTestPtr->calType);
         }
     }
 
