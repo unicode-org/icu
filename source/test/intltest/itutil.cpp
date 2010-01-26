@@ -204,7 +204,7 @@ static IntlTest *createLocalPointerTest() {
     return new LocalPointerTest();
 }
 
-void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char */*par*/) {
+void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite LocalPointerTest: ");
     }
