@@ -962,7 +962,7 @@ public final class ZoneMeta {
                 UResourceBundle metazonesBundle = null;
                 try {
                     UResourceBundle supplementalBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
-                        "supplementalData");
+                        "metazoneInfo");
                     UResourceBundle  mapTimezonesBundle = supplementalBundle.get("mapTimezones");
                     metazonesBundle = mapTimezonesBundle.get("metazones");
                 } catch (MissingResourceException mre) {
