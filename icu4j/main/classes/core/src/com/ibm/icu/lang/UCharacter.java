@@ -2070,7 +2070,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
         private static String trimBlockName(String name) {
             String upper = name.toUpperCase();
-            StringBuffer result = new StringBuffer(upper.length());
+            StringBuilder result = new StringBuilder(upper.length());
             for (int i = 0; i < upper.length(); i++) {
                 char c = upper.charAt(i);
                 if (c != ' ' && c != '_' && c != '-') {
@@ -3939,7 +3939,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return getName(s.charAt(0));
         }
         int cp;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s,i);
             if (i != 0) sb.append(separator);

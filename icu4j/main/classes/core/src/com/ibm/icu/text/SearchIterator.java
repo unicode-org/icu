@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -347,7 +347,7 @@ public abstract class SearchIterator
     {
         if (matchLength > 0) {
             int limit = m_lastMatchStart_ + matchLength;
-            StringBuffer result = new StringBuffer(matchLength);
+            StringBuilder result = new StringBuilder(matchLength);
             result.append(targetText.current());
             targetText.next();
             while (targetText.getIndex() < limit) {

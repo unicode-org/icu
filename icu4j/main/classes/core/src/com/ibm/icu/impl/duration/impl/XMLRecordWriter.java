@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and   *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -118,7 +118,7 @@ public class XMLRecordWriter implements RecordWriter {
         if (str == null) {
             return null;
         }
-        StringBuffer sb = null;
+        StringBuilder sb = null;
         boolean inWhitespace = false;
         char c = '\0';
         boolean special = false;
@@ -126,7 +126,7 @@ public class XMLRecordWriter implements RecordWriter {
             c = str.charAt(i);
             if (UCharacter.isWhitespace(c)) {
                 if (sb == null && (inWhitespace || c != ' ')) {
-                    sb = new StringBuffer(str.substring(0, i));
+                    sb = new StringBuilder(str.substring(0, i));
                 }
                 if (inWhitespace) {
                     continue;
@@ -138,7 +138,7 @@ public class XMLRecordWriter implements RecordWriter {
                 inWhitespace = false;
                 special = c == '<' || c == '&';
                 if (special && sb == null) {
-                    sb = new StringBuffer(str.substring(0, i));
+                    sb = new StringBuilder(str.substring(0, i));
                 }
             }
             if (sb != null) {

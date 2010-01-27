@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -157,7 +157,7 @@ public class PluralRulesLoader {
                 UResourceBundle rulesb = pluralb.get("rules");
                 UResourceBundle setb = rulesb.get(rulesId);
 
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < setb.getSize(); ++i) {
                     UResourceBundle b = setb.get(i);
                     if (i > 0) {

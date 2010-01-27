@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -434,7 +434,7 @@ public class VTimeZone extends BasicTimeZone {
             boolean eol = false;
             boolean start = false;
             boolean success = false;
-            StringBuffer line = new StringBuffer();
+            StringBuilder line = new StringBuilder();
             while (true) {
                 int ch = reader.read();
                 if (ch == -1) {
@@ -1841,7 +1841,7 @@ public class VTimeZone extends BasicTimeZone {
      */
     private static String getDateTimeString(long time) {
         int[] fields = Grego.timeToFields(time, null);
-        StringBuffer sb = new StringBuffer(15);
+        StringBuilder sb = new StringBuilder(15);
         sb.append(numToString(fields[0], 4));
         sb.append(numToString(fields[1] + 1, 2));
         sb.append(numToString(fields[2], 2));
@@ -1981,7 +1981,7 @@ public class VTimeZone extends BasicTimeZone {
      * Convert milliseconds to RFC2445 utc-offset string
      */
     private static String millisToOffset(int millis) {
-        StringBuffer sb = new StringBuffer(7);
+        StringBuilder sb = new StringBuilder(7);
         if (millis >= 0) {
             sb.append('+');
         } else {
@@ -2012,7 +2012,7 @@ public class VTimeZone extends BasicTimeZone {
         if (len >= width) {
             return str.substring(len - width, len);
         }
-        StringBuffer sb = new StringBuffer(width);
+        StringBuilder sb = new StringBuilder(width);
         for (int i = len; i < width; i++) {
             sb.append('0');
         }

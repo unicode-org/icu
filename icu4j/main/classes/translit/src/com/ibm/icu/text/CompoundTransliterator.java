@@ -195,7 +195,7 @@ class CompoundTransliterator extends Transliterator {
         // If the direction is UTRANS_REVERSE then we may need to fix the
         // ID.
         if (direction == REVERSE && fixReverseID) {
-            StringBuffer newID = new StringBuffer();
+            StringBuilder newID = new StringBuilder();
             for (i=0; i<count; ++i) {
                 if (i > 0) {
                     newID.append(ID_DELIM);
@@ -244,7 +244,7 @@ class CompoundTransliterator extends Transliterator {
     /**
      * Append c to buf, unless buf is empty or buf already ends in c.
      */
-    private static void _smartAppend(StringBuffer buf, char c) {
+    private static void _smartAppend(StringBuilder buf, char c) {
         if (buf.length() != 0 &&
             buf.charAt(buf.length() - 1) != c) {
             buf.append(c);
@@ -268,7 +268,7 @@ class CompoundTransliterator extends Transliterator {
         // handle compound RBT transliterators specially -- those for which
         // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
         // we do call toRules() recursively.
-        StringBuffer rulesSource = new StringBuffer();
+        StringBuilder rulesSource = new StringBuilder();
         if (numAnonymousRBTs >= 1 && getFilter() != null) {
             // If we are a compound RBT and if we have a global
             // filter, then emit it at the top.

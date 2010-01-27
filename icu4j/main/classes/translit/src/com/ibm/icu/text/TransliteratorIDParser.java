@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2009, International Business Machines Corporation
+*   Copyright (c) 2002-2010, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -508,7 +508,7 @@ class TransliteratorIDParser {
     public static String STVtoID(String source,
                                  String target,
                                  String variant) {
-        StringBuffer id = new StringBuffer(source);
+        StringBuilder id = new StringBuilder(source);
         if (id.length() == 0) {
             id.append(ANY);
         }
@@ -696,7 +696,7 @@ class TransliteratorIDParser {
         String basicID = "";
         String basicPrefix = "";
         if (specs != null) {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             if (dir == FORWARD) {
                 if (specs.sawSource) {
                     buf.append(specs.source).append(TARGET_SEP);
@@ -735,7 +735,7 @@ class TransliteratorIDParser {
             // If the original ID contained "Any-" then make the
             // special inverse "Any-Foo"; otherwise make it "Foo".
             // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             if (specs.filter != null) {
                 buf.append(specs.filter);
             }

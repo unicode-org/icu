@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -60,7 +60,7 @@ final class BidiWriter {
             return dest.toString();
         }
         case Bidi.REMOVE_BIDI_CONTROLS: {
-            StringBuffer dest = new StringBuffer(src.length());
+            StringBuilder dest = new StringBuilder(src.length());
 
             /* copy the LTR run and remove any Bidi control characters */
             int i = 0;
@@ -237,7 +237,7 @@ final class BidiWriter {
     static String writeReordered(Bidi bidi, int options)
     {
         int run, runCount;
-        StringBuffer dest;
+        StringBuilder dest;
         char[] text = bidi.text;
         runCount = bidi.countRuns();
 
@@ -267,7 +267,7 @@ final class BidiWriter {
             (bidi.reorderingMode != Bidi.REORDER_RUNS_ONLY)) {
             options &= ~Bidi.INSERT_LRM_FOR_NUMERIC;
         }
-        dest = new StringBuffer((options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0 ?
+        dest = new StringBuilder((options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0 ?
                                  bidi.length * 2 : bidi.length);
         /*
          * Iterate through all visual runs and copy the run text segments to

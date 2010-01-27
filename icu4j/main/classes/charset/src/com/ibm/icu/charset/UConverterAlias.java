@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -201,7 +201,7 @@ final class UConverterAlias {
         int mid, start, limit;
         int lastMid;
         int result;
-        StringBuffer strippedName = new StringBuffer();
+        StringBuilder strippedName = new StringBuilder();
         String aliasToCompare;
 
         stripForCompare(strippedName, alias);
@@ -257,7 +257,7 @@ final class UConverterAlias {
      * @param name The alias to strip
      * @return the destination buffer.
      */
-    public static final StringBuffer stripForCompare(StringBuffer dst, String name) {
+    public static final StringBuilder stripForCompare(StringBuilder dst, String name) {
         return io_stripASCIIForCompare(dst, name);
     }
 
@@ -285,7 +285,7 @@ final class UConverterAlias {
     }
     
     /** @see UConverterAlias#compareNames */
-    private static final StringBuffer io_stripASCIIForCompare(StringBuffer dst, String name) {
+    private static final StringBuilder io_stripASCIIForCompare(StringBuilder dst, String name) {
         int nameIndex = 0;
         char type, nextType;
         char c1;

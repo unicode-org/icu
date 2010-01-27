@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -74,7 +74,7 @@ public class TimeZoneTransition {
      * @stable ICU 3.8
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("time=" + time);
         buf.append(", from={" + from + "}");
         buf.append(", to={" + to + "}");

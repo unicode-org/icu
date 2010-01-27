@@ -264,7 +264,7 @@ public class ICULocaleService extends ICUService {
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
-                StringBuffer buf = new StringBuffer(); // default capacity 16 is usually good enough
+                StringBuilder buf = new StringBuilder(); // default capacity 16 is usually good enough
                 if (kind != KIND_ANY) {
                     buf.append(prefix());
                 }
@@ -450,7 +450,7 @@ public class ICULocaleService extends ICUService {
          * For debugging.
          */
         public String toString() {
-            StringBuffer buf = new StringBuffer(super.toString());
+            StringBuilder buf = new StringBuilder(super.toString());
             if (name != null) {
                 buf.append(", name: ");
                 buf.append(name);
@@ -509,7 +509,7 @@ public class ICULocaleService extends ICUService {
         }
 
         public String toString() {
-            StringBuffer buf = new StringBuffer(super.toString());
+            StringBuilder buf = new StringBuilder(super.toString());
             buf.append(", id: ");
             buf.append(id);
             buf.append(", kind: ");

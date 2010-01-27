@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -186,7 +186,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
             size -= (variant << 1);
         }
           
-        StringBuffer prefix = new StringBuffer();
+        StringBuilder prefix = new StringBuilder();
         char c = (char)(m_dataInputStream_.readByte() & 0x00FF);
         while (c != 0)
         {

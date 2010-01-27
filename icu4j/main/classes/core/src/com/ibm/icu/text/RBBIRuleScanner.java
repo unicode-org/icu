@@ -341,7 +341,7 @@ class RBBIRuleScanner {
         // sets that just happen to contain only one character.
         {
             n = pushNewNode(RBBINode.setRef);
-            String s = (new StringBuffer().append((char) fC.fChar)).toString();
+            String s = String.valueOf((char)fC.fChar);
             findSetFor(s, n, null);
             n.fFirstPos = fScanIndex;
             n.fLastPos = fNextIndex;
@@ -664,7 +664,7 @@ class RBBIRuleScanner {
     //
     //----------------------------------------------------------------------------------------
     static String stripRules(String rules) {
-        StringBuffer strippedRules = new StringBuffer();
+        StringBuilder strippedRules = new StringBuilder();
         int rulesLength = rules.length();
         for (int idx = 0; idx < rulesLength;) {
             char ch = rules.charAt(idx++);

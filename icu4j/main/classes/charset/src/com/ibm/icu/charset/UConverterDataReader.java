@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */ 
@@ -528,7 +528,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     protected String readBaseTableName() throws IOException
     {
         char c;
-        StringBuffer name = new StringBuffer();
+        StringBuilder name = new StringBuilder();
         while((c = (char)dataInputStream.readByte()) !=  0){
             name.append(c);
             bytesRead++;

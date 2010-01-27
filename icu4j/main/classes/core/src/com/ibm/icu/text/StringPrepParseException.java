@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -143,7 +143,7 @@ public class StringPrepParseException extends ParseException {
      * @stable ICU 2.8
      */
     public String toString(){
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(super.getMessage());
         buf.append(". line:  ");
         buf.append(line);
@@ -158,12 +158,11 @@ public class StringPrepParseException extends ParseException {
     private int error;
     
     /**
-     * The line on which the error occured.  If the parse engine
+     * The line on which the error occurred.  If the parse engine
      * is not using this field, it should set it to zero.  Otherwise
      * it should be a positive integer. The default value of this field
      * is -1. It will be set to 0 if the code populating this struct is not
      * using line numbers.
-     * @stable ICU 2.8  
      */
     private int line;
 
@@ -171,14 +170,12 @@ public class StringPrepParseException extends ParseException {
     /**
      * Textual context before the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
-     * @stable ICU 2.8
      */
     private StringBuffer preContext = new StringBuffer();
 
     /**
      * Textual context after the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
-     * @stable ICU 2.8   
      */
     private StringBuffer postContext =  new StringBuffer();
     

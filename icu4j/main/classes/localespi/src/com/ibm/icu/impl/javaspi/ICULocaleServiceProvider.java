@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -124,7 +124,7 @@ public class ICULocaleServiceProvider {
             String country = loc.getCountry();
             String variant = loc.getVariant();
 
-            StringBuffer var = new StringBuffer(variant);
+            StringBuilder var = new StringBuilder(variant);
             if (var.length() != 0) {
                 var.append("_");
             }

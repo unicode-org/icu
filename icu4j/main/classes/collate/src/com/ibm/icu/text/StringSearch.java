@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -453,14 +453,14 @@ public final class StringSearch extends SearchIterator
         m_isCanonicalMatch_ = allowCanonical;
         if (m_isCanonicalMatch_ == true) {
             if (m_canonicalPrefixAccents_ == null) {
-                m_canonicalPrefixAccents_ = new StringBuffer();
+                m_canonicalPrefixAccents_ = new StringBuilder();
             }
             else {
                 m_canonicalPrefixAccents_.delete(0, 
                                             m_canonicalPrefixAccents_.length());
             }
             if (m_canonicalSuffixAccents_ == null) {
-                m_canonicalSuffixAccents_ = new StringBuffer();
+                m_canonicalSuffixAccents_ = new StringBuilder();
             }
             else {
                 m_canonicalSuffixAccents_.delete(0, 
@@ -746,11 +746,11 @@ public final class StringSearch extends SearchIterator
     /**
      * Buffer storing accents during a canonical search
      */
-    private StringBuffer m_canonicalPrefixAccents_;
+    private StringBuilder m_canonicalPrefixAccents_;
     /**
      * Buffer storing accents during a canonical search
      */
-    private StringBuffer m_canonicalSuffixAccents_;
+    private StringBuilder m_canonicalSuffixAccents_;
     /**
      * Flag to indicate if canonical search is to be done.
      * E.g looking for "a\u0300" in "a\u0318\u0300" will yield the match at 0.
@@ -1634,7 +1634,7 @@ public final class StringSearch extends SearchIterator
     *         are not blocked
     * @return the length of populated accentsindex
     */
-    private int getUnblockedAccentIndex(StringBuffer accents, 
+    private int getUnblockedAccentIndex(StringBuilder accents, 
                                         int accentsindex[])
     {
         int index = 0;
@@ -1661,7 +1661,7 @@ public final class StringSearch extends SearchIterator
     }
 
     /**
-     * Appends 3 StringBuffer/CharacterIterator together into a destination 
+     * Appends 3 StringBuilder/CharacterIterator together into a destination 
      * string buffer.
      * @param source1 string buffer
      * @param source2 character iterator
@@ -1670,19 +1670,14 @@ public final class StringSearch extends SearchIterator
      * @param source3 string buffer
      * @return appended string buffer
      */
-    private static final StringBuffer merge(StringBuffer source1, 
+    private static final StringBuilder merge(StringBuilder source1, 
                                              CharacterIterator source2,
                                              int start2, int end2,
-                                             StringBuffer source3) 
+                                             StringBuilder source3) 
     {
-        StringBuffer result = new StringBuffer();    
+        StringBuilder result = new StringBuilder();    
         if (source1 != null && source1.length() != 0) {
-            // jdk 1.3.1 does not have append(StringBuffer) yet
-            if(com.ibm.icu.impl.ICUDebug.isJDK14OrHigher){
-                result.append(source1);
-            }else{
-                result.append(source1.toString());
-            }
+            result.append(source1);
         }
         source2.setIndex(start2);
         while (source2.getIndex() < end2) {
@@ -1690,12 +1685,7 @@ public final class StringSearch extends SearchIterator
             source2.next();
         }
         if (source3 != null && source3.length() != 0) {
-            // jdk 1.3.1 does not have append(StringBuffer) yet
-            if(com.ibm.icu.impl.ICUDebug.isJDK14OrHigher){
-                result.append(source3);
-            }else{
-                result.append(source3.toString());
-            }
+            result.append(source3);
         }
         return result;
     }
@@ -1753,7 +1743,7 @@ public final class StringSearch extends SearchIterator
         int offset = getNextBaseOffset(targetText, start);
         start = getPreviousBaseOffset(start);
     
-        StringBuffer accents = new StringBuffer();
+        StringBuilder accents = new StringBuilder();
         String accentstr = getString(targetText, start, offset - start);
         // normalizing the offensive string
         if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
@@ -1784,7 +1774,7 @@ public final class StringSearch extends SearchIterator
                     }
                 }
             }
-            StringBuffer match = merge(m_canonicalPrefixAccents_,
+            StringBuilder match = merge(m_canonicalPrefixAccents_,
                                        targetText, offset, end,
                                        m_canonicalSuffixAccents_);
                 
@@ -1838,7 +1828,7 @@ public final class StringSearch extends SearchIterator
     private int doNextCanonicalSuffixMatch(int textoffset)
     {
         int safelength = 0;
-        StringBuffer safetext;
+        StringBuilder safetext;
         int safeoffset = m_textBeginOffset_; 
         
         if (textoffset != m_textBeginOffset_ 
@@ -1968,7 +1958,7 @@ public final class StringSearch extends SearchIterator
             return false;
         }
     
-        StringBuffer accents = new StringBuffer();
+        StringBuilder accents = new StringBuilder();
         // offset to the last base character in substring to search
         int baseoffset = getPreviousBaseOffset(targetText, textoffset);
         // normalizing the offensive string
@@ -2368,7 +2358,7 @@ public final class StringSearch extends SearchIterator
         }
         end = getNextBaseOffset(targetText, end);
     
-        StringBuffer accents = new StringBuffer();
+        StringBuilder accents = new StringBuilder();
         int offset = getPreviousBaseOffset(targetText, end);
         // normalizing the offensive string
         String accentstr = getString(targetText, offset, end - offset);
@@ -2399,7 +2389,7 @@ public final class StringSearch extends SearchIterator
                     }
                 }
             }
-            StringBuffer match = merge(m_canonicalPrefixAccents_, targetText,
+            StringBuilder match = merge(m_canonicalPrefixAccents_, targetText,
                                         start, offset, 
                                         m_canonicalSuffixAccents_);
             // run the collator iterator through this match
@@ -2429,7 +2419,7 @@ public final class StringSearch extends SearchIterator
     private int doPreviousCanonicalPrefixMatch(int textoffset)
     {
        // int safelength = 0;
-        StringBuffer safetext;
+        StringBuilder safetext;
         int safeoffset = textoffset;
     
         if (textoffset > m_textBeginOffset_
@@ -2557,7 +2547,7 @@ public final class StringSearch extends SearchIterator
             return false;
         }
     
-        StringBuffer accents = new StringBuffer();
+        StringBuilder accents = new StringBuilder();
         // offset to the last base character in substring to search
         int baseoffset = getNextBaseOffset(targetText, textoffset);
         // normalizing the offensive string
@@ -3101,7 +3091,7 @@ public final class StringSearch extends SearchIterator
     private static final String getString(CharacterIterator text, int start,
                                             int length)
     {
-        StringBuffer result = new StringBuffer(length);
+        StringBuilder result = new StringBuilder(length);
         int offset = text.getIndex();
         text.setIndex(start);
         for (int i = 0; i < length; i ++) {

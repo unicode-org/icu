@@ -542,9 +542,9 @@ public class MessageFormat extends UFormat {
      */
     @SuppressWarnings("fallthrough")
     public void applyPattern(String pttrn) {
-        StringBuffer[] segments = new StringBuffer[4];
+        StringBuilder[] segments = new StringBuilder[4];
         for (int i = 0; i < segments.length; ++i) {
-            segments[i] = new StringBuffer();
+            segments[i] = new StringBuilder();
         }
         int part = 0;
         int formatNumber = 0;
@@ -621,7 +621,7 @@ public class MessageFormat extends UFormat {
     public String toPattern() {
         // later, make this more extensible
         int lastOffset = 0;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i <= maxOffset; ++i) {
             copyAndFixQuotes(pattern, lastOffset, offsets[i],result);
             lastOffset = offsets[i];
@@ -693,20 +693,20 @@ public class MessageFormat extends UFormat {
     /**
       * Double every single quote
       */
-    private String duplicateSingleQuotes(String pat){
-      String result = pat;
-      if (pat.indexOf('\'') != 0) {
-        StringBuffer buf = new StringBuffer();
-        for (int j = 0; j < pat.length(); ++j) {
-          char ch = pat.charAt(j);
-          if (ch == '\'') {
-            buf.append(ch); // double it
-          }
-          buf.append(ch);
+    private String duplicateSingleQuotes(String pat) {
+        String result = pat;
+        if (pat.indexOf('\'') != 0) {
+            StringBuilder buf = new StringBuilder();
+            for (int j = 0; j < pat.length(); ++j) {
+                char ch = pat.charAt(j);
+                if (ch == '\'') {
+                    buf.append(ch); // double it
+                }
+                buf.append(ch);
+            }
+            result = buf.toString();
         }
-        result = buf.toString();
-      }
-      return result;
+        return result;
     }
 
     /**
@@ -1874,7 +1874,7 @@ public class MessageFormat extends UFormat {
         DATE_MODIFIER_FULL = 4;
 
     private void makeFormat(int position, int offsetNumber,
-                            StringBuffer[] segments)
+                            StringBuilder[] segments)
     {
         // get the argument number
         // int argumentNumber;
@@ -2064,7 +2064,7 @@ public class MessageFormat extends UFormat {
                 // PluralFormat and SelectFormat does not handle quotes.
                 // Remove quotes.
                 // TODO: Should PluralFormat and SelectFormat handle quotes?
-                StringBuffer unquotedPattern = new StringBuffer();
+                StringBuilder unquotedPattern = new StringBuilder();
                 String quotedPattern = segments[3].toString();
                 boolean inQuote = false;
                 for (int i = 0; i < quotedPattern.length(); ++i) {
@@ -2111,7 +2111,7 @@ public class MessageFormat extends UFormat {
     }
 
     private static final void copyAndFixQuotes(String source, int start, int end, 
-            StringBuffer target) {
+            StringBuilder target) {
         // added 'gotLB' logic from ICU4C - questionable [alan]
         boolean gotLB = false;
         for (int i = start; i < end; ++i) {
@@ -2230,7 +2230,7 @@ public class MessageFormat extends UFormat {
      * @stable ICU 3.4
      */
     public static String autoQuoteApostrophe(String pattern) {
-        StringBuffer buf = new StringBuffer(pattern.length() * 2);
+        StringBuilder buf = new StringBuilder(pattern.length() * 2);
         int state = STATE_INITIAL;
         int braceCount = 0;
         for (int i = 0, j = pattern.length(); i < j; ++i) {
@@ -2316,7 +2316,7 @@ public class MessageFormat extends UFormat {
             return _createAttributedCharacterIterator("");
         }
         // Create a single AttributedString
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < iterators.length; i++) {
             int index = iterators[i].getBeginIndex();
             int end = iterators[i].getEndIndex();

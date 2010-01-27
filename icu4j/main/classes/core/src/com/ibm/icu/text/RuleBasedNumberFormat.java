@@ -878,7 +878,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // accumulate the descriptions of all the rule sets in a
         // StringBuffer, then cast it to a String and return it
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < ruleSets.length; i++) {
             result.append(ruleSets[i].toString());
         }
@@ -1430,7 +1430,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param specialName the name of the special rule text to extract
      * @return the special rule text, or null if the rule was not found
      */
-    private String extractSpecial(StringBuffer description, String specialName) {
+    private String extractSpecial(StringBuilder description, String specialName) {
         String result = null;
         int lp = description.indexOf(specialName);
         if (lp != -1) {
@@ -1478,7 +1478,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // description).  This allows us to look for rule-set boundaries
         // by searching for ";%" without having to worry about whitespace
         // between the ; and the %
-        StringBuffer descBuf = stripWhitespace(description);
+        StringBuilder descBuf = stripWhitespace(description);
 
         // check to see if there's a set of lenient-parse rules.  If there
         // is, pull them out into our temporary holding place for them,
@@ -1638,10 +1638,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return The description with all the whitespace that follows semicolons
      * taken out.
      */
-    private StringBuffer stripWhitespace(String description) {
+    private StringBuilder stripWhitespace(String description) {
         // since we don't have a method that deletes characters (why?!!)
         // create a new StringBuffer to copy the text into
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         // iterate through the characters...
         int start = 0;

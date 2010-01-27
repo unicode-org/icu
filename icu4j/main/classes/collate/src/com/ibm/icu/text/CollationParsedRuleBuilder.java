@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -559,7 +559,7 @@ final class CollationParsedRuleBuilder {
         }
 
         m_utilElement_.clear();
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
 
         // add latin-1 stuff
         copyRangeFromUCA(t, 0, 0xFF);
@@ -836,12 +836,12 @@ final class CollationParsedRuleBuilder {
 
         BasicContractionTable() {
             m_CEs_ = new Vector<Integer>();
-            m_codePoints_ = new StringBuffer();
+            m_codePoints_ = new StringBuilder();
         }
 
         // package private data members -------------------------------------
 
-        StringBuffer m_codePoints_;
+        StringBuilder m_codePoints_;
         Vector<Integer> m_CEs_;
     }
 
@@ -857,7 +857,7 @@ final class CollationParsedRuleBuilder {
             m_mapping_ = mapping;
             m_elements_ = new Vector<BasicContractionTable>();
             m_CEs_ = new Vector<Integer>();
-            m_codePoints_ = new StringBuffer();
+            m_codePoints_ = new StringBuilder();
             m_offsets_ = new Vector<Integer>();
             m_currentTag_ = CE_NOT_FOUND_TAG_;
         }
@@ -871,7 +871,7 @@ final class CollationParsedRuleBuilder {
         ContractionTable(ContractionTable table) {
             m_mapping_ = table.m_mapping_;
             m_elements_ = new Vector<BasicContractionTable>(table.m_elements_);
-            m_codePoints_ = new StringBuffer(table.m_codePoints_.toString());
+            m_codePoints_ = new StringBuilder(table.m_codePoints_);
             m_CEs_ = new Vector<Integer>(table.m_CEs_);
             m_offsets_ = new Vector<Integer>(table.m_offsets_);
             m_currentTag_ = table.m_currentTag_;
@@ -884,7 +884,7 @@ final class CollationParsedRuleBuilder {
          */
         Vector<BasicContractionTable> m_elements_;
         IntTrieBuilder m_mapping_;
-        StringBuffer m_codePoints_;
+        StringBuilder m_codePoints_;
         Vector<Integer> m_CEs_;
         Vector<Integer> m_offsets_;
         int m_currentTag_;
@@ -1328,7 +1328,7 @@ final class CollationParsedRuleBuilder {
     private WeightRange m_utilWeightRange_ = new WeightRange();
     private char m_utilCharBuffer_[] = new char[256];
     private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
-    private StringBuffer m_utilStringBuffer_ = new StringBuffer("");
+    private StringBuilder m_utilStringBuffer_ = new StringBuilder("");
     // Flag indicating a combining marks table is required or not.
     private static boolean buildCMTabFlag = false;
 
@@ -3661,7 +3661,7 @@ final class CollationParsedRuleBuilder {
         table.m_CEs_.clear();
         table.m_codePoints_.delete(0, table.m_codePoints_.length());
         // Now stuff the things in
-        StringBuffer cpPointer = table.m_codePoints_;
+        StringBuilder cpPointer = table.m_codePoints_;
         Vector<Integer> CEPointer = table.m_CEs_;
         for (int i = 0; i < tsize; i++) {
             BasicContractionTable bct = table.m_elements_.get(i);
@@ -4010,7 +4010,7 @@ final class CollationParsedRuleBuilder {
             maxIndex = index[cClass - 1];
         }
         for (int i = 0; i < maxIndex; i++) {
-            StringBuffer decompBuf = new StringBuffer();
+            StringBuilder decompBuf = new StringBuilder();
             decompBuf.append(baseChar).append(cmLookup.cPoints[i]);
             String comp = Normalizer.compose(decompBuf.toString(), false);
             if (comp.length() == 1) {
@@ -4018,7 +4018,7 @@ final class CollationParsedRuleBuilder {
                 precompClass[precompLen] = (NormalizerImpl
                         .getFCD16(cmLookup.cPoints[i]) & 0xff);
                 precompLen++;
-                StringBuffer decomp = new StringBuffer();
+                StringBuilder decomp = new StringBuilder();
                 for (int j = 0; j < m_utilElement_.m_cPoints_.length(); j++) {
                     if (m_utilElement_.m_cPoints_.charAt(j) == cMark) {
                         decomp.append(cmLookup.cPoints[i]);
@@ -4027,7 +4027,7 @@ final class CollationParsedRuleBuilder {
                     }
                 }
                 comp = Normalizer.compose(decomp.toString(), false);
-                StringBuffer buf = new StringBuffer(comp);
+                StringBuilder buf = new StringBuilder(comp);
                 buf.append(cMark);
                 decomp.append(cMark);
                 comp = buf.toString();
@@ -4135,7 +4135,7 @@ final class CollationParsedRuleBuilder {
 
         for (int j = 0; j < maxComp; j++) {
             int count = 0;
-            StringBuffer temp;
+            StringBuilder temp;
 
             do {
                 String newDecomp, comp;
@@ -4143,11 +4143,11 @@ final class CollationParsedRuleBuilder {
                 if (count == 0) { // Decompose the saved precomposed char.
                     newDecomp = Normalizer.decompose(
                             new String(precompCh, j, 1), false);
-                    temp = new StringBuffer(newDecomp);
+                    temp = new StringBuilder(newDecomp);
                     temp.append(cmLookup.cPoints[cmPos]);
                     newDecomp = temp.toString();
                 } else {
-                    temp = new StringBuffer(decomp);
+                    temp = new StringBuilder(decomp);
                     temp.append(precompCh[j]);
                     newDecomp = temp.toString();
                 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -129,7 +129,7 @@ final class NFRule {
             // if the description does contain a matched pair of brackets,
             // then it's really shorthand for two rules (with one exception)
             NFRule rule2 = null;
-            StringBuffer sbuf = new StringBuffer();
+            StringBuilder sbuf = new StringBuilder();
 
             // we'll actually only split the rule into two rules if its
             // base value is an even multiple of its divisor (or it's one
@@ -265,7 +265,7 @@ final class NFRule {
             // if the rule descriptor begins with a digit, it's a descriptor
             // for a normal rule
             else if (descriptor.charAt(0) >= '0' && descriptor.charAt(0) <= '9') {
-                StringBuffer tempValue = new StringBuffer();
+                StringBuilder tempValue = new StringBuilder();
                 p = 0;
                 char c = ' ';
 
@@ -557,7 +557,7 @@ final class NFRule {
      * @return A textual description of the rule
      */
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         // start with the rule descriptor.  Special-case the special rules
         if (baseValue == NEGATIVE_NUMBER_RULE) {
@@ -600,7 +600,7 @@ final class NFRule {
 
         // now, write the rule's rule text, inserting appropriate
         // substitution tokens in the appropriate places
-        StringBuffer ruleTextCopy = new StringBuffer(ruleText);
+        StringBuilder ruleTextCopy = new StringBuilder(ruleText);
         ruleTextCopy.insert(sub2.getPos(), sub2.toString());
         ruleTextCopy.insert(sub1.getPos(), sub1.toString());
         result.append(ruleTextCopy.toString());

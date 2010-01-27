@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2004, International Business Machines Corporation and
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
@@ -44,7 +44,7 @@ class UnicodeNameTransliterator extends Transliterator {
         int cursor = offsets.start;
         int limit = offsets.limit;
         
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         str.append(OPEN_DELIM);
         int len;
         String name;

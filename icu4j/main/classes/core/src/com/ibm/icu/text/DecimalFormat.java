@@ -3554,7 +3554,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     private String unquote(String pat) {
-        StringBuffer buf = new StringBuffer(pat.length());
+        StringBuilder buf = new StringBuilder(pat.length());
         int i = 0;
         while (i < pat.length()) {
             char ch = pat.charAt(i++);
@@ -3826,7 +3826,7 @@ public class DecimalFormat extends NumberFormat {
             }
             StringBuffer affixBuf = new StringBuffer();
             expandAffix(affixPat, null, affixBuf, true);
-            buf.append(affixBuf.toString());
+            buf.append(affixBuf);
             return affixBuf.length();
         }
 
@@ -4253,8 +4253,8 @@ public class DecimalFormat extends NumberFormat {
             // etc., and then only change the actual object fields if everything parses
             // correctly. This also lets us register the data from part 0 and ignore the
             // part 1, except for the prefix and suffix.
-            StringBuffer prefix = new StringBuffer();
-            StringBuffer suffix = new StringBuffer();
+            StringBuilder prefix = new StringBuilder();
+            StringBuilder suffix = new StringBuilder();
             int decimalPos = -1;
             int multpl = 1;
             int digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0, sigDigitCount = 0;
@@ -4268,7 +4268,7 @@ public class DecimalFormat extends NumberFormat {
             boolean expSignAlways = false;
 
             // The affix is either the prefix or the suffix.
-            StringBuffer affix = prefix;
+            StringBuilder affix = prefix;
 
             int start = pos;
 
