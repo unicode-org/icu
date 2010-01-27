@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -119,7 +119,7 @@ final class DigitList {
      */
     public final double getDouble() {
         if (count == 0) return 0.0;
-        StringBuffer temp = new StringBuffer(count);
+        StringBuilder temp = new StringBuilder(count);
         temp.append('.');
         for (int i = 0; i < count; ++i) temp.append((char)(digits[i]));
         temp.append('E');
@@ -143,7 +143,7 @@ final class DigitList {
         // we'd get a parse failure.
         if (isLongMIN_VALUE()) return Long.MIN_VALUE;
 
-        StringBuffer temp = new StringBuffer(count);
+        StringBuilder temp = new StringBuilder(count);
         for (int i = 0; i < decimalAt; ++i)
         {
             temp.append((i < count) ? (char)(digits[i]) : '0');
@@ -163,7 +163,7 @@ final class DigitList {
         if (isZero()) return BigInteger.valueOf(0);
         //Eclipse stated the following is "dead code"
         /*if (false) {
-            StringBuffer stringRep = new StringBuffer(count);
+            StringBuilder stringRep = new StringBuilder(count);
             if (!isPositive) {
                 stringRep.append('-');
             }
@@ -203,7 +203,7 @@ final class DigitList {
 
     private String getStringRep(boolean isPositive) {
         if (isZero()) return "0";
-        StringBuffer stringRep = new StringBuffer(count+1);
+        StringBuilder stringRep = new StringBuilder(count+1);
         if (!isPositive) {
             stringRep.append('-');
         }
@@ -258,7 +258,7 @@ final class DigitList {
                     return new java.math.BigDecimal(0);
                 }
             }
-            StringBuffer significantDigits = new StringBuffer(numDigits + 1);
+            StringBuilder significantDigits = new StringBuilder(numDigits + 1);
             if (!isPositive) {
                 significantDigits.append('-');
             }
@@ -304,7 +304,7 @@ final class DigitList {
                     return new com.ibm.icu.math.BigDecimal(0);
                 }
             }
-            StringBuffer significantDigits = new StringBuffer(numDigits + 1);
+            StringBuilder significantDigits = new StringBuilder(numDigits + 1);
             if (!isPositive) {
                 significantDigits.append('-');
             }
@@ -852,7 +852,7 @@ final class DigitList {
     public String toString()
     {
         if (isZero()) return "0";
-        StringBuffer buf = new StringBuffer("0.");
+        StringBuilder buf = new StringBuilder("0.");
         for (int i=0; i<count; ++i) buf.append((char)digits[i]);
         buf.append("x10^");
         buf.append(decimalAt);

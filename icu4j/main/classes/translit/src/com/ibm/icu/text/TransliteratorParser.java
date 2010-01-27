@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2009, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -294,7 +294,7 @@ class TransliteratorParser {
             if (s != null &&
                 s.length() > 0 &&
                 s.charAt(s.length() - 1) == '\\') {
-                StringBuffer b = new StringBuffer(s);
+                StringBuilder b = new StringBuilder(s);
                 do {
                     b.deleteCharAt(b.length()-1);
                     s = handleNextLine();
@@ -910,7 +910,7 @@ class TransliteratorParser {
 
         ruleArray.reset();
 
-        StringBuffer idBlockResult = new StringBuffer();
+        StringBuilder idBlockResult = new StringBuilder();
 
         // The compound filter offset is an index into idBlockResult.
         // If it is 0, then the compound filter occurred at the start,

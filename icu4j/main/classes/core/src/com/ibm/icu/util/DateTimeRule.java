@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -302,7 +302,7 @@ public class DateTimeRule implements Serializable {
         int mins = time % 60;
         int hours = time / 60;
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("month=");
         buf.append(MONSTR[month]);
         buf.append(", date=");

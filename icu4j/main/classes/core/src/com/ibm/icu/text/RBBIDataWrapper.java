@@ -308,7 +308,7 @@ final class RBBIDataWrapper {
         }
         dis.skip(This.fHeader.fRuleSource - pos);
         pos = This.fHeader.fRuleSource;
-        StringBuffer sb = new StringBuffer(This.fHeader.fRuleSourceLen / 2);
+        StringBuilder sb = new StringBuilder(This.fHeader.fRuleSourceLen / 2);
         for (i=0; i<This.fHeader.fRuleSourceLen; i+=2) {
             sb.append(dis.readChar()); 
             pos += 2;
@@ -355,7 +355,7 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     /* Fixed width int-to-string conversion. */
     static public String intToString(int n, int width) {
-        StringBuffer  dest = new StringBuffer(width);   
+        StringBuilder  dest = new StringBuilder(width);   
         dest.append(n);
         while (dest.length() < width) {
            dest.insert(0, ' ');   
@@ -367,7 +367,7 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     /* Fixed width int-to-string conversion. */
     static public String intToHexString(int n, int width) {
-        StringBuffer  dest = new StringBuffer(width);   
+        StringBuilder  dest = new StringBuilder(width);   
         dest.append(Integer.toHexString(n));
         while (dest.length() < width) {
            dest.insert(0, ' ');   
@@ -408,7 +408,7 @@ final class RBBIDataWrapper {
      * @param state
      */
     private void dumpRow(short table[], int   state) {
-        StringBuffer dest = new StringBuffer(fHeader.fCatCount*5 + 20);
+        StringBuilder dest = new StringBuilder(fHeader.fCatCount*5 + 20);
         dest.append(intToString(state, 4));
         int row = getRowIndex(state);
         if (table[row+ACCEPTING] != 0) {

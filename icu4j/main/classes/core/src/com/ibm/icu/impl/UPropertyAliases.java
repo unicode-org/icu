@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2009, International Business Machines
+ * Copyright (c) 2002-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -537,7 +537,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
             String stringPool[] = new String[count + 1];
             stringPool_map = new short[count + 1];
             short pos = offset;
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             stringPool_map[0] = 0;
             for (int i=1; i<=count; ++i) {
                 buf.setLength(0);

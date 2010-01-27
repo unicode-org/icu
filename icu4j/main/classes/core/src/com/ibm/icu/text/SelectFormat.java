@@ -281,8 +281,8 @@ public class SelectFormat extends Format{
         this.pattern = pattern;
 
         //Initialization
-        StringBuffer keyword = new StringBuffer();
-        StringBuffer phrase = new StringBuffer();
+        StringBuilder keyword = new StringBuilder();
+        StringBuilder phrase = new StringBuilder();
         int braceCount = 0;
 
         parsedValues = new HashMap<String, String>();
@@ -536,7 +536,7 @@ public class SelectFormat extends Format{
      * @provisional This API might change or be removed in a future release.
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("pattern='" + pattern + "'");
         return buf.toString();
     }

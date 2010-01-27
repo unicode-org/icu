@@ -196,7 +196,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @stable ICU 3.2
      */
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; ++i) {
             if (i != 0) result.append(" ");
             result.append(Utility.hex(bytes[i]&0xFF,2));

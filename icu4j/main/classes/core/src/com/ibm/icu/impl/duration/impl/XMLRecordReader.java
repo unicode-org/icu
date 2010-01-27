@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -191,7 +191,7 @@ public class XMLRecordReader implements RecordReader {
     }
 
     private String readData() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean inWhitespace = false;
         // boolean inAmp = false;
         while (true) {
@@ -203,7 +203,7 @@ public class XMLRecordReader implements RecordReader {
             if (c == '&') {
                 c = readChar();
                 if (c == '#') {
-                    StringBuffer numBuf = new StringBuffer();
+                    StringBuilder numBuf = new StringBuilder();
                     int radix = 10;
                     c = readChar();
                     if (c == 'x') {
@@ -223,7 +223,7 @@ public class XMLRecordReader implements RecordReader {
                         throw ex;
                     }
                 } else {
-                    StringBuffer charBuf = new StringBuffer();
+                    StringBuilder charBuf = new StringBuilder();
                     while (c != ';' && c != -1) {
                         charBuf.append((char) c);
                         c = readChar();
@@ -281,7 +281,7 @@ public class XMLRecordReader implements RecordReader {
 
         if (atTag) {
             atTag = false;
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             while (true) {
                 c = readChar();
                 if (c == '>' || c == -1) {

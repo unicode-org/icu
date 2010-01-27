@@ -338,7 +338,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer(7);
+        StringBuilder result = new StringBuilder(7);
         result.append(getMajor());
         result.append('.');
         result.append(getMinor());

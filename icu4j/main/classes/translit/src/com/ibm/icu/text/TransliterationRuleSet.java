@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -139,7 +139,7 @@ class TransliterationRuleSet {
         rules = new TransliterationRule[v.size()];
         v.copyInto(rules);
 
-        StringBuffer errors = null;
+        StringBuilder errors = null;
 
         /* Check for masking.  This is MUCH faster than our old check,
          * which was each rule against each following rule, since we
@@ -155,7 +155,7 @@ class TransliterationRuleSet {
                     TransliterationRule r2 = rules[k];
                     if (r1.masks(r2)) {
                         if (errors == null) {
-                            errors = new StringBuffer();
+                            errors = new StringBuilder();
                         } else {
                             errors.append("\n");
                         }
@@ -225,7 +225,7 @@ class TransliterationRuleSet {
     String toRules(boolean escapeUnprintable) {
         int i;
         int count = ruleVector.size();
-        StringBuffer ruleSource = new StringBuffer();
+        StringBuilder ruleSource = new StringBuilder();
         for (i=0; i<count; ++i) {
             if (i != 0) {
                 ruleSource.append('\n');

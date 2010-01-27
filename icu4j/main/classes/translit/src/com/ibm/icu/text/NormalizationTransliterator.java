@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -85,7 +85,7 @@ final class NormalizationTransliterator extends Transliterator {
      */
     public static NormalizationTransliterator getInstance(Normalizer.Mode m,
                                                           int opt) {
-        StringBuffer id = new StringBuffer("NF");
+        StringBuilder id = new StringBuilder("NF");
         int choice = 0;
         if(m==Normalizer.NFC){
             id.append("C");

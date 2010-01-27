@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -750,9 +750,9 @@ public final class RuleBasedCollator extends Collator
     }
     
     private void
-    addSpecial(contContext c, StringBuffer buffer, int CE)
+    addSpecial(contContext c, StringBuilder buffer, int CE)
     {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         int offset = (CE & 0xFFFFFF) - c.coll.m_contractionOffset_;
         int newCE = c.coll.m_contractionCE_[offset];
         // we might have a contraction that ends from previous level
@@ -824,7 +824,7 @@ public final class RuleBasedCollator extends Collator
             int start = element.start;
             int limit = element.limit;
             int CE = element.value;
-            StringBuffer contraction = new StringBuffer(internalBufferSize);
+            StringBuilder contraction = new StringBuilder(internalBufferSize);
             
             if(isSpecial(CE)) {
                 if(((getTag(CE) == CollationElementIterator.CE_SPEC_PROC_TAG_ && c.addPrefixes) || getTag(CE) == CollationElementIterator.CE_CONTRACTION_TAG_)) {

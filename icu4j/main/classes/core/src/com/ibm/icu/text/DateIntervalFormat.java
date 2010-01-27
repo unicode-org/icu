@@ -897,10 +897,10 @@ public class DateIntervalFormat extends UFormat {
         /* Check whether the skeleton is a combination of date and time.
          * For the complication reason 1 explained above.
          */
-        StringBuffer date = new StringBuffer(skeleton.length());
-        StringBuffer normalizedDate = new StringBuffer(skeleton.length());
-        StringBuffer time = new StringBuffer(skeleton.length());
-        StringBuffer normalizedTime = new StringBuffer(skeleton.length());
+        StringBuilder date = new StringBuilder(skeleton.length());
+        StringBuilder normalizedDate = new StringBuilder(skeleton.length());
+        StringBuilder time = new StringBuilder(skeleton.length());
+        StringBuilder normalizedTime = new StringBuilder(skeleton.length());
 
         /* the difference between time skeleton and normalizedTimeSkeleton are:
          * 1. both 'H' and 'h' are normalized as 'h' in normalized time skeleton,
@@ -1108,10 +1108,10 @@ public class DateIntervalFormat extends UFormat {
      *                                skeleton.
      */
     private static void getDateTimeSkeleton(String skeleton,
-                                            StringBuffer dateSkeleton,
-                                            StringBuffer normalizedDateSkeleton,
-                                            StringBuffer timeSkeleton,
-                                            StringBuffer normalizedTimeSkeleton)
+                                            StringBuilder dateSkeleton,
+                                            StringBuilder normalizedDateSkeleton,
+                                            StringBuilder timeSkeleton,
+                                            StringBuilder normalizedTimeSkeleton)
     {
         // dateSkeleton follows the sequence of y*M*E*d*
         // timeSkeleton follows the sequence of hm*[v|z]?
@@ -1482,7 +1482,7 @@ public class DateIntervalFormat extends UFormat {
             bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
         }
 
-        StringBuffer adjustedPtn = new StringBuffer(bestMatchIntervalPattern);
+        StringBuilder adjustedPtn = new StringBuilder(bestMatchIntervalPattern);
 
         boolean inQuote = false;
         char prevCh = 0;

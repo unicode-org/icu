@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -249,7 +249,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @stable ICU 3.8
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(super.toString());
         buf.append(", rule={" + dateTimeRule + "}");
         buf.append(", startYear=" + startYear);

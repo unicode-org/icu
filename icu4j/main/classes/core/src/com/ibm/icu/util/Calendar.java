@@ -3320,7 +3320,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         boolean inQuotes = false;
         char prevChar = ' ';
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         StringCharacterIterator it = new StringCharacterIterator(pattern);
 
@@ -4169,7 +4169,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 2.0
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(getClass().getName());
         buffer.append("[time=");
         buffer.append(isTimeSet ? String.valueOf(time) : "?");

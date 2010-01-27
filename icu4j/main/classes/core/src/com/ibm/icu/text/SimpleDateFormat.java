@@ -1140,7 +1140,7 @@ public class SimpleDateFormat extends DateFormat {
 
         boolean isPrevQuote = false;
         boolean inQuote = false;
-        StringBuffer text = new StringBuffer();
+        StringBuilder text = new StringBuilder();
         char itemType = 0;  // 0 for string literal, otherwise date/time pattern character
         int itemLength = 1;
 
@@ -2550,7 +2550,7 @@ public class SimpleDateFormat extends DateFormat {
      * corresponding character in the to string.
      */
     private String translatePattern(String pat, String from, String to) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         boolean inQuote = false;
         for (int i = 0; i < pat.length(); ++i) {
             char c = pat.charAt(i);

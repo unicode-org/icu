@@ -1608,12 +1608,7 @@ public final class Utility {
                 }
                 if (quoteBuf.length() > 0) {
                     rule.append(APOSTROPHE);
-                    // jdk 1.3.1 does not have append(StringBuffer) yet
-                    if(ICUDebug.isJDK14OrHigher){
-                        rule.append(quoteBuf);
-                    }else{
-                        rule.append(quoteBuf.toString());
-                    }
+                    rule.append(quoteBuf);
                     rule.append(APOSTROPHE);
                     quoteBuf.setLength(0);
                 }

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2003, International Business Machines Corporation
+*   Copyright (c) 2002-2010, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -63,7 +63,7 @@ class FunctionReplacer implements UnicodeReplacer {
      * UnicodeReplacer API
      */
     public String toReplacerPattern(boolean escapeUnprintable) {
-        StringBuffer rule = new StringBuffer("&");
+        StringBuilder rule = new StringBuilder("&");
         rule.append(translit.getID());
         rule.append("( ");
         rule.append(replacer.toReplacerPattern(escapeUnprintable));

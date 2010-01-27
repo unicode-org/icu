@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2009, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -665,7 +665,7 @@ class TransliteratorRegistry {
         }
 
         for (int pass=0; pass<2; ++pass) {
-            StringBuffer tag = new StringBuffer();
+            StringBuilder tag = new StringBuilder();
             // First try either TransliteratorTo_xxx or
             // TransliterateFrom_xxx, then try the bidirectional
             // Transliterate_xxx.  This precedence order is arbitrary

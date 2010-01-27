@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -69,7 +69,7 @@ class Quantifier implements UnicodeMatcher {
      * Implement UnicodeMatcher API
      */
     public String toPattern(boolean escapeUnprintable) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append(matcher.toPattern(escapeUnprintable));
         if (minCount == 0) {
             if (maxCount == 1) {

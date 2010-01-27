@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -592,11 +592,11 @@ public final class CollationElementIterator
     CollationElementIterator(String source, RuleBasedCollator collator)
     {
         m_srcUtilIter_ = new StringUCharacterIterator(source);
-        m_utilStringBuffer_ = new StringBuffer();
+        m_utilStringBuffer_ = new StringBuilder();
         m_source_ = m_srcUtilIter_;
         m_collator_ = collator;
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuffer();
+        m_buffer_ = new StringBuilder();
         m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
@@ -616,11 +616,11 @@ public final class CollationElementIterator
                              RuleBasedCollator collator)
     {
         m_srcUtilIter_ = new StringUCharacterIterator();
-        m_utilStringBuffer_ = new StringBuffer();
+        m_utilStringBuffer_ = new StringBuilder();
         m_source_ = new CharacterIteratorWrapper(source);
         m_collator_ = collator;
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuffer();
+        m_buffer_ = new StringBuilder();
         m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
@@ -640,12 +640,12 @@ public final class CollationElementIterator
                              RuleBasedCollator collator)
     {
         m_srcUtilIter_ = new StringUCharacterIterator();
-        m_utilStringBuffer_ = new StringBuffer();
+        m_utilStringBuffer_ = new StringBuilder();
         m_srcUtilIter_.setText(source.getText());
         m_source_ = m_srcUtilIter_;
         m_collator_ = collator;
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuffer();
+        m_buffer_ = new StringBuilder();
         m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
@@ -810,7 +810,7 @@ public final class CollationElementIterator
      * Buffer for temporary storage of normalized characters, discontiguous
      * characters and Thai characters
      */
-    private StringBuffer m_buffer_;
+    private StringBuilder m_buffer_;
     /**
      * Position in the original string to continue forward FCD check from.
      */
@@ -852,8 +852,8 @@ public final class CollationElementIterator
      * Utility
      */
     private StringUCharacterIterator m_srcUtilIter_;
-    private StringBuffer m_utilStringBuffer_;
-    private StringBuffer m_utilSkippedBuffer_;
+    private StringBuilder m_utilStringBuffer_;
+    private StringBuilder m_utilSkippedBuffer_;
     private CollationElementIterator m_utilColEIter_;
     /**
      * One character before the first non-zero combining class character
@@ -973,12 +973,7 @@ public final class CollationElementIterator
         backup.m_bufferOffset_ = m_bufferOffset_;
         backup.m_buffer_.setLength(0);
         if (m_bufferOffset_ >= 0) {
-            // jdk 1.3.1 does not have append(StringBuffer) yet
-            if(ICUDebug.isJDK14OrHigher){
-                backup.m_buffer_.append(m_buffer_);
-            }else{
-                backup.m_buffer_.append(m_buffer_.toString());
-            }
+            backup.m_buffer_.append(m_buffer_);
         }
     }
 
@@ -995,8 +990,7 @@ public final class CollationElementIterator
         m_FCDStart_ = backup.m_FCDStart_;
         m_buffer_.setLength(0);
         if (m_bufferOffset_ >= 0) {
-            // jdk 1.3.1 does not have append(StringBuffer) yet
-            m_buffer_.append(backup.m_buffer_.toString());
+            m_buffer_.append(backup.m_buffer_);
         }
     }
 
@@ -1509,7 +1503,7 @@ public final class CollationElementIterator
      * really painful.
      * @param skipped character buffer
      */
-    private void setDiscontiguous(StringBuffer skipped)
+    private void setDiscontiguous(StringBuilder skipped)
     {
         if (m_bufferOffset_ >= 0) {
             m_buffer_.replace(0, m_bufferOffset_, skipped.toString());
@@ -1555,7 +1549,7 @@ public final class CollationElementIterator
         boolean multicontraction = false;
         // since it will be stuffed into this iterator and ran over again
         if (m_utilSkippedBuffer_ == null) {
-            m_utilSkippedBuffer_ = new StringBuffer();
+            m_utilSkippedBuffer_ = new StringBuilder();
         }
         else {
             m_utilSkippedBuffer_.setLength(0);

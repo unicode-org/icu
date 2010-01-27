@@ -183,7 +183,7 @@ public class IndexCharacters {
      * Return the string with interspersed CGJs. Input must have more than 2 codepoints.
      */
     private String separated(String item) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         // add a CGJ except within surrogates
         char last = item.charAt(0);
         result.append(last);

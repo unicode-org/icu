@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -161,7 +161,7 @@ class EscapeTransliterator extends Transliterator {
         int start = pos.start;
         int limit = pos.limit;
 
-        StringBuffer buf = new StringBuffer(prefix);
+        StringBuilder buf = new StringBuilder(prefix);
         int prefixLen = prefix.length();
         boolean redoPrefix = false;
 

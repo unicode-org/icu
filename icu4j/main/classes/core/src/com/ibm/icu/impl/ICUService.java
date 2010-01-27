@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -326,7 +326,7 @@ public class ICUService extends ICUNotifier {
          * For debugging.
          */
         public String toString() {
-            StringBuffer buf = new StringBuffer(super.toString());
+            StringBuilder buf = new StringBuilder(super.toString());
             buf.append(", id: ");
             buf.append(id);
             buf.append(", visible: ");

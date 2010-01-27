@@ -1,8 +1,8 @@
 /*
- *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ ********************************************************************************
+ * Copyright (C) 2009-2010, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                             *
+ ********************************************************************************
  */
 package com.ibm.icu.impl;
 
@@ -58,7 +58,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      *         Pattern.compile().
      */
     public String transform(String regex) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         UnicodeSet temp = new UnicodeSet();
         ParsePosition pos = new ParsePosition(0);
         int state = 0; // 1 = after \
@@ -300,7 +300,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
 
     // ===== PRIVATES =====
 
-    private int processSet(String regex, int i, StringBuffer result, UnicodeSet temp, ParsePosition pos) {
+    private int processSet(String regex, int i, StringBuilder result, UnicodeSet temp, ParsePosition pos) {
         try {
             pos.setIndex(i);
             UnicodeSet x = temp.clear().applyPattern(regex, pos, null, 0);

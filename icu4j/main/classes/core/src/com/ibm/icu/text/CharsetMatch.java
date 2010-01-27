@@ -87,7 +87,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
     public String getString(int maxLength) throws java.io.IOException {
         String result = null;
         if (fInputStream != null) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             char[] buffer = new char[1024];
             Reader reader = getReader();
             int max = maxLength < 0? Integer.MAX_VALUE : maxLength;

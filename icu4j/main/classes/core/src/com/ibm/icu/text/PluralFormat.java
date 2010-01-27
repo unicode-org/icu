@@ -331,7 +331,7 @@ public class PluralFormat extends UFormat {
         // 0: Reading keyword.
         // 1: Reading value for preceding keyword.
         int state = 0;
-        StringBuffer token = new StringBuffer();
+        StringBuilder token = new StringBuilder();
         String currentKeyword = null;
         boolean readSpaceAfterKeyword = false;
         for (int i = 0; i < pttrn.length(); ++i) {
@@ -573,7 +573,7 @@ public class PluralFormat extends UFormat {
             return "";
         }
         String formattedNumber = numberFormat.format(number);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int braceStack = 0;
         int startIndex = 0;
         for (int i = 0; i < message.length(); ++i) {
@@ -633,7 +633,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("locale=" + ulocale);
         buf.append(", rules='" + pluralRules + "'");
         buf.append(", pattern='" + pattern + "'");

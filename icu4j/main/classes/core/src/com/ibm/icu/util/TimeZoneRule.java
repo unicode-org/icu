@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -175,7 +175,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @stable ICU 3.8
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("name=" + name);
         buf.append(", stdOffset=" + rawOffset);
         buf.append(", dstSaving=" + dstSavings);

@@ -1250,7 +1250,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         public String toString(int start, int limit) {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (int i = start; i < limit; ++i) {
                 Object item = items.get(i);
                 if (item instanceof String) {
@@ -1585,7 +1585,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     private String adjustFieldTypes(PatternWithMatcher patternWithMatcher, DateTimeMatcher inputRequest, boolean fixFractionalSeconds, int options) {
         fp.set(patternWithMatcher.pattern);
-        StringBuffer newPattern = new StringBuffer();
+        StringBuilder newPattern = new StringBuilder();
         for (Object item : fp.getItems()) {
             if (item instanceof String) {
                 newPattern.append(fp.quoteLiteral((String)item));
@@ -1671,7 +1671,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     public String getFields(String pattern) {
         fp.set(pattern);
-        StringBuffer newPattern = new StringBuffer();
+        StringBuilder newPattern = new StringBuilder();
         for (Object item : fp.getItems()) {
             if (item instanceof String) {
                 newPattern.append(fp.quoteLiteral((String)item));
@@ -1865,7 +1865,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         public String toString() {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < TYPE_LIMIT; ++i) {
                 if (original[i].length() != 0) result.append(original[i]);
             }
@@ -1873,7 +1873,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         String getBasePattern() {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < TYPE_LIMIT; ++i) {
                 if (baseOriginal[i].length() != 0) result.append(baseOriginal[i]);
             }

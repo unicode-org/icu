@@ -235,7 +235,7 @@ public final class CanonicalIterator {
     // int[] pieces_lengths;
 
     // transient fields
-    private transient StringBuffer buffer = new StringBuffer();
+    private transient StringBuilder buffer = new StringBuilder();
 
 
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.

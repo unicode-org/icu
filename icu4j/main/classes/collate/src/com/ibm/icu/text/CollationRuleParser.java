@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -37,7 +37,7 @@ final class CollationRuleParser
     CollationRuleParser(String rules) throws ParseException
     {
         extractSetsFromRules(rules);
-        m_source_ = new StringBuffer(Normalizer.decompose(rules, false).trim());
+        m_source_ = new StringBuilder(Normalizer.decompose(rules, false).trim());
         m_rules_ = m_source_.toString();
         m_current_ = 0;
         m_extraCurrent_ = m_source_.length();
@@ -151,7 +151,7 @@ final class CollationRuleParser
        TokenListHeader m_listHeader_;
        Token m_previous_;
        Token m_next_;
-       StringBuffer m_rules_;
+       StringBuilder m_rules_;
        char m_flags_;
 
        // package private constructors ---------------------------------------
@@ -259,7 +259,7 @@ final class CollationRuleParser
     /**
      * Normalized collation rules with some extra characters
      */
-    StringBuffer m_source_;
+    StringBuilder m_source_;
     /**
      * Hash table to keep all tokens
      */
@@ -1090,7 +1090,7 @@ final class CollationRuleParser
         // for pre-context
         String precontext = rules.substring(0, offset);
         String postcontext = rules.substring(offset, rules.length());
-        StringBuffer error = new StringBuffer(
+        StringBuilder error = new StringBuilder(
                                     "Parse error occurred in rule at offset ");
         error.append(offset);
         error.append("\n after the prefix \"");

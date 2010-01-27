@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2009 International Business Machines
+* Copyright (c) 2003-2010 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -802,7 +802,7 @@ public final class ZoneMeta {
      */
     static String formatCustomID(int hour, int min, int sec, boolean negative) {
         // Create normalized time zone ID - GMT[+|-]hh:mm[:ss]
-        StringBuffer zid = new StringBuffer(kCUSTOM_TZ_PREFIX);
+        StringBuilder zid = new StringBuilder(kCUSTOM_TZ_PREFIX);
         if (hour != 0 || min != 0) {
             if(negative) {
                 zid.append('-');
