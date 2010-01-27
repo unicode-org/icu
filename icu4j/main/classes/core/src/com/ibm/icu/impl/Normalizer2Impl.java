@@ -1283,14 +1283,48 @@ public final class Normalizer2Impl {
         buffer.flush();
     }
 
+    /**
+     * Does c have a composition boundary before it?
+     * True if its decomposition begins with a character that has
+     * ccc=0 && NFC_QC=Yes (isCompYesAndZeroCC()).
+     * As a shortcut, this is true if c itself has ccc=0 && NFC_QC=Yes
+     * (isCompYesAndZeroCC()) so we need not decompose.
+     */
     private boolean hasCompBoundaryBefore(int c, int norm16) {
-        throw new UnsupportedOperationException();  // TODO
+        for(;;) {
+            if(isCompYesAndZeroCC(norm16)) {
+                return true;
+            } else if(isMaybeOrNonZeroCC(norm16)) {
+                return false;
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                c=mapAlgorithmic(c, norm16);
+                norm16=getNorm16(c);
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16++);
+                if((firstUnit&MAPPING_LENGTH_MASK)==0) {
+                    return false;
+                }
+                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0 && (extraData.charAt(norm16++)&0xff00)!=0) {
+                    return false;  // non-zero leadCC
+                }
+                return isCompYesAndZeroCC(getNorm16(Character.codePointAt(extraData, norm16)));
+            }
+        }
     }
     private int findPreviousCompBoundary(CharSequence s, int start, int p) {
         throw new UnsupportedOperationException();  // TODO
     }
     private int findNextCompBoundary(CharSequence s, int p, int limit) {
-        throw new UnsupportedOperationException();  // TODO
+        while(p<limit) {
+            int c=Character.codePointAt(s, p);
+            int norm16=normTrie.get(c);
+            if(hasCompBoundaryBefore(c, norm16)) {
+                break;
+            }
+            p+=Character.charCount(c);
+        }
+        return p;
     }
 
     private int findPreviousFCDBoundary(CharSequence s, int start, int p) {
