@@ -1117,7 +1117,11 @@
     "HowToWindowsConfigureICU"><strong>Configuring ICU on Windows
     NOTE:</strong></a> </p>
     <p>
-    You may need to run <tt>"dos2unix.exe"</tt> on all of the scripts (e.g. configure)
+    Ensure that the order of the PATH is MSVC, Cygwin, and then other PATHs. The configure 
+    script needs certain tools in Cygwin (e.g. grep).
+    </p>
+    <p>
+    Also, you may need to run <tt>"dos2unix.exe"</tt> on all of the scripts (e.g. configure)
     in the top source directory of ICU. To avoid this issue, you can download
     the ICU source for Unix platforms (icu-xxx.tgz).
     </p>
