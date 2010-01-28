@@ -28,7 +28,9 @@ import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 
 /**
- * <code>Calendar</code> is an abstract base class for converting between
+ * {@icuenhanced java.util.Calendar}.{@icu _usage_}
+ *
+ * <p><code>Calendar</code> is an abstract base class for converting between
  * a <code>Date</code> object and a set of integer fields such as
  * <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>, <code>HOUR</code>,
  * and so on. (A <code>Date</code> object represents a specific instant in
@@ -36,11 +38,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * {@link Date}
  * for information about the <code>Date</code> class.)
  *
- * <p><b>Note:</b>  This class is similar, but not identical, to the class
- * <code>java.util.Calendar</code>.  Changes are detailed below.
- *
- * <p>
- * Subclasses of <code>Calendar</code> interpret a <code>Date</code>
+ * <p>Subclasses of <code>Calendar</code> interpret a <code>Date</code>
  * according to the rules of a specific calendar system.  ICU4J contains
  * several subclasses implementing different international calendar systems.
  *
@@ -57,7 +55,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * <p>When a <code>ULocale</code> is used by <code>getInstance</code>, its
  * '<code>calendar</code>' tag and value are retrieved if present.  If a recognized
  * value is supplied, a calendar is provided and configured as appropriate.
- * Currently recognized tags are "buddhist", "chinese", "coptic", "ethiopic", 
+ * Currently recognized tags are "buddhist", "chinese", "coptic", "ethiopic",
  * "gregorian", "hebrew", "islamic", "islamic-civil", "japanese", and "roc".  For
  * example: <blockquote>
  * <pre>Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=japanese"));</pre>
@@ -108,14 +106,12 @@ import com.ibm.icu.text.SimpleDateFormat;
  * there may be inconsistent information (such as "Tuesday, July 15, 1996" --
  * July 15, 1996 is actually a Monday).
  *
- * <p>
- * <strong>Insufficient information.</strong> The calendar will use default
+ * <p><strong>Insufficient information.</strong> The calendar will use default
  * information to specify the missing fields. This may vary by calendar; for
  * the Gregorian calendar, the default for a field is the same as that of the
  * start of the epoch: i.e., YEAR = 1970, MONTH = JANUARY, DATE = 1, etc.
  *
- * <p>
- * <strong>Inconsistent information.</strong> If fields conflict, the calendar
+ * <p><strong>Inconsistent information.</strong> If fields conflict, the calendar
  * will give preference to fields set more recently. For example, when
  * determining the day, the calendar will look for one of the following
  * combinations of fields.  The most recent combination, as determined by the
@@ -138,14 +134,12 @@ import com.ibm.icu.text.SimpleDateFormat;
  * AM_PM + HOUR</pre>
  * </blockquote>
  *
- * <p>
- * <strong>Note:</strong> for some non-Gregorian calendars, different
+ * <p><strong>Note:</strong> for some non-Gregorian calendars, different
  * fields may be necessary for complete disambiguation. For example, a full
  * specification of the historial Arabic astronomical calendar requires year,
  * month, day-of-month <em>and</em> day-of-week in some cases.
  *
- * <p>
- * <strong>Note:</strong> There are certain possible ambiguities in
+ * <p><strong>Note:</strong> There are certain possible ambiguities in
  * interpretation of certain singular times, which are resolved in the
  * following ways:
  * <ol>
@@ -157,8 +151,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  *          12:00 am (midnight) &lt; 12:01 am, and 12:00 pm (noon) &lt; 12:01 pm
  * </ol>
  *
- * <p>
- * The date or time format strings are not part of the definition of a
+ * <p>The date or time format strings are not part of the definition of a
  * calendar, as those must be modifiable or overridable by the user at
  * runtime. Use {@link DateFormat}
  * to format dates.
@@ -717,9 +710,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the
      * week number within the current year.  The first week of the year, as
-     * defined by <code>getFirstDayOfWeek()</code> and
-     * <code>getMinimalDaysInFirstWeek()</code>, has value 1.  Subclasses define
-     * the value of <code>WEEK_OF_YEAR</code> for days before the first week of
+     * defined by {@link #getFirstDayOfWeek()} and
+     * {@link #getMinimalDaysInFirstWeek()}, has value 1.  Subclasses define
+     * the value of {@link #WEEK_OF_YEAR} for days before the first week of
      * the year.
      * @see #getFirstDayOfWeek
      * @see #getMinimalDaysInFirstWeek
@@ -730,9 +723,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the
      * week number within the current month.  The first week of the month, as
-     * defined by <code>getFirstDayOfWeek()</code> and
-     * <code>getMinimalDaysInFirstWeek()</code>, has value 1.  Subclasses define
-     * the value of <code>WEEK_OF_MONTH</code> for days before the first week of
+     * defined by {@link #getFirstDayOfWeek()} and
+     * {@link #getMinimalDaysInFirstWeek()}, has value 1.  Subclasses define
+     * the value of {@link #WEEK_OF_MONTH} for days before the first week of
      * the month.
      * @see #getFirstDayOfWeek
      * @see #getMinimalDaysInFirstWeek
@@ -742,7 +735,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the
-     * day of the month. This is a synonym for <code>DAY_OF_MONTH</code>.
+     * day of the month. This is a synonym for {@link #DAY_OF_MONTH}.
      * The first day of the month has value 1.
      * @see #DAY_OF_MONTH
      * @stable ICU 2.0
@@ -751,7 +744,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the
-     * day of the month. This is a synonym for <code>DATE</code>.
+     * day of the month. This is a synonym for {@link #DATE}.
      * The first day of the month has value 1.
      * @see #DATE
      * @stable ICU 2.0
@@ -767,9 +760,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the day
-     * of the week.  This field takes values <code>SUNDAY</code>,
-     * <code>MONDAY</code>, <code>TUESDAY</code>, <code>WEDNESDAY</code>,
-     * <code>THURSDAY</code>, <code>FRIDAY</code>, and <code>SATURDAY</code>.
+     * of the week.  This field takes values {@link #SUNDAY},
+     * {@link #MONDAY}, {@link #TUESDAY}, {@link #WEDNESDAY},
+     * {@link #THURSDAY}, {@link #FRIDAY}, and {@link #SATURDAY}.
      * @see #SUNDAY
      * @see #MONDAY
      * @see #TUESDAY
@@ -784,11 +777,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Field number for <code>get</code> and <code>set</code> indicating the
      * ordinal number of the day of the week within the current month. Together
-     * with the <code>DAY_OF_WEEK</code> field, this uniquely specifies a day
-     * within a month.  Unlike <code>WEEK_OF_MONTH</code> and
-     * <code>WEEK_OF_YEAR</code>, this field's value does <em>not</em> depend on
-     * <code>getFirstDayOfWeek()</code> or
-     * <code>getMinimalDaysInFirstWeek()</code>.  <code>DAY_OF_MONTH 1</code>
+     * with the {@link #DAY_OF_WEEK} field, this uniquely specifies a day
+     * within a month.  Unlike {@link #WEEK_OF_MONTH} and
+     * {@link #WEEK_OF_YEAR}, this field's value does <em>not</em> depend on
+     * {@link #getFirstDayOfWeek()} or
+     * {@link #getMinimalDaysInFirstWeek()}.  <code>DAY_OF_MONTH 1</code>
      * through <code>7</code> always correspond to <code>DAY_OF_WEEK_IN_MONTH
      * 1</code>; <code>8</code> through <code>15</code> correspond to
      * <code>DAY_OF_WEEK_IN_MONTH 2</code>, and so on.
@@ -876,16 +869,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public final static int DST_OFFSET = 16;
 
     /**
-     * Field number for <code>get()</code> and <code>set()</code>
+     * {@icu} Field number for <code>get()</code> and <code>set()</code>
      * indicating the extended year corresponding to the
-     * <code>WEEK_OF_YEAR</code> field.  This may be one greater or less
-     * than the value of <code>EXTENDED_YEAR</code>.
+     * {@link #WEEK_OF_YEAR} field.  This may be one greater or less
+     * than the value of {@link #EXTENDED_YEAR}.
      * @stable ICU 2.0
      */
     public static final int YEAR_WOY = 17;
 
     /**
-     * Field number for <code>get()</code> and <code>set()</code>
+     * {@icu} Field number for <code>get()</code> and <code>set()</code>
      * indicating the localized day of week.  This will be a value from 1
      * to 7 inclusive, with 1 being the localized first day of the week.
      * @stable ICU 2.0
@@ -893,7 +886,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int DOW_LOCAL = 18;
 
     /**
-     * Field number for <code>get()</code> and <code>set()</code>
+     * {@icu} Field number for <code>get()</code> and <code>set()</code>
      * indicating the extended year.  This is a single number designating
      * the year of this calendar system, encompassing all supra-year
      * fields.  For example, for the Julian calendar system, year numbers
@@ -905,7 +898,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int EXTENDED_YEAR = 19;
 
     /**
-     * Field number for <code>get()</code> and <code>set()</code>
+     * {@icu} Field number for <code>get()</code> and <code>set()</code>
      * indicating the modified Julian day number.  This is different from
      * the conventional Julian day number in two regards.  First, it
      * demarcates days at local zone midnight, rather than noon GMT.
@@ -917,7 +910,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int JULIAN_DAY = 20;
 
     /**
-     * Field number for <code>get()</code> and <code>set()</code>
+     * {@icu} Field number for <code>get()</code> and <code>set()</code>
      * indicating the milliseconds in the day.  This ranges from 0 to
      * 23:59:59.999 (regardless of DST).  This field behaves
      * <em>exactly</em> like a composite of all time-related fields, not
@@ -931,13 +924,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int MILLISECONDS_IN_DAY = 21;
 
     /**
-     * Field indicating whether or not the current month is a leap month.
+     * {@icu} Field indicating whether or not the current month is a leap month.
      * Should have a value of 0 for non-leap months, and 1 for leap months.
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public static final int IS_LEAP_MONTH = 22;
-    
+
     /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
@@ -1087,7 +1080,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Value of the <code>MONTH</code> field indicating the
-     * thirteenth month of the year. Although <code>GregorianCalendar</code>
+     * thirteenth month of the year. Although {@link GregorianCalendar}
      * does not use this value, lunar calendars do.
      * @stable ICU 2.0
      */
@@ -1108,7 +1101,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public final static int PM = 1;
 
     /**
-     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * {@icu} Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * weekday.
      * @see #WEEKEND
      * @see #WEEKEND_ONSET
@@ -1119,7 +1112,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int WEEKDAY = 0;
 
     /**
-     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * {@icu} Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * weekend day.
      * @see #WEEKDAY
      * @see #WEEKEND_ONSET
@@ -1130,7 +1123,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int WEEKEND = 1;
 
     /**
-     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * {@icu} Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * day that starts as a weekday and transitions to the weekend.
      * Call getWeekendTransition() to get the point of transition.
      * @see #WEEKDAY
@@ -1142,7 +1135,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int WEEKEND_ONSET = 2;
 
     /**
-     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * {@icu} Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * day that starts as the weekend and transitions to a weekday.
      * Call getWeekendTransition() to get the point of transition.
      * @see #WEEKDAY
@@ -1203,7 +1196,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * The minimum supported Julian day.  This value is equivalent to
-     * <code>MIN_MILLIS</code> and <code>MIN_DATE</code>.
+     * {@link #MIN_MILLIS} and {@link #MIN_DATE}.
      * @see #JULIAN_DAY
      * @stable ICU 2.0
      */
@@ -1211,7 +1204,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * The minimum supported epoch milliseconds.  This value is equivalent
-     * to <code>MIN_JULIAN</code> and <code>MIN_DATE</code>.
+     * to {@link #MIN_JULIAN} and {@link #MIN_DATE}.
      * @stable ICU 2.0
      */
     protected static final long MIN_MILLIS = -184303902528000000L;
@@ -1221,14 +1214,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * The minimum supported <code>Date</code>.  This value is equivalent
-     * to <code>MIN_JULIAN</code> and <code>MIN_MILLIS</code>.
+     * to {@link #MIN_JULIAN} and {@link #MIN_MILLIS}.
      * @stable ICU 2.0
      */
     protected static final Date MIN_DATE = new Date(MIN_MILLIS);
 
     /**
      * The maximum supported Julian day.  This value is equivalent to
-     * <code>MAX_MILLIS</code> and <code>MAX_DATE</code>.
+     * {@link #MAX_MILLIS} and {@link #MAX_DATE}.
      * @see #JULIAN_DAY
      * @stable ICU 2.0
      */
@@ -1236,14 +1229,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * The maximum supported epoch milliseconds.  This value is equivalent
-     * to <code>MAX_JULIAN</code> and <code>MAX_DATE</code>.
+     * to {@link #MAX_JULIAN} and {@link #MAX_DATE}.
      * @stable ICU 2.0
      */
     protected static final long MAX_MILLIS = (MAX_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
 
     /**
      * The maximum supported <code>Date</code>.  This value is equivalent
-     * to <code>MAX_JULIAN</code> and <code>MAX_MILLIS</code>.
+     * to {@link #MAX_JULIAN} and {@link #MAX_MILLIS}.
      * @stable ICU 2.0
      */
     protected static final Date MAX_DATE = new Date(MAX_MILLIS);
@@ -1261,7 +1254,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * The field values for the currently set time for this calendar.
-     * This is an array of at least <code>BASE_FIELD_COUNT</code> integers.
+     * This is an array of at least {@link #BASE_FIELD_COUNT} integers.
      * @see #handleCreateFields
      * @serial
      */
@@ -1325,15 +1318,15 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private boolean         lenient = true;
 
     /**
-     * The <code>TimeZone</code> used by this calendar. </code>Calendar</code>
-     * uses the time zone data to translate between locale and GMT time.
+     * The {@link TimeZone} used by this calendar. {@link Calendar}
+     * uses the time zone data to translate between local and GMT time.
      * @serial
      */
     private TimeZone        zone;
 
     /**
-     * The first day of the week, with possible values <code>SUNDAY</code>,
-     * <code>MONDAY</code>, etc.  This is a locale-dependent value.
+     * The first day of the week, with possible values {@link #SUNDAY},
+     * {@link #MONDAY}, etc.  This is a locale-dependent value.
      * @serial
      */
     private int             firstDayOfWeek;
@@ -1454,7 +1447,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     // Proclaim serialization compatibility with JDK 1.1
     // static final long       serialVersionUID = -1807547505821590642L;
-    
+
     // haven't been compatible for awhile, no longer try
     // jdk1.4.2 serialver
     private static final long serialVersionUID = 6222646104888790989L;
@@ -1553,7 +1546,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar using the default time zone and locale.
+     * Returns a calendar using the default time zone and locale.
      * @return a Calendar.
      * @stable ICU 2.0
      */
@@ -1563,7 +1556,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar using the specified time zone and default locale.
+     * Returns a calendar using the specified time zone and default locale.
      * @param zone the time zone to use
      * @return a Calendar.
      * @stable ICU 2.0
@@ -1574,7 +1567,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar using the default time zone and specified locale.
+     * Returns a calendar using the default time zone and specified locale.
      * @param aLocale the locale for the week data
      * @return a Calendar.
      * @stable ICU 2.0
@@ -1585,7 +1578,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar using the default time zone and specified locale.  
+     * Returns a calendar using the default time zone and specified locale.
      * @param locale the ulocale for the week data
      * @return a Calendar.
      * @stable ICU 3.2
@@ -1596,7 +1589,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar with the specified time zone and locale.
+     * Returns a calendar with the specified time zone and locale.
      * @param zone the time zone to use
      * @param aLocale the locale for the week data
      * @return a Calendar.
@@ -1608,7 +1601,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets a calendar with the specified time zone and locale.
+     * Returns a calendar with the specified time zone and locale.
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
      * @return a Calendar.
@@ -1622,7 +1615,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /*
      * All getInstance implementations call this private method to create a new
      * Calendar instance.
-     */ 
+     */
     private static Calendar getInstanceInternal(TimeZone tz, ULocale locale) {
         if (locale == null) {
             locale = ULocale.getDefault();
@@ -1682,7 +1675,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the list of locales for which Calendars are installed.
+     * Returns the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
      * @stable ICU 2.0
      */
@@ -1695,7 +1688,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the list of locales for which Calendars are installed.
+     * {@icu} Returns the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
      * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
@@ -1897,7 +1890,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 //    };
 
     /**
-     * Given a key and a locale, returns an array of string values in a preferred
+     * {@icu} Given a key and a locale, returns an array of string values in a preferred
      * order that would make a difference. These are all and only those values where
      * the open (creation) of the service with the locale formed from the input locale
      * plus input keyword and that value has different behavior than creation with the
@@ -1911,7 +1904,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return an array of string values for the given key and the locale.
      * @stable ICU 4.2
      */
-    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, boolean commonlyUsed) {
+    public static final String[] getKeywordValuesForLocale(String key, ULocale locale,
+                                                           boolean commonlyUsed) {
         // Resolve region
         String prefRegion = locale.getCountry();
         if (prefRegion.length() == 0){
@@ -1955,7 +1949,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets this Calendar's current time.
+     * Returns this Calendar's current time.
      * @return the current time.
      * @stable ICU 2.0
      */
@@ -1965,10 +1959,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Sets this Calendar's current time with the given Date.
-     * <p>
-     * Note: Calling <code>setTime()</code> with
+     * 
+     * <p>Note: Calling <code>setTime</code> with
      * <code>Date(Long.MAX_VALUE)</code> or <code>Date(Long.MIN_VALUE)</code>
-     * may yield incorrect field values from <code>get()</code>.
+     * may yield incorrect field values from {@link #get(int)}.
      * @param date the given Date.
      * @stable ICU 2.0
      */
@@ -1977,7 +1971,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets this Calendar's current time as a long.
+     * Returns this Calendar's current time as a long.
      * @return the current time as UTC milliseconds from the epoch.
      * @stable ICU 2.0
      */
@@ -2003,7 +1997,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the value for a given time field.
+     * Returns the value for a given time field.
      * @param field the given time field.
      * @return the value for the given time field.
      * @stable ICU 2.0
@@ -2015,7 +2009,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the value for a given time field.  This is an internal method
+     * Returns the value for a given time field.  This is an internal method
      * for subclasses that does <em>not</em> trigger any calculations.
      * @param field the given time field.
      * @return the value for the given time field.
@@ -2027,7 +2021,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Get the value for a given time field, or return the given default
+     * Returns the value for a given time field, or return the given default
      * value if the field is not set.  This is an internal method for
      * subclasses that does <em>not</em> trigger any calculations.
      * @param field the given time field.
@@ -2059,7 +2053,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Sets the values for the fields year, month, and date.
      * Previous values of other fields are retained.  If this is not desired,
-     * call <code>clear</code> first.
+     * call {@link #clear()} first.
      * @param year the value used to set the YEAR time field.
      * @param month the value used to set the MONTH time field.
      * Month value is 0-based. e.g., 0 for January.
@@ -2076,7 +2070,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Sets the values for the fields year, month, date, hour, and minute.
      * Previous values of other fields are retained.  If this is not desired,
-     * call <code>clear</code> first.
+     * call {@link #clear()} first.
      * @param year the value used to set the YEAR time field.
      * @param month the value used to set the MONTH time field.
      * Month value is 0-based. e.g., 0 for January.
@@ -2097,7 +2091,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Sets the values for the fields year, month, date, hour, minute, and second.
      * Previous values of other fields are retained.  If this is not desired,
-     * call <code>clear</code> first.
+     * call {@link #clear} first.
      * @param year the value used to set the YEAR time field.
      * @param month the value used to set the MONTH time field.
      * Month value is 0-based. e.g., 0 for January.
@@ -2194,7 +2188,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Returns true if the given Calendar object is equivalent to this
+     * {@icu} Returns true if the given Calendar object is equivalent to this
      * one.  An equivalent Calendar will behave exactly as this one
      * does, but it may be set to a different time.  By contrast, for
      * the equals() method to return true, the other Calendar must
@@ -2229,7 +2223,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the difference in milliseconds between the moment this
+     * Returns the difference in milliseconds between the moment this
      * calendar is set to and the moment the given calendar or Date object
      * is set to.
      */
@@ -2270,7 +2264,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the maximum value that this field could have, given the
+     * Returns the maximum value that this field could have, given the
      * current date.  For example, with the Gregorian date February 3, 1997
      * and the {@link #DAY_OF_MONTH DAY_OF_MONTH} field, the actual maximum
      * is 28; for February 3, 1996 it is 29.
@@ -2338,7 +2332,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the minimum value that this field could have, given the current date.
+     * Returns the minimum value that this field could have, given the current date.
      * For most fields, this is the same as {@link #getMinimum getMinimum}
      * and {@link #getGreatestMinimum getGreatestMinimum}.  However, some fields,
      * especially those related to week number, are more complicated.
@@ -2564,7 +2558,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
-     * The <code>com.ibm.icu.util.Calendar</code> implementation of this method is able to roll
+     * {@icunote} the ICU implementation of this method is able to roll
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>roll</code>.
@@ -2903,7 +2897,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
-     * The <code>com.ibm.icu.util.Calendar</code> implementation of this method is able to add to
+     * {@icunote} The ICU implementation of this method is able to add to
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>add</code>.
@@ -3061,7 +3055,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the name of this calendar in the language of the given locale.
+     * Returns the name of this calendar in the language of the given locale.
      * @stable ICU 2.0
      */
     public String getDisplayName(Locale loc) {
@@ -3069,7 +3063,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the name of this calendar in the language of the given locale.
+     * Returns the name of this calendar in the language of the given locale.
      * @stable ICU 3.2
      */
     public String getDisplayName(ULocale loc) {
@@ -3081,16 +3075,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * <code>Calendar</code> objects.
      *
      * @param that the <code>Calendar</code> to compare to this.
-     * @return <code>0</code> if the time represented by 
-     * this <code>Calendar</code> is equal to the time represented 
-     * by that <code>Calendar</code>, a value less than 
+     * @return <code>0</code> if the time represented by
+     * this <code>Calendar</code> is equal to the time represented
+     * by that <code>Calendar</code>, a value less than
      * <code>0</code> if the time represented by this is before
      * the time represented by that, and a value greater than
      * <code>0</code> if the time represented by this
      * is after the time represented by that.
-     * @throws NullPointerException if that 
+     * @throws NullPointerException if that
      * <code>Calendar</code> is null.
-     * @throws IllegalArgumentException if the time of that 
+     * @throws IllegalArgumentException if the time of that
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
      * @stable ICU 3.4
@@ -3105,10 +3099,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     //-------------------------------------------------------------------------
 
     /**
-     * Return a <code>DateFormat</code> appropriate to this calendar.
+     * {@icu} Returns a <code>DateFormat</code> appropriate to this calendar.
      * Subclasses wishing to specialize this behavior should override
-     * <code>handleGetDateFormat()</code>
-     * @see #handleGetDateFormat
+     * {@link #handleGetDateFormat}.
      * @stable ICU 2.0
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, Locale loc) {
@@ -3116,10 +3109,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return a <code>DateFormat</code> appropriate to this calendar.
+     * {@icu} Returns a <code>DateFormat</code> appropriate to this calendar.
      * Subclasses wishing to specialize this behavior should override
-     * <code>handleGetDateFormat()</code>
-     * @see #handleGetDateFormat
+     * {@link #handleGetDateFormat}.
      * @stable ICU 3.2
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
@@ -3127,7 +3119,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * Creates a <code>DateFormat</code> appropriate to this calendar.
      * This is a framework method for subclasses to override.  This method
      * is responsible for creating the calendar-specific DateFormat and
      * DateFormatSymbols objects as needed.
@@ -3142,7 +3134,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * Creates a <code>DateFormat</code> appropriate to this calendar.
      * This is a framework method for subclasses to override.  This method
      * is responsible for creating the calendar-specific DateFormat and
      * DateFormatSymbols objects as needed.
@@ -3157,7 +3149,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * Creates a <code>DateFormat</code> appropriate to this calendar.
      * This is a framework method for subclasses to override.  This method
      * is responsible for creating the calendar-specific DateFormat and
      * DateFormatSymbols objects as needed.
@@ -3172,7 +3164,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * Creates a <code>DateFormat</code> appropriate to this calendar.
      * This is a framework method for subclasses to override.  This method
      * is responsible for creating the calendar-specific DateFormat and
      * DateFormatSymbols objects as needed.
@@ -3195,7 +3187,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     // date format pattern cache
-    private static final ICUCache<String, PatternData> PATTERN_CACHE = new SimpleCache<String, PatternData>();
+    private static final ICUCache<String, PatternData> PATTERN_CACHE =
+        new SimpleCache<String, PatternData>();
     // final fallback patterns
     private static final String[] DEFAULT_PATTERNS = {
         "HH:mm:ss z",
@@ -3213,21 +3206,27 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         "{1} {0}"
     };
 
-    static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle, int timeStyle) {
-        PatternData patternData = PatternData.make(cal, loc); 
+    static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle,
+                                           int timeStyle) {
+        PatternData patternData = PatternData.make(cal, loc);
         String override = null;
 
         // Resolve a pattern for the date/time style
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
             pattern = MessageFormat.format(patternData.getDateTimePattern(dateStyle),
-                    new Object[] {patternData.patterns[timeStyle], patternData.patterns[dateStyle + 4]});
-            // Might need to merge the overrides from the date and time into a single override string
-            // TODO: Right now we are forcing the date's override into the time style.
+                    new Object[] {patternData.patterns[timeStyle],
+                                  patternData.patterns[dateStyle + 4]});
+            // Might need to merge the overrides from the date and time into a single
+            // override string TODO: Right now we are forcing the date's override into the
+            // time style.
             if ( patternData.overrides != null ) {
                 String dateOverride = patternData.overrides[dateStyle + 4];
                 String timeOverride = patternData.overrides[timeStyle];
-                override = mergeOverrideStrings(patternData.patterns[dateStyle+4],patternData.patterns[timeStyle],dateOverride,timeOverride);
+                override = mergeOverrideStrings(
+                    patternData.patterns[dateStyle+4],
+                    patternData.patterns[timeStyle],
+                    dateOverride, timeOverride);
             }
         } else if (timeStyle >= 0) {
             pattern = patternData.patterns[timeStyle];
@@ -3246,7 +3245,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         result.setCalendar(cal);
         return result;
     }
-    
+
     static class PatternData {
         // TODO make this even more object oriented
         private String[] patterns;
@@ -3271,7 +3270,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // Cache missed.  Get one from bundle
                 try {
                     CalendarData calData = new CalendarData(loc, cal.getType());
-                    patternData = new PatternData(calData.getDateTimePatterns(), calData.getOverrides());
+                    patternData = new PatternData(calData.getDateTimePatterns(),
+                                                  calData.getOverrides());
                 } catch (MissingResourceException e) {
                     patternData = new PatternData(DEFAULT_PATTERNS, null);
                 }
@@ -3280,17 +3280,18 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             return patternData;
         }
     }
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public static String getDateTimePattern(Calendar cal, ULocale uLocale, int dateStyle) {
-        PatternData patternData = PatternData.make(cal, uLocale); 
+        PatternData patternData = PatternData.make(cal, uLocale);
         return patternData.getDateTimePattern(dateStyle);
     }
 
-    private static String mergeOverrideStrings( String datePattern, String timePattern, String dateOverride, String timeOverride ) {
+    private static String mergeOverrideStrings( String datePattern, String timePattern,
+                                                String dateOverride, String timeOverride ) {
 
         if ( dateOverride == null && timeOverride == null ) {
             return null;
@@ -3303,12 +3304,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         if ( timeOverride == null ) {
             return expandOverride(datePattern,dateOverride);
         }
-        
+
         if ( dateOverride.equals(timeOverride) ) {
             return dateOverride;
         }
 
-        return (expandOverride(datePattern,dateOverride)+";"+expandOverride(timePattern,timeOverride));
+        return (expandOverride(datePattern,dateOverride)+";"+
+                expandOverride(timePattern,timeOverride));
 
     }
 
@@ -3337,16 +3339,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 result.append(c);
                 result.append("=");
                 result.append(override);
-            }  
+            }
             prevChar = c;
-        } 
+        }
         return result.toString();
     }
     /**
      * An instance of FormatConfiguration represents calendar specific
      * date format configuration and used for calling the ICU private
      * SimpleDateFormat factory method.
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -3362,7 +3364,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         /**
-         * Gets the pattern string
+         * Returns the pattern string
          * @return the format pattern string
          * @internal
          * @deprecated This API is ICU internal only.
@@ -3380,7 +3382,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         /**
-         * Gets the calendar
+         * Returns the calendar
          * @return the calendar
          * @internal
          * @deprecated This API is ICU internal only.
@@ -3390,7 +3392,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         /**
-         * Gets the locale
+         * Returns the locale
          * @return the locale
          * @internal
          * @deprecated This API is ICU internal only.
@@ -3400,7 +3402,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         /**
-         * Gets the format symbols
+         * Returns the format symbols
          * @return the format symbols
          * @internal
          * @deprecated This API is ICU internal only.
@@ -3454,7 +3456,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the week number of a day, within a period. This may be the week number in
+     * Returns the week number of a day, within a period. This may be the week number in
      * a year or the week number in a month. Usually this will be a value >= 1, but if
      * some initial days of the period are excluded from week 1, because
      * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1, then
@@ -3517,7 +3519,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the week number of a day, within a period. This may be the week number in
+     * Returns the week number of a day, within a period. This may be the week number in
      * a year, or the week number in a month. Usually this will be a value >= 1, but if
      * some initial days of the period are excluded from week 1, because
      * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1,
@@ -3556,8 +3558,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     //-------------------------------------------------------------------------
 
     /**
-     * [NEW]
-     * Return the difference between the given time and the time this
+     * {@icu} Returns the difference between the given time and the time this
      * calendar object is set to.  If this calendar is set
      * <em>before</em> the given time, the returned value will be
      * positive.  If this calendar is set <em>after</em> the given
@@ -3720,7 +3721,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the time zone.
+     * Returns the time zone.
      * @return the time zone object associated with this calendar.
      * @stable ICU 2.0
      */
@@ -3771,7 +3772,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets what the first day of the week is; e.g., Sunday in US,
+     * Returns what the first day of the week is; e.g., Sunday in US,
      * Monday in France.
      * @return the first day of the week.
      * @stable ICU 2.0
@@ -3807,7 +3808,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets what the minimal days required in the first week of the year are;
+     * Returns what the minimal days required in the first week of the year are;
      * e.g., if the first week is defined as one that contains the first day
      * of the first month of a year, getMinimalDaysInFirstWeek returns 1. If
      * the minimal days required must be a full week, getMinimalDaysInFirstWeek
@@ -3845,7 +3846,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
         {           0,            0, 24*ONE_HOUR-1, 24*ONE_HOUR-1  }, // MILLISECONDS_IN_DAY
         {           0,            0,             1,             1  }, // IS_LEAP_MONTH
-        
+
     };
 
     /**
@@ -3872,7 +3873,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     abstract protected int handleGetLimit(int field, int limitType);
 
     /**
-     * Return a limit for a field.
+     * Returns a limit for a field.
      * @param field the field, from 0..</code>getFieldCount()-1</code>
      * @param limitType the type specifier for the limit
      * @see #MINIMUM
@@ -3958,7 +3959,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     protected static final int MAXIMUM = 3;
 
     /**
-     * Gets the minimum value for the given time field.
+     * Returns the minimum value for the given time field.
      * e.g., for Gregorian DAY_OF_MONTH, 1.
      * @param field the given time field.
      * @return the minimum value for the given time field.
@@ -3969,7 +3970,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the maximum value for the given time field.
+     * Returns the maximum value for the given time field.
      * e.g. for Gregorian DAY_OF_MONTH, 31.
      * @param field the given time field.
      * @return the maximum value for the given time field.
@@ -3980,7 +3981,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the highest minimum value for the given field if varies.
+     * Returns the highest minimum value for the given field if varies.
      * Otherwise same as getMinimum(). For Gregorian, no difference.
      * @param field the given time field.
      * @return the highest minimum value for the given time field.
@@ -3991,7 +3992,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Gets the lowest maximum value for the given field if varies.
+     * Returns the lowest maximum value for the given field if varies.
      * Otherwise same as getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
      * @param field the given time field.
      * @return the lowest maximum value for the given time field.
@@ -4007,7 +4008,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     //-------------------------------------------------------------------------
 
     /**
-     * Return whether the given day of the week is a weekday, a
+     * {@icu} Returns whether the given day of the week is a weekday, a
      * weekend day, or a day that transitions from one to the other,
      * in this calendar system.  If a transition occurs at midnight,
      * then the days before and after the transition will have the
@@ -4054,11 +4055,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the time during the day at which the weekend begins or end in
-     * this calendar system.  If getDayOfWeekType(dayOfWeek) ==
-     * WEEKEND_ONSET return the time at which the weekend begins.  If
-     * getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE return the time at
-     * which the weekend ends.  If getDayOfWeekType(dayOfWeek) has some
+     * {@icu} Returns the time during the day at which the weekend begins or end in this
+     * calendar system.  If getDayOfWeekType(dayOfWeek) == WEEKEND_ONSET return the time
+     * at which the weekend begins.  If getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE
+     * return the time at which the weekend ends.  If getDayOfWeekType(dayOfWeek) has some
      * other value, then throw an exception.
      * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
      * THURSDAY, FRIDAY, or SATURDAY
@@ -4081,10 +4081,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return true if the given date and time is in the weekend in
-     * this calendar system.  Equivalent to calling setTime() followed
-     * by isWeekend().  Note: This method changes the time this
-     * calendar is set to.
+     * {@icu} Returns true if the given date and time is in the weekend in this calendar
+     * system.  Equivalent to calling setTime() followed by isWeekend().  Note: This
+     * method changes the time this calendar is set to.
      * @param date the date and time
      * @return true if the given date and time is part of the
      * weekend
@@ -4099,8 +4098,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return true if this Calendar's current date and time is in the
-     * weekend in this calendar system.
+     * {@icu} Returns true if this Calendar's current date and time is in the weekend in
+     * this calendar system.
      * @return true if the given date and time is part of the
      * weekend
      * @see #getDayOfWeekType
@@ -4160,7 +4159,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return a string representation of this calendar. This method
+     * Returns a string representation of this calendar. This method
      * is intended to be used only for debugging purposes, and the
      * format of the returned string may vary between implementations.
      * The returned string may be empty but may not be <code>null</code>.
@@ -4219,7 +4218,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             this.weekendCeaseMillis = weekendCeaseMillis;
         }
     }
-    
+
     /**
      * Set this calendar to contain week and weekend data for the given
      * locale.
@@ -4229,7 +4228,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     {
         /* try to get the Locale data from the cache */
         WeekData data = cachedLocaleData.get(locale);
-        
+
         if (data == null) {  /* cache miss */
 
             CalendarData calData = new CalendarData(locale, getType());
@@ -4628,7 +4627,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the newest stamp of a given range of fields.
+     * Returns the newest stamp of a given range of fields.
      * @stable ICU 2.0
      */
     protected int newestStamp(int first, int last, int bestStampSoFar) {
@@ -4642,7 +4641,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the timestamp of a field.
+     * Returns the timestamp of a field.
      * @stable ICU 2.0
      */
     protected final int getStamp(int field) {
@@ -4650,7 +4649,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the field that is newer, either defaultField, or
+     * Returns the field that is newer, either defaultField, or
      * alternateField.  If neither is newer or neither is set, return defaultField.
      * @stable ICU 2.0
      */
@@ -4872,7 +4871,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the field resolution array for this calendar.  Calendars that
+     * Returns the field resolution array for this calendar.  Calendars that
      * define additional fields or change the semantics of existing fields
      * should override this method to adjust the field resolution semantics
      * accordingly.  Other subclasses should not override this method.
@@ -4884,7 +4883,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the Julian day number of day before the first day of the
+     * Returns the Julian day number of day before the first day of the
      * given month in the given extended year.  Subclasses should override
      * this method to implement their calendar system.
      * @param eyear the extended year
@@ -4900,7 +4899,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                                                    boolean useMonth);
 
     /**
-     * Return the extended year defined by the current fields.  This will
+     * Returns the extended year defined by the current fields.  This will
      * use the EXTENDED_YEAR field or the YEAR and supra-year fields (such
      * as ERA) specific to the calendar system, depending on which set of
      * fields is newer.
@@ -4913,7 +4912,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     // override it.  2003-06-11 ICU 2.6 Alan)
     ///CLOVER:OFF
     /**
-     * Return the number of days in the given month of the given extended
+     * Returns the number of days in the given month of the given extended
      * year of this calendar system.  Subclasses should override this
      * method if they can provide a more correct or more efficient
      * implementation than the default implementation in Calendar.
@@ -4926,7 +4925,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     ///CLOVER:ON
 
     /**
-     * Return the number of days in the given extended year of this
+     * Returns the number of days in the given extended year of this
      * calendar system.  Subclasses should override this method if they can
      * provide a more correct or more efficient implementation than the
      * default implementation in Calendar.
@@ -4948,9 +4947,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     protected int[] handleCreateFields() {
         return new int[BASE_FIELD_COUNT];
     }
-    
+
     /**
-     * Subclasses may override this. 
+     * Subclasses may override this.
      * Called by handleComputeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
@@ -4964,7 +4963,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Subclasses may override this. 
+     * Subclasses may override this.
      * Called by handleComputeJulianDay.  Returns the default day (1-based) for the month,
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
@@ -4994,10 +4993,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int year;
 
         if (bestField == WEEK_OF_YEAR) {
-            // Nota Bene!  It is critical that YEAR_WOY be used as the year here, if it is set.
-            // Otherwise, when WOY is the best field, the year may be wrong at the extreme limits of the year.
-            // If YEAR_WOY is not set then it will fall back.
-            // TODO: Should resolveField(YEAR_PRECEDENCE) be brought to bear? 
+            // Nota Bene!  It is critical that YEAR_WOY be used as the year here, if it is
+            // set.  Otherwise, when WOY is the best field, the year may be wrong at the
+            // extreme limits of the year.  If YEAR_WOY is not set then it will fall back.
+            // TODO: Should resolveField(YEAR_PRECEDENCE) be brought to bear?
             year = internalGet(YEAR_WOY, handleGetExtendedYear());
         } else {
             year = handleGetExtendedYear();
@@ -5006,7 +5005,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         internalSet(EXTENDED_YEAR, year);
 
         int month = useMonth ? internalGet(MONTH, getDefaultMonthInYear(year)) : 0;
-        
+
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
         int julianDay = handleComputeMonthStart(year, month, useMonth);
@@ -5195,7 +5194,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     //----------------------------------------------------------------------
 
     /**
-     * Return the extended year on the Gregorian calendar as computed by
+     * Returns the extended year on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
      * @stable ICU 2.0
@@ -5205,7 +5204,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the month (0-based) on the Gregorian calendar as computed by
+     * Returns the month (0-based) on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
      * @stable ICU 2.0
@@ -5215,7 +5214,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the day of year (1-based) on the Gregorian calendar as
+     * Returns the day of year (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
      * @stable ICU 2.0
@@ -5225,7 +5224,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the day of month (1-based) on the Gregorian calendar as
+     * Returns the day of month (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
      * @stable ICU 2.0
@@ -5235,7 +5234,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the number of fields defined by this calendar.  Valid field
+     * {@icu} Returns the number of fields defined by this calendar.  Valid field
      * arguments to <code>set()</code> and <code>get()</code> are
      * <code>0..getFieldCount()-1</code>.
      * @stable ICU 2.0
@@ -5295,7 +5294,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the length of a month of the Gregorian calendar.
+     * Returns the length of a month of the Gregorian calendar.
      * @param y the extended year
      * @param m the 0-based month number
      * @return the number of days in the given month
@@ -5306,7 +5305,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the length of a previous month of the Gregorian calendar.
+     * Returns the length of a previous month of the Gregorian calendar.
      * @param y the extended year
      * @param m the 0-based month number
      * @return the number of days in the month previous to the given month
@@ -5414,7 +5413,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     };
 
     /**
-     * Return a string name for a field, for debugging and exceptions.
+     * Returns a string name for a field, for debugging and exceptions.
      * @stable ICU 2.0
      */
     protected String fieldName(int field) {
@@ -5446,7 +5445,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the day of week, from SUNDAY to SATURDAY, given a Julian day.
+     * Returns the day of week, from SUNDAY to SATURDAY, given a Julian day.
      * @stable ICU 2.0
      */
     protected static final int julianDayToDayOfWeek(int julian) {
@@ -5460,27 +5459,27 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Return the current milliseconds without recomputing.
+     * Returns the current milliseconds without recomputing.
      * @stable ICU 2.0
      */
     protected final long internalGetTimeInMillis() {
         return time;
     }
-    
+
     /**
-     * Return the current Calendar type.
-     * Note, in 3.0 this function will return 'gregorian' in Calendar to emulate legacy behavior
+     * {@icu} Returns the current Calendar type.  Note, in 3.0 this function will return
+     * 'gregorian' in Calendar to emulate legacy behavior
      * @return type of calendar (gregorian, etc)
      * @stable ICU 3.8
      */
     public String getType() {
         return "gregorian";
     }
-    
+
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * Return the locale that was used to create this object, or null.
+     * {@icu} Returns the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
      * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be

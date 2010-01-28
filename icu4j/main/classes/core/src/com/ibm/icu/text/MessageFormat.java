@@ -36,7 +36,9 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 /**
- * MessageFormat produces concatenated messages in a language-neutral
+ * {@icuenhanced java.text.MessageFormat}.{@icu _usage_}
+ *
+ * <p>MessageFormat produces concatenated messages in a language-neutral
  * way. Use this whenever concatenating strings that are displayed to
  * end users.
  *
@@ -44,11 +46,11 @@ import com.ibm.icu.util.ULocale;
  * within a <em>template string</em>.  Together, the subformats and
  * template string determine how the MessageFormat will operate during
  * formatting and parsing.
- * 
+ *
  * <p>Typically, both the subformats and the template string are
  * specified at once in a <em>pattern</em>.  By using different
  * patterns for different locales, messages may be localized.
- * 
+ *
  * <p>When formatting, MessageFormat takes a collection of arguments
  * and produces a user-readable string.  The arguments may be passed
  * as an array or as a Map.  Each argument is matched up with its
@@ -71,7 +73,7 @@ import com.ibm.icu.util.ULocale;
  * <code>:ID_START:</code> and continue with characters in <code>:ID_CONTINUE:</code>,
  * in particular they do not start with a digit.  If named arguments
  * are used, {@link #usesNamedArguments()} will return true.
- * 
+ *
  * <p>The other new methods supporting named arguments are
  * {@link #setFormatsByArgumentName(Map)},
  * {@link #setFormatByArgumentName(String, Format)},
@@ -82,11 +84,11 @@ import com.ibm.icu.util.ULocale;
  * the keys in the input or output <code>Map</code>s use
  * <code>String</code>s that name the argument indices, e.g. "0",
  * "1", "2"... etc.
- * 
+ *
  * <p>When named arguments are used, certain methods on MessageFormat that take or
  * return arrays will throw an exception, since it is not possible to
- * identify positions in an array using a name.  These methods are 
- * {@link #setFormatsByArgumentIndex(Format[])}, 
+ * identify positions in an array using a name.  These methods are
+ * {@link #setFormatsByArgumentIndex(Format[])},
  * {@link #setFormatByArgumentIndex(int, Format)},
  * {@link #getFormatsByArgumentIndex()},
  * {@link #getFormats()},
@@ -95,7 +97,7 @@ import com.ibm.icu.util.ULocale;
  * {@link #parse(String, ParsePosition)}, and
  * {@link #parse(String)}.
  * These APIs all have corresponding new versions as listed above.
- * 
+ *
  * <p>The API {@link #format(Object, StringBuffer, FieldPosition)} has
  * been modified so that the <code>Object</code> argument can be
  * either an <code>Object</code> array or a <code>Map</code>.  If this
@@ -155,16 +157,16 @@ import com.ibm.icu.util.ULocale;
  *
  * <i>RulesetName:</i>
  *         <i>UnquotedString</i>
- * <p>
- * Within a <i>String</i>, <code>"''"</code> represents a single
+ *
+ * <p>Within a <i>String</i>, <code>"''"</code> represents a single
  * quote. A <i>QuotedString</i> can contain arbitrary characters
  * except single quotes; the surrounding single quotes are removed.
  * An <i>UnquotedString</i> can contain arbitrary characters
  * except single quotes and left curly brackets. Thus, a string that
  * should result in the formatted message "'{0}'" can be written as
  * <code>"'''{'0}''"</code> or <code>"'''{0}'''"</code>.
- * <p>
- * Within a <i>SubformatPattern</i>, different rules apply.
+ *
+ * <p>Within a <i>SubformatPattern</i>, different rules apply.
  * A <i>QuotedPattern</i> can contain arbitrary characters
  * except single quotes; but the surrounding single quotes are
  * <strong>not</strong> removed, so they may be interpreted by the
@@ -176,8 +178,8 @@ import com.ibm.icu.util.ULocale;
  * For example, <code>"ab {0} de"</code> and <code>"ab '}' de"</code>
  * are valid subformat patterns, but <code>"ab {0'}' de"</code> and
  * <code>"ab } de"</code> are not.
- * <p>
- * <dl><dt><b>Warning:</b><dd>The rules for using quotes within message
+ *
+ * <p><dl><dt><b>Warning:</b><dd>The rules for using quotes within message
  * format patterns unfortunately have shown to be somewhat confusing.
  * In particular, it isn't always obvious to localizers whether single
  * quotes need to be doubled or not. Make sure to inform localizers about
@@ -185,25 +187,26 @@ import com.ibm.icu.util.ULocale;
  * bundle source files) which strings will be processed by MessageFormat.
  * Note that localizers may need to use single quotes in translated
  * strings where the original version doesn't have them.
+ *
  * <br>Note also that the simplest way to avoid the problem is to
  * use the real apostrophe (single quote) character \u2019 (') for
  * human-readable text, and to use the ASCII apostrophe (\u0027 ' )
  * only in program syntax, like quoting in MessageFormat.
  * See the annotations for U+0027 Apostrophe in The Unicode Standard.</p>
  * </dl>
- * <p>
- * The <i>ArgumentIndex</i> value is a non-negative integer written
+ *
+ * <p>The <i>ArgumentIndex</i> value is a non-negative integer written
  * using the digits '0' through '9', and represents an index into the
  * <code>arguments</code> array passed to the <code>format</code> methods
  * or the result array returned by the <code>parse</code> methods.
- * <p>
- * The <i>FormatType</i> and <i>FormatStyle</i> values are used to create
+ *
+ * <p>The <i>FormatType</i> and <i>FormatStyle</i> values are used to create
  * a <code>Format</code> instance for the format element. The following
  * table shows how the values map to Format instances. Combinations not
  * shown in the table are illegal. A <i>SubformatPattern</i> must
  * be a valid pattern string for the Format subclass used.
- * <p>
- * <table border=1>
+ *
+ * <p><table border=1>
  *    <tr>
  *       <th>Format Type
  *       <th>Format Style
@@ -297,8 +300,7 @@ import com.ibm.icu.util.ULocale;
  *
  * <h4>Usage Information</h4>
  *
- * <p>
- * Here are some examples of usage:
+ * <p>Here are some examples of usage:
  * <blockquote>
  * <pre>
  * Object[] arguments = {
@@ -319,8 +321,7 @@ import com.ibm.icu.util.ULocale;
  * Typically, the message format will come from resources, and the
  * arguments will be dynamically set at runtime.
  *
- * <p>
- * Example 2:
+ * <p>Example 2:
  * <blockquote>
  * <pre>
  * Object[] testArgs = {new Long(3), "MyDisk"};
@@ -337,8 +338,7 @@ import com.ibm.icu.util.ULocale;
  * </pre>
  * </blockquote>
  *
- * <p>
- * For more sophisticated patterns, you can use a <code>ChoiceFormat</code> to get
+ * <p>For more sophisticated patterns, you can use a <code>ChoiceFormat</code> to get
  * output such as:
  * <blockquote>
  * <pre>
@@ -368,15 +368,15 @@ import com.ibm.icu.util.ULocale;
  *    "There {0,choice,0#are no files|1#is one file|1&lt;are {0,number,integer} files}.");
  * </pre>
  * </blockquote>
- * <p>
- * <strong>Note:</strong> As we see above, the string produced
+ *
+ * <p><strong>Note:</strong> As we see above, the string produced
  * by a <code>ChoiceFormat</code> in <code>MessageFormat</code> is treated specially;
  * occurances of '{' are used to indicated subformats, and cause recursion.
  * If you create both a <code>MessageFormat</code> and <code>ChoiceFormat</code>
  * programmatically (instead of using the string patterns), then be careful not to
  * produce a format that recurses on itself, which will cause an infinite loop.
- * <p>
- * When a single argument is parsed more than once in the string, the last match
+ *
+ * <p>When a single argument is parsed more than once in the string, the last match
  * will be the final result of the parsing.  For example,
  * <pre>
  * MessageFormat mf = new MessageFormat("{0,number,#.##}, {0,number,#.#}");
@@ -387,8 +387,8 @@ import com.ibm.icu.util.ULocale;
  * objs = mf.parse(result, new ParsePosition(0));
  * // objs now equals {new Double(3.1)}
  * </pre>
- * <p>
- * Likewise, parsing with a MessageFormat object using patterns containing
+ *
+ * <p>Likewise, parsing with a MessageFormat object using patterns containing
  * multiple occurances of the same argument would return the last match.  For
  * example,
  * <pre>
@@ -400,8 +400,7 @@ import com.ibm.icu.util.ULocale;
  *
  * <h4><a name="synchronization">Synchronization</a></h4>
  *
- * <p>
- * Message formats are not synchronized.
+ * <p>Message formats are not synchronized.
  * It is recommended to create separate format instances for each thread.
  * If multiple threads access a format concurrently, it must be synchronized
  * externally.
@@ -507,7 +506,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Gets the locale that's used when creating or comparing subformats.
+     * Returns the locale that's used when creating or comparing subformats.
      *
      * @return the locale used when creating or comparing subformats
      * @stable ICU 3.0
@@ -517,7 +516,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Gets the locale that's used when creating or comparing subformats.
+     * {@icu} Returns the locale that's used when creating or comparing subformats.
      *
      * @return the locale used when creating or comparing subformats
      * @stable ICU 3.2
@@ -751,7 +750,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Sets the formats to use for the values passed into
+     * {@icu} Sets the formats to use for the values passed into
      * <code>format</code> methods or returned from <code>parse</code>
      * methods. The keys in <code>newFormats</code> are the argument
      * names in the previously set pattern string, and the values
@@ -849,7 +848,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Sets the format to use for the format elements within the
+     * {@icu} Sets the format to use for the format elements within the
      * previously set pattern string that use the given argument
      * name.
      * <p>
@@ -898,7 +897,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Gets the formats used for the values passed into
+     * Returns the formats used for the values passed into
      * <code>format</code> methods or returned from <code>parse</code>
      * methods. The indices of elements in the returned array
      * correspond to the argument indices used in the previously set
@@ -944,7 +943,7 @@ public class MessageFormat extends UFormat {
     // Where Map is: String argumentName --> Format format.
 
     /**
-     * Gets the formats used for the format elements in the
+     * Returns the formats used for the format elements in the
      * previously set pattern string.
      * The order of formats in the returned array corresponds to
      * the order of format elements in the pattern string.
@@ -969,9 +968,9 @@ public class MessageFormat extends UFormat {
         System.arraycopy(formats, 0, resultArray, 0, maxOffset + 1);
         return resultArray;
     }
-    
+
     /**
-     * Get the format argument names. For more details, see 
+     * {@icu} Returns the format argument names. For more details, see
      * {@link #setFormatByArgumentName(String, Format)}.
      * @return List of names
      * @internal
@@ -984,9 +983,9 @@ public class MessageFormat extends UFormat {
         }
         return result;
     }
-    
+
     /**
-     * Get the formats according to their argument names. For more details, see 
+     * {@icu} Returns the formats according to their argument names. For more details, see
      * {@link #setFormatByArgumentName(String, Format)}.
      * @return format associated with the name, or null if there isn't one.
      * @internal
@@ -1044,7 +1043,7 @@ public class MessageFormat extends UFormat {
      *    <tr>
      *       <td><code>null</code>
      *       <td><code>instanceof Date</code>
-     *       <td><code>DateFormat.getDateTimeInstance(DateFormat.SHORT, 
+     *       <td><code>DateFormat.getDateTimeInstance(DateFormat.SHORT,
      *           DateFormat.SHORT, getLocale()).format(argument)</code>
      *    <tr>
      *       <td><code>null</code>
@@ -1122,8 +1121,8 @@ public class MessageFormat extends UFormat {
      * Creates a MessageFormat with the given pattern and uses it
      * to format the given arguments. This is equivalent to
      * <blockquote>
-     *     <code>(new {@link #MessageFormat(String) MessageFormat}(pattern)).{@link 
-     *     #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition) 
+     *     <code>(new {@link #MessageFormat(String) MessageFormat}(pattern)).{@link
+     *     #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition)
      *     format}(arguments, new StringBuffer(), null).toString()</code>
      * </blockquote>
      *
@@ -1158,7 +1157,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Returns true if this MessageFormat uses named arguments,
+     * {@icu} Returns true if this MessageFormat uses named arguments,
      * and false otherwise.  See class description.
      *
      * @return true if named arguments are used.
@@ -1175,9 +1174,9 @@ public class MessageFormat extends UFormat {
      * provided <code>StringBuffer</code>.
      * This is equivalent to either of
      * <blockquote>
-     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer, 
+     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer,
      *     java.text.FieldPosition) format}((Object[]) arguments, result, pos)</code>
-     *     <code>{@link #format(java.util.Map, java.lang.StringBuffer, 
+     *     <code>{@link #format(java.util.Map, java.lang.StringBuffer,
      *     java.text.FieldPosition) format}((Map) arguments, result, pos)</code>
      * </blockquote>
      * A map must be provided if this format uses named arguments, otherwise
@@ -1220,7 +1219,7 @@ public class MessageFormat extends UFormat {
      * The text of the returned <code>AttributedCharacterIterator</code> is
      * the same that would be returned by
      * <blockquote>
-     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer, 
+     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer,
      *     java.text.FieldPosition) format}(arguments, new StringBuffer(), null).toString()</code>
      * </blockquote>
      * <p>
@@ -1248,7 +1247,7 @@ public class MessageFormat extends UFormat {
     @SuppressWarnings("unchecked")
     public AttributedCharacterIterator formatToCharacterIterator(Object arguments) {
         StringBuffer result = new StringBuffer();
-        ArrayList<AttributedCharacterIterator> iterators = 
+        ArrayList<AttributedCharacterIterator> iterators =
             new ArrayList<AttributedCharacterIterator>();
 
         if (arguments == null) {
@@ -1329,7 +1328,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Parses the string, returning the results in a Map.
+     * {@icu} Parses the string, returning the results in a Map.
      * This is similar to the version that returns an array
      * of Object.  This supports both named and numbered
      * arguments-- if numbered, the keys in the map are the
@@ -1346,15 +1345,6 @@ public class MessageFormat extends UFormat {
             Map<String, Object> empty = new HashMap<String, Object>();
             return empty;
         }
-
-//        int maximumArgumentNumber = -1;
-//        for (int i = 0; i <= maxOffset; i++) {
-//           int argumentNumber = Integer.parseInt(argumentNames[i]);
-//           if (argumentNumber > maximumArgumentNumber) {
-//               maximumArgumentNumber = argumentNumber;
-//           }
-//         }
-//        Object[] resultArray = new Object[maximumArgumentNumber + 1];
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -1446,11 +1436,11 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Parses text from the beginning of the given string to produce a map from
+     * {@icu} Parses text from the beginning of the given string to produce a map from
      * argument to values. The method may not use the entire text of the given string.
-     * <p>
-     * See the {@link #parse(String, ParsePosition)} method for more information
-     * on message parsing.
+     *
+     * <p>See the {@link #parse(String, ParsePosition)} method for more information on
+     * message parsing.
      *
      * @param source A <code>String</code> whose beginning should be parsed.
      * @return A <code>Map</code> parsed from the string.
@@ -1506,7 +1496,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Creates and returns a copy of this object.
+     * Overrides clone.
      *
      * @return a clone of this instance.
      * @stable ICU 3.0
@@ -1529,7 +1519,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Equality comparison between two message format objects
+     * Overrides equals.
      * @stable ICU 3.0
      */
     public boolean equals(Object obj) {
@@ -1548,7 +1538,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Generates a hash code for the message format object.
+     * Overrides hashCode.
      * @stable ICU 3.0
      */
     public int hashCode() {
@@ -1784,8 +1774,8 @@ public class MessageFormat extends UFormat {
                             characterIterators.add(
                                 _createAttributedCharacterIterator(
                                 subIterator, Field.ARGUMENT,
-                                argumentNamesAreNumeric ? 
-                                    (Object)new Integer(argumentName) : 
+                                argumentNamesAreNumeric ?
+                                    (Object)new Integer(argumentName) :
                                     (Object)argumentName));
                             last = result.length();
                         }
@@ -1796,8 +1786,8 @@ public class MessageFormat extends UFormat {
                         characterIterators.add(
                             _createAttributedCharacterIterator(
                                 arg, Field.ARGUMENT,
-                                argumentNamesAreNumeric ? 
-                                    (Object)new Integer(argumentName) : 
+                                argumentNamesAreNumeric ?
+                                    (Object)new Integer(argumentName) :
                                     (Object)argumentName));
                         last = result.length();
                     }
@@ -1851,7 +1841,7 @@ public class MessageFormat extends UFormat {
         TYPE_SPELLOUT = 5,
         TYPE_ORDINAL = 6,
         TYPE_DURATION = 7,
-        TYPE_PLURAL = 8, 
+        TYPE_PLURAL = 8,
         TYPE_SELECT = 9;
 
     private static final String[] modifierList =
@@ -1953,7 +1943,7 @@ public class MessageFormat extends UFormat {
                 newFormat = NumberFormat.getIntegerInstance(ulocale);
                 break;
             default: // pattern
-                newFormat = new DecimalFormat(segments[3].toString(), 
+                newFormat = new DecimalFormat(segments[3].toString(),
                         new DecimalFormatSymbols(ulocale));
                 break;
             }
@@ -2012,7 +2002,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_SPELLOUT:
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, 
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale,
                         RuleBasedNumberFormat.SPELLOUT);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
@@ -2028,7 +2018,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_ORDINAL:
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, 
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale,
                         RuleBasedNumberFormat.ORDINAL);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
@@ -2044,7 +2034,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_DURATION:
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, 
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale,
                         RuleBasedNumberFormat.DURATION);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
@@ -2110,7 +2100,7 @@ public class MessageFormat extends UFormat {
         return -1;
     }
 
-    private static final void copyAndFixQuotes(String source, int start, int end, 
+    private static final void copyAndFixQuotes(String source, int start, int end,
             StringBuilder target) {
         // added 'gotLB' logic from ICU4C - questionable [alan]
         boolean gotLB = false;
@@ -2213,7 +2203,7 @@ public class MessageFormat extends UFormat {
     private static final int STATE_MSG_ELEMENT = 3;
 
     /**
-     * Convert an 'apostrophe-friendly' pattern into a standard
+     * {@icu} Converts an 'apostrophe-friendly' pattern into a standard
      * pattern.  Standard patterns treat all apostrophes as
      * quotes, which is problematic in some languages, e.g.
      * French, where apostrophe is commonly used.  This utility

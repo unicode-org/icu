@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -11,15 +11,16 @@ import java.util.Date;
 import com.ibm.icu.impl.Grego;
 
 /**
- * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
+ * {@icuenhanced java.util.SimpleTimeZone}.{@icu _usage_}
+ *
+ * <p><code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
  * that represents a time zone for use with a Gregorian calendar. This
  * class does not handle historical changes.
  *
- * <P>
- * Use a negative value for <code>dayOfWeekInMonth</code> to indicate that
- * <code>SimpleTimeZone</code> should count from the end of the month backwards.
- * For example, if Daylight Savings Time starts or ends at the last Sunday in a month,
- * use <code>dayOfWeekInMonth = -1</code> along with <code>dayOfWeek = Calendar.SUNDAY</code>
+ * <p>Use a negative value for <code>dayOfWeekInMonth</code> to indicate that
+ * <code>SimpleTimeZone</code> should count from the end of the month backwards.  For
+ * example, if Daylight Savings Time starts or ends at the last Sunday in a month, use
+ * <code>dayOfWeekInMonth = -1</code> along with <code>dayOfWeek = Calendar.SUNDAY</code>
  * to specify the rule.
  *
  * @see      Calendar
@@ -70,7 +71,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Construct a SimpleTimeZone with the given base time zone offset from
+     * Constructs a SimpleTimeZone with the given base time zone offset from
      * GMT, time zone ID, time to start and end the daylight time. Timezone IDs
      * can be obtained from TimeZone.getAvailableIDs. Normally you should use
      * TimeZone.getDefault to create a TimeZone. For a time zone that does not
@@ -123,7 +124,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param endTime         The daylight savings ending time in local wall time,
      *                        which is daylight time in this case. Please see the
      *                        member description for an example.
-     * @exception IllegalArgumentException the month, day, dayOfWeek, or time
+     * @throws IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
      * @stable ICU 2.0
      */
@@ -140,11 +141,11 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Construct a SimpleTimeZone with the given base time zone offset from
+     * Constructs a SimpleTimeZone with the given base time zone offset from
      * GMT, time zone ID, time and its mode to start and end the daylight time.
      * The mode specifies either {@link #WALL_TIME} or {@link #STANDARD_TIME}
      * or {@link #UTC_TIME}.
-     * 
+     *
      * @param rawOffset       The given base time zone offset to GMT.
      * @param ID              The time zone ID which is obtained from
      *                        TimeZone.getAvailableIDs.
@@ -170,7 +171,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      *                        member description for an example.
      * @param endTimeMode     The mode of the end time specified by endTime.
      * @param dstSavings      The amount of time in ms saved during DST.
-     * @exception IllegalArgumentException the month, day, dayOfWeek, or time
+     * @throws IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
      * @stable ICU 3.8
      */
@@ -216,7 +217,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      *                        which is daylight time in this case. Please see the
      *                        member description for an example.
      * @param dstSavings      The amount of time in ms saved during DST.
-     * @exception IllegalArgumentException the month, day, dayOfWeek, or time
+     * @throws IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
      * @stable ICU 2.0
      */
@@ -229,14 +230,13 @@ public class SimpleTimeZone extends BasicTimeZone {
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
-                dstSavings); 
+                dstSavings);
         super.setID(ID);
     }
-    
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     public void setID(String ID) {
@@ -257,7 +257,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
         transitionRulesInitialized = false;
     }
-  
+
     /**
      * Overrides TimeZone
      * Gets the GMT offset for this time zone.
@@ -300,7 +300,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param time              The daylight savings starting time in local wall
      *                          time, which is standard time in this case. Please see
      *                          the member description for an example.
-     * @exception IllegalArgumentException the month, dayOfWeekInMonth,
+     * @throws IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
      * @stable ICU 2.0
      */
@@ -309,11 +309,12 @@ public class SimpleTimeZone extends BasicTimeZone {
         getSTZInfo().setStart(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
         setStartRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);
     }
+
     /**
      * Sets the daylight savings starting rule. For example, in the U.S., Daylight Savings
      * Time starts at the second Sunday in March, at 2 AM in standard time.
      * Therefore, you can set the start rule by calling:
-     * setStartRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000);
+     * <code>setStartRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000);</code>
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
      * allowing various types of rules to be constructed, as follows:<ul>
@@ -347,9 +348,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param time the daylight savings starting time. Please see the member
      * description for an example.
      */
-     
-    private void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time, int mode)
-    {
+    private void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time, int mode) {
         startMonth     =  month;
         startDay       = dayOfWeekInMonth;
         startDayOfWeek = dayOfWeek;
@@ -359,6 +358,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
         transitionRulesInitialized = false;
     }
+
     /**
      * Sets the DST start rule to a fixed date within a month.
      *
@@ -367,7 +367,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST takes effect in local wall time, which is
      *                      standard time in this case.
-     * @exception IllegalArgumentException the month,
+     * @throws IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
      * @stable ICU 2.0
      */
@@ -391,7 +391,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param after         If true, this rule selects the first dayOfWeek on
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
-     * @exception IllegalArgumentException the month, dayOfMonth,
+     * @throws IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
      * @stable ICU 2.0
      */
@@ -417,13 +417,13 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param time              The daylight savings ending time in local wall time,
      *                          which is daylight time in this case. Please see the
      *                          member description for an example.
-     * @exception IllegalArgumentException the month, dayOfWeekInMonth,
+     * @throws IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time) {
         getSTZInfo().setEnd(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
-        setEndRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);        
+        setEndRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);
     }
 
     /**
@@ -434,7 +434,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST ends in local wall time, which is daylight
      *                      time in this case.
-     * @exception IllegalArgumentException the month,
+     * @throws IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
      * @stable ICU 2.0
      */
@@ -456,7 +456,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param after         If true, this rule selects the first dayOfWeek on
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
-     * @exception IllegalArgumentException the month, dayOfMonth,
+     * @throws IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
      * @stable ICU 2.0
      */
@@ -464,10 +464,12 @@ public class SimpleTimeZone extends BasicTimeZone {
         getSTZInfo().setEnd(month, -1, dayOfWeek, time, dayOfMonth, after);
         setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after);
     }
-    private void setEndRule(int month, int dayOfMonth, int dayOfWeek, 
+
+    private void setEndRule(int month, int dayOfMonth, int dayOfWeek,
                                                 int time, int mode, boolean after){
         setEndRule(month, after ? dayOfMonth : -dayOfMonth, -dayOfWeek, time, mode);
     }
+
     /**
      * Sets the daylight savings ending rule. For example, in the U.S., Daylight
      * Savings Time ends at the first Sunday in November, at 2 AM in standard time.
@@ -495,6 +497,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
         transitionRulesInitialized = false;
     }
+
     /**
      * Sets the amount of time in ms that the clock is advanced during DST.
      * @param millisSavedDuringDST the number of milliseconds the time is
@@ -529,14 +532,17 @@ public class SimpleTimeZone extends BasicTimeZone {
         return (java.util.SimpleTimeZone) unwrap();
     }
     */
+
     // on JDK 1.4 and later, can't deserialize a SimpleTimeZone as a SimpleTimeZone...
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(java.io.ObjectInputStream in) throws IOException,
+        ClassNotFoundException {
         in.defaultReadObject();
         /*
         String id = getID();
         if (id!=null && !(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(id))) {
-            // System.out.println("*** readjust " + zone.getClass().getName() + " " + zone.getID() + " ***");
-            java.util.SimpleTimeZone stz = 
+            // System.out.println("*** readjust " + zone.getClass().getName() +
+            // " " + zone.getID() + " ***");
+            java.util.SimpleTimeZone stz =
                 new java.util.SimpleTimeZone(raw, id);
             if (dst != 0) {
                 stz.setDSTSavings(dst);
@@ -551,13 +557,13 @@ public class SimpleTimeZone extends BasicTimeZone {
         }
         */
         /* set all instance variables in this object
-         * to the values in zone 
-         */            
+         * to the values in zone
+         */
          if (xinfo != null) {
              xinfo.applyTo(this);
          }
-        
     }
+
     /**
      * Returns a string representation of this object.
      * @return  a string representation of this object
@@ -591,7 +597,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public int getOffset(int era, int year, int month, int day,
-                         int dayOfWeek, int millis) 
+                         int dayOfWeek, int millis)
     {
         // Check the month before calling Grego.monthLength(). This
         // duplicates the test that occurs in the 7-argument getOffset(),
@@ -612,7 +618,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @deprecated This API is ICU internal only.
      */
     public int getOffset(int era, int year, int month, int day,
-                              int dayOfWeek, int millis, 
+                              int dayOfWeek, int millis,
                               int monthLength)  {
         // Check the month before calling Grego.monthLength(). This
         // duplicates a test that occurs in the 9-argument getOffset(),
@@ -624,13 +630,13 @@ public class SimpleTimeZone extends BasicTimeZone {
         if(month < Calendar.JANUARY || month > Calendar.DECEMBER) {
             throw new IllegalArgumentException();
         }
-        
+
         return getOffset(era, year, month, day, dayOfWeek, millis,
                          Grego.monthLength(year, month), Grego.previousMonthLength(year, month));
     }
 
     int getOffset(int era, int year, int month, int day,
-                  int dayOfWeek, int millis, 
+                  int dayOfWeek, int millis,
                   int monthLength, int prevMonthLength ){
 
         if (true) {
@@ -652,7 +658,7 @@ public class SimpleTimeZone extends BasicTimeZone {
                 || prevMonthLength > 31) {
                 throw new IllegalArgumentException();
             }
-        } 
+        }
         //Eclipse stated the following is "dead code"
         /*else {
             // This parameter checking code is better for debugging, but
@@ -746,20 +752,22 @@ public class SimpleTimeZone extends BasicTimeZone {
         Grego.timeToFields(date, fields);
         offsets[1] = getOffset(GregorianCalendar.AD,
               fields[0], fields[1], fields[2],
-              fields[3], fields[5]) - offsets[0];        
+              fields[3], fields[5]) - offsets[0];
 
         boolean recalc = false;
 
         // Now, we need some adjustment
         if (offsets[1] > 0) {
             if ((nonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD
-                || (nonExistingTimeOpt & STD_DST_MASK) != LOCAL_DST && (nonExistingTimeOpt & FORMER_LATTER_MASK) != LOCAL_LATTER) {
+                || (nonExistingTimeOpt & STD_DST_MASK) != LOCAL_DST
+                && (nonExistingTimeOpt & FORMER_LATTER_MASK) != LOCAL_LATTER) {
                 date -= getDSTSavings();
                 recalc = true;
             }
         } else {
             if ((duplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST
-                    || (duplicatedTimeOpt & STD_DST_MASK) != LOCAL_STD && (duplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+                || (duplicatedTimeOpt & STD_DST_MASK) != LOCAL_STD
+                && (duplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
                 date -= getDSTSavings();
                 recalc = true;
             }
@@ -769,7 +777,7 @@ public class SimpleTimeZone extends BasicTimeZone {
             Grego.timeToFields(date, fields);
             offsets[1] = getOffset(GregorianCalendar.AD,
                     fields[0], fields[1], fields[2],
-                    fields[3], fields[5]) - offsets[0];        
+                    fields[3], fields[5]) - offsets[0];
         }
     }
 
@@ -795,9 +803,9 @@ public class SimpleTimeZone extends BasicTimeZone {
                                   int ruleDay, int ruleMillis)
     {
         // Make adjustments for startTimeMode and endTimeMode
-        
+
         millis += millisDelta;
-        
+
         while (millis >= Grego.MILLIS_PER_DAY) {
             millis -= Grego.MILLIS_PER_DAY;
             ++dayOfMonth;
@@ -831,7 +839,7 @@ public class SimpleTimeZone extends BasicTimeZone {
             }
             millis += Grego.MILLIS_PER_DAY;
         }
-        
+
         if (month < ruleMonth) return -1;
         else if (month > ruleMonth) return 1;
 
@@ -883,7 +891,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     // data needed for streaming mutated SimpleTimeZones in JDK14
-    private int raw;// the TimeZone's raw GMT offset 
+    private int raw;// the TimeZone's raw GMT offset
     private int dst = 3600000;
     private STZInfo xinfo = null;
     private int startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
@@ -891,10 +899,10 @@ public class SimpleTimeZone extends BasicTimeZone {
     private int startTimeMode, endTimeMode; // Mode for startTime, endTime; see TimeMode
     private int endMonth, endDay, endDayOfWeek; // the month, day, DOW, and time DST ends
     private int endTime;
-    private int startYear;  // the year these DST rules took effect 
+    private int startYear;  // the year these DST rules took effect
     private boolean useDaylight; // flag indicating whether this TimeZone uses DST
     private int startMode, endMode;   // flags indicating what kind of rules the DST rules are
-    
+
     /**
      * Overrides TimeZone
      * Queries if this time zone uses Daylight Saving Time.
@@ -1069,7 +1077,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Return true if obj is a SimpleTimeZone equivalent to this.
+     * Overrides equals.
      * @return true if obj is a SimpleTimeZone equivalent to this
      * @stable ICU 3.6
      */
@@ -1109,8 +1117,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Return the hash code.
-     * @return the hash code
+     * Overrides hashCode.
      * @stable ICU 3.6
      */
     public int hashCode(){
@@ -1137,8 +1144,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Return a clone of this time zone.
-     * @return a clone of this time zone
+     * Overrides clone.
      * @stable ICU 3.6
      */
     public Object clone() {
@@ -1146,7 +1152,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Return true if this zone has the same rules and offset as another zone.
+     * Returns true if this zone has the same rules and offset as another zone.
      * @param othr the TimeZone object to be compared with
      * @return true if the given zone has the same rules and offset as this one
      * @stable ICU 2.0
@@ -1193,8 +1199,10 @@ public class SimpleTimeZone extends BasicTimeZone {
         if (base < firstTransitionTime || (inclusive && base == firstTransitionTime)) {
             return firstTransition;
         }
-        Date stdDate = stdRule.getNextStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), inclusive);
-        Date dstDate = dstRule.getNextStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), inclusive);
+        Date stdDate = stdRule.getNextStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(),
+                                            inclusive);
+        Date dstDate = dstRule.getNextStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(),
+                                            inclusive);
         if (stdDate != null && (dstDate == null || stdDate.before(dstDate))) {
             return new TimeZoneTransition(stdDate.getTime(), dstRule, stdRule);
         }
@@ -1218,13 +1226,15 @@ public class SimpleTimeZone extends BasicTimeZone {
         if (base < firstTransitionTime || (!inclusive && base == firstTransitionTime)) {
             return null;
         }
-        Date stdDate = stdRule.getPreviousStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), inclusive);
-        Date dstDate = dstRule.getPreviousStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), inclusive);
+        Date stdDate = stdRule.getPreviousStart(base, dstRule.getRawOffset(),
+                                                dstRule.getDSTSavings(), inclusive);
+        Date dstDate = dstRule.getPreviousStart(base, stdRule.getRawOffset(),
+                                                stdRule.getDSTSavings(), inclusive);
         if (stdDate != null && (dstDate == null || stdDate.after(dstDate))) {
             return new TimeZoneTransition(stdDate.getTime(), dstRule, stdRule);
         }
         if (dstDate != null && (stdDate == null || dstDate.after(stdDate))) {
-            return new TimeZoneTransition(dstDate.getTime(), stdRule, dstRule);            
+            return new TimeZoneTransition(dstDate.getTime(), stdRule, dstRule);
         }
         return null;
     }
@@ -1269,19 +1279,22 @@ public class SimpleTimeZone extends BasicTimeZone {
              dtRule = new DateTimeRule(startMonth, startDay, startTime, timeRuleType);
              break;
             case DOW_IN_MONTH_MODE:
-             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, startTime, timeRuleType);
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, startTime,
+                                       timeRuleType);
              break;
             case DOW_GE_DOM_MODE:
-             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, true, startTime, timeRuleType);
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, true, startTime,
+                                       timeRuleType);
              break;
             case DOW_LE_DOM_MODE:
-             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, false, startTime, timeRuleType);
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, false, startTime,
+                                       timeRuleType);
              break;
             }
             // For now, use ID + "(DST)" as the name
             dstRule = new AnnualTimeZoneRule(getID() + "(DST)", getRawOffset(), getDSTSavings(),
                  dtRule, startYear, AnnualTimeZoneRule.MAX_YEAR);
-     
+
             // Calculate the first DST start time
             firstDstStart = dstRule.getFirstStart(getRawOffset(), 0).getTime();
 
@@ -1296,10 +1309,12 @@ public class SimpleTimeZone extends BasicTimeZone {
                 dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, endTime, timeRuleType);
                 break;
             case DOW_GE_DOM_MODE:
-                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, true, endTime, timeRuleType);
+                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, true, endTime,
+                                          timeRuleType);
                 break;
             case DOW_LE_DOM_MODE:
-                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, false, endTime, timeRuleType);
+                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, false, endTime,
+                                          timeRuleType);
                 break;
             }
             // For now, use ID + "(STD)" as the name
@@ -1311,13 +1326,14 @@ public class SimpleTimeZone extends BasicTimeZone {
 
             // Create a TimeZoneRule for initial time
             if (firstStdStart < firstDstStart) {
-                initialRule = new InitialTimeZoneRule(getID() + "(DST)", getRawOffset(), dstRule.getDSTSavings());                
+                initialRule = new InitialTimeZoneRule(getID() + "(DST)", getRawOffset(),
+                                                      dstRule.getDSTSavings());
                 firstTransition = new TimeZoneTransition(firstStdStart, initialRule, stdRule);
             } else {
                 initialRule = new InitialTimeZoneRule(getID() + "(STD)", getRawOffset(), 0);
                 firstTransition = new TimeZoneTransition(firstDstStart, initialRule, dstRule);
             }
-            
+
         } else {
             // Create a TimeZoneRule for initial time
             initialRule = new InitialTimeZoneRule(getID(), getRawOffset(), 0);
@@ -1325,4 +1341,3 @@ public class SimpleTimeZone extends BasicTimeZone {
         transitionRulesInitialized = true;
     }
 }
-

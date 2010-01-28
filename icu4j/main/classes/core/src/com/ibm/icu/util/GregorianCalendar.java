@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2009, International Business Machines
+ * Copyright (C) 1996-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -9,21 +9,20 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * <code>GregorianCalendar</code> is a concrete subclass of
+ * {@icuenhanced java.util.GregorianCalendar}.{@icu _usage_}
+ *
+ * <p><code>GregorianCalendar</code> is a concrete subclass of
  * {@link Calendar}
  * and provides the standard calendar used by most of the world.
  *
- * <p>
- * The standard (Gregorian) calendar has 2 eras, BC and AD.
+ * <p>The standard (Gregorian) calendar has 2 eras, BC and AD.
  *
- * <p>
- * This implementation handles a single discontinuity, which corresponds by
+ * <p>This implementation handles a single discontinuity, which corresponds by
  * default to the date the Gregorian calendar was instituted (October 15, 1582
  * in some countries, later in others).  The cutover date may be changed by the
  * caller by calling <code>setGregorianChange()</code>.
  *
- * <p>
- * Historically, in those countries which adopted the Gregorian calendar first,
+ * <p>Historically, in those countries which adopted the Gregorian calendar first,
  * October 4, 1582 was thus followed by October 15, 1582. This calendar models
  * this correctly.  Before the Gregorian cutover, <code>GregorianCalendar</code>
  * implements the Julian calendar.  The only difference between the Gregorian
@@ -31,8 +30,7 @@ import java.util.Locale;
  * leap years every four years, whereas the Gregorian calendar omits century
  * years which are not divisible by 400.
  *
- * <p>
- * <code>GregorianCalendar</code> implements <em>proleptic</em> Gregorian and
+ * <p><code>GregorianCalendar</code> implements <em>proleptic</em> Gregorian and
  * Julian calendars. That is, dates are computed by extrapolating the current
  * rules indefinitely far backward and forward in time. As a result,
  * <code>GregorianCalendar</code> may be used for all years to generate
@@ -42,8 +40,7 @@ import java.util.Locale;
  * leap year rules were applied irregularly, and before 45 BC the Julian
  * calendar did not even exist.
  *
- * <p>
- * Prior to the institution of the Gregorian calendar, New Year's Day was
+ * <p>Prior to the institution of the Gregorian calendar, New Year's Day was
  * March 25. To avoid confusion, this calendar always uses January 1. A manual
  * adjustment may be made if desired for dates that are prior to the Gregorian
  * changeover and which fall between January 1 and March 24.
@@ -358,7 +355,7 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Constructs a GregorianCalendar based on the current time
+     * {@icu} Constructs a GregorianCalendar based on the current time
      * in the default time zone with the given locale.
      * @param locale the given ulocale.
      * @stable ICU 3.2
@@ -368,7 +365,7 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Constructs a GregorianCalendar based on the current time
+     * {@icu} Constructs a GregorianCalendar based on the current time
      * in the given time zone with the given locale.
      * @param zone the given time zone.
      * @param aLocale the given locale.
