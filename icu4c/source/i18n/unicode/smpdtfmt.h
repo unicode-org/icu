@@ -258,7 +258,7 @@ public:
      * @param pattern    the pattern for the format.
      * @param override   the override string.
      * @param status     Output param set to success/failure code.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const UnicodeString& override,
@@ -299,7 +299,7 @@ public:
      * @param override   the numbering system override.
      * @param locale     the given locale.
      * @param status     Output param set to success/failure code.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const UnicodeString& override,
