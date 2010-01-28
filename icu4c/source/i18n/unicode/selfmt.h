@@ -155,7 +155,6 @@ class Hashtable;
   *
   * <p>Example:
   * \htmlonly
-  * <pre>
   *
   * UErrorCode status = U_ZERO_ERROR;
   * MessageFormat *msgFmt = new MessageFormat(UnicodeString("{0} est  {1, select, female {all&#x00E9;e} other {all&#x00E9;}} &#x00E0; Paris."), Locale("fr"),  status);
@@ -171,12 +170,12 @@ class Hashtable;
   * cout << "Input is " << str1 << " and result is: " << result << endl;
   * delete msgFmt;
   *
-  * </pre>
   * \endhtmlonly
+  * </p>
   *
   * Produces the output:<br/>
   * \htmlonly
-  * <code>Input is Kirti,female and result is: Kirti est all&#x00E9;e &#x00E0; Paris.</code>
+  * <code>Kirti est all&#x00E9;e &#x00E0; Paris.</code>
   * \endhtmlonly
   *
   * @draft ICU 4.4
@@ -358,16 +357,16 @@ private:
     }characterClass;
 
     UnicodeString pattern;
-    //Hash to store the keyword, phrase pairs
+    //Hash to store the keyword, phrase pairs.
     Hashtable  *parsedValuesHash;
 
-    SelectFormat();   // default constructor not implemented
+    SelectFormat();   // default constructor not implemented.
     void init(UErrorCode& status);
-    //For the applyPattern , classifies char.s in one of the characterClass
+    //For the applyPattern , classifies char.s in one of the characterClass.
     void classifyCharacter(UChar ch, characterClass& type) const; 
-    //Checks if the "other" keyword is present in pattern
+    //Checks if the "other" keyword is present in pattern.
     UBool checkSufficientDefinition();
-    //Checks if the keyword passed is valid            
+    //Checks if the keyword passed is valid.
     UBool checkValidKeyword(const UnicodeString& argKeyword) const;
     void parsingFailure();
     void copyHashtable(Hashtable *other, UErrorCode& status);
