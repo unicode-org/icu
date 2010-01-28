@@ -38,16 +38,16 @@ import java.util.Map;
  * The gender only affects pronouns: "he", "she", "it", "they".
  *
  * <li>German differs from English in that the gender of nouns is  rather
- * arbitrary, even for nouns referring to people ("M\\u00E4dchen", girl, is  neutral).
+ * arbitrary, even for nouns referring to people ("M&#u00E4;dchen", girl, is  neutral).
  * The gender affects pronouns ("er", "sie", "es"), articles ("der",  "die",
- * "das"), and adjective forms ("guter Mann", "gute Frau", "gutes  M\\u00E4dchen").
+ * "das"), and adjective forms ("guter Mann", "gute Frau", "gutes  M&#u00E4;dchen").
  *
  * <li>French has only two genders; as in German the gender of nouns
  * is rather arbitrary - for sun and moon, the genders
  * are the opposite of those in German. The gender affects
  * pronouns ("il", "elle"), articles ("le", "la"),
  * adjective forms ("bon", "bonne"), and sometimes
- * verb forms ("all\\u00E9", "all\\u00E9e").
+ * verb forms ("all&#u00E9;", "all&#u00E9e;").
  *
  * <li>Polish distinguishes five genders (or noun classes),
  * human masculine, animate non-human masculine, inanimate masculine,
@@ -88,7 +88,7 @@ import java.util.Map;
  * <p>The sentence pattern for French, where the gender of the person affects
  * the form of the participle, uses a select format based on argument 1:</p>
  *
- * <pre>{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 {2}.</pre>
+ * <pre>{0} est {1, select, female {all&#u00E9;e} other {all&#u00E9;}} &#u00E0; {2}.</pre>
  *
  * <p>Patterns can be nested, so that it's possible to handle  interactions of
  * number and gender where necessary. For example, if the above  sentence should
@@ -98,9 +98,9 @@ import java.util.Map;
  * argument 3 the city name):</p>
  *
  * <pre>{0} {1, plural, 
- * one {est {2, select, female {all\\u00E9e} other  {all\\u00E9}}}
- * other {sont {2, select, female {all\\u00E9es} other {all\\u00E9s}}}
- * }\\u00E9 {3}.</pre>
+ * one {est {2, select, female {all&#u00E9;e} other  {all&#u00E9;}}}
+ * other {sont {2, select, female {all&#u00E9;es} other {all&#u00E9;s}}}
+ * }&#u00E0; {3}.</pre>
  *
  * <h4>Patterns and Their Interpretation</h4>
  *
@@ -125,7 +125,7 @@ import java.util.Map;
  * <br/>
  * Spaces between <code><i>keyword</i></code> and
  * <code>{<i>phrase</i>}</code>  will be ignored; spaces within
- * <code>{<i>phrase</i>}</code> will be preserved.<p>
+ * <code>{<i>phrase</i>}</code> will be preserved.</p>
  *
  * <p>The phrase for a particular select case may contain other message
  * format patterns. <code>SelectFormat</code> preserves these so that  you
@@ -136,18 +136,17 @@ import java.util.Map;
  * Thus, curly braces (<code>{</code>, <code>}</code>) are <i>only</i> allowed
  * in phrases to define a nested format pattern.</p>
  *
- * <p>Example:
- * <pre>
+ * <pre>Example:
  * MessageFormat msgFmt = new MessageFormat("{0} est " +
- *     "{1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.",
+ *     "{1, select, female {all&#u00E9;e} other {all&#u00E9;}} &#u00E0; Paris.",
  *     new ULocale("fr"));
  * Object args[] = {"Kirti","female"};
  * System.out.println(msgFmt.format(args));
  * </pre>
- * <pre>
+ * <p>
  * Produces the output:<br/>
- * <code>Input is Kirti,female and result is: Kirti est all\\u00E9e \\u00E0 Paris.</code>
- * </pre>
+ * <code>Kirti est all&#u00E9;e &#u00E0; Paris.</code>
+ * </p>
  *
  * @draft ICU 4.4
  * @provisional This API might change or be removed in a future release.
@@ -239,7 +238,7 @@ public class SelectFormat extends Format{
     }
 
     /**
-     * Classifies the characters
+     * Classifies the characters.
      */
     private CharacterClass classifyCharacter(char ch) {
         if ((ch >= 'A') && (ch <= 'Z')) {
