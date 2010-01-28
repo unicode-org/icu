@@ -20,7 +20,7 @@
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
 #include <stdio.h> // for sprintf
-"ti
+
 #ifdef U_WINDOWS
 #include "windttst.h"
 #endif
