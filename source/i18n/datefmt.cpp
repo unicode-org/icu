@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -144,7 +144,7 @@ DateFormat::format(const Formattable& obj,
 UnicodeString&
 DateFormat::format(const Formattable& obj,
                    UnicodeString& appendTo,
-                   FieldPositionIterator& posIter,
+                   FieldPositionIterator* posIter,
                    UErrorCode& status) const
 {
     if (U_FAILURE(status)) return appendTo;
@@ -180,7 +180,7 @@ DateFormat::format(const Formattable& obj,
 UnicodeString&
 DateFormat::format(Calendar& /* unused cal */,
                    UnicodeString& appendTo,
-                   FieldPositionIterator& /* unused posIter */,
+                   FieldPositionIterator* /* unused posIter */,
                    UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         status = U_UNSUPPORTED_ERROR;
@@ -206,7 +206,7 @@ DateFormat::format(UDate date, UnicodeString& appendTo, FieldPosition& fieldPosi
 //----------------------------------------------------------------------
 
 UnicodeString&
-DateFormat::format(UDate date, UnicodeString& appendTo, FieldPositionIterator& posIter,
+DateFormat::format(UDate date, UnicodeString& appendTo, FieldPositionIterator* posIter,
                    UErrorCode& status) const {
     if (fCalendar != NULL) {
         fCalendar->setTime(date, status);
