@@ -380,7 +380,7 @@ public:
      *                      it will return all the available values for the locale.
      * @param status        ICU Error Code
      * @return a string enumeration over keyword values for the given key and the locale.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     static StringEnumeration* U_EXPORT2 getKeywordValuesForLocale(const char* key,
                     const Locale& locale, UBool commonlyUsed, UErrorCode& status);

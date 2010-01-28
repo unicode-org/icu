@@ -397,7 +397,7 @@ public:
      * @param tIter the second ("target") string iterator
      * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     virtual UCollationResult compare(UCharIterator &sIter,
                                      UCharIterator &tIter,

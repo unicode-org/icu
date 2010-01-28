@@ -65,7 +65,7 @@ typedef struct UConverterSelector UConverterSelector;
  * @param status an in/out ICU UErrorCode
  * @return the new selector
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UConverterSelector* U_EXPORT2
 ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
@@ -83,7 +83,7 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
  *
  * @param sel selector to close
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE void U_EXPORT2
 ucnvsel_close(UConverterSelector *sel);
@@ -120,7 +120,7 @@ U_NAMESPACE_END
  * @param status an in/out ICU UErrorCode
  * @return the new selector
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UConverterSelector* U_EXPORT2
 ucnvsel_openFromSerialized(const void* buffer, int32_t length, UErrorCode* status);
@@ -137,7 +137,7 @@ ucnvsel_openFromSerialized(const void* buffer, int32_t length, UErrorCode* statu
  * @return the required buffer capacity to hold serialize data (even if the call fails
  *         with a U_BUFFER_OVERFLOW_ERROR, it will return the required capacity)
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE int32_t U_EXPORT2
 ucnvsel_serialize(const UConverterSelector* sel,
@@ -155,7 +155,7 @@ ucnvsel_serialize(const UConverterSelector* sel,
  *         The returned encoding names and their order will be the same as
  *         supplied when building the selector.
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UEnumeration * U_EXPORT2
 ucnvsel_selectForString(const UConverterSelector* sel,
@@ -173,7 +173,7 @@ ucnvsel_selectForString(const UConverterSelector* sel,
  *         The returned encoding names and their order will be the same as
  *         supplied when building the selector.
  *
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UEnumeration * U_EXPORT2
 ucnvsel_selectForUTF8(const UConverterSelector* sel,

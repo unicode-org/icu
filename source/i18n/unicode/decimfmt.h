@@ -1104,7 +1104,7 @@ public:
      * Returns the currency plural format information,
      * which is generally not changed by the programmer or user.
      * @return desired CurrencyPluralInfo
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     virtual const CurrencyPluralInfo* getCurrencyPluralInfo(void) const;
 
@@ -1112,7 +1112,7 @@ public:
      * Sets the currency plural format information,
      * which is generally not changed by the programmer or user.
      * @param toAdopt CurrencyPluralInfo to be adopted.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     virtual void adoptCurrencyPluralInfo(CurrencyPluralInfo* toAdopt);
 
@@ -1120,7 +1120,7 @@ public:
      * Sets the currency plural format information,
      * which is generally not changed by the programmer or user.
      * @param info Currency Plural Info.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     virtual void setCurrencyPluralInfo(const CurrencyPluralInfo& info);
 

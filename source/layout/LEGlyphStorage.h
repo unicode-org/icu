@@ -327,7 +327,7 @@ public:
      *
      * @see LEInsertionList.h
      *
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
 
@@ -363,7 +363,7 @@ public:
      * @param toPosition - target position of the glyph
      * @param marker marker bit
      *
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     void moveGlyph(le_int32 fromPosition, le_int32 toPosition, le_uint32 marker);
 
