@@ -5856,14 +5856,19 @@ void NumberFormatTest::TestFieldPositionIterator() {
   assertTrue((UnicodeString)"self==", iter1 == iter1);
   assertTrue((UnicodeString)"iter1==iter2", iter1 == iter2);
 
-  decFmt->format(num, str1, iter1, status);
+  decFmt->format(num, str1, &iter1, status);
   assertTrue((UnicodeString)"iter1 != iter2", iter1 != iter2);
-  decFmt->format(num, str2, iter2, status);
+  decFmt->format(num, str2, &iter2, status);
   assertTrue((UnicodeString)"iter1 == iter2 (2)", iter1 == iter2);
   iter1.next(pos);
   assertTrue((UnicodeString)"iter1 != iter2 (2)", iter1 != iter2);
   iter2.next(pos);
   assertTrue((UnicodeString)"iter1 == iter2 (3)", iter1 == iter2);
+
+  // should format ok with no iterator
+  str2.remove();
+  decFmt->format(num, str2, NULL, status);
+  assertEquals("null fpiter", str1, str2);
 
   delete decFmt;
 }
@@ -5886,7 +5891,7 @@ void NumberFormatTest::TestFormatAttributes() {
 
     FieldPositionIterator posIter;
     UnicodeString result;
-    decFmt->format(val, result, posIter, status);
+    decFmt->format(val, result, &posIter, status);
     expectPositions(posIter, expected, tupleCount, result);
   }
   {
@@ -5919,7 +5924,7 @@ void NumberFormatTest::TestFormatAttributes() {
 
     FieldPositionIterator posIter;
     UnicodeString result;
-    decFmt->format(val, result, posIter, status);
+    decFmt->format(val, result, &posIter, status);
     expectPositions(posIter, expected, tupleCount, result);
   }
   {
