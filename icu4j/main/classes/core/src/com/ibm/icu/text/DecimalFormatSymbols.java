@@ -23,17 +23,14 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
+ * {@icuenhanced java.text.DecimalFormatSymbols}.{@icu _usage_}
+ *
  * This class represents the set of symbols (such as the decimal separator, the grouping
  * separator, and so on) needed by <code>DecimalFormat</code> to format
  * numbers. <code>DecimalFormat</code> creates for itself an instance of
  * <code>DecimalFormatSymbols</code> from its locale data.  If you need to change any of
  * these symbols, you can get the <code>DecimalFormatSymbols</code> object from your
  * <code>DecimalFormat</code> and modify it.
- *
- * <p><strong>Note:</strong> This is an enhanced version of
- * <code>DecimalFormatSymbols</code> that is based on the standard version in the JDK.
- * New or changed functionality is labeled <strong><font face=helvetica
- * color=red>NEW</font></strong>.
  *
  * @see          java.util.Locale
  * @see          DecimalFormat
@@ -51,7 +48,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Create a DecimalFormatSymbols object for the given locale.
+     * Creates a DecimalFormatSymbols object for the given locale.
      * @param locale the locale
      * @stable ICU 2.0
      */
@@ -60,7 +57,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Create a DecimalFormatSymbols object for the given locale.
+     * {@icu} Creates a DecimalFormatSymbols object for the given locale.
      * @param locale the locale
      * @stable ICU 3.2
      */
@@ -136,8 +133,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns an array of all locales for which the <code>getInstance</code> methods of
-     * this class can return localized instances.
+     * {@icu} Returns an array of all locales for which the <code>getInstance</code>
+     * methods of this class can return localized instances.
      *
      * <p><strong>Note:</strong> Unlike
      * <code>java.text.DecimalFormatSymbols#getAvailableLocales</code>, this method simply
@@ -219,7 +216,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Set the character used for decimal sign. Different for French, etc.
+     * Sets the character used for decimal sign. Different for French, etc.
      * @param decimalSeparator the decimal character
      * @stable ICU 2.0
      */
@@ -264,7 +261,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Return the character used for a digit in a pattern.
+     * Returns the character used for a digit in a pattern.
      * @return the digit pattern character
      * @stable ICU 2.0
      */
@@ -273,7 +270,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Set the character used for a digit in a pattern.
+     * Sets the character used for a digit in a pattern.
      * @param digit the digit pattern character
      * @stable ICU 2.0
      */
@@ -448,7 +445,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the monetary grouping separator.
+     * {@icu} Returns the monetary grouping separator.
      * @return the monetary grouping separator character
      * @stable ICU 3.6
      */
@@ -483,8 +480,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Returns the string used to separate the mantissa from the exponent.
+     * {@icu} Returns the string used to separate the mantissa from the exponent.
      * Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
      * @return the localized exponent symbol, used in localized patterns
      * and formatted strings
@@ -496,8 +492,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Sets the string used to separate the mantissa from the exponent.
+     * {@icu} Sets the string used to separate the mantissa from the exponent.
      * Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
      * @param exp the localized exponent symbol, used in localized patterns
      * and formatted strings
@@ -509,8 +504,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Returns the localized plus sign.
+     * {@icu} Returns the localized plus sign.
      * @return the plus sign, used in localized patterns and formatted
      * strings
      * @see #setPlusSign
@@ -523,8 +517,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Sets the localized plus sign.
+     * {@icu} Sets the localized plus sign.
      * @param plus the plus sign, used in localized patterns and formatted
      * strings
      * @see #getPlusSign
@@ -537,11 +530,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Returns the character used to pad numbers out to a specified width.  This
-     * is not the pad character itself; rather, it is the special pattern
-     * character <em>preceding</em> the pad character.  In the pattern
-     * "*_#,##0", '*' is the pad escape, and '_' is the pad character.
+     * {@icu} Returns the character used to pad numbers out to a specified width.  This is
+     * not the pad character itself; rather, it is the special pattern character
+     * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is the pad
+     * escape, and '_' is the pad character.
      * @return the character
      * @see #setPadEscape
      * @see DecimalFormat#getFormatWidth
@@ -554,11 +546,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Sets the character used to pad numbers out to a specified width.  This is
-     * not the pad character itself; rather, it is the special pattern character
-     * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is
-     * the pad escape, and '_' is the pad character.
+     * {@icu} Sets the character used to pad numbers out to a specified width.  This is not
+     * the pad character itself; rather, it is the special pattern character
+     * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is the pad
+     * escape, and '_' is the pad character.
      * @see #getPadEscape
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
@@ -570,20 +561,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
+     * {@icu} Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
      * @draft ICU 4.2
      */
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
+
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Indicates the surrounding match pattern used in {@link #getPatternForCurrencySpacing}.
+     * {@icu} Indicates the surrounding match pattern used in {@link
+     * #getPatternForCurrencySpacing}.
      * @draft ICU 4.2
      */
     public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
+
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
+     * {@icu} Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
      * @draft ICU 4.4
      */
     public static final int CURRENCY_SPC_INSERT = 2;
@@ -592,9 +583,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private String[] currencySpcAfterSym;
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Returns the desired currency spacing value. Original values come from ICU's CLDR
-     * data based on the locale provided during construction, and can be null.  These
+     * {@icu} Returns the desired currency spacing value. Original values come from ICU's
+     * CLDR data based on the locale provided during construction, and can be null.  These
      * values govern what and when text is inserted between a currency code/name/symbol
      * and the currency amount when formatting money.
      *
@@ -623,12 +613,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Sets the indicated currency spacing pattern or value. See {@link
+     * {@icu} Sets the indicated currency spacing pattern or value. See {@link
      * #getPatternForCurrencySpacing} for more information.
      *
      * <p>Values for currency match and surrounding match must be {@link
-     * com.ibm.icu.text.UnicodeSet} patterns.  Values for insert can be any string.
+     * com.ibm.icu.text.UnicodeSet} patterns. Values for insert can be any string.
      *
      * <p><strong>Note:</strong> ICU4J does not currently use this information.
      *
@@ -714,9 +703,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         NaN.equals(other.NaN) &&
         currencySymbol.equals(other.currencySymbol) &&
         intlCurrencySymbol.equals(other.intlCurrencySymbol) &&
-        padEscape == other.padEscape && // [NEW]
-        plusSign == other.plusSign && // [NEW]
-        exponentSeparator.equals(other.exponentSeparator) && // [NEW]
+        padEscape == other.padEscape &&
+        plusSign == other.plusSign &&
+        exponentSeparator.equals(other.exponentSeparator) &&
         monetarySeparator == other.monetarySeparator);
     }
 
@@ -1034,7 +1023,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private String exponentSeparator;
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The character used to indicate a padding character in a format,
      * e.g., '*' in a pattern such as "$*_#,##0.00".
      * @serial
@@ -1043,7 +1031,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private char padEscape;
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The character used to indicate a plus sign.
      * @serial
      * @since AlphaWorks
@@ -1116,7 +1103,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * Return the locale that was used to create this object, or null.
+     * {@icu} Returns the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
      * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
@@ -1124,10 +1111,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * <tt>en_US</tt> may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
+     * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i>
+     * locale is not, in most cases.
      * @param type type of information requested, either {@link
      * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
      * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
@@ -1145,7 +1130,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Set information about the locales that were used to create this
+     * {@icu} Sets information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
      * both arguments should be set to null.  Otherwise, neither
      * should be null.  The actual locale must be at the same level or

@@ -31,10 +31,9 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
-// This is an enhanced version of DecimalFormat that is based on the
-// standard version in the JDK.
-
 /**
+ * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
+ *
  * <code>DecimalFormat</code> is a concrete subclass of {@link NumberFormat} that formats
  * decimal numbers. It has a variety of features designed to make it possible to parse and
  * format numbers in any locale, including support for Western, Arabic, or Indic digits.
@@ -42,7 +41,6 @@ import com.ibm.icu.util.ULocale;
  * numbers ("123.4"), scientific notation ("1.23E4"), percentages ("12%"), and currency
  * amounts ("$123.00", "USD123.00", "123.00 US dollars").  All of these flavors can be
  * easily localized.
- *
  *
  * <p>To obtain a {@link NumberFormat} for a specific locale (including the default
  * locale) call one of <code>NumberFormat</code>'s factory methods such as {@link
@@ -697,7 +695,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Create a DecimalFormat from the given pattern, symbols, information used for
+     * Creates a DecimalFormat from the given pattern, symbols, information used for
      * currency plural format, and format style. Use this constructor when you need to
      * completely customize the behavior of the format.
      *
@@ -1016,7 +1014,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Format a BigInteger number.
+     * Formats a BigInteger number.
      *
      * @stable ICU 2.0
      */
@@ -1047,7 +1045,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Format a BigDecimal number.
+     * Formats a BigDecimal number.
      *
      * @stable ICU 2.0
      */
@@ -1076,7 +1074,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Format a BigDecimal number.
+     * Formats a BigDecimal number.
      *
      * @stable ICU 2.0
      */
@@ -2823,7 +2821,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the positive prefix.
+     * Returns the positive prefix.
      *
      * <p>Examples: +123, $123, sFr123
      * @return the prefix
@@ -2846,7 +2844,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the negative prefix.
+     * Returns the negative prefix.
      *
      * <p>Examples: -123, ($123) (with negative suffix), sFr-123
      *
@@ -2870,7 +2868,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the positive suffix.
+     * Returns the positive suffix.
      *
      * <p>Example: 123%
      *
@@ -2894,7 +2892,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the negative suffix.
+     * Returns the negative suffix.
      *
      * <p>Examples: -123%, ($123) (with positive suffixes)
      *
@@ -2918,7 +2916,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the multiplier for use in percent, permill, etc. For a percentage, set the
+     * Returns the multiplier for use in percent, permill, etc. For a percentage, set the
      * suffixes to have "%" and the multiplier to be 100. (For Arabic, use arabic percent
      * symbol). For a permill, set the suffixes to have "\u2031" and the multiplier to be
      * 1000.
@@ -2951,7 +2949,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the rounding increment.
+     * {@icu} Returns the rounding increment.
      *
      * @return A positive rounding increment, or <code>null</code> if rounding is not in
      * effect.
@@ -2967,7 +2965,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Set the rounding increment. This method also controls whether rounding is enabled.
+     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+     * enabled.
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
      * <code>BigDecimal(0.0)</code> to disable rounding.
@@ -2986,7 +2985,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the rounding increment. This method also controls whether rounding is enabled.
+     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+     * enabled.
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
      * <code>BigDecimal(0.0)</code> to disable rounding.
@@ -3010,7 +3010,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the rounding increment. This method also controls whether rounding is enabled.
+     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+     * enabled.
      *
      * @param newValue A positive rounding increment, or 0.0 to disable rounding.
      * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
@@ -3047,7 +3048,7 @@ public class DecimalFormat extends NumberFormat {
     static final double roundingIncrementEpsilon = 0.000000001;
 
     /**
-     * Gets the rounding mode.
+     * Returns the rounding mode.
      *
      * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
      * <code>BigDecimal.ROUND_UNNECESSARY</code>.
@@ -3087,7 +3088,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the width to which the output of <code>format()</code> is padded. The width is
+     * Returns the width to which the output of <code>format()</code> is padded. The width is
      * counted in 16-bit code units.
      *
      * @return the format width, or zero if no padding is in effect
@@ -3103,7 +3104,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Set the width to which the output of <code>format()</code> is
+     * Sets the width to which the output of <code>format()</code> is
      * padded. The width is counted in 16-bit code units.  This method
      * also controls whether padding is enabled.
      *
@@ -3125,7 +3126,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the character used to pad to the format width. The default is ' '.
+     * {@icu} Returns the character used to pad to the format width. The default is ' '.
      *
      * @return the pad character
      * @see #setFormatWidth
@@ -3140,8 +3141,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the character used to pad to the format width. If padding is not enabled, then
-     * this will take effect if padding is later enabled.
+     * {@icu} Sets the character used to pad to the format width. If padding is not
+     * enabled, then this will take effect if padding is later enabled.
      *
      * @param padChar the pad character
      * @see #setFormatWidth
@@ -3156,9 +3157,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the position at which padding will take place. This is the location at which
-     * padding will be inserted if the result of <code>format()</code> is shorter than the
-     * format width.
+     * {@icu} Returns the position at which padding will take place. This is the location at
+     * which padding will be inserted if the result of <code>format()</code> is shorter
+     * than the format width.
      *
      * @return the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
      *         <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
@@ -3179,9 +3180,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the position at which padding will take place. This is the location at which
-     * padding will be inserted if the result of <code>format()</code> is shorter than the
-     * format width. This has no effect unless padding is enabled.
+     * {@icu} Sets the position at which padding will take place. This is the location at
+     * which padding will be inserted if the result of <code>format()</code> is shorter
+     * than the format width. This has no effect unless padding is enabled.
      *
      * @param padPos the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
      * <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
@@ -3206,7 +3207,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns whether or not scientific notation is used.
+     * {@icu} Returns whether or not scientific notation is used.
      *
      * @return true if this object formats and parses scientific notation
      * @see #setScientificNotation
@@ -3221,11 +3222,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets whether or not scientific notation is used. When scientific notation is used,
-     * the effective maximum number of integer digits is <= 8. If the maximum number of
-     * integer digits is set to more than 8, the effective maximum will be 1. This allows
-     * this call to generate a 'default' scientific number format without additional
-     * changes.
+     * {@icu} Sets whether or not scientific notation is used. When scientific notation is
+     * used, the effective maximum number of integer digits is <= 8. If the maximum number
+     * of integer digits is set to more than 8, the effective maximum will be 1. This
+     * allows this call to generate a 'default' scientific number format without
+     * additional changes.
      *
      * @param useScientific true if this object formats and parses scientific notation
      * @see #isScientificNotation
@@ -3240,7 +3241,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the minimum exponent digits that will be shown.
+     * {@icu} Returns the minimum exponent digits that will be shown.
      *
      * @return the minimum exponent digits that will be shown
      * @see #setScientificNotation
@@ -3255,8 +3256,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the minimum exponent digits that will be shown. This has no effect unless
-     * scientific notation is in use.
+     * {@icu} Sets the minimum exponent digits that will be shown. This has no effect
+     * unless scientific notation is in use.
      *
      * @param minExpDig a value >= 1 indicating the fewest exponent
      * digits that will be shown
@@ -3276,7 +3277,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns whether the exponent sign is always shown.
+     * {@icu} Returns whether the exponent sign is always shown.
      *
      * @return true if the exponent is always prefixed with either the localized minus
      * sign or the localized plus sign, false if only negative exponents are prefixed with
@@ -3293,7 +3294,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets whether the exponent sign is always shown. This has no effect unless
+     * {@icu} Sets whether the exponent sign is always shown. This has no effect unless
      * scientific notation is in use.
      *
      * @param expSignAlways true if the exponent is always prefixed with either the
@@ -3339,13 +3340,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the secondary grouping size. In some locales one grouping interval is used
-     * for the least significant integer digits (the primary grouping size), and another
-     * is used for all others (the secondary grouping size). A formatter supporting a
-     * secondary grouping size will return a positive integer unequal to the primary
-     * grouping size returned by <code>getGroupingSize()</code>. For example, if the
-     * primary grouping size is 4, and the secondary grouping size is 2, then the number
-     * 123456789 formats as "1,23,45,6789", and the pattern appears as "#,##,###0".
+     * {@icu} Returns the secondary grouping size. In some locales one grouping interval
+     * is used for the least significant integer digits (the primary grouping size), and
+     * another is used for all others (the secondary grouping size). A formatter
+     * supporting a secondary grouping size will return a positive integer unequal to the
+     * primary grouping size returned by <code>getGroupingSize()</code>. For example, if
+     * the primary grouping size is 4, and the secondary grouping size is 2, then the
+     * number 123456789 formats as "1,23,45,6789", and the pattern appears as "#,##,###0".
      *
      * @return the secondary grouping size, or a value less than one if there is none
      * @see #setSecondaryGroupingSize
@@ -3358,9 +3359,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the secondary grouping size. If set to a value less than 1, then secondary
-     * grouping is turned off, and the primary grouping size is used for all intervals,
-     * not just the least significant.
+     * {@icu} Sets the secondary grouping size. If set to a value less than 1, then
+     * secondary grouping is turned off, and the primary grouping size is used for all
+     * intervals, not just the least significant.
      *
      * @see #getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
@@ -3372,7 +3373,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the MathContext used by this format.
+     * {@icu} Returns the MathContext used by this format.
      *
      * @return desired MathContext
      * @see #getMathContext
@@ -3383,7 +3384,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the MathContext used by this format.
+     * {@icu} Returns the MathContext used by this format.
      *
      * @return desired MathContext
      * @see #getMathContext
@@ -3400,7 +3401,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the MathContext used by this format.
+     * {@icu} Sets the MathContext used by this format.
      *
      * @param newValue desired MathContext
      * @see #getMathContext
@@ -3411,7 +3412,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the MathContext used by this format.
+     * {@icu} Sets the MathContext used by this format.
      *
      * @param newValue desired MathContext
      * @see #getMathContext
@@ -3423,7 +3424,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Gets the behavior of the decimal separator with integers. (The decimal
+     * Returns the behavior of the decimal separator with integers. (The decimal
      * separator will always appear with decimals.)  <p> Example: Decimal ON: 12345 ->
      * 12345.; OFF: 12345 -> 12345
      *
@@ -3452,10 +3453,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns a copy of the CurrencyPluralInfo used by this format. It might return null
-     * if the decimal format is not a plural type currency decimal format. Plural type
-     * currency decimal format means either the pattern in the decimal format contains 3
-     * currency signs, or the decimal format is initialized with PLURALCURRENCYSTYLE.
+     * {@icu} Returns a copy of the CurrencyPluralInfo used by this format. It might
+     * return null if the decimal format is not a plural type currency decimal
+     * format. Plural type currency decimal format means either the pattern in the decimal
+     * format contains 3 currency signs, or the decimal format is initialized with
+     * PLURALCURRENCYSTYLE.
      *
      * @return desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
@@ -3472,8 +3474,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the CurrencyPluralInfo used by this format. The format uses a copy of the
-     * provided information.
+     * {@icu} Sets the CurrencyPluralInfo used by this format. The format uses a copy of
+     * the provided information.
      *
      * @param newInfo desired CurrencyPluralInfo
      * @see CurrencyPluralInfo
@@ -3485,8 +3487,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Standard override; no change in semantics.
-     *
+     * Overrides clone.
      * @stable ICU 2.0
      */
     public Object clone() {
@@ -3508,8 +3509,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Overrides equals
-     *
+     * Overrides equals.
      * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
@@ -3589,8 +3589,7 @@ public class DecimalFormat extends NumberFormat {
     // }
 
     /**
-     * Overrides hashCode
-     *
+     * Overrides hashCode.
      * @stable ICU 2.0
      */
     public int hashCode() {
@@ -3881,8 +3880,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Formats the object to an attributed string, and return the corresponding iterator
-     * Overrides superclass method.
+     * Formats the object to an attributed string, and return the corresponding iterator.
      *
      * @stable ICU 3.6
      */
@@ -4730,8 +4728,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the minimum number of significant digits that will be displayed. This value
-     * has no effect unless areSignificantDigitsUsed() returns true.
+     * {@icu} Returns the minimum number of significant digits that will be
+     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
+     * returns true.
      *
      * @return the fewest significant digits that will be shown
      * @stable ICU 3.0
@@ -4741,8 +4740,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the maximum number of significant digits that will be displayed. This value
-     * has no effect unless areSignificantDigitsUsed() returns true.
+     * {@icu} Returns the maximum number of significant digits that will be
+     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
+     * returns true.
      *
      * @return the most significant digits that will be shown
      * @stable ICU 3.0
@@ -4752,10 +4752,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the minimum number of significant digits that will be displayed. If
+     * {@icu} Sets the minimum number of significant digits that will be displayed. If
      * <code>min</code> is less than one then it is set to one. If the maximum significant
      * digits count is less than <code>min</code>, then it is set to
-     * <code>min</code>. This value has no effect unless areSignificantDigitsUsed()
+     * <code>min</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
      * returns true.
      *
      * @param min the fewest significant digits to be shown
@@ -4772,10 +4772,10 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets the maximum number of significant digits that will be displayed. If
+     * {@icu} Sets the maximum number of significant digits that will be displayed. If
      * <code>max</code> is less than one then it is set to one. If the minimum significant
      * digits count is greater than <code>max</code>, then it is set to
-     * <code>max</code>. This value has no effect unless areSignificantDigitsUsed()
+     * <code>max</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
      * returns true.
      *
      * @param max the most significant digits to be shown
@@ -4792,8 +4792,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns true if significant digits are in use or false if integer and fraction
-     * digit counts are in use.
+     * {@icu} Returns true if significant digits are in use or false if integer and
+     * fraction digit counts are in use.
      *
      * @return true if significant digits are in use
      * @stable ICU 3.0
@@ -4803,8 +4803,8 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets whether significant digits are in use, or integer and fraction digit counts
-     * are in use.
+     * {@icu} Sets whether significant digits are in use, or integer and fraction digit
+     * counts are in use.
      *
      * @param useSignificantDigits true to use significant digits, or false to use integer
      * and fraction digit counts
@@ -4887,11 +4887,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Sets whether {@link #parse(String, ParsePosition)} method returns BigDecimal. The
+     * Sets whether {@link #parse(String, ParsePosition)} returns BigDecimal. The
      * default value is false.
      *
      * @param value true if {@link #parse(String, ParsePosition)}
-     * method returns BigDecimal.
+     * returns BigDecimal.
      * @stable ICU 3.6
      */
     public void setParseBigDecimal(boolean value) {
@@ -4899,9 +4899,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns whether {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * Returns whether {@link #parse(String, ParsePosition)} returns BigDecimal.
      *
-     * @return true if {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * @return true if {@link #parse(String, ParsePosition)} returns BigDecimal.
      * @stable ICU 3.6
      */
     public boolean isParseBigDecimal() {
@@ -5319,8 +5319,8 @@ public class DecimalFormat extends NumberFormat {
     // ----------------------------------------------------------------------
 
     /**
-     * Constant for <code>getPadPosition()</code> and <code>setPadPosition()</code>
-     * specifying pad characters inserted before the prefix.
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
+     * specify pad characters inserted before the prefix.
      *
      * @see #setPadPosition
      * @see #getPadPosition
@@ -5332,8 +5332,8 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_BEFORE_PREFIX = 0;
 
     /**
-     * Constant for <code>getPadPosition()</code> and <code>setPadPosition()</code>
-     * specifying pad characters inserted after the prefix.
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
+     * specify pad characters inserted after the prefix.
      *
      * @see #setPadPosition
      * @see #getPadPosition
@@ -5345,8 +5345,8 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_AFTER_PREFIX = 1;
 
     /**
-     * Constant for <code>getPadPosition()</code> and <code>setPadPosition()</code>
-     * specifying pad characters inserted before the suffix.
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
+     * specify pad characters inserted before the suffix.
      *
      * @see #setPadPosition
      * @see #getPadPosition
@@ -5358,8 +5358,8 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_BEFORE_SUFFIX = 2;
 
     /**
-     * Constant for <code>getPadPosition()</code> and <code>setPadPosition()</code>
-     * specifying pad characters inserted after the suffix.
+     * {@icu} Constant for {@link #getPadPosition()} and {@link #setPadPosition(int)} to
+     * specify pad characters inserted after the suffix.
      *
      * @see #setPadPosition
      * @see #getPadPosition

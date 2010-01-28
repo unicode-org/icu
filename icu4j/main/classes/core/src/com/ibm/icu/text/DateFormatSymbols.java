@@ -27,14 +27,15 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * <code>DateFormatSymbols</code> is a public class for encapsulating
+ * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}
+ *
+ * <p><code>DateFormatSymbols</code> is a public class for encapsulating
  * localizable date-time formatting data, such as the names of the
  * months, the names of the days of the week, and the time zone data.
  * <code>DateFormat</code> and <code>SimpleDateFormat</code> both use
  * <code>DateFormatSymbols</code> to encapsulate this information.
  *
- * <p>
- * Typically you shouldn't use <code>DateFormatSymbols</code> directly.
+ * <p>Typically you shouldn't use <code>DateFormatSymbols</code> directly.
  * Rather, you are encouraged to create a date-time formatter with the
  * <code>DateFormat</code> class's factory methods: <code>getTimeInstance</code>,
  * <code>getDateInstance</code>, or <code>getDateTimeInstance</code>.
@@ -45,8 +46,7 @@ import com.ibm.icu.util.UResourceBundle;
  * creating formatters using <code>DateFormat</code>'s factory methods,
  * see {@link DateFormat}.
  *
- * <p>
- * If you decide to create a date-time formatter with a specific
+ * <p>If you decide to create a date-time formatter with a specific
  * format pattern for a specific locale, you can do so with:
  * <blockquote>
  * <pre>
@@ -54,18 +54,16 @@ import com.ibm.icu.util.UResourceBundle;
  * </pre>
  * </blockquote>
  *
- * <p>
- * <code>DateFormatSymbols</code> objects are clonable. When you obtain
+ * <p><code>DateFormatSymbols</code> objects are clonable. When you obtain
  * a <code>DateFormatSymbols</code> object, feel free to modify the
  * date-time formatting data. For instance, you can replace the localized
  * date-time format pattern characters with the ones that you feel easy
  * to remember. Or you can change the representative cities
  * to your favorite ones.
  *
- * <p>
- * New <code>DateFormatSymbols</code> subclasses may be added to support
+ * <p>New <code>DateFormatSymbols</code> subclasses may be added to support
  * <code>SimpleDateFormat</code> for date-time formatting for additional locales.
-
+ *
  * @see          DateFormat
  * @see          SimpleDateFormat
  * @see          com.ibm.icu.util.SimpleTimeZone
@@ -81,19 +79,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     // Constants for context
     /**
-     * Constant for context.
+     * {@icu} Constant for context.
      * @stable ICU 3.6
      */
     public static final int FORMAT = 0;
 
     /**
-     * Constant for context.
+     * {@icu} Constant for context.
      * @stable ICU 3.6
      */
     public static final int STANDALONE = 1;
 
     /**
-     * Constant for context.
+     * {@icu} Constant for context.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -102,49 +100,49 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // Constants for width
 
     /**
-     * Constant for width.
+     * {@icu} Constant for width.
      * @stable ICU 3.6
      */
     public static final int ABBREVIATED = 0;
 
     /**
-     * Constant for width.
+     * {@icu} Constant for width.
      * @stable ICU 3.6
      */
     public static final int WIDE = 1;
 
     /**
-     * Constant for width.
+     * {@icu} Constant for width.
      * @stable ICU 3.6
      */
     public static final int NARROW = 2;
 
     /**
-     * Constant for width.
+     * {@icu} Constant for width.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public static final int DT_WIDTH_COUNT = 3;
 
     /**
-     * Construct a DateFormatSymbols object by loading format data from
+     * Constructs a DateFormatSymbols object by loading format data from
      * resources for the default locale.
      *
-     * @throws  java.util.MissingResourceException if the resources for the default locale cannot be
-     *          found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the default locale
+     *          cannot be found or cannot be loaded.
      * @stable ICU 2.0
      */
     public DateFormatSymbols()
     {
         this(ULocale.getDefault());
     }
-    
+
     /**
-     * Construct a DateFormatSymbols object by loading format data from
+     * Constructs a DateFormatSymbols object by loading format data from
      * resources for the given locale.
      *
-     * @throws  java.util.MissingResourceException if the resources for the specified locale cannot be
-     *          found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the specified
+     *          locale cannot be found or cannot be loaded.
      * @stable ICU 2.0
      */
     public DateFormatSymbols(Locale locale)
@@ -153,11 +151,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Construct a DateFormatSymbols object by loading format data from
+     * {@icu} Constructs a DateFormatSymbols object by loading format data from
      * resources for the given ulocale.
      *
-     * @throws  java.util.MissingResourceException if the resources for the specified locale cannot be
-     *          found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the specified
+     *          locale cannot be found or cannot be loaded.
      * @stable ICU 3.2
      */
     public DateFormatSymbols(ULocale locale)
@@ -166,13 +164,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets a DateFormatSymbols instance for the default locale.
-     * <br><br>
-     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * Returns a DateFormatSymbols instance for the default locale.
+     *
+     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
      * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols()</code>.
      * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
      * or its equivalent implementation for now.
-     * 
+     *
      * @return A DateFormatSymbols instance.
      * @stable ICU 3.8
      */
@@ -181,13 +179,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets a DateFormatSymbols instance for the given locale.
-     * <br><br>
-     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * Returns a DateFormatSymbols instance for the given locale.
+     *
+     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
      * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
      * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
      * or its equivalent implementation for now.
-     * 
+     *
      * @param locale the locale.
      * @return A DateFormatSymbols instance.
      * @stable ICU 3.8
@@ -197,13 +195,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets a DateFormatSymbols instance for the given locale.
-     * <br><br>
-     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * {@icu} Returns a DateFormatSymbols instance for the given locale.
+     *
+     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
      * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
      * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
      * or its equivalent implementation for now.
-     * 
+     *
      * @param locale the locale.
      * @return A DateFormatSymbols instance.
      * @stable ICU 3.8
@@ -213,15 +211,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns an array of all locales for which the <code>getInstance</code> methods of this
-     * class can return localized instances.
-     * <br><br>
-     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
-     * this method simply returns the array of <code>Locale</code>s available in this class.
-     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
-     * or its equivalent implementation for now.
-     * 
-     * @return An array of <code>Locale</code>s for which localized <code>DateFormatSymbols</code> instances are available.
+     * Returns an array of all locales for which the <code>getInstance</code> methods of
+     * this class can return localized instances.
+     *
+     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
+     * this method simply returns the array of <code>Locale</code>s available in this
+     * class.  ICU does not support <code>DateFormatSymbolsProvider</code> introduced in
+     * Java 6 or its equivalent implementation for now.
+     *
+     * @return An array of <code>Locale</code>s for which localized
+     * <code>DateFormatSymbols</code> instances are available.
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
@@ -229,22 +228,23 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns an array of all locales for which the <code>getInstance</code> methods of this
-     * class can return localized instances.
-     * <br><br>
-     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
-     * this method simply returns the array of <code>ULocale</code>s available in this class.
-     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
-     * or its equivalent implementation for now.
-     * 
-     * @return An array of <code>ULocale</code>s for which localized <code>DateFormatSymbols</code> instances are available.
+     * {@icu} Returns an array of all locales for which the <code>getInstance</code>
+     * methods of this class can return localized instances.
+     *
+     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
+     * this method simply returns the array of <code>ULocale</code>s available in this
+     * class.  ICU does not support <code>DateFormatSymbolsProvider</code> introduced in
+     * Java 6 or its equivalent implementation for now.
+     *
+     * @return An array of <code>ULocale</code>s for which localized
+     * <code>DateFormatSymbols</code> instances are available.
      * @draft ICU 3.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
     }
-    
+
     /**
      * Era strings. For example: "AD" and "BC".  An array of 2 strings,
      * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
@@ -258,7 +258,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String eraNames[] = null;
-    
+
     /**
      * Narrow era names. For example: "A" and "B". An array of 2 strings,
      * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
@@ -379,28 +379,28 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String ampms[] = null;
-    
+
     /**
      * Abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
      * of 4 strings indexed by the month divided by 3.
      * @serial
      */
     String shortQuarters[] = null;
-    
+
     /**
      * Full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
      * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
      * @serial
      */
     String quarters[] = null;
-    
+
     /**
      * Standalone abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
      * of 4 strings indexed by the month divided by 3.
      * @serial
      */
     String standaloneShortQuarters[] = null;
-    
+
     /**
      * Standalone full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
      * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
@@ -458,14 +458,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.TimeZone
      * @serial
      */
-     private String zoneStrings[][] = null;
+    private String zoneStrings[][] = null;
 
      /**
       * Since ICU 3.8.1, we use ZoneStringFormat to access localized
       * zone names.  This field remains null unless setZoneStrings is
       * called.
       */
-     private transient ZoneStringFormat zsformat = null;
+    private transient ZoneStringFormat zsformat = null;
 
      /**
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
@@ -483,13 +483,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * "Xz...", then localized patterns would use 'X' for era and 'z' for year.
      * @serial
      */
-    String  localPatternChars = null;
+    String localPatternChars = null;
 
     /* use serialVersionUID from JDK 1.1.4 for interoperability */
     private static final long serialVersionUID = -5987973545549424702L;
 
     /**
-     * Gets era strings. For example: "AD" and "BC".
+     * Returns era strings. For example: "AD" and "BC".
      * @return the era strings.
      * @stable ICU 2.0
      */
@@ -507,7 +507,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets era name strings. For example: "Anno Domini" and "Before Christ".
+     * {@icu} Returns era name strings. For example: "Anno Domini" and "Before Christ".
      * @return the era strings.
      * @stable ICU 3.4
      */
@@ -516,7 +516,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Sets era name strings. For example: "Anno Domini" and "Before Christ".
+     * {@icu} Sets era name strings. For example: "Anno Domini" and "Before Christ".
      * @param newEraNames the new era strings.
      * @stable ICU 3.8
      */
@@ -525,7 +525,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets month strings. For example: "January", "February", etc.
+     * Returns month strings. For example: "January", "February", etc.
      * @return the month strings.
      * @stable ICU 2.0
      */
@@ -534,7 +534,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets month strings. For example: "January", "February", etc.
+     * Returns month strings. For example: "January", "February", etc.
      * @param context    The month context, FORMAT or STANDALONE.
      * @param width      The width or the returned month string,
      *                   either WIDE, ABBREVIATED, or NARROW.
@@ -621,9 +621,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
               break;
         }
     }
-    
+
     /**
-     * Gets short month strings. For example: "Jan", "Feb", etc.
+     * Returns short month strings. For example: "Jan", "Feb", etc.
      * @return the short month strings.
      * @stable ICU 2.0
      */
@@ -641,7 +641,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets weekday strings. For example: "Sunday", "Monday", etc.
+     * Returns weekday strings. For example: "Sunday", "Monday", etc.
      * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
      * @stable ICU 2.0
@@ -651,7 +651,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets weekday strings. For example: "Sunday", "Monday", etc.
+     * Returns weekday strings. For example: "Sunday", "Monday", etc.
      * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
      * @param context    Formatting context, either FORMAT or STANDALONE.
@@ -743,7 +743,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets short weekday strings. For example: "Sun", "Mon", etc.
+     * Returns short weekday strings. For example: "Sun", "Mon", etc.
      * @return the short weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
      * @stable ICU 2.0
@@ -763,7 +763,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         shortWeekdays = duplicate(newShortWeekdays);
     }
     /**
-     * Gets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+     * {@icu} Returns quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
      * @param context    The quarter context, FORMAT or STANDALONE.
      * @param width      The width or the returned quarter string,
      *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
@@ -786,7 +786,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                      break;
               }
               break;
-              
+
            case STANDALONE :
               switch(width) {
                  case WIDE :
@@ -795,7 +795,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                  case ABBREVIATED :
                     returnValue = standaloneShortQuarters;
                     break;
-                 case NARROW: 
+                 case NARROW:
                      returnValue = null;
                      break;
               }
@@ -805,7 +805,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+     * {@icu} Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
      * @param newQuarters the new quarter strings.
      * @param context    The formatting context, FORMAT or STANDALONE.
      * @param width      The width of the quarter string,
@@ -844,7 +844,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets ampm strings. For example: "AM" and "PM".
+     * Returns am/pm strings. For example: "AM" and "PM".
      * @return the weekday strings.
      * @stable ICU 2.0
      */
@@ -853,7 +853,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Sets ampm strings. For example: "AM" and "PM".
+     * Sets am/pm strings. For example: "AM" and "PM".
      * @param newAmpms the new ampm strings.
      * @stable ICU 2.0
      */
@@ -862,7 +862,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets timezone strings.
+     * Returns timezone strings.
      * @return the timezone strings.
      * @stable ICU 2.0
      */
@@ -884,9 +884,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Gets localized date-time pattern characters. For example: 'u', 't', etc.
-     * <p>
-     * Note: ICU no longer provides localized date-time pattern characters for a locale
+     * Returns localized date-time pattern characters. For example: 'u', 't', etc.
+     *
+     * <p>Note: ICU no longer provides localized date-time pattern characters for a locale
      * starting ICU 3.8.  This method returns the non-localized date-time pattern
      * characters unless user defined localized data is set by setLocalPatternChars.
      * @return the localized date-time pattern characters.
@@ -907,7 +907,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Overrides Cloneable
+     * Overrides clone.
      * @stable ICU 2.0
      */
     public Object clone()
@@ -933,7 +933,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Override equals
+     * Overrides equals.
      * @stable ICU 2.0
      */
     public boolean equals(Object obj)
@@ -969,16 +969,17 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     // =======================privates===============================
 
-    /*
+    /**
      * Useful constant for defining timezone offsets.
      */
     static final int millisPerHour = 60*60*1000;
 
     // DateFormatSymbols cache
-    private static ICUCache<String, DateFormatSymbols> DFSCACHE = new SimpleCache<String, DateFormatSymbols>();
+    private static ICUCache<String, DateFormatSymbols> DFSCACHE =
+        new SimpleCache<String, DateFormatSymbols>();
 
     /**
-     * Initialize format symbols for the locale and calendar type
+     * Initializes format symbols for the locale and calendar type
      * @param desiredLocale The locale whose symbols are desired.
      * @param type          The calendar type whose date format symbols are desired.
      * @stable ICU 3.0
@@ -1000,9 +1001,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
     }
 
-    /* 
-     * Initialize format symbols using another instance.
-     * 
+    /**
+     * Initializes format symbols using another instance.
+     *
      * TODO Clean up initialization methods for subclasses
      */
     void initializeData(DateFormatSymbols dfs) {
@@ -1039,7 +1040,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Initialize format symbols for the locale and calendar type
+     * Initializes format symbols for the locale and calendar type
      * @param desiredLocale The locale whose symbols are desired.
      * @param calData       The calendar resource data
      * @internal
@@ -1059,7 +1060,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         catch (MissingResourceException e) {
            eraNames = calData.getEras("abbreviated");
         }
-        
+
         // NOTE: since the above code assumes that abbreviated
         // era names exist, we make the same assumption here too.
         try {
@@ -1073,7 +1074,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         try {
            narrowMonths = calData.getStringArray("monthNames", "narrow");
-        } 
+        }
         catch (MissingResourceException e) {
             try {
                 narrowMonths = calData.getStringArray("monthNames", "stand-alone", "narrow");
@@ -1085,27 +1086,29 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         try {
            standaloneMonths = calData.getStringArray("monthNames", "stand-alone", "wide");
-        } 
+        }
         catch (MissingResourceException e) {
            standaloneMonths = calData.getStringArray("monthNames", "format", "wide");
         }
 
         try {
-           standaloneShortMonths = calData.getStringArray("monthNames", "stand-alone", "abbreviated");
-        } 
+           standaloneShortMonths =
+               calData.getStringArray("monthNames", "stand-alone", "abbreviated");
+        }
         catch (MissingResourceException e) {
            standaloneShortMonths = calData.getStringArray("monthNames", "format", "abbreviated");
         }
 
         try {
            standaloneNarrowMonths = calData.getStringArray("monthNames", "stand-alone", "narrow");
-        } 
+        }
         catch (MissingResourceException e) {
            try {
               standaloneNarrowMonths = calData.getStringArray("monthNames", "format", "narrow");
            }
            catch (MissingResourceException e1) {
-              standaloneNarrowMonths = calData.getStringArray("monthNames", "format", "abbreviated");
+              standaloneNarrowMonths =
+                  calData.getStringArray("monthNames", "format", "abbreviated");
            }
         }
 
@@ -1174,20 +1177,20 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = calData.getStringArray("AmPmMarkers");
-        
+
         quarters = calData.getStringArray("quarters", "wide");
         shortQuarters = calData.getStringArray("quarters", "abbreviated");
 
         try {
            standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
-        } 
+        }
         catch (MissingResourceException e) {
            standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
         }
 
         try {
            standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
-        } 
+        }
         catch (MissingResourceException e) {
             standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
         }
@@ -1197,7 +1200,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         requestedLocale = desiredLocale;
 
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
+        ICUResourceBundle rb =
+            (ICUResourceBundle)UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
 
         // Because localized date/time pattern characters will be obsolete in CLDR,
         // we decided not to maintain localized pattern characters in ICU any more.
@@ -1217,8 +1222,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         {"+HH:mm:ss", "+HH:mm"}
     };
 
-    /*
-     * Initialize localized GMT format patterns
+    /**
+     * Initializes localized GMT format patterns
      */
     private void initializeGMTFormat(ULocale desiredLocale) {
         // TimeZone format localization is not included in CalendarData
@@ -1241,18 +1246,24 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             // CLDR 1.5 does not have GMT offset pattern including second field.
             // For now, append "ss" to the end.
             if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf(':') != -1) {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ":ss";
+                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ":ss";
             } else if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf('.') != -1) {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ".ss";
+                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ".ss";
             } else {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + "ss";
+                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + "ss";
             }
             if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf(':') != -1) {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ":ss";
+                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ":ss";
             } else if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf('.') != -1) {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ".ss";
+                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ".ss";
             } else {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + "ss";
+                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
+                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + "ss";
             }
         } catch (MissingResourceException e) {
             gmtHourFormats = DEFAULT_GMT_HOUR_PATTERNS;
@@ -1279,7 +1290,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return equal;
     }
 
-    /*
+    /**
      * Package local method (for now) to get localized GMT format pattern.
      */
     String getGmtFormat() {
@@ -1321,8 +1332,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /*
      * save the input locale
      */
-    private ULocale requestedLocale; 
- 
+    private ULocale requestedLocale;
+
     /*
      * Clones an array of Strings.
      * @param srcArray the source array to be cloned.
@@ -1359,7 +1370,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
-     * Get the {@link DateFormatSymbols} object that should be used to format a
+     * Returns the {@link DateFormatSymbols} object that should be used to format a
      * calendar system's dates in the given locale.
      * <p>
      * <b>Subclassing:</b><br>
@@ -1423,7 +1434,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Get the {@link DateFormatSymbols} object that should be used to format a
+     * Returns the {@link DateFormatSymbols} object that should be used to format a
      * calendar system's dates in the given locale.
      * <p>
      * <b>Subclassing:</b><br>
@@ -1512,7 +1523,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Fetch a custom calendar's DateFormatSymbols out of the given resource
+     * Fetches a custom calendar's DateFormatSymbols out of the given resource
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
@@ -1523,19 +1534,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Fetch a custom calendar's DateFormatSymbols out of the given resource
+     * Fetches a custom calendar's DateFormatSymbols out of the given resource
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 3.2
      */
     public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
-        initializeData(locale, 
+        initializeData(locale,
             new CalendarData((ICUResourceBundle)bundle, CalendarUtil.getCalendarType(locale)));
     }
 
     /**
-     * Find the ResourceBundle containing the date format information for
+     * Finds the ResourceBundle containing the date format information for
      * a specified calendar subclass in a given locale.
      * <p>
      * The resource bundle name is based on the calendar's fully-specified
@@ -1549,13 +1560,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated ICU 4.0
      */
     // This API was formerly @stable ICU 2.0
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass, Locale locale)
+    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
+                                                     Locale locale)
         throws MissingResourceException {
         return null;
     }
-        
+
     /**
-     * Find the ResourceBundle containing the date format information for
+     * Finds the ResourceBundle containing the date format information for
      * a specified calendar subclass in a given locale.
      * <p>
      * The resource bundle name is based on the calendar's fully-specified
@@ -1569,7 +1581,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated ICU 4.0
      */
     // This API was formerly @stable ICU 3.2
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass, ULocale locale)
+    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
+                                                     ULocale locale)
         throws MissingResourceException {
         return null;
     }
@@ -1588,7 +1601,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         throws MissingResourceException {
         return null;
     }
-    
+
     /**
      * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
      * a Calendar instance instead of a Calendar class.
@@ -1607,7 +1620,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * Return the locale that was used to create this object, or null.
+     * Returns the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
      * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
@@ -1635,8 +1648,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             this.actualLocale : this.validLocale;
     }
 
-    /*
-     * Set information about the locales that were used to create this
+    /**
+     * Sets information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
      * both arguments should be set to null.  Otherwise, neither
      * should be null.  The actual locale must be at the same level or
@@ -1664,13 +1677,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.actualLocale = actual;
     }
 
-    /*
+    /**
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale validLocale;
 
-    /*
+    /**
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
@@ -1679,7 +1692,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     // -------- END ULocale boilerplate --------
 
-    /*
+    /**
      * 3.8 or older version did not have localized GMT format
      * patterns.
      */

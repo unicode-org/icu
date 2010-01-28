@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2008, International Business Machines Corporation and    *
+* Copyright (C) 2002-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -222,6 +222,21 @@ public class CheckTags {
         return UNKNOWN;
     }
 
+    static final String[] icuTagNames = {
+        "@icu", "@icunote", "@icuenhanced"
+    };
+    static final int ICU = 0;
+    static final int ICUNOTE = 1;
+    static final int ICUENHANCED = 2;
+    static int icuTagIndex(String name) {
+        for (int i = 0; i < icuTagNames.length; ++i) {
+            if (icuTagNames[i].equals(name)) {
+                return i;
+            }
+        }
+        return UNKNOWN;
+    }
+
     boolean newline = false;
 
     void output(String msg, boolean error, boolean newline) {
@@ -252,9 +267,16 @@ public class CheckTags {
         output(msg, true, true);
     }
 
-    void tagErr(Tag tag) {
+    void tagErr(String msg, Tag tag) {
         // Tag.position() requires JDK 1.4, build.xml tests for this
-        errln(tag.toString() + " [" + tag.position() + "]");
+        if (msg.length() > 0) {
+            msg += ": ";
+        }
+        errln(msg + tag.toString() + " [" + tag.position() + "]");
+    };
+
+    void tagErr(Tag tag) {
+        tagErr("", tag);
     }
 
     void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
@@ -306,7 +328,6 @@ public class CheckTags {
 
     /** Return true if subelements of this doc should be checked */
     boolean doTags(ProgramElementDoc doc) {
-        Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
         boolean foundProvisionalTag = false;
@@ -316,9 +337,39 @@ public class CheckTags {
         boolean foundStableTag = false;
         boolean retainAll = false;
 
-        for (int i = 0; i < tags.length; ++i) {
-            Tag tag = tags[i];
+        // first check inline tags
+        for (Tag tag : doc.inlineTags()) {
+            int index = icuTagIndex(tag.name());
+            if (index >= 0) {
+                String text = tag.text().trim();
+                switch (index) {
+                case ICU: {
+                    if (doc.isClass() || doc.isInterface()) {
+                        tagErr("tag should appear only in member docs", tag);
+                    }
+                } break;
+                case ICUNOTE: {
+                    if (text.length() > 0) {
+                        tagErr("tag should not contain text", tag);
+                    }
+                } break;
+                case ICUENHANCED: {
+                    if (text.length() == 0) {
+                        tagErr("text should name related jdk class", tag);
+                    }
+                    if (!(doc.isClass() || doc.isInterface())) {
+                        tagErr("tag should appear only in class/interface docs", tag);
+                    }
+                } break;
+                default:
+                    tagErr("unrecognized tag index for tag", tag);
+                    break;
+                }
+            }
+        }
 
+        // next check regular tags
+        for (Tag tag : doc.tags()) {
             String kind = tag.kind();
             int ix = tagKindIndex(kind);
 

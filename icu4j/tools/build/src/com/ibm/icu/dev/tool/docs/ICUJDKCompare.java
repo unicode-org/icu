@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -253,7 +253,7 @@ public class ICUJDKCompare {
         if (trgPrefix == null) {
             trgPrefix = kTrgPrefix;
         }
-        
+
         if (classPairs == null) {
             processPairInfo(kPairInfo);
         }
@@ -350,6 +350,11 @@ public class ICUJDKCompare {
 
         Set set1 = getFieldSet(fields1);
         Set set2 = getFieldSet(fields2);
+
+        if (n1.indexOf("DecimalFormatSymbols") != -1) {
+          pw.format("fields in %s: %s%n", n1, set1);
+          pw.format("fields in %s: %s%n", n2, set2);
+        }
 
         Map diffConss = diffMethodMaps(cmap2, cmap1);
         Map diffMeths = diffMethodMaps(map2, map1);
@@ -619,7 +624,7 @@ public class ICUJDKCompare {
         if (il == null) {
             return m1;
         }
-            
+
         Map result = new TreeMap(((TreeMap)m1).comparator());
         result.putAll(m1);
         Iterator iter = result.entrySet().iterator();
@@ -633,7 +638,7 @@ public class ICUJDKCompare {
                     continue loop;
                 }
             }
-        }            
+        }
         return result;
     }
 
@@ -660,7 +665,7 @@ public class ICUJDKCompare {
         if (il == null) {
             return s1;
         }
-            
+
         Set result = (Set)((TreeSet)s1).clone();
         Iterator iter = result.iterator();
         loop: while (iter.hasNext()) {
@@ -673,7 +678,7 @@ public class ICUJDKCompare {
                     continue loop;
                 }
             }
-        }            
+        }
         return result;
     }
 
