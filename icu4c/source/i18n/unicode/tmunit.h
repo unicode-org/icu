@@ -25,13 +25,13 @@ U_NAMESPACE_BEGIN
  * Measurement unit for time units.
  * @see TimeUnitAmount
  * @see TimeUnit
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 class U_I18N_API TimeUnit: public MeasureUnit {
 public:
     /**
      * Constants for all the time units we supported.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     enum UTimeUnitFields {
         UTIMEUNIT_YEAR,
@@ -52,7 +52,7 @@ public:
      *                       If the timeUnitField is invalid,
      *                       then this will be set to U_ILLEGAL_ARGUMENT_ERROR.
      * @return               a TimeUnit instance
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     static TimeUnit* U_EXPORT2 createInstance(UTimeUnitFields timeUnitField,
                                               UErrorCode& status);
@@ -60,33 +60,33 @@ public:
 
     /**
      * Override clone.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     virtual UObject* clone() const;
 
     /**
      * Copy operator.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     TimeUnit(const TimeUnit& other);
 
     /**
      * Assignment operator.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     TimeUnit& operator=(const TimeUnit& other);
 
     /**
      * Equality operator. 
      * @return true if 2 objects are the same.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     virtual UBool operator==(const UObject& other) const;
 
     /**
      * Non-Equality operator. 
      * @return true if 2 objects are not the same.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     UBool operator!=(const UObject& other) const;
 
@@ -96,7 +96,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     virtual UClassID getDynamicClassID() const;
 
@@ -104,7 +104,7 @@ public:
      * Returns the class ID for this class. This is used to compare to
      * the return value of getDynamicClassID().
      * @return The class ID for all objects of this class.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
@@ -112,13 +112,13 @@ public:
     /**
      * Get time unit field.
      * @return time unit field.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     UTimeUnitFields getTimeUnitField() const;
 
     /**
      * Destructor.
-     * @stable ICU 4.4 
+     * @stable ICU 4.2 
      */
     virtual ~TimeUnit();
 

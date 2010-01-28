@@ -158,7 +158,7 @@ enum UCalendarType {
   UCAL_TRADITIONAL,
   /**
    * A better name for UCAL_TRADITIONAL.
-   * @stable ICU 4.4
+   * @draft ICU 4.2
    */
   UCAL_DEFAULT = UCAL_TRADITIONAL,
   /**
@@ -1170,7 +1170,7 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
  * @param cal The UCalendar to query.
  * @param status The error code for the operation.
  * @return The resource keyword value string.
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE const char * U_EXPORT2
 ucal_getType(const UCalendar *cal, UErrorCode* status);
@@ -1189,7 +1189,7 @@ ucal_getType(const UCalendar *cal, UErrorCode* status);
  *                      it will return all the available values for the locale.
  * @param status error status
  * @return a string enumeration over keyword values for the given key and the locale.
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char* key,

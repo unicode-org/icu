@@ -218,7 +218,7 @@ public:
      *
      * @param count    Filled in with length of the array.
      * @return         the narrow era strings.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     const UnicodeString* getNarrowEras(int32_t& count) const;
 
@@ -226,7 +226,7 @@ public:
      * Sets narrow era strings. For example: "A" and "B".
      * @param narrowEras  Array of narrow era strings (DateFormatSymbols retains ownership.)
      * @param count Filled in with length of the array.
-     * @stable ICU 4.4
+     * @stable ICU 4.2
      */
     void setNarrowEras(const UnicodeString* narrowEras, int32_t count);
 

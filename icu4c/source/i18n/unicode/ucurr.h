@@ -152,7 +152,7 @@ ucurr_getName(const UChar* currency,
  * @return pointer to display string of 'len' UChars.  If the resource
  * data contains no entry for 'currency', then 'currency' itself is
  * returned.  
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE const UChar* U_EXPORT2
 ucurr_getPluralName(const UChar* currency,
@@ -303,7 +303,7 @@ ucurr_forLocaleAndDate(const char* locale,
  *                      it will return all the available values for the locale.
  * @param status error status
  * @return a string enumeration over keyword values for the given key and the locale.
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE UEnumeration* U_EXPORT2
 ucurr_getKeywordValuesForLocale(const char* key,

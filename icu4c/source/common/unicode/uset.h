@@ -244,7 +244,7 @@ typedef struct USerializedSet {
  * Equivalent to uset_open(1, 0).
  * @return a newly created USet.  The caller must call uset_close() on
  * it when done.
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE USet* U_EXPORT2
 uset_openEmpty();
@@ -727,7 +727,7 @@ uset_clear(USet* set);
  * @param attributes bitmask for attributes to close over.
  * Currently only the USET_CASE bit is supported.  Any undefined bits
  * are ignored.
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE void U_EXPORT2
 uset_closeOver(USet* set, int32_t attributes);
@@ -736,7 +736,7 @@ uset_closeOver(USet* set, int32_t attributes);
  * Remove all strings from this set.
  *
  * @param set the set
- * @stable ICU 4.4
+ * @stable ICU 4.2
  */
 U_STABLE void U_EXPORT2
 uset_removeAllStrings(USet* set);
