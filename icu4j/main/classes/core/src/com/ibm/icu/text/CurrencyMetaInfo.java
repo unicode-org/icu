@@ -224,6 +224,11 @@ public class CurrencyMetaInfo {
             return new CurrencyFilter(this.region, this.currency, from, to);
         }
 
+        /**
+         * Overrides equals.
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public boolean equals(Object rhs) {
             return rhs instanceof CurrencyFilter &&
@@ -245,6 +250,11 @@ public class CurrencyMetaInfo {
                     this.to == rhs.to);
         }
 
+        /**
+         * Overrides hashCode.
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public int hashCode() {
             int hc = 0;
@@ -262,7 +272,9 @@ public class CurrencyMetaInfo {
         }
 
         /**
-         * Return a string representing the filter, for debugging.
+         * Returns a string representing the filter, for debugging.
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public String toString() {
@@ -307,6 +319,8 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string representing the currency digits, for debugging.
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public String toString() {
@@ -380,6 +394,8 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string useful for debugging.
+         * @draft ICU 4.4
+         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public String toString() {
