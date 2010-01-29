@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2006, International Business Machines Corporation and    *
+* Copyright (C) 2004-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -19,7 +19,7 @@ public final class APIData {
     int version;
     String name;
     String base;
-    TreeSet set;
+    TreeSet<APIInfo> set;
 
     static APIData read(BufferedReader br, boolean internal) {
         try {
@@ -27,7 +27,9 @@ public final class APIData {
 
             data.version = Integer.parseInt(APIInfo.readToken(br)); // version
             if (data.version > APIInfo.VERSION) {
-                throw new IllegalArgumentException("data version " + data.version + " is newer than current version (" + APIInfo.VERSION + ")");
+                throw new IllegalArgumentException(
+                    "data version " + data.version
+                    + " is newer than current version (" + APIInfo.VERSION + ")");
             }
             data.name = APIInfo.readToken(br);
             data.base = APIInfo.readToken(br); // base
@@ -83,8 +85,12 @@ public final class APIData {
         return read(new File(fileName), internal);
     }
 
-    private static final String[] stanames = { "draft", "stable", "deprecated", "obsolete", "internal" };
-    private static final String[] catnames = { "classes", "fields", "constructors", "methods" };
+    private static final String[] stanames = {
+        "draft", "stable", "deprecated", "obsolete", "internal"
+    };
+    private static final String[] catnames = {
+        "classes", "fields", "constructors", "methods"
+    };
 
     public void printStats(PrintWriter pw) {
         // classes, methods, fields
