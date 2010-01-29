@@ -1070,6 +1070,9 @@ public final class Normalizer implements Cloneable {
     }
 
     private static String makeFCD(String src,int options) {
+        if(options == 0) {
+            return Norm2AllModes.getFCDNormalizer2NoIOException().normalize(src);
+        }
         int srcLen = src.length();
         char[] dest = new char[MAX_BUF_SIZE_DECOMPOSE*srcLen];
         int length = 0;
@@ -1169,14 +1172,17 @@ public final class Normalizer implements Cloneable {
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
                                 Mode  mode, int options) {
-        if((mode == NFD || mode == NFC) && options == 0) {
+        if((mode == NFD || mode == NFC || mode == FCD) && options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
             CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
             Norm2AllModes norm2AllModes = Norm2AllModes.getNFCInstanceNoIOException();
             if(mode == NFD) {
                 norm2AllModes.decomp.normalize(srcBuffer, app);
-            } else /* NFC */ {
+            } else if(mode == NFC) {
                 norm2AllModes.comp.normalize(srcBuffer, app);
+            } else /* FCD */ {
+                norm2AllModes.impl.getFCDTrie();
+                norm2AllModes.fcd.normalize(srcBuffer, app);
             }
             return app.length();
         }
