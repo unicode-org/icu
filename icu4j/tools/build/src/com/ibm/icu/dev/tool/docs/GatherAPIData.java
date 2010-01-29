@@ -88,6 +88,14 @@ public class GatherAPIData {
         return new GatherAPIData(root).run();
     }
 
+    /**
+     * If you don't do this, javadoc treats enums like regular classes!
+     * doesn't matter if you pass -source 1.5 or not.
+     */
+    public static LanguageVersion languageVersion() {
+        return LanguageVersion.JAVA_1_5;
+    }
+
     GatherAPIData(RootDoc root) {
         this.root = root;
 
@@ -188,27 +196,24 @@ public class GatherAPIData {
         }
     }
 
-    // Sigh. Javadoc's isEnum/isOrdinaryClass apis don't seem to work.
-    // For now, manually list enum methods to ignore.
-
-    // list of enum classes to ignore
-    private static final String[] ignoredEnumApis = {
-        "com.ibm.icu.text.UnicodeSet.ComparisonStyle.values",
-        "com.ibm.icu.text.UnicodeSet.ComparisonStyle.valueOf",
-        "com.ibm.icu.text.UnicodeSet.SpanCondition.values",
-        "com.ibm.icu.text.UnicodeSet.SpanCondition.valueOf",
-        "com.ibm.icu.text.UnicodeSet.SpanCondition.values",
-        "com.ibm.icu.text.UnicodeSet.SpanCondition.valueOf",
-        "com.ibm.icu.text.LocaleDisplayNames.DialectHandling.values",
-        "com.ibm.icu.text.LocaleDisplayNames.DialectHandling.valueOf",
-    };
+    // Sigh. Javadoc doesn't indicate when the compiler generates
+    // the values and valueOf enum methods.  The position of the
+    // method for these is not always the same as the position of
+    // the class, though it often is, so we can't use that.
 
     private boolean isIgnoredEnumMethod(ProgramElementDoc doc) {
-        String qn = doc.qualifiedName();
-        for (String ignored: ignoredEnumApis) {
-            if (qn.equals(ignored)) {
-                return true;
-            }
+        if (doc.isMethod() && doc.containingClass().isEnum()) {
+            // System.out.println("*** " + doc.qualifiedName() + " pos: " +
+            //                    doc.position().line() +
+            //                    " containined by: " +
+            //                    doc.containingClass().name() +
+            //                    " pos: " +
+            //                    doc.containingClass().position().line());
+            // return doc.position().line() == doc.containingClass().position().line();
+
+            String name = doc.name();
+            // assume we don't have enums that overload these method names.
+            return "values".equals(name) || "valueOf".equals(name);
         }
         return false;
     }
