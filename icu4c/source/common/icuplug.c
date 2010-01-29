@@ -112,10 +112,10 @@ typedef struct UPlugLibrary {
     uint32_t ref;                        /**< reference count */
 } UPlugLibrary;
 
-UPlugLibrary   staticLibraryList[UPLUG_LIBRARY_INITIAL_COUNT];
-UPlugLibrary * libraryList = staticLibraryList;
-int32_t libraryCount = 0;
-int32_t libraryMax = UPLUG_LIBRARY_INITIAL_COUNT;
+static UPlugLibrary   staticLibraryList[UPLUG_LIBRARY_INITIAL_COUNT];
+static UPlugLibrary * libraryList = staticLibraryList;
+static int32_t libraryCount = 0;
+static int32_t libraryMax = UPLUG_LIBRARY_INITIAL_COUNT;
 
 /**
  * Search for a library. Doesn't lock
@@ -228,8 +228,8 @@ uplug_closeLibrary(void *lib, UErrorCode *status) {
 
 #endif
 
-UPlugData pluginList[UPLUG_PLUGIN_INITIAL_COUNT];
-int32_t pluginCount = 0;
+static UPlugData pluginList[UPLUG_PLUGIN_INITIAL_COUNT];
+static int32_t pluginCount = 0;
 
 
 
