@@ -179,6 +179,8 @@ for(;@ARGV; shift(@ARGV)) {
 		$symbolCount++;
             } elsif ( /\(/) { # These are strange functions
                 print STDERR "$ARGV[0]: Not sure what to do with '$_'\n";
+	    } elsif ( /^_init/ ) {
+		&verbose( "$ARGV[0]: Skipped initializer $_\n" );
             } elsif ( /icu_/) {
                 print STDERR "$ARGV[0]: Skipped strange mangled function $_\n";
             } elsif ( /^vtable for /) {
@@ -203,10 +205,11 @@ if( $fileCount == 0 ) {
   die "Error: $itemCount lines from $fileCount files processed, but $symbolCount symbols were found.\n";
 }
 
-&verbose(" Loaded $symbolCount symbols from $itemCount lines in $fileCount files.\n");
 if( $symbolCount == 0 ) {
   die "Error: $itemCount lines from $fileCount files processed, but $symbolCount symbols were found.\n";
 }
+
+print " Loaded $symbolCount symbols from $itemCount lines in $fileCount files.\n";
 
 print HEADER "\n/* C exports renaming data */\n\n";
 foreach(sort keys(%CFuncs)) {
