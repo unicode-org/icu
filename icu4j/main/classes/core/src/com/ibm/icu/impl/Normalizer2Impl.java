@@ -10,9 +10,8 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
-import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
@@ -422,16 +421,58 @@ public final class Normalizer2Impl {
         return load(ICUData.getRequiredStream(name));
     }
 
-    public void addPropertyStarts(UnicodeSet sa) {
-        throw new UnsupportedOperationException();  // TODO
+    public void addPropertyStarts(UnicodeSet set) {
+        /* add the start code point of each same-value range of each trie */
+        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
+        while(trieIterator.hasNext()) {
+            /* add the start code point to the USet */
+            set.add(trieIterator.next().startCodePoint);
+        }
+
+        /* add Hangul LV syllables and LV+1 because of skippables */
+        for(int c=Hangul.HANGUL_BASE; c<Hangul.HANGUL_LIMIT; c+=Hangul.JAMO_T_COUNT) {
+            set.add(c);
+            set.add(c+1);
+        }
+        set.add(Hangul.HANGUL_LIMIT); /* add Hangul+1 to continue with other properties */
     }
 
     // low-level properties ------------------------------------------------ ***
 
     public Trie2_16 getNormTrie() { return normTrie; }
-    public Trie2_16 getFCDTrie() {
-        throw new UnsupportedOperationException();  // TODO
-        // return fcdTrie;  // TODO: build if necessary, with synchronization
+    public synchronized Trie2_16 getFCDTrie() {
+        if(fcdTrie!=null) {
+            return fcdTrie;
+        }
+        Trie2Writable newFCDTrie=new Trie2Writable(0, 0);
+        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
+        while(trieIterator.hasNext()) {
+            // Set the FCD value for a range of same-norm16 charcters.
+            Trie2.Range range=trieIterator.next();
+            if(range.value!=0) {
+                setFCD16FromNorm16(range.startCodePoint, range.endCodePoint, range.value, newFCDTrie);
+            }
+        }
+        for(char lead=0xd800; lead<0xdc00; ++lead) {
+            // Collect (OR together) the FCD values for a range of supplementary characters,
+            // for their lead surrogate code unit.
+            int oredValue=newFCDTrie.get(lead);
+            trieIterator=normTrie.iteratorForLeadSurrogate(lead);
+            while(trieIterator.hasNext()) {
+                oredValue|=trieIterator.next().value;
+            }
+            if(oredValue!=0) {
+                // Set a "bad" value for makeFCD() to break the quick check loop
+                // and look up the value for the supplementary code point.
+                // If there is any lccc, then set the worst-case lccc of 1.
+                // The ORed-together value's tccc is already the worst case.
+                if(oredValue>0xff) {
+                    oredValue=0x100|(oredValue&0xff);
+                }
+                newFCDTrie.setForLeadSurrogateCodeUnit(lead, oredValue);
+            }
+        }
+        return fcdTrie=newFCDTrie.toTrie2_16();
     }
 
     public int getNorm16(int c) { return normTrie.get(c); }
@@ -463,10 +504,51 @@ public final class Normalizer2Impl {
 
     int getFCD16(int c) { return fcdTrie.get(c); }
     int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
-/*
-    void setFCD16FromNorm16(int start, int end, uint16_t norm16,
-                            UTrie2 *newFCDTrie) const;
-*/
+
+    void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
+        // Only loops for 1:1 algorithmic mappings.
+        for(;;) {
+            if(norm16>=MIN_NORMAL_MAYBE_YES) {
+                norm16&=0xff;
+                norm16|=norm16<<8;
+            } else if(norm16<=minYesNo || minMaybeYes<=norm16) {
+                // no decomposition or Hangul syllable, all zeros
+                break;
+            } else if(limitNoNo<=norm16) {
+                int delta=norm16-(minMaybeYes-MAX_DELTA-1);
+                if(start==end) {
+                    start+=delta;
+                    norm16=getNorm16(start);
+                } else {
+                    // the same delta leads from different original characters to different mappings
+                    do {
+                        int c=start+delta;
+                        setFCD16FromNorm16(c, c, getNorm16(c), newFCDTrie);
+                    } while(++start<=end);
+                    break;
+                }
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16);
+                if((firstUnit&MAPPING_LENGTH_MASK)==0) {
+                    // A character that is deleted (maps to an empty string) must
+                    // get the worst-case lccc and tccc values because arbitrary
+                    // characters on both sides will become adjacent.
+                    norm16=0x1ff;
+                } else {
+                    if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                        norm16=extraData.charAt(norm16+1)&0xff00;  // lccc
+                    } else {
+                        norm16=0;
+                    }
+                    norm16|=firstUnit>>8;  // tccc
+                }
+            }
+            newFCDTrie.setRange(start, end, norm16, true);
+            break;
+        }
+    }
+
     /**
      * Get the decomposition for one code point.
      * @param c code point
@@ -893,7 +975,131 @@ public final class Normalizer2Impl {
         throw new UnsupportedOperationException();  // TODO
     }
     public int makeFCD(CharSequence s, int src, int limit, ReorderingBuffer buffer) {
-        throw new UnsupportedOperationException();  // TODO
+        // Note: In this function we use buffer->appendZeroCC() because we track
+        // the lead and trail combining classes here, rather than leaving it to
+        // the ReorderingBuffer.
+        // The exception is the call to decomposeShort() which uses the buffer
+        // in the normal way.
+
+        // Tracks the last FCD-safe boundary, before lccc=0 or after properly-ordered tccc<=1.
+        // Similar to the prevBoundary in the compose() implementation.
+        int prevBoundary=src;
+        int prevSrc;
+        int c=0;
+        int prevFCD16=0;
+        int fcd16=0;
+
+        for(;;) {
+            // count code units with lccc==0
+            for(prevSrc=src; src!=limit;) {
+                if((c=s.charAt(src))<MIN_CCC_LCCC_CP) {
+                    prevFCD16=~c;
+                    ++src;
+                } else if((fcd16=fcdTrie.getFromU16SingleLead((char)c))<=0xff) {
+                    prevFCD16=fcd16;
+                    ++src;
+                } else if(!UTF16.isSurrogate((char)c)) {
+                    break;
+                } else {
+                    char c2;
+                    if(UTF16Plus.isSurrogateLead(c)) {
+                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
+                            c=Character.toCodePoint((char)c, c2);
+                        }
+                    } else /* trail surrogate */ {
+                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
+                            --src;
+                            c=Character.toCodePoint(c2, (char)c);
+                        }
+                    }
+                    if((fcd16=getFCD16(c))<=0xff) {
+                        prevFCD16=fcd16;
+                        src+=Character.charCount(c);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            // copy these code units all at once
+            if(src!=prevSrc) {
+                if(src==limit) {
+                    if(buffer!=null) {
+                        buffer.flushAndAppendZeroCC(s, prevSrc, src);
+                    }
+                    break;
+                }
+                prevBoundary=src;
+                // We know that the previous character's lccc==0.
+                if(prevFCD16<0) {
+                    // Fetching the fcd16 value was deferred for this below-U+0300 code point.
+                    prevFCD16=getFCD16FromSingleLead((char)~prevFCD16);
+                    if(prevFCD16>1) {
+                        --prevBoundary;
+                    }
+                } else {
+                    int p=src-1;
+                    if( Character.isLowSurrogate(s.charAt(p)) && prevSrc<p &&
+                        Character.isHighSurrogate(s.charAt(p-1))
+                    ) {
+                        --p;
+                        // Need to fetch the previous character's FCD value because
+                        // prevFCD16 was just for the trail surrogate code point.
+                        prevFCD16=getFCD16(Character.toCodePoint(s.charAt(p), s.charAt(p+1)));
+                        // Still known to have lccc==0 because its lead surrogate unit had lccc==0.
+                    }
+                    if(prevFCD16>1) {
+                        prevBoundary=p;
+                    }
+                }
+                if(buffer!=null) {
+                    // The last lccc==0 character is excluded from the
+                    // flush-and-append call in case it needs to be modified.
+                    buffer.flushAndAppendZeroCC(s, prevSrc, prevBoundary);
+                    buffer.append(s, prevBoundary, src);
+                }
+                // The start of the current character (c).
+                prevSrc=src;
+            } else if(src==limit) {
+                break;
+            }
+
+            src+=Character.charCount(c);
+            // The current character (c) at [prevSrc..src[ has a non-zero lead combining class.
+            // Check for proper order, and decompose locally if necessary.
+            if((prevFCD16&0xff)<=(fcd16>>8)) {
+                // proper order: prev tccc <= current lccc
+                if((fcd16&0xff)<=1) {
+                    prevBoundary=src;
+                }
+                if(buffer!=null) {
+                    buffer.appendZeroCC(c);
+                }
+                prevFCD16=fcd16;
+                continue;
+            } else if(buffer==null) {
+                return prevBoundary;  // quick check "no"
+            } else {
+                /*
+                 * Back out the part of the source that we copied or appended
+                 * already but is now going to be decomposed.
+                 * prevSrc is set to after what was copied/appended.
+                 */
+                buffer.removeSuffix(prevSrc-prevBoundary);
+                /*
+                 * Find the part of the source that needs to be decomposed,
+                 * up to the next safe boundary.
+                 */
+                src=findNextFCDBoundary(s, src, limit);
+                /*
+                 * The source text does not fulfill the conditions for FCD.
+                 * Decompose and reorder a limited piece of the text.
+                 */
+                decomposeShort(s, prevBoundary, src, buffer);
+                prevBoundary=src;
+                prevFCD16=0;
+            }
+        }
+        return src;
     }
     public void makeFCDAndAppend(CharSequence s, int src, int limit,
                                  boolean doMakeFCD,
@@ -1082,7 +1288,7 @@ public final class Normalizer2Impl {
      * See normalizer2impl.h for a more detailed description
      * of the compositions list format.
      */
-    private static int combine(CharSequence compositions, int list, int trail) {
+    private static int combine(String compositions, int list, int trail) {
         int key1, firstUnit;
         if(trail<COMP_1_TRAIL_LIMIT) {
             // trail character is 0..33FF
@@ -1331,7 +1537,15 @@ public final class Normalizer2Impl {
         throw new UnsupportedOperationException();  // TODO
     }
     private int findNextFCDBoundary(CharSequence s, int p, int limit) {
-        throw new UnsupportedOperationException();  // TODO
+        while(p<limit) {
+            int c=Character.codePointAt(s, p);
+            int fcd16=fcdTrie.get(c);
+            if(fcd16<=0xff) {
+                break;
+            }
+            p+=Character.charCount(c);
+        }
+        return p;
     }
 
     VersionInfo dataVersion;

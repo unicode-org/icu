@@ -306,6 +306,15 @@ public final class Norm2AllModes {
     }
 
     public static final NoopNormalizer2 NOOP_NORMALIZER2=new NoopNormalizer2();
+    /**
+     * Gets the FCD normalizer, with the FCD data initialized.
+     * @return FCD normalizer
+     */
+    public static Normalizer2 getFCDNormalizer2NoIOException() {
+        Norm2AllModes allModes=getNFCInstanceNoIOException();
+        allModes.impl.getFCDTrie();
+        return allModes.fcd;
+    }
 
     private static final class Norm2AllModesSingleton {
         public Norm2AllModesSingleton(InputStream data, String name) {
