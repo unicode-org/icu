@@ -506,13 +506,18 @@ public interface UProperty
      * @stable ICU 4.4
      */
     public static final int CHANGES_WHEN_CASEMAPPED=55;
+    /**
+     * Binary property Changes_When_NFKC_Casefolded.
+     * @stable ICU 4.4
+     */
+    public static final int CHANGES_WHEN_NFKC_CASEFOLDED=56;
 
     /** 
-     * <p>One more than the last constant for binary Unicode properties.</p> 
+     * One more than the last constant for binary Unicode properties. 
      * @stable ICU 2.6
      */
-    public static final int BINARY_LIMIT = 56;
-    
+    public static final int BINARY_LIMIT = 57;
+
     /** 
      * Enumerated property Bidi_Class.
      * Same as UCharacter.getDirection(int), returns UCharacterDirection values. 
