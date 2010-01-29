@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #*
 #*******************************************************************************
-#*   Copyright (C) 2001-2009, International Business Machines
+#*   Copyright (C) 2001-2010, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -120,7 +120,12 @@ print HEADER <<"EndOfHeaderComment";
 
 EndOfHeaderComment
 
+$fileCount = 0;
+$itemCount = 0;
+$symbolCount = 0;
+
 for(;@ARGV; shift(@ARGV)) {
+    $fileCount++;
     @NMRESULT = `nm $nmopts $ARGV[0] $post`;
     if($?) {
         warn "Couldn't do 'nm' for $ARGV[0], continuing...\n";
@@ -132,6 +137,7 @@ for(;@ARGV; shift(@ARGV)) {
 #        splice @NMRESULT, 0, 10;
     }
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
+        $itemCount++;
         if($mode =~ /POSIX/) {
             ($_, $address, $type) = split(/\|/);
         } elsif ($mode =~ /Mach-O/) {
@@ -165,10 +171,12 @@ for(;@ARGV; shift(@ARGV)) {
                 } else {
 		    &verbose( " Class: '$CppName[0]': $_ \n");
                     $CppClasses{$CppName[0]}++;
+		    $symbolCount++;
                 }
 	    } elsif ( my ($cfn) = m/^([A-Za-z0-9_]*)\(.*/ ) {
 		&verbose ( "$ARGV[0]:  got global C++ function  $cfn with '$_'\n" );
                 $CFuncs{$cfn}++;
+		$symbolCount++;
             } elsif ( /\(/) { # These are strange functions
                 print STDERR "$ARGV[0]: Not sure what to do with '$_'\n";
             } elsif ( /icu_/) {
@@ -183,11 +191,21 @@ for(;@ARGV; shift(@ARGV)) {
                 &verbose( "C func: $_\n");
                 @funcname = split(/[\(\s+]/);
                 $CFuncs{$funcname[0]}++;
+		$symbolCount++;
             }
         } else {
             &verbose( "Skipped: $_ $1\n");
         }
     }
+}
+
+if( $fileCount == 0 ) {
+  die "Error: $itemCount lines from $fileCount files processed, but $symbolCount symbols were found.\n";
+}
+
+&verbose(" Loaded $symbolCount symbols from $itemCount lines in $fileCount files.\n");
+if( $symbolCount == 0 ) {
+  die "Error: $itemCount lines from $fileCount files processed, but $symbolCount symbols were found.\n";
 }
 
 print HEADER "\n/* C exports renaming data */\n\n";
