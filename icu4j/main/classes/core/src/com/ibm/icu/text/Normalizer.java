@@ -159,9 +159,8 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static class Mode {
-        //private int modeValue;
-        private Mode(int value) {
-            //modeValue = value;
+        protected Mode(Normalizer2 n2) {
+            normalizer2 = n2;
         }
 
         /**
@@ -252,23 +251,24 @@ public final class Normalizer implements Cloneable {
         protected boolean isNFSkippable(int c) {
             return true;
         }
+        protected final Normalizer2 normalizer2;
     }
     
     /** 
      * No decomposition/composition.  
      * @stable ICU 2.8
      */
-    public static final Mode NONE = new Mode(COMPAT_BIT);
+    public static final Mode NONE = new Mode(Norm2AllModes.NOOP_NORMALIZER2);
 
     /** 
      * Canonical decomposition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFD = new NFDMode(DECOMP_BIT);
+    public static final Mode NFD = new NFDMode();
     
     private static final class NFDMode extends Mode {
-        private NFDMode(int value) {
-            super(value);
+        private NFDMode() {
+            super(Norm2AllModes.getNFCInstanceNoIOException().decomp);
         }
 
         protected int normalize(char[] src, int srcStart, int srcLimit,
@@ -326,11 +326,11 @@ public final class Normalizer implements Cloneable {
      * Compatibility decomposition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFKD = new NFKDMode(3);
+    public static final Mode NFKD = new NFKDMode();
     
     private static final class NFKDMode extends Mode {
-        private NFKDMode(int value) {
-            super(value);
+        private NFKDMode() {
+            super(Norm2AllModes.getNFKCInstanceNoIOException().decomp);
         }
 
         protected int normalize(char[] src, int srcStart, int srcLimit,
@@ -388,11 +388,11 @@ public final class Normalizer implements Cloneable {
      * Canonical decomposition followed by canonical composition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFC = new NFCMode(COMPOSE_BIT);
+    public static final Mode NFC = new NFCMode();
     
     private static final class NFCMode extends Mode{
-        private NFCMode(int value) {
-            super(value);
+        private NFCMode() {
+            super(Norm2AllModes.getNFCInstanceNoIOException().comp);
         }
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit,
@@ -453,11 +453,11 @@ public final class Normalizer implements Cloneable {
      * Compatibility decomposition followed by canonical composition. 
      * @stable ICU 2.8
      */
-    public static final Mode NFKC =new NFKCMode(5);
+    public static final Mode NFKC =new NFKCMode();
     
     private static final class NFKCMode extends Mode{
-        private NFKCMode(int value) {
-            super(value);
+        private NFKCMode() {
+            super(Norm2AllModes.getNFKCInstanceNoIOException().comp);
         }
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit, 
@@ -511,11 +511,12 @@ public final class Normalizer implements Cloneable {
      * "Fast C or D" form. 
      * @stable ICU 2.8 
      */
-    public static final Mode FCD = new FCDMode(6);
+    public static final Mode FCD = new FCDMode();
     
     private static final class FCDMode extends Mode{
-        private FCDMode(int value) {
-            super(value);
+        private FCDMode() {
+            super(Norm2AllModes.getNFCInstanceNoIOException().fcd);
+            Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie();
         }
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit, 
@@ -841,12 +842,19 @@ public final class Normalizer implements Cloneable {
     //--------------------------------------------------------------------------
     // Static Utility methods
     //--------------------------------------------------------------------------
-    
+
+    private static final Mode getComposeMode(boolean compat) {
+        return compat ? NFKC : NFC;
+    }
+    private static final Mode getDecomposeMode(boolean compat) {
+        return compat ? NFKD : NFD;
+    }
+
     /**
      * Compose a string.
      * The string will be composed to according to the specified mode.
      * @param str        The string to compose.
-     * @param compat     If true the string will be composed accoding to 
+     * @param compat     If true the string will be composed according to 
      *                    NFKC rules and if false will be composed according to 
      *                    NFC rules.
      * @return String    The composed string   
@@ -860,7 +868,7 @@ public final class Normalizer implements Cloneable {
      * Compose a string.
      * The string will be composed to according to the specified mode.
      * @param str        The string to compose.
-     * @param compat     If true the string will be composed accoding to 
+     * @param compat     If true the string will be composed according to 
      *                    NFKC rules and if false will be composed according to 
      *                    NFC rules.
      * @param options    The only recognized option is UNICODE_3_2
@@ -868,8 +876,8 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */            
     public static String compose(String str, boolean compat, int options) {
-        if(!compat && options == 0) {
-            return Norm2AllModes.getNFCInstanceNoIOException().comp.normalize(str);
+        if(options == 0) {
+            return getComposeMode(compat).normalizer2.normalize(str);
         }
         char[] dest = new char[str.length()*MAX_BUF_SIZE_COMPOSE];
         int destSize=0;
@@ -900,7 +908,7 @@ public final class Normalizer implements Cloneable {
      * The string will be composed to according to the specified mode.
      * @param source The char array to compose.
      * @param target A char buffer to receive the normalized text.
-     * @param compat If true the char array will be composed accoding to 
+     * @param compat If true the char array will be composed according to 
      *                NFKC rules and if false will be composed according to 
      *                NFC rules.
      * @param options The normalization options, ORed together (0 for no options).
@@ -923,7 +931,7 @@ public final class Normalizer implements Cloneable {
      * @param dest      The char buffer to fill in
      * @param destStart Start index of the destination buffer  
      * @param destLimit End index of the destination buffer
-     * @param compat If true the char array will be composed accoding to 
+     * @param compat If true the char array will be composed according to 
      *                NFKC rules and if false will be composed according to 
      *                NFC rules.
      * @param options The normalization options, ORed together (0 for no options).
@@ -936,10 +944,10 @@ public final class Normalizer implements Cloneable {
     public static int compose(char[] src,int srcStart, int srcLimit,
                               char[] dest,int destStart, int destLimit,
                               boolean compat, int options) {
-        if(!compat && options == 0) {
+        if(options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
             CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-            Norm2AllModes.getNFCInstanceNoIOException().comp.normalize(srcBuffer, app);
+            getComposeMode(compat).normalizer2.normalize(srcBuffer, app);
             return app.length();
         }
         UnicodeSet nx = NormalizerImpl.getNX(options);
@@ -968,7 +976,7 @@ public final class Normalizer implements Cloneable {
      * Decompose a string.
      * The string will be decomposed to according to the specified mode.
      * @param str       The string to decompose.
-     * @param compat    If true the string will be decomposed accoding to NFKD 
+     * @param compat    If true the string will be decomposed according to NFKD 
      *                   rules and if false will be decomposed according to NFD 
      *                   rules.
      * @return String   The decomposed string  
@@ -982,7 +990,7 @@ public final class Normalizer implements Cloneable {
      * Decompose a string.
      * The string will be decomposed to according to the specified mode.
      * @param str     The string to decompose.
-     * @param compat  If true the string will be decomposed accoding to NFKD 
+     * @param compat  If true the string will be decomposed according to NFKD 
      *                 rules and if false will be decomposed according to NFD 
      *                 rules.
      * @param options The normalization options, ORed together (0 for no options).
@@ -990,8 +998,8 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */         
     public static String decompose(String str, boolean compat, int options) {
-        if(!compat && options == 0) {
-            return Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(str);
+        if(options == 0) {
+            getDecomposeMode(compat).normalizer2.normalize(str);
         }
         char[] dest = new char[str.length()*MAX_BUF_SIZE_DECOMPOSE];
         int[] trailCC = new int[1];
@@ -1015,7 +1023,7 @@ public final class Normalizer implements Cloneable {
      * The string will be decomposed to according to the specified mode.
      * @param source The char array to decompose.
      * @param target A char buffer to receive the normalized text.
-     * @param compat If true the char array will be decomposed accoding to NFKD 
+     * @param compat If true the char array will be decomposed according to NFKD 
      *                rules and if false will be decomposed according to 
      *                NFD rules.
      * @return int   The total buffer size needed;if greater than length of 
@@ -1038,7 +1046,7 @@ public final class Normalizer implements Cloneable {
      * @param dest      The char buffer to fill in
      * @param destStart Start index of the destination buffer  
      * @param destLimit End index of the destination buffer
-     * @param compat If true the char array will be decomposed accoding to NFKD 
+     * @param compat If true the char array will be decomposed according to NFKD 
      *                rules and if false will be decomposed according to 
      *                NFD rules.
      * @param options The normalization options, ORed together (0 for no options).
@@ -1051,10 +1059,10 @@ public final class Normalizer implements Cloneable {
     public static int decompose(char[] src,int srcStart, int srcLimit,
                                 char[] dest,int destStart, int destLimit,
                                 boolean compat, int options) {
-        if(!compat && options == 0) {
+        if(options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
             CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-            Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(srcBuffer, app);
+            getDecomposeMode(compat).normalizer2.normalize(srcBuffer, app);
             return app.length();
         }
         int[] trailCC = new int[1];
@@ -1105,11 +1113,7 @@ public final class Normalizer implements Cloneable {
      */
     public static String normalize(String str, Mode mode, int options) {
         if(options == 0) {
-            if(mode == NFD) {
-                return Norm2AllModes.getNFCInstanceNoIOException().decomp.normalize(str);
-            } else if(mode == NFC) {
-                return Norm2AllModes.getNFCInstanceNoIOException().comp.normalize(str);
-            }
+            return mode.normalizer2.normalize(str);
         }
         return mode.normalize(str,options);
     }
@@ -1172,18 +1176,11 @@ public final class Normalizer implements Cloneable {
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
                                 Mode  mode, int options) {
-        if((mode == NFD || mode == NFC || mode == FCD) && options == 0) {
+        if(options == 0) {
             CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
             CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
             Norm2AllModes norm2AllModes = Norm2AllModes.getNFCInstanceNoIOException();
-            if(mode == NFD) {
-                norm2AllModes.decomp.normalize(srcBuffer, app);
-            } else if(mode == NFC) {
-                norm2AllModes.comp.normalize(srcBuffer, app);
-            } else /* FCD */ {
-                norm2AllModes.impl.getFCDTrie();
-                norm2AllModes.fcd.normalize(srcBuffer, app);
-            }
+            mode.normalizer2.normalize(srcBuffer, app);
             return app.length();
         }
         int length = mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit, options);
