@@ -58,6 +58,9 @@ SelectFormat::~SelectFormat() {
 
 void
 SelectFormat::init(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+      return;
+    } 
     parsedValuesHash = NULL;
     pattern.remove();
 }
@@ -69,22 +72,20 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
       return;
     } 
 
-    this->parsedValuesHash = NULL;
     this->pattern = newPattern;
     enum State{ startState, keywordState, pastKeywordState, phraseState};
 
     //Initialization
-    UnicodeString keyword = UnicodeString();
-    UnicodeString phrase = UnicodeString();
+    UnicodeString keyword ;
+    UnicodeString phrase ;
     UnicodeString* ptrPhrase ;
     int32_t braceCount = 0;
 
-    if (parsedValuesHash == NULL) {
-        parsedValuesHash = new Hashtable(TRUE, status);
-        parsedValuesHash = new Hashtable(TRUE, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
+    delete parsedValuesHash;
+    this->parsedValuesHash = NULL;
+    parsedValuesHash = new Hashtable(TRUE, status);
+    if (U_FAILURE(status)) {
+        return;
     }
 
     //Process the state machine
