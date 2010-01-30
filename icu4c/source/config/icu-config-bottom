@@ -1,6 +1,6 @@
 ## -*-sh-*-
 ## BEGIN of icu-config-bottom.
-## Copyright (c) 2002-2008, International Business Machines Corporation and
+## Copyright (c) 2002-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
@@ -195,73 +195,73 @@ do
 	    ;;
 
 	--cflags)
-	    echo $ECHO_N "${CFLAGS}${ECHO_C} "
+	    echo $ECHO_N "${CFLAGS} ${ECHO_C}"
 	    ;;
 	    
 	--cc)
-	    echo $ECHO_N "${CC}${ECHO_C} "
+	    echo $ECHO_N "${CC} ${ECHO_C}"
 	    ;;
 	    
 	--cxx)
-	    echo $ECHO_N "${CXX}${ECHO_C} "
+	    echo $ECHO_N "${CXX} ${ECHO_C}"
 	    ;;
 
 	--cxxflags)
-	    echo $ECHO_N "${CXXFLAGS}${ECHO_C} "
+	    echo $ECHO_N "${CXXFLAGS} ${ECHO_C}"
 	    ;;
 
 	--cppflags)
 	    # Don't echo the -I. - it's unneeded.
-	    echo $ECHO_N "${CPPFLAGS}${ECHO_C} " | sed -e 's/-I. //'
+	    echo $ECHO_N "${CPPFLAGS} ${ECHO_C}" | sed -e 's/-I. //'
 	    ;;
 
 	--cppflags-searchpath)
-	    echo $ECHO_N "-I${prefix}/include${ECHO_C} "
+	    echo $ECHO_N "-I${prefix}/include ${ECHO_C}"
 	    ;;
 
 	--cppflags-dynamic)
-	    echo $ECHO_N "${SHAREDLIBCPPFLAGS}${ECHO_C} "
+	    echo $ECHO_N "${SHAREDLIBCPPFLAGS} ${ECHO_C}"
 	    ;;
 
 	--cxxflags-dynamic)
-	    echo $ECHO_N "${SHAREDLIBCXXFLAGS}${ECHO_C} "
+	    echo $ECHO_N "${SHAREDLIBCXXFLAGS} ${ECHO_C}"
 	    ;;
 
 	--cflags-dynamic)
-	    echo $ECHO_N "${SHAREDLIBCFLAGS}${ECHO_C} "
+	    echo $ECHO_N "${SHAREDLIBCFLAGS} ${ECHO_C}"
 	    ;;
 
 	--ldflags-system)
-	    echo $ECHO_N "${LIBS}${ECHO_C} "
+	    echo $ECHO_N "${LIBS} ${ECHO_C}"
 	    ;;
 
 	--ldflags)
-	    echo $ECHO_N "${LDFLAGS} ${ICULIBS} ${LIBS}${ECHO_C} "
+	    echo $ECHO_N "${LDFLAGS} ${ICULIBS} ${LIBS} ${ECHO_C}"
 # $RPATH_LDFLAGS
 	    ;;
 
 	--ldflags-libsonly)
-	    echo $ECHO_N "${ICULIBS_I18N} ${ICULIBS_COMMON} ${ICULIBS_DATA}${ECHO_C} "
+	    echo $ECHO_N "${ICULIBS_I18N} ${ICULIBS_COMMON} ${ICULIBS_DATA} ${ECHO_C}"
 	    ;;
 
 	--ldflags-icuio)
-	    echo $ECHO_N "${ICULIBS_ICUIO}${ECHO_C} "
+	    echo $ECHO_N " ${ICULIBS_ICUIO}${ECHO_C}"
 	    ;;
 
 	--ldflags-obsolete)
-	    echo $ECHO_N "${ICULIBS_OBSOLETE}${ECHO_C} "
+	    echo $ECHO_N "${ICULIBS_OBSOLETE}${ECHO_C}"
 	    ;;
 
 	--ldflags-toolutil)
-	    echo $ECHO_N "${ICULIBS_TOOLUTIL}${ECHO_C} "
+	    echo $ECHO_N " ${ICULIBS_TOOLUTIL}${ECHO_C}"
 	    ;;
 
 	--ldflags-layout)
-	    echo $ECHO_N "${ICULIBS_LAYOUT} ${ICULIBS_LAYOUTEX}${ECHO_C} "
+	    echo $ECHO_N "${ICULIBS_LAYOUT} ${ICULIBS_LAYOUTEX} ${ECHO_C}"
 	    ;;
 
 	--ldflags-searchpath)
-	    echo $ECHO_N "-L${libdir}${ECHO_C} "
+	    echo $ECHO_N "-L${libdir} ${ECHO_C}"
 	    ;;
 
 	--detect-prefix)
@@ -297,39 +297,39 @@ do
 	    ;;
 
 	--shared-datadir)
-	    echo $ECHO_N "${datadir}${ECHO_C} "
+	    echo $ECHO_N "${datadir} ${ECHO_C}"
 	    ;;
 
         --incfile)
-	    echo $ECHO_N "${pkglibdir}/Makefile.inc${ECHO_C} "
+	    echo $ECHO_N "${pkglibdir}/Makefile.inc ${ECHO_C}"
 	    ;;
 
 	--incpkgdatafile)
-	    echo $ECHO_N "${pkglibdir}/pkgdata.inc${ECHO_C} "
+	    echo $ECHO_N "${pkglibdir}/pkgdata.inc ${ECHO_C}"
 	    ;;
 
 	--icudata)
-	    echo $ECHO_N "${ICUDATA_NAME}${ECHO_C} "
+	    echo $ECHO_N "${ICUDATA_NAME} ${ECHO_C}"
 	    ;;
 
 	--icudata-mode)
-	    echo $ECHO_N "${PKGDATA_MODE}${ECHO_C} "
+	    echo $ECHO_N "${PKGDATA_MODE} ${ECHO_C}"
 	    ;;
 
 	--icudata-install-dir)
-        echo $ECHO_N "${ICUPKGDATA_DIR}${ECHO_C} "
+        echo $ECHO_N "${ICUPKGDATA_DIR} ${ECHO_C}"
 	    ;;
 	    
 	--icudatadir)
-	    echo $ECHO_N "${ICUDATA_DIR}${ECHO_C} "
+	    echo $ECHO_N "${ICUDATA_DIR} ${ECHO_C}"
 	    ;;
 
 	--shlib-c)
-	    echo $ECHO_N "${SHLIB_c}${ECHO_C} "
+	    echo $ECHO_N "${SHLIB_c} ${ECHO_C}"
 	    ;;
 
 	--shlib-cc)
-	    echo $ECHO_N "${SHLIB_cc}${ECHO_C} "
+	    echo $ECHO_N "${SHLIB_cc} ${ECHO_C}"
 	    ;;
 
 	--version)
