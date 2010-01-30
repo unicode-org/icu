@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -906,6 +906,7 @@ roundtripBOCU1(UConverter *bocu1, int32_t number, const UChar *text, int32_t len
     /* BOCU-1 -> Unicode */
     roundtripRefLength=readString((uint8_t *)bocu1Ref, bocu1RefLength, roundtripRef);
     if(roundtripRefLength<0) {
+    	free(roundtripICU);
         return; /* readString() found an error and reported it */
     }
 

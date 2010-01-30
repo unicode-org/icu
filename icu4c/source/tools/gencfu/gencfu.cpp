@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -286,7 +286,7 @@ int  main(int argc, char **argv) {
     }
 
     uspoof_close(sc);
-    delete outData;
+    delete [] outData;
     delete confusables;
     delete wsConfsables;
     u_cleanup();
@@ -318,7 +318,8 @@ int  main(int argc, char **argv) {
 
     long t = fread(result, 1, fileSize, file);
     if (t != fileSize)  {
-        delete result;
+        delete [] result;
+		fclose(file);
         return NULL;
     }
     result[fileSize]=0;

@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -287,6 +287,7 @@ void readFile(const char *name) {
     int t = fread(charBuf, 1, rawFileLen, file);
     if (t != rawFileLen)  {
         fprintf(stderr, "Error reading file \"%s\"\n", fileName);
+		fclose(file);
         return;
     }
     charBuf[rawFileLen]=0;
