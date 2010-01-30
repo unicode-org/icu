@@ -126,12 +126,7 @@ public final class Normalizer implements Cloneable {
     private int bufferStart = 0;
     private int bufferPos   = 0;
     private int bufferLimit = 0;
-    
-    // This tells us what the bits in the "mode" object mean.
-    private static final int COMPAT_BIT = 1;
-    private static final int DECOMP_BIT = 2;
-    private static final int COMPOSE_BIT = 4;
-    
+
     // The input text and our position in it
     private UCharacterIterator  text;
     private Mode                mode = NFC;
@@ -161,6 +156,10 @@ public final class Normalizer implements Cloneable {
     public static class Mode {
         protected Mode(Normalizer2 n2) {
             normalizer2 = n2;
+            uni32Normalizer2 = new FilteredNormalizer2(n2, UNI32_SET);
+        }
+        protected final Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ? uni32Normalizer2 : normalizer2;
         }
 
         /**
@@ -251,7 +250,9 @@ public final class Normalizer implements Cloneable {
         protected boolean isNFSkippable(int c) {
             return true;
         }
-        protected final Normalizer2 normalizer2;
+        private final Normalizer2 normalizer2;
+        private final FilteredNormalizer2 uni32Normalizer2;
+        private static final UnicodeSet UNI32_SET = new UnicodeSet("[:age=3.2:]");
     }
     
     /** 
@@ -876,31 +877,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */            
     public static String compose(String str, boolean compat, int options) {
-        if(options == 0) {
-            return getComposeMode(compat).normalizer2.normalize(str);
-        }
-        char[] dest = new char[str.length()*MAX_BUF_SIZE_COMPOSE];
-        int destSize=0;
-        char[] src = str.toCharArray();
-        UnicodeSet nx = NormalizerImpl.getNX(options);
-
-        /* reset options bits that should only be set here or inside compose() */
-        options&=~(NormalizerImpl.OPTIONS_SETS_MASK|NormalizerImpl.OPTIONS_COMPAT|NormalizerImpl.OPTIONS_COMPOSE_CONTIGUOUS);
-
-        if(compat) {
-            options|=NormalizerImpl.OPTIONS_COMPAT;
-        }
-
-        for(;;) {
-            destSize=NormalizerImpl.compose(src,0,src.length,
-                                            dest,0,dest.length,options,
-                                            nx);
-            if(destSize<=dest.length) {
-                return new String(dest,0,destSize);  
-            } else {
-                dest = new char[destSize];
-            }
-        }                   
+        return getComposeMode(compat).getNormalizer2(options).normalize(str);
     }
     
     /**
@@ -944,34 +921,14 @@ public final class Normalizer implements Cloneable {
     public static int compose(char[] src,int srcStart, int srcLimit,
                               char[] dest,int destStart, int destLimit,
                               boolean compat, int options) {
-        if(options == 0) {
-            CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
-            CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-            getComposeMode(compat).normalizer2.normalize(srcBuffer, app);
-            return app.length();
-        }
-        UnicodeSet nx = NormalizerImpl.getNX(options);
-
-        /* reset options bits that should only be set here or inside compose() */
-        options&=~(NormalizerImpl.OPTIONS_SETS_MASK|NormalizerImpl.OPTIONS_COMPAT|NormalizerImpl.OPTIONS_COMPOSE_CONTIGUOUS);
-
-        if(compat) {
-            options|=NormalizerImpl.OPTIONS_COMPAT;
-        }
-
-        int length = NormalizerImpl.compose(src,srcStart,srcLimit,
-                                            dest,destStart,destLimit,
-                                            options, nx);
-        if(length<=(destLimit-destStart)) {
-            return length;
-        } else {
-            throw new IndexOutOfBoundsException(Integer.toString(length));
-        } 
+        CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
+        CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
+        getComposeMode(compat).getNormalizer2(options).normalize(srcBuffer, app);
+        return app.length();
     }
-    
-    private static final int MAX_BUF_SIZE_COMPOSE = 2;
+
     private static final int MAX_BUF_SIZE_DECOMPOSE = 3;
-    
+
     /**
      * Decompose a string.
      * The string will be decomposed to according to the specified mode.
@@ -998,26 +955,9 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */         
     public static String decompose(String str, boolean compat, int options) {
-        if(options == 0) {
-            getDecomposeMode(compat).normalizer2.normalize(str);
-        }
-        char[] dest = new char[str.length()*MAX_BUF_SIZE_DECOMPOSE];
-        int[] trailCC = new int[1];
-        int destSize=0;
-        UnicodeSet nx = NormalizerImpl.getNX(options);
-        for(;;) {
-            destSize=NormalizerImpl.decompose(str.toCharArray(),0,str.length(),
-                                              dest,0,dest.length,
-                                              compat,trailCC, nx);
-            if(destSize<=dest.length) {
-                return new String(dest,0,destSize); 
-            } else {
-                dest = new char[destSize];
-            }
-        } 
-                
+        return getDecomposeMode(compat).getNormalizer2(options).normalize(str);
     }
-    
+
     /**
      * Decompose a string.
      * The string will be decomposed to according to the specified mode.
@@ -1059,41 +999,14 @@ public final class Normalizer implements Cloneable {
     public static int decompose(char[] src,int srcStart, int srcLimit,
                                 char[] dest,int destStart, int destLimit,
                                 boolean compat, int options) {
-        if(options == 0) {
-            CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
-            CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-            getDecomposeMode(compat).normalizer2.normalize(srcBuffer, app);
-            return app.length();
-        }
-        int[] trailCC = new int[1];
-        UnicodeSet nx = NormalizerImpl.getNX(options);
-        int length = NormalizerImpl.decompose(src,srcStart,srcLimit,
-                                              dest,destStart,destLimit,
-                                              compat,trailCC,nx);
-        if(length<=(destLimit-destStart)) {
-            return length;
-        } else {
-            throw new IndexOutOfBoundsException(Integer.toString(length));
-        } 
+        CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
+        CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
+        getDecomposeMode(compat).getNormalizer2(options).normalize(srcBuffer, app);
+        return app.length();
     }
 
     private static String makeFCD(String src,int options) {
-        if(options == 0) {
-            return Norm2AllModes.getFCDNormalizer2NoIOException().normalize(src);
-        }
-        int srcLen = src.length();
-        char[] dest = new char[MAX_BUF_SIZE_DECOMPOSE*srcLen];
-        int length = 0;
-        UnicodeSet nx = NormalizerImpl.getNX(options);
-        for(;;) {
-            length = NormalizerImpl.makeFCD(src.toCharArray(),0,srcLen,
-                                            dest,0,dest.length,nx);
-            if(length <= dest.length) {
-                return new String(dest,0,length);
-            } else {
-                dest = new char[length];
-            }
-        }
+        return Norm2AllModes.getFCDNormalizer2NoIOException().normalize(src);
     }
     
     /**
@@ -1112,10 +1025,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */
     public static String normalize(String str, Mode mode, int options) {
-        if(options == 0) {
-            return mode.normalizer2.normalize(str);
-        }
-        return mode.normalize(str,options);
+        return mode.getNormalizer2(options).normalize(str);
     }
     
     /**
@@ -1176,22 +1086,12 @@ public final class Normalizer implements Cloneable {
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
                                 Mode  mode, int options) {
-        if(options == 0) {
-            CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
-            CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-            Norm2AllModes norm2AllModes = Norm2AllModes.getNFCInstanceNoIOException();
-            mode.normalizer2.normalize(srcBuffer, app);
-            return app.length();
-        }
-        int length = mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit, options);
-
-        if(length<=(destLimit-destStart)) {
-            return length;
-        } else {
-            throw new IndexOutOfBoundsException(Integer.toString(length));
-        } 
+        CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
+        CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
+        mode.getNormalizer2(options).normalize(srcBuffer, app);
+        return app.length();
     }
-    
+
     /**
      * Normalize a codepoint according to the given mode
      * @param char32    The input string to be normalized.
@@ -1202,9 +1102,15 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      * @see #UNICODE_3_2
      */
-    // TODO: actually do the optimization when the guts of Normalizer are 
-    // upgraded --has just dumb implementation for now
     public static String normalize(int char32, Mode mode, int options) {
+        if(mode == NFD && options == 0) {
+            StringBuilder decomposition = new StringBuilder();
+            if(Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(char32, decomposition)) {
+                return decomposition.toString();
+            } else {
+                return UTF16.valueOf(char32);
+            }
+        }
         return normalize(UTF16.valueOf(char32), mode, options);
     }
 
@@ -1215,10 +1121,8 @@ public final class Normalizer implements Cloneable {
      * @return String   The normalized string
      * @stable ICU 2.6
      */
-    // TODO: actually do the optimization when the guts of Normalizer are 
-    // upgraded --has just dumb implementation for now
     public static String normalize(int char32, Mode mode) {
-        return normalize(UTF16.valueOf(char32), mode, 0);
+        return normalize(char32, mode, 0);
     }
     
     /**

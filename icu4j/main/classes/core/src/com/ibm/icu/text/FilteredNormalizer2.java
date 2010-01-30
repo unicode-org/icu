@@ -6,6 +6,8 @@
 */
 package com.ibm.icu.text;
 
+import java.io.IOException;
+
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UnicodeSet;
@@ -45,6 +47,11 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public StringBuilder normalize(CharSequence src, StringBuilder dest) {
+        if(dest==src) {
+            throw new IllegalArgumentException();
+        }
+        dest.delete(0, 0x7fffffff);
+        normalize(src, dest, UnicodeSet.SpanCondition.SIMPLE);
         return dest;
     }
     /** {@inheritDoc}
@@ -52,8 +59,12 @@ public class FilteredNormalizer2 extends Normalizer2 {
      * @provisional This API might change or be removed in a future release.
      */
     public Appendable normalize(CharSequence src, Appendable dest) {
-        return dest;
+        if(dest==src) {
+            throw new IllegalArgumentException();
+        }
+        return normalize(src, dest, UnicodeSet.SpanCondition.SIMPLE);
     }
+
     /** {@inheritDoc}
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
@@ -61,7 +72,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
     @Override
     public StringBuilder normalizeSecondAndAppend(
             StringBuilder first, CharSequence second) {
-        return first;
+        return normalizeSecondAndAppend(first, second, true);
     }
     /** {@inheritDoc}
      * @draft ICU 4.4
@@ -69,7 +80,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public StringBuilder append(StringBuilder first, CharSequence second) {
-        return first;
+        return normalizeSecondAndAppend(first, second, false);
     }
 
     /** {@inheritDoc}
@@ -78,7 +89,20 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public boolean isNormalized(CharSequence s) {
-        return false;
+        UnicodeSet.SpanCondition spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+        for(int prevSpanLimit=0; prevSpanLimit<s.length();) {
+            int spanLimit=set.span(s, prevSpanLimit, spanCondition);
+            if(spanCondition==UnicodeSet.SpanCondition.NOT_CONTAINED) {
+                spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+            } else {
+                if(!norm2.isNormalized(s.subSequence(prevSpanLimit, spanLimit))) {
+                    return false;
+                }
+                spanCondition=UnicodeSet.SpanCondition.NOT_CONTAINED;
+            }
+            prevSpanLimit=spanLimit;
+        }
+        return true;
     }
     /** {@inheritDoc}
      * @draft ICU 4.4
@@ -86,7 +110,25 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public Normalizer.QuickCheckResult quickCheck(CharSequence s) {
-        return Normalizer.NO;
+        Normalizer.QuickCheckResult result=Normalizer.YES;
+        UnicodeSet.SpanCondition spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+        for(int prevSpanLimit=0; prevSpanLimit<s.length();) {
+            int spanLimit=set.span(s, prevSpanLimit, spanCondition);
+            if(spanCondition==UnicodeSet.SpanCondition.NOT_CONTAINED) {
+                spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+            } else {
+                Normalizer.QuickCheckResult qcResult=
+                    norm2.quickCheck(s.subSequence(prevSpanLimit, spanLimit));
+                if(qcResult==Normalizer.NO) {
+                    return qcResult;
+                } else if(qcResult==Normalizer.MAYBE) {
+                    result=qcResult;
+                }
+                spanCondition=UnicodeSet.SpanCondition.NOT_CONTAINED;
+            }
+            prevSpanLimit=spanLimit;
+        }
+        return result;
     }
     /** {@inheritDoc}
      * @draft ICU 4.4
@@ -94,7 +136,23 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public int spanQuickCheckYes(CharSequence s) {
-        return 0;
+        UnicodeSet.SpanCondition spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+        for(int prevSpanLimit=0; prevSpanLimit<s.length();) {
+            int spanLimit=set.span(s, prevSpanLimit, spanCondition);
+            if(spanCondition==UnicodeSet.SpanCondition.NOT_CONTAINED) {
+                spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+            } else {
+                int yesLimit=
+                    prevSpanLimit+
+                    norm2.spanQuickCheckYes(s.subSequence(prevSpanLimit, spanLimit));
+                if(yesLimit<spanLimit) {
+                    return yesLimit;
+                }
+                spanCondition=UnicodeSet.SpanCondition.NOT_CONTAINED;
+            }
+            prevSpanLimit=spanLimit;
+        }
+        return s.length();
     }
 
     /** {@inheritDoc}
@@ -103,7 +161,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public boolean hasBoundaryBefore(int c) {
-        return false;
+        return !set.contains(c) || norm2.hasBoundaryBefore(c);
     }
 
     /** {@inheritDoc}
@@ -112,7 +170,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public boolean hasBoundaryAfter(int c) {
-        return false;
+        return !set.contains(c) || norm2.hasBoundaryAfter(c);
     }
 
     /** {@inheritDoc}
@@ -121,20 +179,89 @@ public class FilteredNormalizer2 extends Normalizer2 {
      */
     @Override
     public boolean isInert(int c) {
-        return false;
+        return !set.contains(c) || norm2.isInert(c);
     }
 
-    /*private StringBuilder normalize(CharSequence src, StringBuilder dest, USetSpanCondition spanCondition) {
+    // Internal: No argument checking, and appends to dest.
+    // Pass as input spanCondition the one that is likely to yield a non-zero
+    // span length at the start of src.
+    // For set=[:age=3.2:], since almost all common characters were in Unicode 3.2,
+    // UnicodeSet.SpanCondition.SIMPLE should be passed in for the start of src
+    // and UnicodeSet.SpanCondition.NOT_CONTAINED should be passed in if we continue after
+    // an in-filter prefix.
+    private Appendable normalize(CharSequence src, Appendable dest,
+                                 UnicodeSet.SpanCondition spanCondition) {
+        // Don't throw away destination buffer between iterations.
+        StringBuilder tempDest=new StringBuilder();
+        try {
+            for(int prevSpanLimit=0; prevSpanLimit<src.length();) {
+                int spanLimit=set.span(src, prevSpanLimit, spanCondition);
+                int spanLength=spanLimit-prevSpanLimit;
+                if(spanCondition==UnicodeSet.SpanCondition.NOT_CONTAINED) {
+                    if(spanLength!=0) {
+                        dest.append(src, prevSpanLimit, spanLimit);
+                    }
+                    spanCondition=UnicodeSet.SpanCondition.SIMPLE;
+                } else {
+                    if(spanLength!=0) {
+                        // Not norm2.normalizeSecondAndAppend() because we do not want
+                        // to modify the non-filter part of dest.
+                        dest.append(norm2.normalize(src.subSequence(prevSpanLimit, spanLimit), tempDest));
+                    }
+                    spanCondition=UnicodeSet.SpanCondition.NOT_CONTAINED;
+                }
+                prevSpanLimit=spanLimit;
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
         return dest;
-    } TODO: need UnicodeSet.span() */
+    }
 
-    /*private StringBuilder normalizeSecondAndAppend(
-            StringBuilder first, CharSequence second, boolean doNormalize) {
+    private StringBuilder normalizeSecondAndAppend(StringBuilder first, CharSequence second,
+                                                   boolean doNormalize) {
+        if(first==second) {
+            throw new IllegalArgumentException();
+        }
+        if(first.length()==0) {
+            if(doNormalize) {
+                return normalize(second, first);
+            } else {
+                return first.append(second);
+            }
+        }
+        // merge the in-filter suffix of the first string with the in-filter prefix of the second
+        int prefixLimit=set.span(second, 0, UnicodeSet.SpanCondition.SIMPLE);
+        if(prefixLimit!=0) {
+            CharSequence prefix=second.subSequence(0, prefixLimit);
+            int suffixStart=set.spanBack(first, 0x7fffffff, UnicodeSet.SpanCondition.SIMPLE);
+            if(suffixStart==0) {
+                if(doNormalize) {
+                    norm2.normalizeSecondAndAppend(first, prefix);
+                } else {
+                    norm2.append(first, prefix);
+                }
+            } else {
+                StringBuilder middle=new StringBuilder(first.subSequence(suffixStart, 0x7fffffff));
+                if(doNormalize) {
+                    norm2.normalizeSecondAndAppend(middle, prefix);
+                } else {
+                    norm2.append(middle, prefix);
+                }
+                first.delete(suffixStart, 0x7fffffff).append(middle);
+            }
+        }
+        if(prefixLimit<second.length()) {
+            CharSequence rest=second.subSequence(prefixLimit, 0x7fffffff);
+            if(doNormalize) {
+                normalize(rest, first, UnicodeSet.SpanCondition.NOT_CONTAINED);
+            } else {
+                first.append(rest);
+            }
+        }
         return first;
-    } TODO: need UnicodeSet.span() */
+    }
 
-    @SuppressWarnings("unused")
     private Normalizer2 norm2;
-    @SuppressWarnings("unused")
     private UnicodeSet set;
 };
