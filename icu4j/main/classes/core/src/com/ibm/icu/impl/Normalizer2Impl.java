@@ -554,6 +554,8 @@ public final class Normalizer2Impl {
      * @param c code point
      * @param buffer out-only buffer gets the decomposition appended
      * @return true if c has a decomposition
+     * TODO: Look at the call sites and see if it would be better to return a String
+     * rather than writing to an Appendable.
      */
     public boolean getDecomposition(int c, Appendable buffer) {
         try {
