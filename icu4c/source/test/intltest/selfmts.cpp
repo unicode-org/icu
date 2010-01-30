@@ -191,29 +191,25 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     for (int32_t i=0; i< numOfConstructors; ++i) {
         status[i] = U_ZERO_ERROR;
     }
-    selFmt[0]= new SelectFormat(status[0]);
+
+    selFmt[0]= new SelectFormat(SIMPLE_PATTERN, status[0]);
     if ( U_FAILURE(status[0]) ) {
-        errln("ERROR: SelectFormat API test constructor with status failed!");
-        return;
-    }
-    selFmt[1]= new SelectFormat(SIMPLE_PATTERN, status[1]);
-    if ( U_FAILURE(status[1]) ) {
         errln("ERROR: SelectFormat API test constructor with pattern and status failed!");
         return;
     }
 
     // =========== Test copy constructor
     logln("SelectFormat API test: Testing copy constructor and == operator ...");
-    SelectFormat fmt = *selFmt[1];
+    SelectFormat fmt = *selFmt[0];
     SelectFormat* dupPFmt = new SelectFormat(fmt);
-    if ((*selFmt[1]) != (*dupPFmt)) {
+    if ((*selFmt[0]) != (*dupPFmt)) {
         errln("ERROR: SelectFormat API test Failed in copy constructor or == operator!");
     }
     delete dupPFmt;
     
     // ======= Test clone && == operator.
     logln("SelectFormat API test: Testing clone and == operator ...");
-    if ( U_SUCCESS(status[0]) && U_SUCCESS(status[1]) ) {
+    if ( U_SUCCESS(status[0])  ) {
         selFmt[1] = (SelectFormat*)selFmt[0]->clone();
         if (selFmt[1]!=NULL) {
             if ( *selFmt[1] != *selFmt[0] ) {

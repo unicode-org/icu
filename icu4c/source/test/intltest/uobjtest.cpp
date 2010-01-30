@@ -260,7 +260,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
     TESTCLASSID_CTOR(PluralFormat, (status));
     TESTCLASSID_CTOR(PluralRules, (status));
-    TESTCLASSID_CTOR(SelectFormat, (status));
+    TESTCLASSID_CTOR(SelectFormat, (UnicodeString(), status) );
     TESTCLASSID_FACTORY(DateTimePatternGenerator, DateTimePatternGenerator::createInstance(status));
     TESTCLASSID_FACTORY(RelativeDateFormat, DateFormat::createDateInstance(DateFormat::kFullRelative, Locale::getUS()));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
