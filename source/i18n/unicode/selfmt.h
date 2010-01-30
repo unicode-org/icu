@@ -185,14 +185,6 @@ class U_I18N_API SelectFormat : public Format {
 public:
 
     /**
-     * Creates a new <code>SelectFormat</code> .
-     * @param status  output param set to success/failure code on exit, which
-     *                must not indicate a failure before the function call.
-     * @internal This function will be removed and will not be API.
-     */
-    SelectFormat(UErrorCode& status);
-
-    /**
      * Creates a new <code>SelectFormat</code> for a given pattern string.
      * @param  pattern the pattern for this <code>SelectFormat</code>.
      *                 errors are returned to status if the pattern is invalid.
