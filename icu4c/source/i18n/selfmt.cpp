@@ -33,16 +33,6 @@
 
 U_NAMESPACE_BEGIN
 
-/*
-U_CDECL_BEGIN
-
-static void U_CALLCONV
-deleteHashStrings(void *obj) {
-    delete (UnicodeString *)obj;
-}
-U_CDECL_END
-*/
-
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SelectFormat)
 
 #define MAX_KEYWORD_SIZE 30
@@ -70,7 +60,6 @@ void
 SelectFormat::init(UErrorCode& status) {
     parsedValuesHash = NULL;
     pattern.remove();
-    //status = U_ZERO_ERROR;
 }
 
 
@@ -96,7 +85,6 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
         if (U_FAILURE(status)) {
             return;
         }
-        //parsedValuesHash->setValueDeleter(deleteHashStrings);
     }
 
     //Process the state machine
@@ -442,7 +430,6 @@ SelectFormat::copyHashtable(Hashtable *other, UErrorCode& status) {
     if (U_FAILURE(status)){
         return;
     }
-    //parsedValuesHash->setValueDeleter(deleteHashStrings);
 
     int32_t pos = -1;
     const UHashElement* elem = NULL;
