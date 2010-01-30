@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2009, International Business Machines Corporation and
+ * Copyright (c) 1998-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -318,8 +318,8 @@ static void TestCompareVersions()
     invop = 0-op; /* inverse operation: with v1 and v2 switched */
     u_versionFromString(v1, v1str);
     u_versionFromString(v2, v2str);
-	got = memcmp(v1, v2, sizeof(UVersionInfo));
-	invgot = memcmp(v2, v1, sizeof(UVersionInfo)); /* Opposite */
+    got = memcmp(v1, v2, sizeof(UVersionInfo));
+    invgot = memcmp(v2, v1, sizeof(UVersionInfo)); /* Opposite */
     if((got <= 0 && op <= 0) || (got >= 0 && op >= 0)) {
         log_verbose("%d: %s %s %s, OK\n", (j/3), v1str, opstr, v2str);
     } else {
@@ -438,6 +438,9 @@ static void TestErrorName(void){
     const char* errorName ;
     for(;code<U_ERROR_LIMIT;code++){
         errorName = u_errorName((UErrorCode)code);
+        if(!errorName || errorName[0] == 0) {
+          log_err("Error:  u_errorName(0x%X) failed.\n",code);
+        }
     }
 
     for(code=0;code<_CODE_ARR_LEN; code++){
