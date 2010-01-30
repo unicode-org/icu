@@ -209,7 +209,7 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
         }//end of switch(state)
     }
 
-    //Check if the stae machine is back to startState
+    //Check if the state machine is back to startState
     if ( state != startState){
         status = U_PATTERN_SYNTAX_ERROR;
         return;
@@ -233,7 +233,7 @@ SelectFormat::format(const Formattable& obj,
     switch (obj.getType())
     {
     case Formattable::kString:
-        return format((UnicodeString)obj.getString(), appendTo, pos, status);
+        return format(obj.getString(), appendTo, pos, status);
     default:
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
@@ -245,8 +245,6 @@ SelectFormat::format(const UnicodeString& sInput,
                      UnicodeString& appendTo, 
                      FieldPosition& pos,
                      UErrorCode& status) const {
-
-    if (U_FAILURE(status)) return appendTo;
 
     //Check for the validity of the keyword
     if ( !checkValidKeyword(sInput) ){
@@ -269,8 +267,7 @@ SelectFormat::format(const UnicodeString& sInput,
 
 UnicodeString&
 SelectFormat::toPattern(UnicodeString& appendTo) {
-    appendTo += pattern;
-    return appendTo;
+    return appendTo += pattern;
 }
 
 void
@@ -310,13 +307,8 @@ SelectFormat::classifyCharacter(UChar ch, characterClass& type) const{
 UBool
 SelectFormat::checkSufficientDefinition() {
     // Check that at least the default rule is defined.
-    if (parsedValuesHash == NULL)  return FALSE;
-    if (parsedValuesHash->get(SELECT_KEYWORD_OTHER) == NULL) {
-        return FALSE;
-    }
-    else {
-        return TRUE;
-    }
+    return (parsedValuesHash != NULL &&
+           parsedValuesHash->get(SELECT_KEYWORD_OTHER) != NULL) ;
 }
 
 UBool
