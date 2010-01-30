@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2006 IBM, Inc. and others
+# Copyright (c) 2002-2010 IBM, Inc. and others
 # sample code rules for a single-target simple sample
 
 # list of targets that aren't actually created
@@ -21,7 +21,7 @@ distclean clean: $(CLEAN_SUBDIR)
 	-rm -rf $(OBJECTS) $(TARGET) $(RESTARGET) $(RESFILES)
 
 # Make check: simply runs the sample, logged to a file
-check: $(TARGET)
+check: $(ALL_SUBDIR) $(RESTARGET) $(TARGET)
 	$(INVOKE) $(CHECK_VARS) ./$(TARGET) $(CHECK_ARGS) | tee $(TARGET).out
 
 ## resources
