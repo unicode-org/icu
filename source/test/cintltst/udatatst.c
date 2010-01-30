@@ -136,6 +136,7 @@ static void TestUDataOpen(){
     const char* testPath=loadTestData(&status);
     if(U_FAILURE(status)) {
         log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+		free(path);
         return;
     }
 
