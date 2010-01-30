@@ -338,75 +338,22 @@ SelectFormat::checkSufficientDefinition() {
 
 UBool
 SelectFormat::checkValidKeyword(const UnicodeString& argKeyword ) const{
-    UnicodeString keyword = UnicodeString();
-    enum State{ startState, keywordState, pastKeywordState };
+    int32_t len = argKeyword.length();
+    if (len < 1){
+        return FALSE;
+    }
+    characterClass type;
+    classifyCharacter( argKeyword.charAt(0) , type); 
+    if( type != tStartKeyword ){
+        return FALSE;
+    }
 
-    //Initialize
-    State state = startState;
-    keyword.remove();
-
-    //Start the processing
     for (int32_t i = 0; i < argKeyword.length(); ++i) {
-        //Get the character and check its type
-        UChar ch = argKeyword.charAt(i);
-        characterClass type;
-        classifyCharacter(ch, type); 
-
-        //Any character that is not allowed
-        if ( type == tOther ) {
+        classifyCharacter( argKeyword.charAt(i) , type); 
+        if( type != tStartKeyword && type != tContinueKeyword ){
             return FALSE;
         }
-
-        //Process the state machine
-        switch (state) {
-            //At the start of pattern
-            case startState:
-                switch (type) {
-                    case tSpace:
-                        break;
-                    case tStartKeyword:
-                        state = keywordState;
-                        keyword += ch;
-                        break;
-                    //If anything else is encountered, it's a syntax error
-                    default:
-                        return FALSE;
-                }//end of switch(type)
-                break;
-
-            //Handle the keyword state
-            case keywordState:
-                switch (type) {
-                    case tSpace:
-                        state = pastKeywordState;
-                        break;
-                    case tStartKeyword:
-                    case tContinueKeyword:
-                        keyword += ch;
-                        break;
-                    //If anything else is encountered,it's a syntax error
-                    default:
-                        return FALSE;
-                }//end of switch(type)
-                break;
-
-            //Handle the pastkeyword state
-            case pastKeywordState:
-                switch (type) {
-                    case tSpace:
-                        break;
-                    //If anything else is encountered,it's a syntax error
-                    default:
-                        return FALSE;
-                }//end of switch(type)
-                break;
-    
-            default:
-              return FALSE; 
-        }//end of switch(state)
-
-    }//end of loop of argKeyword
-
+    }
     return TRUE;
 }
 
