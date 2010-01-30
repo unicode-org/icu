@@ -115,7 +115,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         }
     }
 
-    logln("SelectFormat Unit Test : Creaing format object for Testing applying various patterns");
+    logln("SelectFormat Unit Test : Creating format object for Testing applying various patterns");
     status = U_ZERO_ERROR;
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     //SelectFormat* selFmt1 = new SelectFormat( SIMPLE_PATTERN , status); 
@@ -151,7 +151,6 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         }
     }
 
-/*
     //Test with an invalid keyword
     logln("SelectFormat Unit test: Testing  format() with keyword method and with invalid keywords...");
     status = U_ZERO_ERROR;
@@ -161,18 +160,18 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         "-Keyword-_",       //Starts with a hyphen
         "_Keyword-_",       //Starts with a underscore
         "\\u00E9Keyword-_", //Starts with non-ASCII character
-        "Key*word-_"        //Contains a sepial character not allowed
-        "*Keyword-_"       //Starts with a sepial character not allowed
+        "Key*word-_",       //Contains a sepial character not allowed
+        "*Keyword-_"        //Starts with a sepial character not allowed
     };
 
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
-    for (int i = 0; i< 6; i++ ){
+    for (int32_t i = 0; i< 6; i++ ){
+        status = U_ZERO_ERROR;
         selFmt->format( keywords[i], result , ignore , status);
         if (!U_FAILURE(status)) {
             errln("ERROR: SelectFormat Unit test failed in format() with keyWord and with an invalid keyword as : "+ keywords[i]);
         }
     }
-*/
 
     delete selFmt;
 }
