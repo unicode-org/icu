@@ -33,26 +33,20 @@
 
 U_NAMESPACE_BEGIN
 
+/*
 U_CDECL_BEGIN
 
 static void U_CALLCONV
 deleteHashStrings(void *obj) {
     delete (UnicodeString *)obj;
 }
-
 U_CDECL_END
+*/
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SelectFormat)
 
 #define MAX_KEYWORD_SIZE 30
 static const UChar SELECT_KEYWORD_OTHER[] = {LOW_O, LOW_T, LOW_H, LOW_E, LOW_R, 0};
-
-SelectFormat::SelectFormat(UErrorCode& status) {
-   if (U_FAILURE(status)) {
-      return;
-   } 
-   init(status);
-}
 
 SelectFormat::SelectFormat(const UnicodeString& pat, UErrorCode& status) {
    if (U_FAILURE(status)) {
@@ -76,7 +70,7 @@ void
 SelectFormat::init(UErrorCode& status) {
     parsedValuesHash = NULL;
     pattern.remove();
-    status = U_ZERO_ERROR;
+    //status = U_ZERO_ERROR;
 }
 
 
@@ -102,7 +96,7 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
         if (U_FAILURE(status)) {
             return;
         }
-        parsedValuesHash->setValueDeleter(deleteHashStrings);
+        //parsedValuesHash->setValueDeleter(deleteHashStrings);
     }
 
     //Process the state machine
@@ -448,7 +442,7 @@ SelectFormat::copyHashtable(Hashtable *other, UErrorCode& status) {
     if (U_FAILURE(status)){
         return;
     }
-    parsedValuesHash->setValueDeleter(deleteHashStrings);
+    //parsedValuesHash->setValueDeleter(deleteHashStrings);
 
     int32_t pos = -1;
     const UHashElement* elem = NULL;
