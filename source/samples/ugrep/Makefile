@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2002 IBM, Inc. and others
+# Copyright (c) 2000-2010 IBM, Inc. and others
 # sample code makefile
 
 # Usage:
@@ -13,6 +13,8 @@ TARGET=ugrep
 
 # All object files (C or C++)
 OBJECTS=ugrep.o
+
+CHECK_ARGS=BOM readme.txt
 
 #### rules
 # Load in standard makefile definitions
