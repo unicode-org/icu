@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -373,6 +373,8 @@ UErrorCode convsample_05()
   ucnv_close(conv);
 
   printf("\n");
+
+  fclose(f);
 
   return U_ZERO_ERROR;
 }
@@ -895,6 +897,7 @@ UErrorCode convsample_40()
   if(!out)
   {
     fprintf(stderr, "Couldn't create file 'data40.utf16'.\n");
+	fclose(f);
     return U_FILE_ACCESS_ERROR;
   }
 
@@ -1000,6 +1003,7 @@ UErrorCode convsample_46()
   if(!out)
   {
     fprintf(stderr, "Couldn't create file 'data46.out'.\n");
+	fclose(f);
     return U_FILE_ACCESS_ERROR;
   }
 
