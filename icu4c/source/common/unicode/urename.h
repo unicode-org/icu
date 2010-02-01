@@ -102,8 +102,6 @@
 #define _UTF32LEData U_ICU_ENTRY_POINT_RENAME(_UTF32LEData)
 #define _UTF7Data U_ICU_ENTRY_POINT_RENAME(_UTF7Data)
 #define _UTF8Data U_ICU_ENTRY_POINT_RENAME(_UTF8Data)
-#define _fini U_ICU_ENTRY_POINT_RENAME(_fini)
-#define _init U_ICU_ENTRY_POINT_RENAME(_init)
 #define bms_close U_ICU_ENTRY_POINT_RENAME(bms_close)
 #define bms_empty U_ICU_ENTRY_POINT_RENAME(bms_empty)
 #define bms_getData U_ICU_ENTRY_POINT_RENAME(bms_getData)
@@ -143,9 +141,6 @@
 #define le_getGlyphs U_ICU_ENTRY_POINT_RENAME(le_getGlyphs)
 #define le_layoutChars U_ICU_ENTRY_POINT_RENAME(le_layoutChars)
 #define le_reset U_ICU_ENTRY_POINT_RENAME(le_reset)
-#define libraryCount U_ICU_ENTRY_POINT_RENAME(libraryCount)
-#define libraryList U_ICU_ENTRY_POINT_RENAME(libraryList)
-#define libraryMax U_ICU_ENTRY_POINT_RENAME(libraryMax)
 #define locale_getKeywords U_ICU_ENTRY_POINT_RENAME(locale_getKeywords)
 #define locale_get_default U_ICU_ENTRY_POINT_RENAME(locale_get_default)
 #define locale_set_default U_ICU_ENTRY_POINT_RENAME(locale_set_default)
@@ -202,8 +197,6 @@
 #define pl_resetFontRuns U_ICU_ENTRY_POINT_RENAME(pl_resetFontRuns)
 #define pl_resetLocaleRuns U_ICU_ENTRY_POINT_RENAME(pl_resetLocaleRuns)
 #define pl_resetValueRuns U_ICU_ENTRY_POINT_RENAME(pl_resetValueRuns)
-#define pluginCount U_ICU_ENTRY_POINT_RENAME(pluginCount)
-#define pluginList U_ICU_ENTRY_POINT_RENAME(pluginList)
 #define res_countArrayItems U_ICU_ENTRY_POINT_RENAME(res_countArrayItems)
 #define res_findResource U_ICU_ENTRY_POINT_RENAME(res_findResource)
 #define res_getAlias U_ICU_ENTRY_POINT_RENAME(res_getAlias)
@@ -218,14 +211,7 @@
 #define res_load U_ICU_ENTRY_POINT_RENAME(res_load)
 #define res_read U_ICU_ENTRY_POINT_RENAME(res_read)
 #define res_unload U_ICU_ENTRY_POINT_RENAME(res_unload)
-#define spacesRelativeToTextBeginEnd U_ICU_ENTRY_POINT_RENAME(spacesRelativeToTextBeginEnd)
-#define staticLibraryList U_ICU_ENTRY_POINT_RENAME(staticLibraryList)
-#define tailChar U_ICU_ENTRY_POINT_RENAME(tailChar)
 #define triedict_swap U_ICU_ENTRY_POINT_RENAME(triedict_swap)
-#define uShapeLamalefBegin U_ICU_ENTRY_POINT_RENAME(uShapeLamalefBegin)
-#define uShapeLamalefEnd U_ICU_ENTRY_POINT_RENAME(uShapeLamalefEnd)
-#define uShapeTashkeelBegin U_ICU_ENTRY_POINT_RENAME(uShapeTashkeelBegin)
-#define uShapeTashkeelEnd U_ICU_ENTRY_POINT_RENAME(uShapeTashkeelEnd)
 #define u_UCharsToChars U_ICU_ENTRY_POINT_RENAME(u_UCharsToChars)
 #define u_austrcpy U_ICU_ENTRY_POINT_RENAME(u_austrcpy)
 #define u_austrncpy U_ICU_ENTRY_POINT_RENAME(u_austrncpy)
@@ -1697,6 +1683,8 @@
 #define ztrans_setFrom U_ICU_ENTRY_POINT_RENAME(ztrans_setFrom)
 #define ztrans_setTime U_ICU_ENTRY_POINT_RENAME(ztrans_setTime)
 #define ztrans_setTo U_ICU_ENTRY_POINT_RENAME(ztrans_setTo)
+
+
 /* C++ class names renaming defines */
 
 #ifdef XP_CPLUSPLUS
