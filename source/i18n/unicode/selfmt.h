@@ -339,14 +339,14 @@ public:
     virtual UClassID getDynamicClassID() const;
 
 private:
-    typedef enum characterClass{
+    typedef enum classesForSelectFormat{
         tStartKeyword,
         tContinueKeyword,
         tLeftBrace,
         tRightBrace,
         tSpace,
         tOther
-    }characterClass;
+    }CharacterClass;
 
     UnicodeString pattern;
     //Hash to store the keyword, phrase pairs.
@@ -355,7 +355,7 @@ private:
     SelectFormat();   // default constructor not implemented.
     void init(UErrorCode& status);
     //For the applyPattern , classifies char.s in one of the characterClass.
-    void classifyCharacter(UChar ch, characterClass& type) const; 
+    CharacterClass classifyCharacter(UChar ch) const; 
     //Checks if the "other" keyword is present in pattern.
     UBool checkSufficientDefinition();
     //Checks if the keyword passed is valid.
