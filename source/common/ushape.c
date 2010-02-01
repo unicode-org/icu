@@ -76,12 +76,12 @@
 #define SHAPE_MODE   0
 #define DESHAPE_MODE 1
 
-UChar tailChar = OLD_TAIL_CHAR;
-uint32_t uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
-uint32_t uShapeLamalefEnd    = U_SHAPE_LAMALEF_END;        
-uint32_t uShapeTashkeelBegin = U_SHAPE_TASHKEEL_BEGIN;
-uint32_t uShapeTashkeelEnd = U_SHAPE_TASHKEEL_END;
-int spacesRelativeToTextBeginEnd = 0;
+static UChar tailChar = OLD_TAIL_CHAR;
+static uint32_t uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
+static uint32_t uShapeLamalefEnd    = U_SHAPE_LAMALEF_END;        
+static uint32_t uShapeTashkeelBegin = U_SHAPE_TASHKEEL_BEGIN;
+static uint32_t uShapeTashkeelEnd = U_SHAPE_TASHKEEL_END;
+static int spacesRelativeToTextBeginEnd = 0;
 
 static const uint8_t tailFamilyIsolatedFinal[] = {
     /* FEB1 */ 1,
