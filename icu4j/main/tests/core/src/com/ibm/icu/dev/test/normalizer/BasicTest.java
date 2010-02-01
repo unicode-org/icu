@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -581,9 +581,9 @@ public class BasicTest extends TestFmwk {
                 return;
             }
             if (Normalizer.quickCheck(new char[]{CPNFKC[count]},
-                                       Normalizer.NONE,0)!=Normalizer.MAYBE)
+                                       Normalizer.NONE,0)!=Normalizer.YES)
             {
-                errln("ERROR in NFKC quick check at U+"+
+                errln("ERROR in NONE quick check at U+"+
                                             Integer.toHexString(CPNFKC[count]));
                 return;
             }

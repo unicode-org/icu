@@ -252,9 +252,9 @@ public final class Normalizer implements Cloneable {
         }
         private final Normalizer2 normalizer2;
         private final FilteredNormalizer2 uni32Normalizer2;
-        private static final UnicodeSet UNI32_SET = new UnicodeSet("[:age=3.2:]");
+        private static final UnicodeSet UNI32_SET = new UnicodeSet("[:age=3.2:]").freeze();
     }
-    
+
     /** 
      * No decomposition/composition.  
      * @stable ICU 2.8
@@ -1124,7 +1124,7 @@ public final class Normalizer implements Cloneable {
     public static String normalize(int char32, Mode mode) {
         return normalize(char32, mode, 0);
     }
-    
+
     /**
      * Convenience method.
      *
@@ -1135,26 +1135,34 @@ public final class Normalizer implements Cloneable {
      *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      * @stable ICU 2.8
      */
-    public static QuickCheckResult quickCheck( String source, Mode mode) {
-        return mode.quickCheck(source.toCharArray(),0,source.length(),true,null);
+    public static QuickCheckResult quickCheck(String source, Mode mode) {
+        return quickCheck(source, mode, 0);
     }
-    
+
     /**
-     * Convenience method.
+     * Performing quick check on a string, to quickly determine if the string is 
+     * in a particular normalization format.
+     * Three types of result can be returned Normalizer.YES, Normalizer.NO or
+     * Normalizer.MAYBE. Result Normalizer.YES indicates that the argument
+     * string is in the desired normalized format, Normalizer.NO determines that
+     * argument string is not in the desired normalized format. A 
+     * Normalizer.MAYBE result indicates that a more thorough check is required, 
+     * the user may have to put the string in its normalized form and compare 
+     * the results.
      *
      * @param source   string for determining if it is in a normalized format
      * @param mode     normalization format (Normalizer.NFC,Normalizer.NFD,  
      *                  Normalizer.NFKC,Normalizer.NFKD)
-     * @param options   Options for use with exclusion set an tailored Normalization
+     * @param options   Options for use with exclusion set and tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2     
      * @return         Return code to specify if the text is normalized or not 
      *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      * @stable ICU 2.6
      */
-    public static QuickCheckResult quickCheck( String source, Mode mode, int options) {
-        return mode.quickCheck(source.toCharArray(),0,source.length(),true,NormalizerImpl.getNX(options));
+    public static QuickCheckResult quickCheck(String source, Mode mode, int options) {
+        return mode.getNormalizer2(options).quickCheck(source);
     }
-    
+
     /**
      * Convenience method.
      *
@@ -1162,16 +1170,16 @@ public final class Normalizer implements Cloneable {
      *                normalized format
      * @param mode   normalization format (Normalizer.NFC,Normalizer.NFD,  
      *                Normalizer.NFKC,Normalizer.NFKD)
-     * @param options   Options for use with exclusion set an tailored Normalization
+     * @param options   Options for use with exclusion set and tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2
      * @return       Return code to specify if the text is normalized or not 
      *                (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      * @stable ICU 2.6
      */
     public static QuickCheckResult quickCheck(char[] source, Mode mode, int options) {
-        return mode.quickCheck(source,0,source.length,true, NormalizerImpl.getNX(options));
+        return quickCheck(source, 0, source.length, mode, options);
     }
-    
+
     /**
      * Performing quick check on a string, to quickly determine if the string is 
      * in a particular normalization format.
@@ -1188,7 +1196,7 @@ public final class Normalizer implements Cloneable {
      * @param limit     the limit index of the source it is equal to the length
      * @param mode      normalization format (Normalizer.NFC,Normalizer.NFD,  
      *                   Normalizer.NFKC,Normalizer.NFKD)
-     * @param options   Options for use with exclusion set an tailored Normalization
+     * @param options   Options for use with exclusion set and tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2    
      * @return          Return code to specify if the text is normalized or not 
      *                   (Normalizer.YES, Normalizer.NO or
@@ -1198,12 +1206,9 @@ public final class Normalizer implements Cloneable {
 
     public static QuickCheckResult quickCheck(char[] source,int start, 
                                               int limit, Mode mode,int options) {       
-        return mode.quickCheck(source,start,limit,true,NormalizerImpl.getNX(options));
+        CharBuffer srcBuffer = CharBuffer.wrap(source, start, limit - start);
+        return mode.getNormalizer2(options).quickCheck(srcBuffer);
     }
-    
-    //-------------------------------------------------------------------------
-    // Internal methods (for now)
-    //-------------------------------------------------------------------------
 
     /**
      * Test if a string is in a given normalization form.
@@ -1219,7 +1224,7 @@ public final class Normalizer implements Cloneable {
      * @param start     The strart index in the source
      * @param limit     The limit index in the source
      * @param mode      the normalization mode
-     * @param options   Options for use with exclusion set an tailored Normalization
+     * @param options   Options for use with exclusion set and tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2    
      * @return Boolean value indicating whether the source string is in the
      *         "mode" normalization form
@@ -1228,40 +1233,46 @@ public final class Normalizer implements Cloneable {
     public static boolean isNormalized(char[] src,int start,
                                        int limit, Mode mode, 
                                        int options) {
-        return (mode.quickCheck(src,start,limit,false,NormalizerImpl.getNX(options))==YES);
+        CharBuffer srcBuffer = CharBuffer.wrap(src, start, limit - start);
+        return mode.getNormalizer2(options).isNormalized(srcBuffer);
     }
-    
+
     /**
-     * Convenience Method
+     * Test if a string is in a given normalization form.
+     * This is semantically equivalent to source.equals(normalize(source, mode)).
+     *
+     * Unlike quickCheck(), this function returns a definitive result,
+     * never a "maybe".
+     * For NFD, NFKD, and FCD, both functions work exactly the same.
+     * For NFC and NFKC where quickCheck may return "maybe", this function will
+     * perform further tests to arrive at a true/false result.
      * @param str       the input string to be checked to see if it is 
      *                   normalized
      * @param mode      the normalization mode
-     * @param options   Options for use with exclusion set an tailored Normalization
-     *                                   The only option that is currently recognized is UNICODE_3_2   
+     * @param options   Options for use with exclusion set and tailored Normalization
+     *                  The only option that is currently recognized is UNICODE_3_2   
      * @see #isNormalized
      * @stable ICU 2.6
      */
     public static boolean isNormalized(String str, Mode mode, int options) {
-        return (mode.quickCheck(str.toCharArray(),0,str.length(),false,NormalizerImpl.getNX(options))==YES);
+        return mode.getNormalizer2(options).isNormalized(str);
     }
-    
+
     /**
      * Convenience Method
      * @param char32    the input code point to be checked to see if it is 
      *                   normalized
      * @param mode      the normalization mode
-     * @param options   Options for use with exclusion set an tailored Normalization
-     *                                   The only option that is currently recognized is UNICODE_3_2    
+     * @param options   Options for use with exclusion set and tailored Normalization
+     *                  The only option that is currently recognized is UNICODE_3_2    
      *
      * @see #isNormalized
      * @stable ICU 2.6
      */
-    // TODO: actually do the optimization when the guts of Normalizer are 
-    // upgraded --has just dumb implementation for now
     public static boolean isNormalized(int char32, Mode mode,int options) {
         return isNormalized(UTF16.valueOf(char32), mode, options);
     }
-     
+
     /**
      * Compare two strings for canonical equivalence.
      * Further options include case-insensitive comparison and
