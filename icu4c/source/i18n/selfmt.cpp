@@ -93,8 +93,7 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
     for (int32_t i = 0; i < pattern.length(); ++i) {
         //Get the character and check its type
         UChar ch = pattern.charAt(i);
-        characterClass type;
-        classifyCharacter(ch, type); 
+        CharacterClass type = classifyCharacter(ch); 
 
         //Allow any character in phrase but nowhere else
         if ( type == tOther ) {
@@ -228,26 +227,28 @@ SelectFormat::format(const Formattable& obj,
                    FieldPosition& pos,
                    UErrorCode& status) const
 {
-    if (U_FAILURE(status)) return appendTo;
-    
     switch (obj.getType())
     {
     case Formattable::kString:
         return format(obj.getString(), appendTo, pos, status);
     default:
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        if( U_SUCCESS(status) ){
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
         return appendTo;
     }
 }
 
 UnicodeString&
-SelectFormat::format(const UnicodeString& sInput,
+SelectFormat::format(const UnicodeString& keyword,
                      UnicodeString& appendTo, 
                      FieldPosition& pos,
                      UErrorCode& status) const {
 
+    if (U_FAILURE(status)) return appendTo;
+
     //Check for the validity of the keyword
-    if ( !checkValidKeyword(sInput) ){
+    if ( !checkValidKeyword(keyword) ){
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
@@ -257,7 +258,7 @@ SelectFormat::format(const UnicodeString& sInput,
         return appendTo;
     }
 
-    UnicodeString *selectedPattern = (UnicodeString *)parsedValuesHash->get(sInput);
+    UnicodeString *selectedPattern = (UnicodeString *)parsedValuesHash->get(keyword);
     if (selectedPattern == NULL) {
         selectedPattern = (UnicodeString *)parsedValuesHash->get(SELECT_KEYWORD_OTHER);
     }
@@ -270,37 +271,30 @@ SelectFormat::toPattern(UnicodeString& appendTo) {
     return appendTo += pattern;
 }
 
-void
-SelectFormat::classifyCharacter(UChar ch, characterClass& type) const{
+SelectFormat::CharacterClass
+SelectFormat::classifyCharacter(UChar ch) const{
     if ((ch >= CAP_A) && (ch <= CAP_Z)) {
-        type = tStartKeyword;
-        return;
+        return tStartKeyword;
     }
     if ((ch >= LOW_A) && (ch <= LOW_Z)) {
-        type = tStartKeyword;
-        return;
+        return tStartKeyword;
     }
     if ((ch >= U_ZERO) && (ch <= U_NINE)) {
-        type = tContinueKeyword;
-        return;
+        return tContinueKeyword;
+    }
+    if ( uprv_isRuleWhiteSpace(ch) ){
+        return tSpace;
     }
     switch (ch) {
         case LEFTBRACE: 
-            type = tLeftBrace;
-            break;
+            return tLeftBrace;
         case RIGHTBRACE:
-            type = tRightBrace;
-            break;
-        case SPACE:
-        case TAB:
-            type = tSpace;
-            break;
+            return tRightBrace;
         case HYPHEN:
         case LOWLINE:
-            type = tContinueKeyword;
-            break;
+            return tContinueKeyword;
         default :
-            type = tOther;
+            return tOther;
     }
 }
 
@@ -317,14 +311,13 @@ SelectFormat::checkValidKeyword(const UnicodeString& argKeyword ) const{
     if (len < 1){
         return FALSE;
     }
-    characterClass type;
-    classifyCharacter( argKeyword.charAt(0) , type); 
+    CharacterClass type = classifyCharacter(argKeyword.charAt(0)); 
     if( type != tStartKeyword ){
         return FALSE;
     }
 
     for (int32_t i = 0; i < argKeyword.length(); ++i) {
-        classifyCharacter( argKeyword.charAt(i) , type); 
+        type = classifyCharacter(argKeyword.charAt(i)); 
         if( type != tStartKeyword && type != tContinueKeyword ){
             return FALSE;
         }
@@ -350,10 +343,12 @@ SelectFormat::operator=(const SelectFormat& other) {
 
 UBool
 SelectFormat::operator==(const Format& other) const {
-    // This protected comparison operator should only be called by subclasses
-    // which have confirmed that the other object being compared against is
-    // an instance of a sublcass of SelectFormat.  THIS IS IMPORTANT.
-    // Format::operator== guarantees that this cast is safe
+    if( this == &other){
+        return TRUE;
+    }
+    if( other.getDynamicClassID() != SelectFormat::getStaticClassID() ){
+        return  FALSE;
+    }
     SelectFormat* fmt = (SelectFormat*)&other;
     Hashtable* hashOther = fmt->parsedValuesHash;
     if ( parsedValuesHash == NULL && hashOther == NULL)
@@ -408,9 +403,10 @@ SelectFormat::operator!=(const Format& other) const {
 void
 SelectFormat::parseObject(const UnicodeString& /*source*/,
                         Formattable& /*result*/,
-                        ParsePosition& /*pos*/) const
+                        ParsePosition& pos) const
 {
     // TODO: not yet supported in icu4j and icu4c
+    pos.setErrorIndex(pos.getIndex());
 }
 
 void
