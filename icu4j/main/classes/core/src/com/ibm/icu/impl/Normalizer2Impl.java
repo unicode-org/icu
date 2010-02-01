@@ -960,15 +960,107 @@ public final class Normalizer2Impl {
     }
     /**
      * Very similar to compose(): Make the same changes in both places if relevant.
-     * doSpan: spanQuickCheckYes
+     * doSpan: spanQuickCheckYes (ignore bit 0 of the return value)
      * !doSpan: quickCheck
      * @return bits 31..1: spanQuickCheckYes (==s.length() if "yes") and
-     *         bit 0: set if "maybe"; if the span length&lt;s.length() and not "maybe"
+     *         bit 0: set if "maybe"; otherwise, if the span length&lt;s.length()
      *         then the quick check result is "no"
      */
     public int composeQuickCheck(CharSequence s, int src, int limit,
                                  boolean onlyContiguous, boolean doSpan) {
-        throw new UnsupportedOperationException();  // TODO
+        int qcResult=0;
+        int minNoMaybeCP=minCompNoMaybeCP;
+
+        /*
+         * prevBoundary points to the last character before the current one
+         * that has a composition boundary before it with ccc==0 and quick check "yes".
+         */
+        int prevBoundary=src;
+        int prevSrc;
+        int c=0;
+        int norm16=0;
+        int prevCC=0;
+
+        for(;;) {
+            // count code units below the minimum or with irrelevant data for the quick check
+            for(prevSrc=src;;) {
+                if(src==limit) {
+                    return (src<<1)|qcResult;  // "yes" or "maybe"
+                }
+                if( (c=s.charAt(src))<minNoMaybeCP ||
+                    isCompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                ) {
+                    ++src;
+                } else if(!UTF16.isSurrogate((char)c)) {
+                    break;
+                } else {
+                    char c2;
+                    if(UTF16Plus.isSurrogateLead(c)) {
+                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
+                            c=Character.toCodePoint((char)c, c2);
+                        }
+                    } else /* trail surrogate */ {
+                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
+                            --src;
+                            c=Character.toCodePoint(c2, (char)c);
+                        }
+                    }
+                    if(isCompYesAndZeroCC(norm16=getNorm16(c))) {
+                        src+=Character.charCount(c);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if(src!=prevSrc) {
+                // Set prevBoundary to the last character in the quick check loop.
+                prevBoundary=src-1;
+                if( Character.isLowSurrogate(s.charAt(prevBoundary)) && prevSrc<prevBoundary &&
+                        Character.isHighSurrogate(s.charAt(prevBoundary-1))
+                ) {
+                    --prevBoundary;
+                }
+                prevCC=0;
+                // The start of the current character (c).
+                prevSrc=src;
+            }
+
+            src+=Character.charCount(c);
+            /*
+             * isCompYesAndZeroCC(norm16) is false, that is, norm16>=minNoNo.
+             * c is either a "noNo" (has a mapping) or a "maybeYes" (combines backward)
+             * or has ccc!=0.
+             */
+            if(isMaybeOrNonZeroCC(norm16)) {
+                int cc=getCCFromYesOrMaybe(norm16);
+                if( onlyContiguous &&  // FCC
+                    cc!=0 &&
+                    prevCC==0 &&
+                    prevBoundary<prevSrc &&
+                    // prevCC==0 && prevBoundary<prevSrc tell us that
+                    // [prevBoundary..prevSrc[ (which is exactly one character under these conditions)
+                    // passed the quick check "yes && ccc==0" test.
+                    // Check whether the last character was a "yesYes" or a "yesNo".
+                    // If a "yesNo", then we get its trailing ccc from its
+                    // mapping and check for canonical order.
+                    // All other cases are ok.
+                    getTrailCCFromCompYesAndZeroCC(s, prevBoundary, prevSrc)>cc
+                ) {
+                    // Fails FCD test.
+                } else if(prevCC<=cc || cc==0) {
+                    prevCC=cc;
+                    if(norm16<MIN_YES_YES_WITH_CC) {
+                        if(!doSpan) {
+                            qcResult=1;
+                        } else {
+                            return prevBoundary<<1;  // spanYes does not care to know it's "maybe"
+                        }
+                    }
+                    continue;
+                }
+            }
+            return prevBoundary<<1;  // "no"
+        }
     }
     public void composeAndAppend(CharSequence s, int src, int limit,
                                  boolean doCompose,

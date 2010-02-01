@@ -192,10 +192,10 @@ public final class Norm2AllModes {
         @Override
         public Normalizer.QuickCheckResult quickCheck(CharSequence s) {
             int spanLengthAndMaybe=impl.composeQuickCheck(s, 0, s.length(), onlyContiguous, false);
-            if((spanLengthAndMaybe>>>1)==s.length()) {
-                return Normalizer.YES;
-            } else if((spanLengthAndMaybe&1)!=0) {
+            if((spanLengthAndMaybe&1)!=0) {
                 return Normalizer.MAYBE;
+            } else if((spanLengthAndMaybe>>>1)==s.length()) {
+                return Normalizer.YES;
             } else {
                 return Normalizer.NO;
             }
