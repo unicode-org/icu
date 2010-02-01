@@ -181,6 +181,8 @@ for(;@ARGV; shift(@ARGV)) {
                 print STDERR "$ARGV[0]: Not sure what to do with '$_'\n";
 	    } elsif ( /^_init/ ) {
 		&verbose( "$ARGV[0]: Skipped initializer $_\n" );
+	    } elsif ( /^_fini/ ) {
+		&verbose( "$ARGV[0]: Skipped finilizer $_\n" );
             } elsif ( /icu_/) {
                 print STDERR "$ARGV[0]: Skipped strange mangled function $_\n";
             } elsif ( /^vtable for /) {
@@ -217,6 +219,7 @@ foreach(sort keys(%CFuncs)) {
 #    print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
 
+print HEADER "\n\n";
 print HEADER "/* C++ class names renaming defines */\n\n";
 print HEADER "#ifdef XP_CPLUSPLUS\n";
 print HEADER "#if !U_HAVE_NAMESPACE\n\n";
