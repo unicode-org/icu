@@ -3140,9 +3140,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * DateFormatSymbols objects as needed.
      * @param pattern the pattern, specific to the <code>DateFormat</code>
      * subclass
+     * @param override The override string.  A numbering system override string can take one of the following forms:
+     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
+     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
+     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
+     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
+     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
+     *         Thai digits for the month and Devanagari digits for the year.
      * @param locale the locale for which the symbols should be drawn
      * @return a <code>DateFormat</code> appropriate to this calendar
-     * @stable ICU 2.0
+     * @stable ICU 4.2
      */
     protected DateFormat handleGetDateFormat(String pattern, String override, Locale locale) {
         return handleGetDateFormat(pattern, override, ULocale.forLocale(locale));
