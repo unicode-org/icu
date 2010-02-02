@@ -1,0 +1,3548 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2010 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/metaZones.xml
+// *
+// ***************************************************************************
+metaZones:table(nofallback){
+    mapTimezones{
+        "Acre"{"America/Rio_Branco"}
+        "Afghanistan"{"Asia/Kabul"}
+        "Africa_Central"{"Africa/Maputo"}
+        "Africa_Central:BI"{"Africa/Bujumbura"}
+        "Africa_Central:BW"{"Africa/Gaborone"}
+        "Africa_Central:CD"{"Africa/Lubumbashi"}
+        "Africa_Central:MW"{"Africa/Blantyre"}
+        "Africa_Central:RW"{"Africa/Kigali"}
+        "Africa_Central:ZM"{"Africa/Lusaka"}
+        "Africa_Central:ZW"{"Africa/Harare"}
+        "Africa_Eastern"{"Africa/Nairobi"}
+        "Africa_Eastern:DJ"{"Africa/Djibouti"}
+        "Africa_Eastern:ER"{"Africa/Asmera"}
+        "Africa_Eastern:ET"{"Africa/Addis_Ababa"}
+        "Africa_Eastern:KM"{"Indian/Comoro"}
+        "Africa_Eastern:MG"{"Indian/Antananarivo"}
+        "Africa_Eastern:SO"{"Africa/Mogadishu"}
+        "Africa_Eastern:TZ"{"Africa/Dar_es_Salaam"}
+        "Africa_Eastern:UG"{"Africa/Kampala"}
+        "Africa_Eastern:YT"{"Indian/Mayotte"}
+        "Africa_FarWestern"{"Africa/El_Aaiun"}
+        "Africa_FarWestern:GW"{"Africa/Bissau"}
+        "Africa_Southern"{"Africa/Johannesburg"}
+        "Africa_Southern:LS"{"Africa/Maseru"}
+        "Africa_Southern:SZ"{"Africa/Mbabane"}
+        "Africa_Western"{"Africa/Lagos"}
+        "Africa_Western:AO"{"Africa/Luanda"}
+        "Africa_Western:BJ"{"Africa/Porto-Novo"}
+        "Africa_Western:CD"{"Africa/Kinshasa"}
+        "Africa_Western:CF"{"Africa/Bangui"}
+        "Africa_Western:CG"{"Africa/Brazzaville"}
+        "Africa_Western:CM"{"Africa/Douala"}
+        "Africa_Western:GA"{"Africa/Libreville"}
+        "Africa_Western:GQ"{"Africa/Malabo"}
+        "Africa_Western:NE"{"Africa/Niamey"}
+        "Africa_Western:TD"{"Africa/Ndjamena"}
+        "Aktyubinsk"{"Asia/Aqtobe"}
+        "Alaska"{"America/Juneau"}
+        "Alaska_Hawaii"{"America/Anchorage"}
+        "Almaty"{"Asia/Almaty"}
+        "Amazon"{"America/Manaus"}
+        "America_Central"{"America/Chicago"}
+        "America_Central:BZ"{"America/Belize"}
+        "America_Central:CA"{"America/Winnipeg"}
+        "America_Central:CR"{"America/Costa_Rica"}
+        "America_Central:GT"{"America/Guatemala"}
+        "America_Central:HN"{"America/Tegucigalpa"}
+        "America_Central:MX"{"America/Mexico_City"}
+        "America_Central:SV"{"America/El_Salvador"}
+        "America_Eastern"{"America/New_York"}
+        "America_Eastern:BS"{"America/Nassau"}
+        "America_Eastern:CA"{"America/Toronto"}
+        "America_Eastern:HT"{"America/Port-au-Prince"}
+        "America_Eastern:JM"{"America/Jamaica"}
+        "America_Eastern:KY"{"America/Cayman"}
+        "America_Eastern:PA"{"America/Panama"}
+        "America_Eastern:TC"{"America/Grand_Turk"}
+        "America_Mountain"{"America/Denver"}
+        "America_Mountain:CA"{"America/Edmonton"}
+        "America_Mountain:MX"{"America/Hermosillo"}
+        "America_Pacific"{"America/Los_Angeles"}
+        "America_Pacific:CA"{"America/Vancouver"}
+        "America_Pacific:MX"{"America/Tijuana"}
+        "Anadyr"{"Asia/Anadyr"}
+        "Aqtau"{"Asia/Aqtau"}
+        "Aqtobe"{"Asia/Aqtobe"}
+        "Arabian"{"Asia/Riyadh"}
+        "Arabian:BH"{"Asia/Bahrain"}
+        "Arabian:IQ"{"Asia/Baghdad"}
+        "Arabian:KW"{"Asia/Kuwait"}
+        "Arabian:QA"{"Asia/Qatar"}
+        "Arabian:YE"{"Asia/Aden"}
+        "Argentina"{"America/Buenos_Aires"}
+        "Argentina_Western"{"America/Argentina/San_Luis"}
+        "Armenia"{"Asia/Yerevan"}
+        "Ashkhabad"{"Asia/Ashgabat"}
+        "Atlantic"{"America/Halifax"}
+        "Atlantic:AG"{"America/Antigua"}
+        "Atlantic:AI"{"America/Anguilla"}
+        "Atlantic:AN"{"America/Curacao"}
+        "Atlantic:AW"{"America/Aruba"}
+        "Atlantic:BB"{"America/Barbados"}
+        "Atlantic:BM"{"America/Bermuda"}
+        "Atlantic:DM"{"America/Dominica"}
+        "Atlantic:GD"{"America/Grenada"}
+        "Atlantic:GL"{"America/Thule"}
+        "Atlantic:GP"{"America/Guadaloupe"}
+        "Atlantic:KN"{"America/St_Kitts"}
+        "Atlantic:LC"{"America/St_Lucia"}
+        "Atlantic:MQ"{"America/Martinique"}
+        "Atlantic:MS"{"America/Montserrat"}
+        "Atlantic:PR"{"America/Puerto_Rico"}
+        "Atlantic:TT"{"America/Port_of_Spain"}
+        "Atlantic:VC"{"America/St_Vincent"}
+        "Atlantic:VG"{"America/Tortola"}
+        "Atlantic:VI"{"America/St_Thomas"}
+        "Australia_Central"{"Australia/Adelaide"}
+        "Australia_CentralWestern"{"Australia/Eucla"}
+        "Australia_Eastern"{"Australia/Sydney"}
+        "Australia_Western"{"Australia/Perth"}
+        "Azerbaijan"{"Asia/Baku"}
+        "Azores"{"Atlantic/Azores"}
+        "Baku"{"Asia/Baku"}
+        "Bangladesh"{"Asia/Dhaka"}
+        "Bering"{"America/Adak"}
+        "Bhutan"{"Asia/Thimphu"}
+        "Bolivia"{"America/La_Paz"}
+        "Borneo"{"Asia/Kuching"}
+        "Brasilia"{"America/Sao_Paulo"}
+        "British"{"Europe/London"}
+        "Brunei"{"Asia/Brunei"}
+        "Cape_Verde"{"Atlantic/Cape_Verde"}
+        "Chamorro"{"Pacific/Saipan"}
+        "Chamorro:GU"{"Pacific/Guam"}
+        "Changbai"{"Asia/Harbin"}
+        "Chatham"{"Pacific/Chatham"}
+        "Chile"{"America/Santiago"}
+        "Chile:AQ"{"Antarctica/Palmer"}
+        "China"{"Asia/Shanghai"}
+        "China:MO"{"Asia/Macau"}
+        "Choibalsan"{"Asia/Choibalsan"}
+        "Christmas"{"Indian/Christmas"}
+        "Cocos"{"Indian/Cocos"}
+        "Colombia"{"America/Bogota"}
+        "Cook"{"Pacific/Rarotonga"}
+        "Cuba"{"America/Havana"}
+        "Dacca"{"Asia/Dhaka"}
+        "Davis"{"Antarctica/Davis"}
+        "Dominican"{"America/Santo_Domingo"}
+        "DumontDUrville"{"Antarctica/DumontDUrville"}
+        "Dushanbe"{"Asia/Dushanbe"}
+        "Dutch_Guiana"{"America/Paramaribo"}
+        "East_Timor"{"Asia/Dili"}
+        "Easter"{"Pacific/Easter"}
+        "Ecuador"{"America/Guayaquil"}
+        "Europe_Central"{"Europe/Paris"}
+        "Europe_Central:AD"{"Europe/Andorra"}
+        "Europe_Central:AL"{"Europe/Tirane"}
+        "Europe_Central:AT"{"Europe/Vienna"}
+        "Europe_Central:BA"{"Europe/Sarajevo"}
+        "Europe_Central:BE"{"Europe/Brussels"}
+        "Europe_Central:CH"{"Europe/Zurich"}
+        "Europe_Central:CZ"{"Europe/Prague"}
+        "Europe_Central:DE"{"Europe/Berlin"}
+        "Europe_Central:DK"{"Europe/Copenhagen"}
+        "Europe_Central:ES"{"Europe/Madrid"}
+        "Europe_Central:GI"{"Europe/Gibraltar"}
+        "Europe_Central:HR"{"Europe/Zagreb"}
+        "Europe_Central:HU"{"Europe/Budapest"}
+        "Europe_Central:IT"{"Europe/Rome"}
+        "Europe_Central:LI"{"Europe/Vaduz"}
+        "Europe_Central:LU"{"Europe/Luxembourg"}
+        "Europe_Central:MC"{"Europe/Monaco"}
+        "Europe_Central:ME"{"Europe/Podgorica"}
+        "Europe_Central:MK"{"Europe/Skopje"}
+        "Europe_Central:MT"{"Europe/Malta"}
+        "Europe_Central:NL"{"Europe/Amsterdam"}
+        "Europe_Central:NO"{"Europe/Oslo"}
+        "Europe_Central:PL"{"Europe/Warsaw"}
+        "Europe_Central:RS"{"Europe/Belgrade"}
+        "Europe_Central:SE"{"Europe/Stockholm"}
+        "Europe_Central:SI"{"Europe/Ljubljana"}
+        "Europe_Central:SK"{"Europe/Bratislava"}
+        "Europe_Central:TN"{"Africa/Tunis"}
+        "Europe_Eastern"{"Europe/Bucharest"}
+        "Europe_Eastern:BG"{"Europe/Sofia"}
+        "Europe_Eastern:CY"{"Asia/Nicosia"}
+        "Europe_Eastern:EG"{"Africa/Cairo"}
+        "Europe_Eastern:FI"{"Europe/Helsinki"}
+        "Europe_Eastern:GR"{"Europe/Athens"}
+        "Europe_Eastern:JO"{"Asia/Amman"}
+        "Europe_Eastern:LB"{"Asia/Beirut"}
+        "Europe_Eastern:SY"{"Asia/Damascus"}
+        "Europe_Western"{"Atlantic/Canary"}
+        "Europe_Western:FO"{"Atlantic/Faeroe"}
+        "Falkland"{"Atlantic/Stanley"}
+        "Fiji"{"Pacific/Fiji"}
+        "French_Guiana"{"America/Cayenne"}
+        "French_Southern"{"Indian/Kerguelen"}
+        "Frunze"{"Asia/Bishkek"}
+        "GMT"{"Atlantic/Reykjavik"}
+        "GMT:BF"{"Africa/Ouagadougou"}
+        "GMT:CI"{"Africa/Abidjan"}
+        "GMT:GB"{"Europe/London"}
+        "GMT:GH"{"Africa/Accra"}
+        "GMT:GM"{"Africa/Banjul"}
+        "GMT:GN"{"Africa/Conakry"}
+        "GMT:GW"{"Africa/Bissau"}
+        "GMT:IE"{"Europe/Dublin"}
+        "GMT:LR"{"Africa/Monrovia"}
+        "GMT:ML"{"Africa/Bamako"}
+        "GMT:MR"{"Africa/Nouakchott"}
+        "GMT:SH"{"Atlantic/St_Helena"}
+        "GMT:SL"{"Africa/Freetown"}
+        "GMT:SN"{"Africa/Dakar"}
+        "GMT:ST"{"Africa/Sao_Tome"}
+        "GMT:TG"{"Africa/Lome"}
+        "Galapagos"{"Pacific/Galapagos"}
+        "Gambier"{"Pacific/Gambier"}
+        "Georgia"{"Asia/Tbilisi"}
+        "Gilbert_Islands"{"Pacific/Tarawa"}
+        "Goose_Bay"{"America/Goose_Bay"}
+        "Greenland_Central"{"America/Scoresbysund"}
+        "Greenland_Eastern"{"America/Scoresbysund"}
+        "Greenland_Western"{"America/Godthab"}
+        "Guam"{"Pacific/Guam"}
+        "Gulf"{"Asia/Dubai"}
+        "Gulf:OM"{"Asia/Muscat"}
+        "Guyana"{"America/Guyana"}
+        "Hawaii_Aleutian"{"Pacific/Honolulu"}
+        "Hong_Kong"{"Asia/Hong_Kong"}
+        "Hovd"{"Asia/Hovd"}
+        "India"{"Asia/Calcutta"}
+        "India:LK"{"Asia/Colombo"}
+        "Indian_Ocean"{"Indian/Chagos"}
+        "Indochina"{"Asia/Saigon"}
+        "Indochina:KH"{"Asia/Phnom_Penh"}
+        "Indochina:LA"{"Asia/Vientiane"}
+        "Indochina:TH"{"Asia/Bangkok"}
+        "Indonesia_Central"{"Asia/Makassar"}
+        "Indonesia_Eastern"{"Asia/Jayapura"}
+        "Indonesia_Western"{"Asia/Jakarta"}
+        "Iran"{"Asia/Tehran"}
+        "Irish"{"Europe/Dublin"}
+        "Irkutsk"{"Asia/Irkutsk"}
+        "Israel"{"Asia/Jerusalem"}
+        "Japan"{"Asia/Tokyo"}
+        "Kamchatka"{"Asia/Kamchatka"}
+        "Karachi"{"Asia/Karachi"}
+        "Kashgar"{"Asia/Kashgar"}
+        "Kazakhstan_Eastern"{"Asia/Almaty"}
+        "Kazakhstan_Western"{"Asia/Aqtobe"}
+        "Kizilorda"{"Asia/Qyzylorda"}
+        "Korea"{"Asia/Seoul"}
+        "Korea:KP"{"Asia/Pyongyang"}
+        "Kosrae"{"Pacific/Kosrae"}
+        "Krasnoyarsk"{"Asia/Krasnoyarsk"}
+        "Kuybyshev"{"Europe/Samara"}
+        "Kwajalein"{"Pacific/Kwajalein"}
+        "Kyrgystan"{"Asia/Bishkek"}
+        "Lanka"{"Asia/Colombo"}
+        "Liberia"{"Africa/Monrovia"}
+        "Line_Islands"{"Pacific/Kiritimati"}
+        "Long_Shu"{"Asia/Chongqing"}
+        "Lord_Howe"{"Australia/Lord_Howe"}
+        "Macau"{"Asia/Macau"}
+        "Magadan"{"Asia/Magadan"}
+        "Malaya"{"Asia/Kuala_Lumpur"}
+        "Malaysia"{"Asia/Kuching"}
+        "Maldives"{"Indian/Maldives"}
+        "Marquesas"{"Pacific/Marquesas"}
+        "Marshall_Islands"{"Pacific/Majuro"}
+        "Mauritius"{"Indian/Mauritius"}
+        "Mawson"{"Antarctica/Mawson"}
+        "Mongolia"{"Asia/Ulaanbaatar"}
+        "Moscow"{"Europe/Moscow"}
+        "Myanmar"{"Asia/Rangoon"}
+        "Nauru"{"Pacific/Nauru"}
+        "Nepal"{"Asia/Katmandu"}
+        "New_Caledonia"{"Pacific/Noumea"}
+        "New_Zealand"{"Pacific/Auckland"}
+        "New_Zealand:AQ"{"Antarctica/McMurdo"}
+        "Newfoundland"{"America/St_Johns"}
+        "Niue"{"Pacific/Niue"}
+        "Norfolk"{"Pacific/Norfolk"}
+        "Noronha"{"America/Noronha"}
+        "North_Mariana"{"Pacific/Saipan"}
+        "Novosibirsk"{"Asia/Novosibirsk"}
+        "Omsk"{"Asia/Omsk"}
+        "Oral"{"Asia/Oral"}
+        "Pakistan"{"Asia/Karachi"}
+        "Palau"{"Pacific/Palau"}
+        "Papua_New_Guinea"{"Pacific/Port_Moresby"}
+        "Paraguay"{"America/Asuncion"}
+        "Peru"{"America/Lima"}
+        "Philippines"{"Asia/Manila"}
+        "Phoenix_Islands"{"Pacific/Enderbury"}
+        "Pierre_Miquelon"{"America/Miquelon"}
+        "Pitcairn"{"Pacific/Pitcairn"}
+        "Ponape"{"Pacific/Ponape"}
+        "Qyzylorda"{"Asia/Qyzylorda"}
+        "Reunion"{"Indian/Reunion"}
+        "Rothera"{"Antarctica/Rothera"}
+        "Sakhalin"{"Asia/Sakhalin"}
+        "Samara"{"Europe/Samara"}
+        "Samarkand"{"Asia/Samarkand"}
+        "Samoa"{"Pacific/Apia"}
+        "Seychelles"{"Indian/Mahe"}
+        "Shevchenko"{"Asia/Aqtau"}
+        "Singapore"{"Asia/Singapore"}
+        "Solomon"{"Pacific/Guadalcanal"}
+        "South_Georgia"{"Atlantic/South_Georgia"}
+        "Suriname"{"America/Paramaribo"}
+        "Sverdlovsk"{"Asia/Yekaterinburg"}
+        "Syowa"{"Antarctica/Syowa"}
+        "Tahiti"{"Pacific/Tahiti"}
+        "Taipei"{"Asia/Taipei"}
+        "Tajikistan"{"Asia/Dushanbe"}
+        "Tashkent"{"Asia/Tashkent"}
+        "Tbilisi"{"Asia/Tbilisi"}
+        "Tokelau"{"Pacific/Fakaofo"}
+        "Tonga"{"Pacific/Tongatapu"}
+        "Truk"{"Pacific/Truk"}
+        "Turkey"{"Europe/Istanbul"}
+        "Turkmenistan"{"Asia/Ashgabat"}
+        "Tuvalu"{"Pacific/Funafuti"}
+        "Uralsk"{"Asia/Oral"}
+        "Uruguay"{"America/Montevideo"}
+        "Urumqi"{"Asia/Urumqi"}
+        "Uzbekistan"{"Asia/Tashkent"}
+        "Vanuatu"{"Pacific/Efate"}
+        "Venezuela"{"America/Caracas"}
+        "Vladivostok"{"Asia/Vladivostok"}
+        "Volgograd"{"Europe/Volgograd"}
+        "Vostok"{"Antarctica/Vostok"}
+        "Wake"{"Pacific/Wake"}
+        "Wallis"{"Pacific/Wallis"}
+        "Yakutsk"{"Asia/Yakutsk"}
+        "Yekaterinburg"{"Asia/Yekaterinburg"}
+        "Yerevan"{"Asia/Yerevan"}
+        "Yukon"{"America/Yakutat"}
+    }
+    metazoneInfo{
+        "Africa:Abidjan"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Accra"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Addis_Ababa"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Algiers"{
+            {
+                "Europe_Western",
+                "1970-01-01 00:00",
+                "1977-10-20 23:00",
+            }
+            {
+                "Europe_Central",
+                "1977-10-20 23:00",
+                "1979-10-25 23:00",
+            }
+            {
+                "Europe_Western",
+                "1979-10-25 23:00",
+                "1981-05-01 00:00",
+            }
+            {
+                "Europe_Central",
+                "1981-05-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Asmera"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Bamako"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Bangui"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Banjul"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Bissau"{
+            {
+                "Africa_FarWestern",
+                "1970-01-01 00:00",
+                "1975-01-01 01:00",
+            }
+            {
+                "GMT",
+                "1975-01-01 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Blantyre"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Brazzaville"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Bujumbura"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Cairo"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Africa:Casablanca"{
+            {
+                "Europe_Western",
+                "1970-01-01 00:00",
+                "1984-03-16 00:00",
+            }
+            {
+                "Europe_Central",
+                "1984-03-16 00:00",
+                "1985-12-31 23:00",
+            }
+            {
+                "Europe_Western",
+                "1985-12-31 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Ceuta"{
+            {
+                "Europe_Western",
+                "1970-01-01 00:00",
+                "1984-03-16 00:00",
+            }
+            {
+                "Europe_Central",
+                "1984-03-16 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Conakry"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Dakar"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Dar_es_Salaam"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Djibouti"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Douala"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:El_Aaiun"{
+            {
+                "Africa_FarWestern",
+                "1970-01-01 00:00",
+                "1976-04-14 01:00",
+            }
+            {
+                "Europe_Western",
+                "1976-04-14 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Freetown"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Gaborone"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Harare"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Johannesburg"{
+            {
+                "Africa_Southern",
+            }
+        }
+        "Africa:Kampala"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Khartoum"{
+            {
+                "Africa_Central",
+                "1970-01-01 00:00",
+                "2000-01-15 10:00",
+            }
+            {
+                "Africa_Eastern",
+                "2000-01-15 10:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Kigali"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Kinshasa"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Lagos"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Libreville"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Lome"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Luanda"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Lubumbashi"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Lusaka"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Malabo"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Maputo"{
+            {
+                "Africa_Central",
+            }
+        }
+        "Africa:Maseru"{
+            {
+                "Africa_Southern",
+            }
+        }
+        "Africa:Mbabane"{
+            {
+                "Africa_Southern",
+            }
+        }
+        "Africa:Mogadishu"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Monrovia"{
+            {
+                "Liberia",
+                "1970-01-01 00:00",
+                "1972-05-01 00:45",
+            }
+            {
+                "GMT",
+                "1972-05-01 00:45",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Nairobi"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Africa:Ndjamena"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Niamey"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Nouakchott"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Ouagadougou"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Porto-Novo"{
+            {
+                "Africa_Western",
+            }
+        }
+        "Africa:Sao_Tome"{
+            {
+                "GMT",
+            }
+        }
+        "Africa:Tripoli"{
+            {
+                "Europe_Eastern",
+                "1970-01-01 00:00",
+                "1981-12-31 22:00",
+            }
+            {
+                "Europe_Central",
+                "1981-12-31 22:00",
+                "1990-05-03 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1990-05-03 23:00",
+                "1996-09-29 22:00",
+            }
+            {
+                "Europe_Central",
+                "1996-09-29 22:00",
+                "1997-10-03 22:00",
+            }
+            {
+                "Europe_Eastern",
+                "1997-10-03 22:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Tunis"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Africa:Windhoek"{
+            {
+                "Africa_Southern",
+                "1970-01-01 00:00",
+                "1990-03-20 22:00",
+            }
+            {
+                "Africa_Central",
+                "1990-03-20 22:00",
+                "1994-04-02 22:00",
+            }
+            {
+                "Africa_Western",
+                "1994-04-02 22:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Adak"{
+            {
+                "Bering",
+                "1970-01-01 00:00",
+                "1983-10-30 12:00",
+            }
+            {
+                "Hawaii_Aleutian",
+                "1983-10-30 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Anchorage"{
+            {
+                "Alaska_Hawaii",
+                "1970-01-01 00:00",
+                "1983-10-30 11:00",
+            }
+            {
+                "Alaska",
+                "1983-10-30 11:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Anguilla"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Antigua"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Araguaina"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Argentina:La_Rioja"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-01 02:00",
+            }
+            {
+                "Argentina_Western",
+                "1991-03-01 02:00",
+                "1991-05-07 04:00",
+            }
+            {
+                "Argentina",
+                "1991-05-07 04:00",
+                "2004-06-01 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-06-01 03:00",
+                "2004-06-20 04:00",
+            }
+            {
+                "Argentina",
+                "2004-06-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:Rio_Gallegos"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "2004-06-01 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-06-01 03:00",
+                "2004-06-20 04:00",
+            }
+            {
+                "Argentina",
+                "2004-06-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:Salta"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-03 02:00",
+            }
+            {
+                "Argentina",
+                "1991-10-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:San_Juan"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-01 02:00",
+            }
+            {
+                "Argentina_Western",
+                "1991-03-01 02:00",
+                "1991-05-07 04:00",
+            }
+            {
+                "Argentina",
+                "1991-05-07 04:00",
+                "2004-05-31 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-05-31 03:00",
+                "2004-07-25 04:00",
+            }
+            {
+                "Argentina",
+                "2004-07-25 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:San_Luis"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1990-03-14 02:00",
+            }
+            {
+                "Argentina_Western",
+                "1990-03-14 02:00",
+                "1991-06-01 04:00",
+            }
+            {
+                "Argentina",
+                "1991-06-01 04:00",
+                "1999-10-03 03:00",
+            }
+            {
+                "Argentina_Western",
+                "1999-10-03 03:00",
+                "2000-03-03 03:00",
+            }
+            {
+                "Argentina",
+                "2000-03-03 03:00",
+                "2004-05-31 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-05-31 03:00",
+                "2004-07-25 04:00",
+            }
+            {
+                "Argentina",
+                "2004-07-25 04:00",
+                "2008-01-21 02:00",
+            }
+            {
+                "Argentina_Western",
+                "2008-01-21 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:Tucuman"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-03 02:00",
+            }
+            {
+                "Argentina",
+                "1991-10-20 04:00",
+                "2004-06-01 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-06-01 03:00",
+                "2004-06-13 04:00",
+            }
+            {
+                "Argentina",
+                "2004-06-13 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:Ushuaia"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "2004-05-30 03:00",
+            }
+            {
+                "Argentina",
+                "2004-06-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Aruba"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Asuncion"{
+            {
+                "Paraguay",
+            }
+        }
+        "America:Bahia"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Barbados"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Belem"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Belize"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Blanc-Sablon"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Boa_Vista"{
+            {
+                "Amazon",
+            }
+        }
+        "America:Bogota"{
+            {
+                "Colombia",
+            }
+        }
+        "America:Boise"{
+            {
+                "America_Mountain",
+            }
+        }
+        "America:Buenos_Aires"{
+            {
+                "Argentina",
+            }
+        }
+        "America:Cambridge_Bay"{
+            {
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "1999-10-31 08:00",
+            }
+            {
+                "America_Central",
+                "1999-10-31 08:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "2000-11-05 05:00",
+            }
+            {
+                "America_Central",
+                "2000-11-05 05:00",
+                "2001-04-01 09:00",
+            }
+            {
+                "America_Mountain",
+                "2001-04-01 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Campo_Grande"{
+            {
+                "Amazon",
+            }
+        }
+        "America:Cancun"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1981-12-23 06:00",
+            }
+            {
+                "America_Eastern",
+                "1981-12-23 06:00",
+                "1998-08-02 06:00",
+            }
+            {
+                "America_Central",
+                "1998-08-02 06:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Caracas"{
+            {
+                "Venezuela",
+            }
+        }
+        "America:Catamarca"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-03 02:00",
+            }
+            {
+                "Argentina",
+                "1991-10-20 04:00",
+                "2004-06-01 03:00",
+            }
+            {
+                "Argentina_Western",
+                "2004-06-01 03:00",
+                "2004-06-20 04:00",
+            }
+            {
+                "Argentina",
+                "2004-06-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Cayenne"{
+            {
+                "French_Guiana",
+            }
+        }
+        "America:Cayman"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Chicago"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Chihuahua"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1998-04-05 09:00",
+            }
+            {
+                "America_Mountain",
+                "1998-04-05 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Coral_Harbour"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Cordoba"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-03 02:00",
+            }
+            {
+                "Argentina",
+                "1991-10-20 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Costa_Rica"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Cuiaba"{
+            {
+                "Amazon",
+            }
+        }
+        "America:Curacao"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Danmarkshavn"{
+            {
+                "Greenland_Western",
+                "1970-01-01 00:00",
+                "1996-01-01 03:00",
+            }
+            {
+                "GMT",
+                "1996-01-01 03:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Dawson"{
+            {
+                "Yukon",
+                "1970-01-01 00:00",
+                "1973-10-28 09:00",
+            }
+            {
+                "America_Pacific",
+                "1973-10-28 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Dawson_Creek"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1972-08-30 09:00",
+            }
+            {
+                "America_Mountain",
+                "1972-08-30 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Denver"{
+            {
+                "America_Mountain",
+            }
+        }
+        "America:Detroit"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Dominica"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Edmonton"{
+            {
+                "America_Mountain",
+            }
+        }
+        "America:Eirunepe"{
+            {
+                "Acre",
+                "1970-01-01 00:00",
+                "2008-06-24 05:00",
+            }
+            {
+                "Amazon",
+                "2008-06-24 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:El_Salvador"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Fortaleza"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Glace_Bay"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Godthab"{
+            {
+                "Greenland_Western",
+            }
+        }
+        "America:Goose_Bay"{
+            {
+                "Atlantic",
+                "1970-01-01 00:00",
+                "1988-04-03 04:01",
+            }
+            {
+                "Goose_Bay",
+                "1988-04-03 04:01",
+                "1988-10-30 02:01",
+            }
+            {
+                "Atlantic",
+                "1988-10-30 02:01",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Grand_Turk"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Grenada"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Guadeloupe"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Guatemala"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Guayaquil"{
+            {
+                "Ecuador",
+            }
+        }
+        "America:Guyana"{
+            {
+                "Guyana",
+            }
+        }
+        "America:Halifax"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Havana"{
+            {
+                "Cuba",
+            }
+        }
+        "America:Hermosillo"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1970-01-01 08:00",
+            }
+            {
+                "America_Mountain",
+                "1970-01-01 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Knox"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1991-10-27 07:00",
+            }
+            {
+                "America_Eastern",
+                "1991-10-27 07:00",
+                "2006-04-02 07:00",
+            }
+            {
+                "America_Central",
+                "2006-04-02 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Marengo"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "1974-01-06 07:00",
+            }
+            {
+                "America_Central",
+                "1974-01-06 07:00",
+                "1974-10-27 07:00",
+            }
+            {
+                "America_Eastern",
+                "1974-10-27 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Petersburg"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1977-10-30 07:00",
+            }
+            {
+                "America_Eastern",
+                "1977-10-30 07:00",
+                "2006-04-02 07:00",
+            }
+            {
+                "America_Central",
+                "2006-04-02 07:00",
+                "2007-11-04 07:00",
+            }
+            {
+                "America_Eastern",
+                "2007-11-04 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Tell_City"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "2006-04-02 07:00",
+            }
+            {
+                "America_Central",
+                "2006-04-02 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Vevay"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Indiana:Vincennes"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "2006-04-02 07:00",
+            }
+            {
+                "America_Central",
+                "2006-04-02 07:00",
+                "2007-11-04 07:00",
+            }
+            {
+                "America_Eastern",
+                "2007-11-04 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indiana:Winamac"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "2006-04-02 07:00",
+            }
+            {
+                "America_Central",
+                "2006-04-02 07:00",
+                "2007-03-11 08:00",
+            }
+            {
+                "America_Eastern",
+                "2007-03-11 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Indianapolis"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Inuvik"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1979-04-29 10:00",
+            }
+            {
+                "America_Mountain",
+                "1979-04-29 10:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Iqaluit"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "1999-10-31 06:00",
+            }
+            {
+                "America_Central",
+                "1999-10-31 06:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Jamaica"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Jujuy"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1990-03-04 02:00",
+            }
+            {
+                "Argentina",
+                "1991-10-06 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Juneau"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1983-10-30 09:00",
+            }
+            {
+                "Alaska",
+                "1983-10-30 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Kentucky:Monticello"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:La_Paz"{
+            {
+                "Bolivia",
+            }
+        }
+        "America:Lima"{
+            {
+                "Peru",
+            }
+        }
+        "America:Los_Angeles"{
+            {
+                "America_Pacific",
+            }
+        }
+        "America:Louisville"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "1974-01-06 07:00",
+            }
+            {
+                "America_Central",
+                "1974-01-06 07:00",
+                "1974-10-27 07:00",
+            }
+            {
+                "America_Eastern",
+                "1974-10-27 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Maceio"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Managua"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1973-05-01 06:00",
+            }
+            {
+                "America_Eastern",
+                "1973-05-01 06:00",
+                "1975-02-16 05:00",
+            }
+            {
+                "America_Central",
+                "1975-02-16 05:00",
+                "1992-01-01 10:00",
+            }
+            {
+                "America_Eastern",
+                "1992-01-01 10:00",
+                "1992-09-24 05:00",
+            }
+            {
+                "America_Central",
+                "1992-09-24 05:00",
+                "1993-01-01 06:00",
+            }
+            {
+                "America_Eastern",
+                "1993-01-01 06:00",
+                "1997-01-01 05:00",
+            }
+            {
+                "America_Central",
+                "1997-01-01 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Manaus"{
+            {
+                "Amazon",
+            }
+        }
+        "America:Marigot"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Martinique"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Mazatlan"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1970-01-01 08:00",
+            }
+            {
+                "America_Mountain",
+                "1970-01-01 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Mendoza"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1990-03-04 02:00",
+            }
+            {
+                "Argentina",
+                "1992-10-18 04:00",
+                "2004-05-23 03:00",
+            }
+            {
+                "Argentina",
+                "2004-09-26 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Menominee"{
+            {
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "1973-04-29 07:00",
+            }
+            {
+                "America_Central",
+                "1973-04-29 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Merida"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1981-12-23 06:00",
+            }
+            {
+                "America_Eastern",
+                "1981-12-23 06:00",
+                "1982-12-02 05:00",
+            }
+            {
+                "America_Central",
+                "1982-12-02 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Mexico_City"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Miquelon"{
+            {
+                "Atlantic",
+                "1970-01-01 00:00",
+                "1980-05-01 04:00",
+            }
+            {
+                "Pierre_Miquelon",
+                "1980-05-01 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Moncton"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Monterrey"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Montevideo"{
+            {
+                "Uruguay",
+            }
+        }
+        "America:Montreal"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Montserrat"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Nassau"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:New_York"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Nipigon"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Nome"{
+            {
+                "Bering",
+                "1970-01-01 00:00",
+                "1983-10-30 12:00",
+            }
+            {
+                "Alaska",
+                "1983-10-30 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Noronha"{
+            {
+                "Noronha",
+            }
+        }
+        "America:North_Dakota:Center"{
+            {
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "1992-10-25 08:00",
+            }
+            {
+                "America_Central",
+                "1992-10-25 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:North_Dakota:New_Salem"{
+            {
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "2003-10-26 08:00",
+            }
+            {
+                "America_Central",
+                "2003-10-26 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Panama"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Pangnirtung"{
+            {
+                "Atlantic",
+                "1970-01-01 00:00",
+                "1995-04-02 06:00",
+            }
+            {
+                "America_Eastern",
+                "1995-04-02 06:00",
+                "1999-10-31 06:00",
+            }
+            {
+                "America_Central",
+                "1999-10-31 06:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Paramaribo"{
+            {
+                "Dutch_Guiana",
+                "1970-01-01 00:00",
+                "1975-11-20 03:30",
+            }
+            {
+                "Suriname",
+                "1975-11-20 03:30",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Phoenix"{
+            {
+                "America_Mountain",
+            }
+        }
+        "America:Port-au-Prince"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Port_of_Spain"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Porto_Velho"{
+            {
+                "Amazon",
+            }
+        }
+        "America:Puerto_Rico"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Rainy_River"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Rankin_Inlet"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "2001-04-01 08:00",
+            }
+            {
+                "America_Central",
+                "2001-04-01 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Recife"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Regina"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Resolute"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "2000-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 07:00",
+                "2001-04-01 08:00",
+            }
+            {
+                "America_Central",
+                "2001-04-01 08:00",
+                "2006-10-29 07:00",
+            }
+            {
+                "America_Eastern",
+                "2006-10-29 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Rio_Branco"{
+            {
+                "Acre",
+                "1970-01-01 00:00",
+                "2008-06-24 05:00",
+            }
+            {
+                "Amazon",
+                "2008-06-24 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Santarem"{
+            {
+                "Amazon",
+                "1970-01-01 00:00",
+                "2008-06-24 04:00",
+            }
+            {
+                "Brasilia",
+                "2008-06-24 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Santiago"{
+            {
+                "Chile",
+            }
+        }
+        "America:Santo_Domingo"{
+            {
+                "Dominican",
+                "1970-01-01 00:00",
+                "1974-10-27 05:00",
+            }
+            {
+                "Atlantic",
+                "1974-10-27 05:00",
+                "2000-10-29 06:00",
+            }
+            {
+                "America_Eastern",
+                "2000-10-29 06:00",
+                "2000-12-03 06:00",
+            }
+            {
+                "Atlantic",
+                "2000-12-03 06:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Sao_Paulo"{
+            {
+                "Brasilia",
+            }
+        }
+        "America:Scoresbysund"{
+            {
+                "Greenland_Central",
+                "1970-01-01 00:00",
+                "1981-03-29 02:00",
+            }
+            {
+                "Greenland_Eastern",
+                "1981-03-29 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Shiprock"{
+            {
+                "America_Mountain",
+            }
+        }
+        "America:St_Barthelemy"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:St_Johns"{
+            {
+                "Newfoundland",
+            }
+        }
+        "America:St_Kitts"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:St_Lucia"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:St_Thomas"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:St_Vincent"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Swift_Current"{
+            {
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "1972-04-30 09:00",
+            }
+            {
+                "America_Central",
+                "1972-04-30 09:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Tegucigalpa"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Thule"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Thunder_Bay"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Tijuana"{
+            {
+                "America_Pacific",
+            }
+        }
+        "America:Toronto"{
+            {
+                "America_Eastern",
+            }
+        }
+        "America:Tortola"{
+            {
+                "Atlantic",
+            }
+        }
+        "America:Vancouver"{
+            {
+                "America_Pacific",
+            }
+        }
+        "America:Whitehorse"{
+            {
+                "America_Pacific",
+            }
+        }
+        "America:Winnipeg"{
+            {
+                "America_Central",
+            }
+        }
+        "America:Yakutat"{
+            {
+                "Yukon",
+                "1970-01-01 00:00",
+                "1983-10-30 10:00",
+            }
+            {
+                "Alaska",
+                "1983-10-30 10:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Yellowknife"{
+            {
+                "America_Mountain",
+            }
+        }
+        "Antarctica:Casey"{
+            {
+                "Australia_Western",
+                "1970-01-01 00:00",
+                "2009-10-17 18:00",
+            }
+        }
+        "Antarctica:Davis"{
+            {
+                "Davis",
+            }
+        }
+        "Antarctica:DumontDUrville"{
+            {
+                "DumontDUrville",
+            }
+        }
+        "Antarctica:Mawson"{
+            {
+                "Mawson",
+            }
+        }
+        "Antarctica:McMurdo"{
+            {
+                "New_Zealand",
+            }
+        }
+        "Antarctica:Palmer"{
+            {
+                "Argentina",
+                "1970-01-01 00:00",
+                "1982-05-01 03:00",
+            }
+            {
+                "Chile",
+                "1982-05-01 03:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Antarctica:Rothera"{
+            {
+                "Rothera",
+            }
+        }
+        "Antarctica:Syowa"{
+            {
+                "Syowa",
+            }
+        }
+        "Antarctica:Vostok"{
+            {
+                "Vostok",
+            }
+        }
+        "Arctic:Longyearbyen"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Asia:Aden"{
+            {
+                "Arabian",
+            }
+        }
+        "Asia:Almaty"{
+            {
+                "Almaty",
+                "1970-01-01 00:00",
+                "2005-03-14 18:00",
+            }
+            {
+                "Kazakhstan_Eastern",
+                "2005-03-14 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Amman"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Asia:Anadyr"{
+            {
+                "Anadyr",
+            }
+        }
+        "Asia:Aqtau"{
+            {
+                "Shevchenko",
+                "1970-01-01 00:00",
+                "1991-12-15 19:00",
+            }
+            {
+                "Aqtau",
+                "1991-12-15 19:00",
+                "2005-03-14 20:00",
+            }
+            {
+                "Kazakhstan_Western",
+                "2005-03-14 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Aqtobe"{
+            {
+                "Aktyubinsk",
+                "1970-01-01 00:00",
+                "1991-12-15 19:00",
+            }
+            {
+                "Aqtobe",
+                "1991-12-15 19:00",
+                "2005-03-14 19:00",
+            }
+            {
+                "Kazakhstan_Western",
+                "2005-03-14 19:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Ashgabat"{
+            {
+                "Ashkhabad",
+                "1970-01-01 00:00",
+                "1991-10-26 20:00",
+            }
+            {
+                "Turkmenistan",
+                "1991-10-26 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Baghdad"{
+            {
+                "Arabian",
+            }
+        }
+        "Asia:Bahrain"{
+            {
+                "Gulf",
+                "1970-01-01 00:00",
+                "1972-05-31 20:00",
+            }
+            {
+                "Arabian",
+                "1972-05-31 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Baku"{
+            {
+                "Baku",
+                "1970-01-01 00:00",
+                "1991-08-29 20:00",
+            }
+            {
+                "Azerbaijan",
+                "1991-08-29 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Bangkok"{
+            {
+                "Indochina",
+            }
+        }
+        "Asia:Beirut"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Asia:Bishkek"{
+            {
+                "Frunze",
+                "1970-01-01 00:00",
+                "1991-08-30 20:00",
+            }
+            {
+                "Kyrgystan",
+                "1991-08-30 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Brunei"{
+            {
+                "Brunei",
+            }
+        }
+        "Asia:Calcutta"{
+            {
+                "India",
+            }
+        }
+        "Asia:Choibalsan"{
+            {
+                "Mongolia",
+                "1970-01-01 00:00",
+                "1983-03-31 16:00",
+            }
+            {
+                "Choibalsan",
+                "1983-03-31 16:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Chongqing"{
+            {
+                "Long_Shu",
+                "1970-01-01 00:00",
+                "1980-04-30 17:00",
+            }
+            {
+                "China",
+                "1980-04-30 17:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Colombo"{
+            {
+                "India",
+                "1970-01-01 00:00",
+                "1996-05-24 18:30",
+            }
+            {
+                "Lanka",
+                "1996-05-24 18:30",
+                "2006-04-14 18:30",
+            }
+            {
+                "India",
+                "2006-04-14 18:30",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Damascus"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Asia:Dhaka"{
+            {
+                "Dacca",
+                "1970-01-01 00:00",
+                "1971-03-25 18:00",
+            }
+            {
+                "Bangladesh",
+                "1971-03-25 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Dili"{
+            {
+                "East_Timor",
+                "1970-01-01 00:00",
+                "1976-05-02 15:00",
+            }
+            {
+                "Indonesia_Central",
+                "1976-05-02 15:00",
+                "2000-09-16 16:00",
+            }
+            {
+                "East_Timor",
+                "2000-09-16 16:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Dubai"{
+            {
+                "Gulf",
+            }
+        }
+        "Asia:Dushanbe"{
+            {
+                "Dushanbe",
+                "1970-01-01 00:00",
+                "1991-09-08 21:00",
+            }
+            {
+                "Tajikistan",
+                "1991-09-08 21:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Gaza"{
+            {
+                "Israel",
+                "1970-01-01 00:00",
+                "1995-12-31 22:00",
+            }
+            {
+                "Europe_Eastern",
+                "1995-12-31 22:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Harbin"{
+            {
+                "Changbai",
+                "1970-01-01 00:00",
+                "1980-04-30 15:30",
+            }
+            {
+                "China",
+                "1980-04-30 15:30",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Hong_Kong"{
+            {
+                "Hong_Kong",
+            }
+        }
+        "Asia:Hovd"{
+            {
+                "Hovd",
+            }
+        }
+        "Asia:Irkutsk"{
+            {
+                "Irkutsk",
+            }
+        }
+        "Asia:Jakarta"{
+            {
+                "Indonesia_Western",
+            }
+        }
+        "Asia:Jayapura"{
+            {
+                "Indonesia_Eastern",
+            }
+        }
+        "Asia:Jerusalem"{
+            {
+                "Israel",
+            }
+        }
+        "Asia:Kabul"{
+            {
+                "Afghanistan",
+            }
+        }
+        "Asia:Kamchatka"{
+            {
+                "Kamchatka",
+            }
+        }
+        "Asia:Karachi"{
+            {
+                "Karachi",
+                "1970-01-01 00:00",
+                "1971-03-25 19:00",
+            }
+            {
+                "Pakistan",
+                "1971-03-25 19:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Kashgar"{
+            {
+                "Kashgar",
+                "1970-01-01 00:00",
+                "1980-04-30 19:00",
+            }
+            {
+                "China",
+                "1980-04-30 19:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Katmandu"{
+            {
+                "Nepal",
+            }
+        }
+        "Asia:Krasnoyarsk"{
+            {
+                "Krasnoyarsk",
+            }
+        }
+        "Asia:Kuala_Lumpur"{
+            {
+                "Malaya",
+                "1970-01-01 00:00",
+                "1981-12-31 16:30",
+            }
+            {
+                "Malaysia",
+                "1981-12-31 16:30",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Kuching"{
+            {
+                "Borneo",
+                "1970-01-01 00:00",
+                "1981-12-31 16:00",
+            }
+            {
+                "Malaysia",
+                "1981-12-31 16:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Kuwait"{
+            {
+                "Arabian",
+            }
+        }
+        "Asia:Macau"{
+            {
+                "Macau",
+                "1970-01-01 00:00",
+                "1999-12-19 16:00",
+            }
+            {
+                "China",
+                "1999-12-19 16:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Magadan"{
+            {
+                "Magadan",
+            }
+        }
+        "Asia:Makassar"{
+            {
+                "Indonesia_Central",
+            }
+        }
+        "Asia:Manila"{
+            {
+                "Philippines",
+            }
+        }
+        "Asia:Muscat"{
+            {
+                "Gulf",
+            }
+        }
+        "Asia:Nicosia"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Asia:Novokuznetsk"{
+            {
+                "Krasnoyarsk",
+                "1970-01-01 00:00",
+                "2010-03-27 19:00",
+            }
+            {
+                "Novosibirsk",
+                "2010-03-27 19:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Novosibirsk"{
+            {
+                "Novosibirsk",
+            }
+        }
+        "Asia:Omsk"{
+            {
+                "Omsk",
+            }
+        }
+        "Asia:Oral"{
+            {
+                "Uralsk",
+                "1970-01-01 00:00",
+                "1991-12-15 20:00",
+            }
+            {
+                "Oral",
+                "1991-12-15 20:00",
+                "2005-03-14 20:00",
+            }
+            {
+                "Kazakhstan_Western",
+                "2005-03-14 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Phnom_Penh"{
+            {
+                "Indochina",
+            }
+        }
+        "Asia:Pontianak"{
+            {
+                "Indonesia_Central",
+                "1970-01-01 00:00",
+                "1987-12-31 16:00",
+            }
+            {
+                "Indonesia_Western",
+                "1987-12-31 16:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Pyongyang"{
+            {
+                "Korea",
+            }
+        }
+        "Asia:Qatar"{
+            {
+                "Gulf",
+                "1970-01-01 00:00",
+                "1972-05-31 20:00",
+            }
+            {
+                "Arabian",
+                "1972-05-31 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Qyzylorda"{
+            {
+                "Kizilorda",
+                "1970-01-01 00:00",
+                "1991-12-15 19:00",
+            }
+            {
+                "Qyzylorda",
+                "1991-12-15 19:00",
+                "2005-03-14 18:00",
+            }
+            {
+                "Kazakhstan_Eastern",
+                "2005-03-14 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Rangoon"{
+            {
+                "Myanmar",
+            }
+        }
+        "Asia:Riyadh"{
+            {
+                "Arabian",
+            }
+        }
+        "Asia:Saigon"{
+            {
+                "Indochina",
+            }
+        }
+        "Asia:Sakhalin"{
+            {
+                "Sakhalin",
+            }
+        }
+        "Asia:Samarkand"{
+            {
+                "Samarkand",
+                "1970-01-01 00:00",
+                "1981-09-30 18:00",
+            }
+            {
+                "Tashkent",
+                "1981-09-30 18:00",
+                "1982-03-31 18:00",
+            }
+            {
+                "Samarkand",
+                "1982-03-31 18:00",
+                "1991-08-31 18:00",
+            }
+            {
+                "Uzbekistan",
+                "1991-08-31 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Seoul"{
+            {
+                "Korea",
+            }
+        }
+        "Asia:Shanghai"{
+            {
+                "China",
+            }
+        }
+        "Asia:Singapore"{
+            {
+                "Singapore",
+            }
+        }
+        "Asia:Taipei"{
+            {
+                "Taipei",
+            }
+        }
+        "Asia:Tashkent"{
+            {
+                "Tashkent",
+                "1970-01-01 00:00",
+                "1991-08-31 18:00",
+            }
+            {
+                "Uzbekistan",
+                "1991-08-31 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Tbilisi"{
+            {
+                "Tbilisi",
+                "1970-01-01 00:00",
+                "1991-04-08 20:00",
+            }
+            {
+                "Georgia",
+                "1991-04-08 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Tehran"{
+            {
+                "Iran",
+            }
+        }
+        "Asia:Thimphu"{
+            {
+                "India",
+                "1970-01-01 00:00",
+                "1987-09-30 18:30",
+            }
+            {
+                "Bhutan",
+                "1987-09-30 18:30",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Tokyo"{
+            {
+                "Japan",
+            }
+        }
+        "Asia:Ulaanbaatar"{
+            {
+                "Mongolia",
+            }
+        }
+        "Asia:Urumqi"{
+            {
+                "Urumqi",
+                "1970-01-01 00:00",
+                "1980-04-30 18:00",
+            }
+            {
+                "China",
+                "1980-04-30 18:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Vientiane"{
+            {
+                "Indochina",
+            }
+        }
+        "Asia:Vladivostok"{
+            {
+                "Vladivostok",
+            }
+        }
+        "Asia:Yakutsk"{
+            {
+                "Yakutsk",
+            }
+        }
+        "Asia:Yekaterinburg"{
+            {
+                "Sverdlovsk",
+                "1970-01-01 00:00",
+                "1992-01-18 22:00",
+            }
+            {
+                "Yekaterinburg",
+                "1992-01-18 22:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Yerevan"{
+            {
+                "Yerevan",
+                "1970-01-01 00:00",
+                "1991-09-22 20:00",
+            }
+            {
+                "Armenia",
+                "1991-09-22 20:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Atlantic:Azores"{
+            {
+                "Azores",
+                "1970-01-01 00:00",
+                "1992-09-27 02:00",
+            }
+            {
+                "Europe_Western",
+                "1992-09-27 02:00",
+                "1993-03-28 01:00",
+            }
+            {
+                "Azores",
+                "1993-03-28 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Atlantic:Bermuda"{
+            {
+                "Atlantic",
+            }
+        }
+        "Atlantic:Canary"{
+            {
+                "Europe_Western",
+            }
+        }
+        "Atlantic:Cape_Verde"{
+            {
+                "Cape_Verde",
+            }
+        }
+        "Atlantic:Faeroe"{
+            {
+                "Europe_Western",
+            }
+        }
+        "Atlantic:Madeira"{
+            {
+                "Europe_Western",
+            }
+        }
+        "Atlantic:Reykjavik"{
+            {
+                "GMT",
+            }
+        }
+        "Atlantic:South_Georgia"{
+            {
+                "South_Georgia",
+            }
+        }
+        "Atlantic:St_Helena"{
+            {
+                "GMT",
+            }
+        }
+        "Atlantic:Stanley"{
+            {
+                "Falkland",
+            }
+        }
+        "Australia:Adelaide"{
+            {
+                "Australia_Central",
+            }
+        }
+        "Australia:Brisbane"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Australia:Broken_Hill"{
+            {
+                "Australia_Central",
+            }
+        }
+        "Australia:Currie"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Australia:Darwin"{
+            {
+                "Australia_Central",
+            }
+        }
+        "Australia:Eucla"{
+            {
+                "Australia_CentralWestern",
+            }
+        }
+        "Australia:Hobart"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Australia:Lindeman"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Australia:Lord_Howe"{
+            {
+                "Australia_Eastern",
+                "1970-01-01 00:00",
+                "1981-02-28 14:00",
+            }
+            {
+                "Lord_Howe",
+                "1981-02-28 14:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Australia:Melbourne"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Australia:Perth"{
+            {
+                "Australia_Western",
+            }
+        }
+        "Australia:Sydney"{
+            {
+                "Australia_Eastern",
+            }
+        }
+        "Europe:Amsterdam"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Andorra"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Athens"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Europe:Belgrade"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Berlin"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Bratislava"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Brussels"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Bucharest"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Europe:Budapest"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Chisinau"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1990-05-05 21:00",
+            }
+            {
+                "Europe_Eastern",
+                "1990-05-05 21:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Copenhagen"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Dublin"{
+            {
+                "Irish",
+                "1970-01-01 00:00",
+                "1971-10-31 02:00",
+            }
+            {
+                "GMT",
+                "1971-10-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Gibraltar"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Guernsey"{
+            {
+                "British",
+                "1970-01-01 00:00",
+                "1971-10-31 02:00",
+            }
+            {
+                "GMT",
+                "1971-10-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Helsinki"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Europe:Isle_of_Man"{
+            {
+                "British",
+                "1970-01-01 00:00",
+                "1971-10-31 02:00",
+            }
+            {
+                "GMT",
+                "1971-10-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Istanbul"{
+            {
+                "Europe_Eastern",
+                "1970-01-01 00:00",
+                "1978-10-14 21:00",
+            }
+            {
+                "Turkey",
+                "1978-10-14 21:00",
+                "1985-04-19 21:00",
+            }
+            {
+                "Europe_Eastern",
+                "1985-04-19 21:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Jersey"{
+            {
+                "British",
+                "1970-01-01 00:00",
+                "1971-10-31 02:00",
+            }
+            {
+                "GMT",
+                "1971-10-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Kaliningrad"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1991-03-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-30 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Kiev"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1990-06-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1990-06-30 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Lisbon"{
+            {
+                "Europe_Central",
+                "1970-01-01 00:00",
+                "1976-09-26 00:00",
+            }
+            {
+                "Europe_Western",
+                "1976-09-26 00:00",
+                "1992-09-27 01:00",
+            }
+            {
+                "Europe_Central",
+                "1992-09-27 01:00",
+                "1996-03-31 01:00",
+            }
+            {
+                "Europe_Western",
+                "1996-03-31 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Ljubljana"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:London"{
+            {
+                "British",
+                "1970-01-01 00:00",
+                "1971-10-31 02:00",
+            }
+            {
+                "GMT",
+                "1971-10-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Luxembourg"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Madrid"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Malta"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Mariehamn"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Europe:Minsk"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1991-03-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-30 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Monaco"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Moscow"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1991-03-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-30 23:00",
+                "1992-01-19 00:00",
+            }
+            {
+                "Moscow",
+                "1992-01-19 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Oslo"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Paris"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Podgorica"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Prague"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Riga"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1989-03-25 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1989-03-25 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Rome"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Samara"{
+            {
+                "Kuybyshev",
+                "1970-01-01 00:00",
+                "1991-10-20 00:00",
+            }
+            {
+                "Samara",
+                "1991-10-20 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:San_Marino"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Sarajevo"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Simferopol"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1990-06-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1990-06-30 23:00",
+                "1994-04-30 21:00",
+            }
+            {
+                "Moscow",
+                "1994-04-30 21:00",
+                "1997-03-30 01:00",
+            }
+            {
+                "Europe_Eastern",
+                "1997-03-30 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Skopje"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Sofia"{
+            {
+                "Europe_Eastern",
+            }
+        }
+        "Europe:Stockholm"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Tallinn"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1989-03-25 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1989-03-25 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Tirane"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Uzhgorod"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1990-06-30 23:00",
+            }
+            {
+                "Europe_Central",
+                "1990-06-30 23:00",
+                "1991-03-31 02:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-31 02:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Vaduz"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Vatican"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Vienna"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Vilnius"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1991-03-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-30 23:00",
+                "1998-03-29 01:00",
+            }
+            {
+                "Europe_Central",
+                "1998-03-29 01:00",
+                "1999-10-31 01:00",
+            }
+            {
+                "Europe_Eastern",
+                "1999-10-31 01:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Volgograd"{
+            {
+                "Volgograd",
+            }
+        }
+        "Europe:Warsaw"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Zagreb"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Zaporozhye"{
+            {
+                "Moscow",
+                "1970-01-01 00:00",
+                "1991-03-30 23:00",
+            }
+            {
+                "Europe_Eastern",
+                "1991-03-30 23:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Europe:Zurich"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Indian:Antananarivo"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Indian:Chagos"{
+            {
+                "Indian_Ocean",
+            }
+        }
+        "Indian:Christmas"{
+            {
+                "Christmas",
+            }
+        }
+        "Indian:Cocos"{
+            {
+                "Cocos",
+            }
+        }
+        "Indian:Comoro"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Indian:Kerguelen"{
+            {
+                "French_Southern",
+            }
+        }
+        "Indian:Mahe"{
+            {
+                "Seychelles",
+            }
+        }
+        "Indian:Maldives"{
+            {
+                "Maldives",
+            }
+        }
+        "Indian:Mauritius"{
+            {
+                "Mauritius",
+            }
+        }
+        "Indian:Mayotte"{
+            {
+                "Africa_Eastern",
+            }
+        }
+        "Indian:Reunion"{
+            {
+                "Reunion",
+            }
+        }
+        "Pacific:Apia"{
+            {
+                "Bering",
+                "1970-01-01 00:00",
+                "1983-10-30 12:00",
+            }
+            {
+                "Samoa",
+                "1983-10-30 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Auckland"{
+            {
+                "New_Zealand",
+            }
+        }
+        "Pacific:Chatham"{
+            {
+                "Chatham",
+            }
+        }
+        "Pacific:Easter"{
+            {
+                "Easter",
+            }
+        }
+        "Pacific:Efate"{
+            {
+                "Vanuatu",
+            }
+        }
+        "Pacific:Enderbury"{
+            {
+                "Phoenix_Islands",
+            }
+        }
+        "Pacific:Fakaofo"{
+            {
+                "Tokelau",
+            }
+        }
+        "Pacific:Fiji"{
+            {
+                "Fiji",
+            }
+        }
+        "Pacific:Funafuti"{
+            {
+                "Tuvalu",
+            }
+        }
+        "Pacific:Galapagos"{
+            {
+                "Ecuador",
+                "1970-01-01 00:00",
+                "1986-01-01 05:00",
+            }
+            {
+                "Galapagos",
+                "1986-01-01 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Gambier"{
+            {
+                "Gambier",
+            }
+        }
+        "Pacific:Guadalcanal"{
+            {
+                "Solomon",
+            }
+        }
+        "Pacific:Guam"{
+            {
+                "Guam",
+                "1970-01-01 00:00",
+                "2000-12-22 14:00",
+            }
+            {
+                "Chamorro",
+                "2000-12-22 14:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Honolulu"{
+            {
+                "Alaska_Hawaii",
+                "1970-01-01 00:00",
+                "1983-10-30 11:00",
+            }
+            {
+                "Hawaii_Aleutian",
+                "1983-10-30 11:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Johnston"{
+            {
+                "Alaska_Hawaii",
+                "1970-01-01 00:00",
+                "1983-10-30 11:00",
+            }
+            {
+                "Hawaii_Aleutian",
+                "1983-10-30 11:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Kiritimati"{
+            {
+                "Line_Islands",
+            }
+        }
+        "Pacific:Kosrae"{
+            {
+                "Kosrae",
+            }
+        }
+        "Pacific:Kwajalein"{
+            {
+                "Kwajalein",
+                "1970-01-01 00:00",
+                "1993-08-20 12:00",
+            }
+            {
+                "Marshall_Islands",
+                "1993-08-20 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Majuro"{
+            {
+                "Marshall_Islands",
+            }
+        }
+        "Pacific:Marquesas"{
+            {
+                "Marquesas",
+            }
+        }
+        "Pacific:Midway"{
+            {
+                "Bering",
+                "1970-01-01 00:00",
+                "1983-10-30 12:00",
+            }
+            {
+                "Samoa",
+                "1983-10-30 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Nauru"{
+            {
+                "Nauru",
+            }
+        }
+        "Pacific:Niue"{
+            {
+                "Niue",
+            }
+        }
+        "Pacific:Norfolk"{
+            {
+                "Norfolk",
+            }
+        }
+        "Pacific:Noumea"{
+            {
+                "New_Caledonia",
+            }
+        }
+        "Pacific:Pago_Pago"{
+            {
+                "Bering",
+                "1970-01-01 00:00",
+                "1983-10-30 12:00",
+            }
+            {
+                "Samoa",
+                "1983-10-30 12:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Palau"{
+            {
+                "Palau",
+            }
+        }
+        "Pacific:Pitcairn"{
+            {
+                "Pitcairn",
+            }
+        }
+        "Pacific:Ponape"{
+            {
+                "Ponape",
+            }
+        }
+        "Pacific:Port_Moresby"{
+            {
+                "Papua_New_Guinea",
+            }
+        }
+        "Pacific:Rarotonga"{
+            {
+                "Cook",
+            }
+        }
+        "Pacific:Saipan"{
+            {
+                "North_Mariana",
+                "1970-01-01 00:00",
+                "2000-12-22 14:00",
+            }
+            {
+                "Chamorro",
+                "2000-12-22 14:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Pacific:Tahiti"{
+            {
+                "Tahiti",
+            }
+        }
+        "Pacific:Tarawa"{
+            {
+                "Gilbert_Islands",
+            }
+        }
+        "Pacific:Tongatapu"{
+            {
+                "Tonga",
+            }
+        }
+        "Pacific:Truk"{
+            {
+                "Truk",
+            }
+        }
+        "Pacific:Wake"{
+            {
+                "Wake",
+            }
+        }
+        "Pacific:Wallis"{
+            {
+                "Wallis",
+            }
+        }
+    }
+}
