@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -504,7 +504,7 @@ uregex_reset(URegularExpression    *regexp,
   * @param status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_setRegion(URegularExpression   *regexp,
                  int32_t               regionStart,
                  int32_t               regionLimit,
@@ -519,7 +519,7 @@ uregex_setRegion(URegularExpression   *regexp,
   * @return The starting index of this matcher's region.
   * @stable ICU 4.0
   */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uregex_regionStart(const  URegularExpression   *regexp,
                           UErrorCode           *status);
 
@@ -535,7 +535,7 @@ uregex_regionStart(const  URegularExpression   *regexp,
   * @return The ending point of this matcher's region.
   * @stable ICU 4.0
   */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uregex_regionEnd(const  URegularExpression   *regexp,
                         UErrorCode           *status);
 
@@ -549,7 +549,7 @@ uregex_regionEnd(const  URegularExpression   *regexp,
   * @return TRUE if this matcher is using opaque bounds, false if it is not.
   * @stable ICU 4.0
   */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uregex_hasTransparentBounds(const  URegularExpression   *regexp,
                                    UErrorCode           *status);
 
@@ -573,7 +573,7 @@ uregex_hasTransparentBounds(const  URegularExpression   *regexp,
   * @param   status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   **/
-U_DRAFT void U_EXPORT2  
+U_STABLE void U_EXPORT2  
 uregex_useTransparentBounds(URegularExpression   *regexp, 
                             UBool                b,
                             UErrorCode           *status);
@@ -588,7 +588,7 @@ uregex_useTransparentBounds(URegularExpression   *regexp,
   * @return TRUE if this matcher is using anchoring bounds.
   * @stable ICU 4.0
   */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
                                  UErrorCode           *status);
 
@@ -606,7 +606,7 @@ uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
   * @param status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_useAnchoringBounds(URegularExpression   *regexp,
                           UBool                 b,
                           UErrorCode           *status);
@@ -621,7 +621,7 @@ uregex_useAnchoringBounds(URegularExpression   *regexp,
   *  @return  TRUE if the most recent match hit the end of input
   *  @stable ICU 4.0
   */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uregex_hitEnd(const  URegularExpression   *regexp,
                      UErrorCode           *status);
 
@@ -636,7 +636,7 @@ uregex_hitEnd(const  URegularExpression   *regexp,
   * @return TRUE  if more input could cause the most recent match to no longer match.
   * @stable ICU 4.0
   */
-U_DRAFT UBool U_EXPORT2   
+U_STABLE UBool U_EXPORT2   
 uregex_requireEnd(const  URegularExpression   *regexp,
                          UErrorCode           *status);
 
@@ -870,7 +870,7 @@ uregex_split(   URegularExpression      *regexp,
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @stable ICU 4.0
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_setTimeLimit(URegularExpression      *regexp,
                     int32_t                  limit,
                     UErrorCode              *status);
@@ -884,7 +884,7 @@ uregex_setTimeLimit(URegularExpression      *regexp,
  * @return the maximum allowed time for a match, in units of processing steps.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uregex_getTimeLimit(const URegularExpression      *regexp,
                           UErrorCode              *status);
 
@@ -908,7 +908,7 @@ uregex_getTimeLimit(const URegularExpression      *regexp,
  *
  * @stable ICU 4.0
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_setStackLimit(URegularExpression      *regexp,
                      int32_t                  limit,
                      UErrorCode              *status);
@@ -920,7 +920,7 @@ uregex_setStackLimit(URegularExpression      *regexp,
  *          stack size is unlimited.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uregex_getStackLimit(const URegularExpression      *regexp,
                            UErrorCode              *status);
 
@@ -963,7 +963,7 @@ U_CDECL_END
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @stable ICU 4.0
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_setMatchCallback(URegularExpression      *regexp,
                         URegexMatchCallback     *callback,
                         const void              *context,
@@ -981,7 +981,7 @@ uregex_setMatchCallback(URegularExpression      *regexp,
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @stable ICU 4.0
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uregex_getMatchCallback(const URegularExpression    *regexp,
                         URegexMatchCallback        **callback,
                         const void                 **context,
