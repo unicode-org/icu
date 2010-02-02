@@ -865,19 +865,19 @@ public final class ZoneMeta {
     }
 
     /*
-     * Create olson tzid to metazone mappings from metazoneInfo.res (3.8.1 or later)
+     * Create olson tzid to metazone mappings from metaZones.res
      */
     private static Map<String, List<OlsonToMetaMappingEntry>> createOlsonToMetaMap() {
         // Create olson id to metazone mapping table
         Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = null;
-        UResourceBundle metazoneMappingsBundle = null;
+        UResourceBundle metazoneInfoBundle = null;
         try {
-            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metazoneInfo");
-            metazoneMappingsBundle = bundle.get("metazoneMappings");
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
+            metazoneInfoBundle = bundle.get("metazoneInfo");
         } catch (MissingResourceException mre) {
             // do nothing
         }
-        if (metazoneMappingsBundle != null) {
+        if (metazoneInfoBundle != null) {
             String[] tzids = getAvailableIDs();
             for (int i = 0; i < tzids.length; i++) {
                 // Skip aliases
@@ -887,28 +887,28 @@ public final class ZoneMeta {
                 }
                 String tzkey = tzids[i].replace('/', ':');
                 try {
-                    UResourceBundle zoneBundle = metazoneMappingsBundle.get(tzkey);
+                    UResourceBundle zoneBundle = metazoneInfoBundle.get(tzkey);
                     LinkedList<OlsonToMetaMappingEntry> mzMappings = new LinkedList<OlsonToMetaMappingEntry>();
-                    for (int idx = 0; ; idx++) {
+                    for (int idx = 0; idx < zoneBundle.getSize(); idx++) {
+                        UResourceBundle mz = zoneBundle.get(idx);
+                        String mzid = mz.getString(0);
+                        String from = "1970-01-01 00:00";
+                        String to = "9999-12-31 23:59";
+                        if (mz.getSize() == 3) {
+                            from = mz.getString(1);
+                            to = mz.getString(2);
+                        }
+                        OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                        mzmap.mzid = mzid.intern();
                         try {
-                            UResourceBundle mz = zoneBundle.get("mz" + idx);
-                            String[] mzstr = mz.getStringArray();
-                            if (mzstr == null || mzstr.length != 3) {
-                                continue;
-                            }
-                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
-                            mzmap.mzid = mzstr[0].intern();
-                            mzmap.from = parseDate(mzstr[1]);
-                            mzmap.to = parseDate(mzstr[2]);
-
-                            // Add this mapping to the list
-                            mzMappings.add(mzmap);
-                        } catch (MissingResourceException nomz) {
-                            // we're done
-                            break;
+                            mzmap.from = parseDate(from);
+                            mzmap.to = parseDate(to);
                         } catch (IllegalArgumentException baddate) {
                             // skip this
+                            continue;
                         }
+                        // Add this mapping to the list
+                        mzMappings.add(mzmap);
                     }
                     if (mzMappings.size() != 0) {
                         // Add to the olson-to-meta map
@@ -959,43 +959,43 @@ public final class ZoneMeta {
             }
             if (metaToOlson == null) {
                 metaToOlson = new HashMap<String, List<MetaToOlsonMappingEntry>>();
-                UResourceBundle metazonesBundle = null;
+                UResourceBundle mapTimezonesBundle = null;
                 try {
                     UResourceBundle supplementalBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
-                        "metazoneInfo");
-                    UResourceBundle  mapTimezonesBundle = supplementalBundle.get("mapTimezones");
-                    metazonesBundle = mapTimezonesBundle.get("metazones");
+                        "metaZones");
+                    mapTimezonesBundle = supplementalBundle.get("mapTimezones");
                 } catch (MissingResourceException mre) {
                     // do nothing
                 }
-                if (metazonesBundle != null) {
-                    Enumeration<String> mzenum = metazonesBundle.getKeys();
+                if (mapTimezonesBundle != null) {
+                    Enumeration<String> mzenum = mapTimezonesBundle.getKeys();
                     while (mzenum.hasMoreElements()) {
                         String mzkey = mzenum.nextElement();
-                        if (!mzkey.startsWith("meta:")) {
-                            continue;
-                        }
                         String tzid = null;
                         try {
-                            tzid = metazonesBundle.getString(mzkey);
+                            tzid = mapTimezonesBundle.getString(mzkey);
                         } catch (MissingResourceException mre) {
                             // It should not happen..
                         }
                         if (tzid != null) {
-                            int territoryIdx = mzkey.lastIndexOf('_');
+                            String mzid = mzkey;
+                            String territory = "001"; // default to "001"
+
+                            int territoryIdx = mzkey.lastIndexOf(':');
                             if (territoryIdx > 0) {
-                                String mzid = mzkey.substring(5 /* "meta:".length() */, territoryIdx);
-                                String territory = mzkey.substring(territoryIdx + 1);
-                                List<MetaToOlsonMappingEntry> mappings = metaToOlson.get(mzid);
-                                if (mappings == null) {
-                                    mappings = new LinkedList<MetaToOlsonMappingEntry>();
-                                    metaToOlson.put(mzid, mappings);
-                                }
-                                MetaToOlsonMappingEntry olsonmap = new MetaToOlsonMappingEntry();
-                                olsonmap.id = tzid;
-                                olsonmap.territory = territory;
-                                mappings.add(olsonmap);
+                                mzid = mzkey.substring(0, territoryIdx);
+                                territory = mzkey.substring(territoryIdx + 1);
                             }
+
+                            List<MetaToOlsonMappingEntry> mappings = metaToOlson.get(mzid);
+                            if (mappings == null) {
+                                mappings = new LinkedList<MetaToOlsonMappingEntry>();
+                                metaToOlson.put(mzid, mappings);
+                            }
+                            MetaToOlsonMappingEntry olsonmap = new MetaToOlsonMappingEntry();
+                            olsonmap.id = tzid;
+                            olsonmap.territory = territory;
+                            mappings.add(olsonmap);
                         }
                     }
                 }
