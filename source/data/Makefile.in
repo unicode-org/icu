@@ -786,22 +786,29 @@ $(OUTDIR)/icu4j/icudata.jar: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFO
 	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 
+ICU4J_DATA=$(OUTDIR)/icu4j/icudata.jar
+
 ifdef ICU4J_ROOT
+
+ICU4J_DATA_INSTALLED=$(ICU4J_ROOT)/main/shared/data/icudata.jar
 
 $(ICU4J_ROOT)/main/shared/data/icudata.jar: $(OUTDIR)/icu4j/icudata.jar
 	mkdir -p $(ICU4J_ROOT)/main/shared/data
 	cp $(OUTDIR)/icu4j/icudata.jar $(ICU4J_ROOT)/main/shared/data
 
-icudata.jar: build-dir $(ICU4J_ROOT)/main/shared/data/icudata.jar
+icu4j-data-install: $(ICU4J_DATA_INSTALLED)
 
 else
 
-icudata.jar: build-dir $(OUTDIR)/icu4j/icudata.jar
+icu4j-data-install: icu4j-data
+	@echo data is built into $(OUTDIR)/icu4j
+	@echo '** Error:' ICU4J_ROOT was not set, could not install
+	exit 1
 
 endif
 
-build-icu4j: all
-	$(MAKE) -C ../tools/genrb $@
+icu4j-data: $(ICU4J_DATA)
+
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status

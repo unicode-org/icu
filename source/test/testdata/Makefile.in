@@ -29,7 +29,7 @@ SUBDIRS =
 .PHONY : all all-local all-recursive install install-local	\
 install-recursive clean clean-local clean-recursive distclean	\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive build-dir java-output testdata.jar
+check check-local check-recursive build-dir testdata.jar
 
 .NOTPARALLEL: build-dir
 
@@ -152,14 +152,6 @@ $(TESTBUILDDIR)/test.icu: $(GENTEST)
 $(TESTBUILDDIR)/testtable32.txt:  $(GENTEST)
 	$(INVOKE) $(GENTEST) -r -d $(TESTBUILDDIR) 
 
-# java output
-java-output: $(JAVA_OUT_DIR)/DebugUtilitiesData.java
-
-$(JAVA_OUT_DIR)/DebugUtilitiesData.java:  $(GENTEST)
-	$(MKINSTALLDIRS) $(JAVA_OUT_DIR)
-	$(INVOKE) $(GENTEST) -j -d $(JAVA_OUT_DIR)
-
-
 $(TESTBUILDDIR)/testtable32.res: $(TESTBUILDDIR)/testtable32.txt $(TOOLBINDIR)/genrb$(EXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -s $(TESTBUILDDIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) $(<F)
 
@@ -237,16 +229,36 @@ $(OUTDIR)/icu4j/testdata.jar: build-dir testdata $(TESTOUTDIR)/testdata.dat
 	$(INVOKE) $(TOOLBINDIR)/icupkg $(TESTOUTDIR)/testdata.dat -r test.icu -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/dev/data/testdata
 	$(JAR) cf $(OUTDIR)/icu4j/testdata.jar -C $(OUTDIR)/icu4j com/ibm/icu/dev/data/testdata
 
+
+DEBUGUTILITIESDATA_DIR=main/tests/core/src/com/ibm/icu/dev/test/util
+DEBUGUTILITIESDATA_SRC=DebugUtilitiesData.java
+
+ICU4J_DATA=$(OUTDIR)/icu4j/src/$(DEBUGUTILITIESDATA_SRC) $(OUTDIR)/icu4j/testdata.jar
+
+$(OUTDIR)/icu4j/src/$(DEBUGUTILITIESDATA_SRC): $(GENTEST)
+	mkdir -p $(OUTDIR)/icu4j/src
+	$(INVOKE) $(GENTEST) -j -d $(OUTDIR)/icu4j/src
+
 ifdef ICU4J_ROOT
+
+icu4j-data-install: $(ICU4J_ROOT)/main/shared/data/testdata.jar $(ICU4J_ROOT)/$(DEBUGUTILITIESDATA_DIR)/$(DEBUGUTILITIESDATA_SRC)
+	@echo ICU4J test data installed in $(ICU4J_ROOT)
 
 $(ICU4J_ROOT)/main/shared/data/testdata.jar: $(OUTDIR)/icu4j/testdata.jar
 	mkdir -p $(ICU4J_ROOT)/main/shared/data
 	cp $(OUTDIR)/icu4j/testdata.jar $(ICU4J_ROOT)/main/shared/data
 
-testdata.jar: build-dir $(ICU4J_ROOT)/main/shared/data/testdata.jar
+$(ICU4J_ROOT)/$(DEBUGUTILITIESDATA_DIR)/$(DEBUGUTILITIESDATA_SRC): $(OUTDIR)/icu4j/src/$(DEBUGUTILITIESDATA_SRC)
+	mkdir -p $(ICU4J_ROOT)/$(DEBUGUTILITIESDATA_DIR)
+	cp $^ $@
 
 else
 
-testdata.jar: build-dir $(OUTDIR)/icu4j/testdata.jar
+icu4j-data-install: $(ICU4J_DATA)
+	@echo ICU4J data was built into $(OUTDIR)/icu4j
+	@echo '** Error:' ICU4J_ROOT was not set, could not install
+	exit 1
 
 endif
+
+icu4j-data: $(ICU4J_DATA)
