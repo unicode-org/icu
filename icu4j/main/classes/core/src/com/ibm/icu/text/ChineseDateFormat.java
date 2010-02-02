@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and
+ * Copyright (C) 2000-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -71,10 +71,17 @@ public class ChineseDateFormat extends SimpleDateFormat {
     }
 
     /**
-     * Construct a ChineseDateFormat from a date format pattern and locale
+     * Construct a ChineseDateFormat from a date format pattern, numbering system override and locale
      * @param pattern the pattern
+     * @param override The override string.  A numbering system override string can take one of the following forms:
+     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
+     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
+     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
+     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
+     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
+     *         Thai digits for the month and Devanagari digits for the year.
      * @param locale the locale
-     * @stable ICU 3.2
+     * @draft ICU 4.2
      */
    public ChineseDateFormat(String pattern, String override, ULocale locale) {
        super(pattern, new ChineseDateFormatSymbols(locale), 
