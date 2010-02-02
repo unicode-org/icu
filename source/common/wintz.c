@@ -246,9 +246,8 @@ uprv_detectWindowsTimeZone() {
     uprv_memcpy((char *)&tziKey.daylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
-    bundle = ures_openDirect(NULL, "wintz", &status);
+    bundle = ures_openDirect(NULL, "windowsZones", &status);
     bundle = ures_getByKey(bundle, "mapTimezones", bundle, &status);
-    bundle = ures_getByKey(bundle, "windows", bundle, &status);
 
     /* Note: We get the winid not from static tables but from resource bundle. */
     while (U_SUCCESS(status) && ures_hasNext(bundle)) {
