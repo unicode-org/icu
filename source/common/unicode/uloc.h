@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -876,7 +876,7 @@ typedef enum {
  * @return an enum indicating the layout orientation for characters.
  * @stable ICU 4.0
  */
-U_DRAFT ULayoutType U_EXPORT2
+U_STABLE ULayoutType U_EXPORT2
 uloc_getCharacterOrientation(const char* localeId,
                              UErrorCode *status);
 
@@ -888,7 +888,7 @@ uloc_getCharacterOrientation(const char* localeId,
  * @return an enum indicating the layout orientation for lines.
  * @stable ICU 4.0
  */
-U_DRAFT ULayoutType U_EXPORT2
+U_STABLE ULayoutType U_EXPORT2
 uloc_getLineOrientation(const char* localeId,
                         UErrorCode *status);
 
@@ -959,7 +959,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
  * @return actual the actual size of the locale ID, not including NUL-termination 
  * @stable ICU 3.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
                     UErrorCode *status);
 
@@ -997,7 +997,7 @@ uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
  * On error, the return value is -1.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_addLikelySubtags(const char*    localeID,
          char* maximizedLocaleID,
          int32_t maximizedLocaleIDCapacity,
@@ -1037,7 +1037,7 @@ uloc_addLikelySubtags(const char*    localeID,
  * On error, the return value is -1.
  * @stable ICU 4.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_minimizeSubtags(const char*    localeID,
          char* minimizedLocaleID,
          int32_t minimizedLocaleIDCapacity,

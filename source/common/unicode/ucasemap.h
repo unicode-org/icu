@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2009, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -192,7 +192,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @return titlecasing break iterator
  * @stable ICU 3.8
  */
-U_DRAFT const UBreakIterator * U_EXPORT2
+U_STABLE const UBreakIterator * U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap *csm);
 
 /**
@@ -215,7 +215,7 @@ ucasemap_getBreakIterator(const UCaseMap *csm);
  * @see ucasemap_utf8ToTitle
  * @stable ICU 3.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode);
 
 /**
@@ -264,7 +264,7 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
  * @see u_strToTitle
  * @stable ICU 3.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucasemap_toTitle(UCaseMap *csm,
                  UChar *dest, int32_t destCapacity,
                  const UChar *src, int32_t srcLength,
@@ -376,7 +376,7 @@ ucasemap_utf8ToUpper(const UCaseMap *csm,
  * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
  * @stable ICU 3.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucasemap_utf8ToTitle(UCaseMap *csm,
                     char *dest, int32_t destCapacity,
                     const char *src, int32_t srcLength,
@@ -412,7 +412,7 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
  * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @stable ICU 3.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucasemap_utf8FoldCase(const UCaseMap *csm,
                       char *dest, int32_t destCapacity,
                       const char *src, int32_t srcLength,
