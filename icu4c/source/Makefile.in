@@ -65,7 +65,7 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc tests
+doc install-doc tests icu4j-data icu4j-data-install
 
 ## Clear suffix list
 .SUFFIXES :
@@ -245,3 +245,7 @@ config/%.$(SECTION): $(srcdir)/config/%.$(SECTION).in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+icu4j-data-install icu4j-data: all tests
+	@echo ICU4J_ROOT=$(ICU4J_ROOT)
+	@$(MAKE) -C test/testdata $@
+	@$(MAKE) -C data $@

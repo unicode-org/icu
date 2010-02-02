@@ -1,5 +1,5 @@
 ********************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation         *
+* Copyright (C) 2008-2010, International Business Machines Corporation         *
 * and others. All Rights Reserved.                                             *
 *                                                                              *
 * 6/26/08 - Created by Brian Rower - heavy copying from ICU4J readme & others  *
@@ -19,33 +19,36 @@ In the following,
         ICU4C, see the ICU4C readme at:
         http://source.icu-project.org/repos/icu/icu/trunk/readme.html#HowToBuild
 
-*Windows*
+2. Step 2 depends on whether you are on a Windows or a Unix-type
+platform.
 
-2. On the command line, cd to $icu4c_root\source\data.
+*Windows*  (note: still in progress.)
 
-3. Do
-        nmake -f makedata.mak ICUMAKE=$icu4c_root\source\data\ CFG=x86\Release JAR="$jdk_bin\jar" ICU4J_ROOT=$icu4j_root icudata.jar testdata.jar
+2a. On the command line, cd to $icu4c_root\source\data.
 
-        (You can omit the ICU4J_ROOT argument to skip the final copying.)
+2b. Do
+        nmake -f makedata.mak ICUMAKE=$icu4c_root\source\data\  CFG=x86\Release JAR="$jdk_bin\jar" ICU4J_ROOT=$icu4j_root  icu4j-data-install
+
+       Continue with step 3, in Java:
+
 
 *Linux*
 
         $icu4c_build is the ICU4C root build directory,
         which is $icu4c_root/source in an in-source build
 
-2. On the command line, cd to $icu4c_build/data.
+2c. On the command line, cd to $icu4c_build
 
-3. Do
-        make JAR=$jdk_bin/jar ICU4J_ROOT=$icu4j_root icudata.jar
-        cd ../test/testdata
-        make JAR=$jdk_bin/jar ICU4J_ROOT=$icu4j_root testdata.jar
+2d. Do
+        make JAR=$jdk_bin/jar ICU4J_ROOT=$icu4j_root icu4j-data-install
 
-        (You can omit the ICU4J_ROOT argument to skip the final copying.)
-        (You can omit the JAR if it's just jar.)
+       (You can omit the JAR if it's just jar.)
+
+Continue with step 3, in Java:
 
 *Java*
 
-After the ICU4C-side steps above, build the core-data and core-test-data targets of the
+3. After the ICU4C-side steps above, build the core-data and core-test-data targets of the
         ICU4J ant build to unpack the jar files  with the following commands:
 
         cd $icu4j_root
