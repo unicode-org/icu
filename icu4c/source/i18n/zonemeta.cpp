@@ -194,20 +194,24 @@ static const char gUseMetazoneTag[]     = "um";
 
 static const char gSupplementalData[]   = "supplementalData";
 static const char gMapTimezonesTag[]    = "mapTimezones";
-static const char gMetazonesTag[]       = "metazones";
 static const char gZoneFormattingTag[]  = "zoneFormatting";
 static const char gCanonicalTag[]       = "canonical";
 static const char gTerritoryTag[]       = "territory";
 static const char gAliasesTag[]         = "aliases";
 static const char gMultizoneTag[]       = "multizone";
 
+static const char gMetaZones[]          = "metaZones";
 static const char gMetazoneInfo[]       = "metazoneInfo";
-static const char gMetazoneMappings[]   = "metazoneMappings";
 
-#define MZID_PREFIX_LEN 5
-static const char gMetazoneIdPrefix[]   = "meta:";
+static const char gWorldChar[]          = "001";
+#define WORLD_LEN 3
 
 static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
+
+static const UChar gDefaultFrom[] = {0x31, 0x39, 0x37, 0x30, 0x2D, 0x30, 0x31, 0x2D, 0x30, 0x31,
+                                     0x20, 0x30, 0x30, 0x3A, 0x30, 0x30, 0x00}; // "1970-01-01 00:00"
+static const UChar gDefaultTo[]   = {0x39, 0x39, 0x39, 0x39, 0x2D, 0x31, 0x32, 0x2D, 0x33, 0x31,
+                                     0x20, 0x32, 0x33, 0x3A, 0x35, 0x39, 0x00}; // "9999-12-31 23:59"
 
 #define ASCII_DIGIT(c) (((c)>=0x30 && (c)<=0x39) ? (c)-0x30 : -1)
 
@@ -525,8 +529,8 @@ ZoneMeta::createOlsonToMetaMap(void) {
     uhash_setValueDeleter(olsonToMeta, deleteUVector);
 
     // Read metazone mappings from metazoneInfo bundle
-    metazoneMappings = ures_openDirect(NULL, gMetazoneInfo, &status);
-    metazoneMappings = ures_getByKey(metazoneMappings, gMetazoneMappings, metazoneMappings, &status);
+    metazoneMappings = ures_openDirect(NULL, gMetaZones, &status);
+    metazoneMappings = ures_getByKey(metazoneMappings, gMetazoneInfo, metazoneMappings, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
@@ -570,9 +574,15 @@ ZoneMeta::createOlsonToMetaMap(void) {
         UVector *mzMappings = NULL;
         while (ures_hasNext(zoneItem)) {
             mz = ures_getNextResource(zoneItem, mz, &status);
+
             const UChar *mz_name = ures_getStringByIndex(mz, 0, NULL, &status);
-            const UChar *mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
-            const UChar *mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
+            const UChar *mz_from = gDefaultFrom;
+            const UChar *mz_to = gDefaultTo;
+
+            if (ures_getSize(mz) == 3) {
+                mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
+                mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
+            }
 
             if(U_FAILURE(status)){
                 status = U_ZERO_ERROR;
@@ -668,9 +678,8 @@ ZoneMeta::createMetaToOlsonMap(void) {
     uhash_setKeyDeleter(metaToOlson, deleteUCharString);
     uhash_setValueDeleter(metaToOlson, deleteUVector);
 
-    metazones = ures_openDirect(NULL, gMetazoneInfo, &status);
+    metazones = ures_openDirect(NULL, gMetaZones, &status);
     metazones = ures_getByKey(metazones, gMapTimezonesTag, metazones, &status);
-    metazones = ures_getByKey(metazones, gMetazonesTag, metazones, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
@@ -681,72 +690,73 @@ ZoneMeta::createMetaToOlsonMap(void) {
             status = U_ZERO_ERROR;
             continue;
         }
-        const char *mzkey = ures_getKey(mz);
-        if (uprv_strncmp(mzkey, gMetazoneIdPrefix, MZID_PREFIX_LEN) == 0) {
-            const char *mzid = mzkey + MZID_PREFIX_LEN;
-            const char *territory = uprv_strrchr(mzid, '_');
-            int32_t mzidLen = 0;
-            int32_t territoryLen = 0;
-            if (territory) {
-                mzidLen = (int32_t)(territory - mzid);
-                territory++;
-                territoryLen = (int32_t)uprv_strlen(territory);
-            }
-            if (mzidLen > 0 && territoryLen > 0) {
-                int32_t tzidLen;
-                const UChar *tzid = ures_getStringByIndex(mz, 0, &tzidLen, &status);
-                if (U_SUCCESS(status)) {
-                    // Create MetaToOlsonMappingEntry
-                    MetaToOlsonMappingEntry *entry = (MetaToOlsonMappingEntry*)uprv_malloc(sizeof(MetaToOlsonMappingEntry));
-                    if (entry == NULL) {
-                        status = U_MEMORY_ALLOCATION_ERROR;
-                        goto error_cleanup;
-                    }
-                    entry->id = tzid;
-                    entry->territory = (UChar*)uprv_malloc((territoryLen + 1) * sizeof(UChar));
-                    if (entry->territory == NULL) {
-                        status = U_MEMORY_ALLOCATION_ERROR;
-                        uprv_free(entry);
-                        goto error_cleanup;
-                    }
-                    u_charsToUChars(territory, entry->territory, territoryLen + 1);
+        const char *mzid = ures_getKey(mz);
+        const char *territory = uprv_strrchr(mzid, ':');
+        int32_t mzidLen = 0;
+        int32_t territoryLen = 0;
+        if (territory) {
+            mzidLen = (int32_t)(territory - mzid);
+            territory++;
+            territoryLen = (int32_t)uprv_strlen(territory);
+        } else {
+            mzidLen = uprv_strlen(mzid);
+            territory = gWorldChar; // default value "001"
+            territoryLen = WORLD_LEN; // 3 - length of "001"
+        }
+        if (mzidLen > 0 && territoryLen > 0) {
+            int32_t tzidLen;
+            const UChar *tzid = ures_getStringByIndex(mz, 0, &tzidLen, &status);
+            if (U_SUCCESS(status)) {
+                // Create MetaToOlsonMappingEntry
+                MetaToOlsonMappingEntry *entry = (MetaToOlsonMappingEntry*)uprv_malloc(sizeof(MetaToOlsonMappingEntry));
+                if (entry == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    goto error_cleanup;
+                }
+                entry->id = tzid;
+                entry->territory = (UChar*)uprv_malloc((territoryLen + 1) * sizeof(UChar));
+                if (entry->territory == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    uprv_free(entry);
+                    goto error_cleanup;
+                }
+                u_charsToUChars(territory, entry->territory, territoryLen + 1);
 
-                    // Check if mapping entries for metazone is already available
-                    if (mzidLen < ZID_KEY_MAX) {
-                        UChar mzidUChars[ZID_KEY_MAX];
-                        u_charsToUChars(mzid, mzidUChars, mzidLen);
-                        mzidUChars[mzidLen++] = 0; // Add NUL terminator
-                        UVector *tzMappings = (UVector*)uhash_get(metaToOlson, mzidUChars);
-                        if (tzMappings == NULL) {
-                            // Create new UVector and put it into the hashtable
-                            tzMappings = new UVector(deleteMetaToOlsonMappingEntry, NULL, status);
-                            if (U_FAILURE(status)) {
-                                deleteMetaToOlsonMappingEntry(entry);
-                                goto error_cleanup;
-                            }
-                            UChar *key = (UChar*)uprv_malloc(mzidLen * sizeof(UChar));
-                            if (key == NULL) {
-                                status = U_MEMORY_ALLOCATION_ERROR;
-                                delete tzMappings;
-                                deleteMetaToOlsonMappingEntry(entry);
-                                goto error_cleanup;
-                            }
-                            u_strncpy(key, mzidUChars, mzidLen);
-                            uhash_put(metaToOlson, key, tzMappings, &status);
-                            if (U_FAILURE(status)) {
-                                goto error_cleanup;
-                            }
+                // Check if mapping entries for metazone is already available
+                if (mzidLen < ZID_KEY_MAX) {
+                    UChar mzidUChars[ZID_KEY_MAX];
+                    u_charsToUChars(mzid, mzidUChars, mzidLen);
+                    mzidUChars[mzidLen++] = 0; // Add NUL terminator
+                    UVector *tzMappings = (UVector*)uhash_get(metaToOlson, mzidUChars);
+                    if (tzMappings == NULL) {
+                        // Create new UVector and put it into the hashtable
+                        tzMappings = new UVector(deleteMetaToOlsonMappingEntry, NULL, status);
+                        if (U_FAILURE(status)) {
+                            deleteMetaToOlsonMappingEntry(entry);
+                            goto error_cleanup;
                         }
-                        tzMappings->addElement(entry, status);
+                        UChar *key = (UChar*)uprv_malloc(mzidLen * sizeof(UChar));
+                        if (key == NULL) {
+                            status = U_MEMORY_ALLOCATION_ERROR;
+                            delete tzMappings;
+                            deleteMetaToOlsonMappingEntry(entry);
+                            goto error_cleanup;
+                        }
+                        u_strncpy(key, mzidUChars, mzidLen);
+                        uhash_put(metaToOlson, key, tzMappings, &status);
                         if (U_FAILURE(status)) {
                             goto error_cleanup;
                         }
-                    } else {
-                        deleteMetaToOlsonMappingEntry(entry);
+                    }
+                    tzMappings->addElement(entry, status);
+                    if (U_FAILURE(status)) {
+                        goto error_cleanup;
                     }
                 } else {
-                    status = U_ZERO_ERROR;
+                    deleteMetaToOlsonMappingEntry(entry);
                 }
+            } else {
+                status = U_ZERO_ERROR;
             }
         }
     }
