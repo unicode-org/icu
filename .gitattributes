@@ -1022,7 +1022,6 @@ icu4c/source/data/mappings/convrtrs.txt svneol=native#text/plain
 icu4c/source/data/misc/icustd.txt svneol=native#text/plain
 icu4c/source/data/misc/icuver.txt svneol=native#text/plain
 icu4c/source/data/misc/likelySubtags.txt svneol=native#text/plain
-icu4c/source/data/misc/metazoneInfo.txt svneol=native#text/plain
 icu4c/source/data/misc/numberingSystems.txt svneol=native#text/plain
 icu4c/source/data/misc/plurals.txt svneol=native#text/plain
 icu4c/source/data/misc/supplementalData.txt svneol=native#text/plain

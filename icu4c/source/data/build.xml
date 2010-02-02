@@ -71,7 +71,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, wintz, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metaZones, windowsZones, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -317,8 +317,8 @@
             </run>
         </cldr-build>
     </target>
-    <target name="metazoneInfo" depends="init,setup" description="builds metazoneInfo.txt from metazoneInfo.xml">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="metazoneInfo.txt" noArgs="true">
+    <target name="metaZones" depends="init,setup" description="builds metaZones.txt from metaZones.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="metaZones.txt" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
             <run>
                 <args>
@@ -331,8 +331,8 @@
             </run>
         </cldr-build>
     </target>
-    <target name="wintz" depends="init,setup" description="builds wintz.txt from wintz.xml">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="wintz.txt" noArgs="true">
+    <target name="windowsZones" depends="init,setup" description="builds windowsZones.txt from windowsZones.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="windowsZones.txt" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
             <run>
                 <args>
@@ -472,11 +472,11 @@
             <fileset id="supplementalData" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="supplementalData.txt" />
             </fileset>
-            <fileset id="metazoneInfo" dir="${env.ICU4C_DIR}/source/data/misc">
-                <include name="metazoneInfo.txt" />
+            <fileset id="metaZones" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="metaZones.txt" />
             </fileset>
-            <fileset id="wintz" dir="${env.ICU4C_DIR}/source/data/misc">
-                <include name="wintz.txt" />
+            <fileset id="windowsZones" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="windowsZones.txt" />
             </fileset>
             <fileset id="likelySubtags" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="likelySubtags.txt" />
