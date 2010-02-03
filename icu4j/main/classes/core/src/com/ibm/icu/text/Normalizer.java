@@ -154,11 +154,11 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static class Mode {
-        protected Mode(Normalizer2 n2) {
+        private Mode(Normalizer2 n2) {
             normalizer2 = n2;
             uni32Normalizer2 = new FilteredNormalizer2(n2, UNI32_SET);
         }
-        protected final Normalizer2 getNormalizer2(int options) {
+        private final Normalizer2 getNormalizer2(int options) {
             return (options&UNICODE_3_2) != 0 ? uni32Normalizer2 : normalizer2;
         }
 
@@ -193,14 +193,6 @@ public final class Normalizer implements Cloneable {
         
         /**
          * This method is used for method dispatch
-         * @stable ICU 2.6
-         */
-        protected String normalize(String src, int options) {
-            return src;
-        }
-
-        /**
-         * This method is used for method dispatch
          * @stable ICU 2.8
          */
         protected int getMinC() {
@@ -229,18 +221,6 @@ public final class Normalizer implements Cloneable {
          */
         protected IsNextBoundary getNextBoundary() {
             return null;
-        }
-
-        /**
-         * This method is used for method dispatch
-         * @stable ICU 2.6
-         */
-        protected QuickCheckResult quickCheck(char[] src,int start, int limit, 
-                                              boolean allowMaybe,UnicodeSet nx) {
-            if(allowMaybe) {
-                return MAYBE;
-            }
-            return NO;
         }
 
         /**
@@ -281,10 +261,6 @@ public final class Normalizer implements Cloneable {
                                             false, trailCC,nx);
         }
         
-        protected String normalize( String src, int options) {
-            return decompose(src,false);
-        }
-
         protected int getMinC() {
             return NormalizerImpl.MIN_WITH_LEAD_CC;
         }
@@ -299,21 +275,6 @@ public final class Normalizer implements Cloneable {
 
         protected int getMask() {
             return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD);
-        }
-
-        protected QuickCheckResult quickCheck(char[] src,int start, 
-                                              int limit,boolean allowMaybe,
-                                              UnicodeSet nx) {
-            return NormalizerImpl.quickCheck(
-                                             src, start,limit,
-                                             NormalizerImpl.getFromIndexesArr(
-                                                                              NormalizerImpl.INDEX_MIN_NFD_NO_MAYBE
-                                                                              ),
-                                             NormalizerImpl.QC_NFD,
-                                             0,
-                                             allowMaybe,
-                                             nx
-                                             );
         }
 
         protected boolean isNFSkippable(int c) {
@@ -343,10 +304,6 @@ public final class Normalizer implements Cloneable {
                                             true, trailCC, nx);
         }
 
-        protected String normalize( String src, int options) {
-            return decompose(src,true);
-        }
-
         protected int getMinC() {
             return NormalizerImpl.MIN_WITH_LEAD_CC;
         }
@@ -361,21 +318,6 @@ public final class Normalizer implements Cloneable {
 
         protected int getMask() {
             return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD);
-        }
-
-        protected QuickCheckResult quickCheck(char[] src,int start, 
-                                              int limit,boolean allowMaybe,
-                                              UnicodeSet nx) {
-            return NormalizerImpl.quickCheck(
-                                             src,start,limit,
-                                             NormalizerImpl.getFromIndexesArr(
-                                                                              NormalizerImpl.INDEX_MIN_NFKD_NO_MAYBE
-                                                                              ),
-                                             NormalizerImpl.QC_NFKD,
-                                             NormalizerImpl.OPTIONS_COMPAT,
-                                             allowMaybe,
-                                             nx
-                                             );
         }
 
         protected boolean isNFSkippable(int c) {
@@ -403,10 +345,6 @@ public final class Normalizer implements Cloneable {
                                            0, nx);
         }
   
-        protected String normalize( String src, int options) {
-            return compose(src, false, options);
-        }
-       
         protected int getMinC() {
             return NormalizerImpl.getFromIndexesArr(
                                                     NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
@@ -420,20 +358,6 @@ public final class Normalizer implements Cloneable {
         }
         protected int getMask() {
             return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFC);
-        }
-        protected QuickCheckResult quickCheck(char[] src,int start, 
-                                              int limit,boolean allowMaybe,
-                                              UnicodeSet nx) {
-            return NormalizerImpl.quickCheck(
-                                             src,start,limit,
-                                             NormalizerImpl.getFromIndexesArr(
-                                                                              NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
-                                                                              ),
-                                             NormalizerImpl.QC_NFC,
-                                             0,
-                                             allowMaybe,
-                                             nx
-                                             );
         }
         protected boolean isNFSkippable(int c) {
             return NormalizerImpl.isNFSkippable(c,this,
@@ -468,9 +392,6 @@ public final class Normalizer implements Cloneable {
                                           NormalizerImpl.OPTIONS_COMPAT, nx);
         }
 
-        protected String normalize( String src, int options) {
-            return compose(src, true, options);
-        }
         protected int getMinC() {
             return NormalizerImpl.getFromIndexesArr(
                                                     NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
@@ -484,20 +405,6 @@ public final class Normalizer implements Cloneable {
         }
         protected int getMask() {
             return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKC);
-        }
-        protected QuickCheckResult quickCheck(char[] src,int start, 
-                                              int limit,boolean allowMaybe,
-                                              UnicodeSet nx) {
-            return NormalizerImpl.quickCheck(
-                                             src,start,limit,
-                                             NormalizerImpl.getFromIndexesArr(
-                                                                              NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
-                                                                              ),
-                                             NormalizerImpl.QC_NFKC,
-                                             NormalizerImpl.OPTIONS_COMPAT,
-                                             allowMaybe,
-                                             nx
-                                             );
         }
         protected boolean isNFSkippable(int c) {
             return NormalizerImpl.isNFSkippable(c, this,
@@ -525,9 +432,6 @@ public final class Normalizer implements Cloneable {
             return NormalizerImpl.makeFCD(src, srcStart,srcLimit,
                                           dest, destStart,destLimit, nx);
         }
-        protected String normalize( String src, int options) {
-            return makeFCD(src, options);
-        }
         protected int getMinC() {
             return NormalizerImpl.MIN_WITH_LEAD_CC;
         }
@@ -539,11 +443,6 @@ public final class Normalizer implements Cloneable {
         }
         protected int getMask() {
             return NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD;
-        }
-        protected QuickCheckResult quickCheck(char[] src,int start, 
-                                              int limit,boolean allowMaybe,
-                                              UnicodeSet nx) {
-            return NormalizerImpl.checkFCD(src,start,limit,nx) ? YES : NO;
         }
         protected boolean isNFSkippable(int c) {
             /* FCD: skippable if lead cc==0 and trail cc<=1 */
@@ -1005,10 +904,6 @@ public final class Normalizer implements Cloneable {
         return app.length();
     }
 
-    private static String makeFCD(String src,int options) {
-        return Norm2AllModes.getFCDNormalizer2NoIOException().normalize(src);
-    }
-    
     /**
      * Normalizes a <tt>String</tt> using the given normalization operation.
      * <p>
@@ -1329,16 +1224,36 @@ public final class Normalizer implements Cloneable {
     public static int compare(char[] s1, int s1Start, int s1Limit,
                               char[] s2, int s2Start, int s2Limit,
                               int options) {
-        return internalCompare(s1, s1Start, s1Limit, 
-                               s2, s2Start, s2Limit, 
+        if( s1==null || s1Start<0 || s1Limit<0 || 
+            s2==null || s2Start<0 || s2Limit<0 ||
+            s1Limit<s1Start || s2Limit<s2Start
+        ) {
+            throw new IllegalArgumentException();
+        }
+        return internalCompare(CharBuffer.wrap(s1, s1Start, s1Limit-s1Start), 
+                               CharBuffer.wrap(s2, s2Start, s2Limit-s2Start), 
                                options);
     } 
-       
+
     /**
      * Compare two strings for canonical equivalence.
      * Further options include case-insensitive comparison and
      * code point order (as opposed to code unit order).
-     * Convenience method.
+     *
+     * Canonical equivalence between two strings is defined as their normalized
+     * forms (NFD or NFC) being identical.
+     * This function compares strings incrementally instead of normalizing
+     * (and optionally case-folding) both strings entirely,
+     * improving performance significantly.
+     *
+     * Bulk normalization is only necessary if the strings do not fulfill the 
+     * FCD conditions. Only in this case, and only if the strings are relatively 
+     * long, is memory allocated temporarily.
+     * For FCD strings and short non-FCD strings there is no memory allocation.
+     *
+     * Semantically, this is equivalent to
+     *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
+     * where code point order and foldCase are all optional.
      *
      * @param s1 First source string.
      * @param s2 Second source string.
@@ -1368,12 +1283,9 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static int compare(String s1, String s2, int options) {
-         
-        return compare(s1.toCharArray(),0,s1.length(),
-                       s2.toCharArray(),0,s2.length(),
-                       options);
+        return internalCompare(s1, s2, options);
     }
-     
+
     /**
      * Compare two strings for canonical equivalence.
      * Further options include case-insensitive comparison and
@@ -1408,9 +1320,9 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static int compare(char[] s1, char[] s2, int options) {
-        return compare(s1,0,s1.length,s2,0,s2.length,options);
-    } 
-        
+        return internalCompare(CharBuffer.wrap(s1), CharBuffer.wrap(s2), options);
+    }
+
     /**
      * Convenience method that can have faster implementation
      * by not allocating buffers.
@@ -1419,12 +1331,10 @@ public final class Normalizer implements Cloneable {
      * @param options    A bit set of options
      * @stable ICU 2.8
      */
-    // TODO: actually do the optimization when the guts of Normalizer are 
-    // upgraded --has just dumb implementation for now
-    public static int compare(int char32a, int char32b,int options) {
-        return compare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options);
+    public static int compare(int char32a, int char32b, int options) {
+        return internalCompare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options);
     }
-    
+
     /**
      * Convenience method that can have faster implementation
      * by not allocating buffers.
@@ -1433,12 +1343,10 @@ public final class Normalizer implements Cloneable {
      * @param options   A bit set of options
      * @stable ICU 2.8
      */
-    // TODO: actually do the optimization when the guts of Normalizer are 
-    // upgraded --has just dumb implementation for now
     public static int compare(int char32a, String str2, int options) {
-        return compare(UTF16.valueOf(char32a), str2, options);
+        return internalCompare(UTF16.valueOf(char32a), str2, options);
     }
-   
+
     /**
      * Concatenate normalized strings, making sure that the result is normalized
      * as well.
@@ -2618,27 +2526,10 @@ public final class Normalizer implements Cloneable {
     }    
 
         
-    private static int internalCompare(char[] s1, int s1Start,int s1Limit,
-                                       char[] s2, int s2Start,int s2Limit,
-                                       int options) {
-                                  
-        char[] fcd1  = new char[300];
-        char[] fcd2  = new char[300];
-        
-        Normalizer.Mode mode;
-        int result;
-        
-        if(    s1==null || s1Start<0 || s1Limit<0 || 
-               s2==null || s2Start<0 || s2Limit<0 ||
-               s1Limit<s1Start || s2Limit<s2Start
-               ) {
-                
-            throw new IllegalArgumentException();
-        }
-
-        UnicodeSet nx=NormalizerImpl.getNX(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT);
+    // TODO: Consider proposing this function as public API.
+    private static int internalCompare(CharSequence s1, CharSequence s2, int options) {
+        int normOptions=options>>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
         options|= NormalizerImpl.COMPARE_EQUIV;
-        result=0;
 
         /*
          * UAX #21 Case Mappings, as fixed for Unicode version 4
@@ -2661,20 +2552,18 @@ public final class Normalizer implements Cloneable {
          * are first decomposed or not, so an FCD check - a check only for
          * canonical order - is not sufficient.
          */
-        if((options& Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I) >0 ) {
-            mode=Normalizer.NFD;
-            options&=~ Normalizer.INPUT_IS_FCD;
-        } else {
-            mode=Normalizer.FCD;
-        }
-        if((options& Normalizer.INPUT_IS_FCD)==0) {
-            char[] dest;
-            int fcdLen1, fcdLen2;
-            boolean isFCD1, isFCD2;
-        
+        if((options&INPUT_IS_FCD)==0 || (options&FOLD_CASE_EXCLUDE_SPECIAL_I)!=0) {
+            Normalizer2 n2;
+            if((options&FOLD_CASE_EXCLUDE_SPECIAL_I)!=0) {
+                n2=NFD.getNormalizer2(normOptions);
+            } else {
+                n2=FCD.getNormalizer2(normOptions);
+            }
+
             // check if s1 and/or s2 fulfill the FCD conditions
-            isFCD1= Normalizer.YES==mode.quickCheck(s1, s1Start, s1Limit, true, nx);
-            isFCD2= Normalizer.YES==mode.quickCheck(s2, s2Start, s2Limit, true, nx);
+            int spanQCYes1=n2.spanQuickCheckYes(s1);
+            int spanQCYes2=n2.spanQuickCheckYes(s2);
+
             /*
              * ICU 2.4 had a further optimization:
              * If both strings were not in FCD, then they were both NFD'ed,
@@ -2684,49 +2573,30 @@ public final class Normalizer implements Cloneable {
              * Therefore, ICU 2.6 removes that optimization.
              */
 
-            if(!isFCD1) {
-                fcdLen1=mode.normalize(s1, 0, s1.length,
-                                       fcd1, 0, fcd1.length,
-                                       nx);
-                                       
-                if(fcdLen1>fcd1.length) {
-                    dest=new char[fcdLen1];
-                    fcdLen1=mode.normalize( s1, 0, s1.length,
-                                            dest, 0, dest.length,
-                                            nx);
-                    s1=dest;
-                } else {
-                    s1=fcd1;
-                }
-                s1Limit=fcdLen1;
-                s1Start=0;
+            if(spanQCYes1<s1.length()) {
+                StringBuilder fcd1=new StringBuilder(s1.length()+16).append(s1, 0, spanQCYes1);
+                s1=n2.normalizeSecondAndAppend(fcd1, s1.subSequence(spanQCYes1, s1.length()));
             }
-
-            if(!isFCD2) {
-                fcdLen2=mode.normalize(s2,s2Start,s2Limit,
-                                       fcd2,0,fcd2.length,
-                                       nx);
-                
-                if(fcdLen2>fcd2.length) {
-                    dest=new char[fcdLen2];
-                    fcdLen2=mode.normalize( s2,s2Start,s2Limit,
-                                            dest,0,dest.length,
-                                            nx);
-                    s2=dest;
-                } else {
-                    s2=fcd2;
-                }
-                s2Limit=fcdLen2;
-                s2Start=0;
+            if(spanQCYes2<s2.length()) {
+                StringBuilder fcd2=new StringBuilder(s2.length()+16).append(s2, 0, spanQCYes2);
+                s2=n2.normalizeSecondAndAppend(fcd2, s2.subSequence(spanQCYes2, s2.length()));
             }
-                
         }
-        
-        result=NormalizerImpl.cmpEquivFold(s1, s1Start, s1Limit, 
-                                           s2, s2Start, s2Limit, options);
-        return result;
+
+        // TODO: Temporarily hideously slow. Convert internals to work on CharSequence.
+        int length1=s1.length();
+        char[] s1Array=new char[length1];
+        for(int i=0; i<length1; ++i) {
+            s1Array[i]=s1.charAt(i);
+        }
+        int length2=s2.length();
+        char[] s2Array=new char[length2];
+        for(int i=0; i<length2; ++i) {
+            s2Array[i]=s2.charAt(i);
+        }
+        return NormalizerImpl.cmpEquivFold(s1Array, 0, length1, s2Array, 0, length2, options);
     }    
-    
+
     /**
      * Fetches the Unicode version burned into the Normalization data file
      * @return VersionInfo version information of the normalizer

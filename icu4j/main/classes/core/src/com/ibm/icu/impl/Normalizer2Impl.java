@@ -711,10 +711,31 @@ public final class Normalizer2Impl {
         }
         return src;
     }
-    public void decomposeAndAppend(CharSequence s, int src, int limit,
-                                   boolean doDecompose,
-                                   ReorderingBuffer buffer) {
-        throw new UnsupportedOperationException();  // TODO
+    public void decomposeAndAppend(CharSequence s, boolean doDecompose, ReorderingBuffer buffer) {
+        int limit=s.length();
+        if(limit==0) {
+            return;
+        }
+        if(doDecompose) {
+            decompose(s, 0, limit, buffer);
+            return;
+        }
+        // Just merge the strings at the boundary.
+        int c=Character.codePointAt(s, 0);
+        int src=0;
+        int firstCC, prevCC, cc;
+        firstCC=prevCC=cc=getCC(getNorm16(c));
+        while(cc!=0) {
+            prevCC=cc;
+            src+=Character.charCount(c);
+            if(src>=limit) {
+                break;
+            }
+            c=Character.codePointAt(s, src);
+            cc=getCC(getNorm16(c));
+        };
+        buffer.append(s, 0, src, firstCC, prevCC);
+        buffer.append(s, src, limit);
     }
     // Very similar to composeQuickCheck(): Make the same changes in both places if relevant.
     // doCompose: normalize
@@ -1062,11 +1083,30 @@ public final class Normalizer2Impl {
             return prevBoundary<<1;  // "no"
         }
     }
-    public void composeAndAppend(CharSequence s, int src, int limit,
+    public void composeAndAppend(CharSequence s,
                                  boolean doCompose,
                                  boolean onlyContiguous,
                                  ReorderingBuffer buffer) {
-        throw new UnsupportedOperationException();  // TODO
+        int src=0, limit=s.length();
+        if(!buffer.isEmpty()) {
+            int firstStarterInSrc=findNextCompBoundary(s, 0, limit);
+            if(0!=firstStarterInSrc) {
+                int lastStarterInDest=findPreviousCompBoundary(buffer.getStringBuilder(),
+                                                               buffer.length());
+                StringBuilder middle=new StringBuilder((buffer.length()-lastStarterInDest)+
+                                                       firstStarterInSrc+16);
+                middle.append(buffer.getStringBuilder(), lastStarterInDest, buffer.length());
+                buffer.removeSuffix(buffer.length()-lastStarterInDest);
+                middle.append(s, 0, firstStarterInSrc);
+                compose(middle, 0, middle.length(), onlyContiguous, true, buffer);
+                src=firstStarterInSrc;
+            }
+        }
+        if(doCompose) {
+            compose(s, src, limit, onlyContiguous, true, buffer);
+        } else {
+            buffer.append(s, src, limit);
+        }
     }
     public int makeFCD(CharSequence s, int src, int limit, ReorderingBuffer buffer) {
         // Note: In this function we use buffer->appendZeroCC() because we track
@@ -1195,14 +1235,65 @@ public final class Normalizer2Impl {
         }
         return src;
     }
-    public void makeFCDAndAppend(CharSequence s, int src, int limit,
-                                 boolean doMakeFCD,
-                                 ReorderingBuffer buffer) {
-        throw new UnsupportedOperationException();  // TODO
+    public void makeFCDAndAppend(CharSequence s, boolean doMakeFCD, ReorderingBuffer buffer) {
+        int src=0, limit=s.length();
+        if(!buffer.isEmpty()) {
+            int firstBoundaryInSrc=findNextFCDBoundary(s, 0, limit);
+            if(0!=firstBoundaryInSrc) {
+                int lastBoundaryInDest=findPreviousFCDBoundary(buffer.getStringBuilder(),
+                                                               buffer.length());
+                StringBuilder middle=new StringBuilder((buffer.length()-lastBoundaryInDest)+
+                                                       firstBoundaryInSrc+16);
+                middle.append(buffer.getStringBuilder(), lastBoundaryInDest, buffer.length());
+                buffer.removeSuffix(buffer.length()-lastBoundaryInDest);
+                middle.append(s, 0, firstBoundaryInSrc);
+                makeFCD(middle, 0, middle.length(), buffer);
+                src=firstBoundaryInSrc;
+            }
+        }
+        if(doMakeFCD) {
+            makeFCD(s, src, limit, buffer);
+        } else {
+            buffer.append(s, src, limit);
+        }
     }
 
+    // Note: hasDecompBoundary() could be implemented as aliases to
+    // hasFCDBoundaryBefore() and hasFCDBoundaryAfter()
+    // at the cost of building the FCD trie for a decomposition normalizer.
     public boolean hasDecompBoundary(int c, boolean before) {
-        throw new UnsupportedOperationException();  // TODO
+        for(;;) {
+            if(c<minDecompNoCP) {
+                return true;
+            }
+            int norm16=getNorm16(c);
+            if(isHangul(norm16) || isDecompYesAndZeroCC(norm16)) {
+                return true;
+            } else if(norm16>MIN_NORMAL_MAYBE_YES) {
+                return false;  // ccc!=0
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                c=mapAlgorithmic(c, norm16);
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16++);
+                if((firstUnit&MAPPING_LENGTH_MASK)==0) {
+                    return false;
+                }
+                if(!before) {
+                    // decomp after-boundary: same as hasFCDBoundaryAfter(),
+                    // fcd16<=1 || trailCC==0
+                    if(firstUnit>0x1ff) {
+                        return false;  // trailCC>1
+                    }
+                    if(firstUnit<=0xff) {
+                        return true;  // trailCC==0
+                    }
+                    // if(trailCC==1) test leadCC==0, same as checking for before-boundary
+                }
+                // true if leadCC==0 (hasFCDBoundaryBefore())
+                return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (extraData.charAt(norm16)&0xff00)==0;
+            }
+        }
     }
     public boolean isDecompInert(int c) { return isDecompYesAndZeroCC(getNorm16(c)); }
 
@@ -1210,7 +1301,33 @@ public final class Normalizer2Impl {
         return c<minCompNoMaybeCP || hasCompBoundaryBefore(c, getNorm16(c));
     }
     public boolean hasCompBoundaryAfter(int c, boolean onlyContiguous, boolean testInert) {
-        throw new UnsupportedOperationException();  // TODO
+        for(;;) {
+            int norm16=getNorm16(c);
+            if(isInert(norm16)) {
+                return true;
+            } else if(norm16<=minYesNo) {
+                // Hangul LVT (==minYesNo) has a boundary after it.
+                // Hangul LV and non-inert yesYes characters combine forward.
+                return isHangul(norm16) && !Hangul.isHangulWithoutJamoT((char)c);
+            } else if(norm16>= (testInert ? minNoNo : minMaybeYes)) {
+                return false;
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                c=mapAlgorithmic(c, norm16);
+            } else {
+                // c decomposes, get everything from the variable-length extra data.
+                // If testInert, then c must be a yesNo character which has lccc=0,
+                // otherwise it could be a noNo.
+                int firstUnit=extraData.charAt(norm16);
+                // true if
+                //      c is not deleted, and
+                //      it and its decomposition do not combine forward, and it has a starter, and
+                //      if FCC then trailCC<=1
+                return
+                    (firstUnit&MAPPING_LENGTH_MASK)!=0 &&
+                    (firstUnit&(MAPPING_PLUS_COMPOSITION_LIST|MAPPING_NO_COMP_BOUNDARY_AFTER))==0 &&
+                    (!onlyContiguous || firstUnit<=0x1ff);
+            }
+        }
     }
 
     public boolean hasFCDBoundaryBefore(int c) { return c<MIN_CCC_LCCC_CP || getFCD16(c)<=0xff; }
@@ -1322,7 +1439,6 @@ public final class Normalizer2Impl {
     private void decomposeShort(CharSequence s, int src, int limit,
                                 ReorderingBuffer buffer) {
         while(src<limit) {
-            // TODO: use trie string iterator?? C++ uses UTRIE2_U16_NEXT16(normTrie, src, limit, c, norm16);
             int c=Character.codePointAt(s, src);
             src+=Character.charCount(c);
             decompose(c, getNorm16(c), buffer);
@@ -1462,7 +1578,6 @@ public final class Normalizer2Impl {
             c=sb.codePointAt(p);
             p+=Character.charCount(c);
             norm16=getNorm16(c);
-            // TODO: use trie string iterator?? C++ uses UTRIE2_U16_NEXT16(normTrie, p, limit, c, norm16);
             cc=getCCFromYesOrMaybe(norm16);
             if( // this character combines backward and
                 isMaybe(norm16) &&
@@ -1612,8 +1727,17 @@ public final class Normalizer2Impl {
             }
         }
     }
-    private int findPreviousCompBoundary(CharSequence s, int start, int p) {
-        throw new UnsupportedOperationException();  // TODO
+    private int findPreviousCompBoundary(CharSequence s, int p) {
+        while(p>0) {
+            int c=Character.codePointBefore(s, p);
+            p-=Character.charCount(c);
+            if(hasCompBoundaryBefore(c)) {
+                break;
+            }
+            // We could also test hasCompBoundaryAfter() and return iter.codePointLimit,
+            // but that's probably not worth the extra cost.
+        }
+        return p;
     }
     private int findNextCompBoundary(CharSequence s, int p, int limit) {
         while(p<limit) {
@@ -1627,8 +1751,15 @@ public final class Normalizer2Impl {
         return p;
     }
 
-    private int findPreviousFCDBoundary(CharSequence s, int start, int p) {
-        throw new UnsupportedOperationException();  // TODO
+    private int findPreviousFCDBoundary(CharSequence s, int p) {
+        while(p>0) {
+            int c=Character.codePointBefore(s, p);
+            p-=Character.charCount(c);
+            if(fcdTrie.get(c)<=0xff) {
+                break;
+            }
+        }
+        return p;
     }
     private int findNextFCDBoundary(CharSequence s, int p, int limit) {
         while(p<limit) {
@@ -1642,23 +1773,22 @@ public final class Normalizer2Impl {
         return p;
     }
 
-    VersionInfo dataVersion;
+    @SuppressWarnings("unused")
+    private VersionInfo dataVersion;
 
     // Code point thresholds for quick check codes.
-    int minDecompNoCP;
-    int minCompNoMaybeCP;
+    private int minDecompNoCP;
+    private int minCompNoMaybeCP;
 
     // Norm16 value thresholds for quick check combinations and types of extra data.
-    int minYesNo;
-    int minNoNo;
-    int limitNoNo;
-    int minMaybeYes;
+    private int minYesNo;
+    private int minNoNo;
+    private int limitNoNo;
+    private int minMaybeYes;
 
-    Trie2_16 normTrie;
-    String maybeYesCompositions;
-    String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
+    private Trie2_16 normTrie;
+    private String maybeYesCompositions;
+    private String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
 
-    Trie2_16 fcdTrie;
+    private Trie2_16 fcdTrie;
 }
-
-// TODO: Copy parts of normalizer2impl.h starting with Normalizer2Factory??
