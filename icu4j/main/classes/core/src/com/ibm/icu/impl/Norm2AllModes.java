@@ -148,7 +148,7 @@ public final class Norm2AllModes {
         @Override
         protected void normalizeAndAppend(
                 CharSequence src, boolean doNormalize, Normalizer2Impl.ReorderingBuffer buffer) {
-            impl.decomposeAndAppend(src, 0, src.length(), doNormalize, buffer);
+            impl.decomposeAndAppend(src, doNormalize, buffer);
         }
         @Override
         public int spanQuickCheckYes(CharSequence s) {
@@ -179,7 +179,7 @@ public final class Norm2AllModes {
         @Override
         protected void normalizeAndAppend(
                 CharSequence src, boolean doNormalize, Normalizer2Impl.ReorderingBuffer buffer) {
-            impl.composeAndAppend(src, 0, src.length(), doNormalize, onlyContiguous, buffer);
+            impl.composeAndAppend(src, doNormalize, onlyContiguous, buffer);
         }
 
         @Override
@@ -234,7 +234,7 @@ public final class Norm2AllModes {
         @Override
         protected void normalizeAndAppend(
                 CharSequence src, boolean doNormalize, Normalizer2Impl.ReorderingBuffer buffer) {
-            impl.makeFCDAndAppend(src, 0, src.length(), doNormalize, buffer);
+            impl.makeFCDAndAppend(src, doNormalize, buffer);
         }
         @Override
         public int spanQuickCheckYes(CharSequence s) {
