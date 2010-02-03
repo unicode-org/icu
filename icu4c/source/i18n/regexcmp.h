@@ -1,7 +1,7 @@
 //
 //  regexcmp.h
 //
-//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2010, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexCompile
@@ -54,7 +54,8 @@ public:
     RegexCompile(RegexPattern *rp, UErrorCode &e);
 
     void       compile(const UnicodeString &pat, UParseError &pp, UErrorCode &e);
-
+    void       compile(UText *pat, UParseError &pp, UErrorCode &e);
+    
 
     virtual    ~RegexCompile();
 
@@ -102,7 +103,7 @@ private:
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
-    void        emitONE_CHAR(UChar32 c);             // EMit a ONE_CHAR op into the compiled code,
+    void        emitONE_CHAR(UChar32 c);             // Emit a ONE_CHAR op into the compiled code,
                                                      //   taking case mode into account.
     int32_t     minMatchLength(int32_t start,
                                int32_t end);
@@ -124,16 +125,14 @@ private:
     //
     //  Data associated with low level character scanning
     //
-    int32_t                       fScanIndex;        // Index of current character being processed
+    int64_t                       fScanIndex;        // Index of current character being processed
                                                      //   in the rule input string.
-    int32_t                       fNextIndex;        // Index of the next character, which
-                                                     //   is the first character not yet scanned.
     UBool                         fQuoteMode;        // Scan is in a \Q...\E quoted region
     UBool                         fInBackslashQuote; // Scan is between a '\' and the following char.
     UBool                         fEOLComments;      // When scan is just after '(?',  inhibit #... to
                                                      //   end of line comments, in favor of (?#...) comments.
-    int32_t                       fLineNum;          // Line number in input file.
-    int32_t                       fCharNum;          // Char position within the line.
+    int64_t                       fLineNum;          // Line number in input file.
+    int64_t                       fCharNum;          // Char position within the line.
     UChar32                       fLastChar;         // Previous char, needed to count CR-LF
                                                      //   as a single line, not two.
     UChar32                       fPeekChar;         // Saved char, if we've scanned ahead.
@@ -168,8 +167,8 @@ private:
                                                      //   holds the start index within RegexPattern.
                                                      //   fLiteralText where the string is being stored.
 
-    int32_t                       fPatternLength;    // Length of the input pattern string.
-
+    int64_t                       fPatternLength;    // Length of the input pattern string.
+    
     UVector32                     fParenStack;       // parentheses stack.  Each frame consists of
                                                      //   the positions of compiled pattern operations
                                                      //   needing fixup, followed by negative value.  The
@@ -196,7 +195,7 @@ private:
                                                      //   -1 for the upper interval value means none
                                                      //   was specified (unlimited occurences.)
 
-    int32_t                       fNameStartPos;     // Starting position of a \N{NAME} name in a
+    int64_t                       fNameStartPos;     // Starting position of a \N{NAME} name in a
                                                      //   pattern, valid while remainder of name is
                                                      //   scanned.
 
@@ -208,7 +207,6 @@ private:
     UChar32                       fLastSetLiteral;   // The last single code point added to a set.
                                                      //   needed when "-y" is scanned, and we need
                                                      //   to turn "x-y" into a range.
-
 };
 
 // Constant values to be pushed onto fSetOpStack while scanning & evalueating [set expressions]

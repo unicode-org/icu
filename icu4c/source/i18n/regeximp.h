@@ -1,5 +1,5 @@
 //
-//   Copyright (C) 2002-2007 International Business Machines Corporation
+//   Copyright (C) 2002-2010 International Business Machines Corporation
 //   and others. All rights reserved.
 //
 //   file:  regeximp.h
@@ -279,11 +279,12 @@ enum {
 //  Match Engine State Stack Frame Layout.
 //
 struct REStackFrame {
-    int32_t            fInputIdx;        // Position of next character in the input string
+    int64_t            fInputIdx;        // Position of next character in the input string
     int32_t            fPatIdx;          // Position of next Op in the compiled pattern
     int32_t            fExtra[2];        // Extra state, for capture group start/ends
                                          //   atomic parentheses, repeat counts, etc.
                                          //   Locations assigned at pattern compile time.
+                                         //   Note that this will likely end up longer than 64 bits.
 };
 
 //
@@ -306,7 +307,6 @@ enum StartOfMatch {
                                (v)==START_LINE?    "START_LINE"    : \
                                (v)==START_STRING?  "START_STRING"  : \
                                                    "ILLEGAL")
-
 
 //
 //  8 bit set, to fast-path latin-1 set membership tests.
@@ -346,7 +346,6 @@ inline void Regex8BitSet::init(const UnicodeSet *s) {
 inline void Regex8BitSet::operator = (const Regex8BitSet &s) {
    uprv_memcpy(d, s.d, sizeof(d));
 }
-
 
 U_NAMESPACE_END
 #endif

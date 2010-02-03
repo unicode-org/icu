@@ -3603,6 +3603,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\regextxt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\regextxt.h"
+				>
+			</File>
+			<File
 				RelativePath=".\rematch.cpp"
 				>
 			</File>

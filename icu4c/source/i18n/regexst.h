@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2003-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2003-2010, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexStaticSets
@@ -19,6 +19,7 @@
 #define REGEXST_H
 
 #include "unicode/utypes.h"
+#include "unicode/utext.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "regeximp.h"
@@ -45,7 +46,7 @@ public:
     UnicodeSet    fUnescapeCharSet;            // Set of chars handled by unescape when
                                                //   encountered with a \ in a pattern.
     UnicodeSet    *fRuleDigitsAlias;
-    UnicodeString fEmptyString;                // An empty string, to be used when a matcher
+    UText         *fEmptyText;                 // An empty string, to be used when a matcher
                                                //   is created with no input.
 
 };
