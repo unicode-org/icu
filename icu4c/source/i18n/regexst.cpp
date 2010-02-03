@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2004-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2004-2010, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains class RegexStaticSets
@@ -214,6 +214,10 @@ fRuleDigitsAlias(NULL)
     for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
         fRuleSets[i].compact();
     }
+    
+    // Finally, initialize an empty string for utility purposes
+    fEmptyText = utext_openUChars(NULL, NULL, 0, status);
+    
     return; // If we reached this point, everything is fine so just exit
 
 ExitConstrDeleteAll: // Remove fPropSets and fRuleSets and return error
@@ -233,6 +237,8 @@ RegexStaticSets::~RegexStaticSets() {
         fPropSets[i] = NULL;
     }
     fRuleDigitsAlias = NULL;
+    
+    utext_close(fEmptyText);
 }
 
 

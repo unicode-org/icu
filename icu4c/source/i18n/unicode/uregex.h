@@ -3,7 +3,7 @@
 *   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
-*   file name:  regex.h
+*   file name:  uregex.h
 *   encoding:   US-ASCII
 *   indentation:4
 *
@@ -23,6 +23,7 @@
 #ifndef UREGEX_H
 #define UREGEX_H
 
+#include "unicode/utext.h"
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
@@ -112,6 +113,7 @@ typedef enum URegexpFlag{
   *  string form into an internal representation using the specified match mode flags.
   *  The resulting regular expression handle can then be used to perform various
   *   matching operations.
+  * 
   *
   * @param pattern        The Regular Expression pattern to be compiled. 
   * @param patternLength  The length of the pattern, or -1 if the pattern is
@@ -134,7 +136,36 @@ uregex_open( const  UChar          *pattern,
                     uint32_t        flags,
                     UParseError    *pe,
                     UErrorCode     *status);
-
+                    
+/**
+  *  Open (compile) an ICU regular expression.  Compiles the regular expression in
+  *  string form into an internal representation using the specified match mode flags.
+  *  The resulting regular expression handle can then be used to perform various
+  *   matching operations.
+  *  <p>
+  *  The contents of the pattern UText will be extracted and saved. Ownership of the
+  *   UText struct itself remains with the caller. This is to match the behavior of
+  *   uregex_open().
+  *
+  * @param pattern        The Regular Expression pattern to be compiled. 
+  * @param flags          Flags that alter the default matching behavior for
+  *                       the regular expression, UREGEX_CASE_INSENSITIVE, for
+  *                       example.  For default behavior, set this parameter to zero.
+  *                       See <code>enum URegexpFlag</code>.  All desired flags
+  *                       are bitwise-ORed together.
+  * @param pe             Receives the position (line and column nubers) of any syntax
+  *                       error within the source regular expression string.  If this
+  *                       information is not wanted, pass NULL for this parameter.
+  * @param status         Receives error detected by this function.
+  *
+  * @internal ICU 4.4 technology preview
+  */
+U_INTERNAL URegularExpression *  U_EXPORT2
+uregex_openUText(UText          *pattern,
+                 uint32_t        flags,
+                 UParseError    *pe,
+                 UErrorCode     *status);
+    
 /**
   *  Open (compile) an ICU regular expression.  The resulting regular expression
   *   handle can then be used to perform various matching operations.
@@ -219,7 +250,8 @@ U_STABLE URegularExpression * U_EXPORT2
 uregex_clone(const URegularExpression *regexp, UErrorCode *status);
 
 /**
- *  Return a pointer to the source form of the pattern for this regular expression.
+ *  Returns a pointer to the source form of the pattern for this regular expression.
+ *  This function will work even if the pattern was originally specified as a UText.
  *
  * @param regexp     The compiled regular expression.
  * @param patLength  This output parameter will be set to the length of the
@@ -235,9 +267,24 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  * @stable ICU 3.0
  */
 U_STABLE const UChar * U_EXPORT2 
-uregex_pattern(const  URegularExpression   *regexp,
-                         int32_t           *patLength,
-                         UErrorCode        *status);
+uregex_pattern(const URegularExpression *regexp,
+                     int32_t            *patLength,
+                     UErrorCode         *status);
+
+/**
+ *  Returns the source text of the pattern for this regular expression.
+ *  This function will work even if the pattern was originally specified as a UChar string.
+ *
+ * @param regexp     The compiled regular expression.
+ * @param status     Receives errors detected by this function.
+ * @return the pattern text.  The storage for the text is owned by the regular expression
+ *                   object, and must not be altered or deleted.
+ *
+ * @internal ICU 4.4 technology preview
+ */
+U_INTERNAL UText * U_EXPORT2 
+uregex_patternUText(const URegularExpression *regexp,
+                          UErrorCode         *status);
 
 
 /**
@@ -279,10 +326,36 @@ uregex_setText(URegularExpression *regexp,
                int32_t             textLength,
                UErrorCode         *status);
 
+
+/**
+  *  Set the subject text string upon which the regular expression will look for matches.
+  *  This function may be called any number of times, allowing the regular
+  *  expression pattern to be applied to different strings.
+  *  <p>
+  *  Regular expression matching operations work directly on the application's
+  *  string data; only a shallow clone is made.  The subject string data must not be
+  *  altered after calling this function until after all regular expression
+  *  operations involving this string data are completed.  
+  *
+  * @param regexp     The compiled regular expression.
+  * @param text       The subject text string.
+  * @param status     Receives errors detected by this function.
+  *
+  * @internal ICU 4.4 technology preview
+  */
+U_INTERNAL void U_EXPORT2 
+uregex_setUText(URegularExpression *regexp,
+                UText              *text,
+                UErrorCode         *status);
+
 /**
   *  Get the subject text that is currently associated with this 
-  *   regular expression object.  This simply returns whatever string
-  *   pointer was previously supplied via uregex_setText().
+  *   regular expression object.  If the input was supplied using uregex_setText(),
+  *   that pointer will be returned.  Otherwise, the characters in the input will
+  *   be extracted to a buffer and returned.  In either case, ownership remains
+  *   with the regular expression object.
+  *
+  *  This function will work even if the input was originally specified as a UText.
   *
   * @param regexp      The compiled regular expression.
   * @param textLength  The length of the string is returned in this output parameter. 
@@ -291,7 +364,7 @@ uregex_setText(URegularExpression *regexp,
   *                    the text is known in advance to be a NUL terminated
   *                    string.
   * @param status      Receives errors detected by this function.
-  * @return            Poiner to the subject text string currently associated with
+  * @return            Pointer to the subject text string currently associated with
   *                    this regular expression.
   * @stable ICU 3.0
   */
@@ -299,6 +372,28 @@ U_STABLE const UChar * U_EXPORT2
 uregex_getText(URegularExpression *regexp,
                int32_t            *textLength,
                UErrorCode         *status);
+               
+               
+/**
+  *  Get the subject text that is currently associated with this 
+  *   regular expression object.
+  *
+  *  This function will work even if the input was originally specified as a UChar string.
+  *
+  * @param regexp      The compiled regular expression.
+  * @param dest        A mutable UText in which to store the current input.
+  *                    If NULL, a new UText will be created as an immutable shallow clone
+  *                    of the actual input string.
+  * @param status      Receives errors detected by this function.
+  * @return            The subject text currently associated with this regular expression.
+  *                    If a pre-allocated UText was provided, it will always be used and returned.
+  *
+  * @internal ICU 4.4 technology preview
+  */
+U_INTERNAL UText * U_EXPORT2 
+uregex_getUText(URegularExpression *regexp,
+                UText              *dest,
+                UErrorCode         *status);
 
 /**
   *   Attempts to match the input string against the pattern.
@@ -427,6 +522,29 @@ uregex_group(URegularExpression *regexp,
              UChar              *dest,
              int32_t             destCapacity,
              UErrorCode          *status);
+
+/** Extract the string for the specified matching expression or subexpression.
+  * Group #0 is the complete string of matched text.
+  * Group #1 is the text matched by the first set of capturing parentheses.
+  *
+  *   @param   regexp       The compiled regular expression.
+  *   @param   groupNum     The capture group to extract.  Group 0 is the complete
+  *                         match.  The value of this parameter must be
+  *                         less than or equal to the number of capture groups in
+  *                         the pattern.
+  *   @param   dest         Mutable UText to receive the matching string data.
+  *                         If NULL, a new UText will be created (which may not be mutable).
+  *   @param   status       A reference to a UErrorCode to receive any errors.
+  *   @return               The matching string data. If a pre-allocated UText was provided,
+  *                          it will always be used and returned.
+  *
+  *   @internal ICU 4.4 technology preview
+  */
+U_INTERNAL UText * U_EXPORT2 
+uregex_groupUText(URegularExpression *regexp,
+                  int32_t             groupNum,
+                  UText              *dest,
+                  UErrorCode         *status);
 
 
 /**
@@ -676,6 +794,32 @@ uregex_replaceAll(URegularExpression    *regexp,
                   int32_t                destCapacity,
                   UErrorCode            *status);
 
+/**
+  *    Replaces every substring of the input that matches the pattern
+  *    with the given replacement string.  This is a convenience function that
+  *    provides a complete find-and-replace-all operation.
+  *
+  *    This method scans the input string looking for matches of the pattern. 
+  *    Input that is not part of any match is copied unchanged to the
+  *    destination buffer.  Matched regions are replaced in the output
+  *    buffer by the replacement string.   The replacement string may contain
+  *    references to capture groups; these take the form of $1, $2, etc.
+  *
+  *    @param   regexp         The compiled regular expression.
+  *    @param   replacement    A string containing the replacement text.
+  *    @param   dest           A mutable UText that will receive the result.
+  *                             If NULL, a new UText will be created (which may not be mutable).
+  *    @param   status         A reference to a UErrorCode to receive any errors.
+  *    @return                 A UText containing the results of the find and replace.
+  *                             If a pre-allocated UText was provided, it will always be used and returned.
+  *
+  *    @internal ICU 4.4 technology preview
+  */
+U_INTERNAL UText * U_EXPORT2 
+uregex_replaceAllUText(URegularExpression *regexp,
+                       UText              *replacement,
+                       UText              *dest,
+                       UErrorCode         *status);
 
 /**
   *    Replaces the first substring of the input that matches the pattern
@@ -708,6 +852,33 @@ uregex_replaceFirst(URegularExpression  *regexp,
                     UChar               *destBuf,
                     int32_t              destCapacity,
                     UErrorCode          *status);
+
+/**
+  *    Replaces the first substring of the input that matches the pattern
+  *    with the given replacement string.  This is a convenience function that
+  *    provides a complete find-and-replace operation.
+  *
+  *    This method scans the input string looking for a match of the pattern. 
+  *    All input that is not part of the match is copied unchanged to the
+  *    destination buffer.  The matched region is replaced in the output
+  *    buffer by the replacement string.   The replacement string may contain
+  *    references to capture groups; these take the form of $1, $2, etc.
+  *
+  *    @param   regexp         The compiled regular expression.
+  *    @param   replacement    A string containing the replacement text.
+  *    @param   dest           A mutable UText that will receive the result.
+  *                             If NULL, a new UText will be created (which may not be mutable).
+  *    @param   status         A reference to a UErrorCode to receive any errors.
+  *    @return                 A UText containing the results of the find and replace.
+  *                             If a pre-allocated UText was provided, it will always be used and returned.
+  *
+  *    @internal ICU 4.4 technology preview
+  */
+U_INTERNAL UText * U_EXPORT2 
+uregex_replaceFirstUText(URegularExpression *regexp,
+                         UText              *replacement,
+                         UText              *dest,
+                         UErrorCode         *status);
 
 
 /**
@@ -758,11 +929,40 @@ uregex_replaceFirst(URegularExpression  *regexp,
   */
 U_STABLE int32_t U_EXPORT2 
 uregex_appendReplacement(URegularExpression    *regexp,
-                  const UChar           *replacementText,
-                  int32_t                replacementLength,
-                  UChar                **destBuf,
-                  int32_t               *destCapacity,
-                  UErrorCode            *status);
+                         const UChar           *replacementText,
+                         int32_t                replacementLength,
+                         UChar                **destBuf,
+                         int32_t               *destCapacity,
+                         UErrorCode            *status);
+
+
+/**
+  *   Implements a replace operation intended to be used as part of an
+  *   incremental find-and-replace.
+  *
+  *   <p>The input string, starting from the end of the previous match and ending at
+  *   the start of the current match, is appended to the destination string.  Then the
+  *   replacement string is appended to the output string,
+  *   including handling any substitutions of captured text.</p>
+  *
+  *   <p>For simple, prepackaged, non-incremental find-and-replace
+  *      operations, see replaceFirst() or replaceAll().</p>
+  *
+  *   @param   regexp      The regular expression object.  
+  *   @param   replacementText The string that will replace the matched portion of the
+  *                        input string as it is copied to the destination buffer.
+  *                        The replacement text may contain references ($1, for
+  *                        example) to capture groups from the match.
+  *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
+  *   @param   status      A reference to a UErrorCode to receive any errors. 
+  *
+  *   @internal ICU 4.4 technology preview
+  */
+U_INTERNAL void U_EXPORT2 
+uregex_appendReplacementUText(URegularExpression    *regexp,
+                              UText                 *replacementText,
+                              UText                 *dest,
+                              UErrorCode            *status);
 
 
 /**
@@ -794,7 +994,27 @@ uregex_appendTail(URegularExpression    *regexp,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
                   UErrorCode            *status);
+                  
 
+/**
+  * As the final step in a find-and-replace operation, append the remainder
+  * of the input string, starting at the position following the last match,
+  * to the destination string. <code>uregex_appendTailUText()</code> is intended 
+  *  to be invoked after one or more invocations of the
+  *  <code>uregex_appendReplacementUText()</code> function.
+  *
+  *   @param   regexp      The regular expression object.  This is needed to 
+  *                        obtain the input string and with the position
+  *                        of the last match within it.
+  *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
+  *   @param   status      A reference to a UErrorCode to receive any errors. 
+  *   @return              The destination UText.
+  *
+  *   @internal ICU 4.4 technology preview
+  */
+U_INTERNAL UText * U_EXPORT2 
+uregex_appendTailUText(URegularExpression    *regexp,
+                       UText                 *dest);
 
 
 
@@ -808,6 +1028,22 @@ uregex_appendTail(URegularExpression    *regexp,
    *  buffer, and NUL terminated.  The position of each field within
    *  the destination buffer is returned in the destFields array.
    *
+   *  Note:  another choice for the design of this function would be to not
+   *         copy the resulting fields at all, but to return indexes and
+   *         lengths within the source text.  
+   *           Advantages would be
+   *             o  Faster.  No Copying.
+   *             o  Nothing extra needed when field data may contain embedded NUL chars.
+   *             o  Less memory needed if working on large data.
+   *           Disadvantages
+   *             o  Less consistent with C++ split, which copies into an
+   *                array of UnicodeStrings.
+   *             o  No NUL termination, extracted fields would be less convenient
+   *                to use in most cases.
+   *             o  Possible problems in the future, when support Unicode Normalization
+   *                could cause the fields to not correspond exactly to
+   *                a range of the source text.
+   * 
    *    @param   regexp      The compiled regular expression.
    *    @param   destBuf     A (UChar *) buffer to receive the fields that
    *                         are extracted from the input string. These
@@ -842,6 +1078,39 @@ uregex_split(   URegularExpression      *regexp,
                   int32_t                destCapacity,
                   int32_t               *requiredCapacity,
                   UChar                 *destFields[],
+                  int32_t                destFieldsCapacity,
+                  UErrorCode            *status);
+
+
+  /**
+   * Split a string into fields.  Somewhat like split() from Perl.
+   * The pattern matches identify delimiters that separate the input
+   *  into fields.  The input data between the matches becomes the
+   *  fields themselves.
+   * <p>
+   * The behavior of this function is not very closely aligned with uregex_split();
+   * instead, it is based on (and implemented directly on top of) the C++ split method.
+   *
+   * @param regexp  The compiled regular expression.
+   * @param dest    An array of mutable UText structs to receive the results of the split.
+   *                If a field is NULL, a new UText is allocated to contain the results for
+   *                that field. This new UText is not guaranteed to be mutable.
+   * @param destCapacity  The number of elements in the destination array.
+   *                If the number of fields found is less than destCapacity, the
+   *                extra strings in the destination array are not altered.
+   *                If the number of destination strings is less than the number
+   *                of fields, the trailing part of the input string, including any
+   *                field delimiters, is placed in the last destination string.
+   *                This behavior mimics that of Perl.  It is not  an error condition, and no
+   *                error status is returned when all destField positions are used.
+   * @param status  A reference to a UErrorCode to receive any errors.
+   * @return        The number of fields into which the input string was split.
+   *
+   * @internal ICU 4.4 technology preview
+   */
+U_INTERNAL int32_t U_EXPORT2 
+uregex_splitUText(URegularExpression    *regexp,
+                  UText                 *destFields[],
                   int32_t                destFieldsCapacity,
                   UErrorCode            *status);
 
