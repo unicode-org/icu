@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2009 International Business Machines Corporation   *
+*   Copyright (C) 2002-2010 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -29,11 +29,11 @@ U_NAMESPACE_BEGIN
 //
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
-    // Init all of this instance's data.
-    init();
+    UErrorCode status = U_ZERO_ERROR;
+    u_init(&status);
 
-    // Lazy init of all shared global sets.
-    RegexStaticSets::initGlobals(&fDeferredStatus);
+    // Init all of this instances data.
+    init();
 }
 
 
@@ -52,7 +52,7 @@ RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
 
 //--------------------------------------------------------------------------
 //
-//    Assignmenet Operator
+//    Assignment Operator
 //
 //--------------------------------------------------------------------------
 RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
@@ -68,7 +68,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     init();
 
     // Copy simple fields
-    fPattern          = other.fPattern;
+    fPattern          = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
     fFlags            = other.fFlags;
     fLiteralText      = other.fLiteralText;
     fDeferredStatus   = other.fDeferredStatus;
@@ -85,6 +85,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     *fInitialChars    = *other.fInitialChars;
     fInitialChar      = other.fInitialChar;
     *fInitialChars8   = *other.fInitialChars8;
+    fNeedsAltInput    = other.fNeedsAltInput;
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
     fCompiledPat->assign(*other.fCompiledPat, fDeferredStatus);
@@ -126,7 +127,6 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 //
 //--------------------------------------------------------------------------
 void RegexPattern::init() {
-    fPattern.remove();
     fFlags            = 0;
     fCompiledPat      = 0;
     fLiteralText.remove();
@@ -146,7 +146,9 @@ void RegexPattern::init() {
     fInitialChars     = NULL;
     fInitialChar      = 0;
     fInitialChars8    = NULL;
+    fNeedsAltInput    = FALSE;
 
+    fPattern          = NULL; // will be set later
     fCompiledPat      = new UVector32(fDeferredStatus);
     fGroupMap         = new UVector32(fDeferredStatus);
     fSets             = new UVector(fDeferredStatus);
@@ -192,6 +194,9 @@ void RegexPattern::zap() {
     fInitialChars = NULL;
     delete fInitialChars8;
     fInitialChars8 = NULL;
+    if (fPattern != NULL) {
+        utext_close(fPattern);
+    }
 }
 
 
@@ -220,13 +225,27 @@ RegexPattern  *RegexPattern::clone() const {
 //
 //   operator ==   (comparison)    Consider to patterns to be == if the
 //                                 pattern strings and the flags are the same.
+//                                 Note that pattern strings with the same
+//                                 characters can still be considered different.
 //
 //--------------------------------------------------------------------------
 UBool   RegexPattern::operator ==(const RegexPattern &other) const {
-    UBool r = this->fFlags    == other.fFlags &&
-              this->fPattern  == other.fPattern &&
-              this->fDeferredStatus == other.fDeferredStatus;
-    return r;
+    if (this->fPattern == NULL) {
+        if (other.fPattern == NULL) {
+            return this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus;
+        } else {
+            return FALSE;
+        }
+    } else {
+        if (other.fPattern == NULL) {
+            return FALSE;
+        } else {
+            UTEXT_SETNATIVEINDEX(this->fPattern, 0);
+            UTEXT_SETNATIVEINDEX(other.fPattern, 0);
+            return this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus &&
+                utext_equals(this->fPattern, other.fPattern);
+        }
+    }
 }
 
 //---------------------------------------------------------------------
@@ -240,7 +259,57 @@ RegexPattern::compile(const UnicodeString &regex,
                       UParseError          &pe,
                       UErrorCode           &status)
 {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
+    UREGEX_DOTALL   | UREGEX_MULTILINE        | UREGEX_UWORD |
+    UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES;
+    
+    if ((flags & ~allFlags) != 0) {
+        status = U_REGEX_INVALID_FLAG;
+        return NULL;
+    }
+    
+    if ((flags & UREGEX_CANON_EQ) != 0) {
+        status = U_REGEX_UNIMPLEMENTED;
+        return NULL;
+    }
+    
+    RegexPattern *This = new RegexPattern;
+    if (This == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if (U_FAILURE(This->fDeferredStatus)) {
+        status = This->fDeferredStatus;
+        delete This;
+        return NULL;
+    }
+    This->fFlags = flags;
+    
+    RegexCompile     compiler(This, status);
+    compiler.compile(regex, pe, status);
+    
+    if (U_FAILURE(status)) {
+        delete This;
+        This = NULL;
+    }
+    
+    return This;
+}
 
+
+//
+//   compile, UText mode
+//
+RegexPattern * U_EXPORT2
+RegexPattern::compile(UText                *regex,
+                      uint32_t             flags,
+                      UParseError          &pe,
+                      UErrorCode           &status)
+{
     if (U_FAILURE(status)) {
         return NULL;
     }
@@ -294,19 +363,42 @@ RegexPattern::compile(const UnicodeString &regex,
 }
 
 
+//
+//   compile with default flags, UText mode
+//
+RegexPattern * U_EXPORT2
+RegexPattern::compile(UText               *regex,
+                      UParseError         &pe,
+                      UErrorCode          &err)
+{
+    return compile(regex, 0, pe, err);
+}
+
 
 //
 //   compile with no UParseErr parameter.
 //
 RegexPattern * U_EXPORT2
-RegexPattern::compile( const UnicodeString &regex,
-        uint32_t             flags,
-        UErrorCode           &err)
+RegexPattern::compile(const UnicodeString &regex,
+                      uint32_t             flags,
+                      UErrorCode          &err)
 {
     UParseError pe;
     return compile(regex, flags, pe, err);
 }
 
+
+//
+//   compile with no UParseErr parameter, UText mode
+//
+RegexPattern * U_EXPORT2
+RegexPattern::compile(UText                *regex,
+                      uint32_t             flags,
+                      UErrorCode           &err)
+{
+    UParseError pe;
+    return compile(regex, flags, pe, err);
+}
 
 
 //---------------------------------------------------------------------
@@ -327,8 +419,21 @@ uint32_t RegexPattern::flags() const {
 RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
                                     UErrorCode          &status)  const {
     RegexMatcher    *retMatcher = matcher(status);
-    retMatcher->fDeferredStatus = status;
     if (retMatcher != NULL) {
+        retMatcher->fDeferredStatus = status;
+        retMatcher->reset(input);
+    }
+    return retMatcher;
+}
+
+//
+//   matcher, UText mode
+//
+RegexMatcher *RegexPattern::matcher(UText               *input,
+                                    UErrorCode          &status)  const {
+    RegexMatcher    *retMatcher = matcher(status);
+    if (retMatcher != NULL) {
+        retMatcher->fDeferredStatus = status;
         retMatcher->reset(input);
     }
     return retMatcher;
@@ -399,6 +504,31 @@ UBool U_EXPORT2 RegexPattern::matches(const UnicodeString   &regex,
 }
 
 
+//
+//   matches, UText mode
+//
+UBool U_EXPORT2 RegexPattern::matches(UText                *regex,
+                    UText           *input,
+                    UParseError     &pe,
+                    UErrorCode      &status) {
+
+    if (U_FAILURE(status)) {return FALSE;}
+
+    UBool         retVal;
+    RegexPattern *pat     = NULL;
+    RegexMatcher *matcher = NULL;
+
+    pat     = RegexPattern::compile(regex, 0, pe, status);
+    matcher = pat->matcher(input, status);
+    retVal  = matcher->matches(status);
+
+    delete matcher;
+    delete pat;
+    return retVal;
+}
+
+
+
 
 
 //---------------------------------------------------------------------
@@ -407,9 +537,40 @@ UBool U_EXPORT2 RegexPattern::matches(const UnicodeString   &regex,
 //
 //---------------------------------------------------------------------
 UnicodeString RegexPattern::pattern() const {
-    return fPattern;
+    if (fPattern == NULL) {
+        return UnicodeString();
+    } else {
+        UErrorCode status = U_ZERO_ERROR;
+        int64_t nativeLen = utext_nativeLength(fPattern);
+        int32_t len16 = utext_extract(fPattern, 0, nativeLen, NULL, 0, &status); // buffer overflow error
+        UnicodeString result;
+        
+        status = U_ZERO_ERROR;
+        UChar *resultChars = result.getBuffer(len16);
+        utext_extract(fPattern, 0, nativeLen, resultChars, len16, &status); // unterminated warning
+        result.releaseBuffer(len16);
+        
+        return result;
+    }
 }
 
+
+
+
+//---------------------------------------------------------------------
+//
+//   patternText
+//
+//---------------------------------------------------------------------
+UText *RegexPattern::patternText() const {
+    if (fPattern != NULL) {
+        return fPattern;
+    } else {
+        UErrorCode status = U_ZERO_ERROR;
+        RegexStaticSets::initGlobals(&status);
+        return RegexStaticSets::gStaticSets->fEmptyText;
+    }
+}
 
 
 
@@ -421,7 +582,28 @@ UnicodeString RegexPattern::pattern() const {
 int32_t  RegexPattern::split(const UnicodeString &input,
         UnicodeString    dest[],
         int32_t          destCapacity,
-        UErrorCode       &status) const
+        UErrorCode      &status) const
+{
+    if (U_FAILURE(status)) {
+        return 0;
+    };
+
+    RegexMatcher  m(this);
+    int32_t r = 0;
+    // Check m's status to make sure all is ok.
+    if (U_SUCCESS(m.fDeferredStatus)) {
+    	r = m.split(input, dest, destCapacity, status);
+    }
+    return r;
+}
+
+//
+//   split, UText mode
+//
+int32_t  RegexPattern::split(UText *input,
+        UText           *dest[],
+        int32_t          destCapacity,
+        UErrorCode      &status) const
 {
     if (U_FAILURE(status)) {
         return 0;
@@ -572,17 +754,24 @@ RegexPatternDump(const RegexPattern *This) {
     int      i;
 
     REGEX_DUMP_DEBUG_PRINTF(("Original Pattern:  "));
-    for (i=0; i<This->fPattern.length(); i++) {
-        REGEX_DUMP_DEBUG_PRINTF(("%c", This->fPattern.charAt(i)));
+    UChar32 c = utext_next32From(This->fPattern, 0);
+    while (c != U_SENTINEL) {
+        if (c<32 || c>256) {
+            c = '.';
+        }
+        REGEX_DUMP_DEBUG_PRINTF(("%c", c));
+        
+        c = UTEXT_NEXT32(This->fPattern);
     }
     REGEX_DUMP_DEBUG_PRINTF(("\n"));
     REGEX_DUMP_DEBUG_PRINTF(("   Min Match Length:  %d\n", This->fMinMatchLen));
     REGEX_DUMP_DEBUG_PRINTF(("   Match Start Type:  %s\n", START_OF_MATCH_STR(This->fStartType)));
     if (This->fStartType == START_STRING) {
-        REGEX_DUMP_DEBUG_PRINTF(("    Initial match sting: \""));
+        REGEX_DUMP_DEBUG_PRINTF(("    Initial match string: \""));
         for (i=This->fInitialStringIdx; i<This->fInitialStringIdx+This->fInitialStringLen; i++) {
             REGEX_DUMP_DEBUG_PRINTF(("%c", This->fLiteralText[i]));   // TODO:  non-printables, surrogates.
         }
+        REGEX_DUMP_DEBUG_PRINTF(("\"\n"));
 
     } else if (This->fStartType == START_SET) {
         int32_t numSetChars = This->fInitialChars->size();

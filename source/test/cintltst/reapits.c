@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2009, International Business Machines Corporation and
+ * Copyright (c) 2004-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -26,6 +26,7 @@
 #include "unicode/uloc.h"
 #include "unicode/uregex.h"
 #include "unicode/ustring.h"
+#include "unicode/utext.h"
 #include "cintltst.h"
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
@@ -86,11 +87,34 @@ static void test_assert_string(const char *expected, const UChar *actual, UBool 
 #define TEST_ASSERT_STRING(expected, actual, nulTerm) test_assert_string(expected, actual, nulTerm, __FILE__, __LINE__)
              
 
+static void test_assert_utext(const char *expected, UText *actual, const char *file, int line) {
+    UErrorCode status = U_ZERO_ERROR;
+    UText expectedText = UTEXT_INITIALIZER;
+    utext_openUTF8(&expectedText, expected, -1, &status);
+    utext_setNativeIndex(actual, 0);
+    if (utext_compare(&expectedText, -1, actual, -1) != 0) {
+        UChar32 c;
+        log_err("Failure at file %s, line %d, expected \"%s\", got \"", file, line, expected);
+        c = utext_next32From(actual, 0);
+        while (c != U_SENTINEL) {
+            if (0x20<c && c <0x7e) {
+                log_err("%c", c);
+            } else {
+                log_err("%#x", c);
+            }
+            c = UTEXT_NEXT32(actual);
+        }
+        log_err("\"\n");
+    }
+}
+
+#define TEST_ASSERT_UTEXT(expected, actual) test_assert_utext(expected, actual, __FILE__, __LINE__)
 
 
 
 static void TestRegexCAPI(void);
 static void TestBug4315(void);
+static void TestUTextAPI(void);
 
 void addURegexTest(TestNode** root);
 
@@ -98,6 +122,7 @@ void addURegexTest(TestNode** root)
 {
     addTest(root, &TestRegexCAPI, "regex/TestRegexCAPI");
     addTest(root, &TestBug4315,   "regex/TestBug4315");
+    addTest(root, &TestUTextAPI,  "regex/TestUTextAPI");
 }
 
 /*
@@ -1317,6 +1342,699 @@ static void TestBug4315(void) {
         free(textBuff);
     }
     uregex_close(theRegEx);
+}
+
+/* Based on TestRegexCAPI() */
+static void TestUTextAPI(void) {
+    UErrorCode           status = U_ZERO_ERROR;
+    URegularExpression  *re;
+    UText                patternText = UTEXT_INITIALIZER;
+    UChar                pat[200];
+
+    /* Mimimalist open/close */
+    utext_openUTF8(&patternText, "abc*", -1, &status);
+    re = uregex_openUText(&patternText, 0, 0, &status);
+    if (U_FAILURE(status)) {
+         log_err("Failed to open regular expression, line %d, error is \"%s\"\n", __LINE__, u_errorName(status));
+         return;
+    }
+    uregex_close(re);
+
+    /* Open with all flag values set */
+    status = U_ZERO_ERROR;
+    re = uregex_openUText(&patternText, 
+        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD,
+        0, &status);
+    TEST_ASSERT_SUCCESS(status);
+    uregex_close(re);
+
+    /* Open with an invalid flag */
+    status = U_ZERO_ERROR;
+    re = uregex_openUText(&patternText, 0x40000000, 0, &status);
+    TEST_ASSERT(status == U_REGEX_INVALID_FLAG);
+    uregex_close(re);
+
+    /* open with an invalid parameter */
+    status = U_ZERO_ERROR;
+    re = uregex_openUText(NULL,
+        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD, 0, &status);
+    TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR && re == NULL);
+
+    /*
+     *  clone
+     */
+    {
+        URegularExpression *clone1;
+        URegularExpression *clone2;
+        URegularExpression *clone3;
+        UChar  testString1[30];
+        UChar  testString2[30];
+        UBool  result;
+
+
+        status = U_ZERO_ERROR;
+        re = uregex_openUText(&patternText, 0, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        clone1 = uregex_clone(re, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(clone1 != NULL);
+
+        status = U_ZERO_ERROR;
+        clone2 = uregex_clone(re, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(clone2 != NULL);
+        uregex_close(re);
+
+        status = U_ZERO_ERROR;
+        clone3 = uregex_clone(clone2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(clone3 != NULL);
+
+        u_uastrncpy(testString1, "abcccd", sizeof(pat)/2);
+        u_uastrncpy(testString2, "xxxabcccd", sizeof(pat)/2);
+
+        status = U_ZERO_ERROR;
+        uregex_setText(clone1, testString1, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        result = uregex_lookingAt(clone1, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(result==TRUE);
+        
+        status = U_ZERO_ERROR;
+        uregex_setText(clone2, testString2, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        result = uregex_lookingAt(clone2, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(result==FALSE);
+        result = uregex_find(clone2, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(result==TRUE);
+
+        uregex_close(clone1);
+        uregex_close(clone2);
+        uregex_close(clone3);
+
+    }
+
+    /*
+     *  pattern() and patternText()
+     */
+    {
+        const UChar  *resultPat;
+        int32_t       resultLen;
+        UText        *resultText;
+        u_uastrncpy(pat, "hello", sizeof(pat)/2); /* for comparison */
+        status = U_ZERO_ERROR;
+        
+        utext_openUTF8(&patternText, "hello", -1, &status);
+        re = uregex_open(pat, -1, 0, NULL, &status);
+        resultPat = uregex_pattern(re, &resultLen, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS above should change too... */
+        if (U_SUCCESS(status)) {
+            TEST_ASSERT(resultLen == -1);
+            TEST_ASSERT(u_strcmp(resultPat, pat) == 0);
+        }
+        
+        resultText = uregex_patternUText(re, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("hello", resultText);
+
+        uregex_close(re);
+
+        status = U_ZERO_ERROR;
+        re = uregex_open(pat, 3, 0, NULL, &status);
+        resultPat = uregex_pattern(re, &resultLen, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS above should change too... */
+        if (U_SUCCESS(status)) {
+            TEST_ASSERT(resultLen == 3);
+            TEST_ASSERT(u_strncmp(resultPat, pat, 3) == 0);
+            TEST_ASSERT(u_strlen(resultPat) == 3);
+        }
+        
+        resultText = uregex_patternUText(re, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("hel", resultText);
+
+        uregex_close(re);
+    }
+
+    /*
+     *  setUText() and lookingAt()
+     */
+    {
+        UText  text1 = UTEXT_INITIALIZER;
+        UText  text2 = UTEXT_INITIALIZER;
+        UBool  result;
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&text1, "abcccd", -1, &status);
+        utext_openUTF8(&text2, "abcccxd", -1, &status);
+        
+        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        re = uregex_openUText(&patternText, 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* Operation before doing a setText should fail... */
+        status = U_ZERO_ERROR;
+        uregex_lookingAt(re, 0, &status);
+        TEST_ASSERT( status== U_REGEX_INVALID_STATE);
+
+        status = U_ZERO_ERROR;
+        uregex_setUText(re, &text1, &status);
+        result = uregex_lookingAt(re, 0, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        uregex_setUText(re, &text2, &status);
+        result = uregex_lookingAt(re, 0, &status);
+        TEST_ASSERT(result == FALSE);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        uregex_setUText(re, &text1, &status);
+        result = uregex_lookingAt(re, 0, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+
+        uregex_close(re);
+        utext_close(&text1);
+        utext_close(&text2);
+    }
+
+
+    /*
+     *  getText() and getUText()
+     */
+    {
+        UText  text1 = UTEXT_INITIALIZER;
+        UText  text2 = UTEXT_INITIALIZER;
+        UChar  text2Chars[20];
+        UText  *resultText;
+        const UChar   *result;
+        int32_t  textLength;
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&text1, "abcccd", -1, &status);
+        u_uastrncpy(text2Chars, "abcccxd", sizeof(text2)/2);
+        utext_openUChars(&text2, text2Chars, -1, &status);
+        
+        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        re = uregex_openUText(&patternText, 0, NULL, &status);
+
+        /* First set a UText */
+        uregex_setUText(re, &text1, &status);
+        resultText = uregex_getUText(re, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(resultText != &text1);
+        utext_setNativeIndex(resultText, 0);
+        utext_setNativeIndex(&text1, 0);
+        TEST_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        utext_close(resultText);
+        
+        result = uregex_getText(re, &textLength, &status); /* flattens UText into buffer */
+        TEST_ASSERT(textLength == -1 || textLength == 6);
+        resultText = uregex_getUText(re, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(resultText != &text1);
+        utext_setNativeIndex(resultText, 0);
+        utext_setNativeIndex(&text1, 0);
+        TEST_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        utext_close(resultText);
+
+        /* Then set a UChar * */
+        uregex_setText(re, text2Chars, 7, &status);
+        resultText = uregex_getUText(re, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        utext_setNativeIndex(resultText, 0);
+        utext_setNativeIndex(&text2, 0);
+        TEST_ASSERT(utext_compare(resultText, -1, &text2, -1) == 0);
+        utext_close(resultText);
+        result = uregex_getText(re, &textLength, &status);
+        TEST_ASSERT(textLength == 7);
+        
+        uregex_close(re);
+        utext_close(&text1);
+        utext_close(&text2);
+    }
+
+    /*
+     *  matches()
+     */
+    {
+        UText   text1 = UTEXT_INITIALIZER;
+        UBool   result;
+        UText   nullText = UTEXT_INITIALIZER;
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&text1, "abcccde", -1, &status);
+        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        re = uregex_openUText(&patternText, 0, NULL, &status);
+
+        uregex_setUText(re, &text1, &status);
+        result = uregex_matches(re, 0, &status);
+        TEST_ASSERT(result == FALSE);
+        TEST_ASSERT_SUCCESS(status);
+        uregex_close(re);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC(".?", 0, NULL, &status);
+        uregex_setUText(re, &text1, &status);
+        result = uregex_matches(re, 7, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&nullText, "", -1, &status);
+        uregex_setUText(re, &nullText, &status);
+        TEST_ASSERT_SUCCESS(status);
+        result = uregex_matches(re, 0, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+        
+        uregex_close(re);
+        utext_close(&text1);
+        utext_close(&nullText);
+    }
+
+
+    /*
+     *  lookingAt()    Used in setText test.
+     */
+
+
+    /*
+     *  find(), findNext, start, end, reset
+     */
+    {
+        UChar    text1[50];
+        UBool    result;
+        u_uastrncpy(text1, "012rx5rx890rxrx...",  sizeof(text1)/2);
+        status = U_ZERO_ERROR;
+        re = uregex_openC("rx", 0, NULL, &status);
+
+        uregex_setText(re, text1, -1, &status);
+        result = uregex_find(re, 0, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 3);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 5);
+        TEST_ASSERT_SUCCESS(status);
+
+        result = uregex_find(re, 9, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 11);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 13);
+        TEST_ASSERT_SUCCESS(status);
+
+        result = uregex_find(re, 14, &status);
+        TEST_ASSERT(result == FALSE);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        uregex_reset(re, 0, &status);
+
+        result = uregex_findNext(re, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 3);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 5);
+        TEST_ASSERT_SUCCESS(status);
+
+        result = uregex_findNext(re, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 6);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 8);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        uregex_reset(re, 12, &status);
+
+        result = uregex_findNext(re, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 13);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 15);
+        TEST_ASSERT_SUCCESS(status);
+
+        result = uregex_findNext(re, &status);
+        TEST_ASSERT(result == FALSE);
+        TEST_ASSERT_SUCCESS(status);
+
+        uregex_close(re);
+    }
+
+    /*
+     *  group()
+     */
+    {
+        UChar    text1[80];
+        UText   *actual;
+        UBool    result;
+        u_uastrncpy(text1, "noise abc interior def, and this is off the end",  sizeof(text1)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC("abc(.*?)def", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        uregex_setText(re, text1, -1, &status);
+        result = uregex_find(re, 0, &status);
+        TEST_ASSERT(result==TRUE);
+
+        /*  Capture Group 0, the full match.  Should succeed.  */
+        status = U_ZERO_ERROR;
+        actual = uregex_groupUText(re, 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("abc interior def", actual);
+        utext_close(actual);
+
+        /*  Capture group #1.  Should succeed. */
+        status = U_ZERO_ERROR;
+        actual = uregex_groupUText(re, 1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT(" interior ", actual);
+        utext_close(actual);
+
+        /*  Capture group out of range.  Error. */
+        status = U_ZERO_ERROR;
+        actual = uregex_groupUText(re, 2, NULL, &status);
+        TEST_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+        TEST_ASSERT(utext_nativeLength(actual) == 0);
+        utext_close(actual);
+
+        uregex_close(re);
+
+    }
+    
+    /*
+     *  replaceFirst()
+     */
+    {
+        UChar    text1[80];
+        UChar    text2[80];
+        UText    replText = UTEXT_INITIALIZER;
+        UText   *result;
+        
+        status = U_ZERO_ERROR;
+        u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+        utext_openUTF8(&replText, "<$1>", -1, &status);
+
+        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /*  Normal case, with match */
+        uregex_setText(re, text1, -1, &status);
+        result = uregex_replaceFirstUText(re, &replText, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("Replace <aa> x1x x...x.", result);
+        utext_close(result);
+
+        /* No match.  Text should copy to output with no changes.  */
+        uregex_setText(re, text2, -1, &status);
+        result = uregex_replaceFirstUText(re, &replText, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("No match here.", result);
+        utext_close(result);
+        
+        /* Unicode escapes */
+        uregex_setText(re, text1, -1, &status);
+        utext_openUTF8(&replText, "\\\\\\u0041$1\\U00000042$\\a", -1, &status);
+        result = uregex_replaceFirstUText(re, &replText, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("Replace \\AaaB$a x1x x...x.", result);
+        utext_close(result);
+
+        uregex_close(re);
+        utext_close(&replText);
+    }
+
+
+    /*
+     *  replaceAll()
+     */
+    {
+        UChar    text1[80];
+        UChar    text2[80];
+        UText    replText = UTEXT_INITIALIZER;
+        UText   *result;
+
+        status = U_ZERO_ERROR;
+        u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+        utext_openUTF8(&replText, "<$1>", -1, &status);
+
+        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /*  Normal case, with match */
+        uregex_setText(re, text1, -1, &status);
+        result = uregex_replaceAllUText(re, &replText, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("Replace <aa> <1> <...>.", result);
+        utext_close(result);
+
+        /* No match.  Text should copy to output with no changes.  */
+        uregex_setText(re, text2, -1, &status);
+        result = uregex_replaceAllUText(re, &replText, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_UTEXT("No match here.", result);
+        utext_close(result);
+
+        uregex_close(re);
+        utext_close(&replText);
+    }
+
+
+    /*
+     *  appendReplacement()
+     */
+    {
+        UChar    text[100];
+        UChar    repl[100];
+        UChar    buf[100];
+        UChar   *bufPtr;
+        int32_t  bufCap;
+
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC(".*", 0, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        u_uastrncpy(text, "whatever",  sizeof(text)/2);
+        u_uastrncpy(repl, "some other", sizeof(repl)/2);
+        uregex_setText(re, text, -1, &status);
+
+        /* match covers whole target string */
+        uregex_find(re, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        bufPtr = buf;
+        bufCap = sizeof(buf) / 2;
+        uregex_appendReplacement(re, repl, -1, &bufPtr, &bufCap, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("some other", buf, TRUE);
+
+        /* Match has \u \U escapes */
+        uregex_find(re, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        bufPtr = buf;
+        bufCap = sizeof(buf) / 2;
+        u_uastrncpy(repl, "abc\\u0041\\U00000042 \\\\ $ \\abc", sizeof(repl)/2);
+        uregex_appendReplacement(re, repl, -1, &bufPtr, &bufCap, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("abcAB \\ $ abc", buf, TRUE); 
+
+        uregex_close(re);
+    }
+
+
+    /*
+     *  appendReplacement(), appendTail() checked in replaceFirst(), replaceAll().
+     */
+
+    /*
+     *  splitUText()
+     */
+    {
+        UChar    textToSplit[80];
+        UChar    text2[80];
+        UText    *fields[10];
+        int32_t  numFields;
+
+        u_uastrncpy(textToSplit, "first : second:  third",  sizeof(textToSplit)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC(":", 0, NULL, &status);
+
+
+        /*  Simple split */ 
+
+        uregex_setText(re, textToSplit, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if (U_SUCCESS(status)) {
+            memset(fields, 0, sizeof(fields));
+            numFields = uregex_splitUText(re, fields, 10, &status);
+            TEST_ASSERT_SUCCESS(status);
+
+            /* The TEST_ASSERT_SUCCESS call above should change too... */
+            if(U_SUCCESS(status)) {
+                TEST_ASSERT(numFields == 3);
+                TEST_ASSERT_UTEXT("first ",  fields[0]);
+                TEST_ASSERT_UTEXT(" second", fields[1]);
+                TEST_ASSERT_UTEXT("  third", fields[2]);
+                TEST_ASSERT(fields[3] == NULL);
+            }
+        }
+
+        uregex_close(re);
+
+    
+        /*  Split with too few output strings available */
+        status = U_ZERO_ERROR;
+        re = uregex_openC(":", 0, NULL, &status);
+        uregex_setText(re, textToSplit, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            fields[0] = NULL;
+            fields[1] = NULL;
+            fields[2] = &patternText;
+            numFields = uregex_splitUText(re, fields, 2, &status);
+            TEST_ASSERT_SUCCESS(status);
+
+            /* The TEST_ASSERT_SUCCESS call above should change too... */
+            if(U_SUCCESS(status)) {
+                TEST_ASSERT(numFields == 2);
+                TEST_ASSERT_UTEXT("first ",  fields[0]);
+                TEST_ASSERT_UTEXT(" second:  third", fields[1]);
+                TEST_ASSERT(fields[2] == &patternText);
+            }
+        }
+
+        uregex_close(re);
+    }
+
+    /* splitUText(), part 2.  Patterns with capture groups.  The capture group text
+     *                   comes out as additional fields.  */
+    {
+        UChar    textToSplit[80];
+        UText    *fields[10];
+        int32_t  numFields;
+
+        u_uastrncpy(textToSplit, "first <tag-a> second<tag-b>  third",  sizeof(textToSplit)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC("<(.*?)>", 0, NULL, &status);
+
+        uregex_setText(re, textToSplit, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            memset(fields, 0, sizeof(fields));
+            numFields = uregex_splitUText(re, fields, 10, &status);
+            TEST_ASSERT_SUCCESS(status);
+
+            /* The TEST_ASSERT_SUCCESS call above should change too... */
+            if(U_SUCCESS(status)) {
+                TEST_ASSERT(numFields == 5);
+                TEST_ASSERT_UTEXT("first ",  fields[0]);
+                TEST_ASSERT_UTEXT("tag-a",   fields[1]);
+                TEST_ASSERT_UTEXT(" second", fields[2]);
+                TEST_ASSERT_UTEXT("tag-b",   fields[3]);
+                TEST_ASSERT_UTEXT("  third", fields[4]);
+                TEST_ASSERT(fields[5] == NULL);
+            }
+        }
+    
+        /*  Split with too few output strings available (2) */
+        status = U_ZERO_ERROR;
+        fields[0] = NULL;
+        fields[1] = NULL;
+        fields[2] = &patternText;
+        numFields = uregex_splitUText(re, fields, 2, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            TEST_ASSERT(numFields == 2);
+            TEST_ASSERT_UTEXT("first ",  fields[0]);
+            TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[1]);
+            TEST_ASSERT(fields[2] == &patternText);
+        }
+
+        /*  Split with too few output strings available (3) */
+        status = U_ZERO_ERROR;
+        fields[0] = NULL;
+        fields[1] = NULL;
+        fields[2] = NULL;
+        fields[3] = &patternText;
+        numFields = uregex_splitUText(re, fields, 3, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            TEST_ASSERT(numFields == 3);
+            TEST_ASSERT_UTEXT("first ",  fields[0]);
+            TEST_ASSERT_UTEXT("tag-a",   fields[1]);
+            TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[2]);
+            TEST_ASSERT(fields[3] == &patternText);
+        }
+
+        /*  Split with just enough output strings available (5) */
+        status = U_ZERO_ERROR;
+        fields[0] = NULL;
+        fields[1] = NULL;
+        fields[2] = NULL;
+        fields[3] = NULL;
+        fields[4] = NULL;
+        fields[5] = &patternText;
+        numFields = uregex_splitUText(re, fields, 5, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            TEST_ASSERT(numFields == 5);
+            TEST_ASSERT_UTEXT("first ",  fields[0]);
+            TEST_ASSERT_UTEXT("tag-a",   fields[1]);
+            TEST_ASSERT_UTEXT(" second", fields[2]);
+            TEST_ASSERT_UTEXT("tag-b",   fields[3]);
+            TEST_ASSERT_UTEXT("  third", fields[4]);
+            TEST_ASSERT(fields[5] == &patternText);
+        }
+
+        /* Split, end of text is a field delimiter.   */
+        status = U_ZERO_ERROR;
+        uregex_setText(re, textToSplit, strlen("first <tag-a> second<tag-b>"), &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* The TEST_ASSERT_SUCCESS call above should change too... */
+        if(U_SUCCESS(status)) {
+            memset(fields, 0, sizeof(fields));
+            fields[9] = &patternText;
+            numFields = uregex_splitUText(re, fields, 9, &status);
+            TEST_ASSERT_SUCCESS(status);
+
+            /* The TEST_ASSERT_SUCCESS call above should change too... */
+            if(U_SUCCESS(status)) {
+                TEST_ASSERT(numFields == 4);
+                TEST_ASSERT_UTEXT("first ",  fields[0]);
+                TEST_ASSERT_UTEXT("tag-a",   fields[1]);
+                TEST_ASSERT_UTEXT(" second", fields[2]);
+                TEST_ASSERT_UTEXT("tag-b",   fields[3]);
+                TEST_ASSERT(fields[4] == NULL);
+                TEST_ASSERT(fields[8] == NULL);
+                TEST_ASSERT(fields[9] == &patternText);
+            }
+        }
+
+        uregex_close(re);
+    }
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */

@@ -76,7 +76,7 @@ translit.o utrans.o esctrn.o unesctrn.o funcrepl.o strrepl.o tridpars.o \
 cpdtrans.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 nultrans.o remtrans.o casetrn.o titletrn.o tolowtrn.o toupptrn.o anytrans.o \
 name2uni.o uni2name.o nortrans.o quant.o transreg.o brktrans.o \
-regexcmp.o rematch.o repattrn.o regexst.o udatpg.o uregex.o uregexc.o \
+regexcmp.o rematch.o repattrn.o regexst.o regextxt.o udatpg.o uregex.o uregexc.o \
 ulocdata.o measfmt.o currfmt.o curramt.o currunit.o measure.o utmscale.o \
 csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o \
 wintzimpl.o windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o vtzone.o \

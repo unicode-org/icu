@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2009, International Business Machines Corporation and
+ * Copyright (c) 2005-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -58,6 +58,8 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
             if (exec) Ticket5560();  break;
         case 4: name = "Ticket6847";
             if (exec) Ticket6847();  break;
+        case 5: name = "ComparisonTest";
+            if (exec) ComparisonTest(); break;
         default: name = "";          break;
     }
 }
@@ -833,6 +835,476 @@ void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCoun
     }
 
     delete []buf;
+}
+
+
+//
+//  ComparisonTest()    Check the string comparison functions. Based on UnicodeStringTest::TestCompare()
+//
+void UTextTest::ComparisonTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString   test1Str("this is a test");
+    UnicodeString   test2Str("this is a test");
+    UnicodeString   test3Str("this is a test of the emergency broadcast system");
+    UnicodeString   test4Str("never say, \"this is a test\"!!");
+    
+    UText test1 = UTEXT_INITIALIZER;
+    UText test2 = UTEXT_INITIALIZER;
+    UText test3 = UTEXT_INITIALIZER;
+    UText test4 = UTEXT_INITIALIZER;
+    
+    UChar        uniChars[] = { 0x74, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 
+                                0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0 };
+    char            chars[] = { 0x74, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 
+                                0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0 };
+    
+    UText uniCharText = UTEXT_INITIALIZER;
+    UText charText = UTEXT_INITIALIZER;
+    
+    utext_openUnicodeString(&test1, &test1Str, &status);
+    utext_openUnicodeString(&test2, &test2Str, &status);
+    utext_openUnicodeString(&test3, &test3Str, &status);
+    utext_openUnicodeString(&test4, &test4Str, &status);
+
+    utext_openUChars(&uniCharText, uniChars, -1, &status);
+    utext_openUTF8(&charText, chars, -1, &status);
+    
+    TEST_SUCCESS(status);
+        
+    // test utext_compare(), simple
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, -1, &test2, -1) != 0) errln("utext_compare() failed, simple setup");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test1, -1, &test3, -1) >= 0) errln("utext_compare() failed, simple setup");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compare(&test1, -1, &test4, -1) <= 0) errln("utext_compare() failed, simple setup");
+    
+    // test utext_compareNativeLimit(), simple
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, -1, &test2, -1) != 0) errln("utext_compareNativeLimit() failed, simple setup");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test1, -1, &test3, -1) >= 0) errln("utext_compareNativeLimit() failed, simple setup");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compareNativeLimit(&test1, -1, &test4, -1) <= 0) errln("utext_compareNativeLimit() failed, simple setup");
+    
+    // test utext_compare(), one explicit length
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, 14, &test2, -1) != 0) errln("utext_compare() failed, one explicit length");
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test3, 14, &test2, -1) != 0) errln("utext_compare() failed, one explicit length");
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 12);
+    if (utext_compare(&test4, 14, &test2, -1) != 0) errln("utext_compare() failed, one explicit length and offset");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test3, 18, &test2, -1) <= 0) errln("utext_compare() failed, one explicit length");
+    
+    // test utext_compareNativeLimit(), one explicit length
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, 14, &test2, -1) != 0) errln("utext_compareNativeLimit() failed, one explicit length");
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test3, 14, &test2, -1) != 0) errln("utext_compareNativeLimit() failed, one explicit length");
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 12);
+    if (utext_compareNativeLimit(&test4, 26, &test2, -1) != 0) errln("utext_compareNativeLimit() failed, one explicit length and limit");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test3, 18, &test2, -1) <= 0) errln("utext_compareNativeLimit() failed, one explicit length");
+    
+    // test utext_compare(), UChar-based UText
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test2, -1, &uniCharText, -1) != 0) errln("utext_compare() failed, UChar-based UText");
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test3, -1, &uniCharText, -1) <= 0) errln("utext_compare() failed, UChar-based UText");
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compare(&test4, -1, &uniCharText, -1) >= 0) errln("utext_compare() failed, UChar-based UText");
+    
+    // test utext_compareNativeLimit(), UChar-based UText
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test2, -1, &uniCharText, -1) != 0) errln("utext_compareNativeLimit() failed, UChar-based UText");
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test3, -1, &uniCharText, -1) <= 0) errln("utext_compareNativeLimit() failed, UChar-based UText");
+    UTEXT_SETNATIVEINDEX(&uniCharText, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compareNativeLimit(&test4, -1, &uniCharText, -1) >= 0) errln("utext_compareNativeLimit() failed, UChar-based UText");
+    
+    // test utext_compare(), UTF8-based UText
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test2, -1, &charText, -1) != 0) errln("utext_compare() failed, UTF8-based UText");
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test3, -1, &charText, -1) <= 0) errln("utext_compare() failed, UTF8-based UText");
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compare(&test4, -1, &charText, -1) >= 0) errln("utext_compare() failed, UTF8-based UText");
+    
+    // test utext_compareNativeLimit(), UTF8-based UText
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test2, -1, &charText, -1) != 0) errln("utext_compareNativeLimit() failed, UTF8-based UText");
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test3, -1, &charText, -1) <= 0) errln("utext_compareNativeLimit() failed, UTF8-based UText");
+    UTEXT_SETNATIVEINDEX(&charText, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 0);
+    if (utext_compareNativeLimit(&test4, -1, &charText, -1) >= 0) errln("utext_compareNativeLimit() failed, UTF8-based UText");
+    
+    // test utext_compare(), length
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, -1, &test2, 4) != 0) errln("utext_compare() failed, one length");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, 5, &test2, 4) <= 0) errln("utext_compare() failed, both lengths");
+    
+    // test utext_compareNativeLimit(), limit
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, -1, &test2, 4) != 0) errln("utext_compareNativeLimit() failed, one limit");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, 5, &test2, 4) <= 0) errln("utext_compareNativeLimit() failed, both limits");
+    
+    // test utext_compare(), both explicit offsets and lengths
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, 14, &test2, 14) != 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compare(&test1, 14, &test3, 14) != 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 12);
+    if (utext_compare(&test1, 14, &test4, 14) != 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compare(&test1, 4, &test2, 4) >= 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test3, 22);
+    if (utext_compare(&test1, 4, &test3, 9) <= 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test4, 22);
+    if (utext_compare(&test1, 4, &test4, 4) != 0) errln("utext_compare() failed, both explicit offsets and lengths");
+    
+    // test utext_compareNativeLimit(), both explicit offsets and limits
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, 14, &test2, 14) != 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test3, 0);
+    if (utext_compareNativeLimit(&test1, 14, &test3, 14) != 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    UTEXT_SETNATIVEINDEX(&test1, 0);
+    UTEXT_SETNATIVEINDEX(&test4, 12);
+    if (utext_compareNativeLimit(&test1, 14, &test4, 26) != 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test2, 0);
+    if (utext_compareNativeLimit(&test1, 14, &test2, 4) >= 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test3, 22);
+    if (utext_compareNativeLimit(&test1, 14, &test3, 31) <= 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    UTEXT_SETNATIVEINDEX(&test1, 10);
+    UTEXT_SETNATIVEINDEX(&test4, 22);
+    if (utext_compareNativeLimit(&test1, 14, &test4, 26) != 0) errln("utext_compareNativeLimit() failed, both explicit offsets and limits");
+    
+    /* test caseCompare() */
+    {
+        static const UChar
+        _mixed[]=               { 0x61, 0x42, 0x131, 0x3a3, 0xdf,       0x130,       0x49,  0xfb03,           0xd93f, 0xdfff, 0 },
+        _otherDefault[]=        { 0x41, 0x62, 0x131, 0x3c3, 0x73, 0x53, 0x69, 0x307, 0x69,  0x46, 0x66, 0x49, 0xd93f, 0xdfff, 0 },
+        _otherExcludeSpecialI[]={ 0x41, 0x62, 0x131, 0x3c3, 0x53, 0x73, 0x69,        0x131, 0x66, 0x46, 0x69, 0xd93f, 0xdfff, 0 },
+        _different[]=           { 0x41, 0x62, 0x131, 0x3c3, 0x73, 0x53, 0x130,       0x49,  0x46, 0x66, 0x49, 0xd93f, 0xdffd, 0 };
+        
+        UText
+        mixed = UTEXT_INITIALIZER,
+        otherDefault = UTEXT_INITIALIZER,
+        otherExcludeSpecialI = UTEXT_INITIALIZER,
+        different = UTEXT_INITIALIZER;
+        
+        utext_openUChars(&mixed, _mixed, -1, &status);
+        utext_openUChars(&otherDefault, _otherDefault, -1, &status);
+        utext_openUChars(&otherExcludeSpecialI, _otherExcludeSpecialI, -1, &status);
+        utext_openUChars(&different, _different, -1, &status);
+        
+        TEST_SUCCESS(status);
+        
+        int32_t result;
+        
+        /* test default options */
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherDefault, 0);
+        result = utext_caseCompare(&mixed, -1, &otherDefault, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (other, default) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherDefault, 0);
+        result = utext_caseCompareNativeLimit(&mixed, -1, &otherDefault, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (other, default) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+        
+        /* test excluding special I */
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherExcludeSpecialI, 0);
+        result = utext_caseCompare(&mixed, -1, &otherExcludeSpecialI, -1, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherExcludeSpecialI, 0);
+        result = utext_caseCompareNativeLimit(&mixed, -1, &otherExcludeSpecialI, -1, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherDefault, 0);
+        result = utext_caseCompare(&mixed, -1, &otherDefault, -1, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &status);
+        if (0 == result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (other, U_FOLD_CASE_EXCLUDE_SPECIAL_I) gives %ld (should be nonzero) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&otherDefault, 0);
+        result = utext_caseCompareNativeLimit(&mixed, -1, &otherDefault, -1, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &status);
+        if (0 == result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (other, U_FOLD_CASE_EXCLUDE_SPECIAL_I) gives %ld (should be nonzero) (%s)\n", result, u_errorName(status));
+        }
+        
+        /* test against different string */
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&different, 0);
+        result = utext_caseCompare(&mixed, -1, &different, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 >= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (different, default) gives %ld (should be positive) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 0);
+        UTEXT_SETNATIVEINDEX(&different, 0);
+        result = utext_caseCompareNativeLimit(&mixed, -1, &different, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 >= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (different, default) gives %ld (should be positive) (%s)\n", result, u_errorName(status));
+        }
+
+        /* test caseCompare() - include the folded sharp s (U+00df) with different lengths */
+        UTEXT_SETNATIVEINDEX(&mixed, 1);
+        UTEXT_SETNATIVEINDEX(&different, 1);
+        result = utext_caseCompare(&mixed, 4, &different, 5, U_FOLD_CASE_DEFAULT, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (mixed[1-5), different[1-6), default) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 1);
+        UTEXT_SETNATIVEINDEX(&different, 1);
+        result = utext_caseCompareNativeLimit(&mixed, 5, &different, 6, U_FOLD_CASE_DEFAULT, &status);
+        if (0 != result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (mixed[1-5), different[1-6), default) gives %ld (should be 0) (%s)\n", result, u_errorName(status));
+        }
+
+        /* test caseCompare() - stop in the middle of the sharp s (U+00df) */
+        UTEXT_SETNATIVEINDEX(&mixed, 1);
+        UTEXT_SETNATIVEINDEX(&different, 1);
+        result = utext_caseCompare(&mixed, 4, &different, 4, U_FOLD_CASE_DEFAULT, &status);
+        if (0 >= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare (mixed[1-5), different[1-5), default) gives %ld (should be positive) (%s)\n", result, u_errorName(status));
+        }
+        UTEXT_SETNATIVEINDEX(&mixed, 1);
+        UTEXT_SETNATIVEINDEX(&different, 1);
+        result = utext_caseCompareNativeLimit(&mixed, 5, &different, 5, U_FOLD_CASE_DEFAULT, &status);
+        if (0 >= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompareNativeLimit (mixed[1-5), different[1-5), default) gives %ld (should be positive) (%s)\n", result, u_errorName(status));
+        }
+    }
+    
+    /* test surrogates in comparison */
+    {
+        static const UChar
+        _before[] = { 0x65, 0xd800, 0xd800, 0xdc01, 0x65, 0x00 },
+        _after[]  = { 0x65, 0xd800, 0xdc00, 0x65, 0x00 };
+        
+        UText
+        before = UTEXT_INITIALIZER,
+        after  = UTEXT_INITIALIZER;
+        
+        utext_openUChars(&before, _before, -1, &status);
+        utext_openUChars(&after, _after, -1, &status);
+        
+        TEST_SUCCESS(status);
+        int32_t result;
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_compare(&before, -1, &after, -1);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_compare ({ 65, d800, 10001, 65 }, { 65, 10000, 65 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_compare(&before, 3, &after, 3);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_compare with lengths ({ 65, d800, 10001, 65 }, { 65, 10000, 65 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_caseCompare(&before, -1, &after, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare ({ 65, d800, 10001, 65 }, { 65, 10000, 65 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_caseCompare(&before, 3, &after, 3, U_FOLD_CASE_DEFAULT, &status);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare with lengths ({ 65, d800, 10001, 65 }, { 65, 10000, 65 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        utext_close(&before);
+        utext_close(&after);
+    }
+    
+    /* test surrogates at end of string */
+    {
+        static const UChar
+        _before[] = { 0x65, 0xd800, 0xd800, 0xdc01, 0x00 },
+        _after[]  = { 0x65, 0xd800, 0xdc00, 0x00 };
+        
+        UText
+        before = UTEXT_INITIALIZER,
+        after  = UTEXT_INITIALIZER;
+        
+        utext_openUChars(&before, _before, -1, &status);
+        utext_openUChars(&after, _after, -1, &status);
+        
+        TEST_SUCCESS(status);
+        int32_t result;
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_compare(&before, -1, &after, -1);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_compare ({ 65, d800, 10001 }, { 65, 10000 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        UTEXT_SETNATIVEINDEX(&before, 1);
+        UTEXT_SETNATIVEINDEX(&after, 1);
+        result = utext_caseCompare(&before, -1, &after, -1, U_FOLD_CASE_DEFAULT, &status);
+        if (0 <= result || U_FAILURE(status)) {
+            errln("error: utext_caseCompare ({ 65, d800, 10001 }, { 65, 10000 }) gives %ld (should be negative) (%s)\n", result, u_errorName(status));
+        }
+        
+        utext_close(&before);
+        utext_close(&after);
+    }
+    
+    /* test empty strings */
+    {
+        UChar zero16 = 0;
+        char zero8 = 0;
+        UText emptyUChar = UTEXT_INITIALIZER;
+        UText emptyUTF8 = UTEXT_INITIALIZER;
+        UText nullUChar = UTEXT_INITIALIZER;
+        UText nullUTF8 = UTEXT_INITIALIZER;
+        
+        utext_openUChars(&emptyUChar, &zero16, -1, &status);
+        utext_openUTF8(&emptyUTF8, &zero8, -1, &status);
+        utext_openUChars(&nullUChar, NULL, 0, &status);
+        utext_openUTF8(&nullUTF8, NULL, 0, &status);
+        
+        if (utext_compare(&emptyUChar, -1, &emptyUTF8, -1) != 0) {
+            errln("error: utext_compare(&emptyUChar, -1, &emptyUTF8, -1) != 0");
+        }
+        if (utext_compare(&emptyUChar, -1, &nullUChar, -1) != 0) {
+            errln("error: utext_compare(&emptyUChar, -1, &nullUChar, -1) != 0");
+        }
+        if (utext_compare(&emptyUChar, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compare(&emptyUChar, -1, &nullUTF8, -1) != 0");
+        }
+        if (utext_compare(&emptyUTF8, -1, &nullUChar, -1) != 0) {
+            errln("error: utext_compare(&emptyUTF8, -1, &nullUChar, -1) != 0");
+        }
+        if (utext_compare(&emptyUTF8, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compare(&emptyUTF8, -1, &nullUTF8, -1) != 0");
+        }
+        if (utext_compare(&nullUChar, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compare(&nullUChar, -1, &nullUTF8, -1) != 0");
+        }
+
+        if (utext_compareNativeLimit(&emptyUChar, -1, &emptyUTF8, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&emptyUChar, -1, &emptyUTF8, -1) != 0");
+        }
+        if (utext_compareNativeLimit(&emptyUChar, -1, &nullUChar, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&emptyUChar, -1, &nullUChar, -1) != 0");
+        }
+        if (utext_compareNativeLimit(&emptyUChar, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&emptyUChar, -1, &nullUTF8, -1) != 0");
+        }
+        if (utext_compareNativeLimit(&emptyUTF8, -1, &nullUChar, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&emptyUTF8, -1, &nullUChar, -1) != 0");
+        }
+        if (utext_compareNativeLimit(&emptyUTF8, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&emptyUTF8, -1, &nullUTF8, -1) != 0");
+        }
+        if (utext_compareNativeLimit(&nullUChar, -1, &nullUTF8, -1) != 0) {
+            errln("error: utext_compareNativeLimit(&nullUChar, -1, &nullUTF8, -1) != 0");
+        }
+
+        if (utext_caseCompare(&emptyUChar, -1, &emptyUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&emptyUChar, -1, &emptyUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompare(&emptyUChar, -1, &nullUChar, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&emptyUChar, -1, &nullUChar, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompare(&emptyUChar, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&emptyUChar, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompare(&emptyUTF8, -1, &nullUChar, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&emptyUTF8, -1, &nullUChar, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompare(&emptyUTF8, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&emptyUTF8, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompare(&nullUChar, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompare(&nullUChar, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+
+        if (utext_caseCompareNativeLimit(&emptyUChar, -1, &emptyUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&emptyUChar, -1, &emptyUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompareNativeLimit(&emptyUChar, -1, &nullUChar, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&emptyUChar, -1, &nullUChar, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompareNativeLimit(&emptyUChar, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&emptyUChar, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompareNativeLimit(&emptyUTF8, -1, &nullUChar, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&emptyUTF8, -1, &nullUChar, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompareNativeLimit(&emptyUTF8, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&emptyUTF8, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+        if (utext_caseCompareNativeLimit(&nullUChar, -1, &nullUTF8, -1, 0, &status) != 0) {
+            errln("error: utext_caseCompareNativeLimit(&nullUChar, -1, &nullUTF8, -1, 0, &status) != 0");
+        }
+        
+        utext_close(&emptyUChar);
+        utext_close(&emptyUTF8);
+        utext_close(&nullUChar);
+        utext_close(&nullUTF8);
+    }
 }
 
 
