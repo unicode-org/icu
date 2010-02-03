@@ -8,7 +8,7 @@ import com.ibm.icu.util.VersionInfo;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests mfc */
-/* Copyright (c) IBM Corporation 1996-2009. All Rights Reserved. */
+/* Copyright (c) IBM Corporation 1996-2010. All Rights Reserved. */
 /* ------------------------------------------------------------------ */
 /* DiagBigDecimal */
 /*                                                                    */
@@ -4547,7 +4547,12 @@ public class DiagBigDecimal extends TestFmwk {
         d = d / ((double) 10);
         (new Test("val211")).ok = (com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.09");
         d = d / ((double) 10);
-        (new Test("val212")).ok = (com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.0090");
+        // The primitive double 0.009 is different in java 7. In java <= 6, there is a trailing 0 (e.g 0.0090).
+        if (System.getProperty("java.version").charAt(2) >= '7') {
+            (new Test("val212")).ok = (com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.009");
+        } else {
+            (new Test("val212")).ok = (com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.0090");
+        }
         d = d / ((double) 10);
         (new Test("val213")).ok = (com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("9.0E-4");
         d = d / ((double) 10);
