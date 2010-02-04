@@ -7,7 +7,6 @@
 package com.ibm.icu.text;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.VersionInfo;
 
@@ -122,18 +121,22 @@ public final class Normalizer implements Cloneable {
     //-------------------------------------------------------------------------
     // Private data
     //-------------------------------------------------------------------------  
-    private char[] buffer = new char[100];
-    private int bufferStart = 0;
-    private int bufferPos   = 0;
-    private int bufferLimit = 0;
 
     // The input text and our position in it
     private UCharacterIterator  text;
-    private Mode                mode = NFC;
-    private int                 options = 0;
+    private Normalizer2         norm2;
+    private Mode                mode;
+    private int                 options;
+
+    // The normalization buffer is the result of normalization
+    // of the source in [currentIndex..nextIndex[ .
     private int                 currentIndex;
     private int                 nextIndex;
-    
+
+    // A buffer for holding intermediate results
+    private StringBuilder       buffer;
+    private int                 bufferPos;
+
     /**
      * Options bit set value to select Unicode 3.2 normalization
      * (except NormalizationCorrections).
@@ -667,6 +670,8 @@ public final class Normalizer implements Cloneable {
         this.text = UCharacterIterator.getInstance(str);
         this.mode = mode; 
         this.options=opt;
+        norm2 = mode.getNormalizer2(opt);
+        buffer = new StringBuilder();
     }
 
     /**
@@ -685,13 +690,13 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */
     public Normalizer(CharacterIterator iter, Mode mode, int opt) {
-        this.text = UCharacterIterator.getInstance(
-                                                   (CharacterIterator)iter.clone()
-                                                   );
+        this.text = UCharacterIterator.getInstance((CharacterIterator)iter.clone());
         this.mode = mode;
         this.options = opt;
+        norm2 = mode.getNormalizer2(opt);
+        buffer = new StringBuilder();
     }
-    
+
     /**
      * Creates a new <tt>Normalizer</tt> object for iterating over the
      * normalized form of the given text.
@@ -708,6 +713,8 @@ public final class Normalizer implements Cloneable {
             this.text     = (UCharacterIterator)iter.clone();
             this.mode     = mode;
             this.options  = options;
+            norm2 = mode.getNormalizer2(options);
+            buffer = new StringBuilder();
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e.toString());
         }
@@ -727,18 +734,20 @@ public final class Normalizer implements Cloneable {
         try {
             Normalizer copy = (Normalizer) super.clone();
             copy.text = (UCharacterIterator) text.clone();
-            //clone the internal buffer
-            if (buffer != null) {
-                copy.buffer = new char[buffer.length];
-                System.arraycopy(buffer,0,copy.buffer,0,buffer.length);
-            }
+            copy.mode = mode;
+            copy.options = options;
+            copy.norm2 = norm2;
+            copy.buffer = new StringBuilder(buffer);
+            copy.bufferPos = bufferPos;
+            copy.currentIndex = currentIndex;
+            copy.nextIndex = nextIndex;
             return copy;
         }
         catch (CloneNotSupportedException e) {
-            throw new IllegalStateException(e.toString());
+            throw new IllegalStateException(e);
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Static Utility methods
     //--------------------------------------------------------------------------
@@ -1332,7 +1341,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static int compare(int char32a, int char32b, int options) {
-        return internalCompare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options);
+        return internalCompare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options|INPUT_IS_FCD);
     }
 
     /**
@@ -1617,18 +1626,18 @@ public final class Normalizer implements Cloneable {
     //-------------------------------------------------------------------------
         
     /**
-     * Return the current character in the normalized text->
+     * Return the current character in the normalized text.
      * @return The codepoint as an int
      * @stable ICU 2.8
      */
     public int current() {
-        if(bufferPos<bufferLimit || nextNormalize()) {
-            return getCodePointAt(bufferPos);
+        if(bufferPos<buffer.length() || nextNormalize()) {
+            return buffer.codePointAt(bufferPos);
         } else {
             return DONE;
         }
     }
-        
+
     /**
      * Return the next character in the normalized text and advance
      * the iteration position by one.  If the end
@@ -1637,9 +1646,9 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public int next() {
-        if(bufferPos<bufferLimit ||  nextNormalize()) {
-            int c=getCodePointAt(bufferPos);
-            bufferPos+=(c>0xFFFF) ? 2 : 1;
+        if(bufferPos<buffer.length() ||  nextNormalize()) {
+            int c=buffer.codePointAt(bufferPos);
+            bufferPos+=Character.charCount(c);
             return c;
         } else {
             return DONE;
@@ -1656,8 +1665,8 @@ public final class Normalizer implements Cloneable {
      */
     public int previous() {
         if(bufferPos>0 || previousNormalize()) {
-            int c=getCodePointAt(bufferPos-1);
-            bufferPos-=(c>0xFFFF) ? 2 : 1;
+            int c=buffer.codePointBefore(bufferPos);
+            bufferPos-=Character.charCount(c);
             return c;
         } else {
             return DONE;
@@ -1670,7 +1679,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public void reset() {
-        text.setIndex(0);
+        text.setToStart();
         currentIndex=nextIndex=0;
         clearBuffer();
     }
@@ -1685,8 +1694,8 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public void setIndexOnly(int index) {
-        text.setIndex(index);
-        currentIndex=nextIndex=index; // validates index
+        text.setIndex(index);  // validates index
+        currentIndex=nextIndex=index;
         clearBuffer();
     }
         
@@ -1701,7 +1710,7 @@ public final class Normalizer implements Cloneable {
      * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
      * returned from <tt>setIndex</tt> and {@link #getIndex}.
      * <p>
-     * @param index the desired index in the input text->
+     * @param index the desired index in the input text.
      *
      * @return   the first normalized character that is the result of iterating
      *            forward starting at the given index.
@@ -1741,8 +1750,8 @@ public final class Normalizer implements Cloneable {
         return endIndex();
     }
     /**
-     * Return the first character in the normalized text->  This resets
-     * the <tt>Normalizer's</tt> position to the beginning of the text->
+     * Return the first character in the normalized text.  This resets
+     * the <tt>Normalizer's</tt> position to the beginning of the text.
      * @return The codepoint as an int
      * @stable ICU 2.8
      */
@@ -1752,7 +1761,7 @@ public final class Normalizer implements Cloneable {
     }
         
     /**
-     * Return the last character in the normalized text->  This resets
+     * Return the last character in the normalized text.  This resets
      * the <tt>Normalizer's</tt> position to be just before the
      * the input text corresponding to that normalized character.
      * @return The codepoint as an int
@@ -1764,7 +1773,7 @@ public final class Normalizer implements Cloneable {
         clearBuffer();
         return previous();
     }
-        
+
     /**
      * Retrieve the current iteration position in the input text that is
      * being normalized.  This method is useful in applications such as
@@ -1781,13 +1790,13 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public int getIndex() {
-        if(bufferPos<bufferLimit) {
+        if(bufferPos<buffer.length()) {
             return currentIndex;
         } else {
             return nextIndex;
         }
     }
-        
+
     /**
      * Retrieve the index of the start of the input text. This is the begin 
      * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
@@ -1798,9 +1807,9 @@ public final class Normalizer implements Cloneable {
     public int startIndex() {
         return 0;
     }
-        
+
     /**
-     * Retrieve the index of the end of the input text->  This is the end index
+     * Retrieve the index of the end of the input text.  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
      * @return The current iteration position
@@ -1809,7 +1818,7 @@ public final class Normalizer implements Cloneable {
     public int endIndex() {
         return text.getLength();
     }
-    
+
     //-------------------------------------------------------------------------
     // Property access methods
     //-------------------------------------------------------------------------
@@ -1841,6 +1850,7 @@ public final class Normalizer implements Cloneable {
      */
     public void setMode(Mode newMode) {
         mode = newMode;
+        norm2 = mode.getNormalizer2(options);
     }
     /**
      * Return the basic operation performed by this <tt>Normalizer</tt>
@@ -1875,8 +1885,9 @@ public final class Normalizer implements Cloneable {
         } else {
             options &= (~option);
         }
+        norm2 = mode.getNormalizer2(options);
     }
-        
+
     /**
      * Determine whether an option is turned on or off.
      * <p>
@@ -1924,12 +1935,11 @@ public final class Normalizer implements Cloneable {
     
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position is set to the beginning of the input text->
+     * The iteration position is set to the beginning of the input text.
      * @param newText   The new string to be normalized.
      * @stable ICU 2.8
      */
     public void setText(StringBuffer newText) {
-        
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
@@ -1937,15 +1947,14 @@ public final class Normalizer implements Cloneable {
         text = newIter;
         reset();
     }
-        
+
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position is set to the beginning of the input text->
+     * The iteration position is set to the beginning of the input text.
      * @param newText   The new string to be normalized.
      * @stable ICU 2.8
      */
     public void setText(char[] newText) {
-        
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
@@ -1953,15 +1962,14 @@ public final class Normalizer implements Cloneable {
         text = newIter;
         reset();
     }
-    
+
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position is set to the beginning of the input text->
+     * The iteration position is set to the beginning of the input text.
      * @param newText   The new string to be normalized.
      * @stable ICU 2.8
      */
     public void setText(String newText) {
-            
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
@@ -1969,15 +1977,14 @@ public final class Normalizer implements Cloneable {
         text = newIter;
         reset();
     }
-    
+
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position is set to the beginning of the input text->
+     * The iteration position is set to the beginning of the input text.
      * @param newText   The new string to be normalized.
      * @stable ICU 2.8
      */
     public void setText(CharacterIterator newText) {
-        
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
             throw new IllegalStateException("Could not create a new UCharacterIterator");
@@ -1985,7 +1992,7 @@ public final class Normalizer implements Cloneable {
         text = newIter;
         reset();
     }
-    
+
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the string.
@@ -2004,7 +2011,7 @@ public final class Normalizer implements Cloneable {
             throw new IllegalStateException("Could not clone the UCharacterIterator");
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // Private utility methods
     //-------------------------------------------------------------------------
@@ -2466,56 +2473,54 @@ public final class Normalizer implements Cloneable {
     } 
 
     private void clearBuffer() {
-        bufferLimit=bufferStart=bufferPos=0;
+        buffer.delete(0, 0x7fffffff);
+        bufferPos=0;
     }
-        
+
     private boolean nextNormalize() {
-        
         clearBuffer();
         currentIndex=nextIndex;
         text.setIndex(nextIndex);
-                
-        bufferLimit=next(text,buffer,bufferStart,buffer.length,mode,true,null,options);
-                        
+        // Skip at least one character so we make progress.
+        int c=text.nextCodePoint();
+        if(c<0) {
+            return false;
+        }
+        StringBuilder segment=new StringBuilder().appendCodePoint(c);
+        while((c=text.nextCodePoint())>=0) {
+            if(norm2.hasBoundaryBefore(c)) {
+                text.moveCodePointIndex(-1);
+                break;
+            }
+            segment.appendCodePoint(c);
+        }
         nextIndex=text.getIndex();
-        return (bufferLimit>0);
+        norm2.normalize(segment, buffer);
+        return buffer.length()!=0;
     }
-        
-    private boolean     previousNormalize() {
 
+    private boolean previousNormalize() {
         clearBuffer();
         nextIndex=currentIndex;
         text.setIndex(currentIndex);
-        bufferLimit=previous(text,buffer,bufferStart,buffer.length,mode,true,null,options);
-                
-        currentIndex=text.getIndex();
-        bufferPos = bufferLimit;
-        return bufferLimit>0;
-    }
-    
-    private int getCodePointAt(int index) {
-        if( UTF16.isSurrogate(buffer[index])) {
-            if(UTF16.isLeadSurrogate(buffer[index])) {
-                if((index+1)<bufferLimit &&
-                   UTF16.isTrailSurrogate(buffer[index+1])) {
-                    return UCharacterProperty.getRawSupplementary(
-                                                                  buffer[index], 
-                                                                  buffer[index+1]
-                                                                  );
-                }
-            }else if(UTF16.isTrailSurrogate(buffer[index])) {
-                if(index>0 && UTF16.isLeadSurrogate(buffer[index-1])) {
-                    return UCharacterProperty.getRawSupplementary(
-                                                                  buffer[index-1],
-                                                                  buffer[index]
-                                                                  );
-                }
-            }   
+        StringBuilder segment=new StringBuilder();
+        int c;
+        while((c=text.previousCodePoint())>=0) {
+            if(c<=0xffff) {
+                segment.insert(0, (char)c);
+            } else {
+                segment.insert(0, Character.toChars(c));
+            }
+            if(norm2.hasBoundaryBefore(c)) {
+                break;
+            }
         }
-        return buffer[index];
-        
+        currentIndex=text.getIndex();
+        norm2.normalize(segment, buffer);
+        bufferPos=buffer.length();
+        return buffer.length()!=0;
     }
-    
+
     /**
      * Internal API
      * @internal
@@ -2525,7 +2530,6 @@ public final class Normalizer implements Cloneable {
         return mode.isNFSkippable(c);
     }    
 
-        
     // TODO: Consider proposing this function as public API.
     private static int internalCompare(CharSequence s1, CharSequence s2, int options) {
         int normOptions=options>>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
