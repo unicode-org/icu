@@ -1426,7 +1426,7 @@ void Normalizer2Impl::setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t no
                 } else {
                     norm16=0;
                 }
-                norm16|=*mapping>>8;  // tccc
+                norm16|=firstUnit>>8;  // tccc
             }
         }
         utrie2_setRange32(newFCDTrie, start, end, norm16, TRUE, &errorCode);
