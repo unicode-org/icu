@@ -24,9 +24,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
-#include <sys/time.h>
-
 #define SUPPORT_MUTATING_INPUT_STRING   0
 
 
