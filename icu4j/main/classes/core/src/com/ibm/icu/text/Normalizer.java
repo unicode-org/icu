@@ -12,7 +12,6 @@ import com.ibm.icu.util.VersionInfo;
 
 import java.nio.CharBuffer;
 import java.text.CharacterIterator;
-import com.ibm.icu.impl.Utility;
 
 /**
  * Unicode Normalization 
@@ -115,13 +114,7 @@ import com.ibm.icu.impl.Utility;
  * For more usage examples, see the Unicode Standard Annex.
  * @stable ICU 2.8
  */
-
 public final class Normalizer implements Cloneable {
-    
-    //-------------------------------------------------------------------------
-    // Private data
-    //-------------------------------------------------------------------------  
-
     // The input text and our position in it
     private UCharacterIterator  text;
     private Normalizer2         norm2;
@@ -166,12 +159,13 @@ public final class Normalizer implements Cloneable {
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.6
          */
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit, 
                                 UnicodeSet nx) {
+            // TODO: deprecate or remove this method
             int srcLen = (srcLimit - srcStart);
             int destLen = (destLimit - destStart);
             if( srcLen > destLen ) {
@@ -182,61 +176,64 @@ public final class Normalizer implements Cloneable {
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.6
          */
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit,
                                 int options) {
+            // TODO: deprecate or remove this method
             return normalize(   src, srcStart, srcLimit,
                                 dest,destStart,destLimit,
-                                NormalizerImpl.getNX(options)
-                                );
+                                null);
         }
         
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.8
          */
         protected int getMinC() {
-            return -1;
+            return -1;  // TODO: deprecate or remove this method
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.8
          */
         protected int getMask() {
-            return -1;
+            return -1;  // TODO: deprecate or remove this method
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.8
          */
         protected IsPrevBoundary getPrevBoundary() {
-            return null;
+            return null;  // TODO: deprecate or remove this method
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.8
          */
         protected IsNextBoundary getNextBoundary() {
-            return null;
+            return null;  // TODO: deprecate or remove this method
         }
 
         /**
-         * This method is used for method dispatch
+         * Obsolete method.
          * @stable ICU 2.8
          */
         protected boolean isNFSkippable(int c) {
-            return true;
+            return true;  // TODO: deprecate or remove this method
         }
         private final Normalizer2 normalizer2;
         private final FilteredNormalizer2 uni32Normalizer2;
         private static final UnicodeSet UNI32_SET = new UnicodeSet("[:age=3.2:]").freeze();
     }
+
+    private interface IsPrevBoundary {}  // TODO: remove when Mode.getPrevBoundary() is removed
+    private interface IsNextBoundary {}  // TODO: remove when Mode.getNextBoundary() is removed
 
     /** 
      * No decomposition/composition.  
@@ -248,212 +245,45 @@ public final class Normalizer implements Cloneable {
      * Canonical decomposition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFD = new NFDMode();
-    
-    private static final class NFDMode extends Mode {
-        private NFDMode() {
-            super(Norm2AllModes.getNFCInstanceNoIOException().decomp);
-        }
+    public static final Mode NFD = new Mode(Norm2AllModes.getNFCInstanceNoIOException().decomp);
 
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit, 
-                                UnicodeSet nx) {
-            int[] trailCC = new int[1];
-            return NormalizerImpl.decompose(src,  srcStart,srcLimit,
-                                            dest, destStart,destLimit,
-                                            false, trailCC,nx);
-        }
-        
-        protected int getMinC() {
-            return NormalizerImpl.MIN_WITH_LEAD_CC;
-        }
-
-        protected IsPrevBoundary getPrevBoundary() {
-            return new IsPrevNFDSafe();
-        }
-
-        protected IsNextBoundary getNextBoundary() {
-            return new IsNextNFDSafe();
-        }
-
-        protected int getMask() {
-            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD);
-        }
-
-        protected boolean isNFSkippable(int c) {
-            return NormalizerImpl.isNFSkippable(c,this,
-                                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD)
-                                                );
-        }           
-    }
-                                         
     /** 
      * Compatibility decomposition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFKD = new NFKDMode();
-    
-    private static final class NFKDMode extends Mode {
-        private NFKDMode() {
-            super(Norm2AllModes.getNFKCInstanceNoIOException().decomp);
-        }
+    public static final Mode NFKD = new Mode(Norm2AllModes.getNFKCInstanceNoIOException().decomp);
 
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit, 
-                                UnicodeSet nx) {
-            int[] trailCC = new int[1];
-            return NormalizerImpl.decompose(src,  srcStart,srcLimit,
-                                            dest, destStart,destLimit,
-                                            true, trailCC, nx);
-        }
-
-        protected int getMinC() {
-            return NormalizerImpl.MIN_WITH_LEAD_CC;
-        }
-
-        protected IsPrevBoundary getPrevBoundary() {
-            return new IsPrevNFDSafe();
-        }
-
-        protected IsNextBoundary getNextBoundary() {
-            return new IsNextNFDSafe();
-        }
-
-        protected int getMask() {
-            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD);
-        }
-
-        protected boolean isNFSkippable(int c) {
-            return NormalizerImpl.isNFSkippable(c, this,
-                                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD)
-                                                );
-        }                                         
-    }
-                                         
     /** 
      * Canonical decomposition followed by canonical composition.  
      * @stable ICU 2.8
      */
-    public static final Mode NFC = new NFCMode();
-    
-    private static final class NFCMode extends Mode{
-        private NFCMode() {
-            super(Norm2AllModes.getNFCInstanceNoIOException().comp);
-        }
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit,
-                                UnicodeSet nx) {
-            return NormalizerImpl.compose( src, srcStart, srcLimit,
-                                           dest,destStart,destLimit,
-                                           0, nx);
-        }
-  
-        protected int getMinC() {
-            return NormalizerImpl.getFromIndexesArr(
-                                                    NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
-                                                    );
-        }
-        protected IsPrevBoundary getPrevBoundary() {
-            return new IsPrevTrueStarter();
-        }
-        protected IsNextBoundary getNextBoundary() {
-            return new IsNextTrueStarter();
-        }
-        protected int getMask() {
-            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFC);
-        }
-        protected boolean isNFSkippable(int c) {
-            return NormalizerImpl.isNFSkippable(c,this,
-                                                ( NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|
-                                                  (NormalizerImpl.QC_NFC & NormalizerImpl.QC_ANY_NO)
-                                                  )
-                                                );
-        } 
-    }
-                                         
+    public static final Mode NFC = new Mode(Norm2AllModes.getNFCInstanceNoIOException().comp);
+
     /** 
      * Default normalization.  
      * @stable ICU 2.8
      */
     public static final Mode DEFAULT = NFC; 
-    
+
     /** 
      * Compatibility decomposition followed by canonical composition. 
      * @stable ICU 2.8
      */
-    public static final Mode NFKC =new NFKCMode();
-    
-    private static final class NFKCMode extends Mode{
-        private NFKCMode() {
-            super(Norm2AllModes.getNFKCInstanceNoIOException().comp);
-        }
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit, 
-                                UnicodeSet nx) {
-            return NormalizerImpl.compose(src,  srcStart,srcLimit,
-                                          dest, destStart,destLimit,
-                                          NormalizerImpl.OPTIONS_COMPAT, nx);
-        }
+    public static final Mode NFKC =new Mode(Norm2AllModes.getNFKCInstanceNoIOException().comp);
 
-        protected int getMinC() {
-            return NormalizerImpl.getFromIndexesArr(
-                                                    NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
-                                                    );
-        }
-        protected IsPrevBoundary getPrevBoundary() {
-            return new IsPrevTrueStarter();
-        }
-        protected IsNextBoundary getNextBoundary() {
-            return new IsNextTrueStarter();
-        }
-        protected int getMask() {
-            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKC);
-        }
-        protected boolean isNFSkippable(int c) {
-            return NormalizerImpl.isNFSkippable(c, this,
-                                                ( NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|
-                                                  (NormalizerImpl.QC_NFKC & NormalizerImpl.QC_ANY_NO)
-                                                  )
-                                                );
-        } 
-    }
-                                        
     /** 
      * "Fast C or D" form. 
      * @stable ICU 2.8 
      */
     public static final Mode FCD = new FCDMode();
-    
+
     private static final class FCDMode extends Mode{
         private FCDMode() {
             super(Norm2AllModes.getNFCInstanceNoIOException().fcd);
             Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie();
         }
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit, 
-                                UnicodeSet nx) {
-            return NormalizerImpl.makeFCD(src, srcStart,srcLimit,
-                                          dest, destStart,destLimit, nx);
-        }
-        protected int getMinC() {
-            return NormalizerImpl.MIN_WITH_LEAD_CC;
-        }
-        protected IsPrevBoundary getPrevBoundary() {
-            return new IsPrevNFDSafe();
-        }
-        protected IsNextBoundary getNextBoundary() {
-            return new IsNextNFDSafe();
-        }
-        protected int getMask() {
-            return NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD;
-        }
-        protected boolean isNFSkippable(int c) {
-            /* FCD: skippable if lead cc==0 and trail cc<=1 */
-            return (NormalizerImpl.getFCD16(c)>1);
-        }   
     }
 
-    
     /**
      * Null operation for use with the {@link com.ibm.icu.text.Normalizer constructors}
      * and the static {@link #normalize normalize} method.  This value tells
@@ -645,7 +475,7 @@ public final class Normalizer implements Cloneable {
     public static final int COMPARE_NORM_OPTIONS_SHIFT  = 20;
         
     //-------------------------------------------------------------------------
-    // Constructors
+    // Iterator constructors
     //-------------------------------------------------------------------------
 
     /**
@@ -834,8 +664,6 @@ public final class Normalizer implements Cloneable {
         getComposeMode(compat).getNormalizer2(options).normalize(srcBuffer, app);
         return app.length();
     }
-
-    private static final int MAX_BUF_SIZE_DECOMPOSE = 3;
 
     /**
      * Decompose a string.
@@ -1356,6 +1184,7 @@ public final class Normalizer implements Cloneable {
         return internalCompare(UTF16.valueOf(char32a), str2, options);
     }
 
+    /* Concatenation of normalized strings --------------------------------- */
     /**
      * Concatenate normalized strings, making sure that the result is normalized
      * as well.
@@ -1399,18 +1228,10 @@ public final class Normalizer implements Cloneable {
      *             required length
      * @stable ICU 2.8
      */
-    /* Concatenation of normalized strings --------------------------------- */
-    
     public static int concatenate(char[] left,  int leftStart,  int leftLimit,
                                   char[] right, int rightStart, int rightLimit, 
                                   char[] dest,  int destStart,  int destLimit,
                                   Normalizer.Mode mode, int options) {
-                               
-    
-        UCharacterIterator iter;
-        
-        int leftBoundary, rightBoundary, destLength;
-    
         if(dest == null) {
             throw new IllegalArgumentException();
         }
@@ -1421,94 +1242,19 @@ public final class Normalizer implements Cloneable {
         }
     
         /* allow left==dest */
-    
-        /*
-         * Input: left[0..leftLength[ + right[0..rightLength[
-         *
-         * Find normalization-safe boundaries leftBoundary and rightBoundary
-         * and copy the end parts together:
-         * buffer=left[leftBoundary..leftLength[ + right[0..rightBoundary[
-         *
-         * dest=left[0..leftBoundary[ +
-         *      normalize(buffer) +
-         *      right[rightBoundary..rightLength[
-         */
-    
-        /*
-         * find a normalization boundary at the end of the left string
-         * and copy the end part into the buffer
-         */
-
-        iter = UCharacterIterator.getInstance(left, leftStart, leftLimit);
-                                             
-        iter.setIndex(iter.getLength()); /* end of left string */
-        char[] buffer=new char[100];
-        int bufferLength;
-        bufferLength=previous(iter, buffer,0,buffer.length,mode,false,null,options);
-        
-        leftBoundary=iter.getIndex();
-        
-        if(bufferLength>buffer.length) {
-            char[] newBuf = new char[buffer.length*2];
-            buffer = newBuf;
-            newBuf = null; // null the reference for GC
-            /* just copy from the left string: we know the boundary already */
-            System.arraycopy(left,leftBoundary,buffer,0,bufferLength);
-        }
-    
-        /*
-         * find a normalization boundary at the beginning of the right string
-         * and concatenate the beginning part to the buffer
-         */
-
-        iter = UCharacterIterator.getInstance(right, rightStart, rightLimit);
-        
-        rightBoundary=next(iter,buffer,bufferLength, buffer.length-bufferLength,
-                           mode, false,null, options);
-                           
-        if(bufferLength>buffer.length) {
-            char[] newBuf = new char[buffer.length*2];
-            buffer = newBuf;
-            newBuf = null; // null the reference for GC
-            /* just copy from the right string: we know the boundary already */
-            System.arraycopy(right,rightBoundary,buffer,
-                             bufferLength,rightBoundary);
-        }
-
-        bufferLength+=rightBoundary;
-    
-        /* copy left[0..leftBoundary[ to dest */
-        if(left!=dest && leftBoundary>0 && (destLimit)>0) {
-            System.arraycopy(left,0,dest,0, Math.min(leftBoundary,destLimit)); 
-        }
-        destLength=leftBoundary;
-    
-        /* concatenate the normalization of the buffer to dest */
-        if(destLimit>destLength) {
-            destLength+=Normalizer.normalize(buffer,0,bufferLength,dest,
-                                             destLength,destLimit,mode,options);
-            
-        } else {
-            destLength+=Normalizer.normalize(buffer, 0, bufferLength,null,0,0,mode,options);
-        }
-    
-        /* concatenate right[rightBoundary..rightLength[ to dest */
-        rightStart+=rightBoundary;
-        int rightLength=(rightLimit-rightStart);
-        if(rightLength>0 && destLimit>destLength) {
-            System.arraycopy(right,rightStart,dest,destLength,
-                             Math.min(rightLength,destLimit - destLength)
-                             );
-        }
-        destLength+=rightLength;
-        
+        StringBuilder destBuilder=new StringBuilder(leftLimit-leftStart+rightLimit-rightStart+16);
+        destBuilder.append(left, leftStart, leftLimit-leftStart);
+        CharBuffer rightBuffer=CharBuffer.wrap(right, rightStart, rightLimit-rightStart);
+        mode.getNormalizer2(options).append(destBuilder, rightBuffer);
+        int destLength=destBuilder.length();
         if(destLength<=(destLimit-destStart)) {
+            destBuilder.getChars(0, destLength, dest, destStart);
             return destLength;
         } else {
             throw new IndexOutOfBoundsException(Integer.toString(destLength));
-        }  
+        }
     }
-    
+
     /**
      * Concatenate normalized strings, making sure that the result is normalized
      * as well.
@@ -1537,21 +1283,10 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static String concatenate(char[] left, char[] right,Mode mode, int options) {
-        char[] result = new char[(left.length+right.length)* MAX_BUF_SIZE_DECOMPOSE];
-        for(;;) {
-               
-            int length = concatenate(left,  0, left.length,
-                                     right, 0, right.length,
-                                     result,0, result.length,
-                                     mode, options);
-            if(length<=result.length) {
-                return new String(result,0,length);
-            } else {
-                result = new char[length];
-            }
-        }            
+        StringBuilder dest=new StringBuilder(left.length+right.length+16).append(left);
+        return mode.getNormalizer2(options).append(dest, CharBuffer.wrap(right)).toString();
     }
-    
+
     /**
      * Concatenate normalized strings, making sure that the result is normalized
      * as well.
@@ -1564,7 +1299,11 @@ public final class Normalizer implements Cloneable {
      *     dest=normalize(left+right, mode)
      * </code>
      *
-     * For details see concatenate
+     * With the input strings already being normalized,
+     * this function will use next() and previous()
+     * to find the adjacent end pieces of the input strings.
+     * Only the concatenation of these end pieces will be normalized and
+     * then concatenated with the remaining parts of the input strings.
      *
      * @param left Left source string.
      * @param right Right source string.
@@ -1579,22 +1318,11 @@ public final class Normalizer implements Cloneable {
      * @see #concatenate
      * @stable ICU 2.8
      */
-    public static String concatenate(String left, String right,Mode mode, int options) {
-        char[] result = new char[(left.length()+right.length())* MAX_BUF_SIZE_DECOMPOSE];
-        for(;;) {
-               
-            int length = concatenate(left.toCharArray(), 0, left.length(),
-                                     right.toCharArray(),0, right.length(),
-                                     result,             0, result.length,
-                                     mode, options);
-            if(length<=result.length) {
-                return new String(result,0,length);
-            } else {
-                result = new char[length];
-            }
-        }            
+    public static String concatenate(String left, String right, Mode mode, int options) {
+        StringBuilder dest=new StringBuilder(left.length()+right.length()+16).append(left);
+        return mode.getNormalizer2(options).append(dest, right).toString();
     }
-    
+
     /**
      * Gets the FC_NFKC closure set from the normalization data
      * @param c The code point whose closure set is to be retrieved
@@ -1621,10 +1349,11 @@ public final class Normalizer implements Cloneable {
             }
         }
     }
+
     //-------------------------------------------------------------------------
     // Iteration API
     //-------------------------------------------------------------------------
-        
+
     /**
      * Return the current character in the normalized text.
      * @return The codepoint as an int
@@ -1820,7 +1549,7 @@ public final class Normalizer implements Cloneable {
     }
 
     //-------------------------------------------------------------------------
-    // Property access methods
+    // Iterator attributes
     //-------------------------------------------------------------------------
     /**
      * Set the normalization mode for this object.
@@ -2012,466 +1741,6 @@ public final class Normalizer implements Cloneable {
         }
     }
 
-    //-------------------------------------------------------------------------
-    // Private utility methods
-    //-------------------------------------------------------------------------
-    
-
-    /* backward iteration --------------------------------------------------- */
-               
-    /*
-     * read backwards and get norm32
-     * return 0 if the character is <minC
-     * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
-     * surrogate but read second!)
-     */
-
-    private static  long getPrevNorm32(UCharacterIterator src, 
-                                       int/*unsigned*/ minC, 
-                                       int/*unsigned*/ mask, 
-                                       char[] chars) {
-        long norm32;
-        int ch=0;
-        /* need src.hasPrevious() */
-        if((ch=src.previous()) == UCharacterIterator.DONE) {
-            return 0;
-        }
-        chars[0]=(char)ch;
-        chars[1]=0;
-    
-        /* check for a surrogate before getting norm32 to see if we need to 
-         * predecrement further */
-        if(chars[0]<minC) {
-            return 0;
-        } else if(!UTF16.isSurrogate(chars[0])) {
-            return NormalizerImpl.getNorm32(chars[0]);
-        } else if(UTF16.isLeadSurrogate(chars[0]) || (src.getIndex()==0)) {
-            /* unpaired surrogate */
-            chars[1]=(char)src.current();
-            return 0;
-        } else if(UTF16.isLeadSurrogate(chars[1]=(char)src.previous())) {
-            norm32=NormalizerImpl.getNorm32(chars[1]);
-            if((norm32&mask)==0) {
-                /* all surrogate pairs with this lead surrogate have irrelevant 
-                 * data */
-                return 0;
-            } else {
-                /* norm32 must be a surrogate special */
-                return NormalizerImpl.getNorm32FromSurrogatePair(norm32,chars[0]);
-            }
-        } else {
-            /* unpaired second surrogate, undo the c2=src.previous() movement */
-            src.moveIndex( 1);
-            return 0;
-        }
-    }
- 
-    private interface IsPrevBoundary{
-        public boolean isPrevBoundary(UCharacterIterator src,
-                                      int/*unsigned*/ minC, 
-                                      int/*unsigned*/ mask, 
-                                      char[] chars);
-    }
-    private static final class IsPrevNFDSafe implements IsPrevBoundary{
-        /*
-         * for NF*D:
-         * read backwards and check if the lead combining class is 0
-         * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
-         * surrogate but read second!)
-         */
-        public boolean isPrevBoundary(UCharacterIterator src,
-                                      int/*unsigned*/ minC, 
-                                      int/*unsigned*/ ccOrQCMask, 
-                                      char[] chars) {
-    
-            return NormalizerImpl.isNFDSafe(getPrevNorm32(src, minC, 
-                                                          ccOrQCMask, chars), 
-                                            ccOrQCMask, 
-                                            ccOrQCMask& NormalizerImpl.QC_MASK);
-        }
-    }
-    
-    private static final class IsPrevTrueStarter implements IsPrevBoundary{
-        /*
-         * read backwards and check if the character is (or its decomposition 
-         * begins with) a "true starter" (cc==0 and NF*C_YES)
-         * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
-         * surrogate but read second!)
-         */
-        public boolean isPrevBoundary(UCharacterIterator src, 
-                                      int/*unsigned*/ minC,
-                                      int/*unsigned*/ ccOrQCMask,
-                                      char[] chars) {
-            long norm32; 
-            int/*unsigned*/ decompQCMask;
-            
-            decompQCMask=(ccOrQCMask<<2)&0xf; /*decomposition quick check mask*/
-            norm32=getPrevNorm32(src, minC, ccOrQCMask|decompQCMask, chars);
-            return NormalizerImpl.isTrueStarter(norm32,ccOrQCMask,decompQCMask);
-        }
-    }
-    
-    private static int findPreviousIterationBoundary(UCharacterIterator src,
-                                                     IsPrevBoundary obj, 
-                                                     int/*unsigned*/ minC,
-                                                     int/*mask*/ mask,
-                                                     char[] buffer, 
-                                                     int[] startIndex) {
-        char[] chars=new char[2];
-        boolean isBoundary;
-    
-        /* fill the buffer from the end backwards */
-        startIndex[0] = buffer.length;
-        chars[0]=0;
-        while(src.getIndex()>0 && chars[0]!=UCharacterIterator.DONE) {
-            isBoundary=obj.isPrevBoundary(src, minC, mask, chars);
-    
-            /* always write this character to the front of the buffer */
-            /* make sure there is enough space in the buffer */
-            if(startIndex[0] < (chars[1]==0 ? 1 : 2)) {
-
-                // grow the buffer
-                char[] newBuf = new char[buffer.length*2];
-                /* move the current buffer contents up */
-                System.arraycopy(buffer,startIndex[0],newBuf,
-                                 newBuf.length-(buffer.length-startIndex[0]),
-                                 buffer.length-startIndex[0]);
-                //adjust the startIndex
-                startIndex[0]+=newBuf.length-buffer.length;
-                
-                buffer=newBuf;
-                newBuf=null;                
-                
-            }
-    
-            buffer[--startIndex[0]]=chars[0];
-            if(chars[1]!=0) {
-                buffer[--startIndex[0]]=chars[1];
-            }
-    
-            /* stop if this just-copied character is a boundary */
-            if(isBoundary) {
-                break;
-            }
-        }
-    
-        /* return the length of the buffer contents */
-        return buffer.length-startIndex[0];
-    }
-    
-    private static int previous(UCharacterIterator src,
-                                char[] dest, int destStart, int destLimit, 
-                                Mode mode, 
-                                boolean doNormalize, 
-                                boolean[] pNeededToNormalize,
-                                int options) {
-
-        IsPrevBoundary isPreviousBoundary;
-        int destLength, bufferLength;
-        int/*unsigned*/ mask;
-        
-        int c,c2;
-        
-        char minC;
-        int destCapacity = destLimit-destStart;
-        destLength=0;
-        
-        
-        if(pNeededToNormalize!=null) {
-            pNeededToNormalize[0]=false;
-        }
-        minC = (char)mode.getMinC();
-        mask = mode.getMask();
-        isPreviousBoundary = mode.getPrevBoundary();
-
-        if(isPreviousBoundary==null) {
-            destLength=0;
-            if((c=src.previous())>=0) {
-                destLength=1;
-                if(UTF16.isTrailSurrogate((char)c)) {
-                    c2= src.previous();
-                    if(c2!= UCharacterIterator.DONE) {
-                        if(UTF16.isLeadSurrogate((char)c2)) {
-                            if(destCapacity>=2) {
-                                dest[1]=(char)c; // trail surrogate 
-                                destLength=2;
-                            }
-                            // lead surrogate to be written below 
-                            c=c2; 
-                        } else {
-                            src.moveIndex(1);
-                        }
-                    }
-                }
-    
-                if(destCapacity>0) {
-                    dest[0]=(char)c;
-                }
-            }
-            return destLength;
-        }
-        
-        char[] buffer = new char[100];
-        int[] startIndex= new int[1];
-        bufferLength=findPreviousIterationBoundary(src,
-                                                   isPreviousBoundary, 
-                                                   minC, mask,buffer, 
-                                                   startIndex);
-        if(bufferLength>0) {
-            if(doNormalize) {
-                destLength=Normalizer.normalize(buffer,startIndex[0],
-                                                startIndex[0]+bufferLength,
-                                                dest, destStart,destLimit,
-                                                mode, options);
-                
-                if(pNeededToNormalize!=null) {
-                    pNeededToNormalize[0]=(destLength!=bufferLength ||
-                                                Utility.arrayRegionMatches(
-                                                                           buffer,0,dest,
-                                                                           destStart,destLimit
-                                                                           ));
-                }
-            } else {
-                /* just copy the source characters */
-                if(destCapacity>0) {
-                    System.arraycopy(buffer,startIndex[0],dest,0,
-                                     (bufferLength<destCapacity) ? 
-                                     bufferLength : destCapacity);
-                }
-                destLength = bufferLength;
-            }
-        } else {
-            destLength = bufferLength;
-        }
-
-    
-        return destLength;
-    }
-
- 
-    
-    /* forward iteration ---------------------------------------------------- */
-    /*
-     * read forward and check if the character is a next-iteration boundary
-     * if c2!=0 then (c, c2) is a surrogate pair
-     */
-    private interface IsNextBoundary{
-        boolean isNextBoundary(UCharacterIterator src, 
-                               int/*unsigned*/ minC, 
-                               int/*unsigned*/ mask, 
-                               int[] chars);
-    }   
-    /*
-     * read forward and get norm32
-     * return 0 if the character is <minC
-     * if c2!=0 then (c2, c) is a surrogate pair
-     * always reads complete characters
-     */
-    private static long /*unsigned*/ getNextNorm32(UCharacterIterator src, 
-                                                   int/*unsigned*/ minC, 
-                                                   int/*unsigned*/ mask, 
-                                                   int[] chars) {
-        long norm32;
-    
-        /* need src.hasNext() to be true */
-        chars[0]=src.next();
-        chars[1]=0;
-    
-        if(chars[0]<minC) {
-            return 0;
-        }
-    
-        norm32=NormalizerImpl.getNorm32((char)chars[0]);
-        if(UTF16.isLeadSurrogate((char)chars[0])) {
-            if(src.current()!=UCharacterIterator.DONE &&
-               UTF16.isTrailSurrogate((char)(chars[1]=src.current()))) {
-                src.moveIndex(1); /* skip the c2 surrogate */
-                if((norm32&mask)==0) {
-                    /* irrelevant data */
-                    return 0;
-                } else {
-                    /* norm32 must be a surrogate special */
-                    return NormalizerImpl.getNorm32FromSurrogatePair(norm32,(char)chars[1]);
-                }
-            } else {
-                /* unmatched surrogate */
-                return 0;
-            }
-        }
-        return norm32;
-    }
-
-
-    /*
-     * for NF*D:
-     * read forward and check if the lead combining class is 0
-     * if c2!=0 then (c, c2) is a surrogate pair
-     */
-    private static final class IsNextNFDSafe implements IsNextBoundary{
-        public boolean isNextBoundary(UCharacterIterator src, 
-                                      int/*unsigned*/ minC, 
-                                      int/*unsigned*/ ccOrQCMask, 
-                                      int[] chars) {
-            return NormalizerImpl.isNFDSafe(getNextNorm32(src,minC,ccOrQCMask,chars), 
-                                            ccOrQCMask, ccOrQCMask&NormalizerImpl.QC_MASK);
-        }
-    }
-    
-    /*
-     * for NF*C:
-     * read forward and check if the character is (or its decomposition begins 
-     * with) a "true starter" (cc==0 and NF*C_YES)
-     * if c2!=0 then (c, c2) is a surrogate pair
-     */
-    private static final class IsNextTrueStarter implements IsNextBoundary{
-        public boolean isNextBoundary(UCharacterIterator src, 
-                                      int/*unsigned*/ minC, 
-                                      int/*unsigned*/ ccOrQCMask, 
-                                      int[] chars) {
-            long norm32;
-            int/*unsigned*/ decompQCMask;
-            
-            decompQCMask=(ccOrQCMask<<2)&0xf; /*decomposition quick check mask*/
-            norm32=getNextNorm32(src, minC, ccOrQCMask|decompQCMask, chars);
-            return NormalizerImpl.isTrueStarter(norm32, ccOrQCMask, decompQCMask);
-        }
-    }
-    
-    private static int findNextIterationBoundary(UCharacterIterator src,
-                                                 IsNextBoundary obj, 
-                                                 int/*unsigned*/ minC, 
-                                                 int/*unsigned*/ mask,
-                                                 char[] buffer) {
-        int[] chars = new int[2];
-        int bufferIndex =0;
-        
-        if(src.current()==UCharacterIterator.DONE) {
-            return 0;
-        }
-        /* get one character and ignore its properties */
-        chars[0]=src.next();
-        buffer[0]=(char)chars[0];
-        bufferIndex=1;
-        
-        if(UTF16.isLeadSurrogate((char)chars[0])&& 
-           src.current()!=UCharacterIterator.DONE) {
-            if(UTF16.isTrailSurrogate((char)(chars[1]=src.next()))) {
-                buffer[bufferIndex++]=(char)chars[1];
-            } else {
-                src.moveIndex(-1); /* back out the non-trail-surrogate */
-            }
-        }
-    
-        /* get all following characters until we see a boundary */
-        /* checking hasNext() instead of c!=DONE on the off-chance that U+ffff 
-         * is part of the string */
-        while( src.current()!=UCharacterIterator.DONE) {
-            if(obj.isNextBoundary(src, minC, mask, chars)) {
-                /* back out the latest movement to stop at the boundary */
-                src.moveIndex(chars[1]==0 ? -1 : -2);
-                break;
-            } else {
-                if(bufferIndex+(chars[1]==0 ? 1 : 2)<=buffer.length) {
-                    buffer[bufferIndex++]=(char)chars[0];
-                    if(chars[1]!=0) {
-                        buffer[bufferIndex++]=(char)chars[1];
-                    }
-                } else {
-                    char[] newBuf = new char[buffer.length    *2];
-                    System.arraycopy(buffer,0,newBuf,0,bufferIndex);
-                    buffer = newBuf;
-                    buffer[bufferIndex++]=(char)chars[0];
-                    if(chars[1]!=0) {
-                        buffer[bufferIndex++]=(char)chars[1];
-                    }
-                }
-            }
-        }
-    
-        /* return the length of the buffer contents */
-        return bufferIndex;
-    }
-    
-    private static int next(UCharacterIterator src,
-                            char[] dest, int destStart, int destLimit,
-                            Normalizer.Mode mode,
-                            boolean doNormalize, 
-                            boolean[] pNeededToNormalize,
-                            int options) {
-                                
-        IsNextBoundary isNextBoundary;
-        int /*unsigned*/ mask;
-        int /*unsigned*/ bufferLength;
-        int c,c2;
-        char minC;
-        int destCapacity = destLimit - destStart;
-        int destLength = 0;
-        
-        if(pNeededToNormalize!=null) {
-            pNeededToNormalize[0]=false;
-        }
-
-        minC = (char)mode.getMinC();
-        mask = mode.getMask();
-        isNextBoundary = mode.getNextBoundary();
-        
-        if(isNextBoundary==null) {
-            destLength=0;
-            c=src.next();
-            if(c!=UCharacterIterator.DONE) {
-                destLength=1;
-                if(UTF16.isLeadSurrogate((char)c)) {
-                    c2= src.next();
-                    if(c2!= UCharacterIterator.DONE) {
-                        if(UTF16.isTrailSurrogate((char)c2)) {
-                            if(destCapacity>=2) {
-                                dest[1]=(char)c2; // trail surrogate 
-                                destLength=2;
-                            }
-                            // lead surrogate to be written below 
-                        } else {
-                            src.moveIndex(-1);
-                        }
-                    }
-                }
-    
-                if(destCapacity>0) {
-                    dest[0]=(char)c;
-                }
-            }
-            return destLength;
-        }
-
-        char[] buffer=new char[100];
-        int[] startIndex = new int[1];
-        
-        bufferLength=findNextIterationBoundary(src,isNextBoundary, minC, mask,
-                                               buffer);
-        if(bufferLength>0) {
-            if(doNormalize) {
-                destLength=mode.normalize(buffer,startIndex[0],bufferLength,
-                                          dest,destStart,destLimit, options);
-                
-                if(pNeededToNormalize!=null) {
-                    pNeededToNormalize[0]=(destLength!=bufferLength ||
-                                                Utility.arrayRegionMatches(buffer,startIndex[0],
-                                                                           dest,destStart,
-                                                                           destLength));
-                }
-            } else {
-                /* just copy the source characters */
-                if(destCapacity>0) {
-                    System.arraycopy(buffer,0,dest,destStart,
-                                     Math.min(bufferLength,destCapacity - destStart));
-                }
-                destLength = bufferLength;
-            }
-        } else {
-            destLength = bufferLength;
-        }
-        return destLength;
-    } 
-
     private void clearBuffer() {
         buffer.delete(0, 0x7fffffff);
         bufferPos=0;
@@ -2527,10 +1796,10 @@ public final class Normalizer implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     public static boolean isNFSkippable(int c, Mode mode) {
-        return mode.isNFSkippable(c);
+        return mode.normalizer2.isInert(c);
     }    
 
-    // TODO: Consider proposing this function as public API.
+    // TODO: Broaden the public compare(String, String, options) API like this. Ticket #7407
     private static int internalCompare(CharSequence s1, CharSequence s2, int options) {
         int normOptions=options>>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
         options|= NormalizerImpl.COMPARE_EQUIV;
