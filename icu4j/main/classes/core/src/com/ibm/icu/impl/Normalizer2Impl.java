@@ -329,6 +329,25 @@ public final class Normalizer2Impl {
          */
         public static boolean isSurrogateLead(int c) { return (c&0x400)==0; }
         /**
+         * Compares two CharSequence objects for binary equality.
+         * @param s1 first sequence
+         * @param s2 second sequence
+         * @return true if s1 contains the same text as s2
+         * @draft ICU 4.6
+         */
+        public static boolean equal(CharSequence s1,  CharSequence s2) {
+            int length=s1.length();
+            if(length!=s2.length()) {
+                return false;
+            }
+            for(int i=0; i<length; ++i) {
+                if(s1.charAt(i)!=s2.charAt(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        /**
          * Compares two CharSequence subsequences for binary equality.
          * @param s1 first sequence
          * @param start1 start offset in first sequence
