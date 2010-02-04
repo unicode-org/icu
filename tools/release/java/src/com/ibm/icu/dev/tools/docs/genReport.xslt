@@ -146,7 +146,7 @@
        	            	</xsl:attribute>
                    	</xsl:if>
                 
-                    <xsl:value-of select="@leftStatus" /><xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">&gt;Stable</xsl:if>
+                    <xsl:value-of select="@leftStatus" /><xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">»Stable</xsl:if>
                     <br/> <xsl:value-of select="@leftVersion" />
                 </td>
            	<xsl:if  test = "@leftStatus != 'Draft' or @rightStatus != 'Stable' or @leftVersion != @rightVersion">
