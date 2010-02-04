@@ -283,15 +283,27 @@ Intel can define _M_IX86 or _M_X64
 /** @{ Information about POSIX support                                           */
 /*===========================================================================*/
 
+/**
+ * @internal 
+ */
 #if 1
 #define U_TZSET         _tzset
 #endif
+/**
+ * @internal 
+ */
 #if 1
 #define U_TIMEZONE      _timezone
 #endif
+/**
+ * @internal 
+ */
 #if 1
 #define U_TZNAME        _tzname
 #endif
+/**
+ * @internal 
+ */
 #if 1
 #define U_DAYLIGHT      _daylight
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2009, International Business Machines Corporation and Others.
+ * Copyright (C) 1996-2010, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -211,6 +211,7 @@ bms_open(UCD *ucd,
  * storage associated with it.
  *
  * @param bms - the <code>BMS</code> object to close.
+ * @internal ICU 4.0.1 technology preview
  */
 U_CAPI void U_EXPORT2
 bms_close(BMS *bms);
