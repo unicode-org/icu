@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2009, International Business Machines                 *
+ *   Copyright (C) 1996-2010, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -25,28 +25,35 @@ U_NAMESPACE_BEGIN
 
 /**
  * The size of the internal buffer for the Collator's short description string.
+ * @internal ICU 4.0.1 technology preview
  */
 #define KEY_BUFFER_SIZE 64
 
  /**
   * The size of the internal CE buffer in a <code>CEList</code> object
+  * @internal ICU 4.0.1 technology preview
   */
 #define CELIST_BUFFER_SIZE 4
 
 /**
+ * \def INSTRUMENT_CELIST
  * Define this to enable the <code>CEList</code> objects to collect
  * statistics.
+ * @internal ICU 4.0.1 technology preview
  */
 //#define INSTRUMENT_CELIST
 
  /**
   * The size of the initial list in a <code>StringList</code> object.
+  * @internal ICU 4.0.1 technology preview
   */
 #define STRING_LIST_BUFFER_SIZE 16
 
 /**
+ * \def INSTRUMENT_STRING_LIST
  * Define this to enable the <code>StringList</code> objects to
  * collect statistics.
+ * @internal ICU 4.0.1 technology preview
  */
 //#define INSTRUMENT_STRING_LIST
 
@@ -76,6 +83,7 @@ public:
 
     /**
      * The destructor.
+     * @internal ICU 4.0.1 technology preview
      */
     ~CEList();
 
@@ -125,10 +133,12 @@ public:
 
     /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
     /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     static UClassID getStaticClassID();
 
@@ -220,10 +230,12 @@ public:
 
     /**
      * the UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
     /**
      * the UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     static UClassID getStaticClassID();
 
@@ -297,6 +309,7 @@ public:
      * Get the <code>UCollator</code> object used to create this object.
      * The object returned may not be the exact object that was used to
      * create this object, but it will have the same behavior.
+     * @internal ICU 4.0.1 technology preview
      */
     UCollator *getCollator() const;
 
@@ -373,10 +386,12 @@ public:
 
    /**
     * UObject glue...
+    * @internal ICU 4.0.1 technology preview
     */
     virtual UClassID getDynamicClassID() const;
    /**
     * UObject glue...
+    * @internal ICU 4.0.1 technology preview
     */
     static UClassID getStaticClassID();
 

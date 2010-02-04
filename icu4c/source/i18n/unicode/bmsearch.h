@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2009, International Business Machines                 *
+ *   Copyright (C) 1996-2010, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -202,10 +202,12 @@ public:
 
     /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
     /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     static UClassID getStaticClassID();
     
