@@ -71,7 +71,9 @@ public class StableAPI {
 	private static final String UVERSIONA = "uvernum_8h.xml";
 	private static final String UVERSIONB = "uversion_8h.xml";
     private static final String U_ICU_VERSION = "U_ICU_VERSION";
+    /* ICU 4.4+ */
 	private static final String ICU_VERSION_XPATHA = "/doxygen/compounddef[@id='uvernum_8h'][@kind='file']/sectiondef[@kind='define']";
+	/* ICU <4.4 */
 	private static final String ICU_VERSION_XPATHB = "/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']";
     private static String ICU_VERSION_XPATH = ICU_VERSION_XPATHA;
 
@@ -154,7 +156,8 @@ public class StableAPI {
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
 
-    private static Set<String> warnSet = new TreeSet<String>(); // No Generics because we built with JDK 1.4 for now
+    private static Set<String> warnSet = new TreeSet<String>();
+    
     private static void warn(String what) {
         if(!warnSet.contains(what)) {
                System.out.println("Warning: "+what);
@@ -314,7 +317,8 @@ public class StableAPI {
         	if(node.getAttributes()==null)  {
         		throw new InternalError("[no attributes Can't get attr "+attrName +" out of node " + node.getNodeName()+":"+node.getNodeType()+":"+node.getNodeValue()+"@"+node.getTextContent());
         	} else if(node.getAttributes().getNamedItem(attrName)==null) {
-        		throw new InternalError("No attribute named: "+attrName);
+        		return null; 
+        		//throw new InternalError("No attribute named: "+attrName);
         	} else {
         		System.err.println("Can't get attr "+attrName+": "+npe.toString());
         	}
@@ -340,6 +344,11 @@ public class StableAPI {
         static Function fromXml(Node n){
             Function f = new Function();
             f.prototype = getAttr(n, "prototype");
+            
+            if("yes".equals(getAttr(n, "static"))&&!f.prototype.contains("static")) {
+            	f.prototype = "static ".concat(f.prototype);
+            }
+             
             f.id = getAttr(n, "id");
             f.status = getAttr(n, "status");
             f.version = trimICU(getAttr(n, "version"));
@@ -370,12 +379,20 @@ public class StableAPI {
          */
         private void purifyPrototype(){
             //refer to 'umachine.h'
-            String statusList[] = {"U_CAPI", "U_STABLE", "U_DRAFT", "U_DEPRECATED", "U_OBSOLETE", "U_INTERNAL", "virtual"};
+            String statusList[] = {"U_CAPI", "U_STABLE", "U_DRAFT", "U_DEPRECATED", "U_OBSOLETE", "U_INTERNAL", "virtual", "U_EXPORT2"};
             for (int i = 0; i < statusList.length; i++) {
                 String s = statusList[i];
                 prototype = prototype.replaceAll(s,"");
                 prototype = prototype.trim();
             }
+            
+            String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",
+            				       " , ", ", ",
+            						};
+            for (int i = 0; i < replList.length; i+= 2) {
+                prototype = prototype.replaceAll(replList[i+0],replList[i+1]);
+            }
+            
             
             prototype = prototype.trim();
 
@@ -426,6 +443,24 @@ public class StableAPI {
             }
             
             out.append(in, closeParen, in.length()); // postlude
+            
+            // Delete any doubled whitespace.
+            for(int p=1;p<out.length();p++) {
+                char prev = out.charAt(p-1); 
+            	if(Character.isWhitespace(prev)) {
+            		while (out.length()>p&&(Character.isWhitespace(out.charAt(p)))) {
+            			out.deleteCharAt(p);
+            		}
+            		if(out.length()>p) {
+            			// any trailings to delete?
+            			char curr = out.charAt(p);
+            			if(curr==',' || curr==')' || curr=='*' || curr=='&') { // delete spaces before these.
+            				out.deleteCharAt(--p);
+            				continue;
+            			}
+            		}
+            	}
+            }
             
           //  System.err.println(prototype+" -> " + out.toString());
             prototype = out.toString();
@@ -529,6 +564,10 @@ public class StableAPI {
 		public int compareTo(JoinedFunction o) {
 			return comparableName.compareTo(o.comparableName);
 		}
+		
+        public boolean equals(Function right){
+            return this.prototype.equals(right.prototype);
+        }
     }
 
     TransformerFactory transFac = TransformerFactory.newInstance();

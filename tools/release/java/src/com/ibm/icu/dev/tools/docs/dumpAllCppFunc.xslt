@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and    *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is an XSLT file. 
@@ -26,6 +26,8 @@
              <xsl:attribute name="version"><xsl:value-of select="detaileddescription/para/xrefsect/xrefdescription/para/text()"/></xsl:attribute>
              <xsl:attribute name="prototype"><xsl:value-of select="concat(definition/text(), argsstring/text())" /></xsl:attribute>
              <xsl:copy-of select="location/@file" />
+             <xsl:copy-of select="@static" />
+             <xsl:copy-of select="@inline" />
           </cppfunc>
         </xsl:for-each>
       </xsl:for-each>
