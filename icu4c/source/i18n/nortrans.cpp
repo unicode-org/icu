@@ -138,12 +138,11 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
         int32_t prev = start;
         // Skip at least one character so we make progress.
         // c holds the character at start.
-        segment.setTo(c);
-        start += U16_LENGTH(c);
-        while(start < limit && !fNorm2.hasBoundaryBefore(c = text.char32At(start))) {
+        segment.remove();
+        do {
             segment.append(c);
             start += U16_LENGTH(c);
-        }
+        } while(start < limit && !fNorm2.hasBoundaryBefore(c = text.char32At(start)));
         if(start == limit && isIncremental && !fNorm2.hasBoundaryAfter(c)) {
             // stop in incremental mode when we reach the input limit
             // in case there are additional characters that could change the
