@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -105,10 +105,18 @@
 #   define U_CDECL_END
 #endif
 
-/** This is used for GCC specific attributes*/
+/**
+ * \def U_ATTRIBUTE_DEPRECATED
+ *  This is used for GCC specific attributes
+ * @internal
+ */
 #if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
 #    define U_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
-/** This is used for Visual C++ specific attributes */
+/**
+ * \def U_ATTRIBUTE_DEPRECATED
+ * This is used for Visual C++ specific attributes 
+ * @internal
+ */
 #elif defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1400)
 #    define U_ATTRIBUTE_DEPRECATED __declspec(deprecated)
 #else

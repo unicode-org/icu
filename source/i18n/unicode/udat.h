@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines
+ * Copyright (C) 1996-2010, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -220,7 +220,8 @@ typedef enum UDateFormatStyle {
  * Below are a set of pre-defined skeletons that 
  * have pre-defined interval patterns in resource files.
  * Users are encouraged to use them in date interval format factory methods.
- *
+ * 
+ * @stable ICU 4.0
  */
 #define UDAT_HOUR_MINUTE                "hm"
 #define UDAT_YEAR                       "y"

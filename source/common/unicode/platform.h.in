@@ -33,7 +33,10 @@
 # error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
 #endif
 
-/** Determine wheter to enable auto cleanup of libraries. */
+/**
+ * Determine wheter to enable auto cleanup of libraries. 
+ * @draft ICU 4.4
+ */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
 #endif
@@ -48,7 +51,9 @@
 
 /**
  * \def U_HAVE_DIRENT_H
- * Define whether dirent.h is available */
+ * Define whether dirent.h is available 
+ * @internal
+ */
 #ifndef U_HAVE_DIRENT_H
 #define U_HAVE_DIRENT_H @U_HAVE_DIRENT_H@
 #endif
@@ -179,17 +184,24 @@
 #define U_ENABLE_TRACING @U_ENABLE_TRACING@
 #endif
 
-/* dynamic loading */
+/**
+ * Whether to enable Dynamic loading in ICU
+ * @draft ICU 4.4
+ */
 #ifndef U_ENABLE_DYLOAD
 #define U_ENABLE_DYLOAD @U_ENABLE_DYLOAD@
 #endif
 
+/**
+ * Whether to test Dynamic loading as an OS capabilty
+ * @draft ICU 4.4
+ */
 #ifndef U_CHECK_DYLOAD
 #define U_CHECK_DYLOAD @U_CHECK_DYLOAD@
 #endif
 
 
-/* Do we allow ICU users to use the draft APIs by default? */
+/** Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT @U_DEFAULT_SHOW_DRAFT@
 #endif
@@ -229,6 +241,9 @@
  * \def U_DECLARE_UTF16
  * Do not use this macro. Use the UNICODE_STRING or U_STRING_DECL macros
  * instead.
+ * @internal
+ *
+ * \def U_GNUC_UTF16_STRING
  * @internal
  */
 #ifndef U_GNUC_UTF16_STRING
@@ -328,6 +343,10 @@
 /** @{ GCC built in functions for atomic memory operations                       */
 /*===========================================================================*/
 
+/**
+ * \def U_HAVE_GCC_ATOMICS
+ * @internal
+ */
 #ifndef U_HAVE_GCC_ATOMICS
 #define U_HAVE_GCC_ATOMICS @U_HAVE_GCC_ATOMICS@
 #endif
