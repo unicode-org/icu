@@ -673,11 +673,14 @@ icu4c/source/tools/icuinfo/*.d
 icu4c/source/tools/icuinfo/*.dylib
 icu4c/source/tools/icuinfo/*.o
 icu4c/source/tools/icuinfo/*.so
+icu4c/source/tools/icuinfo/*.user
+icu4c/source/tools/icuinfo/Debug
 icu4c/source/tools/icuinfo/Makefile
 icu4c/source/tools/icuinfo/Makefile.local
 icu4c/source/tools/icuinfo/icuinfo
 icu4c/source/tools/icuinfo/icuinfo.exe
 icu4c/source/tools/icuinfo/icuplugins*.txt
+icu4c/source/tools/icuinfo/x86
 icu4c/source/tools/icupkg/*.8
 icu4c/source/tools/icupkg/*.d
 icu4c/source/tools/icupkg/*.ncb
