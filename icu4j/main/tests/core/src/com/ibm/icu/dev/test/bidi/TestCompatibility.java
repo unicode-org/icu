@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2009, International Business Machines
+*   Copyright (C) 2007-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -138,8 +138,10 @@ public class TestCompatibility extends BidiTest {
     {
         // This test case does not work well on Java 1.4/1.4.1 environment,
         // because of insufficient Bidi implementation in these versions.
+        // This test case also does not work will with Java 1.7 environment,
+        // because the changes to the Java Bidi implementation.
         String javaVersion = System.getProperty("java.version");
-        if (javaVersion.startsWith("1.4.0") || javaVersion.startsWith("1.4.1")) {
+        if (javaVersion.startsWith("1.4.0") || javaVersion.startsWith("1.4.1") || javaVersion.startsWith("1.7")) {
             logln("\nSkipping TestCompatibility.  The test case is known to fail on Java "
                     + javaVersion + "\n");
             return;
