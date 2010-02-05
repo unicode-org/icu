@@ -50,7 +50,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
         if(dest==src) {
             throw new IllegalArgumentException();
         }
-        dest.delete(0, 0x7fffffff);
+        dest.setLength(0);
         normalize(src, dest, UnicodeSet.SpanCondition.SIMPLE);
         return dest;
     }

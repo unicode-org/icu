@@ -20,7 +20,8 @@ public final class Norm2AllModes {
         @Override
         public StringBuilder normalize(CharSequence src, StringBuilder dest) {
             if(dest!=src) {
-                return dest.delete(0, 0x7fffffff).append(src);
+                dest.setLength(0);
+                return dest.append(src);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -80,7 +81,7 @@ public final class Norm2AllModes {
             if(dest==src) {
                 throw new IllegalArgumentException();
             }
-            dest.delete(0, 0x7fffffff);
+            dest.setLength(0);
             normalize(src, new Normalizer2Impl.ReorderingBuffer(impl, dest, src.length()));
             return dest;
         }

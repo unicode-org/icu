@@ -101,7 +101,7 @@ final class NormalizationTransliterator extends Transliterator {
             int prev = start;
             // Skip at least one character so we make progress.
             // c holds the character at start.
-            segment.delete(0, 0x7fffffff);
+            segment.setLength(0);
             do {
                 segment.appendCodePoint(c);
                 start += Character.charCount(c);

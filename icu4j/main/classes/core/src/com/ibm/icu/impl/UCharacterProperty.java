@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -15,13 +15,10 @@ import java.util.MissingResourceException;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
-
-import com.ibm.icu.impl.NormalizerImpl;
 
 /**
 * <p>Internal class used for Unicode character property database.</p>
@@ -116,8 +113,14 @@ public final class UCharacterProperty
     public static final int SRC_CHAR_AND_PROPSVEC=7;
     /** From ucase.c/ucase.icu as well as unorm.cpp/unorm.icu */
     public static final int SRC_CASE_AND_NORM=8;
+    /** From normalizer2impl.cpp/nfc.nrm */
+    public static final int SRC_NFC=9;
+    /** From normalizer2impl.cpp/nfkc.nrm */
+    public static final int SRC_NFKC=10;
+    /** From normalizer2impl.cpp/nfkc_cf.nrm */
+    public static final int SRC_NFKC_CF=11;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=9;
+    public static final int SRC_COUNT=12;
 
     // public methods ----------------------------------------------------
 
@@ -228,8 +231,6 @@ public final class UCharacterProperty
                            version & LAST_NIBBLE_MASK_, 0, 0);
     }
 
-    private static final long UNSIGNED_INT_MASK = 0xffffffffL;
-
     private static final int GC_CN_MASK = getMask(UCharacter.UNASSIGNED);
     private static final int GC_CC_MASK = getMask(UCharacter.CONTROL);
     private static final int GC_CS_MASK = getMask(UCharacter.SURROGATE);
@@ -256,10 +257,10 @@ public final class UCharacterProperty
 
     private static final class BinaryProperties{
        int column;
-       long mask;
-       public BinaryProperties(int column,long mask){
-               this.column = column;
-               this.mask  = mask;
+       int mask;
+       public BinaryProperties(int column, int mask) {
+           this.column = column;
+           this.mask  = mask;
        }
    }
    BinaryProperties[] binProps={
@@ -277,7 +278,7 @@ public final class UCharacterProperty
        new BinaryProperties(  1,                (  1 << DEPRECATED_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << DIACRITIC_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << EXTENDER_PROPERTY_) ),
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_FULL_COMPOSITION_EXCLUSION */
+       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_FULL_COMPOSITION_EXCLUSION */
        new BinaryProperties(  1,                (  1 << GRAPHEME_BASE_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << GRAPHEME_EXTEND_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << GRAPHEME_LINK_PROPERTY_) ),
@@ -305,10 +306,10 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_CASE_SENSITIVE */
        new BinaryProperties(  1,                (  1 << S_TERM_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << VARIATION_SELECTOR_PROPERTY_) ),
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFD_INERT */
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKD_INERT */
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFC_INERT */
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKC_INERT */
+       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFD_INERT */
+       new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKD_INERT */
+       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFC_INERT */
+       new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKC_INERT */
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_SEGMENT_STARTER */
        new BinaryProperties(  1,                (  1 << PATTERN_SYNTAX) ),
        new BinaryProperties(  1,                (  1 << PATTERN_WHITE_SPACE) ),
@@ -323,7 +324,8 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_UPPERCASED */
        new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_TITLECASED */
        new BinaryProperties( SRC_CASE_AND_NORM,  0 ),                               /* UCHAR_CHANGES_WHEN_CASEFOLDED */
-       new BinaryProperties( SRC_CASE,  0 )                                         /* UCHAR_CHANGES_WHEN_CASEMAPPED */
+       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_CASEMAPPED */
+       new BinaryProperties( SRC_NFKC_CF, 0 ),                                      /* UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED */
    };
 
 
@@ -342,8 +344,8 @@ public final class UCharacterProperty
      * <p>Important: If ICU is built with UCD files from Unicode versions
      * below 3.2, then properties marked with "new" are not or
      * not fully available.</p>
-     * @param codepoint Code point to test.
-     * @param property selector constant from com.ibm.icu.lang.UProperty,
+     * @param c Code point to test.
+     * @param which selector constant from com.ibm.icu.lang.UProperty,
      *        identifies which binary property to check.
      * @return true or false according to the binary Unicode property value
      *         for ch. Also false if property is out of bounds or if the
@@ -352,43 +354,59 @@ public final class UCharacterProperty
      * @see com.ibm.icu.lang.UProperty
      */
 
-    public boolean hasBinaryProperty(int codepoint, int property)
-    {
-         if(property <UProperty.BINARY_START || UProperty.BINARY_LIMIT<=property) {
+    public boolean hasBinaryProperty(int c, int which) {
+         if(which<UProperty.BINARY_START || UProperty.BINARY_LIMIT<=which) {
             // not a known binary property
             return false;
         } else {
-            long mask=binProps[property].mask;
-            int column=binProps[property].column;
+            int mask=binProps[which].mask;
+            int column=binProps[which].column;
             if(mask!=0) {
                 // systematic, directly stored properties
-                return ((UNSIGNED_INT_MASK & getAdditional(codepoint, column)) & mask)!=0;
+                return (getAdditional(c, column) & mask)!=0;
             } else {
                 if(column==SRC_CASE) {
                     /* case mapping properties */
                     try {
-                        return UCaseProps.getSingleton().hasBinaryProperty(codepoint, property);
+                        return UCaseProps.getSingleton().hasBinaryProperty(c, which);
                     } catch (IOException e) {
                         return false;
                     }
                 } else if(column==SRC_NORM) {
                     /* normalization properties from unorm.icu */
-                    switch(property) {
-                    case UProperty.FULL_COMPOSITION_EXCLUSION:
-                        return NormalizerImpl.isFullCompositionExclusion(codepoint);
-                    case UProperty.NFD_INERT:
-                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFD);
-                    case UProperty.NFKD_INERT:
-                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFKD);
-                    case UProperty.NFC_INERT:
-                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFC);
-                    case UProperty.NFKC_INERT:
-                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFKC);
+                    switch(which) {
                     case UProperty.SEGMENT_STARTER:
-                        return NormalizerImpl.isCanonSafeStart(codepoint);
+                        return NormalizerImpl.isCanonSafeStart(c);
                     default:
                         break;
                     }
+                } else if(column==SRC_NFC || column==SRC_NFKC) {
+                    switch(which) {
+                    case UProperty.FULL_COMPOSITION_EXCLUSION: {
+                        // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
+                        Normalizer2Impl impl=Norm2AllModes.getNFCInstanceNoIOException().impl;
+                        return impl.isCompNo(impl.getNorm16(c));
+                    }
+                    case UProperty.NFD_INERT:
+                        return Norm2AllModes.getNFCInstanceNoIOException().decomp.isInert(c);
+                    case UProperty.NFKD_INERT:
+                        return Norm2AllModes.getNFKCInstanceNoIOException().decomp.isInert(c);
+                    case UProperty.NFC_INERT:
+                        return Norm2AllModes.getNFCInstanceNoIOException().comp.isInert(c);
+                    case UProperty.NFKC_INERT:
+                        return Norm2AllModes.getNFKCInstanceNoIOException().comp.isInert(c);
+                    default:
+                        break;
+                    }
+                } else if(column==SRC_NFKC_CF) {
+                    // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
+                    Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstanceNoIOException().impl;
+                    String src=UTF16.valueOf(c);
+                    StringBuilder dest=new StringBuilder();
+                    // Small destCapacity for NFKC_CF(c).
+                    Normalizer2Impl.ReorderingBuffer buffer=new Normalizer2Impl.ReorderingBuffer(kcf, dest, 5);
+                    kcf.compose(src, 0, src.length(), false, true, buffer);
+                    return !Normalizer2Impl.UTF16Plus.equal(dest, src);
                 } else if(column==SRC_BIDI) {
                     /* bidi/shaping properties */
                     UBiDiProps bdp;
@@ -397,28 +415,28 @@ public final class UCharacterProperty
                     } catch (IOException e) {
                         return false;
                     }
-                    switch(property) {
+                    switch(which) {
                     case UProperty.BIDI_MIRRORED:
-                        return bdp.isMirrored(codepoint);
+                        return bdp.isMirrored(c);
                     case UProperty.BIDI_CONTROL:
-                        return bdp.isBidiControl(codepoint);
+                        return bdp.isBidiControl(c);
                     case UProperty.JOIN_CONTROL:
-                        return bdp.isJoinControl(codepoint);
+                        return bdp.isJoinControl(c);
                     default:
                         break;
                     }
                 } else if(column==SRC_CHAR) {
-                    switch(property) {
+                    switch(which) {
                     case UProperty.POSIX_BLANK:
                         // "horizontal space"
-                        if(codepoint<=0x9f) {
-                            return codepoint==9 || codepoint==0x20; /* TAB or SPACE */
+                        if(c<=0x9f) {
+                            return c==9 || c==0x20; /* TAB or SPACE */
                         } else {
                             /* Zs */
-                            return UCharacter.getType(codepoint)==UCharacter.SPACE_SEPARATOR;
+                            return UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR;
                         }
                     case UProperty.POSIX_GRAPH:
-                        return isgraphPOSIX(codepoint);
+                        return isgraphPOSIX(c);
                     case UProperty.POSIX_PRINT:
                         /*
                          * Checks if codepoint is in \p{graph}\p{blank} - \p{cntrl}.
@@ -426,64 +444,55 @@ public final class UCharacterProperty
                          * The only cntrl character in graph+blank is TAB (in blank).
                          * Here we implement (blank-TAB)=Zs instead of calling u_isblank().
                          */
-                        return (UCharacter.getType(codepoint)==UCharacter.SPACE_SEPARATOR) || isgraphPOSIX(codepoint);
+                        return (UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR) || isgraphPOSIX(c);
                     case UProperty.POSIX_XDIGIT:
                         /* check ASCII and Fullwidth ASCII a-fA-F */
                         if(
-                            (codepoint<=0x66 && codepoint>=0x41 && (codepoint<=0x46 || codepoint>=0x61)) ||
-                            (codepoint>=0xff21 && codepoint<=0xff46 && (codepoint<=0xff26 || codepoint>=0xff41))
+                            (c<=0x66 && c>=0x41 && (c<=0x46 || c>=0x61)) ||
+                            (c>=0xff21 && c<=0xff46 && (c<=0xff26 || c>=0xff41))
                         ) {
                             return true;
                         }
     
-                        return UCharacter.getType(codepoint)==UCharacter.DECIMAL_DIGIT_NUMBER;
+                        return UCharacter.getType(c)==UCharacter.DECIMAL_DIGIT_NUMBER;
                     default:
                         break;
                     }
                 } else if(column==SRC_CHAR_AND_PROPSVEC) {
-                    switch(property) {
+                    switch(which) {
                     case UProperty.POSIX_ALNUM:
-                        return UCharacter.isUAlphabetic(codepoint) || UCharacter.isDigit(codepoint);
+                        return UCharacter.isUAlphabetic(c) || UCharacter.isDigit(c);
                     default:
                         break;
                     }
                 } else if(column==SRC_CASE_AND_NORM) {
-                    // Need a bigger buffer in Java than in C because long decompositions are copied here,
-                    // where the C code would just return a pointer.
-                    char nfd[]=new char[32];
-                    switch(property) {
+                    String nfd;
+                    switch(which) {
                     case UProperty.CHANGES_WHEN_CASEFOLDED:
-                        int nfdLength=NormalizerImpl.getDecomposition(codepoint, false, nfd, 0, nfd.length);
-                        if(nfdLength>0) {
+                        nfd=Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(c);
+                        if(nfd!=null) {
                             /* c has a decomposition */
-                            if(nfdLength==1) {
-                                codepoint=nfd[0];  /* single BMP code point */
-                            } else if(nfdLength<=2) {
-                                codepoint=Character.codePointAt(nfd, 0);
-                                if(Character.charCount(codepoint)==nfdLength) {
-                                    /* single supplementary code point */
-                                } else {
-                                    codepoint=-1;
-                                }
-                            } else {
-                                codepoint=-1;
+                            c=nfd.codePointAt(0);
+                            if(Character.charCount(c)!=nfd.length()) {
+                                /* multiple code points */
+                                c=-1;
                             }
-                        } else if(codepoint<0) {
+                        } else if(c<0) {
                             return false;  /* protect against bad input */
                         }
-                        if(codepoint>=0) {
+                        if(c>=0) {
                             /* single code point */
                             try {
                                 UCaseProps csp=UCaseProps.getSingleton();
                                 UCaseProps.dummyStringBuffer.setLength(0);
-                                return csp.toFullFolding(codepoint, UCaseProps.dummyStringBuffer, UCharacter.FOLD_CASE_DEFAULT)>=0;
+                                return csp.toFullFolding(c, UCaseProps.dummyStringBuffer,
+                                                         UCharacter.FOLD_CASE_DEFAULT)>=0;
                             } catch (IOException e) {
                                 return false;
                             }
                         } else {
-                            String nfdString=new String(nfd, 0, nfdLength);
-                            String folded=UCharacter.foldCase(nfdString, true);
-                            return folded!=nfdString;
+                            String folded=UCharacter.foldCase(nfd, true);
+                            return !folded.equals(nfd);
                         }
                     default:
                         break;
@@ -513,12 +522,13 @@ public final class UCharacterProperty
 
             case UProperty.CANONICAL_COMBINING_CLASS:
             case UProperty.NFD_QUICK_CHECK:
-            case UProperty.NFKD_QUICK_CHECK:
             case UProperty.NFC_QUICK_CHECK:
-            case UProperty.NFKC_QUICK_CHECK:
             case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
             case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                return SRC_NORM;
+                return SRC_NFC;
+            case UProperty.NFKD_QUICK_CHECK:
+            case UProperty.NFKC_QUICK_CHECK:
+                return SRC_NFKC;
 
             case UProperty.BIDI_CLASS:
             case UProperty.JOINING_GROUP:
