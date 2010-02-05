@@ -1,13 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 
 /**
+ * This class has been deprecated since ICU 2.2.
+ * One problem is that this class is not designed to return supplementary characters.
+ * Use the Normalizer2 and UCharacter classes instead.
+ * <p>
  * <tt>ComposedCharIter</tt> is an iterator class that returns all
  * of the precomposed characters defined in the Unicode standard, along
  * with their decomposed forms.  This is often useful when building
@@ -50,7 +55,6 @@ import com.ibm.icu.impl.NormalizerImpl;
  */
 ///CLOVER:OFF
 public final class ComposedCharIter {
-    
     /**
      * Constant that indicates the iteration has completed.
      * {@link #next} returns this value when there are no more composed characters
@@ -58,7 +62,7 @@ public final class ComposedCharIter {
      * @deprecated ICU 2.2
      */
     public static final  char DONE = (char) Normalizer.DONE;
-    
+
     /**
      * Construct a new <tt>ComposedCharIter</tt>.  The iterator will return
      * all Unicode characters with canonical decompositions, including Korean
@@ -66,11 +70,9 @@ public final class ComposedCharIter {
      * @deprecated ICU 2.2
      */
     public ComposedCharIter() {
-        compat = false;
-        //options =0;
+        this(false, 0);
     }
-    
-    
+
     /**
      * Constructs a non-default <tt>ComposedCharIter</tt> with optional behavior.
      * <p>
@@ -78,18 +80,17 @@ public final class ComposedCharIter {
      *                  <tt>true</tt> for both canonical and compatibility
      *                  decompositions.
      *
-     * @param options   Optional decomposition features.  Currently, the only
-     *                  supported option is {@link Normalizer#IGNORE_HANGUL}, which
-     *                  causes this <tt>ComposedCharIter</tt> not to iterate
-     *                  over the Hangul characters and their corresponding
-     *                  Jamo decompositions.
+     * @param options   Optional decomposition features. None are supported, so this is ignored.
      * @deprecated ICU 2.2
      */
     public ComposedCharIter(boolean compat, int options) {
-        this.compat = compat;
-        //this.options = options;
+        if(compat) {
+            n2impl = Norm2AllModes.getNFKCInstanceNoIOException().impl;
+        } else {
+            n2impl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+        }
     }
-    
+
     /**
      * Determines whether there any precomposed Unicode characters not yet returned
      * by {@link #next}.
@@ -129,36 +130,35 @@ public final class ComposedCharIter {
     public String decomposition() {
         // the decomposition buffer contains the decomposition of 
         // current char so just return it
-        return new String(decompBuf,0, bufLen);
+        if(decompBuf != null) {
+            return decompBuf;
+        } else {
+            return "";
+        }
     }
-    
+
     private void findNextChar() {
         int c=curChar+1;
-        for(;;){
-           if(c < 0xFFFF){
-               bufLen = NormalizerImpl.getDecomposition(c,compat,
-                                                        decompBuf,0,
-                                                        decompBuf.length);
-               if(bufLen>0){
+        decompBuf = null;
+        for(;;) {
+            if(c < 0xFFFF) {
+                decompBuf = n2impl.getDecomposition(c);
+                if(decompBuf != null) {
                     // the curChar can be decomposed... so it is a composed char
                     // cache the result     
                     break;
-               }
-               c++;
-           }else{
-               c=Normalizer.DONE;
-               break;
-           }
+                }
+                c++;
+            } else {
+                c=Normalizer.DONE;
+                break;
+            }
         }
         nextChar=c;  
     }
-    
-    //private int options;
-    private boolean compat;
-    private char[] decompBuf = new char[100];
-    private int bufLen=0;
+
+    private final Normalizer2Impl n2impl;
+    private String decompBuf;
     private int curChar = 0;
     private int nextChar = Normalizer.DONE;
-    
-
 }

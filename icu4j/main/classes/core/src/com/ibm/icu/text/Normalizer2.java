@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 import java.io.InputStream;
 import java.io.IOException;
 
+import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.text.Normalizer;
 
 /**
@@ -63,7 +64,7 @@ public abstract class Normalizer2 {
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    enum Mode {
+    public enum Mode {
         /**
          * Decomposition followed by composition.
          * Same as standard NFC when using an "nfc" instance.
@@ -132,7 +133,14 @@ public abstract class Normalizer2 {
      * @provisional This API might change or be removed in a future release.
      */
     public static Normalizer2 getInstance(InputStream data, String name, Mode mode) throws IOException {
-        return null;
+        Norm2AllModes all2Modes=Norm2AllModes.getInstance(data, name);
+        switch(mode) {
+        case COMPOSE: return all2Modes.comp;
+        case DECOMPOSE: return all2Modes.decomp;
+        case FCD: return all2Modes.fcd;
+        case COMPOSE_CONTIGUOUS: return all2Modes.fcc;
+        default: return null;  // will not occur
+        }
     }
 
     /**

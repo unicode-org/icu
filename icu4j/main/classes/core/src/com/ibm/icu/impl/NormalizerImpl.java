@@ -1,7 +1,7 @@
  /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
  
@@ -1037,95 +1037,6 @@ public final class NormalizerImpl {
     //------------------------------------------------------ 
     // make NFD & NFKD 
     //------------------------------------------------------
-    public static int getDecomposition(int c /*UTF-32*/ , 
-                                        boolean compat,
-                                           char[] dest,
-                                           int destStart, 
-                                           int destCapacity) {
-            
-        if( (UNSIGNED_INT_MASK & c)<=0x10ffff) {
-            long /*unsigned*/ norm32;
-            int qcMask;
-            int minNoMaybe;
-            int length;
-    
-            // initialize 
-            if(!compat) {
-                minNoMaybe = indexes[INDEX_MIN_NFD_NO_MAYBE];
-                qcMask = QC_NFD;
-            } else {
-                minNoMaybe = indexes[INDEX_MIN_NFKD_NO_MAYBE];
-                qcMask = QC_NFKD;
-            }
-    
-            if(c<minNoMaybe) {
-                // trivial case 
-                if(destCapacity>0) {
-                    dest[0]=(char)c;
-                }
-                return -1;
-            }
-    
-            /* data lookup */
-            norm32=getNorm32(c);
-            if((norm32&qcMask)==0) {
-                /* simple case: no decomposition */
-                if(c<=0xffff) {
-                    if(destCapacity>0) {
-                        dest[0]=(char)c;
-                    }
-                    return -1;
-                } else {
-                    if(destCapacity>=2) {
-                        dest[0]=UTF16.getLeadSurrogate(c);
-                        dest[1]=UTF16.getTrailSurrogate(c);
-                    }
-                    return -2;
-                }
-            } else if(isNorm32HangulOrJamo(norm32)) {
-                /* Hangul syllable: decompose algorithmically */
-                char c2;
-    
-                c-=HANGUL_BASE;
-    
-                c2=(char)(c%JAMO_T_COUNT);
-                c/=JAMO_T_COUNT;
-                if(c2>0) {
-                    if(destCapacity>=3) {
-                        dest[2]=(char)(JAMO_T_BASE+c2);
-                    }
-                    length=3;
-                } else {
-                    length=2;
-                }
-    
-                if(destCapacity>=2) {
-                    dest[1]=(char)(JAMO_V_BASE+c%JAMO_V_COUNT);
-                    dest[0]=(char)(JAMO_L_BASE+c/JAMO_V_COUNT);
-                }
-                return length;
-            } else {
-                /* c decomposes, get everything from the variable-length extra 
-                 * data 
-                 */
-                int p, limit;
-                DecomposeArgs args = new DecomposeArgs();
-                /* the index into extra data array*/                 
-                p=decompose(norm32, qcMask, args);
-                if(args.length<=destCapacity) {
-                    limit=p+args.length;
-                    do {
-                        dest[destStart++]=extraData[p++];
-                    } while(p<limit);
-                }
-                return args.length;
-            }
-        } else {
-            return 0;
-        }
-    }
-
-    
     public static int decompose(char[] src,int srcStart,int srcLimit,
                                 char[] dest,int destStart,int destLimit,
                                  boolean compat,int[] outTrailCC,

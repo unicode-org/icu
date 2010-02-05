@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -146,10 +146,10 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
 
         ComposedCharIter iter = new ComposedCharIter(false, options);
         while (iter.hasNext()) {
-            char ch = iter.next();
+            final char ch = iter.next();
 
-            String chStr = new StringBuffer().append(ch).toString();
-            String decomp = Normalizer.decompose(chStr, compat);
+            String chStr = String.valueOf(ch);
+            String decomp = iter.decomposition();
             String comp = Normalizer.compose(decomp, compat);
 
             if (NormalizerImpl.isFullCompositionExclusion(ch)) {
@@ -158,19 +158,14 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
             }
 
             // Avoid disparaged characters
-            if (getDecomposition(ch,compat).length() == 4) continue;
+            if (decomp.length() == 4) continue;
 
             if (!comp.equals(chStr)) {
                 errln("ERROR: Round trip invalid: " + hex(chStr) + " --> " + hex(decomp)
                     + " --> " + hex(comp));
 
-                errln("  char decomp is '" + getDecomposition(ch,compat) + "'");
+                errln("  char decomp is '" + decomp + "'");
             }
         }
-    }
-    private String getDecomposition(char ch, boolean compat){
-        char[] dest = new char[10];   
-        int length = NormalizerImpl.getDecomposition(ch,compat,dest,0,dest.length);   
-        return new String(dest,0,length);
     }
 }
