@@ -18,18 +18,20 @@ In the following,
 1. Download and build ICU4C. For more instructions on downloading and building
         ICU4C, see the ICU4C readme at:
         http://source.icu-project.org/repos/icu/icu/trunk/readme.html#HowToBuild
+	(Windows: build as x86, Release otherwise you will have to set 'CFG' differently below.)
+
 
 2. Step 2 depends on whether you are on a Windows or a Unix-type
 platform.
 
-*Windows*  (note: still in progress.)
+*Windows* 
 
 2a. On the command line, cd to $icu4c_root\source\data.
 
-2b. Do
+2b. On the command line,
         nmake -f makedata.mak ICUMAKE=$icu4c_root\source\data\  CFG=x86\Release JAR="$jdk_bin\jar" ICU4J_ROOT=$icu4j_root  icu4j-data-install
 
-       Continue with step 3, in Java:
+       Continue with step 3 below, in Java:
 
 
 *Linux*
@@ -44,7 +46,7 @@ platform.
 
        (You can omit the JAR if it's just jar.)
 
-Continue with step 3, in Java:
+	Continue with step 3, in Java:
 
 *Java*
 
