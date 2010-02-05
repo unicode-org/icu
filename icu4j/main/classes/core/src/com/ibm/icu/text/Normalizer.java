@@ -147,6 +147,10 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Constants for normalization modes.
+     * <p>
+     * The Mode class is not intended for public subclassing.
+     * Only the Mode constants provided by the Normalizer class should be used,
+     * and any fields or methods should not be called or overridden by users.
      * @stable ICU 2.8
      */
     public static class Mode {
@@ -158,82 +162,10 @@ public final class Normalizer implements Cloneable {
             return (options&UNICODE_3_2) != 0 ? uni32Normalizer2 : normalizer2;
         }
 
-        /**
-         * Obsolete method.
-         * @stable ICU 2.6
-         */
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit, 
-                                UnicodeSet nx) {
-            // TODO: deprecate or remove this method
-            int srcLen = (srcLimit - srcStart);
-            int destLen = (destLimit - destStart);
-            if( srcLen > destLen ) {
-                return srcLen;
-            }
-            System.arraycopy(src,srcStart,dest,destStart,srcLen);
-            return srcLen;
-        }
-
-        /**
-         * Obsolete method.
-         * @stable ICU 2.6
-         */
-        protected int normalize(char[] src, int srcStart, int srcLimit,
-                                char[] dest,int destStart,int destLimit,
-                                int options) {
-            // TODO: deprecate or remove this method
-            return normalize(   src, srcStart, srcLimit,
-                                dest,destStart,destLimit,
-                                null);
-        }
-        
-        /**
-         * Obsolete method.
-         * @stable ICU 2.8
-         */
-        protected int getMinC() {
-            return -1;  // TODO: deprecate or remove this method
-        }
-
-        /**
-         * Obsolete method.
-         * @stable ICU 2.8
-         */
-        protected int getMask() {
-            return -1;  // TODO: deprecate or remove this method
-        }
-
-        /**
-         * Obsolete method.
-         * @stable ICU 2.8
-         */
-        protected IsPrevBoundary getPrevBoundary() {
-            return null;  // TODO: deprecate or remove this method
-        }
-
-        /**
-         * Obsolete method.
-         * @stable ICU 2.8
-         */
-        protected IsNextBoundary getNextBoundary() {
-            return null;  // TODO: deprecate or remove this method
-        }
-
-        /**
-         * Obsolete method.
-         * @stable ICU 2.8
-         */
-        protected boolean isNFSkippable(int c) {
-            return true;  // TODO: deprecate or remove this method
-        }
         private final Normalizer2 normalizer2;
         private final FilteredNormalizer2 uni32Normalizer2;
         private static final UnicodeSet UNI32_SET = new UnicodeSet("[:age=3.2:]").freeze();
     }
-
-    private interface IsPrevBoundary {}  // TODO: remove when Mode.getPrevBoundary() is removed
-    private interface IsNextBoundary {}  // TODO: remove when Mode.getNextBoundary() is removed
 
     /** 
      * No decomposition/composition.  
@@ -275,14 +207,7 @@ public final class Normalizer implements Cloneable {
      * "Fast C or D" form. 
      * @stable ICU 2.8 
      */
-    public static final Mode FCD = new FCDMode();
-
-    private static final class FCDMode extends Mode{
-        private FCDMode() {
-            super(Norm2AllModes.getNFCInstanceNoIOException().fcd);
-            Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie();
-        }
-    }
+    public static final Mode FCD = new Mode(Norm2AllModes.getFCDNormalizer2NoIOException());
 
     /**
      * Null operation for use with the {@link com.ibm.icu.text.Normalizer constructors}
