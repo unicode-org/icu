@@ -20,6 +20,8 @@ In the following,
         http://source.icu-project.org/repos/icu/icu/trunk/readme.html#HowToBuild
 	(Windows: build as x86, Release otherwise you will have to set 'CFG' differently below.)
 
+	*NOTE* You should do a full rebuild after any data changes.
+
 
 2. Step 2 depends on whether you are on a Windows or a Unix-type
 platform.
