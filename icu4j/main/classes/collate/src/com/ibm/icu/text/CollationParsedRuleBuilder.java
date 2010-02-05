@@ -14,6 +14,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import com.ibm.icu.impl.IntTrieBuilder;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.TrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
@@ -1326,7 +1328,7 @@ final class CollationParsedRuleBuilder {
         new WeightRange(), new WeightRange(), new WeightRange(),
         new WeightRange() };
     private WeightRange m_utilWeightRange_ = new WeightRange();
-    private char m_utilCharBuffer_[] = new char[256];
+    private Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
     private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
     private StringBuilder m_utilStringBuffer_ = new StringBuilder("");
     // Flag indicating a combining marks table is required or not.
@@ -3856,12 +3858,9 @@ final class CollationParsedRuleBuilder {
             // if the range is assigned - we might ommit more categories later
 
             for (int u32 = start; u32 < limit; u32++) {
-                int noOfDec = NormalizerImpl.getDecomposition(u32, false,
-                        m_utilCharBuffer_, 0, 256);
-                if (noOfDec > 0) {
-                    // if we're positive, that means there is no decomposition
+                String decomp = nfcImpl.getDecomposition(u32);
+                if (decomp != null) {
                     String comp = UCharacter.toString(u32);
-                    String decomp = new String(m_utilCharBuffer_, 0, noOfDec);
                     if (!collator.equals(comp, decomp)) {
                         m_utilElement_.m_cPoints_ = decomp;
                         m_utilElement_.m_prefix_ = 0;

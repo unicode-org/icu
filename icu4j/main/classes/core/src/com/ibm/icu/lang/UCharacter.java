@@ -3731,7 +3731,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return String.valueOf((char)ch);
         }
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append(UTF16.getLeadSurrogate(ch));
         result.append(UTF16.getTrailSurrogate(ch));
         return result.toString();

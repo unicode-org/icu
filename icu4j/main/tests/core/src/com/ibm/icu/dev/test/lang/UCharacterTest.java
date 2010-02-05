@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.lang;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -26,6 +27,7 @@ import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UCharacterEnums;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -2279,9 +2281,7 @@ public final class UCharacterTest extends TestFmwk
     }
 
    /* various tests for consistency of UCD data and API behavior */
-   public void TestConsistency() {
-       char[] buffer16 = new char[300];
-       char[] buffer   = new char[300];
+   public void TestConsistency() throws IOException {
        UnicodeSet set1, set2, set3, set4;
 
        USerializedSet sset;
@@ -2366,6 +2366,7 @@ public final class UCharacterTest extends TestFmwk
         * In general, the set for the middle such character should be a subset
         * of the set for the first.
         */
+       Normalizer2 norm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
        set1=new UnicodeSet();
        set2=new UnicodeSet();
        sset = new USerializedSet();
@@ -2374,7 +2375,8 @@ public final class UCharacterTest extends TestFmwk
 
        /* enumerate all characters that are plausible to be latin letters */
        for(start=0xa0; start<0x2000; ++start) {
-           if(NormalizerImpl.getDecomposition(start, false, buffer16,0,buffer16.length) > 1 && buffer[0]==0x0049) {
+           String decomp=norm2.normalize(UTF16.valueOf(start));
+           if(decomp.length() > 1 && decomp.charAt(0)==0x49) {
                set2.add(start);
            }
        }
