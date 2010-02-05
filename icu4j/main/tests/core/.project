@@ -4,6 +4,9 @@
 	<comment></comment>
 	<projects>
 		<project>icu4j-core</project>
+		<project>icu4j-currdata</project>
+		<project>icu4j-langdata</project>
+		<project>icu4j-regiondata</project>
 		<project>icu4j-shared</project>
 		<project>icu4j-test-framework</project>
 	</projects>
