@@ -480,9 +480,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	@echo Unicode .c source files built to "$(ICUTMP)"
 
 # Build the ICU4J icudata.jar and testdata.jar.
-# Command line:
-#   C:\svn\icuproj\icu\trunk\source\data>nmake -f makedata.mak ICUMAKE=C:\svn\icuproj\icu\trunk\source\data\ CFG=x86\Release JAR="C:\Program Files\Java\jdk1.5.0_07\bin\jar" ICU4J_ROOT=C:\svn\icuproj\icu4j\trunk icudata.jar testdata.jar
-# You can omit the ICU4J_ROOT for just building the .jar files without copying them.
+# see icu4j-readme.txt
 
 # Build icudata.jar:
 # - add the uni-core-data to the ICU package
@@ -504,27 +502,54 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	"$(ICUPBIN)\icupkg" "$(TESTDATAOUT)\testdata.dat" -r test.icu -x * -tb -d "$(ICUOUT)\icu4j\com\ibm\icu\dev\data\testdata"
 	"$(JAR)" cf "$(ICUOUT)\icu4j\testdata.jar" -C "$(ICUOUT)\icu4j" com\ibm\icu\dev\data\testdata
 
+## Compare to:  source\data\Makefile.in and source\test\testdata\Makefile.in
+
+DEBUGUTILITIESDATA_DIR=main\tests\core\src\com\ibm\icu\dev\test\util
+DEBUGUTILITIESDATA_SRC=DebugUtilitiesData.java
+
+# Build DebugUtilitiesData.java
+"$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)" : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
+	if not exist "$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)" mkdir "$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)"
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -j -d"$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)"
+
+ICU4J_DATA="$(ICUOUT)\icu4j\icudata.jar" "$(ICUOUT)\icu4j\testdata.jar"  "$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)"
+
+icu4j-data: GODATA $(ICU4J_DATA)
+
 !IFDEF ICU4J_ROOT
 
 "$(ICU4J_ROOT)\main\shared\data\icudata.jar": "$(ICUOUT)\icu4j\icudata.jar"
 	if not exist "$(ICU4J_ROOT)\main\shared\data" mkdir "$(ICU4J_ROOT)\main\shared\data"
 	copy "$(ICUOUT)\icu4j\icudata.jar" "$(ICU4J_ROOT)\main\shared\data"
 
-icudata.jar: GODATA "$(ICU4J_ROOT)\main\shared\data\icudata.jar"
-
 "$(ICU4J_ROOT)\main\shared\data\testdata.jar": "$(ICUOUT)\icu4j\testdata.jar"
 	if not exist "$(ICU4J_ROOT)\main\shared\data" mkdir "$(ICU4J_ROOT)\main\shared\data"
 	copy "$(ICUOUT)\icu4j\testdata.jar" "$(ICU4J_ROOT)\main\shared\data"
 
-testdata.jar: GODATA "$(ICU4J_ROOT)\main\shared\data\testdata.jar"
+# "$(DEBUGUTILTIESDATA_OUT)"
+
+"$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)": "$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)"
+	if not exist "$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)" mkdir "$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)"
+	copy "$(ICUOUT)\icu4j\src\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)" "$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)"
+
+#ICU4J_DATA_INSTALLED="$(ICU4J_ROOT)\main\shared\data\icudata.jar" "$(ICU4J_ROOT)\main\shared\data\testdata.jar" "$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)"
+
+#ICU4J_DATA_INSTALLED="$(ICU4J_ROOT)\main\shared\data\icudata.jar" "$(ICU4J_ROOT)\main\shared\data\testdata.jar" 
+ICU4J_DATA_INSTALLED="$(ICU4J_ROOT)\$(DEBUGUTILITIESDATA_DIR)\$(DEBUGUTILITIESDATA_SRC)"
+
+
+icu4j-data-install : GODATA $(ICU4J_DATA) $(ICU4J_DATA_INSTALLED)
+	@echo ICU4J  data output to "$(ICU4J_ROOT)"
 
 !ELSE
 
-icudata.jar: GODATA "$(ICUOUT)\icu4j\icudata.jar"
-
-testdata.jar: GODATA "$(ICUOUT)\icu4j\testdata.jar"
+icu4j-data-install : 
+	@echo ERROR ICU4J_ROOT not set
+	@exit 1
 
 !ENDIF
+
+
 
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat
