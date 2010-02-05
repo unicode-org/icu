@@ -2687,142 +2687,66 @@ public class BasicTest extends TestFmwk {
     }
 
     public void TestSkippable() {
-       UnicodeSet starts;
-       UnicodeSet[] skipSets = new UnicodeSet[]{
-                                                    new UnicodeSet(), //NFD
-                                                    new UnicodeSet(), //NFC
-                                                    new UnicodeSet(), //NFKC
-                                                    new UnicodeSet(), //NFKD
-                                                    new UnicodeSet(), //FCD
-                                                    new UnicodeSet(), //NONE
-                                               };
-       UnicodeSet[] expectSets = new UnicodeSet[]{
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                               };
-       StringBuffer s, pattern;
-       int start, limit, rangeEnd;
-       int i, range, count;
-       starts = new UnicodeSet();
-       /*
-       //[\u0350-\u0357\u035D-\u035F\u0610-\u0615\u0656-\u0658\u0CBC\u17DD\u1939-\u193B]
-       for(int ch=0;ch<=0x10FFFF;ch++){
-               if(Normalizer.isNFSkippable(ch, Normalizer.NFD)) {
-                   skipSets[D].add(ch);
-               }
-               if(Normalizer.isNFSkippable(ch, Normalizer.NFKD)) {
-                   skipSets[KD].add(ch);
-               }
-               if(Normalizer.isNFSkippable(ch, Normalizer.NFC)) {
-                   skipSets[C].add(ch);
-               }
-               if(Normalizer.isNFSkippable(ch, Normalizer.NFKC)) {
-                   skipSets[KC].add(ch);
-               }
-               if(Normalizer.isNFSkippable(ch, Normalizer.FCD)) {
-                   skipSets[FCD].add(ch);
-               }
-               if(Normalizer.isNFSkippable(ch, Normalizer.NONE)) {
-                   skipSets[NONE].add(ch);
-               }
-       }
-       */
-       // build NF*Skippable sets from runtime data 
-       NormalizerImpl.addPropertyStarts(starts);
-       count=starts.getRangeCount();
-   
-       start=limit=0;
-       rangeEnd=0;
-       range=0;
-       for(;;) {
-           if(start<limit) {
-               // get properties for start and apply them to [start..limit[ 
-               if(Normalizer.isNFSkippable(start, Normalizer.NFD)) {
-                   skipSets[D].add(start, limit-1);
-               }
-               if(Normalizer.isNFSkippable(start, Normalizer.NFKD)) {
-                   skipSets[KD].add(start, limit-1);
-               }
-               if(Normalizer.isNFSkippable(start, Normalizer.NFC)) {
-                   skipSets[C].add(start, limit-1);
-               }
-               if(Normalizer.isNFSkippable(start, Normalizer.NFKC)) {
-                   skipSets[KC].add(start, limit-1);
-               }
-               if(Normalizer.isNFSkippable(start, Normalizer.FCD)) {
-                   skipSets[FCD].add(start, limit-1);
-               }
-               if(Normalizer.isNFSkippable(start, Normalizer.NONE)) {
-                   skipSets[NONE].add(start, limit-1);
-               }
-               
-           }
-   
-           // go to next range of same properties 
-           start=limit;
-           if(++limit>rangeEnd) {
-               if(range<count) {
-                   limit=starts.getRangeStart(range);
-                   rangeEnd=starts.getRangeEnd(range);
-                   ++range;
-               } else if(range==count) {
-                   // additional range to complete the Unicode code space 
-                   limit=rangeEnd=0x110000;
-                   ++range;
-               } else {
-                   break;
-               }
-           }
-       }
-   
-       expectSets = initSkippables(expectSets);
-       if(expectSets[D].contains(0x0350)){
+        UnicodeSet[] skipSets = new UnicodeSet[] {
+            new UnicodeSet(), //NFD
+            new UnicodeSet(), //NFC
+            new UnicodeSet(), //NFKD
+            new UnicodeSet()  //NFKC
+        };
+        UnicodeSet[] expectSets = new UnicodeSet[] {
+            new UnicodeSet(),
+            new UnicodeSet(),
+            new UnicodeSet(),
+            new UnicodeSet()
+        };
+        StringBuilder s, pattern;
+
+        // build NF*Skippable sets from runtime data 
+        skipSets[D].applyPattern("[:NFD_Inert:]");
+        skipSets[C].applyPattern("[:NFC_Inert:]");
+        skipSets[KD].applyPattern("[:NFKD_Inert:]");
+        skipSets[KC].applyPattern("[:NFKC_Inert:]");
+
+        expectSets = initSkippables(expectSets);
+        if(expectSets[D].contains(0x0350)){
             errln("expectSets[D] contains 0x0350");
-       }
-       //expectSets.length for now do not test FCD and NONE since there is no data
-       for(i=0; i< 4; ++i) {
+        }
+        for(int i=0; i<expectSets.length; ++i) {
+            if(!skipSets[i].equals(expectSets[i])) {
+                errln("error: TestSkippable skipSets["+i+"]!=expectedSets["+i+"]\n"+
+                      "May need to update hardcoded UnicodeSet patterns in com.ibm.icu.dev.test.normalizer.BasicTest.java\n"+
+                      "See ICU4J - unicodetools.com.ibm.text.UCD.NFSkippable\n" +
+                      "Run com.ibm.text.UCD.Main with the option NFSkippable.");
 
-           if(!skipSets[i].equals(expectSets[i])) {
-               errln("error: TestSkippable skipSets["+i+"]!=expectedSets["+i+"]\n"+
-                     "May need to update hardcoded UnicodeSet patterns in com.ibm.icu.dev.test.normalizer.BasicTest.java\n"+
-                     "See ICU4J - unicodetools.com.ibm.text.UCD.NFSkippable\n" +
-                     "Run com.ibm.text.UCD.Main with the option NFSkippable.");
-   
-               s=new StringBuffer();
-               
-               s.append("\n\nskip=       ");
-               s.append(skipSets[i].toPattern(true));
-               s.append("\n\n");
-               
-               s.append("skip-expect=");             
-               pattern = new StringBuffer(((UnicodeSet)skipSets[i].clone()).removeAll(expectSets[i]).toPattern(true));
-               s.append(pattern);
-   
-               pattern.delete(0,pattern.length());
-               s.append("\n\nexpect-skip=");
-               pattern = new StringBuffer(((UnicodeSet)expectSets[i].clone()).removeAll(skipSets[i]).toPattern(true));
-               s.append(pattern);
-               s.append("\n\n");
-               
-               pattern.delete(0,pattern.length());
-               s.append("\n\nintersection(expect,skip)=");
-               UnicodeSet intersection  = ((UnicodeSet) expectSets[i].clone()).retainAll(skipSets[i]);
-               pattern = new StringBuffer(intersection.toPattern(true));
-               s.append(pattern);
-               s.append("\n\n");
-               
+                s=new StringBuilder();
 
-               
-               errln(s.toString());
-           }
-       }
-     }
-     
-     public void TestBugJ2068(){
+                s.append("\n\nskip=       ");
+                s.append(skipSets[i].toPattern(true));
+                s.append("\n\n");
+
+                s.append("skip-expect=");             
+                pattern = new StringBuilder(((UnicodeSet)skipSets[i].clone()).removeAll(expectSets[i]).toPattern(true));
+                s.append(pattern);
+
+                pattern.delete(0,pattern.length());
+                s.append("\n\nexpect-skip=");
+                pattern = new StringBuilder(((UnicodeSet)expectSets[i].clone()).removeAll(skipSets[i]).toPattern(true));
+                s.append(pattern);
+                s.append("\n\n");
+
+                pattern.delete(0,pattern.length());
+                s.append("\n\nintersection(expect,skip)=");
+                UnicodeSet intersection  = ((UnicodeSet) expectSets[i].clone()).retainAll(skipSets[i]);
+                pattern = new StringBuilder(intersection.toPattern(true));
+                s.append(pattern);
+                s.append("\n\n");
+
+                errln(s.toString());
+            }
+        }
+    }
+
+    public void TestBugJ2068(){
         String sample = "The quick brown fox jumped over the lazy dog";
         UCharacterIterator text = UCharacterIterator.getInstance(sample);
         Normalizer norm = new Normalizer(text,Normalizer.NFC,0);

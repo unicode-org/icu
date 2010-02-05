@@ -16,6 +16,7 @@ import java.util.MissingResourceException;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.BMPSet;
+import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
@@ -3097,6 +3098,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 case UCharacterProperty.SRC_CASE_AND_NORM:
                     NormalizerImpl.addPropertyStarts(incl);
                     UCaseProps.getSingleton().addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFC:
+                    Norm2AllModes.getNFCInstanceNoIOException().impl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFKC:
+                    Norm2AllModes.getNFKCInstanceNoIOException().impl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFKC_CF:
+                    Norm2AllModes.getNFKC_CFInstanceNoIOException().impl.addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_CASE:
                     UCaseProps.getSingleton().addPropertyStarts(incl);

@@ -216,7 +216,7 @@ public final class Normalizer2Impl {
             } else {
                 try {
                     app.append(str);
-                    str.delete(0, 0x7fffffff);
+                    str.setLength(0);
                     reorderStart=0;
                 } catch(IOException e) {
                     throw new RuntimeException(e);  // Avoid declaring "throws IOException".
@@ -237,7 +237,7 @@ public final class Normalizer2Impl {
             } else {
                 try {
                     app.append(str).append(s, start, limit);
-                    str.delete(0, 0x7fffffff);
+                    str.setLength(0);
                     reorderStart=0;
                 } catch(IOException e) {
                     throw new RuntimeException(e);  // Avoid declaring "throws IOException".
@@ -247,7 +247,7 @@ public final class Normalizer2Impl {
             return this;
         }
         public void remove() {
-            str.delete(0, 0x7fffffff);
+            str.setLength(0);
             lastCC=0;
             reorderStart=0;
         }
@@ -571,48 +571,36 @@ public final class Normalizer2Impl {
     /**
      * Get the decomposition for one code point.
      * @param c code point
-     * @param buffer out-only buffer gets the decomposition appended
-     * @return true if c has a decomposition
-     * TODO: Look at the call sites and see if it would be better to return a String
-     * rather than writing to an Appendable.
+     * @return c's decomposition, if it has one; returns null if it does not have a decomposition
      */
-    public boolean getDecomposition(int c, Appendable buffer) {
-        try {
-            int decomp=-1;
-            int norm16;
-            for(;;) {
-                if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
-                    // c does not decompose
-                } else if(isHangul(norm16)) {
-                    // Hangul syllable: decompose algorithmically
-                    Hangul.decompose(c, buffer);
-                    return true;
-                } else if(isDecompNoAlgorithmic(norm16)) {
-                    decomp=c=mapAlgorithmic(c, norm16);
-                    continue;
-                } else {
-                    // c decomposes, get everything from the variable-length extra data
-                    int firstUnit=extraData.charAt(norm16++);
-                    int length=firstUnit&MAPPING_LENGTH_MASK;
-                    if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                        ++norm16;
-                    }
-                    buffer.append(extraData, norm16, norm16+length);
-                    return true;
+    public String getDecomposition(int c) {
+        int decomp=-1;
+        int norm16;
+        for(;;) {
+            if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
+                // c does not decompose
+            } else if(isHangul(norm16)) {
+                // Hangul syllable: decompose algorithmically
+                StringBuilder buffer=new StringBuilder();
+                Hangul.decompose(c, buffer);
+                return buffer.toString();
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                decomp=c=mapAlgorithmic(c, norm16);
+                continue;
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16++);
+                int length=firstUnit&MAPPING_LENGTH_MASK;
+                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                    ++norm16;
                 }
-                if(decomp<0) {
-                    return false;
-                } else if(decomp<=0xffff) {
-                    buffer.append((char)decomp);
-                } else {
-                    char[] surrogatePair=Character.toChars(decomp);
-                    buffer.append(surrogatePair[0]).append(surrogatePair[1]);
-                }
-                return true;
+                return extraData.substring(norm16, norm16+length);
             }
-        } catch(IOException e) {
-            // Will not occur because we do not write to I/O.
-            throw new RuntimeException(e);
+            if(decomp<0) {
+                return null;
+            } else {
+                return UTF16.valueOf(decomp);
+            }
         }
     }
 

@@ -836,12 +836,12 @@ public final class Normalizer implements Cloneable {
      */
     public static String normalize(int char32, Mode mode, int options) {
         if(mode == NFD && options == 0) {
-            StringBuilder decomposition = new StringBuilder();
-            if(Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(char32, decomposition)) {
-                return decomposition.toString();
-            } else {
-                return UTF16.valueOf(char32);
+            String decomposition =
+                Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(char32);
+            if(decomposition == null) {
+                decomposition = UTF16.valueOf(char32);
             }
+            return decomposition;
         }
         return normalize(UTF16.valueOf(char32), mode, options);
     }
@@ -1742,7 +1742,7 @@ public final class Normalizer implements Cloneable {
     }
 
     private void clearBuffer() {
-        buffer.delete(0, 0x7fffffff);
+        buffer.setLength(0);
         bufferPos=0;
     }
 
@@ -1789,15 +1789,6 @@ public final class Normalizer implements Cloneable {
         bufferPos=buffer.length();
         return buffer.length()!=0;
     }
-
-    /**
-     * Internal API
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public static boolean isNFSkippable(int c, Mode mode) {
-        return mode.normalizer2.isInert(c);
-    }    
 
     // TODO: Broaden the public compare(String, String, options) API like this. Ticket #7407
     private static int internalCompare(CharSequence s1, CharSequence s2, int options) {
