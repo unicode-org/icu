@@ -58,6 +58,8 @@ check: all check-local
 all-local: $(TARGET) 
 
 install-local: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
 dist-local:
 

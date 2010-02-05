@@ -21,7 +21,6 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
-#include "unicode/udata.h"
 #include "unicode/udbgutil.h"
 #include "unewdata.h"
 #include "cmemory.h"
@@ -43,6 +42,7 @@ static UOption options[]={
   /*3*/ UOPTION_VERBOSE,
   /*4*/ UOPTION_DEF("list-plugins", 'L', UOPT_NO_ARG),
   /*5*/ UOPTION_DEF("milisecond-time", 'm', UOPT_NO_ARG),
+  /*6*/ UOPTION_DEF("cleanup", 'K', UOPT_NO_ARG),
 };
 
 
@@ -62,125 +62,6 @@ static const char *getPlatform()
 #else
 	return "unknown"
 #endif
-}
-
-
-
-
-void *theLib = NULL;
-
-
-void printVersion(const uint8_t  *v)
-{
-  int i;
-  for(i=0;i<4;i++)
-    fprintf(stdout, "%3d%c", (int)v[i], (i==3?' ':'.'));
-
-  for(i=0;i<4;i++)
-    fprintf(stdout, "%c", isprint(v[i])?v[i]:'_');
-
-  fprintf(stdout, "\n");
-}
-
-void printInfo(const UDataInfo *info)
-{
-    printf("Size: %d, Endianness: %c, Charset family: %c, ",
-	   (int)info->size,
-	   "lB?"[info->isBigEndian],
-	   "AE?"[info->charsetFamily]);
-    
-    printf("UChar=%d bytes.\n", info->sizeofUChar);
-
-    printf("dataFormat   =");
-    printVersion(info->dataFormat);
-    printf("formatVersion=");
-    printVersion(info->formatVersion);
-    printf("dataVersion  =");
-    printVersion(info->dataVersion);
-}
-
-#if 0
-void cmd_C(const char */*buf*/, UErrorCode *status)
-{
-    if(theLib != NULL)
-    {
-        uplug_closeLibrary(theLib, status);
-        if(U_FAILURE(*status))
-        {
-            fprintf(stderr, "Closed, with err %s\n", u_errorName(*status));
-        } else {
-            fprintf(stderr, "Closed.\n");
-        }
-        theLib = NULL;
-    }
-}
-
-void cmd_O(const char *buf, UErrorCode *status)
-{
-    void *p;
-
-    if((buf[1]!=' ')||(buf[2]==0))
-    {
-        fprintf(stderr, "Usage:  O library...\n");
-        return;
-    }
-
-    /* close the buffer if it is open. */
-    cmd_C(buf, status);
-
-    fprintf(stderr, "Opening: [%s]\n", buf+2);
-    p = uplug_openLibrary(buf+2, status);
-    if(!p || U_FAILURE(*status)) {
-        fprintf(stderr, "Didnt' open. %s\n", u_errorName(*status));
-    }
-    else
-    {
-        fprintf(stderr, " -> %p\n", p);
-    }
-
-    theLib = p;
-}
-
-#endif
-
-
-
-void
-cmd_help()
-{
-/*
-    fprintf(stderr, "Options:\n");
-    fprintf(stderr, "\th                     - print the top 256 bytes of the item\n");
-    fprintf(stderr, "\ti                     - print info on current item\n");
-    fprintf(stderr, "\tl %cpath%cpkg|name.type - load item of path, package, 'name' and 'type'\n", U_FILE_SEP_CHAR, U_FILE_SEP_CHAR);
-    fprintf(stderr, "\tl name.type           - load item of 'name' and 'type'\n");
-    fprintf(stderr, "\tl pkg|name.type       - load item of package, 'name' and 'type'\n");
-    fprintf(stderr, "\tp                     - print the path\n");
-    fprintf(stderr, "\tp=                    - set the path to empty\n");
-    fprintf(stderr, "\tp=%ca%cb%c%cstuff%cmypkg.dat - set the path\n", U_FILE_SEP_CHAR,U_FILE_SEP_CHAR,U_PATH_SEP_CHAR,U_FILE_SEP_CHAR, U_FILE_SEP_CHAR,U_PATH_SEP_CHAR, U_FILE_SEP_CHAR, U_FILE_SEP_CHAR);
-    fprintf(stderr, "\tq                     - quit the program\n");
-    fprintf(stderr, "\tu                     - unload data item\n");
-    fprintf(stderr, "\tv                     - print version and info (Loads data!)\n");
-    fprintf(stderr, "\t?                     - show this help\n");
-#if CAN_DYNAMIC_LOAD
-    fprintf(stderr, " Dynamic Load Functions:\n");
-    fprintf(stderr, "\tO whatever.dll        - DLL load\n");
-    fprintf(stderr, "\tC                     - close DLL\n");
-    fprintf(stderr, "\tS myapp_dat=myapp     - load app data myapp from package myapp_dat\n");
-    fprintf(stderr, "\tI icuwhatever_dat     - load ICU data\n");
-    fprintf(stderr, "\tI " U_ICUDATA_NAME "      ( default for 'I')\n");
-#endif
-*/
-    fprintf(stderr, "No help available yet, sorry. \n");
-    fprintf(stderr, "\t -m\n"
-                    "\t --millisecond-time   - Print the current UTC time in milliseconds.\n");
-}
-
-const char *prettyDir(const char *d)
-{
-    if(d == NULL) return "<NULL>";
-    if(*d == 0) return "<EMPTY>";
-    return d;
 }
 
 void cmd_millis()
@@ -278,10 +159,10 @@ void cmd_version(UBool noLoad)
     printf("</ICUINFO>\n\n");
 }
 
-void cmd_cleanup(UBool noLoad)
+void cmd_cleanup()
 {
     u_cleanup();
-    /* fprintf(stderr,"u_cleanup() returned.\n");*/
+    fprintf(stderr,"ICU u_cleanup() called.\n");
 }
 
 
@@ -379,12 +260,19 @@ main(int argc, char* argv[]) {
             argv[-argc]);
     }
     if( options[0].doesOccur || options[1].doesOccur) {
-        fprintf(stderr,
-            "usage: %s [-options]\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n",
-            argv[0]);
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+      fprintf(stderr, "%s: Output information about the current ICU\n", argv[0]);
+      fprintf(stderr, "Options:\n"
+              " -h     or  --help                 - Print this help message.\n"
+              " -m     or  --millisecond-time     - Print the current UTC time in milliseconds.\n"
+              " -d <dir>   or  --icudatadir <dir> - Set the ICU Data Directory\n"
+              " -v                                - Print version and configuration information about ICU\n"
+              " -L         or  --list-plugins     - List and diagnose issues with ICU Plugins\n"
+              " -K         or  --cleanup          - Call u_cleanup() before exitting (will attempt to unload plugins)\n"
+              "\n"
+              "If no arguments are given, the tool will print ICU version and configuration information.\n"
+              );
+      fprintf(stderr, "International Components for Unicode %s\n%s\n", U_ICU_VERSION, U_COPYRIGHT_STRING );
+      return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
     
     if(options[2].doesOccur) {
@@ -394,25 +282,24 @@ main(int argc, char* argv[]) {
     if(options[5].doesOccur) {
       cmd_millis();
       didSomething=TRUE;
-    } else {
-        if(options[3].doesOccur) {
-            cmd_version(FALSE);
-            didSomething = TRUE;
-        }
+    } 
+    if(options[4].doesOccur) {
+      cmd_listplugins();
+      didSomething = TRUE;
+    }
+    
+    if(options[3].doesOccur) {
+      cmd_version(FALSE);
+      didSomething = TRUE;
+    }
         
-        if(options[4].doesOccur) {
-            cmd_listplugins();
-            didSomething = TRUE;
-        }
-
-        if(options[3].doesOccur) {  /* 2nd part of version: cleanup */
-            cmd_cleanup(FALSE);
-            didSomething = TRUE;
-        }
+    if(options[6].doesOccur) {  /* 2nd part of version: cleanup */
+      cmd_cleanup();
+      didSomething = TRUE;
+    }
         
-        if(!didSomething) {
-            cmd_version(FALSE);  /* at least print the version # */
-        }
+    if(!didSomething) {
+      cmd_version(FALSE);  /* at least print the version # */
     }
 
     return U_FAILURE(errorCode);
