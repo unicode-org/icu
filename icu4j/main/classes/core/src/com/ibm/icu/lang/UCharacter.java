@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
@@ -3914,9 +3916,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCombiningClass(int ch)
     {
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
-        throw new IllegalArgumentException("Codepoint out of bounds");
+            throw new IllegalArgumentException("Codepoint out of bounds");
         }
-        return NormalizerImpl.getCombiningClass(ch);
+        Normalizer2Impl impl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+        return impl.getCC(impl.getNorm16(ch));
     }
 
     /**
@@ -5381,8 +5384,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 case UProperty.NFKD_QUICK_CHECK:
                 case UProperty.NFC_QUICK_CHECK:
                 case UProperty.NFKC_QUICK_CHECK:
-                    // 2=UNORM_NFD
-                    return NormalizerImpl.quickCheck(ch, (type-UProperty.NFD_QUICK_CHECK)+2);
+                    return Norm2AllModes.getN2WithImpl(type-UProperty.NFD_QUICK_CHECK).getQuickCheck(ch);
                 case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
                     return NormalizerImpl.getFCD16(ch)>>8;
                 case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:

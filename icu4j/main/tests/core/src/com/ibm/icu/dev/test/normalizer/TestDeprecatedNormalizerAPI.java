@@ -7,9 +7,9 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.ComposedCharIter;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.StringCharacterIterator;
@@ -152,7 +152,7 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
             String decomp = iter.decomposition();
             String comp = Normalizer.compose(decomp, compat);
 
-            if (NormalizerImpl.isFullCompositionExclusion(ch)) {
+            if (UCharacter.hasBinaryProperty(ch, UProperty.FULL_COMPOSITION_EXCLUSION)) {
                 logln("Skipped excluded char " + hex(ch) + " (" + UCharacter.getName(ch) + ")" );
                 continue;
             }

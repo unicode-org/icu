@@ -13,6 +13,8 @@ package com.ibm.icu.text;
  * import java.text.StringCharacterIterator;
  * import java.text.CharacterIterator;
  */
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.StringUCharacterIterator;
@@ -855,8 +857,9 @@ public final class CollationElementIterator
     private StringBuilder m_utilStringBuffer_;
     private StringBuilder m_utilSkippedBuffer_;
     private CollationElementIterator m_utilColEIter_;
+    private static final Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
     /**
-     * One character before the first non-zero combining class character
+     * The first non-zero combining class character
      */
     private static final int FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_ = 0xC0;
     /**
@@ -1002,8 +1005,9 @@ public final class CollationElementIterator
     private int getCombiningClass(int ch)
     {
         if (ch >= LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_ &&
-            m_collator_.isUnsafe((char)ch) || ch > 0xFFFF) {
-            return NormalizerImpl.getCombiningClass(ch);
+            m_collator_.isUnsafe((char)ch) || ch > 0xFFFF
+        ) {
+            return nfcImpl.getCC(nfcImpl.getNorm16(ch));
         }
         return 0;
     }
