@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.VersionInfo;
@@ -496,13 +495,13 @@ public final class Normalizer2Impl {
 
     public int getNorm16(int c) { return normTrie.get(c); }
 
-    public Normalizer.QuickCheckResult getCompQuickCheck(int norm16) {
+    public int getCompQuickCheck(int norm16) {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
-            return Normalizer.YES;
+            return 1;  // yes
         } else if(minMaybeYes<=norm16) {
-            return Normalizer.MAYBE;
+            return 2;  // maybe
         } else {
-            return Normalizer.NO;
+            return 0;  // no
         }
     }
     public boolean isCompNo(int norm16) { return minNoNo<=norm16 && norm16<minMaybeYes; }

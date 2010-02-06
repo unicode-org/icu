@@ -2764,18 +2764,7 @@ public class BasicTest extends TestFmwk {
             } 
         }
     }  
-    
-    public void TestGetNX(){
-        UnicodeSet set = NormalizerImpl.getNX(1 /*NormalizerImpl.NX_HANGUL*/);
-        if(!set.contains(0xac01)){
-            errln("getNX did not return correct set for NX_HANGUL");
-        }
-        
-        set = NormalizerImpl.getNX(2/*NormalizerImpl.NX_CJK_COMPAT*/);
-        if(!set.contains('\uFA20')){
-            errln("getNX did not return correct set for NX_CJK_COMPAT");
-        }
-    }
+
     public void TestSerializedSet(){
         USerializedSet sset=new USerializedSet();
         UnicodeSet set = new UnicodeSet();

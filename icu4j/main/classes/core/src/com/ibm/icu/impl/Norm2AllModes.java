@@ -130,8 +130,8 @@ public final class Norm2AllModes {
             return isNormalized(s) ? Normalizer.YES : Normalizer.NO;
         }
 
-        public Normalizer.QuickCheckResult getQuickCheck(int c) {
-            return Normalizer.YES;
+        public int getQuickCheck(int c) {
+            return 1;
         }
 
         Normalizer2Impl impl;
@@ -156,8 +156,8 @@ public final class Norm2AllModes {
             return impl.decompose(s, 0, s.length(), null);
         }
         @Override
-        public Normalizer.QuickCheckResult getQuickCheck(int c) {
-            return impl.isDecompYes(impl.getNorm16(c)) ? Normalizer.YES : Normalizer.NO;
+        public int getQuickCheck(int c) {
+            return impl.isDecompYes(impl.getNorm16(c)) ? 1 : 0;
         }
         @Override
         public boolean hasBoundaryBefore(int c) { return impl.hasDecompBoundary(c, true); }
@@ -206,7 +206,7 @@ public final class Norm2AllModes {
             return impl.composeQuickCheck(s, 0, s.length(), onlyContiguous, true)>>>1;
         }
         @Override
-        public Normalizer.QuickCheckResult getQuickCheck(int c) {
+        public int getQuickCheck(int c) {
             return impl.getCompQuickCheck(impl.getNorm16(c));
         }
         @Override
@@ -242,8 +242,8 @@ public final class Norm2AllModes {
             return impl.makeFCD(s, 0, s.length(), null);
         }
         @Override
-        public Normalizer.QuickCheckResult getQuickCheck(int c) {
-            return impl.isDecompYes(impl.getNorm16(c)) ? Normalizer.YES : Normalizer.NO;
+        public int getQuickCheck(int c) {
+            return impl.isDecompYes(impl.getNorm16(c)) ? 1 : 0;
         }
         @Override
         public boolean hasBoundaryBefore(int c) { return impl.hasFCDBoundaryBefore(c); }
@@ -283,6 +283,16 @@ public final class Norm2AllModes {
     }
     public static Norm2AllModes getNFKC_CFInstanceNoIOException() {
         return getInstanceFromSingletonNoIOException(nfkc_cfSingleton);
+    }
+    // For use in properties APIs.
+    public static Normalizer2WithImpl getN2WithImpl(int index) {
+        switch(index) {
+        case 0: return getNFCInstanceNoIOException().decomp;  // NFD
+        case 1: return getNFKCInstanceNoIOException().decomp; // NFKD
+        case 2: return getNFCInstanceNoIOException().comp;    // NFC
+        case 3: return getNFKCInstanceNoIOException().comp;   // NFKC
+        default: return null;
+        }
     }
     public static Norm2AllModes getInstance(InputStream data, String name) throws IOException {
         if(data==null) {

@@ -387,16 +387,9 @@ public final class UCharacterProperty
                         Normalizer2Impl impl=Norm2AllModes.getNFCInstanceNoIOException().impl;
                         return impl.isCompNo(impl.getNorm16(c));
                     }
-                    case UProperty.NFD_INERT:
-                        return Norm2AllModes.getNFCInstanceNoIOException().decomp.isInert(c);
-                    case UProperty.NFKD_INERT:
-                        return Norm2AllModes.getNFKCInstanceNoIOException().decomp.isInert(c);
-                    case UProperty.NFC_INERT:
-                        return Norm2AllModes.getNFCInstanceNoIOException().comp.isInert(c);
-                    case UProperty.NFKC_INERT:
-                        return Norm2AllModes.getNFKCInstanceNoIOException().comp.isInert(c);
                     default:
-                        break;
+                        // UCHAR_NF..._INERT properties
+                        return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
                     }
                 } else if(column==SRC_NFKC_CF) {
                     // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
