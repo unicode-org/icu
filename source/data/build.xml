@@ -71,7 +71,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metaZones, windowsZones, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, resfiles_curr, resfiles_lang, resfiles_region, resfiles_zone, collation, colfiles, rbnf, rbnffiles, supplementalData, metaZones, windowsZones, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles, keyTypeData" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -415,6 +415,20 @@
             </run>
         </cldr-build>
     </target>
+
+    <target name="keyTypeData" depends="init,setup" description="builds keyTypeData.txt and timezoneTypes.txt from bcp47/*.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/bcp47" />
+                    <arg name="-k" value="${env.CLDR_DIR}/common/bcp47" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                </args>
+            </run>
+        </cldr-build>
+    </target>
+
         <target name="translit" depends="init,setup" description="builds collation files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.ConvertTransforms" srcFile=".*xml" destFile=".*txt">
             <run>
