@@ -3183,18 +3183,17 @@ public final class ULocale implements Serializable {
     // LDML legacy/BCP47 key and type mapping functions
     //
     private static String ldmlKeyToBCP47(String key) {
-        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
                                             ICUResourceBundle.ICU_BASE_NAME,
-                                            "supplementalData",
+                                            "keyTypeData",
                                             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
-        UResourceBundle keyMaps = bcp47Mappings.get("key");
+        UResourceBundle keyMap = keyTypeData.get("keyMap");
 
         // normalize key to lowercase
         key = AsciiUtil.toLowerString(key);
         String bcpKey = null;
         try {
-            bcpKey = keyMaps.getString(key);
+            bcpKey = keyMap.getString(key);
         } catch (MissingResourceException mre) {
             // fall through
         }
@@ -3209,20 +3208,19 @@ public final class ULocale implements Serializable {
     }
 
     private static String bcp47ToLDMLKey(String bcpKey) {
-        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
                                             ICUResourceBundle.ICU_BASE_NAME,
-                                            "supplementalData",
+                                            "keyTypeData",
                                             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
-        UResourceBundle keyMaps = bcp47Mappings.get("key");
+        UResourceBundle keyMap = keyTypeData.get("keyMap");
 
         // normalize bcp key to lowercase
         bcpKey = AsciiUtil.toLowerString(bcpKey);
         String key = null;
-        for (int i = 0; i < keyMaps.getSize(); i++) {
-            UResourceBundle keyMap = keyMaps.get(i);
-            if (bcpKey.equals(keyMap.getString())) {
-                key = keyMap.getKey();
+        for (int i = 0; i < keyMap.getSize(); i++) {
+            UResourceBundle mapData = keyMap.get(i);
+            if (bcpKey.equals(mapData.getString())) {
+                key = mapData.getKey();
                 break;
             }
         }
@@ -3233,22 +3231,34 @@ public final class ULocale implements Serializable {
     }
 
     private static String ldmlTypeToBCP47(String key, String type) {
-        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
                                             ICUResourceBundle.ICU_BASE_NAME,
-                                            "supplementalData",
+                                            "keyTypeData",
                                             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
+        UResourceBundle typeMap = keyTypeData.get("typeMap");
 
-        // normalize key/type to lowercase
+        // keys are case-insensitive, while types are case-sensitive
         key = AsciiUtil.toLowerString(key);
-        type = AsciiUtil.toLowerString(type);
+        UResourceBundle typeMapForKey = null;
         String bcpType = null;
+        String typeResKey = key.equals("timezone") ? type.replace('/', ':') : type;
         try {
-            UResourceBundle typeMaps = bcp47Mappings.get(key);
-            String tmp = key.equals("timezone") ? type.replaceAll("/", ":") : type;
-            bcpType = typeMaps.getString(tmp);
+            typeMapForKey = typeMap.get(key);
+            bcpType = typeMapForKey.getString(typeResKey);
         } catch (MissingResourceException mre) {
             // fall through
+        }
+
+        if (bcpType == null && typeMapForKey != null) {
+            // is this type alias?
+            UResourceBundle typeAlias = keyTypeData.get("typeAlias");
+            try {
+                UResourceBundle typeAliasForKey = typeAlias.get(key);
+                typeResKey = typeAliasForKey.getString(typeResKey);
+                bcpType = typeMapForKey.getString(typeResKey.replace('/', ':'));
+            } catch (MissingResourceException mre) {
+                // fall through
+            }
         }
 
         if (bcpType == null) {
@@ -3262,11 +3272,11 @@ public final class ULocale implements Serializable {
     }
 
     private static String bcp47ToLDMLType(String key, String bcpType) {
-        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME,
-                "supplementalData",
-                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
+        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
+                                            ICUResourceBundle.ICU_BASE_NAME,
+                                            "keyTypeData",
+                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle typeMap = keyTypeData.get("typeMap");
 
         // normalize key/bcpType to lowercase
         key = AsciiUtil.toLowerString(key);
@@ -3274,19 +3284,19 @@ public final class ULocale implements Serializable {
 
         String type = null;
         try {
-            UResourceBundle typeMaps = bcp47Mappings.get(key);
+            UResourceBundle typeMapForKey = typeMap.get(key);
 
             // Note:    Linear search for time zone ID might be too slow.
             //          ICU services do not use timezone keywords for now.
             //          In future, we may need to build the optimized inverse
             //          lookup table.
 
-            for (int i = 0; i < typeMaps.getSize(); i++) {
-                UResourceBundle typeMap = typeMaps.get(i);
-                if (bcpType.equals(typeMap.getString())) {
-                    type = typeMap.getKey();
+            for (int i = 0; i < typeMapForKey.getSize(); i++) {
+                UResourceBundle mapData = typeMapForKey.get(i);
+                if (bcpType.equals(mapData.getString())) {
+                    type = mapData.getKey();
                     if (key.equals("timezone")) {
-                        type = type.replaceAll(":", "/");
+                        type = type.replace(':', '/');
                     }
                     break;
                 }
