@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,7 +49,7 @@ public class LocaleBuilderTest extends TestFmwk {
             {"st", "K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
             {"st", "E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
             {"st", "E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
-            {"st", "L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc", "en_US@timezone=america/new_york"},
+            {"st", "L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc", "en_US@timezone=America/New_York"},
             {"st", "L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk", "true", "T", "de-u-co-phonebk-kk-true-ks-level1", "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
             {"lv", "L", "en", "R", "us", "V", "Windows_XP", "T", "en-US-windows-x-variant-xp", "en_US_WINDOWS_XP"},
         };

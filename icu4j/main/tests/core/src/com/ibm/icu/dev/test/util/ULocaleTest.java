@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2009, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -3768,6 +3768,7 @@ public class ULocaleTest extends TestFmwk {
             {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk"},
             {"th@numbers=thai;z=extz;x=priv-use;a=exta",   "th-a-exta-u-nu-thai-z-extz-x-priv-use"},
             {"en@timezone=America/New_York;calendar=japanese",    "en-u-ca-japanese-tz-usnyc"},
+            {"en@timezone=US/Eastern",    "en-u-tz-usnyc"},
             {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z"},
             {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
         };
@@ -3786,7 +3787,6 @@ public class ULocaleTest extends TestFmwk {
         final Integer NOERROR = Integer.valueOf(-1);
 
         final Object[][] langtag_to_locale = {
-                {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      Integer.valueOf(15)},
             {"en",                  "en",                   NOERROR},
             {"en-us",               "en_US",                NOERROR},
             {"und-us",              "_US",                  NOERROR},
@@ -3816,7 +3816,7 @@ public class ULocaleTest extends TestFmwk {
             {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", NOERROR},
             {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   NOERROR},
             {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      Integer.valueOf(15)},
-            {"en-us-u-tz-usnyc",    "en_US@timezone=america/new_york",      NOERROR},
+            {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      NOERROR},
             {"und-a-abc-def",       "@a=abc-def",           NOERROR},
             {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
             {"fr--FR",              "fr",                   Integer.valueOf(3)},
