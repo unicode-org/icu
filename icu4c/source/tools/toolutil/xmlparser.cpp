@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -563,7 +563,7 @@ UnicodeString
 UXMLParser::scanContent(UErrorCode &status) {
     UnicodeString  result;
     if (mXMLCharData.lookingAt(fPos, status)) {
-        result = mXMLCharData.group(0, status);
+        result = mXMLCharData.group((int32_t)0, status);
         // Normalize the new-lines.  (Before char ref substitution)
         mNewLineNormalizer.reset(result);
         result = mNewLineNormalizer.replaceAll(fOneLF, status);
@@ -622,7 +622,7 @@ UXMLParser::replaceCharRefs(UnicodeString &s, UErrorCode &status) {
             // An unrecognized &entity;  Leave it alone.
             //  TODO:  check that it really looks like an entity, and is not some
             //         random & in the text.
-            replacement = mAmps.group(0, status);
+            replacement = mAmps.group((int32_t)0, status);
         }
         mAmps.appendReplacement(result, replacement, status);
     }
