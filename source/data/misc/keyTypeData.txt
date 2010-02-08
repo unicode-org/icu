@@ -9,19 +9,19 @@
 keyTypeData:table(nofallback){
     keyMap{
         calendar{"ca"}
-        colAlternate{"ka"}
-        colBackwards{"kb"}
-        colCaseFirst{"kf"}
-        colCaseLevel{"kc"}
-        colHiraganaQuaternary{"kh"}
-        colNormalization{"kk"}
-        colNumeric{"kn"}
-        colStrength{"ks"}
+        colalternate{"ka"}
+        colbackwards{"kb"}
+        colcasefirst{"kf"}
+        colcaselevel{"kc"}
+        colhiraganaquaternary{"kh"}
         collation{"co"}
+        colnormalization{"kk"}
+        colnumeric{"kn"}
+        colstrength{"ks"}
         currency{"cu"}
         numbers{"nu"}
         timezone{"tz"}
-        variableTop{"vt"}
+        variabletop{"vt"}
     }
     typeAlias{
         timezone:alias{"/ICUDATA/timezoneTypes/typeAlias/timezone"}
@@ -32,44 +32,44 @@ keyTypeData:table(nofallback){
             gregorian{"gregory"}
             islamic-civil{"islamicc"}
         }
-        colAlternate{
+        colalternate{
             non-ignorable{"noignore"}
         }
-        colBackwards{
+        colbackwards{
             no{"false"}
             yes{"true"}
         }
-        colCaseFirst{
+        colcasefirst{
             no{"false"}
         }
-        colCaseLevel{
-            no{"false"}
-            yes{"true"}
-        }
-        colHiraganaQuaternary{
+        colcaselevel{
             no{"false"}
             yes{"true"}
         }
-        colNormalization{
+        colhiraganaquaternary{
             no{"false"}
             yes{"true"}
-        }
-        colNumeric{
-            no{"false"}
-            yes{"true"}
-        }
-        colStrength{
-            identical{"identic"}
-            primary{"level1"}
-            quarternary{"level4"}
-            secondary{"level2"}
-            tertiary{"level3"}
         }
         collation{
             dictionary{"dict"}
             gb2312han{"gb2312"}
             phonebook{"phonebk"}
             traditional{"trad"}
+        }
+        colnormalization{
+            no{"false"}
+            yes{"true"}
+        }
+        colnumeric{
+            no{"false"}
+            yes{"true"}
+        }
+        colstrength{
+            identical{"identic"}
+            primary{"level1"}
+            quarternary{"level4"}
+            secondary{"level2"}
+            tertiary{"level3"}
         }
         timezone:alias{"/ICUDATA/timezoneTypes/typeMap/timezone"}
     }
