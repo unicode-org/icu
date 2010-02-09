@@ -120,21 +120,6 @@ public final class NormalizerImpl {
     /*******************************/
 
     /* Wrappers for Trie implementations */ 
-    static final class FCDTrieImpl implements Trie.DataManipulate{
-        static CharTrie fcdTrie=null;
-       /**
-        * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
-        * data the index array offset of the indexes for that lead surrogate.
-        * @param value data value for a surrogate from the trie, including
-        *         the folding offset
-        * @return data offset or 0 if there is no data for the lead surrogate
-        */
-        /* fcdTrie: the folding offset is the lead FCD value itself */
-        public int getFoldingOffset(int value){
-            return value;
-        }
-    }
-    
     static final class AuxTrieImpl implements Trie.DataManipulate{
         static CharTrie auxTrie = null;
        /**
@@ -151,9 +136,7 @@ public final class NormalizerImpl {
     }
          
     /****************************************************/
-    
-    
-    private static FCDTrieImpl fcdTrieImpl;
+
     private static AuxTrieImpl auxTrieImpl;
     private static int[] indexes;
     private static char[] combiningTable;
@@ -211,14 +194,12 @@ public final class NormalizerImpl {
             byte[] auxBytes = new byte[indexes[NormalizerImpl.INDEX_AUX_TRIE_SIZE]];
             canonStartSets=new Object[NormalizerImpl.CANON_SET_MAX_CANON_SETS];
             
-            fcdTrieImpl = new FCDTrieImpl();
             auxTrieImpl = new AuxTrieImpl();
                         
             // load the rest of the data data and initialize the data members
             reader.read(normBytes, fcdBytes,auxBytes, extraData, combiningTable, 
                         canonStartSets);
                                        
-            FCDTrieImpl.fcdTrie   = new CharTrie( new ByteArrayInputStream(fcdBytes),fcdTrieImpl  );
             AuxTrieImpl.auxTrie   = new CharTrie( new ByteArrayInputStream(auxBytes),auxTrieImpl  );
             
             // we reached here without any exceptions so the data is fully 
@@ -254,31 +235,9 @@ public final class NormalizerImpl {
     
     /* data access primitives ----------------------------------------------- */
     
-//    private static long getNorm32(int c,int mask){
-//        long/*unsigned*/ norm32= getNorm32(UTF16.getLeadSurrogate(c));
-//        if(((norm32&mask)>0) && isNorm32LeadSurrogate(norm32)) {
-//            /* c is a lead surrogate, get the real norm32 */
-//            norm32=getNorm32FromSurrogatePair(norm32,UTF16.getTrailSurrogate(c));
-//        }
-//        return norm32; 
-//    }
-    
     public static VersionInfo getUnicodeVersion(){
         return VersionInfo.getInstance(unicodeVersion[0], unicodeVersion[1],
                                        unicodeVersion[2], unicodeVersion[3]);
-    }
-    public static char    getFCD16(char c) {
-        return  FCDTrieImpl.fcdTrie.getLeadValue(c);
-    }
-    
-    public static char getFCD16FromSurrogatePair(char fcd16, char c2) {
-        /* the surrogate index in fcd16 is an absolute offset over the 
-         * start of stage 1 
-         * */
-        return FCDTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
-    }
-    public static int getFCD16(int c) {
-        return  FCDTrieImpl.fcdTrie.getCodePointValue(c);
     }
 
     public static boolean isCanonSafeStart(int c) {
@@ -444,14 +403,6 @@ public final class NormalizerImpl {
         int c;
        
         /* add the start code point of each same-value range of each trie */
-        //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator fcdIter  = new TrieIterator(FCDTrieImpl.fcdTrie);
-        RangeValueIterator.Element fcdResult = new RangeValueIterator.Element();
-
-        while(fcdIter.next(fcdResult)){
-            set.add(fcdResult.start);
-        }
-        
         if(isFormatVersion_2_1){
             //utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, set);
             TrieIterator auxIter  = new TrieIterator(AuxTrieImpl.auxTrie);

@@ -15,7 +15,6 @@ import java.util.Map;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterName;
@@ -5386,9 +5385,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 case UProperty.NFKC_QUICK_CHECK:
                     return Norm2AllModes.getN2WithImpl(type-UProperty.NFD_QUICK_CHECK).getQuickCheck(ch);
                 case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-                    return NormalizerImpl.getFCD16(ch)>>8;
+                    return Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie().get(ch)>>8;
                 case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                    return NormalizerImpl.getFCD16(ch)&0xff;
+                    return Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie().get(ch)&0xff;
                 case UProperty.GRAPHEME_CLUSTER_BREAK:
                     return (UCharacterProperty.INSTANCE.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
                 case UProperty.SENTENCE_BREAK:

@@ -520,8 +520,8 @@ public final class Normalizer2Impl {
         return norm16>=MIN_NORMAL_MAYBE_YES ? norm16&0xff : 0;
     }
 
-    int getFCD16(int c) { return fcdTrie.get(c); }
-    int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
+    public int getFCD16(int c) { return fcdTrie.get(c); }
+    public int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
 
     void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
         // Only loops for 1:1 algorithmic mappings.
@@ -1442,8 +1442,9 @@ public final class Normalizer2Impl {
     // fail the quick check loop and/or where the quick check loop's overhead
     // is unlikely to be amortized.
     // Called by the compose() and makeFCD() implementations.
-    private void decomposeShort(CharSequence s, int src, int limit,
-                                ReorderingBuffer buffer) {
+    // Public in Java for collation implementation code.
+    public void decomposeShort(CharSequence s, int src, int limit,
+                               ReorderingBuffer buffer) {
         while(src<limit) {
             int c=Character.codePointAt(s, src);
             src+=Character.charCount(c);

@@ -15,7 +15,6 @@ package com.ibm.icu.text;
  */
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.StringUCharacterIterator;
 import com.ibm.icu.impl.CharacterIteratorWrapper;
@@ -580,6 +579,15 @@ public final class CollationElementIterator
 
     // package private constructors ------------------------------------------
 
+    private CollationElementIterator(RuleBasedCollator collator) {
+        m_utilStringBuffer_ = new StringBuilder();
+        m_collator_ = collator;
+        m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
+        m_buffer_ = new StringBuilder();
+        m_utilSpecialBackUp_ = new Backup();
+        m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
+    }
+
     /**
      * <p>CollationElementIterator constructor. This takes a source
      * string and a RuleBasedCollator. The iterator will walk through
@@ -593,13 +601,8 @@ public final class CollationElementIterator
      */
     CollationElementIterator(String source, RuleBasedCollator collator)
     {
-        m_srcUtilIter_ = new StringUCharacterIterator(source);
-        m_utilStringBuffer_ = new StringBuilder();
-        m_source_ = m_srcUtilIter_;
-        m_collator_ = collator;
-        m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuilder();
-        m_utilSpecialBackUp_ = new Backup();
+        this(collator);
+        m_source_ = m_srcUtilIter_ = new StringUCharacterIterator(source);
         updateInternalState();
     }
 
@@ -617,13 +620,9 @@ public final class CollationElementIterator
     CollationElementIterator(CharacterIterator source,
                              RuleBasedCollator collator)
     {
+        this(collator);
         m_srcUtilIter_ = new StringUCharacterIterator();
-        m_utilStringBuffer_ = new StringBuilder();
         m_source_ = new CharacterIteratorWrapper(source);
-        m_collator_ = collator;
-        m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuilder();
-        m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
     
@@ -641,14 +640,10 @@ public final class CollationElementIterator
     CollationElementIterator(UCharacterIterator source,
                              RuleBasedCollator collator)
     {
+        this(collator);
         m_srcUtilIter_ = new StringUCharacterIterator();
-        m_utilStringBuffer_ = new StringBuilder();
         m_srcUtilIter_.setText(source.getText());
         m_source_ = m_srcUtilIter_;
-        m_collator_ = collator;
-        m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
-        m_buffer_ = new StringBuilder();
-        m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
 
@@ -857,7 +852,9 @@ public final class CollationElementIterator
     private StringBuilder m_utilStringBuffer_;
     private StringBuilder m_utilSkippedBuffer_;
     private CollationElementIterator m_utilColEIter_;
-    private static final Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private static final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private StringBuilder m_unnormalized_;
+    private Normalizer2Impl.ReorderingBuffer m_n2Buffer_;
     /**
      * The first non-zero combining class character
      */
@@ -1007,7 +1004,7 @@ public final class CollationElementIterator
         if (ch >= LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_ &&
             m_collator_.isUnsafe((char)ch) || ch > 0xFFFF
         ) {
-            return nfcImpl.getCC(nfcImpl.getNorm16(ch));
+            return m_nfcImpl_.getCC(m_nfcImpl_.getNorm16(ch));
         }
         return 0;
     }
@@ -1021,16 +1018,19 @@ public final class CollationElementIterator
      */
     private void normalize()
     {
+        if (m_unnormalized_ == null) {
+            m_unnormalized_ = new StringBuilder();
+            m_n2Buffer_ = new Normalizer2Impl.ReorderingBuffer(m_nfcImpl_, m_buffer_, 10);
+        } else {
+            m_unnormalized_.setLength(0);
+            m_n2Buffer_.remove();
+        }
         int size = m_FCDLimit_ - m_FCDStart_;
-        m_buffer_.setLength(0);
         m_source_.setIndex(m_FCDStart_);
         for (int i = 0; i < size; i ++) {
-            m_buffer_.append((char)m_source_.next());
+            m_unnormalized_.append((char)m_source_.next());
         }
-        String decomp = Normalizer.decompose(m_buffer_.toString(), false);
-        m_buffer_.setLength(0);
-        m_buffer_.append(decomp);
-        m_bufferOffset_ = 0;
+        m_nfcImpl_.decomposeShort(m_unnormalized_, 0, size, m_n2Buffer_);
     }
 
     /**
@@ -1046,57 +1046,51 @@ public final class CollationElementIterator
      * Incoming source offsets points to the current processing character.
      * Return source offsets points to the current processing character.
      * </p>
-     * @param ch current character
-     * @param offset current character offset
+     * @param ch current character (lead unit)
+     * @param offset offset of ch +1
      * @return true if FCDCheck passes, false otherwise
      */
-    private boolean FCDCheck(char ch, int offset)
+    private boolean FCDCheck(int ch, int offset)
     {
         boolean result = true;
 
         // Get the trailing combining class of the current character.
         // If it's zero, we are OK.
-        m_FCDStart_ = offset;
+        m_FCDStart_ = offset - 1;
         m_source_.setIndex(offset);
         // trie access
-        char fcd = NormalizerImpl.getFCD16(ch);
-        if (fcd != 0 && UTF16.isLeadSurrogate(ch)) {
-            m_source_.next();
-            ch = (char)m_source_.current(); 
-            // UCharacterIterator.DONE has 0 fcd
-            if (UTF16.isTrailSurrogate(ch)) {
-                fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, ch);
+        int fcd = m_nfcImpl_.getFCD16FromSingleLead((char)ch);
+        if (fcd != 0 && Character.isHighSurrogate((char)ch)) {
+            int c2 = m_source_.next(); 
+            if (c2 < 0) {
+                fcd = 0;  // end of input
+            } else if (Character.isLowSurrogate((char)c2)) {
+                fcd = m_nfcImpl_.getFCD16(Character.toCodePoint((char)ch, (char)c2));
             } else {
+                m_source_.moveIndex(-1);
                 fcd = 0;
             }
         }
 
         int prevTrailCC = fcd & LAST_BYTE_MASK_;
 
-        if (prevTrailCC != 0) {
+        if (prevTrailCC == 0) {
+            offset = m_source_.getIndex();
+        } else {
             // The current char has a non-zero trailing CC. Scan forward until
             // we find a char with a leading cc of zero.
             while (true) {
-                m_source_.next();
-                int ch_int = m_source_.current();
-                if (ch_int == UCharacterIterator.DONE) {
+                ch = m_source_.nextCodePoint();
+                if (ch < 0) {
+                    offset = m_source_.getIndex();
                     break;
                 }
-                ch = (char)ch_int;
                 // trie access
-                fcd = NormalizerImpl.getFCD16(ch);
-                if (fcd != 0 && UTF16.isLeadSurrogate(ch)) {
-                    m_source_.next();
-                    ch = (char)m_source_.current();
-                    if (UTF16.isTrailSurrogate(ch)) {
-                        fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, ch);
-                    } else {
-                        fcd = 0;
-                    }
-                }
-                int leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
+                fcd = m_nfcImpl_.getFCD16(ch);
+                int leadCC = fcd >> SECOND_LAST_BYTE_SHIFT_;
                 if (leadCC == 0) {
                     // this is a base character, we stop the FCD checks
+                    offset = m_source_.getIndex() - Character.charCount(ch);
                     break;
                 }
 
@@ -1107,9 +1101,8 @@ public final class CollationElementIterator
                 prevTrailCC = fcd & LAST_BYTE_MASK_;
             }
         }
-        m_FCDLimit_ = m_source_.getIndex();
-        m_source_.setIndex(m_FCDStart_);
-        m_source_.next();
+        m_FCDLimit_ = offset;
+        m_source_.setIndex(m_FCDStart_ + 1);
         return result;
     }
 
@@ -1127,7 +1120,7 @@ public final class CollationElementIterator
         if (m_bufferOffset_ < 0) {
             // we're working on the source and not normalizing. fast path.
             // note Thai pre-vowel reordering uses buffer too
-            result = m_source_.current();
+            result = m_source_.next();
         }
         else {
             // we are in the buffer, buffer offset will never be 0 here
@@ -1145,16 +1138,14 @@ public final class CollationElementIterator
         if (result < FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_
             // Fast fcd safe path. trail combining class == 0.
             || m_collator_.getDecomposition() == Collator.NO_DECOMPOSITION
-            || m_bufferOffset_ >= 0 || m_FCDLimit_ > startoffset) {
+            || m_bufferOffset_ >= 0 || m_FCDLimit_ >= startoffset) {
             // skip the fcd checks
-            m_source_.next();
             return result;
         }
 
         if (result < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
             // We need to peek at the next character in order to tell if we are
             // FCD
-            m_source_.next();
             int next = m_source_.current();
             if (next == UCharacterIterator.DONE
                 || next < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
@@ -1164,7 +1155,7 @@ public final class CollationElementIterator
         }
 
         // Need a more complete FCD check and possible normalization.
-        if (!FCDCheck((char)result, startoffset)) {
+        if (!FCDCheck(result, startoffset)) {
             normalize();
             result = m_buffer_.charAt(0);
             m_bufferOffset_ = 1;
@@ -1202,72 +1193,53 @@ public final class CollationElementIterator
      * @param offset current character offset
      * @return true if FCDCheck passes, false otherwise
      */
-    private boolean FCDCheckBackwards(char ch, int offset)
+    private boolean FCDCheckBackwards(int ch, int offset)
     {
-        boolean result = true;
-        char fcd = 0;
+        int fcd;
         m_FCDLimit_ = offset + 1;
         m_source_.setIndex(offset);
-        if (!UTF16.isSurrogate(ch)) {
-            fcd = NormalizerImpl.getFCD16(ch);
-        }
-        else if (UTF16.isTrailSurrogate(ch) && m_FCDLimit_ > 0) {
-            // note trail surrogate characters gets 0 fcd
-            char trailch = ch;
-            ch = (char)m_source_.previous();
-            if (UTF16.isLeadSurrogate(ch)) {
-                fcd = NormalizerImpl.getFCD16(ch);
-                if (fcd != 0) {
-                    fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd,
-                                                                   trailch);
+        if (!UTF16.isSurrogate((char)ch)) {
+            fcd = m_nfcImpl_.getFCD16FromSingleLead((char)ch);
+        } else {
+            fcd = 0;
+            if (!Normalizer2Impl.UTF16Plus.isSurrogateLead(ch)) {
+                int c2 = m_source_.previous();
+                if (c2 < 0) {
+                    // start of input
+                } else if (Character.isHighSurrogate((char)c2)) {
+                    ch = Character.toCodePoint((char)c2, (char)ch);
+                    fcd = m_nfcImpl_.getFCD16(ch);
+                    --offset;
+                } else {
+                    m_source_.moveIndex(1);
                 }
-            }
-            else {
-                fcd = 0; // unpaired surrogate
             }
         }
 
-        int leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
-        // The current char has a non-zero leading combining class.
-        // Scan backward until we find a char with a trailing cc of zero.
-
-        while (leadCC != 0) {
-            offset = m_source_.getIndex();
-            if (offset == 0) {
-                break;
-            }
-            ch = (char)m_source_.previous();
-            if (!UTF16.isSurrogate(ch)) {
-                fcd = NormalizerImpl.getFCD16(ch);
-            }
-            else if (UTF16.isTrailSurrogate(ch) && m_source_.getIndex() > 0) {
-                char trail = ch;
-                ch = (char)m_source_.previous();
-                if (UTF16.isLeadSurrogate(ch)) {
-                    fcd = NormalizerImpl.getFCD16(ch);
+        // Scan backward until we find a char with a leading cc of zero.
+        boolean result = true;
+        if (fcd != 0) {
+            int leadCC;
+            for (;;) {
+                leadCC = fcd >> SECOND_LAST_BYTE_SHIFT_;
+                if (leadCC == 0 || (ch = m_source_.previousCodePoint()) < 0) {
+                    offset = m_source_.getIndex();
+                    break;
                 }
-                if (fcd != 0) {
-                    fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, trail);
+                fcd = m_nfcImpl_.getFCD16(ch);
+                int prevTrailCC = fcd & LAST_BYTE_MASK_;
+                if (leadCC < prevTrailCC) {
+                    result = false;
+                } else if (fcd == 0) {
+                    offset = m_source_.getIndex() + Character.charCount(ch);
+                    break;
                 }
             }
-            else {
-                fcd = 0; // unpaired surrogate
-            }
-            int prevTrailCC = fcd & LAST_BYTE_MASK_;
-            if (leadCC < prevTrailCC) {
-                result = false;
-            }
-            leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
         }
 
         // storing character with 0 lead fcd or the 1st accent with a base
         // character before it
-        if (fcd == 0) {
-            m_FCDStart_ = offset;
-        }
-        else {
-            m_FCDStart_ = m_source_.getIndex();
-        }
+        m_FCDStart_ = offset;
         m_source_.setIndex(m_FCDLimit_);
         return result;
     }
@@ -1314,13 +1286,13 @@ public final class CollationElementIterator
             return result;
         }
         // Need a more complete FCD check and possible normalization.
-        if (!FCDCheckBackwards((char)result, startoffset)) {
+        if (!FCDCheckBackwards(result, startoffset)) {
             normalizeBackwards();
             m_bufferOffset_ --;
             result = m_buffer_.charAt(m_bufferOffset_);
         }
         else {
-            // fcd checks alway reset m_source_ to the limit of the FCD
+            // fcd checks always reset m_source_ to the limit of the FCD
             m_source_.setIndex(startoffset);
         }
         return result;
