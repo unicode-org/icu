@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -543,8 +543,10 @@ _initializeULanguageTag(ULanguageTag* langtag) {
     langtag->privateuse = EMPTY;
 }
 
-#define SUPPLEMENTAL    "supplementalData"
-#define BCP47MAPPINGS   "bcp47KeywordMappings"
+#define KEYTYPEDATA     "keyTypeData"
+#define KEYMAP          "keyMap"
+#define TYPEMAP         "typeMap"
+#define TYPEALIAS       "typeAlias"
 #define MAX_BCP47_SUBTAG_LEN    9   /* including null terminator */
 #define MAX_LDML_KEY_LEN        22
 #define MAX_LDML_TYPE_LEN       32
@@ -580,9 +582,8 @@ _ldmlKeyToBCP47(const char* key, int32_t keyLen,
         keyBuf[i] = uprv_tolower(keyBuf[i]);
     }
 
-    rb = ures_openDirect(NULL, SUPPLEMENTAL, status);
-    ures_getByKey(rb, BCP47MAPPINGS, rb, status);
-    ures_getByKey(rb, "key", rb, status);
+    rb = ures_openDirect(NULL, KEYTYPEDATA, status);
+    ures_getByKey(rb, KEYMAP, rb, status);
 
     if (U_FAILURE(*status)) {
         ures_close(rb);
@@ -623,7 +624,7 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
     int32_t resultLen = 0;
     int32_t i;
     const char *resKey = NULL;
-    UResourceBundle *keyMap;
+    UResourceBundle *mapData;
 
     if (bcpKeyLen < 0) {
         bcpKeyLen = (int32_t)uprv_strlen(bcpKey);
@@ -642,21 +643,20 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
         bcpKeyBuf[i] = uprv_tolower(bcpKeyBuf[i]);
     }
 
-    rb = ures_openDirect(NULL, SUPPLEMENTAL, status);
-    ures_getByKey(rb, BCP47MAPPINGS, rb, status);
-    ures_getByKey(rb, "key", rb, status);
+    rb = ures_openDirect(NULL, KEYTYPEDATA, status);
+    ures_getByKey(rb, KEYMAP, rb, status);
     if (U_FAILURE(*status)) {
         ures_close(rb);
         return 0;
     }
 
-    keyMap = ures_getNextResource(rb, NULL, status);
+    mapData = ures_getNextResource(rb, NULL, status);
     while (U_SUCCESS(*status)) {
         const UChar *uBcpKey;
         char tmpBcpKeyBuf[MAX_BCP47_SUBTAG_LEN];
         int32_t tmpBcpKeyLen;
 
-        uBcpKey = ures_getString(keyMap, &tmpBcpKeyLen, status);
+        uBcpKey = ures_getString(mapData, &tmpBcpKeyLen, status);
         if (U_FAILURE(*status)) {
             break;
         }
@@ -664,16 +664,16 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
         tmpBcpKeyBuf[tmpBcpKeyLen] = 0;
         if (uprv_strcmp(bcpKeyBuf, tmpBcpKeyBuf) == 0) {
             /* found a matching BCP47 key */
-            resKey = ures_getKey(keyMap);
+            resKey = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resKey);
             break;
         }
         if (!ures_hasNext(rb)) {
             break;
         }
-        ures_getNextResource(rb, keyMap, status);
+        ures_getNextResource(rb, mapData, status);
     }
-    ures_close(keyMap);
+    ures_close(mapData);
     ures_close(rb);
 
     if (U_FAILURE(*status)) {
@@ -694,16 +694,15 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
                  const char* type, int32_t typeLen,
                  char* bcpType, int32_t bcpTypeCapacity,
                  UErrorCode *status) {
-
-    UResourceBundle *rb;
+    UResourceBundle *rb, *keyTypeData, *typeMapForKey;
     char keyBuf[MAX_LDML_KEY_LEN];
     char typeBuf[MAX_LDML_TYPE_LEN];
     char bcpTypeBuf[MAX_BCP47_SUBTAG_LEN];
     int32_t resultLen = 0;
     int32_t i;
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    const UChar *uBcpType;
-    int32_t bcpTypeLen;
+    const UChar *uBcpType, *uCanonicalType;
+    int32_t bcpTypeLen, canonicalTypeLen;
     UBool isTimezone = FALSE;
 
     if (keyLen < 0) {
@@ -732,41 +731,73 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    uprv_memcpy(typeBuf, type, typeLen);
-    typeBuf[typeLen] = 0;
 
-    for (i = 0; i < typeLen; i++) {
-        if (isTimezone && typeBuf[i] == '/') {
-            typeBuf[i] = ':';
-        } else {
-            typeBuf[i] = uprv_tolower(typeBuf[i]);
+    if (isTimezone) {
+        /* replace '/' with ':' */
+        for (i = 0; i < typeLen; i++) {
+            if (*(type + i) == '/') {
+                typeBuf[i] = ':';
+            } else {
+                typeBuf[i] = *(type + i);
+            }
         }
+        typeBuf[typeLen] = 0;
+        type = &typeBuf[0];
     }
 
-    rb = ures_openDirect(NULL, SUPPLEMENTAL, status);
-    ures_getByKey(rb, BCP47MAPPINGS, rb, status);
+    keyTypeData = ures_openDirect(NULL, KEYTYPEDATA, status);
+    rb = ures_getByKey(keyTypeData, TYPEMAP, NULL, status);
     if (U_FAILURE(*status)) {
         ures_close(rb);
+        ures_close(keyTypeData);
         return 0;
     }
 
-    ures_getByKey(rb, keyBuf, rb, &tmpStatus);
-    uBcpType = ures_getStringByKey(rb, typeBuf, &bcpTypeLen, &tmpStatus);
+    typeMapForKey = ures_getByKey(rb, keyBuf, NULL, &tmpStatus);
+    uBcpType = ures_getStringByKey(typeMapForKey, type, &bcpTypeLen, &tmpStatus);
     if (U_SUCCESS(tmpStatus)) {
         u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
         resultLen = bcpTypeLen;
     } else if (tmpStatus == U_MISSING_RESOURCE_ERROR) {
-        if (_isLDMLType(type, typeLen)) {
-            uprv_memcpy(bcpTypeBuf, type, typeLen);
-            resultLen = typeLen;
-        } else {
-            /* mapping not availabe */
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
+        /* is this type alias? */
+        tmpStatus = U_ZERO_ERROR;
+        ures_getByKey(keyTypeData, TYPEALIAS, rb, &tmpStatus);
+        ures_getByKey(rb, keyBuf, rb, &tmpStatus);
+        uCanonicalType = ures_getStringByKey(rb, type, &canonicalTypeLen, &tmpStatus);
+        if (U_SUCCESS(tmpStatus)) {
+            u_UCharsToChars(uCanonicalType, typeBuf, canonicalTypeLen);
+            if (isTimezone) {
+                /* replace '/' with ':' */
+                for (i = 0; i < canonicalTypeLen; i++) {
+                    if (typeBuf[i] == '/') {
+                        typeBuf[i] = ':';
+                    }
+                }
+            }
+            typeBuf[canonicalTypeLen] = 0;
+
+            /* look up the canonical type */
+            uBcpType = ures_getStringByKey(typeMapForKey, typeBuf, &bcpTypeLen, &tmpStatus);
+            if (U_SUCCESS(tmpStatus)) {
+                u_UCharsToChars(uBcpType, bcpTypeBuf, bcpTypeLen);
+                resultLen = bcpTypeLen;
+            }
+        }
+        if (tmpStatus == U_MISSING_RESOURCE_ERROR) {
+            if (_isLDMLType(type, typeLen)) {
+                uprv_memcpy(bcpTypeBuf, type, typeLen);
+                resultLen = typeLen;
+            } else {
+                /* mapping not availabe */
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+            }
         }
     } else {
         *status = tmpStatus;
     }
     ures_close(rb);
+    ures_close(typeMapForKey);
+    ures_close(keyTypeData);
 
     if (U_FAILURE(*status)) {
         return 0;
@@ -787,7 +818,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
     int32_t resultLen = 0;
     int32_t i;
     const char *resType = NULL;
-    UResourceBundle *typeMap;
+    UResourceBundle *mapData;
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t copyLen;
 
@@ -826,21 +857,21 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
         bcpTypeBuf[i] = uprv_tolower(bcpTypeBuf[i]);
     }
 
-    rb = ures_openDirect(NULL, SUPPLEMENTAL, status);
-    ures_getByKey(rb, BCP47MAPPINGS, rb, status);
+    rb = ures_openDirect(NULL, KEYTYPEDATA, status);
+    ures_getByKey(rb, TYPEMAP, rb, status);
     if (U_FAILURE(*status)) {
         ures_close(rb);
         return 0;
     }
 
     ures_getByKey(rb, keyBuf, rb, &tmpStatus);
-    typeMap = ures_getNextResource(rb, NULL, &tmpStatus);
+    mapData = ures_getNextResource(rb, NULL, &tmpStatus);
     while (U_SUCCESS(tmpStatus)) {
         const UChar *uBcpType;
         char tmpBcpTypeBuf[MAX_BCP47_SUBTAG_LEN];
         int32_t tmpBcpTypeLen;
 
-        uBcpType = ures_getString(typeMap, &tmpBcpTypeLen, &tmpStatus);
+        uBcpType = ures_getString(mapData, &tmpBcpTypeLen, &tmpStatus);
         if (U_FAILURE(tmpStatus)) {
             break;
         }
@@ -848,16 +879,16 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
         tmpBcpTypeBuf[tmpBcpTypeLen] = 0;
         if (uprv_strcmp(bcpTypeBuf, tmpBcpTypeBuf) == 0) {
             /* found a matching BCP47 type */
-            resType = ures_getKey(typeMap);
+            resType = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resType);
             break;
         }
         if (!ures_hasNext(rb)) {
             break;
         }
-        ures_getNextResource(rb, typeMap, &tmpStatus);
+        ures_getNextResource(rb, mapData, &tmpStatus);
     }
-    ures_close(typeMap);
+    ures_close(mapData);
     ures_close(rb);
 
     if (U_FAILURE(tmpStatus) && tmpStatus != U_MISSING_RESOURCE_ERROR) {
