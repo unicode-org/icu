@@ -16,7 +16,6 @@ import java.util.Vector;
 import com.ibm.icu.impl.IntTrieBuilder;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.TrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -1328,7 +1327,7 @@ final class CollationParsedRuleBuilder {
         new WeightRange(), new WeightRange(), new WeightRange(),
         new WeightRange() };
     private WeightRange m_utilWeightRange_ = new WeightRange();
-    private Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
     private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
     private StringBuilder m_utilStringBuffer_ = new StringBuilder("");
     // Flag indicating a combining marks table is required or not.
@@ -1817,8 +1816,7 @@ final class CollationParsedRuleBuilder {
                 }
                 if (!buildCMTabFlag) {
                     // check combining class
-                    char fcd = NormalizerImpl
-                            .getFCD16(m_utilElement_.m_cPoints_.charAt(i));
+                    int fcd = m_nfcImpl_.getFCD16FromSingleLead(m_utilElement_.m_cPoints_.charAt(i));  // TODO: review for handling supplementary characters
                     if ((fcd & 0xff) == 0) {
                         // reset flag when current char is not combining mark.
                         containCombinMarks = false;
@@ -3788,7 +3786,7 @@ final class CollationParsedRuleBuilder {
      * @param t
      *            build table
      */
-    private static final void unsafeCPAddCCNZ(BuildTable t) {
+    private final void unsafeCPAddCCNZ(BuildTable t) {
         boolean buildCMTable = (buildCMTabFlag & (t.cmLookup == null));
         char[] cm = null; // combining mark array
         int[] index = new int[256];
@@ -3798,7 +3796,7 @@ final class CollationParsedRuleBuilder {
             cm = new char[0x10000];
         }
         for (char c = 0; c < 0xffff; c++) {
-            char fcd = NormalizerImpl.getFCD16(c);
+            int fcd = m_nfcImpl_.getFCD16FromSingleLead(c);  // TODO: review for handling supplementary characters
             if (fcd >= 0x100 || // if the leading combining class(c) > 0 ||
                     (UTF16.isLeadSurrogate(c) && fcd != 0)) {
                 // c is a leading surrogate with some FCD data
@@ -3858,7 +3856,7 @@ final class CollationParsedRuleBuilder {
             // if the range is assigned - we might ommit more categories later
 
             for (int u32 = start; u32 < limit; u32++) {
-                String decomp = nfcImpl.getDecomposition(u32);
+                String decomp = m_nfcImpl_.getDecomposition(u32);
                 if (decomp != null) {
                     String comp = UCharacter.toString(u32);
                     if (!collator.equals(comp, decomp)) {
@@ -3968,8 +3966,7 @@ final class CollationParsedRuleBuilder {
                 for (int j = 0; j < m_utilElement_.m_cPoints_.length()
                         - m_utilElement_.m_cPointsOffset_; j++) {
 
-                    char fcd = NormalizerImpl
-                            .getFCD16(m_utilElement_.m_cPoints_.charAt(j));
+                    int fcd = m_nfcImpl_.getFCD16FromSingleLead(m_utilElement_.m_cPoints_.charAt(j));  // TODO: review for handling supplementary characters
                     if ((fcd & 0xff) == 0) {
                         baseChar = m_utilElement_.m_cPoints_.charAt(j);
                     } else {
@@ -3998,7 +3995,7 @@ final class CollationParsedRuleBuilder {
         }
         CombinClassTable cmLookup = t.cmLookup;
         int[] index = cmLookup.index;
-        int cClass = NormalizerImpl.getFCD16(cMark) & 0xff;
+        int cClass = m_nfcImpl_.getFCD16FromSingleLead(cMark) & 0xff;  // TODO: review for handling supplementary characters
         int maxIndex = 0;
         char[] precompCh = new char[256];
         int[] precompClass = new int[256];
@@ -4014,8 +4011,7 @@ final class CollationParsedRuleBuilder {
             String comp = Normalizer.compose(decompBuf.toString(), false);
             if (comp.length() == 1) {
                 precompCh[precompLen] = comp.charAt(0);
-                precompClass[precompLen] = (NormalizerImpl
-                        .getFCD16(cmLookup.cPoints[i]) & 0xff);
+                precompClass[precompLen] = (m_nfcImpl_.getFCD16FromSingleLead(cmLookup.cPoints[i]) & 0xff);  // TODO: review for handling supplementary characters
                 precompLen++;
                 StringBuilder decomp = new StringBuilder();
                 for (int j = 0; j < m_utilElement_.m_cPoints_.length(); j++) {

@@ -12,7 +12,8 @@ import java.text.StringCharacterIterator;
 import java.util.Locale;
 
 import com.ibm.icu.impl.CharacterIteratorWrapper;
-import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
@@ -759,7 +760,8 @@ public final class StringSearch extends SearchIterator
     /**
      * Character break iterator for boundary checking.
      */
-    private BreakIterator m_charBreakIter_; 
+    private BreakIterator m_charBreakIter_;
+    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
     /**
      * Size of the shift tables
      */
@@ -802,7 +804,10 @@ public final class StringSearch extends SearchIterator
         // to be discussed on the hash algo.
         return CollationElementIterator.primaryOrder(ce) % MAX_TABLE_SIZE_;
     }
-    
+
+    private final char getFCD(int c) {
+        return (char)m_nfcImpl_.getFCD16(c);
+    }
     /**
      * Gets the fcd value for a character at the argument index.
      * This method takes into accounts of the supplementary characters.
@@ -811,24 +816,47 @@ public final class StringSearch extends SearchIterator
      * @param offset position of the character whose fcd is to be retrieved
      * @return fcd value
      */
-    private static final char getFCD(CharacterIterator str, int offset)
+    private final char getFCD(CharacterIterator str, int offset)
     {
-        str.setIndex(offset);
-        char ch = str.current();
-        char result = NormalizerImpl.getFCD16(ch);
-        
-        if ((result != 0) && (str.getEndIndex() != offset + 1) && 
-            UTF16.isLeadSurrogate(ch)) {
-            ch = str.next();
-            if (UTF16.isTrailSurrogate(ch)) {
-                result = NormalizerImpl.getFCD16FromSurrogatePair(result, ch);
+        char ch = str.setIndex(offset);
+        int result = m_nfcImpl_.getFCD16FromSingleLead(ch);
+        if (result != 0 && Character.isHighSurrogate(ch)) {
+            char c2 = str.next();
+            if (Character.isLowSurrogate(c2)) {
+                result = m_nfcImpl_.getFCD16(Character.toCodePoint(ch, c2));
             } else {
                 result = 0;
             }
         }
+        return (char)result;
+    }
+    /**
+     * Gets the FCD value for the code point before the input offset.
+     * Modifies the iterator's index.
+     * @param iter text iterator
+     * @param offset index after the character to test
+     * @return FCD value for the character before offset
+     */
+    private final int getFCDBefore(CharacterIterator iter, int offset) {
+        int result;
+        iter.setIndex(offset);
+        char c = iter.previous();
+        if (UTF16.isSurrogate(c)) {
+            if (Normalizer2Impl.UTF16Plus.isSurrogateLead(c)) {
+                result = 0;
+            } else {
+                char lead = iter.previous();
+                if (Character.isHighSurrogate(lead)) {
+                    result = m_nfcImpl_.getFCD16(Character.toCodePoint(lead, c));
+                } else {
+                    result = 0;
+                }
+            }
+        } else {
+            result = m_nfcImpl_.getFCD16FromSingleLead(c);
+        }
         return result;
     }
-    
     /**
      * Gets the fcd value for a character at the argument index.
      * This method takes into accounts of the supplementary characters.
@@ -836,23 +864,21 @@ public final class StringSearch extends SearchIterator
      * @param offset position of the character whose fcd is to be retrieved
      * @return fcd value
      */
-    private static final char getFCD(String str, int offset)
+    private final char getFCD(String str, int offset)
     {
         char ch = str.charAt(offset);
-        char result = NormalizerImpl.getFCD16(ch);
-        
-        if ((result != 0) && (str.length() != offset + 1) && 
-            UTF16.isLeadSurrogate(ch)) {
-            ch = str.charAt(offset + 1);
-            if (UTF16.isTrailSurrogate(ch)) {
-                result = NormalizerImpl.getFCD16FromSurrogatePair(result, ch);
+        int result = m_nfcImpl_.getFCD16FromSingleLead(ch);
+        if (result != 0 && Character.isHighSurrogate(ch)) {
+            char c2;
+            if (++offset < str.length() && Character.isLowSurrogate(c2 = str.charAt(offset))) {
+                result = m_nfcImpl_.getFCD16(Character.toCodePoint(ch, c2));
             } else {
                 result = 0;
             }
         }
-        return result;
+        return (char)result;
     }
-    
+
     /**
     * Getting the modified collation elements taking into account the collation 
     * attributes
@@ -949,9 +975,8 @@ public final class StringSearch extends SearchIterator
         } else {
             m_pattern_.m_hasPrefixAccents_ = (getFCD(m_pattern_.targetText, 0) 
                                                  >> SECOND_LAST_BYTE_SHIFT_) != 0;
-            m_pattern_.m_hasSuffixAccents_ = (getFCD(m_pattern_.targetText, 
-                                                     m_pattern_.targetText.length() 
-                                                     - 1) 
+            m_pattern_.m_hasSuffixAccents_ = (getFCD(m_pattern_.targetText.codePointBefore(
+                                                        m_pattern_.targetText.length()))
                                                 & LAST_BYTE_MASK_) != 0;
         }
         // since intializePattern is an internal method status is a success.
@@ -1102,7 +1127,7 @@ public final class StringSearch extends SearchIterator
         }
         return true;
     }
-    
+
     /**
      * Getting the next base character offset if current offset is an accent, 
      * or the current offset if the current character contains a base character. 
@@ -1113,22 +1138,32 @@ public final class StringSearch extends SearchIterator
      * @return the next base character or the current offset
      *         if the current character is contains a base character.
      */
-    private final int getNextBaseOffset(CharacterIterator text, 
-                                                        int textoffset)
+    private final int getNextBaseOffset(CharacterIterator text, int textoffset)
     {
-        if (textoffset < text.getEndIndex()) {
-            while (text.getIndex() < text.getEndIndex()) { 
-                int result = textoffset;
-                if ((getFCD(text, textoffset ++) 
-                            >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-                     return result;
-                }
-            }
-            return text.getEndIndex();
+        if (textoffset >= text.getEndIndex()) {
+            return textoffset;
         }
-        return textoffset;
+        // iteration ends with reading CharacterIterator.DONE which has fcd==0
+        char c = text.setIndex(textoffset);
+        for (;;) {
+            if ((m_nfcImpl_.getFCD16FromSingleLead(c) >> SECOND_LAST_BYTE_SHIFT_) == 0) {
+                return textoffset;
+            }
+            char next = text.next();
+            if (Character.isSurrogatePair(c, next)) {
+                int fcd = m_nfcImpl_.getFCD16(Character.toCodePoint(c, next));
+                if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
+                    return textoffset;
+                }
+                next = text.next();
+                textoffset += 2;
+            } else {
+                ++textoffset;
+            }
+            c = next;
+        }
     }
-    
+
     /**
      * Gets the next base character offset depending on the string search 
      * pattern data
@@ -1139,17 +1174,14 @@ public final class StringSearch extends SearchIterator
      */
     private final int getNextBaseOffset(int textoffset)
     {
-        if (m_pattern_.m_hasSuffixAccents_ 
-            && textoffset < m_textLimitOffset_) {
-            targetText.setIndex(textoffset);
-            targetText.previous();
-            if ((getFCD(targetText, targetText.getIndex()) & LAST_BYTE_MASK_) != 0) {
+        if (m_pattern_.m_hasSuffixAccents_ && textoffset < m_textLimitOffset_) {
+            if ((getFCDBefore(targetText, textoffset) & LAST_BYTE_MASK_) != 0) {
                 return getNextBaseOffset(targetText, textoffset);
             }
         }
         return textoffset;
     }
-    
+
     /**
      * Shifting the collation element iterator position forward to prepare for
      * a following match. If the last character is a unsafe character, we'll 
