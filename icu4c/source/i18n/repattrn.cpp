@@ -430,6 +430,7 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
 //   matcher, UText mode
 //
 RegexMatcher *RegexPattern::matcher(UText               *input,
+                                    PatternIsUTextFlag  /*flag*/,
                                     UErrorCode          &status)  const {
     RegexMatcher    *retMatcher = matcher(status);
     if (retMatcher != NULL) {
@@ -519,7 +520,7 @@ UBool U_EXPORT2 RegexPattern::matches(UText                *regex,
     RegexMatcher *matcher = NULL;
 
     pat     = RegexPattern::compile(regex, 0, pe, status);
-    matcher = pat->matcher(input, status);
+    matcher = pat->matcher(input, PATTERN_IS_UTEXT, status);
     retVal  = matcher->matches(status);
 
     delete matcher;

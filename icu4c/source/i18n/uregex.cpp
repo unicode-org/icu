@@ -1582,6 +1582,7 @@ uregex_appendTailUText(URegularExpression    *regexp2,
 //                   and the NUL is counted in the output size.
 //
 //------------------------------------------------------------------------------
+#if 0
 static void copyString(UChar        *destBuffer,    //  Destination buffer.
                        int32_t       destCapacity,  //  Total capacity of dest buffer
                        int32_t      *destIndex,     //  Index into dest buffer.  Updated on return.
@@ -1609,7 +1610,7 @@ static void copyString(UChar        *destBuffer,    //  Destination buffer.
     di++;
     *destIndex = di;
 }
-
+#endif
 
 //------------------------------------------------------------------------------
 //
