@@ -360,6 +360,12 @@ public:
         
         
    /**
+    * Flag to disambiguate RegexPattern::matcher signature
+    * @internal ICU 4.4 technology preview
+    */
+    enum PatternIsUTextFlag { PATTERN_IS_UTEXT };
+
+   /**
     * Creates a RegexMatcher that will match the given input against this pattern.  The
     * RegexMatcher can then be used to perform match, find or replace operations
     * on the input.  Note that a RegexPattern object must not be deleted while
@@ -371,12 +377,15 @@ public:
     * altered or deleted before use by the regular expression operations is complete.
     *
     * @param input    The input text to which the regular expression will be applied.
+    * @param flag     Must be RegexPattern::PATTERN_IS_UTEXT; used to disambiguate
+    *                 method signature.
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return         A RegexMatcher object for this pattern and input.
     *
     * @internal ICU 4.4 technology preview
     */
     virtual RegexMatcher *matcher(UText *input,
+        PatternIsUTextFlag	flag, 
         UErrorCode          &status) const;
 
 private:
@@ -833,10 +842,18 @@ public:
 
 
    /**
+    * Flag to disambiguate RegexMatcher::group signature
+    * @internal ICU 4.4 technology preview
+    */
+    enum MatcherDestIsUTextFlag { MATCHER_DEST_IS_UTEXT };
+
+   /**
     *   Returns a string containing the text matched by the previous match.
     *   If the pattern can match an empty string, an empty string may be returned.
     *   @param   dest        A mutable UText in which the matching text is placed.
     *                        If NULL, a new UText will be created (which may not be mutable).
+    *   @param   flag        Must be RegexMatcher::MATCHER_DEST_IS_UTEXT; used to
+    *                        disambiguate method signature.
     *   @param   status      A reference to a UErrorCode to receive any errors.
     *                        Possible errors are  U_REGEX_INVALID_STATE if no match
     *                        has been attempted or the last match failed.
@@ -845,7 +862,7 @@ public:
     *
     *   @internal ICU 4.4 technology preview
     */
-    virtual UText *group(UText *dest, UErrorCode &status) const;
+    virtual UText *group(UText *dest, MatcherDestIsUTextFlag flag, UErrorCode &status) const;
 
 
    /**

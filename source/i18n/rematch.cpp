@@ -1060,10 +1060,10 @@ UBool RegexMatcher::findUsingChunk() {
 //
 //--------------------------------------------------------------------------------
 UnicodeString RegexMatcher::group(UErrorCode &status) const {
-    return group((int32_t)0, status);
+    return group(0, status);
 }
 
-UText *RegexMatcher::group(UText *dest, UErrorCode &status) const {
+UText *RegexMatcher::group(UText *dest, MatcherDestIsUTextFlag /*flag*/, UErrorCode &status) const {
     return group(0, dest, status);
 }
 
