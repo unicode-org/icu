@@ -760,6 +760,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     uint32_t extensionOffset = 0;
     uint32_t newStrength = UCOL_TOK_UNSET;
     UChar buff[10];
+    UChar32 codepoint;
 
     src->parsedToken.charsOffset = 0;  src->parsedToken.charsLen = 0;
     src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
@@ -823,6 +824,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         goto EndOfLoop;
                     }
                     newStrength = UCOL_IDENTICAL;
+                    if(*(src->current+1) == 0x002A) {/*'*'*/
+                        src->current++;
+                        src->prevStrength = newStrength;
+                    }else{
+                        src->prevStrength = UCOL_TOK_UNSET;
+                    }
                     break;
 
                 case 0x002C/*','*/:
@@ -838,6 +845,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         goto EndOfLoop;
                     }
                     newStrength = UCOL_TERTIARY;
+                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case  0x003B/*';'*/:
@@ -853,6 +861,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         goto EndOfLoop;
                     }
                     newStrength = UCOL_SECONDARY;
+                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case 0x003C/*'<'*/:
@@ -880,6 +889,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     } else { /* just one */
                         newStrength = UCOL_PRIMARY;
                     }
+                    if(*(src->current+1) == 0x002A) {/*'*'*/
+                        src->current++;
+                        src->prevStrength = newStrength;
+                    }else{
+                        src->prevStrength = UCOL_TOK_UNSET;
+                    }
                     break;
 
                 case 0x0026/*'&'*/:
@@ -889,6 +904,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     }
 
                     newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
+                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case 0x005b/*'['*/:
@@ -953,11 +969,15 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     /* found a quote, we're gonna start copying */
                 case 0x0027/*'\''*/:
                     if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
-                        *status = U_INVALID_FORMAT_ERROR;
-                        syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                        return NULL;
-                        // enabling rules to start with a non-token character a < b
-                        // newStrength = UCOL_TOK_RESET;
+                        if(src->prevStrength == UCOL_TOK_UNSET){
+                            *status = U_INVALID_FORMAT_ERROR;
+                            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                            return NULL;
+                            // enabling rules to start with a non-token character a < b
+                            // newStrength = UCOL_TOK_RESET;
+                        }else{
+                            newStrength = src->prevStrength;
+                        }
                     }
 
                     inQuote = TRUE;
@@ -1036,9 +1056,13 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     break;
                 default:
                     if (newStrength == UCOL_TOK_UNSET) {
-                        *status = U_INVALID_FORMAT_ERROR;
-                        syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                        return NULL;
+                        if(src->prevStrength == UCOL_TOK_UNSET){
+                            *status = U_INVALID_FORMAT_ERROR;
+                            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                            return NULL;
+                        }else{
+                            newStrength = src->prevStrength;
+                        }
                     }
 
                     if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
@@ -1056,6 +1080,11 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                             src->parsedToken.charsOffset = (uint32_t)(src->current - src->source);
                         }
                         src->parsedToken.charsLen++;
+                        if(src->prevStrength != UCOL_TOK_UNSET){
+                            U16_NEXT(0, src->current, src->end, codepoint);
+                            src->parsedToken.charsLen+= U16_LENGTH(codepoint) - 1;
+                            goto EndOfLoop;
+                        }
                     } else {
                         if(newExtensionLen == 0) {
                             extensionOffset = (uint32_t)(src->current - src->source);
@@ -1069,6 +1098,10 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         }
 
         if(wasInQuote) {
+            if(src->prevStrength != UCOL_TOK_UNSET && !inQuote){
+                src->current++;
+                goto EndOfLoop;
+            }
             if(ch != 0x27) {
                 if(inQuote || !uprv_isRuleWhiteSpace(ch)) {
                     ucol_tok_addToExtraCurrent(src, &ch, 1, status);
@@ -1826,6 +1859,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
     src->parsedToken.flags = 0;
     src->parsedToken.strength = UCOL_TOK_UNSET;
     src->buildCCTabFlag = FALSE;
+    src->prevStrength = UCOL_TOK_UNSET;
 
     if(U_FAILURE(*status)) {
         return;
@@ -1915,4 +1949,3 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
-
