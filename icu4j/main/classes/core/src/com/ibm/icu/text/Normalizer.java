@@ -1252,29 +1252,62 @@ public final class Normalizer implements Cloneable {
     }
 
     /**
-     * Gets the FC_NFKC closure set from the normalization data
-     * @param c The code point whose closure set is to be retrieved
-     * @param dest The char array to receive the closure set
+     * Gets the FC_NFKC closure value.
+     * @param c The code point whose closure value is to be retrieved
+     * @param dest The char array to receive the closure value
+     * @return the length of the closure value; 0 if there is none
      * @stable ICU 3.8
      */
     public static int getFC_NFKC_Closure(int c,char[] dest) {
-        return NormalizerImpl.getFC_NFKC_Closure(c,dest);
+        String closure=getFC_NFKC_Closure(c);
+        int length=closure.length();
+        if(length!=0 && dest!=null && length<=dest.length) {
+            closure.getChars(0, length, dest, 0);
+        }
+        return length;
     }
     /**
-     * Gets the FC_NFKC closure set from the normalization data
-     * @param c The the code point whose closure set is to be retrieved
-     * @return String representation of the closure set
+     * Gets the FC_NFKC closure value.
+     * @param c The code point whose closure value is to be retrieved
+     * @return String representation of the closure value; "" if there is none
      * @stable ICU 3.8
      */ 
     public static String getFC_NFKC_Closure(int c) {
-        char[] dest = new char[10];
-        for(;;) {
-            int length = getFC_NFKC_Closure(c,dest);
-            if(length<=dest.length) {
-                return new String(dest,0,length);
-            } else {
-                dest = new char[length];
+        // Compute the FC_NFKC_Closure on the fly:
+        // We have the API for complete coverage of Unicode properties, although
+        // this value by itself is not useful via API.
+        // (What could be useful is a custom normalization table that combines
+        // case folding and NFKC.)
+        // For the derivation, see Unicode's DerivedNormalizationProps.txt.
+        Normalizer2Impl nfkcImpl=Norm2AllModes.getNFKCInstanceNoIOException().impl;
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+        // first: b = NFKC(Fold(a))
+        StringBuffer folded=new StringBuffer();
+        String kc1;
+        int folded1Length=csp.toFullFolding(c, folded, 0);
+        if(folded1Length<0) {
+            kc1=nfkcImpl.getDecomposition(c);
+            if(kc1==null) {
+                return "";  // c does not change at all under CaseFolding+NFKC
             }
+        } else {
+            if(folded1Length>UCaseProps.MAX_STRING_LENGTH) {
+                folded.appendCodePoint(folded1Length);
+            }
+            kc1=NFKC.normalizer2.normalize(folded);
+        }
+        // second: c = NFKC(Fold(b))
+        String kc2=NFKC.normalizer2.normalize(UCharacter.foldCase(kc1, 0));
+        // if (c != b) add the mapping from a to c
+        if(kc1.equals(kc2)) {
+            return "";
+        } else {
+            return kc2;
         }
     }
 

@@ -360,41 +360,6 @@ public final class NormalizerImpl {
     
         return false; /* not found */
     }
-    
-    public static int getFC_NFKC_Closure(int c, char[] dest) {
-        
-        int destCapacity;
-         
-        if(dest==null ) {
-            destCapacity=0;
-        }else{
-            destCapacity = dest.length;
-        }
-        
-        int aux =AuxTrieImpl.auxTrie.getCodePointValue(c);
-
-        aux&= AUX_FNC_MASK;
-        if(aux!=0) {
-            int s;
-            int index=aux; 
-            int length;
-            
-            s =extraData[index];
-            if(s<0xff00) {
-                /* s points to the single-unit string */
-                length=1;
-            } else {
-                length=s&0xff;
-                ++index;
-            }
-            if(0<length && length<=destCapacity) {
-                System.arraycopy(extraData,index,dest,0,length);
-            }
-            return length;
-        } else {
-            return 0;
-        }
-    }
 
     public static UnicodeSet addPropertyStarts(UnicodeSet set) {
         int c;
