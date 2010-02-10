@@ -124,9 +124,6 @@ U_NAMESPACE_USE
  * Note that all of this is only a problem when case-folding _and_
  * canonical equivalence come together.
  * (Comments in unorm_compare() are more up to date than this TODO.)
- *
- * This function could be moved to a different source file, at increased cost
- * for calling the decomposition access function.
  */
 
 /* stack element for previous-level source/decomposition pointers */
