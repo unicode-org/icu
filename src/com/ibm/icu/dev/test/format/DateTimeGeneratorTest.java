@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2009, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2010, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
@@ -541,36 +541,77 @@ public class DateTimeGeneratorTest extends TestFmwk {
      *         didn't know what form you really wanted so this is just a
      *         stand-in.)
      */
-  private DateOrder getOrdering(int style, ULocale locale) {
-      // and the date pattern
-      String pattern = ((SimpleDateFormat) DateFormat.getDateInstance(style, locale)).toPattern();
-      int count = 0;
-      DateOrder result = new DateOrder();
-     
-      for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
-          Object item = it.next();
-        if (!(item instanceof String)) {
-          // the first character of the variable field determines the type,
-          // according to CLDR.
-          String variableField = item.toString();
-          switch (variableField.charAt(0)) {
-            case 'y': case 'Y': case 'u':
-              result.fields[count++] = DateFieldType.YEAR;
-              break;
-            case 'M': case 'L':
-                result.monthLength = variableField.length();
-                if (result.monthLength < 2) {
-                    result.monthLength = 2;
+    private DateOrder getOrdering(int style, ULocale locale) {
+        // and the date pattern
+        String pattern = ((SimpleDateFormat) DateFormat.getDateInstance(style, locale)).toPattern();
+        int count = 0;
+        DateOrder result = new DateOrder();
+
+        for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
+            Object item = it.next();
+            if (!(item instanceof String)) {
+                // the first character of the variable field determines the type,
+                // according to CLDR.
+                String variableField = item.toString();
+                switch (variableField.charAt(0)) {
+                case 'y': case 'Y': case 'u':
+                    result.fields[count++] = DateFieldType.YEAR;
+                    break;
+                case 'M': case 'L':
+                    result.monthLength = variableField.length();
+                    if (result.monthLength < 2) {
+                        result.monthLength = 2;
+                    }
+                    result.fields[count++] = DateFieldType.MONTH;
+                    break;
+                case 'd': case 'D': case 'F': case 'g':
+                    result.fields[count++] = DateFieldType.DAY;
+                    break;
                 }
-                result.fields[count++] = DateFieldType.MONTH;
-              break;
-            case 'd': case 'D': case 'F': case 'g':
-                result.fields[count++] = DateFieldType.DAY;
-              break;
-          }
+            }
         }
-      }
-      return result;
+        return result;
     }
+
+    /*
+     * Test case for DateFormatPatternGenerator threading problem #7169
+     */
+    public void TestT7169() {
+      Thread[] workers = new Thread[10];
+      for (int i = 0 ; i < workers.length; i++) {
+          workers[i] = new Thread(new Runnable() {
+              public void run() {
+                  try {
+                      for (int j = 0; j < 50; j++) {
+                          DateTimePatternGenerator patternGenerator =
+                              DateTimePatternGenerator.getFrozenInstance(ULocale.US);
+                          patternGenerator.getBestPattern("MMMMd");
+                      }
+                  } catch (Exception e) {
+                      errln("FAIL: Caught an exception (frozen)" + e);
+                  }
+                  try {
+                      for (int j = 0; j < 50; j++) {
+                          DateTimePatternGenerator patternGenerator =
+                              DateTimePatternGenerator.getInstance(ULocale.US);
+                          patternGenerator.getBestPattern("MMMMd");
+                      }
+                  } catch (Exception e) {
+                      errln("FAIL: Caught an exception " + e);
+                  }
+              }
+          });
+      }
+      for (int i = 0; i < workers.length; i++) {
+          workers[i].start();
+      }
+      for (int i = 0; i < workers.length; i++) {
+          try {
+              workers[i].join();
+          } catch (InterruptedException ie) {
+              
+          }
+      }
+      }
 }
 //eof

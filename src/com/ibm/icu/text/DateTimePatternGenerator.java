@@ -1,7 +1,7 @@
 //##header
 /*
  ********************************************************************************
- * Copyright (C) 2006-2009, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2010, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -111,7 +111,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
 
     /**
-     * Construct a flexible generator according to data for a given locale.
+     * Construct a flexible generator according to data for the default locale.
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getInstance() {
@@ -124,6 +124,19 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getInstance(ULocale uLocale) {
+        return (DateTimePatternGenerator)getFrozenInstance(uLocale).cloneAsThawed();
+    }
+
+    /**
+     * Construct a frozen instance of DateTimePatternGenerator for a
+     * given locale.  This method returns a cached frozen instance of
+     * DateTimePatternGenerator, so less expensive than the regular
+     * factory method.
+     * @param uLocale The locale to pass.
+     * @return A frozen DateTimePatternGenerator.
+     * @internal
+     */
+    public static DateTimePatternGenerator getFrozenInstance(ULocale uLocale) {
         String localeKey = uLocale.toString();
         DateTimePatternGenerator result = (DateTimePatternGenerator)DTPNG_CACHE.get(localeKey);
         if (result != null) {
@@ -240,6 +253,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         // decimal point for seconds
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(uLocale);
         result.setDecimal(String.valueOf(dfs.getDecimalSeparator()));
+
+        // freeze and cache
+        result.freeze();
         DTPNG_CACHE.put(localeKey, result);
         return result;
     }
@@ -346,6 +362,10 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     public String getBestPattern(String skeleton) {
+        return getBestPattern(skeleton, null);
+    }
+
+    private String getBestPattern(String skeleton, DateTimeMatcher skipMatcher) {
         //if (!isComplete) complete();
         if (chineseMonthHack) {
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -371,17 +391,21 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         // replace it with the default hour format char
         skeleton = Utility.replaceAll(skeleton, "j", String.valueOf(defaultHourFormatChar));
 
-        current.set(skeleton, fp);
-        String best = getBestRaw(current, -1, _distanceInfo);
-        if (_distanceInfo.missingFieldMask == 0 && _distanceInfo.extraFieldMask == 0) {
-            // we have a good item. Adjust the field types
-            return adjustFieldTypes(best, current, false);
+        String datePattern, timePattern;
+        synchronized(this) {
+            current.set(skeleton, fp);
+            String best = getBestRaw(current, -1, _distanceInfo, skipMatcher);
+            if (_distanceInfo.missingFieldMask == 0 && _distanceInfo.extraFieldMask == 0) {
+                // we have a good item. Adjust the field types
+                return adjustFieldTypes(best, current, false);
+            }
+            int neededFields = current.getFieldMask();
+
+            // otherwise break up by date and time.
+            datePattern = getBestAppending(current, neededFields & DATE_MASK, _distanceInfo, skipMatcher);
+            timePattern = getBestAppending(current, neededFields & TIME_MASK, _distanceInfo, skipMatcher);
         }
-        int neededFields = current.getFieldMask();
-        // otherwise break up by date and time.
-        String datePattern = getBestAppending(neededFields & DATE_MASK);
-        String timePattern = getBestAppending(neededFields & TIME_MASK);
-        
+
         if (datePattern == null) return timePattern == null ? "" : timePattern;
         if (timePattern == null) return datePattern;
         return MessageFormat.format(getDateTimeFormat(), new Object[]{timePattern, datePattern});
@@ -648,8 +672,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 DateTimeMatcher cur = (DateTimeMatcher) it.next();
                 String pattern = (String) skeleton2pattern.get(cur);
                 if (CANONICAL_SET.contains(pattern)) continue;
-                skipMatcher = cur;
-                String trial = getBestPattern(cur.toString());
+                String trial = getBestPattern(cur.toString(), cur);
                 if (trial.equals(pattern)) {
                     output.add(pattern);
                 }
@@ -1310,8 +1333,6 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     private transient DateTimeMatcher current = new DateTimeMatcher();
     private transient FormatParser fp = new FormatParser();
     private transient DistanceInfo _distanceInfo = new DistanceInfo();
-    private transient DateTimeMatcher skipMatcher = null; // only used temporarily, for internal purposes
-
 
     private static final int FRACTIONAL_MASK = 1<<FRACTIONAL_SECOND;
     private static final int SECOND_AND_FRACTIONAL_MASK = (1<<SECOND) | (1<<FRACTIONAL_SECOND);
@@ -1329,27 +1350,27 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * We only get called here if we failed to find an exact skeleton. We have broken it into date + time, and look for the pieces.
      * If we fail to find a complete skeleton, we compose in a loop until we have all the fields.
      */
-    private String getBestAppending(int missingFields) {
+    private String getBestAppending(DateTimeMatcher source, int missingFields, DistanceInfo distInfo, DateTimeMatcher skipMatcher) {
         String resultPattern = null;
         if (missingFields != 0) {
-            resultPattern = getBestRaw(current, missingFields, _distanceInfo);
-            resultPattern = adjustFieldTypes(resultPattern, current, false);
+            resultPattern = getBestRaw(current, missingFields, distInfo, skipMatcher);
+            resultPattern = adjustFieldTypes(resultPattern, source, false);
 
-            while (_distanceInfo.missingFieldMask != 0) { // precondition: EVERY single field must work!
+            while (distInfo.missingFieldMask != 0) { // precondition: EVERY single field must work!
                 
                 // special hack for SSS. If we are missing SSS, and we had ss but found it, replace the s field according to the 
                 // number separator
-                if ((_distanceInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
+                if ((distInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
                         && (missingFields & SECOND_AND_FRACTIONAL_MASK) == SECOND_AND_FRACTIONAL_MASK) {
-                    resultPattern = adjustFieldTypes(resultPattern, current, true);
-                    _distanceInfo.missingFieldMask &= ~FRACTIONAL_MASK; // remove bit
+                    resultPattern = adjustFieldTypes(resultPattern, source, true);
+                    distInfo.missingFieldMask &= ~FRACTIONAL_MASK; // remove bit
                     continue;
                 }
 
-                int startingMask = _distanceInfo.missingFieldMask;
-                String temp = getBestRaw(current, _distanceInfo.missingFieldMask, _distanceInfo);
-                temp = adjustFieldTypes(temp, current, false);
-                int foundMask = startingMask & ~_distanceInfo.missingFieldMask;
+                int startingMask = distInfo.missingFieldMask;
+                String temp = getBestRaw(source, distInfo.missingFieldMask, distInfo, skipMatcher);
+                temp = adjustFieldTypes(temp, source, false);
+                int foundMask = startingMask & ~distInfo.missingFieldMask;
                 int topField = getTopBitNumber(foundMask);
                 resultPattern = MessageFormat.format(getAppendFormat(topField), new Object[]{resultPattern, temp, getAppendName(topField)});
             }
@@ -1405,7 +1426,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     /**
      * 
      */
-    private String getBestRaw(DateTimeMatcher source, int includeMask, DistanceInfo missingFields) {
+    private String getBestRaw(DateTimeMatcher source, int includeMask, DistanceInfo missingFields, DateTimeMatcher skipMatcher) {
 //      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern 
 //      + ", mask: " + showMask(includeMask));
         int bestDistance = Integer.MAX_VALUE;
