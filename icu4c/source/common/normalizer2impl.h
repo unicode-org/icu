@@ -487,6 +487,10 @@ public:
     static const Normalizer2Impl *getNFKCImpl(UErrorCode &errorCode);
     static const Normalizer2Impl *getNFKC_CFImpl(UErrorCode &errorCode);
 
+    // Get the Impl instance of the Normalizer2.
+    // Must be used only when it is known that norm2 is a Normalizer2WithImpl instance.
+    static const Normalizer2Impl *getImpl(const Normalizer2 *norm2);
+
     static const UTrie2 *getFCDTrie(UErrorCode &errorCode);
 private:
     Normalizer2Factory();  // No instantiation.

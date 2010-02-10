@@ -586,6 +586,55 @@ uprops_getSource(UProperty which) {
     }
 }
 
+U_CAPI int32_t U_EXPORT2
+u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    // Compute the FC_NFKC_Closure on the fly:
+    // We have the API for complete coverage of Unicode properties, although
+    // this value by itself is not useful via API.
+    // (What could be useful is a custom normalization table that combines
+    // case folding and NFKC.)
+    // For the derivation, see Unicode's DerivedNormalizationProps.txt.
+    const Normalizer2 *nfkc=Normalizer2Factory::getNFKCInstance(*pErrorCode);
+    const UCaseProps *csp=ucase_getSingleton(pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    // first: b = NFKC(Fold(a))
+    UnicodeString folded1String;
+    const UChar *folded1;
+    int32_t folded1Length=ucase_toFullFolding(csp, c, &folded1, U_FOLD_CASE_DEFAULT);
+    if(folded1Length<0) {
+        const Normalizer2Impl *nfkcImpl=Normalizer2Factory::getImpl(nfkc);
+        if(nfkcImpl->getCompQuickCheck(nfkcImpl->getNorm16(c))!=UNORM_NO) {
+            return u_terminateUChars(dest, destCapacity, 0, pErrorCode);  // c does not change at all under CaseFolding+NFKC
+        }
+        folded1String.setTo(c);
+    } else {
+        if(folded1Length>UCASE_MAX_STRING_LENGTH) {
+            folded1String.setTo(folded1Length);
+        } else {
+            folded1String.setTo(FALSE, folded1, folded1Length);
+        }
+    }
+    UnicodeString kc1=nfkc->normalize(folded1String, *pErrorCode);
+    // second: c = NFKC(Fold(b))
+    UnicodeString folded2String(kc1);
+    UnicodeString kc2=nfkc->normalize(folded2String.foldCase(), *pErrorCode);
+    // if (c != b) add the mapping from a to c
+    if(U_FAILURE(*pErrorCode) || kc1==kc2) {
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
+    } else {
+        return kc2.extract(dest, destCapacity, *pErrorCode);
+    }
+}
+
 /*----------------------------------------------------------------
  * Inclusions list
  *----------------------------------------------------------------*/

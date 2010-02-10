@@ -510,6 +510,11 @@ Normalizer2Factory::getNFKC_CFImpl(UErrorCode &errorCode) {
     return allModes!=NULL ? &allModes->impl : NULL;
 }
 
+const Normalizer2Impl *
+Normalizer2Factory::getImpl(const Normalizer2 *norm2) {
+    return &((Normalizer2WithImpl *)norm2)->impl;
+}
+
 const UTrie2 *
 Normalizer2Factory::getFCDTrie(UErrorCode &errorCode) {
     Norm2AllModes *allModes=

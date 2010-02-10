@@ -1342,6 +1342,8 @@ TestFCNFKCClosure(void) {
         UChar32 c;
         const UChar s[6];
     } tests[]={
+        { 0x00C4, { 0 } },
+        { 0x00E4, { 0 } },
         { 0x037A, { 0x0020, 0x03B9, 0 } },
         { 0x03D2, { 0x03C5, 0 } },
         { 0x20A8, { 0x0072, 0x0073, 0 } },
