@@ -318,6 +318,8 @@ public final class Normalizer2Impl {
     }
 
     // TODO: Propose as public API on the UTF16 class.
+    // TODO: Propose widening UTF16 methods that take char to take int.
+    // TODO: Propose widening UTF16 methods that take String to take CharSequence.
     public static final class UTF16Plus {
         /**
          * Assuming c is a surrogate code point (UTF16.isSurrogate(c)),
