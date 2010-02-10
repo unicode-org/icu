@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -352,8 +352,7 @@ public class ZoneStringFormat {
         
         // Resolve metazones used by this zone
         int mzPartialLocIdx = 0;
-        Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = ZoneMeta.getOlsonToMetaMap();
-        List<OlsonToMetaMappingEntry> metazoneMappings = olsonToMeta.get(tzid);
+        List<OlsonToMetaMappingEntry> metazoneMappings = ZoneMeta.getOlsonToMatazones(tzid);
         if (metazoneMappings != null) {
             Iterator<OlsonToMetaMappingEntry> it = metazoneMappings.iterator();
             while (it.hasNext()) {
