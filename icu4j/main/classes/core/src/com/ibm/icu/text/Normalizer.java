@@ -5,11 +5,14 @@
  *******************************************************************************
  */
 package com.ibm.icu.text;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.VersionInfo;
 
+import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.CharacterIterator;
 
@@ -1715,10 +1718,12 @@ public final class Normalizer implements Cloneable {
         return buffer.length()!=0;
     }
 
+    /* compare canonically equivalent ------------------------------------------- */
+
     // TODO: Broaden the public compare(String, String, options) API like this. Ticket #7407
     private static int internalCompare(CharSequence s1, CharSequence s2, int options) {
-        int normOptions=options>>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
-        options|= NormalizerImpl.COMPARE_EQUIV;
+        int normOptions=options>>>COMPARE_NORM_OPTIONS_SHIFT;
+        options|= COMPARE_EQUIV;
 
         /*
          * UAX #21 Case Mappings, as fixed for Unicode version 4
@@ -1772,19 +1777,513 @@ public final class Normalizer implements Cloneable {
             }
         }
 
-        // TODO: Temporarily hideously slow. Convert internals to work on CharSequence.
-        int length1=s1.length();
-        char[] s1Array=new char[length1];
-        for(int i=0; i<length1; ++i) {
-            s1Array[i]=s1.charAt(i);
-        }
-        int length2=s2.length();
-        char[] s2Array=new char[length2];
-        for(int i=0; i<length2; ++i) {
-            s2Array[i]=s2.charAt(i);
-        }
-        return NormalizerImpl.cmpEquivFold(s1Array, 0, length1, s2Array, 0, length2, options);
+        return cmpEquivFold(s1, s2, options);
     }    
+
+    /*
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
+     *
+     * In this function, canonical equivalence is optional as well.
+     * If canonical equivalence is tested, then both strings must fulfill
+     * the FCD check.
+     *
+     * Semantically, this is equivalent to
+     *   strcmp[CodePointOrder](NFD(foldCase(s1)), NFD(foldCase(s2)))
+     * where code point order, NFD and foldCase are all optional.
+     *
+     * String comparisons almost always yield results before processing both strings
+     * completely.
+     * They are generally more efficient working incrementally instead of
+     * performing the sub-processing (strlen, normalization, case-folding)
+     * on the entire strings first.
+     *
+     * It is also unnecessary to not normalize identical characters.
+     *
+     * This function works in principle as follows:
+     *
+     * loop {
+     *   get one code unit c1 from s1 (-1 if end of source)
+     *   get one code unit c2 from s2 (-1 if end of source)
+     *
+     *   if(either string finished) {
+     *     return result;
+     *   }
+     *   if(c1==c2) {
+     *     continue;
+     *   }
+     *
+     *   // c1!=c2
+     *   try to decompose/case-fold c1/c2, and continue if one does;
+     *
+     *   // still c1!=c2 and neither decomposes/case-folds, return result
+     *   return c1-c2;
+     * }
+     *
+     * When a character decomposes, then the pointer for that source changes to
+     * the decomposition, pushing the previous pointer onto a stack.
+     * When the end of the decomposition is reached, then the code unit reader
+     * pops the previous source from the stack.
+     * (Same for case-folding.)
+     *
+     * This is complicated further by operating on variable-width UTF-16.
+     * The top part of the loop works on code units, while lookups for decomposition
+     * and case-folding need code points.
+     * Code points are assembled after the equality/end-of-source part.
+     * The source pointer is only advanced beyond all code units when the code point
+     * actually decomposes/case-folds.
+     *
+     * If we were on a trail surrogate unit when assembling a code point,
+     * and the code point decomposes/case-folds, then the decomposition/folding
+     * result must be compared with the part of the other string that corresponds to
+     * this string's lead surrogate.
+     * Since we only assemble a code point when hitting a trail unit when the
+     * preceding lead units were identical, we back up the other string by one unit
+     * in such a case.
+     *
+     * The optional code point order comparison at the end works with
+     * the same fix-up as the other code point order comparison functions.
+     * See ustring.c and the comment near the end of this function.
+     *
+     * Assumption: A decomposition or case-folding result string never contains
+     * a single surrogate. This is a safe assumption in the Unicode Standard.
+     * Therefore, we do not need to check for surrogate pairs across
+     * decomposition/case-folding boundaries.
+     *
+     * Further assumptions (see verifications tstnorm.cpp):
+     * The API function checks for FCD first, while the core function
+     * first case-folds and then decomposes. This requires that case-folding does not
+     * un-FCD any strings.
+     *
+     * The API function may also NFD the input and turn off decomposition.
+     * This requires that case-folding does not un-NFD strings either.
+     *
+     * TODO If any of the above two assumptions is violated,
+     * then this entire code must be re-thought.
+     * If this happens, then a simple solution is to case-fold both strings up front
+     * and to turn off UNORM_INPUT_IS_FCD.
+     * We already do this when not both strings are in FCD because makeFCD
+     * would be a partial NFD before the case folding, which does not work.
+     * Note that all of this is only a problem when case-folding _and_
+     * canonical equivalence come together.
+     * (Comments in unorm_compare() are more up to date than this TODO.)
+     */
+
+    /* stack element for previous-level source/decomposition pointers */
+    private static final class CmpEquivLevel {
+        CharSequence cs;
+        int s;
+    };
+    private static final CmpEquivLevel[] createCmpEquivLevelStack() {
+        return new CmpEquivLevel[] {
+            new CmpEquivLevel(), new CmpEquivLevel()
+        };
+    }
+
+    /**
+     * Internal option for unorm_cmpEquivFold() for decomposing.
+     * If not set, just do strcasecmp().
+     */
+    private static final int COMPARE_EQUIV=0x80000;
+
+    /* internal function; package visibility for use by UTF16.StringComparator */
+    /*package*/ static int cmpEquivFold(CharSequence cs1, CharSequence cs2, int options) {
+        Normalizer2Impl nfcImpl;
+        UCaseProps csp;
+
+        /* current-level start/limit - s1/s2 as current */
+        int s1, s2, limit1, limit2;
+
+        /* decomposition and case folding variables */
+        int length;
+
+        /* stacks of previous-level start/current/limit */
+        CmpEquivLevel[] stack1=null, stack2=null;
+
+        /* buffers for algorithmic decompositions */
+        String decomp1, decomp2;
+
+        /* case folding buffers, only use current-level start/limit */
+        StringBuffer fold1, fold2;
+
+        /* track which is the current level per string */
+        int level1, level2;
+
+        /* current code units, and code points for lookups */
+        int c1, c2, cp1, cp2;
+
+        /* no argument error checking because this itself is not an API */
+
+        /*
+         * assume that at least one of the options _COMPARE_EQUIV and U_COMPARE_IGNORE_CASE is set
+         * otherwise this function must behave exactly as uprv_strCompare()
+         * not checking for that here makes testing this function easier
+         */
+
+        /* normalization/properties data loaded? */
+        if((options&COMPARE_EQUIV)!=0) {
+            nfcImpl=Norm2AllModes.getNFCInstanceNoIOException().impl;
+        } else {
+            nfcImpl=null;
+        }
+        if((options&COMPARE_IGNORE_CASE)!=0) {
+            try {
+                csp=UCaseProps.getSingleton();
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+            fold1=new StringBuffer();
+            fold2=new StringBuffer();
+        } else {
+            csp=null;
+            fold1=fold2=null;
+        }
+
+        /* initialize */
+        s1=0;
+        limit1=cs1.length();
+        s2=0;
+        limit2=cs2.length();
+
+        level1=level2=0;
+        c1=c2=-1;
+
+        /* comparison loop */
+        for(;;) {
+            /*
+             * here a code unit value of -1 means "get another code unit"
+             * below it will mean "this source is finished"
+             */
+
+            if(c1<0) {
+                /* get next code unit from string 1, post-increment */
+                for(;;) {
+                    if(s1==limit1) {
+                        if(level1==0) {
+                            c1=-1;
+                            break;
+                        }
+                    } else {
+                        c1=cs1.charAt(s1++);
+                        break;
+                    }
+
+                    /* reached end of level buffer, pop one level */
+                    do {
+                        --level1;
+                        cs1=stack1[level1].cs;
+                    } while(cs1==null);
+                    s1=stack1[level1].s;
+                    limit1=cs1.length();
+                }
+            }
+
+            if(c2<0) {
+                /* get next code unit from string 2, post-increment */
+                for(;;) {
+                    if(s2==limit2) {
+                        if(level2==0) {
+                            c2=-1;
+                            break;
+                        }
+                    } else {
+                        c2=cs2.charAt(s2++);
+                        break;
+                    }
+
+                    /* reached end of level buffer, pop one level */
+                    do {
+                        --level2;
+                        cs2=stack2[level2].cs;
+                    } while(cs2==null);
+                    s2=stack2[level2].s;
+                    limit2=cs2.length();
+                }
+            }
+
+            /*
+             * compare c1 and c2
+             * either variable c1, c2 is -1 only if the corresponding string is finished
+             */
+            if(c1==c2) {
+                if(c1<0) {
+                    return 0;   /* c1==c2==-1 indicating end of strings */
+                }
+                c1=c2=-1;       /* make us fetch new code units */
+                continue;
+            } else if(c1<0) {
+                return -1;      /* string 1 ends before string 2 */
+            } else if(c2<0) {
+                return 1;       /* string 2 ends before string 1 */
+            }
+            /* c1!=c2 && c1>=0 && c2>=0 */
+
+            /* get complete code points for c1, c2 for lookups if either is a surrogate */
+            cp1=c1;
+            if(UTF16.isSurrogate((char)c1)) {
+                char c;
+
+                if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
+                    if(s1!=limit1 && Character.isLowSurrogate(c=cs1.charAt(s1))) {
+                        /* advance ++s1; only below if cp1 decomposes/case-folds */
+                        cp1=Character.toCodePoint((char)c1, c);
+                    }
+                } else /* isTrail(c1) */ {
+                    if(0<=(s1-2) && Character.isHighSurrogate(c=cs1.charAt(s1-2))) {
+                        cp1=Character.toCodePoint(c, (char)c1);
+                    }
+                }
+            }
+
+            cp2=c2;
+            if(UTF16.isSurrogate((char)c2)) {
+                char c;
+
+                if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
+                    if(s2!=limit2 && Character.isLowSurrogate(c=cs2.charAt(s2))) {
+                        /* advance ++s2; only below if cp2 decomposes/case-folds */
+                        cp2=Character.toCodePoint((char)c2, c);
+                    }
+                } else /* isTrail(c2) */ {
+                    if(0<=(s2-2) && Character.isHighSurrogate(c=cs2.charAt(s2-2))) {
+                        cp2=Character.toCodePoint(c, (char)c2);
+                    }
+                }
+            }
+
+            /*
+             * go down one level for each string
+             * continue with the main loop as soon as there is a real change
+             */
+
+            if( level1==0 && (options&COMPARE_IGNORE_CASE)!=0 &&
+                (length=csp.toFullFolding(cp1, fold1, options))>=0
+            ) {
+                /* cp1 case-folds to the code point "length" or to p[length] */
+                if(UTF16.isSurrogate((char)c1)) {
+                    if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
+                        /* advance beyond source surrogate pair if it case-folds */
+                        ++s1;
+                    } else /* isTrail(c1) */ {
+                        /*
+                         * we got a supplementary code point when hitting its trail surrogate,
+                         * therefore the lead surrogate must have been the same as in the other string;
+                         * compare this decomposition with the lead surrogate in the other string
+                         * remember that this simulates bulk text replacement:
+                         * the decomposition would replace the entire code point
+                         */
+                        --s2;
+                        c2=cs2.charAt(s2-1);
+                    }
+                }
+
+                /* push current level pointers */
+                if(stack1==null) {
+                    stack1=createCmpEquivLevelStack();
+                }
+                stack1[0].cs=cs1;
+                stack1[0].s=s1;
+                ++level1;
+
+                /* copy the folding result to fold1[] */
+                /* Java: the buffer was probably not empty, remove the old contents */
+                if(length<=UCaseProps.MAX_STRING_LENGTH) {
+                    fold1.delete(0, fold1.length()-length);
+                } else {
+                    fold1.setLength(0);
+                    fold1.appendCodePoint(length);
+                }
+
+                /* set next level pointers to case folding */
+                cs1=fold1;
+                s1=0;
+                limit1=fold1.length();
+
+                /* get ready to read from decomposition, continue with loop */
+                c1=-1;
+                continue;
+            }
+
+            if( level2==0 && (options&COMPARE_IGNORE_CASE)!=0 &&
+                (length=csp.toFullFolding(cp2, fold2, options))>=0
+            ) {
+                /* cp2 case-folds to the code point "length" or to p[length] */
+                if(UTF16.isSurrogate((char)c2)) {
+                    if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
+                        /* advance beyond source surrogate pair if it case-folds */
+                        ++s2;
+                    } else /* isTrail(c2) */ {
+                        /*
+                         * we got a supplementary code point when hitting its trail surrogate,
+                         * therefore the lead surrogate must have been the same as in the other string;
+                         * compare this decomposition with the lead surrogate in the other string
+                         * remember that this simulates bulk text replacement:
+                         * the decomposition would replace the entire code point
+                         */
+                        --s1;
+                        c1=cs1.charAt(s1-1);
+                    }
+                }
+
+                /* push current level pointers */
+                if(stack2==null) {
+                    stack2=createCmpEquivLevelStack();
+                }
+                stack2[0].cs=cs2;
+                stack2[0].s=s2;
+                ++level2;
+
+                /* copy the folding result to fold2[] */
+                /* Java: the buffer was probably not empty, remove the old contents */
+                if(length<=UCaseProps.MAX_STRING_LENGTH) {
+                    fold2.delete(0, fold2.length()-length);
+                } else {
+                    fold2.setLength(0);
+                    fold2.appendCodePoint(length);
+                }
+
+                /* set next level pointers to case folding */
+                cs2=fold2;
+                s2=0;
+                limit2=fold2.length();
+
+                /* get ready to read from decomposition, continue with loop */
+                c2=-1;
+                continue;
+            }
+
+            if( level1<2 && (options&COMPARE_EQUIV)!=0 &&
+                (decomp1=nfcImpl.getDecomposition(cp1))!=null
+            ) {
+                /* cp1 decomposes into p[length] */
+                if(UTF16.isSurrogate((char)c1)) {
+                    if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
+                        /* advance beyond source surrogate pair if it decomposes */
+                        ++s1;
+                    } else /* isTrail(c1) */ {
+                        /*
+                         * we got a supplementary code point when hitting its trail surrogate,
+                         * therefore the lead surrogate must have been the same as in the other string;
+                         * compare this decomposition with the lead surrogate in the other string
+                         * remember that this simulates bulk text replacement:
+                         * the decomposition would replace the entire code point
+                         */
+                        --s2;
+                        c2=cs2.charAt(s2-1);
+                    }
+                }
+
+                /* push current level pointers */
+                if(stack1==null) {
+                    stack1=createCmpEquivLevelStack();
+                }
+                stack1[level1].cs=cs1;
+                stack1[level1].s=s1;
+                ++level1;
+
+                /* set empty intermediate level if skipped */
+                if(level1<2) {
+                    stack1[level1++].cs=null;
+                }
+
+                /* set next level pointers to decomposition */
+                cs1=decomp1;
+                s1=0;
+                limit1=decomp1.length();
+
+                /* get ready to read from decomposition, continue with loop */
+                c1=-1;
+                continue;
+            }
+
+            if( level2<2 && (options&COMPARE_EQUIV)!=0 &&
+                (decomp2=nfcImpl.getDecomposition(cp2))!=null
+            ) {
+                /* cp2 decomposes into p[length] */
+                if(UTF16.isSurrogate((char)c2)) {
+                    if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
+                        /* advance beyond source surrogate pair if it decomposes */
+                        ++s2;
+                    } else /* isTrail(c2) */ {
+                        /*
+                         * we got a supplementary code point when hitting its trail surrogate,
+                         * therefore the lead surrogate must have been the same as in the other string;
+                         * compare this decomposition with the lead surrogate in the other string
+                         * remember that this simulates bulk text replacement:
+                         * the decomposition would replace the entire code point
+                         */
+                        --s1;
+                        c1=cs1.charAt(s1-1);
+                    }
+                }
+
+                /* push current level pointers */
+                if(stack2==null) {
+                    stack2=createCmpEquivLevelStack();
+                }
+                stack2[level2].cs=cs2;
+                stack2[level2].s=s2;
+                ++level2;
+
+                /* set empty intermediate level if skipped */
+                if(level2<2) {
+                    stack2[level2++].cs=null;
+                }
+
+                /* set next level pointers to decomposition */
+                cs2=decomp2;
+                s2=0;
+                limit2=decomp2.length();
+
+                /* get ready to read from decomposition, continue with loop */
+                c2=-1;
+                continue;
+            }
+
+            /*
+             * no decomposition/case folding, max level for both sides:
+             * return difference result
+             *
+             * code point order comparison must not just return cp1-cp2
+             * because when single surrogates are present then the surrogate pairs
+             * that formed cp1 and cp2 may be from different string indexes
+             *
+             * example: { d800 d800 dc01 } vs. { d800 dc00 }, compare at second code units
+             * c1=d800 cp1=10001 c2=dc00 cp2=10000
+             * cp1-cp2>0 but c1-c2<0 and in fact in UTF-32 it is { d800 10001 } < { 10000 }
+             *
+             * therefore, use same fix-up as in ustring.c/uprv_strCompare()
+             * except: uprv_strCompare() fetches c=*s while this functions fetches c=*s++
+             * so we have slightly different pointer/start/limit comparisons here
+             */
+
+            if(c1>=0xd800 && c2>=0xd800 && (options&COMPARE_CODE_POINT_ORDER)!=0) {
+                /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
+                if(
+                    (c1<=0xdbff && s1!=limit1 && Character.isLowSurrogate(cs1.charAt(s1))) ||
+                    (Character.isLowSurrogate((char)c1) && 0!=(s1-1) && Character.isHighSurrogate(cs1.charAt(s1-2)))
+                ) {
+                    /* part of a surrogate pair, leave >=d800 */
+                } else {
+                    /* BMP code point - may be surrogate code point - make <d800 */
+                    c1-=0x2800;
+                }
+
+                if(
+                    (c2<=0xdbff && s2!=limit2 && Character.isLowSurrogate(cs2.charAt(s2))) ||
+                    (Character.isLowSurrogate((char)c2) && 0!=(s2-1) && Character.isHighSurrogate(cs2.charAt(s2-2)))
+                ) {
+                    /* part of a surrogate pair, leave >=d800 */
+                } else {
+                    /* BMP code point - may be surrogate code point - make <d800 */
+                    c2-=0x2800;
+                }
+            }
+
+            return c1-c2;
+        }
+    }
 
     /**
      * Fetches the Unicode version burned into the Normalization data file

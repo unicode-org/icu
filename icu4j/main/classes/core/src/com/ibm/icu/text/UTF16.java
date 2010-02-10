@@ -8,7 +8,6 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.NormalizerImpl;
 
 /**
  * <p>
@@ -2555,7 +2554,7 @@ public final class UTF16 {
          * @return -1 is s1 &lt; s2, 0 if equals,
          */
         private int compareCaseInsensitive(String s1, String s2) {
-            return NormalizerImpl.cmpEquivFold(s1, s2, m_foldCase_ | m_codePointCompare_
+            return Normalizer.cmpEquivFold(s1, s2, m_foldCase_ | m_codePointCompare_
                     | Normalizer.COMPARE_IGNORE_CASE);
         }
 
