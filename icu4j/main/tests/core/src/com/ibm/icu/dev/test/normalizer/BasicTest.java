@@ -2208,6 +2208,7 @@ public class BasicTest extends TestFmwk {
         
         TestStruct[] tests= new TestStruct[]{
             new TestStruct( 0x00C4, "" ),
+            new TestStruct( 0x00E4, "" ),
             new TestStruct( 0x037A, "\u0020\u03B9" ),
             new TestStruct( 0x03D2, "\u03C5" ),
             new TestStruct( 0x20A8, "\u0072\u0073" ) ,

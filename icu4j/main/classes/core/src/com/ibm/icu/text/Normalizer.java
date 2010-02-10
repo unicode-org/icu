@@ -1279,7 +1279,6 @@ public final class Normalizer implements Cloneable {
         // (What could be useful is a custom normalization table that combines
         // case folding and NFKC.)
         // For the derivation, see Unicode's DerivedNormalizationProps.txt.
-        Normalizer2Impl nfkcImpl=Norm2AllModes.getNFKCInstanceNoIOException().impl;
         UCaseProps csp;
         try {
             csp=UCaseProps.getSingleton();
@@ -1288,19 +1287,19 @@ public final class Normalizer implements Cloneable {
         }
         // first: b = NFKC(Fold(a))
         StringBuffer folded=new StringBuffer();
-        String kc1;
         int folded1Length=csp.toFullFolding(c, folded, 0);
         if(folded1Length<0) {
-            kc1=nfkcImpl.getDecomposition(c);
-            if(kc1==null) {
+            Normalizer2Impl nfkcImpl=((Norm2AllModes.Normalizer2WithImpl)NFKC.normalizer2).impl;
+            if(nfkcImpl.getCompQuickCheck(nfkcImpl.getNorm16(c))!=0) {
                 return "";  // c does not change at all under CaseFolding+NFKC
             }
+            folded.appendCodePoint(c);
         } else {
             if(folded1Length>UCaseProps.MAX_STRING_LENGTH) {
                 folded.appendCodePoint(folded1Length);
             }
-            kc1=NFKC.normalizer2.normalize(folded);
         }
+        String kc1=NFKC.normalizer2.normalize(folded);
         // second: c = NFKC(Fold(b))
         String kc2=NFKC.normalizer2.normalize(UCharacter.foldCase(kc1, 0));
         // if (c != b) add the mapping from a to c
