@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2009, International Business Machines
+ * Copyright (C) 1996-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -408,10 +408,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
         // We keep a cache, indexed by locale.  The cache contains a
         // SimpleDateFormat object, which we create on demand.
-        SimpleDateFormat format = (SimpleDateFormat)cachedLocaleData.get(locale);
-        if (format == null) {
+        SimpleDateFormat format;
+        SimpleDateFormat tmpfmt = (SimpleDateFormat)cachedLocaleData.get(locale);
+        if (tmpfmt == null) {
             format = new SimpleDateFormat(null, locale);
             cachedLocaleData.put(locale, format);
+        } else {
+            format = (SimpleDateFormat)tmpfmt.clone();
         }
 
         String[] patterns = { "z", "zzzz", "v", "vvvv" };

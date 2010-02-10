@@ -1,7 +1,7 @@
 //##header
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1143,7 +1143,33 @@ public class TimeZoneRegression extends TestFmwk {
         } else {
             logln("OK: zone " + j_id +" returned offset in December: " + offset2);
         }
+    }
 
+    public void TestT7107() {
+        Thread[] workers = new Thread[20];
+        for (int i = 0 ; i < workers.length; i++) {
+            workers[i] = new Thread(new Runnable() {
+                public void run() {
+                    for (int j = 0; j < 10000; j++) {
+                        try {
+                            com.ibm.icu.util.TimeZone.getTimeZone("GMT").getDisplayName();
+                        } catch (Exception e) {
+                            errln("FAIL: Caught an exception " + e);
+                        }
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < workers.length; i++) {
+            workers[i].start();
+        }
+        for (int i = 0; i < workers.length; i++) {
+            try {
+                workers[i].join();
+            } catch (InterruptedException ie) {
+                
+            }
+        }
     }
 }
 
