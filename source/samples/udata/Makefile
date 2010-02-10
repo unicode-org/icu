@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2004 IBM, Inc. and others
+# Copyright (c) 2000-2010 IBM, Inc. and others
 # udata sample code
 # Usage:
 #  - configure, build, install ICU
@@ -28,7 +28,7 @@ OBJECTS1=reader.o
 OBJECTS2=writer.o
 OBJECTS=$(OBJECTS1) $(OBJECTS2)
 
-CLEANFILES=*~ $(TARGET).out
+CLEANFILES=*~ $(TARGET).out $(TARGET1).out $(TARGET2).out
 
 all: $(TARGET1) $(TARGET2)
 
