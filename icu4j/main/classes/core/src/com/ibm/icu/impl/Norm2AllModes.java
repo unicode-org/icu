@@ -134,7 +134,7 @@ public final class Norm2AllModes {
             return 1;
         }
 
-        Normalizer2Impl impl;
+        public final Normalizer2Impl impl;
     }
 
     public static final class DecomposeNormalizer2 extends Normalizer2WithImpl {
