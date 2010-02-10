@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2006 IBM, Inc. and others
+# Copyright (c) 2001-2010 IBM, Inc. and others
 #
 # File
 #    icu/source/samples/ufortune/resources/Makefile
@@ -28,7 +28,7 @@ include ../../defs.mk
 
 # No conventional target - this dir is resources only.
 TARGET=
-CLEANFILES += *.[co] *.lst $(RESNAME)_*.mak $(RESNAME).dat $(RESFILES) *.ao README*resources.txt
+CLEANFILES += *.[co] *.lst $(RESNAME)_*.mak $(RESNAME).dat $(RESFILES) *.ao README*resources.txt $(RESNAME)_dat*
 
 include ../fortunedefs.mk
 
