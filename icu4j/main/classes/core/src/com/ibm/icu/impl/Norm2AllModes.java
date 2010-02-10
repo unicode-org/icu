@@ -276,13 +276,13 @@ public final class Norm2AllModes {
         return singleton.allModes;
     }
     public static Norm2AllModes getNFCInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(nfcSingleton);
+        return getInstanceFromSingletonNoIOException(NFCSingleton.INSTANCE);
     }
     public static Norm2AllModes getNFKCInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(nfkcSingleton);
+        return getInstanceFromSingletonNoIOException(NFKCSingleton.INSTANCE);
     }
     public static Norm2AllModes getNFKC_CFInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(nfkc_cfSingleton);
+        return getInstanceFromSingletonNoIOException(NFKC_CFSingleton.INSTANCE);
     }
     // For use in properties APIs.
     public static Normalizer2WithImpl getN2WithImpl(int index) {
@@ -298,11 +298,11 @@ public final class Norm2AllModes {
         if(data==null) {
             Norm2AllModesSingleton singleton;
             if(name.equals("nfc")) {
-                singleton=nfcSingleton;
+                singleton=NFCSingleton.INSTANCE;
             } else if(name.equals("nfkc")) {
-                singleton=nfkcSingleton;
+                singleton=NFKCSingleton.INSTANCE;
             } else if(name.equals("nfkc_cf")) {
-                singleton=nfkc_cfSingleton;
+                singleton=NFKC_CFSingleton.INSTANCE;
             } else {
                 throw new UnsupportedOperationException();  // TODO
             }
@@ -327,8 +327,8 @@ public final class Norm2AllModes {
         return allModes.fcd;
     }
 
-    private static final class Norm2AllModesSingleton {
-        public Norm2AllModesSingleton(InputStream data, String name) {
+    private static class Norm2AllModesSingleton {
+        private Norm2AllModesSingleton(InputStream data, String name) {
             Normalizer2Impl impl;
             if(data==null) {
                 try {
@@ -345,11 +345,26 @@ public final class Norm2AllModes {
             }
         }
 
-        public Norm2AllModes allModes;
-        public IOException ioException;
-        public RuntimeException runtimeException;
+        private Norm2AllModes allModes;
+        private IOException ioException;
+        private RuntimeException runtimeException;
     }
-    private static Norm2AllModesSingleton nfcSingleton=new Norm2AllModesSingleton(null, "nfc");
-    private static Norm2AllModesSingleton nfkcSingleton=new Norm2AllModesSingleton(null, "nfkc");
-    private static Norm2AllModesSingleton nfkc_cfSingleton=new Norm2AllModesSingleton(null, "nfkc_cf");
+    private static final class NFCSingleton extends Norm2AllModesSingleton {
+        private NFCSingleton() {
+            super(null, "nfc");
+        }
+        private static final NFCSingleton INSTANCE=new NFCSingleton();
+    }
+    private static final class NFKCSingleton extends Norm2AllModesSingleton {
+        private NFKCSingleton() {
+            super(null, "nfkc");
+        }
+        private static final NFKCSingleton INSTANCE=new NFKCSingleton();
+    }
+    private static final class NFKC_CFSingleton extends Norm2AllModesSingleton {
+        private NFKC_CFSingleton() {
+            super(null, "nfkc_cf");
+        }
+        private static final NFKC_CFSingleton INSTANCE=new NFKC_CFSingleton();
+    }
 }
