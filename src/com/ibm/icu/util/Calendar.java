@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -18,6 +18,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
@@ -1670,53 +1671,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private static final int CALTYPE_UNKNOWN = -1;
 
     private static int getCalendarTypeForLocale(ULocale l) {
-        int calType = CALTYPE_UNKNOWN;
-
-        // canonicalize, so grandfathered variant will be transformed to keywords
-        ULocale canonical = ULocale.createCanonical(l.toString());
-
-        String calTypeStr = canonical.getKeywordValue("calendar");
-        if (calTypeStr != null) {
-            calType = getCalendarType(calTypeStr);
-            if (calType != CALTYPE_UNKNOWN) {
-                return calType;
-            }
-        }
-
-        // when calendar keyword is not available or not supported, read supplementalData
-        // to get the default calendar type for the locale's region
-        String region = canonical.getCountry();
-        if (region.length() == 0) {
-            ULocale fullLoc = ULocale.addLikelySubtags(canonical);
-            region = fullLoc.getCountry();
-        }
-
-        try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(
-                                    ICUResourceBundle.ICU_BASE_NAME,
-                                    "supplementalData",
-                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle calPref = rb.get("calendarPreferenceData");
-            UResourceBundle order = null;
-            try {
-                order = calPref.get(region);
-            } catch (MissingResourceException mre) {
-                // use "001" as fallback
-                order = calPref.get("001");
-            }
-            // the first calendar type is the default for the region
-            calTypeStr = order.getString(0);
-            calType = getCalendarType(calTypeStr);
-        } catch (MissingResourceException mre) {
-            // fall through
-        }
-        if (calType == CALTYPE_UNKNOWN) {
-            return CALTYPE_GREGORIAN;
-        }
-        return calType;
-    }
-
-    private static int getCalendarType(String s) {
+        String s = CalendarUtil.getCalendarType(l);
         if (s != null) {
             s = s.toLowerCase();
             for (int i = 0; i < calTypes.length; ++i) {

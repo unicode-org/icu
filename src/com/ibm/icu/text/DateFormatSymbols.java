@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
@@ -164,7 +165,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(ULocale locale)
     {
-        initializeData(locale, getCalendarType(locale));
+        initializeData(locale, CalendarUtil.getCalendarType(locale));
     }
 
     /**
@@ -1533,7 +1534,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
         initializeData(locale, 
-            new CalendarData((ICUResourceBundle)bundle, getCalendarType(locale)));
+            new CalendarData((ICUResourceBundle)bundle, CalendarUtil.getCalendarType(locale)));
     }
 
     /**
@@ -1604,17 +1605,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {
         return null;
-    }
-
-    // Return the calendar type string for the given locale
-    private static String getCalendarType(ULocale locale) {
-        String calType = locale.getKeywordValue("calendar");
-        if (calType == null) {
-            locale = ICUResourceBundle.getFunctionalEquivalent(
-                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", locale, null, false);
-            calType = locale.getKeywordValue("calendar");
-        }
-        return calType;
     }
 
     // -------- BEGIN ULocale boilerplate --------
