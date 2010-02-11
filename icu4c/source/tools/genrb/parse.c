@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -763,6 +763,11 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
                 }
                 else
                 {
+                    if(intStatus == U_FILE_ACCESS_ERROR) {
+                      error(startline, "Collation could not be built- U_FILE_ACCESS_ERROR. Make sure ICU's data has been built and iss loading properly.");
+                      *status = intStatus;
+                      return NULL;
+                    }
                     warning(line, "%%Collation could not be constructed from CollationElements - check context!");
                     if(isStrict()){
                         *status = intStatus;
