@@ -327,7 +327,7 @@ public final class Norm2AllModes {
         return allModes.fcd;
     }
 
-    private static class Norm2AllModesSingleton {
+    private static final class Norm2AllModesSingleton {
         private Norm2AllModesSingleton(InputStream data, String name) {
             Normalizer2Impl impl;
             if(data==null) {
@@ -349,22 +349,13 @@ public final class Norm2AllModes {
         private IOException ioException;
         private RuntimeException runtimeException;
     }
-    private static final class NFCSingleton extends Norm2AllModesSingleton {
-        private NFCSingleton() {
-            super(null, "nfc");
-        }
-        private static final NFCSingleton INSTANCE=new NFCSingleton();
+    private static final class NFCSingleton {
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfc");
     }
-    private static final class NFKCSingleton extends Norm2AllModesSingleton {
-        private NFKCSingleton() {
-            super(null, "nfkc");
-        }
-        private static final NFKCSingleton INSTANCE=new NFKCSingleton();
+    private static final class NFKCSingleton {
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfkc");
     }
-    private static final class NFKC_CFSingleton extends Norm2AllModesSingleton {
-        private NFKC_CFSingleton() {
-            super(null, "nfkc_cf");
-        }
-        private static final NFKC_CFSingleton INSTANCE=new NFKC_CFSingleton();
+    private static final class NFKC_CFSingleton {
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfkc_cf");
     }
 }
