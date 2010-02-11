@@ -413,7 +413,7 @@ u_fgetcodepage(UFILE *file);
  * mix codepages within a file. This should only be called right
  * after opening the <TT>UFile</TT>, or after calling <TT>u_frewind</TT>.
  * @param codepage The codepage in which data will be written to 
- * and read from the file. For example <TT>"latin-1"</TT> or <TT>"ibm-943</TT>.
+ * and read from the file. For example <TT>"latin-1"</TT> or <TT>"ibm-943"</TT>.
  * A value of NULL means the default codepage for the UFILE's current 
  * locale will be used.
  * @param file The UFILE to set.

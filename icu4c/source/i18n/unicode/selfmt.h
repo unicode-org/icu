@@ -139,7 +139,7 @@ class Hashtable;
   * it's provided to returns the error  <code>U_DEFAULT_KEYWORD_MISSING</code>.
   * If a pattern provides more than one phrase for the same keyword, the
   * error <code>U_DUPLICATE_KEYWORD</code> is returned.
-  * <br/>
+  * <br>
   * Spaces between <code><i>keyword</i></code> and
   * <code>{<i>phrase</i>}</code>  will be ignored; spaces within
   * <code>{<i>phrase</i>}</code> will be preserved.<p>
@@ -173,7 +173,7 @@ class Hashtable;
   * \endhtmlonly
   * </p>
   *
-  * Produces the output:<br/>
+  * Produces the output:<br>
   * \htmlonly
   * <code>Kirti est all&#x00E9;e &#x00E0; Paris.</code>
   * \endhtmlonly

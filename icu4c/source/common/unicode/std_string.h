@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,7 +19,7 @@
 
 /**
  * \file 
- * \brief C++ API: Central ICU header for including the C++ standard <string>
+ * \brief C++ API: Central ICU header for including the C++ standard &lt;string&gt;
  *                 header and for related definitions.
  */
 
@@ -27,7 +27,7 @@
 
 /**
  * \def U_HAVE_STD_STRING
- * Define whether the standard C++ (STL) <string> header is available.
+ * Define whether the standard C++ (STL) &lt;string&gt; header is available.
  * @draft ICU 4.2
  */
 #ifndef U_HAVE_STD_STRING

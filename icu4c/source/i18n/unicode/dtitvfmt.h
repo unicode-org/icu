@@ -1,5 +1,5 @@
 /********************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 2008-2010, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File DTITVFMT.H
@@ -112,15 +112,15 @@ U_NAMESPACE_BEGIN
  * There is a set of pre-defined static skeleton strings.
  * There are pre-defined interval patterns for those pre-defined skeletons
  * in locales' resource files.
- * For example, for a skeleton UDAT_YEAR_ABBR_MONTH_DAY, which is  "yMMMd",
+ * For example, for a skeleton UDAT_YEAR_ABBR_MONTH_DAY, which is  &quot;yMMMd&quot;,
  * in  en_US, if the largest different calendar field between date1 and date2 
- * is "year", the date interval pattern  is "MMM d, yyyy - MMM d, yyyy", 
- * such as "Jan 10, 2007 - Jan 10, 2008".
- * If the largest different calendar field between date1 and date2 is "month",
- * the date interval pattern is "MMM d - MMM d, yyyy",
- * such as "Jan 10 - Feb 10, 2007".
- * If the largest different calendar field between date1 and date2 is "day",
- * the date interval pattern is ""MMM d-d, yyyy", such as "Jan 10-20, 2007".
+ * is &quot;year&quot;, the date interval pattern  is &quot;MMM d, yyyy - MMM d, yyyy&quot;, 
+ * such as &quot;Jan 10, 2007 - Jan 10, 2008&quot;.
+ * If the largest different calendar field between date1 and date2 is &quot;month&quot;,
+ * the date interval pattern is &quot;MMM d - MMM d, yyyy&quot;,
+ * such as &quot;Jan 10 - Feb 10, 2007&quot;.
+ * If the largest different calendar field between date1 and date2 is &quot;day&quot;,
+ * the date interval pattern is &quot;MMM d-d, yyyy&quot;, such as &quot;Jan 10-20, 2007&quot;.
  *
  * For date skeleton, the interval patterns when year, or month, or date is 
  * different are defined in resource files.

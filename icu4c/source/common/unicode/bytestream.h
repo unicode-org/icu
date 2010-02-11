@@ -214,7 +214,7 @@ class StringByteSink : public ByteSink {
   StringByteSink(StringClass* dest) : dest_(dest) { }
   /**
    * Append "bytes[0,n-1]" to this.
-   * @param bytes the pointer to the bytes
+   * @param data the pointer to the bytes
    * @param n the number of bytes; must be non-negative
    * @stable ICU 4.2
    */

@@ -214,7 +214,7 @@ public:
     void setEraNames(const UnicodeString* eraNames, int32_t count);
 
     /**
-     * Gets narrow era strings. For example: A" and "D".
+     * Gets narrow era strings. For example: "A" and "B".
      *
      * @param count    Filled in with length of the array.
      * @return         the narrow era strings.
