@@ -205,7 +205,9 @@ public:
     *    from a pattern string rather than separately compiling the pattern and
     *    then creating a RegexMatcher object from the pattern.</p>
     *
-    * @param regex The regular expression to be compiled.
+    * @param regex The regular expression to be compiled. Note, the text referred
+    *              to by this UText must not be deleted during the lifetime of the
+    *              RegexPattern object or any RegexMatcher object created from it.
     * @param pe    Receives the position (line and column nubers) of any error
     *              within the regular expression.)
     * @param status A reference to a UErrorCode to receive any errors.
@@ -262,7 +264,9 @@ public:
     *    from a pattern string instead of than separately compiling the pattern and
     *    then creating a RegexMatcher object from the pattern.</p>
     *
-    * @param regex The regular expression to be compiled.
+    * @param regex The regular expression to be compiled. Note, the text referred
+    *              to by this UText must not be deleted during the lifetime of the
+    *              RegexPattern object or any RegexMatcher object created from it.
     * @param flags The match mode flags to be used.
     * @param pe    Receives the position (line and column numbers) of any error
     *              within the regular expression.)
@@ -319,7 +323,9 @@ public:
     *    from a pattern string instead of than separately compiling the pattern and
     *    then creating a RegexMatcher object from the pattern.</p>
     *
-    * @param regex The regular expression to be compiled.
+    * @param regex The regular expression to be compiled. Note, the text referred
+    *              to by this UText must not be deleted during the lifetime of the
+    *              RegexPattern object or any RegexMatcher object created from it.
     * @param flags The match mode flags to be used.
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
@@ -566,6 +572,7 @@ private:
     //  Implementation Data
     //
     UText          *fPattern;      // The original pattern string.
+    UnicodeString  *fPatternString; // The original pattern UncodeString if relevant
     uint32_t        fFlags;        // The flags used when compiling the pattern.
                                    //
     UVector32       *fCompiledPat; // The compiled pattern p-code.

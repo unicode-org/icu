@@ -68,7 +68,18 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     init();
 
     // Copy simple fields
-    fPattern          = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
+    if ( other.fPatternString == NULL ) {
+        fPatternString = NULL;
+        fPattern      = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
+    } else {
+        fPatternString = new UnicodeString(*(other.fPatternString));
+        UErrorCode status = U_ZERO_ERROR;
+        fPattern      = utext_openConstUnicodeString(NULL, fPatternString, &status);
+        if (U_FAILURE(status)) {
+            fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+            return *this;
+        }
+    }
     fFlags            = other.fFlags;
     fLiteralText      = other.fLiteralText;
     fDeferredStatus   = other.fDeferredStatus;
@@ -149,6 +160,7 @@ void RegexPattern::init() {
     fNeedsAltInput    = FALSE;
 
     fPattern          = NULL; // will be set later
+    fPatternString    = NULL; // may be set later
     fCompiledPat      = new UVector32(fDeferredStatus);
     fGroupMap         = new UVector32(fDeferredStatus);
     fSets             = new UVector(fDeferredStatus);
@@ -196,6 +208,11 @@ void RegexPattern::zap() {
     fInitialChars8 = NULL;
     if (fPattern != NULL) {
         utext_close(fPattern);
+        fPattern = NULL;
+    }
+    if (fPatternString != NULL) {
+        delete fPatternString;
+        fPatternString = NULL;
     }
 }
 
@@ -230,22 +247,20 @@ RegexPattern  *RegexPattern::clone() const {
 //
 //--------------------------------------------------------------------------
 UBool   RegexPattern::operator ==(const RegexPattern &other) const {
-    if (this->fPattern == NULL) {
-        if (other.fPattern == NULL) {
-            return this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus;
-        } else {
-            return FALSE;
-        }
-    } else {
-        if (other.fPattern == NULL) {
-            return FALSE;
-        } else {
+    if (this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus) {
+        if (this->fPatternString != NULL && other.fPatternString != NULL) {
+            return *(this->fPatternString) == *(other.fPatternString);
+        } else if (this->fPattern == NULL) {
+            if (other.fPattern == NULL) {
+                return TRUE;
+            }
+        } else if (other.fPattern != NULL) {
             UTEXT_SETNATIVEINDEX(this->fPattern, 0);
             UTEXT_SETNATIVEINDEX(other.fPattern, 0);
-            return this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus &&
-                utext_equals(this->fPattern, other.fPattern);
+            return utext_equals(this->fPattern, other.fPattern);
         }
     }
+    return FALSE;
 }
 
 //---------------------------------------------------------------------
@@ -538,7 +553,9 @@ UBool U_EXPORT2 RegexPattern::matches(UText                *regex,
 //
 //---------------------------------------------------------------------
 UnicodeString RegexPattern::pattern() const {
-    if (fPattern == NULL) {
+    if (fPatternString != NULL) {
+        return *fPatternString;
+    } else if (fPattern == NULL) {
         return UnicodeString();
     } else {
         UErrorCode status = U_ZERO_ERROR;
