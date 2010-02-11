@@ -126,7 +126,7 @@ class FieldPositionHandler;
  *     str.remove();
  *     cout << "format result " << form->format(myNumber, str) << endl;
  *     format->parse(form->format(myNumber, str), fmtable, success);
- * }</pre></blockquote>
+ * }</pre>
  *
  *
  * <p><strong>Patterns</strong>

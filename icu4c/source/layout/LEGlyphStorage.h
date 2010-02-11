@@ -342,7 +342,6 @@ public:
      *
      * @param atIndex the index of the glyph to be replaced
      * @param insertCount the number of glyphs to replace it with
-     * @param success set to an error code if the auxillary data cannot be retrieved.
      *
      * @return the address at which to store the replacement glyphs.
      *

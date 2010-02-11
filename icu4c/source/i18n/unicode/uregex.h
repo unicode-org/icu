@@ -1007,7 +1007,6 @@ uregex_appendTail(URegularExpression    *regexp,
   *                        obtain the input string and with the position
   *                        of the last match within it.
   *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
-  *   @param   status      A reference to a UErrorCode to receive any errors. 
   *   @return              The destination UText.
   *
   *   @internal ICU 4.4 technology preview
@@ -1092,10 +1091,10 @@ uregex_split(   URegularExpression      *regexp,
    * instead, it is based on (and implemented directly on top of) the C++ split method.
    *
    * @param regexp  The compiled regular expression.
-   * @param dest    An array of mutable UText structs to receive the results of the split.
+   * @param destFields    An array of mutable UText structs to receive the results of the split.
    *                If a field is NULL, a new UText is allocated to contain the results for
    *                that field. This new UText is not guaranteed to be mutable.
-   * @param destCapacity  The number of elements in the destination array.
+   * @param destFieldsCapacity  The number of elements in the destination array.
    *                If the number of fields found is less than destCapacity, the
    *                extra strings in the destination array are not altered.
    *                If the number of destination strings is less than the number

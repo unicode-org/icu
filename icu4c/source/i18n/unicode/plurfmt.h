@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and
+* Copyright (C) 2007-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -97,7 +97,7 @@ class Hashtable;
  * message text of the plural case "<code>other</code>" gets assigned to this
  * plural case. If you specify more than one message for the same plural case,
  * U_DUPLICATE_KEYWORD will be set to status.
- * <br/>
+ * <br>
  * Spaces between <code><i>caseKeyword</i></code> and
  * <code><i>message</i></code>  will be ignored; spaces within
  * <code><i>message</i></code> will be preserved.
@@ -107,9 +107,9 @@ class Hashtable;
  * can use the strings produced by <code>PluralFormat</code> with other
  * formatters. If you are using <code>PluralFormat</code> inside a
  * <code>MessageFormat</code> pattern, <code>MessageFormat</code> will
- * automatically evaluate the resulting format pattern.<br/>
+ * automatically evaluate the resulting format pattern.<br>
  * Thus, curly braces (<code>{</code>, <code>}</code>) are <i>only</i> allowed
- * in message texts to define a nested format pattern.<br/>
+ * in message texts to define a nested format pattern.<br>
  * The pound sign (<code>#</code>) will be interpreted as the number placeholder
  * in the message text, if it is not contained in curly braces (to preserve
  * <code>NumberFormat</code> patterns). <code>PluralFormat</code> will
@@ -138,11 +138,11 @@ class Hashtable;
  * msgFmt->format(args2, 1, result, ignore, status);
  * cout << result << endl;
  * </pre>
- * Produces the output:<br/>
- * <code>C'est 0,0 fichier dans la liste.</code><br/>
+ * Produces the output:<br>
+ * <code>C'est 0,0 fichier dans la liste.</code><br>
  * <code>Ce sont 3 fichiers dans la liste."</code>
  * <p>
- * <strong>Note:</strong><br/>
+ * <strong>Note:</strong><br>
  *   Currently <code>PluralFormat</code>
  *   does not make use of quotes like <code>MessageFormat</code>.
  *   If you use plural format strings with <code>MessageFormat</code> and want
@@ -361,7 +361,7 @@ public:
      *
      * @param number   a number for which the plural message should be formatted
      *                 for. If no pattern has been applied to this
-     *                 <code>PluralFormat</code> object yet, the formatted number
+     *                 PluralFormat object yet, the formatted number
      *                 will be returned.
      * @param appendTo output parameter to receive result.
      *                 result is appended to existing contents.
