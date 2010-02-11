@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -91,10 +91,10 @@ U_NAMESPACE_BEGIN
  * plain C API with equivalent functionality is defined in the
  * file ubrk.h
  * <p>
- * Code snippits illustrating the use of the Break Iterator APIs
+ * Code snippets illustrating the use of the Break Iterator APIs
  * are available in the ICU User Guide,
  * http://icu-project.org/userguide/boundaryAnalysis.html
- * and in the sample program icu/source/samples/break/break.cpp"
+ * and in the sample program icu/source/samples/break/break.cpp
  *
  */
 class U_COMMON_API BreakIterator : public UObject {

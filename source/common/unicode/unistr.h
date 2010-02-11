@@ -3082,7 +3082,7 @@ public:
    *
    * \\a => U+0007, \\b => U+0008, \\t => U+0009, \\n => U+000A,
    * \\v => U+000B, \\f => U+000C, \\r => U+000D, \\e => U+001B,
-   * \\" => U+0022, \\' => U+0027, \\? => U+003F, \\\\ => U+005C
+   * \\&quot; => U+0022, \\' => U+0027, \\? => U+003F, \\\\ => U+005C
    *
    * Anything else following a backslash is generically escaped.  For
    * example, "[a\\-z]" returns "[a-z]".

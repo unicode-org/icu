@@ -83,7 +83,7 @@
 
 /**
  * \def U_HAVE_STD_STRING
- * Define whether the standard C++ (STL) <string> header is available.
+ * Define whether the standard C++ (STL) &lt;string&gt; header is available.
  * For platforms that do not use platform.h and do not define this constant
  * in their platform-specific headers, std_string.h defaults
  * U_HAVE_STD_STRING to 1.
@@ -372,9 +372,21 @@
 /*===========================================================================*/
 /* Custom icu entry point renaming                                                  */
 /*===========================================================================*/
-/* Define the library suffix in a C syntax. */
+
+/**
+ * Define the library suffix with C syntax.
+ * @internal
+ */
 # define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
+/**
+ * Define the library suffix as a string with C syntax
+ * @internal
+ */
 # define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
+/**
+ * 1 if a custom library suffix is set
+ * @internal
+ */
 # define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
 
 #if U_HAVE_LIB_SUFFIX

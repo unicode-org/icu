@@ -76,7 +76,7 @@
  * This function implements the ToASCII operation as defined in the IDNA RFC.
  * This operation is done on <b>single labels</b> before sending it to something that expects
  * ASCII names. A label is an individual part of a domain name. Labels are usually
- * separated by dots; e.g." "www.example.com" is composed of 3 labels "www","example", and "com".
+ * separated by dots; e.g. "www.example.com" is composed of 3 labels "www","example", and "com".
  *
  *
  * @param src               Input UChar array containing label in Unicode.
@@ -122,7 +122,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  * This function implements the ToUnicode operation as defined in the IDNA RFC.
  * This operation is done on <b>single labels</b> before sending it to something that expects
  * Unicode names. A label is an individual part of a domain name. Labels are usually
- * separated by dots; for e.g." "www.example.com" is composed of 3 labels "www","example", and "com".
+ * separated by dots; for e.g. "www.example.com" is composed of 3 labels "www","example", and "com".
  *
  * @param src               Input UChar array containing ASCII (ACE encoded) label.
  * @param srcLength         Number of UChars in src, or -1 if NUL-terminated.
