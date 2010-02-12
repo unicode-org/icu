@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
-  <meta name="COPYRIGHT" content="Copyright 2000-2009, International Business Machines Corporation and others. All Rights Reserved.">
+  <meta name="COPYRIGHT" content="Copyright 2000-2010, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
 h4.doc { text-decoration: underline }
@@ -13,10 +13,10 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.2.1</h3>
+<h3>Read Me for ICU4J 4.2.1.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-July 1, 2009<br>
+February 12, 2010<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -139,6 +139,22 @@ new features in this release.  The list of API changes since the previous ICU4J 
 is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-2/APIChangeReport.html">here</a>.
 </p>
+
+<h4 class="doc">Summary of changes in 4.2.1.1 (February 12, 2010)</h4>
+<p><b>Time zone data update</b></p>
+<p>ICU4J 4.2.1.1 updates the time zone data to version
+<a href="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/2010b/">2010b</a>
+from the Olson tz database.</p>
+
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes ported from ICU4J 4.4 development code stream
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7107">#7107</a> Synchronization issue in TimeZone.getDisplayName</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7137">#7137</a> ICU4J SimpleDateFormat takes too much time for initializing DateFormatSymbols</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7140">#7140</a> SimpleDateFormat constructor takes too much time on initializing NumberingSystem</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7169">#7169</a> DatTimePatternGenerator threading problem</li>
+</ul>
+
 
 <h4 class="doc">Summary of changes in 4.2.1 (July 1, 2009)</h4>
 <p><b>Locale data update</b></p>
@@ -1028,7 +1044,7 @@ review all comments.</p>
 <h2>Thank you for your interest in ICU4J!</h2>
 <br>
 <hr align="center" size="2" width="100%">
-<p><I><font size="-1">Copyright &copy; 2002-2009 International Business
+<p><I><font size="-1">Copyright &copy; 2002-2010 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
 4400 North First Street, San Jos&eacute;, CA 95193, USA
