@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.ibm.icu.text.UnicodeSet;
@@ -467,7 +468,7 @@ public final class Normalizer2Impl {
         Trie2Writable newFCDTrie=new Trie2Writable(0, 0);
         Iterator<Trie2.Range> trieIterator=normTrie.iterator();
         while(trieIterator.hasNext()) {
-            // Set the FCD value for a range of same-norm16 charcters.
+            // Set the FCD value for a range of same-norm16 characters.
             Trie2.Range range=trieIterator.next();
             if(range.value!=0) {
                 setFCD16FromNorm16(range.startCodePoint, range.endCodePoint, range.value, newFCDTrie);
@@ -493,6 +494,89 @@ public final class Normalizer2Impl {
             }
         }
         return fcdTrie=newFCDTrie.toTrie2_16();
+    }
+
+    public synchronized Normalizer2Impl ensureCanonIterData() {
+        if(canonIterData==null) {
+            Trie2Writable newData=new Trie2Writable(0, 0);
+            canonStartSets=new ArrayList<UnicodeSet>();
+            Iterator<Trie2.Range> trieIterator=normTrie.iterator();
+            while(trieIterator.hasNext()) {
+                Trie2.Range range=trieIterator.next();
+                int norm16=range.value;
+                if(norm16==0) {
+                    continue;  // inert
+                }
+                if(norm16==minYesNo) {
+                    // Hangul LV & LVT: Set has-compositions for all syllables
+                    // to minimize the trie size, although only LV syllables
+                    // do have compositions. Handle at runtime.
+                    // Set the same value for the whole range because
+                    // there cannot be other data. Hangul syllables are segment starters,
+                    // and since they decompose they cannot have canonStartSets.
+                    // (There is no decomposable character in a decomposition mapping.)
+                    range.value=CANON_HAS_COMPOSITIONS;
+                    newData.setRange(range, true);
+                    continue;
+                }
+                for(int c=range.startCodePoint; c<=range.endCodePoint; ++c) {
+                    int oldValue=newData.get(c);
+                    int newValue=oldValue;
+                    if(norm16>=minMaybeYes) {
+                        // not a segment starter if it occurs in a decomposition or has cc!=0
+                        newValue|=CANON_NOT_SEGMENT_STARTER;
+                        if(norm16<MIN_NORMAL_MAYBE_YES) {
+                            newValue|=CANON_HAS_COMPOSITIONS;
+                        }
+                    } else if(norm16<minYesNo) {
+                        newValue|=CANON_HAS_COMPOSITIONS;
+                    } else {
+                        // c has a decomposition
+                        int c2=c;
+                        while(limitNoNo<=norm16 && norm16<minMaybeYes) {
+                            c2=this.mapAlgorithmic(c2, norm16);
+                            norm16=getNorm16(c2);
+                        }
+                        if(minYesNo<=norm16 && norm16<limitNoNo) {
+                            // c decomposes, get everything from the variable-length extra data
+                            int firstUnit=extraData.charAt(norm16++);
+                            if(c==c2 && (firstUnit&MAPPING_PLUS_COMPOSITION_LIST)!=0) {
+                                newValue|=CANON_HAS_COMPOSITIONS;  // original c has compositions
+                            }
+                            int length=firstUnit&MAPPING_LENGTH_MASK;
+                            if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                                if(c==c2 && (extraData.charAt(norm16)&0xff)!=0) {
+                                    newValue|=CANON_NOT_SEGMENT_STARTER;  // original c has cc!=0
+                                }
+                                ++norm16;
+                            }
+                            if(length!=0) {
+                                // add c to first code point's start set
+                                int limit=norm16+length;
+                                c2=extraData.codePointAt(norm16);
+                                addToStartSet(newData, c, c2);
+                                // set CANON_NOT_SEGMENT_STARTER for each remaining code point
+                                while((norm16+=Character.charCount(c2))<limit) {
+                                    c2=extraData.codePointAt(norm16);
+                                    int c2Value=newData.get(c2);
+                                    if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
+                                        newData.set(c2, c2Value|CANON_NOT_SEGMENT_STARTER);
+                                    }
+                                }
+                            }
+                        } else {
+                            // c decomposed to c2 algorithmically; c has cc==0
+                            addToStartSet(newData, c, c2);
+                        }
+                    }
+                    if(newValue!=oldValue) {
+                        newData.set(c, newValue);
+                    }
+                }
+            }
+            canonIterData=newData.toTrie2_32();
+        }
+        return this;
     }
 
     public int getNorm16(int c) { return normTrie.get(c); }
@@ -603,6 +687,10 @@ public final class Normalizer2Impl {
                 return UTF16.valueOf(decomp);
             }
         }
+    }
+
+    public boolean isCanonSegmentStarter(int c) {
+        return canonIterData.get(c)>=0;
     }
 
     public static final int MIN_CCC_LCCC_CP=0x300;
@@ -1782,6 +1870,30 @@ public final class Normalizer2Impl {
         return p;
     }
 
+    private void addToStartSet(Trie2Writable newData, int origin, int decompLead) {
+        int canonValue=newData.get(decompLead);
+        if((canonValue&(CANON_HAS_SET|CANON_VALUE_MASK))==0 && origin!=0) {
+            // origin is the first character whose decomposition starts with
+            // the character for which we are setting the value.
+            newData.set(decompLead, canonValue|origin);
+        } else {
+            // origin is not the first character, or it is U+0000.
+            UnicodeSet set;
+            if((canonValue&CANON_HAS_SET)==0) {
+                int firstOrigin=canonValue&CANON_VALUE_MASK;
+                canonValue=(canonValue&~CANON_VALUE_MASK)|CANON_HAS_SET|canonStartSets.size();
+                newData.set(decompLead, canonValue);
+                canonStartSets.add(set=new UnicodeSet());
+                if(firstOrigin!=0) {
+                    set.add(firstOrigin);
+                }
+            } else {
+                set=canonStartSets.get(canonValue&CANON_VALUE_MASK);
+            }
+            set.add(origin);
+        }
+    }
+
     @SuppressWarnings("unused")
     private VersionInfo dataVersion;
 
@@ -1800,4 +1912,12 @@ public final class Normalizer2Impl {
     private String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
 
     private Trie2_16 fcdTrie;
+    private Trie2_32 canonIterData;
+    private ArrayList<UnicodeSet> canonStartSets;
+
+    // bits in canonIterData
+    private static final int CANON_NOT_SEGMENT_STARTER = 0x80000000;
+    private static final int CANON_HAS_COMPOSITIONS = 0x40000000;
+    private static final int CANON_HAS_SET = 0x200000;
+    private static final int CANON_VALUE_MASK = 0x1fffff;
 }
