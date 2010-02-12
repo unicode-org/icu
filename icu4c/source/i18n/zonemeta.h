@@ -16,11 +16,6 @@
 
 U_NAMESPACE_BEGIN
 
-typedef struct CanonicalMapEntry {
-    const UChar *id; // const because it's a reference to a resource bundle string.
-    const UChar *country; // const because it's a reference to a resource bundle string.
-} CanonicalMapEntry;
-
 typedef struct OlsonToMetaMappingEntry {
     const UChar *mzid; // const because it's a reference to a resource bundle string.
     UDate from;
@@ -64,11 +59,6 @@ public:
 
 private:
     ZoneMeta(); // Prevent construction.
-    static const CanonicalMapEntry* U_EXPORT2 getCanonicalInfo(const UnicodeString &tzid);
-
-    static void initializeCanonicalMap(void);
-    static UHashtable* createCanonicalMap(void);
-
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
 };
 

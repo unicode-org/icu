@@ -24,9 +24,7 @@
 
 // Metazone mapping tables
 static UMTX gZoneMetaLock = NULL;
-static UHashtable *gCanonicalMap = NULL;
 static UHashtable *gOlsonToMeta = NULL;
-static UBool gCanonicalMapInitialized = FALSE;
 static UBool gOlsonToMetaInitialized = FALSE;
 
 U_CDECL_BEGIN
@@ -38,12 +36,6 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV zoneMeta_cleanup(void)
 {
      umtx_destroy(&gZoneMetaLock);
-
-    if (gCanonicalMap != NULL) {
-        uhash_close(gCanonicalMap);
-        gCanonicalMap = NULL;
-    }
-    gCanonicalMapInitialized = FALSE;
 
     if (gOlsonToMeta != NULL) {
         uhash_close(gOlsonToMeta);
@@ -72,15 +64,6 @@ deleteUVector(void *obj) {
 }
 
 /**
- * Deleter for CanonicalMapEntry
- */
-static void U_CALLCONV
-deleteCanonicalMapEntry(void *obj) {
-    U_NAMESPACE_QUALIFIER CanonicalMapEntry *entry = (U_NAMESPACE_QUALIFIER CanonicalMapEntry*)obj;
-    uprv_free(entry);
-}
-
-/**
  * Deleter for OlsonToMetaMappingEntry
  */
 static void U_CALLCONV
@@ -95,17 +78,18 @@ U_NAMESPACE_BEGIN
 
 #define ZID_KEY_MAX 128
 static const char gSupplementalData[]   = "supplementalData";
-static const char gMapTimezonesTag[]    = "mapTimezones";
 static const char gZoneFormattingTag[]  = "zoneFormatting";
-static const char gCanonicalTag[]       = "canonical";
 static const char gTerritoryTag[]       = "territory";
-static const char gAliasesTag[]         = "aliases";
 static const char gMultizoneTag[]       = "multizone";
+static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
 
 static const char gMetaZones[]          = "metaZones";
 static const char gMetazoneInfo[]       = "metazoneInfo";
+static const char gMapTimezonesTag[]    = "mapTimezones";
 
-static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
+static const char gKeyTypeData[]        = "keyTypeData";
+static const char gTypeAliasTag[]       = "typeAlias";
+static const char gTimezoneTag[]        = "timezone";
 
 static const UChar gDefaultFrom[] = {0x31, 0x39, 0x37, 0x30, 0x2D, 0x30, 0x31, 0x2D, 0x30, 0x31,
                                      0x20, 0x30, 0x30, 0x3A, 0x30, 0x30, 0x00}; // "1970-01-01 00:00"
@@ -189,267 +173,84 @@ parseDate (const UChar *text, UErrorCode &status) {
     return 0;
 }
 
-UHashtable*
-ZoneMeta::createCanonicalMap(void) {
-    UErrorCode status = U_ZERO_ERROR;
-
-    UHashtable *canonicalMap = NULL;
-    UResourceBundle *zoneFormatting = NULL;
-    UResourceBundle *tzitem = NULL;
-    UResourceBundle *aliases = NULL;
-
-    UResourceBundle *idArray = NULL;
-
-    canonicalMap = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // no key deleter
-    uhash_setValueDeleter(canonicalMap, deleteCanonicalMapEntry);
-
-    zoneFormatting = ures_openDirect(NULL, gSupplementalData, &status);
-    zoneFormatting = ures_getByKey(zoneFormatting, gZoneFormattingTag, zoneFormatting, &status);
-    if (U_FAILURE(status)) {
-        goto error_cleanup;
-    }
-
-    while (ures_hasNext(zoneFormatting)) {
-        tzitem = ures_getNextResource(zoneFormatting, tzitem, &status);
-        if (U_FAILURE(status)) {
-            status = U_ZERO_ERROR;
-            continue;
-        }
-        if (ures_getType(tzitem) != URES_TABLE) {
-            continue;
-        }
-
-        int32_t canonicalLen;
-        const UChar *canonical = ures_getStringByKey(tzitem, gCanonicalTag, &canonicalLen, &status);
-        if (U_FAILURE(status)) {
-            status = U_ZERO_ERROR;
-            continue;
-        }
-
-        int32_t territoryLen;
-        const UChar *territory = ures_getStringByKey(tzitem, gTerritoryTag, &territoryLen, &status);
-        if (U_FAILURE(status)) {
-            territory = NULL;
-            status = U_ZERO_ERROR;
-        }
-
-        // Create canonical map entry
-        CanonicalMapEntry *entry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
-        if (entry == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            goto error_cleanup;
-        }
-        entry->id = canonical;
-        if (territory == NULL || u_strcmp(territory, gWorld) == 0) {
-            entry->country = NULL;
-        } else {
-            entry->country = territory;
-        }
-
-        // Put this entry in the hashtable. Since this hashtable has no key deleter,
-        // key is treated as const, but must be passed as non-const.
-        uhash_put(canonicalMap, (UChar*)canonical, entry, &status);
-        if (U_FAILURE(status)) {
-            goto error_cleanup;
-        }
-
-        // Get aliases
-        aliases = ures_getByKey(tzitem, gAliasesTag, aliases, &status);
-        if (U_FAILURE(status)) {
-            // No aliases
-            status = U_ZERO_ERROR;
-            continue;
-        }
-
-        while (ures_hasNext(aliases)) {
-            const UChar* alias = ures_getNextString(aliases, NULL, NULL, &status);
-            if (U_FAILURE(status)) {
-                status = U_ZERO_ERROR;
-                continue;
-            }
-            // Create canonical map entry for this alias
-            entry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
-            if (entry == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                goto error_cleanup;
-            }
-            entry->id = canonical;
-            if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
-                entry->country = NULL;
-            } else {
-                entry->country = territory;
-            }
-
-            // Put this entry in the hashtable. Since this hashtable has no key deleter,
-            // key is treated as const, but must be passed as non-const.
-            uhash_put(canonicalMap, (UChar*)alias, entry, &status);
-            if (U_FAILURE(status)) {
-                goto error_cleanup;
-            }
-        }
-    }
-
-    // Some available Olson zones are not included in CLDR data (such as Asia/Riyadh87).
-    // Also, when we update Olson tzdata, new zones may be added.
-    // This code scans all available zones in zoneinfo.res, and if any of them are
-    // missing, add them to the map.
-    idArray = TimeZone::getIDArray(status);
-    if (U_SUCCESS(status)) {
-        const UChar *zone;
-        int32_t numZones = ures_getSize(idArray);
-        int32_t i;
-        UnicodeString zoneStr;
-        for (i = 0; i < numZones; i++) {
-            zone = ures_getStringByIndex(idArray, i, NULL, &status);
-            if (U_FAILURE(status)) {
-                // ignore this
-                status = U_ZERO_ERROR;
-                continue;
-            }
-            CanonicalMapEntry *entry = (CanonicalMapEntry*)uhash_get(canonicalMap, zone);
-            if (entry) {
-                // Already included in CLDR data
-                continue;
-            }
-
-            zoneStr.setTo(zone, -1);
-
-            // Not in CLDR data, but it could be new one whose alias is available
-            // in CLDR.
-            int32_t nTzdataEquivalent = TimeZone::countEquivalentIDs(zoneStr);
-            int32_t j;
-            for (j = 0; j < nTzdataEquivalent; j++) {
-                UnicodeString alias = TimeZone::getEquivalentID(zoneStr, j);
-                if (alias == zoneStr) {
-                    continue;
-                }
-                UChar aliasUChars[ZID_KEY_MAX];
-                alias.extract(aliasUChars, ZID_KEY_MAX, status);
-                if (U_FAILURE(status) || status==U_STRING_NOT_TERMINATED_WARNING) {
-                    status = U_ZERO_ERROR;
-                    continue; // zone id is too long to extract
-                }
-                entry = (CanonicalMapEntry*)uhash_get(canonicalMap, aliasUChars);
-                if (entry != NULL) {
-                    break;
-                }
-            }
-            // Create a new map entry
-            CanonicalMapEntry* newEntry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
-            if (newEntry == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                goto error_cleanup;
-            }
-            if (entry == NULL) {
-                // Set dereferenced zone ID as the canonical ID
-                const UChar* derefZone = TimeZone::dereferOlsonLink(zoneStr);
-                if (derefZone == NULL) {
-                    // it should never happen..
-                    delete newEntry;
-                    continue;
-                }
-                newEntry->id = derefZone;
-
-                // No territory information available
-                newEntry->country = NULL;
-            } else {
-                // Duplicate the entry
-                newEntry->id = entry->id;
-                newEntry->country = entry->country;
-            }
-
-            // Put this entry in the hashtable.
-            // key is treated as const, but must be passed as non-const.
-            uhash_put(canonicalMap, (UChar*)zone, newEntry, &status);
-            if (U_FAILURE(status)) {
-                goto error_cleanup;
-            }
-        }
-    }
-
-normal_cleanup:
-    ures_close(aliases);
-    ures_close(tzitem);
-    ures_close(zoneFormatting);
-    ures_close(idArray);
-    return canonicalMap;
-
-error_cleanup:
-    if (canonicalMap != NULL) {
-        uhash_close(canonicalMap);
-        canonicalMap = NULL;
-    }
-    goto normal_cleanup;
-}
-
- /*
- * Initialize global objects
- */
-void
-ZoneMeta::initializeCanonicalMap(void) {
-    UBool initialized;
-    UMTX_CHECK(&gZoneMetaLock, gCanonicalMapInitialized, initialized);
-    if (initialized) {
-        return;
-    }
-    // Initialize hash table
-    UHashtable *tmpCanonicalMap = createCanonicalMap();
-
-    umtx_lock(&gZoneMetaLock);
-    if (!gCanonicalMapInitialized) {
-        gCanonicalMap = tmpCanonicalMap;
-        tmpCanonicalMap = NULL;
-        gCanonicalMapInitialized = TRUE;
-    }
-    umtx_unlock(&gZoneMetaLock);
-
-    // OK to call the following multiple times with the same function
-    ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
-    if (tmpCanonicalMap != NULL) {
-        uhash_close(tmpCanonicalMap);
-    }
-}
-
 UnicodeString& U_EXPORT2
 ZoneMeta::getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status) {
-    const CanonicalMapEntry *entry = getCanonicalInfo(tzid);
-    if (entry != NULL) {
-        systemID.setTo(entry->id);
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    // Dereference the input ID using the tz data first
+    const UChar *canonical = TimeZone::dereferOlsonLink(tzid);
+    if (canonical != NULL) {
+        // check canonical mapping in CLDR
+        char id[ZID_KEY_MAX];
+        int32_t len = u_strlen(canonical);
+        if (len < sizeof(id)) {
+            u_UCharsToChars(canonical, id, len + 1 /* include the terminator */);
+            // replace '/' with ':'
+            char *p = id;
+            while (*p) {
+                if (*p == '/') {
+                    *p = ':';
+                }
+                p++;
+            }
+
+            UErrorCode tmpStatus = U_ZERO_ERROR;
+            UResourceBundle *rb = ures_openDirect(NULL, gKeyTypeData, &tmpStatus);
+            ures_getByKey(rb, gTypeAliasTag, rb, &tmpStatus);
+            ures_getByKey(rb, gTimezoneTag, rb, &tmpStatus);
+            const UChar *cldrCanonical = ures_getStringByKey(rb, id, NULL, &tmpStatus);
+            if (U_SUCCESS(tmpStatus)) {
+                // canonical map found
+                canonical = cldrCanonical;
+            }
+            ures_close(rb);
+        }
     }
+    if (canonical == NULL) {
+        systemID.remove();
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    } else {
+        systemID.setTo(canonical);
+    }
+
     return systemID;
 }
 
 UnicodeString& U_EXPORT2
 ZoneMeta::getCanonicalCountry(const UnicodeString &tzid, UnicodeString &canonicalCountry) {
-    const CanonicalMapEntry *entry = getCanonicalInfo(tzid);
-    if (entry != NULL && entry->country != NULL) {
-        canonicalCountry.setTo(entry->country);
-    } else {
-        // Use the input tzid
+    const UChar *territory = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString canonicalID;
+
+    getCanonicalSystemID(tzid, canonicalID, status);
+    if (U_SUCCESS(status) && canonicalID.length() < ZID_KEY_MAX) {
+        char tzkey[ZID_KEY_MAX];
+        canonicalID.extract(0, canonicalID.length(), tzkey, sizeof(tzkey), US_INV);
+        // replace '/' with ':'
+        char *p = tzkey;
+        while (*p) {
+            if (*p == '/') {
+                *p = ':';
+            }
+            p++;
+        }
+
+        UResourceBundle *rb = ures_openDirect(NULL, gSupplementalData, &status);
+        ures_getByKey(rb, gZoneFormattingTag, rb, &status);
+        ures_getByKey(rb, tzkey, rb, &status);
+        territory = ures_getStringByKey(rb, gTerritoryTag, NULL, &status);
+        if (U_SUCCESS(status)) {
+            if (u_strcmp(territory, gWorld) == 0) {
+                territory = NULL;
+            }
+        }
+        ures_close(rb);
+    }
+
+    if (territory == NULL) {
         canonicalCountry.remove();
+    } else {
+        canonicalCountry.setTo(territory, -1);
     }
     return canonicalCountry;
-}
-
-const CanonicalMapEntry* U_EXPORT2
-ZoneMeta::getCanonicalInfo(const UnicodeString &tzid) {
-    initializeCanonicalMap();
-    CanonicalMapEntry *entry = NULL;
-    if (gCanonicalMap != NULL) {
-        UErrorCode status = U_ZERO_ERROR;
-        UChar tzidUChars[ZID_KEY_MAX];
-        tzid.extract(tzidUChars, ZID_KEY_MAX, status);
-        if (U_SUCCESS(status) && status!=U_STRING_NOT_TERMINATED_WARNING) {
-            entry = (CanonicalMapEntry*)uhash_get(gCanonicalMap, tzidUChars);
-        }
-    }
-    return entry;
 }
 
 UnicodeString& U_EXPORT2
