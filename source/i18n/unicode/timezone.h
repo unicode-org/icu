@@ -746,12 +746,14 @@ private:
      * Resolve a link in Olson tzdata.  When the given id is known and it's not a link,
      * the id itself is returned.  When the given id is known and it is a link, then
      * dereferenced zone id is returned.  When the given id is unknown, then it returns
-     * empty string.
-     * @param linkTo Input zone id string
-     * @param linkFrom Receives the dereferenced zone id string
-     * @return The reference to the result (linkFrom)
+     * NULL.
+     * @param id Receives the dereferenced zone id string
+     * @return the dereferenced zone or NULL
      */
-    static UnicodeString& dereferOlsonLink(const UnicodeString& linkTo, UnicodeString& linkFrom);
+    static const UChar* dereferOlsonLink(const UnicodeString& id);
+
+    /* Retuns a resource bundle array contains all time zone IDs.  This is only used by ZoneMeta class. */
+    static UResourceBundle* getIDArray(UErrorCode& status);
 
     /**
      * Parses the given custom time zone identifier
