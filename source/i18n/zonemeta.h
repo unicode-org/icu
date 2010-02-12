@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -26,11 +26,6 @@ typedef struct OlsonToMetaMappingEntry {
     UDate from;
     UDate to;
 } OlsonToMetaMappingEntry;
-
-typedef struct MetaToOlsonMappingEntry {
-    const UChar *id; // const because it's a reference to a resource bundle string.
-    UChar *territory;
-} MetaToOlsonMappingEntry;
 
 class UVector;
 
@@ -72,11 +67,9 @@ private:
     static const CanonicalMapEntry* U_EXPORT2 getCanonicalInfo(const UnicodeString &tzid);
 
     static void initializeCanonicalMap(void);
-    static void initializeOlsonToMeta(void);
-    static void initializeMetaToOlson(void);
     static UHashtable* createCanonicalMap(void);
-    static UHashtable* createOlsonToMetaMap(void);
-    static UHashtable* createMetaToOlsonMap(void);
+
+    static UVector* createMetazoneMappings(const UnicodeString &tzid);
 };
 
 U_NAMESPACE_END
