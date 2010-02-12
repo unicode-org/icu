@@ -28,85 +28,9 @@ static UHashtable *gCanonicalMap = NULL;
 static UHashtable *gOlsonToMeta = NULL;
 static UBool gCanonicalMapInitialized = FALSE;
 static UBool gOlsonToMetaInitialized = FALSE;
-static UChar **gUStringTable = NULL;
-static int32_t gUStringCount = 0;
-static int32_t gUStringAlloc = 0;
-
-// Currently (ICU 4.1.3+), gUStringTable only contains strings allocated in the section of
-// createCanonicalMap that iterates over the enumerator created with TimeZone::createEnumeration.
-// And currently, that allocates a total of 22 strings. So USTRING_ALLOC_START is defined to
-// be adequate for that set, and USTRING_ALLOC_INCR is a reasonable expansion increment. In
-// future versions of ICU, these numbers may need adjusting to avoid excessive reallocs, or to
-// avoid allocating unused memory (but in any case the effects are small).
-#define USTRING_ALLOC_START 24
-#define USTRING_ALLOC_INCR 12
 
 U_CDECL_BEGIN
 
-// We have switched CanonicalMap to use const UChar* strings for the key and for the id field of
-// CanonicalMapEntry; that is because for the most part these now point into UChar strings in the
-// shared data file, in order to reduce process-specific dynamically-allocated memory. Consequently,
-// there is no longer a deleter for the key field, and the deleter for CanonicalMapEntry
-// no longer frees the id field. However, for the few strings that are obtained from the
-// TimeZone::createEnumeration() enumerator or from TimeZone::dereferOlsonLink instead of the
-// data file, we do need to allocate copies. In order to ensure that these strings are freed by
-// zoneMeta_cleanup(), we need to create a little memory manager for them; this is in the form of
-// a table that tracks the strings allocated for this purpose. The following three functions
-// (along with the gUStringXxxxx statics) are used to allocate and free such strings.
-
-// The following allocs space for a UChar* string of the specified length, puts a pointer to the string
-// in gUStringTable, and returns either a pointer to the allocated string space, or NULL for failure.
-static UChar * allocUStringInTable(int32_t uStringLen) {
-    UChar * uStringSpace = NULL;
-    // initialize the table if necessary
-    umtx_lock(&gZoneMetaLock);
-    if (gUStringTable == NULL) {
-        gUStringTable = (UChar**)uprv_malloc(USTRING_ALLOC_START*sizeof(UChar*));
-        if (gUStringTable != NULL) {
-            gUStringAlloc = USTRING_ALLOC_START;
-        }
-    }
-    if (gUStringTable != NULL) {
-        // expand the table if necessary
-        if (gUStringCount == gUStringAlloc) {
-            UChar ** newTable = (UChar**)uprv_realloc(gUStringTable, (gUStringAlloc+USTRING_ALLOC_INCR)*sizeof(UChar*));
-            if (newTable != NULL) {
-                gUStringTable = newTable;
-                gUStringAlloc += USTRING_ALLOC_INCR;
-            }
-        }
-        // add the string if possible
-        if (gUStringCount < gUStringAlloc) {
-            uStringSpace = (UChar*)uprv_malloc(uStringLen*sizeof(UChar));
-            if (uStringSpace != NULL) {
-                gUStringTable[gUStringCount++] = uStringSpace;
-            }
-        }
-    }
-    umtx_unlock(&gZoneMetaLock);
-    return uStringSpace;
-}
-
-static void removeLastUStringFromTable(void) {
-	umtx_lock(&gZoneMetaLock);
-    if (gUStringCount > 0) {
-        free(gUStringTable[--gUStringCount]);
-    }
-    umtx_unlock(&gZoneMetaLock);
-}
-
-static void freeUStringTable(void) {
-    int32_t uStringCount = gUStringCount;
-    gUStringCount = 0;
-    gUStringAlloc = 0;
-    if (gUStringTable != NULL) {
-        while (uStringCount > 0) {
-            free(gUStringTable[--uStringCount]);
-        }
-        free(gUStringTable);
-        gUStringTable = NULL;
-    }
-}
 
 /**
  * Cleanup callback func
@@ -126,8 +50,6 @@ static UBool U_CALLCONV zoneMeta_cleanup(void)
         gOlsonToMeta = NULL;
     }
     gOlsonToMetaInitialized = FALSE;
-
-    freeUStringTable();
 
     return TRUE;
 }
@@ -172,9 +94,6 @@ U_CDECL_END
 U_NAMESPACE_BEGIN
 
 #define ZID_KEY_MAX 128
-static const char gZoneStringsTag[]     = "zoneStrings";
-static const char gUseMetazoneTag[]     = "um";
-
 static const char gSupplementalData[]   = "supplementalData";
 static const char gMapTimezonesTag[]    = "mapTimezones";
 static const char gZoneFormattingTag[]  = "zoneFormatting";
@@ -185,9 +104,6 @@ static const char gMultizoneTag[]       = "multizone";
 
 static const char gMetaZones[]          = "metaZones";
 static const char gMetazoneInfo[]       = "metazoneInfo";
-
-static const char gWorldChar[]          = "001";
-#define WORLD_LEN 3
 
 static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
 
@@ -282,8 +198,7 @@ ZoneMeta::createCanonicalMap(void) {
     UResourceBundle *tzitem = NULL;
     UResourceBundle *aliases = NULL;
 
-    StringEnumeration* tzenum = NULL;
-    int32_t numZones;
+    UResourceBundle *idArray = NULL;
 
     canonicalMap = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
     if (U_FAILURE(status)) {
@@ -382,35 +297,34 @@ ZoneMeta::createCanonicalMap(void) {
     // Also, when we update Olson tzdata, new zones may be added.
     // This code scans all available zones in zoneinfo.res, and if any of them are
     // missing, add them to the map.
-    tzenum = TimeZone::createEnumeration();
-    numZones = tzenum->count(status);
+    idArray = TimeZone::getIDArray(status);
     if (U_SUCCESS(status)) {
+        const UChar *zone;
+        int32_t numZones = ures_getSize(idArray);
         int32_t i;
+        UnicodeString zoneStr;
         for (i = 0; i < numZones; i++) {
-            const UnicodeString *zone = tzenum->snext(status);
+            zone = ures_getStringByIndex(idArray, i, NULL, &status);
             if (U_FAILURE(status)) {
-                // We should not get here.
+                // ignore this
                 status = U_ZERO_ERROR;
                 continue;
             }
-            UChar zoneUChars[ZID_KEY_MAX];
-            int32_t zoneUCharsLen = zone->extract(zoneUChars, ZID_KEY_MAX, status) + 1; // Add one for NUL termination
-            if (U_FAILURE(status) || status==U_STRING_NOT_TERMINATED_WARNING) {
-                status = U_ZERO_ERROR;
-                continue; // zone id is too long to extract
-            }
-            CanonicalMapEntry *entry = (CanonicalMapEntry*)uhash_get(canonicalMap, zoneUChars);
+            CanonicalMapEntry *entry = (CanonicalMapEntry*)uhash_get(canonicalMap, zone);
             if (entry) {
                 // Already included in CLDR data
                 continue;
             }
+
+            zoneStr.setTo(zone, -1);
+
             // Not in CLDR data, but it could be new one whose alias is available
             // in CLDR.
-            int32_t nTzdataEquivalent = TimeZone::countEquivalentIDs(*zone);
+            int32_t nTzdataEquivalent = TimeZone::countEquivalentIDs(zoneStr);
             int32_t j;
             for (j = 0; j < nTzdataEquivalent; j++) {
-                UnicodeString alias = TimeZone::getEquivalentID(*zone, j);
-                if (alias == *zone) {
+                UnicodeString alias = TimeZone::getEquivalentID(zoneStr, j);
+                if (alias == zoneStr) {
                     continue;
                 }
                 UChar aliasUChars[ZID_KEY_MAX];
@@ -426,33 +340,20 @@ ZoneMeta::createCanonicalMap(void) {
             }
             // Create a new map entry
             CanonicalMapEntry* newEntry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
-            int32_t idLen;
             if (newEntry == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 goto error_cleanup;
             }
             if (entry == NULL) {
                 // Set dereferenced zone ID as the canonical ID
-                UnicodeString derefZone;
-                TimeZone::dereferOlsonLink(*zone, derefZone);
-                if (derefZone.length() == 0) {
-                    // It should never happen.. but just in case
-                    derefZone = *zone;
+                const UChar* derefZone = TimeZone::dereferOlsonLink(zoneStr);
+                if (derefZone == NULL) {
+                    // it should never happen..
+                    delete newEntry;
+                    continue;
                 }
-                idLen = derefZone.length() + 1;
-                newEntry->id = allocUStringInTable(idLen);
-                if (newEntry->id == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    uprv_free(newEntry);
-                    goto error_cleanup;
-                }
-                // Copy NULL terminated string
-                derefZone.extract((UChar*)(newEntry->id), idLen, status);
-                if (U_FAILURE(status)) {
-                    removeLastUStringFromTable();
-                    uprv_free(newEntry);
-                    goto error_cleanup;
-                }
+                newEntry->id = derefZone;
+
                 // No territory information available
                 newEntry->country = NULL;
             } else {
@@ -461,15 +362,9 @@ ZoneMeta::createCanonicalMap(void) {
                 newEntry->country = entry->country;
             }
 
-            // Put this entry in the hashtable
-            UChar *key = allocUStringInTable(zoneUCharsLen);
-            if (key == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                deleteCanonicalMapEntry(newEntry);
-                goto error_cleanup;
-            }
-            u_strncpy(key, zoneUChars, zoneUCharsLen);
-            uhash_put(canonicalMap, key, newEntry, &status);
+            // Put this entry in the hashtable.
+            // key is treated as const, but must be passed as non-const.
+            uhash_put(canonicalMap, (UChar*)zone, newEntry, &status);
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
@@ -480,7 +375,7 @@ normal_cleanup:
     ures_close(aliases);
     ures_close(tzitem);
     ures_close(zoneFormatting);
-    delete tzenum;
+    ures_close(idArray);
     return canonicalMap;
 
 error_cleanup:

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1088,29 +1088,45 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
 
 // ---------------------------------------
 
-UnicodeString&
-TimeZone::dereferOlsonLink(const UnicodeString& linkTo, UnicodeString& linkFrom) {
+// These two methods are used by ZoneMeta class only.
+
+const UChar*
+TimeZone::dereferOlsonLink(const UnicodeString& id) {
+    const UChar *result = NULL;
     UErrorCode ec = U_ZERO_ERROR;
-    linkFrom.remove();
-    UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
-    UResourceBundle *res = getZoneByName(top, linkTo, NULL, ec);
+    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &ec);
+
+    // resolve zone index by name
+    UResourceBundle *names = ures_getByKey(rb, kNAMES, NULL, &ec);
+    int32_t idx = findInStringArray(names, id, ec);
+    result = ures_getStringByIndex(names, idx, NULL, &ec);
+
+    // open the zone bundle by index
+    ures_getByKey(rb, kZONES, rb, &ec);
+    ures_getByIndex(rb, idx, rb, &ec); 
+
     if (U_SUCCESS(ec)) {
-        if (ures_getSize(res) == 1) {
-            int32_t deref = ures_getInt(res, &ec);
-            UResourceBundle *nres = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Names section
-            int32_t len;
-            const UChar* tmp = ures_getStringByIndex(nres, deref, &len, &ec);
+        if (ures_getSize(rb) == 1) {
+            // this is a link - dereference the link
+            int32_t deref = ures_getInt(rb, &ec);
+            const UChar* tmp = ures_getStringByIndex(names, deref, NULL, &ec);
             if (U_SUCCESS(ec)) {
-                linkFrom.setTo(tmp, len);
+                result = tmp;
             }
-            ures_close(nres);
-        } else {
-            linkFrom.setTo(linkTo);
         }
     }
-    ures_close(res);
-    ures_close(top);
-    return linkFrom;
+
+    ures_close(names);
+    ures_close(rb);
+
+    return result;
+}
+
+UResourceBundle*
+TimeZone::getIDArray(UErrorCode& status) {
+    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &status);
+    ures_getByKey(rb, kNAMES, rb, &status);
+    return rb;
 }
 
 // ---------------------------------------
