@@ -140,10 +140,6 @@ public final class Normalizer implements Cloneable {
         }
         private final Normalizer2 normalizer2;
     }
-    private static final class NONEModeImpl {
-        private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.NOOP_NORMALIZER2);
-    }
     private static final class NFDModeImpl {
         private static final ModeImpl INSTANCE =
             new ModeImpl(Norm2AllModes.getNFCInstanceNoIOException().decomp);
@@ -222,35 +218,40 @@ public final class Normalizer implements Cloneable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        protected abstract ModeImpl get(int options);
+        protected abstract Normalizer2 getNormalizer2(int options);
     }
 
     private static final class NONEMode extends Mode {
-        protected ModeImpl get(int options) { return NONEModeImpl.INSTANCE; }
+        protected Normalizer2 getNormalizer2(int options) { return Norm2AllModes.NOOP_NORMALIZER2; }
     }
     private static final class NFDMode extends Mode {
-        protected ModeImpl get(int options) {
-            return (options&UNICODE_3_2) != 0 ? NFD32ModeImpl.INSTANCE : NFDModeImpl.INSTANCE;
+        protected Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ?
+                    NFD32ModeImpl.INSTANCE.normalizer2 : NFDModeImpl.INSTANCE.normalizer2;
         }
     }
     private static final class NFKDMode extends Mode {
-        protected ModeImpl get(int options) {
-            return (options&UNICODE_3_2) != 0 ? NFKD32ModeImpl.INSTANCE : NFKDModeImpl.INSTANCE;
+        protected Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ?
+                    NFKD32ModeImpl.INSTANCE.normalizer2 : NFKDModeImpl.INSTANCE.normalizer2;
         }
     }
     private static final class NFCMode extends Mode {
-        protected ModeImpl get(int options) {
-            return (options&UNICODE_3_2) != 0 ? NFC32ModeImpl.INSTANCE : NFCModeImpl.INSTANCE;
+        protected Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ?
+                    NFC32ModeImpl.INSTANCE.normalizer2 : NFCModeImpl.INSTANCE.normalizer2;
         }
     }
     private static final class NFKCMode extends Mode {
-        protected ModeImpl get(int options) {
-            return (options&UNICODE_3_2) != 0 ? NFKC32ModeImpl.INSTANCE : NFKCModeImpl.INSTANCE;
+        protected Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ?
+                    NFKC32ModeImpl.INSTANCE.normalizer2 : NFKCModeImpl.INSTANCE.normalizer2;
         }
     }
     private static final class FCDMode extends Mode {
-        protected ModeImpl get(int options) {
-            return (options&UNICODE_3_2) != 0 ? FCD32ModeImpl.INSTANCE : FCDModeImpl.INSTANCE;
+        protected Normalizer2 getNormalizer2(int options) {
+            return (options&UNICODE_3_2) != 0 ?
+                    FCD32ModeImpl.INSTANCE.normalizer2 : FCDModeImpl.INSTANCE.normalizer2;
         }
     }
 
@@ -512,7 +513,7 @@ public final class Normalizer implements Cloneable {
         this.text = UCharacterIterator.getInstance(str);
         this.mode = mode; 
         this.options=opt;
-        norm2 = mode.get(opt).normalizer2;
+        norm2 = mode.getNormalizer2(opt);
         buffer = new StringBuilder();
     }
 
@@ -535,7 +536,7 @@ public final class Normalizer implements Cloneable {
         this.text = UCharacterIterator.getInstance((CharacterIterator)iter.clone());
         this.mode = mode;
         this.options = opt;
-        norm2 = mode.get(opt).normalizer2;
+        norm2 = mode.getNormalizer2(opt);
         buffer = new StringBuilder();
     }
 
@@ -555,7 +556,7 @@ public final class Normalizer implements Cloneable {
             this.text     = (UCharacterIterator)iter.clone();
             this.mode     = mode;
             this.options  = options;
-            norm2 = mode.get(options).normalizer2;
+            norm2 = mode.getNormalizer2(options);
             buffer = new StringBuilder();
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e.toString());
@@ -594,11 +595,11 @@ public final class Normalizer implements Cloneable {
     // Static Utility methods
     //--------------------------------------------------------------------------
 
-    private static final ModeImpl getComposeMode(boolean compat, int options) {
-        return (compat ? NFKC : NFC).get(options);
+    private static final Normalizer2 getComposeNormalizer2(boolean compat, int options) {
+        return (compat ? NFKC : NFC).getNormalizer2(options);
     }
-    private static final ModeImpl getDecomposeMode(boolean compat, int options) {
-        return (compat ? NFKD : NFD).get(options);
+    private static final Normalizer2 getDecomposeNormalizer2(boolean compat, int options) {
+        return (compat ? NFKD : NFD).getNormalizer2(options);
     }
 
     /**
@@ -627,7 +628,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */            
     public static String compose(String str, boolean compat, int options) {
-        return getComposeMode(compat, options).normalizer2.normalize(str);
+        return getComposeNormalizer2(compat, options).normalize(str);
     }
     
     /**
@@ -673,7 +674,7 @@ public final class Normalizer implements Cloneable {
                               boolean compat, int options) {
         CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
         CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-        getComposeMode(compat, options).normalizer2.normalize(srcBuffer, app);
+        getComposeNormalizer2(compat, options).normalize(srcBuffer, app);
         return app.length();
     }
 
@@ -703,7 +704,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */         
     public static String decompose(String str, boolean compat, int options) {
-        return getDecomposeMode(compat, options).normalizer2.normalize(str);
+        return getDecomposeNormalizer2(compat, options).normalize(str);
     }
 
     /**
@@ -749,7 +750,7 @@ public final class Normalizer implements Cloneable {
                                 boolean compat, int options) {
         CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
         CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-        getDecomposeMode(compat, options).normalizer2.normalize(srcBuffer, app);
+        getDecomposeNormalizer2(compat, options).normalize(srcBuffer, app);
         return app.length();
     }
 
@@ -769,7 +770,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */
     public static String normalize(String str, Mode mode, int options) {
-        return mode.get(options).normalizer2.normalize(str);
+        return mode.getNormalizer2(options).normalize(str);
     }
     
     /**
@@ -832,7 +833,7 @@ public final class Normalizer implements Cloneable {
                                 Mode  mode, int options) {
         CharBuffer srcBuffer = CharBuffer.wrap(src, srcStart, srcLimit - srcStart);
         CharsAppendable app = new CharsAppendable(dest, destStart, destLimit);
-        mode.get(options).normalizer2.normalize(srcBuffer, app);
+        mode.getNormalizer2(options).normalize(srcBuffer, app);
         return app.length();
     }
 
@@ -904,7 +905,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */
     public static QuickCheckResult quickCheck(String source, Mode mode, int options) {
-        return mode.get(options).normalizer2.quickCheck(source);
+        return mode.getNormalizer2(options).quickCheck(source);
     }
 
     /**
@@ -951,7 +952,7 @@ public final class Normalizer implements Cloneable {
     public static QuickCheckResult quickCheck(char[] source,int start, 
                                               int limit, Mode mode,int options) {       
         CharBuffer srcBuffer = CharBuffer.wrap(source, start, limit - start);
-        return mode.get(options).normalizer2.quickCheck(srcBuffer);
+        return mode.getNormalizer2(options).quickCheck(srcBuffer);
     }
 
     /**
@@ -978,7 +979,7 @@ public final class Normalizer implements Cloneable {
                                        int limit, Mode mode, 
                                        int options) {
         CharBuffer srcBuffer = CharBuffer.wrap(src, start, limit - start);
-        return mode.get(options).normalizer2.isNormalized(srcBuffer);
+        return mode.getNormalizer2(options).isNormalized(srcBuffer);
     }
 
     /**
@@ -999,7 +1000,7 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.6
      */
     public static boolean isNormalized(String str, Mode mode, int options) {
-        return mode.get(options).normalizer2.isNormalized(str);
+        return mode.getNormalizer2(options).isNormalized(str);
     }
 
     /**
@@ -1257,7 +1258,7 @@ public final class Normalizer implements Cloneable {
         StringBuilder destBuilder=new StringBuilder(leftLimit-leftStart+rightLimit-rightStart+16);
         destBuilder.append(left, leftStart, leftLimit-leftStart);
         CharBuffer rightBuffer=CharBuffer.wrap(right, rightStart, rightLimit-rightStart);
-        mode.get(options).normalizer2.append(destBuilder, rightBuffer);
+        mode.getNormalizer2(options).append(destBuilder, rightBuffer);
         int destLength=destBuilder.length();
         if(destLength<=(destLimit-destStart)) {
             destBuilder.getChars(0, destLength, dest, destStart);
@@ -1296,7 +1297,7 @@ public final class Normalizer implements Cloneable {
      */
     public static String concatenate(char[] left, char[] right,Mode mode, int options) {
         StringBuilder dest=new StringBuilder(left.length+right.length+16).append(left);
-        return mode.get(options).normalizer2.append(dest, CharBuffer.wrap(right)).toString();
+        return mode.getNormalizer2(options).append(dest, CharBuffer.wrap(right)).toString();
     }
 
     /**
@@ -1332,7 +1333,7 @@ public final class Normalizer implements Cloneable {
      */
     public static String concatenate(String left, String right, Mode mode, int options) {
         StringBuilder dest=new StringBuilder(left.length()+right.length()+16).append(left);
-        return mode.get(options).normalizer2.append(dest, right).toString();
+        return mode.getNormalizer2(options).append(dest, right).toString();
     }
 
     /**
@@ -1624,7 +1625,7 @@ public final class Normalizer implements Cloneable {
      */
     public void setMode(Mode newMode) {
         mode = newMode;
-        norm2 = mode.get(options).normalizer2;
+        norm2 = mode.getNormalizer2(options);
     }
     /**
      * Return the basic operation performed by this <tt>Normalizer</tt>
@@ -1659,7 +1660,7 @@ public final class Normalizer implements Cloneable {
         } else {
             options &= (~option);
         }
-        norm2 = mode.get(options).normalizer2;
+        norm2 = mode.getNormalizer2(options);
     }
 
     /**
@@ -1866,9 +1867,9 @@ public final class Normalizer implements Cloneable {
         if((options&INPUT_IS_FCD)==0 || (options&FOLD_CASE_EXCLUDE_SPECIAL_I)!=0) {
             Normalizer2 n2;
             if((options&FOLD_CASE_EXCLUDE_SPECIAL_I)!=0) {
-                n2=NFD.get(normOptions).normalizer2;
+                n2=NFD.getNormalizer2(normOptions);
             } else {
-                n2=FCD.get(normOptions).normalizer2;
+                n2=FCD.getNormalizer2(normOptions);
             }
 
             // check if s1 and/or s2 fulfill the FCD conditions
