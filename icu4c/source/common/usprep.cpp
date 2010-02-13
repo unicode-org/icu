@@ -277,7 +277,7 @@ loadData(UStringPrepProfile* profile,
     /* initialize some variables */
     profile->mappingData=(uint16_t *)((uint8_t *)(p+_SPREP_INDEX_TOP)+profile->indexes[_SPREP_INDEX_TRIE_SIZE]);
     
-    unorm_getUnicodeVersion(&normUnicodeVersion, errorCode);
+    u_getUnicodeVersion(normUnicodeVersion);
     normUniVer = (normUnicodeVersion[0] << 24) + (normUnicodeVersion[1] << 16) + 
                  (normUnicodeVersion[2] << 8 ) + (normUnicodeVersion[3]);
     sprepUniVer = (dataVersion[0] << 24) + (dataVersion[1] << 16) + 

@@ -187,13 +187,6 @@ U_CAPI UBool U_EXPORT2
 unorm_haveData(UErrorCode *pErrorCode);
 
 /**
- * internal API, used by StringPrep
- * @internal
- */
-U_CAPI void U_EXPORT2
-unorm_getUnicodeVersion(UVersionInfo *versionInfo, UErrorCode *pErrorCode);
-
-/**
  * Internal API, used by enumeration of canonically equivalent strings
  * @internal
  */

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -494,13 +494,12 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
     if(rangeIndex<bmpLength) {
         *pStart=array[rangeIndex++];
         if(rangeIndex<bmpLength) {
-            *pEnd=array[rangeIndex];
+            *pEnd=array[rangeIndex]-1;
         } else if(rangeIndex<length) {
-            *pEnd=(((int32_t)array[rangeIndex])<<16)|array[rangeIndex+1];
+            *pEnd=((((int32_t)array[rangeIndex])<<16)|array[rangeIndex+1])-1;
         } else {
-            *pEnd=0x110000;
+            *pEnd=0x10ffff;
         }
-        --*pEnd;
         return TRUE;
     } else {
         rangeIndex-=bmpLength;
@@ -511,11 +510,10 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
             *pStart=(((int32_t)array[rangeIndex])<<16)|array[rangeIndex+1];
             rangeIndex+=2;
             if(rangeIndex<length) {
-                *pEnd=(((int32_t)array[rangeIndex])<<16)|array[rangeIndex+1];
+                *pEnd=((((int32_t)array[rangeIndex])<<16)|array[rangeIndex+1])-1;
             } else {
-                *pEnd=0x110000;
+                *pEnd=0x10ffff;
             }
-            --*pEnd;
             return TRUE;
         } else {
             return FALSE;
