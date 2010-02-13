@@ -11,12 +11,11 @@ import java.text.StringCharacterIterator;
 import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
@@ -1998,21 +1997,17 @@ public class BasicTest extends TestFmwk {
         
         // test cases with i and I to make sure Turkic works
         char[] iI= new char[]{ 0x49, 0x69, 0x130, 0x131 };
-        USerializedSet sset=new USerializedSet();
-        UnicodeSet set = new UnicodeSet();
-    
+        UnicodeSet set = new UnicodeSet(), iSet = new UnicodeSet();
+        Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+        nfcImpl.ensureCanonIterData();
+
         String s1, s2;
         int start, end;
     
         // collect all sets into one for contiguous output
-        int[] startEnd = new int[2];
         for(i=0; i<iI.length; ++i) {
-            if(NormalizerImpl.getCanonStartSet(iI[i], sset)) {
-                count=sset.countRanges();
-                for(j=0; j<count; ++j) {
-                    sset.getRange(j, startEnd);
-                    set.add(startEnd[0], startEnd[1]);
-                }
+            if(nfcImpl.getCanonStartSet(iI[i], iSet)) {
+                set.addAll(iSet);
             }
         }
 
@@ -2771,20 +2766,24 @@ public class BasicTest extends TestFmwk {
         USerializedSet sset=new USerializedSet();
         UnicodeSet set = new UnicodeSet();
         int start, end;
-    
+
+        char[] serialized = {
+            0x8007,  // length
+            3,  // bmpLength
+            0xc0, 0xfe, 0xfffc,
+            1, 9, 0x10, 0xfffc
+        };
+        sset.getSet(serialized, 0);
+
         // collect all sets into one for contiguous output
         int[] startEnd = new int[2];
-
-        if(NormalizerImpl.getCanonStartSet(0x0130, sset)) {
-            int count=sset.countRanges();
-            for(int j=0; j<count; ++j) {
-                sset.getRange(j, startEnd);
-                set.add(startEnd[0], startEnd[1]);
-            }
+        int count=sset.countRanges();
+        for(int j=0; j<count; ++j) {
+            sset.getRange(j, startEnd);
+            set.add(startEnd[0], startEnd[1]);
         }
-       
 
-        // test all of these precomposed characters
+        // test all of these characters
         UnicodeSetIterator it = new UnicodeSetIterator(set);
         while(it.nextRange() && it.codepoint!=UnicodeSetIterator.IS_STRING) {
             start=it.codepoint;
@@ -2793,10 +2792,11 @@ public class BasicTest extends TestFmwk {
                 if(!sset.contains(start)){
                     errln("USerializedSet.contains failed for "+Utility.hex(start,8));
                 }
+                ++start;
             }
         }
     }
-    
+
     public void TestReturnFailure(){
         char[] term = {'r','\u00e9','s','u','m','\u00e9' };
         char[] decomposed_term = new char[10 + term.length + 2];

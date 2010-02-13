@@ -12,9 +12,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Set;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CanonicalIterator;
@@ -40,17 +37,6 @@ public class TestCanonicalIterator extends TestFmwk {
         {"\u010d\u017E", "c\u030Cz\u030C, c\u030C\u017E, \u010Dz\u030C, \u010D\u017E"},
         {"x\u0307\u0327", "x\u0307\u0327, x\u0327\u0307, \u1E8B\u0327"},
     };
-
-    public void TestOldAndNew() {
-        Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
-        nfcImpl.ensureCanonIterData();
-        for (int c = 0; c <= 0x10ffff; ++c) {
-            if (nfcImpl.isCanonSegmentStarter(c) != NormalizerImpl.isCanonSafeStart(c)) {
-                errln(String.format("old!=new segment starter for U+%04x: old %b new %b",
-                        c, NormalizerImpl.isCanonSafeStart(c), nfcImpl.isCanonSegmentStarter(c)));
-            }
-        }
-    }
 
     public void TestExhaustive() {
         int counter = 0;

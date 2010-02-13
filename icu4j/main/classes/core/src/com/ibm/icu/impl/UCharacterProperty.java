@@ -103,24 +103,22 @@ public final class UCharacterProperty
     public static final int SRC_PROPSVEC=2;
     /** From unames.c/unames.icu */
     public static final int SRC_NAMES=3;
-    /** From unorm.cpp/unorm.icu */
-    public static final int SRC_NORM=4;
     /** From ucase.c/ucase.icu */
-    public static final int SRC_CASE=5;
+    public static final int SRC_CASE=4;
     /** From ubidi_props.c/ubidi.icu */
-    public static final int SRC_BIDI=6;
+    public static final int SRC_BIDI=5;
     /** From uchar.c/uprops.icu main trie as well as properties vectors trie */
-    public static final int SRC_CHAR_AND_PROPSVEC=7;
+    public static final int SRC_CHAR_AND_PROPSVEC=6;
     /** From ucase.c/ucase.icu as well as unorm.cpp/unorm.icu */
-    public static final int SRC_CASE_AND_NORM=8;
+    public static final int SRC_CASE_AND_NORM=7;
     /** From normalizer2impl.cpp/nfc.nrm */
-    public static final int SRC_NFC=9;
+    public static final int SRC_NFC=8;
     /** From normalizer2impl.cpp/nfkc.nrm */
-    public static final int SRC_NFKC=10;
+    public static final int SRC_NFKC=9;
     /** From normalizer2impl.cpp/nfkc_cf.nrm */
-    public static final int SRC_NFKC_CF=11;
+    public static final int SRC_NFKC_CF=10;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=12;
+    public static final int SRC_COUNT=11;
 
     // public methods ----------------------------------------------------
 
@@ -310,7 +308,7 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKD_INERT */
        new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFC_INERT */
        new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKC_INERT */
-       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_SEGMENT_STARTER */
+       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_SEGMENT_STARTER */
        new BinaryProperties(  1,                (  1 << PATTERN_SYNTAX) ),
        new BinaryProperties(  1,                (  1 << PATTERN_WHITE_SPACE) ),
        new BinaryProperties( SRC_CHAR_AND_PROPSVEC,  0 ),                           /* UCHAR_POSIX_ALNUM */
@@ -372,25 +370,25 @@ public final class UCharacterProperty
                     } catch (IOException e) {
                         return false;
                     }
-                } else if(column==SRC_NORM) {
-                    /* normalization properties from unorm.icu */
-                    switch(which) {
-                    case UProperty.SEGMENT_STARTER:
-                        return NormalizerImpl.isCanonSafeStart(c);
-                    default:
-                        break;
-                    }
-                } else if(column==SRC_NFC || column==SRC_NFKC) {
+                } else if(column==SRC_NFC) {
+                    /* normalization properties from nfc.nrm */
                     switch(which) {
                     case UProperty.FULL_COMPOSITION_EXCLUSION: {
                         // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
                         Normalizer2Impl impl=Norm2AllModes.getNFCInstanceNoIOException().impl;
                         return impl.isCompNo(impl.getNorm16(c));
                     }
+                    case UProperty.SEGMENT_STARTER:
+                        return Norm2AllModes.getNFCInstanceNoIOException().impl.
+                            ensureCanonIterData().isCanonSegmentStarter(c);
                     default:
-                        // UCHAR_NF..._INERT properties
+                        // UCHAR_NF[CD]_INERT properties
                         return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
                     }
+                } else if(column==SRC_NFKC) {
+                    /* normalization properties from nfkc.nrm */
+                    // UCHAR_NFK[CD]_INERT properties
+                    return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
                 } else if(column==SRC_NFKC_CF) {
                     // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
                     Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstanceNoIOException().impl;
