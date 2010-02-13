@@ -45,6 +45,8 @@ public:
         JAMO_V_COUNT=21,
         JAMO_T_COUNT=28,
 
+        JAMO_VT_COUNT=JAMO_V_COUNT*JAMO_T_COUNT,
+
         HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT,
         HANGUL_LIMIT=HANGUL_BASE+HANGUL_COUNT
     };
@@ -408,7 +410,7 @@ private:
 
     // Requires minYesNo<norm16<limitNoNo.
     const uint16_t *getMapping(uint16_t norm16) const { return extraData+norm16; }
-    const uint16_t *getCompositionsListForDecompYesAndZeroCC(uint16_t norm16) const {
+    const uint16_t *getCompositionsListForDecompYes(uint16_t norm16) const {
         if(norm16==0 || MIN_NORMAL_MAYBE_YES<=norm16) {
             return NULL;
         } else if(norm16<minMaybeYes) {
