@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.USerializedSet;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 
@@ -48,6 +48,9 @@ public final class CanonicalIterator {
      * @stable ICU 2.4
      */
     public CanonicalIterator(String source) {
+        Norm2AllModes allModes = Norm2AllModes.getNFCInstanceNoIOException();
+        nfd = allModes.decomp;
+        nfcImpl = allModes.impl.ensureCanonIterData();
         setSource(source);
     }
 
@@ -110,7 +113,7 @@ public final class CanonicalIterator {
      * @stable ICU 2.4
      */
     public void setSource(String newSource) {
-        source = Normalizer.normalize(newSource, Normalizer.NFD);
+        source = nfd.normalize(newSource);
         done = false;
 
         // catch degenerate case
@@ -131,9 +134,9 @@ public final class CanonicalIterator {
 
         int i = UTF16.findOffsetFromCodePoint(source, 1);
 
-        for (; i < source.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(source, i);
-            if (NormalizerImpl.isCanonSafeStart(cp)) {
+        for (; i < source.length(); i += Character.charCount(cp)) {
+            cp = source.codePointAt(i);
+            if (nfcImpl.isCanonSegmentStarter(cp)) {
                 segmentList.add(source.substring(start, i)); // add up to i
                 start = i;
             }
@@ -226,6 +229,8 @@ public final class CanonicalIterator {
     private static boolean SKIP_ZEROS = true;
 
     // fields
+    private final Normalizer2 nfd;
+    private final Normalizer2Impl nfcImpl;
     private String source;
     private boolean done;
     private String[][] pieces;
@@ -286,37 +291,30 @@ public final class CanonicalIterator {
 
         result.add(segment);
         StringBuffer workingBuffer = new StringBuffer();
+        UnicodeSet starts = new UnicodeSet();
 
         // cycle through all the characters
-        int cp=0;
-        int[] range = new int[2];
-        for (int i = 0; i < segment.length(); i += UTF16.getCharCount(cp)) {
+        int cp;
+        for (int i = 0; i < segment.length(); i += Character.charCount(cp)) {
 
             // see if any character is at the start of some decomposition
-            cp = UTF16.charAt(segment, i);
-            USerializedSet starts = new USerializedSet();
-
-            if (!NormalizerImpl.getCanonStartSet(cp, starts)) {
+            cp = segment.codePointAt(i);
+            if (!nfcImpl.getCanonStartSet(cp, starts)) {
               continue;
             }
-            int j=0;
             // if so, see which decompositions match
-            int rangeCount = starts.countRanges();
-            for(j = 0; j < rangeCount; ++j) {
-                starts.getRange(j, range);
-                int end=range[1];
-                for (int cp2 = range[0]; cp2 <= end; ++cp2) {
-                    Set<String> remainder = extract(cp2, segment, i, workingBuffer);
-                    if (remainder == null) {
-                        continue;
-                    }
+            for(UnicodeSetIterator iter = new UnicodeSetIterator(starts); iter.next();) {
+                int cp2 = iter.codepoint;
+                Set<String> remainder = extract(cp2, segment, i, workingBuffer);
+                if (remainder == null) {
+                    continue;
+                }
 
-                    // there were some matches, so add all the possibilities to the set.
-                    String prefix= segment.substring(0,i);
-                    prefix += UTF16.valueOf(cp2);
-                    for (String item : remainder) {
-                        result.add(prefix + item);
-                    }
+                // there were some matches, so add all the possibilities to the set.
+                String prefix= segment.substring(0,i);
+                prefix += UTF16.valueOf(cp2);
+                for (String item : remainder) {
+                    result.add(prefix + item);
                 }
             }
         }
@@ -368,8 +366,10 @@ public final class CanonicalIterator {
         if (PROGRESS) System.out.println(" extract: " + Utility.hex(UTF16.valueOf(comp))
             + ", " + Utility.hex(segment.substring(segmentPos)));
 
-        //String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
-        String decomp = Normalizer.normalize(comp, Normalizer.NFD);
+        String decomp = nfcImpl.getDecomposition(comp);
+        if (decomp == null) {
+            decomp = UTF16.valueOf(comp);
+        }
 
         // See if it matches the start of segment (at segmentPos)
         boolean ok = false;

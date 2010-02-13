@@ -6,11 +6,9 @@
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.VersionInfo;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -2401,14 +2399,6 @@ public final class Normalizer implements Cloneable {
 
             return c1-c2;
         }
-    }
-
-    /**
-     * Fetches the Unicode version burned into the Normalization data file
-     * @return VersionInfo version information of the normalizer
-     */
-    static VersionInfo getUnicodeVersion() {
-        return NormalizerImpl.getUnicodeVersion();
     }
 
     /**

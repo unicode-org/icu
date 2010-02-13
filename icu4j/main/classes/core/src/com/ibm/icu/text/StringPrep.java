@@ -17,6 +17,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.UBiDiProps;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.util.VersionInfo;
 
@@ -297,7 +298,7 @@ public final class StringPrep {
         checkBiDi         = ((indexes[OPTIONS] & CHECK_BIDI_ON) > 0);
         sprepUniVer   = getVersionInfo(reader.getUnicodeVersion());
         normCorrVer   = getVersionInfo(indexes[NORM_CORRECTNS_LAST_UNI_VERSION]);
-        VersionInfo normUniVer = Normalizer.getUnicodeVersion();
+        VersionInfo normUniVer = UCharacter.getUnicodeVersion();
         if(normUniVer.compareTo(sprepUniVer) < 0 && /* the Unicode version of SPREP file must be less than the Unicode Vesion of the normalization data */
            normUniVer.compareTo(normCorrVer) < 0 && /* the Unicode version of the NormalizationCorrections.txt file should be less than the Unicode Vesion of the normalization data */
            ((indexes[OPTIONS] & NORMALIZATION_ON) > 0) /* normalization turned on*/

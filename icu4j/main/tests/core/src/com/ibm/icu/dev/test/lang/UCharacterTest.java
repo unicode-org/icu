@@ -14,12 +14,12 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -2204,19 +2204,6 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
-    /* add characters from a serialized set to a normal one */
-    private static void _setAddSerialized(UnicodeSet set, USerializedSet sset) {
-     //  int start, end;
-       int i, count;
-
-       count=sset.countRanges();
-       int[] range = new int[2];
-       for(i=0; i<count; ++i) {
-           sset.getRange(i,range);
-           set.add(range[0],range[1]);
-       }
-    }
-
     private boolean showADiffB(UnicodeSet a, UnicodeSet b,
                                         String a_name, String b_name,
                                         boolean expect,
@@ -2284,7 +2271,6 @@ public final class UCharacterTest extends TestFmwk
    public void TestConsistency() throws IOException {
        UnicodeSet set1, set2, set3, set4;
 
-       USerializedSet sset;
        int start, end;
        int i, length;
 
@@ -2368,10 +2354,9 @@ public final class UCharacterTest extends TestFmwk
         */
        Normalizer2 norm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
        set1=new UnicodeSet();
+       Norm2AllModes.getNFCInstanceNoIOException().impl.
+           ensureCanonIterData().getCanonStartSet(0x49, set1);
        set2=new UnicodeSet();
-       sset = new USerializedSet();
-       NormalizerImpl.getCanonStartSet(0x49,sset);
-       _setAddSerialized(set1, sset);
 
        /* enumerate all characters that are plausible to be latin letters */
        for(start=0xa0; start<0x2000; ++start) {
@@ -2869,7 +2854,7 @@ public final class UCharacterTest extends TestFmwk
         }
         
         // Testing when "if(ch<NormalizerImpl.JAMO_L_BASE)" is true
-        for(int i=NormalizerImpl.JAMO_L_BASE-5; i<NormalizerImpl.JAMO_L_BASE; i++){
+        for(int i=Normalizer2Impl.Hangul.JAMO_L_BASE-5; i<Normalizer2Impl.Hangul.JAMO_L_BASE; i++){
             if(UCharacter.getIntPropertyValue(i, UProperty.HANGUL_SYLLABLE_TYPE) != 0){
                 errln("UCharacter.getIntPropertyValue(ch, type) was suppose to return 0 " +
                         "when passing ch: " + i + "and type of Property.HANGUL_SYLLABLE_TYPE");
@@ -2878,7 +2863,7 @@ public final class UCharacterTest extends TestFmwk
         }
         
         // Testing when "else if((ch-=NormalizerImpl.HANGUL_BASE)<0)" is true
-        for(int i=NormalizerImpl.HANGUL_BASE-5; i<NormalizerImpl.HANGUL_BASE; i++){
+        for(int i=Normalizer2Impl.Hangul.HANGUL_BASE-5; i<Normalizer2Impl.Hangul.HANGUL_BASE; i++){
             if(UCharacter.getIntPropertyValue(i, UProperty.HANGUL_SYLLABLE_TYPE) != 0){
                 errln("UCharacter.getIntPropertyValue(ch, type) was suppose to return 0 " +
                         "when passing ch: " + i + "and type of Property.HANGUL_SYLLABLE_TYPE");

@@ -17,7 +17,6 @@ import java.util.TreeSet;
 
 import com.ibm.icu.impl.BMPSet;
 import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.UBiDiProps;
@@ -3092,11 +3091,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     UCharacterProperty.INSTANCE.addPropertyStarts(incl);
                     UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
                     break;
-                case UCharacterProperty.SRC_NORM:
-                    NormalizerImpl.addPropertyStarts(incl);
-                    break;
                 case UCharacterProperty.SRC_CASE_AND_NORM:
-                    NormalizerImpl.addPropertyStarts(incl);
+                    Norm2AllModes.getNFCInstanceNoIOException().impl.addPropertyStarts(incl);
                     UCaseProps.getSingleton().addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_NFC:

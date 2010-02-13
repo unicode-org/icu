@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2002-2009, International Business Machines
+ *   Copyright (C) 2002-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
 */
@@ -112,28 +112,26 @@ public final class USerializedSet {
         if(rangeIndex<bmpLength) {
             range[0]=array[rangeIndex++];
             if(rangeIndex<bmpLength) {
-                range[1]=array[rangeIndex];
+                range[1]=array[rangeIndex]-1;
             } else if(rangeIndex<length) {
-                range[1]=(((int)array[rangeIndex])<<16)|array[rangeIndex+1];
+                range[1]=((((int)array[rangeIndex])<<16)|array[rangeIndex+1])-1;
             } else {
-                range[1]=0x110000;
+                range[1]=0x10ffff;
             }
-            range[1]-=1;
             return true;
         } else {
             rangeIndex-=bmpLength;
             rangeIndex*=2; /* address pairs of pairs of units */
-            length-=bmpLength;
-            if(rangeIndex<length) {
+            int suppLength=length-bmpLength;
+            if(rangeIndex<suppLength) {
                 int offset=arrayOffset+bmpLength;
                 range[0]=(((int)array[offset+rangeIndex])<<16)|array[offset+rangeIndex+1];
                 rangeIndex+=2;
-                if(rangeIndex<length) {
-                    range[1]=(((int)array[offset+rangeIndex])<<16)|array[offset+rangeIndex+1];
+                if(rangeIndex<suppLength) {
+                    range[1]=((((int)array[offset+rangeIndex])<<16)|array[offset+rangeIndex+1])-1;
                 } else {
-                    range[1]=0x110000;
+                    range[1]=0x10ffff;
                 }
-                range[1]-=1;
                 return true;
             } else {
                 return false;

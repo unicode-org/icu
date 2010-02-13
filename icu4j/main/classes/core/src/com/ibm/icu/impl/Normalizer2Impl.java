@@ -33,6 +33,8 @@ public final class Normalizer2Impl {
         public static final int JAMO_L_LIMIT=JAMO_L_BASE+JAMO_L_COUNT;
         public static final int JAMO_V_LIMIT=JAMO_V_BASE+JAMO_V_COUNT;
 
+        public static final int JAMO_VT_COUNT=JAMO_V_COUNT*JAMO_T_COUNT;
+
         public static final int HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT;
         public static final int HANGUL_LIMIT=HANGUL_BASE+HANGUL_COUNT;
 
@@ -502,25 +504,19 @@ public final class Normalizer2Impl {
             canonStartSets=new ArrayList<UnicodeSet>();
             Iterator<Trie2.Range> trieIterator=normTrie.iterator();
             while(trieIterator.hasNext()) {
-                Trie2.Range range=trieIterator.next();
-                int norm16=range.value;
-                if(norm16==0) {
-                    continue;  // inert
-                }
-                if(norm16==minYesNo) {
-                    // Hangul LV & LVT: Set has-compositions for all syllables
-                    // to minimize the trie size, although only LV syllables
-                    // do have compositions. Handle at runtime.
-                    // Set the same value for the whole range because
-                    // there cannot be other data. Hangul syllables are segment starters,
-                    // and since they decompose they cannot have canonStartSets.
-                    // (There is no decomposable character in a decomposition mapping.)
-                    range.value=CANON_HAS_COMPOSITIONS;
-                    newData.setRange(range, true);
+                final Trie2.Range range=trieIterator.next();
+                final int norm16=range.value;
+                if(range.leadSurrogate || norm16==0 || (minYesNo<=norm16 && norm16<minNoNo)) {
+                    // Inert, or 2-way mapping (including Hangul syllable).
+                    // We do not write a canonStartSet for any yesNo character.
+                    // Composites from 2-way mappings are added at runtime from the
+                    // starter's compositions list, and the other characters in
+                    // 2-way mappings get CANON_NOT_SEGMENT_STARTER set because they are
+                    // "maybe" characters.
                     continue;
                 }
                 for(int c=range.startCodePoint; c<=range.endCodePoint; ++c) {
-                    int oldValue=newData.get(c);
+                    final int oldValue=newData.get(c);
                     int newValue=oldValue;
                     if(norm16>=minMaybeYes) {
                         // not a segment starter if it occurs in a decomposition or has cc!=0
@@ -531,36 +527,39 @@ public final class Normalizer2Impl {
                     } else if(norm16<minYesNo) {
                         newValue|=CANON_HAS_COMPOSITIONS;
                     } else {
-                        // c has a decomposition
+                        // c has a one-way decomposition
                         int c2=c;
-                        while(limitNoNo<=norm16 && norm16<minMaybeYes) {
-                            c2=this.mapAlgorithmic(c2, norm16);
-                            norm16=getNorm16(c2);
+                        int norm16_2=norm16;
+                        while(limitNoNo<=norm16_2 && norm16_2<minMaybeYes) {
+                            c2=this.mapAlgorithmic(c2, norm16_2);
+                            norm16_2=getNorm16(c2);
                         }
-                        if(minYesNo<=norm16 && norm16<limitNoNo) {
+                        if(minYesNo<=norm16_2 && norm16_2<limitNoNo) {
                             // c decomposes, get everything from the variable-length extra data
-                            int firstUnit=extraData.charAt(norm16++);
-                            if(c==c2 && (firstUnit&MAPPING_PLUS_COMPOSITION_LIST)!=0) {
-                                newValue|=CANON_HAS_COMPOSITIONS;  // original c has compositions
-                            }
+                            int firstUnit=extraData.charAt(norm16_2++);
                             int length=firstUnit&MAPPING_LENGTH_MASK;
                             if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                                if(c==c2 && (extraData.charAt(norm16)&0xff)!=0) {
+                                if(c==c2 && (extraData.charAt(norm16_2)&0xff)!=0) {
                                     newValue|=CANON_NOT_SEGMENT_STARTER;  // original c has cc!=0
                                 }
-                                ++norm16;
+                                ++norm16_2;
                             }
+                            // Skip empty mappings (no characters in the decomposition).
                             if(length!=0) {
                                 // add c to first code point's start set
-                                int limit=norm16+length;
-                                c2=extraData.codePointAt(norm16);
+                                int limit=norm16_2+length;
+                                c2=extraData.codePointAt(norm16_2);
                                 addToStartSet(newData, c, c2);
-                                // set CANON_NOT_SEGMENT_STARTER for each remaining code point
-                                while((norm16+=Character.charCount(c2))<limit) {
-                                    c2=extraData.codePointAt(norm16);
-                                    int c2Value=newData.get(c2);
-                                    if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
-                                        newData.set(c2, c2Value|CANON_NOT_SEGMENT_STARTER);
+                                // Set CANON_NOT_SEGMENT_STARTER for each remaining code point of a
+                                // one-way mapping. A 2-way mapping is possible here after
+                                // intermediate algorithmic mapping.
+                                if(norm16_2>=minNoNo) {
+                                    while((norm16_2+=Character.charCount(c2))<limit) {
+                                        c2=extraData.codePointAt(norm16_2);
+                                        int c2Value=newData.get(c2);
+                                        if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
+                                            newData.set(c2, c2Value|CANON_NOT_SEGMENT_STARTER);
+                                        }
                                     }
                                 }
                             }
@@ -691,6 +690,29 @@ public final class Normalizer2Impl {
 
     public boolean isCanonSegmentStarter(int c) {
         return canonIterData.get(c)>=0;
+    }
+    public boolean getCanonStartSet(int c, UnicodeSet set) {
+        int canonValue=canonIterData.get(c)&~CANON_NOT_SEGMENT_STARTER;
+        if(canonValue==0) {
+            return false;
+        }
+        set.clear();
+        int value=canonValue&CANON_VALUE_MASK;
+        if((canonValue&CANON_HAS_SET)!=0) {
+            set.addAll(canonStartSets.get(value));
+        } else if(value!=0) {
+            set.add(value);
+        }
+        if((canonValue&CANON_HAS_COMPOSITIONS)!=0) {
+            int norm16=getNorm16(c);
+            if(norm16==JAMO_L) {
+                int syllable=Hangul.HANGUL_BASE+(c-Hangul.JAMO_L_BASE)*Hangul.JAMO_VT_COUNT;
+                set.add(syllable, syllable+Hangul.JAMO_VT_COUNT-1);
+            } else {
+                addComposites(getCompositionsList(norm16), set);
+            }
+        }
+        return true;
     }
 
     public static final int MIN_CCC_LCCC_CP=0x300;
@@ -1503,7 +1525,7 @@ public final class Normalizer2Impl {
     /**
      * @return index into maybeYesCompositions, or -1
      */
-    private int getCompositionsListForDecompYesAndZeroCC(int norm16) {
+    private int getCompositionsListForDecompYes(int norm16) {
         if(norm16==0 || MIN_NORMAL_MAYBE_YES<=norm16) {
             return -1;
         } else {
@@ -1526,6 +1548,15 @@ public final class Normalizer2Impl {
             1+  // +1 to skip the first unit with the mapping lenth
             (firstUnit&MAPPING_LENGTH_MASK)+  // + mapping length
             ((firstUnit>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
+    }
+    /**
+     * @param c code point must have compositions
+     * @return index into maybeYesCompositions
+     */
+    private int getCompositionsList(int norm16) {
+        return isDecompYes(norm16) ?
+                getCompositionsListForDecompYes(norm16) :
+                getCompositionsListForComposite(norm16);
     }
 
     // Decompose a short piece of text which is likely to contain characters that
@@ -1638,6 +1669,29 @@ public final class Normalizer2Impl {
             }
         }
         return -1;
+    }
+    /**
+     * @param c Character which has compositions
+     * @param set recursively receives the composites from c's compositions
+     */
+    private void addComposites(int list, UnicodeSet set) {
+        int firstUnit, compositeAndFwd;
+        do {
+            firstUnit=maybeYesCompositions.charAt(list);
+            if((firstUnit&COMP_1_TRIPLE)==0) {
+                compositeAndFwd=maybeYesCompositions.charAt(list+1);
+                list+=2;
+            } else {
+                compositeAndFwd=(((int)maybeYesCompositions.charAt(list+1)&~COMP_2_TRAIL_MASK)<<16)|
+                                maybeYesCompositions.charAt(list+2);
+                list+=3;
+            }
+            int composite=compositeAndFwd>>1;
+            if((compositeAndFwd&1)!=0) {
+                addComposites(getCompositionsListForComposite(getNorm16(composite)), set);
+            }
+            set.add(composite);
+        } while((firstUnit&COMP_1_LAST_TUPLE)==0);
     }
     /*
      * Recomposes the buffer text starting at recomposeStartIndex
@@ -1777,7 +1831,7 @@ public final class Normalizer2Impl {
             // If c did not combine, then check if it is a starter.
             if(cc==0) {
                 // Found a new starter.
-                if((compositionsList=getCompositionsListForDecompYesAndZeroCC(norm16))>=0) {
+                if((compositionsList=getCompositionsListForDecompYes(norm16))>=0) {
                     // It may combine with something, prepare for it.
                     if(c<=0xffff) {
                         starterIsSupplementary=false;
