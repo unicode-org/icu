@@ -183,28 +183,31 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                     break;
                 }
 #endif
-            } else if(column==UPROPS_SRC_NFC || column==UPROPS_SRC_NFKC) {
+            } else if(column==UPROPS_SRC_NFC) {
 #if !UCONFIG_NO_NORMALIZATION
                 UErrorCode errorCode=U_ZERO_ERROR;
                 switch(which) {
                 case UCHAR_FULL_COMPOSITION_EXCLUSION: {
                     // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
                     const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
-                    if(U_SUCCESS(errorCode)) {
-                        return impl->isCompNo(impl->getNorm16(c));
-                    }
+                    return U_SUCCESS(errorCode) && impl->isCompNo(impl->getNorm16(c));
                     break;
                 }
                 default: {
-                    // UCHAR_NF..._INERT properties
+                    // UCHAR_NF[CD]_INERT properties
                     const Normalizer2 *norm2=Normalizer2Factory::getInstance(
                         (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD), errorCode);
-                    if(U_SUCCESS(errorCode)) {
-                        return norm2->isInert(c);
-                    }
-                    break;
+                    return U_SUCCESS(errorCode) && norm2->isInert(c);
                 }
                 }
+#endif
+            } else if(column==UPROPS_SRC_NFKC) {
+#if !UCONFIG_NO_NORMALIZATION
+                // UCHAR_NFK[CD]_INERT properties
+                UErrorCode errorCode=U_ZERO_ERROR;
+                const Normalizer2 *norm2=Normalizer2Factory::getInstance(
+                    (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD), errorCode);
+                return U_SUCCESS(errorCode) && norm2->isInert(c);
 #endif
             } else if(column==UPROPS_SRC_NFKC_CF) {
                 // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED

@@ -411,7 +411,7 @@ ALL_INDEX_SRC_FILES = $(PKGDATA_LIST) $(INDEX_FILE) $(CURR_INDEX_FILE) $(LANG_IN
 # a list to use in the .lst files (package-relative)
 ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(CURR_FILES_SHORT) $(CURR_INDEX_RES_SHORT) $(LANG_FILES_SHORT) $(LANG_INDEX_RES_SHORT) $(REGION_FILES_SHORT) $(REGION_INDEX_RES_SHORT) $(ZONE_FILES_SHORT) $(ZONE_INDEX_RES_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT) $(CFU_FILES_SHORT)
 
-UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu unorm.icu
+UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu
 UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
 
 ifneq ($(INCLUDE_UNI_CORE_DATA),)
@@ -487,16 +487,12 @@ $(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLBINDIR)/gencase$(
 $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLBINDIR)/genpname$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genpname -d $(BUILDDIR)
 
-# unorm.icu
-# ICU 4.4: $(BUILDDIR)/unorm.icu is now prebuilt, see below.
+# normalization
 $(OUTTMPDIR)/unorm_props_data.c: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLBINDIR)/gennorm$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)ucase.icu
 	$(INVOKE) $(TOOLBINDIR)/gennorm --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
 
-# unorm.icu used to be built like this:
-#	$(INVOKE) $(TOOLBINDIR)/gennorm -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
-
 # ucadata.icu
-# used to depend on $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
+# used to depend on $(BUILDDIR)/$(ICUDT)ucase.icu
 # see Jitterbug 4497
 $(COLBLDDIR)/ucadata.icu $(COLBLDDIR)/invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLBINDIR)/genuca$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)nfc.nrm
 	$(INVOKE) $(TOOLBINDIR)/genuca -s $(UNICODEDATADIR) -d $(COLBLDDIR) -i $(BUILDDIR) 
@@ -510,9 +506,6 @@ $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLBINDIR)/gencnval$(TOOL
 	$(INVOKE) $(TOOLBINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # Targets for prebuilt Unicode data
-$(BUILDDIR)/unorm.icu: $(SRCDATADIR)/in/unorm.icu
-	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
-
 $(BUILDDIR)/%.nrm: $(SRCDATADIR)/in/%.nrm
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
@@ -756,7 +749,7 @@ clean-resindex:
 $(INDEX_RES_FILE): $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILE)
 
-# Starting with ICU4C 3.4, the core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
+# The core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu)
 # are hardcoded in the common DLL and therefore not included in the data package any more.
 # They are not built by default but need to be built for ICU4J data and for getting the .c source files
 # when updating the Unicode data.
@@ -782,7 +775,7 @@ JAR=jar
 # - package them into the .jar file
 $(OUTDIR)/icu4j/icudata.jar: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
 	mkdir -p $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
-	echo ubidi.icu ucase.icu uprops.icu unorm.icu > $(OUTDIR)/icu4j/add.txt
+	echo ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
 	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 
@@ -825,7 +818,7 @@ pkgdataMakefile:
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
-# used to depend on uprops.icu ucase.icu ubidi.icu unorm.icu
+# used to depend on uprops.icu ucase.icu ubidi.icu
 # see Jitterbug 4497
 ALLFILES390=pnames.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
