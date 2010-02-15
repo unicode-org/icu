@@ -27,7 +27,6 @@ public class SelectFormatUnitTest extends TestFmwk {
      */
     public void TestPatternSyntax() {
         log("Inside TestPatternSyntax");
-        System.out.println("\nInside TestPatternSyntax");
 
         String checkSyntaxData[] = {
             "odd{foo} odd{bar} other{foobar}",
@@ -81,7 +80,6 @@ public class SelectFormatUnitTest extends TestFmwk {
     public void TestInvalidKeyword() {
         //Test formatting with invalid keyword
         log("Inside TestInvalidKeyword");
-        System.out.println("\nInside TestInvalidKeyword");
 
         String keywords[] = {
             "9Keyword-_",       //Starts with a digit
@@ -118,7 +116,6 @@ public class SelectFormatUnitTest extends TestFmwk {
     public void TestApplyFormat() {
         //Test applying and formatting with various pattern
         log("Inside TestApplyFormat");
-        System.out.println("\nInside TestApplyFormat");
 
         String patternTestData[] = {
             "fem {femValue} other{even}",
