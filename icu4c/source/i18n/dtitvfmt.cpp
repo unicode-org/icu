@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation and
+* Copyright (C) 2008-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -579,9 +579,9 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
 
 
     /* the difference between time skeleton and normalizedTimeSkeleton are:
-     * 1. both 'H' and 'h' are normalized as 'h' in normalized time skeleton,
+     * 1. (Formerly, normalized time skeleton folded 'H' to 'h'; no longer true)
      * 2. 'a' is omitted in normalized time skeleton.
-     * 3. there is only one appearance for 'h', 'm','v', 'z' in normalized 
+     * 3. there is only one appearance for 'h' or 'H', 'm','v', 'z' in normalized 
      *    time skeleton
      *
      * The difference between date skeleton and normalizedDateSkeleton are:
@@ -735,6 +735,7 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     int32_t MCount = 0;
     int32_t yCount = 0;
     int32_t hCount = 0;
+    int32_t HCount = 0;
     int32_t mCount = 0;
     int32_t vCount = 0;
     int32_t zCount = 0;
@@ -781,9 +782,12 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             timeSkeleton.append(ch);
             break;
           case LOW_H:
-          case CAP_H:
             timeSkeleton.append(ch);
             ++hCount;
+            break;
+          case CAP_H:
+            timeSkeleton.append(ch);
+            ++HCount;
             break;
           case LOW_M:
             timeSkeleton.append(ch);
@@ -840,7 +844,10 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     }
 
     /* generate normalized form for time */
-    if ( hCount != 0 ) {
+    if ( HCount != 0 ) {
+        normalizedTimeSkeleton.append(CAP_H);
+    }
+    else if ( hCount != 0 ) {
         normalizedTimeSkeleton.append(LOW_H);
     }
     if ( mCount != 0 ) {
