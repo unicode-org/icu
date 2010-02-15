@@ -18,6 +18,7 @@ ME=`basename "$0"`
 
 allflags()
 {
+    echo "  --noverify             Don't verify that ICU is actually installed."
     echo "  --bindir               Print binary directory path (bin)"
     echo "  --cc                   Print C compiler used [CC]"
     echo "  --cflags               Print C compiler flags [CFLAGS]"
@@ -61,7 +62,7 @@ allflags()
     echo "  --incfile              Print path to Makefile.inc"
     echo "  --incpkgdatafile       Print path to pkgdata.inc (for -O option of pkgdata)"
     echo "  --install              Print path to install-sh"
-    echo "  --mkinstalldirs              Print path to mkinstalldirs"
+    echo "  --mkinstalldirs        Print path to mkinstalldirs"
 }
 
 ## Print the normal usage message
@@ -92,11 +93,12 @@ usage()
 ## Check the sanity of current variables
 sanity()
 {
-    if [ ! -f ${ICUUC_FILE} ] && [ ${IGNORE_ICUUC_FILE_CHECK} = "no" ];
+    if [ ! -f ${ICUUC_FILE} ] && [ ${IGNORE_ICUUC_FILE_CHECK} = "no" ] && [ ${SANITY} = "sane" ];
     then
 	echo "### $ME: Can't find ${ICUUC_FILE} - ICU prefix is wrong."  1>&2
 	echo "###      Try the --prefix= option " 1>&2
-	echo "###      or --detect-prefix"
+	echo "###      or --detect-prefix" 1>&2
+        echo "###      (If you want to disable this check, use  the --noverify option)" 1>&2
 	echo "### $ME: Exitting." 1>&2
 	exit 2
     fi
@@ -110,7 +112,18 @@ if [ $# -lt 1 ]; then
 fi
 
 # For certain options (e.g. --detect-prefix) don't check for icuuc library file.
+
 IGNORE_ICUUC_FILE_CHECK="no";
+
+SANITY="sane"
+
+case "$1" in
+--noverify)
+    SANITY="nosanity"
+    shift
+    ;;
+esac
+
 case "$1" in 
 *prefix*)
     IGNORE_ICUUC_FILE_CHECK="yes"
@@ -122,7 +135,7 @@ esac
 loaddefs
 loaddefs
 
-if [ $1 = "--selfcheck" ];
+if [ $# -gt 0 -a $1 = "--selfcheck" ];
 then
 	echo "passed"
 	exit 
@@ -139,10 +152,15 @@ do
     case "$arg" in
 
         # undocumented.
-	--debug)
+        --debug)
 	    set -x
 	    ;;
-
+        
+        --noverify)
+            echo "### $ME: Error: --noverify must be the first argument." 1>&2
+            exit 1
+            ;;
+            
     --so)
         echo $SO
         ;;
