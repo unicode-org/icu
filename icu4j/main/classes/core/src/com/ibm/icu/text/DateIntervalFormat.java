@@ -903,7 +903,7 @@ public class DateIntervalFormat extends UFormat {
         StringBuilder normalizedTime = new StringBuilder(skeleton.length());
 
         /* the difference between time skeleton and normalizedTimeSkeleton are:
-         * 1. both 'H' and 'h' are normalized as 'h' in normalized time skeleton,
+         * 1. (Formerly, normalized time skeleton folded 'H' to 'h'; no longer true)
          * 2. 'a' is omitted in normalized time skeleton.
          * 3. there is only one appearance for 'h', 'm','v', 'z' in normalized 
          *    time skeleton
@@ -1121,6 +1121,7 @@ public class DateIntervalFormat extends UFormat {
         int MCount = 0;
         int yCount = 0;
         int hCount = 0;
+        int HCount = 0;
         int mCount = 0;
         int vCount = 0;
         int zCount = 0;
@@ -1166,9 +1167,12 @@ public class DateIntervalFormat extends UFormat {
                 timeSkeleton.append(ch);
                 break;
               case 'h':
-              case 'H':
                 timeSkeleton.append(ch);
                 ++hCount;
+                break;
+              case 'H':
+                timeSkeleton.append(ch);
+                ++HCount;
                 break;
               case 'm':
                 timeSkeleton.append(ch);
@@ -1223,7 +1227,10 @@ public class DateIntervalFormat extends UFormat {
         }
     
         /* generate normalized form for time */
-        if ( hCount != 0 ) {
+        if ( HCount != 0 ) {
+            normalizedTimeSkeleton.append('H');
+        }
+        else if ( hCount != 0 ) {
             normalizedTimeSkeleton.append('h');
         }
         if ( mCount != 0 ) {
