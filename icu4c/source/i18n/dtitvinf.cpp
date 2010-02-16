@@ -602,7 +602,7 @@ DateIntervalInfo::initHash(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(dtitvinfHashTableValueComparator);
+    hTable->setValueComparator(dtitvinfHashTableValueComparator);
     return hTable;
 }
 

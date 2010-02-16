@@ -123,6 +123,8 @@ TEST_UCM_SOURCE= test1.ucm test1bmp.ucm test3.ucm test4.ucm test4x.ucm test5.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/%.cnv)
 
+TEST_NRM_FILES=$(TESTBUILDDIR)/testnorm.nrm
+
 # import the shared .mk file
 include $(TESTSRCDATADIR)/tstfiles.mk
 -include $(TESTSRCDATADIR)/tstlocal.mk
@@ -138,7 +140,7 @@ ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_SPP_FILES) $(TEST_BRK_FILES) $(TEST_CN
 $(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
-	@for file in $(TEST_RES_FILES:$(TESTBUILDDIR)/%.res=%.res) $(TEST_DAT_FILES:$(TESTBUILDDIR)/%.icu=%.icu) $(TEST_SPP_FILES:$(TESTBUILDDIR)/%.spp=%.spp) $(TEST_CNV_FILES:$(TESTBUILDDIR)/%.cnv=%.cnv); do \
+	@for file in $(TEST_RES_FILES:$(TESTBUILDDIR)/%.res=%.res) $(TEST_DAT_FILES:$(TESTBUILDDIR)/%.icu=%.icu) $(TEST_SPP_FILES:$(TESTBUILDDIR)/%.spp=%.spp) $(TEST_CNV_FILES:$(TESTBUILDDIR)/%.cnv=%.cnv) $(TEST_NRM_FILES:$(TESTBUILDDIR)/%.nrm=%.nrm); do \
 	  echo $$file >> $@; \
 	done;
 
@@ -182,6 +184,9 @@ $(TESTBUILDDIR)/nfsmxp.spp: $(TOOLBINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nf
 
 $(TESTBUILDDIR)/%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLBINDIR)/makeconv$(EXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/makeconv --small -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
+
+$(TESTBUILDDIR)/%.nrm: $(TESTSRCDATADIR)/%.txt $(TOOLBINDIR)/gennorm2$(EXEEXT)
+	$(INVOKE) $(TOOLBINDIR)/gennorm2 -s $(TESTSRCDATADIR) $(<F) -o $@
 
 $(TESTBUILDDIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLBINDIR)/genrb$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -q -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) $(<F)
