@@ -2500,4 +2500,10 @@ void LocaleTest::TestGetVariantWithKeywords(void)
   const char *variant = l.getVariant();
   logln(variant);
   test_assert(strcmp("VALLEY", variant) == 0);
+
+  UErrorCode status = U_ZERO_ERROR;
+  char buffer[50];
+  int32_t len = l.getKeywordValue("foo", buffer, 50, status);
+  buffer[len] = '\0';
+  test_assert(strcmp("value", buffer) == 0);
 }
