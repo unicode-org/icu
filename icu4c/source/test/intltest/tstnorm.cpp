@@ -9,6 +9,7 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/uchar.h"
+#include "unicode/errorcode.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
@@ -51,6 +52,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(14,FindFoldFCDExceptions);
         CASE(15,TestCompare);
         CASE(16,TestSkippable);
+        CASE(17,TestCustomComp);
         default: name = ""; break;
     }
 }
@@ -1750,6 +1752,39 @@ BasicNormalizerTest::TestSkippable() {
             s.append(UNICODE_STRING_SIMPLE("\n\n"));
 
             errln(s);
+        }
+    }
+}
+
+struct StringPair { const char *input, *expected; };
+
+void
+BasicNormalizerTest::TestCustomComp() {
+    static const StringPair pairs[]={
+        { "\\uD801\\uE000\\uDFFE", "" },
+        { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+        { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+        { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE002\\U000110B9\\u0327\\u0345" },
+        { "\\uE010\\U000F0011\\uE012", "\\uE011\\uE012" },
+        { "\\uE010\\U000F0011\\U000F0011\\uE012", "\\uE011\\U000F0010" },
+        { "\\uE111\\u1161\\uE112\\u1162", "\\uAE4C\\u1102\\u0062\\u1162" },
+        { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
+    };
+    IcuTestErrorCode errorCode(*this, "BasicNormalizerTest/TestCustomComp");
+    const Normalizer2 *customComp=
+        Normalizer2::getInstance(loadTestData(errorCode), "testnorm", UNORM2_COMPOSE, errorCode);
+    if(errorCode.isFailure()) {
+        errorCode.reset();
+        dataerrln(UNICODE_STRING_SIMPLE("unable to load testdata/testnorm.nrm"));
+        return;
+    }
+    for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
+        const StringPair &pair=pairs[i];
+        UnicodeString input=UnicodeString(pair.input, -1, US_INV).unescape();
+        UnicodeString expected=UnicodeString(pair.expected, -1, US_INV).unescape();
+        UnicodeString result=customComp->normalize(input, errorCode);
+        if(result!=expected) {
+            errln("custom compose Normalizer2 did not normalize input %d as expected", i);
         }
     }
 }

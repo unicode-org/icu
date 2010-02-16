@@ -27,6 +27,7 @@
 #include "mutex.h"
 #include "normalizer2impl.h"
 #include "ucln_cmn.h"
+#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 
@@ -409,13 +410,21 @@ private:
 
 STATIC_SIMPLE_SINGLETON(noopSingleton);
 
+static UHashtable *cache=NULL;
+
 U_CDECL_BEGIN
+
+static void U_CALLCONV deleteNorm2AllModes(void *allModes) {
+    delete (Norm2AllModes *)allModes;
+}
 
 static UBool U_CALLCONV uprv_normalizer2_cleanup() {
     Norm2AllModesSingleton(nfcSingleton, NULL).deleteInstance();
     Norm2AllModesSingleton(nfkcSingleton, NULL).deleteInstance();
     Norm2AllModesSingleton(nfkc_cfSingleton, NULL).deleteInstance();
     Norm2Singleton(noopSingleton).deleteInstance();
+    uhash_close(cache);
+    cache=NULL;
     return TRUE;
 }
 
@@ -534,8 +543,11 @@ Normalizer2::getInstance(const char *packageName,
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
+    if(name==NULL || *name==0) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    Norm2AllModes *allModes=NULL;
     if(packageName==NULL) {
-        Norm2AllModes *allModes=NULL;
         if(0==uprv_strcmp(name, "nfc")) {
             allModes=Norm2AllModesSingleton(nfcSingleton, "nfc").getInstance(errorCode);
         } else if(0==uprv_strcmp(name, "nfkc")) {
@@ -543,25 +555,64 @@ Normalizer2::getInstance(const char *packageName,
         } else if(0==uprv_strcmp(name, "nfkc_cf")) {
             allModes=Norm2AllModesSingleton(nfkc_cfSingleton, "nfkc_cf").getInstance(errorCode);
         }
-        if(allModes!=NULL) {
-            switch(mode) {
-            case UNORM2_COMPOSE:
-                return &allModes->comp;
-            case UNORM2_DECOMPOSE:
-                return &allModes->decomp;
-            case UNORM2_FCD:
-                allModes->impl.getFCDTrie(errorCode);
-                return &allModes->fcd;
-            case UNORM2_COMPOSE_CONTIGUOUS:
-                return &allModes->fcc;
-            default:
-                break;  // do nothing
+    }
+    if(allModes==NULL && U_SUCCESS(errorCode)) {
+        UHashtable *localCache;
+        {
+            Mutex lock;
+            localCache=cache;
+            if(localCache!=NULL) {
+                allModes=(Norm2AllModes *)uhash_get(localCache, name);
+            }
+        }
+        if(allModes==NULL) {
+            if(localCache==NULL) {
+                Mutex lock;
+                if(cache==NULL) {
+                    cache=uhash_open(uhash_hashChars, uhash_compareChars, NULL, &errorCode);
+                    if(U_FAILURE(errorCode)) {
+                        return NULL;
+                    }
+                    uhash_setKeyDeleter(cache, uprv_free);
+                    uhash_setValueDeleter(cache, deleteNorm2AllModes);
+                }
+                localCache=cache;
+            }
+            allModes=Norm2AllModes::createInstance(packageName, name, errorCode);
+            if(U_SUCCESS(errorCode)) {
+                Mutex lock;
+                void *temp=uhash_get(localCache, name);
+                if(temp==NULL) {
+                    int32_t keyLength=uprv_strlen(name)+1;
+                    char *nameCopy=(char *)uprv_malloc(keyLength);
+                    if(nameCopy==NULL) {
+                        errorCode=U_MEMORY_ALLOCATION_ERROR;
+                        return NULL;
+                    }
+                    uprv_memcpy(nameCopy, name, keyLength);
+                    uhash_put(localCache, nameCopy, allModes, &errorCode);
+                } else {
+                    // race condition
+                    delete allModes;
+                    allModes=(Norm2AllModes *)temp;
+                }
             }
         }
     }
-    if(U_SUCCESS(errorCode)) {
-        // TODO: Real loading and caching...
-        errorCode=U_UNSUPPORTED_ERROR;
+    if(allModes!=NULL && U_SUCCESS(errorCode)) {
+        switch(mode) {
+        case UNORM2_COMPOSE:
+            return &allModes->comp;
+        case UNORM2_DECOMPOSE:
+            return &allModes->decomp;
+        case UNORM2_FCD:
+            allModes->impl.getFCDTrie(errorCode);
+            return &allModes->fcd;
+        case UNORM2_COMPOSE_CONTIGUOUS:
+            return &allModes->fcc;
+        default:
+            break;  // do nothing
+        }
     }
     return NULL;
 }

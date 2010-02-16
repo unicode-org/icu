@@ -822,7 +822,7 @@ TimeUnitFormat::initHash(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(tmutfmtHashTableValueComparator);
+    hTable->setValueComparator(tmutfmtHashTableValueComparator);
     return hTable;
 }
 

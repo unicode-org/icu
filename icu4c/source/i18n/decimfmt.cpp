@@ -4604,7 +4604,7 @@ DecimalFormat::initHashForAffix(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(decimfmtAffixValueComparator);
+    hTable->setValueComparator(decimfmtAffixValueComparator);
     return hTable;
 }
 
@@ -4618,7 +4618,7 @@ DecimalFormat::initHashForAffixPattern(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(decimfmtAffixPatternValueComparator);
+    hTable->setValueComparator(decimfmtAffixPatternValueComparator);
     return hTable;
 }
 
