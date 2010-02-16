@@ -206,7 +206,7 @@
         </java>
     </target>
 
-    <target name="collateCheck" depends="info, core, collate, currdata, langdata, regiondata, collate-tests" description="Run only the collation tests">
+    <target name="collateCheck" depends="info, core, collate, currdata, langdata, regiondata, core-tests, collate-tests" description="Run only the collation tests">
         <java classname="com.ibm.icu.dev.test.TestAllCollate" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
@@ -219,6 +219,7 @@
                 <pathelement path="${icu4j.currdata.jar}"/>
                 <pathelement path="${icu4j.langdata.jar}"/>
                 <pathelement path="${icu4j.regiondata.jar}"/>
+                <pathelement path="${icu4j.core-tests.jar}"/>
             </classpath>
         </java>
     </target>

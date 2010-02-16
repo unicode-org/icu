@@ -389,15 +389,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
     }
 
     public void TestResourceBundle() {
-        // remove when we deal with the data issue
-//        System.out.println("feb 1: " + new GregorianCalendar(2010, 1, 15).getTimeInMillis());
-        if (System.currentTimeMillis() > 1266220800000L) {
-            errln("Timebomb failure: 2010/02/01");
-        } else {
-            logln("test temporarily disabled until 2010/02/01");
-            return;
-        }
-
         String baseName = "com.ibm.icu.dev.data.resources.TestDataElements";
         ResourceBundle rb;
 
