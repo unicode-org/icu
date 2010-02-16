@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2004-2009, International Business Machines Corporation and
+ * Copyright (c) 2004-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -178,21 +178,21 @@ void UVectorTest::Hashtable_API() {
     TEST_ASSERT((a->removei("a") == 1));
     TEST_ASSERT((a->find("a") == NULL));
 
-    /* verify that setValueCompartor works */
+    /* verify that setValueComparator works */
     Hashtable b(status);
     TEST_ASSERT((!a->equals(b)));
     TEST_ASSERT((b.puti("b", 2, status) == 0));
     TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be FALSE by default.
-    b.setValueCompartor(uhash_compareLong);
+    b.setValueComparator(uhash_compareLong);
     TEST_ASSERT((!a->equals(b)));
-    a->setValueCompartor(uhash_compareLong);
+    a->setValueComparator(uhash_compareLong);
     TEST_ASSERT((a->equals(b)));
     TEST_ASSERT((a->equals(*a))); // This better be reflexive.
 
-    /* verify that setKeyCompartor works */
+    /* verify that setKeyComparator works */
     TEST_ASSERT((a->puti("a", 1, status) == 0));
     TEST_ASSERT((a->find("a") != NULL));
-    a->setKeyCompartor(neverTRUE);
+    a->setKeyComparator(neverTRUE);
     TEST_ASSERT((a->find("a") == NULL));
 
     delete a;

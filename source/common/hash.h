@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -40,8 +40,8 @@ public:
 
     /**
      * Construct a hashtable
-     * @param keyComp Compartor for comparing the keys
-     * @param valueComp Compartor for comparing the values
+     * @param keyComp Comparator for comparing the keys
+     * @param valueComp Comparator for comparing the values
      * @param status Error code
     */
     Hashtable(UKeyComparator *keyComp, UValueComparator *valueComp, UErrorCode& status);
@@ -86,9 +86,9 @@ public:
 
     const UHashElement* nextElement(int32_t& pos) const;
     
-    UKeyComparator* setKeyCompartor(UKeyComparator*keyComp);
+    UKeyComparator* setKeyComparator(UKeyComparator*keyComp);
     
-    UValueComparator* setValueCompartor(UValueComparator* valueComp);
+    UValueComparator* setValueComparator(UValueComparator* valueComp);
 
     UBool equals(const Hashtable& that) const;
 private:
@@ -190,11 +190,11 @@ inline void Hashtable::removeAll(void) {
     uhash_removeAll(hash);
 }
 
-inline UKeyComparator* Hashtable::setKeyCompartor(UKeyComparator*keyComp){
+inline UKeyComparator* Hashtable::setKeyComparator(UKeyComparator*keyComp){
     return uhash_setKeyComparator(hash, keyComp);
 }
     
-inline UValueComparator* Hashtable::setValueCompartor(UValueComparator* valueComp){
+inline UValueComparator* Hashtable::setValueComparator(UValueComparator* valueComp){
     return uhash_setValueComparator(hash, valueComp);
 }
 
