@@ -12,7 +12,26 @@
 *   Created by: Vladimir Weinstein
 *   Updated by: Steven R. Loomis
 *
-*  Gets included by utypes.h and Windows .rc files
+*  Gets included by uversion.h and other files.
+*
+* IMPORTANT: When updating version, the following things need to be done:
+* source/common/unicode/uvernum.h - this file: update major, minor,
+*        patchlevel, suffix, version, short version constants, namespace,
+*                    renaming macro, and copyright
+*
+* The following files need to be updated as well, which can be done
+*  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
+*
+* 
+* source/common/common.vcproj - update 'Output file name' on the link tab so
+*                   that it contains the new major/minor combination
+* source/i18n/i18n.vcproj - same as for the common.vcproj
+* source/layout/layout.vcproj - same as for the common.vcproj
+* source/layoutex/layoutex.vcproj - same
+* source/stubdata/stubdata.vcproj - same as for the common.vcproj
+* source/io/io.vcproj - same as for the common.vcproj
+* source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
+*                            the new major/minor combination and the Unicode version.
 */
 
 #ifndef UVERNUM_H
@@ -23,7 +42,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2009, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2010, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** The current ICU major version as an integer. 
  *  This value will change in the subsequent releases of ICU
@@ -35,13 +54,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 3
+#define U_ICU_VERSION_MINOR_NUM 4
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 4
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
@@ -55,7 +74,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _43
+#define U_ICU_VERSION_SUFFIX _44
 
 /** Glued version suffix function for renamers 
  *  This value will change in the subsequent releases of ICU.
@@ -64,7 +83,7 @@
  *  @draft ICU 4.2
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _43
+#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _44
 #endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
@@ -72,18 +91,18 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "4.3.4"
+#define U_ICU_VERSION "4.4"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "43"
+#define U_ICU_VERSION_SHORT "44"
 
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "4.3.4"
+#define U_ICU_DATA_VERSION "4.4"
 
 /*===========================================================================
  * ICU collation framework version information                               
