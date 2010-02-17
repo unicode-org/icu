@@ -1947,12 +1947,25 @@ $as_echo_n "checking for ICU version numbers... " >&6; }
 geticuversion() {
     sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
 }
+getuversion() {
+    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_UNICODE_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
+}
 VERSION=`geticuversion $srcdir/common/unicode/uvernum.h`
 if test x"$VERSION" = x; then
     VERSION=`geticuversion $srcdir/common/unicode/*.h`
     if test x"$VERSION" = x; then
-        { { $as_echo "$as_me:$LINENO: error: Cannot determine ICU version number from header files" >&5
-$as_echo "$as_me: error: Cannot determine ICU version number from header files" >&2;}
+        { { $as_echo "$as_me:$LINENO: error: Cannot determine ICU version number from uvernum.h header file" >&5
+$as_echo "$as_me: error: Cannot determine ICU version number from uvernum.h header file" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+fi
+
+UNICODE_VERSION=`getuversion $srcdir/common/unicode/uchar.h`
+if test x"$UNICODE_VERSION" = x; then
+    UNICODE_VERSION=`getuversion $srcdir/common/unicode/*.h`
+    if test x"$UNICODE_VERSION" = x; then
+        { { $as_echo "$as_me:$LINENO: error: Cannot determine Unicode version number from uchar.h header file" >&5
+$as_echo "$as_me: error: Cannot determine Unicode version number from uchar.h header file" >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi
@@ -1964,10 +1977,9 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 
 
 
-{ $as_echo "$as_me:$LINENO: result: release $VERSION, library $LIB_VERSION" >&5
-$as_echo "release $VERSION, library $LIB_VERSION" >&6; }
+{ $as_echo "$as_me:$LINENO: result: release $VERSION, library $LIB_VERSION, unicode version $UNICODE_VERSION" >&5
+$as_echo "release $VERSION, library $LIB_VERSION, unicode version $UNICODE_VERSION" >&6; }
 
-UNICODE_VERSION="5.2"
 
 
 # Determine the host system
