@@ -65,7 +65,7 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc tests icu4j-data icu4j-data-install
+doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles
 
 ## Clear suffix list
 .SUFFIXES :
@@ -229,7 +229,7 @@ config.status: $(srcdir)/configure $(srcdir)/common/unicode/uvernum.h
 	@echo
 	@echo
 	@echo "*** config.status has become stale ***"
-	@echo "   'configure' and/or 'uversion.h' have changed, please"
+	@echo "   'configure' and/or 'uvernum.h' have changed, please"
 	@echo "  do 'runConfigureICU' (or 'configure') again, as per"
 	@echo "  the readme.html."
 	@echo
@@ -249,3 +249,19 @@ icu4j-data-install icu4j-data: all tests
 	@echo ICU4J_ROOT=$(ICU4J_ROOT)
 	@$(MAKE) -C test/testdata $@
 	@$(MAKE) -C data $@
+
+WINDOWS_UPDATEFILES=$(srcdir)/data/makedata.mak $(shell find $(srcdir) -name '*.vcproj')
+
+WINDOWS_UPDATEFILES_SED=config/windows-update.sed
+
+update-windows-makefiles: config.status
+	@echo Updating Windows Makefiles for ICU $(VERSION)
+	CONFIG_FILES=$(WINDOWS_UPDATEFILES_SED) CONFIG_HEADERS= $(SHELL) ./config.status
+	@for file in $(WINDOWS_UPDATEFILES); do \
+	  echo "Updating $$file"; \
+	  mv "$${file}" "$${file}.bak" && \
+	  sed -f $(WINDOWS_UPDATEFILES_SED) < "$${file}.bak" > "$${file}" && \
+	  rm "$${file}.bak"; \
+	done;
+	$(RMV) $(WINDOWS_UPDATEFILES_SED)
+	@echo Please check over the changes carefully before checking them in.

@@ -21,11 +21,22 @@ AC_MSG_CHECKING(for ICU version numbers)
 geticuversion() {
     [sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"]
 }
+getuversion() {
+    [sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_UNICODE_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"]
+}
 VERSION=`geticuversion $srcdir/common/unicode/uvernum.h`
 if test x"$VERSION" = x; then
     VERSION=`geticuversion $srcdir/common/unicode/*.h`
     if test x"$VERSION" = x; then
-        AC_MSG_ERROR([Cannot determine ICU version number from header files])
+        AC_MSG_ERROR([Cannot determine ICU version number from uvernum.h header file])
+    fi
+fi
+
+UNICODE_VERSION=`getuversion $srcdir/common/unicode/uchar.h`
+if test x"$UNICODE_VERSION" = x; then
+    UNICODE_VERSION=`getuversion $srcdir/common/unicode/*.h`
+    if test x"$UNICODE_VERSION" = x; then
+        AC_MSG_ERROR([Cannot determine Unicode version number from uchar.h header file])
     fi
 fi
 # Compute a reasonable library version from the release version. This is
@@ -36,9 +47,8 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 AC_SUBST(VERSION)
 AC_SUBST(LIB_VERSION)
 AC_SUBST(LIB_VERSION_MAJOR)
-AC_MSG_RESULT([release $VERSION, library $LIB_VERSION])
+AC_MSG_RESULT([release $VERSION, library $LIB_VERSION, unicode version $UNICODE_VERSION])
 
-UNICODE_VERSION="5.2"
 AC_SUBST(UNICODE_VERSION)
 
 # Determine the host system
