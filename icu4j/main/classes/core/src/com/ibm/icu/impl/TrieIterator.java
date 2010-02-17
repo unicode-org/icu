@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 1996-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 */
 
@@ -137,7 +137,7 @@ public class TrieIterator implements RangeValueIterator
         m_nextCodepoint_    = 0;
         m_nextIndex_        = 0;
         m_nextBlock_ = m_trie_.m_index_[0] << Trie.INDEX_STAGE_2_SHIFT_;
-        if (m_nextBlock_ == 0) {
+        if (m_nextBlock_ == m_trie_.m_dataOffset_) {
             m_nextValue_ = m_initialValue_;
         }
         else {
@@ -205,7 +205,6 @@ public class TrieIterator implements RangeValueIterator
         // synwee check that next block index == 0 here 
         // enumerate BMP - the main loop enumerates data blocks
         while (m_nextCodepoint_ < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-            m_nextIndex_ ++;
             // because of the way the character is split to form the index
             // the lead surrogate and trail surrogate can not be in the
             // mid of a block
@@ -217,6 +216,8 @@ public class TrieIterator implements RangeValueIterator
             else if (m_nextCodepoint_ == TRAIL_SURROGATE_MIN_VALUE_) {
                 // go back to regular BMP code points
                 m_nextIndex_ = m_nextCodepoint_ >> Trie.INDEX_STAGE_1_SHIFT_;
+            } else {
+                m_nextIndex_ ++;
             }
             
             m_nextBlockIndex_ = 0;
@@ -278,14 +279,14 @@ public class TrieIterator implements RangeValueIterator
         // enumerate supplementary code points
         while (nextLead < TRAIL_SURROGATE_MIN_VALUE_) {
             // lead surrogate access
-            int leadBlock = 
+            final int leadBlock = 
                    m_trie_.m_index_[nextLead >> Trie.INDEX_STAGE_1_SHIFT_] << 
                                                    Trie.INDEX_STAGE_2_SHIFT_;
             if (leadBlock == m_trie_.m_dataOffset_) {
                 // no entries for a whole block of lead surrogates
                 if (currentValue != m_initialValue_) {
                     m_nextValue_      = m_initialValue_;
-                    m_nextBlock_      = 0;
+                    m_nextBlock_      = leadBlock;  // == m_trie_.m_dataOffset_
                     m_nextBlockIndex_ = 0;
                     setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                               currentValue);
@@ -316,7 +317,7 @@ public class TrieIterator implements RangeValueIterator
                 // no data for this lead surrogate
                 if (currentValue != m_initialValue_) {
                     m_nextValue_      = m_initialValue_;
-                    m_nextBlock_      = 0;
+                    m_nextBlock_      = m_trie_.m_dataOffset_;
                     m_nextBlockIndex_ = 0;
                     setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                               currentValue);
@@ -390,7 +391,7 @@ public class TrieIterator implements RangeValueIterator
             // currentValue
             m_nextCodepoint_ += DATA_BLOCK_LENGTH_;
         }
-        else if (m_nextBlock_ == 0) {
+        else if (m_nextBlock_ == m_trie_.m_dataOffset_) {
             // this is the all-initial-value block
             if (currentValue != m_initialValue_) {
                 m_nextValue_      = m_initialValue_;
