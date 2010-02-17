@@ -447,9 +447,10 @@ public final class Normalizer2Impl {
     public void addPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of each trie */
         Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-        while(trieIterator.hasNext()) {
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
             /* add the start code point to the USet */
-            set.add(trieIterator.next().startCodePoint);
+            set.add(range.startCodePoint);
         }
 
         /* add Hangul LV syllables and LV+1 because of skippables */
@@ -469,9 +470,9 @@ public final class Normalizer2Impl {
         }
         Trie2Writable newFCDTrie=new Trie2Writable(0, 0);
         Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-        while(trieIterator.hasNext()) {
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
             // Set the FCD value for a range of same-norm16 characters.
-            Trie2.Range range=trieIterator.next();
             if(range.value!=0) {
                 setFCD16FromNorm16(range.startCodePoint, range.endCodePoint, range.value, newFCDTrie);
             }
@@ -503,10 +504,10 @@ public final class Normalizer2Impl {
             Trie2Writable newData=new Trie2Writable(0, 0);
             canonStartSets=new ArrayList<UnicodeSet>();
             Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-            while(trieIterator.hasNext()) {
-                final Trie2.Range range=trieIterator.next();
+            Trie2.Range range;
+            while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
                 final int norm16=range.value;
-                if(range.leadSurrogate || norm16==0 || (minYesNo<=norm16 && norm16<minNoNo)) {
+                if(norm16==0 || (minYesNo<=norm16 && norm16<minNoNo)) {
                     // Inert, or 2-way mapping (including Hangul syllable).
                     // We do not write a canonStartSet for any yesNo character.
                     // Composites from 2-way mappings are added at runtime from the

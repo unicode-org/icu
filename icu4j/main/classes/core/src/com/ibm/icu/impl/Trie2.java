@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -868,8 +868,8 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
                 throw new IllegalArgumentException("Bad lead surrogate value.");
             }
             mapper    = vm;
-            nextStart = 0x10000 + (leadSurrogate - 0xd800) * 1024;
-            limitCP   = nextStart + 1024;
+            nextStart = (leadSurrogate - 0xd7c0) << 10;
+            limitCP   = nextStart + 0x400;
             doLeadSurrogates = false;   // Do not iterate over lead the special lead surrogate
                                         //   values after completing iteration over code points.
         }
