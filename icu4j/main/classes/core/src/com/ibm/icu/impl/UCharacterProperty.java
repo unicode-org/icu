@@ -375,11 +375,11 @@ public final class UCharacterProperty
                     switch(which) {
                     case UProperty.FULL_COMPOSITION_EXCLUSION: {
                         // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
-                        Normalizer2Impl impl=Norm2AllModes.getNFCInstanceNoIOException().impl;
+                        Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl;
                         return impl.isCompNo(impl.getNorm16(c));
                     }
                     case UProperty.SEGMENT_STARTER:
-                        return Norm2AllModes.getNFCInstanceNoIOException().impl.
+                        return Norm2AllModes.getNFCInstance().impl.
                             ensureCanonIterData().isCanonSegmentStarter(c);
                     default:
                         // UCHAR_NF[CD]_INERT properties
@@ -391,7 +391,7 @@ public final class UCharacterProperty
                     return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
                 } else if(column==SRC_NFKC_CF) {
                     // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
-                    Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstanceNoIOException().impl;
+                    Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstance().impl;
                     String src=UTF16.valueOf(c);
                     StringBuilder dest=new StringBuilder();
                     // Small destCapacity for NFKC_CF(c).
@@ -460,7 +460,7 @@ public final class UCharacterProperty
                     String nfd;
                     switch(which) {
                     case UProperty.CHANGES_WHEN_CASEFOLDED:
-                        nfd=Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(c);
+                        nfd=Norm2AllModes.getNFCInstance().impl.getDecomposition(c);
                         if(nfd!=null) {
                             /* c has a decomposition */
                             c=nfd.codePointAt(0);

@@ -7,7 +7,6 @@
 package com.ibm.icu.text;
 
 import java.io.InputStream;
-import java.io.IOException;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.text.Normalizer;
@@ -125,6 +124,8 @@ public abstract class Normalizer2 {
      * </ul>
      * If data!=null, then the binary data is read once and cached using the provided
      * name as the key.
+     * If you know or expect the data to be cached already, you can use data!=null
+     * for non-ICU data as well.
      * @param data the binary, big-endian normalization (.nrm file) data, or null for ICU data
      * @param name "nfc" or "nfkc" or "nfkc_cf" or name of custom data file
      * @param mode normalization mode (compose or decompose etc.)
@@ -132,7 +133,7 @@ public abstract class Normalizer2 {
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
-    public static Normalizer2 getInstance(InputStream data, String name, Mode mode) throws IOException {
+    public static Normalizer2 getInstance(InputStream data, String name, Mode mode) {
         Norm2AllModes all2Modes=Norm2AllModes.getInstance(data, name);
         switch(mode) {
         case COMPOSE: return all2Modes.comp;

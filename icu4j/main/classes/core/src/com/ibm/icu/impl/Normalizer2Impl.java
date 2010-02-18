@@ -392,55 +392,59 @@ public final class Normalizer2Impl {
         private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
     }
     private static final Reader READER=new Reader();
-    public Normalizer2Impl load(InputStream data) throws IOException {
-        BufferedInputStream bis=new BufferedInputStream(data);
-        dataVersion=READER.readHeader(bis);
-        DataInputStream ds=new DataInputStream(bis);
-        int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
-        if(indexesLength<=IX_MIN_MAYBE_YES) {
-            throw new IOException("Normalizer2 data: not enough indexes");
-        }
-        int[] inIndexes=new int[indexesLength];
-        inIndexes[0]=indexesLength*4;
-        for(int i=1; i<indexesLength; ++i) {
-            inIndexes[i]=ds.readInt();
-        }
-
-        minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
-        minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
-
-        minYesNo=inIndexes[IX_MIN_YES_NO];
-        minNoNo=inIndexes[IX_MIN_NO_NO];
-        limitNoNo=inIndexes[IX_LIMIT_NO_NO];
-        minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
-
-        // Read the normTrie.
-        int offset=inIndexes[IX_NORM_TRIE_OFFSET];
-        int nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-        normTrie=Trie2_16.createFromSerialized(ds);
-        int trieLength=normTrie.getSerializedLength();
-        if(trieLength>(nextOffset-offset)) {
-            throw new IOException("Normalizer2 data: not enough bytes for normTrie");
-        }
-        ds.skipBytes((nextOffset-offset)-trieLength);  // skip padding after trie bytes
-
-        // Read the composition and mapping data.
-        offset=nextOffset;
-        nextOffset=inIndexes[IX_RESERVED2_OFFSET];
-        int numChars=(nextOffset-offset)/2;
-        char[] chars;
-        if(numChars!=0) {
-            chars=new char[numChars];
-            for(int i=0; i<numChars; ++i) {
-                chars[i]=ds.readChar();
+    public Normalizer2Impl load(InputStream data) {
+        try {
+            BufferedInputStream bis=new BufferedInputStream(data);
+            dataVersion=READER.readHeader(bis);
+            DataInputStream ds=new DataInputStream(bis);
+            int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
+            if(indexesLength<=IX_MIN_MAYBE_YES) {
+                throw new IOException("Normalizer2 data: not enough indexes");
             }
-            maybeYesCompositions=new String(chars);
-            extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
+            int[] inIndexes=new int[indexesLength];
+            inIndexes[0]=indexesLength*4;
+            for(int i=1; i<indexesLength; ++i) {
+                inIndexes[i]=ds.readInt();
+            }
+    
+            minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
+            minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
+    
+            minYesNo=inIndexes[IX_MIN_YES_NO];
+            minNoNo=inIndexes[IX_MIN_NO_NO];
+            limitNoNo=inIndexes[IX_LIMIT_NO_NO];
+            minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
+    
+            // Read the normTrie.
+            int offset=inIndexes[IX_NORM_TRIE_OFFSET];
+            int nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
+            normTrie=Trie2_16.createFromSerialized(ds);
+            int trieLength=normTrie.getSerializedLength();
+            if(trieLength>(nextOffset-offset)) {
+                throw new IOException("Normalizer2 data: not enough bytes for normTrie");
+            }
+            ds.skipBytes((nextOffset-offset)-trieLength);  // skip padding after trie bytes
+    
+            // Read the composition and mapping data.
+            offset=nextOffset;
+            nextOffset=inIndexes[IX_RESERVED2_OFFSET];
+            int numChars=(nextOffset-offset)/2;
+            char[] chars;
+            if(numChars!=0) {
+                chars=new char[numChars];
+                for(int i=0; i<numChars; ++i) {
+                    chars[i]=ds.readChar();
+                }
+                maybeYesCompositions=new String(chars);
+                extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
+            }
+            data.close();
+            return this;
+        } catch(IOException e) {
+            throw new RuntimeException(e);
         }
-        data.close();
-        return this;
     }
-    public Normalizer2Impl load(String name) throws IOException {
+    public Normalizer2Impl load(String name) {
         return load(ICUData.getRequiredStream(name));
     }
 

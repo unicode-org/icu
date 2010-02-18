@@ -48,7 +48,7 @@ public final class CanonicalIterator {
      * @stable ICU 2.4
      */
     public CanonicalIterator(String source) {
-        Norm2AllModes allModes = Norm2AllModes.getNFCInstanceNoIOException();
+        Norm2AllModes allModes = Norm2AllModes.getNFCInstance();
         nfd = allModes.decomp;
         nfcImpl = allModes.impl.ensureCanonIterData();
         setSource(source);

@@ -852,7 +852,7 @@ public final class CollationElementIterator
     private StringBuilder m_utilStringBuffer_;
     private StringBuilder m_utilSkippedBuffer_;
     private CollationElementIterator m_utilColEIter_;
-    private static final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private static final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstance().impl;
     private StringBuilder m_unnormalized_;
     private Normalizer2Impl.ReorderingBuffer m_n2Buffer_;
     /**
