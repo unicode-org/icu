@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"1.7.1"}
+    cldrVersion{"1.8"}
     languageData{
         aa{
             primary{
@@ -439,6 +439,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        asa{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "TZ",
+                }
+            }
+        }
         ast{
             primary{
                 scripts{
@@ -612,6 +622,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "ID",
+                }
+            }
+        }
+        bez{
+            secondary{
+                territories{
+                    "TZ",
                 }
             }
         }
@@ -1048,6 +1065,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "US",
+                }
+            }
         }
         chy{
             primary{
@@ -1384,6 +1406,16 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BT",
+                }
+            }
+        }
+        ebu{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "KE",
                 }
             }
         }
@@ -8609,6 +8641,10 @@ supplementalData:table(nofallback){
             aliases{
                 "Europe/Nicosia",
             }
+        }
+        "Asia:Novokuznetsk"{
+            canonical{"Asia/Novokuznetsk"}
+            territory{"RU"}
         }
         "Asia:Novosibirsk"{
             canonical{"Asia/Novosibirsk"}

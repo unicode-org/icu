@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/om.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/om.xml
  */
 om{
-    ExemplarCharacters{"[a-z]"}
+    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -20,9 +20,35 @@ om{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "WD",
+                "WB",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y",
+                "dd MMMM y",
+                "dd-MMM-y",
+                "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyMM{"MM/yy"}
+                yyQ{"Q yy"}
+                yyyyMMMM{"MMMM y"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -42,6 +68,17 @@ om{
                         "Kamiisa",
                         "Jimaata",
                         "Sanbata",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
                     }
                 }
             }
@@ -80,6 +117,38 @@ om{
                         "Onkololeessa",
                         "Sadaasa",
                         "Muddee",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

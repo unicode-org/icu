@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hu.xml
@@ -449,6 +449,7 @@ hu{
         sux{"sumér"}
         sv{"svéd"}
         sw{"szuahéli"}
+        swb{"comorei"}
         syc{"klasszikus szír"}
         syr{"szíriai"}
         ta{"tamil"}
@@ -510,6 +511,7 @@ hu{
         yi{"jiddis"}
         yo{"joruba"}
         ypk{"jupik nyelv"}
+        yue{"kantoni"}
         za{"zsuang"}
         zap{"zapoték"}
         zbl{"Bliss jelképrendszer"}
@@ -694,6 +696,7 @@ hu{
         NEDIS{"Natisone dialektus"}
         NJIVA{"Gniva/Njiva tájszólás"}
         OSOJS{"Oseacco/Osojane tájszólás"}
+        PINYIN{"pinjin átírás"}
         POLYTON{"Politonikus"}
         POSIX{"Számítógép"}
         REVISED{"Átdolgozott helyesírás"}
@@ -704,8 +707,9 @@ hu{
         SOLBA{"Stolvizza/Solbica tájszólás"}
         TARASK{"Taraskijevica helyesírás"}
         VALENCIA{"Valencia"}
+        WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -44,6 +44,7 @@ sv{
         172{"Oberoende staters samvälde"}
         419{"Latinamerika och Karibien"}
         830{"Kanalöarna"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"Förenade Arabemiraten"}
         AF{"Afghanistan"}
@@ -93,6 +94,7 @@ sv{
         CM{"Kamerun"}
         CN{"Kina"}
         CO{"Colombia"}
+        CP{"Clippertonön"}
         CR{"Costa Rica"}
         CS{"Serbien och Montenegro"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ sv{
         CY{"Cypern"}
         CZ{"Tjeckien"}
         DE{"Tyskland"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Danmark"}
         DM{"Dominica"}
         DO{"Dominikanska republiken"}
         DZ{"Algeriet"}
+        EA{"Ceuta och Melilla"}
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Egypten"}
@@ -113,6 +117,7 @@ sv{
         ER{"Eritrea"}
         ES{"Spanien"}
         ET{"Etiopien"}
+        EU{"Europeiska unionen"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandsöarna"}
@@ -144,6 +149,7 @@ sv{
         HR{"Kroatien"}
         HT{"Haiti"}
         HU{"Ungern"}
+        IC{"Kanarieöarna"}
         ID{"Indonesien"}
         IE{"Irland"}
         IL{"Israel"}
@@ -232,7 +238,6 @@ sv{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Yttre öar i Oceanien"}
-        QU{"Europeiska unionen"}
         RE{"Réunion"}
         RO{"Rumänien"}
         RS{"Serbien"}
@@ -257,6 +262,7 @@ sv{
         SV{"El Salvador"}
         SY{"Syrien"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- och Caicosöarna"}
         TD{"Tchad"}
         TF{"Franska Sydterritorierna"}
@@ -295,5 +301,5 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd eller ogiltig regionkod"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.49"}
 }

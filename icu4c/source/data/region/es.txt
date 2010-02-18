@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es.xml
@@ -43,6 +43,7 @@ es{
         155{"Europa occidental"}
         172{"Comunidad de Estados Independientes"}
         419{"Latinoamérica y el Caribe"}
+        AC{"Isla de la Ascensión"}
         AD{"Andorra"}
         AE{"Emiratos Árabes Unidos"}
         AF{"Afganistán"}
@@ -84,7 +85,7 @@ es{
         CC{"Islas Cocos"}
         CD{"República Democrática del Congo"}
         CF{"República Centroafricana"}
-        CG{"Congo"}
+        CG{"Congo - Brazzaville"}
         CH{"Suiza"}
         CI{"Costa de Marfil"}
         CK{"Islas Cook"}
@@ -92,6 +93,7 @@ es{
         CM{"Camerún"}
         CN{"China"}
         CO{"Colombia"}
+        CP{"Isla Clipperton"}
         CR{"Costa Rica"}
         CS{"Serbia y Montenegro"}
         CU{"Cuba"}
@@ -100,11 +102,13 @@ es{
         CY{"Chipre"}
         CZ{"República Checa"}
         DE{"Alemania"}
+        DG{"Diego García"}
         DJ{"Yibuti"}
         DK{"Dinamarca"}
         DM{"Dominica"}
         DO{"República Dominicana"}
         DZ{"Argelia"}
+        EA{"Ceuta y Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egipto"}
@@ -112,6 +116,7 @@ es{
         ER{"Eritrea"}
         ES{"España"}
         ET{"Etiopía"}
+        EU{"Unión Europea"}
         FI{"Finlandia"}
         FJ{"Fiyi"}
         FK{"Islas Malvinas"}
@@ -146,6 +151,7 @@ es{
         HR{"Croacia"}
         HT{"Haití"}
         HU{"Hungría"}
+        IC{"Islas Canarias"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -191,7 +197,7 @@ es{
         MH{"Islas Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Birmania]"}
         MN{"Mongolia"}
         MO{"Región Administrativa Especial de Macao de la República Popular China"}
         MP{"Islas Marianas del Norte"}
@@ -228,13 +234,12 @@ es{
         PM{"San Pedro y Miquelón"}
         PN{"Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palestina"}
+        PS{"Territorios Palestinos"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Territorios alejados de Oceanía"}
-        QU{"Unión Europea"}
         RE{"Reunión"}
         RO{"Rumanía"}
         RS{"Serbia"}
@@ -259,6 +264,7 @@ es{
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Suazilandia"}
+        TA{"Tristán da Cunha"}
         TC{"Islas Turcas y Caicos"}
         TD{"Chad"}
         TF{"Territorios Australes Franceses"}
@@ -297,5 +303,5 @@ es{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida o no válida"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

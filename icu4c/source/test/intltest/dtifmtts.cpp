@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -834,14 +834,14 @@ void DateIntervalFormatTest::testFormat() {
         "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "EEEEdMMM", "Mittwoch 10. Jan", 
         
         
-        "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "10-14", 
+        "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "10 vorm. - 2 nachm.", 
         
         "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "EEEEdMMM", "Mittwoch 10. Jan", 
         
         
-        "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "10:00-10:20 Vereinigte Staaten (Los Angeles)", 
+        "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "10:00-10:20 vorm. Vereinigte Staaten (Los Angeles)", 
         
-        "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmz", "10:00-10:20 GMT-08:00", 
+        "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmz", "10:00-10:20 vorm. GMT-08:00", 
         
         "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "10", 
         

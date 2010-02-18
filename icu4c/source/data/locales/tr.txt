@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -10,11 +10,9 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    AuxExemplarCharacters{
-        "[á à ă â å ä ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ß ú ù ŭ û ū w x ÿ"
-        "]"
-    }
-    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ {i\u0307} j-o ö p r s ş t u ü v y z]"}
+    AuxExemplarCharacters{"[á à ă â å ä ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ú ù ŭ û ū w x ÿ]"}
+    ExemplarCharacters{"[a b c ç d e f g ğ h ı i {i\u0307} j k l m n o ö p r s ş t u ü v y z]"}
+    ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -38,7 +36,7 @@ tr{
         "% #,##0",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         chinese{
             availableFormats{
@@ -110,10 +108,11 @@ tr{
             availableFormats{
                 EEEd{"d EEE"}
                 Ed{"d E"}
-                H{"H"}
+                H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"dd/MM E"}
                 MMM{"LLL"}
@@ -125,6 +124,8 @@ tr{
                 d{"d"}
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
@@ -152,6 +153,15 @@ tr{
                         "Cum",
                         "Cmt",
                     }
+                    narrow{
+                        "P",
+                        "P",
+                        "S",
+                        "Ç",
+                        "P",
+                        "C",
+                        "C",
+                    }
                     wide{
                         "Pazar",
                         "Pazartesi",
@@ -163,6 +173,15 @@ tr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Paz",
+                        "Pzt",
+                        "Sal",
+                        "Çar",
+                        "Per",
+                        "Cum",
+                        "Cmt",
+                    }
                     narrow{
                         "P",
                         "P",
@@ -172,10 +191,23 @@ tr{
                         "C",
                         "C",
                     }
+                    wide{
+                        "Pazar",
+                        "Pazartesi",
+                        "Salı",
+                        "Çarşamba",
+                        "Perşembe",
+                        "Cuma",
+                        "Cumartesi",
+                    }
                 }
             }
             eras{
                 abbreviated{
+                    "MÖ",
+                    "MS",
+                }
+                narrow{
                     "MÖ",
                     "MS",
                 }
@@ -229,6 +261,24 @@ tr{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH-HH"}
+                    a{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    a{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    a{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                    a{"HH-HH v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -259,22 +309,22 @@ tr{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"HH-HH"}
-                    h{"HH-HH"}
+                    a{"h a - h a"}
+                    h{"h-h a"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"HH-HH v"}
-                    h{"HH-HH v"}
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y-y"}
@@ -328,6 +378,20 @@ tr{
                         "Kas",
                         "Ara",
                     }
+                    narrow{
+                        "O",
+                        "Ş",
+                        "M",
+                        "N",
+                        "M",
+                        "H",
+                        "T",
+                        "A",
+                        "E",
+                        "E",
+                        "K",
+                        "A",
+                    }
                     wide{
                         "Ocak",
                         "Şubat",
@@ -344,6 +408,20 @@ tr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Oca",
+                        "Şub",
+                        "Mar",
+                        "Nis",
+                        "May",
+                        "Haz",
+                        "Tem",
+                        "Ağu",
+                        "Eyl",
+                        "Eki",
+                        "Kas",
+                        "Ara",
+                    }
                     narrow{
                         "O",
                         "Ş",
@@ -357,6 +435,20 @@ tr{
                         "E",
                         "K",
                         "A",
+                    }
+                    wide{
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık",
                     }
                 }
             }
@@ -376,11 +468,23 @@ tr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Ç1",
+                        "Ç2",
+                        "Ç3",
+                        "Ç4",
+                    }
                     narrow{
                         "1",
                         "2",
                         "3",
                         "4",
+                    }
+                    wide{
+                        "1. çeyrek",
+                        "2. çeyrek",
+                        "3. çeyrek",
+                        "4. çeyrek",
                     }
                 }
             }
@@ -388,6 +492,88 @@ tr{
         hebrew{
             monthNames{
                 format{
+                    abbreviated{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    narrow{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    wide{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    narrow{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
                     wide{
                         "Tişri",
                         "Heşvan",
@@ -410,6 +596,114 @@ tr{
         islamic{
             monthNames{
                 format{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
                     wide{
                         "Muharrem",
                         "Safer",
@@ -430,6 +724,50 @@ tr{
         persian{
             monthNames{
                 format{
+                    abbreviated{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
+                    }
+                    wide{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
+                    }
                     wide{
                         "Ferverdin",
                         "Ordibeheşt",

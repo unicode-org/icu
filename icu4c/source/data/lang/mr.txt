@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mr.xml
@@ -137,7 +137,7 @@ mr{
         en{"इंग्रजी"}
         en_AU{"ऑस्ट्रेलियन इंग्रजी"}
         en_CA{"कॅनेडियन इंग्रजी"}
-        en_GB{"ब्रिटिश इंग्रजी"}
+        en_GB{"इंग्रजी (यूके)"}
         en_US{"यू. एस. इंग्रजी"}
         enm{"मिडल इंग्रजी"}
         eo{"एस्परान्टो"}
@@ -444,6 +444,7 @@ mr{
         sux{"सुमेरियन"}
         sv{"स्वीडिश"}
         sw{"स्वाहिली"}
+        swb{"कोमोरियन"}
         syc{"अभिजात सिरियाक"}
         syr{"सिरियाक"}
         ta{"तमिळ"}
@@ -505,6 +506,7 @@ mr{
         yi{"यिद्दिश"}
         yo{"योरुबा"}
         ypk{"यूपिक भाषा"}
+        yue{"कँटोनीज"}
         za{"झुआंग"}
         zap{"झेपोटेक"}
         zbl{"ब्लिसिम्बॉल्स"}
@@ -650,5 +652,9 @@ mr{
         Zyyy{"सामान्य"}
         Zzzz{"अज्ञात वा अवैध लिपी"}
     }
-    Version{"2.0.42.82"}
+    Variants{
+        PINYIN{"पिनयिन रोमनायझेशन"}
+        WADEGILE{"वादे-गिलेस रोमनायझेशन"}
+    }
+    Version{"2.0.46.51"}
 }

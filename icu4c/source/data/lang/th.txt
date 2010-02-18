@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/th.xml
@@ -448,6 +448,7 @@ th{
         sux{"ซูเมอ"}
         sv{"สวีเดน"}
         sw{"สวาฮีลี"}
+        swb{"โคเมอเรียน"}
         syc{"ซีเรียแบบดั้งเดิม"}
         syr{"ซีเรีย"}
         ta{"ทมิฬ"}
@@ -509,6 +510,7 @@ th{
         yi{"ยิว"}
         yo{"โยรูบา"}
         ypk{"ภาษาอูย์ปิค"}
+        yue{"กวางตุ้ง"}
         za{"จ้วง"}
         zap{"ซาโปเตก"}
         zbl{"บลิสซิมโบลส์"}
@@ -683,13 +685,14 @@ th{
         AREVMDA{"อาร์เมเนียตะวันตก"}
         FONIPA{"สัทอักษรสากล"}
         NEDIS{"ภาษาพื้นเมืองนาทิโซเน"}
+        PINYIN{"พินอิน"}
         POLYTON{"โพลีโทนิก"}
         POSIX{"คอมพิวเตอร์"}
         REVISED{"ออร์โธกราฟิปรับปรุง"}
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

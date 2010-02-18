@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -14,7 +14,8 @@ lt{
         "[{į\u0307} {i\u0307} {i\u0307\u0301} {i\u0307\u0300} {i\u0307\u0303} {j"
         "\u0307} q w x]"
     }
-    ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]"}
+    ExemplarCharacters{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
+    ExemplarCharactersCurrency{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
     LocaleScript{
         "Latn",
     }
@@ -26,10 +27,10 @@ lt{
         "0",
         "#",
         "−",
-        "E",
+        "×10^",
         "‰",
         "∞",
-        "NaN",
+        "¤¤¤",
         "+",
     }
     NumberPatterns{
@@ -38,13 +39,9 @@ lt{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.46"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "ryte",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -102,6 +99,15 @@ lt{
                         "Pn",
                         "Št",
                     }
+                    narrow{
+                        "S",
+                        "P",
+                        "A",
+                        "T",
+                        "K",
+                        "P",
+                        "Š",
+                    }
                     wide{
                         "sekmadienis",
                         "pirmadienis",
@@ -113,6 +119,15 @@ lt{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Sk",
+                        "Pi",
+                        "A",
+                        "T",
+                        "K",
+                        "Pe",
+                        "Š",
+                    }
                     narrow{
                         "S",
                         "P",
@@ -122,11 +137,24 @@ lt{
                         "P",
                         "Š",
                     }
+                    wide{
+                        "sekmadienis",
+                        "pirmadienis",
+                        "antradienis",
+                        "trečiadienis",
+                        "ketvirtadienis",
+                        "penktadienis",
+                        "šeštadienis",
+                    }
                 }
             }
             eras{
                 abbreviated{
                     "pr. Kr.",
+                    "po Kr.",
+                }
+                narrow{
+                    "po Kr.",
                     "po Kr.",
                 }
                 wide{
@@ -179,6 +207,20 @@ lt{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -206,18 +248,18 @@ lt{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    h{"HH-HH"}
+                    h{"h-h a"}
                 }
                 hm{
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    h{"HH-HH v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y-y"}
@@ -267,22 +309,50 @@ lt{
                         "Lap",
                         "Grd",
                     }
+                    narrow{
+                        "S",
+                        "V",
+                        "K",
+                        "B",
+                        "G",
+                        "B",
+                        "L",
+                        "R",
+                        "R",
+                        "S",
+                        "L",
+                        "G",
+                    }
                     wide{
-                        "sausio",
-                        "vasario",
-                        "kovo",
-                        "balandžio",
-                        "gegužės",
-                        "birželio",
-                        "liepos",
-                        "rugpjūčio",
-                        "rugsėjo",
-                        "spalio",
-                        "lapkričio",
-                        "gruodžio",
+                        "sausis",
+                        "vasaris",
+                        "kovas",
+                        "balandis",
+                        "gegužė",
+                        "birželis",
+                        "liepa",
+                        "rugpjūtis",
+                        "rugsėjis",
+                        "spalis",
+                        "lapkritis",
+                        "gruodis",
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Saus.",
+                        "Vas.",
+                        "kov",
+                        "Bal.",
+                        "Geg.",
+                        "Bir.",
+                        "Liep.",
+                        "Rugpj.",
+                        "Rugs.",
+                        "Spal.",
+                        "Lapkr.",
+                        "Gruod.",
+                    }
                     narrow{
                         "S",
                         "V",
@@ -334,6 +404,12 @@ lt{
                         "2K",
                         "3K",
                         "4K",
+                    }
+                    wide{
+                        "pirmasis ketvirtis",
+                        "antrasis ketvirtis",
+                        "trečiasis ketvirtis",
+                        "ketvirtasis ketvirtis",
                     }
                 }
             }

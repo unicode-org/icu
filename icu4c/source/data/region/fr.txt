@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr.xml
@@ -44,6 +44,7 @@ fr{
         172{"Communauté des États indépendants"}
         419{"Amérique latine et Caraïbes"}
         830{"Îles Anglo-normandes"}
+        AC{"Île de l'Ascension"}
         AD{"Andorre"}
         AE{"Émirats arabes unis"}
         AF{"Afghanistan"}
@@ -85,7 +86,7 @@ fr{
         CC{"Îles Cocos - Keeling"}
         CD{"République démocratique du Congo"}
         CF{"République centrafricaine"}
-        CG{"Congo"}
+        CG{"Congo-Brazzaville"}
         CH{"Suisse"}
         CI{"Côte d’Ivoire"}
         CK{"Îles Cook"}
@@ -93,6 +94,7 @@ fr{
         CM{"Cameroun"}
         CN{"Chine"}
         CO{"Colombie"}
+        CP{"Île Clipperton"}
         CR{"Costa Rica"}
         CS{"Serbie-et-Monténégro"}
         CU{"Cuba"}
@@ -101,11 +103,13 @@ fr{
         CY{"Chypre"}
         CZ{"République tchèque"}
         DE{"Allemagne"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Danemark"}
         DM{"Dominique"}
         DO{"République dominicaine"}
         DZ{"Algérie"}
+        EA{"Ceuta et Melilla"}
         EC{"Équateur"}
         EE{"Estonie"}
         EG{"Égypte"}
@@ -113,6 +117,7 @@ fr{
         ER{"Érythrée"}
         ES{"Espagne"}
         ET{"Éthiopie"}
+        EU{"Union européenne"}
         FI{"Finlande"}
         FJ{"Fidji"}
         FK{"Îles Malouines"}
@@ -144,6 +149,7 @@ fr{
         HR{"Croatie"}
         HT{"Haïti"}
         HU{"Hongrie"}
+        IC{"Îles Canaries"}
         ID{"Indonésie"}
         IE{"Irlande"}
         IL{"Israël"}
@@ -232,7 +238,6 @@ fr{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"régions éloignées de l’Océanie"}
-        QU{"Union européenne"}
         RE{"Réunion"}
         RO{"Roumanie"}
         RS{"Serbie"}
@@ -257,6 +262,7 @@ fr{
         SV{"El Salvador"}
         SY{"Syrie"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Îles Turks et Caïques"}
         TD{"Tchad"}
         TF{"Terres australes françaises"}
@@ -295,5 +301,5 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

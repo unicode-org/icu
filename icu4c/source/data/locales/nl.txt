@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nl.xml
@@ -11,7 +11,11 @@
  */
 nl{
     AuxExemplarCharacters{"[å ã ç ñ ô]"}
-    ExemplarCharacters{"[a á ä b-e é ë f-i í ï {ij} j-o ó ö p-u ú ü v-z]"}
+    ExemplarCharacters{
+        "[a á ä b c d e é ë f g h i í ï {ij} j k l m n o ó ö p q r s t u ú ü v w x y "
+        "z]"
+    }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +39,7 @@ nl{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -126,7 +130,7 @@ nl{
                 }
                 wide{
                     "Voor Christus",
-                    "Anno Domini",
+                    "na Christus",
                 }
             }
             fields{
@@ -174,6 +178,24 @@ nl{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH-HH"}
+                    a{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    a{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    a{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                    a{"HH-HH v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -204,22 +226,22 @@ nl{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"HH-HH"}
-                    h{"HH-HH"}
+                    a{"h a - h a"}
+                    h{"h-h a"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"HH-HH v"}
-                    h{"HH-HH v"}
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y-y"}

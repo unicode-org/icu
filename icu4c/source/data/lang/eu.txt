@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eu.xml
@@ -31,7 +31,7 @@ eu{
         cs{"txekiera"}
         cy{"galesera"}
         da{"daniera"}
-        de{"alemanera"}
+        de{"alemana"}
         el{"greziera"}
         en{"ingelera"}
         en_AU{"ingelesa (Australia)"}
@@ -45,7 +45,7 @@ eu{
         fi{"finlandiera"}
         fil{"tagalo"}
         fo{"faroera"}
-        fr{"frantsesera"}
+        fr{"frantsesa"}
         fy{"frisiarra"}
         ga{"gaelikoa"}
         gd{"eskoziar gaelikoa"}
@@ -108,6 +108,7 @@ eu{
         su{"sundanera"}
         sv{"suediera"}
         sw{"swahili"}
+        swb{"swb"}
         ta{"tamilera"}
         te{"telugua"}
         th{"thailandiera"}
@@ -124,6 +125,7 @@ eu{
         vi{"vietnamera"}
         xh{"xhosa"}
         yi{"yiddishera"}
+        yue{"yue"}
         zh{"txinera"}
         zh_Hans{"txinera (soildua)"}
         zh_Hant{"txinera (tradizionala)"}
@@ -161,12 +163,14 @@ eu{
         Geor{"Geor"}
         Glag{"Glag"}
         Goth{"Goth"}
-        Grek{"Grez"}
+        Grek{"Grek"}
         Gujr{"Gujr"}
         Guru{"Guru"}
         Hang{"Hang"}
         Hani{"Hani"}
         Hano{"Hano"}
+        Hans{"Hans"}
+        Hant{"Hant"}
         Hebr{"Hebr"}
         Hira{"Hira"}
         Hrkt{"Hrkt"}
@@ -209,7 +213,9 @@ eu{
         Syrn{"Syrn"}
         Talu{"Talu"}
         Zmth{"Zmth"}
+        Zxxx{"Zxxx"}
         Zyyy{"Zyyy"}
+        Zzzz{"Zzzz"}
     }
     Types{
         calendar{
@@ -238,7 +244,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

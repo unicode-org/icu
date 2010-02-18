@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/et.xml
@@ -200,7 +200,7 @@ et{
             "Küprose nael",
         }
         CZK{
-            "Kč",
+            "CZK",
             "Tšehhi kroon",
         }
         DEM{
@@ -208,7 +208,7 @@ et{
             "Saksa mark",
         }
         DKK{
-            "Dkr",
+            "DKK",
             "Taani kroon",
         }
         DZD{
@@ -221,7 +221,7 @@ et{
         }
         EEK{
             "kr",
-            "kroon",
+            "Eesti kroon",
             {
                 /**
                  * Duplicated from NumberPatterns resource
@@ -491,7 +491,7 @@ et{
             "Hollandi kulden",
         }
         NOK{
-            "Nkr",
+            "NOK",
             "Norra kroon",
         }
         NPR{
@@ -595,7 +595,7 @@ et{
             "Sudaani nael",
         }
         SEK{
-            "Skr",
+            "SEK",
             "Rootsi kroon",
         }
         SGD{
@@ -746,9 +746,25 @@ et{
             "XBA",
             "EURCO",
         }
+        XBB{
+            "XBB",
+            "Euroopa rahaühik",
+        }
+        XBC{
+            "XBC",
+            "Euroopa rahaline arvestusühik (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Euroopa rahaline arvestusühik (XBD)",
+        }
         XCD{
             "EC$",
             "Ida-Kariibi dollar",
+        }
+        XDR{
+            "XDR",
+            "Rahvusvahelise Valuutafondi arvestusühik",
         }
         XEU{
             "XEU" /** ===  */,
@@ -757,6 +773,10 @@ et{
         XFO{
             "XFO",
             "Prantsuse kuldfrank",
+        }
+        XFU{
+            "XFU",
+            "Prantsuse UIC-frank",
         }
         XPD{
             "XPD",
@@ -803,5 +823,55 @@ et{
             "Zimbabwe dollar",
         }
     }
-    Version{"2.0.42.82"}
+    CurrencyPlurals{
+        CZK{
+            one{"Tšehhi kroon"}
+            other{"Tšehhi krooni"}
+        }
+        DKK{
+            one{"Taani kroon"}
+            other{"Taani krooni"}
+        }
+        EEK{
+            one{"Eesti kroon"}
+            other{"Eesti krooni"}
+        }
+        EUR{
+            one{"euro"}
+            other{"eurot"}
+        }
+        NOK{
+            one{"Norra kroon"}
+            other{"Norra krooni"}
+        }
+        SEK{
+            one{"Rootsi kroon"}
+            other{"Rootsi krooni"}
+        }
+        SKK{
+            one{"Slovakkia kroon"}
+            other{"Slovakkia krooni"}
+        }
+        XAG{
+            one{"hõbe"}
+            other{"hõbedat"}
+        }
+        XAU{
+            one{"kuld"}
+            other{"kulda"}
+        }
+        XPD{
+            one{"pallaadium"}
+            other{"pallaadiumit"}
+        }
+        XPT{
+            one{"plaatina"}
+            other{"plaatina"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.0.46.51"}
 }

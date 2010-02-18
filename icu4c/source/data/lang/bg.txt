@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bg.xml
@@ -383,6 +383,8 @@ bg{
         pro{"провансалски"}
         ps{"пущу"}
         pt{"португалски"}
+        pt_BR{"бразилски португалски"}
+        pt_PT{"европейски португалски"}
         qu{"кечуа"}
         raj{"раджастански"}
         rap{"рапа нуи"}
@@ -447,6 +449,7 @@ bg{
         sux{"шумерски"}
         sv{"шведски"}
         sw{"суахили"}
+        swb{"коморски"}
         syc{"класически сирийски"}
         syr{"сирийски"}
         ta{"тамилски"}
@@ -508,6 +511,7 @@ bg{
         yi{"идиш"}
         yo{"йоруба"}
         ypk{"юпик"}
+        yue{"кантонски"}
         za{"зуанг"}
         zap{"запотек"}
         zbl{"блис символи"}
@@ -682,6 +686,7 @@ bg{
         NEDIS{"Диалект Натисоне"}
         NJIVA{"Диалект Нджива"}
         OSOJS{"Диалект Осеако/Осояне"}
+        PINYIN{"Пинин романизация"}
         POLYTON{"Политонично"}
         POSIX{"Компютърен"}
         REVISED{"Променен правопис"}
@@ -692,8 +697,9 @@ bg{
         SOLBA{"Диалект Столвиза"}
         TARASK{"Тарашкевица"}
         VALENCIA{"Валенсиански"}
+        WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

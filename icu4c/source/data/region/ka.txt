@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ka.xml
@@ -110,6 +110,7 @@ ka{
         ER{"ერიტრეა"}
         ES{"ესპანეთი"}
         ET{"ეთიოპია"}
+        EU{"ევროკავშირი"}
         FI{"ფინეთი"}
         FJ{"ფიჯი"}
         FK{"ფალკლენდის კუნძულები"}
@@ -223,7 +224,6 @@ ka{
         PY{"პარაგვაი"}
         QA{"კატარი"}
         QO{"დაშორებული ოკეანია"}
-        QU{"ევროკავშირი"}
         RE{"რეიუნიონი"}
         RO{"რუმინეთი"}
         RS{"სერბია"}
@@ -280,5 +280,5 @@ ka{
         ZW{"ზიმბაბვე"}
         ZZ{"უცნობი ან არასწორი რეგიონი"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.66"}
 }

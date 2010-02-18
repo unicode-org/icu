@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/or.xml
@@ -114,6 +114,7 @@ or{
         ER{"ଇରିଟ୍ରିୟା"}
         ES{"ସ୍ପେନ୍"}
         ET{"ଇଥିଓପିଆ"}
+        EU{"ୟୁରୋପିଆନ୍ ୟୁନିଅନ୍"}
         FI{"ଫିନଲ୍ୟାଣ୍ଡ"}
         FJ{"ଫିଜି"}
         FK{"ଫଲ୍କଲ୍ୟାଣ୍ଡ ଦ୍ବୀପପୁଞ୍ଜ"}
@@ -233,7 +234,6 @@ or{
         PY{"ପାରାଗୁଏ"}
         QA{"କତାର୍"}
         QO{"ଆଉଟଲେଇଂ ଓସେନିଆ"}
-        QU{"ୟୁରୋପିଆନ୍ ୟୁନିଅନ୍"}
         RE{"ରିୟୁନିଅନ୍"}
         RO{"ରୋମାନିଆ"}
         RS{"ସର୍ବିଆ"}
@@ -296,5 +296,5 @@ or{
         ZW{"ଜିମ୍ବାୱେ"}
         ZZ{"ଅଜଣା କିମ୍ବା ଅବୈଧ ପ୍ରଦେଶ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
 }

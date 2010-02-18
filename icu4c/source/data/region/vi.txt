@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/vi.xml
@@ -107,6 +107,7 @@ vi{
         ER{"Ê-ri-tơ-rê-a"}
         ES{"Tây Ban Nha"}
         ET{"Ê-ti-ô-pi-a"}
+        EU{"Liên Minh Châu Âu"}
         FI{"Phần Lan"}
         FJ{"Phi-gi"}
         FK{"Quần Đảo Falkland"}
@@ -218,7 +219,6 @@ vi{
         PY{"Pa-ra-goay"}
         QA{"Ca-ta"}
         QO{"Vùng xa xôi thuộc Châu Đại Dương"}
-        QU{"Liên Minh Châu Âu"}
         RE{"RE"}
         RO{"Ru-ma-ni"}
         RS{"Xéc-bi"}
@@ -281,5 +281,5 @@ vi{
         ZW{"Dim-ba-bu-ê"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
 }

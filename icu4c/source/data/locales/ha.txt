@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ha.xml
@@ -11,7 +11,8 @@
  */
 ha{
     AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r\u0303} ú ù û v x ƴ]"}
-    ExemplarCharacters{"[a b ɓ c d ɗ e-k ƙ l-o r s {sh} t {ts} u w y z ʼ {ʼy}]"}
+    ExemplarCharacters{"[a b ɓ c d ɗ e f g h i j k ƙ l m n o r s {sh} t {ts} u w y z ʼ {ʼy}]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ ha{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -58,35 +59,42 @@ ha{
                 "{1} {0}",
             }
             availableFormats{
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E, d-M"}
+                MEd{"E, M/d"}
                 MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"M-d"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
                 d{"d"}
+                hm{"h:mm a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yMEd{"EEE, d/M/yyyy"}
-                yMMMEd{"EEE, d MMM y"}
+                yM{"M/y"}
+                yMEd{"EEE, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
             }
             dayNames{
                 format{
                     abbreviated{
-                        "Lah",
-                        "Lit",
-                        "Tal",
-                        "Lar",
-                        "Alh",
-                        "Jum",
-                        "Asa",
+                        "Lh",
+                        "Li",
+                        "Ta",
+                        "Lr",
+                        "Al",
+                        "Ju",
+                        "As",
                     }
                     wide{
                         "Lahadi",
-                        "Litini",
+                        "Litinin",
                         "Talata",
                         "Laraba",
                         "Alhamis",
@@ -106,17 +114,67 @@ ha{
                     }
                 }
             }
+            eras{
+                abbreviated{
+                    "KHAI",
+                    "BHAI",
+                }
+                wide{
+                    "Kafin haihuwar annab",
+                    "Bayan haihuwar annab",
+                }
+            }
+            fields{
+                day{
+                    dn{"Kwana"}
+                    relative{
+                        "-1"{"Jiya"}
+                        "0"{"Yau"}
+                        "1"{"Gobe"}
+                    }
+                }
+                dayperiod{
+                    dn{"Yini"}
+                }
+                era{
+                    dn{"Zamani"}
+                }
+                hour{
+                    dn{"Awa"}
+                }
+                minute{
+                    dn{"Minti"}
+                }
+                month{
+                    dn{"Wata"}
+                }
+                second{
+                    dn{"Daƙiƙa"}
+                }
+                week{
+                    dn{"Mako"}
+                }
+                weekday{
+                    dn{"Rana"}
+                }
+                year{
+                    dn{"Shekara"}
+                }
+                zone{
+                    dn{"Agogo"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
                         "Jan",
                         "Fab",
                         "Mar",
-                        "Afr",
+                        "Afi",
                         "May",
                         "Yun",
                         "Yul",
-                        "Aug",
+                        "Agu",
                         "Sat",
                         "Okt",
                         "Nuw",
@@ -124,13 +182,13 @@ ha{
                     }
                     wide{
                         "Janairu",
-                        "Fabrairu",
+                        "Faburairu",
                         "Maris",
-                        "Afrilu",
+                        "Afirilu",
                         "Mayu",
                         "Yuni",
                         "Yuli",
-                        "Augusta",
+                        "Agusta",
                         "Satumba",
                         "Oktoba",
                         "Nuwamba",
@@ -155,6 +213,20 @@ ha{
                 }
             }
             quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "Kwata na ɗaya",
+                        "Kwata na biyu",
+                        "Kwata na uku",
+                        "Kwata na huɗu",
+                    }
+                }
                 stand-alone{
                     narrow{
                         "1",
@@ -165,5 +237,11 @@ ha{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"'"}
+        quotationStart{"'"}
     }
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -447,6 +447,7 @@ ja{
         sux{"シュメール語"}
         sv{"スウェーデン語"}
         sw{"スワヒリ語"}
+        swb{"コモロ語"}
         syr{"シリア語"}
         ta{"タミール語"}
         tai{"タイ諸語"}
@@ -507,6 +508,7 @@ ja{
         yi{"イディッシュ語"}
         yo{"ヨルバ語"}
         ypk{"ユピック語族"}
+        yue{"広東語"}
         za{"チワン語"}
         zap{"ザポテック語"}
         zen{"ゼナガ語"}
@@ -658,6 +660,7 @@ ja{
         FONUPA{"ウラル音声記号"}
         MONOTON{"モノトニック"}
         NEDIS{"ナティゾーネ方言"}
+        PINYIN{"ピン音 (ローマ字表記法)"}
         POLYTON{"ポリトニック"}
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
@@ -665,8 +668,9 @@ ja{
         SAAHO{"サホ語"}
         SCOUSE{"リバプール方言"}
         VALENCIA{"バレンシア方言"}
+        WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.59"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

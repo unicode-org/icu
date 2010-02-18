@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_HK.xml
@@ -24,11 +24,8 @@ zh_Hant_HK{
         1901{"傳統德國拼字法"}
         1996{"1996 德國拼字法"}
         BISKE{"San Giorgio/Bila 方言"}
-        NJIVA{"Gniva/Njiva 方言"}
-        OSOJS{"Oseacco/Osojane 方言"}
         REVISED{"已修訂拼字法"}
         SCOTLAND{"蘇格蘭標準英語"}
-        SOLBA{"Stolvizza/Solbica 方言"}
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.46.25"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/af.xml
@@ -10,7 +10,8 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-o ô ö p-u û v-z]"}
+    ExemplarCharacters{"[a á â b c d e é è ê ë f g h i î ï j k l m n o ô ö p q r s t u û v w x y z]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -34,7 +35,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -44,17 +45,40 @@ af{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
-                "HH:mm:ss",
-                "HH:mm",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE dd MMMM y",
-                "y MMMM d",
-                "y MMM d",
+                "dd MMMM y",
+                "dd MMM y",
                 "yyyy-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"EEE, y-M-d"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
             }
             dayNames{
                 format{
@@ -67,6 +91,15 @@ af{
                         "Vr",
                         "Sa",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "D",
+                        "W",
+                        "D",
+                        "V",
+                        "S",
+                    }
                     wide{
                         "Sondag",
                         "Maandag",
@@ -77,11 +110,63 @@ af{
                         "Saterdag",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "D",
+                        "W",
+                        "D",
+                        "V",
+                        "S",
+                    }
+                }
             }
             eras{
                 abbreviated{
                     "v.C.",
                     "n.C.",
+                }
+                wide{
+                    "voor Christus",
+                    "na Christus",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dag"}
+                    relative{
+                        "-1"{"Gister"}
+                        "0"{"Vandag"}
+                        "1"{"Môre"}
+                    }
+                }
+                dayperiod{
+                    dn{"AM/PM"}
+                }
+                hour{
+                    dn{"Uur"}
+                }
+                minute{
+                    dn{"Minuut"}
+                }
+                month{
+                    dn{"Maand"}
+                }
+                second{
+                    dn{"Sekonde"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Weeksdag"}
+                }
+                year{
+                    dn{"Jaar"}
+                }
+                zone{
+                    dn{"Tydsone"}
                 }
             }
             monthNames{
@@ -100,6 +185,20 @@ af{
                         "Nov",
                         "Des",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "Januarie",
                         "Februarie",
@@ -115,11 +214,55 @@ af{
                         "Desember",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1ste kwartaal",
+                        "2de kwartaal",
+                        "3de kwartaal",
+                        "4de kwartaal",
+                    }
+                }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
     measurementSystemNames{
         US{"VSA"}
         metric{"Metriek"}
+    }
+    units{
+        day{
+            one{"{0} dag"}
+            other{"{0} dae"}
+        }
     }
 }

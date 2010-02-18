@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -44,6 +44,7 @@ lt{
         172{"Nepriklausomų Valstybių Sandrauga"}
         200{"Čekoslovakija"}
         419{"Lotynų Amerika ir Karibai"}
+        AC{"Ascension sala"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
         AF{"Afganistanas"}
@@ -93,6 +94,7 @@ lt{
         CM{"Kamerūnas"}
         CN{"Kinija"}
         CO{"Kolumbija"}
+        CP{"Clipperton sala"}
         CR{"Kosta Rika"}
         CS{"Serbija ir Juodkalnija"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ lt{
         CY{"Kipras"}
         CZ{"Čekija"}
         DE{"Vokietija"}
+        DG{"Diego Garcia"}
         DJ{"Džibutis"}
         DK{"Danija"}
         DM{"Dominika"}
         DO{"Dominikos Respublika"}
         DZ{"Alžyras"}
+        EA{"Ceuta ir Melilla"}
         EC{"Ekvadoras"}
         EE{"Estija"}
         EG{"Egiptas"}
@@ -113,6 +117,7 @@ lt{
         ER{"Eritrėja"}
         ES{"Ispanija"}
         ET{"Etiopija"}
+        EU{"Europos Sąjunga"}
         FI{"Suomija"}
         FJ{"Fidžis"}
         FK{"Falklando salos"}
@@ -138,12 +143,13 @@ lt{
         GU{"Guamas"}
         GW{"Bisau Gvinėja"}
         GY{"Gajana"}
-        HK{"Kinijos S.A.R.Honkongas"}
+        HK{"Kinijos S. A. R. Honkongas"}
         HM{"Heardo ir McDonaldo Salų Sritis"}
         HN{"Hondūras"}
         HR{"Kroatija"}
         HT{"Haitis"}
         HU{"Vengrija"}
+        IC{"Kanarų salos"}
         ID{"Indonezija"}
         IE{"Airija"}
         IL{"Izraelis"}
@@ -231,7 +237,7 @@ lt{
         PW{"Palau"}
         PY{"Paragvajus"}
         QA{"Kataras"}
-        QU{"Europos Sąjunga"}
+        QO{"Nuošali Okeanija"}
         RE{"Reunionas"}
         RO{"Rumunija"}
         RS{"Serbija"}
@@ -256,6 +262,7 @@ lt{
         SV{"Salvadoras"}
         SY{"Sirija"}
         SZ{"Svazilendas"}
+        TA{"Tristan da Cunha"}
         TC{"Turkso ir Caicoso salos"}
         TD{"Čadas"}
         TF{"Prancūzijos Pietų sritys"}
@@ -294,5 +301,5 @@ lt{
         ZW{"Zimbabvė"}
         ZZ{"Nežinoma ar neteisinga sritis"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.46"}
 }

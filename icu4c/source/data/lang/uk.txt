@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/uk.xml
@@ -449,6 +449,7 @@ uk{
         sux{"шумерська"}
         sv{"шведська"}
         sw{"суахілі"}
+        swb{"коморська"}
         syc{"сирійська класична"}
         syr{"сирійська"}
         ta{"тамільська"}
@@ -510,6 +511,7 @@ uk{
         yi{"ідиш"}
         yo{"йоруба"}
         ypk{"юпік мови"}
+        yue{"кантонська"}
         za{"чжуан"}
         zap{"сапотекська"}
         zbl{"блісса мова"}
@@ -694,6 +696,7 @@ uk{
         NEDIS{"Натісонський діалект"}
         NJIVA{"Діалект Нджіва"}
         OSOJS{"Осоянський діалект"}
+        PINYIN{"Романізація піньїн"}
         POLYTON{"Політонічний"}
         POSIX{"Комп'ютерний"}
         REVISED{"Нова орфографія"}
@@ -704,8 +707,9 @@ uk{
         SOLBA{"Діалект Столвіца/Солбіка"}
         TARASK{"Орфографія Тараскевича"}
         VALENCIA{"Валенсійська"}
+        WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     codePatterns{
         language{"Мова з кодом {0}"}
         script{"Скрипт із кодом {0}"}

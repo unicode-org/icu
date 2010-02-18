@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2009, International Business Machines
+ *   Copyright (C) 1996-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -624,7 +624,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(az),    /*  az  Azerbaijani               0x2c */
     ILCID_POSIX_MAP(ba),    /*  ba  Bashkir                   0x6d */
     ILCID_POSIX_MAP(be),    /*  be  Belarusian                0x23 */
-    ILCID_POSIX_MAP(ber),   /*  ber Berber/Tamazight          0x5f */
+/*    ILCID_POSIX_MAP(ber),     ber Berber/Tamazight          0x5f */
     ILCID_POSIX_MAP(bg),    /*  bg  Bulgarian                 0x02 */
     ILCID_POSIX_MAP(bn),    /*  bn  Bengali; Bangla           0x45 */
     ILCID_POSIX_MAP(bo),    /*  bo  Tibetan                   0x51 */

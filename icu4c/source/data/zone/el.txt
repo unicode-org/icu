@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/el.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}
@@ -900,7 +900,7 @@ el{
             ss{"SAMT (Σάμαρκαντ)"}
         }
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HHmm;-HHmm"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }
 }

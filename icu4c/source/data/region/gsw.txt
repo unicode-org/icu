@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gsw.xml
@@ -113,6 +113,7 @@ gsw{
         ER{"Äritreea"}
         ES{"Schpanie"}
         ET{"Äzioopie"}
+        EU{"Europääischi Unioon"}
         FI{"Finnland"}
         FJ{"Fitschi"}
         FK{"Falkland-Insle"}
@@ -232,7 +233,6 @@ gsw{
         PY{"Paraguai"}
         QA{"Ggatar"}
         QO{"Üssers Ozeaanie"}
-        QU{"Europääischi Unioon"}
         RE{"Reünioon"}
         RO{"Rumäänie"}
         RS{"Särbie"}
@@ -295,5 +295,5 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
 }

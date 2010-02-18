@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ne.xml
@@ -111,6 +111,7 @@ ne{
         ER{"एरित्रिया"}
         ES{"स्पेन"}
         ET{"इथोपिया"}
+        EU{"युरोपियन युनियन"}
         FI{"फिन्ल्याण्ड"}
         FJ{"फिजी"}
         FK{"फकल्याण्ड टापु"}
@@ -229,7 +230,6 @@ ne{
         PY{"प्यारागुये"}
         QA{"कटार"}
         QO{"बाह्य ओसनिया"}
-        QU{"युरोपियन युनियन"}
         RE{"रियुनियन"}
         RO{"रोमानिया"}
         RS{"सर्बिया"}
@@ -292,5 +292,5 @@ ne{
         ZW{"जिम्बाबे"}
         ZZ{"अपरिचित वा अवैध क्षेत्र"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
 }

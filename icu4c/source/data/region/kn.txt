@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kn.xml
@@ -114,6 +114,7 @@ kn{
         ER{"ಏರಿಟ್ರಿಯಾ"}
         ES{"ಸ್ಪೈನ್"}
         ET{"ಇಥಿಯೋಪಿಯಾ"}
+        EU{"ಯುರೋಪಿಯನ್ ಯೂನಿಯನ್"}
         FI{"ಫಿನ್‍‍ಲ್ಯಾಂಡ್"}
         FJ{"ಫಿಜಿ"}
         FK{"ಫ್ಹಾಕ್‌ಲ್ಯಾಂಡ್ ದ್ವೀಪಗಳು"}
@@ -233,7 +234,6 @@ kn{
         PY{"ಪರಾಗ್ವೇ"}
         QA{"ಕತಾರ್"}
         QO{"ಔಟ್‌ಲೈಯಿಂಗ್ ಓಶಿಯಾನಿಯಾ"}
-        QU{"ಯುರೋಪಿಯನ್ ಯೂನಿಯನ್"}
         RE{"ರೀಯೂನಿಯನ್"}
         RO{"ರೊಮ್ಯಾನಿಯಾ"}
         RS{"ಸೆರ್ಬಿಯಾ"}
@@ -296,5 +296,5 @@ kn{
         ZW{"ಜಿಂಬಾಬ್ವೆ"}
         ZZ{"ಅಪರಿಚಿತ ಅಥವಾ ಅಮಾನ್ಯ ಪ್ರದೇಶ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
 }

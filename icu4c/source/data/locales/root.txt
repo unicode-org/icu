@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -12,6 +12,7 @@
 root{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[]"}
+    ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
     LocaleScript{
         "Zyyy",
     }
@@ -40,13 +41,10 @@ root{
         297,
         210,
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -77,8 +75,8 @@ root{
             }
             availableFormats{
                 EEEd{"EEE d"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -113,10 +111,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         chinese{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -183,10 +178,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         coptic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -246,10 +238,7 @@ root{
         }
         default{"gregorian"}
         ethiopic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -308,10 +297,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         ethiopic-amete-alem{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -366,8 +352,8 @@ root{
             }
             availableFormats{
                 EEEd{"d EEE"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -468,6 +454,24 @@ root{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                    a{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    a{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    a{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                    a{"HH–HH v"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -498,22 +502,22 @@ root{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"HH–HH"}
-                    h{"HH–HH"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"HH:mm–HH:mm"}
-                    h{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"HH:mm–HH:mm v"}
-                    h{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"HH–HH v"}
-                    h{"HH–HH v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -621,10 +625,7 @@ root{
             }
         }
         hebrew{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -669,10 +670,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         indian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -728,10 +726,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         islamic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -747,7 +742,20 @@ root{
             monthNames{
                 default{"format"}
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
                     default{"wide"}
                     narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
@@ -788,10 +796,7 @@ root{
         }
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
         japanese{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -822,7 +827,7 @@ root{
             }
             availableFormats{
                 Ed{"E d"}
-                H{"H"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 MMMEd{"E MMM d"}
@@ -1322,10 +1327,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         persian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
@@ -1381,10 +1383,7 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         roc{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -1414,8 +1413,8 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}

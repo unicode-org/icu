@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/it.xml
@@ -446,6 +446,7 @@ it{
         sux{"sumero"}
         sv{"svedese"}
         sw{"swahili"}
+        swb{"Comoriano"}
         syr{"siriaco"}
         ta{"tamil"}
         tai{"lingua tailandese"}
@@ -506,6 +507,7 @@ it{
         yi{"yiddish"}
         yo{"yoruba"}
         ypk{"lingue yupik"}
+        yue{"Cantonese"}
         za{"zhuang"}
         zap{"zapotec"}
         zen{"zenaga"}
@@ -673,7 +675,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

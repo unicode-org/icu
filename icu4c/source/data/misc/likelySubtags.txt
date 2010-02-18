@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/likelySubtags.xml
@@ -15,6 +15,7 @@ likelySubtags:table(nofallback){
     am{"am_Ethi_ET"}
     ar{"ar_Arab_EG"}
     as{"as_Beng_IN"}
+    asa{"asa_Latn_TZ"}
     ast{"ast_Latn_ES"}
     av{"av_Cyrl_RU"}
     ay{"ay_Latn_BO"}
@@ -33,6 +34,7 @@ likelySubtags:table(nofallback){
     ceb{"ceb_Latn_PH"}
     ch{"ch_Latn_GU"}
     chk{"chk_Latn_FM"}
+    chr{"chr_Cher_US"}
     crk{"crk_Cans_CA"}
     cs{"cs_Latn_CZ"}
     cwd{"cwd_Cans_CA"}
@@ -179,6 +181,7 @@ likelySubtags:table(nofallback){
     sr{"sr_Cyrl_RS"}
     sr_ME{"sr_Latn_ME"}
     ss{"ss_Latn_ZA"}
+    ssy{"ssy_Latn_ER"}
     st{"st_Latn_ZA"}
     su{"su_Latn_ID"}
     sv{"sv_Latn_SE"}

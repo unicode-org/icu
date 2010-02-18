@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -449,6 +449,7 @@ hr{
         sux{"sumerski"}
         sv{"švedski"}
         sw{"svahili"}
+        swb{"komorski"}
         syc{"klasični sirski"}
         syr{"sirijski"}
         ta{"tamilski"}
@@ -510,6 +511,7 @@ hr{
         yi{"jidiš"}
         yo{"joruba"}
         ypk{"yupik"}
+        yue{"kantonski"}
         za{"zhuang"}
         zap{"zapotec"}
         zbl{"blissymbols"}
@@ -695,6 +697,7 @@ hr{
         NEDIS{"natisone dijalekt"}
         NJIVA{"Gniva/Njiva dijalekt"}
         OSOJS{"oseacco/osojane dijalekt"}
+        PINYIN{"Pinyin romanizacija"}
         POLYTON{"politono"}
         POSIX{"računalo"}
         REVISED{"izmijenjen pravopis"}
@@ -705,8 +708,9 @@ hr{
         SOLBA{"stolvizza/solbica dijalekt"}
         TARASK{"taraskievica pravopis"}
         VALENCIA{"valencijski"}
+        WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ka.xml
@@ -10,10 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/ka.xml
  */
 ka{
+    AuxExemplarCharacters{
+        "[ⴀ ⴁ ⴂ ⴃ ⴄ ⴅ ⴆ ⴡ ⴇ ⴈ ⴉ ⴊ ⴋ ⴌ ⴢ ⴍ ⴎ ⴏ ⴐ ⴑ ⴒ ⴣ ⴓ ⴔ ⴕ ⴖ ⴗ ⴘ ⴙ ⴚ ⴛ ⴜ ⴝ ⴞ ⴤ ⴟ ⴠ ⴥ"
+        "]"
+    }
     ExemplarCharacters{
-        "[ა ⴀ ბ ⴁ გ ⴂ დ ⴃ ე ⴄ ვ ⴅ ზ ⴆ ჱ ⴡ თ ⴇ ი ⴈ კ ⴉ ლ ⴊ მ ⴋ ნ ⴌ ჲ ⴢ ო ⴍ პ ⴎ ჟ ⴏ რ ⴐ"
-        " ს ⴑ ტ ⴒ ჳ ⴣ უ ⴓ ფ ⴔ ქ ⴕ ღ ⴖ ყ ⴗ შ ⴘ ჩ ⴙ ც ⴚ ძ ⴛ წ ⴜ ჭ ⴝ ხ ⴞ ჴ ⴤ ჯ ⴟ ჰ ⴠ ჵ ⴥ"
-        " ჶ-ჺ]"
+        "[ა ბ გ დ ე ვ ზ ჱ თ ი კ ლ მ ნ ჲ ო პ ჟ რ ს ტ ჳ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჴ ჯ ჰ ჵ"
+        " ჶ ჷ ჸ ჹ ჺ]"
     }
     LocaleScript{
         "Geor",
@@ -32,7 +35,7 @@ ka{
         "NaN",
         "+",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.66"}
     calendar{
         gregorian{
             availableFormats{

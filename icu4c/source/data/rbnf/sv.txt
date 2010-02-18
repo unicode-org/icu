@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/sv.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/rbnf/sv.xml
+ *  ICU <specials> source: <path>/xml/rbnf/sv.xml
  */
 sv{
     RBNFRules{
@@ -219,5 +219,5 @@ sv{
             "1: er =%spellout-ordinal-feminine=;",
         }
     }
-    Version{"4203"}
+    Version{"2.0.42.3"}
 }

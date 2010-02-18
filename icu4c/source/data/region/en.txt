@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -45,6 +45,7 @@ en{
         200{"Czechoslovakia"}
         419{"Latin America and the Caribbean"}
         830{"Channel Islands"}
+        AC{"Ascension Island"}
         AD{"Andorra"}
         AE{"United Arab Emirates"}
         AF{"Afghanistan"}
@@ -94,6 +95,7 @@ en{
         CM{"Cameroon"}
         CN{"China"}
         CO{"Colombia"}
+        CP{"Clipperton Island"}
         CR{"Costa Rica"}
         CS{"Serbia and Montenegro"}
         CU{"Cuba"}
@@ -102,11 +104,13 @@ en{
         CY{"Cyprus"}
         CZ{"Czech Republic"}
         DE{"Germany"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Denmark"}
         DM{"Dominica"}
         DO{"Dominican Republic"}
         DZ{"Algeria"}
+        EA{"Ceuta and Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egypt"}
@@ -114,6 +118,7 @@ en{
         ER{"Eritrea"}
         ES{"Spain"}
         ET{"Ethiopia"}
+        EU{"European Union"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falkland Islands"}
@@ -145,6 +150,7 @@ en{
         HR{"Croatia"}
         HT{"Haiti"}
         HU{"Hungary"}
+        IC{"Canary Islands"}
         ID{"Indonesia"}
         IE{"Ireland"}
         IL{"Israel"}
@@ -233,7 +239,6 @@ en{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Outlying Oceania"}
-        QU{"European Union"}
         RE{"Réunion"}
         RO{"Romania"}
         RS{"Serbia"}
@@ -258,6 +263,7 @@ en{
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks and Caicos Islands"}
         TD{"Chad"}
         TF{"French Southern Territories"}
@@ -296,5 +302,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown or Invalid Region"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

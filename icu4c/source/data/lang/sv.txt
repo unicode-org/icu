@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -449,6 +449,7 @@ sv{
         sux{"sumeriska"}
         sv{"svenska"}
         sw{"swahili"}
+        swb{"shimaoré"}
         syc{"klassisk syriska"}
         syr{"syriska"}
         ta{"tamil"}
@@ -510,6 +511,7 @@ sv{
         yi{"jiddisch"}
         yo{"yoruba"}
         ypk{"eskimåspråk"}
+        yue{"kantonesiska"}
         za{"zhuang"}
         zap{"zapotek"}
         zbl{"blissymboler"}
@@ -534,7 +536,7 @@ sv{
         Blis{"blissymboler"}
         Bopo{"bopomofo"}
         Brah{"brami"}
-        Brai{"blindskrift"}
+        Brai{"punktskrift"}
         Bugi{"buginesiska"}
         Buhd{"buhid"}
         Cakm{"chakma"}
@@ -695,6 +697,7 @@ sv{
         NEDIS{"natisonsk dialekt"}
         NJIVA{"Njiva-dialekt"}
         OSOJS{"Osojane-dialekt"}
+        PINYIN{"pinyin"}
         POLYTON{"polytonisk stavning"}
         REVISED{"reformerad stavning"}
         ROZAJ{"resisk dialekt"}
@@ -704,8 +707,9 @@ sv{
         SOLBA{"Solbica-dialekt"}
         TARASK{"Taraskievika-stavning"}
         VALENCIA{"valensisk dialekt"}
+        WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.49"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

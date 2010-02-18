@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bg.xml
@@ -11,7 +11,7 @@
  */
 bg{
     AuxExemplarCharacters{"[i v x {а\u0300} ѐ ѝ {о\u0300} {у\u0300} {ъ\u0300} ѣ {ю\u0300} {я\u0300} ѫ]"}
-    ExemplarCharacters{"[а-ъ ь ю я]"}
+    ExemplarCharacters{"[а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ь ю я]"}
     LocaleScript{
         "Cyrl",
     }
@@ -35,7 +35,7 @@ bg{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -59,7 +59,7 @@ bg{
             }
             availableFormats{
                 Ed{"E d"}
-                H{"H"}
+                H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 MMMEd{"d MMM, E"}
@@ -166,6 +166,20 @@ bg{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -193,18 +207,18 @@ bg{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    h{"HH-HH"}
+                    h{"h-h a"}
                 }
                 hm{
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    h{"HH-HH v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y-y"}
