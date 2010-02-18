@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -127,7 +127,7 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         final String tzID = "Asia/Tokyo";
 
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);
-        final String[] eras = symbols.getEras();
+        final String[] eras = symbols.getEraNames();
 
         assertEquals("BC =", bc, eras[0]);
         assertEquals("AD =", ad, eras[1]);

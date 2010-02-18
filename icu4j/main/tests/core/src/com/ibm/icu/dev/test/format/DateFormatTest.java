@@ -57,8 +57,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestPatterns() {
         final String[][] EXPECTED = {
                 {DateFormat.MINUTE_SECOND, "ms", "en", "mm:ss"}, // (fixed expected result per ticket 6872<-6626)
-                {DateFormat.HOUR24_MINUTE, "Hm", "en", "H:mm"}, // (fixed expected result per ticket 6872<-6626)
-                {DateFormat.HOUR24_MINUTE_SECOND, "Hms","en","H:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
+                {DateFormat.HOUR24_MINUTE, "Hm", "en", "HH:mm"}, // (fixed expected result per ticket 6872<-6626)
+                {DateFormat.HOUR24_MINUTE_SECOND, "Hms","en","HH:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR_MINUTE, "hm","en","h:m a"}, // *** get "expected result" but it seems incorrect, needs investigation
                 {DateFormat.HOUR_MINUTE_SECOND, "hms","en","h:m:s a"}, // *** get "expected result" but it seems incorrect, needs investigation
                 {DateFormat.DAY, "d","en","d"},
