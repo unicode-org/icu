@@ -25,37 +25,37 @@ final class NormalizationTransliterator extends Transliterator {
         Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "NFC", Norm2AllModes.getNFCInstanceNoIOException().comp);
+                        "NFC", Norm2AllModes.getNFCInstance().comp);
             }
         });
         Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "NFD", Norm2AllModes.getNFCInstanceNoIOException().decomp);
+                        "NFD", Norm2AllModes.getNFCInstance().decomp);
             }
         });
         Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "NFKC", Norm2AllModes.getNFKCInstanceNoIOException().comp);
+                        "NFKC", Norm2AllModes.getNFKCInstance().comp);
             }
         });
         Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "NFKD", Norm2AllModes.getNFKCInstanceNoIOException().decomp);
+                        "NFKD", Norm2AllModes.getNFKCInstance().decomp);
             }
         });
         Transliterator.registerFactory("Any-FCD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "FCD", Norm2AllModes.getFCDNormalizer2NoIOException());
+                        "FCD", Norm2AllModes.getFCDNormalizer2());
             }
         });
         Transliterator.registerFactory("Any-FCC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator(
-                        "FCC", Norm2AllModes.getNFCInstanceNoIOException().fcc);
+                        "FCC", Norm2AllModes.getNFCInstance().fcc);
             }
         });
         Transliterator.registerSpecialInverse("NFC", "NFD", true);

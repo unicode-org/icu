@@ -140,23 +140,23 @@ public final class Normalizer implements Cloneable {
     }
     private static final class NFDModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFCInstanceNoIOException().decomp);
+            new ModeImpl(Norm2AllModes.getNFCInstance().decomp);
     }
     private static final class NFKDModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFKCInstanceNoIOException().decomp);
+            new ModeImpl(Norm2AllModes.getNFKCInstance().decomp);
     }
     private static final class NFCModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFCInstanceNoIOException().comp);
+            new ModeImpl(Norm2AllModes.getNFCInstance().comp);
     }
     private static final class NFKCModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getNFKCInstanceNoIOException().comp);
+            new ModeImpl(Norm2AllModes.getNFKCInstance().comp);
     }
     private static final class FCDModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(Norm2AllModes.getFCDNormalizer2NoIOException());
+            new ModeImpl(Norm2AllModes.getFCDNormalizer2());
     }
 
     private static final class Unicode32 {
@@ -164,27 +164,27 @@ public final class Normalizer implements Cloneable {
     }
     private static final class NFD32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstanceNoIOException().decomp,
+            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstance().decomp,
                                                  Unicode32.INSTANCE));
     }
     private static final class NFKD32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstanceNoIOException().decomp,
+            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstance().decomp,
                                                  Unicode32.INSTANCE));
     }
     private static final class NFC32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstanceNoIOException().comp,
+            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFCInstance().comp,
                                                  Unicode32.INSTANCE));
     }
     private static final class NFKC32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstanceNoIOException().comp,
+            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getNFKCInstance().comp,
                                                  Unicode32.INSTANCE));
     }
     private static final class FCD32ModeImpl {
         private static final ModeImpl INSTANCE =
-            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getFCDNormalizer2NoIOException(),
+            new ModeImpl(new FilteredNormalizer2(Norm2AllModes.getFCDNormalizer2(),
                                                  Unicode32.INSTANCE));
     }
 
@@ -848,7 +848,7 @@ public final class Normalizer implements Cloneable {
     public static String normalize(int char32, Mode mode, int options) {
         if(mode == NFD && options == 0) {
             String decomposition =
-                Norm2AllModes.getNFCInstanceNoIOException().impl.getDecomposition(char32);
+                Norm2AllModes.getNFCInstance().impl.getDecomposition(char32);
             if(decomposition == null) {
                 decomposition = UTF16.valueOf(char32);
             }
@@ -2039,7 +2039,7 @@ public final class Normalizer implements Cloneable {
 
         /* normalization/properties data loaded? */
         if((options&COMPARE_EQUIV)!=0) {
-            nfcImpl=Norm2AllModes.getNFCInstanceNoIOException().impl;
+            nfcImpl=Norm2AllModes.getNFCInstance().impl;
         } else {
             nfcImpl=null;
         }

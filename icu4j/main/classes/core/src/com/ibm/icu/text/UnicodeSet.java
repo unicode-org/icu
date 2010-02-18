@@ -3092,17 +3092,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_CASE_AND_NORM:
-                    Norm2AllModes.getNFCInstanceNoIOException().impl.addPropertyStarts(incl);
+                    Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
                     UCaseProps.getSingleton().addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_NFC:
-                    Norm2AllModes.getNFCInstanceNoIOException().impl.addPropertyStarts(incl);
+                    Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_NFKC:
-                    Norm2AllModes.getNFKCInstanceNoIOException().impl.addPropertyStarts(incl);
+                    Norm2AllModes.getNFKCInstance().impl.addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_NFKC_CF:
-                    Norm2AllModes.getNFKC_CFInstanceNoIOException().impl.addPropertyStarts(incl);
+                    Norm2AllModes.getNFKC_CFInstance().impl.addPropertyStarts(incl);
                     break;
                 case UCharacterProperty.SRC_CASE:
                     UCaseProps.getSingleton().addPropertyStarts(incl);

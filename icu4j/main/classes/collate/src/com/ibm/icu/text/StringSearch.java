@@ -761,7 +761,7 @@ public final class StringSearch extends SearchIterator
      * Character break iterator for boundary checking.
      */
     private BreakIterator m_charBreakIter_;
-    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstance().impl;
     /**
      * Size of the shift tables
      */

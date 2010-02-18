@@ -1327,7 +1327,7 @@ final class CollationParsedRuleBuilder {
         new WeightRange(), new WeightRange(), new WeightRange(),
         new WeightRange() };
     private WeightRange m_utilWeightRange_ = new WeightRange();
-    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstanceNoIOException().impl;
+    private final Normalizer2Impl m_nfcImpl_ = Norm2AllModes.getNFCInstance().impl;
     private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
     private StringBuilder m_utilStringBuffer_ = new StringBuilder("");
     // Flag indicating a combining marks table is required or not.

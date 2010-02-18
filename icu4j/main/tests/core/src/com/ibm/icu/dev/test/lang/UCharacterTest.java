@@ -8,7 +8,6 @@
 package com.ibm.icu.dev.test.lang;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -2268,7 +2267,7 @@ public final class UCharacterTest extends TestFmwk
     }
 
    /* various tests for consistency of UCD data and API behavior */
-   public void TestConsistency() throws IOException {
+   public void TestConsistency() {
        UnicodeSet set1, set2, set3, set4;
 
        int start, end;
@@ -2354,7 +2353,7 @@ public final class UCharacterTest extends TestFmwk
         */
        Normalizer2 norm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
        set1=new UnicodeSet();
-       Norm2AllModes.getNFCInstanceNoIOException().impl.
+       Norm2AllModes.getNFCInstance().impl.
            ensureCanonIterData().getCanonStartSet(0x49, set1);
        set2=new UnicodeSet();
 

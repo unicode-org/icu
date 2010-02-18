@@ -7,7 +7,6 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
-import java.io.IOException;
 import java.text.StringCharacterIterator;
 import java.util.Random;
 
@@ -2000,7 +1999,7 @@ public class BasicTest extends TestFmwk {
         // test cases with i and I to make sure Turkic works
         char[] iI= new char[]{ 0x49, 0x69, 0x130, 0x131 };
         UnicodeSet set = new UnicodeSet(), iSet = new UnicodeSet();
-        Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+        Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstance().impl;
         nfcImpl.ensureCanonIterData();
 
         String s1, s2;
@@ -2860,16 +2859,11 @@ public class BasicTest extends TestFmwk {
             { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
         };
         Normalizer2 customNorm2;
-        try {
-            customNorm2=
-                Normalizer2.getInstance(
-                    BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
-                    "testnorm",
-                    Normalizer2.Mode.COMPOSE);
-        } catch(IOException e) {
-            errln("testdata/testnorm.nrm is not available: "+e.getMessage());
-            return;
-        }
+        customNorm2=
+            Normalizer2.getInstance(
+                BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
+                "testnorm",
+                Normalizer2.Mode.COMPOSE);
         for(int i=0; i<pairs.length; ++i) {
             String[] pair=pairs[i];
             String input=Utility.unescape(pair[0]);
@@ -2895,16 +2889,11 @@ public class BasicTest extends TestFmwk {
             { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
         };
         Normalizer2 customNorm2;
-        try {
-            customNorm2=
-                Normalizer2.getInstance(
-                    BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
-                    "testnorm",
-                    Normalizer2.Mode.COMPOSE_CONTIGUOUS);
-        } catch(IOException e) {
-            errln("testdata/testnorm.nrm is not available: "+e.getMessage());
-            return;
-        }
+        customNorm2=
+            Normalizer2.getInstance(
+                BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
+                "testnorm",
+                Normalizer2.Mode.COMPOSE_CONTIGUOUS);
         for(int i=0; i<pairs.length; ++i) {
             String[] pair=pairs[i];
             String input=Utility.unescape(pair[0]);

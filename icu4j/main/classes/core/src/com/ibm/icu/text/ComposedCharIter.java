@@ -85,9 +85,9 @@ public final class ComposedCharIter {
      */
     public ComposedCharIter(boolean compat, int options) {
         if(compat) {
-            n2impl = Norm2AllModes.getNFKCInstanceNoIOException().impl;
+            n2impl = Norm2AllModes.getNFKCInstance().impl;
         } else {
-            n2impl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+            n2impl = Norm2AllModes.getNFCInstance().impl;
         }
     }
 

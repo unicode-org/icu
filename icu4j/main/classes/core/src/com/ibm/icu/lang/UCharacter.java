@@ -3917,7 +3917,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
             throw new IllegalArgumentException("Codepoint out of bounds");
         }
-        Normalizer2Impl impl = Norm2AllModes.getNFCInstanceNoIOException().impl;
+        Normalizer2Impl impl = Norm2AllModes.getNFCInstance().impl;
         return impl.getCC(impl.getNorm16(ch));
     }
 
@@ -5385,9 +5385,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 case UProperty.NFKC_QUICK_CHECK:
                     return Norm2AllModes.getN2WithImpl(type-UProperty.NFD_QUICK_CHECK).getQuickCheck(ch);
                 case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-                    return Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie().get(ch)>>8;
+                    return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(ch)>>8;
                 case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                    return Norm2AllModes.getNFCInstanceNoIOException().impl.getFCDTrie().get(ch)&0xff;
+                    return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(ch)&0xff;
                 case UProperty.GRAPHEME_CLUSTER_BREAK:
                     return (UCharacterProperty.INSTANCE.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
                 case UProperty.SENTENCE_BREAK:

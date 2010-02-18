@@ -6,8 +6,8 @@
 */
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -273,32 +273,32 @@ public final class Norm2AllModes {
     public final FCDNormalizer2 fcd;
     public final ComposeNormalizer2 fcc;
 
-    private static Norm2AllModes getInstanceFromSingletonNoIOException(Norm2AllModesSingleton singleton) {
-        if(singleton.runtimeException!=null) {
-            throw singleton.runtimeException;
+    private static Norm2AllModes getInstanceFromSingleton(Norm2AllModesSingleton singleton) {
+        if(singleton.exception!=null) {
+            throw singleton.exception;
         }
         return singleton.allModes;
     }
-    public static Norm2AllModes getNFCInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(NFCSingleton.INSTANCE);
+    public static Norm2AllModes getNFCInstance() {
+        return getInstanceFromSingleton(NFCSingleton.INSTANCE);
     }
-    public static Norm2AllModes getNFKCInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(NFKCSingleton.INSTANCE);
+    public static Norm2AllModes getNFKCInstance() {
+        return getInstanceFromSingleton(NFKCSingleton.INSTANCE);
     }
-    public static Norm2AllModes getNFKC_CFInstanceNoIOException() {
-        return getInstanceFromSingletonNoIOException(NFKC_CFSingleton.INSTANCE);
+    public static Norm2AllModes getNFKC_CFInstance() {
+        return getInstanceFromSingleton(NFKC_CFSingleton.INSTANCE);
     }
     // For use in properties APIs.
     public static Normalizer2WithImpl getN2WithImpl(int index) {
         switch(index) {
-        case 0: return getNFCInstanceNoIOException().decomp;  // NFD
-        case 1: return getNFKCInstanceNoIOException().decomp; // NFKD
-        case 2: return getNFCInstanceNoIOException().comp;    // NFC
-        case 3: return getNFKCInstanceNoIOException().comp;   // NFKC
+        case 0: return getNFCInstance().decomp;  // NFD
+        case 1: return getNFKCInstance().decomp; // NFKD
+        case 2: return getNFCInstance().comp;    // NFC
+        case 3: return getNFKCInstance().comp;   // NFKC
         default: return null;
         }
     }
-    public static Norm2AllModes getInstance(InputStream data, String name) throws IOException {
+    public static Norm2AllModes getInstance(InputStream data, String name) {
         if(data==null) {
             Norm2AllModesSingleton singleton;
             if(name.equals("nfc")) {
@@ -311,10 +311,8 @@ public final class Norm2AllModes {
                 singleton=null;
             }
             if(singleton!=null) {
-                if(singleton.ioException!=null) {
-                    throw singleton.ioException;
-                } else if(singleton.runtimeException!=null) {
-                    throw singleton.runtimeException;
+                if(singleton.exception!=null) {
+                    throw singleton.exception;
                 }
                 return singleton.allModes;
             }
@@ -357,8 +355,8 @@ public final class Norm2AllModes {
      * Gets the FCD normalizer, with the FCD data initialized.
      * @return FCD normalizer
      */
-    public static Normalizer2 getFCDNormalizer2NoIOException() {
-        Norm2AllModes allModes=getNFCInstanceNoIOException();
+    public static Normalizer2 getFCDNormalizer2() {
+        Norm2AllModes allModes=getNFCInstance();
         allModes.impl.getFCDTrie();
         return allModes.fcd;
     }
@@ -369,17 +367,13 @@ public final class Norm2AllModes {
                 Normalizer2Impl impl=new Normalizer2Impl().load(
                         ICUResourceBundle.ICU_BUNDLE+"/"+name+".nrm");
                 allModes=new Norm2AllModes(impl);
-            } catch(IOException e) {
-                ioException=e;
-                runtimeException=new RuntimeException(e);
             } catch(RuntimeException e) {
-                runtimeException=e;
+                exception=e;
             }
         }
 
         private Norm2AllModes allModes;
-        private IOException ioException;
-        private RuntimeException runtimeException;
+        private RuntimeException exception;
     }
     private static final class NFCSingleton {
         private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfc");
