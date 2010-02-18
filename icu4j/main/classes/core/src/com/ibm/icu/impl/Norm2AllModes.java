@@ -8,6 +8,10 @@ package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
@@ -304,17 +308,49 @@ public final class Norm2AllModes {
             } else if(name.equals("nfkc_cf")) {
                 singleton=NFKC_CFSingleton.INSTANCE;
             } else {
-                throw new UnsupportedOperationException();  // TODO
+                singleton=null;
             }
-            if(singleton.ioException!=null) {
-                throw singleton.ioException;
-            } else if(singleton.runtimeException!=null) {
-                throw singleton.runtimeException;
+            if(singleton!=null) {
+                if(singleton.ioException!=null) {
+                    throw singleton.ioException;
+                } else if(singleton.runtimeException!=null) {
+                    throw singleton.runtimeException;
+                }
+                return singleton.allModes;
             }
-            return singleton.allModes;
         }
-        throw new UnsupportedOperationException();  // TODO
+        Norm2AllModes allModes=null;
+        synchronized(Norm2AllModes.class) {
+            if(cache!=null) {
+                allModes=cache.get(name).get();
+            }
+        }
+        if(allModes==null) {
+            if(data==null) {
+                throw new MissingResourceException(
+                        "No Normalizer2 data name \""+name+"\" cached, and InputStream is null",
+                        "Normalizer2",
+                        name);
+            }
+            Normalizer2Impl impl=new Normalizer2Impl().load(data);
+            allModes=new Norm2AllModes(impl);
+            synchronized(Norm2AllModes.class) {
+                if(cache==null) {
+                    cache=new HashMap<String, SoftReference<Norm2AllModes>>();
+                }
+                Reference<Norm2AllModes> ref=cache.get(name);
+                Norm2AllModes temp;
+                if(ref==null || (temp=ref.get())==null) {
+                    cache.put(name, new SoftReference<Norm2AllModes>(allModes));
+                } else {
+                    // race condition
+                    allModes=temp;
+                }
+            }
+        }
+        return allModes;
     }
+    private static HashMap<String, SoftReference<Norm2AllModes>> cache;
 
     public static final NoopNormalizer2 NOOP_NORMALIZER2=new NoopNormalizer2();
     /**
@@ -328,20 +364,16 @@ public final class Norm2AllModes {
     }
 
     private static final class Norm2AllModesSingleton {
-        private Norm2AllModesSingleton(InputStream data, String name) {
-            Normalizer2Impl impl;
-            if(data==null) {
-                try {
-                    impl=new Normalizer2Impl().load(ICUResourceBundle.ICU_BUNDLE+"/"+name+".nrm");
-                    allModes=new Norm2AllModes(impl);
-                } catch(IOException e) {
-                    ioException=e;
-                    runtimeException=new RuntimeException(e);
-                } catch(RuntimeException e) {
-                    runtimeException=e;
-                }
-            } else {
-                throw new UnsupportedOperationException();  // TODO
+        private Norm2AllModesSingleton(String name) {
+            try {
+                Normalizer2Impl impl=new Normalizer2Impl().load(
+                        ICUResourceBundle.ICU_BUNDLE+"/"+name+".nrm");
+                allModes=new Norm2AllModes(impl);
+            } catch(IOException e) {
+                ioException=e;
+                runtimeException=new RuntimeException(e);
+            } catch(RuntimeException e) {
+                runtimeException=e;
             }
         }
 
@@ -350,12 +382,12 @@ public final class Norm2AllModes {
         private RuntimeException runtimeException;
     }
     private static final class NFCSingleton {
-        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfc");
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfc");
     }
     private static final class NFKCSingleton {
-        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfkc");
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfkc");
     }
     private static final class NFKC_CFSingleton {
-        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton(null, "nfkc_cf");
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfkc_cf");
     }
 }
