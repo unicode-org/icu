@@ -53,6 +53,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(15,TestCompare);
         CASE(16,TestSkippable);
         CASE(17,TestCustomComp);
+        CASE(18,TestCustomFCC);
         default: name = ""; break;
     }
 }
@@ -1771,20 +1772,51 @@ BasicNormalizerTest::TestCustomComp() {
         { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
     };
     IcuTestErrorCode errorCode(*this, "BasicNormalizerTest/TestCustomComp");
-    const Normalizer2 *customComp=
-        Normalizer2::getInstance(loadTestData(errorCode), "testnorm", UNORM2_COMPOSE, errorCode);
-    if(errorCode.isFailure()) {
-        errorCode.reset();
-        dataerrln(UNICODE_STRING_SIMPLE("unable to load testdata/testnorm.nrm"));
+    const Normalizer2 *customNorm2=
+        Normalizer2::getInstance(loadTestData(errorCode), "testnorm",
+                                 UNORM2_COMPOSE, errorCode);
+    if(errorCode.logIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
         return;
     }
     for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
         const StringPair &pair=pairs[i];
         UnicodeString input=UnicodeString(pair.input, -1, US_INV).unescape();
         UnicodeString expected=UnicodeString(pair.expected, -1, US_INV).unescape();
-        UnicodeString result=customComp->normalize(input, errorCode);
+        UnicodeString result=customNorm2->normalize(input, errorCode);
         if(result!=expected) {
             errln("custom compose Normalizer2 did not normalize input %d as expected", i);
+        }
+    }
+}
+
+void
+BasicNormalizerTest::TestCustomFCC() {
+    static const StringPair pairs[]={
+        { "\\uD801\\uE000\\uDFFE", "" },
+        { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+        { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+        // The following expected result is different from CustomComp
+        // because of only-contiguous composition.
+        { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE001\\U000110B9\\u0327\\u0308\\u0345" },
+        { "\\uE010\\U000F0011\\uE012", "\\uE011\\uE012" },
+        { "\\uE010\\U000F0011\\U000F0011\\uE012", "\\uE011\\U000F0010" },
+        { "\\uE111\\u1161\\uE112\\u1162", "\\uAE4C\\u1102\\u0062\\u1162" },
+        { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
+    };
+    IcuTestErrorCode errorCode(*this, "BasicNormalizerTest/TestCustomFCC");
+    const Normalizer2 *customNorm2=
+        Normalizer2::getInstance(loadTestData(errorCode), "testnorm",
+                                 UNORM2_COMPOSE_CONTIGUOUS, errorCode);
+    if(errorCode.logIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
+        return;
+    }
+    for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
+        const StringPair &pair=pairs[i];
+        UnicodeString input=UnicodeString(pair.input, -1, US_INV).unescape();
+        UnicodeString expected=UnicodeString(pair.expected, -1, US_INV).unescape();
+        UnicodeString result=customNorm2->normalize(input, errorCode);
+        if(result!=expected) {
+            errln("custom FCC Normalizer2 did not normalize input %d as expected", i);
         }
     }
 }
