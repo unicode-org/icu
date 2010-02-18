@@ -43,6 +43,7 @@ public:
     void FindFoldFCDExceptions();
     void TestSkippable();
     void TestCustomComp();
+    void TestCustomFCC();
 
 private:
     UnicodeString canonTests[24][3];

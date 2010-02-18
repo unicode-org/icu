@@ -557,16 +557,16 @@ Normalizer2::getInstance(const char *packageName,
         }
     }
     if(allModes==NULL && U_SUCCESS(errorCode)) {
-        UHashtable *localCache;
         {
             Mutex lock;
-            localCache=cache;
-            if(localCache!=NULL) {
-                allModes=(Norm2AllModes *)uhash_get(localCache, name);
+            if(cache!=NULL) {
+                allModes=(Norm2AllModes *)uhash_get(cache, name);
             }
         }
         if(allModes==NULL) {
-            if(localCache==NULL) {
+            LocalPointer<Norm2AllModes> localAllModes(
+                Norm2AllModes::createInstance(packageName, name, errorCode));
+            if(U_SUCCESS(errorCode)) {
                 Mutex lock;
                 if(cache==NULL) {
                     cache=uhash_open(uhash_hashChars, uhash_compareChars, NULL, &errorCode);
@@ -576,12 +576,7 @@ Normalizer2::getInstance(const char *packageName,
                     uhash_setKeyDeleter(cache, uprv_free);
                     uhash_setValueDeleter(cache, deleteNorm2AllModes);
                 }
-                localCache=cache;
-            }
-            allModes=Norm2AllModes::createInstance(packageName, name, errorCode);
-            if(U_SUCCESS(errorCode)) {
-                Mutex lock;
-                void *temp=uhash_get(localCache, name);
+                void *temp=uhash_get(cache, name);
                 if(temp==NULL) {
                     int32_t keyLength=uprv_strlen(name)+1;
                     char *nameCopy=(char *)uprv_malloc(keyLength);
@@ -590,10 +585,9 @@ Normalizer2::getInstance(const char *packageName,
                         return NULL;
                     }
                     uprv_memcpy(nameCopy, name, keyLength);
-                    uhash_put(localCache, nameCopy, allModes, &errorCode);
+                    uhash_put(cache, nameCopy, allModes=localAllModes.orphan(), &errorCode);
                 } else {
                     // race condition
-                    delete allModes;
                     allModes=(Norm2AllModes *)temp;
                 }
             }
