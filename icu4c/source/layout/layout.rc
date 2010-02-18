@@ -1,7 +1,7 @@
 // Do not edit with Microsoft Developer Studio Resource Editor.
 //   It will permanently substitute version numbers that are intended to be
 //   picked up by the pre-processor during each build.
-// Copyright (c) 2001-2009 International Business Machines
+// Copyright (c) 2001-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 #include "../common/msvcres.h"
@@ -71,8 +71,8 @@ BEGIN
         BLOCK "00000000"
         BEGIN
             VALUE "Comments", ICU_WEBSITE "\0"
-            VALUE "CompanyName", "IBM Corporation and others\0"
-            VALUE "FileDescription", "IBM ICU Layout DLL\0"
+            VALUE "CompanyName", ICU_COMPANY "\0"
+            VALUE "FileDescription", ICU_PRODUCT_PREFIX " Layout DLL\0"
             VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
 #ifdef _DEBUG
@@ -81,7 +81,7 @@ BEGIN
             VALUE "OriginalFilename", "icule" U_ICU_VERSION_SHORT ".dll\0"
 #endif
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "International Components for Unicode\0"
+            VALUE "ProductName", ICU_PRODUCT "\0"
             VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "SpecialBuild", "\0"
         END

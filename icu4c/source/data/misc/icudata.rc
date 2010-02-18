@@ -1,6 +1,6 @@
 //Do not edit with Microsoft Developer Studio because it will modify this
 //script in the wrong way.
-// Copyright (c) 2001-2007 International Business Machines
+// Copyright (c) 2001-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 #define APSTUDIO_READONLY_SYMBOLS
@@ -46,13 +46,13 @@ BEGIN
         BLOCK "00000000"
         BEGIN
             VALUE "Comments", ICU_WEBSITE "\0"
-            VALUE "CompanyName", "IBM Corporation and others\0"
-            VALUE "FileDescription", "ICU Data DLL\0"
+            VALUE "CompanyName", ICU_COMPANY "\0"
+            VALUE "FileDescription", ICU_PRODUCT_PREFIX " Data DLL\0"
             VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
             VALUE "OriginalFilename", "icudt" U_ICU_VERSION_SHORT ".dll\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "International Components for Unicode\0"
+            VALUE "ProductName", ICU_PRODUCT "\0"
             VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "SpecialBuild", "\0"
         END
