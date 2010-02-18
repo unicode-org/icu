@@ -1071,10 +1071,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
       }
       public void TestOptions() {
           final TestOptionsItem[] testOptionsData = {
-              new TestOptionsItem( "en", "Hmm",  "H:mm",    DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-              new TestOptionsItem( "en", "HHmm", "H:mm",    DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+              new TestOptionsItem( "en", "Hmm",  "HH:mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+              new TestOptionsItem( "en", "HHmm", "HH:mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
               new TestOptionsItem( "en", "hhmm", "h:mm a",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-              new TestOptionsItem( "en", "Hmm",  "H:mm",    DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+              new TestOptionsItem( "en", "Hmm",  "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "en", "HHmm", "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "en", "hhmm", "hh:mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "nb", "Hmm",  "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
