@@ -7,6 +7,7 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
+import java.io.IOException;
 import java.text.StringCharacterIterator;
 import java.util.Random;
 
@@ -17,6 +18,7 @@ import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -2842,6 +2844,74 @@ public class BasicTest extends TestFmwk {
             output=Normalizer.normalize(cases[i].input, cases[i].mode, cases[i].options);
             if(!output.equals(cases[i].expect)) {
                 errln("unexpected result for case "+i);
+            }
+        }
+    }
+
+    public void TestCustomComp() {
+        String [][] pairs={
+            { "\\uD801\\uE000\\uDFFE", "" },
+            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE002\\U000110B9\\u0327\\u0345" },
+            { "\\uE010\\U000F0011\\uE012", "\\uE011\\uE012" },
+            { "\\uE010\\U000F0011\\U000F0011\\uE012", "\\uE011\\U000F0010" },
+            { "\\uE111\\u1161\\uE112\\u1162", "\\uAE4C\\u1102\\u0062\\u1162" },
+            { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
+        };
+        Normalizer2 customNorm2;
+        try {
+            customNorm2=
+                Normalizer2.getInstance(
+                    BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
+                    "testnorm",
+                    Normalizer2.Mode.COMPOSE);
+        } catch(IOException e) {
+            errln("testdata/testnorm.nrm is not available: "+e.getMessage());
+            return;
+        }
+        for(int i=0; i<pairs.length; ++i) {
+            String[] pair=pairs[i];
+            String input=Utility.unescape(pair[0]);
+            String expected=Utility.unescape(pair[1]);
+            String result=customNorm2.normalize(input);
+            if(!result.equals(expected)) {
+                errln("custom compose Normalizer2 did not normalize input "+i+" as expected");
+            }
+        }
+    }
+
+    public void TestCustomFCC() {
+        String[][] pairs={
+            { "\\uD801\\uE000\\uDFFE", "" },
+            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            // The following expected result is different from CustomComp
+            // because of only-contiguous composition.
+            { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE001\\U000110B9\\u0327\\u0308\\u0345" },
+            { "\\uE010\\U000F0011\\uE012", "\\uE011\\uE012" },
+            { "\\uE010\\U000F0011\\U000F0011\\uE012", "\\uE011\\U000F0010" },
+            { "\\uE111\\u1161\\uE112\\u1162", "\\uAE4C\\u1102\\u0062\\u1162" },
+            { "\\uFFF3\\uFFF7\\U00010036\\U00010077", "\\U00010037\\U00010037\\uFFF6\\U00010037" }
+        };
+        Normalizer2 customNorm2;
+        try {
+            customNorm2=
+                Normalizer2.getInstance(
+                    BasicTest.class.getResourceAsStream("/com/ibm/icu/dev/data/testdata/testnorm.nrm"),
+                    "testnorm",
+                    Normalizer2.Mode.COMPOSE_CONTIGUOUS);
+        } catch(IOException e) {
+            errln("testdata/testnorm.nrm is not available: "+e.getMessage());
+            return;
+        }
+        for(int i=0; i<pairs.length; ++i) {
+            String[] pair=pairs[i];
+            String input=Utility.unescape(pair[0]);
+            String expected=Utility.unescape(pair[1]);
+            String result=customNorm2.normalize(input);
+            if(!result.equals(expected)) {
+                errln("custom FCC Normalizer2 did not normalize input "+i+" as expected");
             }
         }
     }
