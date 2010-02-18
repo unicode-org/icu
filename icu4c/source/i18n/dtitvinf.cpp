@@ -221,7 +221,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
   int32_t locNameLen;
   uprv_strcpy(parentLocale, locName);
   UErrorCode status = U_ZERO_ERROR;
-  Hashtable skeletonSet(TRUE, status);
+  Hashtable skeletonSet(FALSE, status);
   if ( U_FAILURE(status) ) {
       return;
   }
@@ -298,7 +298,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
                         calendarField = UCAL_DATE;
                     } else if ( !uprv_strcmp(key, "a") ) {
                         calendarField = UCAL_AM_PM;
-                    } else if ( !uprv_strcmp(key, "h") ) {
+                    } else if ( !uprv_strcmp(key, "h") || !uprv_strcmp(key, "H") ) {
                         calendarField = UCAL_HOUR;
                     } else if ( !uprv_strcmp(key, "m") ) {
                         calendarField = UCAL_MINUTE;
@@ -598,7 +598,7 @@ DateIntervalInfo::initHash(UErrorCode& status) {
         return NULL;
     }
     Hashtable* hTable;
-    if ( (hTable = new Hashtable(TRUE, status)) == NULL ) {
+    if ( (hTable = new Hashtable(FALSE, status)) == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
