@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kok.xml
@@ -12,8 +12,10 @@
 kok{
     AuxExemplarCharacters{"[\u200C \u200D]"}
     ExemplarCharacters{
-        "[़ ँ-ः ०-९ ॐ अ-ऍ ए-ऑ ओ-क {क़} ख {ख़} ग {ग़} घ-ज {ज़} झ-ड {ड़} ढ {ढ़} ण-न प फ"
-        " {फ़} ब-य {य़} र ल ळ व-ह ऽ-ॅ े-ॉ ो-्]"
+        "[\u093C ० १ २ ३ ४ ५ ६ ७ ८ ९ ॐ \u0902 \u0901 ः अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क "
+        "{क\u093C} ख {ख\u093C} ग {ग\u093C} घ ङ च छ ज {ज\u093C} झ ञ ट ठ ड {ड\u093C} ढ "
+        "{ढ\u093C} ण त थ द ध न प फ {फ\u093C} ब भ म य {य\u093C} र ल व श ष स ह ळ ऽ ा ि "
+        "ी \u0941 \u0942 \u0943 \u0944 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
     }
     LocaleScript{
         "Deva",
@@ -24,7 +26,7 @@ kok{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             AmPmMarkers{

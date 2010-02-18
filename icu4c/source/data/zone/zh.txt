@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -344,6 +344,9 @@ zh{
         }
         "America:Indiana:Vincennes"{
             ec{"温森斯"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"印第安纳州威纳马克"}
         }
         "America:Indianapolis"{
             ec{"印地安纳波利斯"}
@@ -1216,7 +1219,9 @@ zh{
         }
         "meta:Australia_CentralWestern"{
             ld{"澳大利亚中西部夏令时间"}
+            lg{"澳大利亚中西部时间"}
             ls{"澳大利亚中西部标准时间"}
+            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"澳大利亚东部夏令时间"}
@@ -1266,11 +1271,21 @@ zh{
         "meta:Brunei"{
             ls{"汶萊時間"}
         }
+        "meta:Cape_Verde"{
+            ld{"佛得角夏令时间"}
+            ls{"佛得角时间"}
+        }
         "meta:Chamorro"{
+            lg{"查莫罗时间"}
             ls{"查莫罗标准时区"}
+            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"长白山时间"}
+        }
+        "meta:Chatham"{
+            ld{"查坦夏令时间"}
+            ls{"查坦标准时间"}
         }
         "meta:Chile"{
             ld{"智利夏令时间"}
@@ -1288,9 +1303,19 @@ zh{
             ld{"乔巴山夏令时间"}
             ls{"乔巴山标准时间"}
         }
+        "meta:Christmas"{
+            ls{"圣诞岛时间"}
+        }
+        "meta:Cocos"{
+            ls{"科科斯岛时间"}
+        }
         "meta:Colombia"{
             ld{"哥伦比亚夏令时间"}
             ls{"哥伦比亚时间"}
+        }
+        "meta:Cook"{
+            ld{"库克群岛仲夏时间"}
+            ls{"库克群岛时间"}
         }
         "meta:Cuba"{
             ld{"古巴夏令时间"}
@@ -1302,6 +1327,12 @@ zh{
         "meta:Dacca"{
             ls{"达卡标准时间"}
         }
+        "meta:Davis"{
+            ls{"戴维斯时间"}
+        }
+        "meta:DumontDUrville"{
+            ls{"杜蒙特‧杜维尔时间"}
+        }
         "meta:Dushanbe"{
             ld{"杜尚别夏令时间"}
             ls{"杜尚别标准时间"}
@@ -1311,6 +1342,10 @@ zh{
         }
         "meta:East_Timor"{
             ls{"东帝汶标准时间"}
+        }
+        "meta:Easter"{
+            ld{"复活岛夏令时间"}
+            ls{"复活节岛时间"}
         }
         "meta:Ecuador"{
             ls{"厄瓜多尔标准时间"}
@@ -1327,8 +1362,19 @@ zh{
             ld{"欧洲西部夏令时间"}
             ls{"欧洲西部时间"}
         }
+        "meta:Falkland"{
+            ld{"福克兰群岛夏令时间"}
+            ls{"福克兰群岛时间"}
+        }
+        "meta:Fiji"{
+            ld{"斐济夏令时间"}
+            ls{"斐济时间"}
+        }
         "meta:French_Guiana"{
             ls{"法属圭亚那时间"}
+        }
+        "meta:French_Southern"{
+            ls{"法属南部和南极洲时间"}
         }
         "meta:Frunze"{
             ld{"伏龙芝夏令时间"}
@@ -1340,9 +1386,15 @@ zh{
         "meta:Galapagos"{
             ls{"加拉帕戈斯时间"}
         }
+        "meta:Gambier"{
+            ls{"甘比尔群岛时间"}
+        }
         "meta:Georgia"{
             ld{"格鲁吉亚夏令时间"}
             ls{"格鲁吉亚标准时间"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"吉尔柏特群岛时间"}
         }
         "meta:Greenland_Central"{
             ld{"格林兰中部夏令时间"}
@@ -1378,6 +1430,12 @@ zh{
         }
         "meta:India"{
             ls{"印度标准时间"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"印度洋时间"}
+        }
+        "meta:Indochina"{
+            ls{"印度支那时间"}
         }
         "meta:Indonesia_Central"{
             ls{"印度尼西亚中部标准时间"}
@@ -1430,6 +1488,9 @@ zh{
             lg{"韩国时间"}
             ls{"韩国标准时间"}
         }
+        "meta:Kosrae"{
+            ls{"科斯雷时间"}
+        }
         "meta:Kuybyshev"{
             ld{"古比雪夫夏令时间"}
             ls{"古比雪夫时间"}
@@ -1447,6 +1508,7 @@ zh{
             ld{"罗德毫岛夏令时间"}
             lg{"罗德毫岛时间"}
             ls{"罗德毫岛标准时间"}
+            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"澳门夏令时间"}
@@ -1462,8 +1524,18 @@ zh{
         "meta:Malaysia"{
             ls{"马来西亚标准时间"}
         }
+        "meta:Maldives"{
+            ls{"马尔代夫时间"}
+        }
         "meta:Marshall_Islands"{
             ls{"马绍尔群岛时间"}
+        }
+        "meta:Mauritius"{
+            ld{"毛里求斯夏令时间"}
+            ls{"毛里求斯时间"}
+        }
+        "meta:Mawson"{
+            ls{"莫森时间"}
         }
         "meta:Mongolia"{
             ld{"乌兰巴托夏令时间"}
@@ -1530,6 +1602,12 @@ zh{
             ld{"克孜勒奥尔达夏令时间"}
             ls{"克孜勒奥尔达标准时间"}
         }
+        "meta:Reunion"{
+            ls{"留尼旺岛时间"}
+        }
+        "meta:Rothera"{
+            ls{"罗瑟拉时间"}
+        }
         "meta:Sakhalin"{
             ld{"库页岛夏令时间"}
             ls{"库页岛时间"}
@@ -1545,6 +1623,9 @@ zh{
         "meta:Samoa"{
             ls{"萨摩亚标准时间"}
         }
+        "meta:Seychelles"{
+            ls{"塞舌尔时间"}
+        }
         "meta:Shevchenko"{
             ld{"舍甫琴科夏令时间"}
             ls{"舍甫琴科时间"}
@@ -1552,12 +1633,18 @@ zh{
         "meta:Singapore"{
             ls{"新加坡标准时间"}
         }
+        "meta:South_Georgia"{
+            ls{"南乔治亚时间"}
+        }
         "meta:Suriname"{
             ls{"苏里南标准时间"}
         }
         "meta:Sverdlovsk"{
             ld{"斯维尔德洛夫斯克夏令时间"}
             ls{"斯维尔德洛夫斯克标准时间"}
+        }
+        "meta:Syowa"{
+            ls{"昭和时间"}
         }
         "meta:Taipei"{
             ld{"台北夏令时间"}
@@ -1607,6 +1694,13 @@ zh{
         "meta:Vladivostok"{
             ld{"海参崴夏令时间"}
             ls{"海参崴时间"}
+        }
+        "meta:Volgograd"{
+            ld{"伏尔加格勒夏令时间"}
+            ls{"伏尔加格勒时间"}
+        }
+        "meta:Vostok"{
+            ls{"沃斯托克时间"}
         }
         "meta:Yakutsk"{
             ld{"雅库茨克夏令时间"}

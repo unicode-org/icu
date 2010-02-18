@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr.xml
@@ -1091,6 +1091,14 @@ fr{
             "$Z",
             "dollar zimbabwéen",
         }
+        ZWL{
+            "ZWL",
+            "dollar zimbabwéen (2009)",
+        }
+        ZWR{
+            "ZWR" /** ===  */,
+            "dollar zimbabwéen (2008)",
+        }
     }
     CurrencyPlurals{
         ADP{
@@ -1442,6 +1450,7 @@ fr{
             other{"livres sterling"}
         }
         GEK{
+            one{"coupon de lari géorgien"}
             other{"coupons de lari géorgiens"}
         }
         GEL{
@@ -2064,6 +2073,22 @@ fr{
             one{"once troy d’or"}
             other{"onces troy d’or"}
         }
+        XBA{
+            one{"unité composée européenne (EURCO)"}
+            other{"unités composées européennes (EURCO)"}
+        }
+        XBB{
+            one{"unité monétaire européenne (UME-6)"}
+            other{"unités monétaires européennes (UME-6)"}
+        }
+        XBC{
+            one{"unité de compte 9 européenne (UEC-9)"}
+            other{"unités de compte 9 européennes (UEC-9)"}
+        }
+        XBD{
+            one{"unité de compte 17 européenne (UEC-17)"}
+            other{"unités de compte 17 européennes (UEC-17)"}
+        }
         XCD{
             one{"dollar des Caraïbes orientales"}
             other{"dollars des Caraïbes orientales"}
@@ -2152,10 +2177,18 @@ fr{
             one{"dollar zimbabwéen"}
             other{"dollars zimbabwéens"}
         }
+        ZWL{
+            one{"dollar zimbabwéen (2009)"}
+            other{"dollars zimbabwéens (2009)"}
+        }
+        ZWR{
+            one{"dollar zimbabwéen (2008)"}
+            other{"dollars zimbabwéens (2008)"}
+        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

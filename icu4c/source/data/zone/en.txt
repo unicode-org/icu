@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
@@ -78,28 +78,36 @@ en{
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
+            sd{"CDT"}
             sg{"CT"}
+            ss{"CST"}
         }
         "meta:America_Eastern"{
             cu:int{1}
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
+            sd{"EDT"}
             sg{"ET"}
+            ss{"EST"}
         }
         "meta:America_Mountain"{
             cu:int{1}
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
+            sd{"MDT"}
             sg{"MT"}
+            ss{"MST"}
         }
         "meta:America_Pacific"{
             cu:int{1}
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
+            sd{"PDT"}
             sg{"PT"}
+            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadyr Summer Time"}
@@ -143,7 +151,9 @@ en{
             ld{"Atlantic Daylight Time"}
             lg{"Atlantic Time"}
             ls{"Atlantic Standard Time"}
+            sd{"ADT"}
             sg{"AT"}
+            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Australian Central Daylight Time"}
@@ -290,14 +300,20 @@ en{
         "meta:Europe_Central"{
             ld{"Central European Summer Time"}
             ls{"Central European Time"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Eastern European Summer Time"}
             ls{"Eastern European Time"}
+            sd{"EEST"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Western European Summer Time"}
             ls{"Western European Time"}
+            sd{"WEST"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland Islands Summer Time"}
@@ -320,6 +336,7 @@ en{
         "meta:GMT"{
             cu:int{1}
             ls{"Greenwich Mean Time"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Time"}

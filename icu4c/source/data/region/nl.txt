@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nl.xml
@@ -44,6 +44,7 @@ nl{
         172{"Gemenebest van Onafhankelijke Staten"}
         419{"Latijns-Amerika en het Caribisch gebied"}
         830{"Kanaaleilanden"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"Verenigde Arabische Emiraten"}
         AF{"Afghanistan"}
@@ -93,6 +94,7 @@ nl{
         CM{"Kameroen"}
         CN{"China"}
         CO{"Colombia"}
+        CP{"Clipperton"}
         CR{"Costa Rica"}
         CS{"Servië en Montenegro"}
         CU{"Cuba"}
@@ -101,11 +103,13 @@ nl{
         CY{"Cyprus"}
         CZ{"Tsjechië"}
         DE{"Duitsland"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Denemarken"}
         DM{"Dominica"}
         DO{"Dominicaanse Republiek"}
         DZ{"Algerije"}
+        EA{"Ceuta en Melilla"}
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Egypte"}
@@ -113,6 +117,7 @@ nl{
         ER{"Eritrea"}
         ES{"Spanje"}
         ET{"Ethiopië"}
+        EU{"Europese Unie"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandeilanden"}
@@ -144,6 +149,7 @@ nl{
         HR{"Kroatië"}
         HT{"Haïti"}
         HU{"Hongarije"}
+        IC{"Canarische Eilanden"}
         ID{"Indonesië"}
         IE{"Ierland"}
         IL{"Israël"}
@@ -232,7 +238,6 @@ nl{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oceanië (overige)"}
-        QU{"Europese Unie"}
         RE{"Réunion"}
         RO{"Roemenië"}
         RS{"Servië"}
@@ -257,6 +262,7 @@ nl{
         SV{"El Salvador"}
         SY{"Syrië"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- en Caicoseilanden"}
         TD{"Tsjaad"}
         TF{"Franse Gebieden in de zuidelijke Indische Oceaan"}
@@ -295,5 +301,5 @@ nl{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend of onjuist gebied"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

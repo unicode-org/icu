@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ta.xml
@@ -11,7 +11,11 @@
  */
 ta{
     AuxExemplarCharacters{"[a g i m t]"}
-    ExemplarCharacters{"[ஃ அ-ஊ எ-ஐ ஒ-க ங ச ஜ ஞ ட ண த ந-ப ம-வ ஷ-ஹ ா-ூ ெ-ை ொ-்]"}
+    ExemplarCharacters{
+        "[அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ ஃ க ங ச ஞ ட ண த ந ப ம ய ர ல வ ழ ள ற ன ஜ ஷ ஸ ஹ ா ி "
+        "\u0BC0 ு ூ ெ ே ை ொ ோ ௌ \u0BCD]"
+    }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Taml",
     }
@@ -21,7 +25,7 @@ ta{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     calendar{
         gregorian{
             AmPmMarkers{

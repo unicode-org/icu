@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ga.xml
@@ -11,7 +11,7 @@
  */
 ga{
     AuxExemplarCharacters{"[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]"}
-    ExemplarCharacters{"[a á b-e é f-i í j-o ó p-u ú v-z]"}
+    ExemplarCharacters{"[a á b c d e é f g h i í j k l m n o ó p q r s t u ú v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -21,12 +21,27 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "a.m.",
                 "p.m.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "dd/MM/yyyy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             dayNames{
                 format{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ro.xml
@@ -44,6 +44,7 @@ ro{
         172{"Comunitatea Statelor Independente"}
         419{"America Latină și Caraibe"}
         830{"Insulele Anglo-Normande"}
+        AC{"Insula Ascension"}
         AD{"Andorra"}
         AE{"Emiratele Arabe Unite"}
         AF{"Afganistan"}
@@ -93,6 +94,7 @@ ro{
         CM{"Camerun"}
         CN{"China"}
         CO{"Columbia"}
+        CP{"Insula Clipperton"}
         CR{"Costa Rica"}
         CS{"Serbia și Muntenegru"}
         CU{"Cuba"}
@@ -101,11 +103,13 @@ ro{
         CY{"Cipru"}
         CZ{"Republica Cehă"}
         DE{"Germania"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Danemarca"}
         DM{"Dominica"}
         DO{"Republica Dominicană"}
         DZ{"Algeria"}
+        EA{"Ceuta şi Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egipt"}
@@ -113,6 +117,7 @@ ro{
         ER{"Eritreea"}
         ES{"Spania"}
         ET{"Etiopia"}
+        EU{"Uniunea Europeană"}
         FI{"Finlanda"}
         FJ{"Fiji"}
         FK{"Insulele Falkland"}
@@ -133,7 +138,7 @@ ro{
         GP{"Guadelupa"}
         GQ{"Guineea Ecuatorială"}
         GR{"Grecia"}
-        GS{"Insulele Georgia de Sud și Sandwich de Sud"}
+        GS{"Georgia de Sud şi Insulele Sandwich de Sud"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guineea-Bissau"}
@@ -144,6 +149,7 @@ ro{
         HR{"Croația"}
         HT{"Haiti"}
         HU{"Ungaria"}
+        IC{"Insulele Canare"}
         ID{"Indonezia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -232,7 +238,6 @@ ro{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oceania Periferică"}
-        QU{"Uniunea Europeană"}
         RE{"Reunion"}
         RO{"România"}
         RS{"Serbia"}
@@ -257,6 +262,7 @@ ro{
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Insulele Turks și Caicos"}
         TD{"Ciad"}
         TF{"Teritoriile Australe și Antarctice Franceze"}
@@ -275,7 +281,7 @@ ro{
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}
-        UM{"Insulele mici îndepărtate ale Statelor Unite ale Americii"}
+        UM{"Insulele Minore Îndepărtate ale Statelor Unite ale Americii"}
         US{"Statele Unite ale Americii"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -295,5 +301,5 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută sau nevalidă"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
 }

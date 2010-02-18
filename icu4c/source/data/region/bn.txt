@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bn.xml
@@ -114,6 +114,7 @@ bn{
         ER{"ইরিত্রিয়া"}
         ES{"স্পেন"}
         ET{"ইফিওপিয়া"}
+        EU{"ইউরোপীয় ইউনিয়ন"}
         FI{"ফিন্ল্যাণ্ড"}
         FJ{"ফিজি"}
         FK{"ফকল্যান্ড দ্বীপপুঞ্জ"}
@@ -233,7 +234,6 @@ bn{
         PY{"প্যারাগোয়ে"}
         QA{"কাতার"}
         QO{"আউটলাইনিং ওসানিয়া"}
-        QU{"ইউরোপীয় ইউনিয়ন"}
         RE{"রিইউনিয়ন"}
         RO{"রুমানিয়া"}
         RS{"সারবিয়া"}
@@ -296,5 +296,5 @@ bn{
         ZW{"জিম্বাবুয়ে"}
         ZZ{"অজানা অথবা ভুল স্থান"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

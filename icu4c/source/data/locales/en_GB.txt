@@ -1,19 +1,20 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_GB.xml
 // *
 // ***************************************************************************
 en_GB{
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -43,6 +44,14 @@ en_GB{
                 yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -70,12 +79,12 @@ en_GB{
                 }
                 fallback{"{0} - {1}"}
                 hm{
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 y{
                     y{"y-y"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -14,6 +14,8 @@ id{
         aa{"Afar"}
         ab{"Abkhaz"}
         ace{"Aceh"}
+        ach{"Acholi"}
+        ady{"Adygei"}
         ae{"Avestan"}
         af{"Afrikaans"}
         afa{"Afro-Asiatik (Lainnya)"}
@@ -41,6 +43,7 @@ id{
         be{"Belarusia"}
         bg{"Bulgaria"}
         bh{"Bihari"}
+        bho{"Bhojpur"}
         bi{"Bislama"}
         bm{"Bambara"}
         bn{"Bengal"}
@@ -48,7 +51,8 @@ id{
         br{"Breton"}
         bs{"Bosnia"}
         bug{"Bugis"}
-        ca{"Catalan"}
+        ca{"Katalan"}
+        cad{"Kado"}
         cai{"India Amerika Tengah (Lainnnya)"}
         car{"Karib"}
         cau{"Kaukasia (Lainnya)"}
@@ -59,10 +63,10 @@ id{
         co{"Korsika"}
         cop{"Koptik"}
         cr{"Cree"}
-        cs{"Ceko"}
+        cs{"Cheska"}
         cv{"Chuvash"}
         cy{"Welsh"}
-        da{"Denmark"}
+        da{"Dansk"}
         de{"Jerman"}
         dv{"Divehi"}
         dz{"Dzongkha"}
@@ -77,7 +81,7 @@ id{
         eu{"Basque"}
         fa{"Persia"}
         ff{"Fulah"}
-        fi{"Finlandia"}
+        fi{"Suomi"}
         fj{"Fiji"}
         fo{"Faro"}
         fr{"Perancis"}
@@ -102,8 +106,8 @@ id{
         he{"Ibrani"}
         hi{"Hindi"}
         ho{"Hiri Motu"}
-        hr{"Kroasia"}
-        hu{"Hungaria"}
+        hr{"Kroat"}
+        hu{"Magyar"}
         hy{"Armenia"}
         hz{"Herero"}
         ia{"Interlingua"}
@@ -114,8 +118,8 @@ id{
         ik{"Inupiaq"}
         io{"Ido"}
         is{"Icelandic"}
-        it{"Italian"}
-        ja{"Japanese"}
+        it{"Italia"}
+        ja{"Jepang"}
         jpr{"Judeo-Persia"}
         jrb{"Judeo-Arab"}
         jv{"Jawa"}
@@ -145,7 +149,7 @@ id{
         lo{"Lao"}
         lt{"Lithuania"}
         lu{"Luba-Katanga"}
-        lv{"Latvian"}
+        lv{"Latvi"}
         mad{"Madura"}
         mak{"Makassar"}
         map{"Austronesia"}
@@ -163,6 +167,7 @@ id{
         ms{"Malay"}
         mt{"Maltese"}
         my{"Burma"}
+        myv{"Erza"}
         na{"Nauru"}
         nb{"Norwegian Bokmål"}
         ne{"Nepal"}
@@ -188,7 +193,7 @@ id{
         rm{"Rhaeto-Romance"}
         rn{"Rundi"}
         ro{"Romanian"}
-        ru{"Russian"}
+        ru{"Rusia"}
         rw{"Kinyarwanda"}
         sa{"Sanskrit"}
         sc{"Sardinian"}
@@ -198,17 +203,18 @@ id{
         sh{"Serbo-Croatian"}
         si{"Sinhalese"}
         sk{"Slovak"}
-        sl{"Slovenian"}
+        sl{"Sloven"}
         sm{"Samoan"}
         sn{"Shona"}
         so{"Somali"}
         sq{"Albanian"}
-        sr{"Serbian"}
+        sr{"Serb"}
         ss{"Swati"}
         su{"Sundan"}
         sux{"Sumeria"}
-        sv{"Swedia"}
+        sv{"Swensk"}
         sw{"Swahili"}
+        swb{"Komoria"}
         syr{"Syria"}
         ta{"Tamil"}
         te{"Telugu"}
@@ -218,13 +224,14 @@ id{
         tk{"Turkmen"}
         tl{"Tagalog"}
         tn{"Tswana"}
-        tr{"Turkish"}
+        tr{"Turki"}
         ts{"Tsonga"}
         tt{"Tatar"}
+        tut{"Altai"}
         tw{"Twi"}
         ty{"Tahitian"}
         ug{"Uighur"}
-        uk{"Ukrainian"}
+        uk{"Ukraina"}
         ur{"Urdu"}
         uz{"Uzbek"}
         ve{"Venda"}
@@ -235,9 +242,16 @@ id{
         xh{"Xhosa"}
         yi{"Yiddish"}
         yo{"Yoruba"}
+        yue{"Kanton"}
         za{"Zhuang"}
-        zh{"Cina"}
+        zh{"Mandarin"}
+        zh_Hans{"Mandarin (aksara sederhana)"}
+        zh_Hant{"Mandarin (aksara tradisional)"}
         zu{"Zulu"}
     }
-    Version{"2.0.42.82"}
+    Variants{
+        PINYIN{"Pinyin Latin"}
+        WADEGILE{"Wade-Giles Latin"}
+    }
+    Version{"2.0.46.49"}
 }

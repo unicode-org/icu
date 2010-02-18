@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eu.xml
@@ -11,6 +11,7 @@
  */
 eu{
     Countries{
+        AC{"AC"}
         AE{"Arabiar Emirrerri Batuak"}
         AF{"Afganistan"}
         AG{"Antigua eta Barbuda"}
@@ -51,6 +52,7 @@ eu{
         CM{"Kamerun"}
         CN{"Txina"}
         CO{"Kolonbia"}
+        CP{"CP"}
         CS{"Serbia eta Montenegro"}
         CU{"Kuba"}
         CV{"Cabo Verde"}
@@ -58,11 +60,13 @@ eu{
         CY{"Zipre"}
         CZ{"Txekiar errepublika"}
         DE{"Alemania"}
+        DG{"DG"}
         DJ{"Djibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
         DO{"Dominikar Errepublika"}
         DZ{"Aljeria"}
+        EA{"EA"}
         EC{"Ekuador"}
         EE{"Estonia"}
         EG{"Egipto"}
@@ -76,6 +80,7 @@ eu{
         FO{"Faroe Uharteak"}
         FR{"Frantzia"}
         GA{"Gabon"}
+        GB{"Erresuma Batua"}
         GE{"Georgia"}
         GF{"Guyana Frantsesa"}
         GG{"Guernsey"}
@@ -85,12 +90,15 @@ eu{
         GN{"Ginea"}
         GQ{"Ekuatore Ginea"}
         GR{"Grezia"}
+        GS{"Hegoaldeko Georgia eta Hegoaldeko Sandwich uharteak"}
         GW{"Ginea-Bissau"}
+        HK{"HK"}
         HM{"Heard eta McDonald Uharteak"}
         HN{"Honduras"}
         HR{"Kroazia"}
         HT{"Haiti"}
         HU{"Hungaria"}
+        IC{"IC"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -119,6 +127,7 @@ eu{
         LB{"Libano"}
         LC{"Santa Luzia"}
         LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
         LR{"Liberia"}
         LS{"Lesotho"}
         LT{"Lituania"}
@@ -173,34 +182,58 @@ eu{
         SA{"Saudi Arabia"}
         SB{"Salomon uharteak"}
         SC{"Seychelleak"}
+        SD{"Sudan"}
         SE{"Suedia"}
         SG{"Singapur"}
         SH{"Saint Helena"}
         SI{"Eslovenia"}
+        SJ{"Svalbard eta Jan Mayen uharteak"}
         SK{"Eslovakia"}
         SL{"Sierra Leona"}
         SM{"San Marino"}
         SN{"Senegal"}
+        SO{"Somalia"}
         SR{"Surinam"}
         ST{"Sao Tomé eta Principe"}
         SY{"Siria"}
         SZ{"Swazilandia"}
+        TA{"TA"}
+        TC{"Turk eta Caicos uharteak"}
         TD{"Txad"}
         TF{"Frantziaren Lurralde Australak"}
+        TG{"Togo"}
         TH{"Tailandia"}
         TJ{"Tadjikistan"}
+        TK{"Tokelau"}
         TL{"Ekialdeko Timor"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
         TR{"Turkia"}
         TT{"Trinidad eta Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzania"}
         UA{"Ukraina"}
+        UG{"Uganda"}
+        UM{"Estatu Batuetatik urruti dauden uharte txikiak"}
         US{"Ameriketako Estatu Batuak"}
         UY{"Uruguai"}
+        UZ{"Uzbekistan"}
         VA{"Vatikano"}
         VC{"Saint Vincent eta Grenadinak"}
+        VE{"Venezuela"}
         VG{"Birjina uharte britainiarrak"}
         VI{"Birjina uharte amerikarrak"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis eta Futuna"}
         WS{"Samoa"}
+        YE{"Yemen"}
         ZA{"Hegoafrika"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+        ZZ{"ZZ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

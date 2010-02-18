@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -112,6 +112,7 @@ cs{
         ER{"Eritrea"}
         ES{"Španělsko"}
         ET{"Etiopie"}
+        EU{"Evropská unie"}
         FI{"Finsko"}
         FJ{"Fidži"}
         FK{"Falklandské ostrovy"}
@@ -231,7 +232,6 @@ cs{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Vnější Oceánie"}
-        QU{"Evropská unie"}
         RE{"Réunion"}
         RO{"Rumunsko"}
         RS{"Srbsko"}
@@ -294,5 +294,5 @@ cs{
         ZW{"Zimbabwe"}
         ZZ{"Neznámá nebo neplatná oblast"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

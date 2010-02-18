@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2008-2009, International Business Machines Corporation and
+ * Copyright (c) 2008-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -737,10 +737,10 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
 {
     DTPtnGenOptionsData testData[] = {
     //   locale  skel   expectedPattern     options
-        { "en", "Hmm",  "H:mm",    UDATPG_MATCH_NO_OPTIONS        },
-        { "en", "HHmm", "H:mm",    UDATPG_MATCH_NO_OPTIONS        },
+        { "en", "Hmm",  "HH:mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "en", "HHmm", "HH:mm",   UDATPG_MATCH_NO_OPTIONS        },
         { "en", "hhmm", "h:mm a",  UDATPG_MATCH_NO_OPTIONS        },
-        { "en", "Hmm",  "H:mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "en", "Hmm",  "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "HHmm", "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "hhmm", "hh:mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "nb", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/th.xml
@@ -10,8 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    AuxExemplarCharacters{"[\u200B a e g m n p q t]"}
-    ExemplarCharacters{"[ฯ ๆ \u0E4E \u0E47-\u0E4D ก-ฮ ะ-\u0E3A เ-ๅ]"}
+    AuxExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharacters{
+        "[ฯ ๆ \u0E4E \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B \u0E4C \u0E4D ก ข ฃ ค ฅ ฆ ง จ"
+        " ฉ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ"
+        " ะ \u0E31 า ำ \u0E34 \u0E35 \u0E36 \u0E37 \u0E38 \u0E39 \u0E3A เ แ โ ใ ไ ๅ]"
+    }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Thai",
     }
@@ -35,7 +40,7 @@ th{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -117,8 +122,8 @@ th{
             }
             availableFormats{
                 EEEd{"EEE d"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
+                HHmm{"H:mm"}
+                HHmmss{"H:mm:ss"}
                 Hm{"H:mm"}
                 M{"L"}
                 MEd{"E, d/M"}
@@ -235,6 +240,24 @@ th{
                 }
             }
             intervalFormats{
+                H{
+                    H{"H-H"}
+                    a{"H-H"}
+                }
+                Hm{
+                    H{"H:mm-H:mm"}
+                    a{"H:mm-H:mm"}
+                    m{"H:mm-H:mm"}
+                }
+                Hmv{
+                    H{"H:mm-H:mm v"}
+                    a{"H:mm-H:mm v"}
+                    m{"H:mm-H:mm v"}
+                }
+                Hv{
+                    H{"H-H v"}
+                    a{"H-H v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -265,22 +288,22 @@ th{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"H-H"}
-                    h{"H-H"}
+                    a{"h a - h a"}
+                    h{"h-h a"}
                 }
                 hm{
-                    a{"H:mm-H:mm"}
-                    h{"H:mm-H:mm"}
-                    m{"H:mm-H:mm"}
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"H:mm-H:mm v"}
-                    h{"H:mm-H:mm v"}
-                    m{"H:mm-H:mm v"}
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"H-H v"}
-                    h{"H-H v"}
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y-y"}

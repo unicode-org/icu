@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -140,7 +140,7 @@ ko{
         el{"그리스어"}
         elx{"엘람어"}
         en{"영어"}
-        en_AU{"영어 (호주)"}
+        en_AU{"영어(호주)"}
         en_CA{"영어 (캐나다)"}
         en_GB{"영어 (영국식)"}
         en_US{"영어 (미국식)"}
@@ -514,7 +514,7 @@ ko{
         zen{"제나가어"}
         zh{"중국어"}
         zh_Hans{"중국어(간체)"}
-        zh_Hant{"중국어 (번체)"}
+        zh_Hant{"중국어(번체)"}
         znd{"아잔데족어"}
         zu{"줄루어"}
         zun{"주니어"}
@@ -660,7 +660,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

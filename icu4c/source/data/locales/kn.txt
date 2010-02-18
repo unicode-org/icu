@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kn.xml
@@ -10,7 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/kn.xml
  */
 kn{
-    ExemplarCharacters{"[಼ ಂ ಃ ೦-೯ ಅ-ಋ ೠ ಌ ೡ ಎ-ಐ ಒ-ನ ಪ-ಲ ವ-ಹ ಳ ೞ ಽ-ೄ ೆ-ೈ ೊ-್ ೕ ೖ]"}
+    ExemplarCharacters{
+        "[\u0CBC ೦ ೧ ೨ ೩ ೪ ೫ ೬ ೭ ೮ ೯ ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಂ ಃ ಕ ಖ ಗ ಘ ಙ ಚ "
+        "ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ೞ ಽ ಾ \u0CBF ೀ ು ೂ"
+        " ೃ ೄ \u0CC6 ೇ ೈ ೊ ೋ \u0CCC \u0CCD ೕ ೖ]"
+    }
     LocaleScript{
         "Knda",
     }
@@ -34,7 +38,7 @@ kn{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lv.xml
@@ -53,6 +53,7 @@ lv{
         az{"azerbaidžāņu"}
         ba{"baškīru"}
         bad{"bandu"}
+        bai{"bamileku valodas"}
         bal{"beludžu"}
         ban{"baliešu"}
         bas{"basu"}
@@ -222,7 +223,7 @@ lv{
         ira{"irāņu valodas"}
         iro{"irokēzu valodas"}
         is{"īslandiešu"}
-        it{"itāliešu"}
+        it{"itāļu"}
         iu{"inuītu"}
         ja{"japāņu"}
         jbo{"ložbans"}
@@ -237,6 +238,7 @@ lv{
         kar{"karenu"}
         kaw{"kāvi"}
         kbd{"kabardiešu"}
+        kfo{"koru"}
         kg{"kongu"}
         kha{"khasu"}
         khi{"hosjanu valodas"}
@@ -315,7 +317,7 @@ lv{
         ms{"malajiešu"}
         mt{"maltiešu"}
         mul{"vairākas valodas"}
-        mun{"mundu valoda"}
+        mun{"mundu valodas"}
         mus{"krīku"}
         mwl{"mirandiešu"}
         mwr{"marvaru"}
@@ -341,6 +343,7 @@ lv{
         no{"norvēģu"}
         nog{"nogaju"}
         non{"sennorvēģu"}
+        nqo{"nko"}
         nr{"dienvidndebelu"}
         nso{"ziemeļsotu"}
         nub{"nūbiešu valodas"}
@@ -354,23 +357,25 @@ lv{
         oc{"oksitāņu"}
         oj{"odžibvu"}
         om{"oromu"}
+        or{"oriju"}
         os{"osetīnu"}
         osa{"važāžu"}
         ota{"turku osmaņu"}
-        oto{"otomu valoda"}
+        oto{"otomu valodas"}
         pa{"pandžabu"}
-        paa{"papuasu valoda"}
+        paa{"papuasu valodas"}
         pag{"pangasinanu"}
         pal{"pehlevi"}
         pam{"pampanganu"}
         pap{"papjamento"}
         pau{"palaviešu"}
-        phi{"filipīniešu valoda"}
+        peo{"senpersu"}
+        phi{"filipīniešu valodas"}
         phn{"feniķiešu"}
         pi{"pāli"}
         pl{"poļu"}
         pon{"ponapiešu"}
-        pra{"prākrita valoda"}
+        pra{"prākrita valodas"}
         pro{"senprovansiešu"}
         ps{"puštu"}
         pt{"portugāļu"}
@@ -418,7 +423,7 @@ lv{
         sla{"slāvu"}
         sm{"samoāņu"}
         sma{"dienvidsāmu"}
-        smi{"sāmu valoda"}
+        smi{"sāmu valodas"}
         smj{"Luleo sāmu"}
         smn{"Inari sāmu"}
         sms{"skoltsāmu"}
@@ -433,12 +438,14 @@ lv{
         srr{"serēru"}
         ss{"svatu"}
         ssa{"Nīlas-Sahāras valodas"}
+        st{"dienvidsotu"}
         su{"sundaniešu"}
         suk{"sukumu"}
         sus{"susu"}
         sux{"šumeru"}
         sv{"zviedru"}
         sw{"svahili"}
+        swb{"komoru"}
         syc{"klasiskā sīriešu"}
         syr{"sīriešu"}
         ta{"tamilu"}
@@ -460,7 +467,7 @@ lv{
         tmh{"tuaregu"}
         tn{"cvanu"}
         to{"tongu"}
-        tog{"Njasas tongu valoda"}
+        tog{"Njasas tongu"}
         tpi{"tokpisins"}
         tr{"turku"}
         ts{"congu"}
@@ -500,6 +507,7 @@ lv{
         yi{"jidišs"}
         yo{"jorubu"}
         ypk{"jopiku valodas"}
+        yue{"kantoniešu"}
         za{"džuanu"}
         zap{"sapoteku"}
         zen{"zenagu"}
@@ -509,7 +517,7 @@ lv{
         znd{"zandē"}
         zu{"zulu"}
         zun{"zunju"}
-        zxx{"Bez lingvistiska satura"}
+        zxx{"bez lingvistiska satura"}
     }
     Scripts{
         Arab{"arābu"}
@@ -533,6 +541,8 @@ lv{
         Goth{"gotu"}
         Grek{"grieķu"}
         Gujr{"gudžaratu"}
+        Guru{"pandžabu"}
+        Hang{"hangila"}
         Hani{"ķīniešu"}
         Hans{"ķīniešu vienkāršotā"}
         Hant{"ķīniešu tradicionālā"}
@@ -576,11 +586,13 @@ lv{
         Thaa{"taana"}
         Thai{"taju"}
         Tibt{"tibetiešu"}
-        Xpeo{"vecpersiešu"}
+        Xpeo{"senperiešu"}
         Xsux{"šumeru-akadiešu ķīļraksts"}
         Yiii{"ji"}
         Zmth{"matemātiskais pieraksts"}
+        Zsym{"simboli"}
         Zxxx{"bez rakstības"}
+        Zyyy{"vispārējs"}
         Zzzz{"nezināma vai nederīga rakstība"}
     }
     Types{
@@ -600,12 +612,33 @@ lv{
             direct{"tiešā kārtošanas secība"}
             gb2312han{"vienkāršotās ķīniešu valodas kārtošanas secība - GB2312"}
             phonebook{"tālruņu grāmatas kārtošanas secība"}
-            pinyin{"Pinyin kārtošanas secība"}
+            pinyin{"piņjiņa kārtošanas secība"}
             stroke{"Stroke kārtošanas secība"}
             traditional{"tradicionālā kārtošanas secība"}
         }
     }
-    Version{"2.0.42.82"}
+    Variants{
+        1901{"tradicionālā vācu ortogrāfija"}
+        1959ACAD{"akadēmiskā"}
+        1996{"vācu ortogrāfija no 1996. gada"}
+        AREVELA{"austrumarmēņu"}
+        AREVMDA{"rietumarmēņu"}
+        FONIPA{"Starptautiskais fonētiskais alfabēts"}
+        FONUPA{"UPA fonētika"}
+        KKCOR{"tradicionālā ortogrāfija"}
+        MONOTON{"monotons"}
+        NEDIS{"Natisona dialekts"}
+        PINYIN{"piņjiņa romanizācija"}
+        POLYTON{"politons"}
+        POSIX{"datoru"}
+        SAAHO{"saho"}
+        SCOTLAND{"Skotijas angļu"}
+        TARASK{"Taraškeviča ortogrāfija"}
+        UCCOR{"vienotā ortogrāfija"}
+        VALENCIA{"valensiešu"}
+        WADEGILE{"Veida-Džailza romanizācija"}
+    }
+    Version{"2.0.46.29"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

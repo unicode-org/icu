@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr_CA.xml
@@ -17,7 +17,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.45.82"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -49,6 +49,20 @@ fr_CA{
                 yyMM{"yy-MM"}
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
                 MEd{
                     M{"E MM-dd – E MM-dd"}
                     d{"E MM-dd – E MM-dd"}
@@ -64,18 +78,18 @@ fr_CA{
                     d{"d–d"}
                 }
                 h{
-                    h{"HH–HH"}
+                    h{"h–h a"}
                 }
                 hm{
-                    h{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    h{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    h{"HH–HH v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}

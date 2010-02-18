@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -28,6 +28,7 @@
     <aliasLocale locale="sh_BA" />
     <aliasLocale locale="sh_CS" />
     <aliasLocale locale="sh_YU" />
+    <aliasLocale locale="shi_MA" />
     <aliasLocale locale="sr_BA" />
     <aliasLocale locale="sr_CS" />
     <aliasLocale locale="sr_ME" />
@@ -37,6 +38,7 @@
     <aliasLocale locale="sr_Cyrl_CS" />
     <aliasLocale locale="sr_Latn_YU" />
     <aliasLocale locale="sr_Latn_CS" />
+    <aliasLocale locale="tzm_MA" />
     <aliasLocale locale="uz_AF" />
     <aliasLocale locale="uz_UZ" />
     <aliasLocale locale="zh_CN" />

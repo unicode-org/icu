@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa.xml
@@ -10,11 +10,15 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    AuxExemplarCharacters{"[\u064E-\u0650 \u0652 \u0656 \u0670 ۰-۹ \u200C-\u200F]"}
-    ExemplarCharacters{
-        "[\u064B \u064D \u064C \u0651 \u0654 آ ا ء أ ؤ ئ ب پ ت-ج چ ح-ز ژ س-غ ف ق ک گ "
-        "ل-ن و ه ة ی]"
+    AuxExemplarCharacters{
+        "[\u200C \u200D \u200E \u200F \u064E \u0650 \u064F \u0652 \u0656 \u0670 ۰ ۱ ۲"
+        " ۳ ۴ ۵ ۶ ۷ ۸ ۹]"
     }
+    ExemplarCharacters{
+        "[\u064B \u064D \u064C \u0651 \u0654 آ ا ء أ ؤ ئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س "
+        "ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ة ی]"
+    }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z ﷼]"}
     LocaleScript{
         "Arab",
     }
@@ -38,7 +42,7 @@ fa{
         "'‪'%#,##0'‬'",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -50,10 +54,10 @@ fa{
                 "H:mm:ss (z)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d MMMM y",
-                "d MMMM y",
-                "yyyy/M/d",
-                "yy/M/d",
+                "EEEE, MMMM d, y",
+                "MMMM d, y",
+                "MMM d, y",
+                "M/d/yy",
                 "{1}،‏ {0}",
                 "{1}، ساعت {0}",
                 "{1}، ساعت {0}",
@@ -93,6 +97,15 @@ fa{
             }
             dayNames{
                 format{
+                    abbreviated{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
                     wide{
                         "یکشنبه",
                         "دوشنبه",
@@ -118,7 +131,7 @@ fa{
             eras{
                 abbreviated{
                     "ق.م.",
-                    "م.",
+                    "ب. م.",
                 }
                 narrow{
                     "ق",
@@ -174,6 +187,24 @@ fa{
                 }
             }
             intervalFormats{
+                H{
+                    H{"H تا H"}
+                    a{"H تا H"}
+                }
+                Hm{
+                    H{"H:mm تا H:mm"}
+                    a{"H:mm تا H:mm"}
+                    m{"H:mm تا H:mm"}
+                }
+                Hmv{
+                    H{"H:mm تا H:mm (v)"}
+                    a{"H:mm تا H:mm (v)"}
+                    m{"H:mm تا H:mm (v)"}
+                }
+                Hv{
+                    H{"H تا H (v)"}
+                    a{"H تا H (v)"}
+                }
                 M{
                     M{"M تا M"}
                 }
@@ -204,22 +235,22 @@ fa{
                 }
                 fallback{"{0} تا {1}"}
                 h{
-                    a{"H تا H"}
-                    h{"H تا H"}
+                    a{"h a تا h a"}
+                    h{"h تا h a"}
                 }
                 hm{
-                    a{"H:mm تا H:mm"}
-                    h{"H:mm تا H:mm"}
-                    m{"H:mm تا H:mm"}
+                    a{"h:mm a تا h:mm a"}
+                    h{"h:mm تا h:mm a"}
+                    m{"h:mm تا h:mm a"}
                 }
                 hmv{
-                    a{"H:mm تا H:mm (v)"}
-                    h{"H:mm تا H:mm (v)"}
-                    m{"H:mm تا H:mm (v)"}
+                    a{"h:mm a تا h:mm a (v)"}
+                    h{"h:mm تا h:mm a (v)"}
+                    m{"h:mm تا h:mm a (v)"}
                 }
                 hv{
-                    a{"H تا H (v)"}
-                    h{"H تا H (v)"}
+                    a{"h a تا h a (v)"}
+                    h{"h تا h a (v)"}
                 }
                 y{
                     y{"y تا y"}
@@ -264,9 +295,9 @@ fa{
                         "فوریهٔ",
                         "مارس",
                         "آوریل",
-                        "مهٔ",
-                        "ژوئن",
-                        "ژوئیهٔ",
+                        "می",
+                        "جون",
+                        "جولای",
                         "اوت",
                         "سپتامبر",
                         "اکتبر",
@@ -278,10 +309,10 @@ fa{
                         "فوریهٔ",
                         "مارس",
                         "آوریل",
-                        "مهٔ",
-                        "ژوئن",
-                        "ژوئیهٔ",
-                        "اوت",
+                        "می",
+                        "جون",
+                        "جولای",
+                        "آگوست",
                         "سپتامبر",
                         "اکتبر",
                         "نوامبر",
@@ -294,7 +325,7 @@ fa{
                         "ف",
                         "م",
                         "آ",
-                        "م",
+                        "می",
                         "ژ",
                         "ژ",
                         "ا",

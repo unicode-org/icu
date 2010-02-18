@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
@@ -11,7 +11,9 @@ pt_PT{
         009{"Oceânia"}
         035{"Sudeste Asiático"}
         154{"Europa do Norte"}
+        AC{"Ascensão"}
         AE{"Emiratos Árabes Unidos"}
+        AI{"Anguila"}
         AM{"Arménia"}
         AQ{"Antárctica"}
         AZ{"Azerbeijão"}
@@ -19,19 +21,20 @@ pt_PT{
         BF{"Burkina-Faso"}
         BH{"Bahrein"}
         BJ{"Benim"}
-        BW{"Botswana"}
+        BS{"Baamas"}
         BY{"Bielorrússia"}
         CC{"Ilhas Cocos"}
-        CD{"República Democrática do Congo"}
+        CG{"Congo-Brazzaville"}
         CX{"Ilha do Natal"}
         CZ{"República Checa"}
         EE{"Estónia"}
         EG{"Egipto"}
         EH{"Sara Ocidental"}
+        FK{"Ilhas Falkland"}
         FM{"Estados Federados da Micronésia"}
         GL{"Gronelândia"}
         GW{"Guiné-Bissau"}
-        HK{"Hong Kong - Região Administrativa Especial da China"}
+        HK{"Região Administrativa Especial de Hong Kong"}
         IR{"Irão"}
         KE{"Quénia"}
         KG{"Quirguizistão"}
@@ -43,16 +46,17 @@ pt_PT{
         MC{"Mónaco"}
         MD{"Moldávia, República da"}
         MG{"Madagáscar"}
-        MK{"Macedónia, República da"}
-        MO{"Macau - Região Administrativa Especial da China"}
+        MK{"Macedónia"}
+        MM{"Mianmar"}
+        MO{"Região Administrativa Especial de Macau"}
         MP{"Ilhas Mariana do Norte"}
         MU{"Maurícias"}
+        MW{"Malavi"}
         NC{"Nova Caledónia"}
         NL{"Países Baixos"}
-        PG{"Papua Nova Guiné"}
+        PG{"Papuásia-Nova Guiné"}
         PL{"Polónia"}
         PS{"Território Palestiniano"}
-        QA{"Qatar"}
         QO{"Oceânia Insular"}
         RO{"Roménia"}
         SC{"Seicheles"}
@@ -62,11 +66,11 @@ pt_PT{
         TC{"Ilhas Turcas e Caicos"}
         TJ{"Tajiquistão"}
         TM{"Turquemenistão"}
-        UM{"Ilhas Minor Outlying (E.U.A)"}
+        TT{"Trindade e Tobago"}
         VI{"Ilhas Virgin E.U.A."}
         VN{"Vietname"}
         YE{"Iémen"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.46.69"}
 }

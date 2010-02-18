@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -77,6 +77,9 @@ nb{
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
+        }
+        "America:St_Johns"{
+            ec{"St. Johns"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}

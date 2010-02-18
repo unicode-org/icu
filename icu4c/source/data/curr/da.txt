@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/da.xml
@@ -1263,6 +1263,10 @@ da{
         ETB{
             other{"Etiopiske birr"}
         }
+        EUR{
+            one{"euro"}
+            other{"euro"}
+        }
         FIM{
             one{"Finsk mark"}
             other{"Finske mar"}
@@ -1611,8 +1615,20 @@ da{
         WST{
             other{"Samoanske tala"}
         }
+        XAG{
+            one{"unse sølv"}
+        }
+        XAU{
+            one{"unse guld"}
+        }
         XCD{
             other{"Østkaribiske dollar"}
+        }
+        XPD{
+            one{"unse palladium"}
+        }
+        XPT{
+            one{"unse platin"}
         }
         XTS{
             one{"testvaluta"}
@@ -1645,5 +1661,5 @@ da{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

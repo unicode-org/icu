@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ar.xml
  */
 ar{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.60"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"سيتا"}
@@ -516,5 +516,8 @@ ar{
         "Pacific:Wake"{
             ec{"واك"}
         }
+        gmtFormat{"جرينتش{0}"}
+        gmtZeroFormat{"جرينتش"}
+        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

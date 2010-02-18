@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fo.xml
@@ -11,7 +11,7 @@
  */
 fo{
     AuxExemplarCharacters{"[c q w z]"}
-    ExemplarCharacters{"[a á b d ð e-i í j-o ó p r-u ú v x y ý æ ø]"}
+    ExemplarCharacters{"[a á b d ð e f g h i í j k l m n o ó p r s t u ú v x y ý æ ø]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +35,7 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     calendar{
         gregorian{
             DateTimePatterns{

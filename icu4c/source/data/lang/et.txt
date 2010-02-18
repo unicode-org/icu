@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/et.xml
@@ -10,6 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
+    Keys{
+        calendar{"kalender"}
+        collation{"sortimine"}
+        currency{"vääring"}
+    }
     Languages{
         aa{"afari"}
         ab{"abhaasi"}
@@ -19,19 +24,19 @@ et{
         ady{"adõgee"}
         ae{"avesta"}
         af{"afrikaani"}
-        afa{"muu afroaasia"}
+        afa{"afroaasia keel"}
         afh{"afrihili"}
         ain{"ainu"}
         ak{"akani"}
         akk{"akadi"}
         ale{"aleuudi"}
-        alg{"algonkini keeled"}
+        alg{"algonkini keel"}
         alt{"altai"}
         am{"amhari"}
         an{"aragoni"}
         ang{"vanainglise"}
         anp{"angika"}
-        apa{"apatši keeled"}
+        apa{"apatši keel"}
         ar{"araabia"}
         arc{"aramea"}
         arn{"araukaani"}
@@ -41,18 +46,18 @@ et{
         as{"assami"}
         ast{"astuuria"}
         ath{"atapaski keeled"}
-        aus{"Austraalia keeled"}
+        aus{"austraali keel"}
         av{"avaari"}
         awa{"avadhi"}
         ay{"aimara"}
         az{"aserbaidžaani"}
         ba{"baškiiri"}
         bad{"banda"}
-        bai{"bamileke keeled"}
+        bai{"bamileke keel"}
         bal{"belutši"}
         ban{"bali"}
         bas{"basa"}
-        bat{"muu balti"}
+        bat{"balti keel"}
         be{"valgevene"}
         bej{"bedža"}
         bem{"bemba"}
@@ -77,12 +82,13 @@ et{
         byn{"bilini"}
         ca{"katalaani"}
         cad{"kado"}
-        cai{"muu Kesk-Ameerika indiaani"}
+        cai{"Kesk-Ameerika indiaani keel"}
         car{"kariibi"}
-        cau{"muu Kaukaasia"}
+        cau{"kaukaasia keel"}
+        cch{"atsami"}
         ce{"tšetšeeni"}
         ceb{"sebu"}
-        cel{"muu keldi"}
+        cel{"keldi keel"}
         ch{"tšamorro"}
         chb{"tšibtša"}
         chg{"tšagatai"}
@@ -96,12 +102,12 @@ et{
         cmc{"tšami keeled"}
         co{"korsika"}
         cop{"kopti"}
-        cpe{"muud inglispõhjalised kreool- ja pidžinkeeled"}
-        cpf{"muud prantsuspõhjalised kreool- ja pidžinkeeled"}
-        cpp{"muud portugalipõhjalised kreool- ja pidžinkeeled"}
+        cpe{"inglispõhjalised kreool- ja pidžinkeeled"}
+        cpf{"prantsuspõhjalised kreool- ja pidžinkeeled"}
+        cpp{"portugalipõhjalised kreooli-/pidžinkeeled"}
         cr{"krii"}
         crh{"krimmitatari"}
-        crp{"muud kreool- ja pidžinkeeled"}
+        crp{"kreool- või pidžinkeel"}
         cs{"tšehhi"}
         csb{"kašuubi"}
         cu{"kirikuslaavi"}
@@ -113,12 +119,13 @@ et{
         dar{"dargi"}
         day{"dajaki"}
         de{"saksa"}
+        de_CH{"saksa (kõrgsaksa)"}
         del{"delavari"}
         den{"sleivi"}
         dgr{"dogribi"}
         din{"dinka"}
         doi{"dogri"}
-        dra{"muu draviidi keel"}
+        dra{"draviidi keel"}
         dsb{"alamsorbi"}
         dua{"duala"}
         dum{"keskhollandi"}
@@ -132,9 +139,12 @@ et{
         el{"kreeka"}
         elx{"eelami"}
         en{"inglise"}
+        en_US{"inglise (USA)"}
         enm{"keskinglise"}
         eo{"esperanto"}
         es{"hispaania"}
+        es_419{"hispaania (Ladina-Ameerika)"}
+        es_ES{"hispaania (Ibeeria)"}
         et{"eesti"}
         eu{"baski"}
         ewo{"evondo"}
@@ -144,7 +154,7 @@ et{
         ff{"fulbe"}
         fi{"soome"}
         fil{"filipino"}
-        fiu{"muu soomeugri"}
+        fiu{"soomeugri keel"}
         fj{"fidži"}
         fo{"fääri"}
         fon{"foni"}
@@ -160,7 +170,7 @@ et{
         gay{"gajo"}
         gba{"gbaja"}
         gd{"gaeli"}
-        gem{"muu germaani"}
+        gem{"germaani keel"}
         gez{"etioopia"}
         gil{"kiribati"}
         gl{"galeegi"}
@@ -198,16 +208,16 @@ et{
         id{"indoneesia"}
         ie{"interlingue"}
         ig{"ibo"}
-        ii{"Sichuani jii"}
+        ii{"sichuani jii"}
         ijo{"idžo"}
         ik{"injupiaki"}
         ilo{"iloko"}
-        inc{"muu India"}
-        ine{"muu indoeuroopa"}
+        inc{"india keel"}
+        ine{"indoeuroopa keel"}
         inh{"inguši"}
         io{"ido"}
-        ira{"muu Iraani"}
-        iro{"irokeesi keeled"}
+        ira{"iraani keeled"}
+        iro{"irokeesi keel"}
         is{"islandi"}
         it{"itaalia"}
         iu{"inuktituti"}
@@ -220,13 +230,16 @@ et{
         kaa{"karakalpaki"}
         kab{"kabiili"}
         kac{"katšini"}
+        kaj{"jju"}
         kam{"kamba"}
-        kar{"kareni"}
+        kar{"kareni keel"}
         kaw{"kaavi"}
         kbd{"kabardi-tšerkessi"}
+        kcg{"tyapi"}
+        kfo{"koro"}
         kg{"kongo"}
         kha{"khasi"}
-        khi{"muu khoisani"}
+        khi{"khoisani keel"}
         kho{"saki"}
         ki{"kikuju"}
         kj{"ambo"}
@@ -276,7 +289,7 @@ et{
         mai{"maithili"}
         mak{"makassari"}
         man{"malinke"}
-        map{"austroneesia keeled"}
+        map{"austroneesia keel"}
         mas{"masai"}
         mdf{"mokša"}
         mdr{"mandari"}
@@ -289,12 +302,12 @@ et{
         min{"minangkabau"}
         mis{"üksikkeeled"}
         mk{"makedoonia"}
-        mkh{"muu moni-khmeeri"}
+        mkh{"moni-khmeeri keel"}
         ml{"malajalami"}
         mn{"mongoli"}
         mnc{"mandžu"}
         mni{"manipuri"}
-        mno{"manobo keeled"}
+        mno{"manobo keel"}
         mo{"moldova"}
         moh{"mohoogi"}
         mos{"more"}
@@ -311,7 +324,7 @@ et{
         myv{"ersa"}
         na{"nauru"}
         nah{"nahua"}
-        nai{"muu Põhja-Ameerika indiaani"}
+        nai{"Põhja-Ameerika indiaani keel"}
         nap{"napoli"}
         nb{"norra bokmål"}
         nd{"põhjandebele"}
@@ -320,9 +333,10 @@ et{
         new{"nevari"}
         ng{"ndonga"}
         nia{"niasi"}
-        nic{"muu Nigeri-Kordofani"}
+        nic{"Nigeri-Kordofani keel"}
         niu{"niue"}
         nl{"hollandi"}
+        nl_BE{"flaami"}
         nn{"norra nynorsk"}
         no{"norra"}
         nog{"nogai"}
@@ -330,7 +344,7 @@ et{
         nqo{"nkoo"}
         nr{"lõunandebele"}
         nso{"pedi"}
-        nub{"Nuubia keeled"}
+        nub{"nuubia keel"}
         nv{"navaho"}
         nwc{"vananevari"}
         ny{"njandža"}
@@ -345,24 +359,25 @@ et{
         os{"osseedi"}
         osa{"oseidži"}
         ota{"osmanitürgi"}
-        oto{"otomi keeled"}
+        oto{"otomi keel"}
         pa{"pandžabi"}
-        paa{"muu Paapua"}
+        paa{"paapua keel"}
         pag{"pangasinani"}
         pal{"pahlavi"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"belau"}
         peo{"vanapärsia"}
-        phi{"muu Filipiini"}
+        phi{"filipiini keel"}
         phn{"foiniikia"}
         pi{"paali"}
         pl{"poola"}
         pon{"poonpei"}
-        pra{"praakriti keeled"}
+        pra{"praakriti keel"}
         pro{"vanaprovansi"}
         ps{"puštu"}
         pt{"portugali"}
+        pt_PT{"portugali (Ibeeria)"}
         qu{"ketšua"}
         raj{"radžastani"}
         rap{"rapanui"}
@@ -370,7 +385,7 @@ et{
         rm{"retoromaani"}
         rn{"rundi"}
         ro{"rumeenia"}
-        roa{"muu romaani"}
+        roa{"romaani keel"}
         rom{"mustlaskeel"}
         ru{"vene"}
         rup{"aromuuni"}
@@ -378,9 +393,9 @@ et{
         sa{"sanskriti"}
         sad{"sandave"}
         sah{"jakuudi"}
-        sai{"muu Lõuna-Ameerika indiaani"}
-        sal{"sališi keeled"}
-        sam{"Samaaria aramea"}
+        sai{"Lõuna-Ameerika indiaani keel"}
+        sal{"sališi keel"}
+        sam{"samaaria aramea"}
         sas{"sasaki"}
         sat{"santali"}
         sc{"sardiinia"}
@@ -389,19 +404,19 @@ et{
         sd{"sindhi"}
         se{"põhjasaami"}
         sel{"sölkupi"}
-        sem{"muu semi"}
+        sem{"semi keel"}
         sg{"sango"}
         sga{"vanaiiri"}
-        sgn{"viipekeeled"}
+        sgn{"viipekeel"}
         sh{"serbia-horvaadi"}
         shn{"šani"}
         si{"singali"}
         sid{"sidamo"}
-        sio{"siuu keeled"}
-        sit{"muu Hiina-Tiibeti"}
+        sio{"siuu keel"}
+        sit{"hiina-tiibeti keel"}
         sk{"slovaki"}
         sl{"sloveeni"}
-        sla{"muu slaavi"}
+        sla{"slaavi keel"}
         sm{"samoa"}
         sma{"lõunasaami"}
         smi{"muu saami"}
@@ -418,7 +433,7 @@ et{
         srn{"sranani"}
         srr{"sereri"}
         ss{"svaasi"}
-        ssa{"muu Niiluse-Sahara"}
+        ssa{"Niiluse-Sahara keel"}
         st{"lõunasotho"}
         su{"sunda"}
         suk{"sukuma"}
@@ -426,9 +441,10 @@ et{
         sux{"sumeri"}
         sv{"rootsi"}
         sw{"suahiili"}
+        swb{"komoori"}
         syr{"süüria"}
         ta{"tamili"}
-        tai{"muu tai keel"}
+        tai{"tai keel"}
         te{"telugu"}
         tem{"temne"}
         ter{"tereno"}
@@ -450,11 +466,11 @@ et{
         tpi{"uusmelaneesia"}
         tr{"türgi"}
         ts{"tsonga"}
-        tsi{"tšimši keeled"}
+        tsi{"tšimši"}
         tt{"tatari"}
         tum{"tumbuka"}
         tup{"tupii keeled"}
-        tut{"muu Altai"}
+        tut{"altai keel"}
         tvl{"tuvalu"}
         tw{"tvii"}
         ty{"tahiti"}
@@ -473,11 +489,11 @@ et{
         vo{"volapüki"}
         vot{"vadja"}
         wa{"vallooni"}
-        wak{"vakaši keeled"}
+        wak{"vakaši keel"}
         wal{"volamo"}
         war{"varai"}
         was{"vašo"}
-        wen{"sorbi keeled"}
+        wen{"sorbi keel"}
         wo{"volofi"}
         xal{"kalmõki"}
         xh{"koosa"}
@@ -485,7 +501,8 @@ et{
         yap{"japi"}
         yi{"jidiši"}
         yo{"joruba"}
-        ypk{"jupiki keeled"}
+        ypk{"jupiki keel"}
+        yue{"kantoni"}
         za{"tšuangi"}
         zap{"sapoteegi"}
         zen{"zenaga"}
@@ -548,6 +565,7 @@ et{
         Khar{"kharoshthi"}
         Khmr{"khmeeri"}
         Knda{"kannada"}
+        Kore{"koreani"}
         Laoo{"lao"}
         Latf{"ladina fraktuurkiri"}
         Latg{"ladina keldi kiri"}
@@ -599,6 +617,7 @@ et{
         Xpeo{"vanapärsia"}
         Xsux{"sumeri kiilkiri"}
         Yiii{"jii"}
+        Zsym{"sümbolid"}
         Zxxx{"kirjakeeleta"}
         Zyyy{"üldine"}
         Zzzz{"määramata"}
@@ -609,27 +628,61 @@ et{
             chinese{"Hiina kalender"}
             gregorian{"Gregoriuse kalender"}
             hebrew{"juudi kalender"}
+            indian{"India rahvuslik"}
             islamic{"islamikalender"}
             islamic-civil{"islami ilmalik kalender"}
             japanese{"Jaapani kalender"}
+            roc{"Hiina Vabariigi kalender"}
         }
         collation{
             big5han{"hiina traditsiooniline - big5"}
             direct{"lisareegliteta"}
             gb2312han{"hiina lihtsustatud - GB2312"}
             phonebook{"telefoniraamat"}
+            pinyin{"hiina lihtsustatud - pinyin järjekorras"}
             stroke{"elementide kirjutamise järjekorras"}
             traditional{"traditsiooniline"}
         }
     }
     Variants{
+        1606NICT{"hiline kesk-prantsuse kuni 1606"}
+        1694ACAD{"varajane moodne prantsuse"}
         1901{"saksa traditsiooniline kirjaviis"}
+        1959ACAD{"akadeemiline"}
+        1994{"standardiseeritud Resia ortograafia"}
         1996{"saksa reformitud kirjaviis"}
+        AREVELA{"ida-armeenia"}
+        AREVMDA{"lääne-armeenia"}
+        BAKU1926{"ühtlustatud türgi-ladina tähestik"}
+        BISKE{"San Giorgio/Bila murre"}
+        BOONT{"boontlingi"}
+        FONIPA{"IPA foneetika"}
+        FONUPA{"UPA foneetika"}
+        KKCOR{"üldlevinud ortograafia"}
+        LIPAW{"Resia Lipovaz'i murre"}
+        MONOTON{"monotoonne"}
         NEDIS{"Natisone murre"}
+        NJIVA{"Gniva/Njiva murre"}
+        OSOJS{"Oseacco/Osojane murre"}
+        PINYIN{"pinyin"}
         POLYTON{"polütooniline"}
+        POSIX{"arvuti"}
         REVISED{"uus kirjaviis"}
         ROZAJ{"Resia murre"}
         SAAHO{"saho murre"}
+        SCOTLAND{"šoti tavainglise"}
+        SCOUSE{"scouse"}
+        SOLBA{"Stolvizza/Solbica murre"}
+        TARASK{"Taraskievica ortograafia"}
+        UCCOR{"ühtlustatud ortograafia"}
+        UCRCOR{"ühtlustatud redigeeritud ortograafia"}
+        VALENCIA{"valentsia"}
+        WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
+    codePatterns{
+        language{"Keel: {0}"}
+        script{"Skript: {0}"}
+        territory{"Regioon: {0}"}
+    }
 }

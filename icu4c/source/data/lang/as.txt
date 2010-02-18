@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/as.xml
@@ -16,7 +16,7 @@ as{
         currency{"মুদ্ৰা"}
     }
     Languages{
-        as{"অসমীয়া"}
+        as{"অসমীয়া"}
     }
     Scripts{
         Beng{"বঙালী"}
@@ -25,9 +25,9 @@ as{
         calendar{
             buddhist{"বৌদ্ধ পঞ্জিকা"}
             chinese{"চীনা পঞ্জিকা"}
-            gregorian{"গ্ৰিগোৰীয় পঞ্জিকা"}
+            gregorian{"গ্ৰিগোৰীয় পঞ্জিকা"}
             hebrew{"হীব্ৰু পঞ্জিকা"}
-            indian{"ভাৰতীয় ৰাষ্ট্ৰীয় পঞ্জিকা"}
+            indian{"ভাৰতীয় ৰাষ্ট্ৰীয় পঞ্জিকা"}
             islamic{"ইচলামী পঞ্জিকা"}
             islamic-civil{"ইচলামী-নাগৰিকৰ পঞ্জিকা"}
             japanese{"জাপানী পঞ্জিকা"}
@@ -35,13 +35,13 @@ as{
         }
         collation{
             big5han{"পৰম্পৰাগত চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - Big5"}
-            direct{"পোনপটীয়াকৈ শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
+            direct{"পোনপটীয়াকৈ শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
             gb2312han{"সৰল চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - GB2312"}
             phonebook{"টেলিফোন বহিৰ মতেশৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
-            pinyin{"পিন্‌য়িন শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
+            pinyin{"পিন্‌য়িন শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
             stroke{"স্ট্ৰোক শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
             traditional{"পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
         }
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.50"}
 }

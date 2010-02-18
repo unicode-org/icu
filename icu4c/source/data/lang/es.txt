@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es.xml
@@ -449,6 +449,7 @@ es{
         sux{"sumerio"}
         sv{"sueco"}
         sw{"swahili"}
+        swb{"comorense"}
         syc{"siríaco clásico"}
         syr{"siriaco"}
         ta{"tamil"}
@@ -510,6 +511,7 @@ es{
         yi{"yídish"}
         yo{"yoruba"}
         ypk{"lenguas yupik"}
+        yue{"cantonés"}
         za{"zhuang"}
         zap{"zapoteco"}
         zbl{"símbolos Bliss"}
@@ -672,12 +674,14 @@ es{
         AREVELA{"Armenio oriental"}
         FONIPA{"alfabeto fonético internacional IPA"}
         MONOTON{"Monotónico"}
+        PINYIN{"Romanización pinyin"}
         POLYTON{"Politónico"}
         POSIX{"Ordenador"}
         REVISED{"Ortografía revisada"}
         VALENCIA{"Valenciano"}
+        WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

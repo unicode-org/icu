@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -44,6 +44,7 @@ tr{
         172{"Bağımsız Devletler Topluluğu"}
         419{"Latin Amerika ve Karayipler"}
         830{"Kanal Adaları"}
+        AC{"Ascension Adası"}
         AD{"Andorra"}
         AE{"Birleşik Arap Emirlikleri"}
         AF{"Afganistan"}
@@ -76,7 +77,7 @@ tr{
         BO{"Bolivya"}
         BR{"Brezilya"}
         BS{"Bahamalar"}
-        BT{"Bhutan"}
+        BT{"Butan"}
         BV{"Bouvet Adası"}
         BW{"Botsvana"}
         BY{"Beyaz Rusya"}
@@ -93,6 +94,7 @@ tr{
         CM{"Kamerun"}
         CN{"Çin"}
         CO{"Kolombiya"}
+        CP{"Clipperton Adası"}
         CR{"Kosta Rika"}
         CS{"Sırbistan-Karadağ"}
         CU{"Küba"}
@@ -101,11 +103,13 @@ tr{
         CY{"Güney Kıbrıs Rum Kesimi"}
         CZ{"Çek Cumhuriyeti"}
         DE{"Almanya"}
+        DG{"Diego Garcia"}
         DJ{"Cibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
         DO{"Dominik Cumhuriyeti"}
         DZ{"Cezayir"}
+        EA{"Ceuta ve Melilla"}
         EC{"Ekvador"}
         EE{"Estonya"}
         EG{"Mısır"}
@@ -113,6 +117,7 @@ tr{
         ER{"Eritre"}
         ES{"İspanya"}
         ET{"Etiyopya"}
+        EU{"Avrupa Birliği"}
         FI{"Finlandiya"}
         FJ{"Fiji"}
         FK{"Falkland Adaları"}
@@ -130,7 +135,7 @@ tr{
         GL{"Grönland"}
         GM{"Gambiya"}
         GN{"Gine"}
-        GP{"Guadeloupe"}
+        GP{"Guadalupe"}
         GQ{"Ekvator Ginesi"}
         GR{"Yunanistan"}
         GS{"Güney Georgia ve Güney Sandwich Adaları"}
@@ -144,12 +149,13 @@ tr{
         HR{"Hırvatistan"}
         HT{"Haiti"}
         HU{"Macaristan"}
+        IC{"Kanarya Adaları"}
         ID{"Endonezya"}
         IE{"İrlanda"}
         IL{"İsrail"}
         IM{"Man Adası"}
         IN{"Hindistan"}
-        IO{"Hint Okyanusu İngiliz Bölgesi"}
+        IO{"İngiliz Hint Okyanusu Bölgesi"}
         IQ{"Irak"}
         IR{"İran"}
         IS{"İzlanda"}
@@ -175,7 +181,7 @@ tr{
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberya"}
-        LS{"Lesotho"}
+        LS{"Lesoto"}
         LT{"Litvanya"}
         LU{"Lüksemburg"}
         LV{"Letonya"}
@@ -191,7 +197,7 @@ tr{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Moğolistan"}
-        MO{"Makao S.A.R. Çin"}
+        MO{"Makao SAR - Çin"}
         MP{"Kuzey Mariana Adaları"}
         MQ{"Martinik"}
         MR{"Moritanya"}
@@ -232,7 +238,6 @@ tr{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Uzak Okyanusya"}
-        QU{"Avrupa Birliği"}
         RE{"Reunion"}
         RO{"Romanya"}
         RS{"Sırbistan"}
@@ -240,13 +245,13 @@ tr{
         RW{"Ruanda"}
         SA{"Suudi Arabistan"}
         SB{"Solomon Adaları"}
-        SC{"Seyşel Adaları"}
+        SC{"Seyşeller"}
         SD{"Sudan"}
         SE{"İsveç"}
         SG{"Singapur"}
         SH{"Saint Helena"}
         SI{"Slovenya"}
-        SJ{"Svalbard ve Jan Mayen"}
+        SJ{"Svalbard ve Jan Mayen Adaları"}
         SK{"Slovakya"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -257,6 +262,7 @@ tr{
         SV{"El Salvador"}
         SY{"Suriye"}
         SZ{"Svaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks ve Caicos Adaları"}
         TD{"Çad"}
         TF{"Fransız Güney Bölgeleri"}
@@ -264,7 +270,7 @@ tr{
         TH{"Tayland"}
         TJ{"Tacikistan"}
         TK{"Tokelau"}
-        TL{"Doğu Timor"}
+        TL{"Timor-Leste"}
         TM{"Türkmenistan"}
         TN{"Tunus"}
         TO{"Tonga"}
@@ -286,7 +292,7 @@ tr{
         VI{"ABD Virgin Adaları"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis ve Futuna"}
+        WF{"Wallis ve Futuna Adaları"}
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
@@ -295,5 +301,5 @@ tr{
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen veya Geçersiz Bölge"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -39,6 +39,7 @@ en{
         art{"Artificial Language"}
         arw{"Arawak"}
         as{"Assamese"}
+        asa{"Asu"}
         ast{"Asturian"}
         ath{"Athapascan Language"}
         aus{"Australian Language"}
@@ -57,6 +58,7 @@ en{
         bej{"Beja"}
         bem{"Bemba"}
         ber{"Berber"}
+        bez{"Bena"}
         bg{"Bulgarian"}
         bh{"Bihari"}
         bho{"Bhojpuri"}
@@ -84,6 +86,7 @@ en{
         ce{"Chechen"}
         ceb{"Cebuano"}
         cel{"Celtic Language"}
+        cgg{"Chiga"}
         ch{"Chamorro"}
         chb{"Chibcha"}
         chg{"Chagatai"}
@@ -112,6 +115,7 @@ en{
         da{"Danish"}
         dak{"Dakota"}
         dar{"Dargwa"}
+        dav{"Taita"}
         day{"Dayak"}
         de{"German"}
         de_AT{"Austrian German"}
@@ -120,6 +124,7 @@ en{
         den{"Slave"}
         dgr{"Dogrib"}
         din{"Dinka"}
+        dje{"Zarma"}
         doi{"Dogri"}
         dra{"Dravidian Language"}
         dsb{"Lower Sorbian"}
@@ -128,6 +133,7 @@ en{
         dv{"Divehi"}
         dyu{"Dyula"}
         dz{"Dzongkha"}
+        ebu{"Embu"}
         ee{"Ewe"}
         efi{"Efik"}
         egy{"Ancient Egyptian"}
@@ -185,6 +191,7 @@ en{
         grc{"Ancient Greek"}
         gsw{"Swiss German"}
         gu{"Gujarati"}
+        guz{"Gusii"}
         gv{"Manx"}
         gwi{"Gwichʼin"}
         ha{"Hausa"}
@@ -224,6 +231,7 @@ en{
         iu{"Inuktitut"}
         ja{"Japanese"}
         jbo{"Lojban"}
+        jmc{"Machame"}
         jpr{"Judeo-Persian"}
         jrb{"Judeo-Arabic"}
         jv{"Javanese"}
@@ -237,15 +245,19 @@ en{
         kaw{"Kawi"}
         kbd{"Kabardian"}
         kcg{"Tyap"}
+        kde{"Makonde"}
+        kea{"Kabuverdianu"}
         kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi"}
         khi{"Khoisan Language"}
         kho{"Khotanese"}
+        khq{"Koyra Chiini"}
         ki{"Kikuyu"}
         kj{"Kuanyama"}
         kk{"Kazakh"}
         kl{"Kalaallisut"}
+        kln{"Kalenjin"}
         km{"Khmer"}
         kmb{"Kimbundu"}
         kn{"Kannada"}
@@ -259,6 +271,8 @@ en{
         kro{"Kru"}
         kru{"Kurukh"}
         ks{"Kashmiri"}
+        ksb{"Shambala"}
+        ksh{"Colognian"}
         ku{"Kurdish"}
         kum{"Kumyk"}
         kut{"Kutenai"}
@@ -267,6 +281,7 @@ en{
         ky{"Kirghiz"}
         la{"Latin"}
         lad{"Ladino"}
+        lag{"Langi"}
         lah{"Lahnda"}
         lam{"Lamba"}
         lb{"Luxembourgish"}
@@ -284,6 +299,7 @@ en{
         lun{"Lunda"}
         luo{"Luo"}
         lus{"Lushai"}
+        luy{"Luyia"}
         lv{"Latvian"}
         mad{"Madurese"}
         mag{"Magahi"}
@@ -295,6 +311,7 @@ en{
         mdf{"Moksha"}
         mdr{"Mandar"}
         men{"Mende"}
+        mer{"Meru"}
         mfe{"Morisyen"}
         mg{"Malagasy"}
         mga{"Middle Irish"}
@@ -328,6 +345,7 @@ en{
         nah{"Nahuatl"}
         nai{"North American Indian Language"}
         nap{"Neapolitan"}
+        naq{"Nama"}
         nb{"Norwegian Bokmål"}
         nd{"North Ndebele"}
         nds{"Low German"}
@@ -385,21 +403,24 @@ en{
         raj{"Rajasthani"}
         rap{"Rapanui"}
         rar{"Rarotongan"}
-        rm{"Rhaeto-Romance"}
+        rm{"Romansh"}
         rn{"Rundi"}
         ro{"Romanian"}
         roa{"Romance Language"}
+        rof{"Rombo"}
         rom{"Romany"}
         root{"Root"}
         ru{"Russian"}
         rup{"Aromanian"}
         rw{"Kinyarwanda"}
+        rwk{"Rwa"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
         sah{"Yakut"}
         sai{"South American Indian Language"}
         sal{"Salishan Language"}
         sam{"Samaritan Aramaic"}
+        saq{"Samburu"}
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardinian"}
@@ -407,12 +428,15 @@ en{
         sco{"Scots"}
         sd{"Sindhi"}
         se{"Northern Sami"}
+        seh{"Sena"}
         sel{"Selkup"}
         sem{"Semitic Language"}
+        ses{"Koyraboro Senni"}
         sg{"Sango"}
         sga{"Old Irish"}
         sgn{"Sign Language"}
         sh{"Serbo-Croatian"}
+        shi{"Tachelhit"}
         shn{"Shan"}
         si{"Sinhala"}
         sid{"Sidamo"}
@@ -438,6 +462,7 @@ en{
         srr{"Serer"}
         ss{"Swati"}
         ssa{"Nilo-Saharan Language"}
+        ssy{"Saho"}
         st{"Southern Sotho"}
         su{"Sundanese"}
         suk{"Sukuma"}
@@ -445,12 +470,14 @@ en{
         sux{"Sumerian"}
         sv{"Swedish"}
         sw{"Swahili"}
+        swb{"Comorian"}
         syc{"Classical Syriac"}
         syr{"Syriac"}
         ta{"Tamil"}
         tai{"Tai Language"}
         te{"Telugu"}
         tem{"Timne"}
+        teo{"Teso"}
         ter{"Tereno"}
         tet{"Tetum"}
         tg{"Tajik"}
@@ -478,8 +505,10 @@ en{
         tut{"Altaic Language"}
         tvl{"Tuvalu"}
         tw{"Twi"}
+        twq{"Tasawaq"}
         ty{"Tahitian"}
         tyv{"Tuvinian"}
+        tzm{"Central Morocco Tamazight"}
         udm{"Udmurt"}
         ug{"Uighur"}
         uga{"Ugaritic"}
@@ -493,6 +522,7 @@ en{
         vi{"Vietnamese"}
         vo{"Volapük"}
         vot{"Votic"}
+        vun{"Vunjo"}
         wa{"Walloon"}
         wak{"Wakashan Language"}
         wal{"Walamo"}
@@ -502,11 +532,13 @@ en{
         wo{"Wolof"}
         xal{"Kalmyk"}
         xh{"Xhosa"}
+        xog{"Soga"}
         yao{"Yao"}
         yap{"Yapese"}
         yi{"Yiddish"}
         yo{"Yoruba"}
         ypk{"Yupik Language"}
+        yue{"Cantonese"}
         za{"Zhuang"}
         zap{"Zapotec"}
         zbl{"Blissymbols"}
@@ -529,6 +561,7 @@ en{
         Armn{"Armenian"}
         Avst{"Avestan"}
         Bali{"Balinese"}
+        Bamu{"Bamum"}
         Batk{"Batak"}
         Beng{"Bengali"}
         Blis{"Blissymbols"}
@@ -557,6 +590,7 @@ en{
         Geor{"Georgian"}
         Glag{"Glagolitic"}
         Goth{"Gothic"}
+        Gran{"Grantha"}
         Grek{"Greek"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
@@ -590,17 +624,20 @@ en{
         Limb{"Limbu"}
         Lina{"Linear A"}
         Linb{"Linear B"}
+        Lisu{"Fraser"}
         Lyci{"Lycian"}
         Lydi{"Lydian"}
         Mand{"Mandaean"}
         Mani{"Manichaean"}
         Maya{"Mayan hieroglyphs"}
+        Merc{"Meroitic Cursive"}
         Mero{"Meroitic"}
         Mlym{"Malayalam"}
         Mong{"Mongolian"}
         Moon{"Moon"}
         Mtei{"Meitei Mayek"}
         Mymr{"Myanmar"}
+        Nkgb{"Naxi Geba"}
         Nkoo{"N’Ko"}
         Ogam{"Ogham"}
         Olck{"Ol Chiki"}
@@ -621,6 +658,7 @@ en{
         Runr{"Runic"}
         Samr{"Samaritan"}
         Sara{"Sarati"}
+        Sarb{"Old South Arabian"}
         Saur{"Saurashtra"}
         Sgnw{"SignWriting"}
         Shaw{"Shavian"}
@@ -646,6 +684,7 @@ en{
         Ugar{"Ugaritic"}
         Vaii{"Vai"}
         Visp{"Visible Speech"}
+        Wara{"Varang Kshiti"}
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
@@ -680,6 +719,42 @@ en{
             stroke{"Traditional Chinese Stroke Sort Order"}
             traditional{"Traditional Sort Order"}
         }
+        numbers{
+            arab{"Arabic-Indic Digits"}
+            arabext{"Extended Arabic-Indic Digits"}
+            armn{"Armenian Numerals"}
+            armnlow{"Armenian Lowercase Numerals"}
+            beng{"Bengali Digits"}
+            deva{"Devanagari Digits"}
+            ethi{"Ethiopic Numerals"}
+            fullwide{"Full Width Digits"}
+            geor{"Georgian Numerals"}
+            grek{"Greek Numerals"}
+            greklow{"Greek Lowercase Numerals"}
+            gujr{"Gujarati Digits"}
+            guru{"Gurmukhi Digits"}
+            hans{"Simplified Chinese Numerals"}
+            hansfin{"Simplified Chinese Financial Numerals"}
+            hant{"Traditional Chinese Numerals"}
+            hantfin{"Traditional Chinese Financial Numerals"}
+            hebr{"Hebrew Numerals"}
+            jpan{"Japanese Numerals"}
+            jpanfin{"Japanese Financial Numerals"}
+            khmr{"Khmer Digits"}
+            knda{"Kannada Digits"}
+            laoo{"Lao Digits"}
+            latn{"Western Digits"}
+            mlym{"Malayalam Digits"}
+            mong{"Mongolian Digits"}
+            mymr{"Myanmar Digits"}
+            orya{"Oriya Digits"}
+            roman{"Roman Numerals"}
+            romanlow{"Roman Lowercase Numerals"}
+            taml{"Tamil Numerals"}
+            telu{"Telugu Digits"}
+            thai{"Thai Digits"}
+            tibt{"Tibetan Digits"}
+        }
     }
     Variants{
         1606NICT{"Late Middle French to 1606"}
@@ -688,6 +763,8 @@ en{
         1959ACAD{"Academic"}
         1994{"Standardized Resian orthography"}
         1996{"German orthography of 1996"}
+        ALALC97{"ALA-LC Romanization, 1997 edition"}
+        ALUKU{"Aluku dialect"}
         AREVELA{"Eastern Armenian"}
         AREVMDA{"Western Armenian"}
         BAKU1926{"Unified Turkic Latin Alphabet"}
@@ -695,12 +772,16 @@ en{
         BOONT{"Boontling"}
         FONIPA{"IPA Phonetics"}
         FONUPA{"UPA Phonetics"}
+        HEPBURN{"Hepburn romanization"}
+        HEPLOC{"Hepburn romanization, Library of Congress method"}
         KKCOR{"Common Orthography"}
         LIPAW{"The Lipovaz dialect of Resian"}
         MONOTON{"Monotonic"}
+        NDYUKA{"Ndyuka dialect"}
         NEDIS{"Natisone dialect"}
         NJIVA{"Gniva/Njiva dialect"}
         OSOJS{"Oseacco/Osojane dialect"}
+        PAMAKA{"Pamaka dialect"}
         PINYIN{"Pinyin Romanization"}
         POLYTON{"Polytonic"}
         POSIX{"Computer"}
@@ -716,7 +797,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

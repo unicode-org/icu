@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -44,6 +44,7 @@ fi{
         172{"Itsenäisten valtioiden yhteisö"}
         419{"Latinalainen Amerikka ja Karibia"}
         830{"Kanaalisaaret"}
+        AC{"Ascension-saari"}
         AD{"Andorra"}
         AE{"Arabiemiirikunnat"}
         AF{"Afganistan"}
@@ -83,9 +84,9 @@ fi{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kookossaaret"}
-        CD{"Kongo-Kinshasa"}
+        CD{"Kongon demokraattinen tasavalta"}
         CF{"Keski-Afrikan tasavalta"}
-        CG{"Kongo-Brazzaville"}
+        CG{"Kongon tasavalta"}
         CH{"Sveitsi"}
         CI{"Norsunluurannikko"}
         CK{"Cookinsaaret"}
@@ -93,6 +94,7 @@ fi{
         CM{"Kamerun"}
         CN{"Kiina"}
         CO{"Kolumbia"}
+        CP{"Clippertoninsaari"}
         CR{"Costa Rica"}
         CS{"Serbia ja Montenegro"}
         CU{"Kuuba"}
@@ -101,11 +103,13 @@ fi{
         CY{"Kypros"}
         CZ{"Tšekki"}
         DE{"Saksa"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Tanska"}
         DM{"Dominica"}
         DO{"Dominikaaninen tasavalta"}
         DZ{"Algeria"}
+        EA{"Ceuta ja Melilla"}
         EC{"Ecuador"}
         EE{"Viro"}
         EG{"Egypti"}
@@ -113,6 +117,7 @@ fi{
         ER{"Eritrea"}
         ES{"Espanja"}
         ET{"Etiopia"}
+        EU{"EU"}
         FI{"Suomi"}
         FJ{"Fidži"}
         FK{"Falklandinsaaret"}
@@ -138,12 +143,13 @@ fi{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong – Kiinan erityishallintoalue"}
+        HK{"Hongkong – Kiinan e.h.a."}
         HM{"Heard- ja McDonaldinsaaret"}
         HN{"Honduras"}
         HR{"Kroatia"}
         HT{"Haiti"}
         HU{"Unkari"}
+        IC{"Kanariansaaret"}
         ID{"Indonesia"}
         IE{"Irlanti"}
         IL{"Israel"}
@@ -191,7 +197,7 @@ fi{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Macao – Kiinan erityishallintoalue"}
+        MO{"Macao – Kiinan e.h.a."}
         MP{"Pohjois-Mariaanit"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -232,7 +238,6 @@ fi{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"ulkomeri"}
-        QU{"Euroopan unioni"}
         RE{"Réunion"}
         RO{"Romania"}
         RS{"Serbia"}
@@ -257,6 +262,7 @@ fi{
         SV{"El Salvador"}
         SY{"Syyria"}
         SZ{"Swazimaa"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- ja Caicossaaret"}
         TD{"Tšad"}
         TF{"Ranskan ulkopuoliset eteläiset alueet"}
@@ -295,5 +301,5 @@ fi{
         ZW{"Zimbabwe"}
         ZZ{"tuntematon tai virheellinen alue"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

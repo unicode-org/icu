@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/it.xml
@@ -43,6 +43,7 @@ it{
         155{"Europa occidentale"}
         172{"Comunità di Stati Indipendenti"}
         419{"America Latina e Caraibi"}
+        AC{"Isola di Ascensione"}
         AD{"Andorra"}
         AE{"Emirati Arabi Uniti"}
         AF{"Afghanistan"}
@@ -92,6 +93,7 @@ it{
         CM{"Camerun"}
         CN{"Cina"}
         CO{"Colombia"}
+        CP{"Isola di Clipperton"}
         CR{"Costa Rica"}
         CS{"Serbia e Montenegro"}
         CU{"Cuba"}
@@ -100,11 +102,13 @@ it{
         CY{"Cipro"}
         CZ{"Repubblica Ceca"}
         DE{"Germania"}
+        DG{"Diego Garcia"}
         DJ{"Gibuti"}
         DK{"Danimarca"}
         DM{"Dominica"}
         DO{"Repubblica Dominicana"}
         DZ{"Algeria"}
+        EA{"Ceuta e Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egitto"}
@@ -112,6 +116,7 @@ it{
         ER{"Eritrea"}
         ES{"Spagna"}
         ET{"Etiopia"}
+        EU{"Unione Europea"}
         FI{"Finlandia"}
         FJ{"Figi"}
         FK{"Isole Falkland"}
@@ -146,6 +151,7 @@ it{
         HR{"Croazia"}
         HT{"Haiti"}
         HU{"Ungheria"}
+        IC{"Isole Canarie"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israele"}
@@ -230,13 +236,12 @@ it{
         PM{"Saint Pierre e Miquelon"}
         PN{"Pitcairn"}
         PR{"Portorico"}
-        PS{"Palestina"}
+        PS{"Territori palestinesi"}
         PT{"Portogallo"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oceania lontana"}
-        QU{"Unione Europea"}
         RE{"Réunion"}
         RO{"Romania"}
         RS{"Serbia"}
@@ -261,6 +266,7 @@ it{
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Isole Turks e Caicos"}
         TD{"Ciad"}
         TF{"Territori australi francesi"}
@@ -299,5 +305,5 @@ it{
         ZW{"Zimbabwe"}
         ZZ{"regione non valida o sconosciuta"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

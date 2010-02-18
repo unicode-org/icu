@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sl.xml
@@ -443,6 +443,7 @@ sl{
         sux{"sumerščina"}
         sv{"švedščina"}
         sw{"svahili"}
+        swb{"šikomor"}
         syc{"klasična sirščina"}
         syr{"sirščina"}
         ta{"tamilščina"}
@@ -504,6 +505,7 @@ sl{
         yi{"jidiš"}
         yo{"jorubščina"}
         ypk{"jupiški jezik"}
+        yue{"kantonščina"}
         za{"za"}
         zap{"zapoteščina"}
         zbl{"znakovni jezik Bliss"}
@@ -689,6 +691,7 @@ sl{
         NEDIS{"nadiško narečje"}
         NJIVA{"rezijansko narečje Njiva (Gniva)"}
         OSOJS{"rezijansko narečje iz Osojan (Oseacco)"}
+        PINYIN{"romanizacija pindžin"}
         POLYTON{"politonalni pravopis"}
         POSIX{"standard prenosljivosti programske opreme"}
         REVISED{"revidiran pravopis"}
@@ -698,8 +701,9 @@ sl{
         SOLBA{"rezijansko narečje iz Solbice (Stolvizza)"}
         TARASK{"Taraškievičeva beloruska slovnica"}
         VALENCIA{"valencijski pravopis"}
+        WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     codePatterns{
         language{"Jezik: {0}"}
         territory{"Regija: {0}"}

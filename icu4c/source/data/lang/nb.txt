@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -44,6 +44,7 @@ nb{
         art{"kunstig språk"}
         arw{"arawak"}
         as{"assamisk"}
+        asa{"asu (Tanzania)"}
         ast{"asturisk"}
         ath{"athapaskansk språk"}
         aus{"australsk språk"}
@@ -62,6 +63,7 @@ nb{
         bej{"beja"}
         bem{"bemba"}
         ber{"berbisk"}
+        bez{"bena (Tanzania)"}
         bg{"bulgarsk"}
         bh{"bihari"}
         bho{"bhojpuri"}
@@ -133,6 +135,7 @@ nb{
         dv{"divehi"}
         dyu{"dyula"}
         dz{"dzongkha"}
+        ebu{"kiembu"}
         ee{"ewe"}
         efi{"efik"}
         egy{"gammelegyptisk"}
@@ -242,6 +245,7 @@ nb{
         kaw{"kawi"}
         kbd{"kabardisk"}
         kcg{"tyap"}
+        kea{"kappverdisk"}
         kfo{"koro"}
         kg{"kikongo"}
         kha{"khasi"}
@@ -289,6 +293,7 @@ nb{
         lun{"lunda"}
         luo{"luo"}
         lus{"lushai"}
+        luy{"oluluyia"}
         lv{"latvisk"}
         mad{"maduresisk"}
         mag{"magahi"}
@@ -510,6 +515,7 @@ nb{
         yi{"jiddisk"}
         yo{"joruba"}
         ypk{"jupisk språk"}
+        yue{"kantonesisk"}
         za{"zhuang"}
         zap{"zapotec"}
         zbl{"blissymboler"}
@@ -659,12 +665,15 @@ nb{
         calendar{
             buddhist{"buddhistisk kalender"}
             chinese{"kinesisk kalender"}
+            ethiopic{"etiopisk kalender"}
+            ethiopic-amete-alem{"etiopisk amete-alem-kalender"}
             gregorian{"gregoriansk kalender"}
             hebrew{"hebraisk kalender"}
             indian{"indisk nasjonalkalender"}
             islamic{"islamsk kalender"}
             islamic-civil{"islamsk sivil kalender"}
             japanese{"japansk kalender"}
+            persian{"persisk kalender"}
             roc{"kalender for Republikken Kina"}
         }
         collation{
@@ -693,6 +702,7 @@ nb{
         NEDIS{"natisonedialekt"}
         NJIVA{"gniva- og njivadialekt"}
         OSOJS{"oseacco- og osojanedialekt"}
+        PINYIN{"pinyin"}
         POLYTON{"polytonisk rettskriving"}
         POSIX{"dataspråk"}
         REVISED{"revidert rettskriving"}
@@ -702,8 +712,9 @@ nb{
         SCOUSE{"scouse dialekt"}
         SOLBA{"stolvizza- og solbicadialekt"}
         VALENCIA{"valensisk dialekt"}
+        WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

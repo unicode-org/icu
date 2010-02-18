@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/si.xml
@@ -10,8 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
-    AuxExemplarCharacters{"[\u200B-\u200D ඎ-ඐ ඦ ෳ]"}
-    ExemplarCharacters{"[අ-ඍ එ-ඖ ං ඃ ක-ඣ ඥ ඤ ට-න ඳ-ර ල ව-ෆ ා-\u0DD4 \u0DD6 ෘ ෲ ෟ ෙ-ෞ \u0DCA]"}
+    AuxExemplarCharacters{"[\u200B \u200C \u200D ඎ ඏ ඐ ඦ ෳ]"}
+    ExemplarCharacters{
+        "[අ ආ ඇ ඈ ඉ ඊ උ ඌ ඍ එ ඒ ඓ ඔ ඕ ඖ ං ඃ ක ඛ ග ඝ ඞ ඟ ච ඡ ජ ඣ ඥ ඤ ට ඨ ඩ ඪ ණ ඬ ත ථ ද"
+        " ධ න ඳ ප ඵ බ භ ම ඹ ය ර ල ව ශ ෂ ස හ ළ ෆ ා ැ ෑ \u0DD2 \u0DD3 \u0DD4 \u0DD6 ෘ ෲ"
+        " ෟ \u0DCA ෙ ේ ෛ ො ෝ ෞ]"
+    }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Sinh",
     }
@@ -21,7 +26,7 @@ si{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.46"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/it.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/rbnf/it.xml
+ *  ICU <specials> source: <path>/xml/rbnf/it.xml
  */
 it{
     RBNFRules{
@@ -217,5 +217,5 @@ it{
             "2: =%%msco-with-o=;",
         }
     }
-    Version{"4126"}
+    Version{"2.0.41.26"}
 }

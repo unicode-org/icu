@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/zh_Hant.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/rbnf/zh_Hant.xml
+ *  ICU <specials> source: <path>/xml/rbnf/zh_Hant.xml
  */
 zh_Hant{
     %%ParentIsRoot:int{1}
@@ -130,5 +130,5 @@ zh_Hant{
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"4126"}
+    Version{"2.0.41.26"}
 }

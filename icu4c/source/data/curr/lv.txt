@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lv.xml
@@ -33,7 +33,7 @@ lv{
         }
         AOA{
             "Kz",
-            "Angolas jaunā kvanza",
+            "Angolas kvanza",
         }
         ARS{
             "AR$",
@@ -51,13 +51,17 @@ lv{
             "Afl.",
             "Arubas guldenis",
         }
+        AZM{
+            "AZM",
+            "Azerbaidžānas manats (1993-2006)",
+        }
         AZN{
             "man.",
             "Azerbaidžānas manats",
         }
         BAM{
             "KM",
-            "Bosnijas konvertējamā marka",
+            "Bosnijas un Hercogovinas marka",
         }
         BBD{
             "Bds$",
@@ -75,13 +79,17 @@ lv{
             "BGN",
             "Bulgārijas leva",
         }
+        BHD{
+            "BD",
+            "Bahreinas dinārs",
+        }
         BIF{
             "FBu",
             "Burundi franks",
         }
         BMD{
             "BD$",
-            "Bermudu salu dolārs",
+            "Bermudu dolārs",
         }
         BND{
             "BN$",
@@ -133,7 +141,7 @@ lv{
         }
         CNY{
             "CN¥",
-            "Ķīnas juana",
+            "Ķīnas juaņa renminbi",
         }
         COP{
             "CO$",
@@ -146,6 +154,10 @@ lv{
         CRC{
             "₡",
             "Kostarikas kolons",
+        }
+        CUC{
+            "CUC$",
+            "Kubas konvertējamais peso",
         }
         CUP{
             "CU$",
@@ -253,7 +265,7 @@ lv{
         }
         GTQ{
             "GTQ",
-            "(Gvatemalas) ketsals",
+            "Gvatemalas ketsals",
         }
         GYD{
             "GY$",
@@ -320,7 +332,7 @@ lv{
             "Jordānas dinārs",
         }
         JPY{
-            "JP¥",
+            "¥",
             "Japānas jena",
         }
         KES{
@@ -330,6 +342,14 @@ lv{
         KGS{
             "KGS",
             "Kirgizstānas soms",
+        }
+        KHR{
+            "KHR",
+            "Kambodžas riels",
+        }
+        KMF{
+            "CF",
+            "Komoru franks",
         }
         KPW{
             "KPW",
@@ -342,6 +362,10 @@ lv{
         KWD{
             "KD",
             "Kuveitas dinārs",
+        }
+        KYD{
+            "KY$",
+            "Kaimanu salu dolārs",
         }
         KZT{
             "KZT",
@@ -397,7 +421,7 @@ lv{
         }
         MGA{
             "MGA",
-            "ariari",
+            "Madagaskaras ariari",
         }
         MKD{
             "MKD",
@@ -454,6 +478,10 @@ lv{
         MZE{
             "MZE" /** ===  */,
             "Mozambikas eskudo",
+        }
+        MZM{
+            "Mt",
+            "Mozambikas vecais metikals",
         }
         MZN{
             "MTn",
@@ -519,9 +547,17 @@ lv{
             "Esc",
             "Portugāles eskudo",
         }
+        PYG{
+            "₲",
+            "Paragvajas guarani",
+        }
         QAR{
             "QR",
             "Kataras riāls",
+        }
+        ROL{
+            "ROL",
+            "Rumānijas vecā leja",
         }
         RON{
             "RON",
@@ -545,7 +581,7 @@ lv{
         }
         SBD{
             "SI$",
-            "Zālamana salu dolārs",
+            "Zālamana Salu dolārs",
         }
         SCR{
             "SRe",
@@ -599,6 +635,10 @@ lv{
             "SV₡",
             "Salvadoras kolons",
         }
+        SYP{
+            "SY£",
+            "Sīrijas mārciņa",
+        }
         SZL{
             "SZL",
             "Svazilendas lilangeni",
@@ -613,7 +653,11 @@ lv{
         }
         TMM{
             "TMM",
-            "Turkmēnijas manats",
+            "Turkmenistānas manats",
+        }
+        TMT{
+            "TMT",
+            "Turkmenistānas jaunais manats",
         }
         TND{
             "DT",
@@ -629,7 +673,7 @@ lv{
         }
         TRY{
             "TL",
-            "jaunā Turcijas lira",
+            "Turcijas jaunā lira",
         }
         TTD{
             "TT$",
@@ -637,7 +681,7 @@ lv{
         }
         TWD{
             "NT$",
-            "jaunais Taivānas dolārs",
+            "Taivānas jaunais dolārs",
         }
         TZS{
             "TSh",
@@ -683,6 +727,10 @@ lv{
             "WS$",
             "Samoa tala",
         }
+        XAF{
+            "FCFA",
+            "Centrālāfrikas CFA franks",
+        }
         XAG{
             "XAG",
             "sudrabs",
@@ -691,9 +739,21 @@ lv{
             "XAU",
             "zelts",
         }
+        XBA{
+            "XBA",
+            "Eiropas norēķinu vienība EURCO",
+        }
         XBB{
             "XBB",
             "Eiropas naudas vienība",
+        }
+        XBC{
+            "XBC",
+            "Eiropas norēķinu vienība (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Eiropas norēķinu vienība (XBD)",
         }
         XCD{
             "EC$",
@@ -715,13 +775,25 @@ lv{
             "XFU",
             "Francijas UIC franks",
         }
+        XOF{
+            "CFA",
+            "Rietumāfrikas CFA franks",
+        }
         XPD{
             "XPD",
             "pallādijs",
         }
+        XPF{
+            "CFPF",
+            "CFP franks",
+        }
         XPT{
             "XPT",
             "platīns",
+        }
+        XTS{
+            "XTS",
+            "Testa valūtas kods",
         }
         XXX{
             "XXX",
@@ -743,10 +815,175 @@ lv{
             "Z$",
             "Zimbabves dolārs",
         }
+        ZWL{
+            "ZWL",
+            "Zimbabves dolārs (2009)",
+        }
     }
     CurrencyPlurals{
+        AED{
+            one{"Apvienoto Arābu Emirātu dirhēms"}
+            other{"Apvienoto Arābu Emirātu dirhēmi"}
+            zero{"Apvienoto Arābu Emirātu dirhēmi"}
+        }
+        AFN{
+            one{"Afganistānas afgāns"}
+            other{"Afganistānas afgāni"}
+            zero{"Afganistānas afgāni"}
+        }
+        ALL{
+            one{"Albānijas leks"}
+            other{"Albānijas leki"}
+            zero{"Albānijas leki"}
+        }
+        AMD{
+            one{"Armēnijas drams"}
+            other{"Armēnijas drami"}
+            zero{"Armēnijas drami"}
+        }
+        ANG{
+            one{"Nīderlandes Antiļu guldenis"}
+            other{"Nīderlandes Antiļu guldeņi"}
+            zero{"Nīderlandes Antiļu guldeņi"}
+        }
+        AOA{
+            one{"Angolas kvanza"}
+            other{"Angolas kvanzas"}
+            zero{"Angolas kvanzas"}
+        }
+        ARS{
+            one{"Argentīnas peso"}
+        }
+        AUD{
+            one{"Austrālijas dolārs"}
+            other{"Austrālijas dolāri"}
+            zero{"Austrālijas dolāri"}
+        }
+        AZM{
+            one{"Azerbaidžānas manats (1993-2006)"}
+            other{"Azerbaidžānas manati (1993-2006)"}
+            zero{"Azerbaidžānas manati (1993-2006)"}
+        }
+        AZN{
+            one{"Azerbaidžānas manats"}
+            other{"Azerbaidžānas manati"}
+            zero{"Azerbaidžānas manati"}
+        }
+        BAM{
+            one{"Bosnijas un Hercogovinas marka"}
+            other{"Bosnijas un Hercogovinas markas"}
+            zero{"Bosnijas un Hercogovinas markas"}
+        }
+        BBD{
+            one{"Barbadosas dolārs"}
+            other{"Barbadosas dolāri"}
+            zero{"Barbadosas dolāri"}
+        }
+        BDT{
+            one{"Bangladešas taka"}
+            other{"Bangladešas takas"}
+            zero{"Bangladešas takas"}
+        }
+        BEF{
+            one{"Beļģijas franks"}
+            other{"Beļģijas franki"}
+            zero{"Beļģijas franki"}
+        }
+        BGN{
+            one{"Bulgārijas leva"}
+        }
+        BHD{
+            one{"Bahreinas dinārs"}
+            other{"Bahreinas dināri"}
+            zero{"Bahreinas dināri"}
+        }
+        CUC{
+            one{"Kubas konvertējamais peso"}
+            other{"Kubas konvertējamie peso"}
+            zero{"Kubas konvertējamie peso"}
+        }
+        KHR{
+            one{"Kambodžas riels"}
+            other{"Kambodžas rieli"}
+            zero{"Kambodžas rieli"}
+        }
+        KMF{
+            one{"Komoru franks"}
+            other{"Komoru franki"}
+            zero{"Komoru franki"}
+        }
+        KYD{
+            one{"Kaimanu salu dolārs"}
+            other{"Kaimanu salu dolāri"}
+            zero{"Kaimanu salu dolāri"}
+        }
         KZT{
             zero{"Kazahstānas tenge"}
+        }
+        MZM{
+            one{"Mozambikas vecais metikals"}
+            other{"Mozambikas vecie metikali"}
+            zero{"Mozambikas vecie metikali"}
+        }
+        PYG{
+            one{"Paragvajas guarani"}
+            other{"Paragvajas guarani"}
+            zero{"Paragvajas guarani"}
+        }
+        ROL{
+            one{"Rumānijas vecā leva"}
+            other{"Rumānijas vecās levas"}
+            zero{"Rumānijas vecās levas"}
+        }
+        SYP{
+            one{"Sīrijas mārciņa"}
+            other{"Sīrijas mārciņas"}
+            zero{"Sīrijas mārciņas"}
+        }
+        TMT{
+            one{"Turkmenistānas jaunais manats"}
+            other{"Turkmenistānas jaunie manati"}
+            zero{"Turkmenistānas jaunie manati"}
+        }
+        XAF{
+            one{"Centrālāfrikas CFA franks"}
+            other{"Centrālāfrikas CFA franki"}
+            zero{"Centrālāfrikas CFA franki"}
+        }
+        XBA{
+            one{"Eiropas norēķinu vienība EURCO"}
+            other{"Eiropas norēķinu vienības EURCO"}
+            zero{"Eiropas norēķinu vienības EURCO"}
+        }
+        XBC{
+            one{"Eiropas norēķinu vienība (XBC)"}
+            other{"Eiropas norēķinu vienības (XBC)"}
+            zero{"Eiropas norēķinu vienības (XBC)"}
+        }
+        XBD{
+            one{"Eiropas norēķinu vienība (XBD)"}
+            other{"Eiropas norēķinu vienības (XBD)"}
+            zero{"Eiropas norēķinu vienības (XBD)"}
+        }
+        XOF{
+            one{"Rietumāfrikas CFA franks"}
+            other{"Rietumāfrikas CFA franki"}
+            zero{"Rietumāfrikas CFA franki"}
+        }
+        XPF{
+            one{"CFP franks"}
+            other{"CFP franki"}
+            zero{"CFP franki"}
+        }
+        XTS{
+            one{"testa valūtas kods"}
+            other{"testa valūtas kods"}
+            zero{"testa valūtas kods"}
+        }
+        ZWL{
+            one{"Zimbabves dollārs (2009)"}
+            other{"Zimbabves dollāri (2009)"}
+            zero{"Zimbabves dollāri (2009)"}
         }
     }
     CurrencyUnitPatterns{
@@ -754,5 +991,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.29"}
 }

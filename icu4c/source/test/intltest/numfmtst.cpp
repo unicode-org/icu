@@ -2909,7 +2909,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         {"ru_RU", "2", "RUB", "2,00\\u00A0\\u0440\\u0443\\u0431.", "2,00\\u00A0RUB", "2,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0445 \\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU", "5", "RUB", "5,00\\u00A0\\u0440\\u0443\\u0431.", "5,00\\u00A0RUB", "5,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0445 \\u0440\\u0443\\u0431\\u043B\\u0435\\u0439"},
         // test locale without currency information
-        {"ti_ET", "-1.23", "USD", "-US$1.23", "-USD1.23", "-1.23 USD"},
+        {"root", "-1.23", "USD", "-US$\\u00A01.23", "-USD\\u00A01.23", "-1.23 USD"},
         // test choice format
         {"es_AR", "1", "INR", "Rs\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
     };
@@ -3324,7 +3324,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Brazilian reals1.00",
         "British Pound Sterling1.00",
         "British pound sterling1.00",
-        "British pound sterlings1.00",
+        "British pounds sterling1.00",
         "Brunei Dollar1.00",
         "Brunei dollar1.00",
         "Brunei dollars1.00",
@@ -4555,7 +4555,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "1.00 Brazilian reals random",
         "1.00 British Pound Sterling random",
         "1.00 British pound sterling random",
-        "1.00 British pound sterlings random",
+        "1.00 British pounds sterling random",
         "1.00 Brunei Dollar random",
         "1.00 Brunei dollar random",
         "1.00 Brunei dollars random",

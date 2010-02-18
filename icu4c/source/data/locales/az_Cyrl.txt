@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az_Cyrl.xml
@@ -11,12 +11,12 @@
  */
 az_Cyrl{
     %%ParentIsRoot:int{1}
-    AuxExemplarCharacters{"[ц щ ъ ь-я]"}
-    ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}
+    AuxExemplarCharacters{"[ц щ ъ ь э ю я]"}
+    ExemplarCharacters{"[а ә б в г ғ д е ж з и й ј к ҝ л м н о ө п р с т у ү ф х һ ч ҹ ш ы]"}
     LocaleScript{
         "Cyrl",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             dayNames{

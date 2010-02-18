@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ms.xml
@@ -11,8 +11,8 @@
  */
 ms{
     ExemplarCharacters{
-        "[a {ai} {au} b-d {dz} e-k {kh} l-n {ng} {ngg} {ny} o-s {sy} t {ts} u {ua} v-"
-        "z]"
+        "[a {ai} {au} b c d {dz} e f g h i j k {kh} l m n {ng} {ngg} {ny} o p q r s {"
+        "sy} t {ts} u {ua} v w x y z]"
     }
     LocaleScript{
         "Latn",
@@ -23,9 +23,15 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
+            availableFormats{
+                MEd{"E, d-M"}
+                Md{"d-M"}
+                yM{"M-y"}
+                yMEd{"EEE, d-M-yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -46,6 +52,12 @@ ms{
                         "Jumaat",
                         "Sabtu",
                     }
+                }
+            }
+            intervalFormats{
+                h{
+                    a{"H – H"}
+                    h{"H – H"}
                 }
             }
             monthNames{

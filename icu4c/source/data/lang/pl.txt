@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -185,7 +185,7 @@ pl{
         got{"gocki"}
         grb{"grebo"}
         grc{"starogrecki"}
-        gsw{"szwajcarski niemiecki"}
+        gsw{"niemiecki (Szwajcaria)"}
         gu{"gudźaracki"}
         gv{"manx"}
         gwi{"Gwichʼin"}
@@ -380,7 +380,6 @@ pl{
         pro{"staroprowansalski"}
         ps{"paszto"}
         pt{"portugalski"}
-        pt_BR{"brazylyjski portugalski"}
         qu{"keczua"}
         raj{"radźasthani"}
         rap{"rapanui"}
@@ -445,6 +444,7 @@ pl{
         sux{"sumeryjski"}
         sv{"szwedzki"}
         sw{"suahili"}
+        swb{"komoryjski"}
         syc{"syriacki"}
         syr{"syryjski"}
         ta{"tamilski"}
@@ -506,6 +506,7 @@ pl{
         yi{"jidysz"}
         yo{"joruba"}
         ypk{"jupik"}
+        yue{"kantoński"}
         za{"czuang"}
         zap{"zapotecki"}
         zbl{"bliss"}
@@ -686,6 +687,7 @@ pl{
         BOONT{"dialekt Boontling"}
         FONIPA{"fonetyczny międzynarodowy"}
         FONUPA{"fonetyczny"}
+        KKCOR{"ortografia wspólna"}
         LIPAW{"dialekt Lipovaz w regionie Resia"}
         MONOTON{"monotoniczny"}
         NEDIS{"dialekt Natisone"}
@@ -700,9 +702,12 @@ pl{
         SCOUSE{"dialekt Scouse"}
         SOLBA{"dialekt Stolvizza/Solbica"}
         TARASK{"ortografia taraszkiewicka"}
+        UCCOR{"ortografia ujednolicona"}
+        UCRCOR{"zreformowana ortografia ujednolicona"}
         VALENCIA{"walencki"}
+        WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

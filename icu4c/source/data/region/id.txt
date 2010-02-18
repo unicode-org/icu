@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -11,6 +11,7 @@
  */
 id{
     Countries{
+        AC{"Pulau Ascension"}
         AD{"Andora"}
         AE{"Uni Emirat Arab"}
         AF{"Afghanistan"}
@@ -40,9 +41,9 @@ id{
         BN{"Brunei"}
         BO{"Bolivia"}
         BR{"Brazil"}
-        BS{"Bahamas"}
+        BS{"Bahama"}
         BT{"Bhutan"}
-        BV{"Kepulauan Bouvet"}
+        BV{"Pulau Bouvet"}
         BW{"Botswana"}
         BY{"Belarusia"}
         BZ{"Belize"}
@@ -50,14 +51,15 @@ id{
         CC{"Kepulauan Cocos"}
         CD{"Republik Demokratik Kongo"}
         CF{"Republik Afrika Tengah"}
-        CG{"Kongo"}
+        CG{"Kongo - Republik"}
         CH{"Swiss"}
-        CI{"Pantai Gading"}
+        CI{"Cote d'Ivoire"}
         CK{"Kepulauan Cook"}
-        CL{"Chili"}
+        CL{"Cile"}
         CM{"Kamerun"}
         CN{"Cina"}
         CO{"Kolombia"}
+        CP{"Pulau Clipperton"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
         CV{"Tanjung Verde"}
@@ -65,11 +67,13 @@ id{
         CY{"Siprus"}
         CZ{"Republik Ceko"}
         DE{"Jerman"}
-        DJ{"Jibouti"}
+        DG{"Diego Garcia"}
+        DJ{"Jibuti"}
         DK{"Denmark"}
         DM{"Dominika"}
         DO{"Republik Dominika"}
         DZ{"Algeria"}
+        EA{"Ceuta dan Melilla"}
         EC{"Ekuador"}
         EE{"Estonia"}
         EG{"Mesir"}
@@ -79,7 +83,7 @@ id{
         ET{"Ethiopia"}
         FI{"Finlandia"}
         FJ{"Fiji"}
-        FK{"Kepulauan Falkland"}
+        FK{"Kepulauan Malvinas"}
         FM{"Mikronesia"}
         FO{"Kepulauan Faroe"}
         FR{"Perancis"}
@@ -90,27 +94,29 @@ id{
         GF{"Guyana Perancis"}
         GH{"Ghana"}
         GI{"Gibraltar"}
-        GL{"Greenland"}
+        GL{"Grinlandia"}
         GM{"Gambia"}
         GN{"Guinea"}
         GP{"Guadeloupe"}
         GQ{"Guinea Khatulistiwa"}
         GR{"Yunani"}
-        GS{"Georgia Selatan dan Kepulauan Sandwich Selatan"}
+        GS{"Kepulauan South Sandwich dan South Georgia"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong S.A.R., Cina"}
+        HK{"Hong Kong SAR China"}
         HM{"Pulau Heard dan Kepulauan McDonald"}
         HN{"Honduras"}
         HR{"Kroasia"}
         HT{"Haiti"}
         HU{"Hungaria"}
+        IC{"Kepulauan Canary"}
         ID{"Indonesia"}
         IE{"Irlandia"}
         IL{"Israel"}
         IN{"India"}
+        IO{"Wilayah Inggris di Samudra Hindia"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Islandia"}
@@ -119,7 +125,7 @@ id{
         JO{"Yordania"}
         JP{"Jepang"}
         KE{"Kenya"}
-        KG{"Kyrgyzstan"}
+        KG{"Kirgistan"}
         KH{"Kamboja"}
         KI{"Kiribati"}
         KM{"Komoros"}
@@ -128,35 +134,35 @@ id{
         KR{"Korea Selatan"}
         KW{"Kuwait"}
         KY{"Kepulauan Kayman"}
-        KZ{"Kazakhstan"}
+        KZ{"Kazakstan"}
         LA{"Laos"}
         LB{"Lebanon"}
-        LC{"Santa Lusia"}
+        LC{"Saint Lucia"}
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberia"}
         LS{"Lesotho"}
-        LT{"Lithuania"}
+        LT{"Lituania"}
         LU{"Luxembourg"}
         LV{"Latvia"}
-        LY{"Libya"}
+        LY{"Libia"}
         MA{"Maroko"}
         MC{"Monaco"}
         MD{"Moldova"}
         MG{"Madagaskar"}
         MH{"Kepulauan Marshall"}
-        MK{"Macedonia"}
+        MK{"Makedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Makao S.A.R. Cina"}
+        MO{"Makau SAR China"}
         MP{"Kepualuan Mariana Utara"}
         MQ{"Martinique"}
         MR{"Mauritania"}
         MS{"Montserrat"}
         MT{"Malta"}
         MU{"Mauritius"}
-        MV{"Maldives"}
+        MV{"Maladewa"}
         MW{"Malawi"}
         MX{"Mexico"}
         MY{"Malaysia"}
@@ -166,7 +172,7 @@ id{
         NE{"Niger"}
         NF{"Kepulauan Norfolk"}
         NG{"Nigeria"}
-        NI{"Nicaragua"}
+        NI{"Nikaragua"}
         NL{"Netherlands"}
         NO{"Norwegia"}
         NP{"Nepal"}
@@ -177,7 +183,7 @@ id{
         PA{"Panama"}
         PE{"Peru"}
         PF{"Polynesia Perancis"}
-        PG{"Papua Nugini"}
+        PG{"Nugini Papua Nugini"}
         PH{"Filipina"}
         PK{"Pakistan"}
         PL{"Polandia"}
@@ -190,18 +196,18 @@ id{
         PY{"Paraguay"}
         QA{"Qatar"}
         RE{"Réunion"}
-        RO{"Romania"}
+        RO{"Rumania"}
         RU{"Rusia"}
         RW{"Rwanda"}
         SA{"Arab Saudi"}
         SB{"Kepulauan Solomon"}
         SC{"Seychelles"}
         SD{"Sudan"}
-        SE{"Sweden"}
+        SE{"Swedia"}
         SG{"Singapura"}
         SH{"Saint Helena"}
         SI{"Slovenia"}
-        SJ{"Svalbard dan Jan Mayen"}
+        SJ{"Kepulauan Svalbard dan Jan Mayen"}
         SK{"Slovakia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -212,11 +218,13 @@ id{
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TD{"Chad"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tajikistan"}
         TK{"Tokelau"}
+        TL{"Timor Leste"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -227,17 +235,18 @@ id{
         TZ{"Tanzania"}
         UA{"Ukraina"}
         UG{"Uganda"}
+        UM{"Kepulauan Kecil Terluar Amerika Serikat"}
         US{"Amerika Serikat"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
         VA{"Vatikan"}
         VC{"Saint Vincent dan Grenadines"}
         VE{"Venezuela"}
-        VG{"Kepulauan British Virgin"}
+        VG{"Kepulauan Virgin Inggris"}
         VI{"Kepulauan U.S. Virgin"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis dan Futuna"}
+        WF{"Kepulauan Wallis dan Futuna"}
         WS{"Samoa"}
         YE{"Yaman"}
         YT{"Mayotte"}
@@ -245,5 +254,5 @@ id{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.49"}
 }

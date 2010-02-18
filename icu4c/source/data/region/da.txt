@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/da.xml
@@ -43,6 +43,7 @@ da{
         155{"Vesteuropa"}
         172{"Sammenslutningen af uafhængige stater"}
         419{"Latinamerika og Caribien"}
+        AC{"Ascensionøen"}
         AD{"Andorra"}
         AE{"Forenede Arabiske Emirater"}
         AF{"Afghanistan"}
@@ -92,6 +93,7 @@ da{
         CM{"Cameroun"}
         CN{"Kina"}
         CO{"Colombia"}
+        CP{"Clippertonøen"}
         CR{"Costa Rica"}
         CS{"Serbien og Montenegro"}
         CU{"Cuba"}
@@ -100,11 +102,13 @@ da{
         CY{"Cypern"}
         CZ{"Tjekkiet"}
         DE{"Tyskland"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Danmark"}
         DM{"Dominica"}
         DO{"Den Dominikanske Republik"}
         DZ{"Algeriet"}
+        EA{"Ceuta og Melilla"}
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Egypten"}
@@ -112,6 +116,7 @@ da{
         ER{"Eritrea"}
         ES{"Spanien"}
         ET{"Etiopien"}
+        EU{"EU"}
         FI{"Finland"}
         FJ{"Fiji-øerne"}
         FK{"Falklandsøerne"}
@@ -143,6 +148,7 @@ da{
         HR{"Kroatien"}
         HT{"Haiti"}
         HU{"Ungarn"}
+        IC{"Kanariske øer"}
         ID{"Indonesien"}
         IE{"Irland"}
         IL{"Israel"}
@@ -186,7 +192,7 @@ da{
         MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshalløerne"}
-        MK{"Republikken Makedonien"}
+        MK{"Makedonien"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongoliet"}
@@ -231,7 +237,6 @@ da{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Ydre Oceanien"}
-        QU{"EU"}
         RE{"Reunion"}
         RO{"Rumænien"}
         RS{"Serbien"}
@@ -256,6 +261,7 @@ da{
         SV{"El Salvador"}
         SY{"Syrien"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- og Caicosøerne"}
         TD{"Tchad"}
         TF{"Franske Besiddelser i Det Sydlige Indiske Ocean"}
@@ -294,5 +300,5 @@ da{
         ZW{"Zimbabwe"}
         ZZ{"Ukendt eller ugyldigt område"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }
