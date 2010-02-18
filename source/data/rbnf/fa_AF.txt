@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/fa_AF.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/rbnf/fa_AF.xml
+ *  ICU <specials> source: <path>/xml/rbnf/fa_AF.xml
  */
 fa_AF{
     RBNFRules{
@@ -60,5 +60,5 @@ fa_AF{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"4126"}
+    Version{"2.0.41.26"}
 }

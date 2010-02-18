@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -92,6 +92,7 @@ ko{
         " 휄 휑 휘 휙 휜 휠 휨 휩 휫 휭 휴 휵 휸 휼 흄 흇 흉 흐 흑 흔 흖-흙 흠 흡 흣 흥 흩 희 흰 흴 흼 흽 힁 히 힉 힌 힐 힘"
         " 힙 힛 힝]"
     }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Hang",
         "Hani",
@@ -116,7 +117,7 @@ ko{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     calendar{
         buddhist{
             AmPmMarkers{

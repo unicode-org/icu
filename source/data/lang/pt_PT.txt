@@ -1,12 +1,17 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
 // *
 // ***************************************************************************
 pt_PT{
+    Keys{
+        calendar{"calendário"}
+        collation{"ordenação"}
+        currency{"moeda"}
+    }
     Languages{
         af{"afrikaans"}
         art{"idioma artifical"}
@@ -59,6 +64,7 @@ pt_PT{
         sal{"salishan languages"}
         sgn{"linguages de sinais"}
         ssa{"idioma nilo-sariano"}
+        swb{"língua comoriana"}
         tai{"idioma tailândes"}
         tg{"tajique"}
         to{"tonga"}
@@ -98,8 +104,10 @@ pt_PT{
         NEDIS{"dialecto natisone"}
         NJIVA{"dialecto gniva/njiva"}
         OSOJS{"dialecto oseacco/osojane"}
+        PINYIN{"Romanização pinyin"}
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
+        WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.46.69"}
 }

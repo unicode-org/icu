@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ml.xml
@@ -10,11 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/ml.xml
  */
 ml{
-    AuxExemplarCharacters{"[a-z]"}
+    AuxExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharacters{
-        "[\u200C \u200D ഃ അ-ഋ ൠ ഌ ൡ എ-ഐ ഒ-ന പ-മ ം യ ര ല വ-ഹ ള ഴ റ ാ-ൃ െ-ൈ ൊ ോ ൗ ൌ "
-        "\u0D4D]"
+        "[\u200C \u200D ഃ അ ആ ഇ ഈ ഉ ഊ ഋ ൠ ഌ ൡ എ ഏ ഐ ഒ ഓ ഔ ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ"
+        " ണ ത ഥ ദ ധ ന പ ഫ ബ ഭ മ ം യ ര ല വ ശ ഷ സ ഹ ള ഴ റ ാ ി ീ \u0D41 \u0D42 \u0D43 െ "
+        "േ ൈ ൊ ോ ൗ ൌ \u0D4D]"
     }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Mlym",
     }
@@ -38,12 +40,12 @@ ml{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
     calendar{
         gregorian{
             AmPmMarkers{
-                "am",
-                "pm",
+                "രാവിലെ",
+                "വൈകുന്നേരം",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -117,12 +119,21 @@ ml{
                         "വെ",
                         "ശ",
                     }
+                    wide{
+                        "ഞായറാഴ്ച",
+                        "തിങ്കളാഴ്ച",
+                        "ചൊവ്വാഴ്ച",
+                        "ബുധനാഴ്ച",
+                        "വ്യാഴാഴ്ച",
+                        "വെള്ളിയാഴ്ച",
+                        "ശനിയാഴ്ച",
+                    }
                 }
             }
             eras{
                 abbreviated{
-                    "ക്രി.മു.",
-                    "ക്രി.പി.",
+                    "ക്രി.മൂ",
+                    "ക്രി.മു",
                 }
                 narrow{
                     "ക്രി.മു.",
@@ -139,18 +150,18 @@ ml{
                     relative{
                         "-1"{"ഇന്നലെ"}
                         "-2"{"മിനിഞ്ഞാന്ന്"}
-                        "-3"{"മൂന്നുദിവസം മുമ്പ്"}
-                        "0"{"ഇന്നു്"}
+                        "-3"{"മൂന്നുദിവസം മുന്പ്"}
+                        "0"{"ഇന്ന്"}
                         "1"{"നാളെ"}
                         "2"{"മറ്റന്നാള്‍"}
-                        "3"{"ഇന്നേക്ക് മൂന്നാം‌പക്കം"}
+                        "3"{"ഇന്നേയ്ക്ക് മൂന്നാം പക്കം"}
                     }
                 }
                 dayperiod{
                     dn{"am/pm"}
                 }
                 era{
-                    dn{"അബ്ദം"}
+                    dn{"കാലഘട്ടം"}
                 }
                 hour{
                     dn{"മണിക്കൂര്‍"}
@@ -162,7 +173,7 @@ ml{
                     dn{"മാസം"}
                 }
                 second{
-                    dn{"സെക്കന്റ്"}
+                    dn{"സെക്കന്‍റ്"}
                 }
                 week{
                     dn{"ആഴ്ച"}
@@ -285,7 +296,7 @@ ml{
                         "മേയ്",
                         "ജൂണ്‍",
                         "ജൂലൈ",
-                        "ഓഗസ്റ്റ്",
+                        "ആഗസ്റ്റ്",
                         "സെപ്റ്റംബര്‍",
                         "ഒക്ടോബര്‍",
                         "നവംബര്‍",
@@ -306,6 +317,20 @@ ml{
                         "ഒ",
                         "ന",
                         "ഡി",
+                    }
+                    wide{
+                        "ജനുവരി",
+                        "ഫെബ്രുവരി",
+                        "മാര്‍ച്ച്",
+                        "ഏപ്രില്‍",
+                        "മേയ്",
+                        "ജൂണ്‍",
+                        "ജൂലൈ",
+                        "ആഗസ്റ്റ്",
+                        "സെപ്റ്റംബര്‍",
+                        "ഒക്ടോബര്‍",
+                        "നവംബര്‍",
+                        "ഡിസംബര്‍",
                     }
                 }
             }
@@ -424,8 +449,8 @@ ml{
         quotationStart{"“"}
     }
     measurementSystemNames{
-        US{"യു.എസ്."}
-        metric{"മെട്രിക്"}
+        US{"യുഎസ്സ്"}
+        metric{"മെട്രിക്ക്"}
     }
     units{
         day{

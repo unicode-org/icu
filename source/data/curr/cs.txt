@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -81,7 +81,7 @@ cs{
         }
         AZM{
             "AZM",
-            "Manat ázerbajdžánský",
+            "Manat ázerbajdžánský (1993-2006)",
         }
         BAD{
             "BAD" /** ===  */,
@@ -295,6 +295,14 @@ cs{
             "Nfk",
             "Nakfa",
         }
+        ESA{
+            "ESA" /** ===  */,
+            "Peseta španělská („A“ účet)",
+        }
+        ESB{
+            "ESB" /** ===  */,
+            "Peseta španělská (konvertibilní účet)",
+        }
         ESP{
             "Pts",
             "Peseta španělská",
@@ -337,7 +345,7 @@ cs{
         }
         GHC{
             "₵",
-            "Cedi",
+            "Cedi (1979-2007)",
         }
         GIP{
             "GI£",
@@ -753,7 +761,7 @@ cs{
         }
         SDP{
             "SDP" /** ===  */,
-            "Libra súdánská",
+            "Libra súdánská (1957-1998)",
         }
         SEK{
             "Skr",
@@ -963,6 +971,10 @@ cs{
             "CFPF",
             "Frank CFP",
         }
+        XTS{
+            "XTS",
+            "Kód vyhrazený pro testovací účely",
+        }
         XXX{
             "XXX",
             "Neznámá nebo neplatná měna",
@@ -1012,5 +1024,5 @@ cs{
             "Dolar zimbabwský",
         }
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

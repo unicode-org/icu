@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -10,8 +10,9 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    AuxExemplarCharacters{"[q w-y]"}
-    ExemplarCharacters{"[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
+    AuxExemplarCharacters{"[q w x y]"}
+    ExemplarCharacters{"[a b c č ć d đ {dž} e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ hr{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -72,6 +73,10 @@ hr{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -79,8 +84,8 @@ hr{
                 "HH:mm",
                 "EEEE, d. MMMM y.",
                 "d. MMMM y.",
-                "d.M.yyyy.",
-                "dd.MM.yyyy.",
+                "d. M. yyyy.",
+                "dd. MM. yyyy.",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -91,7 +96,7 @@ hr{
                 EEEd{"EEE, d."}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
                 MEd{"E, d.M."}
                 MMM{"LLL."}
                 MMMEd{"E, d.MMM."}
@@ -154,8 +159,8 @@ hr{
             }
             eras{
                 abbreviated{
-                    "pr.n.e.",
-                    "AD",
+                    "p. n. e.",
+                    "A. D.",
                 }
                 wide{
                     "Prije Krista",
@@ -207,6 +212,24 @@ hr{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH - HH'h'"}
+                    a{"HH - HH'h'"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    a{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    a{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH - HH 'h' v"}
+                    a{"HH - HH 'h' v"}
+                }
                 M{
                     M{"MM. - MM."}
                 }
@@ -237,22 +260,22 @@ hr{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"HH - HH'h'"}
-                    h{"HH - HH'h'"}
+                    a{"h a - h a"}
+                    h{"h - h'h' a"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"HH - HH 'h' v"}
-                    h{"HH - HH 'h' v"}
+                    a{"h a - h a v"}
+                    h{"h - h 'h' a v"}
                 }
                 y{
                     y{"y. - y."}
@@ -293,18 +316,18 @@ hr{
             monthNames{
                 format{
                     abbreviated{
-                        "01.",
-                        "02.",
-                        "03.",
-                        "04.",
-                        "05.",
-                        "06.",
-                        "07.",
-                        "08.",
-                        "09.",
-                        "10.",
-                        "11.",
-                        "12.",
+                        "sij",
+                        "velj",
+                        "ožu",
+                        "tra",
+                        "svi",
+                        "lip",
+                        "srp",
+                        "kol",
+                        "ruj",
+                        "lis",
+                        "stu",
+                        "pro",
                     }
                     wide{
                         "siječnja",

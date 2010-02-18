@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2007-2009, International Business Machines
+*   Copyright (C) 2007-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -372,10 +372,10 @@ static const UChar patn_hhpmm_a[] = { 0x0068, 0x0068, 0x002E, 0x006D, 0x006D, 0x
 static void TestOptions() {
     const DTPtnGenOptionsData testData[] = {
         /*loc   skel       options                       expectedPattern */
-        { "en", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_Hcmm    },
-        { "en", skel_HHmm, UDATPG_MATCH_NO_OPTIONS,        patn_Hcmm    },
+        { "en", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_HHcmm   },
+        { "en", skel_HHmm, UDATPG_MATCH_NO_OPTIONS,        patn_HHcmm   },
         { "en", skel_hhmm, UDATPG_MATCH_NO_OPTIONS,        patn_hcmm_a  },
-        { "en", skel_Hmm,  UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_Hcmm    },
+        { "en", skel_Hmm,  UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHcmm   },
         { "en", skel_HHmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHcmm   },
         { "en", skel_hhmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_hhcmm_a },
         { "nb", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_HHpmm   },

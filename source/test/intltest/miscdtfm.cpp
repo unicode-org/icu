@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -327,7 +327,7 @@ DateFormatMiscTests::test4117335()
     }
     failure(status, "new DateFormatSymbols");
     int32_t eraCount = 0;
-    const UnicodeString *eras = symbols->getEras(eraCount);
+    const UnicodeString *eras = symbols->getEraNames(eraCount);
     
     logln(UnicodeString("BC = ") + eras[0]);
     if (eras[0] != bc) {

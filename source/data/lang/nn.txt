@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nn.xml
@@ -44,6 +44,7 @@ nn{
         art{"kunstig språk"}
         arw{"arawak"}
         as{"assamisk"}
+        asa{"asu (Tanzania)"}
         ast{"asturisk"}
         ath{"athapaskansk språk"}
         aus{"australsk språk"}
@@ -62,6 +63,7 @@ nn{
         bej{"beja"}
         bem{"bemba"}
         ber{"berbisk"}
+        bez{"bena (Tanzania)"}
         bg{"bulgarsk"}
         bh{"bihari"}
         bho{"bhojpuri"}
@@ -133,6 +135,7 @@ nn{
         dv{"divehi"}
         dyu{"dyula"}
         dz{"dzongkha"}
+        ebu{"kiembu"}
         ee{"ewe"}
         efi{"efik"}
         egy{"gammalegyptisk"}
@@ -140,7 +143,9 @@ nn{
         el{"gresk"}
         elx{"elamittisk"}
         en{"engelsk"}
+        en_AU{"australisk engelsk"}
         en_CA{"kanadisk engelsk"}
+        en_GB{"britisk engelsk"}
         en_US{"engelsk (amerikansk)"}
         enm{"mellomengelsk"}
         eo{"esperanto"}
@@ -240,6 +245,7 @@ nn{
         kaw{"kawi"}
         kbd{"kabardisk"}
         kcg{"tyap"}
+        kea{"kapverdisk"}
         kfo{"koro"}
         kg{"kikongo"}
         kha{"khasi"}
@@ -446,6 +452,7 @@ nn{
         sux{"sumerisk"}
         sv{"svensk"}
         sw{"swahili"}
+        swb{"shimaore"}
         syc{"klassisk syrisk"}
         syr{"syrisk"}
         ta{"tamil"}
@@ -507,6 +514,7 @@ nn{
         yi{"jiddisk"}
         yo{"joruba"}
         ypk{"jupisk språk"}
+        yue{"kantonesisk"}
         za{"zhuang"}
         zap{"zapotec"}
         zbl{"blissymbol"}
@@ -567,7 +575,7 @@ nn{
         Hmng{"pahawk hmong"}
         Hrkt{"katakana eller hiragana"}
         Hung{"gammalungarsk"}
-        Inds{"indus (Harappan)"}
+        Inds{"indus"}
         Ital{"gammalitalisk"}
         Java{"javanesisk"}
         Jpan{"japansk"}
@@ -583,7 +591,7 @@ nn{
         Latf{"latinsk (frakturvariant)"}
         Latg{"latinsk (gælisk variant)"}
         Latn{"latinsk"}
-        Lepc{"lepcha (róng)"}
+        Lepc{"lepcha"}
         Limb{"lumbu"}
         Lina{"lineær A"}
         Linb{"lineær B"}
@@ -635,7 +643,7 @@ nn{
         Tavt{"tai viet"}
         Telu{"telugu"}
         Teng{"tengwar"}
-        Tfng{"tifinagh (berber)"}
+        Tfng{"tifinagh"}
         Tglg{"tagalog"}
         Thaa{"thaana"}
         Thai{"thai"}
@@ -656,12 +664,15 @@ nn{
         calendar{
             buddhist{"buddhistisk kalender"}
             chinese{"kinesisk kalender"}
+            ethiopic{"etiopisk kalender"}
+            ethiopic-amete-alem{"etiopisk amete-alem-kalender"}
             gregorian{"gregoriansk kalender"}
             hebrew{"hebraisk kalender"}
             indian{"indisk nasjonalkalender"}
             islamic{"islamsk kalender"}
             islamic-civil{"islamsk sivil kalender"}
             japanese{"japansk kalender"}
+            persian{"persisk kalender"}
             roc{"kalender for Republikken Kina"}
         }
         collation{
@@ -703,7 +714,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

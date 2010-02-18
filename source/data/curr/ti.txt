@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ti.xml
@@ -10,5 +10,43 @@
  *  ICU <specials> source: <path>/xml/main/ti.xml
  */
 ti{
-    Version{"2.0.42.82"}
+    Currencies{
+        BRL{
+            "R$",
+            "የብራዚል ሪል",
+        }
+        CNY{
+            "CN¥",
+            "የቻይና ዩአን ረንሚንቢ",
+        }
+        ETB{
+            "Br",
+            "የኢትዮጵያ ብር",
+        }
+        EUR{
+            "€",
+            "አውሮ",
+        }
+        GBP{
+            "£",
+            "የእንግሊዝ ፓውንድ ስተርሊንግ",
+        }
+        INR{
+            "Rs",
+            "የሕንድ ሩፒ",
+        }
+        JPY{
+            "JP¥",
+            "የጃፓን የን",
+        }
+        RUB{
+            "RUB",
+            "የራሻ ሩብል",
+        }
+        USD{
+            "US$",
+            "የአሜሪካን ዶላር",
+        }
+    }
+    Version{"2.0.45.82"}
 }

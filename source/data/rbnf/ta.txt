@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/ta.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials > source: <path>/xml/rbnf/ta.xml
+ *  ICU <specials> source: <path>/xml/rbnf/ta.xml
  */
 ta{
     RBNFRules{
@@ -68,5 +68,5 @@ ta{
             "1000000000000000000: =#,##,##0=;",
         }
     }
-    Version{"4126"}
+    Version{"2.0.41.26"}
 }

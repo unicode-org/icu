@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -820,7 +820,7 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
 
     for (strIdx = 0; strIdx < langSize; strIdx++) {
         if (!uset_contains(exemplarSet, string[strIdx])
-            && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027
+            && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027 && string[strIdx] != 0x2019 && string[strIdx] != 0x0f0b
             && string[strIdx] != 0x200C && string[strIdx] != 0x200D) {
             if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
                 uset_close(exemplarSet);
@@ -984,6 +984,9 @@ static void VerifyTranslation(void) {
         }
         else if (QUICK && exemplarLen > 2048) {
             log_verbose("skipping test for %s\n", currLoc);
+        }
+        else if (uprv_strncmp(currLoc,"bem",3) == 0) {
+            log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
         }
         else {
             UChar langBuffer[128];

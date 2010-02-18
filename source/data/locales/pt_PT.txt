@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
 // *
 // ***************************************************************************
 pt_PT{
-    AuxExemplarCharacters{"[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]"}
+    AuxExemplarCharacters{"[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ù ŭ û ü ū ÿ]"}
     NumberElements{
         ",",
         " ",
@@ -28,7 +28,7 @@ pt_PT{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.41.78"}
+    Version{"2.0.46.69"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -68,16 +68,38 @@ pt_PT{
                 "{1} {0}",
             }
             availableFormats{
+                hm{"h:mm"}
+                hms{"h:mm:ss"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
                 yyQ{"QQQ 'de' yy"}
             }
+            dayNames{
+                format{
+                    wide{
+                        "Domingo",
+                        "Segunda-feira",
+                        "Terça-feira",
+                        "Quarta-feira",
+                        "Quinta-feira",
+                        "Sexta-feira",
+                        "Sábado",
+                    }
+                }
+            }
             intervalFormats{
+                Hm{
+                    H{"HH'h' - HH'h'"}
+                }
                 MMM{
                     M{"MMM-MMM"}
                 }
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
                 hm{
-                    h{"H'h' - H'h'"}
+                    h{"h'h' - h'h' a"}
                 }
                 y{
                     y{"y-y"}

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -192,7 +192,7 @@ static void TestDateFormat()
         log_data_err("FAIL: Date Format for french locale failed using udat_format().\n" );
 
     /*format using it */
-    u_uastrcpy(temp, "10/lug/1996 16.05.28");
+    u_uastrcpy(temp, "10/lug/1996 16:05:28");
     
     { 
         UChar *fmtted;

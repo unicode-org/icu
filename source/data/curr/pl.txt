@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -935,6 +935,14 @@ pl{
             "XAU",
             "złoto",
         }
+        XBC{
+            "XBC",
+            "Europejska Jednostka Rozrachunkowa (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Europejska Jednostka Rozrachunkowa (XBD)",
+        }
         XCD{
             "EC$",
             "dolar wschodniokaraibski",
@@ -1014,6 +1022,10 @@ pl{
         ZWD{
             "Z$",
             "dolar Zimbabwe",
+        }
+        ZWL{
+            "ZWL",
+            "dolar Zimbabwe (2009)",
         }
     }
     CurrencyPlurals{
@@ -1220,5 +1232,5 @@ pl{
     CurrencyUnitPatterns{
         one{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

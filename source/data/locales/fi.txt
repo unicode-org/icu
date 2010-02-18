@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -11,7 +11,8 @@
  */
 fi{
     AuxExemplarCharacters{"[á à â ã č ç đ é è ë ǧ ǥ ȟ í ï ǩ ń ñ ŋ ô õ œ ř ŧ ú ü ʒ ǯ æ ø]"}
-    ExemplarCharacters{"[a-s š t-z ž å ä ö]"}
+    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š t u v w x y z ž å ä ö]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ fi{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -59,8 +60,9 @@ fi{
             }
             availableFormats{
                 EEEd{"EEE d."}
-                HHmmss{"HH.mm.ss"}
+                HHmmss{"H.mm.ss"}
                 Hm{"H.mm"}
+                Hms{"H.mm.ss"}
                 M{"L"}
                 MEd{"E d.M."}
                 MMM{"LLL"}
@@ -83,7 +85,7 @@ fi{
                 yQ{"Q/yyyy"}
                 yQQQ{"QQQ y"}
                 yyMM{"M/yy"}
-                yyMMM{"MMM yy"}
+                yyMMM{"LLLL yy"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMEEEd{"EEE d.M.yyyy"}
@@ -101,6 +103,15 @@ fi{
                         "pe",
                         "la",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "K",
+                        "T",
+                        "P",
+                        "L",
+                    }
                     wide{
                         "sunnuntaina",
                         "maanantaina",
@@ -112,6 +123,15 @@ fi{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "su",
+                        "ma",
+                        "ti",
+                        "ke",
+                        "to",
+                        "pe",
+                        "la",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -154,7 +174,7 @@ fi{
                     }
                 }
                 dayperiod{
-                    dn{"ap/ip"}
+                    dn{"ap./ip."}
                 }
                 era{
                     dn{"aikakausi"}
@@ -185,12 +205,30 @@ fi{
                 }
             }
             intervalFormats{
+                H{
+                    H{"H–H"}
+                    a{"H–H"}
+                }
+                Hm{
+                    H{"H.mm–H.mm"}
+                    a{"H.mm–H.mm"}
+                    m{"H.mm–H.mm"}
+                }
+                Hmv{
+                    H{"H.mm–H.mm v"}
+                    a{"H.mm–H.mm v"}
+                    m{"H.mm–H.mm v"}
+                }
+                Hv{
+                    H{"H–H v"}
+                    a{"H–H v"}
+                }
                 M{
                     M{"L.–L."}
                 }
                 MEd{
                     M{"E d.M. – E d.M."}
-                    d{"E d. – E d.M"}
+                    d{"E d. – E d.M."}
                 }
                 MMM{
                     M{"LLL–LLLL"}
@@ -215,22 +253,22 @@ fi{
                 }
                 fallback{"{0}–{1}"}
                 h{
-                    a{"H–H"}
-                    h{"H–H"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"H.mm–H.mm"}
-                    h{"H.mm–H.mm"}
-                    m{"H.mm–H.mm"}
+                    a{"h.mm a – h.mm a"}
+                    h{"h.mm–h.mm a"}
+                    m{"h.mm–h.mm a"}
                 }
                 hmv{
-                    a{"H.mm–H.mm v"}
-                    h{"H.mm–H.mm v"}
-                    m{"H.mm–H.mm v"}
+                    a{"h.mm a – h.mm a v"}
+                    h{"h.mm–h.mm a v"}
+                    m{"h.mm–h.mm a v"}
                 }
                 hv{
-                    a{"H–H v"}
-                    h{"H–H v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -373,6 +411,40 @@ fi{
             monthNames{
                 format{
                     abbreviated{
+                        "tišríkuuta",
+                        "hešvánkuuta",
+                        "kislévkuuta",
+                        "tevétkuuta",
+                        "ševátkuuta",
+                        "adárkuuta I",
+                        "adárkuuta",
+                        "nisánkuuta",
+                        "ijjárkuuta",
+                        "sivánkuuta",
+                        "tammúzkuuta",
+                        "abkuuta",
+                        "elúlkuuta",
+                        "adárkuuta II",
+                    }
+                    wide{
+                        "tišríkuuta",
+                        "hešvánkuuta",
+                        "kislévkuuta",
+                        "tevétkuuta",
+                        "ševátkuuta",
+                        "adárkuuta I",
+                        "adárkuuta",
+                        "nisánkuuta",
+                        "ijjárkuuta",
+                        "sivánkuuta",
+                        "tammúzkuuta",
+                        "abkuuta",
+                        "elúlkuuta",
+                        "adárkuuta II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
                         "tišrí",
                         "hešván",
                         "kislév",
@@ -387,6 +459,22 @@ fi{
                         "ab",
                         "elúl",
                         "adár II",
+                    }
+                    narrow{
+                        "T",
+                        "H",
+                        "K",
+                        "T",
+                        "S",
+                        "A",
+                        "A",
+                        "N",
+                        "I",
+                        "S",
+                        "T",
+                        "A",
+                        "E",
+                        "A",
                     }
                     wide{
                         "tišríkuu",

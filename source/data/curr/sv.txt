@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -1127,6 +1127,10 @@ sv{
             "Z$",
             "Zimbabwe-dollar",
         }
+        ZWL{
+            "ZWL",
+            "Zimbabwe-dollar (2009)",
+        }
     }
     CurrencyPlurals{
         ADP{
@@ -1994,7 +1998,8 @@ sv{
             other{"turkiska lire"}
         }
         TTD{
-            other{"Trinidad ochTobago-dollar"}
+            one{"Trinidad och Tobago-dollar"}
+            other{"Trinidad och Tobago-dollar"}
         }
         TWD{
             other{"taiwanesiska nya dollar"}
@@ -2172,10 +2177,14 @@ sv{
             one{"Zimbabwe-dollar"}
             other{"Zimbabwe-dollar"}
         }
+        ZWL{
+            one{"Zimbabwe-dollar (2009)"}
+            other{"Zimbabwe-dollar (2009)"}
+        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.49"}
 }

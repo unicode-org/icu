@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_IE.xml
@@ -13,7 +13,7 @@ en_IE{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.41.83"}
+    Version{"2.0.45.82"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -49,6 +49,13 @@ en_IE{
                 yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
+                Hm{
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
                 M{
                     M{"M-M"}
                 }
@@ -76,11 +83,11 @@ en_IE{
                 }
                 fallback{"{0} - {1}"}
                 hm{
-                    m{"HH:mm-HH:mm"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 y{
                     y{"y-y"}

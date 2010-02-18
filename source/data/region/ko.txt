@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -112,9 +112,10 @@ ko{
         ER{"에리트리아"}
         ES{"스페인"}
         ET{"이디오피아"}
+        EU{"유럽 연합"}
         FI{"핀란드"}
         FJ{"피지"}
-        FK{"포클랜드 군도"}
+        FK{"포클랜드 제도"}
         FM{"미크로네시아"}
         FO{"페로제도"}
         FR{"프랑스"}
@@ -129,10 +130,10 @@ ko{
         GL{"그린란드"}
         GM{"감비아"}
         GN{"기니"}
-        GP{"과달로프"}
+        GP{"과들루프"}
         GQ{"적도 기니"}
         GR{"그리스"}
-        GS{"사우스조지아-사우스샌드위치제도"}
+        GS{"사우스조지아 사우스샌드위치 제도"}
         GT{"과테말라"}
         GU{"괌"}
         GW{"기네비쏘"}
@@ -231,7 +232,6 @@ ko{
         PY{"파라과이"}
         QA{"카타르"}
         QO{"오세아니아 외곽"}
-        QU{"유럽 연합"}
         RE{"리유니온"}
         RO{"루마니아"}
         RS{"세르비아"}
@@ -294,5 +294,5 @@ ko{
         ZW{"짐바브웨"}
         ZZ{"알수없거나 유효하지 않은 지역"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

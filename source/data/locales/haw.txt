@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/haw.xml
@@ -10,8 +10,8 @@
  *  ICU <specials> source: <path>/xml/main/haw.xml
  */
 haw{
-    AuxExemplarCharacters{"[b-d f g j q-t v x-z]"}
-    ExemplarCharacters{"[a ā e ē i ī o ō u ū h k-n p w ʻ]"}
+    AuxExemplarCharacters{"[b c d f g j q r s t v x y z]"}
+    ExemplarCharacters{"[a ā e ē i ī o ō u ū h k l m n p w ʻ]"}
     LocaleScript{
         "Latn",
     }
@@ -21,7 +21,7 @@ haw{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             dayNames{
@@ -78,6 +78,33 @@ haw{
                     }
                 }
             }
+        }
+    }
+    measurementSystemNames{
+        US{"ʻAmelika Hui Pū ʻIa"}
+        metric{"Mekalika"}
+    }
+    units{
+        day{
+            other{"{0} lā"}
+        }
+        hour{
+            other{"{0} hola"}
+        }
+        minute{
+            other{"{0} minuke"}
+        }
+        month{
+            other{"{0} mahina"}
+        }
+        second{
+            other{"{0} kekona"}
+        }
+        week{
+            other{"{0} pule"}
+        }
+        year{
+            other{"{0} makahiki"}
         }
     }
 }

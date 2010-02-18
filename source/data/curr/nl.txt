@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nl.xml
@@ -254,6 +254,10 @@ nl{
         CSK{
             "CSK" /** ===  */,
             "Tsjechoslowaakse harde koruna",
+        }
+        CUC{
+            "CUC$",
+            "Cubaanse convertibele peso",
         }
         CUP{
             "CU$",
@@ -871,6 +875,10 @@ nl{
             "TMM",
             "Turkmeense manat",
         }
+        TMT{
+            "TMT",
+            "Turkmeense nieuwe manat",
+        }
         TND{
             "DT",
             "Tunesische dinar",
@@ -1087,6 +1095,10 @@ nl{
             "Z$",
             "Zimbabwaanse dollar",
         }
+        ZWL{
+            "ZWL",
+            "Zimbabwaanse dollar (2009)",
+        }
     }
     CurrencyPlurals{
         ADP{
@@ -1109,6 +1121,18 @@ nl{
             one{"Albanese lek"}
             other{"Albanese lek"}
         }
+        CUC{
+            one{"Cubaanse convertibele peso"}
+            other{"Cubaanse convertibele pesos"}
+        }
+        EUR{
+            one{"euro"}
+            other{"euro"}
+        }
+        TMT{
+            one{"Turkmeense nieuwe manat"}
+            other{"Turkmeense nieuwe manat"}
+        }
         TRL{
             one{"oude Turkse lira"}
             other{"oude Turkse lira"}
@@ -1117,13 +1141,33 @@ nl{
             one{"Turkse lira"}
             other{"Turkse lira"}
         }
+        XAG{
+            one{"troy ounce zilver"}
+            other{"troy ounces zilver"}
+        }
+        XAU{
+            one{"troy ounce goud"}
+            other{"troy ounces goud"}
+        }
+        XPD{
+            one{"troy ounce palladium"}
+            other{"troy ounces palladium"}
+        }
+        XPT{
+            one{"troy ounce platina"}
+            other{"troy ounces platina"}
+        }
         XXX{
             one{"onbekende/ongeldige munteenheid"}
+        }
+        ZWL{
+            one{"Zimbabwaanse dollar (2009)"}
+            other{"Zimbabwaanse dollar (2009)"}
         }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

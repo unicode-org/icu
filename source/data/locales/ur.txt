@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ur.xml
@@ -11,8 +11,8 @@
  */
 ur{
     ExemplarCharacters{
-        "[أ ؤ ا آ ب پ ت ٹ ث ج چ ح-د ڈ ذ ر ڑ ز ژ س-غ ف ق ک گ ل-ن ں و ہ ی ء ئ ے ٻ ة ٺ ټ"
-        " ٽ ه ھ ي]"
+        "[أ ؤ ا آ ب پ ت ٹ ث ج چ ح خ د ڈ ذ ر ڑ ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ں و ہ"
+        " ی ء ئ ے ٻ ة ٺ ټ ٽ ه ھ ي]"
     }
     LocaleScript{
         "Arab",
@@ -37,7 +37,7 @@ ur{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             DateTimePatterns{

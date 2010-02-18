@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nn.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nn.xml
  */
 nn{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
@@ -104,10 +104,14 @@ nn{
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommartid"}
             ls{"sentraleuropeisk tid"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"austeuropeisk sommartid"}
             ls{"austeuropeisk tid"}
+            sd{"EEST"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"vesteuropeisk sommartid"}

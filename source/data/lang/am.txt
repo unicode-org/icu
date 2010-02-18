@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/am.xml
@@ -13,6 +13,7 @@ am{
     Languages{
         aa{"አፋርኛ"}
         ab{"አብሐዚኛ"}
+        ak{"አካንኛ"}
         am{"አማርኛ"}
         ar{"ዐርቢኛ"}
         as{"አሳሜዛዊ"}
@@ -61,6 +62,7 @@ am{
         ia{"ኢንቴርሊንጓ"}
         id{"እንዶኒሲኛ"}
         ie{"እንተርሊንግወ"}
+        ig{"ኢግቦኛ"}
         ik{"እኑፒያቅኛ"}
         is{"አይስላንድኛ"}
         it{"ጣሊያንኛ"}
@@ -70,7 +72,7 @@ am{
         ka{"ጊዮርጊያን"}
         kk{"ካዛክኛ"}
         kl{"ካላሊሱትኛ"}
-        km{"ክመርኛ"}
+        km{"ክመርኛ ማእከላዊ"}
         kn{"ካናዳኛ"}
         ko{"ኮሪያኛ"}
         ks{"ካሽሚርኛ"}
@@ -99,7 +101,7 @@ am{
         om{"ኦሮምኛ"}
         or{"ኦሪያኛ"}
         pa{"ፓንጃቢኛ"}
-        pl{"ፖሊሽ"}
+        pl{"ፖሊሽኛ"}
         ps{"ፑሽቶኛ"}
         pt{"ፖርቱጋሊኛ"}
         qu{"ኵቿኛ"}
@@ -153,5 +155,5 @@ am{
         zh{"ቻይንኛ"}
         zu{"ዙሉኛ"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.82"}
 }

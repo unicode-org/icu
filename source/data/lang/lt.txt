@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -102,12 +102,12 @@ lt{
         cmc{"čamikų kalba"}
         co{"korsikiečių"}
         cop{"koptų"}
-        cpe{"kreolų ir pidžinų kalba pagal anglų"}
-        cpf{"kreolų ir pidžinų kalba pagal prancūzų"}
-        cpp{"kreolų ir pidžinų kalba pagal portugalų"}
+        cpe{"kreolų arba pidžinų kalba pagal anglų"}
+        cpf{"kreolų arba pidžinų kalba pagal prancūzų"}
+        cpp{"kreolų arba pidžinų kalba pagal portugalų"}
         cr{"kry"}
         crh{"krymo turkų"}
-        crp{"kreolų ir pidžinų"}
+        crp{"kreolų arba pidžinų kalba"}
         cs{"čekų"}
         csb{"kašubų"}
         cu{"bažnytinė slavų"}
@@ -140,7 +140,6 @@ lt{
         el{"graikų"}
         elx{"elamitų"}
         en{"anglų"}
-        en_AU{"anglų kalba (australija)"}
         en_CA{"Kanados anglų"}
         en_GB{"anglų (britų)"}
         en_US{"anglų (amerikiečių)"}
@@ -222,7 +221,7 @@ lt{
         ine{"indoeuropiečių kalba"}
         inh{"ingušų"}
         io{"ido"}
-        ira{"Iraniečių"}
+        ira{"iraniečių kalba"}
         iro{"irako kalba"}
         is{"islandų"}
         it{"italų"}
@@ -449,6 +448,7 @@ lt{
         sux{"šumerų"}
         sv{"švedų"}
         sw{"svahili"}
+        swb{"Comorian"}
         syc{"klasikinė siriečių"}
         syr{"sirų"}
         ta{"tamilų"}
@@ -510,6 +510,7 @@ lt{
         yi{"jidiš"}
         yo{"joruba"}
         ypk{"jupik kalba"}
+        yue{"kinų kalbos Kantono tarmė"}
         za{"chuang"}
         zap{"zapotekų"}
         zbl{"„Bliss“ simbolių kalba"}
@@ -568,7 +569,7 @@ lt{
         Hebr{"hebrajų"}
         Hira{"hiragana"}
         Hmng{"pahav hmong"}
-        Hrkt{"katakana/hiragana"}
+        Hrkt{"katakana / hiragana"}
         Hung{"senasis vengrų"}
         Inds{"indus"}
         Ital{"senasis italų"}
@@ -579,7 +580,7 @@ lt{
         Khar{"karošti"}
         Khmr{"khmerų"}
         Knda{"kanadiečių"}
-        Kore{"korejiečių"}
+        Kore{"korėjiečių"}
         Kthi{"kaithi"}
         Lana{"lana"}
         Laoo{"lao"}
@@ -658,18 +659,61 @@ lt{
     Types{
         calendar{
             buddhist{"Budistų kalendorius"}
-            chinese{"Kiniečių kalendorius"}
+            chinese{"Kinų kalendorius"}
             gregorian{"Grigaliaus kalendorius"}
             hebrew{"Hebrajų kalendorius"}
+            indian{"Nacionalinis indų kalendorius"}
             islamic{"Islamo kalendorius"}
+            islamic-civil{"Pilietinis islamo kalendorius"}
             japanese{"Japonų kalendorius"}
-            roc{"Kinijos respublikos kalendorius"}
+            roc{"Kinijos Respublikos kalendorius"}
+        }
+        collation{
+            big5han{"Įprasta kiniška rūšiavimo tvarka - Big5"}
+            direct{"Tiesioginė rūšiavimo tvarka"}
+            gb2312han{"Supaprastinta kiniška rūšiavimo tvarka - GB2312"}
+            phonebook{"Telefonų knygos rūšiavimo tvarka"}
+            pinyin{"Supaprastinta kiniškų hieroglifų vertimo sistemos rūšiavimo tvarka"}
+            stroke{"Įprasta kiniško požymio rūšiavimo tvarka"}
+            traditional{"Įprasta rūšiavimo tvarka"}
         }
     }
     Variants{
+        1606NICT{"1606 -ųjų metų prancūzų kalba"}
+        1694ACAD{"Ankstyvasis Prancūzijos modernizmas"}
+        1901{"Įprasta vokiečių rašyba"}
+        1959ACAD{"Akademinis"}
+        1994{"Sunorminta Resian rašyba"}
+        1996{"1996 -ųjų metų vokiečių rašyba"}
+        AREVELA{"Rytų armėnai"}
+        AREVMDA{"Vakarų armėnai"}
+        BAKU1926{"Suvienodinta turkų kalbos lotyniška abėcėlė"}
+        BISKE{"San Giorgio / Bila tarmė"}
+        BOONT{"Boontling"}
+        FONIPA{"Tarptautinės abėcėlės fonetika"}
+        FONUPA{"UPA fonetika"}
+        KKCOR{"Įprasta rašyba"}
+        LIPAW{"Resian tarmei priklausanti Lipovaz tarmė"}
+        MONOTON{"Vienodas"}
+        NEDIS{"Natisone tarmė"}
+        NJIVA{"Gniva / Njiva tarmė"}
+        OSOJS{"Oseacco / Osojane tarmė"}
+        PINYIN{"Kinų hieroglifų vertimo sistema Romanization"}
+        POLYTON{"Polytonic"}
         POSIX{"Kompiuteris"}
+        REVISED{"Ištaisyta rašyba"}
+        ROZAJ{"Resian"}
+        SAAHO{"Saho"}
+        SCOTLAND{"Norminė škotiška anglų kalba"}
+        SCOUSE{"Scouse"}
+        SOLBA{"Stolvizza / Solbica tarmė"}
+        TARASK{"Taraskievica tarmė"}
+        UCCOR{"Suvienodinta rašyba"}
+        UCRCOR{"Suvienodinta ištaisyta rašyba"}
+        VALENCIA{"Valenciečiai"}
+        WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.46"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

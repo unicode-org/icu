@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -43,6 +43,7 @@ nb{
         155{"Vest-Europa"}
         172{"Samveldet av uavhengige stater"}
         419{"Latin-Amerika og Karibia"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"De forente arabiske emirater"}
         AF{"Afghanistan"}
@@ -92,6 +93,7 @@ nb{
         CM{"Kamerun"}
         CN{"Kina"}
         CO{"Colombia"}
+        CP{"Clippertonøya"}
         CR{"Costa Rica"}
         CS{"Serbia og Montenegro"}
         CU{"Cuba"}
@@ -100,11 +102,13 @@ nb{
         CY{"Kypros"}
         CZ{"Tsjekkia"}
         DE{"Tyskland"}
+        DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Danmark"}
         DM{"Dominica"}
         DO{"Den dominikanske republikk"}
         DZ{"Algerie"}
+        EA{"Ceuta og Melilla"}
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Egypt"}
@@ -112,6 +116,7 @@ nb{
         ER{"Eritrea"}
         ES{"Spania"}
         ET{"Etiopia"}
+        EU{"Den europeiske union"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandsøyene"}
@@ -143,6 +148,7 @@ nb{
         HR{"Kroatia"}
         HT{"Haiti"}
         HU{"Ungarn"}
+        IC{"Kanariøyene"}
         ID{"Indonesia"}
         IE{"Irland"}
         IL{"Israel"}
@@ -231,7 +237,6 @@ nb{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"avsidesliggende Oceania"}
-        QU{"Den europeiske union"}
         RE{"Reunion"}
         RO{"Romania"}
         RS{"Serbia"}
@@ -256,6 +261,7 @@ nb{
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- og Caicosøyene"}
         TD{"Tsjad"}
         TF{"De franske sørterritorier"}
@@ -294,5 +300,5 @@ nb{
         ZW{"Zimbabwe"}
         ZZ{"ukjent eller ugyldig område"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

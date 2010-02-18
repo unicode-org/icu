@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -44,6 +44,7 @@ pl{
         172{"Wspólnota Niezależnych Państw"}
         419{"Ameryka Łacińska i Karaiby"}
         830{"Wyspy Normandzkie"}
+        AC{"Wyspa Wniebowstąpienia"}
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
         AF{"Afganistan"}
@@ -93,6 +94,7 @@ pl{
         CM{"Kamerun"}
         CN{"Chiny"}
         CO{"Kolumbia"}
+        CP{"Clipperton"}
         CR{"Kostaryka"}
         CS{"Serbia i Czarnogóra"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ pl{
         CY{"Cypr"}
         CZ{"Czechy"}
         DE{"Niemcy"}
+        DG{"Diego Garcia"}
         DJ{"Dżibuti"}
         DK{"Dania"}
         DM{"Dominika"}
         DO{"Republika Dominikańska"}
         DZ{"Algieria"}
+        EA{"Ceuta i Melilla"}
         EC{"Ekwador"}
         EE{"Estonia"}
         EG{"Egipt"}
@@ -113,6 +117,7 @@ pl{
         ER{"Erytrea"}
         ES{"Hiszpania"}
         ET{"Etiopia"}
+        EU{"Unia Europejska"}
         FI{"Finlandia"}
         FJ{"Fidżi"}
         FK{"Falklandy"}
@@ -138,12 +143,13 @@ pl{
         GU{"Guam"}
         GW{"Gwinea Bissau"}
         GY{"Gujana"}
-        HK{"Hongkong, Specjalny Region Administracyjny Chin"}
+        HK{"Hongkong SAR"}
         HM{"Wyspy Heard i McDonalda"}
         HN{"Honduras"}
         HR{"Chorwacja"}
         HT{"Haiti"}
         HU{"Węgry"}
+        IC{"Wyspy Kanaryjskie"}
         ID{"Indonezja"}
         IE{"Irlandia"}
         IL{"Izrael"}
@@ -191,7 +197,7 @@ pl{
         ML{"Mali"}
         MM{"Birma"}
         MN{"Mongolia"}
-        MO{"Makau, Specjalny Region Administracyjny Chin"}
+        MO{"Makau SAR"}
         MP{"Mariany Północne"}
         MQ{"Martynika"}
         MR{"Mauretania"}
@@ -232,7 +238,6 @@ pl{
         PY{"Paragwaj"}
         QA{"Katar"}
         QO{"Oceania inne"}
-        QU{"Unia Europejska"}
         RE{"Reunion"}
         RO{"Rumunia"}
         RS{"Serbia"}
@@ -257,6 +262,7 @@ pl{
         SV{"Salwador"}
         SY{"Syria"}
         SZ{"Suazi"}
+        TA{"Tristan da Cunha"}
         TC{"Turks i Caicos"}
         TD{"Czad"}
         TF{"Francuskie Terytoria Południowe"}
@@ -295,5 +301,5 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany lub nieprawidłowy region"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

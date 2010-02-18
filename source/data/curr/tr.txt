@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -254,6 +254,10 @@ tr{
         CSK{
             "CSK" /** ===  */,
             "Çekoslavak Korunası (Hard)",
+        }
+        CUC{
+            "CUC$",
+            "Konvertibl Küba Pezosu",
         }
         CUP{
             "CU$",
@@ -871,6 +875,10 @@ tr{
             "TMM",
             "Türkmenistan Manatı",
         }
+        TMT{
+            "TMT",
+            "Yeni Türkmenistan Manatı",
+        }
         TND{
             "DT",
             "Tunus Dinarı",
@@ -1087,9 +1095,13 @@ tr{
             "Z$",
             "Zimbabve Doları",
         }
+        ZWL{
+            "ZWL",
+            "Zimbabve Doları (2009)",
+        }
     }
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
 }

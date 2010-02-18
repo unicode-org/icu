@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/de.xml
@@ -44,6 +44,7 @@ de{
         172{"Gemeinschaft Unabhängiger Staaten"}
         419{"Lateinamerika und Karibik"}
         830{"Kanalinseln"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"Vereinigte Arabische Emirate"}
         AF{"Afghanistan"}
@@ -83,9 +84,9 @@ de{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kokosinseln"}
-        CD{"Demokratische Republik Kongo"}
+        CD{"Kongo-Kinshasa"}
         CF{"Zentralafrikanische Republik"}
-        CG{"Kongo"}
+        CG{"Kongo-Brazzaville"}
         CH{"Schweiz"}
         CI{"Côte d’Ivoire"}
         CK{"Cookinseln"}
@@ -93,6 +94,7 @@ de{
         CM{"Kamerun"}
         CN{"China"}
         CO{"Kolumbien"}
+        CP{"Clipperton-Insel"}
         CR{"Costa Rica"}
         CS{"Serbien und Montenegro"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ de{
         CY{"Zypern"}
         CZ{"Tschechische Republik"}
         DE{"Deutschland"}
+        DG{"Diego Garcia"}
         DJ{"Dschibuti"}
         DK{"Dänemark"}
         DM{"Dominica"}
         DO{"Dominikanische Republik"}
         DZ{"Algerien"}
+        EA{"Ceuta und Melilla"}
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Ägypten"}
@@ -113,6 +117,7 @@ de{
         ER{"Eritrea"}
         ES{"Spanien"}
         ET{"Äthiopien"}
+        EU{"Europäische Union"}
         FI{"Finnland"}
         FJ{"Fidschi"}
         FK{"Falklandinseln"}
@@ -144,6 +149,7 @@ de{
         HR{"Kroatien"}
         HT{"Haiti"}
         HU{"Ungarn"}
+        IC{"Kanarische Inseln"}
         ID{"Indonesien"}
         IE{"Irland"}
         IL{"Israel"}
@@ -226,13 +232,12 @@ de{
         PM{"St. Pierre und Miquelon"}
         PN{"Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palästinensische Gebiete"}
+        PS{"Palästinensische Autonomiegebiete"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Äußeres Ozeanien"}
-        QU{"Europäische Union"}
         RE{"Réunion"}
         RO{"Rumänien"}
         RS{"Serbien"}
@@ -257,6 +262,7 @@ de{
         SV{"El Salvador"}
         SY{"Syrien"}
         SZ{"Swasiland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- und Caicosinseln"}
         TD{"Tschad"}
         TF{"Französische Süd- und Antarktisgebiete"}
@@ -295,5 +301,5 @@ de{
         ZW{"Simbabwe"}
         ZZ{"Unbekannte oder ungültige Region"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }

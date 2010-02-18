@@ -1,4 +1,4 @@
-# *   Copyright (C) 1998-2009, International Business Machines
+# *   Copyright (C) 1998-2010, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 COLLATION_CLDR_VERSION = 1.7
 # A list of txt's to build
@@ -58,22 +58,22 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_AE.txt ar_BH.txt\
  fr_FR.txt fr_LU.txt ga.txt ga_IE.txt gu_IN.txt\
  ha_Latn.txt ha_Latn_GH.txt ha_Latn_NE.txt ha_Latn_NG.txt he_IL.txt\
  hi_IN.txt hr_HR.txt hu_HU.txt hy_AM.txt id.txt\
- id_ID.txt is_IS.txt it_CH.txt it_IT.txt ja_JP.txt\
- ka.txt ka_GE.txt kk_KZ.txt kl_GL.txt kn_IN.txt\
- ko_KR.txt kok_IN.txt lt_LT.txt lv_LV.txt mk_MK.txt\
- ml_IN.txt mr_IN.txt ms.txt ms_BN.txt ms_MY.txt\
- mt_MT.txt nb_NO.txt nl.txt nl_BE.txt nl_NL.txt\
- nn_NO.txt om_ET.txt om_KE.txt or_IN.txt pa_Arab.txt\
- pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt pl_PL.txt ps_AF.txt\
- pt.txt pt_BR.txt pt_PT.txt ro_RO.txt ru_RU.txt\
- ru_UA.txt si_LK.txt sk_SK.txt sl_SI.txt sq_AL.txt\
- sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt\
- sr_Latn_ME.txt sr_Latn_RS.txt st.txt st_LS.txt st_ZA.txt\
- sv_FI.txt sv_SE.txt sw_KE.txt sw_TZ.txt ta_IN.txt\
- te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt ur_IN.txt\
- ur_PK.txt vi_VN.txt xh.txt xh_ZA.txt zh_Hans.txt\
- zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt\
- zu.txt zu_ZA.txt
+ id_ID.txt ig_NG.txt is_IS.txt it_CH.txt it_IT.txt\
+ ja_JP.txt ka.txt ka_GE.txt kk_KZ.txt kl_GL.txt\
+ kn_IN.txt ko_KR.txt kok_IN.txt lt_LT.txt lv_LV.txt\
+ mk_MK.txt ml_IN.txt mr_IN.txt ms.txt ms_BN.txt\
+ ms_MY.txt mt_MT.txt nb_NO.txt nl.txt nl_BE.txt\
+ nl_NL.txt nn_NO.txt om_ET.txt om_KE.txt or_IN.txt\
+ pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt pl_PL.txt\
+ ps_AF.txt pt.txt pt_BR.txt pt_PT.txt ro_RO.txt\
+ ru_RU.txt ru_UA.txt si_LK.txt sk_SK.txt sl_SI.txt\
+ sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
+ sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt st.txt st_LS.txt\
+ st_ZA.txt sv_FI.txt sv_SE.txt sw_KE.txt sw_TZ.txt\
+ ta_IN.txt te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt\
+ ur_IN.txt ur_PK.txt vi_VN.txt xh.txt xh_ZA.txt\
+ yo_NG.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt zu_ZA.txt
 
 
 # Ordinary resources
@@ -81,15 +81,16 @@ COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) af.txt ar.txt as.txt az.txt\
  be.txt bg.txt bn.txt ca.txt cs.txt\
  cy.txt da.txt de.txt el.txt en.txt\
  en_BE.txt eo.txt es.txt et.txt fa.txt\
- fa_AF.txt fi.txt fo.txt fr.txt gu.txt\
- ha.txt haw.txt he.txt hi.txt hr.txt\
- hu.txt hy.txt is.txt it.txt ja.txt\
- kk.txt kl.txt km.txt kn.txt ko.txt\
- kok.txt lt.txt lv.txt mk.txt ml.txt\
- mr.txt mt.txt nb.txt nn.txt om.txt\
- or.txt pa.txt pl.txt ps.txt ro.txt\
- ru.txt si.txt sk.txt sl.txt sq.txt\
- sr.txt sr_Latn.txt sv.txt sw.txt ta.txt\
- te.txt th.txt tr.txt uk.txt ur.txt\
- vi.txt zh.txt zh_Hant.txt
+ fa_AF.txt fi.txt fil.txt fo.txt fr.txt\
+ gu.txt ha.txt haw.txt he.txt hi.txt\
+ hr.txt hu.txt hy.txt ig.txt is.txt\
+ it.txt ja.txt kk.txt kl.txt km.txt\
+ kn.txt ko.txt kok.txt lt.txt lv.txt\
+ mk.txt ml.txt mr.txt mt.txt nb.txt\
+ nn.txt om.txt or.txt pa.txt pl.txt\
+ ps.txt ro.txt ru.txt si.txt sk.txt\
+ sl.txt sq.txt sr.txt sr_Latn.txt sv.txt\
+ sw.txt ta.txt te.txt th.txt to.txt\
+ tr.txt uk.txt ur.txt vi.txt yo.txt\
+ zh.txt zh_Hant.txt
 

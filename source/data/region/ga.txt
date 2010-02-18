@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ga.xml
@@ -94,6 +94,7 @@ ga{
         ER{"An Eiritré"}
         ES{"An Spáinn"}
         ET{"An Aetóip"}
+        EU{"An tAontas Eorpach"}
         FI{"An Fhionlainn"}
         FJ{"Fidsí"}
         FK{"Oileáin Fháclainne"}
@@ -212,7 +213,6 @@ ga{
         PY{"Paragua"}
         QA{"Catar"}
         QO{"An Aigéine Imeallach"}
-        QU{"An tAontas Eorpach"}
         RE{"Réunion"}
         RO{"An Rómáin"}
         RS{"An tSeirbia"}
@@ -275,5 +275,5 @@ ga{
         ZW{"An tSiombáib"}
         ZZ{"Réigiún Anaithnid nó Neamhbhailí"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
 }

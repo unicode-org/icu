@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -10,5 +10,39 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.42.82"}
+    Currencies{
+        BOB{
+            "Bs",
+            "Boliviano",
+        }
+        BRL{
+            "R$",
+            "Real Brasil",
+        }
+        CLP{
+            "CL$",
+            "Peso Cile",
+        }
+        CZK{
+            "Kč",
+            "Koruna Cheska",
+        }
+        DKK{
+            "Dkr",
+            "Krone Denmark",
+        }
+        FRF{
+            "₣",
+            "Franc Prancis",
+        }
+        NZD{
+            "NZ$",
+            "Dolar Selandia Baru",
+        }
+        PLN{
+            "zł",
+            "Polandia Zloty",
+        }
+    }
+    Version{"2.0.46.49"}
 }

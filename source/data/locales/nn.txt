@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nn.xml
@@ -11,7 +11,8 @@
  */
 nn{
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
-    ExemplarCharacters{"[a à b-e é f-o ó ò ô p-z æ ø å]"}
+    ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ nn{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.25"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -164,6 +165,14 @@ nn{
                 }
             }
             intervalFormats{
+                Hm{
+                    H{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
+                }
+                Hmv{
+                    H{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -191,18 +200,18 @@ nn{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    h{"5–06"}
+                    h{"h–h a"}
                 }
                 hm{
-                    h{"HH.mm–HH.mm"}
-                    m{"HH.mm–HH.mm"}
+                    h{"h.mm–h.mm a"}
+                    m{"h.mm–h.mm a"}
                 }
                 hmv{
-                    h{"HH.mm–HH.mm v"}
-                    m{"HH.mm–HH.mm v"}
+                    h{"h.mm–h.mm a v"}
+                    m{"h.mm–h.mm a v"}
                 }
                 hv{
-                    h{"HH–HH v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}

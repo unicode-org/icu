@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/da.xml
@@ -44,6 +44,7 @@ da{
         art{"kunstsprog"}
         arw{"arawak"}
         as{"assamesisk"}
+        asa{"asu"}
         ast{"asturisk"}
         ath{"athapaskisk sprog"}
         aus{"australsk sprog"}
@@ -62,6 +63,7 @@ da{
         bej{"beja"}
         bem{"bemba"}
         ber{"berberisk"}
+        bez{"bena"}
         bg{"bulgarsk"}
         bh{"bihari"}
         bho{"bhojpuri"}
@@ -133,6 +135,7 @@ da{
         dv{"divehi"}
         dyu{"dyula"}
         dz{"dzongkha"}
+        ebu{"kiembu"}
         ee{"ewe"}
         efi{"efik"}
         egy{"oldegyptisk"}
@@ -242,6 +245,7 @@ da{
         kaw{"kawi"}
         kbd{"kabardian"}
         kcg{"tyap"}
+        kea{"kapverdisk"}
         kfo{"koro"}
         kg{"kongo"}
         kha{"khasi"}
@@ -289,6 +293,7 @@ da{
         lun{"lunda"}
         luo{"luo"}
         lus{"lushai"}
+        luy{"olulujia"}
         lv{"lettisk"}
         mad{"madurese"}
         mag{"magahi"}
@@ -449,6 +454,7 @@ da{
         sux{"sumerisk"}
         sv{"svensk"}
         sw{"swahili"}
+        swb{"shimaore"}
         syc{"klassisk syrisk"}
         syr{"syrisk"}
         ta{"tamilsk"}
@@ -510,6 +516,7 @@ da{
         yi{"jiddisch"}
         yo{"yoruba"}
         ypk{"yupisk sprog"}
+        yue{"kantonesisk"}
         za{"zhuang"}
         zap{"zapotec"}
         zbl{"blissymboler"}
@@ -659,12 +666,15 @@ da{
         calendar{
             buddhist{"buddhistisk kalender"}
             chinese{"kinesisk kalender"}
+            ethiopic{"etiopisk kalender"}
+            ethiopic-amete-alem{"etiopisk amete-alem-kalender"}
             gregorian{"gregoriansk kalender"}
             hebrew{"jødisk kalender"}
             indian{"indisk nationalkalender"}
             islamic{"islamisk kalender"}
             islamic-civil{"verdslig islamisk kalender"}
             japanese{"japansk kalender"}
+            persian{"persisk kalender"}
             roc{"kalender for Republikken Kina"}
         }
         collation{
@@ -681,14 +691,19 @@ da{
         1901{"traditionel tysk retskrivning"}
         1996{"tysk retskrivning fra 1996"}
         AREVELA{"østarmensk"}
+        AREVMDA{"vestarmensk"}
         BOONT{"boontling"}
         FONIPA{"det internationale fonetiske alfabet"}
         FONUPA{"det uraliske fonetiske alfabet"}
         LIPAW{"lipovaz"}
+        MONOTON{"monotonisk"}
+        PINYIN{"pinyin"}
+        POLYTON{"polytonisk"}
         POSIX{"computer"}
         REVISED{"revideret retskrivning"}
+        WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

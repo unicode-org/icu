@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/he.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"סאוטה"}
@@ -341,6 +341,34 @@ he{
         }
         "Pacific:Wake"{
             ec{"וואק"}
+        }
+        "meta:Africa_Central"{
+            ls{"שעון מרכז אפריקה"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"שעון מזרח אפריקה"}
+        }
+        "meta:Africa_Southern"{
+            ls{"שעון דרום אפריקה"}
+        }
+        "meta:Africa_Western"{
+            ld{"שעון קיץ, מערב אפריקה"}
+            ls{"שעון מערב אפריקה"}
+        }
+        "meta:America_Central"{
+            sg{"שעון מרכז ארה\"ב (שיקגו)"}
+        }
+        "meta:America_Eastern"{
+            sg{"שעון מזרח ארה\"ב (ניו-יורק)"}
+        }
+        "meta:America_Mountain"{
+            sg{"שעון אזור ההרים של ארה\"ב (דנוור)"}
+        }
+        "meta:America_Pacific"{
+            sg{"שעון מערב ארה\"ב (לוס אנג'לס)"}
+        }
+        "meta:Atlantic"{
+            sg{"שעון קנדה (הליפקס)"}
         }
         "meta:India"{
             ss{"IST (הודו)"}

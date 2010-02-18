@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lv.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.42.82"}
+    Version{"2.0.46.29"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seūta"}
@@ -59,6 +59,9 @@ lv{
         }
         "America:Boa_Vista"{
             ec{"Boavista"}
+        }
+        "America:Boise"{
+            ec{"Boisisitija"}
         }
         "America:Buenos_Aires"{
             ec{"Buenosairesa"}
@@ -292,7 +295,7 @@ lv{
             ec{"Deivisa"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dimondirvila"}
         }
         "Antarctica:Mawson"{
             ec{"Mavsona"}
@@ -513,6 +516,217 @@ lv{
         "Pacific:Wake"{
             ec{"Veika"}
         }
+        "meta:Acre"{
+            sd{"ACST (Akri)"}
+            ss{"ACT (Akri)"}
+        }
+        "meta:Afghanistan"{
+            ls{"Afganistānas laiks"}
+        }
+        "meta:Africa_Central"{
+            ls{"Centrālāfrikas laiks"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Austrumāfrikas laiks"}
+        }
+        "meta:Africa_Southern"{
+            lg{"Dienvidāfrikas laiks"}
+            ls{"Dienvidāfrikas ziemas laiks"}
+            sg{"SAT"}
+        }
+        "meta:Africa_Western"{
+            ld{"Rietumāfrikas vasaras laiks"}
+            ls{"Rietumāfrikas laiks"}
+        }
+        "meta:Alaska"{
+            ld{"Aļaskas vasaras laiks"}
+            lg{"Aļaskas laiks"}
+            ls{"Aļaskas ziemas laiks"}
+            sg{"AKT"}
+        }
+        "meta:Alaska_Hawaii"{
+            sg{"AHT"}
+        }
+        "meta:Amazon"{
+            ld{"Amazones vasaras laiks"}
+            ls{"Amazones laiks"}
+        }
+        "meta:America_Central"{
+            ld{"Centrālais vasaras laiks"}
+            lg{"Centrālais laiks"}
+            ls{"Centrālais ziemas laiks"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Austrumu vasaras laiks"}
+            lg{"Austrumu laiks"}
+            ls{"Austrumu ziemas laiks"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Kalnu vasaras laiks"}
+            lg{"Kalnu laiks"}
+            ls{"Kalnu ziemas laiks"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Klusā okeāna vasaras laiks"}
+            lg{"Klusā okeāna laiks"}
+            ls{"Klusā okeāna ziemas laiks"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
+        }
+        "meta:Aqtau"{
+            sd{"AQTST (Aktau)"}
+            ss{"AQTT (Aktau)"}
+        }
+        "meta:Aqtobe"{
+            sd{"AQTST (Aktebe)"}
+            ss{"AQTT (Aktebe)"}
+        }
+        "meta:Arabian"{
+            ld{"Arābu vasaras laiks"}
+            lg{"Arābu laiks"}
+            ls{"Arābu ziemas laiks"}
+            sd{"ADT (Arābija)"}
+            sg{"AT (Arābija)"}
+            ss{"AST (Arābija)"}
+        }
+        "meta:Argentina"{
+            ld{"Argentīnas vasaras laiks"}
+            ls{"Argentīnas laiks"}
+        }
+        "meta:Argentina_Western"{
+            ls{"Rietumargentīnas laiks"}
+        }
+        "meta:Armenia"{
+            ld{"Armēnijas vasaras laiks"}
+            ls{"Armēnijas laiks"}
+            sd{"AMST (Armēnija)"}
+            ss{"AMT (Armēnija)"}
+        }
+        "meta:Ashkhabad"{
+            ld{"Ašhabadas vasaras laiks"}
+            ls{"Ašhabadas laiks"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantijas vasaras laiks"}
+            lg{"Atlantijas laiks"}
+            ls{"Atlantijas ziemas laiks"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
+        }
+        "meta:Australia_Central"{
+            ld{"Austrālijas centrālais vasaras laiks"}
+            lg{"Austrālijas centrālais laiks"}
+            ls{"Austrālijas centrālais ziemas laiks"}
+            sg{"ACT"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Austrālijas centrālais rietumu vasaras laiks"}
+            lg{"Austrālijas centrālais rietumu laiks"}
+            ls{"Austrālijas centrālais rietumu ziemas laiks"}
+            sg{"ACWT"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Austrālijas austrumu vasaras laiks"}
+            lg{"Austrālijas austrumu laiks"}
+            ls{"Austrālijas austrumu ziemas laiks"}
+            sg{"AET"}
+        }
+        "meta:Australia_Western"{
+            ld{"Austrālijas rietumu vasaras laiks"}
+            lg{"Rietumaustrālijas laiks"}
+            ls{"Austrālijas rietumu ziemas laiks"}
+            sg{"AWT"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Azerbaidžānas vasaras laiks"}
+            ls{"Azerbaidžānas laiks"}
+        }
+        "meta:Azores"{
+            ld{"Azoru salu vasaras laiks"}
+            ls{"Azoru salu laiks"}
+        }
+        "meta:Baku"{
+            ld{"Baku vasaras laiks"}
+            ls{"Baku laiks"}
+        }
+        "meta:Bangladesh"{
+            ld{"Bangladešas vasaras laiks"}
+            ls{"Bangladešas laiks"}
+        }
+        "meta:Bering"{
+            sd{"BDT (Beringa)"}
+            sg{"BT"}
+            ss{"BST (Beringa)"}
+        }
+        "meta:Bhutan"{
+            ls{"Butānas laiks"}
+        }
+        "meta:Bolivia"{
+            ls{"Bolīvijas laiks"}
+        }
+        "meta:Borneo"{
+            ld{"Borneo vasaras laiks"}
+            ls{"Borneo laiks"}
+        }
+        "meta:Brasilia"{
+            ld{"Brazīlijas vasaras laiks"}
+            ls{"Brazīlijas laiks"}
+        }
+        "meta:Chile"{
+            ld{"Čīles vasaras laiks"}
+            ls{"Čīles laiks"}
+        }
+        "meta:China"{
+            ld{"Ķīnas vasaras laiks"}
+            lg{"Ķīnas laiks"}
+            ls{"Ķīnas ziemas laiks"}
+            sg{"CR (Ķīna)"}
+            ss{"CST (Ķīna)"}
+        }
+        "meta:Christmas"{
+            ls{"Ziemsvētku Salas laiks"}
+        }
+        "meta:Cocos"{
+            ls{"Kokosa salu laiks"}
+        }
+        "meta:Colombia"{
+            ld{"Kolumbijas vasaras laiks"}
+            ls{"Kolumbijas laiks"}
+        }
+        "meta:Cook"{
+            ld{"Kuka salu vasaras laiks"}
+            ls{"Kuka salu laiks"}
+        }
+        "meta:Cuba"{
+            ld{"Kubas vasaras laiks"}
+            lg{"Kubas laiks"}
+            ls{"Kubas ziemas laiks"}
+        }
+        "meta:Dushanbe"{
+            ld{"Dušanbe vasaras laiks"}
+            ls{"Dušanbe laiks"}
+        }
+        "meta:East_Timor"{
+            ls{"Austrumtimoras laiks"}
+        }
+        "meta:Easter"{
+            ld{"Lieldienu salas vasaras laiks"}
+            ls{"Lieldienu salas laiks"}
+        }
+        "meta:Ecuador"{
+            ls{"Ekvadoras laiks"}
+        }
         "meta:Europe_Central"{
             ld{"Centrāleiropas vasaras laiks"}
             ls{"Centrāleiropas laiks"}
@@ -525,28 +739,269 @@ lv{
             sd{"EEST"}
             ss{"EET"}
         }
+        "meta:Europe_Western"{
+            ld{"Rietumeiropas vasaras laiks"}
+            ls{"Rietumeiropas laiks"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:Falkland"{
+            ld{"Folklenda salu vasaras laiks"}
+            ls{"Folklenda salu laiks"}
+        }
+        "meta:Fiji"{
+            ld{"Fidži vasaras laiks"}
+            ls{"Fidži laiks"}
+        }
+        "meta:French_Guiana"{
+            ls{"Franču Gviānas laiks"}
+        }
+        "meta:French_Southern"{
+            ls{"Francijas Dienidjūru un Antarktikas teritorijas laiks"}
+        }
+        "meta:Frunze"{
+            ld{"Frunzes vasaras laiks"}
+            ls{"Frunzes laiks"}
+        }
+        "meta:GMT"{
+            ls{"Griničas laiks"}
+            ss{"GMT"}
+        }
+        "meta:Galapagos"{
+            ls{"Galapagu laiks"}
+        }
+        "meta:Guam"{
+            ss{"GST (Guama)"}
+        }
+        "meta:Guyana"{
+            ls{"Gvijānas laiks"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Honkongas vasaras laiks"}
+            ls{"Honkongas laiks"}
+        }
+        "meta:India"{
+            ls{"Indijas ziemas laiks"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Indijas Okeāna laiks"}
+        }
+        "meta:Iran"{
+            ld{"Irānas vasaras laiks"}
+            ls{"Irānas ziemas laiks"}
+        }
+        "meta:Irkutsk"{
+            ld{"Irkutskas vasaras laiks"}
+            ls{"Irkutskas laiks"}
+        }
+        "meta:Israel"{
+            ld{"Izraēlas vasaras laiks"}
+            lg{"Izraēlas laiks"}
+            ls{"Izraēlas ziemas laiks"}
+            ss{"IST (Izraēla)"}
+        }
+        "meta:Japan"{
+            ld{"Japānas vasaras laiks"}
+            lg{"Japānas laiks"}
+            ls{"Japānas ziemas laiks"}
+            sg{"JT"}
+        }
+        "meta:Korea"{
+            ld{"Korejas vasaras laiks"}
+            lg{"Korejas laiks"}
+            ls{"Korejas ziemas laiks"}
+            sg{"KT"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Krasnojarskas vasaras laiks"}
+            ls{"Krasnojarskas laiks"}
+        }
         "meta:Kuybyshev"{
             ld{"Kuibiševas vasaras laiks"}
             ls{"Kuibiševas laiks"}
         }
+        "meta:Lord_Howe"{
+            sg{"LHT"}
+        }
+        "meta:Magadan"{
+            ld{"Magadānas vasaras laiks"}
+            ls{"Magadānas laiks"}
+        }
+        "meta:Maldives"{
+            ls{"Maldīvijas laiks"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Māršala salu laiks"}
+        }
+        "meta:Mauritius"{
+            ld{"Maurīcijas vasaras laiks"}
+            ls{"Maurīcijas laiks"}
+        }
+        "meta:Mongolia"{
+            ld{"Ulanbatoras vasaras laiks"}
+            ls{"Ulanbatoras laiks"}
+        }
         "meta:Moscow"{
             ld{"Maskavas vasaras laiks"}
             lg{"Maskavas laiks"}
-            ls{"Maskavas standarta laiks"}
+            ls{"Maskavas ziemas laiks"}
+        }
+        "meta:Nepal"{
+            ls{"Nepālas laiks"}
+        }
+        "meta:New_Caledonia"{
+            ld{"Jaunkaledonijas vasaras laiks"}
+            ls{"Jaunkaledonijas laiks"}
+        }
+        "meta:New_Zealand"{
+            ld{"Jaunzēlamdes vasaras laiks"}
+            lg{"Jaunzēlandes laiks"}
+            ls{"Janzēlandes ziemas laiks"}
+        }
+        "meta:Newfoundland"{
+            sg{"NT"}
+        }
+        "meta:Norfolk"{
+            ls{"Norfolkas salu laiks"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Novosibirskas vasaras laiks"}
+            ls{"Novosibirskas laiks"}
+        }
+        "meta:Omsk"{
+            ld{"Omskas vasaras laiks"}
+            ls{"Omskas laiks"}
+        }
+        "meta:Pakistan"{
+            ld{"Pakistānas vasaras laiks"}
+            ls{"Pakistānas laiks"}
+        }
+        "meta:Palau"{
+            ls{"Palau laiks"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"Papua-Jaungvinejas laiks"}
+        }
+        "meta:Paraguay"{
+            ld{"Paragvajas vasaras laiks"}
+            ls{"Paragvajas laiks"}
+        }
+        "meta:Peru"{
+            ld{"Peru vasaras laiks"}
+            ls{"Peru laiks"}
+        }
+        "meta:Philippines"{
+            ld{"Filipīnu vasaras laiks"}
+            ls{"Filipīnu laiks"}
+        }
+        "meta:Pierre_Miquelon"{
+            sg{"PMT"}
+        }
+        "meta:Pitcairn"{
+            ls{"Pitkērnas laiks"}
+        }
+        "meta:Reunion"{
+            ls{"Reinjonas laiks"}
+        }
+        "meta:Sakhalin"{
+            ld{"Sahalīnas vasaras laiks"}
+            ls{"Sahalīnas laiks"}
         }
         "meta:Samara"{
             ld{"Samaras vasaras laiks"}
             ls{"Samaras laiks"}
         }
+        "meta:Samarkand"{
+            ld{"Samarkandas vasaras laiks"}
+            ls{"Samarkandas laiks"}
+            sd{"SAMST (Samarkanda)"}
+            ss{"SAMT (Samarkanda)"}
+        }
+        "meta:Samoa"{
+            ls{"Rietumsamoas ziemas laiks"}
+        }
+        "meta:Seychelles"{
+            ls{"Seišeļu salu laiks"}
+        }
+        "meta:Singapore"{
+            ls{"Singapūras ziemas laiks"}
+        }
+        "meta:Solomon"{
+            ls{"Zālamana salu laiks"}
+        }
+        "meta:South_Georgia"{
+            ls{"Dienviddžordžijas laiks"}
+        }
+        "meta:Suriname"{
+            ls{"Surinamas laiks"}
+        }
+        "meta:Sverdlovsk"{
+            ld{"Sverdlovskas vasaras laiks"}
+            ls{"Sverdlovskas laiks"}
+        }
+        "meta:Tahiti"{
+            ls{"Taiti laiks"}
+        }
+        "meta:Taipei"{
+            sd{"CDT (Taipeja)"}
+            ss{"CST (Taipeja)"}
+        }
+        "meta:Tashkent"{
+            ld{"Taškentas vasaras laiks"}
+            ls{"Taškentas laiks"}
+        }
+        "meta:Tbilisi"{
+            ld{"Tbilisi vasaras laiks"}
+            ls{"Tbilisi laiks"}
+        }
+        "meta:Tokelau"{
+            ls{"Tokelau laiks"}
+        }
         "meta:Turkey"{
             ld{"Turcijas vasaras laiks"}
             ls{"Turcijas laiks"}
+        }
+        "meta:Uruguay"{
+            ld{"Urugvajas vasaras laiks"}
+            ls{"Urugvajas laiks"}
+        }
+        "meta:Vanuatu"{
+            ld{"Vanuatu vasaras laiks"}
+            ls{"Vanuatu laiks"}
+        }
+        "meta:Venezuela"{
+            ls{"Venecuēlas laiks"}
+        }
+        "meta:Vladivostok"{
+            ld{"Vladivostokas vasaras laiks"}
+            ls{"Vladivostokas laiks"}
         }
         "meta:Volgograd"{
             ld{"Volgogradas vasaras laiks"}
             ls{"Volgogradas laiks"}
         }
-        fallbackFormat{"{1} ({0})"}
+        "meta:Wallis"{
+            ls{"Volisas un Futunas laiks"}
+        }
+        "meta:Yakutsk"{
+            ld{"Jakutskas vasaras laiks"}
+            ls{"Jakutskas laiks"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Jekaterinburgas vasaras laiks"}
+            ls{"Jekaterinburgas laiks"}
+        }
+        "meta:Yerevan"{
+            ld{"Erevānas vasaras laiks"}
+            ls{"Erevānas laiks"}
+        }
+        "meta:Yukon"{
+            ld{"Jukonas vasaras laiks"}
+            lg{"Jukonas laiks"}
+            ls{"Jukonas ziemas laiks"}
+            sg{"YT"}
+        }
+        fallbackFormat{"{0} ({1})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"{0}"}

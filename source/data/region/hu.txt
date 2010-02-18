@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hu.xml
@@ -44,6 +44,7 @@ hu{
         172{"Független Államok Közössége"}
         419{"Latin-Amerika és a Karib-térség"}
         830{"Csatorna-szigetek"}
+        AC{"Ascension-sziget"}
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
         AF{"Afganisztán"}
@@ -75,7 +76,7 @@ hu{
         BN{"Brunei"}
         BO{"Bolívia"}
         BR{"Brazília"}
-        BS{"Bahamák"}
+        BS{"Bahama-szigetek"}
         BT{"Bhután"}
         BV{"Bouvet-sziget"}
         BW{"Botswana"}
@@ -85,7 +86,7 @@ hu{
         CC{"Kókusz-szigetek"}
         CD{"Kongó - Kinshasa"}
         CF{"Közép-afrikai Köztársaság"}
-        CG{"Kongó"}
+        CG{"Kongó - Brazzaville"}
         CH{"Svájc"}
         CI{"Elefántcsontpart"}
         CK{"Cook-szigetek"}
@@ -93,6 +94,7 @@ hu{
         CM{"Kamerun"}
         CN{"Kína"}
         CO{"Kolumbia"}
+        CP{"Clipperton-sziget"}
         CR{"Costa Rica"}
         CS{"Szerbia és Montenegró"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ hu{
         CY{"Ciprus"}
         CZ{"Csehország"}
         DE{"Németország"}
+        DG{"Diego Garcia"}
         DJ{"Dzsibuti"}
         DK{"Dánia"}
         DM{"Dominika"}
         DO{"Dominikai Köztársaság"}
         DZ{"Algéria"}
+        EA{"Ceuta és Melilla"}
         EC{"Ecuador"}
         EE{"Észtország"}
         EG{"Egyiptom"}
@@ -113,6 +117,7 @@ hu{
         ER{"Eritrea"}
         ES{"Spanyolország"}
         ET{"Etiópia"}
+        EU{"Európai Unió"}
         FI{"Finnország"}
         FJ{"Fidzsi"}
         FK{"Falkland-szigetek"}
@@ -138,18 +143,19 @@ hu{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong S.A.R, Kína"}
+        HK{"Hongkong SAR Kína"}
         HM{"Heard és McDonald Szigetek"}
         HN{"Honduras"}
         HR{"Horvátország"}
         HT{"Haiti"}
         HU{"Magyarország"}
+        IC{"Kanári-szigetek"}
         ID{"Indonézia"}
         IE{"Írország"}
         IL{"Izrael"}
         IM{"Man-sziget"}
         IN{"India"}
-        IO{"Brit Indiai Oceán"}
+        IO{"Brit Indiai-óceáni Terület"}
         IQ{"Irak"}
         IR{"Irán"}
         IS{"Izland"}
@@ -189,7 +195,7 @@ hu{
         MH{"Marshall-szigetek"}
         MK{"Macedónia"}
         ML{"Mali"}
-        MM{"Mianmar"}
+        MM{"Mianmar [Burma]"}
         MN{"Mongólia"}
         MO{"Makaó SAR Kína"}
         MP{"Északi Mariana-szigetek"}
@@ -224,7 +230,7 @@ hu{
         PK{"Pakisztán"}
         PL{"Lengyelország"}
         PM{"Saint Pierre és Miquelon"}
-        PN{"Pitcairn-sziget"}
+        PN{"Pitcairn-szigetek"}
         PR{"Puerto Rico"}
         PS{"Palesztin Terület"}
         PT{"Portugália"}
@@ -232,11 +238,10 @@ hu{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Külső-Óceánia"}
-        QU{"Európai Unió"}
         RE{"Reunion"}
         RO{"Románia"}
         RS{"Szerbia"}
-        RU{"Oroszország"}
+        RU{"Oroszországi Föderáció"}
         RW{"Ruanda"}
         SA{"Szaúd-Arábia"}
         SB{"Salamon-szigetek"}
@@ -246,7 +251,7 @@ hu{
         SG{"Szingapúr"}
         SH{"Szent Helena"}
         SI{"Szlovénia"}
-        SJ{"Svalbard és Jan Mayen"}
+        SJ{"Spitzbergák és Jan Mayen-szigetek"}
         SK{"Szlovákia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -257,6 +262,7 @@ hu{
         SV{"Salvador"}
         SY{"Szíria"}
         SZ{"Szváziföld"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- és Caicos-szigetek"}
         TD{"Csád"}
         TF{"Francia Déli Területek"}
@@ -276,24 +282,24 @@ hu{
         UA{"Ukrajna"}
         UG{"Uganda"}
         UM{"Amerikai Csendes-óceáni Szigetek"}
-        US{"Egyesült Államok"}
+        US{"Amerikai Egyesült Államok"}
         UY{"Uruguay"}
         UZ{"Üzbegisztán"}
         VA{"Vatikán"}
-        VC{"Saint Vincent és Grenadines"}
+        VC{"Saint Vincent és a Grenadine-szigetek"}
         VE{"Venezuela"}
         VG{"Brit Virgin-szigetek"}
         VI{"Amerikai Virgin-szigetek"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis és Futuna"}
+        WF{"Wallis- és Futuna-szigetek"}
         WS{"Szamoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        ZA{"Dél-Afrika"}
+        ZA{"Dél-afrikai Köztársaság"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen vagy érvénytelen körzet"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
 }

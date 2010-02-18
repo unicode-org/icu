@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/te.xml
@@ -17,7 +17,7 @@ te{
         }
         BRL{
             "R$",
-            "బ్రజిల్ దేశ రియాల్",
+            "బ్రజిలియన్ రియల్",
         }
         CNY{
             "CN¥",
@@ -29,7 +29,7 @@ te{
         }
         GBP{
             "£",
-            "బ్ిటిష్ పౌన్డ స్టెర్లిగ్",
+            "బ్రిటిష్ పౌండ్ స్టెర్లింగ్",
         }
         INR{
             "రూ.",
@@ -41,12 +41,12 @@ te{
         }
         RUB{
             "RUB",
-            "రష్య దేశ రూబల్",
+            "రష్యా రూబల్",
         }
         USD{
             "US$",
             "ఐక్య రాష్ట్ర అమెరిక డాలర్",
         }
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.43"}
 }

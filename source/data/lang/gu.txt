@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gu.xml
@@ -447,6 +447,7 @@ gu{
         sux{"સુમેરિયન"}
         sv{"સ્વીડિશ"}
         sw{"સ્વાહિલી"}
+        swb{"કોમોરિયન"}
         syc{"પરંપરાગત સિરિએક"}
         syr{"સિરિએક"}
         ta{"તમિલ"}
@@ -508,6 +509,7 @@ gu{
         yi{"યીદ્દીશ"}
         yo{"યોરૂબા"}
         ypk{"યૂપિક ભાષા"}
+        yue{"કેંટોનીઝ"}
         za{"ઝુઆગ"}
         zap{"ઝેપોટેક"}
         zbl{"બ્લિસિમ્બોલ્સ"}
@@ -652,5 +654,9 @@ gu{
         Zyyy{"સામાન્ય"}
         Zzzz{"અજ્ઞાત અથવા અમાન્ય લિપિ"}
     }
-    Version{"2.0.42.82"}
+    Variants{
+        PINYIN{"પિનયિન રોમનાઇઝેશન"}
+        WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
+    }
+    Version{"2.0.46.51"}
 }

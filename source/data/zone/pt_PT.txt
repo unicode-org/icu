@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.41.78"}
+    Version{"2.0.46.69"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaina"}
@@ -32,9 +32,6 @@ pt_PT{
         }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrado"}
         }
         "Europe:Madrid"{
             ec{"Madrid"}
@@ -220,6 +217,7 @@ pt_PT{
         }
         "meta:Bangladesh"{
             cu:int{1}
+            ld{"Hora de Verão do Bangladesh"}
             lg{"Hora do Bangladesh"}
             ls{"Hora do Bangladesh"}
             sg{"Hora do Bangladesh"}

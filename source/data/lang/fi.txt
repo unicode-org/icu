@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -18,19 +18,19 @@ fi{
     Languages{
         aa{"afar"}
         ab{"abhaasi"}
-        ace{"aceh"}
+        ace{"atšeh"}
         ach{"atšoli"}
         ada{"adangme"}
         ady{"adyge"}
         ae{"avesta"}
         af{"afrikaans"}
-        afa{"afro-aasialainen kieli"}
+        afa{"afroaasialainen kieli"}
         afh{"afrihili"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadi"}
         ale{"aleutti"}
-        alg{"algonkin-kieli"}
+        alg{"algonkikieli"}
         alt{"altai"}
         am{"amhara"}
         an{"aragonia"}
@@ -38,14 +38,14 @@ fi{
         anp{"angika"}
         apa{"apaššikieli"}
         ar{"arabia"}
-        arc{"aramea"}
-        arn{"araukaani"}
+        arc{"valtakunnanaramea"}
+        arn{"mapudungun"}
         arp{"arapaho"}
         art{"keinotekoinen kieli"}
         arw{"arawak"}
         as{"assami"}
         ast{"asturia"}
-        ath{"athabasca-kieli"}
+        ath{"athabascakieli"}
         aus{"australialainen kieli"}
         av{"avaari"}
         awa{"awadhi"}
@@ -53,7 +53,7 @@ fi{
         az{"azeri"}
         ba{"baškiiri"}
         bad{"banda"}
-        bai{"bamileke-kieli"}
+        bai{"bamilekekieli"}
         bal{"belutši"}
         ban{"bali"}
         bas{"basa"}
@@ -68,7 +68,7 @@ fi{
         bi{"bislama"}
         bik{"bikol"}
         bin{"bini"}
-        bla{"mustajalka"}
+        bla{"siksika"}
         bm{"bambara"}
         bn{"bengali"}
         bnt{"bantukieli"}
@@ -76,7 +76,7 @@ fi{
         br{"bretoni"}
         bra{"bradž"}
         bs{"bosnia"}
-        btk{"batak"}
+        btk{"batakkieli"}
         bua{"burjaatti"}
         bug{"bugi"}
         byn{"bilin"}
@@ -99,7 +99,7 @@ fi{
         chp{"chipewyan"}
         chr{"cherokee"}
         chy{"cheyenne"}
-        cmc{"tšam-kieli"}
+        cmc{"tšamkieli"}
         co{"korsika"}
         cop{"kopti"}
         cpe{"englantiin perustuva kreoli- tai pidgin-kieli"}
@@ -117,7 +117,7 @@ fi{
         da{"tanska"}
         dak{"dakota"}
         dar{"dargi"}
-        day{"dajakki"}
+        day{"land-dajakki-kieli"}
         de{"saksa"}
         de_AT{"itävallansaksa"}
         de_CH{"sveitsinyläsaksa"}
@@ -190,7 +190,7 @@ fi{
         grc{"muinaiskreikka"}
         gsw{"sveitsinsaksa"}
         gu{"gudžarati"}
-        gv{"manx"}
+        gv{"manksi"}
         gwi{"gwitšin"}
         ha{"hausa"}
         hai{"haida"}
@@ -215,8 +215,8 @@ fi{
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuanin-yi"}
-        ijo{"idžo"}
-        ik{"inupiatun"}
+        ijo{"idžokieli"}
+        ik{"inupiaq"}
         ilo{"iloko"}
         inc{"indoarjalainen kieli"}
         ine{"indoeurooppalainen kieli"}
@@ -235,7 +235,7 @@ fi{
         ka{"georgia"}
         kaa{"karakalpakki"}
         kab{"kabyyli"}
-        kac{"kachin"}
+        kac{"katšin"}
         kaj{"jju"}
         kam{"kamba"}
         kar{"karen"}
@@ -245,13 +245,13 @@ fi{
         kfo{"norsunluurannikonkoro"}
         kg{"kongo"}
         kha{"khasi"}
-        khi{"khoisan-kieli"}
+        khi{"khoisankieli"}
         kho{"khotani"}
         ki{"kikuju"}
         kj{"kuanjama"}
         kk{"kazakki"}
         kl{"kalaallisut"}
-        km{"khmer"}
+        km{"keskikhmer"}
         kmb{"kimbundu"}
         kn{"kannada"}
         ko{"korea"}
@@ -313,8 +313,8 @@ fi{
         mn{"mongoli"}
         mnc{"mantšu"}
         mni{"manipuri"}
-        mno{"manobo-kieli"}
-        mo{"moldavia"}
+        mno{"manobokieli"}
+        mo{"moldova"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
@@ -326,10 +326,10 @@ fi{
         mwl{"mirandeesi"}
         mwr{"marwari"}
         my{"burma"}
-        myn{"maya-kieli"}
+        myn{"mayakieli"}
         myv{"ersä"}
         na{"nauru"}
-        nah{"nahuatl"}
+        nah{"nahuatlkieli"}
         nai{"pohjoisamerikkalainen intiaanikieli"}
         nap{"napoli"}
         nb{"norjan bokmål"}
@@ -365,7 +365,7 @@ fi{
         os{"osseetti"}
         osa{"osage"}
         ota{"osmani"}
-        oto{"otomi-kieli"}
+        oto{"otomikieli"}
         pa{"pandžabi"}
         paa{"papualaiskieli"}
         pag{"pangasinan"}
@@ -374,12 +374,12 @@ fi{
         pap{"papiamentu"}
         pau{"palau"}
         peo{"muinaispersia"}
-        phi{"filippiiniläinen kieli"}
+        phi{"filippiiniläiskieli"}
         phn{"foinikia"}
         pi{"paali"}
         pl{"puola"}
         pon{"pohnpei"}
-        pra{"prakrit-kieli"}
+        pra{"prakritkieli"}
         pro{"muinaisprovensaali"}
         ps{"paštu"}
         pt{"portugali"}
@@ -418,9 +418,9 @@ fi{
         sgn{"viittomakieli"}
         sh{"serbokroaatti"}
         shn{"shan"}
-        si{"sinhali"}
+        si{"sinhala"}
         sid{"sidamo"}
-        sio{"sioux-kieli"}
+        sio{"siouxkieli"}
         sit{"sinotiibetiläinen kieli"}
         sk{"slovakki"}
         sl{"sloveeni"}
@@ -435,7 +435,7 @@ fi{
         snk{"soninke"}
         so{"somali"}
         sog{"sogdi"}
-        son{"songhai"}
+        son{"songhaikieli"}
         sq{"albania"}
         sr{"serbia"}
         srn{"sranan"}
@@ -449,9 +449,10 @@ fi{
         sux{"sumeri"}
         sv{"ruotsi"}
         sw{"swahili"}
+        swb{"komori"}
         syc{"muinaissyyria"}
         syr{"syyria"}
-        ta{"tamil"}
+        ta{"tamili"}
         tai{"thaikieli"}
         te{"telugu"}
         tem{"temne"}
@@ -477,7 +478,7 @@ fi{
         tsi{"tsimši"}
         tt{"tataari"}
         tum{"tumbuka"}
-        tup{"tupi-kieli"}
+        tup{"tupikieli"}
         tut{"altailainen kieli"}
         tvl{"tuvalu"}
         tw{"twi"}
@@ -487,8 +488,8 @@ fi{
         ug{"uiguuri"}
         uga{"ugarit"}
         uk{"ukraina"}
-        umb{"umbundu"}
-        und{"määrittämätön"}
+        umb{"mbundu"}
+        und{"määrittämätön kieli"}
         ur{"urdu"}
         uz{"uzbekki"}
         vai{"vai"}
@@ -497,11 +498,11 @@ fi{
         vo{"volapük"}
         vot{"vatja"}
         wa{"valloni"}
-        wak{"wakash-kieli"}
-        wal{"walamo"}
+        wak{"wakashkieli"}
+        wal{"wolaitta"}
         war{"waray"}
         was{"washo"}
-        wen{"sorbin kieli"}
+        wen{"sorbikieli"}
         wo{"wolof"}
         xal{"kalmukki"}
         xh{"xhosa"}
@@ -510,14 +511,15 @@ fi{
         yi{"jiddiš"}
         yo{"joruba"}
         ypk{"jupikkikieli"}
+        yue{"kantoninkiina"}
         za{"zhuang"}
-        zap{"sapoteekki"}
+        zap{"zapoteekki"}
         zbl{"blisskieli"}
         zen{"zenaga"}
         zh{"kiina"}
         zh_Hans{"yksinkertaistettu kiina"}
         zh_Hant{"perinteinen kiina"}
-        znd{"zande"}
+        znd{"zandekieli"}
         zu{"zulu"}
         zun{"zuni"}
         zxx{"ei kielellistä sisältöä"}
@@ -659,12 +661,15 @@ fi{
         calendar{
             buddhist{"buddhalainen kalenteri"}
             chinese{"kiinalainen kalenteri"}
+            ethiopic{"etiopialainen kalenteri"}
+            ethiopic-amete-alem{"etiopialainen amete alem -kalenteri"}
             gregorian{"gregoriaaninen kalenteri"}
             hebrew{"juutalainen kalenteri"}
             indian{"intialainen kalenteri"}
             islamic{"islamilainen kalenteri"}
             islamic-civil{"islamilainen siviilikalenteri"}
             japanese{"japanilainen kalenteri"}
+            persian{"persialainen kalenteri"}
             roc{"kiinan tasavallan kalenteri 1912–1949"}
         }
         collation{
@@ -675,6 +680,9 @@ fi{
             pinyin{"pinyin-järjestys"}
             stroke{"piirtojärjestys"}
             traditional{"perinteinen järjestys"}
+        }
+        numbers{
+            latn{"länsimaiset numerot"}
         }
     }
     Variants{
@@ -712,7 +720,7 @@ fi{
         VALENCIA{"katalaanin valencian murre"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

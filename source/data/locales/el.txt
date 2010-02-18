@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/el.xml
@@ -10,7 +10,8 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    ExemplarCharacters{"[α ά β-ε έ ζ η ή θ ι ί ϊ ΐ κ-ο ό π ρ σ ς τ υ ύ ϋ ΰ φ-ω ώ]"}
+    AuxExemplarCharacters{"[]"}
+    ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
     LocaleScript{
         "Grek",
     }
@@ -34,7 +35,7 @@ el{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -96,10 +97,10 @@ el{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, dd MMMM y",
-                "dd MMMM y",
-                "dd MMM y",
-                "dd/MM/yyyy",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "d/M/yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -109,10 +110,10 @@ el{
             availableFormats{
                 EEEd{"EEE d"}
                 Ed{"E d"}
-                H{"H"}
+                H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E, d/M"}
                 MMM{"LLL"}

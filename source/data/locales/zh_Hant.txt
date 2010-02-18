@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -72,33 +72,15 @@ zh_Hant{
         "Hani",
         "Bopo",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.99"}
+    Version{"2.0.46.69"}
     calendar{
         chinese{
-            AmPmMarkers{
-                "上午",
-                "下午",
-            }
             DateTimePatterns{
                 "zzzzah時mm分ss秒",
                 "zah時mm分ss秒",
@@ -145,7 +127,6 @@ zh_Hant{
                 MEd{"M-d（E）"}
                 MMM{"LLL"}
                 MMMEd{"MMMd日E"}
-                MMMMEd{"MMMMd日E"}
                 MMMMd{"MMMMd日"}
                 MMMMdd{"MMMMdd日"}
                 MMMd{"MMMd日"}
@@ -169,7 +150,6 @@ zh_Hant{
                 yyQ{"yy年第Q季度"}
                 yyyy{"y年"}
                 yyyyM{"y年M月"}
-                yyyyMMMM{"y年MMMM"}
             }
             dayNames{
                 format{
@@ -266,6 +246,9 @@ zh_Hant{
                     M{"M/dE至M/dE"}
                     d{"M/dE至M/dE"}
                 }
+                MMM{
+                    M{"LLLL至LLLL"}
+                }
                 MMMEd{
                     M{"M月d日E至M月d日E"}
                     d{"M月d日E至d日E"}
@@ -314,6 +297,10 @@ zh_Hant{
                     M{"yyyy/M/dE至yyyy/M/dE"}
                     d{"yyyy/M/dE至yyyy/M/dE"}
                     y{"yyyy/M/dE至yyyy/M/dE"}
+                }
+                yMMM{
+                    M{"y年M月至M月"}
+                    y{"y年M月至y年M月"}
                 }
                 yMMMEd{
                     M{"y年M月d日E至M月d日E"}
@@ -367,6 +354,20 @@ zh_Hant{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "一月",
+                        "二月",
+                        "三月",
+                        "四月",
+                        "五月",
+                        "六月",
+                        "七月",
+                        "八月",
+                        "九月",
+                        "十月",
+                        "十一月",
+                        "十二月",
+                    }
                     narrow{
                         "1",
                         "2",
@@ -380,20 +381,6 @@ zh_Hant{
                         "10",
                         "11",
                         "12",
-                    }
-                    wide{
-                        "一月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
                     }
                 }
             }
@@ -412,21 +399,9 @@ zh_Hant{
                         "第4季",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         roc{
-            AmPmMarkers{
-                "上午",
-                "下午",
-            }
             DateTimePatterns{
                 "zzzzah時mm分ss秒",
                 "zah時mm分ss秒",
@@ -465,49 +440,25 @@ zh_Hant{
         quotationStart{"「"}
     }
     units{
-        day{
-            other{"{0}日"}
-        }
         hour{
             other{"{0}小時"}
         }
-        minute{
-            other{"{0}分"}
-        }
-        month{
-            other{"{0}月"}
-        }
-        second{
-            other{"{0}秒"}
-        }
         week{
             other{"{0}週"}
-        }
-        year{
-            other{"{0}年"}
         }
     }
     unitsShort{
         day{
-            other{"{0}日"}
+            other{"{0}天"}
         }
         hour{
             other{"{0}小時"}
         }
-        minute{
-            other{"{0}分"}
-        }
         month{
-            other{"{0}月"}
-        }
-        second{
-            other{"{0}秒"}
+            other{"{0}個月"}
         }
         week{
             other{"{0}週"}
-        }
-        year{
-            other{"{0}年"}
         }
     }
 }

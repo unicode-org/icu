@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hy.xml
@@ -10,7 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/hy.xml
  */
 hy{
-    ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-ֆ]"}
+    ExemplarCharacters{
+        "[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա բ գ դ ե զ է ը թ ժ ի լ խ ծ կ հ ձ ղ ճ մ յ ն շ ո չ պ ջ ռ ս վ տ"
+        " ր ց ւ փ ք և օ ֆ]"
+    }
     LocaleScript{
         "Armn",
     }
@@ -34,12 +37,12 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.45.99"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "Առ․",
-                "Եր․",
+                "Կե․",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -80,20 +83,20 @@ hy{
             }
             eras{
                 abbreviated{
-                    "Ք․Ա․",
-                    "Ք․Ե․",
+                    "Մ․Թ․Ա․",
+                    "Մ․Թ․",
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "Յնր",
-                        "Փտր",
+                        "Հնվ",
+                        "Փտվ",
                         "Մրտ",
                         "Ապր",
                         "Մյս",
-                        "Յնս",
-                        "Յլս",
+                        "Հնս",
+                        "Հլս",
                         "Օգս",
                         "Սեպ",
                         "Հոկ",
@@ -101,13 +104,13 @@ hy{
                         "Դեկ",
                     }
                     wide{
-                        "Յունուար",
-                        "Փետրուար",
+                        "Հունվար",
+                        "Փետրվար",
                         "Մարտ",
                         "Ապրիլ",
                         "Մայիս",
-                        "Յունիս",
-                        "Յուլիս",
+                        "Հունիս",
+                        "Հուլիս",
                         "Օգոստոս",
                         "Սեպտեմբեր",
                         "Հոկտեմբեր",

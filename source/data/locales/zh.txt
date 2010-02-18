@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -66,6 +66,7 @@ zh{
         " 飘 飙 飞 食 餐 饭 饮 饰 饱 饼 馆 首 香 馨 马 驱 驶 驻 驾 验 骑 骗 骚 骤 骨 高 鬼 魂 魅 魔 鱼 鲁 鲜 鸟 鸣 鸭 鸿 鹅"
         " 鹤 鹰 鹿 麦 麻 黄 黎 黑 默 鼓 鼠 鼻 齐 齿 龄 龙 龟]"
     }
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Hani",
     }
@@ -89,7 +90,7 @@ zh{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -115,7 +116,7 @@ zh{
                 Ed{"d日E"}
                 H{"H时"}
                 HHmm{"H:mm"}
-                HHmmss{"HH:mm:ss"}
+                HHmmss{"H:mm:ss"}
                 Hm{"H:mm"}
                 M{"L"}
                 MEd{"M-dE"}

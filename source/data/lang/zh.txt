@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -449,6 +449,7 @@ zh{
         sux{"苏马文"}
         sv{"瑞典文"}
         sw{"斯瓦希里文"}
+        swb{"科摩罗语"}
         syr{"叙利亚文"}
         ta{"泰米尔文"}
         tai{"傣语诸语言（其他）"}
@@ -509,6 +510,7 @@ zh{
         yi{"依地文"}
         yo{"约鲁巴文"}
         ypk{"尤皮克诸语言"}
+        yue{"粤语"}
         za{"壮语"}
         zap{"萨波蒂克文"}
         zen{"泽纳加文"}
@@ -668,12 +670,14 @@ zh{
         AREVELA{"东亚美尼亚语"}
         AREVMDA{"西亚美尼亚语"}
         FONIPA{"国际音标"}
+        PINYIN{"拼音"}
         POLYTON{"多音"}
         POSIX{"电脑"}
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
+        WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

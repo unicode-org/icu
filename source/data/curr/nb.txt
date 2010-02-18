@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -273,7 +273,7 @@ nb{
         }
         CUC{
             "CUC",
-            "CUC",
+            "kubansk konvertibel peso",
         }
         CUP{
             "CUP",
@@ -356,7 +356,7 @@ nb{
             "euro",
         }
         FIM{
-            "mk",
+            "FIM",
             "finske mark",
         }
         FJD{
@@ -368,7 +368,7 @@ nb{
             "Falkland-pund",
         }
         FRF{
-            "₣",
+            "FRF",
             "franske franc",
         }
         GBP{
@@ -412,7 +412,7 @@ nb{
             "ekvatorialguineanske ekwele guineana",
         }
         GRD{
-            "₯",
+            "GRD",
             "greske drakmer",
         }
         GTQ{
@@ -644,7 +644,7 @@ nb{
             "mauritanske ouguiya",
         }
         MTL{
-            "Lm",
+            "MTL",
             "maltesiske lira",
         }
         MTP{
@@ -676,7 +676,7 @@ nb{
             "meksikanske unidad de inversion (UDI)",
         }
         MYR{
-            "RM",
+            "MYR",
             "malaysiske ringgit",
         }
         MZE{
@@ -684,11 +684,11 @@ nb{
             "mosambikiske escudo",
         }
         MZM{
-            "Mt",
+            "MZM",
             "gamle mosambikiske metical",
         }
         MZN{
-            "MTn",
+            "MZN",
             "mosambikiske metical",
         }
         NAD{
@@ -696,7 +696,7 @@ nb{
             "namibiske dollar",
         }
         NGN{
-            "₦",
+            "NGN",
             "nigerianske naira",
         }
         NIC{
@@ -704,7 +704,7 @@ nb{
             "nicaraguanske cordoba",
         }
         NIO{
-            "C$",
+            "NIO",
             "nicaraguanske cordoba oro",
         }
         NLG{
@@ -728,7 +728,7 @@ nb{
             "omanske rialer",
         }
         PAB{
-            "B/.",
+            "PAB",
             "panamanske balboa",
         }
         PEI{
@@ -736,7 +736,7 @@ nb{
             "peruvianske inti",
         }
         PEN{
-            "S/.",
+            "PEN",
             "peruvianske nye sol",
         }
         PES{
@@ -748,7 +748,7 @@ nb{
             "papuanske kina",
         }
         PHP{
-            "₱",
+            "PHP",
             "filippinske pesos",
         }
         PKR{
@@ -756,7 +756,7 @@ nb{
             "pakistanske rupier",
         }
         PLN{
-            "zł",
+            "PLN",
             "polske zloty",
         }
         PLZ{
@@ -768,7 +768,7 @@ nb{
             "portugisiske escudo",
         }
         PYG{
-            "₲",
+            "PYG",
             "paraguayanske guarani",
         }
         QAR{
@@ -788,7 +788,7 @@ nb{
             "rumenske leu",
         }
         RSD{
-            "din.",
+            "RSD",
             "serbiske dinarer",
         }
         RUB{
@@ -812,11 +812,11 @@ nb{
             "salomonske dollar",
         }
         SCR{
-            "SRe",
+            "SCR",
             "seychelliske rupier",
         }
         SDD{
-            "LSd",
+            "SDD",
             "sudanesiske dinarer",
         }
         SDG{
@@ -844,15 +844,15 @@ nb{
             "slovenske tolar",
         }
         SKK{
-            "Sk",
+            "SKK",
             "slovakiske koruna",
         }
         SLL{
-            "Le",
+            "SLL",
             "sierraleonske leone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "somaliske shilling",
         }
         SRD{
@@ -860,11 +860,11 @@ nb{
             "surinamske dollar",
         }
         SRG{
-            "Sf",
+            "SRG",
             "surinamske gylden",
         }
         STD{
-            "Db",
+            "STD",
             "Sao Tome og Principe-dobra",
         }
         SUR{
@@ -899,12 +899,16 @@ nb{
             "TMM",
             "turkmenske manat",
         }
+        TMT{
+            "TMT",
+            "turkmenistansk ny manat",
+        }
         TND{
-            "DT",
+            "TND",
             "tunisiske dinarer",
         }
         TOP{
-            "T$",
+            "TOP",
             "tonganske paʻanga",
         }
         TPE{
@@ -916,7 +920,7 @@ nb{
             "tyrkiske lire",
         }
         TRY{
-            "TL",
+            "TRY",
             "ny tyrkisk lire",
         }
         TTD{
@@ -924,15 +928,15 @@ nb{
             "trinidadiske dollar",
         }
         TWD{
-            "NT$",
+            "TWD",
             "taiwanske nye dollar",
         }
         TZS{
-            "TSh",
+            "TZS",
             "tanzanianske shilling",
         }
         UAH{
-            "₴",
+            "UAH",
             "ukrainske hryvnia",
         }
         UAK{
@@ -944,7 +948,7 @@ nb{
             "ugandiske shilling (1966-1987)",
         }
         UGX{
-            "USh",
+            "UGX",
             "ugandiske shilling",
         }
         USD{
@@ -980,23 +984,23 @@ nb{
             "venezuelanske bolivar",
         }
         VEF{
-            "Bs.F.",
+            "VEF",
             "venezuelanske bolivar fuerte",
         }
         VND{
-            "₫",
+            "VND",
             "vietnamesiske dong",
         }
         VUV{
-            "VT",
+            "VUV",
             "vanuatiske vatu",
         }
         WST{
-            "WS$",
+            "WST",
             "vestsamoiske tala",
         }
         XAF{
-            "FCFA",
+            "XAF",
             "CFA franc BEAC",
         }
         XAG{
@@ -1096,11 +1100,11 @@ nb{
             "sørafrikanske rand (finansielle)",
         }
         ZAR{
-            "R",
+            "ZAR",
             "sørafrikanske rand",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "zambiske kwacha",
         }
         ZRN{
@@ -1112,16 +1116,22 @@ nb{
             "zairiske zaire",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "zimbabwiske dollar",
+        }
+        ZWL{
+            "ZWL",
+            "zimbabwisk dollar (2009)",
         }
     }
     CurrencyPlurals{
         ADP{
             one{"andorransk pesetas"}
+            other{"andorranske pesetas"}
         }
         ALL{
             one{"albansk lek"}
+            other{"albanske lek"}
         }
         AMD{
             one{"armensk dram"}
@@ -1281,6 +1291,9 @@ nb{
         CSK{
             one{"tsjekkoslovakisk koruna (hard)"}
         }
+        CUC{
+            one{"kubansk peso (konvertibel)"}
+        }
         CUP{
             one{"kubansk pesos"}
         }
@@ -1293,6 +1306,7 @@ nb{
         }
         CZK{
             one{"tsjekkisk koruna"}
+            other{"tsjekkiske kroner"}
         }
         DDM{
             one{"østtysk ostmark"}
@@ -1324,6 +1338,7 @@ nb{
         }
         EEK{
             one{"estisk kroon"}
+            other{"estiske kroner"}
         }
         EGP{
             one{"egyptisk pund"}
@@ -1342,6 +1357,10 @@ nb{
         }
         ETB{
             one{"etiopisk birr"}
+        }
+        EUR{
+            one{"euro"}
+            other{"euro"}
         }
         FIM{
             one{"finsk mark"}
@@ -1605,6 +1624,7 @@ nb{
         }
         NOK{
             one{"norsk krone"}
+            other{"norske kroner"}
         }
         NPR{
             one{"nepalsk rupi"}
@@ -1696,6 +1716,7 @@ nb{
         }
         SEK{
             one{"svensk krone"}
+            other{"svenske kroner"}
         }
         SGD{
             one{"singaporsk dollar"}
@@ -1818,6 +1839,12 @@ nb{
         WST{
             one{"vestsamoisk tala"}
         }
+        XAG{
+            one{"unse sølv"}
+        }
+        XAU{
+            one{"unse gull"}
+        }
         XBA{
             other{"europeiske sammensatte enheter"}
         }
@@ -1844,6 +1871,12 @@ nb{
         }
         XFU{
             one{"fransk UIC-franc"}
+        }
+        XPD{
+            one{"unse palladium"}
+        }
+        XPT{
+            one{"unse platina"}
         }
         XTS{
             one{"testvaluta"}
@@ -1891,5 +1924,5 @@ nb{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.51"}
 }

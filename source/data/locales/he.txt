@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/he.xml
@@ -11,10 +11,12 @@
  */
 he{
     AuxExemplarCharacters{
-        "[\u05BD \u05C4\u200E \u200F \u05B0-\u05B9 \u05BB \u05C2 \u05C1 \u05BC \u05BF"
-        " ־ ׳ ״ a-z]"
+        "[\u05BD\u05C4\u200E\u200F \u05B0 \u05B1 \u05B2 \u05B3 \u05B4 \u05B5 \u05B6 "
+        "\u05B7 \u05B8 \u05B9 \u05BB \u05C2 \u05C1 \u05BC \u05BF ־ ׳ ״ a b c d e f g "
+        "h i j k l m n o p q r s t u v w x y z]"
     }
-    ExemplarCharacters{"[א-י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק-ת]"}
+    ExemplarCharacters{"[א ב ג ד ה ו ז ח ט י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק ר ש ת]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Hebr",
     }
@@ -38,7 +40,7 @@ he{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -52,7 +54,7 @@ he{
                 "HH:mm",
                 "EEEE, d בMMMM y",
                 "d בMMMM y",
-                "dd/MM/yyyy",
+                "d בMMM yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -61,33 +63,35 @@ he{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E d"}
-                H{"H"}
+                EEEd{"EEE ה-d"}
+                Ed{"E ה-d"}
+                H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E MMMM d"}
+                MMMEd{"E, d בMMM"}
+                MMMMEd{"E, d בMMMM"}
                 MMMMd{"d בMMMM"}
-                MMMd{"MMM d"}
+                MMMd{"d בMMM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
+                hm{"HH:mm"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M.yyyy"}
                 yMEd{"EEE, d.M.yyyy"}
-                yMMM{"y MMM"}
-                yMMMEd{"EEE, y MMM d"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d בMMM y"}
                 yMMMM{"MMMM y"}
                 yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
                 yyMM{"MM/yy"}
-                yyMMM{"MMM yy"}
+                yyMMM{"MMM yyyy"}
                 yyQ{"Q yy"}
                 yyyy{"y"}
                 yyyyMM{"MM/yyyy"}
@@ -104,6 +108,15 @@ he{
                         "יום ו'",
                         "שבת",
                     }
+                    narrow{
+                        "א",
+                        "ב",
+                        "ג",
+                        "ד",
+                        "ה",
+                        "ו",
+                        "ש",
+                    }
                     wide{
                         "יום ראשון",
                         "יום שני",
@@ -115,6 +128,15 @@ he{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "יום א'",
+                        "יום ב'",
+                        "יום ג'",
+                        "יום ד'",
+                        "יום ה'",
+                        "יום ו'",
+                        "שבת",
+                    }
                     narrow{
                         "א",
                         "ב",
@@ -123,6 +145,15 @@ he{
                         "ה",
                         "ו",
                         "ש",
+                    }
+                    wide{
+                        "יום ראשון",
+                        "יום שני",
+                        "יום שלישי",
+                        "יום רביעי",
+                        "יום חמישי",
+                        "יום שישי",
+                        "יום שבת",
                     }
                 }
             }
@@ -211,22 +242,22 @@ he{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"HH–HH"}
-                    h{"HH–HH"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"HH:mm–HH:mm"}
-                    h{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"HH:mm–HH:mm v"}
-                    h{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"HH–HH v"}
-                    h{"HH–HH v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -250,8 +281,8 @@ he{
                     y{"EEEE d MMM y – EEEE d MMM y"}
                 }
                 yMMMM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y–MMMM y"}
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}
@@ -279,6 +310,50 @@ he{
                         "אוק",
                         "נוב",
                         "דצמ",
+                    }
+                    wide{
+                        "ינואר",
+                        "פברואר",
+                        "מרס",
+                        "אפריל",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוגוסט",
+                        "ספטמבר",
+                        "אוקטובר",
+                        "נובמבר",
+                        "דצמבר",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ינו'",
+                        "פבר",
+                        "מרס",
+                        "אפר",
+                        "מאי",
+                        "יונ'",
+                        "יול'",
+                        "אוג'",
+                        "ספט'",
+                        "אוק'",
+                        "נוב'",
+                        "דצמ'",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "ינואר",

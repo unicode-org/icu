@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -44,6 +44,7 @@ hr{
         172{"Zajednica nezavisnih država"}
         419{"Latinska Amerika i Karibi"}
         830{"Kanalski otoci"}
+        AC{"Otok Ascension"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Afganistan"}
@@ -85,7 +86,7 @@ hr{
         CC{"Kokosovi Otoci"}
         CD{"Demokratska Republika Kongo"}
         CF{"Srednjoafrička Republika"}
-        CG{"Kongo"}
+        CG{"Kongo - Brazzaville"}
         CH{"Švicarska"}
         CI{"Obala Bjelokosti"}
         CK{"Kukovi Otoci"}
@@ -93,6 +94,7 @@ hr{
         CM{"Kamerun"}
         CN{"Kina"}
         CO{"Kolumbija"}
+        CP{"Otok Clipperton"}
         CR{"Kostarika"}
         CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
@@ -101,11 +103,13 @@ hr{
         CY{"Cipar"}
         CZ{"Češka Republika"}
         DE{"Njemačka"}
+        DG{"Diego Garcia"}
         DJ{"Džibuti"}
         DK{"Danska"}
         DM{"Dominika"}
         DO{"Dominikanska Republika"}
         DZ{"Alžir"}
+        EA{"Ceuta i Melilla"}
         EC{"Ekvador"}
         EE{"Estonija"}
         EG{"Egipat"}
@@ -113,6 +117,7 @@ hr{
         ER{"Eritreja"}
         ES{"Španjolska"}
         ET{"Etiopija"}
+        EU{"Europska Unija"}
         FI{"Finska"}
         FJ{"Fidži"}
         FK{"Falklandski Otoci"}
@@ -144,6 +149,7 @@ hr{
         HR{"Hrvatska"}
         HT{"Haiti"}
         HU{"Mađarska"}
+        IC{"Kanarski Otoci"}
         ID{"Indonezija"}
         IE{"Irska"}
         IL{"Izrael"}
@@ -164,7 +170,7 @@ hr{
         KI{"Kiribati"}
         KM{"Komori"}
         KN{"Sveti Kristofor i Nevis"}
-        KP{"Koreja, Sjeverna"}
+        KP{"Sjeverna Koreja"}
         KR{"Južna Koreja"}
         KW{"Kuvajt"}
         KY{"Kajmanski Otoci"}
@@ -179,7 +185,7 @@ hr{
         LT{"Litva"}
         LU{"Luksemburg"}
         LV{"Latvija"}
-        LY{"Libijska Arapska Džamahirija"}
+        LY{"Libija"}
         MA{"Maroko"}
         MC{"Monako"}
         MD{"Moldavija"}
@@ -187,7 +193,7 @@ hr{
         MF{"Sveti Martin"}
         MG{"Madagaskar"}
         MH{"Maršalovi Otoci"}
-        MK{"Bivša Jugoslavenska Republika Makedonija"}
+        MK{"Makedonija"}
         ML{"Mali"}
         MM{"Mijanma"}
         MN{"Mongolija"}
@@ -232,7 +238,6 @@ hr{
         PY{"Paragvaj"}
         QA{"Katar"}
         QO{"Ostala oceanija"}
-        QU{"Europska Unija"}
         RE{"Reunion"}
         RO{"Rumunjska"}
         RS{"Srbija"}
@@ -257,6 +262,7 @@ hr{
         SV{"El Salvador"}
         SY{"Sirija"}
         SZ{"Svazi"}
+        TA{"Tristan da Cunha"}
         TC{"Turkski i Kaikos Otoci"}
         TD{"Čad"}
         TF{"Francuski Južni Teritoriji"}
@@ -295,5 +301,5 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.74"}
 }

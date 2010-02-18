@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -26,6 +26,10 @@ fi{
         AFN{
             "AFN",
             "Afganistanin afgaani",
+        }
+        ALK{
+            "ALK",
+            "Albanian vanha lek",
         }
         ALL{
             "ALL",
@@ -103,6 +107,10 @@ fi{
             "BAM",
             "Bosnia-Hertsegovinan vaihdettava markka",
         }
+        BAN{
+            "BAN",
+            "Bosnia-Hertsegovinan uusi dinaari",
+        }
         BBD{
             "BBD",
             "Barbadosin dollari",
@@ -127,9 +135,17 @@ fi{
             "BGL" /** ===  */,
             "Bulgarian kova lev",
         }
+        BGM{
+            "BGM",
+            "Bulgarian sosialistinen lev",
+        }
         BGN{
             "BGN",
             "Bulgarian uusi lev",
+        }
+        BGO{
+            "BGO",
+            "Bulgarian vanha lev",
         }
         BHD{
             "BHD",
@@ -150,6 +166,10 @@ fi{
         BOB{
             "BOB",
             "Bolivian boliviano",
+        }
+        BOL{
+            "BOL",
+            "Bolivian vanha boliviano",
         }
         BOP{
             "BOP",
@@ -247,6 +267,10 @@ fi{
             "CLP",
             "Chilen peso",
         }
+        CNX{
+            "CNX",
+            "Kiinan kansanpankin dollari",
+        }
         CNY{
             "CNY",
             "Kiinan yuan",
@@ -273,7 +297,7 @@ fi{
         }
         CUC{
             "CUC",
-            "CUC",
+            "Kuuban vaihdettava peso",
         }
         CUP{
             "CUP",
@@ -531,6 +555,14 @@ fi{
             "KPW",
             "Pohjois-Korean won",
         }
+        KRH{
+            "KRH",
+            "Etelä-Korean hwan",
+        }
+        KRO{
+            "KRO",
+            "Etelä-Korean vanha won",
+        }
         KRW{
             "KRW",
             "Etelä-Korean won",
@@ -607,6 +639,14 @@ fi{
             "MAF" /** ===  */,
             "Marokon frangi",
         }
+        MCF{
+            "MCF",
+            "Monacon frangi",
+        }
+        MDC{
+            "MDC",
+            "Moldovan kuponkileu",
+        }
         MDL{
             "MDL",
             "Moldovan leu",
@@ -622,6 +662,10 @@ fi{
         MKD{
             "MKD",
             "Makedonian dinaari",
+        }
+        MKN{
+            "MKN",
+            "Makedonian vanha dinaari",
         }
         MLF{
             "MLF" /** ===  */,
@@ -991,6 +1035,10 @@ fi{
             "VND",
             "Vietnamin dong",
         }
+        VNN{
+            "VNN",
+            "Vietnamin vanha dong",
+        }
         VUV{
             "VUV",
             "Vanuatun vatu",
@@ -1095,6 +1143,10 @@ fi{
             "YUN" /** ===  */,
             "Jugoslavian vaihdettava dinaari",
         }
+        YUR{
+            "YUR",
+            "Jugoslavian uudistettu dinaari",
+        }
         ZAL{
             "ZAL" /** ===  */,
             "Etelä-Afrikan rahoitusrandi",
@@ -1145,6 +1197,10 @@ fi{
             one{"Afganistanin afgaani"}
             other{"Afganistanin afgaania"}
         }
+        ALK{
+            one{"Albanian vanha lek"}
+            other{"Albanian vanhaa lekiä"}
+        }
         ALL{
             one{"Albanian lek"}
             other{"Albanian lekiä"}
@@ -1176,6 +1232,14 @@ fi{
         ARA{
             one{"Argentiinan austral"}
             other{"Argentiinan australia"}
+        }
+        ARL{
+            one{"Argentiinan ley-peso"}
+            other{"Argentiinan ley-pesoa"}
+        }
+        ARM{
+            one{"Argentiinan moneda nacional -peso"}
+            other{"Argentiinan moneda nacional -pesoa"}
         }
         ARP{
             one{"Argentiinan peso (1983–1985)"}
@@ -1213,6 +1277,10 @@ fi{
             one{"Bosnia-Hertsegovinan vaihdettava markka"}
             other{"Bosnia-Hertsegovinan vaihdettavaa markkaa"}
         }
+        BAN{
+            one{"Bosnia-Hertsegovinan uusi dinaari"}
+            other{"Bosnia-Hertsegovinan uutta dinaaria"}
+        }
         BBD{
             one{"Barbadosin dollari"}
             other{"Barbadosin dollaria"}
@@ -1235,11 +1303,19 @@ fi{
         }
         BGL{
             one{"Bulgarian kova lev"}
-            other{"Bulgarian kovaa levaa"}
+            other{"Bulgarian kovaa leviä"}
+        }
+        BGM{
+            one{"Bulgarian sosialistinen lev"}
+            other{"Bulgarian sosialistista leviä"}
         }
         BGN{
             one{"Bulgarian uusi lev"}
-            other{"Bulgarian uutta levaa"}
+            other{"Bulgarian uutta leviä"}
+        }
+        BGO{
+            one{"Bulgarian vanha lev"}
+            other{"Bulgarian vanhaa leviä"}
         }
         BHD{
             one{"Bahrainin dinaari"}
@@ -1260,6 +1336,10 @@ fi{
         BOB{
             one{"Bolivian boliviano"}
             other{"Bolivian bolivianoa"}
+        }
+        BOL{
+            one{"Bolivian vanha boliviano"}
+            other{"Bolivian vanhaa bolivianoa"}
         }
         BOP{
             one{"Bolivian peso"}
@@ -1292,6 +1372,10 @@ fi{
         BRR{
             one{"Brasilian cruzeiro"}
             other{"Brasilian cruzeiroa"}
+        }
+        BRZ{
+            one{"Brasilian vanha cruzeiro"}
+            other{"Brasilian vanhaa cruzeiroa"}
         }
         BSD{
             one{"Bahaman dollari"}
@@ -1341,6 +1425,10 @@ fi{
             one{"Sveitsin WIR-frangi"}
             other{"Sveitsin WIR-frangia"}
         }
+        CLE{
+            one{"Chilen escudo"}
+            other{"Chilen escudoa"}
+        }
         CLF{
             one{"Chilen unidades de fomento"}
             other{"Chilen unidades de fomentoa"}
@@ -1348,6 +1436,10 @@ fi{
         CLP{
             one{"Chilen peso"}
             other{"Chilen pesoa"}
+        }
+        CNX{
+            one{"Kiinan kansanpankin dollari"}
+            other{"Kiinan kansanpankin dollaria"}
         }
         CNY{
             one{"Kiinan yuan"}
@@ -1372,6 +1464,10 @@ fi{
         CSK{
             one{"Tšekkoslovakian kova koruna"}
             other{"Tšekkoslovakian kovaa korunaa"}
+        }
+        CUC{
+            one{"Kuuban vaihdettava peso"}
+            other{"Kuuban vaihdettavaa pesoa"}
         }
         CUP{
             one{"Kuuban peso"}
@@ -1629,6 +1725,14 @@ fi{
             one{"Pohjois-Korean won"}
             other{"Pohjois-Korean wonia"}
         }
+        KRH{
+            one{"Etelä-Korean hwan"}
+            other{"Etelä-Korean hwania"}
+        }
+        KRO{
+            one{"Etelä-Korean vanha won"}
+            other{"Etelä-Korean vanhaa wonia"}
+        }
         KRW{
             one{"Etelä-Korean won"}
             other{"Etelä-Korean wonia"}
@@ -1705,6 +1809,14 @@ fi{
             one{"Marokon frangi"}
             other{"Marokon frangia"}
         }
+        MCF{
+            one{"Monacon frangi"}
+            other{"Monacon frangia"}
+        }
+        MDC{
+            one{"Moldovan kuponkileu"}
+            other{"Moldovan kuponkileuta"}
+        }
         MDL{
             one{"Moldovan leu"}
             other{"Moldovan leuta"}
@@ -1720,6 +1832,10 @@ fi{
         MKD{
             one{"Makedonian dinaari"}
             other{"Makedonian dinaaria"}
+        }
+        MKN{
+            one{"Makedonian vanha dinaari"}
+            other{"Makedonian vanhaa dinaaria"}
         }
         MLF{
             one{"Malin frangi"}
@@ -2089,6 +2205,10 @@ fi{
             one{"Vietnamin dong"}
             other{"Vietnamin dongia"}
         }
+        VNN{
+            one{"Vietnamin vanha dong"}
+            other{"Vietnamin vanhaa dongia"}
+        }
         VUV{
             one{"Vanuatun vatu"}
             other{"Vanuatun vatua"}
@@ -2193,6 +2313,10 @@ fi{
             one{"Jugoslavian vaihdettava dinaari"}
             other{"Jugoslavian vaihdettavaa dinaaria"}
         }
+        YUR{
+            one{"Jugoslavian uudistettu dinaari"}
+            other{"Jugoslavian uudistettua dinaaria"}
+        }
         ZAL{
             one{"Etelä-Afrikan rahoitusrandi"}
             other{"Etelä-Afrikan rahoitusrandia"}
@@ -2230,5 +2354,5 @@ fi{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.42.82"}
+    Version{"2.0.46.69"}
 }
