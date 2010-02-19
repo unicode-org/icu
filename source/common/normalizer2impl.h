@@ -602,5 +602,106 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
     return fcd;
 }
 
+/**
+ * Format of Normalizer2 .nrm data files.
+ * Format version 1.0.
+ *
+ * Normalizer2 .nrm data files provide data for the Unicode Normalization algorithms.
+ * ICU ships with data files for standard Unicode Normalization Forms
+ * NFC and NFD (nfc.nrm), NFKC and NFKD (nfkc.nrm) and NFKC_Casefold (nfkc_cf.nrm).
+ * Custom (application-specific) data can be built into additional .nrm files
+ * with the gennorm2 build tool.
+ *
+ * Normalizer2.getInstance() causes a .nrm file to be loaded, unless it has been
+ * cached already. Internally, Normalizer2Impl.load() reads the .nrm file.
+ *
+ * A .nrm file begins with a standard ICU data file header
+ * (DataHeader, see ucmndata.h and unicode/udata.h).
+ * The UDataInfo.dataVersion field usually contains the Unicode version
+ * for which the data was generated.
+ *
+ * After the header, the file contains the following parts.
+ * Constants are defined as enum values of the Normalizer2Impl class.
+ *
+ * Many details of the data structures are described in the design doc
+ * which is at http://site.icu-project.org/design/normalization/custom
+ *
+ * int32_t indexes[indexesLength]; -- indexesLength=indexes[IX_NORM_TRIE_OFFSET]/4;
+ *
+ *      The first eight indexes are byte offsets in ascending order.
+ *      Each byte offset marks the start of the next part in the data file,
+ *      and the end of the previous one.
+ *      When two consecutive byte offsets are the same, then the corresponding part is empty.
+ *      Byte offsets are offsets from after the header,
+ *      that is, from the beginning of the indexes[].
+ *      Each part starts at an offset with proper alignment for its data.
+ *      If necessary, the previous part may include padding bytes to achieve this alignment.
+ *
+ *      minDecompNoCP=indexes[IX_MIN_DECOMP_NO_CP] is the lowest code point
+ *      with a decomposition mapping, that is, with NF*D_QC=No.
+ *      minCompNoMaybeCP=indexes[IX_MIN_COMP_NO_MAYBE_CP] is the lowest code point
+ *      with NF*C_QC=No (has a one-way mapping) or Maybe (combines backward).
+ *
+ *      The next four indexes are thresholds of 16-bit trie values for ranges of
+ *      values indicating multiple normalization properties.
+ *          minYesNo=indexes[IX_MIN_YES_NO];
+ *          minNoNo=indexes[IX_MIN_NO_NO];
+ *          limitNoNo=indexes[IX_LIMIT_NO_NO];
+ *          minMaybeYes=indexes[IX_MIN_MAYBE_YES];
+ *      See the normTrie description below and the design doc for details.
+ *
+ * UTrie2 normTrie; -- see utrie2_impl.h and utrie2.h
+ *
+ *      The trie holds the main normalization data. Each code point is mapped to a 16-bit value.
+ *      Rather than using independent bits in the value (which would require more than 16 bits),
+ *      information is extracted primarily via range checks.
+ *      For example, a 16-bit value norm16 in the range minYesNo<=norm16<minNoNo
+ *      means that the character has NF*C_QC=Yes and NF*D_QC=No properties,
+ *      which means it has a two-way (round-trip) decomposition mapping.
+ *      Values in the range 2<=norm16<limitNoNo are also directly indexes into the extraData
+ *      pointing to mappings, composition lists, or both.
+ *      Value norm16==0 means that the character is normalization-inert, that is,
+ *      it does not have a mapping, does not participate in composition, has a zero
+ *      canonical combining class, and forms a boundary where text before it and after it
+ *      can be normalized independently.
+ *      For details about how multiple properties are encoded in 16-bit values
+ *      see the design doc.
+ *      Note that the encoding cannot express all combinations of the properties involved;
+ *      it only supports those combinations that are allowed by
+ *      the Unicode Normalization algorithms. Details are in the design doc as well.
+ *      The gennorm2 tool only builds .nrm files for data that conforms to the limitations.
+ *
+ *      The trie has a value for each lead surrogate code unit representing the "worst case"
+ *      properties of the 1024 supplementary characters whose UTF-16 form starts with
+ *      the lead surrogate. If all of the 1024 supplementary characters are normalization-inert,
+ *      then their lead surrogate code unit has the trie value 0.
+ *      When the lead surrogate unit's value exceeds the quick check minimum during processing,
+ *      the properties for the full supplementary code point need to be looked up.
+ *
+ * uint16_t maybeYesCompositions[MIN_NORMAL_MAYBE_YES-minMaybeYes];
+ * uint16_t extraData[];
+ *
+ *      There is only one byte offset for the end of these two arrays.
+ *      The split between them is given by the constant and variable mentioned above.
+ *
+ *      The maybeYesCompositions array contains composition lists for characters that
+ *      combine both forward (as starters in composition pairs)
+ *      and backward (as trailing characters in composition pairs).
+ *      Such characters do not occur in Unicode 5.2 but are allowed by
+ *      the Unicode Normalization algorithms.
+ *      If there are no such characters, then minMaybeYes==MIN_NORMAL_MAYBE_YES
+ *      and the maybeYesCompositions array is empty.
+ *      If there are such characters, then minMaybeYes is subtracted from their norm16 values
+ *      to get the index into this array.
+ *
+ *      The extraData array contains composition lists for "YesYes" characters,
+ *      followed by mappings and optional composition lists for "YesNo" characters,
+ *      followed by only mappings for "NoNo" characters.
+ *      (Referring to pairs of NFC/NFD quick check values.)
+ *      The norm16 values of those characters are directly indexes into the extraData array.
+ *
+ *      The data structures for composition lists and mappings are described in the design doc.
+ */
+
 #endif  /* !UCONFIG_NO_NORMALIZATION */
 #endif  /* __NORMALIZER2IMPL_H__ */
