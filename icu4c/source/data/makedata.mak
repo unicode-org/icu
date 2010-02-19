@@ -475,7 +475,7 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 # Changed in makedata.mak revision 1.117. See Jitterbug 4497.
 # Command line:
 #   C:\svn\icuproj\icu\trunk\source\data>nmake -f makedata.mak ICUMAKE=C:\svn\icuproj\icu\trunk\source\data\ CFG=x86\Debug uni-core-data
-uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUTMP)\unorm_props_data.c"
+uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu"
 	@echo Unicode .icu files built to "$(ICUBLD_PKG)"
 	@echo Unicode .c source files built to "$(ICUTMP)"
 
@@ -901,11 +901,6 @@ res_index:table(nofallback) {
 	@echo Creating data file for Unicode Case Mapping Properties
 	@"$(ICUTOOLS)\gencase\$(CFG)\gencase" -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUBLD_PKG)"
 	@"$(ICUTOOLS)\gencase\$(CFG)\gencase" --csource -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUTMP)"
-
-# Targets for normalization
-"$(ICUTMP)\unorm_props_data.c": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu"
-	@echo Creating data file for Unicode Normalization
-	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" --csource -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUTMP)"
 
 # Targets for converters
 "$(ICUBLD_PKG)\cnvalias.icu" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"

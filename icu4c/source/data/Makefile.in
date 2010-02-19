@@ -487,10 +487,6 @@ $(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLBINDIR)/gencase$(
 $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLBINDIR)/genpname$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genpname -d $(BUILDDIR)
 
-# normalization
-$(OUTTMPDIR)/unorm_props_data.c: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLBINDIR)/gennorm$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)ucase.icu
-	$(INVOKE) $(TOOLBINDIR)/gennorm --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
-
 # ucadata.icu
 # used to depend on $(BUILDDIR)/$(ICUDT)ucase.icu
 # see Jitterbug 4497
@@ -754,7 +750,7 @@ $(INDEX_RES_FILE): $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 # They are not built by default but need to be built for ICU4J data and for getting the .c source files
 # when updating the Unicode data.
 # Changed in Makefile.in revision 1.147. See Jitterbug 4497.
-uni-core-data: build-dir $(UNI_CORE_TARGET_DATA) $(OUTTMPDIR)/unorm_props_data.c
+uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
 	@echo Unicode .c source files built to $(OUTTMPDIR)
 
