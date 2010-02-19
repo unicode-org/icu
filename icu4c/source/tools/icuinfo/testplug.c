@@ -25,6 +25,19 @@
 #include "cmemory.h"
 
 /**
+ * Prototypes
+ */
+#define DECLARE_PLUGIN(x) U_CAPI UPlugTokenReturn U_EXPORT2 x (UPlugData *data, UPlugReason reason, UErrorCode *status)
+
+DECLARE_PLUGIN(myPlugin);
+DECLARE_PLUGIN(myPluginLow);
+DECLARE_PLUGIN(myPluginFailQuery);
+DECLARE_PLUGIN(myPluginFailToken);
+DECLARE_PLUGIN(myPluginBad);
+DECLARE_PLUGIN(myPluginHigh);
+DECLARE_PLUGIN(debugMemoryPlugin);
+
+/**
  * A simple, trivial plugin.
  */
 
@@ -141,25 +154,30 @@ UPlugTokenReturn U_EXPORT2 myPluginHigh (
 
 /*  Debug Memory Plugin (see hpmufn.c) */
 static void * U_CALLCONV myMemAlloc(const void *context, size_t size) {
-    void *retPtr = (void *)malloc(size);
-    fprintf(stderr, "MEM: malloc(%d) = %p\n", size, retPtr);
-    return retPtr;
+  void *retPtr = (void *)malloc(size);
+  (void)context; /* unused */
+  fprintf(stderr, "MEM: malloc(%d) = %p\n", (int32_t)size, retPtr);
+  return retPtr;
 }
 
 static void U_CALLCONV myMemFree(const void *context, void *mem) {
-    free(mem);
-    fprintf(stderr, "MEM: free(%p)\n", mem);
+  (void)context; /* unused */
+
+  free(mem);
+  fprintf(stderr, "MEM: free(%p)\n", mem);
 }
 
 static void * U_CALLCONV myMemRealloc(const void *context, void *mem, size_t size) {
     void *retPtr;
+    (void)context; /* unused */
+
     
     if(mem==NULL) {
         retPtr = NULL;
     } else {
         retPtr = realloc(mem, size);
     }
-    fprintf(stderr, "MEM: realloc(%p, %d) = %p\n", mem, size, retPtr);
+    fprintf(stderr, "MEM: realloc(%p, %d) = %p\n", mem, (int32_t)size, retPtr);
     return retPtr;
 }
 

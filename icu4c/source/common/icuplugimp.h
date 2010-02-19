@@ -80,7 +80,7 @@ uplug_getPlugInternal(int32_t n);
  * @internal - Internal use only.
  */
 U_INTERNAL const char* U_EXPORT2
-uplug_getPluginFile();
+uplug_getPluginFile(void);
 
 /** @} */
 

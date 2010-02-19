@@ -221,7 +221,8 @@ uplug_getPlugLevel(UPlugData *plug);
  * @return the lowest level of plug which can currently load
  * @internal ICU 4.4 Technology Preview
  */
-U_CAPI UPlugLevel U_EXPORT2 uplug_getCurrentLevel();
+U_CAPI UPlugLevel U_EXPORT2
+uplug_getCurrentLevel(void);
 
 
 /**

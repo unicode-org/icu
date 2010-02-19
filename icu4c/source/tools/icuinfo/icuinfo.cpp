@@ -45,6 +45,15 @@ static UOption options[]={
   /*6*/ UOPTION_DEF("cleanup", 'K', UOPT_NO_ARG),
 };
 
+static UErrorCode initStatus = U_ZERO_ERROR;
+static UBool icuInitted = FALSE;
+
+static void do_init() {
+    if(!icuInitted) {
+      u_init(&initStatus);
+      icuInitted = TRUE;
+    }
+}
 
 /** 
  * Print the current platform 
@@ -104,9 +113,9 @@ void cmd_version(UBool noLoad)
     printf("Cygwin: CYGWINMSVC\n");
 #endif
     printf("ICUDATA: %s\n", U_ICUDATA_NAME);
-    u_init(&status);
+    do_init();
     printf("Data Directory: %s\n", u_getDataDirectory());
-    printf("ICU Initialization returned: %s\n", u_errorName(status));
+    printf("ICU Initialization returned: %s\n", u_errorName(initStatus));
     printf( "Default locale: %s\n", uloc_getDefault());
     {
       UErrorCode subStatus = U_ZERO_ERROR;
@@ -169,6 +178,9 @@ void cmd_cleanup()
 void cmd_listplugins() {
     int32_t i;
     UPlugData *plug;
+
+    do_init();
+    printf("ICU Initialized: u_init() returned %s\n", u_errorName(initStatus));
     
     printf("Plugins: \n");
     printf(    "# %6s   %s \n",
