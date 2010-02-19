@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -197,31 +197,28 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    UChar b1Stack[MAX_BUFFER_SIZE];
-    UChar *b1 = b1Stack;
-    int32_t b1Len,b1Capacity = MAX_BUFFER_SIZE;
+    UnicodeString b1String;
+    UChar *b1 = b1String.getBuffer(MAX_BUFFER_SIZE);
+    int32_t b1Len;
 
     int32_t b1Index = 0;
     UCharDirection direction=U_CHAR_DIRECTION_COUNT, firstCharDir=U_CHAR_DIRECTION_COUNT;
     UBool leftToRight=FALSE, rightToLeft=FALSE;
 
-    b1Len = map(src,srcLength, b1, b1Capacity,allowUnassigned,parseError, status);
+    b1Len = map(src, srcLength, b1, b1String.getCapacity(), allowUnassigned, parseError, status);
+    b1String.releaseBuffer(b1Len);
 
     if(status == U_BUFFER_OVERFLOW_ERROR){
         // redo processing of string
         /* we do not have enough room so grow the buffer*/
-        if(!u_growBufferFromStatic(b1Stack,&b1,&b1Capacity,b1Len,0)){
-            status = U_MEMORY_ALLOCATION_ERROR;
-            goto CLEANUP;
-        }
-
+        b1 = b1String.getBuffer(b1Len);
         status = U_ZERO_ERROR; // reset error
-        
-        b1Len = map(src,srcLength, b1, b1Len,allowUnassigned, parseError, status);
-        
+        b1Len = map(src, srcLength, b1, b1String.getCapacity(), allowUnassigned, parseError, status);
+        b1String.releaseBuffer(b1Len);
     }
 
     if(U_FAILURE(status)){
+        b1Len = 0;
         goto CLEANUP;
     }
 
@@ -234,6 +231,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
 
         if(prohibited.contains(ch) && ch!=0x0020){
             status = U_IDNA_PROHIBITED_ERROR;
+            b1Len = 0;
             goto CLEANUP;
         }
 
@@ -252,6 +250,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     // satisfy 2
     if( leftToRight == TRUE && rightToLeft == TRUE){
         status = U_IDNA_CHECK_BIDI_ERROR;
+        b1Len = 0;
         goto CLEANUP;
     }
 
@@ -269,10 +268,6 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     }
 
 CLEANUP:
-    if(b1!=b1Stack){
-        uprv_free(b1);
-    }
-
     return u_terminateUChars(dest, destCapacity, b1Len, &status);
 }
 
