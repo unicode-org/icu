@@ -86,29 +86,6 @@ uprv_haveProperties(UErrorCode *pErrorCode);
 /*U_CFUNC int8_t
 uprv_loadPropsData(UErrorCode *errorCode);*/
 
-/**
- * Type of a function that may be passed to the internal case mapping functions
- * or similar for growing the destination buffer.
- * @internal
- */
-typedef UBool U_CALLCONV
-UGrowBuffer(void *context,      /* opaque pointer for this function */
-            UChar **pBuffer,    /* in/out destination buffer pointer */
-            int32_t *pCapacity, /* in/out buffer capacity in numbers of UChars */
-            int32_t reqCapacity,/* requested capacity */
-            int32_t length);    /* number of UChars to be copied to new buffer */
-
-/**
- * Default implementation of UGrowBuffer.
- * Takes a static buffer as context, allocates a new buffer,
- * and releases the old one if it is not the same as the one passed as context.
- * @internal
- */
-U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
-u_growBufferFromStatic(void *context,
-                       UChar **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
-                       int32_t length);
-
 /*
  * Internal string casing functions implementing
  * ustring.h/ustrcase.c and UnicodeString case mapping functions.
