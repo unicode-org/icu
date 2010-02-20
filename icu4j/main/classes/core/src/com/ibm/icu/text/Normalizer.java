@@ -100,8 +100,8 @@ import java.text.CharacterIterator;
  *
  * normalize(FCD) may be implemented with NFD.
  *
- * For more details on FCD see the collation design document:
- * http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm
+ * For more details on FCD see Unicode Technical Note #5 (Canonical Equivalence in Applications):
+ * http://www.unicode.org/notes/tn5/#FCD
  *
  * ICU collation performs either NFD or FCD normalization automatically if 
  * normalization is turned on for the collator object. Beyond collation and 
@@ -113,6 +113,16 @@ import java.text.CharacterIterator;
  * often do not encode any combining marks by themselves. For conversion to such
  * character encodings the Unicode text needs to be normalized to NFC.
  * For more usage examples, see the Unicode Standard Annex.
+ *
+ * Note: The Normalizer class also provides API for iterative normalization.
+ * While the setIndex() and getIndex() refer to indices in the
+ * underlying Unicode input text, the next() and previous() methods
+ * iterate through characters in the normalized output.
+ * This means that there is not necessarily a one-to-one correspondence
+ * between characters returned by next() and previous() and the indices
+ * passed to and returned from setIndex() and getIndex().
+ * It is for this reason that Normalizer does not implement the CharacterIterator interface.
+ *
  * @stable ICU 2.8
  */
 public final class Normalizer implements Cloneable {
