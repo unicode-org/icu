@@ -116,6 +116,14 @@ U_NAMESPACE_BEGIN
  * then the internal index is 0 and one can return to this getIndex()
  * later with setIndexOnly().
  *
+ * Note: While the setIndex() and getIndex() refer to indices in the
+ * underlying Unicode input text, the next() and previous() methods
+ * iterate through characters in the normalized output.
+ * This means that there is not necessarily a one-to-one correspondence
+ * between characters returned by next() and previous() and the indices
+ * passed to and returned from setIndex() and getIndex().
+ * It is for this reason that Normalizer does not implement the CharacterIterator interface.
+ *
  * @author Laura Werner, Mark Davis, Markus Scherer
  * @stable ICU 2.0
  */
