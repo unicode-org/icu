@@ -49,10 +49,14 @@ README text !eol
 *.tri2 -text
 
 icu4c/icu4c.css -text
+icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/nfc.nrm -text
 icu4c/source/data/in/nfkc.nrm -text
 icu4c/source/data/in/nfkc_cf.nrm -text
+icu4c/source/data/lang/pool.res -text
 icu4c/source/data/locales/pool.res -text
+icu4c/source/data/region/pool.res -text
+icu4c/source/data/zone/pool.res -text
 icu4c/source/i18n/regextxt.cpp -text
 icu4c/source/i18n/regextxt.h -text
 icu4c/source/samples/ucnv/data02.bin -text

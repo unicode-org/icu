@@ -83,7 +83,7 @@ UOption options[]={
                       UOPTION_DEF("omitCollationRules", 'R', UOPT_NO_ARG),/* 17 */
                       UOPTION_DEF("formatVersion", '\x01', UOPT_REQUIRES_ARG),/* 18 */
                       UOPTION_DEF("writePoolBundle", '\x01', UOPT_NO_ARG),/* 19 */
-                      UOPTION_DEF("usePoolBundle", '\x01', UOPT_NO_ARG),/* 20 */
+                      UOPTION_DEF("usePoolBundle", '\x01', UOPT_OPTIONAL_ARG),/* 20 */
                   };
 
 static     UBool       write_java = FALSE;
@@ -206,7 +206,7 @@ main(int argc,
                 "\t                           for example, --formatVersion 1\n");
         fprintf(stderr,
                 "\t      --writePoolBundle    write a pool.res file with all of the keys of all input bundles\n"
-                "\t      --usePoolBundle      point to keys from the pool.res keys pool bundle if they are available there;\n"
+                "\t      --usePoolBundle [path-to-pool.res]  point to keys from the pool.res keys pool bundle if they are available there;\n"
                 "\t                           makes .res files smaller but dependent on the pool bundle\n"
                 "\t                           (--writePoolBundle and --usePoolBundle cannot be combined)\n");
 
@@ -320,7 +320,10 @@ main(int argc,
          * Share code with icupkg?
          * Also, make_res_filename() seems to be unused. Review and remove.
          */
-        if (inputDir) {
+        if (options[USE_POOL_BUNDLE].hasArg) {
+            uprv_strcpy(theCurrentFileName, options[USE_POOL_BUNDLE].value);
+            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
+        } else if (inputDir) {
             uprv_strcpy(theCurrentFileName, inputDir);
             uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
         } else {
