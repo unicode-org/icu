@@ -59,8 +59,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {DateFormat.MINUTE_SECOND, "ms", "en", "mm:ss"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR24_MINUTE, "Hm", "en", "HH:mm"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR24_MINUTE_SECOND, "Hms","en","HH:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
-                {DateFormat.HOUR_MINUTE, "hm","en","h:m a"}, // *** get "expected result" but it seems incorrect, needs investigation
-                {DateFormat.HOUR_MINUTE_SECOND, "hms","en","h:m:s a"}, // *** get "expected result" but it seems incorrect, needs investigation
+                {DateFormat.HOUR_MINUTE, "hm","en","h:mm a"}, // (fixed expected result per ticket 6872<-7180)
+                {DateFormat.HOUR_MINUTE_SECOND, "hms","en","h:mm:ss a"}, // (fixed expected result per ticket 6872<-7180)
                 {DateFormat.DAY, "d","en","d"},
                 {DateFormat.STANDALONE_MONTH, "LLLL","en","LLLL"},
                 {DateFormat.ABBR_STANDALONE_MONTH, "LLL","en","LLL"},
