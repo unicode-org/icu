@@ -8,9 +8,6 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.text.Normalizer;
@@ -317,38 +314,21 @@ public final class Norm2AllModes {
                 return singleton.allModes;
             }
         }
-        Norm2AllModes allModes=null;
-        synchronized(Norm2AllModes.class) {
-            if(cache!=null) {
-                allModes=cache.get(name).get();
-            }
-        }
-        if(allModes==null) {
-            if(data==null) {
-                throw new MissingResourceException(
-                        "No Normalizer2 data name \""+name+"\" cached, and InputStream is null",
-                        "Normalizer2",
-                        name);
-            }
-            Normalizer2Impl impl=new Normalizer2Impl().load(data);
-            allModes=new Norm2AllModes(impl);
-            synchronized(Norm2AllModes.class) {
-                if(cache==null) {
-                    cache=new HashMap<String, SoftReference<Norm2AllModes>>();
-                }
-                Reference<Norm2AllModes> ref=cache.get(name);
-                Norm2AllModes temp;
-                if(ref==null || (temp=ref.get())==null) {
-                    cache.put(name, new SoftReference<Norm2AllModes>(allModes));
-                } else {
-                    // race condition
-                    allModes=temp;
-                }
-            }
-        }
-        return allModes;
+        return cache.getInstance(name, data);
     }
-    private static HashMap<String, SoftReference<Norm2AllModes>> cache;
+    private static CacheBase<String, Norm2AllModes, InputStream> cache =
+        new SoftCache<String, Norm2AllModes, InputStream>() {
+            protected Norm2AllModes createInstance(String key, InputStream data) {
+                if(data==null) {
+                    throw new MissingResourceException(
+                            "No Normalizer2 data name \""+key+"\" cached, and InputStream is null",
+                            "Normalizer2",
+                            key);
+                }
+                Normalizer2Impl impl=new Normalizer2Impl().load(data);
+                return new Norm2AllModes(impl);
+            }
+        };
 
     public static final NoopNormalizer2 NOOP_NORMALIZER2=new NoopNormalizer2();
     /**
