@@ -553,6 +553,11 @@ $(BUILDDIR)/%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLBINDIR)/makeconv$(TOOLEXEEXT)
 $(CURRBLDDIR)/%.res: $(CURRSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(CURRSRCDIR) -d $(CURRBLDDIR) $(<F)
 
+# copy the curr/pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+$(CURRBLDDIR)/pool.res: $(CURRSRCDIR)/pool.res
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(CURRSRCDIR)/pool.res $(CURRBLDDIR)/pool.res
+
 $(CURRBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(CURR_TREE)/$(INDEX_NAME).txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(OUTTMPDIR)/$(CURR_TREE) -d $(CURRBLDDIR) $(INDEX_NAME).txt
 
@@ -571,6 +576,11 @@ $(CURR_INDEX_FILE): $(SRCLISTDEPS)
 ### lang res
 $(LANGBLDDIR)/%.res: $(LANGSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LANGSRCDIR) -d $(LANGBLDDIR) $(<F)
+
+# copy the lang/pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+$(LANGBLDDIR)/pool.res: $(LANGSRCDIR)/pool.res
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(LANGSRCDIR)/pool.res $(LANGBLDDIR)/pool.res
 
 $(LANGBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(LANG_TREE)/$(INDEX_NAME).txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(OUTTMPDIR)/$(LANG_TREE) -d $(LANGBLDDIR) $(INDEX_NAME).txt
@@ -591,6 +601,11 @@ $(LANG_INDEX_FILE): $(SRCLISTDEPS)
 $(REGIONBLDDIR)/%.res: $(REGIONSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(REGIONSRCDIR) -d $(REGIONBLDDIR) $(<F)
 
+# copy the region/pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+$(REGIONBLDDIR)/pool.res: $(REGIONSRCDIR)/pool.res
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(REGIONSRCDIR)/pool.res $(REGIONBLDDIR)/pool.res
+
 $(REGIONBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(REGION_TREE)/$(INDEX_NAME).txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(OUTTMPDIR)/$(REGION_TREE) -d $(REGIONBLDDIR) $(INDEX_NAME).txt
 
@@ -609,6 +624,11 @@ $(REGION_INDEX_FILE): $(SRCLISTDEPS)
 ### zone res
 $(ZONEBLDDIR)/%.res: $(ZONESRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(ZONESRCDIR) -d $(ZONEBLDDIR) $(<F)
+
+# copy the zone/pool.res file from the source folder to the build output folder
+# and swap it to native endianness
+$(ZONEBLDDIR)/pool.res: $(ZONESRCDIR)/pool.res
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(ZONESRCDIR)/pool.res $(ZONEBLDDIR)/pool.res
 
 $(ZONEBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(ZONE_TREE)/$(INDEX_NAME).txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(OUTTMPDIR)/$(ZONE_TREE) -d $(ZONEBLDDIR) $(INDEX_NAME).txt
@@ -692,7 +712,7 @@ all-RES:  $(RES_FILES)
 $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-# copy the pool.res file from the source folder to the build output folder
+# copy the locales/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
 $(BUILDDIR)/pool.res: $(LOCSRCDIR)/pool.res
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(LOCSRCDIR)/pool.res $(BUILDDIR)/pool.res
