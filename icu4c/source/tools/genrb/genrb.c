@@ -320,7 +320,7 @@ main(int argc,
          * Share code with icupkg?
          * Also, make_res_filename() seems to be unused. Review and remove.
          */
-        if (options[USE_POOL_BUNDLE].hasArg) {
+        if (options[USE_POOL_BUNDLE].value!=NULL) {
             uprv_strcpy(theCurrentFileName, options[USE_POOL_BUNDLE].value);
             uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
         } else if (inputDir) {
