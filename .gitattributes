@@ -463,6 +463,7 @@ icu4c/source/data/curr/pa_Guru_IN.txt svneol=native#text/plain
 icu4c/source/data/curr/pa_IN.txt svneol=native#text/plain
 icu4c/source/data/curr/pa_PK.txt svneol=native#text/plain
 icu4c/source/data/curr/pl.txt svneol=native#text/plain
+icu4c/source/data/curr/pool.res -text
 icu4c/source/data/curr/ps.txt svneol=native#text/plain
 icu4c/source/data/curr/pt.txt svneol=native#text/plain
 icu4c/source/data/curr/pt_PT.txt svneol=native#text/plain
@@ -713,6 +714,7 @@ icu4c/source/data/lang/pa_Guru_IN.txt svneol=native#text/plain
 icu4c/source/data/lang/pa_IN.txt svneol=native#text/plain
 icu4c/source/data/lang/pa_PK.txt svneol=native#text/plain
 icu4c/source/data/lang/pl.txt svneol=native#text/plain
+icu4c/source/data/lang/pool.res -text
 icu4c/source/data/lang/ps.txt svneol=native#text/plain
 icu4c/source/data/lang/pt.txt svneol=native#text/plain
 icu4c/source/data/lang/pt_PT.txt svneol=native#text/plain
@@ -1464,6 +1466,7 @@ icu4c/source/data/region/pa_Guru_IN.txt svneol=native#text/plain
 icu4c/source/data/region/pa_IN.txt svneol=native#text/plain
 icu4c/source/data/region/pa_PK.txt svneol=native#text/plain
 icu4c/source/data/region/pl.txt svneol=native#text/plain
+icu4c/source/data/region/pool.res -text
 icu4c/source/data/region/ps.txt svneol=native#text/plain
 icu4c/source/data/region/pt.txt svneol=native#text/plain
 icu4c/source/data/region/pt_PT.txt svneol=native#text/plain
@@ -2084,6 +2087,7 @@ icu4c/source/data/zone/pa_Guru_IN.txt svneol=native#text/plain
 icu4c/source/data/zone/pa_IN.txt svneol=native#text/plain
 icu4c/source/data/zone/pa_PK.txt svneol=native#text/plain
 icu4c/source/data/zone/pl.txt svneol=native#text/plain
+icu4c/source/data/zone/pool.res -text
 icu4c/source/data/zone/ps.txt svneol=native#text/plain
 icu4c/source/data/zone/pt.txt svneol=native#text/plain
 icu4c/source/data/zone/pt_PT.txt svneol=native#text/plain
