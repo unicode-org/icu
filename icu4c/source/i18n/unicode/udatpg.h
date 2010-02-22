@@ -99,6 +99,10 @@ typedef enum UDateTimePatternMatchOptions {
     UDATPG_MATCH_NO_OPTIONS = 0,
     /** @draft ICU 4.4 */
     UDATPG_MATCH_HOUR_FIELD_LENGTH = 1 << UDATPG_HOUR_FIELD,
+    /** @internal ICU 4.4 */
+    UDATPG_MATCH_MINUTE_FIELD_LENGTH = 1 << UDATPG_MINUTE_FIELD,
+    /** @internal ICU 4.4 */
+    UDATPG_MATCH_SECOND_FIELD_LENGTH = 1 << UDATPG_SECOND_FIELD,
     /** @draft ICU 4.4 */
     UDATPG_MATCH_ALL_FIELDS_LENGTH = (1 << UDATPG_FIELD_COUNT) - 1
 } UDateTimePatternMatchOptions;
