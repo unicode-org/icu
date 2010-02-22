@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and
+* Copyright (C) 2007-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -1039,10 +1039,10 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     // requested skeleton, except that in the following cases the length of the adjusted field
                     // should match that in the found pattern (i.e. the length of this pattern field should
                     // not be adjusted):
-                    // 1. typeValue is UDATPG_HOUR_FIELD and the corresponding bit in options is not set (ticket
-                    //    #7180). Note, we may want to implement a similar change for other numeric fields (MM,
-                    //    dd, etc.) so the default behavior is to get locale preference for field length, but
-                    //    options bits can be used to override this.
+                    // 1. typeValue is UDATPG_HOUR_FIELD/MINUTE/SECOND and the corresponding bit in options is
+                    //    not set (ticket #7180). Note, we may want to implement a similar change for other
+                    //    numeric fields (MM, dd, etc.) so the default behavior is to get locale preference for
+                    //    field length, but options bits can be used to override this.
                     // 2. There is a specified skeleton for the found pattern and one of the following is true:
                     //    a) The length of the field in the skeleton (skelFieldLen) is equal to reqFieldLen.
                     //    b) The pattern field is numeric and the skeleton field is not, or vice versa.
@@ -1050,7 +1050,9 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     UnicodeString reqField = dtMatcher->skeleton.original[typeValue];
                     int32_t reqFieldLen = reqField.length();
                     int32_t adjFieldLen = reqFieldLen;
-                    if (typeValue==UDATPG_HOUR_FIELD && (options & UDATPG_MATCH_HOUR_FIELD_LENGTH)==0) {
+                    if ( (typeValue==UDATPG_HOUR_FIELD && (options & UDATPG_MATCH_HOUR_FIELD_LENGTH)==0) ||
+                         (typeValue==UDATPG_MINUTE_FIELD && (options & UDATPG_MATCH_MINUTE_FIELD_LENGTH)==0) ||
+                         (typeValue==UDATPG_SECOND_FIELD && (options & UDATPG_MATCH_SECOND_FIELD_LENGTH)==0) ) {
                          adjFieldLen = field.length();
                     } else if (specifiedSkeleton) {
                         UnicodeString skelField = specifiedSkeleton->original[typeValue];
