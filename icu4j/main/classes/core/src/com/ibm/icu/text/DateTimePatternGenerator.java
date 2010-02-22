@@ -848,6 +848,18 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     public static final int MATCH_HOUR_FIELD_LENGTH = 1 << HOUR;
 
     /**
+     * @internal ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int MATCH_MINUTE_FIELD_LENGTH = 1 << MINUTE;
+
+    /**
+     * @internal ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int MATCH_SECOND_FIELD_LENGTH = 1 << SECOND;
+
+    /**
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
@@ -1631,7 +1643,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     int reqFieldLen = reqField.length();
                     int adjFieldLen = reqFieldLen;
                     DateTimeMatcher matcherWithSkeleton = patternWithMatcher.matcherWithSkeleton;
-                    if (type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0) {
+                    if ( (type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0) ||
+                         (type == MINUTE && (options & MATCH_MINUTE_FIELD_LENGTH)==0) ||
+                         (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0) ) {
                         adjFieldLen = field.length();
                     } else if (matcherWithSkeleton != null) {
                         String skelField = matcherWithSkeleton.origStringForField(type);
