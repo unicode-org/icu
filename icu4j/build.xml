@@ -157,6 +157,30 @@
         </java>
     </target>
 
+    <target name="runTest" description="Run a ICU4J test case, without calling any other build targets">
+        <echo message="JVM argument:   ${jvm_options} -Djava.awt.headless=true"/>
+        <echo message="Test argument:   ${testarg}"/>
+
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg line="${testarg}"/>
+            <jvmarg line="${jvm_options} -Djava.awt.headless=true"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.collate.jar}"/>
+                <pathelement path="${icu4j.charset.jar}"/>
+                <pathelement path="${icu4j.currdata.jar}"/>
+                <pathelement path="${icu4j.langdata.jar}"/>
+                <pathelement path="${icu4j.regiondata.jar}"/>
+                <pathelement path="${icu4j.translit.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement path="${icu4j.collate-tests.jar}"/> 
+                <pathelement path="${icu4j.charset-tests.jar}"/>
+                <pathelement path="${icu4j.translit-tests.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="packagingCheck" depends="info, core, packaging-tests" description="Run packaging tests">
         <!-- region data but no language data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
