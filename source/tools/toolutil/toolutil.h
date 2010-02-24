@@ -66,15 +66,32 @@ U_NAMESPACE_END
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname);
 
-/*
+/**
  * Find the basename at the end of a pathname, i.e., the part
  * after the last file separator, and return a pointer
  * to this part of the pathname.
  * If the pathname only contains a basename and no file separator,
  * then the pathname pointer itself is returned.
- */
+ **/
 U_CAPI const char * U_EXPORT2
 findBasename(const char *filename);
+
+/**
+ * Find the directory name of a pathname, that is, everything
+ * up to but not including the last file separator. 
+ *
+ * If successful, copies the directory name into the output buffer along with
+ * a terminating NULL. 
+ *
+ * If there isn't a directory name in the path, it returns the current directory string ('.').
+ * @param path the full pathname to inspect. 
+ * @param buffer the output buffer
+ * @param bufLen the output buffer length
+ * @param status error code- may return U_BUFFER_OVERFLOW_ERROR if bufLen is too small.
+ * @return If successful, a pointer to the output buffer. If failure or bufLen is too small, NULL.
+ **/
+U_CAPI const char * U_EXPORT2
+findDirname(const char *path, char *buffer, int32_t bufLen, UErrorCode* status);
 
 /*
  * Return the current year in the Gregorian calendar. Used for copyright generation.
