@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -61,6 +61,9 @@ class CurrencyFormat : public MeasureFormat {
      * Override Format API.
      */
     virtual Format* clone() const;
+
+
+    using MeasureFormat::format;
 
     /**
      * Override Format API.

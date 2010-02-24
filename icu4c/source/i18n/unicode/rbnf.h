@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and others.
+* Copyright (C) 1997-2010, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -11,7 +11,7 @@
 #include "unicode/utypes.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Rule Based Number Format
  */
 
@@ -490,9 +490,9 @@ class Collator;
  * <p>In the syntax, angle brackets '<', '>' are used to delimit the arrays, and comma ',' is used
  * to separate elements of an array.  Whitespace is ignored, unless quoted.</p>
  * <p>For example:<pre>
- * < < %foo, %bar, %baz >, 
- *   < en, Foo, Bar, Baz >, 
- *   < fr, 'le Foo', 'le Bar', 'le Baz' > 
+ * < < %foo, %bar, %baz >,
+ *   < en, Foo, Bar, Baz >,
+ *   < fr, 'le Foo', 'le Bar', 'le Baz' >
  *   < zh, \\u7532, \\u4e59, \\u4e19 > >
  * </pre></p>
  * @author Richard Gillam
@@ -521,7 +521,7 @@ public:
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default locale.  
+     * passed in.  The formatter uses the default locale.
      * <p>
      * The localizations data provides information about the public
      * rule sets and their localized display names for different
@@ -565,7 +565,7 @@ public:
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default locale.  
+     * passed in.  The formatter uses the default locale.
      * <p>
      * The localizations data provides information about the public
      * rule sets and their localized display names for different
@@ -697,7 +697,7 @@ public:
     /**
      * Return the rule set display names for the provided locale.  These are in the same order
      * as those returned by getRuleSetName.  The locale is matched against the locales for
-     * which there is display name data, using normal fallback rules.  If no locale matches, 
+     * which there is display name data, using normal fallback rules.  If no locale matches,
      * the default display names are returned.  (These are the internal rule set names minus
      * the leading '%'.)
      * @param index the index of the rule set
@@ -707,19 +707,22 @@ public:
      * @see #getRuleSetName
      * @stable ICU 3.2
      */
-  virtual UnicodeString getRuleSetDisplayName(int32_t index, 
+  virtual UnicodeString getRuleSetDisplayName(int32_t index,
                           const Locale& locale = Locale::getDefault());
 
     /**
-     * Return the rule set display name for the provided rule set and locale.  
+     * Return the rule set display name for the provided rule set and locale.
      * The locale is matched against the locales for which there is display name data, using
      * normal fallback rules.  If no locale matches, the default display name is returned.
      * @return the display name for the rule set
      * @stable ICU 3.2
      * @see #getRuleSetDisplayName
      */
-  virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName, 
+  virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName,
                           const Locale& locale = Locale::getDefault());
+
+
+  using NumberFormat::format;
 
   /**
    * Formats the specified 32-bit number using the default ruleset.
@@ -965,8 +968,8 @@ private:
     RuleBasedNumberFormat(); // default constructor not implemented
 
     // this will ref the localizations if they are not NULL
-    // caller must deref to get adoption 
-    RuleBasedNumberFormat(const UnicodeString& description, LocalizationInfo* localizations, 
+    // caller must deref to get adoption
+    RuleBasedNumberFormat(const UnicodeString& description, LocalizationInfo* localizations,
               const Locale& locale, UParseError& perror, UErrorCode& status);
 
     void init(const UnicodeString& rules, LocalizationInfo* localizations, UParseError& perror, UErrorCode& status);
