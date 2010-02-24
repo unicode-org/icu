@@ -143,8 +143,13 @@ ICUDataTable::getNoFallback(const char* tableKey, const char* subTableKey, const
   return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocaleDisplayNames)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#if 0  // currently unused
 
 class DefaultLocaleDisplayNames : public LocaleDisplayNames {
   UDialectHandling dialectHandling;
@@ -254,6 +259,8 @@ DefaultLocaleDisplayNames::keyValueDisplayName(const char* /* key */,
   return result = UnicodeString(value, -1, US_INV);
 }
 
+#endif  // currently unused class DefaultLocaleDisplayNames
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class LocaleDisplayNamesImpl : public LocaleDisplayNames {
@@ -291,11 +298,15 @@ public:
   virtual UnicodeString& keyValueDisplayName(const char* key,
                                              const char* value,
                                              UnicodeString& result) const;
+  static UClassID U_EXPORT2 getStaticClassID();
+  virtual UClassID getDynamicClassID() const;
 private:
   UnicodeString& localeIdName(const char* localeId,
                               UnicodeString& result) const;
   UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
 };
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LocaleDisplayNamesImpl)
 
 LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
                                                UDialectHandling dialectHandling)
@@ -519,8 +530,7 @@ uldn_open(const char * locale,
     return 0;
   }
   if (locale == NULL) {
-    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
+    locale = uloc_getDefault();
   }
   return (ULocaleDisplayNames *)LocaleDisplayNames::createInstance(Locale(locale), dialectHandling);
 }
