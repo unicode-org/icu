@@ -183,7 +183,7 @@ uplug_openLibrary(const char *libName, UErrorCode *status) {
       libraryCount--;
     } else { /* is it still there? */
       /* link it in */
-      strncpy(libraryList[libEntry].name,libName,UPLUG_NAME_MAX);
+      uprv_strncpy(libraryList[libEntry].name,libName,UPLUG_NAME_MAX);
       libraryList[libEntry].ref=1;
       lib = libraryList[libEntry].lib;
     }
@@ -353,13 +353,13 @@ static UPlugData *uplug_allocatePlug(UPlugEntrypoint *entrypoint, const char *co
 
   plug = uplug_allocateEmptyPlug(status);
   if(config!=NULL) {
-    strncpy(plug->config, config, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->config, config, UPLUG_NAME_MAX);
   } else {
     plug->config[0] = 0;
   }
     
   if(symName!=NULL) {
-    strncpy(plug->sym, symName, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->sym, symName, UPLUG_NAME_MAX);
   } else {
     plug->sym[0] = 0;
   }
@@ -443,7 +443,7 @@ uplug_getPlugLevel(UPlugData *data) {
 
 U_CAPI void U_EXPORT2
 uplug_setPlugName(UPlugData *data, const char *name) {
-  strncpy(data->name, name, UPLUG_NAME_MAX);
+  uprv_strncpy(data->name, name, UPLUG_NAME_MAX);
 }
 
 
@@ -546,19 +546,19 @@ uplug_initErrorPlug(const char *libName, const char *sym, const char *config, co
   plug->dontUnload = TRUE; /* cannot unload. */
 
   if(sym!=NULL) {
-    strncpy(plug->sym, sym, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->sym, sym, UPLUG_NAME_MAX);
   }
 
   if(libName!=NULL) {
-    strncpy(plug->libName, libName, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->libName, libName, UPLUG_NAME_MAX);
   }
 
   if(nameOrError!=NULL) {
-    strncpy(plug->name, nameOrError, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->name, nameOrError, UPLUG_NAME_MAX);
   }
 
   if(config!=NULL) {
-    strncpy(plug->config, config, UPLUG_NAME_MAX);
+    uprv_strncpy(plug->config, config, UPLUG_NAME_MAX);
   }
 
   return plug;
@@ -734,11 +734,11 @@ uplug_init(UErrorCode *status) {
     FILE *f;
         
         
-    strncpy(plugin_file, plugin_dir, 2047);
-    strncat(plugin_file, U_FILE_SEP_STRING,2047);
-    strncat(plugin_file, "icuplugins",2047);
-    strncat(plugin_file, U_ICU_VERSION_SHORT ,2047);
-    strncat(plugin_file, ".txt" ,2047);
+    uprv_strncpy(plugin_file, plugin_dir, 2047);
+    uprv_strncat(plugin_file, U_FILE_SEP_STRING,2047);
+    uprv_strncat(plugin_file, "icuplugins",2047);
+    uprv_strncat(plugin_file, U_ICU_VERSION_SHORT ,2047);
+    uprv_strncat(plugin_file, ".txt" ,2047);
         
 #if UPLUG_TRACE
     DBG((stderr, "pluginfile= %s\n", plugin_file));
