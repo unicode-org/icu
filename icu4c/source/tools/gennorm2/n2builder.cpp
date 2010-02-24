@@ -150,7 +150,7 @@ enumRangeHandler(const void *context, UChar32 start, UChar32 end, uint32_t value
 U_CDECL_END
 
 Normalizer2DataBuilder::Normalizer2DataBuilder(UErrorCode &errorCode) :
-        phase(0), overrideHandling(OVERRIDE_PREVIOUS) {
+        phase(0), overrideHandling(OVERRIDE_PREVIOUS), optimization(OPTIMIZE_NORMAL) {
     memset(unicodeVersion, 0, sizeof(unicodeVersion));
     normTrie=utrie2_open(0, 0, &errorCode);
     normMem=utm_open("gennorm2 normalization structs", 10000, 0x110100, sizeof(Norm));
@@ -778,9 +778,9 @@ void Normalizer2DataBuilder::writeExtraData(UChar32 c, uint32_t value, ExtraData
                     (long)c);
             exit(U_INVALID_FORMAT_ERROR);
         }
-        if(p->cc==0) {
+        if(p->cc==0 && optimization!=OPTIMIZE_FAST) {
             // Try a compact, algorithmic encoding.
-            // Only for ccc=0.
+            // Only for ccc=0, because we can't store additional information.
             if(p->mappingCP>=0) {
                 int32_t delta=p->mappingCP-c;
                 if(-Normalizer2Impl::MAX_DELTA<=delta && delta<=Normalizer2Impl::MAX_DELTA) {
@@ -791,9 +791,7 @@ void Normalizer2DataBuilder::writeExtraData(UChar32 c, uint32_t value, ExtraData
         if(p->offset==0) {
             int32_t oldNoNoLength=writer.noNoMappings.length();
             writeMapping(c, p, writer.noNoMappings);
-            UnicodeString newMapping(FALSE,
-                                     writer.noNoMappings.getBuffer()+oldNoNoLength,
-                                     writer.noNoMappings.length()-oldNoNoLength);
+            UnicodeString newMapping=writer.noNoMappings.tempSubString(oldNoNoLength);
             int32_t previousOffset=writer.previousNoNoMappings.geti(newMapping);
             if(previousOffset!=0) {
                 // Duplicate, remove the new units and point to the old ones.
