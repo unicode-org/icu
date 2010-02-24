@@ -253,9 +253,9 @@ public final class Normalizer2Impl {
             lastCC=0;
             reorderStart=0;
         }
-        public void removeSuffix(int length) {
+        public void removeSuffix(int suffixLength) {
             int oldLength=str.length();
-            str.delete(oldLength-length, oldLength);
+            str.delete(oldLength-suffixLength, oldLength);
             lastCC=0;
             reorderStart=str.length();
         }
@@ -761,6 +761,9 @@ public final class Normalizer2Impl {
 
     // higher-level functionality ------------------------------------------ ***
 
+    // Dual functionality:
+    // buffer!=NULL: normalize
+    // buffer==NULL: isNormalized/quickCheck/spanQuickCheckYes
     public int decompose(CharSequence s, int src, int limit,
                          ReorderingBuffer buffer) {
         int minNoCP=minDecompNoCP;
@@ -1231,6 +1234,9 @@ public final class Normalizer2Impl {
             buffer.append(s, src, limit);
         }
     }
+    // Dual functionality:
+    // buffer!=NULL: normalize
+    // buffer==NULL: isNormalized/quickCheck/spanQuickCheckYes
     public int makeFCD(CharSequence s, int src, int limit, ReorderingBuffer buffer) {
         // Note: In this function we use buffer->appendZeroCC() because we track
         // the lead and trail combining classes here, rather than leaving it to
