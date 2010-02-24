@@ -21,6 +21,7 @@
 #include "unicode/icudataver.h"
 #include "cstring.h"
 #include "putilimp.h"
+#include "toolutil.h"
 
 static UBool compareWithNAN(double x, double y);
 static void doAssert(double expect, double got, const char *message);
@@ -453,6 +454,8 @@ static void TestErrorName(void){
 
 void addPUtilTest(TestNode** root);
 
+static void addToolUtilTests(TestNode** root);
+
 void
 addPUtilTest(TestNode** root)
 {
@@ -461,5 +464,185 @@ addPUtilTest(TestNode** root)
 /*    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder"); */
     addTest(root, &TestErrorName, "putiltst/TestErrorName");
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
+
+    addToolUtilTests(root);
 }
 
+/* Tool Util Tests ================ */
+#define TOOLUTIL_TESTBUF_SIZE 2048
+static char toolutil_testBuf[TOOLUTIL_TESTBUF_SIZE];
+static const char *NULLSTR="NULL";
+
+/**
+ * Normalize NULL to 'NULL'  for testing
+ */
+#define STRNULL(x) ((x)?(x):NULLSTR)
+
+static void toolutil_findBasename(void)
+{
+  struct {
+    const char *inBuf;
+    const char *expectResult;
+  } testCases[] = { 
+    {
+      U_FILE_SEP_STRING "usr" U_FILE_SEP_STRING "bin" U_FILE_SEP_STRING "pkgdata",
+      "pkgdata"
+    },
+    {
+      U_FILE_SEP_STRING "usr" U_FILE_SEP_STRING "bin" U_FILE_SEP_STRING,
+      ""
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_ALT_SEP_STRING "pkgdata",
+      "pkgdata"
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_ALT_SEP_STRING,
+      ""
+    },
+  };
+  int32_t count=(sizeof(testCases)/sizeof(testCases[0]));
+  int32_t i;
+
+
+  log_verbose("Testing findBaseName()\n");
+  for(i=0;i<count;i++) {
+    const char *result;
+    const char *input = STRNULL(testCases[i].inBuf);
+    const char *expect = STRNULL(testCases[i].expectResult);
+    log_verbose("Test case [%d/%d]: %s\n", i, count-1, input);
+    result = STRNULL(findBasename(testCases[i].inBuf));
+    if(result==expect||!strcmp(result,expect)) {
+      log_verbose(" -> %s PASS\n", result);
+    } else {
+      log_err("FAIL: Test case [%d/%d]: %s -> %s but expected %s\n", i, count-1, input, result, expect);
+    }
+  }
+}
+
+
+static void toolutil_findDirname(void)
+{
+  int i;
+  struct {
+    const char *inBuf;
+    int32_t outBufLen;
+    UErrorCode expectStatus;
+    const char *expectResult;
+  } testCases[] = { 
+    {
+      U_FILE_SEP_STRING "usr" U_FILE_SEP_STRING "bin" U_FILE_SEP_STRING "pkgdata",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_SEP_STRING "usr" U_FILE_SEP_STRING "bin",
+    },
+    {
+      U_FILE_SEP_STRING "usr" U_FILE_SEP_STRING "bin" U_FILE_SEP_STRING "pkgdata",
+      2,
+      U_BUFFER_OVERFLOW_ERROR,
+      NULL
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_ALT_SEP_STRING "pkgdata",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin"
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_ALT_SEP_STRING "pkgdata",
+      2,
+      U_BUFFER_OVERFLOW_ERROR,
+      NULL
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_SEP_STRING "pkgdata",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin"
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_SEP_STRING "bin" U_FILE_ALT_SEP_STRING "pkgdata",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_SEP_STRING "bin"
+    },
+    {
+      U_FILE_ALT_SEP_STRING "usr" U_FILE_ALT_SEP_STRING "bin" U_FILE_ALT_SEP_STRING "pkgdata",
+      2,
+      U_BUFFER_OVERFLOW_ERROR,
+      NULL
+    },
+    {
+      U_FILE_ALT_SEP_STRING "vmlinuz",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_ALT_SEP_STRING
+    },
+    {
+      U_FILE_ALT_SEP_STRING "vmlinux",
+      200,
+      U_ZERO_ERROR,
+      U_FILE_SEP_STRING
+    },
+    {
+      "pkgdata",
+      0,
+      U_BUFFER_OVERFLOW_ERROR,
+      NULL
+    },
+    {
+      "pkgdata",
+      1,
+      U_BUFFER_OVERFLOW_ERROR,
+      NULL
+    },
+    {
+      "pkgdata",
+      2,
+      U_ZERO_ERROR,
+      "."
+    },
+    {
+      "pkgdata",
+      20,
+      U_ZERO_ERROR,
+      "."
+    }
+  };
+  int32_t count=(sizeof(testCases)/sizeof(testCases[0]));
+
+  log_verbose("Testing findDirname()\n");
+  for(i=0;i<count;i++) {
+    const char *result;
+    const char *input = STRNULL(testCases[i].inBuf);
+    const char *expect = STRNULL(testCases[i].expectResult);
+    UErrorCode status = U_ZERO_ERROR;
+    uprv_memset(toolutil_testBuf, 0x55, TOOLUTIL_TESTBUF_SIZE);
+    
+    log_verbose("Test case [%d/%d]: %s\n", i, count-1, input);
+    result = STRNULL(findDirname(testCases[i].inBuf, toolutil_testBuf, testCases[i].outBufLen, &status));
+    log_verbose(" -> %s, \n", u_errorName(status));
+    if(status != testCases[i].expectStatus) {
+      log_verbose("FAIL: Test case [%d/%d]: %s got error code %s but expected %s\n", i, count-1, input, u_errorName(status), u_errorName(testCases[i].expectStatus));
+    }
+    if(result==expect||!strcmp(result,expect)) {
+      log_verbose(" = -> %s \n", result);
+    } else {
+      log_err("FAIL: Test case [%d/%d]: %s -> %s but expected %s\n", i, count-1, input, result, expect);
+    }
+  }
+}
+
+
+
+static void addToolUtilTests(TestNode** root) {
+    addTest(root, &toolutil_findBasename,       "putiltst/toolutil/findBasename");
+    addTest(root, &toolutil_findDirname,       "putiltst/toolutil/findDirname");
+  /*
+    Not yet tested:
+
+    addTest(root, &toolutil_getLongPathname,       "putiltst/toolutil/getLongPathname");
+    addTest(root, &toolutil_getCurrentYear,       "putiltst/toolutil/getCurrentYear");
+    addTest(root, &toolutil_UToolMemory,       "putiltst/toolutil/UToolMemory");
+  */
+}

@@ -71,10 +71,10 @@ U_CAPI int32_t U_EXPORT2 getCurrentYear() {
         currentYear = ucal_get(cal, UCAL_YEAR, &status);
         ucal_close(cal);
     }
-    return currentYear;
 #else
-    return 2008;
+    /* No formatting- no way to set the current year. */
 #endif
+    return currentYear;
 }
 
 
@@ -99,6 +99,41 @@ getLongPathname(const char *pathname) {
     }
 #endif
     return pathname;
+}
+
+U_CAPI const char * U_EXPORT2
+findDirname(const char *path, char *buffer, int32_t bufLen, UErrorCode* status) {
+  if(U_FAILURE(*status)) return NULL;
+  const char *resultPtr = NULL;
+  int32_t resultLen = 0;
+
+  const char *basename=uprv_strrchr(path, U_FILE_SEP_CHAR);
+#if U_FILE_ALT_SEP_CHAR!=U_FILE_SEP_CHAR
+  const char *basenameAlt=uprv_strrchr(path, U_FILE_ALT_SEP_CHAR);
+  if(basenameAlt && (!basename || basename<basenameAlt)) {
+    basename = basenameAlt;
+  }
+#endif
+  if(!basename) {
+    /* no basename - return '.'. */
+    resultPtr = ".";
+    resultLen = 1;
+  } else {
+    resultPtr = path;
+    resultLen = basename - path;
+    if(resultLen<1) {
+      resultLen = 1; /* '/' or '/a' -> '/' */
+    }
+  }
+
+  if((resultLen+1) <= bufLen) {
+    uprv_strncpy(buffer, resultPtr, resultLen);
+    buffer[resultLen]=0;
+    return buffer;
+  } else {
+    *status = U_BUFFER_OVERFLOW_ERROR;
+    return NULL;
+  }
 }
 
 U_CAPI const char * U_EXPORT2
