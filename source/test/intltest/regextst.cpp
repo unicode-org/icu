@@ -245,7 +245,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     utext_openUTF8(&pattern, pat, -1, &status);
     REPattern = RegexPattern::compile(&pattern, 0, pe, status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in RegexPattern::compile() at line %d (UTF8).  Status = %s\n",
+        dataerrln("RegexTest failure in RegexPattern::compile() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
         return FALSE;
     }
@@ -356,7 +356,7 @@ void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
     utext_openUTF8(&patternText, pat, -1, &status);
     callerPattern = RegexPattern::compile(&patternText, 0, pe, status);
     if (status != expectedStatus) {
-        errln("Line %d: unexpected error %s compiling pattern.", line, u_errorName(status));
+        dataerrln("Line %d: unexpected error %s compiling pattern.", line, u_errorName(status));
     } else {
         if (status != U_ZERO_ERROR) {
             if (pe.line != errLine || pe.offset != errCol) {

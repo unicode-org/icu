@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -99,7 +99,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
     SimpleDateFormat basicFmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
             status);
     if (U_FAILURE(status)) {
-        errcheckln(status, "FAIL: Couldn't create basic SimpleDateFormat: %s\n",
+        dataerrln("FAIL: Couldn't create basic SimpleDateFormat: %s",
                 u_errorName(status));
         return;
     }

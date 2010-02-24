@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -243,7 +243,7 @@ void TransliteratorTest::TestInstantiation() {
             // If UCONFIG_NO_BREAK_ITERATION is on, then only Thai should fail.
             if (id.compare((UnicodeString)"Thai-Latin") != 0)
 #endif
-                errln(UnicodeString("FAIL: Couldn't create ") + id +
+                dataerrln(UnicodeString("FAIL: Couldn't create ") + id +
                       /*", parse error " + parseError.code +*/
                       ", line " + parseError.line +
                       ", offset " + parseError.offset +
@@ -1459,7 +1459,7 @@ void TransliteratorTest::TestNormalizationTransliterator() {
     Transliterator* NFD = Transliterator::createInstance("NFD", UTRANS_FORWARD, parseError, status);
     Transliterator* NFC = Transliterator::createInstance("NFC", UTRANS_FORWARD, parseError, status);
     if (!NFD || !NFC) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed: %s", u_errorName(status));
         delete NFD;
         delete NFC;
         return;
@@ -2104,7 +2104,7 @@ void TransliteratorTest::TestNFDChainRBT() {
                                "TEST", "::NFD; aa > Q; a > q;",
                                UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
-        errln("FAIL: Transliterator::createFromRules failed with %s", u_errorName(ec));
+        dataerrln("FAIL: Transliterator::createFromRules failed with %s", u_errorName(ec));
         return;
     }
     expect(*t, "aa", "Q");
@@ -3561,7 +3561,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 
                 Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: Could not create " + id);
+                    dataerrln((UnicodeString)"FAIL: Could not create " + id);
                     delete t;
                     continue;
                 }

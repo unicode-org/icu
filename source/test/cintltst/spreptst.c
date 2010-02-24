@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2009, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -337,7 +337,7 @@ static void Test_nfs4_cis_prep(void){
         }
 
         if(expectedStatus != status){
-            log_err("Did not get the expected status for nfs4_cis_prep at index %i. Expected: %s Got: %s\n",i, u_errorName(expectedStatus), u_errorName(status));
+            log_data_err("Did not get the expected status for nfs4_cis_prep at index %i. Expected: %s Got: %s - (Are you missing data?)\n",i, u_errorName(expectedStatus), u_errorName(status));
         }
         if(U_SUCCESS(status) && (strcmp(expectedDest,dest) !=0)){
               log_err("Did not get the expected output for nfs4_cis_prep at index %i.\n", i);
@@ -462,7 +462,7 @@ Test_nfs4_mixed_prep(void){
             }
             free(dest);
             if(U_FAILURE(status)){
-                log_err("Preparation of string at index %i failed. Error: %s\n", i, u_errorName(status));
+                log_data_err("Preparation of string at index %i failed. Error: %s - (Are you missing data?)\n", i, u_errorName(status));
                 continue;
             }
         } 

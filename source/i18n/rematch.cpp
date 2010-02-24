@@ -109,6 +109,10 @@ RegexMatcher::RegexMatcher(UText *regexp, UText *input,
     }
     UParseError    pe;
     fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     fPattern           = fPatternOwned;
     init2(input, status);
 }
@@ -122,6 +126,9 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     }
     UParseError    pe;
     fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     fPattern           = fPatternOwned;
     init2(RegexStaticSets::gStaticSets->fEmptyText, status);
 }
@@ -134,6 +141,10 @@ RegexMatcher::RegexMatcher(UText *regexp,
     }
     UParseError    pe;
     fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+        if (U_FAILURE(status)) {
+        return;
+    }
+
     fPattern           = fPatternOwned;
     init2(RegexStaticSets::gStaticSets->fEmptyText, status);
 }

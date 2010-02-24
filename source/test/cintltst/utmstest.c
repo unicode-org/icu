@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (c) 1997-2007, International Business Machines Corporation and *
+ * Copyright (c) 1997-2010, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  */
@@ -455,7 +455,7 @@ TestDotNet() {
     cal = ucal_open(utc, -1, "", UCAL_GREGORIAN, &errorCode);
     ucal_setGregorianChange(cal, -1000000 * (dayMillis * (UDate)1), &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ucal_open(UTC/proleptic Gregorian) failed: %s\n", u_errorName(errorCode));
+        log_data_err("ucal_open(UTC/proleptic Gregorian) failed: %s - (Are you missing data?)\n", u_errorName(errorCode));
         ucal_close(cal);
         return;
     }

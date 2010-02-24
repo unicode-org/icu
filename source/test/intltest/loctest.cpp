@@ -1306,7 +1306,7 @@ LocaleTest::Test4139940()
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat df_full("EEEE", mylocale, status);
     if(U_FAILURE(status)){
-        errcheckln(status, UnicodeString("Could not create SimpleDateFormat object for locale hu. Error: " )+ UnicodeString(u_errorName(status)));
+        dataerrln(UnicodeString("Could not create SimpleDateFormat object for locale hu. Error: ") + UnicodeString(u_errorName(status)));
         return;
     }
     UnicodeString str;
@@ -1813,7 +1813,7 @@ void LocaleTest::TestGetLocale(void) {
     req = "en_US_BROOKLYN";
     Calendar* cal = Calendar::createInstance(Locale::createFromName(req), ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: Calendar::createInstance failed - %s", u_errorName(ec));
+        dataerrln("FAIL: Calendar::createInstance failed - %s", u_errorName(ec));
     } else {
         valid = cal->getLocale(ULOC_VALID_LOCALE, ec);
         actual = cal->getLocale(ULOC_ACTUAL_LOCALE, ec);

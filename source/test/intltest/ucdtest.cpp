@@ -244,9 +244,9 @@ void UnicodeTest::TestAdditionalProperties() {
             end=derivedProps[i].getRangeEnd(range);
             for(; start<=end; ++start) {
                 if(!u_hasBinaryProperty(start, derivedPropsIndex[i])) {
-                    errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong\n", start, derivedPropsNames[i]);
+                    dataerrln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong", start, derivedPropsNames[i]);
                     if(++numErrors[i]>=MAX_ERRORS) {
-                      errln("Too many errors, moving to the next test");
+                      dataerrln("Too many errors, moving to the next test");
                       break;
                     }
                 }

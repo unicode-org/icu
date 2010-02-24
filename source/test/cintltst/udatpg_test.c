@@ -408,7 +408,7 @@ static void TestOptions() {
             }
             udatpg_close(dtpgen);
         } else {
-            log_err("ERROR udatpg_open failed for locale %s\n", testDataPtr->locale);
+            log_data_err("ERROR udatpg_open failed for locale %s : %s - (Are you missing data?)\n", testDataPtr->locale, myErrorName(status));
         }
     }
 }

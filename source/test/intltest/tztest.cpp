@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -165,7 +165,7 @@ TimeZoneTest::TestRuleAPI()
     // Establish our expected transition times.  Do this with a non-DST
     // calendar with the (above) declared local offset.
     GregorianCalendar *gc = new GregorianCalendar(*zone, status);
-    if (failure(status, "new GregorianCalendar")) return;
+    if (failure(status, "new GregorianCalendar", TRUE)) return;
     gc->clear();
     gc->set(1990, UCAL_MARCH, 1);
     UDate marchOneStd = gc->getTime(status); // Local Std time midnight
@@ -335,7 +335,7 @@ TimeZoneTest::TestVariousAPI518()
     UnicodeString str;
     logln("The timezone is " + time_zone->getID(str));
     if (!time_zone->inDaylightTime(d, status)) dataerrln("FAIL: inDaylightTime returned FALSE");
-    if (U_FAILURE(status)) { errln("FAIL: TimeZone::inDaylightTime failed"); return; }
+    if (failure(status, "TimeZone::inDaylightTime", TRUE)) return;
     if (!time_zone->useDaylightTime()) dataerrln("FAIL: useDaylightTime returned FALSE");
     if (time_zone->getRawOffset() != - 8 * millisPerHour) dataerrln("FAIL: getRawOffset returned wrong value");
     GregorianCalendar *gc = new GregorianCalendar(status);
@@ -1250,7 +1250,7 @@ TimeZoneTest::TestDisplayName()
     logln(UnicodeString("Modified PST inDaylightTime->") + inDaylight );
     if(U_FAILURE(status))
     {
-        errln("Some sort of error..." + UnicodeString(u_errorName(status))); // REVISIT
+        dataerrln("Some sort of error..." + UnicodeString(u_errorName(status))); // REVISIT
     }
     name.remove();
     name = zone2->getDisplayName(Locale::getEnglish(),name);
@@ -1276,7 +1276,7 @@ TimeZoneTest::TestDisplayName()
     ResourceBundle enRB(NULL,
                             Locale::getEnglish(), status);
     if(U_FAILURE(status))
-        errcheckln(status, "Couldn't get ResourceBundle for en - %s", u_errorName(status));
+        dataerrln("Couldn't get ResourceBundle for en - %s", u_errorName(status));
 
     ResourceBundle mtRB(NULL,
                          mt_MT, status);
@@ -1663,7 +1663,7 @@ void TimeZoneTest::TestFebruary() {
     // Gregorian calendar with the UTC time zone for getting sample test date/times.
     GregorianCalendar gc(*TimeZone::getGMT(), status);
     if (U_FAILURE(status)) {
-        errln("Unable to create the UTC calendar: %s", u_errorName(status));
+        dataerrln("Unable to create the UTC calendar: %s", u_errorName(status));
         return;
     }
 
@@ -1925,7 +1925,7 @@ static struct   {
 void TimeZoneTest::TestDisplayNamesMeta() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar cal(*TimeZone::getGMT(), status);
-    if (failure(status, "GregorianCalendar")) return;
+    if (failure(status, "GregorianCalendar", TRUE)) return;
 
     UBool isReferenceYear = TRUE;
     if (cal.get(UCAL_YEAR, status) != TimeZoneTest::REFERENCE_YEAR) {

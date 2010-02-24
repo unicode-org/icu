@@ -629,13 +629,13 @@ void TestMessageFormat::internalFormat(MessageFormat* msgFmt ,
         //Format with passed arguments
         msgFmt->format( args , numOfArgs , result, ignore, status);
         if (U_FAILURE(status)) {
-            errln( "%serror while formatting with ErrorCode as %s" ,errMsg, u_errorName(status) );
+            dataerrln( "%serror while formatting with ErrorCode as %s" ,errMsg, u_errorName(status) );
         }
         //Compare expected with obtained result
         if ( result!= expected ) {
             UnicodeString err = UnicodeString(errMsg);
-            err+= UnicodeString(":Unexpected Result \n Expected: " + expected + "\n Obtained: " + result);
-            errln(err);
+            err+= UnicodeString(":Unexpected Result \n Expected: " + expected + "\n Obtained: " + result + "\n");
+            dataerrln(err);
         }
 }
 
@@ -645,7 +645,7 @@ MessageFormat* TestMessageFormat::internalCreate(
     //Create the MessageFormat with simple SelectFormat
     MessageFormat* msgFmt = new MessageFormat(pattern, locale, status);
     if (U_FAILURE(status)) {
-        errln( "%serror while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
+        dataerrln( "%serror while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
         logln(UnicodeString("TestMessageFormat::testMsgFormatSelect #1 with error code ")+(int32_t)status);
         return NULL;
     }

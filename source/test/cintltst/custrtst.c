@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1726,7 +1726,7 @@ testUNormIteratorWithText(const UChar *text, int32_t textLength, int32_t middle,
     for(mode=UNORM_NONE; mode<UNORM_MODE_COUNT; ++mode) {
         length=unorm_normalize(text, textLength, mode, 0, buffer, LENGTHOF(buffer), &errorCode);
         if(U_FAILURE(errorCode)) {
-            log_err("unorm_normalize(mode %d) failed: %s\n", mode, u_errorName(errorCode));
+            log_data_err("unorm_normalize(mode %d) failed: %s - (Are you missing data?)\n", mode, u_errorName(errorCode));
             break;
         }
 

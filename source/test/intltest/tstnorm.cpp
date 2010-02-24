@@ -354,21 +354,29 @@ void BasicNormalizerTest::TestZeroIndex(void) {
         a = a.unescape();
         UnicodeString b;
         Normalizer::normalize(a, UNORM_NFKC, 0, b, status);
-        UnicodeString exp(DATA[i+1], "");
-        exp = exp.unescape();
-        if (b == exp) {
-            logln((UnicodeString)"Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+        if (U_FAILURE(status)) {
+            dataerrln("Error calling normalize UNORM_NFKC: %s", u_errorName(status));
         } else {
-            errln((UnicodeString)"FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
-                  ", expect " + hex(exp));
+            UnicodeString exp(DATA[i+1], "");
+            exp = exp.unescape();
+            if (b == exp) {
+                logln((UnicodeString)"Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+            } else {
+                errln((UnicodeString)"FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
+                      ", expect " + hex(exp));
+            }
         }
         Normalizer::normalize(b, UNORM_NFD, 0, a, status);
-        exp = UnicodeString(DATA[i+2], "").unescape();
-        if (a == exp) {
-            logln((UnicodeString)"Ok: " + hex(b) + " x DECOMP => " + hex(a));
+        if (U_FAILURE(status)) {
+            dataerrln("Error calling normalize UNORM_NFD: %s", u_errorName(status));
         } else {
-            errln((UnicodeString)"FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
-                  ", expect " + hex(exp));
+            UnicodeString exp = UnicodeString(DATA[i+2], "").unescape();
+            if (a == exp) {
+                logln((UnicodeString)"Ok: " + hex(b) + " x DECOMP => " + hex(a));
+            } else {
+                errln((UnicodeString)"FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
+                      ", expect " + hex(exp));
+            }
         }
     }
 }
@@ -529,7 +537,7 @@ void BasicNormalizerTest::staticTest(UNormalizationMode mode, int options,
         Normalizer::normalize(input, mode, options, output, status);
         
         if (output != expect) {
-            errln(UnicodeString("ERROR: case ") + i + " normalized " + hex(input) + "\n"
+            dataerrln(UnicodeString("ERROR: case ") + i + " normalized " + hex(input) + "\n"
                 + "                expected " + hex(expect) + "\n"
                 + "              static got " + hex(output) );
         }
@@ -563,7 +571,7 @@ void BasicNormalizerTest::assertEqual(const UnicodeString&    input,
         result += ch;
     }
     if (result != expected) {
-        errln(errPrefix + "normalized " + hex(input) + "\n"
+        dataerrln(errPrefix + "normalized " + hex(input) + "\n"
             + "                expected " + hex(expected) + "\n"
             + "             iterate got " + hex(result) );
     }
@@ -653,8 +661,8 @@ BasicNormalizerTest::TestPreviousNext(const UChar *src, int32_t srcLength,
             char history[64];
             uprv_strcpy(history, moves);
             history[move-moves]=0;
-            errln("error: mismatch in Normalizer iteration (%s) at %s: "
-                  "got c1=U+%04lx != expected c2=U+%04lx\n",
+            dataerrln("error: mismatch in Normalizer iteration (%s) at %s: "
+                  "got c1=U+%04lx != expected c2=U+%04lx",
                   name, history, c1, c2);
             break;
         }
@@ -810,7 +818,7 @@ void BasicNormalizerTest::TestConcatenate() {
 
         r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
         if(U_FAILURE(errorCode) || /*result!=r ||*/ result!=expect) {
-            errln("error in Normalizer::concatenate(), cases[] fails with "+
+            dataerrln("error in Normalizer::concatenate(), cases[] fails with "+
                 UnicodeString(u_errorName(errorCode))+", result==expect: expected: "+
                 hex(expect)+" =========> got: " + hex(result));
         }
@@ -1120,7 +1128,7 @@ BasicNormalizerTest::TestCompare() {
             errorCode=U_ZERO_ERROR;
             Normalizer::decompose(s1, FALSE, 0, s2, errorCode);
             if(U_FAILURE(errorCode)) {
-                errln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
+                dataerrln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
                 return;
             }
 
@@ -1210,7 +1218,7 @@ BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
 
         if (U_FAILURE(errorCode)) {
             ++count;
-            errln("U+%04lx: Failed with error %s", u_errorName(errorCode));
+            dataerrln("U+%04lx: Failed with error %s", u_errorName(errorCode));
         }
 
         // bad:
@@ -1222,8 +1230,8 @@ BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
             (cc!=foldCC && foldCC!=0) || (trailCC!=foldTrailCC && foldTrailCC!=0)
         ) {
             ++count;
-            errln("U+%04lx: case-folding may un-FCD a string (folding options %04lx)", c, foldingOptions);
-            errln("  cc %02x trailCC %02x    foldCC(U+%04lx) %02x foldTrailCC(U+%04lx) %02x   quickCheck(folded)=%d", cc, trailCC, d.char32At(0), foldCC, d.char32At(d.length()-1), foldTrailCC, qcResult);
+            dataerrln("U+%04lx: case-folding may un-FCD a string (folding options %04lx)", c, foldingOptions);
+            dataerrln("  cc %02x trailCC %02x    foldCC(U+%04lx) %02x foldTrailCC(U+%04lx) %02x   quickCheck(folded)=%d", cc, trailCC, d.char32At(0), foldCC, d.char32At(d.length()-1), foldTrailCC, qcResult);
             continue;
         }
 
@@ -1253,7 +1261,7 @@ BasicNormalizerTest::FindFoldFCDExceptions() {
          * It currently assumes that one can check for FCD then case-fold
          * and then still have FCD strings for raw decomposition without reordering.
          */
-        errln("error: There are %ld code points for which case-folding may un-FCD a string for all folding options.\n"
+        dataerrln("error: There are %ld code points for which case-folding may un-FCD a string for all folding options.\n"
               "See comment in BasicNormalizerTest::FindFoldFCDExceptions()!", count);
     }
 }
@@ -1727,7 +1735,7 @@ BasicNormalizerTest::TestSkippable() {
     skipSets[UNORM_NFKD].applyPattern(UNICODE_STRING_SIMPLE("[:NFKD_Inert:]"), errorCode);
     skipSets[UNORM_NFC].applyPattern(UNICODE_STRING_SIMPLE("[:NFC_Inert:]"), errorCode);
     skipSets[UNORM_NFKC].applyPattern(UNICODE_STRING_SIMPLE("[:NFKC_Inert:]"), errorCode);
-    if(errorCode.logIfFailureAndReset("UnicodeSet(NF..._Inert) failed")) {
+    if(errorCode.logDataIfFailureAndReset("UnicodeSet(NF..._Inert) failed")) {
         return;
     }
 

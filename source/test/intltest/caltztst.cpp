@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -61,7 +61,7 @@ DateFormat*   CalendarTimeZoneTest::getDateFormat()
         {
             delete theFormat;
             theFormat = 0;
-            errcheckln(status, "FAIL: Could not create SimpleDateFormat - %s", u_errorName(status));
+            dataerrln("FAIL: Could not create SimpleDateFormat - %s", u_errorName(status));
         }
     }
 
@@ -108,7 +108,7 @@ Calendar*  CalendarTimeZoneTest::getCalendar()
         {
             delete theCalendar;
             theCalendar = 0;
-            errln("FAIL: Calendar::createInstance failed");
+            dataerrln("FAIL: Calendar::createInstance failed: %s", u_errorName(status));
         }
     }
     return theCalendar;
@@ -189,7 +189,7 @@ CalendarTimeZoneTest::date(int32_t y, int32_t m, int32_t d, int32_t hr, int32_t 
     releaseCalendar(cal);
     if (U_FAILURE(status))
     {
-        errln("FAIL: Calendar::getTime failed");
+        errln("FAIL: Calendar::getTime failed: %s", u_errorName(status));
         return 0.0;
     }
     return dt;

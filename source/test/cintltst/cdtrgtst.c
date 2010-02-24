@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -143,7 +143,8 @@ void Test4056591()
     log_verbose("Testing s[get] 2 digit year start regressively\n");
     cal=ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){
-        log_err("error in ucal_open caldef : %s\n", myErrorName(status));
+        log_data_err("error in ucal_open caldef : %s - (Are you missing data?)\n", myErrorName(status));
+        return;
     }
     ucal_setDateTime(cal, 1809, UCAL_DECEMBER, 25, 17, 40, 30, &status);
     d[0]=ucal_getMillis(cal, &status);
@@ -213,7 +214,7 @@ void Test4059917()
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,tzID,-1,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
-        log_err_status(status, "FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
+        log_data_err("FAIL: error in creating the dateformat using openPattern: %s - (Are you missing data?)\n", myErrorName(status));
         return;
     }
     myDate=(UChar*)malloc(sizeof(UChar) * 11);
@@ -292,7 +293,7 @@ void Test4060212()
     fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, tzID, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err_status(status, "FAIL: error in creating the dateformat using default date and time style: %s\n", 
+        log_data_err("FAIL: error in creating the dateformat using default date and time style: %s - (Are you missing data?)\n", 
                         myErrorName(status) );
         return;
     }
@@ -330,7 +331,7 @@ void Test4061287()
     log_verbose("Testing parsing by changing the attribute lenient\n");
     df = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status)){
-        log_err_status(status, "ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
+        log_data_err("ERROR: failure in open pattern of test4061287: %s - (Are you missing data?)\n", myErrorName(status));
         return;
     }
 

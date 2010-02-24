@@ -381,7 +381,7 @@ static void TestNewFormatAndParseAPI(void)
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("error in ucal_open caldef : %s\n", myErrorName(status) );
+        log_data_err("error in ucal_open caldef : %s - (Are you missing data?)\n", myErrorName(status) );
         return;
     }
     ucal_setDateTime(cal, 1999, UCAL_MARCH, 18, 0, 0, 0, &status);
@@ -483,12 +483,12 @@ static void TestSampleFormatAndParseWithError(void)
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("error in ucal_open caldef : %s\n", myErrorName(status) );
+        log_data_err("error in ucal_open caldef : %s - (Are you missing data?)\n", myErrorName(status) );
     }
     ucal_setDateTime(cal, 1999, UCAL_MARCH, 18, 0, 0, 0, &status);
     d1=ucal_getMillis(cal, &status);
     if(U_FAILURE(status)){
-            log_err("Error: failure in get millis: %s\n", myErrorName(status) );
+            log_data_err("Error: failure in get millis: %s - (Are you missing data?)\n", myErrorName(status) );
     }
     
     log_verbose("\nTesting with pattern test#4");
@@ -576,12 +576,12 @@ static void TestSampleFormatAndParse(void)
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("error in ucal_open caldef : %s\n", myErrorName(status) );
+        log_data_err("error in ucal_open caldef : %s - (Are you missing data?)\n", myErrorName(status) );
     }
     ucal_setDateTime(cal, 1999, UCAL_MARCH, 18, 0, 0, 0, &status);
     d1=ucal_getMillis(cal, &status);
     if(U_FAILURE(status)){
-            log_err("Error: failure in get millis: %s\n", myErrorName(status) );
+            log_data_err("Error: failure in get millis: %s - (Are you missing data?)\n", myErrorName(status) );
     }
     
     log_verbose("\nTesting with pattern test#4");

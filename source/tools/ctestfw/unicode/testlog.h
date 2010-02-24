@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2009, International Business Machines Corporation and
+ * Copyright (c) 2004-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -35,6 +35,7 @@ public:
     virtual ~IcuTestErrorCode();
     // Returns TRUE if isFailure().
     UBool logIfFailureAndReset(const char *fmt, ...);
+    UBool logDataIfFailureAndReset(const char *fmt, ...);
 protected:
     virtual void handleFailure() const;
 private:

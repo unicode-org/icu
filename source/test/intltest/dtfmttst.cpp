@@ -237,7 +237,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     UnicodeString str;
 
     if(U_FAILURE(status)) {
-        errcheckln(status, "Could not set up test. exitting - %s", u_errorName(status));
+        dataerrln("Could not set up test. exitting - %s", u_errorName(status));
         return;
     }
 
@@ -481,8 +481,8 @@ DateFormatTest::TestPartialParse994()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* f = new SimpleDateFormat(status);
-    ASSERT_OK(status);
     if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
         delete f;
         return;
     }
@@ -547,7 +547,11 @@ DateFormatTest::TestRunTogetherPattern985()
     UnicodeString now, then;
     //UBool flag;
     SimpleDateFormat *formatter = new SimpleDateFormat(format, status);
-    ASSERT_OK(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
+        delete formatter;
+        return;
+    }
     UDate date1 = Calendar::getNow();
     ((DateFormat*)formatter)->format(date1, now);
     logln(now);
@@ -574,7 +578,11 @@ DateFormatTest::TestRunTogetherPattern917()
     SimpleDateFormat* fmt;
     UnicodeString myDate;
     fmt = new SimpleDateFormat((UnicodeString)"yyyy/MM/dd", status);
-    ASSERT_OK(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
+        delete fmt;
+        return;
+    }
     myDate = "1997/02/03";
     testIt917(fmt, myDate, date(97, 2 - 1, 3));
     delete fmt;
@@ -670,7 +678,11 @@ DateFormatTest::TestLetterDPattern212()
     expLittleD = expBigD; // Expect the same, with default lenient parsing
     logln((UnicodeString)"dateString= " + dateString);
     SimpleDateFormat *formatter = new SimpleDateFormat(bigD, status);
-    ASSERT_OK(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
+        delete formatter;
+        return;
+    }
     ParsePosition pos(0);
     UDate myDate = formatter->parse(dateString, pos);
     logln((UnicodeString)"Using " + bigD + " -> " + myDate);
@@ -745,7 +757,11 @@ DateFormatTest::TestQuotePattern161()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* formatter = new SimpleDateFormat((UnicodeString)"MM/dd/yyyy 'at' hh:mm:ss a zzz", status);
-    ASSERT_OK(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
+        delete formatter;
+        return;
+    }
     UDate currentTime_1 = date(97, UCAL_AUGUST, 13, 10, 42, 28);
     UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
     UnicodeString exp("08/13/1997 at 10:42:28 AM ");
@@ -860,7 +876,7 @@ DateFormatTest::TestBadInput135a()
   UErrorCode status = U_ZERO_ERROR;
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   if(U_FAILURE(status)) {
-    errcheckln(status, "Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+    dataerrln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
     delete dateParse;
     return;
   }
@@ -941,7 +957,7 @@ DateFormatTest::TestTwoDigitYear()
     UErrorCode ec = U_ZERO_ERROR;
     SimpleDateFormat fmt("dd/MM/yy", Locale::getUK(), ec);
     if (U_FAILURE(ec)) {
-        errcheckln(ec, "FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
+        dataerrln("FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
         return;
     }
     parse2DigitYear(fmt, "5/6/17", date(117, UCAL_JUNE, 5));
@@ -982,7 +998,7 @@ DateFormatTest::TestDateFormatZone061()
     logln((UnicodeString)"Date 1997/3/25 00:00 GMT: " + date);
     formatter = new SimpleDateFormat((UnicodeString)"dd-MMM-yyyyy HH:mm", Locale::getUK(), status);
     if(U_FAILURE(status)) {
-      errcheckln(status, "Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+      dataerrln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
       delete formatter;
       return;
     }
@@ -1029,38 +1045,41 @@ DateFormatTest::TestDateFormatZone146()
         // now try to use the default GMT time zone
         GregorianCalendar *greenwichcalendar =
             new GregorianCalendar(1997, 3, 4, 23, 0, status);
-        failure(status, "new GregorianCalendar");
-        //*****************************greenwichcalendar.setTimeZone(TimeZone.getDefault());
-        //greenwichcalendar.set(1997, 3, 4, 23, 0);
-        // try anything to set hour to 23:00 !!!
-        greenwichcalendar->set(UCAL_HOUR_OF_DAY, 23);
-        // get time
-        UDate greenwichdate = greenwichcalendar->getTime(status);
-        // format every way
-        UnicodeString DATA [] = {
-            UnicodeString("simple format:  "), UnicodeString("04/04/97 23:00 GMT+00:00"),
-                UnicodeString("MM/dd/yy HH:mm z"),
-            UnicodeString("full format:    "), UnicodeString("Friday, April 4, 1997 11:00:00 o'clock PM GMT+00:00"),
-                UnicodeString("EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a z"),
-            UnicodeString("long format:    "), UnicodeString("April 4, 1997 11:00:00 PM GMT+00:00"),
-                UnicodeString("MMMM d, yyyy h:mm:ss a z"),
-            UnicodeString("default format: "), UnicodeString("04-Apr-97 11:00:00 PM"),
-                UnicodeString("dd-MMM-yy h:mm:ss a"),
-            UnicodeString("short format:   "), UnicodeString("4/4/97 11:00 PM"),
-                UnicodeString("M/d/yy h:mm a")
-        };
-        int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
+        if (U_FAILURE(status)) {
+            dataerrln("Fail new GregorianCalendar: %s", u_errorName(status));
+        } else {
+            //*****************************greenwichcalendar.setTimeZone(TimeZone.getDefault());
+            //greenwichcalendar.set(1997, 3, 4, 23, 0);
+            // try anything to set hour to 23:00 !!!
+            greenwichcalendar->set(UCAL_HOUR_OF_DAY, 23);
+            // get time
+            UDate greenwichdate = greenwichcalendar->getTime(status);
+            // format every way
+            UnicodeString DATA [] = {
+                UnicodeString("simple format:  "), UnicodeString("04/04/97 23:00 GMT+00:00"),
+                    UnicodeString("MM/dd/yy HH:mm z"),
+                UnicodeString("full format:    "), UnicodeString("Friday, April 4, 1997 11:00:00 o'clock PM GMT+00:00"),
+                    UnicodeString("EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a z"),
+                UnicodeString("long format:    "), UnicodeString("April 4, 1997 11:00:00 PM GMT+00:00"),
+                    UnicodeString("MMMM d, yyyy h:mm:ss a z"),
+                UnicodeString("default format: "), UnicodeString("04-Apr-97 11:00:00 PM"),
+                    UnicodeString("dd-MMM-yy h:mm:ss a"),
+                UnicodeString("short format:   "), UnicodeString("4/4/97 11:00 PM"),
+                    UnicodeString("M/d/yy h:mm a")
+            };
+            int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
-        for (int32_t i=0; i<DATA_length; i+=3) {
-            DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::getEnglish(), status);
-            if(failure(status, "new SimpleDateFormat")) break;
-            fmt->setCalendar(*greenwichcalendar);
-            UnicodeString result;
-            result = fmt->format(greenwichdate, result);
-            logln(DATA[i] + result);
-            if (result != DATA[i+1])
-                errln("FAIL: Expected " + DATA[i+1] + ", got " + result);
-            delete fmt;
+            for (int32_t i=0; i<DATA_length; i+=3) {
+                DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::getEnglish(), status);
+                if(failure(status, "new SimpleDateFormat")) break;
+                fmt->setCalendar(*greenwichcalendar);
+                UnicodeString result;
+                result = fmt->format(greenwichdate, result);
+                logln(DATA[i] + result);
+                if (result != DATA[i+1])
+                    errln("FAIL: Expected " + DATA[i+1] + ", got " + result);
+                delete fmt;
+            }
         }
     //}
     //finally {
@@ -1259,7 +1278,10 @@ void DateFormatTest::TestWhiteSpaceParsing() {
 void DateFormatTest::TestInvalidPattern() {
     UErrorCode ec = U_ZERO_ERROR;
     SimpleDateFormat f(UnicodeString("Yesterday"), ec);
-    ASSERT_OK(ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Fail construct SimpleDateFormat: %s", u_errorName(ec));
+        return;
+    }
     UnicodeString out;
     FieldPosition pos;
     f.format((UDate)0, out, pos);
@@ -1272,7 +1294,10 @@ void DateFormatTest::TestGreekMay() {
     UErrorCode ec = U_ZERO_ERROR;
     UDate date = -9896080848000.0;
     SimpleDateFormat fmt("EEEE, dd MMMM yyyy h:mm:ss a", Locale("el", "", ""), ec);
-    if (!assertSuccess("SimpleDateFormat::ct", ec)) return;
+    if (U_FAILURE(ec)) {
+        dataerrln("Fail construct SimpleDateFormat: %s", u_errorName(ec));
+        return;
+    }
     UnicodeString str;
     fmt.format(date, str);
     ParsePosition pos(0);
@@ -1574,7 +1599,7 @@ void DateFormatTest::expectParse(const char** data, int32_t data_length,
     SimpleDateFormat ref(data[i++], loc, ec);
     SimpleDateFormat gotfmt("G yyyy MM dd HH:mm:ss z", loc, ec);
     if (U_FAILURE(ec)) {
-        errcheckln(ec, "FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
+        dataerrln("FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
         return;
     }
 
@@ -1657,7 +1682,10 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
     SimpleDateFormat fmt("", loc, ec);
     SimpleDateFormat ref(data[i++], loc, ec);
     SimpleDateFormat univ("EE G yyyy MM dd HH:mm:ss.SSS z", loc, ec);
-    if (!assertSuccess("construct SimpleDateFormat", ec)) return;
+    if (U_FAILURE(ec)) {
+        dataerrln("Fail construct SimpleDateFormat: %s", u_errorName(ec));
+        return;
+    }
 
     UnicodeString currentPat;
     while (i<data_length) {
@@ -1758,7 +1786,10 @@ void DateFormatTest::expectFormat(const char** data, int32_t data_length,
     SimpleDateFormat fmt("", loc, ec);
     SimpleDateFormat ref(data[i++], loc, ec);
     SimpleDateFormat univ("EE G yyyy MM dd HH:mm:ss.SSS z", loc, ec);
-    if (!assertSuccess("construct SimpleDateFormat", ec)) return;
+    if (U_FAILURE(ec)) {
+        dataerrln("Fail construct SimpleDateFormat: %s", u_errorName(ec));
+        return;
+    }
 
     UnicodeString currentPat;
 
@@ -1834,7 +1865,10 @@ void DateFormatTest::TestGenericTime() {
     SimpleDateFormat(basepat + "zzz", en, status),
     SimpleDateFormat(basepat + "zzzz", en, status)
   };
-  ASSERT_OK(status);
+  if (U_FAILURE(status)) {
+    dataerrln("Fail construct SimpleDateFormat: %s", u_errorName(status));
+    return;
+  }
   const int32_t formats_length = sizeof(formats)/sizeof(formats[0]);
 
   UnicodeString test;
@@ -1910,12 +1944,12 @@ void DateFormatTest::TestZTimeZoneParsing(void) {
     UnicodeString test;
     //SimpleDateFormat univ("yyyy-MM-dd'T'HH:mm Z", en, status);
     SimpleDateFormat univ("HH:mm Z", en, status);
+    if (failure(status, "construct SimpleDateFormat", TRUE)) return;
     const TimeZone *t = TimeZone::getGMT();
     univ.setTimeZone(*t);
 
     univ.setLenient(false);
     ParsePosition pp(0);
-    ASSERT_OK(status);
     struct {
         UnicodeString input;
         UnicodeString expected_result;
@@ -2905,7 +2939,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = GregorianCalendar::createInstance(status);
-    ASSERT_OK(status);
+    if (failure(status, "GregorianCalendar::createInstance", TRUE)) return;
     for (int i = 0; fallbackTests[i][0]; i++) {
         const char **testLine = fallbackTests[i];
         UnicodeString info[5];
@@ -2952,7 +2986,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
         NULL
     };
     if (U_FAILURE(status)) {
-        errln("Failed to initialize calendars");
+        dataerrln("Failed to initialize calendars: %s", u_errorName(status));
         for (int i = 0; calendars[i] != NULL; i++) {
             delete calendars[i];
         }
@@ -3085,7 +3119,7 @@ void DateFormatTest::Test6338(void)
     UErrorCode status = U_ZERO_ERROR;
 
     SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("y-M-d"), Locale("ar"), status);
-    failure(status, "new SimpleDateFormat");
+    if (failure(status, "new SimpleDateFormat", TRUE)) return;
 
     UDate dt1 = date(2008-1900, UCAL_JUNE, 10, 12, 00);
     UnicodeString str1;
@@ -3262,7 +3296,8 @@ void DateFormatTest::Test6880() {
 
     TimeZone *tz = TimeZone::createTimeZone("Asia/Shanghai");
     GregorianCalendar gcal(*tz, status);
-
+    if (failure(status, "construct GregorianCalendar", TRUE)) return;
+    
     gcal.clear();
     gcal.set(1910, UCAL_JULY, 1, 12, 00);   // offset 8:05:52
     d1 = gcal.getTime(status);

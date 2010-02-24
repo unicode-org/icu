@@ -294,7 +294,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 
 #if !UCONFIG_NO_FORMATTING
     LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
-    if(errorCode.logIfFailureAndReset("ucal_open()")) {
+    if(errorCode.logDataIfFailureAndReset("ucal_open()")) {
         return;
     }
     if(cal.isNull()) {
@@ -389,7 +389,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUCalendarPointer");
         LocalUCalendarPointer null;
         LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
-        cal.adoptInstead(NULL);
+        if(!errorCode.logDataIfFailureAndReset("ucal_open()")) {
+            cal.adoptInstead(NULL);
+        }
     }
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUDateTimePatternGeneratorPointer");
@@ -414,7 +416,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
         LocalURegularExpressionPointer null;
         LocalURegularExpressionPointer regex(
             uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
-        regex.adoptInstead(NULL);
+        if(!errorCode.logDataIfFailureAndReset("urege_open()")) {
+            regex.adoptInstead(NULL);
+        }
     }
 #endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS */
 
@@ -425,7 +429,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
         LocalUTransliteratorPointer null;
         LocalUTransliteratorPointer trans(
             utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
-        trans.adoptInstead(NULL);
+        if(!errorCode.logDataIfFailureAndReset("utrans_openU()")) {
+            trans.adoptInstead(NULL);
+        }
     }
 #endif /* !UCONFIG_NO_TRANSLITERATION */
 

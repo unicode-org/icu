@@ -55,7 +55,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
     Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone((UnicodeString)"UTC"), status);
     if (U_FAILURE(status)) {
-        errln("Calendar::createInstance failed");
+        dataerrln("Calendar::createInstance failed: %s", u_errorName(status));
         return;
     }
 
@@ -448,7 +448,7 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone((UnicodeString) "UTC"), status);
     if (U_FAILURE(status)) {
-        errln("Calendar::createInstance failed");
+        dataerrln("Calendar::createInstance failed: %s", u_errorName(status));
         return;
     }
 
