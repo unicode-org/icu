@@ -59,7 +59,8 @@ enum {
     COPYRIGHT,
     SOURCEDIR,
     OUTPUT_FILENAME,
-    UNICODE_VERSION
+    UNICODE_VERSION,
+    OPT_FAST
 };
 
 static UOption options[]={
@@ -69,7 +70,8 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_SOURCEDIR,
     UOPTION_DEF("output", 'o', UOPT_REQUIRES_ARG),
-    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG)
+    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
+    UOPTION_DEF("fast", '\1', UOPT_NO_ARG)
 };
 
 extern "C" int
@@ -113,6 +115,12 @@ main(int argc, char* argv[]) {
         fprintf(stderr,
             "\t-s or --sourcedir   source directory, followed by the path\n"
             "\t-o or --output      output filename\n");
+        fprintf(stderr,
+            "\t      --fast        optimize the .nrm file for fast normalization,\n"
+            "\t                    which might increase its size  (Writes fully decomposed\n"
+            "\t                    regular mappings instead of delta mappings.\n"
+            "\t                    You should measure the runtime speed to make sure that\n"
+            "\t                    this is a good trade-off.)\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
@@ -136,6 +144,10 @@ main(int argc, char* argv[]) {
     errorCode.assertSuccess();
 
     builder->setUnicodeVersion(options[UNICODE_VERSION].value);
+
+    if(options[OPT_FAST].doesOccur) {
+        builder->setOptimization(Normalizer2DataBuilder::OPTIMIZE_FAST);
+    }
 
     // prepare the filename beginning with the source dir
     U_STD_NSQ string filename(options[SOURCEDIR].value);
