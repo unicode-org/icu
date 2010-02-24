@@ -882,7 +882,10 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
         const char* locName = data[i++];
         Locale loc(locName);
         SimpleDateFormat ref(pattern, loc, ec);
-        if (!assertSuccess("construct SimpleDateFormat in expect", ec)) return;
+        if (U_FAILURE(ec)) {
+            dataerrln("contruct SimpleDateFormat in expect failed: %s", u_errorName(ec));
+            return;
+        }
         // 'f'
         const char* datestr = data[i++];
         const char* datestr_2 = data[i++];
@@ -993,7 +996,10 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
         const char* locName = data[i++];
         Locale loc(locName);
         SimpleDateFormat ref(pattern, loc, ec);
-        if (!assertSuccess("construct SimpleDateFormat in expectUserDII", ec)) return;
+        if (U_FAILURE(ec)) {
+            dataerrln("contruct SimpleDateFormat in expectUserDII failed: %s", u_errorName(ec));
+            return;
+        }
         const char* datestr = data[i++];
         const char* datestr_2 = data[i++];
         UDate date = ref.parse(ctou(datestr), ec);

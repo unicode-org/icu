@@ -18,7 +18,7 @@
 
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
-      errcheckln(status, (UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
+      dataerrln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
         return; \
     }
 

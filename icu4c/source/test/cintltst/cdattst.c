@@ -411,7 +411,7 @@ static void TestRelativeDateFormat()
         ucal_close(ucal);
     }
     if ( U_FAILURE(status) || today == 0.0 ) {
-        log_err("Generate UDate for a specified time today fails, error %s\n", myErrorName(status) );
+        log_data_err("Generate UDate for a specified time today fails, error %s - (Are you missing data?)\n", myErrorName(status) );
         return;
     }
     for (stylePtr = dateStylesList, monthPtnPtr = monthPatnsList; *stylePtr != UDAT_NONE; ++stylePtr, ++monthPtnPtr) {

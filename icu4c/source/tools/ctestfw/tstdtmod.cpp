@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2009, International Business Machines Corporation and
+ * Copyright (c) 2002-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -38,11 +38,35 @@ UBool IcuTestErrorCode::logIfFailureAndReset(const char *fmt, ...) {
     }
 }
 
+UBool IcuTestErrorCode::logDataIfFailureAndReset(const char *fmt, ...) {
+    if(isFailure()) {
+        char buffer[4000];
+        va_list ap;
+        va_start(ap, fmt);
+        vsprintf(buffer, fmt, ap);
+        va_end(ap);
+        UnicodeString msg(testName, -1, US_INV);
+        msg.append(UNICODE_STRING_SIMPLE(" failure: ")).append(UnicodeString(errorName(), -1, US_INV));
+        msg.append(UNICODE_STRING_SIMPLE(" - ")).append(UnicodeString(buffer, -1, US_INV));
+        testClass.dataerrln(msg);
+        reset();
+        return TRUE;
+    } else {
+        reset();
+        return FALSE;
+    }
+}
+
 void IcuTestErrorCode::handleFailure() const {
     // testClass.errln("%s failure - %s", testName, errorName());
     UnicodeString msg(testName, -1, US_INV);
     msg.append(UNICODE_STRING_SIMPLE(" failure: ")).append(UnicodeString(errorName(), -1, US_INV));
-    testClass.errln(msg);
+
+    if (get() == U_MISSING_RESOURCE_ERROR) {
+        testClass.dataerrln(msg);
+    } else {
+        testClass.errln(msg);
+    }
 }
 
 TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log, UErrorCode &status)

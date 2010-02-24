@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -97,7 +97,7 @@ CalendarLimitTest::TestCalendarExtremeLimit()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     cal->adoptTimeZone(TimeZone::createTimeZone("GMT"));
     DateFormat *fmt = DateFormat::createDateTimeInstance();
     if(!fmt || !cal) {
@@ -172,7 +172,7 @@ CalendarLimitTest::TestLimits(void) {
         uprv_strcpy(buf, "root@calendar=");
         strcat(buf, TestCases[i].type);
         Calendar *cal = Calendar::createInstance(buf, status);
-        if (failure(status, "Calendar::createInstance")) {
+        if (failure(status, "Calendar::createInstance", TRUE)) {
             continue;
         }
         if (uprv_strcmp(cal->getType(), TestCases[i].type) != 0) {

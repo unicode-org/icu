@@ -763,6 +763,11 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         UDateTimePatternMatchOptions options = testDataPtr->options;
 
         DateTimePatternGenerator * dtpgen = DateTimePatternGenerator::createInstance(locale, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create DateTimePatternGenerator instance for locale(%s): %s", locale.getName(), u_errorName(status));
+            delete dtpgen;
+            continue;
+        }
         UnicodeString pattern = dtpgen->getBestPattern(skel, options, status);
         if (pattern.compare(expectedPattern) != 0) {
             errln( UnicodeString("ERROR in getBestPattern, locale ") + UnicodeString(testDataPtr->locale) +

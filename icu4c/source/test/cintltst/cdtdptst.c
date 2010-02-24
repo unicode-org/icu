@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -59,7 +59,7 @@ void TestTwoDigitYearDSTParse()
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
     fullFmt= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))    {
-        log_err_status(status, "FAIL: Error in creating a date format using udat_openPattern %s\n", 
+        log_data_err("FAIL: Error in creating a date format using udat_openPattern %s - (Are you missing data?)\n", 
             myErrorName(status) );
     }
     else {
@@ -202,7 +202,7 @@ void TestRunTogetherPattern985()
     u_uastrcpy(pattern, "yyyyMMddHHmmssSSS");
     format = udat_open(UDAT_IGNORE, UDAT_IGNORE, NULL, NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
-        log_err_status(status, "FAIL: Error in date format construction with pattern: %s\n", myErrorName(status));
+        log_data_err("FAIL: Error in date format construction with pattern: %s - (Are you missing data?)\n", myErrorName(status));
         return;
     }
     date1 = ucal_getNow();
@@ -318,7 +318,7 @@ void TestQuotePattern161()
     /* format= udat_openPattern(pattern, u_strlen(pattern), NULL, &status); */
     format= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
-        log_err_status(status, "error in udat_open: %s\n", myErrorName(status));
+        log_data_err("error in udat_open: %s - (Are you missing data?)\n", myErrorName(status));
         return;
     }
     tzID=(UChar*)malloc(sizeof(UChar) * 4);

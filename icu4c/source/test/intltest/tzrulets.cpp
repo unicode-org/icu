@@ -272,7 +272,12 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
 
     GregorianCalendar *cal = new GregorianCalendar(status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Could not create a Gregorian calendar instance.");
+        dataerrln("FAIL: Could not create a Gregorian calendar instance.: %s", u_errorName(status));
+        delete rbtz1;
+        delete rbtz2;
+        delete rbtz3;
+        delete rbtz1c;
+        return;
     }
     cal->setTimeZone(*rbtz1);
     cal->clear();
@@ -1316,12 +1321,12 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
     }
     b1 = a3->getNextStart(time2, -3*HOUR, 0, FALSE, d1);
     if (b1) {
-        errln("FAIL: getNextStart must return FALSE when no start time is available after the base time");
+        dataerrln("FAIL: getNextStart must return FALSE when no start time is available after the base time");
     }
     b1 = a3->getFinalStart(-3*HOUR, 0, d1);
     b2 = a3->getPreviousStart(time2, -3*HOUR, 0, FALSE, d2);
     if (!b1 || !b2 || d1 != d2) {
-        errln("FAIL: getPreviousStart does not match with getFinalStart after the end year");
+        dataerrln("FAIL: getPreviousStart does not match with getFinalStart after the end year");
     }
 
     // AnnualTimeZone::isEquavalentTo
@@ -1448,11 +1453,11 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
     // TimeArrayTimeZoneRule::getNextStart/getPreviousStart
     b1 = t3->getNextStart(time1, -3*HOUR, 1*HOUR, FALSE, d1);
     if (b1) {
-        errln("FAIL: getNextStart returned TRUE after the final transition for t3");
+        dataerrln("FAIL: getNextStart returned TRUE after the final transition for t3");
     }
     b1 = t3->getPreviousStart(time1, -3*HOUR, 1*HOUR, FALSE, d1);
     if (!b1 || d1 != trtimes2[1]) {
-        errln("FAIL: Bad start time returned by getPreviousStart for t3");
+        dataerrln("FAIL: Bad start time returned by getPreviousStart for t3");
     } else {
         b2 = t3->getPreviousStart(d1, -3*HOUR, 1*HOUR, FALSE, d2);
         if (!b2 || d2 != trtimes2[0]) {
@@ -1663,11 +1668,11 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     UBool inDst1, inDst2;
     inDst1 = otz->inDaylightTime(t, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: inDaylightTime failed for otz");
+        dataerrln("FAIL: inDaylightTime failed for otz: %s", u_errorName(status));
     }
     inDst2 = vtz->inDaylightTime(t, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: inDaylightTime failed for vtz");
+        dataerrln("FAIL: inDaylightTime failed for vtz: %s", u_errorName(status));
     }
     if (inDst1 != inDst2) {
         errln("FAIL: inDaylightTime returned different results in VTimeZone and OlsonTimeZone");
@@ -1741,10 +1746,10 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     UDate time2 = getUTCMillis(2020, UCAL_JANUARY, 1);
     UBool equiv = vtz->hasEquivalentTransitions(*otz, time1, time2, FALSE, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: hasEquivalentTransitions failed for vtz/otz");
+        dataerrln("FAIL: hasEquivalentTransitions failed for vtz/otz: %s", u_errorName(status));
     }
     if (!equiv) {
-        errln("FAIL: hasEquivalentTransitons returned false for the same time zone");
+        dataerrln("FAIL: hasEquivalentTransitons returned false for the same time zone");
     }
 
     // operator=/operator==/operator!=
@@ -2053,7 +2058,7 @@ TimeZoneRuleTest::TestT6216(void) {
     TimeZone *utc = TimeZone::createTimeZone("Etc/GMT");
     GregorianCalendar cal(utc, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Failed to creat a GregorianCalendar");
+        dataerrln("FAIL: Failed to creat a GregorianCalendar: %s", u_errorName(status));
         return;
     }
     for (i = 0; TestDates[i][2] != 0; i++) {
@@ -2249,7 +2254,7 @@ TimeZoneRuleTest::getUTCMillis(int32_t y, int32_t m, int32_t d,
     Calendar *cal = Calendar::createInstance(*tz, status);
     if (U_FAILURE(status)) {
         delete cal;
-        errln("FAIL: Calendar::createInstance failed");
+        dataerrln("FAIL: Calendar::createInstance failed: %s", u_errorName(status));
         return 0.0;
     }
     cal->set(y, m, d, hr, min, sec);

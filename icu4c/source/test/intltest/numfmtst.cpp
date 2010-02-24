@@ -5849,6 +5849,8 @@ void NumberFormatTest::TestFieldPositionIterator() {
   FieldPosition pos;
 
   DecimalFormat *decFmt = (DecimalFormat *) NumberFormat::createInstance(status);
+  if (failure(status, "NumberFormat::createInstance", TRUE)) return;
+
   double num = 1234.56;
   UnicodeString str1;
   UnicodeString str2;
@@ -5877,8 +5879,9 @@ void NumberFormatTest::TestFormatAttributes() {
   Locale locale("en_US");
   UErrorCode status = U_ZERO_ERROR;
   DecimalFormat *decFmt = (DecimalFormat *) NumberFormat::createInstance(locale, NumberFormat::kCurrencyStyle, status);
+    if (failure(status, "NumberFormat::createInstance", TRUE)) return;
   double val = 12345.67;
-
+  
   {
     int32_t expected[] = {
       NumberFormat::kCurrencyField, 0, 1,

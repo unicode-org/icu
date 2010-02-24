@@ -580,6 +580,9 @@ unorm_compare(const UChar *s1, int32_t length1,
         } else {
             n2=Normalizer2Factory::getFCDInstance(*pErrorCode);
         }
+        if (U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
 
         // check if s1 and/or s2 fulfill the FCD conditions
         const UnicodeSet *uni32;

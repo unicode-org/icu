@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -2636,7 +2636,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
     // create a Calendar for this locale
     Calendar *cal = Calendar::createInstance(loc, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
+        dataerrln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 

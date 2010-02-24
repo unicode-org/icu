@@ -46,7 +46,7 @@
   { \
     if (UnicodeString(target)!=(value)) { \
       logln("unexpected value '" + (value) + "'"); \
-      errln("FAIL: " #target " == " #value " was not true. In " __FILE__ " on line %d", __LINE__); \
+      dataerrln("FAIL: " #target " == " #value " was not true. In " __FILE__ " on line %d", __LINE__); \
     } else { \
 	logln("PASS: asserted " #target " == " #value); \
     } \

@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -89,7 +89,10 @@ void DateFormatRoundTripTest::TestCentury()
     Locale locale("es_PA");
     UnicodeString pattern = "MM/dd/yy hh:mm:ss a z";
     SimpleDateFormat fmt(pattern, locale, status);
-    if(!assertSuccess("trying to construct", status))return;
+    if (U_FAILURE(status)) {
+        dataerrln("Fail: construct SimpleDateFormat: %s", u_errorName(status));
+        return;
+    }
     UDate date[] = {-55018555891590.05, 0, 0};
     UnicodeString result[2];
 
@@ -126,8 +129,10 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     UErrorCode status = U_ZERO_ERROR;
 
     getFieldCal = Calendar::createInstance(status);
-    failure(status, "Calendar::createInstance");
-    if(!assertSuccess("trying to construct", status))return;
+    if (U_FAILURE(status)) {
+        dataerrln("Fail: Calendar::createInstance: %s", u_errorName(status));
+        return;
+    }
 
 
     int32_t locCount = 0;

@@ -139,7 +139,7 @@ void TimeZoneRegressionTest:: Test4073215()
 
     GregorianCalendar cal(1997, UCAL_JANUARY, 31, status);
     if(U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       return;
     }
     failure(status, "new GregorianCalendar");
@@ -310,7 +310,7 @@ void TimeZoneRegressionTest:: Test4109314() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
     if(U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       delete testCal;
       return;
     }
@@ -452,7 +452,7 @@ void TimeZoneRegressionTest:: Test4126678()
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
     if(U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       delete cal;
       return;
     }
@@ -480,6 +480,7 @@ void TimeZoneRegressionTest:: Test4126678()
     failure(status, "cal->get");
     int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis, status);
     int32_t raw_offset = tz->getRawOffset();
+
     if (offset == raw_offset)
         errln("Offsets should match");
 
@@ -837,7 +838,7 @@ TimeZoneRegressionTest::Test4162593()
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::getUS(), status);
     if(U_FAILURE(status)) {
-      errcheckln(status, "Error creating calendar %s", u_errorName(status));
+      dataerrln("Error creating calendar %s", u_errorName(status));
       delete fmt;
       return;
     }
@@ -926,7 +927,10 @@ void TimeZoneRegressionTest::Test4176686() {
 
     // Also check DateFormat
     DateFormat* fmt1 = new SimpleDateFormat(UnicodeString("z"), status);
-    if(!assertSuccess("trying to construct", status))return;
+    if (U_FAILURE(status)) {
+        dataerrln("Failure trying to construct: %s", u_errorName(status));
+        return;
+    }
     fmt1->setTimeZone(*z1); // Format uses standard zone
     DateFormat* fmt2 = new SimpleDateFormat(UnicodeString("z"), status);
     if(!assertSuccess("trying to construct", status))return;

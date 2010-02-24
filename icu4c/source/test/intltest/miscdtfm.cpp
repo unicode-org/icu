@@ -113,7 +113,10 @@ DateFormatMiscTests::test4097450()
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *formatter;
     SimpleDateFormat *resultFormatter = new SimpleDateFormat((UnicodeString)"yyyy", status);
-    failure(status, "new SimpleDateFormat");
+    if (U_FAILURE(status)) {
+        dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
+        return;
+    }
 
     logln("Format\tSource\tResult");
     logln("-------\t-------\t-------");

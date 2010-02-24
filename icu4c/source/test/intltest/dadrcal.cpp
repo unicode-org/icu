@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -88,7 +88,7 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
             status);
     if (U_FAILURE(status)) {
-        errcheckln(status, "FAIL: Couldn't create SimpleDateFormat: %s",
+        dataerrln("FAIL: Couldn't create SimpleDateFormat: %s",
                 u_errorName(status));
         return;
     }
@@ -374,7 +374,7 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
         testSetting.extract(0, testSetting.length(), toCalLoc, (const char*)0);
         toCalendar = Calendar::createInstance(toCalLoc, status);
         if (U_FAILURE(status)) {
-            errln("Unable to instantiate ToCalendar for "+testSetting);
+            dataerrln(UnicodeString("Unable to instantiate ToCalendar for ")+testSetting);
             return;
         }
     }
