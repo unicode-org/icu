@@ -1,4 +1,4 @@
-# Some Portions Copyright (c) 2006-2009 IBM and others. All Rights Reserved.
+# Some Portions Copyright (c) 2006-2010 IBM and others. All Rights Reserved.
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -112,7 +112,7 @@ CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
 
 # more data
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
-ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
+ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo64.txt
 
 $(ZICTARG):		$(OBJECTS) $(TDATA) yearistype $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(TZORIG_EXTRA_CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -38,6 +38,7 @@ typedef unsigned char ICUZoneinfoVersion;
  * resource name within the file.  That is, the output will be to the
  * file ICU_TZ_RESOURCE ".txt" and the resource within it will be
  * ICU_TZ_RESOURCE. */
-#define ICU_TZ_RESOURCE "zoneinfo"
+#define ICU_TZ_RESOURCE_OLD "zoneinfo"
+#define ICU_TZ_RESOURCE "zoneinfo64"
 
 #endif
