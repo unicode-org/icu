@@ -307,6 +307,9 @@ public:
      */
     void applyPattern(const UnicodeString& pattern, UErrorCode& status);
 
+
+    using Format::format;
+
     /**
      * Formats a plural message for a given number.
      *
@@ -319,8 +322,8 @@ public:
      * @return        the string containing the formatted plural message.
      * @stable ICU 4.0
      */
-    UnicodeString format(int32_t number, UErrorCode& status) const;   
-    
+    UnicodeString format(int32_t number, UErrorCode& status) const;
+
     /**
      * Formats a plural message for a given number.
      *
@@ -355,7 +358,7 @@ public:
                           UnicodeString& appendTo,
                           FieldPosition& pos,
                           UErrorCode& status) const;
-    
+
     /**
      * Formats a plural message for a given number.
      *

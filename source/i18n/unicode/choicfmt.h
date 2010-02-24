@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -10,7 +10,7 @@
 *
 *   Date        Name        Description
 *   02/19/97    aliu        Converted from java.
-*   03/20/97    helena      Finished first cut of implementation and got rid 
+*   03/20/97    helena      Finished first cut of implementation and got rid
 *                           of nextDouble/previousDouble and replaced with
 *                           boolean array.
 *   4/10/97     aliu        Clean up.  Modified to work on AIX.
@@ -18,17 +18,17 @@
 *   07/22/98    stephen     Removed operator!= (implemented in Format)
 ********************************************************************************
 */
- 
+
 #ifndef CHOICFMT_H
 #define CHOICFMT_H
- 
+
 #include "unicode/utypes.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Choice Format.
  */
- 
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unistr.h"
@@ -48,32 +48,32 @@ class MessageFormat;
  * string. <code>ChoiceFormat</code> is generally used in a
  * <code>MessageFormat</code> for displaying grammatically correct
  * plurals such as &quot;There are 2 files.&quot;</p>
- * 
+ *
  * <p>There are two methods of defining a <code>ChoiceFormat</code>; both
  * are equivalent.  The first is by using a string pattern. This is the
  * preferred method in most cases.  The second method is through direct
  * specification of the arrays that make up the
  * <code>ChoiceFormat</code>.</p>
- * 
+ *
  * <p><strong>Patterns</strong></p>
- * 
+ *
  * <p>In most cases, the preferred way to define a
  * <code>ChoiceFormat</code> is with a pattern. Here is an example of a
  * <code>ChoiceFormat</code> pattern:</p>
  *
  * \htmlonly<pre>    0&#x2264;are no files|1&#x2264;is one file|1&lt;are many files</pre>\endhtmlonly
- * 
+ *
  * <p>or equivalently,</p>
- * 
+ *
  * \htmlonly<pre>    0#are no files|1#is one file|1&lt;are many files</pre>\endhtmlonly
- * 
+ *
  * <p>The pattern consists of a number or <em>range specifiers</em>
  * separated by vertical bars '|' (U+007C). There is no
  * vertical bar after the last range.  Each range specifier is of the
  * form:</p>
  *
  * \htmlonly<blockquote><em>Number Separator String</em></blockquote>\endhtmlonly
- * 
+ *
  * <p><em>Number</em> is a floating point number that can be parsed by a
  * default <code>NumberFormat</code> for the US locale. It gives the
  * lower limit of this range. The lower limit is either inclusive or
@@ -81,14 +81,14 @@ class MessageFormat;
  * given by the lower limit of the next range.  The Unicode infinity
  * sign \htmlonly&#x221E \endhtmlonly (U+221E) is recognized for positive infinity. It may be preceded by
  * '-' (U+002D) to indicate negative infinity.</p>
- * 
+ *
  * <p><em>String</em> is the format string for this range, with special
  * characters enclosed in single quotes (<code>'The #
  * sign'</code>). Single quotes themselves are indicated by two single
  * quotes in a row (<code>'o''clock'</code>).</p>
- * 
+ *
  * <p><em>Separator</em> is one of the following single characters:
- * 
+ *
  * <ul>
  *   <li>\htmlonly'&#x2264;' \endhtmlonly (U+2264) or '#' (U+0023)
  *   indicates that the lower limit given by <em>Number</em> is
@@ -103,15 +103,15 @@ class MessageFormat;
  *   saying this is that the corresponding closure is
  *   <code>TRUE</code>.
  * </ul>
- * 
+ *
  * <p>See below for more information about closures.</p>
- * 
+ *
  * <p><strong>Arrays</strong></p>
- * 
+ *
  * <p>A <code>ChoiceFormat</code> defining <code>n</code> intervals
  * (<code>n</code> &gt;= 2) is specified by three arrays of
  * <code>n</code> items:
- * 
+ *
  * <ul>
  *   <li><code>double limits[]</code> gives the start of each
  *     interval. This must be a non-decreasing list of values, none of
@@ -127,19 +127,19 @@ class MessageFormat;
  *   <li><code>UnicodeString formats[]</code> gives the string label
  *     associated with each interval.</li>
  * </ul>
- * 
+ *
  * <p><strong>Formatting and Parsing</strong></p>
- * 
+ *
  * <p>During formatting, a number is converted to a
  * string. <code>ChoiceFormat</code> accomplishes this by mapping the
  * number to an interval using the following rule. Given a number
  * <code>X</code> and and index value <code>j</code> in the range
  * <code>0..n-1</code>, where <code>n</code> is the number of ranges:</p>
- * 
+ *
  * \htmlonly<blockquote>\endhtmlonly<code>X</code> matches <code>j</code> if and only if
  * <code>limit[j] &lt;= X &lt; limit[j+1]</code>
  * \htmlonly</blockquote>\endhtmlonly
- * 
+ *
  * <p>(This assumes that all closures are <code>FALSE</code>.  If some
  * closures are <code>TRUE</code> then the relations must be changed to
  * <code>&lt;=</code> or <code>&lt;</code> as appropriate.) If there is
@@ -147,14 +147,14 @@ class MessageFormat;
  * whether the number is too low or too high. Once a number is mapped to
  * an interval <code>j</code>, the string <code>formats[j]</code> is
  * output.</p>
- * 
+ *
  * <p>During parsing, a string is converted to a
  * number. <code>ChoiceFormat</code> finds the element
  * <code>formats[j]</code> equal to the string, and returns
  * <code>limits[j]</code> as the parsed value.</p>
- * 
+ *
  * <p><strong>Notes</strong></p>
- * 
+ *
  * <p>The first limit value does not define a range boundary. For
  * example, in the pattern \htmlonly&quot;<code>1.0#a|2.0#b</code>&quot;\endhtmlonly, the
  * intervals are [-Inf, 2.0) and [2.0, +Inf].  It appears that the first
@@ -163,39 +163,39 @@ class MessageFormat;
  * [-Inf, 2.0).  However, the first limit value <em>is</em> used during
  * formatting. In this example, <code>parse(&quot;a&quot;)</code> returns
  * 1.0.</p>
- * 
+ *
  * <p>There are no gaps between intervals and the entire number line is
  * covered.  A <code>ChoiceFormat</code> maps <em>all</em> possible
  * double values to a finite set of intervals.</p>
- * 
+ *
  * <p>The non-number <code>NaN</code> is mapped to interval zero during
  * formatting.</p>
- * 
+ *
  * <p><strong>Examples</strong></p>
- * 
+ *
  * <p>Here is an example of two arrays that map the number
  * <code>1..7</code> to the English day of the week abbreviations
  * <code>Sun..Sat</code>. No closures array is given; this is the same as
  * specifying all closures to be <code>FALSE</code>.</p>
- * 
+ *
  * <pre>    {1,2,3,4,5,6,7},
  *     {&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;}</pre>
- * 
+ *
  * <p>Here is an example that maps the ranges [-Inf, 1), [1, 1], and (1,
  * +Inf] to three strings. That is, the number line is split into three
  * ranges: x &lt; 1.0, x = 1.0, and x &gt; 1.0.</p>
- * 
+ *
  * <pre>    {0, 1, 1},
  *     {FALSE, FALSE, TRUE},
  *     {&quot;no files&quot;, &quot;one file&quot;, &quot;many files&quot;}</pre>
- * 
+ *
  * <p>Here is a simple example that shows formatting and parsing: </p>
- * 
+ *
  * \code
  *   #include <unicode/choicfmt.h>
  *   #include <unicode/unistr.h>
  *   #include <iostream.h>
- *   
+ *
  *   int main(int argc, char *argv[]) {
  *       double limits[] = {1,2,3,4,5,6,7};
  *       UnicodeString monthNames[] = {
@@ -214,17 +214,17 @@ class MessageFormat;
  *       return 0;
  *   }
  * \endcode
- * 
+ *
  * <p>Here is a more complex example using a <code>ChoiceFormat</code>
  * constructed from a pattern together with a
  * <code>MessageFormat</code>.</p>
- * 
+ *
  * \code
  *   #include <unicode/choicfmt.h>
  *   #include <unicode/msgfmt.h>
  *   #include <unicode/unistr.h>
  *   #include <iostream.h>
- * 
+ *
  *   int main(int argc, char *argv[]) {
  *       UErrorCode status = U_ZERO_ERROR;
  *       double filelimits[] = {0,1,2};
@@ -280,7 +280,7 @@ public:
      * @param count     Size of 'limits' and 'formats' arrays.
      * @stable ICU 2.0
      */
-    
+
     ChoiceFormat(const double* limits,
                  const UnicodeString* formats,
                  int32_t count );
@@ -342,8 +342,8 @@ public:
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
      *
-     * @param other    ChoiceFormat object to be compared 
-     * @return         true if other is the same as this. 
+     * @param other    ChoiceFormat object to be compared
+     * @return         true if other is the same as this.
      * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
@@ -362,7 +362,7 @@ public:
     /**
      * Sets the pattern.
      * @param pattern    The pattern to be applied.
-     * @param parseError Struct to recieve information on position 
+     * @param parseError Struct to recieve information on position
      *                   of error if an error is encountered
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
@@ -374,7 +374,7 @@ public:
                              UErrorCode& status);
     /**
      * Gets the pattern.
-     * 
+     *
      * @param pattern    Output param which will recieve the pattern
      *                   Previous contents are deleted.
      * @return    A reference to 'pattern'
@@ -396,7 +396,7 @@ public:
      */
     virtual void setChoices(const double* limitsToCopy,
                             const UnicodeString* formatsToCopy,
-                            int32_t count );    
+                            int32_t count );
 
     /**
      * Set the choices to be used in formatting.  See class description
@@ -420,7 +420,7 @@ public:
      * @stable ICU 2.0
      */
     virtual const double* getLimits(int32_t& count) const;
-    
+
     /**
      * Get the limit booleans passed in the constructor.  The caller
      * must not delete the result.
@@ -439,6 +439,9 @@ public:
      * @stable ICU 2.0
      */
     virtual const UnicodeString* getFormats(int32_t& count) const;
+
+
+    using NumberFormat::format;
 
     /**
      * Format a double or long number using this object's choices.
@@ -494,7 +497,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @param success   Output param set to success/failure code on
-     *                  exit. 
+     *                  exit.
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
@@ -513,13 +516,13 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @param status    Output param set to success/failure code on
-     *                  exit. 
+     *                  exit.
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
-                                  FieldPosition& pos, 
+                                  FieldPosition& pos,
                                   UErrorCode& status) const;
 
     /**
@@ -529,7 +532,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @param status    Output param set to success/failure code on
-     *                  exit. 
+     *                  exit.
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
@@ -586,7 +589,7 @@ public:
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
                        ParsePosition& parsePosition) const;
-    
+
     /**
     * Return a long if possible (e.g. within range LONG_MAX,
     * LONG_MAX], and with no decimals), otherwise a double.  If
@@ -606,8 +609,8 @@ public:
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
                        UErrorCode& status) const;
-    
-    
+
+
 public:
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -639,7 +642,7 @@ private:
     // static cache management (thread-safe)
   //  static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
   //  static void          releaseNumberFormat(NumberFormat *adopt); // call this function to 'return' the number format to the cache.
-    
+
     /**
      * Converts a string to a double value using a default NumberFormat object
      * which is static (shared by all ChoiceFormat instances).
@@ -664,7 +667,7 @@ private:
      * based on the pattern.
      *
      * @param newPattern   Pattern used to construct object.
-     * @param parseError   Struct to recieve information on position 
+     * @param parseError   Struct to recieve information on position
      *                     of error if an error is encountered.
      * @param status       Output param to receive success code.  If the
      *                     pattern cannot be parsed, set to failure code.
@@ -717,7 +720,7 @@ private:
     UnicodeString*  fChoiceFormats;
     int32_t         fCount;
 };
- 
+
 inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,
                      UnicodeString& appendTo,

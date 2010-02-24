@@ -178,7 +178,7 @@ public:
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
-                                  FieldPositionIterator& posIter,
+                                  FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
 
     /**
