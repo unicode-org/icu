@@ -1,4 +1,4 @@
-// Copyright (C) 2009, International Business Machines
+// Copyright (C) 2009-2010, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2004 and onwards Google Inc.
@@ -9,6 +9,7 @@
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
 #include "cstring.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -39,6 +40,29 @@ StringPiece::StringPiece(const StringPiece& x, int32_t pos, int32_t len) {
   ptr_ = x.ptr_ + pos;
   length_ = len;
 }
+
+void StringPiece::set(const char* str) {
+  ptr_ = str;
+  if (str != NULL)
+    length_ = static_cast<int32_t>(uprv_strlen(str));
+  else
+    length_ = 0;
+}
+
+U_EXPORT UBool U_EXPORT2
+operator==(const StringPiece& x, const StringPiece& y) {
+  int32_t len = x.size();
+  if (len != y.size()) {
+    return false;
+  }
+  const char* p = x.data();
+  const char* p2 = y.data();
+  // Test last byte in case strings share large common prefix
+  if ((len > 0) && (p[len-1] != p2[len-1])) return false;
+  // At this point we can, but don't have to, ignore the last byte.
+  return uprv_memcmp(p, p2, len-1) == 0;
+}
+
 
 /* Microsft Visual Studios <= 8.0 complains about redefinition of this
  * static const class variable. However, the C++ standard states that this 

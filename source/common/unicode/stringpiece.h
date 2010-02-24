@@ -135,6 +135,21 @@ class U_COMMON_API StringPiece : public UMemory {
   void clear() { ptr_ = NULL; length_ = 0; }
 
   /**
+   * Reset the stringpiece to refer to new data.
+   * @param data pointer the new string data.  Need not be nul terminated.
+   * @param len the length of the new data
+   * @internal
+   */
+  void set(const char* data, int32_t len) { ptr_ = data; length_ = len; }
+
+  /**
+   * Reset the stringpiece to refer to new data.
+   * @param str a pointer to a NUL-terminated string. 
+   * @internal
+   */
+  void set(const char* str);
+
+  /**
    * Removes the first n string units.
    * @param n prefix length, must be non-negative and <=length()
    * @stable ICU 4.2
@@ -182,6 +197,27 @@ class U_COMMON_API StringPiece : public UMemory {
     return StringPiece(*this, pos, len);
   }
 };
+
+/**
+ * Global operator == for StringPiece
+ * @param x The first StringPiece to compare.
+ * @param y The second StringPiece to compare.
+ * @return TRUE if the string data is equal
+ * @internal
+ */
+U_EXPORT UBool U_EXPORT2 
+operator==(const StringPiece& x, const StringPiece& y);
+
+/**
+ * Global operator != for StringPiece
+ * @param x The first StringPiece to compare.
+ * @param y The second StringPiece to compare.
+ * @return TRUE if the string data is not equal
+ * @internal
+ */
+inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
+  return !(x == y);
+}
 
 U_NAMESPACE_END
 
