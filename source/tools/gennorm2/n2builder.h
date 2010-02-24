@@ -56,6 +56,13 @@ public:
 
     void setOverrideHandling(OverrideHandling oh);
 
+    enum Optimization {
+        OPTIMIZE_NORMAL,
+        OPTIMIZE_FAST
+    };
+
+    void setOptimization(Optimization opt) { optimization=opt; }
+
     void setCC(UChar32 c, uint8_t cc);
     void setOneWayMapping(UChar32 c, const UnicodeString &m);
     void setRoundTripMapping(UChar32 c, const UnicodeString &m);
@@ -105,6 +112,8 @@ private:
 
     int32_t phase;
     OverrideHandling overrideHandling;
+
+    Optimization optimization;
 
     int32_t indexes[Normalizer2Impl::IX_COUNT];
     UTrie2 *norm16Trie;
