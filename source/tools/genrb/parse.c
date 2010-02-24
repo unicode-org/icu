@@ -764,7 +764,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
                 else
                 {
                     if(intStatus == U_FILE_ACCESS_ERROR) {
-                      error(startline, "Collation could not be built- U_FILE_ACCESS_ERROR. Make sure ICU's data has been built and iss loading properly.");
+                      error(startline, "Collation could not be built- U_FILE_ACCESS_ERROR. Make sure ICU's data has been built and is loading properly.");
                       *status = intStatus;
                       return NULL;
                     }
