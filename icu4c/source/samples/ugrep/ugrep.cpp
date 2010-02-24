@@ -287,7 +287,7 @@ void readFile(const char *name) {
     int t = fread(charBuf, 1, rawFileLen, file);
     if (t != rawFileLen)  {
         fprintf(stderr, "Error reading file \"%s\"\n", fileName);
-		fclose(file);
+        fclose(file);
         return;
     }
     charBuf[rawFileLen]=0;

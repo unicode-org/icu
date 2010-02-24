@@ -319,7 +319,7 @@ int  main(int argc, char **argv) {
     long t = fread(result, 1, fileSize, file);
     if (t != fileSize)  {
         delete [] result;
-		fclose(file);
+        close(file);
         return NULL;
     }
     result[fileSize]=0;
