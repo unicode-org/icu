@@ -1,7 +1,7 @@
 
 /*
 **********************************************************************
-* Copyright (c) 2003-2008, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -48,9 +48,10 @@
 #include "tz2icu.h"
 #include "unicode/uversion.h"
 
-#define USE64BITDATA
-
 using namespace std;
+
+bool ICU44PLUS = TRUE;
+string TZ_RESOURCE_NAME = ICU_TZ_RESOURCE;
 
 //--------------------------------------------------------------------
 // Time utilities
@@ -287,7 +288,7 @@ bool readbool(ifstream& file) {
  * Read the zoneinfo file structure (see tzfile.h) into a ZoneInfo
  * @param file an already-open file stream
  */
-void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData=false) {
+void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
     int32_t i;
 
     // Check for TZ_ICU_MAGIC signature at file start.  If we get a
@@ -360,7 +361,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData=false) {
 
     // Build transitions vector out of corresponding times and types.
     bool insertInitial = false;
-    if (is64bitData) {
+    if (is64bitData && !ICU44PLUS) {
         if (timecnt > 0) {
             int32_t minidx = -1;
             for (i=0; i<timecnt; ++i) {
@@ -436,7 +437,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData=false) {
                 }
             }
         } else {
-        	initialTypeIdx = 0;
+            initialTypeIdx = 0;
         }
         assert(initialTypeIdx >= 0);
         // Add the initial type associated with the lowest int32 time
@@ -545,15 +546,16 @@ void handleFile(string path, string id) {
         throw invalid_argument("can't open file");
     }
 
+    // eat 32bit data part
     ZoneInfo info;
-    readzoneinfo(file, info);
+    readzoneinfo(file, info, false);
 
     // Check for errors
     if (!file) {
         throw invalid_argument("read error");
     }
 
-#ifdef USE64BITDATA
+    // we only use 64bit part
     ZoneInfo info64;
     readzoneinfo(file, info64, true);
 
@@ -590,27 +592,6 @@ void handleFile(string path, string id) {
     }
 
     ZONEINFO[id] = info64;
-
-#else
-    // Check eof-relative pos (there may be a cleaner way to do this)
-    int64_t eofPos = (int64_t) file.tellg();
-    char buf[32];
-    file.read(buf, 4);
-    file.seekg(0, ios::end);
-    eofPos =  eofPos - (int64_t) file.tellg();
-    if (eofPos) {
-      // 2006c merged 32 and 64 bit versions in a fat binary
-      // 64 version starts at the end of 32 bit version.
-      // Therefore, if the file is *not* consumed, check
-      // if it is maybe being restarted.
-      if (strncmp(buf, TZ_ICU_MAGIC, 4) != 0) {
-        ostringstream os;
-        os << (-eofPos) << " unprocessed bytes at end";
-        throw invalid_argument(os.str());
-      }
-    }
-    ZONEINFO[id] = info;
-#endif
 }
 
 /**
@@ -1034,7 +1015,6 @@ void readFinalZonesAndRules(istream& in) {
 
 void ZoneInfo::print(ostream& os, const string& id) const {
     // Implement compressed format #2:
-
   os << "  /* " << id << " */ ";
 
     if (aliasTo >= 0) {
@@ -1043,22 +1023,75 @@ void ZoneInfo::print(ostream& os, const string& id) const {
         return;
     }
 
-    os << ":array {" << endl;
+    if (ICU44PLUS) {
+        os << ":table {" << endl;
+    } else {
+        os << ":array {" << endl;
+    }
 
     vector<Transition>::const_iterator trn;
     vector<ZoneType>::const_iterator typ;
 
-    bool first=true;
-    os << "    :intvector { ";
-    for (trn = transitions.begin(); trn != transitions.end(); ++trn) {
-        if (!first) os << ", ";
-        first = false;
-        os << trn->time;
+    bool first;
+
+    if (ICU44PLUS) {
+        trn = transitions.begin();
+
+        // pre 32bit transitions
+        if (trn != transitions.end() && trn->time < LOWEST_TIME32) {
+            os << "    transPre32:intvector { ";
+            for (first = true; trn != transitions.end() && trn->time < LOWEST_TIME32; ++trn) {
+                if (!first) {
+                    os<< ", ";
+                }
+                first = false;
+                os << (int32_t)(trn->time >> 32) << ", " << (int32_t)(trn->time & 0x00000000ffffffff);
+            }
+            os << " }" << endl;
+        }
+
+        // 32bit transtions
+        if (trn != transitions.end() && trn->time < HIGHEST_TIME32) {
+            os << "    trans:intvector { ";
+            for (first = true; trn != transitions.end() && trn->time < HIGHEST_TIME32; ++trn) {
+                if (!first) {
+                    os << ", ";
+                }
+                first = false;
+                os << trn->time;
+            }
+            os << " }" << endl;
+        }
+
+        // post 32bit transitons
+        if (trn != transitions.end()) {
+            os << "    transPost32:intvector { ";
+            for (first = true; trn != transitions.end(); ++trn) {
+                if (!first) {
+                    os<< ", ";
+                }
+                first = false;
+                os << (int32_t)(trn->time >> 32) << ", " << (int32_t)(trn->time & 0x00000000ffffffff);
+            }
+            os << " }" << endl;
+        }
+    } else {
+        os << "    :intvector { ";
+        for (trn = transitions.begin(), first = true; trn != transitions.end(); ++trn) {
+            if (!first) os << ", ";
+            first = false;
+            os << trn->time;
+        }
+        os << " }" << endl;
     }
-    os << " }" << endl;
+
 
     first=true;
-    os << "    :intvector { ";
+    if (ICU44PLUS) {
+        os << "    typeOffsets:intvector { ";
+    } else {
+        os << "    :intvector { ";
+    }
     for (typ = types.begin(); typ != types.end(); ++typ) {
         if (!first) os << ", ";
         first = false;
@@ -1066,23 +1099,43 @@ void ZoneInfo::print(ostream& os, const string& id) const {
     }
     os << " }" << endl;
 
-    os << "    :bin { \"" << hex << setfill('0');
-    for (trn = transitions.begin(); trn != transitions.end(); ++trn) {
-        os << setw(2) << trn->type;
+    if (ICU44PLUS) {
+        if (transitions.size() != 0) {
+            os << "    typeMap:bin { \"" << hex << setfill('0');
+            for (trn = transitions.begin(); trn != transitions.end(); ++trn) {
+                os << setw(2) << trn->type;
+            }
+            os << dec << "\" }" << endl;
+        }
+    } else {
+        os << "    :bin { \"" << hex << setfill('0');
+        for (trn = transitions.begin(); trn != transitions.end(); ++trn) {
+            os << setw(2) << trn->type;
+        }
+        os << dec << "\" }" << endl;
     }
-    os << dec << "\" }" << endl;
 
     // Final zone info, if any
     if (finalYear != -1) {
-        os << "    \"" << finalRuleID << "\"" << endl;
-        os << "    :intvector { " << finalOffset << ", "
-           << finalYear << " }" << endl;
+        if (ICU44PLUS) {
+            os << "    finalRule { \"" << finalRuleID << "\" }" << endl;
+            os << "    finalRaw:int { " << finalOffset << " }" << endl;
+            os << "    finalYear:int { " << finalYear << " }" << endl;
+        } else {
+            os << "    \"" << finalRuleID << "\"" << endl;
+            os << "    :intvector { " << finalOffset << ", "
+               << finalYear << " }" << endl;
+        }
     }
 
     // Alias list, if any
     if (aliases.size() != 0) {
         first = true;
-        os << "    :intvector { ";
+        if (ICU44PLUS) {
+            os << "    links:intvector { ";
+        } else {
+            os << "    :intvector { ";
+        }
         for (set<int32_t>::const_iterator i=aliases.begin(); i!=aliases.end(); ++i) {
             if (!first) os << ", ";
             first = false;
@@ -1100,7 +1153,7 @@ operator<<(ostream& os, const ZoneMap& zoneinfo) {
     for (ZoneMapIter it = zoneinfo.begin();
          it != zoneinfo.end();
          ++it) {
-        if(c)  os << ",";
+        if(c && !ICU44PLUS)  os << ",";
         it->second.print(os, it->first);
         os << "//Z#" << c++ << endl;
     }
@@ -1189,42 +1242,117 @@ void ZoneInfo::optimizeTypeList() {
 
     if (aliasTo >= 0) return; // Nothing to do for aliases
 
-    // If there are zero transitions and one type, then leave that as-is.
-    if (transitions.size() == 0) {
-        if (types.size() != 1) {
-            cerr << "Error: transition count = 0, type count = " << types.size() << endl;
+    if (!ICU44PLUS) {
+        // This is the old logic which has a bug, which occasionally removes
+        // the type before the first transition.  The problem was fixed
+        // by inserting the dummy transition indirectly.
+
+        // If there are zero transitions and one type, then leave that as-is.
+        if (transitions.size() == 0) {
+            if (types.size() != 1) {
+                cerr << "Error: transition count = 0, type count = " << types.size() << endl;
+            }
+            return;
         }
-        return;
+
+        set<SimplifiedZoneType> simpleset;
+        for (vector<Transition>::const_iterator i=transitions.begin();
+             i!=transitions.end(); ++i) {
+            assert(i->type < (int32_t)types.size());
+            simpleset.insert(types[i->type]);
+        }
+
+        // Map types to integer indices
+        map<SimplifiedZoneType,int32_t> simplemap;
+        int32_t n=0;
+        for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin();
+             i!=simpleset.end(); ++i) {
+            simplemap[*i] = n++;
+        }
+
+        // Remap transitions
+        for (vector<Transition>::iterator i=transitions.begin();
+             i!=transitions.end(); ++i) {
+            assert(i->type < (int32_t)types.size());
+            ZoneType oldtype = types[i->type];
+            SimplifiedZoneType newtype(oldtype);
+            assert(simplemap.find(newtype) != simplemap.end());
+            i->type = simplemap[newtype];
+        }
+
+        // Replace type list
+        types.clear();
+        copy(simpleset.begin(), simpleset.end(), back_inserter(types));
+
+    } else {
+        if (types.size() > 1) {
+            // Note: localtime uses the very first non-dst type as initial offsets.
+            // If all types are DSTs, the very first type is treated as the initial offsets.
+
+            // Decide a type used as the initial offsets.  ICU put the type at index 0.
+            ZoneType initialType = types[0];
+            for (vector<ZoneType>::const_iterator i=types.begin(); i!=types.end(); ++i) {
+                if (i->dstoffset == 0) {
+                    initialType = *i;
+                    break;
+                }
+            }
+
+            SimplifiedZoneType initialSimplifiedType(initialType);
+
+            // create a set of unique types, but ignoring fields which we're not interested in
+            set<SimplifiedZoneType> simpleset;
+            simpleset.insert(initialSimplifiedType);
+            for (vector<Transition>::const_iterator i=transitions.begin(); i!=transitions.end(); ++i) {
+                assert(i->type < (int32_t)types.size());
+                simpleset.insert(types[i->type]);
+            }
+
+            // Map types to integer indices, however, keeping the first type at offset 0
+            map<SimplifiedZoneType,int32_t> simplemap;
+            simplemap[initialSimplifiedType] = 0;
+            int32_t n = 1;
+            for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin(); i!=simpleset.end(); ++i) {
+                if (*i < initialSimplifiedType || initialSimplifiedType < *i) {
+                    simplemap[*i] = n++;
+                }
+            }
+
+            // Remap transitions
+            for (vector<Transition>::iterator i=transitions.begin();
+                 i!=transitions.end(); ++i) {
+                assert(i->type < (int32_t)types.size());
+                ZoneType oldtype = types[i->type];
+                SimplifiedZoneType newtype(oldtype);
+                assert(simplemap.find(newtype) != simplemap.end());
+                i->type = simplemap[newtype];
+            }
+
+            // Replace type list
+            types.clear();
+            types.push_back(initialSimplifiedType);
+            for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin(); i!=simpleset.end(); ++i) {
+                if (*i < initialSimplifiedType || initialSimplifiedType < *i) {
+                    types.push_back(*i);
+                }
+            }
+
+            // Reiterating transitions to remove any transitions which
+            // do not actually change the raw/dst offsets
+            int32_t prevTypeIdx = 0;
+            for (vector<Transition>::iterator i=transitions.begin(); i!=transitions.end();) {
+                if (i->type == prevTypeIdx) {
+                    // this is not a time transition, probably just name change
+                    // e.g. America/Resolute after 2006 in 2010b
+                    transitions.erase(i);
+                } else {
+                    prevTypeIdx = i->type;
+                    i++;
+                }
+            }
+        }
     }
 
-    set<SimplifiedZoneType> simpleset;
-    for (vector<Transition>::const_iterator i=transitions.begin();
-         i!=transitions.end(); ++i) {
-        assert(i->type < (int32_t)types.size());
-        simpleset.insert(types[i->type]);
-    }
-
-    // Map types to integer indices
-    map<SimplifiedZoneType,int32_t> simplemap;
-    int32_t n=0;
-    for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin();
-         i!=simpleset.end(); ++i) {
-        simplemap[*i] = n++;
-    }
-
-    // Remap transitions
-    for (vector<Transition>::iterator i=transitions.begin();
-         i!=transitions.end(); ++i) {
-        assert(i->type < (int32_t)types.size());
-        ZoneType oldtype = types[i->type];
-        SimplifiedZoneType newtype(oldtype);
-        assert(simplemap.find(newtype) != simplemap.end());
-        i->type = simplemap[newtype];
-    }
-
-    // Replace type list
-    types.clear();
-    copy(simpleset.begin(), simpleset.end(), back_inserter(types));
 }
 
 /**
@@ -1233,6 +1361,17 @@ void ZoneInfo::optimizeTypeList() {
 void ZoneInfo::mergeFinalData(const FinalZone& fz) {
     int32_t year = fz.year;
     int64_t seconds = yearToSeconds(year);
+
+    if (!ICU44PLUS) {
+        if (seconds > HIGHEST_TIME32) {
+            // Avoid transitions beyond signed 32bit max second.
+            // This may result incorrect offset computation around
+            // HIGHEST_TIME32.  This is a limitation of ICU
+            // before 4.4.
+            seconds = HIGHEST_TIME32;
+        }
+    }
+
     vector<Transition>::iterator it =
         find_if(transitions.begin(), transitions.end(),
                 bind2nd(ptr_fun(isAfter), seconds));
@@ -1292,22 +1431,35 @@ void FinalRule::print(ostream& os) const {
 
 int main(int argc, char *argv[]) {
     string rootpath, zonetab, version;
+    bool validArgs = FALSE;
 
-    if (argc != 4) {
-        cout << "Usage: tz2icu <dir> <cmap> <vers>" << endl
-             << " <dir>   path to zoneinfo file tree generated by" << endl
-             << "         ICU-patched version of zic" << endl
-             << " <cmap>  country map, from tzdata archive," << endl
-             << "         typically named \"zone.tab\"" << endl
-             << " <vers>  version string, such as \"2003e\"" << endl;
-        exit(1);
-    } else {
+    if (argc == 4 || argc == 5) {
+        validArgs = TRUE;
         rootpath = argv[1];
         zonetab = argv[2];
         version = argv[3];
+        if (argc == 5) {
+            if (strcmp(argv[4], "--old") == 0) {
+                ICU44PLUS = FALSE;
+                TZ_RESOURCE_NAME = ICU_TZ_RESOURCE_OLD;
+            } else {
+                validArgs = FALSE;
+            }
+        }
+    }
+    if (!validArgs) {
+        cout << "Usage: tz2icu <dir> <cmap> <tzver> [--old]" << endl
+             << " <dir>    path to zoneinfo file tree generated by" << endl
+             << "          ICU-patched version of zic" << endl
+             << " <cmap>   country map, from tzdata archive," << endl
+             << "          typically named \"zone.tab\"" << endl
+             << " <tzver>  version string, such as \"2003e\"" << endl
+             << " --old    generating resource format before ICU4.4" << endl;
+        exit(1);
     }
 
     cout << "Olson data version: " << version << endl;
+    cout << "ICU 4.4+ format: " << (ICU44PLUS ? "Yes" : "No") << endl;
 
     try {
         ifstream finals(ICU_ZONE_FILE);
@@ -1326,70 +1478,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-//############################################################################
-//# Note: We no longer use tz.alias to define alias for legacy ICU time zones.
-//# The contents of tz.alias were migrated into zic source format and
-//# processed by zic as 'Link'.
-//############################################################################
-#if 0
-    // Read the legacy alias list and process it.  Treat the legacy mappings
-    // like links, but also record them in the "legacy" hash.
-    try {
-        ifstream aliases(ICU_TZ_ALIAS);
-        if (!aliases) {
-            cerr << "Error: Unable to open " ICU_TZ_ALIAS << endl;
-            return 1;
-        }
-        int32_t n = 0;
-        string line;
-        while (getline(aliases, line)) {
-            string::size_type lb = line.find('#');
-            if (lb != string::npos) {
-                line.resize(lb); // trim comments
-            }
-            vector<string> a;
-            istringstream is(line);
-            copy(istream_iterator<string>(is),istream_iterator<string>(),
-                 back_inserter(a));
-            if (a.size() == 0) continue; // blank line
-            if (a.size() != 2) {
-                cerr << "Error: Can't parse \"" << line << "\" in "
-                    ICU_TZ_ALIAS << endl;
-                exit(1);
-            }
-            ++n;
-            
-            string alias(a[0]), olson(a[1]);
-            if (links.find(alias) != links.end()) {
-                cerr << "Error: Alias \"" << alias
-                     << "\" is an Olson zone in "
-                     ICU_TZ_ALIAS << endl;
-                return 1;
-            }
-            if (reverseLinks.find(alias) != reverseLinks.end()) {
-                cerr << "Error: Alias \"" << alias
-                     << "\" is an Olson link to \"" << reverseLinks[olson]
-                     << "\" in " << ICU_TZ_ALIAS << endl;
-                return 1;
-            }
-
-            // Record source for error reporting
-            if (linkSource.find(olson) == linkSource.end()) {
-                linkSource[olson] = "ICU alias";
-            }
-            assert(linkSource.find(alias) == linkSource.end());
-            linkSource[alias] = "ICU alias";
-            
-            links[olson].insert(alias);
-            reverseLinks[alias] = olson;
-        }
-        cout << "Finished reading " << n
-             << " aliases from " ICU_TZ_ALIAS << endl;
-    } catch (const exception& error) {
-        cerr << "Error: While reading " ICU_TZ_ALIAS ": " << error.what() << endl;
-        return 1;
-    }
-#endif
     try {
         // Recursively scan all files below the given path, accumulating
         // their data into ZONEINFO.  All files must be TZif files.  Any
@@ -1570,9 +1658,10 @@ int main(int argc, char *argv[]) {
     struct tm* now = localtime(&sec);
     int32_t thisYear = now->tm_year + 1900;
 
+    string filename = TZ_RESOURCE_NAME + ".txt";
     // Write out a resource-bundle source file containing data for
     // all zones.
-    ofstream file(ICU_TZ_RESOURCE ".txt");
+    ofstream file(filename.c_str());
     if (file) {
         file << "//---------------------------------------------------------" << endl
              << "// Copyright (C) 2003";
@@ -1592,7 +1681,7 @@ int main(int argc, char *argv[]) {
              << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl
              << "//---------------------------------------------------------" << endl
              << endl
-             << ICU_TZ_RESOURCE ":table(nofallback) {" << endl
+             << TZ_RESOURCE_NAME << ":table(nofallback) {" << endl
              << " TZVersion { \"" << version << "\" }" << endl
              << " Zones:array { " << endl
              << ZONEINFO // Zones (the actual data)
@@ -1615,35 +1704,47 @@ int main(int argc, char *argv[]) {
         }
         file << " }" << endl;
 
-        // Emit country (region) map.  Emitting the string zone IDs results
-        // in a 188 kb binary resource; emitting the zone index numbers
-        // trims this to 171 kb.  More work for the runtime code, but
-        // a smaller data footprint.
-        file << " Regions { " << endl;
-        int32_t  rc = 0;
-        for (map<string, set<string> >::const_iterator i=countryMap.begin();
-             i != countryMap.end(); ++i) {
-            string country = i->first;
-            const set<string>& zones(i->second);
-            file << "  ";
-            if(country[0]==0) {
-              file << "Default";
-            }
-            file << country << ":intvector { ";
-            bool first = true;
-            for (set<string>::const_iterator j=zones.begin();
-                 j != zones.end(); ++j) {
-                if (!first) file << ", ";
-                first = false;
-                if (zoneIDs.find(*j) == zoneIDs.end()) {
-                    cerr << "Error: Nonexistent zone in country map: " << *j << endl;
-                    return 1;
+        // Emit country (region) map.
+        if (ICU44PLUS) {
+            file << " Regions:array {" << endl;
+            int32_t zn = 0;
+            for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
+                map<string, string>::iterator cit = reverseCountryMap.find(i->first);
+                if (cit == reverseCountryMap.end()) {
+                    file << "  \"001\",";
+                } else {
+                    file << "  \"" << cit->second << "\", ";
                 }
-                file << zoneIDs[*j]; // emit the zone's index number
+                file << "//Z#" << zn++ << " " << i->first << endl;
             }
-            file << " } //R#" << rc++ << endl;
+            file << " }" << endl;
+        } else {
+            file << " Regions { " << endl;
+            int32_t  rc = 0;
+            for (map<string, set<string> >::const_iterator i=countryMap.begin();
+                 i != countryMap.end(); ++i) {
+                string country = i->first;
+                const set<string>& zones(i->second);
+                file << "  ";
+                if(country[0]==0) {
+                  file << "Default";
+                }
+                file << country << ":intvector { ";
+                bool first = true;
+                for (set<string>::const_iterator j=zones.begin();
+                     j != zones.end(); ++j) {
+                    if (!first) file << ", ";
+                    first = false;
+                    if (zoneIDs.find(*j) == zoneIDs.end()) {
+                        cerr << "Error: Nonexistent zone in country map: " << *j << endl;
+                        return 1;
+                    }
+                    file << zoneIDs[*j]; // emit the zone's index number
+                }
+                file << " } //R#" << rc++ << endl;
+            }
+            file << " }" << endl;
         }
-        file << " }" << endl;
 
         file << "}" << endl;
     }
@@ -1651,100 +1752,10 @@ int main(int argc, char *argv[]) {
     file.close();
      
     if (file) { // recheck error bit
-        cout << "Finished writing " ICU_TZ_RESOURCE ".txt" << endl;
+        cout << "Finished writing " << TZ_RESOURCE_NAME << ".txt" << endl;
     } else {
-        cerr << "Error: Unable to open/write to " ICU_TZ_RESOURCE ".txt" << endl;
+        cerr << "Error: Unable to open/write to " << TZ_RESOURCE_NAME << ".txt" << endl;
         return 1;
     }
-
-#define ICU4J_TZ_CLASS "ZoneMetaData"
-
-    // Write out a Java source file containing only a few pieces of
-    // meta-data missing from the core JDK: the equivalency lists and
-    // the country map.
-    ofstream java(ICU4J_TZ_CLASS ".java");
-    if (java) {
-        java << "//---------------------------------------------------------" << endl
-             << "// Copyright (C) 2003";
-        if (thisYear > 2003) {
-            java << "-" << thisYear;
-        }
-        java << ", International Business Machines" << endl
-             << "// Corporation and others.  All Rights Reserved." << endl
-             << "//---------------------------------------------------------" << endl
-             << "// Build tool: tz2icu" << endl
-             << "// Build date: " << asctime(now) /* << endl -- asctime emits CR */
-             << "// Olson source: ftp://elsie.nci.nih.gov/pub/" << endl
-             << "// Olson version: " << version << endl
-             << "// ICU version: " << U_ICU_VERSION << endl
-             << "//---------------------------------------------------------" << endl
-             << "// >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<" << endl
-             << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl
-             << "//---------------------------------------------------------" << endl
-             << endl
-             << "package com.ibm.icu.impl;" << endl
-             << endl
-             << "public final class " ICU4J_TZ_CLASS " {" << endl;
-
-        // Emit equivalency lists
-        bool first1 = true;
-        java << "  public static final String VERSION = \"" + version + "\";" << endl;
-        java << "  public static final String[][] EQUIV = {" << endl;
-        for (ZoneMap::const_iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
-            if (i->second.isAlias() || i->second.getAliases().size() == 0) {
-                continue;
-            }
-            if (!first1) java << "," << endl;
-            first1 = false;
-            // The ID of this zone (the canonical zone, to which the
-            // aliases point) will be sorted into the list, so it
-            // won't be at position 0.  If we want to know which is
-            // the canonical zone, we should move it to position 0.
-            java << "    { ";
-            bool first2 = true;
-            const set<int32_t>& s = i->second.getAliases();
-            for (set<int32_t>::const_iterator j=s.begin(); j!=s.end(); ++j) {
-                if (!first2) java << ", ";
-                java << '"' << zoneIDlist[*j] << '"';
-                first2 = false;
-            }
-            java << " }";
-        }
-        java << endl
-             << "  };" << endl;
-
-        // Emit country map.
-        first1 = true;
-        java << "  public static final String[][] COUNTRY = {" << endl;
-        for (map<string, set<string> >::const_iterator i=countryMap.begin();
-             i != countryMap.end(); ++i) {
-            if (!first1) java << "," << endl;
-            first1 = false;
-            string country = i->first;
-            const set<string>& zones(i->second);
-            java << "    { \"" << country << '"';
-            for (set<string>::const_iterator j=zones.begin();
-                 j != zones.end(); ++j) {
-                java << ", \"" << *j << '"';
-            }
-            java << " }";
-        }
-        java << endl
-             << "  };" << endl;
-
-        java << "}" << endl;
-    }
-
-    java.close();
-
-    if (java) { // recheck error bit
-        cout << "Finished writing " ICU4J_TZ_CLASS ".java" << endl;
-    } else {
-        cerr << "Error: Unable to open/write to " ICU4J_TZ_CLASS ".java" << endl;
-        return 1;
-    }
-
-    return 0;
 }
-
 //eof
