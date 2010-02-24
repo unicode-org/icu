@@ -143,7 +143,7 @@ public:
     UBool appendZeroCC(UChar32 c, UErrorCode &errorCode);
     UBool appendZeroCC(const UChar *s, const UChar *sLimit, UErrorCode &errorCode);
     void remove();
-    void removeSuffix(int32_t length);
+    void removeSuffix(int32_t suffixLength);
     void setReorderingLimit(UChar *newLimit) {
         remainingCapacity+=(int32_t)(limit-newLimit);
         reorderStart=limit=newLimit;

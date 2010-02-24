@@ -161,10 +161,10 @@ void ReorderingBuffer::remove() {
     lastCC=0;
 }
 
-void ReorderingBuffer::removeSuffix(int32_t length) {
-    if(length<(limit-start)) {
-        limit-=length;
-        remainingCapacity+=length;
+void ReorderingBuffer::removeSuffix(int32_t suffixLength) {
+    if(suffixLength<(limit-start)) {
+        limit-=suffixLength;
+        remainingCapacity+=suffixLength;
     } else {
         limit=start;
         remainingCapacity=str.getCapacity();
@@ -371,6 +371,9 @@ Normalizer2Impl::copyLowPrefixFromNulTerminated(const UChar *src,
     return src;
 }
 
+// Dual functionality:
+// buffer!=NULL: normalize
+// buffer==NULL: isNormalized/spanQuickCheckYes
 const UChar *
 Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
                            ReorderingBuffer *buffer,
@@ -1440,6 +1443,9 @@ const UTrie2 *Normalizer2Impl::getFCDTrie(UErrorCode &errorCode) const {
     return FCDTrieSingleton(me->fcdTrieSingleton, *me, errorCode).getInstance(errorCode);
 }
 
+// Dual functionality:
+// buffer!=NULL: normalize
+// buffer==NULL: isNormalized/quickCheck/spanQuickCheckYes
 const UChar *
 Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
                          ReorderingBuffer *buffer,
