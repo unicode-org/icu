@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
+ * Copyright (c) 1997-2010, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
@@ -460,8 +460,7 @@ void TimeZoneRegressionTest:: Test4126678()
     TimeZone *tz = TimeZone::createTimeZone("PST");
     cal->adoptTimeZone(tz);
 
-    cal->set(1998 - 1900, UCAL_APRIL, 5, 10, 0);
-    //Date dt = new Date(1998-1900, Calendar::APRIL, 5, 10, 0);
+    cal->set(1998, UCAL_APRIL, 5, 10, 0);
     
     if (! tz->useDaylightTime() || U_FAILURE(status))
         dataerrln("We're not in Daylight Savings Time and we should be. - %s", u_errorName(status));
@@ -481,21 +480,7 @@ void TimeZoneRegressionTest:: Test4126678()
     failure(status, "cal->get");
     int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis, status);
     int32_t raw_offset = tz->getRawOffset();
-    /* Because of better historical timezone support based on Olson data,
-     * DST is not observed in year 98.  Thus, the expected result is changed.
-     * As of Mar 2007, ICU timezone transition data is represented by 32-bit.
-     * When we support 64-bit Olson transition data, the actual offset in
-     * AD 98 for America/Los_Angeles will be changed again (-7:52:58).  Until
-     * then, expected result is offset == raw_offset.  -Yoshito
-     */
-    /*
     if (offset == raw_offset)
-        errln("Offsets should not match when in DST");
-    */
-    /* TODO: When ICU support the Olson LMT offset for America/Los_Angeles, we need to update
-     * the reference data.
-     */
-    if (offset != raw_offset)
         errln("Offsets should match");
 
     delete cal;

@@ -1,4 +1,4 @@
-// Copyright (c) 2008 International Business Machines
+// Copyright (c) 2008-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 calendar:table(nofallback) {
     Info {
@@ -348,7 +348,7 @@ calendar:table(nofallback) {
                     "MILLIS=-180799750799999",
                     "add",
                     "YEAR=100000", // year + 100000
-                    "MILLIS=2974930005600001",
+                    "MILLIS=2974930006022001",
                },
             }
         }	          

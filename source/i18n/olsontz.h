@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2007, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 class SimpleTimeZone;
 
 /**
- * A time zone based on the Olson database.  Olson time zones change
+ * A time zone based on the Olson tz database.  Olson time zones change
  * behavior over time.  The raw offset, rules, presence or absence of
  * daylight savings time, and even the daylight savings amount can all
  * vary.
@@ -37,56 +37,61 @@ class SimpleTimeZone;
  *
  * 1. Zones.  These have keys corresponding to the Olson IDs, e.g.,
  * "Asia/Shanghai".  Each resource describes the behavior of the given
- * zone.  Zones come in several formats, which are differentiated
- * based on length.
+ * zone.  Zones come in two different formats.
  *
- *  a. Alias (int, length 1).  An alias zone is an int resource.  The
- *  integer is the zone number of the target zone.  The key of this
- *  resource is an alternate name for the target zone.  Aliases
- *  represent Olson links and ICU compatibility IDs.
+ *   a. Zone (table).  A zone is a table resource contains several
+ *   type of resources below:
+ *  
+ *   - typeOffsets:intvector (Required)
+ *  
+ *   Sets of UTC raw/dst offset pairs in seconds.  Entries at
+ *   2n represents raw offset and 2n+1 represents dst offset
+ *   paired with the raw offset at 2n.  The very first pair represents
+ *   the initial zone offset (before the first transition) always.
  *
- *  b. Simple zone (array, length 3).  The three subelements are:
- *
- *   i. An intvector of transitions.  These are given in epoch
- *   seconds.  This may be an empty invector (length 0).  If the
- *   transtions list is empty, then the zone's behavior is fixed and
- *   given by the offset list, which will contain exactly one pair.
- *   Otherwise each transtion indicates a time after which (inclusive)
- *   the associated offset pair is in effect.
- *
- *   ii. An intvector of offsets.  These are in pairs of raw offset /
- *   DST offset, in units of seconds.  There will be at least one pair
- *   (length >= 2 && length % 2 == 0).
- *
- *   iii. A binary resource.  This is of the same length as the
- *   transitions vector, so length may be zero.  Each unsigned byte
- *   corresponds to one transition, and has a value of 0..n-1, where n
- *   is the number of pairs in the offset vector.  This forms a map
- *   between transitions and offset pairs.
- *
- *  c. Simple zone with aliases (array, length 4).  This is like a
- *  simple zone, but also contains a fourth element:
- *
- *   iv. An intvector of aliases.  This list includes this zone
- *   itself, and lists all aliases of this zone.
- *
- *  d. Complex zone (array, length 5).  This is like a simple zone,
- *  but contains two more elements:
- *
- *   iv. A string, giving the name of a rule.  This is the "final
- *   rule", which governs the zone's behavior beginning in the "final
- *   year".  The rule ID is given without leading underscore, e.g.,
- *   "EU".
- *
- *   v. An intvector of length 2, containing the raw offset for the
- *   final rule (in seconds), and the final year.  The final rule
- *   takes effect for years >= the final year.
- *
- *  e. Complex zone with aliases (array, length 6).  This is like a
- *  complex zone, but also contains a sixth element:
+ *   - trans:intvector (Optional) 
+ *  
+ *   List of transition times represented by 32bit seconds from the
+ *   epoch (1970-01-01T00:00Z) in ascending order.
+ *  
+ *   - transPre32/transPost32:intvector (Optional)
+ *  
+ *   List of transition times before/after 32bit minimum seconds.
+ *   Each time is represented by a pair of 32bit integer.
  * 
- *   vi. An intvector of aliases.  This list includes this zone
- *   itself, and lists all aliases of this zone.
+ *   - typeMap:bin (Optional)
+ *  
+ *   Array of bytes representing the mapping between each transition
+ *   time (transPre32/trans/transPost32) and its corresponding offset
+ *   data (typeOffsets).
+ *  
+ *   - finalRule:string (Optional)
+ *  
+ *   If a recurrent transition rule is applicable to a zone forever
+ *   after the final transition time, finalRule represents the rule
+ *   in Rules data.
+ *  
+ *   - finalRaw:int (Optional)
+ *   
+ *   When finalRule is available, finalRaw is required and specifies
+ *   the raw (base) offset of the rule.
+ *   
+ *   - finalYear:int (Optional)
+ *   
+ *   When finalRule is available, finalYear is required and specifies
+ *   the start year of the rule.
+ *   
+ *   - links:intvector (Optional)
+ *   
+ *   When this zone data is shared with other zones, links specifies
+ *   all zones including the zone itself.  Each zone is referenced by
+ *   integer index.
+ * 
+ *  b. Link (int, length 1).  A link zone is an int resource.  The
+ *  integer is the zone number of the target zone.  The key of this
+ *  resource is an alternate name for the target zone.  This data
+ *  is corresponding to Link data in the tz database.
+ *
  *
  * 2. Rules.  These have keys corresponding to the Olson rule IDs,
  * with an underscore prepended, e.g., "_EU".  Each resource describes
@@ -100,18 +105,10 @@ class SimpleTimeZone;
  * used), with the times and the DST savings multiplied by 1000 to
  * scale from seconds to milliseconds.
  *
- * 3. Countries.  These have keys corresponding to the 2-letter ISO
- * country codes, with a percent sign prepended, e.g., "%US".  Each
- * resource is an intvector listing the zones associated with the
- * given country.  The special entry "%" corresponds to "no country",
- * that is, the category of zones assigned to no country in the Olson
- * DB.
- *
- * 4. Metadata.  Metadata is stored under the key "_".  It is an
- * intvector of length three containing the number of zones resources,
- * rule resources, and country resources.  For the purposes of this
- * count, the metadata entry itself is considered a rule resource,
- * since its key begins with an underscore.
+ * 3. Regions.  An array specifies mapping between zones and regions.
+ * Each item is either a 2-letter ISO country code or "001"
+ * (UN M.49 - World).  This data is generated from "zone.tab"
+ * in the tz database.
  */
 class OlsonTimeZone: public BasicTimeZone {
  public:
@@ -289,14 +286,51 @@ private:
         int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
         int32_t& rawoff, int32_t& dstoff) const;
 
-    int32_t zoneOffset(int16_t index) const;
-    int32_t rawOffset(int16_t index) const;
-    int32_t dstOffset(int16_t index) const;
+    int16_t transitionCount() const;
+
+    int64_t transitionTimeInSeconds(int16_t transIdx) const;
+    double transitionTime(int16_t transIdx) const;
+
+    /*
+     * Following 3 methods return an offset at the given transition time index.
+     * When the index is negative, return the initial offset.
+     */
+    int32_t zoneOffsetAt(int16_t transIdx) const;
+    int32_t rawOffsetAt(int16_t transIdx) const;
+    int32_t dstOffsetAt(int16_t transIdx) const;
+
+    /*
+     * Following methods return the initial offset.
+     */
+    int32_t initialRawOffset() const;
+    int32_t initialDstOffset() const;
 
     /**
-     * Number of transitions, 0..~370
+     * Number of transitions in each time range
      */
-    int16_t transitionCount;
+    int16_t transitionCountPre32;
+    int16_t transitionCount32;
+    int16_t transitionCountPost32;
+
+    /**
+     * Time of each transition in seconds from 1970 epoch before 32bit second range (<= 1900).
+     * Each transition in this range is represented by a pair of int32_t.
+     * Length is transitionCount int32_t's.  NULL if no transitions in this range.
+     */
+    const int32_t *transitionTimesPre32; // alias into res; do not delete
+
+    /**
+     * Time of each transition in seconds from 1970 epoch in 32bit second range.
+     * Length is transitionCount int32_t's.  NULL if no transitions in this range.
+     */
+    const int32_t *transitionTimes32; // alias into res; do not delete
+
+    /**
+     * Time of each transition in seconds from 1970 epoch after 32bit second range (>= 2038).
+     * Each transition in this range is represented by a pair of int32_t.
+     * Length is transitionCount int32_t's.  NULL if no transitions in this range.
+     */
+    const int32_t *transitionTimesPost32; // alias into res; do not delete
 
     /**
      * Number of types, 1..255
@@ -304,44 +338,33 @@ private:
     int16_t typeCount;
 
     /**
-     * Time of each transition in seconds from 1970 epoch.
-     * Length is transitionCount int32_t's.
-     */
-    const int32_t *transitionTimes; // alias into res; do not delete
-
-    /**
      * Offset from GMT in seconds for each type.
-     * Length is typeCount int32_t's.
+     * Length is typeCount int32_t's.  At least one type (a pair of int32_t)
+     * is required.
      */
     const int32_t *typeOffsets; // alias into res; do not delete
 
     /**
      * Type description data, consisting of transitionCount uint8_t
      * type indices (from 0..typeCount-1).
-     * Length is transitionCount int8_t's.
+     * Length is transitionCount int16_t's.  NULL if no transitions.
      */
-    const uint8_t *typeData; // alias into res; do not delete
+    const uint8_t *typeMapData; // alias into res; do not delete
 
     /**
-     * The last year for which the transitions data are to be used
-     * rather than the finalZone.  If there is no finalZone, then this
-     * is set to INT32_MAX.  NOTE: This corresponds to the year _before_
-     * the one indicated by finalMillis.
-     */
-    int32_t finalYear;
-
-    /**
-     * The millis for the start of the first year for which finalZone
-     * is to be used, or DBL_MAX if finalZone is 0.  NOTE: This is
-     * 0:00 GMT Jan 1, <finalYear + 1> (not <finalMillis>).
-     */
-    double finalMillis;
-
-    /**
-     * A SimpleTimeZone that governs the behavior for years > finalYear.
-     * If and only if finalYear == INT32_MAX then finalZone == 0.
+     * A SimpleTimeZone that governs the behavior for date >= finalMillis.
      */
     SimpleTimeZone *finalZone; // owned, may be NULL
+
+    /**
+     * For date >= finalMillis, the finalZone will be used.
+     */
+    double finalStartMillis;
+
+    /**
+     * For year >= finalYear, the finalZone will be used.
+     */
+    int32_t finalStartYear;
 
     /* BasicTimeZone support */
     void clearTransitionRules(void);
@@ -358,20 +381,42 @@ private:
     UBool               transitionRulesInitialized;
 };
 
-inline int32_t
-OlsonTimeZone::zoneOffset(int16_t index) const {
-    index <<= 1;
-    return typeOffsets[index] + typeOffsets[index+1];
+inline int16_t
+OlsonTimeZone::transitionCount() const {
+    return transitionCountPre32 + transitionCount32 + transitionCountPost32;
+}
+
+inline double
+OlsonTimeZone::transitionTime(int16_t transIdx) const {
+    return (double)transitionTimeInSeconds(transIdx) * U_MILLIS_PER_SECOND;
 }
 
 inline int32_t
-OlsonTimeZone::rawOffset(int16_t index) const {
-    return typeOffsets[(uint32_t)(index << 1)];
+OlsonTimeZone::zoneOffsetAt(int16_t transIdx) const {
+    int16_t typeIdx = (transIdx >= 0 ? typeMapData[transIdx] : 0) << 1;
+    return typeOffsets[typeIdx] + typeOffsets[typeIdx + 1];
 }
 
 inline int32_t
-OlsonTimeZone::dstOffset(int16_t index) const {
-    return typeOffsets[(uint32_t)((index << 1) + 1)];
+OlsonTimeZone::rawOffsetAt(int16_t transIdx) const {
+    int16_t typeIdx = (transIdx >= 0 ? typeMapData[transIdx] : 0) << 1;
+    return typeOffsets[typeIdx];
+}
+
+inline int32_t
+OlsonTimeZone::dstOffsetAt(int16_t transIdx) const {
+    int16_t typeIdx = (transIdx >= 0 ? typeMapData[transIdx] : 0) << 1;
+    return typeOffsets[typeIdx + 1];
+}
+
+inline int32_t
+OlsonTimeZone::initialRawOffset() const {
+    return typeOffsets[0];
+}
+
+inline int32_t
+OlsonTimeZone::initialDstOffset() const {
+    return typeOffsets[1];
 }
 
 U_NAMESPACE_END
