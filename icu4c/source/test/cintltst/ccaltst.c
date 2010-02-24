@@ -240,27 +240,27 @@ static void TestCalendar()
     u_uastrcpy(tzID, "PST");
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: error in ucal_open caldef : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_open caldef : %s\n - (Are you missing data?)", u_errorName(status));
     }
     
     caldef2=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: error in ucal_open caldef : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_open caldef : %s - (Are you missing data?)\n", u_errorName(status));
     }
     u_strcpy(tzID, fgGMTID);
     calfr=ucal_open(tzID, u_strlen(tzID), "fr_FR", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: error in ucal_open calfr : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_open calfr : %s - (Are you missing data?)\n", u_errorName(status));
     }
     calit=ucal_open(tzID, u_strlen(tzID), "it_IT", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status))    {
-        log_err("FAIL: error in ucal_open calit : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_open calit : %s - (Are you missing data?)\n", u_errorName(status));
     }
 
     /*Testing the  clone() function*/
     calfrclone = ucal_clone(calfr, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: error in ucal_clone calfr : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in ucal_clone calfr : %s - (Are you missing data?)\n", u_errorName(status));
     }
     
     /*Testing udat_getAvailable() and udat_countAvailable()*/ 
@@ -651,7 +651,7 @@ static void TestFieldGetSet()
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
-        log_err("ucal_open failed: %s\n", u_errorName(status));
+        log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
     }
     datdef=udat_open(UDAT_SHORT,UDAT_SHORT ,NULL,fgGMTID,-1,NULL, 0, &status);
@@ -803,7 +803,7 @@ static void TestAddRollExtensive()
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
     if (U_FAILURE(status)) {
-        log_err("ucal_open() failed : %s\n", u_errorName(status)); 
+        log_data_err("ucal_open() failed : %s - (Are you missing data?)\n", u_errorName(status)); 
         return; 
     }
 
@@ -963,7 +963,7 @@ static void TestGetLimits()
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
     if (U_FAILURE(status)) {
-        log_err("ucal_open() for gregorian calendar failed in TestGetLimits: %s\n", u_errorName(status));
+        log_data_err("ucal_open() for gregorian calendar failed in TestGetLimits: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
     }
     
@@ -1061,7 +1061,7 @@ static void TestDOWProgression()
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
-        log_err("ucal_open failed: %s\n", u_errorName(status));
+        log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
     }
 
@@ -1134,7 +1134,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     u_strcpy(tzID, fgGMTID);
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
-        log_err("ucal_open failed: %s\n", u_errorName(status)); 
+        log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status)); 
         return; 
     }
     u_uastrcpy(tzID, "PST");
@@ -1359,7 +1359,7 @@ void TestGregorianChange() {
     errorCode = U_ZERO_ERROR;
     cal = ucal_open(utc, -1, "", UCAL_GREGORIAN, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ucal_open(UTC) failed: %s\n", u_errorName(errorCode));
+        log_data_err("ucal_open(UTC) failed: %s - (Are you missing data?)\n", u_errorName(errorCode));
         return;
     }
     ucal_setGregorianChange(cal, -365 * (dayMillis * (UDate)1), &errorCode);
@@ -1620,7 +1620,7 @@ static void TestWeekend() {
 			}
 			ucal_close(cal);
 		} else {
-			log_err("FAIL: ucal_open for locale %s failed: %s\n", testDatesPtr->locale, u_errorName(status) );
+			log_data_err("FAIL: ucal_open for locale %s failed: %s - (Are you missing data?)\n", testDatesPtr->locale, u_errorName(status) );
 		}
 	}
     if (U_SUCCESS(fmtStatus)) {
@@ -1650,7 +1650,7 @@ static void TestWeekend() {
             }
             ucal_close(cal);
         } else {
-            log_err("FAIL: ucal_open for locale %s failed: %s\n", testDaysPtr->locale, u_errorName(status) );
+            log_data_err("FAIL: ucal_open for locale %s failed: %s - (Are you missing data?)\n", testDaysPtr->locale, u_errorName(status) );
         }
     }
 }

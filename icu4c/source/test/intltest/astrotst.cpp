@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2009, International Business Machines Corporation and
+ * Copyright (c) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -43,7 +43,7 @@ void AstroTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
 
 #undef CASE
 
-#define ASSERT_OK(x)   if(U_FAILURE(x)) { errln("%s:%d: %s\n", __FILE__, __LINE__, u_errorName(x)); return; }
+#define ASSERT_OK(x)   if(U_FAILURE(x)) { dataerrln("%s:%d: %s\n", __FILE__, __LINE__, u_errorName(x)); return; }
 
 
 void AstroTest::initAstro(UErrorCode &status) {

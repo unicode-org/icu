@@ -26,13 +26,13 @@ BasicNormalizerTest::TestNormalizerAPI() {
     StringCharacterIterator iter(s);
     Normalizer norm(iter, UNORM_NFC);
     if(norm.next()!=0xe4) {
-        errln("error in Normalizer(CharacterIterator).next()");
+        dataerrln("error in Normalizer(CharacterIterator).next()");
     }
 
     // test copy constructor
     Normalizer copy(norm);
     if(copy.next()!=0xac00) {
-        errln("error in Normalizer(Normalizer(CharacterIterator)).next()");
+        dataerrln("error in Normalizer(Normalizer(CharacterIterator)).next()");
     }
 
     // test clone(), ==, and hashCode()
@@ -45,7 +45,7 @@ BasicNormalizerTest::TestNormalizerAPI() {
         errln("error in Normalizer(Normalizer(CharacterIterator)).clone()->hashCode()!=copy.hashCode()");
     }
     if(clone->next()!=0x4e3d) {
-        errln("error in Normalizer(Normalizer(CharacterIterator)).clone()->next()");
+        dataerrln("error in Normalizer(Normalizer(CharacterIterator)).clone()->next()");
     }
     // position changed, must change hashCode()
     if(clone->hashCode()==copy.hashCode()) {
@@ -63,7 +63,7 @@ BasicNormalizerTest::TestNormalizerAPI() {
     Normalizer::compose(tel, TRUE, 0, nfkc, errorCode);
     Normalizer::decompose(tel, TRUE, 0, nfkd, errorCode);
     if(U_FAILURE(errorCode)) {
-        errln("error in Normalizer::(de)compose(): %s", u_errorName(errorCode));
+        dataerrln("error in Normalizer::(de)compose(): %s", u_errorName(errorCode));
     } else if(
         nfkc!=UnicodeString("TE\\u0139TELTELTELTELTELTELTELTELTEL", "").unescape() || 
         nfkd!=UnicodeString("TEL\\u0301TELTELTELTELTELTELTELTELTEL", "").unescape()
@@ -74,7 +74,7 @@ BasicNormalizerTest::TestNormalizerAPI() {
     // test setIndex()
     norm.setIndexOnly(3);
     if(norm.current()!=0x4e3d) {
-        errln("error in Normalizer(CharacterIterator).setIndex(3)");
+        dataerrln("error in Normalizer(CharacterIterator).setIndex(3)");
     }
 
     // test setText(CharacterIterator) and getText()
@@ -102,7 +102,7 @@ BasicNormalizerTest::TestNormalizerAPI() {
         errln("error in Normalizer::setMode() or Normalizer::getUMode()");
     }
     if(copy.next()!=0x308 || copy.next()!=0x1100) {
-        errln("error in Normalizer::setText(UChar *) or Normalizer::setMode()");
+        dataerrln("error in Normalizer::setText(UChar *) or Normalizer::setMode()");
     }
 
     // test setText(UChar *, length=-1)
@@ -145,23 +145,23 @@ BasicNormalizerTest::TestNormalizerAPI() {
     s.setTo((UChar)0xe4);
     Normalizer::normalize(s, UNORM_NFD, 0, s, status);
     if(s.charAt(1)!=0x308) {
-        errln("error in Normalizer::normalize(UNORM_NFD, self)");
+        dataerrln("error in Normalizer::normalize(UNORM_NFD, self)");
     }
     Normalizer::normalize(s, UNORM_NFC, 0, s, status);
     if(s.charAt(0)!=0xe4) {
-        errln("error in Normalizer::normalize(UNORM_NFC, self)");
+        dataerrln("error in Normalizer::normalize(UNORM_NFC, self)");
     }
     Normalizer::decompose(s, FALSE, 0, s, status);
     if(s.charAt(1)!=0x308) {
-        errln("error in Normalizer::decompose(self)");
+        dataerrln("error in Normalizer::decompose(self)");
     }
     Normalizer::compose(s, FALSE, 0, s, status);
     if(s.charAt(0)!=0xe4) {
-        errln("error in Normalizer::compose(self)");
+        dataerrln("error in Normalizer::compose(self)");
     }
     Normalizer::concatenate(s, s, s, UNORM_NFC, 0, status);
     if(s.charAt(1)!=0xe4) {
-        errln("error in Normalizer::decompose(self)");
+        dataerrln("error in Normalizer::decompose(self)");
     }
 }
 

@@ -1355,7 +1355,8 @@ static void TestUTextAPI(void) {
     utext_openUTF8(&patternText, "abc*", -1, &status);
     re = uregex_openUText(&patternText, 0, 0, &status);
     if (U_FAILURE(status)) {
-         log_err("Failed to open regular expression, line %d, error is \"%s\"\n", __LINE__, u_errorName(status));
+         log_data_err("Failed to open regular expression, line %d, error is \"%s\" (Are you missing data?)\n", __LINE__, u_errorName(status));
+         utext_close(&patternText);
          return;
     }
     uregex_close(re);

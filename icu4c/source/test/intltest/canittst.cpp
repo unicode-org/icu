@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2006, International Business Machines Corporation and
+ * Copyright (c) 2002-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -71,6 +71,10 @@ CanonicalIteratorTest::~CanonicalIteratorTest()
 void CanonicalIteratorTest::TestExhaustive() {
     UErrorCode status = U_ZERO_ERROR;
     CanonicalIterator it("", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating CanonicalIterator: %s", u_errorName(status));
+        return;
+    }
     UChar32 i = 0;
     UnicodeString s;
     // Test static and dynamic class IDs
@@ -163,7 +167,7 @@ void CanonicalIteratorTest::TestBasic() {
 
       }
     } else {
-      errln("Couldn't instantiate canonical iterator. Error: %s", u_errorName(status));
+      dataerrln("Couldn't instantiate canonical iterator. Error: %s", u_errorName(status));
     }
     delete set;
 }
@@ -303,6 +307,10 @@ void CanonicalIteratorTest::TestAPI() {
   logln("Testing CanonicalIterator::getSource");
   logln("Instantiating canonical iterator with string "+start);
   CanonicalIterator can(start, status);
+  if (U_FAILURE(status)) {
+      dataerrln("Error creating CanonicalIterator: %s", u_errorName(status));
+      return;
+  }
   UnicodeString source = can.getSource();
   logln("CanonicalIterator::getSource returned "+source);
   if(start != source) {

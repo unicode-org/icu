@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2008, International Business Machines Corporation 
+ * Copyright (c) 2003-2010, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -164,6 +164,7 @@ void CalendarCaseTest::IslamicCivil()
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("ar@calendar=islamic-civil", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
@@ -295,6 +296,7 @@ void CalendarCaseTest::Hebrew() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("he_HE@calendar=hebrew", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
@@ -380,6 +382,7 @@ void CalendarCaseTest::Indian() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("hi_IN@calendar=indian", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
@@ -423,6 +426,8 @@ void CalendarCaseTest::Coptic() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("cop_EG@calendar=coptic", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
+
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
@@ -470,6 +475,7 @@ void CalendarCaseTest::Ethiopic() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("am_ET@calendar=ethiopic", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
@@ -485,6 +491,7 @@ void CalendarCaseTest::Ethiopic() {
         }
     }
     c = Calendar::createInstance("am_ET@calendar=ethiopic-amete-alem", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
     doTestCases(tests, c);
 

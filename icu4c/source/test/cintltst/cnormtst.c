@@ -159,7 +159,7 @@ void TestDecomp()
             unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
         } else {
           assertEqual(result, canonTests[x][1], x);
         }
@@ -188,7 +188,7 @@ void TestCompatDecomp()
             unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
         } else {
           assertEqual(result, compatTests[x][1], x);
         }
@@ -217,7 +217,7 @@ void TestCanonDecompCompose()
             unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
+            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source),myErrorName(status) );
         } else {
           assertEqual(result, canonTests[x][2], x);
         }
@@ -246,7 +246,7 @@ void TestCompatDecompCompose()
             unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
         } else {
           assertEqual(result, compatTests[x][2], x);
         }
@@ -297,7 +297,7 @@ static void TestNull_check(UChar *src, int32_t srcLen,
     len = unorm_normalize(src, srcLen, mode, 0, result, 50, &status); 
 
     if(U_FAILURE(status)) {
-      log_err("unorm_normalize(%s) with 0x0000 failed: %s\n", name, u_errorName(status));
+      log_data_err("unorm_normalize(%s) with 0x0000 failed: %s - (Are you missing data?)\n", name, u_errorName(status));
     } else if (len != expLen) {
       log_err("unorm_normalize(%s) with 0x0000 failed: Expected len %d, got %d\n", name, expLen, len);
     } 
@@ -423,7 +423,7 @@ static void TestQuickCheckResultYES()
   {
     if (unorm_quickCheck(&cp, 1, UNORM_NFD, &error) != UNORM_YES)
     {
-      log_err("ERROR in NFD quick check at U+%04x\n", cp);
+      log_data_err("ERROR in NFD quick check at U+%04x - (Are you missing data?)\n", cp);
       return;
     }
     if (unorm_quickCheck(&cp, 1, UNORM_NFC, &error) != 
@@ -494,7 +494,7 @@ static void TestQuickCheckResultMAYBE()
     if (unorm_quickCheck(&(CPNFC[count]), 1, UNORM_NFC, &error) != 
                                                            UNORM_MAYBE)
     {
-      log_err("ERROR in NFC quick check at U+%04x\n", CPNFC[count]);
+      log_data_err("ERROR in NFC quick check at U+%04x - (Are you missing data?)\n", CPNFC[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKC[count]), 1, UNORM_NFKC, &error) != 
@@ -520,7 +520,7 @@ static void TestQuickCheckStringResult()
     if (unorm_quickCheck(d, u_strlen(d), UNORM_NFD, &error) != 
                                                             UNORM_YES)
     {
-      log_err("ERROR in NFD quick check for string at count %d\n", count);
+      log_data_err("ERROR in NFD quick check for string at count %d - (Are you missing data?)\n", count);
       return;
     }
 
@@ -592,7 +592,7 @@ static void TestIsNormalized(void) {
     /* normal case with length>=0 (length -1 used for special cases below) */
     errorCode=U_ZERO_ERROR;
     if(!unorm_isNormalized(notNFC[0]+2, 1, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error: !isNormalized(<U+0300>, NFC) (%s)\n", u_errorName(errorCode));
+        log_data_err("error: !isNormalized(<U+0300>, NFC) (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* incoming U_FAILURE */
@@ -606,31 +606,31 @@ static void TestIsNormalized(void) {
     errorCode=U_ZERO_ERROR;
     (void)unorm_isNormalized(NULL, 1, UNORM_NFC, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("error: isNormalized(NULL) did not set U_ILLEGAL_ARGUMENT_ERROR but %s\n", u_errorName(errorCode));
+        log_data_err("error: isNormalized(NULL) did not set U_ILLEGAL_ARGUMENT_ERROR but %s - (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* bad length */
     errorCode=U_ZERO_ERROR;
     (void)unorm_isNormalized(notNFC[0]+2, -2, UNORM_NFC, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("error: isNormalized([-2]) did not set U_ILLEGAL_ARGUMENT_ERROR but %s\n", u_errorName(errorCode));
+        log_data_err("error: isNormalized([-2]) did not set U_ILLEGAL_ARGUMENT_ERROR but %s - (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* specific cases */
     for(i=0; i<LENGTHOF(notNFC); ++i) {
         errorCode=U_ZERO_ERROR;
         if(unorm_isNormalized(notNFC[i], -1, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
-            log_err("error: isNormalized(notNFC[%d], NFC) is wrong (%s)\n", i, u_errorName(errorCode));
+            log_data_err("error: isNormalized(notNFC[%d], NFC) is wrong (%s) - (Are you missing data?)\n", i, u_errorName(errorCode));
         }
         errorCode=U_ZERO_ERROR;
         if(unorm_isNormalized(notNFC[i], -1, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
-            log_err("error: isNormalized(notNFC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
+            log_data_err("error: isNormalized(notNFC[%d], NFKC) is wrong (%s) - (Are you missing data?)\n", i, u_errorName(errorCode));
         }
     }
     for(i=0; i<LENGTHOF(notNFKC); ++i) {
         errorCode=U_ZERO_ERROR;
         if(unorm_isNormalized(notNFKC[i], -1, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
-            log_err("error: isNormalized(notNFKC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
+            log_data_err("error: isNormalized(notNFKC[%d], NFKC) is wrong (%s) - (Are you missing data?)\n", i, u_errorName(errorCode));
         }
     }
 }
@@ -666,20 +666,20 @@ void TestCheckFCD()
   int count = 0;
   
   if (unorm_quickCheck(FAST_, 10, UNORM_FCD, &status) != UNORM_YES)
-    log_err("unorm_quickCheck(FCD) failed: expected value for fast unorm_quickCheck is UNORM_YES\n");
+    log_data_err("unorm_quickCheck(FCD) failed: expected value for fast unorm_quickCheck is UNORM_YES - (Are you missing data?)\n");
   if (unorm_quickCheck(FALSE_, 10, UNORM_FCD, &status) != UNORM_NO)
     log_err("unorm_quickCheck(FCD) failed: expected value for error unorm_quickCheck is UNORM_NO\n");
   if (unorm_quickCheck(TRUE_, 10, UNORM_FCD, &status) != UNORM_YES)
-    log_err("unorm_quickCheck(FCD) failed: expected value for correct unorm_quickCheck is UNORM_YES\n");
+    log_data_err("unorm_quickCheck(FCD) failed: expected value for correct unorm_quickCheck is UNORM_YES - (Are you missing data?)\n");
 
   if (U_FAILURE(status))
-    log_err("unorm_quickCheck(FCD) failed: %s\n", u_errorName(status));
+    log_data_err("unorm_quickCheck(FCD) failed: %s - (Are you missing data?)\n", u_errorName(status));
 
   while (count < 4)
   {
     UBool fcdresult = unorm_quickCheck(datastr[count], 4, UNORM_FCD, &status);
     if (U_FAILURE(status)) {
-      log_err("unorm_quickCheck(FCD) failed: exception occured at data set %d\n", count);
+      log_data_err("unorm_quickCheck(FCD) failed: exception occured at data set %d - (Are you missing data?)\n", count);
       break;
     }
     else {
@@ -711,7 +711,7 @@ void TestCheckFCD()
       normsize += unorm_normalize(data + size, 1, UNORM_NFD, 0, 
                                   norm + normsize, 100 - normsize, &status);       
       if (U_FAILURE(status)) {
-        log_err("unorm_quickCheck(FCD) failed: exception occured at data generation\n");
+        log_data_err("unorm_quickCheck(FCD) failed: exception occured at data generation - (Are you missing data?)\n");
         break;
       }
       size ++;
@@ -721,7 +721,7 @@ void TestCheckFCD()
     nfdsize = unorm_normalize(data, size, UNORM_NFD, 0, 
                               nfd, 100, &status);       
     if (U_FAILURE(status)) {
-      log_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation\n");
+      log_data_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation - (Are you missing data?)\n");
     }
 
     if (nfdsize != normsize || u_memcmp(nfd, norm, nfdsize) != 0) {
@@ -735,7 +735,7 @@ void TestCheckFCD()
     }
 
     if (unorm_quickCheck(data, size, UNORM_FCD, &status) != testresult || U_FAILURE(status)) {
-      log_err("unorm_quickCheck(FCD) failed: expected %d for random data\n", testresult);
+      log_data_err("unorm_quickCheck(FCD) failed: expected %d for random data - (Are you missing data?)\n", testresult);
     }
   }
 }
@@ -751,7 +751,7 @@ TestAPI() {
     errorCode=U_ZERO_ERROR;
     length=unorm_normalize(in, 2, UNORM_NFD, 0, NULL, 0, &errorCode);
     if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
-        log_err("unorm_normalize(pure preflighting NFD)=%ld failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("unorm_normalize(pure preflighting NFD)=%ld failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
         return;
     }
 
@@ -857,23 +857,23 @@ TestNormCoverage() {
     /* quick checks */
     errorCode=U_ZERO_ERROR;
     if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFD, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error unorm_quickCheck(long input, UNORM_NFD)!=NO (%s)\n", u_errorName(errorCode));
+        log_data_err("error unorm_quickCheck(long input, UNORM_NFD)!=NO (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
     if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFKD, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error unorm_quickCheck(long input, UNORM_NFKD)!=NO (%s)\n", u_errorName(errorCode));
+        log_data_err("error unorm_quickCheck(long input, UNORM_NFKD)!=NO (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
     if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error unorm_quickCheck(long input, UNORM_NFC)!=NO (%s)\n", u_errorName(errorCode));
+        log_data_err("error unorm_quickCheck(long input, UNORM_NFC)!=NO (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
     if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error unorm_quickCheck(long input, UNORM_NFKC)!=NO (%s)\n", u_errorName(errorCode));
+        log_data_err("error unorm_quickCheck(long input, UNORM_NFKC)!=NO (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
     errorCode=U_ZERO_ERROR;
     if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_FCD, &errorCode) || U_FAILURE(errorCode)) {
-        log_err("error unorm_quickCheck(long input, UNORM_FCD)!=NO (%s)\n", u_errorName(errorCode));
+        log_data_err("error unorm_quickCheck(long input, UNORM_FCD)!=NO (%s) - (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* NFKC */
@@ -923,7 +923,7 @@ TestNormCoverage() {
                            output, 100, /* too short */
                            &errorCode);
     if(errorCode!=U_BUFFER_OVERFLOW_ERROR) {
-        log_err("error unorm_normalize(long input, output too short, UNORM_NFKC) did not overflow but %s\n", u_errorName(errorCode));
+        log_data_err("error unorm_normalize(long input, output too short, UNORM_NFKC) did not overflow but %s - (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* real NFKC */
@@ -933,7 +933,7 @@ TestNormCoverage() {
                            output, sizeof(output)/U_SIZEOF_UCHAR,
                            &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error unorm_normalize(long input, UNORM_NFKC) failed with %s\n", u_errorName(errorCode));
+        log_data_err("error unorm_normalize(long input, UNORM_NFKC) failed with %s - (Are you missing data?)\n", u_errorName(errorCode));
     } else if(length!=expectLength || u_memcmp(output, expect, length)!=0) {
         log_err("error unorm_normalize(long input, UNORM_NFKC) produced wrong result\n");
         for(i=0; i<length; ++i) {
@@ -973,7 +973,7 @@ TestNormCoverage() {
                            output, sizeof(output)/U_SIZEOF_UCHAR,
                            &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error unorm_normalize(long input, UNORM_FCD) failed with %s\n", u_errorName(errorCode));
+        log_data_err("error unorm_normalize(long input, UNORM_FCD) failed with %s - (Are you missing data?)\n", u_errorName(errorCode));
     } else if(length!=expectLength || u_memcmp(output, expect, length)!=0) {
         log_err("error unorm_normalize(long input, UNORM_FCD) produced wrong result\n");
         for(i=0; i<length; ++i) {
@@ -1008,21 +1008,21 @@ TestConcatenate(void) {
     errorCode=U_ZERO_ERROR;
     length=unorm_concatenate(left, 2, right, -1, buffer, 100, UNORM_NFC, 0, &errorCode);
     if(U_FAILURE(errorCode) || length!=6 || 0!=u_memcmp(buffer, expect, length)) {
-        log_err("error: unorm_concatenate()=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("error: unorm_concatenate()=%ld (expect 6) failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
     }
 
     /* preflighting */
     errorCode=U_ZERO_ERROR;
     length=unorm_concatenate(left, 2, right, -1, NULL, 0, UNORM_NFC, 0, &errorCode);
     if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=6) {
-        log_err("error: unorm_concatenate(preflighting)=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("error: unorm_concatenate(preflighting)=%ld (expect 6) failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
     }
 
     buffer[2]=0x5555;
     errorCode=U_ZERO_ERROR;
     length=unorm_concatenate(left, 2, right, -1, buffer, 1, UNORM_NFC, 0, &errorCode);
     if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=6 || buffer[2]!=0x5555) {
-        log_err("error: unorm_concatenate(preflighting 2)=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("error: unorm_concatenate(preflighting 2)=%ld (expect 6) failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
     }
 
     /* enter with U_FAILURE */
@@ -1038,13 +1038,13 @@ TestConcatenate(void) {
     errorCode=U_ZERO_ERROR;
     length=unorm_concatenate(NULL, 2, right, -1, buffer, 100, UNORM_NFC, 0, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || buffer[2]!=0xaaaa) {
-        log_err("error: unorm_concatenate(left=NULL)=%ld failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("error: unorm_concatenate(left=NULL)=%ld failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
     }
 
     errorCode=U_ZERO_ERROR;
     length=unorm_concatenate(left, 2, right, -1, NULL, 100, UNORM_NFC, 0, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("error: unorm_concatenate(buffer=NULL)=%ld failed with %s\n", length, u_errorName(errorCode));
+        log_data_err("error: unorm_concatenate(buffer=NULL)=%ld failed with %s - (Are you missing data?)\n", length, u_errorName(errorCode));
     }
 }
 
@@ -1135,7 +1135,7 @@ _testIter(const UChar *src, int32_t srcLength,
         index=iter->getIndex(iter, UITER_CURRENT);
 
         if(U_FAILURE(errorCode)) {
-            log_err("error unorm iteration (next/previous %d %s)[%d]: %s\n",
+            log_data_err("error unorm iteration (next/previous %d %s)[%d]: %s - (Are you missing data?)\n",
                     forward, _modeString[mode], i, u_errorName(errorCode));
             return;
         }
@@ -1271,7 +1271,7 @@ TestNextPrevious() {
                       UNORM_NFD, 0, TRUE, NULL,
                       &errorCode);
     if(U_FAILURE(errorCode) || length!=2 || buffer[0]!=nfd[2] || buffer[1]!=nfd[3]) {
-        log_err("error unorm_next(without needed) %s\n", u_errorName(errorCode));
+        log_data_err("error unorm_next(without needed) %s - (Are you missing data?)\n", u_errorName(errorCode));
         return;
     }
 
@@ -1365,7 +1365,7 @@ TestFCNFKCClosure(void) {
         errorCode=U_ZERO_ERROR;
         length=u_getFC_NFKC_Closure(tests[i].c, buffer, LENGTHOF(buffer), &errorCode);
         if(U_FAILURE(errorCode) || length!=u_strlen(buffer) || 0!=u_strcmp(tests[i].s, buffer)) {
-            log_err("u_getFC_NFKC_Closure(U+%04lx) is wrong (%s)\n", tests[i].c, u_errorName(errorCode));
+            log_data_err("u_getFC_NFKC_Closure(U+%04lx) is wrong (%s) - (Are you missing data?)\n", tests[i].c, u_errorName(errorCode));
         }
     }
 
@@ -1414,25 +1414,25 @@ TestQuickCheckPerCP() {
         qc1=u_getIntPropertyValue(c, UCHAR_NFC_QUICK_CHECK);
         qc2=unorm_quickCheck(s, length, UNORM_NFC, &errorCode);
         if(qc1!=qc2) {
-            log_err("u_getIntPropertyValue(NFC)=%d != %d=unorm_quickCheck(NFC) for U+%04x\n", qc1, qc2, c);
+            log_data_err("u_getIntPropertyValue(NFC)=%d != %d=unorm_quickCheck(NFC) for U+%04x - (Are you missing data?)\n", qc1, qc2, c);
         }
 
         qc1=u_getIntPropertyValue(c, UCHAR_NFD_QUICK_CHECK);
         qc2=unorm_quickCheck(s, length, UNORM_NFD, &errorCode);
         if(qc1!=qc2) {
-            log_err("u_getIntPropertyValue(NFD)=%d != %d=unorm_quickCheck(NFD) for U+%04x\n", qc1, qc2, c);
+            log_data_err("u_getIntPropertyValue(NFD)=%d != %d=unorm_quickCheck(NFD) for U+%04x - (Are you missing data?)\n", qc1, qc2, c);
         }
 
         qc1=u_getIntPropertyValue(c, UCHAR_NFKC_QUICK_CHECK);
         qc2=unorm_quickCheck(s, length, UNORM_NFKC, &errorCode);
         if(qc1!=qc2) {
-            log_err("u_getIntPropertyValue(NFKC)=%d != %d=unorm_quickCheck(NFKC) for U+%04x\n", qc1, qc2, c);
+            log_data_err("u_getIntPropertyValue(NFKC)=%d != %d=unorm_quickCheck(NFKC) for U+%04x - (Are you missing data?)\n", qc1, qc2, c);
         }
 
         qc1=u_getIntPropertyValue(c, UCHAR_NFKD_QUICK_CHECK);
         qc2=unorm_quickCheck(s, length, UNORM_NFKD, &errorCode);
         if(qc1!=qc2) {
-            log_err("u_getIntPropertyValue(NFKD)=%d != %d=unorm_quickCheck(NFKD) for U+%04x\n", qc1, qc2, c);
+            log_data_err("u_getIntPropertyValue(NFKD)=%d != %d=unorm_quickCheck(NFKD) for U+%04x - (Are you missing data?)\n", qc1, qc2, c);
         }
 
         length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, LENGTHOF(nfd), &errorCode);
@@ -1496,7 +1496,7 @@ TestComposition(void) {
             length!=u_strlen(cases[i].expect) ||
             0!=u_memcmp(output, cases[i].expect, length)
         ) {
-            log_err("unexpected result for case %d\n", i);
+            log_data_err("unexpected result for case %d - (Are you missing data?)\n", i);
         }
     }
 }

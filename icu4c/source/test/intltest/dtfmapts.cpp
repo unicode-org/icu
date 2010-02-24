@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -254,7 +254,7 @@ if (fr != NULL && it != NULL && de != NULL)
     status = U_ZERO_ERROR;
     DateFormat *test = new SimpleDateFormat(status);
     if(U_FAILURE(status)) {
-        errcheckln(status, "ERROR: Couldn't create a DateFormat - %s", u_errorName(status));
+        dataerrln("ERROR: Couldn't create a DateFormat - %s", u_errorName(status));
     }
 
     if(test->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {

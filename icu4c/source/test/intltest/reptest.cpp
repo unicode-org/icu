@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2001-2005, International Business Machines Corporation and
+ * Copyright (c) 2001-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -296,9 +296,7 @@ void ReplaceableTest::check(const UnicodeString& transliteratorName,
         t = Transliterator::createInstance(transliteratorName, UTRANS_FORWARD, status);
     }
     if (U_FAILURE(status)) {
-        log("FAIL: failed to create the ");
-        log(transliteratorName);
-        errln(" transliterator.");
+        dataerrln("FAIL: failed to create the " + transliteratorName + " transliterator");
         delete tr;
         return;
     }

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and         *
+* Copyright (C) 2007-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -121,7 +121,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
     TimeZone* utc = TimeZone::createTimeZone("UTC");
     Calendar* cal = Calendar::createInstance(*utc, status);
     if (U_FAILURE(status)) {
-        errln("Calendar::createInstance failed");
+        dataerrln("Calendar::createInstance failed: %s", u_errorName(status));
         return;
     }
     cal->clear();

@@ -2638,14 +2638,14 @@ TestAdditionalProperties() {
         if(which<UCHAR_INT_START) {
             result=u_hasBinaryProperty(c, which);
             if(result!=props[i][2]) {
-                log_err("error: u_hasBinaryProperty(U+%04lx, %s)=%d is wrong (props[%d])\n",
+                log_data_err("error: u_hasBinaryProperty(U+%04lx, %s)=%d is wrong (props[%d]) - (Are you missing data?)\n",
                         c, whichName, result, i);
             }
         }
 
         result=u_getIntPropertyValue(c, which);
         if(result!=props[i][2]) {
-            log_err("error: u_getIntPropertyValue(U+%04lx, %s)=%d is wrong, should be %d (props[%d])\n",
+            log_data_err("error: u_getIntPropertyValue(U+%04lx, %s)=%d is wrong, should be %d (props[%d]) - (Are you missing data?)\n",
                     c, whichName, result, props[i][2], i);
         }
 

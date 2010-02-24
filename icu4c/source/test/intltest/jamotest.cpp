@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 ************************************************************************
@@ -161,7 +161,7 @@ void JamoTest::TestPiecemeal(void) {
 
     t = Transliterator::createInstance("NFD", UTRANS_FORWARD, status); // was Hangul-Jamo
     if (U_FAILURE(status) || t == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed");
         return;
     }
     expect(*t, hangul, jamo);

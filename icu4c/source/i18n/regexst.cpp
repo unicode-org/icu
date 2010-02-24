@@ -146,7 +146,8 @@ RegexStaticSets *RegexStaticSets::gStaticSets = NULL;
 RegexStaticSets::RegexStaticSets(UErrorCode *status)
 :
 fUnescapeCharSet(UnicodeString(TRUE, gUnescapeCharPattern, -1), *status),
-fRuleDigitsAlias(NULL)
+fRuleDigitsAlias(NULL),
+fEmptyText(NULL)
 {
     // First zero out everything
     int i;
