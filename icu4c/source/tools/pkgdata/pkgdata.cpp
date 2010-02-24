@@ -1519,9 +1519,21 @@ static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
     FILE *p;
     size_t n;
     static char buf[512] = "";
+    char cmdBuf[1024];
+    UErrorCode status = U_ZERO_ERROR;
     const char cmd[] = "icu-config --incpkgdatafile";
 
-    p = popen(cmd, "r");
+    /* #1 try the same path where pkgdata was called from. */
+    findDirname(progname, cmdBuf, 1024, &status);
+    if(U_SUCCESS(status)) {
+      uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
+      uprv_strncat(cmdBuf, cmd, 1024);
+      p = popen(cmdBuf, "r");
+    }
+
+    if(p == NULL) {
+      p = popen(cmd, "r");      
+    }
 
     if(p == NULL)
     {
