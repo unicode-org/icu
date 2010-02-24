@@ -12,12 +12,9 @@ package com.ibm.icu.impl;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Set;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -43,6 +40,14 @@ import com.ibm.icu.util.UResourceBundle;
 public final class ZoneMeta {
     private static final boolean ASSERT = false;
 
+    private static final String ZONEINFORESNAME = "zoneinfo64";
+    private static final String kREGIONS  = "Regions";
+    private static final String kZONES    = "Zones";
+    private static final String kNAMES    = "Names";
+
+    private static final String kGMT_ID   = "GMT";
+    private static final String kCUSTOM_TZ_PREFIX = "GMT";
+
     /**
      * Returns a String array containing all system TimeZone IDs
      * associated with the given country.  These IDs may be passed to
@@ -54,75 +59,67 @@ public final class ZoneMeta {
      * country.  If there are none, return a zero-length array.
      */
     public static synchronized String[] getAvailableIDs(String country) {
-        if(!getOlsonMeta()){
-            return EMPTY;
-        }
+        String[] ids = null;
+
         try{
-            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle regions = top.get(kREGIONS);
-            UResourceBundle names = top.get(kNAMES); // dereference Zones section
-            UResourceBundle temp = regions.get(country);
-            int[] vector = temp.getIntVector();
-            if (ASSERT) Assert.assrt("vector.length>0", vector.length>0);
-            String[] ret = new String[vector.length];
-            for (int i=0; i<vector.length; ++i) {
-                if (ASSERT) Assert.assrt("vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT", 
-                        vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT);
-                ret[i] = names.getString(vector[i]);
-            }
-            return ret;
-        }catch(MissingResourceException ex){
-            //throw away the exception
-        }
-        return EMPTY;
-    }
-    public static synchronized String[] getAvailableIDs() {
-        if(!getOlsonMeta()){
-            return EMPTY;
-        }
-        try{
-            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle names = top.get(kNAMES); // dereference Zones section
-            return names.getStringArray();
-        }catch(MissingResourceException ex){
-            //throw away the exception
-        }
-        return EMPTY;
-    }
-    public static synchronized String[] getAvailableIDs(int offset){
-        if(!getOlsonMeta()){
-            return EMPTY;
-        }
-        ArrayList<String> vector = new ArrayList<String>(OLSON_ZONE_COUNT);
-        for (int i = 0; i < OLSON_ZONE_COUNT; ++i) {
-            String unistr;
-            if ((unistr = getID(i))!=null) {
-                // This is VERY inefficient.
-                TimeZone z = TimeZone.getTimeZone(unistr);
-                // Make sure we get back the ID we wanted (if the ID is
-                // invalid we get back GMT).
-                if (z != null && z.getID().equals(unistr) &&
-                    z.getRawOffset() == offset) {
-                    vector.add(unistr);
+
+            // Create a list of zones associated with the country
+            List<String> countryZones = new ArrayList<String>();
+
+            for (int i = 0; i < regions.getSize(); i++) {
+                if (country.equals(regions.getString(i))) {
+                    String zoneName = getZoneID(i);
+                    countryZones.add(zoneName);
                 }
             }
-        }
-        if(!vector.isEmpty()){
-            String[] strings = new String[vector.size()];
-            return vector.toArray(strings);
-        }
-        return EMPTY;
-    }
-    private static String getID(int i) {
-        try{
-            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle names = top.get(kNAMES); // dereference Zones section
-            return names.getString(i);
-        }catch(MissingResourceException ex){
+            if (countryZones.size() > 0) {
+                ids = countryZones.toArray(new String[countryZones.size()]);
+            }
+        } catch (MissingResourceException ex){
             //throw away the exception
         }
-        return null;
+
+        if (ids == null) {
+            ids = new String[0];
+        }
+        return ids;
     }
+
+    public static synchronized String[] getAvailableIDs() {
+        String[] ids = getZoneIDs();
+        if (ids == null) {
+            return new String[0];
+        }
+        return ids.clone();
+    }
+
+    public static synchronized String[] getAvailableIDs(int offset){
+        String[] ids = null;
+        String[] all = getZoneIDs();
+        if (all != null) {
+            ArrayList<String> zones = new ArrayList<String>();
+            for (String zid : all) {
+                // This is VERY inefficient.
+                TimeZone z = TimeZone.getTimeZone(zid);
+                // Make sure we get back the ID we wanted (if the ID is
+                // invalid we get back GMT).
+                if (z != null && z.getID().equals(zid) && z.getRawOffset() == offset) {
+                    zones.add(zid);
+                }
+            }
+            if (zones.size() > 0) {
+                ids = zones.toArray(new String[zones.size()]);
+            }
+        }
+        if (ids == null) {
+            ids = new String[0];
+        }
+        return ids;
+    }
+
     /**
      * Returns the number of IDs in the equivalency group that
      * includes the given ID.  An equivalency group contains zones
@@ -137,16 +134,16 @@ public final class ZoneMeta {
      * @see #getEquivalentID
      */
     public static synchronized int countEquivalentIDs(String id) {
-
-        UResourceBundle res = openOlsonResource(id);
-        int size = res.getSize();
-        if (size == 4 || size == 6) {
-            UResourceBundle r=res.get(size-1);
-            //result = ures_getSize(&r); // doesn't work
-            int[] v = r.getIntVector();
-            return v.length;
+        int count = 0;
+        try {
+            UResourceBundle res = openOlsonResource(null, id);
+            UResourceBundle links = res.get("links");
+            int[] v = links.getIntVector();
+            count = v.length;
+        } catch (MissingResourceException ex) {
+            // throw away
         }
-        return 0;
+        return count;
     }
 
     /**
@@ -168,35 +165,97 @@ public final class ZoneMeta {
      * @see #countEquivalentIDs
      */
     public static synchronized String getEquivalentID(String id, int index) {
-        String result="";
-        UResourceBundle res = openOlsonResource(id);
-        if (res != null) {
-            int zone = -1;
-            int size = res.getSize();
-            if (size == 4 || size == 6) {
-                UResourceBundle r = res.get(size-1);
-                int[] v = r.getIntVector();
-                if (index >= 0 && index < v.length) {
-                    zone = v[index];
+        String result = "";
+        int zoneIdx = -1;
+
+        if (index >= 0) {
+            try {
+                UResourceBundle res = openOlsonResource(null, id);
+                UResourceBundle links = res.get("links");
+                int[] zones = links.getIntVector();
+                if (index < zones.length) {
+                    zoneIdx = zones[index];
                 }
+            } catch (MissingResourceException ex) {
+                // throw away
+                zoneIdx = -1;
             }
-            if (zone >= 0) {
-                try {
-                    UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo",
-                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                    UResourceBundle ares = top.get(kNAMES); // dereference Zones section
-                    result = ares.getString(zone);
-                } catch (MissingResourceException e) {
-                    result = "";
-                }
+        }
+        if (zoneIdx >= 0) {
+            String tmp = getZoneID(zoneIdx);
+            if (tmp != null) {
+                result = tmp;
             }
         }
         return result;
     }
 
-    private static volatile Set<String> multiZoneTerritories = null;
+    private static String[] ZONEIDS = null;
+
+    /*
+     * ICU frequently refers the zone ID array in zoneinfo resource
+     */
+    private static synchronized String[] getZoneIDs() {
+        if (ZONEIDS == null) {
+            try {
+                UResourceBundle top = UResourceBundle.getBundleInstance(
+                        ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle names = top.get(kNAMES);
+                ZONEIDS = names.getStringArray();
+            } catch (MissingResourceException ex) {
+                // throw away..
+            }
+        }
+        if (ZONEIDS == null) {
+            ZONEIDS = new String[0];
+        }
+        return ZONEIDS;
+    }
+
+    private static String getZoneID(int idx) {
+        if (idx >= 0) {
+            String[] ids = getZoneIDs();
+            if (idx < ids.length) {
+                return ids[idx];
+            }
+        }
+        return null;
+    }
+
+    private static int getZoneIndex(String zid) {
+        int zoneIdx = -1;
+
+        String[] all = getZoneIDs();
+        if (all.length > 0) {
+            int start = 0;
+            int limit = all.length;
+
+            int lastMid = Integer.MAX_VALUE;
+            for (;;) {
+                int mid = (start + limit) / 2;
+                if (lastMid == mid) {   /* Have we moved? */
+                    break;  /* We haven't moved, and it wasn't found. */
+                }
+                lastMid = mid;
+                int r = zid.compareTo(all[mid]);
+                if (r == 0) {
+                    zoneIdx = mid;
+                    break;
+                } else if(r < 0) {
+                    limit = mid;
+                } else {
+                    start = mid;
+                }
+            }
+        }
+
+        return zoneIdx;
+    }
+
+
     private static ICUCache<String, String> CANONICAL_ID_CACHE = new SimpleCache<String, String>();
-    private static ICUCache<String, String> TERRITORY_CACHE = new SimpleCache<String, String>();
+    private static ICUCache<String, String> REGION_CACHE = new SimpleCache<String, String>();
+    private static ICUCache<String, Boolean> SINGLE_COUNTRY_CACHE = new SimpleCache<String, Boolean>();
 
     /**
      * Return the canonical id for this system tzid, which might be the id itself.
@@ -205,36 +264,39 @@ public final class ZoneMeta {
     public static String getCanonicalSystemID(String tzid) {
         String canonical = CANONICAL_ID_CACHE.get(tzid);
         if (canonical == null) {
-            try {
-                UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo",
-                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle zone = getZoneByName(top, tzid);
-
-                canonical = tzid;
-                if (zone.getSize() <= 1) {
-                    // dereference
-                    UResourceBundle names = top.get(kNAMES);
-                    canonical = names.getString(zone.getInt());
+            int zoneIdx = getZoneIndex(tzid);
+            if (zoneIdx >= 0) {
+                try {
+                    UResourceBundle top = UResourceBundle.getBundleInstance(
+                            ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle zones = top.get(kZONES);
+                    UResourceBundle zone = zones.get(zoneIdx);
+                    if (zone.getType() == UResourceBundle.INT) {
+                        // resolve link
+                        String tmp = getZoneID(zone.getInt());
+                        if (tmp != null) {
+                            canonical = tmp;
+                        }
+                    } else {
+                        canonical = tzid;
+                    }
+                    // check canonical mapping in CLDR
+                    UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
+                            ICUResourceBundle.ICU_BASE_NAME, "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle typeAlias = keyTypeData.get("typeAlias");
+                    UResourceBundle aliasesForKey = typeAlias.get("timezone");
+                    String cldrCanonical = aliasesForKey.getString(canonical.replace('/', ':'));
+                    if (cldrCanonical != null) {
+                        canonical = cldrCanonical;
+                    }
+                } catch (MissingResourceException e) {
+                    // fall through
                 }
-
-                // check canonical mapping in CLDR
-                UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
-                        "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle typeAlias = keyTypeData.get("typeAlias");
-                UResourceBundle aliasesForKey = typeAlias.get("timezone");
-                String cldrCanonical = aliasesForKey.getString(canonical.replace('/', ':'));
-                if (cldrCanonical != null) {
-                    canonical = cldrCanonical;
-                }
-            } catch (MissingResourceException e) {
-                // fall through
             }
-
             if (canonical != null) {
                 CANONICAL_ID_CACHE.put(tzid, canonical);
             }
         }
-
         return canonical;
     }
 
@@ -243,30 +305,29 @@ public final class ZoneMeta {
      * is not associated with a country, return null.
      */
     public static String getCanonicalCountry(String tzid) {
-        String canonicalID = getCanonicalSystemID(tzid);
-        if (canonicalID == null) {
-            return null;
-        }
-        String territory = TERRITORY_CACHE.get(canonicalID);
-        if (territory == null) {
-            try {
-                UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData",
-                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle zoneFormatting = supplementalDataBundle.get("zoneFormatting");
-                UResourceBundle zone = zoneFormatting.get(canonicalID.replace('/', ':'));
-                territory = zone.getString("territory");
-                if (territory != null) {
-                    TERRITORY_CACHE.put(canonicalID, territory);
+        String region = REGION_CACHE.get(tzid);
+        if (region == null) {
+            int zoneIdx = getZoneIndex(tzid);
+            if (zoneIdx >= 0) {
+                try {
+                    UResourceBundle top = UResourceBundle.getBundleInstance(
+                            ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle regions = top.get(kREGIONS);
+                    if (zoneIdx < regions.getSize()) {
+                        region = regions.getString(zoneIdx);
+                    }
+                } catch (MissingResourceException e) {
+                    // throw away
                 }
-            } catch (MissingResourceException e) {
-                // fall through
+                if (region != null) {
+                    REGION_CACHE.put(tzid, region);
+                }
             }
         }
-        if (territory != null && territory.equals("001")) {
-            // "001" - not associated with a specific territory
-            territory = null;
+        if (region.equals("001")) {
+            return null;
         }
-        return territory;
+        return region;
     }
 
     /**
@@ -276,39 +337,31 @@ public final class ZoneMeta {
      * tr#35 appendix J step 5.)
      */
     public static String getSingleCountry(String tzid) {
-        String territory = getCanonicalCountry(tzid);
-        if (territory == null) {
-            return null;
-        }
-        if (isMultiZoneTerritory(territory)) {
-            return null;
-        }
-        return territory;
-    }
-
-    private static boolean isMultiZoneTerritory(String territory) {
-        if (multiZoneTerritories == null) {
-            synchronized (ZoneMeta.class) {
-                if (multiZoneTerritories == null) {
-                    // load data from resource
-                    try {
-                        UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
-                                "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                        UResourceBundle zoneFormatting = supplementalDataBundle.get("zoneFormatting");
-                        UResourceBundle multizone = zoneFormatting.get("multizone");
-                        String[] territories = multizone.getStringArray();
-                        multiZoneTerritories = new HashSet<String>();
-                        for (String tr : territories) {
-                            multiZoneTerritories.add(tr);
+        String country = getCanonicalCountry(tzid);
+        if (country != null) {
+            Boolean isSingle = SINGLE_COUNTRY_CACHE.get(tzid);
+            if (isSingle == null) {
+                // This is not so efficient
+                boolean isSingleCountryZone = true;
+                String[] ids = TimeZone.getAvailableIDs(country);
+                if (ids.length > 1) {
+                    // Check if there are multiple canonical zones included
+                    String canonical = getCanonicalSystemID(ids[0]);
+                    for (int i = 1; i < ids.length; i++) {
+                        if (!canonical.equals(getCanonicalSystemID(ids[i]))) {
+                            isSingleCountryZone = false;
+                            break;
                         }
-                    } catch (MissingResourceException e) {
-                        // use empty set as fallback??
-                        multiZoneTerritories = Collections.emptySet();
                     }
                 }
+                isSingle = Boolean.valueOf(isSingleCountryZone);
+                SINGLE_COUNTRY_CACHE.put(tzid, isSingle);
+            }
+            if (!isSingle) {
+                country = null;
             }
         }
-        return multiZoneTerritories.contains(territory);
+        return country;
     }
 
     /**
@@ -405,139 +458,41 @@ public final class ZoneMeta {
 //        return valid;
 //    }
 
-    /**
-     * Empty string array.
-     */
-    private static final String[] EMPTY = new String[0];
-
-
 
     /**
-     * Given an ID, open the appropriate resource for the given time zone.
-     * Dereference aliases if necessary.
+     * Given an ID and the top-level resource of the zoneinfo resource,
+     * open the appropriate resource for the given time zone.
+     * Dereference links if necessary.
+     * @param top the top level resource of the zoneinfo resource or null.
      * @param id zone id
-     * @return top-level resource bundle
+     * @return the corresponding zone resource or null if not found
      */
-    public static UResourceBundle openOlsonResource(String id)
+    public static UResourceBundle openOlsonResource(UResourceBundle top, String id)
     {
         UResourceBundle res = null;
-        try {
-            ICUResourceBundle top = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            res = getZoneByName(top, id);
-            // Dereference if this is an alias.  Docs say result should be 1
-            // but it is 0 in 2.8 (?).
-             if (res.getSize() <= 1) {
-                int deref = res.getInt() + 0;
-                UResourceBundle ares = top.get(kZONES); // dereference Zones section
-                res = (ICUResourceBundle) ares.get(deref);
+        int zoneIdx = getZoneIndex(id);
+        if (zoneIdx >= 0) {
+            try {
+                if (top == null) {
+                    top = UResourceBundle.getBundleInstance(
+                            ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                }
+                UResourceBundle zones = top.get(kZONES);
+                UResourceBundle zone = zones.get(zoneIdx);
+                if (zone.getType() == UResourceBundle.INT) {
+                    // resolve link
+                    zone = zones.get(zone.getInt());
+                }
+                res = zone;
+            } catch (MissingResourceException e) {
+                res = null;
             }
-        } catch (MissingResourceException e) {
-            res = null;
         }
         return res;
     }
 
-    /**
-     * Fetch a specific zone by name.  Replaces the getByKey call. 
-     * @param top Top timezone resource
-     * @param id Time zone ID
-     * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
-     */
-    private static UResourceBundle getZoneByName(UResourceBundle top, String id) throws MissingResourceException {
-        // load the Rules object
-        UResourceBundle tmp = top.get(kNAMES);
-        
-        // search for the string
-        int idx = findInStringArray(tmp, id);
-        
-        if((idx == -1)) {
-            // not found 
-            throw new MissingResourceException(kNAMES, ((ICUResourceBundle)tmp).getResPath(), id);
-            //ures_close(oldbundle);
-            //oldbundle = NULL;
-        } else {
-            tmp = top.get(kZONES); // get Zones object from top
-            tmp = tmp.get(idx); // get nth Zone object
-        }
-        return tmp;
-    }
-    private static int findInStringArray(UResourceBundle array, String id){
-        int start = 0;
-        int limit = array.getSize();
-        int mid;
-        String u = null;
-        int lastMid = Integer.MAX_VALUE;
-        if((limit < 1)) { 
-            return -1;
-        }
-        for (;;) {
-            mid = (start + limit) / 2;
-            if (lastMid == mid) {   /* Have we moved? */
-                break;  /* We haven't moved, and it wasn't found. */
-            }
-            lastMid = mid;
-            u = array.getString(mid);
-            if(u==null){
-                break;
-            }
-            int r = id.compareTo(u);
-            if(r==0) {
-                return mid;
-            } else if(r<0) {
-                limit = mid;
-            } else {
-                start = mid;
-            }
-        }
-        return -1;
-    }
-    private static final String kREGIONS  = "Regions";
-    private static final String kZONES    = "Zones";
-    private static final String kNAMES    = "Names";
-    private static final String kGMT_ID   = "GMT";
-    private static final String kCUSTOM_TZ_PREFIX = "GMT";
-    private static ICUCache<String, TimeZone> zoneCache = new SimpleCache<String, TimeZone>();
-    /**
-     * The Olson data is stored the "zoneinfo" resource bundle.
-     * Sub-resources are organized into three ranges of data: Zones, final
-     * rules, and country tables.  There is also a meta-data resource
-     * which has 3 integers: The number of zones, rules, and countries,
-     * respectively.  The country count includes the non-country 'Default'.
-     */
-    static int OLSON_ZONE_START = -1; // starting index of zones
-    static int OLSON_ZONE_COUNT = 0;  // count of zones
 
-    /**
-     * Given a pointer to an open "zoneinfo" resource, load up the Olson
-     * meta-data. Return true if successful.
-     */
-    private static boolean getOlsonMeta(ICUResourceBundle top) {
-        if (OLSON_ZONE_START < 0 && top != null) {
-            try {
-                UResourceBundle res = top.get(kZONES);
-                OLSON_ZONE_COUNT = res.getSize();
-                OLSON_ZONE_START = 0;
-            } catch (MissingResourceException e) {
-                // throws away the exception
-            }
-        }
-        return (OLSON_ZONE_START >= 0);
-    }
-
-    /**
-     * Load up the Olson meta-data. Return true if successful.
-     */
-    private static boolean getOlsonMeta() {
-        if (OLSON_ZONE_START < 0) {
-            try {
-                ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                getOlsonMeta(top);
-            } catch (MissingResourceException e) {
-                // throws away the exception
-            }
-        }
-        return (OLSON_ZONE_START >= 0);
-    }
+    private static ICUCache<String, TimeZone> SYSTEM_ZONE_CACHE = new SimpleCache<String, TimeZone>();
 
     /**
      * Lookup the given name in our system zone table.  If found,
@@ -545,21 +500,22 @@ public final class ZoneMeta {
      * found, return 0.
      */
     public static TimeZone getSystemTimeZone(String id) {
-        TimeZone z = zoneCache.get(id);
+        TimeZone z = SYSTEM_ZONE_CACHE.get(id);
         if (z == null) {
             try{
-                UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle res = openOlsonResource(id);
+                UResourceBundle top = UResourceBundle.getBundleInstance(
+                        ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle res = openOlsonResource(top, id);
                 z = new OlsonTimeZone(top, res);
                 z.setID(id);
-                zoneCache.put(id, z);
+                SYSTEM_ZONE_CACHE.put(id, z);
             }catch(Exception ex){
                 return null;
             }
         }
         return (TimeZone)z.clone();
     }
-    
+
     public static TimeZone getGMT(){
         TimeZone z = new SimpleTimeZone(0, kGMT_ID);
         z.setID(kGMT_ID);

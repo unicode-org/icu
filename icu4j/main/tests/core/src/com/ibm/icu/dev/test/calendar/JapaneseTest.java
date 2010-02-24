@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -208,8 +208,7 @@ public class JapaneseTest extends CalendarTest {
         fmt.applyPattern("G y");
         logln("fmt's locale = " + fmt.getLocale(ULocale.ACTUAL_LOCALE));
         //SimpleDateFormat fmt = new SimpleDateFormat("G y", new Locale("en_US@calendar=japanese"));
-        long aDateLong = -3197120400000L 
-            + 3600000L; // compensate for DST
+        long aDateLong = -3197117222000L;
         Date aDate = new Date(aDateLong); //08 Sept 1868
         logln("aDate: " + aDate.toString() +", from " + aDateLong);
         String str;
