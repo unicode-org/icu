@@ -6,8 +6,11 @@
   */
 package com.ibm.icu.impl;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
@@ -23,7 +26,7 @@ import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * A time zone based on the Olson database.  Olson time zones change
+ * A time zone based on the Olson tz database.  Olson time zones change
  * behavior over time.  The raw offset, rules, presence or absence of
  * daylight savings time, and even the daylight savings amount can all
  * vary.
@@ -36,56 +39,61 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * 1. Zones.  These have keys corresponding to the Olson IDs, e.g.,
  * "Asia/Shanghai".  Each resource describes the behavior of the given
- * zone.  Zones come in several formats, which are differentiated
- * based on length.
+ * zone.  Zones come in two different formats.
  *
- *  a. Alias (int, length 1).  An alias zone is an int resource.  The
- *  integer is the zone number of the target zone.  The key of this
- *  resource is an alternate name for the target zone.  Aliases
- *  represent Olson links and ICU compatibility IDs.
+ *   a. Zone (table).  A zone is a table resource contains several
+ *   type of resources below:
+ *  
+ *   - typeOffsets:intvector (Required)
+ *  
+ *   Sets of UTC raw/dst offset pairs in seconds.  Entries at
+ *   2n represents raw offset and 2n+1 represents dst offset
+ *   paired with the raw offset at 2n.  The very first pair represents
+ *   the initial zone offset (before the first transition) always.
  *
- *  b. Simple zone (array, length 3).  The three subelements are:
- *
- *   i. An intvector of transitions.  These are given in epoch
- *   seconds.  This may be an empty invector (length 0).  If the
- *   transtions list is empty, then the zone's behavior is fixed and
- *   given by the offset list, which will contain exactly one pair.
- *   Otherwise each transtion indicates a time after which (inclusive)
- *   the associated offset pair is in effect.
- *
- *   ii. An intvector of offsets.  These are in pairs of raw offset /
- *   DST offset, in units of seconds.  There will be at least one pair
- *   (length >= 2 && length % 2 == 0).
- *
- *   iii. A binary resource.  This is of the same length as the
- *   transitions vector, so length may be zero.  Each unsigned byte
- *   corresponds to one transition, and has a value of 0..n-1, where n
- *   is the number of pairs in the offset vector.  This forms a map
- *   between transitions and offset pairs.
- *
- *  c. Simple zone with aliases (array, length 4).  This is like a
- *  simple zone, but also contains a fourth element:
- *
- *   iv. An intvector of aliases.  This list includes this zone
- *   itself, and lists all aliases of this zone.
- *
- *  d. Complex zone (array, length 5).  This is like a simple zone,
- *  but contains two more elements:
- *
- *   iv. A string, giving the name of a rule.  This is the "final
- *   rule", which governs the zone's behavior beginning in the "final
- *   year".  The rule ID is given without leading underscore, e.g.,
- *   "EU".
- *
- *   v. An intvector of length 2, containing the raw offset for the
- *   final rule (in seconds), and the final year.  The final rule
- *   takes effect for years >= the final year.
- *
- *  e. Complex zone with aliases (array, length 6).  This is like a
- *  complex zone, but also contains a sixth element:
+ *   - trans:intvector (Optional) 
+ *  
+ *   List of transition times represented by 32bit seconds from the
+ *   epoch (1970-01-01T00:00Z) in ascending order.
+ *  
+ *   - transPre32/transPost32:intvector (Optional)
+ *  
+ *   List of transition times before/after 32bit minimum seconds.
+ *   Each time is represented by a pair of 32bit integer.
  * 
- *   vi. An intvector of aliases.  This list includes this zone
- *   itself, and lists all aliases of this zone.
+ *   - typeMap:bin (Optional)
+ *  
+ *   Array of bytes representing the mapping between each transition
+ *   time (transPre32/trans/transPost32) and its corresponding offset
+ *   data (typeOffsets).
+ *  
+ *   - finalRule:string (Optional)
+ *  
+ *   If a recurrent transition rule is applicable to a zone forever
+ *   after the final transition time, finalRule represents the rule
+ *   in Rules data.
+ *  
+ *   - finalRaw:int (Optional)
+ *   
+ *   When finalRule is available, finalRaw is required and specifies
+ *   the raw (base) offset of the rule.
+ *   
+ *   - finalYear:int (Optional)
+ *   
+ *   When finalRule is available, finalYear is required and specifies
+ *   the start year of the rule.
+ *   
+ *   - links:intvector (Optional)
+ *   
+ *   When this zone data is shared with other zones, links specifies
+ *   all zones including the zone itself.  Each zone is referenced by
+ *   integer index.
+ * 
+ *  b. Link (int, length 1).  A link zone is an int resource.  The
+ *  integer is the zone number of the target zone.  The key of this
+ *  resource is an alternate name for the target zone.  This data
+ *  is corresponding to Link data in the tz database.
+ *
  *
  * 2. Rules.  These have keys corresponding to the Olson rule IDs,
  * with an underscore prepended, e.g., "_EU".  Each resource describes
@@ -99,25 +107,15 @@ import com.ibm.icu.util.UResourceBundle;
  * used), with the times and the DST savings multiplied by 1000 to
  * scale from seconds to milliseconds.
  *
- * 3. Countries.  These have keys corresponding to the 2-letter ISO
- * country codes, with a percent sign prepended, e.g., "%US".  Each
- * resource is an intvector listing the zones associated with the
- * given country.  The special entry "%" corresponds to "no country",
- * that is, the category of zones assigned to no country in the Olson
- * DB.
- *
- * 4. Metadata.  Metadata is stored under the key "_".  It is an
- * intvector of length three containing the number of zones resources,
- * rule resources, and country resources.  For the purposes of this
- * count, the metadata entry itself is considered a rule resource,
- * since its key begins with an underscore.
+ * 3. Regions.  An array specifies mapping between zones and regions.
+ * Each item is either a 2-letter ISO country code or "001"
+ * (UN M.49 - World).  This data is generated from "zone.tab"
+ * in the tz database.
  */
 public class OlsonTimeZone extends BasicTimeZone {
 
     // Generated by serialver from JDK 1.4.1_01
     static final long serialVersionUID = -6281977362477515376L;
-
-    private static final boolean ASSERT = false;
 
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getOffset(int, int, int, int, int, int)
@@ -153,8 +151,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             year = -year;
         }
 
-        if (year > finalYear) { // [sic] >, not >=; see above
-            if (ASSERT) Assert.assrt("(finalZone != null)", finalZone != null);
+        if (finalZone != null && year >= finalStartYear) {
             return finalZone.getOffset(era, year, month, dom, dow, millis);
         }
 
@@ -175,7 +172,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         }
         long current = System.currentTimeMillis();
 
-        if (current < finalMillis) {
+        if (current < finalStartMillis) {
             SimpleTimeZone stz = new SimpleTimeZone(offsetMillis, getID());
 
             boolean bDst = useDaylightTime();
@@ -230,13 +227,14 @@ public class OlsonTimeZone extends BasicTimeZone {
             }
 
             int[] fields = Grego.timeToFields(current, null);
-            finalYear = fields[0] - 1; // finalYear is (year of finalMillis) - 1
-            finalMillis = Grego.fieldsToDay(fields[0], 0, 1);
+
+            finalStartYear = fields[0];
+            finalStartMillis = Grego.fieldsToDay(fields[0], 0, 1);
 
             if (bDst) {
                 // we probably do not need to set start year of final rule
                 // to finalzone itself, but we always do this for now.
-                stz.setStartYear(finalYear);
+                stz.setStartYear(finalStartYear);
             }
 
             finalZone = stz;
@@ -250,13 +248,24 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     public Object clone() {
         OlsonTimeZone other = (OlsonTimeZone) super.clone();
-        if(finalZone!=null){
+        if(finalZone != null){
             finalZone.setID(getID());
             other.finalZone = (SimpleTimeZone)finalZone.clone();
         }
-        other.transitionTimes = transitionTimes.clone();
-        other.typeData = typeData.clone();
+
+        // Following data are read-only and never changed.
+        // Therefore, shallow copies should be sufficient.
+
+        /*
+        if (transitionTimes64 != null) {
+            other.transitionTimes64 = transitionTimes64.clone();
+        }
+        if (typeMapData != null) {
+            other.typeMapData = typeMapData.clone();
+        }
         other.typeOffsets = typeOffsets.clone();
+        */
+
         return other;
     }
 
@@ -264,10 +273,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * TimeZone API.
      */
     public void getOffset(long date, boolean local, int[] offsets)  {
-        // The check against finalMillis will suffice most of the time, except
-        // for the case in which finalMillis == DBL_MAX, date == DBL_MAX,
-        // and finalZone == 0.  For this case we add "&& finalZone != 0".
-        if (date >= finalMillis && finalZone != null) {
+        if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffset(date, local, offsets);
         } else {
             getHistoricalOffset(date, local,
@@ -282,7 +288,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
-        if (date >= finalMillis && finalZone != null) {
+        if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
             getHistoricalOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
@@ -294,7 +300,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     public int getRawOffset() {
         int[] ret = new int[2];
-        getOffset( System.currentTimeMillis(), false, ret);
+        getOffset(System.currentTimeMillis(), false, ret);
         return ret[0];
     }
 
@@ -307,25 +313,26 @@ public class OlsonTimeZone extends BasicTimeZone {
         // this method to return FALSE.  This method determines whether
         // DST is in use in the current year (at any point in the year)
         // and returns TRUE if so.
-        int[] fields = Grego.timeToFields(System.currentTimeMillis(), null);
-        int year = fields[0];
+        long current = System.currentTimeMillis();
 
-        if (year > finalYear) { // [sic] >, not >=; see above
+        if (finalZone != null && current >= finalStartMillis) {
             return (finalZone != null && finalZone.useDaylightTime());
         }
 
+        int[] fields = Grego.timeToFields(current, null);
+
         // Find start of this year, and start of next year
-        long start = Grego.fieldsToDay(year, 0, 1) * SECONDS_PER_DAY;    
-        long limit = Grego.fieldsToDay(year+1, 0, 1) * SECONDS_PER_DAY;    
+        long start = Grego.fieldsToDay(fields[0], 0, 1) * SECONDS_PER_DAY;    
+        long limit = Grego.fieldsToDay(fields[0] + 1, 0, 1) * SECONDS_PER_DAY;    
 
         // Return TRUE if DST is observed at any time during the current
         // year.
         for (int i = 0; i < transitionCount; ++i) {
-            if (transitionTimes[i] >= limit) {
+            if (transitionTimes64[i] >= limit) {
                 break;
             }
-            if ((transitionTimes[i] >= start && dstOffset(typeData[i]) != 0)
-                    || (transitionTimes[i] > start && i > 0 && dstOffset(typeData[i - 1]) != 0)) {
+            if ((transitionTimes64[i] >= start && dstOffsetAt(i) != 0)
+                    || (transitionTimes64[i] > start && i > 0 && dstOffsetAt(i - 1) != 0)) {
                 return true;
             }
         }
@@ -338,7 +345,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * to get local wall clock time.
      */
     public int getDSTSavings() {
-        if(finalZone!=null){
+        if (finalZone != null){
             return finalZone.getDSTSavings();
         }
         return super.getDSTSavings();
@@ -371,12 +378,12 @@ public class OlsonTimeZone extends BasicTimeZone {
         // Check final zone
         OlsonTimeZone o = (OlsonTimeZone)other;
         if (finalZone == null) {
-            if (o.finalZone != null && finalYear != Integer.MAX_VALUE) {
+            if (o.finalZone != null) {
                 return false;
             }
         } else {
             if (o.finalZone == null
-                    || finalYear != o.finalYear
+                    || finalStartYear != o.finalStartYear
                     || !(finalZone.hasSameRules(o.finalZone))) {
                 return false;
             }
@@ -385,9 +392,9 @@ public class OlsonTimeZone extends BasicTimeZone {
         // Note: The code below actually fails to compare two equivalent rules in
         // different representation properly.
         if (transitionCount != o.transitionCount ||
-                !Arrays.equals(transitionTimes, o.transitionTimes) ||
+                !Arrays.equals(transitionTimes64, o.transitionTimes64) ||
                 typeCount != o.typeCount ||
-                !Arrays.equals(typeData, o.typeData) ||
+                !Arrays.equals(typeMapData, o.typeMapData) ||
                 !Arrays.equals(typeOffsets, o.typeOffsets)){
             return false;
         }
@@ -400,10 +407,16 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     private void constructEmpty(){
         transitionCount = 0;
+        transitionTimes64 = null;
+        typeMapData =  null;
+
         typeCount = 1;
-        transitionTimes = typeOffsets = new int[]{0,0};
-        typeData =  new byte[2];
-        
+        typeOffsets = new int[]{0,0};
+        finalZone = null;
+        finalStartYear = Integer.MAX_VALUE;
+        finalStartMillis = Double.MAX_VALUE;
+
+        transitionRulesInitialized = false;
     }
 
     /**
@@ -423,218 +436,264 @@ public class OlsonTimeZone extends BasicTimeZone {
         }
         if(DEBUG) System.out.println("OlsonTimeZone(" + res.getKey() +")");
 
+        UResourceBundle r;
+        int[] transPre32, trans32, transPost32;
+        transPre32 = trans32 = transPost32 = null;
 
-        // TODO -- clean up -- Doesn't work if res points to an alias
-        //        // TODO remove nonconst casts below when ures_* API is fixed
-        //        setID(ures_getKey((UResourceBundle*) res)); // cast away const
+        transitionCount = 0;
 
-        // Size 1 is an alias TO another zone (int)
-        // HOWEVER, the caller should dereference this and never pass it in to us
-        // Size 3 is a purely historical zone (no final rules)
-        // Size 4 is like size 3, but with an alias list at the end
-        // Size 5 is a hybrid zone, with historical and final elements
-        // Size 6 is like size 5, but with an alias list at the end
-        int size = res.getSize();
-        if (size < 3 || size > 6) {
-           // ec = U_INVALID_FORMAT_ERROR;
-            throw new IllegalArgumentException("Invalid Format");
+        // Pre-32bit second transitions
+        try {
+            r = res.get("transPre32");
+            transPre32 = r.getIntVector();
+            if (transPre32.length % 2 != 0) {
+                // elements in the pre-32bit must be an even number
+                throw new IllegalArgumentException("Invalid Format");
+            }
+            transitionCount += transPre32.length / 2;
+        } catch (MissingResourceException e) {
+            // Pre-32bit transition data is optional
         }
 
-        // Transitions list may be empty
-        UResourceBundle r = res.get(0);
-        transitionTimes = r.getIntVector();
-        
-        if ((transitionTimes.length<0 || transitionTimes.length>0x7FFF) ) {
-            throw new IllegalArgumentException("Invalid Format");
+        // 32bit second transitions
+        try {
+            r = res.get("trans");
+            trans32 = r.getIntVector();
+            transitionCount += trans32.length;
+        } catch (MissingResourceException e) {
+            // 32bit transition data is optional
         }
-        transitionCount = transitionTimes.length;
-        
+
+        // Post-32bit second transitions
+        try {
+            r = res.get("transPost32");
+            transPost32 = r.getIntVector();
+            if (transPost32.length % 2 != 0) {
+                // elements in the post-32bit must be an even number
+                throw new IllegalArgumentException("Invalid Format");
+            }
+            transitionCount += transPost32.length / 2;
+        } catch (MissingResourceException e) {
+            // Post-32bit transition data is optional
+        }
+
+        transitionTimes64 = new long[transitionCount];
+        int idx = 0;
+        if (transPre32 != null) {
+            for (int i = 0; i < transPre32.length / 2; i++, idx++) {
+                transitionTimes64[idx] = 
+                    (((long)transPre32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                    | (((long)transPre32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+            }
+        }
+        if (trans32 != null) {
+            for (int i = 0; i < trans32.length; i++, idx++) {
+                transitionTimes64[idx] = (long)trans32[i];
+            }
+        }
+        if (transPost32 != null) {
+            for (int i = 0; i < transPost32.length / 2; i++, idx++) {
+                transitionTimes64[idx] = 
+                    (((long)transPost32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                    | (((long)transPost32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+            }
+        }
+
         // Type offsets list must be of even size, with size >= 2
-        r = res.get( 1);
+        r = res.get("typeOffsets");
         typeOffsets = r.getIntVector();
-        if ((typeOffsets.length<2 || typeOffsets.length>0x7FFE || ((typeOffsets.length&1)!=0))) {
+        if ((typeOffsets.length < 2 || typeOffsets.length > 0x7FFE || typeOffsets.length % 2 != 0)) {
             throw new IllegalArgumentException("Invalid Format");
         }
-        typeCount = typeOffsets.length >> 1;
+        typeCount = typeOffsets.length / 2;
 
-        // Type data must be of the same size as the transitions list        
-        r = res.get(2);
-        typeData = r.getBinary(null);
-        if (typeData.length != transitionCount) {
-            throw new IllegalArgumentException("Invalid Format");
+        // Type map data must be of the same size as the transition count
+        typeMapData = null;
+        if (transitionCount > 0) {
+            r = res.get("typeMap");
+            typeMapData = r.getBinary(null);
+            if (typeMapData.length != transitionCount) {
+                throw new IllegalArgumentException("Invalid Format");
+            }
         }
 
         // Process final rule and data, if any
-        if (size >= 5) {
-            String ruleid = res.getString(3);
-            r = res.get(4);
-            int[] data = r.getIntVector();
+        finalZone = null;
+        finalStartYear = Integer.MAX_VALUE;
+        finalStartMillis = Double.MAX_VALUE;
 
-            if (data != null && data.length == 2) {
-                int rawOffset = data[0] * Grego.MILLIS_PER_SECOND;
-                // Subtract one from the actual final year; we
-                // actually store final year - 1, and compare
-                // using > rather than >=.  This allows us to use
-                // INT32_MAX as an exclusive upper limit for all
-                // years, including INT32_MAX.
-                if (ASSERT) Assert.assrt("data[1] > Integer.MIN_VALUE", data[1] > Integer.MIN_VALUE);
-                finalYear = data[1] - 1;
-                // Also compute the millis for Jan 1, 0:00 GMT of the
-                // finalYear.  This reduces runtime computations.
-                finalMillis = Grego.fieldsToDay(data[1], 0, 1) * Grego.MILLIS_PER_DAY;
-                //U_DEBUG_TZ_MSG(("zone%s|%s: {%d,%d}, finalYear%d, finalMillis%.1lf\n",
-                  //              zKey,rKey, data[0], data[1], finalYear, finalMillis));
-                r = loadRule(top, ruleid);
+        String ruleID = null;
+        try {
+            ruleID = res.getString("finalRule");
 
-                // 3, 1, -1, 7200, 0, 9, -31, -1, 7200, 0, 3600
-                data = r.getIntVector();
-                if ( data.length == 11) {
-                    //U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}", zKey, ures_getKey(r), 
-                      //            data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]));
-                    finalZone = new SimpleTimeZone(rawOffset, "",
-                        data[0], data[1], data[2],
-                        data[3] * Grego.MILLIS_PER_SECOND,
-                        data[4],
-                        data[5], data[6], data[7],
-                        data[8] * Grego.MILLIS_PER_SECOND,
-                        data[9],
-                        data[10] * Grego.MILLIS_PER_SECOND);
-                } else {
-                    throw new IllegalArgumentException("Invalid Format");
-                }                
-            } else {
+            r = res.get("finalRaw");
+            int ruleRaw = r.getInt() * Grego.MILLIS_PER_SECOND;
+            r = loadRule(top, ruleID);
+            int[] ruleData = r.getIntVector();
+
+            if (ruleData == null || ruleData.length != 11) {
                 throw new IllegalArgumentException("Invalid Format");
             }
-        }       
+            finalZone = new SimpleTimeZone(ruleRaw, "",
+                    ruleData[0], ruleData[1], ruleData[2],
+                    ruleData[3] * Grego.MILLIS_PER_SECOND,
+                    ruleData[4],
+                    ruleData[5], ruleData[6], ruleData[7],
+                    ruleData[8] * Grego.MILLIS_PER_SECOND,
+                    ruleData[9],
+                    ruleData[10] * Grego.MILLIS_PER_SECOND);
+
+            r = res.get("finalYear");
+            finalStartYear = r.getInt();
+
+            // Note: Setting finalStartYear to the finalZone is problematic.  When a date is around
+            // year boundary, SimpleTimeZone may return false result when DST is observed at the 
+            // beginning of year.  We could apply safe margin (day or two), but when one of recurrent
+            // rules falls around year boundary, it could return false result.  Without setting the
+            // start year, finalZone works fine around the year boundary of the start year.
+
+            // finalZone.setStartYear(finalStartYear);
+
+            // Compute the millis for Jan 1, 0:00 GMT of the finalYear
+
+            // Note: finalStartMillis is used for detecting either if
+            // historic transition data or finalZone to be used.  In an
+            // extreme edge case - for example, two transitions fall into
+            // small windows of time around the year boundary, this may
+            // result incorrect offset computation.  But I think it will
+            // never happen practically.  Yoshito - Feb 20, 2010
+            finalStartMillis = Grego.fieldsToDay(finalStartYear, 0, 1) * Grego.MILLIS_PER_DAY;
+        } catch (MissingResourceException e) {
+            if (ruleID != null) {
+                // ruleID is found, but missing other data required for
+                // creating finalZone
+                throw new IllegalArgumentException("Invalid Format");
+            }
+        }
     }
 
-    public OlsonTimeZone(){
-       /*
-        * 
-        finalYear = Integer.MAX_VALUE;
-        finalMillis = Double.MAX_VALUE;
-        finalZone = null;
-        */
-        constructEmpty();
-    }
-
+    // This constructor is used for testing purpose only
     public OlsonTimeZone(String id){
-        UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle res = ZoneMeta.openOlsonResource(id);
+        UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle res = ZoneMeta.openOlsonResource(top, id);
         construct(top, res);
-        if(finalZone!=null){
+        if (finalZone != null){
             finalZone.setID(id);
         }
         super.setID(id);
     }
 
     public void setID(String id){
-        if(finalZone!= null){
+        if (finalZone != null){
             finalZone.setID(id);
         }
         super.setID(id);
         transitionRulesInitialized = false;
     }
 
-    private static final int UNSIGNED_BYTE_MASK =0xFF;
-
-    private int getInt(byte val){
-        return UNSIGNED_BYTE_MASK & val; 
-    }
-
     private void getHistoricalOffset(long date, boolean local,
             int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
         if (transitionCount != 0) {
             long sec = Grego.floorDivide(date, Grego.MILLIS_PER_SECOND);
-            // Linear search from the end is the fastest approach, since
-            // most lookups will happen at/near the end.
-            int i = 0;
-            for (i = transitionCount - 1; i > 0; --i) {
-                int transition = transitionTimes[i];
-                if (local) {
-                    int offsetBefore = zoneOffset(getInt(typeData[i-1]));
-                    boolean dstBefore = dstOffset(getInt(typeData[i-1])) != 0;
+            if (!local && sec < transitionTimes64[0]) {
+                // Before the first transition time
+                offsets[0] = initialRawOffset() * Grego.MILLIS_PER_SECOND;
+                offsets[1] = initialDstOffset() * Grego.MILLIS_PER_SECOND;
+            } else {
+                // Linear search from the end is the fastest approach, since
+                // most lookups will happen at/near the end.
+                int transIdx;
+                for (transIdx = transitionCount - 1; transIdx >= 0; transIdx--) {
+                    long transition = transitionTimes64[transIdx];
+                    if (local) {
+                        int offsetBefore = zoneOffsetAt(transIdx - 1);
+                        boolean dstBefore = dstOffsetAt(transIdx - 1) != 0;
 
-                    int offsetAfter = zoneOffset(getInt(typeData[i]));
-                    boolean dstAfter = dstOffset(getInt(typeData[i])) != 0;
+                        int offsetAfter = zoneOffsetAt(transIdx);
+                        boolean dstAfter = dstOffsetAt(transIdx) != 0;
 
-                    boolean dstToStd = dstBefore && !dstAfter;
-                    boolean stdToDst = !dstBefore && dstAfter;
-                    
-                    if (offsetAfter - offsetBefore >= 0) {
-                        // Positive transition, which makes a non-existing local time range
-                        if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
-                            transition += offsetBefore;
-                        } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
-                            transition += offsetAfter;
-                        } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
-                            transition += offsetBefore;
+                        boolean dstToStd = dstBefore && !dstAfter;
+                        boolean stdToDst = !dstBefore && dstAfter;
+
+                        if (offsetAfter - offsetBefore >= 0) {
+                            // Positive transition, which makes a non-existing local time range
+                            if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
+                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                                transition += offsetBefore;
+                            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
+                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                                transition += offsetAfter;
+                            } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
+                                transition += offsetBefore;
+                            } else {
+                                // Interprets the time with rule before the transition,
+                                // default for non-existing time range
+                                transition += offsetAfter;
+                            }
                         } else {
-                            // Interprets the time with rule before the transition,
-                            // default for non-existing time range
-                            transition += offsetAfter;
-                        }
-                    } else {
-                        // Negative transition, which makes a duplicated local time range
-                        if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
-                            transition += offsetAfter;
-                        } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
-                            transition += offsetBefore;
-                        } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
-                            transition += offsetBefore;
-                        } else {
-                            // Interprets the time with rule after the transition,
-                            // default for duplicated local time range
-                            transition += offsetAfter;
+                            // Negative transition, which makes a duplicated local time range
+                            if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
+                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                                transition += offsetAfter;
+                            } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
+                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                                transition += offsetBefore;
+                            } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+                                transition += offsetBefore;
+                            } else {
+                                // Interprets the time with rule after the transition,
+                                // default for duplicated local time range
+                                transition += offsetAfter;
+                            }
                         }
                     }
+                    if (sec >= transition) {
+                        break;
+                    }
                 }
-                
-                if (sec >= transition) {
-                    break;
-                }
+                // transIdx could be -1 when local=true
+                offsets[0] = rawOffsetAt(transIdx) * Grego.MILLIS_PER_SECOND;
+                offsets[1] = dstOffsetAt(transIdx) * Grego.MILLIS_PER_SECOND;
             }
-
-            if (ASSERT) Assert.assrt("i>=0 && i<transitionCount", i>=0 && i<transitionCount);
-
-            // Check invariants for GMT times; if these pass for GMT times
-            // the local logic should be working too.
-            if (ASSERT) {
-                Assert.assrt("local || sec < transitionTimes[0] || sec >= transitionTimes[i]", 
-                        local || sec < transitionTimes[0] || sec >= transitionTimes[i]);
-                Assert.assrt("local || i == transitionCount-1 || sec < transitionTimes[i+1]", 
-                        local || i == transitionCount-1 || sec < transitionTimes[i+1]);
-            }
-            // Since ICU tzdata 2007c, the first transition data is actually not a
-            // transition, but used for representing the initial offset.  So the code
-            // below works even if i == 0.
-            int index = getInt(typeData[i]);
-            offsets[0] = rawOffset(index) * Grego.MILLIS_PER_SECOND;
-            offsets[1] = dstOffset(index) * Grego.MILLIS_PER_SECOND;
         } else {
             // No transitions, single pair of offsets only
-            offsets[0] = rawOffset(0) * Grego.MILLIS_PER_SECOND;
-            offsets[1] = dstOffset(0) * Grego.MILLIS_PER_SECOND;
+            offsets[0] = initialRawOffset() * Grego.MILLIS_PER_SECOND;
+            offsets[1] = initialDstOffset() * Grego.MILLIS_PER_SECOND;
         }
     }
 
-    private int zoneOffset(int index){
-        index=index << 1;
-        return typeOffsets[index] + typeOffsets[index+1];
+    private int getInt(byte val){
+        return val & 0xFF; 
     }
 
-    private int rawOffset(int index){
-        return typeOffsets[index << 1];
+    /*
+     * Following 3 methods return an offset at the given transition time index.
+     * When the index is negative, return the initial offset.
+     */
+    private int zoneOffsetAt(int transIdx) {
+        int typeIdx = transIdx >= 0 ? getInt(typeMapData[transIdx]) * 2 : 0;
+        return typeOffsets[typeIdx] + typeOffsets[typeIdx + 1];
     }
 
-    private int dstOffset(int index){
-        return typeOffsets[(index << 1) + 1];
+    private int rawOffsetAt(int transIdx) {
+        int typeIdx = transIdx >= 0 ? getInt(typeMapData[transIdx]) * 2 : 0;
+        return typeOffsets[typeIdx];
     }
-    
+
+    private int dstOffsetAt(int transIdx) {
+        int typeIdx = transIdx >= 0 ? getInt(typeMapData[transIdx]) * 2 : 0;
+        return typeOffsets[typeIdx + 1];
+    }
+
+    private int initialRawOffset() {
+        return typeOffsets[0];
+    }
+
+    private int initialDstOffset() {
+        return typeOffsets[1];
+    }
+
     // temp
     public String toString() {
         StringBuilder buf = new StringBuilder();
@@ -643,13 +702,13 @@ public class OlsonTimeZone extends BasicTimeZone {
         buf.append("transitionCount=" + transitionCount);
         buf.append(",typeCount=" + typeCount);
         buf.append(",transitionTimes=");
-        if (transitionTimes != null) {
+        if (transitionTimes64 != null) {
             buf.append('[');
-            for (int i = 0; i < transitionTimes.length; ++i) {
+            for (int i = 0; i < transitionTimes64.length; ++i) {
                 if (i > 0) {
                     buf.append(',');
                 }
-                buf.append(Integer.toString(transitionTimes[i]));
+                buf.append(Long.toString(transitionTimes64[i]));
             }
             buf.append(']');
         } else {
@@ -668,8 +727,8 @@ public class OlsonTimeZone extends BasicTimeZone {
         } else {
             buf.append("null");
         }
-        buf.append(",finalYear=" + finalYear);
-        buf.append(",finalMillis=" + finalMillis);
+        buf.append(",finalStartYear=" + finalStartYear);
+        buf.append(",finalStartMillis=" + finalStartMillis);
         buf.append(",finalZone=" + finalZone);
         buf.append(']');
         
@@ -688,44 +747,40 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     /**
      * Time of each transition in seconds from 1970 epoch.
-     * Length is transitionCount int32_t's.
      */
-    private int[] transitionTimes; // alias into res; do not delete
+    private long[] transitionTimes64;
 
     /**
      * Offset from GMT in seconds for each type.
-     * Length is typeCount int32_t's.
+     * Length is equal to typeCount
      */
     private int[] typeOffsets; // alias into res; do not delete
 
     /**
      * Type description data, consisting of transitionCount uint8_t
      * type indices (from 0..typeCount-1).
-     * Length is transitionCount int8_t's.
+     * Length is equal to transitionCount
      */
-    private byte[] typeData; // alias into res; do not delete
+    private byte[] typeMapData; // alias into res; do not delete
 
     /**
-     * The last year for which the transitions data are to be used
-     * rather than the finalZone.  If there is no finalZone, then this
-     * is set to INT32_MAX.  NOTE: This corresponds to the year _before_
-     * the one indicated by finalMillis.
+     * For year >= finalStartYear, the finalZone will be used.
      */
-    private int finalYear = Integer.MAX_VALUE;
+    private int finalStartYear = Integer.MAX_VALUE;
 
     /**
-     * The millis for the start of the first year for which finalZone
-     * is to be used, or DBL_MAX if finalZone is 0.  NOTE: This is
-     * 0:00 GMT Jan 1, <finalYear + 1> (not <finalMillis>).
+     * For date >= finalStartMillis, the finalZone will be used.
      */
-    private double finalMillis = Double.MAX_VALUE;
+    private double finalStartMillis = Double.MAX_VALUE;
 
     /**
-     * A SimpleTimeZone that governs the behavior for years > finalYear.
+     * A SimpleTimeZone that governs the behavior for years >= finalYear.
      * If and only if finalYear == INT32_MAX then finalZone == 0.
      */
     private SimpleTimeZone finalZone = null; // owned, may be NULL
  
+    private static final String ZONEINFORES = "zoneinfo64";
+
     private static final boolean DEBUG = ICUDebug.enabled("olson");
     private static final int SECONDS_PER_DAY = 24*60*60;
     
@@ -740,51 +795,42 @@ public class OlsonTimeZone extends BasicTimeZone {
         
         OlsonTimeZone z = (OlsonTimeZone) obj;
 
-        return (Utility.arrayEquals(typeData, z.typeData) ||
+        return (Utility.arrayEquals(typeMapData, z.typeMapData) ||
                  // If the pointers are not equal, the zones may still
                  // be equal if their rules and transitions are equal
-                 (finalYear == z.finalYear &&
+                 (finalStartYear == z.finalStartYear &&
                   // Don't compare finalMillis; if finalYear is ==, so is finalMillis
                   ((finalZone == null && z.finalZone == null) ||
                    (finalZone != null && z.finalZone != null &&
                     finalZone.equals(z.finalZone)) &&
                   transitionCount == z.transitionCount &&
                   typeCount == z.typeCount &&
-                  Utility.arrayEquals(transitionTimes, z.transitionTimes) &&
+                  Utility.arrayEquals(transitionTimes64, z.transitionTimes64) &&
                   Utility.arrayEquals(typeOffsets, z.typeOffsets) &&
-                  Utility.arrayEquals(typeData, z.typeData)
+                  Utility.arrayEquals(typeMapData, z.typeMapData)
                   )));
 
     }
 
     public int hashCode(){
-        int ret =   (int)  (finalYear ^ (finalYear>>>4) +
+        int ret =   (int)  (finalStartYear ^ (finalStartYear>>>4) +
                    transitionCount ^ (transitionCount>>>6) +
                    typeCount ^ (typeCount>>>8) + 
-                   Double.doubleToLongBits(finalMillis)+
+                   Double.doubleToLongBits(finalStartMillis)+
                    (finalZone == null ? 0 : finalZone.hashCode()) + 
                    super.hashCode());
-        for(int i=0; i<transitionTimes.length; i++){
-            ret+=transitionTimes[i]^(transitionTimes[i]>>>8);
+        for(int i=0; i<transitionTimes64.length; i++){
+            ret+=transitionTimes64[i]^(transitionTimes64[i]>>>8);
         }
         for(int i=0; i<typeOffsets.length; i++){
             ret+=typeOffsets[i]^(typeOffsets[i]>>>8);
         }
-        for(int i=0; i<typeData.length; i++){
-            ret+=typeData[i] & UNSIGNED_BYTE_MASK;
+        for(int i=0; i<typeMapData.length; i++){
+            ret+=typeMapData[i] & 0xFF;
         } 
         return ret;
     }
-    /*
-    private void readObject(ObjectInputStream s) throws IOException  {
-        s.defaultReadObject();
-        // customized deserialization code
-       
-        // followed by code to update the object, if necessary
-    }
-    */
 
- 
     //
     // BasicTimeZone methods
     //
@@ -812,7 +858,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             // Find a historical transition
             int ttidx = transitionCount - 1;
             for (; ttidx >= firstTZTransitionIdx; ttidx--) {
-                long t = ((long)transitionTimes[ttidx]) * Grego.MILLIS_PER_SECOND;
+                long t = transitionTimes64[ttidx] * Grego.MILLIS_PER_SECOND;
                 if (base > t || (!inclusive && base == t)) {
                     break;
                 }
@@ -823,9 +869,9 @@ public class OlsonTimeZone extends BasicTimeZone {
                 return firstTZTransition;
             } else {
                 // Create a TimeZoneTransition
-                TimeZoneRule to = historicRules[getInt(typeData[ttidx + 1])];
-                TimeZoneRule from = historicRules[getInt(typeData[ttidx])];
-                long startTime = ((long)transitionTimes[ttidx+1])*Grego.MILLIS_PER_SECOND;
+                TimeZoneRule to = historicRules[getInt(typeMapData[ttidx + 1])];
+                TimeZoneRule from = historicRules[getInt(typeMapData[ttidx])];
+                long startTime = transitionTimes64[ttidx+1] * Grego.MILLIS_PER_SECOND;
 
                 // The transitions loaded from zoneinfo.res may contain non-transition data
                 if (from.getName().equals(to.getName()) && from.getRawOffset() == to.getRawOffset()
@@ -862,7 +908,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             // Find a historical transition
             int ttidx = transitionCount - 1;
             for (; ttidx >= firstTZTransitionIdx; ttidx--) {
-                long t = ((long)transitionTimes[ttidx]) * Grego.MILLIS_PER_SECOND;
+                long t = transitionTimes64[ttidx] * Grego.MILLIS_PER_SECOND;
                 if (base > t || (inclusive && base == t)) {
                     break;
                 }
@@ -874,9 +920,9 @@ public class OlsonTimeZone extends BasicTimeZone {
                 return firstTZTransition;
             } else {
                 // Create a TimeZoneTransition
-                TimeZoneRule to = historicRules[getInt(typeData[ttidx])];
-                TimeZoneRule from = historicRules[getInt(typeData[ttidx-1])];
-                long startTime = ((long)transitionTimes[ttidx])*Grego.MILLIS_PER_SECOND;
+                TimeZoneRule to = historicRules[getInt(typeMapData[ttidx])];
+                TimeZoneRule from = historicRules[getInt(typeMapData[ttidx-1])];
+                long startTime = transitionTimes64[ttidx] * Grego.MILLIS_PER_SECOND;
 
                 // The transitions loaded from zoneinfo.res may contain non-transition data
                 if (from.getName().equals(to.getName()) && from.getRawOffset() == to.getRawOffset()
@@ -934,7 +980,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             } else {
                 // Create a TimeArrayTimeZoneRule at finalMillis
                 rules[idx++] = new TimeArrayTimeZoneRule(getID() + "(STD)", finalZone.getRawOffset(), 0,
-                        new long[] {(long)finalMillis}, DateTimeRule.UTC_TIME);                
+                        new long[] {(long)finalStartMillis}, DateTimeRule.UTC_TIME);                
             }
         }
         return rules;
@@ -965,23 +1011,23 @@ public class OlsonTimeZone extends BasicTimeZone {
         String dstName = getID() + "(DST)";
 
         int raw, dst;
+
+        // Create initial rule
+        raw = initialRawOffset() * Grego.MILLIS_PER_SECOND;
+        dst = initialDstOffset() * Grego.MILLIS_PER_SECOND;
+        initialRule = new InitialTimeZoneRule((dst == 0 ? stdName : dstName), raw, dst);
+
         if (transitionCount > 0) {
             int transitionIdx, typeIdx;
 
-            // Note: Since 2007c, the very first transition data is a dummy entry
-            //       added for resolving a offset calculation problem.
-
-            // Create initial rule
-            typeIdx = getInt(typeData[0]); // initial type
-            raw = typeOffsets[typeIdx*2]*Grego.MILLIS_PER_SECOND;
-            dst = typeOffsets[typeIdx*2 + 1]*Grego.MILLIS_PER_SECOND;
-            initialRule = new InitialTimeZoneRule((dst == 0 ? stdName : dstName), raw, dst);
-
-            for (transitionIdx = 1; transitionIdx < transitionCount; transitionIdx++) {
-                firstTZTransitionIdx++;
-                if (typeIdx != getInt(typeData[transitionIdx])) {
+            // We probably no longer need to check the first "real" transition
+            // here, because the new tzcode remove such transitions already.
+            // For now, keeping this code for just in case. Feb 19, 2010 Yoshito
+            for (transitionIdx = 0; transitionIdx < transitionCount; transitionIdx++) {
+                if (getInt(typeMapData[transitionIdx]) != 0) { // type 0 is the initial type
                     break;
                 }
+                firstTZTransitionIdx++;
             }
             if (transitionIdx == transitionCount) {
                 // Actually no transitions...
@@ -992,9 +1038,9 @@ public class OlsonTimeZone extends BasicTimeZone {
                     // Gather all start times for each pair of offsets
                     int nTimes = 0;
                     for (transitionIdx = firstTZTransitionIdx; transitionIdx < transitionCount; transitionIdx++) {
-                        if (typeIdx == getInt(typeData[transitionIdx])) {
-                            long tt = ((long)transitionTimes[transitionIdx])*Grego.MILLIS_PER_SECOND;
-                            if (tt < finalMillis) {
+                        if (typeIdx == getInt(typeMapData[transitionIdx])) {
+                            long tt = ((long)transitionTimes64[transitionIdx])*Grego.MILLIS_PER_SECOND;
+                            if (tt < finalStartMillis) {
                                 // Exclude transitions after finalMillis
                                 times[nTimes++] = tt;
                             }
@@ -1015,23 +1061,16 @@ public class OlsonTimeZone extends BasicTimeZone {
                 }
 
                 // Create initial transition
-                typeIdx = getInt(typeData[firstTZTransitionIdx]);
-                firstTZTransition = new TimeZoneTransition(((long)transitionTimes[firstTZTransitionIdx])*Grego.MILLIS_PER_SECOND,
+                typeIdx = getInt(typeMapData[firstTZTransitionIdx]);
+                firstTZTransition = new TimeZoneTransition(((long)transitionTimes64[firstTZTransitionIdx])*Grego.MILLIS_PER_SECOND,
                         initialRule, historicRules[typeIdx]);
                 
             }
         }
 
-        if (initialRule == null) {
-            // No historic transitions
-            raw = typeOffsets[0]*Grego.MILLIS_PER_SECOND;
-            dst = typeOffsets[1]*Grego.MILLIS_PER_SECOND;
-            initialRule = new InitialTimeZoneRule((dst == 0 ? stdName : dstName), raw, dst);
-        }
-
         if (finalZone != null) {
             // Get the first occurrence of final rule starts
-            long startTime = (long)finalMillis;
+            long startTime = (long)finalStartMillis;
             TimeZoneRule firstFinalRule;
             if (finalZone.useDaylightTime()) {
                 /*
@@ -1043,9 +1082,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                  * start year when extracting rules.
                  */
                 finalZoneWithStartYear = (SimpleTimeZone)finalZone.clone();
-                // finalYear is 1 year before the actual final year.
-                // See the comment in the construction method.
-                finalZoneWithStartYear.setStartYear(finalYear + 1);
+                finalZoneWithStartYear.setStartYear(finalStartYear);
 
                 TimeZoneTransition tzt = finalZoneWithStartYear.getNextTransition(startTime, false);
                 firstFinalRule  = tzt.getTo();
@@ -1057,7 +1094,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             }
             TimeZoneRule prevRule = null;
             if (transitionCount > 0) {
-                prevRule = historicRules[getInt(typeData[transitionCount - 1])];
+                prevRule = historicRules[getInt(typeMapData[transitionCount - 1])];
             }
             if (prevRule == null) {
                 // No historic transitions, but only finalZone available
@@ -1067,5 +1104,52 @@ public class OlsonTimeZone extends BasicTimeZone {
         }
 
         transitionRulesInitialized = true;
+    }
+
+    // Note: This class does not support back level serialization compatibility
+    // very well.  ICU 4.4 introduced the 64bit transition data.  It is probably
+    // possible to implement this class to make old version of ICU to deserialize
+    // object stream serialized by ICU 4.4+.  However, such implementation will
+    // introduce unnecessary complexity other than serialization support.
+    // I decided to provide minimum level of backward compatibility, which
+    // only support ICU 4.4+ to create an instance of OlsonTimeZone by reloading
+    // the zone rules from bundles.  ICU 4.2 or older version of ICU cannot
+    // deserialize object stream created by ICU 4.4+.  Yoshito -Feb 22, 2010
+
+    private static final int currentSerialVersion = 1;
+    private int serialVersionOnStream = currentSerialVersion;
+
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+
+        if (serialVersionOnStream < 1) {
+            // No version - 4.2 or older
+            // Just reloading the rule from bundle
+            boolean initialized = false;
+            String tzid = getID();
+            if (tzid != null) {
+                try {
+                    UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                            ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle res = ZoneMeta.openOlsonResource(top, tzid);
+                    construct(top, res);
+                    if (finalZone != null){
+                        finalZone.setID(tzid);
+                    }
+                    initialized = true;
+                } catch (Exception e) {
+                    // throw away
+                }
+            }
+            if (!initialized) {
+                // final resort
+                constructEmpty();
+            }
+        } else {
+            System.out.println("4.4");
+        }
+
+        // need to rebuild transition rules when requested
+        transitionRulesInitialized = false;
     }
 }
