@@ -1,8 +1,8 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
- * Copyright (C) 2010 , Yahoo! Inc. 
+ * Copyright (C) 2010 , Yahoo! Inc.
  ********************************************************************
  *
  * File SELFMT.H
@@ -108,12 +108,12 @@ class Hashtable;
   * <p>Patterns can be nested, so that it's possible to handle  interactions of
   * number and gender where necessary. For example, if the above  sentence should
   * allow for the names of several people to be inserted, the  following sentence
-  * pattern can be used (with argument 0 the list of people's names,  
-  * argument 1 the number of people, argument 2 their combined gender, and  
+  * pattern can be used (with argument 0 the list of people's names,
+  * argument 1 the number of people, argument 2 their combined gender, and
   * argument 3 the city name):</p>
   *
   * \htmlonly
-  * <pre>{0} {1, plural, 
+  * <pre>{0} {1, plural,
   *                 one {est {2, select, female {all&#x00E9;e} other  {all&#x00E9;}}}
   *                 other {sont {2, select, female {all&#x00E9;es} other {all&#x00E9;s}}}
   *          }&#x00E0; {3}.</pre>
@@ -124,7 +124,7 @@ class Hashtable;
   * <p>The <code>SelectFormat</code> pattern text defines the phrase  output
   * for each user-defined keyword.
   * The pattern is a sequence of <code><i>keyword</i>{<i>phrase</i>}</code>
-  * clauses. 
+  * clauses.
   * Each clause assigns the phrase <code><i>phrase</i></code>
   * to the user-defined <code><i>keyword</i></code>.</p>
   *
@@ -132,7 +132,7 @@ class Hashtable;
   * that don't match this pattern result in the error code
   * <code>U_ILLEGAL_CHARACTER</code>.
   * You always have to define a phrase for the default keyword
-  * <code>other</code>; this phrase is returned when the keyword  
+  * <code>other</code>; this phrase is returned when the keyword
   * provided to
   * the <code>format</code> method matches no other keyword.
   * If a pattern does not provide a phrase for <code>other</code>, the  method
@@ -219,17 +219,20 @@ public:
      */
     void applyPattern(const UnicodeString& pattern, UErrorCode& status);
 
+
+    using Format::format;
+
     /**
      * Selects the phrase for  the given keyword
      *
-     * @param keyword  The keyword that is used to select an alternative. 
+     * @param keyword  The keyword that is used to select an alternative.
      * @param appendTo output parameter to receive result.
      *                 result is appended to existing contents.
      * @param pos      On input: an alignment field, if desired.
      *                 On output: the offsets of the alignment field.
      * @param status  output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
-     * @return         Reference to 'appendTo' parameter. 
+     * @return         Reference to 'appendTo' parameter.
      * @draft ICU 4.4
      */
     UnicodeString& format(const UnicodeString& keyword,
@@ -271,12 +274,12 @@ public:
     virtual Format* clone(void) const;
 
     /**
-     * Format an object to produce a string. 
-     * This method handles keyword strings. 
-     * If the Formattable object is not a <code>UnicodeString</code>, 
+     * Format an object to produce a string.
+     * This method handles keyword strings.
+     * If the Formattable object is not a <code>UnicodeString</code>,
      * then it returns a failing UErrorCode.
      *
-     * @param obj       A keyword string that is used to select an alternative. 
+     * @param obj       A keyword string that is used to select an alternative.
      * @param appendTo  output parameter to receive result.
      *                  Result is appended to existing contents.
      * @param pos       On input: an alignment field, if desired.
@@ -355,7 +358,7 @@ private:
     SelectFormat();   // default constructor not implemented.
     void init(UErrorCode& status);
     //For the applyPattern , classifies char.s in one of the characterClass.
-    CharacterClass classifyCharacter(UChar ch) const; 
+    CharacterClass classifyCharacter(UChar ch) const;
     //Checks if the "other" keyword is present in pattern.
     UBool checkSufficientDefinition();
     //Checks if the keyword passed is valid.

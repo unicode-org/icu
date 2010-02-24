@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2010, International Business Machines Corporation and 
+* Copyright (C) 1997-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -366,6 +366,9 @@ public:
      * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
+
+
+    using DateFormat::format;
 
     /**
      * Format a date or time, which is the standard millis since 24:00 GMT, Jan

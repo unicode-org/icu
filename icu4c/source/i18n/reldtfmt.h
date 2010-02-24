@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -11,10 +11,10 @@
 #include "unicode/utypes.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Format and parse relative dates and times.
  */
- 
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/datefmt.h"
@@ -28,11 +28,12 @@ class MessageFormat;
 struct URelativeString;
 
 /**
- * This class is normally accessed using the kRelative or k...Relative values of EStyle as parameters to DateFormat::createDateInstance.
- * 
- * Example: 
+ * This class is normally accessed using the kRelative or k...Relative values of EStyle as
+ * parameters to DateFormat::createDateInstance.
+ *
+ * Example:
  *     DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
- * 
+ *
  * @draft ICU 3.8
  */
 
@@ -75,6 +76,9 @@ public:
      * @draft ICU 3.8
      */
     virtual UBool operator==(const Format& other) const;
+
+
+    using DateFormat::format;
 
     /**
      * Format a date or time, which is the standard millis since 24:00 GMT, Jan
@@ -137,7 +141,7 @@ public:
      */
     virtual void parse( const UnicodeString& text,
                         Calendar& cal,
-                        ParsePosition& pos) const;    
+                        ParsePosition& pos) const;
 
     /**
      * Parse a date/time string starting at the given parse position. For
@@ -218,38 +222,38 @@ public:
 
 
 private:
-    DateFormat *fDateFormat; // the held date format 
+    DateFormat *fDateFormat; // the held date format
     DateFormat *fTimeFormat; // the held time format
-    MessageFormat *fCombinedFormat; //  the {0} {1} format. 
-    
+    MessageFormat *fCombinedFormat; //  the {0} {1} format.
+
     UDateFormatStyle fDateStyle;
     UDateFormatStyle fTimeStyle;
     Locale  fLocale;
-    
+
     int32_t fDayMin;    // day id of lowest #
     int32_t fDayMax;    // day id of highest #
     int32_t fDatesLen;    // Length of array
     URelativeString *fDates; // array of strings
-    
-    
+
+
     /**
      * Get the string at a specific offset.
      * @param day day offset ( -1, 0, 1, etc.. )
-     * @param len on output, length of string. 
+     * @param len on output, length of string.
      * @return the string, or NULL if none at that location.
      */
     const UChar *getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const;
-    
-    /** 
+
+    /**
      * Load the Date string array
      */
     void loadDates(UErrorCode &status);
-    
+
     /**
      * @return the number of days in "until-now"
      */
     static int32_t dayDifference(Calendar &until, UErrorCode &status);
-    
+
     /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
      * @param adoptZone  Zone to be adopted, or NULL for TimeZone::createDefault().
@@ -259,7 +263,7 @@ private:
      * @draft ICU 3.8
      */
     Calendar* initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status);
-    
+
 public:
     /**
      * Return the class ID for this class. This is useful only for comparing to

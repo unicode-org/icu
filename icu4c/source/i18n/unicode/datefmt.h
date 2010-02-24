@@ -30,7 +30,7 @@
 #include "unicode/locid.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Abstract class for converting dates.
  */
 
@@ -141,7 +141,7 @@ public:
     /**
      * Constants for various style patterns. These reflect the order of items in
      * the DateTimePatterns resource. There are 4 time patterns, 4 date patterns,
-     * the default date-time pattern, and 4 date-time patterns. Each block of 4 values 
+     * the default date-time pattern, and 4 date-time patterns. Each block of 4 values
      * in the resource occurs in the order full, long, medium, short.
      * @stable ICU 2.4
      */
@@ -171,15 +171,15 @@ public:
 
         // relative dates
         kRelative = (1 << 7),
-        
+
         kFullRelative = (kFull | kRelative),
-            
+
         kLongRelative = kLong | kRelative,
-        
+
         kMediumRelative = kMedium | kRelative,
-        
+
         kShortRelative = kShort | kRelative,
-        
+
 
         kDefault      = kMedium,
 
@@ -210,6 +210,9 @@ public:
      * @stable ICU 2.0
      */
     virtual UBool operator==(const Format&) const;
+
+
+    using Format::format;
 
     /**
      * Format an object to produce a string. This method handles Formattable
