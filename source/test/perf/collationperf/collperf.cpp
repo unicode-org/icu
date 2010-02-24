@@ -808,8 +808,8 @@ void doKeyHist() {
                 (float)accumulatedLen[i] / (float)(numKeysOfSize[i] * i));
         }
     }
-	delete []accumulatedLen;
-	delete []numKeysOfSize ;
+    delete []accumulatedLen;
+    delete []numKeysOfSize ;
 }
 
 //---------------------------------------------------------------------------------------

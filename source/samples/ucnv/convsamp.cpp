@@ -897,7 +897,7 @@ UErrorCode convsample_40()
   if(!out)
   {
     fprintf(stderr, "Couldn't create file 'data40.utf16'.\n");
-	fclose(f);
+    fclose(f);
     return U_FILE_ACCESS_ERROR;
   }
 
@@ -1003,7 +1003,7 @@ UErrorCode convsample_46()
   if(!out)
   {
     fprintf(stderr, "Couldn't create file 'data46.out'.\n");
-	fclose(f);
+    fclose(f);
     return U_FILE_ACCESS_ERROR;
   }
 
