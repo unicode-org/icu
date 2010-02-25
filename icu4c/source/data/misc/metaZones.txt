@@ -29,7 +29,6 @@ metaZones:table(nofallback){
         "Africa_Eastern:UG"{"Africa/Kampala"}
         "Africa_Eastern:YT"{"Indian/Mayotte"}
         "Africa_FarWestern"{"Africa/El_Aaiun"}
-        "Africa_FarWestern:GW"{"Africa/Bissau"}
         "Africa_Southern"{"Africa/Johannesburg"}
         "Africa_Southern:LS"{"Africa/Maseru"}
         "Africa_Southern:SZ"{"Africa/Mbabane"}
@@ -94,7 +93,7 @@ metaZones:table(nofallback){
         "Atlantic:DM"{"America/Dominica"}
         "Atlantic:GD"{"America/Grenada"}
         "Atlantic:GL"{"America/Thule"}
-        "Atlantic:GP"{"America/Guadaloupe"}
+        "Atlantic:GP"{"America/Guadeloupe"}
         "Atlantic:KN"{"America/St_Kitts"}
         "Atlantic:LC"{"America/St_Lucia"}
         "Atlantic:MQ"{"America/Martinique"}
@@ -195,7 +194,6 @@ metaZones:table(nofallback){
         "GMT:GH"{"Africa/Accra"}
         "GMT:GM"{"Africa/Banjul"}
         "GMT:GN"{"Africa/Conakry"}
-        "GMT:GW"{"Africa/Bissau"}
         "GMT:IE"{"Europe/Dublin"}
         "GMT:LR"{"Africa/Monrovia"}
         "GMT:ML"{"Africa/Bamako"}
