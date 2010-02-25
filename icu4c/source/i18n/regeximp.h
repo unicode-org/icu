@@ -279,13 +279,18 @@ enum {
 //  Match Engine State Stack Frame Layout.
 //
 struct REStackFrame {
+    // Header
     int64_t            fInputIdx;        // Position of next character in the input string
-    int32_t            fPatIdx;          // Position of next Op in the compiled pattern
-    int32_t            fExtra[2];        // Extra state, for capture group start/ends
+    int64_t            fPatIdx;          // Position of next Op in the compiled pattern
+                                         // (int64_t for UVector64, values fit in an int32_t)
+    // Remainder
+    int64_t            fExtra[1];        // Extra state, for capture group start/ends
                                          //   atomic parentheses, repeat counts, etc.
                                          //   Locations assigned at pattern compile time.
-                                         //   Note that this will likely end up longer than 64 bits.
+                                         //   Variable-length array.
 };
+// number of UVector elements in the header
+#define RESTACKFRAME_HDRCOUNT 2
 
 //
 //  Start-Of-Match type.  Used by find() to quickly scan to positions where a

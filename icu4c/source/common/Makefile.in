@@ -73,7 +73,7 @@ LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
 OBJECTS = errorcode.o putil.o umath.o utypes.o uinvchar.o umutex.o ucln_cmn.o uinit.o uobject.o cmemory.o \
 udata.o ucmndata.o udatamem.o umapfile.o udataswp.o ucol_swp.o utrace.o \
-uhash.o uhash_us.o uenum.o ustrenum.o uvector.o ustack.o uvectr32.o \
+uhash.o uhash_us.o uenum.o ustrenum.o uvector.o ustack.o uvectr32.o uvectr64.o \
 ucnv.o ucnv_bld.o ucnv_cnv.o ucnv_io.o ucnv_cb.o ucnv_err.o ucnvlat1.o \
 ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
 ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_set.o \

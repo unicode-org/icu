@@ -17,6 +17,7 @@
 #include "uassert.h"
 #include "uvector.h"
 #include "uvectr32.h"
+#include "uvectr64.h"
 #include "regexcmp.h"
 #include "regeximp.h"
 #include "regexst.h"
@@ -161,7 +162,7 @@ void RegexPattern::init() {
 
     fPattern          = NULL; // will be set later
     fPatternString    = NULL; // may be set later
-    fCompiledPat      = new UVector32(fDeferredStatus);
+    fCompiledPat      = new UVector64(fDeferredStatus);
     fGroupMap         = new UVector32(fDeferredStatus);
     fSets             = new UVector(fDeferredStatus);
     fInitialChars     = new UnicodeSet;

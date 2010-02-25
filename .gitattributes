@@ -4,6 +4,8 @@ icu4c/icu4c.css -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/common/uvectr64.cpp -text
+icu4c/source/common/uvectr64.h -text
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/char_th.txt svneol=native#text/plain
 icu4c/source/data/brkitr/el.txt svneol=native#text/plain
