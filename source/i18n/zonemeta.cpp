@@ -97,6 +97,8 @@ static const char gKeyTypeData[]        = "keyTypeData";
 static const char gTypeAliasTag[]       = "typeAlias";
 static const char gTimezoneTag[]        = "timezone";
 
+static const char gWorldTag[]           = "001";
+
 static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
 
 static const UChar gDefaultFrom[] = {0x31, 0x39, 0x37, 0x30, 0x2D, 0x30, 0x31, 0x2D, 0x30, 0x31,
@@ -551,7 +553,7 @@ ZoneMeta::createMetazoneMappings(const UnicodeString &tzid) {
     ures_close(rb);
     return mzMappings;
 }
-
+/*
 UnicodeString& U_EXPORT2
 ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &region, UnicodeString &result) {
 
@@ -590,7 +592,49 @@ ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &re
 
     return result;
 }
+*/
+UnicodeString& U_EXPORT2
+ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &region, UnicodeString &result) {
+    UErrorCode status = U_ZERO_ERROR;
+    const UChar *tzid = NULL;
+    int32_t tzidLen = 0;
+    char keyBuf[ZID_KEY_MAX + 1];
+    int32_t keyLen = 0;
 
+    if (mzid.length() >= ZID_KEY_MAX) {
+        result.remove();
+        return result;
+    }
+
+    keyLen = mzid.extract(0, mzid.length(), keyBuf, ZID_KEY_MAX, US_INV);
+
+    UResourceBundle *rb = ures_openDirect(NULL, gMetaZones, &status);
+    ures_getByKey(rb, gMapTimezonesTag, rb, &status);
+    ures_getByKey(rb, keyBuf, rb, &status);
+
+    if (U_SUCCESS(status)) {
+        // check region mapping
+        if (region.length() == 2 || region.length() == 3) {
+            region.extract(0, region.length(), keyBuf, ZID_KEY_MAX, US_INV);
+            tzid = ures_getStringByKey(rb, keyBuf, &tzidLen, &status);
+            if (status == U_MISSING_RESOURCE_ERROR) {
+                status = U_ZERO_ERROR;
+            }
+        }
+        if (U_SUCCESS(status) && tzid == NULL) {
+            // try "001"
+            tzid = ures_getStringByKey(rb, gWorldTag, &tzidLen, &status);
+        }
+    }
+
+    if (tzid == NULL) {
+        result.remove();
+    } else {
+        result.setTo(tzid, tzidLen);
+    }
+
+    return result;
+}
 
 U_NAMESPACE_END
 
