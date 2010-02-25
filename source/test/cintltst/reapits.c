@@ -106,6 +106,7 @@ static void test_assert_utext(const char *expected, UText *actual, const char *f
         }
         log_err("\"\n");
     }
+    utext_close(&expectedText);
 }
 
 #define TEST_ASSERT_UTEXT(expected, actual) test_assert_utext(expected, actual, __FILE__, __LINE__)
@@ -1862,6 +1863,7 @@ static void TestUTextAPI(void) {
         UChar    text2[80];
         UText    *fields[10];
         int32_t  numFields;
+        int32_t i;
 
         u_uastrncpy(textToSplit, "first : second:  third",  sizeof(textToSplit)/2);
         u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
@@ -1889,6 +1891,9 @@ static void TestUTextAPI(void) {
                 TEST_ASSERT_UTEXT("  third", fields[2]);
                 TEST_ASSERT(fields[3] == NULL);
             }
+            for(i = 0; i < numFields; i++) {
+                utext_close(fields[i]);
+            }
         }
 
         uregex_close(re);
@@ -1915,6 +1920,9 @@ static void TestUTextAPI(void) {
                 TEST_ASSERT_UTEXT(" second:  third", fields[1]);
                 TEST_ASSERT(fields[2] == &patternText);
             }
+            for(i = 0; i < numFields; i++) {
+                utext_close(fields[i]);
+            }
         }
 
         uregex_close(re);
@@ -1926,6 +1934,7 @@ static void TestUTextAPI(void) {
         UChar    textToSplit[80];
         UText    *fields[10];
         int32_t  numFields;
+        int32_t i;
 
         u_uastrncpy(textToSplit, "first <tag-a> second<tag-b>  third",  sizeof(textToSplit)/2);
 
@@ -1951,6 +1960,9 @@ static void TestUTextAPI(void) {
                 TEST_ASSERT_UTEXT("  third", fields[4]);
                 TEST_ASSERT(fields[5] == NULL);
             }
+            for(i = 0; i < numFields; i++) {
+                utext_close(fields[i]);
+            }
         }
     
         /*  Split with too few output strings available (2) */
@@ -1968,6 +1980,10 @@ static void TestUTextAPI(void) {
             TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[1]);
             TEST_ASSERT(fields[2] == &patternText);
         }
+        for(i = 0; i < numFields; i++) {
+            utext_close(fields[i]);
+        }
+
 
         /*  Split with too few output strings available (3) */
         status = U_ZERO_ERROR;
@@ -1985,6 +2001,9 @@ static void TestUTextAPI(void) {
             TEST_ASSERT_UTEXT("tag-a",   fields[1]);
             TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[2]);
             TEST_ASSERT(fields[3] == &patternText);
+        }
+        for(i = 0; i < numFields; i++) {
+            utext_close(fields[i]);
         }
 
         /*  Split with just enough output strings available (5) */
@@ -2007,6 +2026,9 @@ static void TestUTextAPI(void) {
             TEST_ASSERT_UTEXT("tag-b",   fields[3]);
             TEST_ASSERT_UTEXT("  third", fields[4]);
             TEST_ASSERT(fields[5] == &patternText);
+        }
+        for(i = 0; i < numFields; i++) {
+            utext_close(fields[i]);
         }
 
         /* Split, end of text is a field delimiter.   */
@@ -2032,10 +2054,14 @@ static void TestUTextAPI(void) {
                 TEST_ASSERT(fields[8] == NULL);
                 TEST_ASSERT(fields[9] == &patternText);
             }
+            for(i = 0; i < numFields; i++) {
+                utext_close(fields[i]);
+            }
         }
 
         uregex_close(re);
     }
+    utext_close(&patternText);
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
