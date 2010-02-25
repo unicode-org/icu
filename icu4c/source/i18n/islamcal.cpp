@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation
+* Copyright (C) 2003-2010, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -232,7 +232,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
     if (start==0) {
         // Make a guess at when the month started, using the average length
         UDate origin = HIJRA_MILLIS 
-            + uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH - 1) * kOneDay;
+            + uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH) * kOneDay;
 
         // moonAge will fail due to memory allocation error
         double age = moonAge(origin, status);
@@ -405,14 +405,14 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
         // Guess at the number of elapsed full months since the epoch
         int32_t months = (int32_t)uprv_floor((double)days / CalendarAstronomer::SYNODIC_MONTH);
 
-        startDate = uprv_floor(months * CalendarAstronomer::SYNODIC_MONTH - 1);
+        startDate = uprv_floor(months * CalendarAstronomer::SYNODIC_MONTH);
 
         double age = moonAge(internalGetTime(), status);
         if (U_FAILURE(status)) {
         	status = U_MEMORY_ALLOCATION_ERROR;
         	return;
         }
-        if ( days - startDate >= 28 && age > 0) {
+        if ( days - startDate >= 25 && age > 0) {
             // If we're near the end of the month, assume next month and search backwards
             months++;
         }
