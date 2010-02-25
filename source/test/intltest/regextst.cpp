@@ -306,7 +306,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     ucnv_close(UTF8Converter);
     utext_close(&inputText);
     utext_close(&pattern);
-    delete textChars;
+    delete[] textChars;
     return retVal;
 }
 
