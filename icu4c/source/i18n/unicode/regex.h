@@ -62,6 +62,7 @@ class RegexMatcher;
 class RegexPattern;
 class UVector;
 class UVector32;
+class UVector64;
 class UnicodeSet;
 struct REStackFrame;
 struct Regex8BitSet;
@@ -575,7 +576,7 @@ private:
     UnicodeString  *fPatternString; // The original pattern UncodeString if relevant
     uint32_t        fFlags;        // The flags used when compiling the pattern.
                                    //
-    UVector32       *fCompiledPat; // The compiled pattern p-code.
+    UVector64       *fCompiledPat; // The compiled pattern p-code.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern,
                                    //   after un-escaping, for use during the match.
 
@@ -1595,7 +1596,7 @@ private:
     UBool                isWordBoundary(int64_t pos);         // perform Perl-like  \b test
     UBool                isUWordBoundary(int64_t pos);        // perform RBBI based \b test
     REStackFrame        *resetStack();
-    inline REStackFrame *StateSave(REStackFrame *fp, int32_t savePatIdx, UErrorCode &status);
+    inline REStackFrame *StateSave(REStackFrame *fp, int64_t savePatIdx, UErrorCode &status);
     void                 IncrementTime(UErrorCode &status);
     
     int64_t              appendGroup(int32_t groupNum, UText *dest, UErrorCode &status) const;
@@ -1648,13 +1649,13 @@ private:
     UBool                fRequireEnd;      // True if the last match required end-of-input
                                            //    (matched $ or Z)
 
-    UVector32           *fStack;
+    UVector64           *fStack;
     REStackFrame        *fFrame;           // After finding a match, the last active stack frame,
                                            //   which will contain the capture group results.
                                            //   NOT valid while match engine is running.
 
-    int32_t             *fData;            // Data area for use by the compiled pattern.
-    int32_t             fSmallData[8];     //   Use this for data if it's enough.
+    int64_t             *fData;            // Data area for use by the compiled pattern.
+    int64_t             fSmallData[8];     //   Use this for data if it's enough.
 
     int32_t             fTimeLimit;        // Max time (in arbitrary steps) to let the
                                            //   match engine run.  Zero for unlimited.

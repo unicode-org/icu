@@ -986,6 +986,14 @@
 				RelativePath=".\uvectr32.h"
 				>
 			</File>
+			<File
+				RelativePath=".\uvectr64.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\uvectr64.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="configuration"

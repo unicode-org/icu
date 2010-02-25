@@ -49,6 +49,8 @@ README text !eol
 *.tri2 -text
 
 icu4c/icu4c.css -text
+icu4c/source/common/uvectr64.cpp -text
+icu4c/source/common/uvectr64.h -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/nfc.nrm -text
 icu4c/source/data/in/nfkc.nrm -text
