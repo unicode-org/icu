@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2009, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2010, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -33,6 +33,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * and if the result TimeZone has the expected behavior.
      */
     public void TestTimeZoneRoundTrip() {
+        boolean TEST_ALL = "true".equalsIgnoreCase(getProperty("TimeZoneRoundTripAll"));
+
         TimeZone unknownZone = new SimpleTimeZone(-31415, "Etc/Unknown");
         int badDstOffset = -1234;
         int badZoneOffset = -2345;
@@ -66,7 +68,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // Set up test locales
         ULocale[] LOCALES = null;
-        if (getInclusion() > 5) {
+        if (TEST_ALL || getInclusion() > 5) {
             LOCALES = ULocale.getAvailableLocales();
         } else {
             LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"), new ULocale("zh_Hant")};
