@@ -1,9 +1,7 @@
 /*
 ******************************************************************************
-*                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
-*                Corporation and others. All Rights Reserved.                *
-*                                                                            *
+* Copyright (C) 2001-2010, International Business Machines
+*                Corporation and others. All Rights Reserved.
 ******************************************************************************
 *   file name:  ucln_cmn.c
 *   encoding:   US-ASCII
@@ -18,7 +16,6 @@
 #include "unicode/uclean.h"
 #include "utracimp.h"
 #include "ustr_imp.h"
-#include "unormimp.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "ucln.h"

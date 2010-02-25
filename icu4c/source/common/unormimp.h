@@ -200,18 +200,6 @@ unorm_isCanonSafeStart(UChar32 c);
 U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
 
-#ifdef XP_CPLUSPLUS
-
-/**
- * Get normalization exclusion set for the options.
- * Requires unorm_haveData().
- * @internal
- */
-U_CFUNC const U_NAMESPACE_QUALIFIER UnicodeSet *
-unorm_getNX(int32_t options, UErrorCode *pErrorCode);
-
-#endif
-
 /**
  * Enumerate each normalization data trie and add the
  * start of each range of same properties to the set.

@@ -15,7 +15,6 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "normalizer2impl.h"
-#include "unormimp.h"
 #include "ucol_imp.h"
 #include "usrchimp.h"
 #include "cmemory.h"

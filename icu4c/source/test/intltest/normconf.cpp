@@ -13,7 +13,6 @@
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
 #include "unicode/putil.h"
-#include "unormimp.h"
 #include "cstring.h"
 #include "filestrm.h"
 #include "normconf.h"

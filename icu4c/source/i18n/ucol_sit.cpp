@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_sit.cpp
@@ -19,7 +19,6 @@
 #include "utracimp.h"
 #include "ucol_imp.h"
 #include "ucol_tok.h"
-#include "unormimp.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uresimp.h"

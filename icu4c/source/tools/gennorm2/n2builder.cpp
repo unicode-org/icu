@@ -38,7 +38,6 @@
 #include "normalizer2impl.h"
 #include "toolutil.h"
 #include "unewdata.h"
-#include "unormimp.h"
 #include "utrie2.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
