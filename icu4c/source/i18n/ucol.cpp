@@ -29,7 +29,6 @@
 #include "bocsu.h"
 
 #include "normalizer2impl.h"
-#include "unormimp.h"
 #include "unorm_it.h"
 #include "umutex.h"
 #include "cmemory.h"

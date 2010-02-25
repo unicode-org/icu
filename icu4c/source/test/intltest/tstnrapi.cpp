@@ -10,7 +10,6 @@
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
-#include "unormimp.h"
 #include "tstnorm.h"
 
 #if !UCONFIG_NO_NORMALIZATION
