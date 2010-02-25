@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1997-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File TXTBDRY.CPP
@@ -194,25 +194,6 @@ const Locale* U_EXPORT2
 BreakIterator::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
-}
-
-// -------------------------------------
-// Gets the objectLocale display name in the default locale language.
-UnicodeString& U_EXPORT2
-BreakIterator::getDisplayName(const Locale& objectLocale,
-                             UnicodeString& name)
-{
-    return objectLocale.getDisplayName(name);
-}
-
-// -------------------------------------
-// Gets the objectLocale display name in the displayLocale language.
-UnicodeString& U_EXPORT2
-BreakIterator::getDisplayName(const Locale& objectLocale,
-                             const Locale& displayLocale,
-                             UnicodeString& name)
-{
-    return objectLocale.getDisplayName(displayLocale, name);
 }
 
 // ------------------------------------------
