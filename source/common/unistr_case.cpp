@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -26,7 +26,6 @@
 #include "unicode/uchar.h"
 #include "unicode/ubrk.h"
 #include "ustr_imp.h"
-#include "unormimp.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN

@@ -32,7 +32,6 @@
 #include "cstring.h"
 #include "udataswp.h"
 #include "ucln_cmn.h"
-#include "unormimp.h"
 #include "ubidi_props.h"
 
 U_NAMESPACE_USE

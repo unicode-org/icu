@@ -16,7 +16,6 @@
 /*tests for u_normalization*/
 #include "unicode/utypes.h"
 #include "unicode/unorm.h"
-#include "unormimp.h"
 #include "cintltst.h"
 
 #if UCONFIG_NO_NORMALIZATION
