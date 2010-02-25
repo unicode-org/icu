@@ -247,7 +247,7 @@ uprv_detectWindowsTimeZone() {
            sizeof(apiTZI.DaylightDate));
 
     bundle = ures_openDirect(NULL, "windowsZones", &status);
-    bundle = ures_getByKey(bundle, "mapTimezones", bundle, &status);
+    ures_getByKey(bundle, "mapTimezones", bundle, &status);
 
     /* Note: We get the winid not from static tables but from resource bundle. */
     while (U_SUCCESS(status) && ures_hasNext(bundle)) {
@@ -268,7 +268,7 @@ uprv_detectWindowsTimeZone() {
             tziKey.daylightBias = tziReg.daylightBias;
 
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
-                const UChar* icuTZ = ures_getString(winTZ, &len, &status);
+                const UChar* icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
                 if (U_SUCCESS(status)) {
                     icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
                     uprv_memset(icuid, 0, len + 1);
