@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -78,7 +78,7 @@ private:
     /**
      * doLimitsTest with default test duration and fields
      */
-    void doLimitsTest(Calendar& cal, UDate startDate);
+    void doLimitsTest(Calendar& cal, UDate startDate, int32_t endTime);
 
     UnicodeString& ymdToString(const Calendar& cal, UnicodeString& str);
 };

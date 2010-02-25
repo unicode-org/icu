@@ -2078,6 +2078,8 @@ void CalendarTest::Test3785()
 {
     UErrorCode status = U_ZERO_ERROR; 
     UnicodeString uzone = UNICODE_STRING_SIMPLE("Europe/Paris");
+    UnicodeString exp1 = UNICODE_STRING_SIMPLE("Mon 30 Jumada II 1433 AH, 01:47:03");
+    UnicodeString exp2 = UNICODE_STRING_SIMPLE("Mon 1 Rajab 1433 AH, 01:47:04");
 
     LocalUDateFormatPointer df(udat_open(UDAT_NONE, UDAT_NONE, "en@calendar=islamic", uzone.getTerminatedBuffer(), 
                                          uzone.length(), NULL, 0, &status));
@@ -2092,15 +2094,30 @@ void CalendarTest::Test3785()
 
     status = U_ZERO_ERROR; 
     udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status); 
-    if (U_FAILURE(status)) return; 
+    if (U_FAILURE(status)) {
+        errln("Error formatting date 1\n");
+        return; 
+    }
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
 
+    UnicodeString act1(ubuffer);
+    if ( act1 != exp1 ) {
+        errln("Unexpected result from date 1 format\n"); 
+    }
     ud0 += 1000.0; // add one second
 
     status = U_ZERO_ERROR; 
     udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status); 
-    if (U_FAILURE(status)) return; 
+    if (U_FAILURE(status)) {
+        errln("Error formatting date 2\n");
+        return; 
+    }
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
+    UnicodeString act2(ubuffer);
+    if ( act2 != exp2 ) {
+        errln("Unexpected result from date 2 format\n");
+    }
+
     return;
 }
 
