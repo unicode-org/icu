@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2008, International Business Machines
+ *   Copyright (C) 1998-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -782,7 +782,7 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                     fprintf(stderr, "       the substitution character byte sequence is illegal in this codepage structure!\n");
                     *pErrorCode=U_INVALID_TABLE_FORMAT;
 
-                } else if(1!=ucm_countChars(baseStates, &staticData->subChar1, 1)) {
+                } else if(staticData->subChar1!=0 && 1!=ucm_countChars(baseStates, &staticData->subChar1, 1)) {
                     fprintf(stderr, "       the subchar1 byte is illegal in this codepage structure!\n");
                     *pErrorCode=U_INVALID_TABLE_FORMAT;
 
