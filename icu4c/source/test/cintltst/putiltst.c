@@ -579,7 +579,7 @@ static void toolutil_findDirname(void)
       U_FILE_ALT_SEP_STRING
     },
     {
-      U_FILE_ALT_SEP_STRING "vmlinux",
+      U_FILE_SEP_STRING "vmlinux",
       200,
       U_ZERO_ERROR,
       U_FILE_SEP_STRING
