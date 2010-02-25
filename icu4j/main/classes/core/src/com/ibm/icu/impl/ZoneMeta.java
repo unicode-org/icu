@@ -12,9 +12,12 @@ package com.ibm.icu.impl;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -887,44 +890,40 @@ public final class ZoneMeta {
         return date;
      }
 
-     private static ICUCache<String, String> META_TO_OLSON_CACHE =
-         new SimpleCache<String, String>();
+     private static ICUCache<String, Map<String, String>> META_TO_OLSON_CACHE =
+         new SimpleCache<String, Map<String, String>>();
 
      /**
       * Returns an Olson ID for the ginve metazone and region
       */
      public static String getZoneIdByMetazone(String metazoneID, String region) {
          String tzid = null;
-         String keyWithRegion = (region == null || region.length() == 0) ? null : metazoneID + ":" + region;
 
          // look up in the cache first
-         if (keyWithRegion != null) {
-             tzid = META_TO_OLSON_CACHE.get(metazoneID + ":" + region);
-         }
-         if (tzid == null) {
-             tzid = META_TO_OLSON_CACHE.get(metazoneID);
-         }
-
-         // look up in the resource bundle
-         if (tzid == null) {
+         Map<String, String> zoneMap = META_TO_OLSON_CACHE.get(metazoneID);
+         if (zoneMap == null) {
              try {
+                 // Create zone mappings for the metazone
                  UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
                  UResourceBundle mapTimezones = bundle.get("mapTimezones");
+                 UResourceBundle territoryMap = mapTimezones.get(metazoneID);
+                 zoneMap = new HashMap<String, String>();
+                 Set<String> territories = territoryMap.keySet();
+                 for (String territory : territories) {
+                     String zone = territoryMap.getString(territory);
+                     zoneMap.put(territory, zone);
+                 }
+                 // cache this
+                 META_TO_OLSON_CACHE.put(metazoneID, zoneMap);
+             } catch (MissingResourceException e) {
+                 // ignore
+             }
+         }
 
-                 if (keyWithRegion != null) {
-                     try {
-                         tzid = mapTimezones.getString(keyWithRegion);
-                         META_TO_OLSON_CACHE.put(keyWithRegion, tzid);
-                     } catch (MissingResourceException e) {
-                         // fall through
-                     }
-                 }
-                 if (tzid == null) {
-                     tzid = mapTimezones.getString(metazoneID);
-                     META_TO_OLSON_CACHE.put(metazoneID, tzid);
-                 }
-             } catch (MissingResourceException mre) {
-                 // do nothing
+         if (zoneMap != null) {
+             tzid = zoneMap.get(region);
+             if (tzid == null) {
+                 tzid = zoneMap.get("001"); // use the mapping for world as fallback
              }
          }
 
