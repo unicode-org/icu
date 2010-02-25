@@ -87,6 +87,7 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
     if (U_FAILURE(status)) {
         return;
     }
+    parsedValuesHash->setValueDeleter(uhash_deleteUnicodeString);
 
     //Process the state machine
     State state = startState;
