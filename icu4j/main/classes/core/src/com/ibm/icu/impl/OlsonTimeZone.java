@@ -1039,7 +1039,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                     int nTimes = 0;
                     for (transitionIdx = firstTZTransitionIdx; transitionIdx < transitionCount; transitionIdx++) {
                         if (typeIdx == getInt(typeMapData[transitionIdx])) {
-                            long tt = ((long)transitionTimes64[transitionIdx])*Grego.MILLIS_PER_SECOND;
+                            long tt = transitionTimes64[transitionIdx] * Grego.MILLIS_PER_SECOND;
                             if (tt < finalStartMillis) {
                                 // Exclude transitions after finalMillis
                                 times[nTimes++] = tt;
@@ -1062,7 +1062,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
                 // Create initial transition
                 typeIdx = getInt(typeMapData[firstTZTransitionIdx]);
-                firstTZTransition = new TimeZoneTransition(((long)transitionTimes64[firstTZTransitionIdx])*Grego.MILLIS_PER_SECOND,
+                firstTZTransition = new TimeZoneTransition(transitionTimes64[firstTZTransitionIdx] * Grego.MILLIS_PER_SECOND,
                         initialRule, historicRules[typeIdx]);
                 
             }
@@ -1145,8 +1145,6 @@ public class OlsonTimeZone extends BasicTimeZone {
                 // final resort
                 constructEmpty();
             }
-        } else {
-            System.out.println("4.4");
         }
 
         // need to rebuild transition rules when requested
