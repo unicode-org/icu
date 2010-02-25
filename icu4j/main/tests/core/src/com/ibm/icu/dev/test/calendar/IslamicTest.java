@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -143,6 +143,16 @@ public class IslamicTest extends CalendarTest {
         IslamicCalendar islamic = newCivil();
         doLimitsTest(islamic, null, cal.getTime());
         doTheoreticalLimitsTest(islamic, true);
+
+
+        // number of days to test - Islamic calendar starts to exhibit 
+        // rounding errors after year AH3954 - about 2500 years out.
+
+        IslamicCalendar islamic2 = new IslamicCalendar();
+        islamic2.setCivil(false);
+        int testTime = getInclusion() <= 5 ? 20000 : 800000;
+        doLimitsTest(islamic2, null, cal.getTime(), testTime);
+        doTheoreticalLimitsTest(islamic2, true);
     }
 
     public void TestCoverage() {

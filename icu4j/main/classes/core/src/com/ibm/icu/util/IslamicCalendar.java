@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -438,7 +438,7 @@ public class IslamicCalendar extends Calendar {
         {
             // Make a guess at when the month started, using the average length
             long origin = HIJRA_MILLIS 
-                        + (long)Math.floor(month * CalendarAstronomer.SYNODIC_MONTH - 1) * ONE_DAY;
+                        + (long)Math.floor(month * CalendarAstronomer.SYNODIC_MONTH) * ONE_DAY;
 
             double age = moonAge(origin);
 
@@ -610,7 +610,7 @@ public class IslamicCalendar extends Calendar {
 
             monthStart = (long)Math.floor(months * CalendarAstronomer.SYNODIC_MONTH - 1);
 
-            if ( days - monthStart >= 28 && moonAge(internalGetTimeInMillis()) > 0) {
+            if ( days - monthStart >= 25 && moonAge(internalGetTimeInMillis()) > 0) {
                 // If we're near the end of the month, assume next month and search backwards
                 months++;
             }
