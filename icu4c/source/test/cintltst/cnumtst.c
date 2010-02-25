@@ -768,6 +768,7 @@ free(result);
         } else {
             log_verbose("unum_parseDouble with empty groupingSep: no hang, OK\n");
         }
+        unum_close(dec_en);
     }
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/

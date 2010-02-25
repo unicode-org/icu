@@ -681,6 +681,8 @@ static void TestMsgFormatSelect(void)
     if(U_FAILURE(status)){
         log_data_err("ERROR: failure in message format on Select test#1 : %s \n", myErrorName(status));
     }
+    free(str);
+    free(str1);
 
     /*Test a nested pattern*/
     str=(UChar*)malloc(sizeof(UChar) * 25);
@@ -709,7 +711,8 @@ static void TestMsgFormatSelect(void)
     if(U_FAILURE(status)){
         log_data_err("ERROR: failure in message format on Select test#2 : %s \n", myErrorName(status));
     }
-
+    free(str);
+    free(str1);
 }
 
 /* test message format with a choice option */
