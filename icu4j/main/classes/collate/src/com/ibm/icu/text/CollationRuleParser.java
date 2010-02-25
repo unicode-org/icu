@@ -47,6 +47,7 @@ final class CollationRuleParser
         m_options_ = new OptionSet(RuleBasedCollator.UCA_);
         m_listHeader_ = new TokenListHeader[512];
         m_resultLength_ = 0;
+        m_prevStrength_ = TOKEN_UNSET_;
         // call assembleTokenList() manually, so that we can
         // init a parser and manually parse tokens
         //assembleTokenList();
@@ -409,6 +410,12 @@ final class CollationRuleParser
      * the UCA.
      */
     UnicodeSet m_removeSet_;
+    /**
+     * Stores the previous token's strength when making a list of same level
+     * differences.
+     */
+    private int m_prevStrength_;
+
     /*
      * This is space for the extra strings that need to be unquoted during the
      * parsing of the rules
@@ -1234,6 +1241,12 @@ final class CollationRuleParser
                                                        variabletop, before);
                         }
                         newstrength = Collator.IDENTICAL;
+                        if(m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
+                            m_current_++;
+                            m_prevStrength_ = newstrength;
+                        }else{
+                            m_prevStrength_ = TOKEN_UNSET_;
+                        }
                         break;
                     case 0x002C : // ','
                         if (newstrength != TOKEN_UNSET_) {
@@ -1254,6 +1267,7 @@ final class CollationRuleParser
                                                        variabletop, before);
                         }
                         newstrength = Collator.TERTIARY;
+                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x003B : // ';'
                         if (newstrength != TOKEN_UNSET_) {
@@ -1274,6 +1288,7 @@ final class CollationRuleParser
                                                        variabletop, before);
                         }
                         newstrength = Collator.SECONDARY;
+                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x003C : // '<'
                         if (newstrength != TOKEN_UNSET_) {
@@ -1308,6 +1323,13 @@ final class CollationRuleParser
                         else { // just one
                             newstrength = Collator.PRIMARY;
                         }
+
+                        if(m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
+                            m_current_++;
+                            m_prevStrength_ = newstrength;
+                        }else{
+                            m_prevStrength_ = TOKEN_UNSET_;
+                        }
                         break;
                     case 0x0026 : // '&'
                         if (newstrength != TOKEN_UNSET_) {
@@ -1318,6 +1340,7 @@ final class CollationRuleParser
                                                        variabletop, before);
                         }
                         newstrength = TOKEN_RESET_; // PatternEntry::RESET = 0
+                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x005b : // '['
                         // options - read an option, analyze it
@@ -1389,8 +1412,12 @@ final class CollationRuleParser
                     // found a quote, we're gonna start copying
                     case 0x0027 : //'\''
                         if (newstrength == TOKEN_UNSET_) {
-                            // quote is illegal until we have a strength
-                            throwParseException(m_rules_, m_current_);
+                            if (m_prevStrength_ == TOKEN_UNSET_) {
+                                // quote is illegal until we have a strength
+                                throwParseException(m_rules_, m_current_);
+                            }else{
+                                newstrength = m_prevStrength_;
+                            }
                         }
                         inquote = true;
                         if (inchars) { // we're doing characters
@@ -1477,7 +1504,11 @@ final class CollationRuleParser
                         break;
                     default :
                         if (newstrength == TOKEN_UNSET_) {
-                            throwParseException(m_rules_, m_current_);
+                            if(m_prevStrength_ == TOKEN_UNSET_){
+                                throwParseException(m_rules_, m_current_);
+                            }else{
+                                newstrength = m_prevStrength_;
+                            }
                         }
                         if (isSpecialChar(ch) && (inquote == false)) {
                             throwParseException(m_rules_, m_current_);
@@ -1490,6 +1521,16 @@ final class CollationRuleParser
                                 m_parsedToken_.m_charsOffset_ = m_current_;
                             }
                             m_parsedToken_.m_charsLen_++;
+                            if(m_prevStrength_ != TOKEN_UNSET_){
+                                char[] fullchar = Character.toChars(Character.codePointAt(m_source_, m_current_));
+                                m_current_ += fullchar.length;
+                                m_parsedToken_.m_charsLen_ += fullchar.length - 1;
+                                return doEndParseNextToken(newstrength,
+                                                           top,
+                                                           extensionoffset,
+                                                           newextensionlen,
+                                                           variabletop, before);
+                            }
                         }
                         else {
                             if (newextensionlen == 0) {
