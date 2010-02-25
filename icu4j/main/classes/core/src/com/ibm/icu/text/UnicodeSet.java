@@ -39,7 +39,7 @@ import com.ibm.icu.util.VersionInfo;
  *
  * Note: method freeze() will not only makes the set immutable, but
  * also makes important methods much higher performance:
- * containsNone(...), span(...), spanBack(...) etc.
+ * contains(c), containsNone(...), span(...), spanBack(...) etc.
  * After the object is frozen, any subsequent call that wants to change
  * the object will throw UnsupportedOperationException.
  *
@@ -3891,20 +3891,16 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @provisional This API might change or be removed in a future release.
      */
     public int span(CharSequence s, int start, SpanCondition spanCondition) {
-        if (start < 0) {
-          start = 0;
-        } else if (start > s.length()) {
-          return s.length();
-        }
         int end = s.length();
-        int len = end - start;
-        if (len <= 0) {
-            return start;
+        if (start < 0) {
+            start = 0;
+        } else if (start >= end) {
+            return end;
         }
         if (bmpSet != null) {
             return start + bmpSet.span(s, start, end, spanCondition);
         }
-
+        int len = end - start;
         if (stringSpan != null) {
             return start + stringSpan.span(s, start, len, spanCondition);
         } else if (!strings.isEmpty()) {
@@ -3946,7 +3942,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Span a string backwards (from the fromIndex) using this UnicodeSet.
-     *   If the fromIndex is less than 0 or greater than string length, it will span back from the string length.
+     * If the fromIndex is less than 0, spanBack will return 0.
+     * If fromIndex is greater than the string length, spanBack will start from the string length.
      * 
      * @param s The string to be spanned
      * @param fromIndex The index of the char (exclusive) that the string should be spanned backwards
@@ -3956,15 +3953,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @provisional This API might change or be removed in a future release.
      */
     public int spanBack(CharSequence s, int fromIndex, SpanCondition spanCondition) {
-        if (fromIndex < 0 ||
-            fromIndex > s.length()) {
+        if (fromIndex <= 0) {
+            return 0;
+        }
+        if (fromIndex > s.length()) {
             fromIndex = s.length();
         }
-        if (fromIndex > 0 && bmpSet != null) {
+        if (bmpSet != null) {
             return bmpSet.spanBack(s, fromIndex, spanCondition);
-        }
-        if (fromIndex == 0) {
-            return 0;
         }
         if (stringSpan != null) {
             return stringSpan.spanBack(s, fromIndex, spanCondition);
