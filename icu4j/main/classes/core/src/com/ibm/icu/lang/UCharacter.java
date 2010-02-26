@@ -3299,8 +3299,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     /**
      * Compatibility override of Java deprecated method.  This
-     * method will always remain deprecated.  Delegates to
-     * java.lang.Character.isSpace.
+     * method will always remain deprecated.
+     * Same as java.lang.Character.isSpace().
      * @param ch the code point
      * @return true if the code point is a space character as
      * defined by java.lang.Character.isSpace.
@@ -3489,8 +3489,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * A code point is considered to be an whitespace character if and only
      * if it satisfies one of the following criteria:
      * <ul>
-     * <li> It is a Unicode space character (categories "Zs" or "Zl" or "Zp"), but is not
-     *      also a no-break space (&#92u00A0 or &#92u2007 or &#92u202F).
+     * <li> It is a Unicode Separator character (categories "Z" = "Zs" or "Zl" or "Zp"), but is not
+     *      also a non-breaking space (&#92u00A0 or &#92u2007 or &#92u202F).
      * <li> It is &#92u0009, HORIZONTAL TABULATION.
      * <li> It is &#92u000A, LINE FEED.
      * <li> It is &#92u000B, VERTICAL TABULATION.
@@ -3502,10 +3502,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <li> It is &#92u001F, UNIT SEPARATOR.
      * </ul>
      *
-     * This API tries to synch to the semantics of the Java API,
+     * This API tries to sync with the semantics of Java's
      * java.lang.Character.isWhitespace(), but it may not return
-     * the exactly same results because of the Unicode version
+     * the exact same results because of the Unicode version
      * difference.
+     * <p>Note: Unicode 4.0.1 changed U+200B ZERO WIDTH SPACE from a Space Separator (Zs)
+     * to a Format Control (Cf). Since then, isWhitespace(0x200b) returns false.
+     * See http://www.unicode.org/versions/Unicode4.0.1/
      * @param ch code point to determine if it is a white space
      * @return true if the specified code point is a white space character
      * @stable ICU 2.1
@@ -3640,12 +3643,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     /**
      * Determines if the specified code point should be regarded as an
-     * ignorable character in a Unicode identifier.
-     * A character is ignorable in the Unicode standard if it is of the type
-     * Cf, Formatting code.<br>
+     * ignorable character in a Java identifier.
+     * A character is Java-identifier-ignorable if it has the general category
+     * Cf Formatting Control, or it is a non-Java-whitespace ISO control:
+     * U+0000..U+0008, U+000E..U+001B, U+007F..U+009F.<br>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isIdentifierIgnorable().<br>
      * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * <p>Note that Unicode just recommends to ignore Cf (format controls).
      * @param ch code point to be determined if it can be ignored in a Unicode
      *        identifier.
      * @return true if the code point is ignorable
@@ -3656,9 +3661,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // see java.lang.Character.isIdentifierIgnorable() on range of
         // ignorable characters.
         if (ch <= 0x9f) {
-        return isISOControl(ch)
-        && !((ch >= 0x9 && ch <= 0xd)
-             || (ch >= 0x1c && ch <= 0x1f));
+            return isISOControl(ch)
+                && !((ch >= 0x9 && ch <= 0xd)
+                     || (ch >= 0x1c && ch <= 0x1f));
         }
         return getType(ch) == UCharacterCategory.FORMAT;
     }
