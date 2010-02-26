@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
  *
  */
 
@@ -408,7 +408,11 @@ static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'samr' (SAMR) */
     NULL,            /* 'tavt' (TAVT) */
     NULL,            /* 'zmth' (ZMTH) */
-    NULL             /* 'zsym' (ZSYM) */
+    NULL,            /* 'zsym' (ZSYM) */
+    NULL,            /* 'bamu' (BAMUM) */
+    NULL,            /* 'lisu' (LISU) */
+    NULL,            /* 'nkgb' (NKGB) */
+    NULL             /* 'sarb' (OLD_SOUTH_ARABIAN) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const

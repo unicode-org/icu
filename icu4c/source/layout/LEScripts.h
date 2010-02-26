@@ -1,16 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2009, All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2010. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * *************************************************************
- * Hand edited on 04/24/2008 to add correct @stable, @draft tags
- * prior to updating the tool to track these.
- * *************************************************************
- *
- * Generated on: 04/24/2008 10:19:12 AM HST
+ * Generated on: 02/25/2010 06:59:11 PM PST
  */
 
 #ifndef __LESCRIPTS_H
@@ -34,7 +29,8 @@ U_NAMESPACE_BEGIN
 
 enum ScriptCodes {
     zyyyScriptCode =  0,
-    qaaiScriptCode =  1,
+    zinhScriptCode =  1,
+    qaaiScriptCode = zinhScriptCode,  /* manually added alias, for API stability */
     arabScriptCode =  2,
     armnScriptCode =  3,
     bengScriptCode =  4,
@@ -73,18 +69,24 @@ enum ScriptCodes {
     thaaScriptCode = 37,
     thaiScriptCode = 38,
     tibtScriptCode = 39,
+/**
+ * @stable ICU 2.6
+ */
 
-    /** Canadian_Aboriginal script. @stable ICU 2.6 */
     cansScriptCode = 40,
-
+/**
+ * @stable ICU 2.2
+ */
 
     yiiiScriptCode = 41,
     tglgScriptCode = 42,
     hanoScriptCode = 43,
     buhdScriptCode = 44,
     tagbScriptCode = 45,
+/**
+ * @stable ICU 2.6
+ */
 
-    /** New scripts in Unicode 4 @stable ICU 2.6 */
     braiScriptCode = 46,
     cprtScriptCode = 47,
     limbScriptCode = 48,
@@ -93,11 +95,15 @@ enum ScriptCodes {
     shawScriptCode = 51,
     taleScriptCode = 52,
     ugarScriptCode = 53,
+/**
+ * @stable ICU 3.0
+ */
 
-    /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
     hrktScriptCode = 54,
-      
-    /** New scripts in Unicode 4.1 @stable ICU 3.4 */
+/**
+ * @stable ICU 3.4
+ */
+
     bugiScriptCode = 55,
     glagScriptCode = 56,
     kharScriptCode = 57,
@@ -105,8 +111,10 @@ enum ScriptCodes {
     taluScriptCode = 59,
     tfngScriptCode = 60,
     xpeoScriptCode = 61,
+/**
+ * @stable ICU 3.6
+ */
 
-    /** New script codes from ISO 15924 @stable ICU 3.6 */
     baliScriptCode = 62,
     batkScriptCode = 63,
     blisScriptCode = 64,
@@ -149,8 +157,10 @@ enum ScriptCodes {
     xsuxScriptCode = 101,
     zxxxScriptCode = 102,
     zzzzScriptCode = 103,
+/**
+ * @stable ICU 3.8
+ */
 
-    /** New script codes from ISO 15924 @stable ICU 3.8 */
     cariScriptCode = 104,
     jpanScriptCode = 105,
     lanaScriptCode = 106,
@@ -163,8 +173,10 @@ enum ScriptCodes {
     sundScriptCode = 113,
     moonScriptCode = 114,
     mteiScriptCode = 115,
+/**
+ * @stable ICU 4.0
+ */
 
-    /** New script codes from ISO 15924 @stable ICU 4.0 */
     armiScriptCode = 116,
     avstScriptCode = 117,
     cakmScriptCode = 118,
@@ -179,8 +191,16 @@ enum ScriptCodes {
     tavtScriptCode = 127,
     zmthScriptCode = 128,
     zsymScriptCode = 129,
+/**
+ * @draft ICU 4.4
+ */
 
-    scriptCodeCount = 130
+    bamuScriptCode = 130,
+    lisuScriptCode = 131,
+    nkgbScriptCode = 132,
+    sarbScriptCode = 133,
+
+    scriptCodeCount = 134
 };
 
 U_NAMESPACE_END
