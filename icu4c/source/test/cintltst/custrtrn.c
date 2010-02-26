@@ -43,6 +43,7 @@ static void Test_widestrs(void);
 static void Test_WCHART_LongString(void);
 static void Test_strToJavaModifiedUTF8(void);
 static void Test_strFromJavaModifiedUTF8(void);
+static void TestNullEmptySource(void);
 
 void 
 addUCharTransformTest(TestNode** root)
@@ -61,6 +62,7 @@ addUCharTransformTest(TestNode** root)
 #endif
    addTest(root, &Test_strToJavaModifiedUTF8,  "custrtrn/Test_strToJavaModifiedUTF8");
    addTest(root, &Test_strFromJavaModifiedUTF8,  "custrtrn/Test_strFromJavaModifiedUTF8");
+   addTest(root, &TestNullEmptySource,  "custrtrn/TestNullEmptySource");
 }
 
 static const UChar32 src32[]={
@@ -1176,16 +1178,16 @@ static void Test_UChar_WCHART_API(void){
             log_err("u_strToWCS() should return NULL with a bad argument\n");
         }
 
-        /* Bad UErrorCode arguments. */
+        /* NULL source & destination. */
         err = U_ZERO_ERROR;
         u_strFromWCS(NULL,0,NULL,NULL,0,&err);
-        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("u_strFromWCS() didn't fail as expected with bad arguments. Error: %s \n", u_errorName(err));
+        if (err != U_STRING_NOT_TERMINATED_WARNING) {
+            log_err("u_strFromWCS(NULL, NULL) failed. Error: %s \n", u_errorName(err));
         }
         err = U_ZERO_ERROR;
         u_strToWCS(NULL,0,NULL,NULL,0,&err);
-        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("u_strToWCS() didn't fail as expected with bad arguments. Error: %s \n", u_errorName(err));
+        if (err != U_STRING_NOT_TERMINATED_WARNING) {
+            log_err("u_strToWCS(NULL, NULL) failed. Error: %s \n", u_errorName(err));
         }
         err = U_ZERO_ERROR;
 
@@ -1954,4 +1956,129 @@ static void Test_strFromJavaModifiedUTF8() {
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0xffff) {
         log_err("u_strFromJavaModifiedUTF8WithSub(subchar is surrogate) failed - %s\n", u_errorName(errorCode));
     }
+}
+
+/* test that string transformation functions permit NULL source pointer when source length==0 */
+static void TestNullEmptySource() {
+    char dest8[4]={ 3, 3, 3, 3 };
+    UChar dest16[4]={ 3, 3, 3, 3 };
+    UChar32 dest32[4]={ 3, 3, 3, 3 };
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+    wchar_t destW[4]={ 3, 3, 3, 3 };
+#endif
+
+    int32_t length;
+    UErrorCode errorCode;
+
+    /* u_strFromXyz() */
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromUTF8(dest16, LENGTHOF(dest16), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromUTF8(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromUTF8WithSub(dest16, LENGTHOF(dest16), &length, NULL, 0, 0xfffd, NULL, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromUTF8WithSub(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromUTF8Lenient(dest16, LENGTHOF(dest16), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromUTF8Lenient(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromUTF32(dest16, LENGTHOF(dest16), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromUTF32(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromUTF32WithSub(dest16, LENGTHOF(dest16), &length, NULL, 0, 0xfffd, NULL, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromUTF32WithSub(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromJavaModifiedUTF8WithSub(dest16, LENGTHOF(dest16), &length, NULL, 0, 0xfffd, NULL, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromJavaModifiedUTF8WithSub(source=NULL, sourceLength=0) failed\n");
+    }
+
+    /* u_strToXyz() */
+
+    dest8[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToUTF8(dest8, LENGTHOF(dest8), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest8[0]!=0 || dest8[1]!=3) {
+        log_err("u_strToUTF8(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest8[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToUTF8WithSub(dest8, LENGTHOF(dest8), &length, NULL, 0, 0xfffd, NULL, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest8[0]!=0 || dest8[1]!=3) {
+        log_err("u_strToUTF8(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest32[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToUTF32(dest32, LENGTHOF(dest32), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest32[0]!=0 || dest32[1]!=3) {
+        log_err("u_strToUTF32(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest32[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToUTF32WithSub(dest32, LENGTHOF(dest32), &length, NULL, 0, 0xfffd, NULL, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest32[0]!=0 || dest32[1]!=3) {
+        log_err("u_strToUTF32WithSub(source=NULL, sourceLength=0) failed\n");
+    }
+
+    dest8[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToJavaModifiedUTF8(dest8, LENGTHOF(dest8), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest8[0]!=0 || dest8[1]!=3) {
+        log_err("u_strToJavaModifiedUTF8(source=NULL, sourceLength=0) failed\n");
+    }
+
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+
+    dest16[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strFromWCS(dest16, LENGTHOF(dest16), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || dest16[0]!=0 || dest16[1]!=3) {
+        log_err("u_strFromWCS(source=NULL, sourceLength=0) failed\n");
+    }
+
+    destW[0]=3;
+    length=3;
+    errorCode=U_ZERO_ERROR;
+    u_strToWCS(destW, LENGTHOF(destW), &length, NULL, 0, &errorCode);
+    if(errorCode!=U_ZERO_ERROR || length!=0 || destW[0]!=0 || destW[1]!=3) {
+        log_err("u_strToWCS(source=NULL, sourceLength=0) failed\n");
+    }
+
+#endif
 }

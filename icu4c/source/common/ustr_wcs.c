@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -232,7 +232,9 @@ u_strToWCS(wchar_t *dest,
         return NULL;
     }
         
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0)
+    ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -484,8 +486,10 @@ u_strFromWCS(UChar   *dest,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
-        
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0)
+    ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
