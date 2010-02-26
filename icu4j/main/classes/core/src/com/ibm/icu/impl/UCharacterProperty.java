@@ -380,9 +380,6 @@ public final class UCharacterProperty
                         Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl;
                         return impl.isCompNo(impl.getNorm16(c));
                     }
-                    case UProperty.SEGMENT_STARTER:
-                        return Norm2AllModes.getNFCInstance().impl.
-                            ensureCanonIterData().isCanonSegmentStarter(c);
                     default:
                         // UCHAR_NF[CD]_INERT properties
                         return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
@@ -400,6 +397,11 @@ public final class UCharacterProperty
                     Normalizer2Impl.ReorderingBuffer buffer=new Normalizer2Impl.ReorderingBuffer(kcf, dest, 5);
                     kcf.compose(src, 0, src.length(), false, true, buffer);
                     return !Normalizer2Impl.UTF16Plus.equal(dest, src);
+                } else if(column==SRC_NFC_CANON_ITER) {
+                    /* normalization properties from nfc.nrm canonical iterator data */
+                    // SEGMENT_STARTER
+                    return Norm2AllModes.getNFCInstance().impl.
+                        ensureCanonIterData().isCanonSegmentStarter(c);
                 } else if(column==SRC_BIDI) {
                     /* bidi/shaping properties */
                     UBiDiProps bdp;

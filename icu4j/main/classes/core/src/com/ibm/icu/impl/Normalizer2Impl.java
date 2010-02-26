@@ -468,13 +468,19 @@ public final class Normalizer2Impl {
     public void addCanonIterPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of the canonical iterator data trie */
         ensureCanonIterData();
-        Iterator<Trie2.Range> trieIterator=canonIterData.iterator();
+        // currently only used for the SEGMENT_STARTER property
+        Iterator<Trie2.Range> trieIterator=canonIterData.iterator(segmentStarterMapper);
         Trie2.Range range;
         while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
             /* add the start code point to the USet */
             set.add(range.startCodePoint);
         }
     }
+    private static final Trie2.ValueMapper segmentStarterMapper=new Trie2.ValueMapper() {
+        public int map(int in) {
+            return in&CANON_NOT_SEGMENT_STARTER;
+        }
+    };
 
     // low-level properties ------------------------------------------------ ***
 
