@@ -2917,9 +2917,20 @@ public class BasicTest extends TestFmwk {
         }
         // For [:Segment_Starter:] to work right, not just the property function has to work right,
         // UnicodeSet also needs a correct range starts set.
-        UnicodeSet segStarters=new UnicodeSet("[:Segment_Starter:]");
+        UnicodeSet segStarters=new UnicodeSet("[:Segment_Starter:]").freeze();
         if(segStarters.contains(0xfb5)) {
             errln("[:Segment_Starter:].contains(U+0fb5)=true is wrong");
+        }
+        // Try characters up to Kana and miscellaneous CJK but below Han (for expediency).
+        for(int c=0; c<=0x33ff; ++c) {
+            boolean isStarter=impl.isCanonSegmentStarter(c);
+            boolean isContained=segStarters.contains(c);
+            if(isStarter!=isContained) {
+                errln(String.format(
+                        "discrepancy: isCanonSegmentStarter(U+%04x)=%5b != " +
+                        "[:Segment_Starter:].contains(same)",
+                        c, isStarter));
+            }
         }
     }
 }
