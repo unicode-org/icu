@@ -2904,4 +2904,22 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
+
+    public void TestCanonIterData() {
+        // For now, just a regression test.
+        Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl.ensureCanonIterData();
+        // U+0FB5 TIBETAN SUBJOINED LETTER SSA is the trailing character
+        // in some decomposition mappings where there is a composition exclusion.
+        // In fact, U+0FB5 is normalization-inert (NFC_QC=Yes, NFD_QC=Yes, ccc=0)
+        // but it is not a segment starter because it occurs in a decomposition mapping.
+        if(impl.isCanonSegmentStarter(0xfb5)) {
+            errln("isCanonSegmentStarter(U+0fb5)=true is wrong");
+        }
+        // For [:Segment_Starter:] to work right, not just the property function has to work right,
+        // UnicodeSet also needs a correct range starts set.
+        UnicodeSet segStarters=new UnicodeSet("[:Segment_Starter:]");
+        if(segStarters.contains(0xfb5)) {
+            errln("[:Segment_Starter:].contains(U+0fb5)=true is wrong");
+        }
+    }
 }

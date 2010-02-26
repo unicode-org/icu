@@ -465,6 +465,17 @@ public final class Normalizer2Impl {
         set.add(Hangul.HANGUL_LIMIT); /* add Hangul+1 to continue with other properties */
     }
 
+    public void addCanonIterPropertyStarts(UnicodeSet set) {
+        /* add the start code point of each same-value range of the canonical iterator data trie */
+        ensureCanonIterData();
+        Iterator<Trie2.Range> trieIterator=canonIterData.iterator();
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+            /* add the start code point to the USet */
+            set.add(range.startCodePoint);
+        }
+    }
+
     // low-level properties ------------------------------------------------ ***
 
     public Trie2_16 getNormTrie() { return normTrie; }
