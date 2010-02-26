@@ -44,6 +44,7 @@
 #include "cstring.h"
 #include "putilimp.h"
 #include "umutex.h"
+#include "digitlst.h"
 #include <float.h>
 
 //#define FMT_DEBUG
@@ -210,6 +211,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
 {
     if (this != &rhs)
     {
+        Format::operator=(rhs);
         fGroupingUsed = rhs.fGroupingUsed;
         fMaxIntegerDigits = rhs.fMaxIntegerDigits;
         fMinIntegerDigits = rhs.fMinIntegerDigits;
@@ -322,18 +324,29 @@ NumberFormat::format(int64_t /* unused number */,
 }
 
 // -------------------------------------
-// Default implementation sets unsupported error; subclasses should
-// override.
+// Decimal Number format() default implementation 
+// Subclasses do not normally override this function, but rather the DigitList
+// formatting functions..
+//   The expected call chain from here is
+//      this function ->
+//      NumberFormat::format(Formattable  ->
+//      DecimalFormat::format(DigitList    
+//
+//   Or, for subclasses of Formattable that do not know about DigitList,
+//       this Function ->
+//       NumberFormat::format(Formattable  ->
+//       NumberFormat::format(DigitList  ->
+//       XXXFormat::format(double
 
 UnicodeString&
-NumberFormat::format(const StringPiece & /* unused decimal number */,
+NumberFormat::format(const StringPiece &decimalNum,
                      UnicodeString& toAppendTo,
-                     FieldPositionIterator* /* unused posIter */,
+                     FieldPositionIterator* fpi,
                      UErrorCode& status) const
 {
-    if (!U_FAILURE(status)) {
-        status = U_UNSUPPORTED_ERROR;
-    }
+    Formattable f;
+    f.setDecimalNumber(decimalNum, status);
+    format(f, toAppendTo, fpi, status);
     return toAppendTo;
 }
 
@@ -388,6 +401,39 @@ ArgExtractor::~ArgExtractor() {
     }
 }
 
+UnicodeString& NumberFormat::format(const DigitList &number,
+                      UnicodeString& appendTo,
+                      FieldPositionIterator* posIter,
+                      UErrorCode& status) const {
+    // DecimalFormat overrides this function, and handles DigitList based big decimals.
+    // Other subclasses (ChoiceFormat, RuleBasedNumberFormat) do not (yet) handle DigitLists,
+    // so this default implementation falls back to formatting decimal numbers as doubles.
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    double dnum = number.getDouble();
+    format(dnum, appendTo, posIter, status);
+    return appendTo;
+}
+
+
+
+UnicodeString&
+NumberFormat::format(const DigitList &number,
+                     UnicodeString& appendTo,
+                     FieldPosition& pos,
+                     UErrorCode &status) const { 
+    // DecimalFormat overrides this function, and handles DigitList based big decimals.
+    // Other subclasses (ChoiceFormat, RuleBasedNumberFormat) do not (yet) handle DigitLists,
+    // so this default implementation falls back to formatting decimal numbers as doubles.
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    double dnum = number.getDouble();
+    format(dnum, appendTo, pos, status);
+    return appendTo;
+}
+
 UnicodeString&
 NumberFormat::format(const Formattable& obj,
                         UnicodeString& appendTo,
@@ -399,19 +445,31 @@ NumberFormat::format(const Formattable& obj,
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
 
-    switch (n->getType()) {
-    case Formattable::kDouble:
-        format(n->getDouble(), appendTo, pos);
-        break;
-    case Formattable::kLong:
-        format(n->getLong(), appendTo, pos);
-        break;
-    case Formattable::kInt64:
-        format(n->getInt64(), appendTo, pos);
-        break;
-    default:
-        status = U_INVALID_FORMAT_ERROR;
-        break;
+    if (n->isNumeric() && n->getDigitList() != NULL) {
+        // Decimal Number.  We will have a DigitList available if the value was
+        //   set to a decimal number, or if the value originated with a parse.
+        //
+        // The default implementation for formatting a DigitList converts it
+        // to a double, and formats that, allowing formatting classes that don't
+        // know about DigitList to continue to operate as they had.
+        //
+        // DecimalFormat overrides the DigitList formatting functions.
+        format(*n->getDigitList(), appendTo, pos, status);
+    } else {
+        switch (n->getType()) {
+        case Formattable::kDouble:
+            format(n->getDouble(), appendTo, pos);
+            break;
+        case Formattable::kLong:
+            format(n->getLong(), appendTo, pos);
+            break;
+        case Formattable::kInt64:
+            format(n->getInt64(), appendTo, pos);
+            break;
+        default:
+            status = U_INVALID_FORMAT_ERROR;
+            break;
+        }
     }
 
     return appendTo;
@@ -432,19 +490,24 @@ NumberFormat::format(const Formattable& obj,
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
 
-    switch (n->getType()) {
-    case Formattable::kDouble:
-        format(n->getDouble(), appendTo, posIter, status);
-        break;
-    case Formattable::kLong:
-        format(n->getLong(), appendTo, posIter, status);
-        break;
-    case Formattable::kInt64:
-        format(n->getInt64(), appendTo, posIter, status);
-        break;
-    default:
-        status = U_INVALID_FORMAT_ERROR;
-        break;
+    if (n->isNumeric() && n->getDigitList() != NULL) {
+        // Decimal Number
+        format(*n->getDigitList(), appendTo, posIter, status);
+    } else {
+        switch (n->getType()) {
+        case Formattable::kDouble:
+            format(n->getDouble(), appendTo, posIter, status);
+            break;
+        case Formattable::kLong:
+            format(n->getLong(), appendTo, posIter, status);
+            break;
+        case Formattable::kInt64:
+            format(n->getInt64(), appendTo, posIter, status);
+            break;
+        default:
+            status = U_INVALID_FORMAT_ERROR;
+            break;
+        }
     }
 
     return appendTo;

@@ -201,7 +201,7 @@ public:
     /**
      * Get one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
-     * (characters with modifyer letters) can be used.
+     * (characters with modifier letters) can be used.
      *
      * @param symbol    Constant to indicate a number format symbol.
      * @return    the format symbols by the param 'symbol'
@@ -212,10 +212,10 @@ public:
     /**
      * Set one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
-     * (characters with modifyer letters) can be used.
+     * (characters with modifier letters) can be used.
      *
      * @param symbol    Constant to indicate a number format symbol.
-     * @param value     value of the format sybmol
+     * @param value     value of the format symbol
      * @stable ICU 2.0
      */
     void setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value);

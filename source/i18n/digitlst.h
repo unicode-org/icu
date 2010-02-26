@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -29,9 +29,12 @@
 #if !UCONFIG_NO_FORMATTING
 #include "unicode/decimfmt.h"
 #include <float.h>
+#include "decContext.h"
+#include "decNumber.h"
+#include "cmemory.h"
+#include "decnumstr.h"
 
 // Decimal digits in a 64-bit int
-//#define LONG_DIGITS 19 
 #define INT64_DIGITS 19
 
 typedef enum EDigitListValues {
@@ -40,6 +43,7 @@ typedef enum EDigitListValues {
     MAX_DIGITS = MAX_I64_DIGITS,
     MAX_EXPONENT = DBL_DIG,
     DIGIT_PADDING = 3,
+    DEFAULT_DIGITS = 40,   // Initial storage size, will grow as needed.
 
      // "+." + fDigits + "e" + fDecimalAt
     MAX_DEC_DIGITS = MAX_DIGITS + DIGIT_PADDING + MAX_EXPONENT
@@ -47,7 +51,34 @@ typedef enum EDigitListValues {
 
 U_NAMESPACE_BEGIN
 
+// Export an explicit template instantiation of the MaybeStackArray that
+//    is used as a data member of DigitList.
+//
+//    MSVC requires this, even though it should not be necessary. 
+//    No direct access to the MaybeStackArray leaks out of the i18n library.
+//
+//    Macintosh produces duplicate definition linker errors with the explicit template
+//    instantiation.
+//
+#if !defined(U_DARWIN)
+template class U_I18N_API MaybeStackArray<char, sizeof(decNumber) + DEFAULT_DIGITS>;
+#endif
+
+
 /**
+ * Digit List is actually a Decimal Floating Point number.
+ * The original implementation has been replaced by a thin wrapper onto a 
+ * decimal number from the decNumber library.
+ *
+ * The original DigitList API has been retained, to minimize the impact of
+ * the change on the rest of the ICU formatting code.
+ *
+ * The change to decNumber enables support for big decimal numbers, and
+ * allows rounding computations to be done directly in decimal, avoiding
+ * extra, and inaccurate, conversions to and from doubles.
+ *
+ * Original DigitList comments:
+ *
  * Digit List utility class. Private to DecimalFormat.  Handles the transcoding
  * between numeric values and strings of characters.  Only handles
  * non-negative numbers.  The division of labor between DigitList and
@@ -65,9 +96,31 @@ U_NAMESPACE_BEGIN
  * object can be computed by mulitplying the fraction f, where 0 <= f < 1,
  * derived by placing all the digits of the list to the right of the
  * decimal point, by 10^exponent.
+ *
+ * --------
+ *
+ * DigitList vs. decimalNumber:
+ *
+ *    DigitList stores digits with the most significant first.
+ *    decNumber stores digits with the least significant first.
+ *
+ *    DigitList, decimal point is before the most significant.
+ *    decNumber, decimal point is after the least signficant digit.
+ *
+ *       digitList:    0.ddddd * 10 ^ exp
+ *       decNumber:    ddddd. * 10 ^ exp
+ *
+ *       digitList exponent = decNumber exponent + digit count
+ *
+ *    digitList, digits are chars, '0' - '9'
+ *    decNumber, digits are binary, one per byte, 0 - 9.
+ *
+ *       (decNumber library is configurable in how digits are stored, ICU has configured
+ *        it this way for convenience in replacing the old DigitList implementation.)
  */
-class DigitList : public UMemory { // Declare external to make compiler happy
+class U_I18N_API DigitList : public UMemory { // Declare external to make compiler happy
 public:
+
     DigitList();
     ~DigitList();
 
@@ -91,12 +144,10 @@ public:
      */
     UBool operator==(const DigitList& other) const;
 
-private:
-    /**
-     * Commented out due to lack of usage and low code coverage.
-     */
-    inline UBool operator!=(const DigitList& other) const;
-public:
+    int32_t  compare(const DigitList& other);
+
+
+    inline UBool operator!=(const DigitList& other) const { return !operator==(other); };
 
     /**
      * Clears out the digits.
@@ -108,18 +159,30 @@ public:
     void clear(void);
 
     /**
-     * Appends digits to the list. Ignores all digits beyond the first DBL_DIG,
-     * since they are not significant for either longs or doubles.
+     *  Remove, by rounding, any fractional part of the decimal number,
+     *  leaving an integer value.
+     */
+    void toIntegralValue();
+    
+    /**
+     * Appends digits to the list. 
+     *    CAUTION:  this function is not recommended for new code.
+     *              In the original DigitList implementation, decimal numbers were
+     *              parsed by appending them to a digit list as they were encountered.
+     *              With the revamped DigitList based on decNumber, append is very
+     *              inefficient, and the interaction with the exponent value is confusing.
+     *              Best avoided.
+     *              TODO:  remove this function once all use has been replaced.
      * @param digit The digit to be appended.
      */
-    inline void append(char digit);
+    void append(char digit);
 
     /**
      * Utility routine to get the value of the digit list
      * Returns 0.0 if zero length.
      * @return the value of the digit list.
      */
-    double getDouble(void) /*const*/;
+    double getDouble(void) const;
 
     /**
      * Utility routine to get the value of the digit list
@@ -136,6 +199,11 @@ public:
      * @return the value of the digit list, return 0 if it is zero length
      */
     int64_t getInt64(void) /*const*/;
+
+    /**
+     *  Utility routine to get the value of the digit list as a decimal string.
+     */  
+    void getDecimal(DecimalNumberString &str, UErrorCode &status);
 
     /**
      * Return true if the number represented by this object can fit into
@@ -156,49 +224,105 @@ public:
     UBool fitsIntoInt64(UBool ignoreNegativeZero) /*const*/;
 
     /**
-     * Utility routine to set the value of the digit list from a double
-     * Input must be non-negative, and must not be Inf, -Inf, or NaN.
-     * The maximum fraction digits helps us round properly.
+     * Utility routine to set the value of the digit list from a double.
      * @param source The value to be set
-     * @param maximunDigits The maximum number of digits to be shown
-     * @param fixedPoint True if the point is fixed
      */
-    void set(double source, int32_t maximumDigits, UBool fixedPoint = TRUE);
+    void set(double source);
 
     /**
      * Utility routine to set the value of the digit list from a long.
      * If a non-zero maximumDigits is specified, no more than that number of
      * significant digits will be produced.
      * @param source The value to be set
-     * @param maximunDigits The maximum number of digits to be shown
      */
-    void set(int32_t source, int32_t maximumDigits = 0);
+    void set(int32_t source);
 
     /**
      * Utility routine to set the value of the digit list from an int64.
      * If a non-zero maximumDigits is specified, no more than that number of
      * significant digits will be produced.
      * @param source The value to be set
-     * @param maximunDigits The maximum number of digits to be shown
      */
-    void set(int64_t source, int32_t maximumDigits = 0);
+    void set(int64_t source);
+
+   /**
+     * Utility routine to set the value of the digit list from a decimal number
+     * string.
+     * @param source The value to be set.  The string must be nul-terminated.
+     */
+    void set(const StringPiece &source, UErrorCode &status);
 
     /**
-     * Return true if this is a representation of zero.
-     * @return true if this is a representation of zero.
+     * Multiply    this = this * arg
+     *    This digitlist will be expanded if necessary to accomodate the result.
+     *  @param arg  the number to multiply by.
+     */
+    void mult(const DigitList &arg, UErrorCode &status);
+
+    /**
+     *   Divide    this = this / arg
+     */
+    void div(const DigitList &arg, UErrorCode &status);
+
+    //  The following functions replace direct access to the original DigitList implmentation
+    //  data structures.
+
+    void setRoundingMode(DecimalFormat::ERoundingMode m); 
+
+    /** Test a number for zero.
+     * @return  TRUE if the number is zero
      */
     UBool isZero(void) const;
 
-    /**
-     * Return true if this is a representation of LONG_MIN.  You must use
-     * this method to determine if this is so; you cannot check directly,
-     * because a special format is used to handle this.
+    /** Test for a Nan
+     * @return  TRUE if the number is a NaN
      */
-    // This code is unused.
-    //UBool isLONG_MIN(void) const;
+    UBool isNaN(void) const {return decNumberIsNaN(fDecNumber);};
 
-public:
+    UBool isInfinite() const {return decNumberIsInfinite(fDecNumber);};
+
+    /**  Reduce, or normalize.  Removes trailing zeroes, adjusts exponent appropriately. */
+    void     reduce();
+
+    /**  Remove trailing fraction zeros, adjust exponent accordingly. */
+    void     trim();
+
+    /** Set to zero */
+    void     setToZero() {uprv_decNumberZero(fDecNumber);};
+
+    /** get the number of digits in the decimal number */
+    int32_t  digits() const {return fDecNumber->digits;};
+
     /**
+     * Round the number to the given number of digits.
+     * @param maximumDigits The maximum number of digits to be shown.
+     * Upon return, count will be less than or equal to maximumDigits.
+     */
+    void round(int32_t maximumDigits);
+
+    void roundFixedPoint(int32_t maximumFractionDigits);
+
+    /** Ensure capacity for digits.  Grow the storage if it is currently less than
+     *      the requested size.   Capacity is not reduced if it is already greater
+     *      than requested.
+     */
+    void  ensureCapacity(int32_t  requestedSize, UErrorCode &status); 
+
+    UBool    isPositive(void) const { return decNumberIsNegative(fDecNumber) == 0;};
+    void     setPositive(UBool s); 
+
+    void     setDecimalAt(int32_t d);
+    int32_t  getDecimalAt();
+
+    void     setCount(int32_t c);
+    int32_t  getCount() const;
+    
+    void     setDigit(int32_t i, char v);
+    char     getDigit(int32_t i);
+
+
+private:
+    /*
      * These data members are intentionally public and can be set directly.
      *<P>
      * The value represented is given by placing the decimal point before
@@ -218,46 +342,32 @@ public:
      * <P>
      * Zero is represented by any DigitList with fCount == 0 or with each fDigits[i]
      * for all i <= fCount == '0'.
+     *
+     * int32_t                         fDecimalAt;
+     * int32_t                         fCount;
+     * UBool                           fIsPositive;
+     * char                            *fDigits;
+     * DecimalFormat::ERoundingMode    fRoundingMode;
      */
-    int32_t                         fDecimalAt;
-    int32_t                         fCount;
-    UBool                           fIsPositive;
-    char                            *fDigits;
-    DecimalFormat::ERoundingMode    fRoundingMode;
 
 private:
 
-    /* One character before fDigits for the decimal*/
-    char        fDecimalDigits[MAX_DEC_DIGITS + 1];
-
-    /**
-     * Round the representation to the given number of digits.
-     * @param maximumDigits The maximum number of digits to be shown.
-     * Upon return, count will be less than or equal to maximumDigits.
+    decContext    fContext;
+    decNumber     *fDecNumber;
+    MaybeStackArray<char, sizeof(decNumber) + DEFAULT_DIGITS>  fStorage;
+    
+    /* Cached double value corresponding to this decimal number.
+     * This is an optimization for the formatting implementation, which may
+     * ask for the double value multiple times.
      */
-    void round(int32_t maximumDigits);
+    double        fDouble;
+    UBool         fHaveDouble;
+
+
 
     UBool shouldRoundUp(int32_t maximumDigits) const;
 };
- 
-// -------------------------------------
-// Appends the digit to the digit list if it's not out of scope.
-// Ignores the digit, otherwise.
 
-inline void
-DigitList::append(char digit)
-{
-    // Ignore digits which exceed the precision we can represent
-    if (fCount < MAX_DIGITS)
-        fDigits[fCount++] = digit;
-}
-
-#if 0
-inline UBool
-DigitList::operator!=(const DigitList& other) const {
-    return !operator==(other);
-}
-#endif
 
 U_NAMESPACE_END
 

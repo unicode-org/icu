@@ -88,8 +88,10 @@ Format::Format(const Format &that)
 Format&
 Format::operator=(const Format& that)
 {
-    uprv_strcpy(validLocale, that.validLocale);
-    uprv_strcpy(actualLocale, that.actualLocale);
+    if (this != &that) {
+        uprv_strcpy(validLocale, that.validLocale);
+        uprv_strcpy(actualLocale, that.actualLocale);
+    }
     return *this;
 }
 

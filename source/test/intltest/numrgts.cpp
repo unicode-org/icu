@@ -1941,6 +1941,7 @@ void NumberFormatRegressionTest::Test4145457() {
         out2 = nf->format(pi, out2, pos);
         UnicodeString pat2;
         pat2 = nf->toPattern(pat2);
+        pp.setIndex(0);
         nf->parse(out2, num, pp);
         double val2 = num.getDouble();
         
