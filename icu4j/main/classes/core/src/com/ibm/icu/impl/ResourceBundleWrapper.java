@@ -126,6 +126,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
             ResourceBundleWrapper parent = null;
             int i = localeID.lastIndexOf('_');
     
+            boolean loadFromProperties = false;
             if (i != -1) {
                 String locName = localeID.substring(0, i);
                 parent = (ResourceBundleWrapper)loadFromCache(cl, baseName+"_"+locName,defaultLocale);
@@ -149,55 +150,9 @@ public class ResourceBundleWrapper extends UResourceBundle {
                 b.localeID = localeID;            
     
             } catch (ClassNotFoundException e) {
-                
-                final String resName = name.replace('.', '/') + ".properties";
-                InputStream stream = java.security.AccessController.doPrivileged(
-                    new java.security.PrivilegedAction<InputStream>() {
-                        public InputStream run() {
-                            if (cl != null) {
-                                return cl.getResourceAsStream(resName);
-                            } else {
-                                return ClassLoader.getSystemResourceAsStream(resName);
-                            }
-                        }
-                    }
-                );
-                if (stream != null) {
-                    // make sure it is buffered
-                    stream = new java.io.BufferedInputStream(stream);
-                    try {
-                        b = new ResourceBundleWrapper(new PropertyResourceBundle(stream));
-                        if (parent != null) {
-                            b.setParent(parent);
-                        }
-                        b.baseName=baseName;
-                        b.localeID=localeID;
-                    } catch (Exception ex) {
-                        // throw away exception
-                    } finally {
-                        try {
-                            stream.close();
-                        } catch (Exception ex) {
-                            // throw away exception
-                        }
-                    }
-                }
-    
-                // if a bogus locale is passed then the parent should be
-                // the default locale not the root locale!
-                if (b==null) {
-                    String defaultName = defaultLocale.toString();
-                    if (localeID.length()>0 && localeID.indexOf('_')< 0 && defaultName.indexOf(localeID) == -1) {
-                        b = (ResourceBundleWrapper)loadFromCache(cl,baseName+"_"+defaultName, defaultLocale);
-                        if(b==null){
-                            b = (ResourceBundleWrapper)instantiateBundle(baseName , defaultName, cl, disableFallback);
-                        }
-                    }
-                }
-                // if still could not find the bundle then return the parent
-                if(b==null){
-                    b=parent;
-                }
+                loadFromProperties = true;
+            } catch (NoClassDefFoundError e) {
+                loadFromProperties = true;
             } catch (Exception e) {
                 if (DEBUG)
                     System.out.println("failure");
@@ -205,8 +160,66 @@ public class ResourceBundleWrapper extends UResourceBundle {
                     System.out.println(e);
             }
 
+            if (loadFromProperties) {
+                try {
+                    final String resName = name.replace('.', '/') + ".properties";
+                    InputStream stream = java.security.AccessController.doPrivileged(
+                        new java.security.PrivilegedAction<InputStream>() {
+                            public InputStream run() {
+                                if (cl != null) {
+                                    return cl.getResourceAsStream(resName);
+                                } else {
+                                    return ClassLoader.getSystemResourceAsStream(resName);
+                                }
+                            }
+                        }
+                    );
+                    if (stream != null) {
+                        // make sure it is buffered
+                        stream = new java.io.BufferedInputStream(stream);
+                        try {
+                            b = new ResourceBundleWrapper(new PropertyResourceBundle(stream));
+                            if (parent != null) {
+                                b.setParent(parent);
+                            }
+                            b.baseName=baseName;
+                            b.localeID=localeID;
+                        } catch (Exception ex) {
+                            // throw away exception
+                        } finally {
+                            try {
+                                stream.close();
+                            } catch (Exception ex) {
+                                // throw away exception
+                            }
+                        }
+                    }
+        
+                    // if a bogus locale is passed then the parent should be
+                    // the default locale not the root locale!
+                    if (b==null) {
+                        String defaultName = defaultLocale.toString();
+                        if (localeID.length()>0 && localeID.indexOf('_')< 0 && defaultName.indexOf(localeID) == -1) {
+                            b = (ResourceBundleWrapper)loadFromCache(cl,baseName+"_"+defaultName, defaultLocale);
+                            if(b==null){
+                                b = (ResourceBundleWrapper)instantiateBundle(baseName , defaultName, cl, disableFallback);
+                            }
+                        }
+                    }
+                    // if still could not find the bundle then return the parent
+                    if(b==null){
+                        b=parent;
+                    }                
+                } catch (Exception e) {
+                    if (DEBUG)
+                        System.out.println("failure");
+                    if (DEBUG)
+                        System.out.println(e);
+                }
+            }
             b = (ResourceBundleWrapper)addToCache(cl, name, defaultLocale, b);
         }
+
         if(b!=null){
             b.initKeysVector();
         }else{

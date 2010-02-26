@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1044,5 +1044,24 @@ public final class ICUResourceBundleTest extends TestFmwk {
         assertFalse("array_in_Root_te.getKeys().hasMoreElements()", array_in_Root_te.getKeys().hasMoreElements());
         UResourceBundle string_in_Root_te = te.get("string_in_Root_te");
         assertFalse("string_in_Root_te.getKeys().hasMoreElements()", string_in_Root_te.getKeys().hasMoreElements());
+    }
+
+    /*
+     * UResouceBundle should be able to load a resource bundle even if
+     * a similarly named class (only case differences) exists in the
+     * same package.  See Ticket#6844
+     */
+    public void TestT6844() {
+        try {
+            UResourceBundle rb1
+                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestMessages");
+            assertEquals("bundleContainer in TestMessages", "TestMessages.class", rb1.getString("bundleContainer"));
+
+            UResourceBundle rb2
+                = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.testmessages");
+            assertEquals("bundleContainer in testmessages", "testmessages.properties", rb2.getString("bundleContainer"));
+        } catch (Throwable t) {
+            errln(t.getMessage());
+        }
     }
 }

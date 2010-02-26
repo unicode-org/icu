@@ -2411,6 +2411,7 @@ icu4j/main/tests/core/manifest.stub -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain
