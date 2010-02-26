@@ -414,6 +414,10 @@ u_isISOControl(UChar32 c) {
 #define IS_THAT_CONTROL_SPACE(c) \
     (c<=0x9f && ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL))
 
+/* Java has decided that U+0085 New Line is not whitespace any more. */
+#define IS_THAT_ASCII_CONTROL_SPACE(c) \
+    (c<=0x1f && c>=TAB && (c<=CR || c>=0x1c))
+
 /* Checks if the Unicode character is a space character.*/
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c) {
@@ -437,7 +441,7 @@ u_isWhitespace(UChar32 c) {
     return (UBool)(
                 ((CAT_MASK(props)&U_GC_Z_MASK)!=0 &&
                     c!=NBSP && c!=FIGURESP && c!=NNBSP) || /* exclude no-break spaces */
-                IS_THAT_CONTROL_SPACE(c)
+                IS_THAT_ASCII_CONTROL_SPACE(c)
            );
 }
 
@@ -546,7 +550,7 @@ u_isIDPart(UChar32 c) {
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c) {
     if(c<=0x9f) {
-        return u_isISOControl(c) && !IS_THAT_CONTROL_SPACE(c);
+        return u_isISOControl(c) && !IS_THAT_ASCII_CONTROL_SPACE(c);
     } else {
         uint32_t props;
         GET_PROPS(c, props);

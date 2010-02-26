@@ -2179,8 +2179,8 @@ u_isJavaSpaceChar(UChar32 c);
  * A character is considered to be a Java whitespace character if and only
  * if it satisfies one of the following criteria:
  *
- * - It is a Unicode separator (categories "Z"), but is not
- *      a no-break space (U+00A0 NBSP or U+2007 Figure Space or U+202F Narrow NBSP).
+ * - It is a Unicode Separator character (categories "Z" = "Zs" or "Zl" or "Zp"), but is not
+ *      also a non-breaking space (U+00A0 NBSP or U+2007 Figure Space or U+202F Narrow NBSP).
  * - It is U+0009 HORIZONTAL TABULATION.
  * - It is U+000A LINE FEED.
  * - It is U+000B VERTICAL TABULATION.
@@ -2190,9 +2190,15 @@ u_isJavaSpaceChar(UChar32 c);
  * - It is U+001D GROUP SEPARATOR.
  * - It is U+001E RECORD SEPARATOR.
  * - It is U+001F UNIT SEPARATOR.
- * - It is U+0085 NEXT LINE.
  *
- * Same as java.lang.Character.isWhitespace() except that Java omits U+0085.
+ * This API tries to sync with the semantics of Java's
+ * java.lang.Character.isWhitespace(), but it may not return
+ * the exact same results because of the Unicode version
+ * difference.
+ *
+ * Note: Unicode 4.0.1 changed U+200B ZERO WIDTH SPACE from a Space Separator (Zs)
+ * to a Format Control (Cf). Since then, isWhitespace(0x200b) returns false.
+ * See http://www.unicode.org/versions/Unicode4.0.1/
  *
  * Note: There are several ICU whitespace functions; please see the uchar.h
  * file documentation for a detailed comparison.
@@ -2805,11 +2811,9 @@ u_isIDPart(UChar32 c);
  * according to Java.
  * True for characters with general category "Cf" (format controls) as well as
  * non-whitespace ISO controls
- * (U+0000..U+0008, U+000E..U+001B, U+007F..U+0084, U+0086..U+009F).
+ * (U+0000..U+0008, U+000E..U+001B, U+007F..U+009F).
  *
- * Same as java.lang.Character.isIdentifierIgnorable()
- * except that Java also returns TRUE for U+0085 Next Line
- * (it omits U+0085 from whitespace ISO controls).
+ * Same as java.lang.Character.isIdentifierIgnorable().
  *
  * Note that Unicode just recommends to ignore Cf (format controls).
  *
