@@ -51,7 +51,10 @@
   /* constant.  This must not be changed without recompiling the      */
   /* decNumber library modules. */
 
-  #define DECDPUN 3           /* DECimal Digits Per UNit [must be >0  */
+  /* For ICU, use one digit per byte, to make it easier to emulate the
+   * old DigitList interface on top of a decNumber
+   */
+  #define DECDPUN 1           /* DECimal Digits Per UNit [must be >0  */
                               /* and <10; 3 or powers of 2 are best]. */
 
   /* DECNUMDIGITS is the default number of digits that can be held in */
@@ -107,74 +110,74 @@
   /* decNumber public functions and macros                            */
   /* ---------------------------------------------------------------- */
   /* Conversions                                                      */
-  decNumber * uprv_decNumberFromInt32(decNumber *, int32_t);
-  decNumber * uprv_decNumberFromUInt32(decNumber *, uint32_t);
-  decNumber * uprv_decNumberFromString(decNumber *, const char *, decContext *);
-  char      * uprv_decNumberToString(const decNumber *, char *);
-  char      * uprv_decNumberToEngString(const decNumber *, char *);
-  uint32_t    uprv_decNumberToUInt32(const decNumber *, decContext *);
-  int32_t     uprv_decNumberToInt32(const decNumber *, decContext *);
-  uint8_t   * uprv_decNumberGetBCD(const decNumber *, uint8_t *);
-  decNumber * uprv_decNumberSetBCD(decNumber *, const uint8_t *, uint32_t);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberFromInt32(decNumber *, int32_t);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberFromUInt32(decNumber *, uint32_t);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberFromString(decNumber *, const char *, decContext *);
+  U_INTERNAL char      * U_EXPORT2 uprv_decNumberToString(const decNumber *, char *);
+  U_INTERNAL char      * U_EXPORT2 uprv_decNumberToEngString(const decNumber *, char *);
+  U_INTERNAL uint32_t    U_EXPORT2 uprv_decNumberToUInt32(const decNumber *, decContext *);
+  U_INTERNAL int32_t     U_EXPORT2 uprv_decNumberToInt32(const decNumber *, decContext *);
+  U_INTERNAL uint8_t   * U_EXPORT2 uprv_decNumberGetBCD(const decNumber *, uint8_t *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberSetBCD(decNumber *, const uint8_t *, uint32_t);
 
   /* Operators and elementary functions                               */
-  decNumber * uprv_decNumberAbs(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberAdd(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberAnd(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberCompare(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberCompareSignal(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberCompareTotal(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberCompareTotalMag(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberDivide(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberDivideInteger(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberExp(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberFMA(decNumber *, const decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberInvert(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberLn(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberLogB(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberLog10(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMax(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMaxMag(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMin(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMinMag(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMinus(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberMultiply(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberNormalize(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberOr(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberPlus(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberPower(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberQuantize(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberReduce(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberRemainder(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberRemainderNear(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberRescale(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberRotate(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberSameQuantum(decNumber *, const decNumber *, const decNumber *);
-  decNumber * uprv_decNumberScaleB(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberShift(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberSquareRoot(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberSubtract(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberToIntegralExact(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberToIntegralValue(decNumber *, const decNumber *, decContext *);
-  decNumber * uprv_decNumberXor(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberAbs(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberAdd(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberAnd(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberCompare(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberCompareSignal(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberCompareTotal(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberCompareTotalMag(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberDivide(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberDivideInteger(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberExp(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberFMA(decNumber *, const decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberInvert(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberLn(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberLogB(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMax(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMaxMag(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMin(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMinMag(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMinus(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberMultiply(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberNormalize(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberOr(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberPlus(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberPower(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberQuantize(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberReduce(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberRemainder(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberRemainderNear(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberRescale(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberRotate(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberSameQuantum(decNumber *, const decNumber *, const decNumber *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberScaleB(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberShift(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberSubtract(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberToIntegralExact(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberToIntegralValue(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber * U_EXPORT2 uprv_decNumberXor(decNumber *, const decNumber *, const decNumber *, decContext *);
 
   /* Utilities                                                        */
   enum decClass uprv_decNumberClass(const decNumber *, decContext *);
-  const char * uprv_decNumberClassToString(enum decClass);
-  decNumber  * uprv_decNumberCopy(decNumber *, const decNumber *);
-  decNumber  * uprv_decNumberCopyAbs(decNumber *, const decNumber *);
-  decNumber  * uprv_decNumberCopyNegate(decNumber *, const decNumber *);
-  decNumber  * uprv_decNumberCopySign(decNumber *, const decNumber *, const decNumber *);
-  decNumber  * uprv_decNumberNextMinus(decNumber *, const decNumber *, decContext *);
-  decNumber  * uprv_decNumberNextPlus(decNumber *, const decNumber *, decContext *);
-  decNumber  * uprv_decNumberNextToward(decNumber *, const decNumber *, const decNumber *, decContext *);
-  decNumber  * uprv_decNumberTrim(decNumber *);
-  const char * uprv_decNumberVersion(void);
-  decNumber  * uprv_decNumberZero(decNumber *);
+  U_INTERNAL const char * U_EXPORT2 uprv_decNumberClassToString(enum decClass);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberCopy(decNumber *, const decNumber *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberCopyAbs(decNumber *, const decNumber *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberCopyNegate(decNumber *, const decNumber *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberCopySign(decNumber *, const decNumber *, const decNumber *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberNextMinus(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberNextPlus(decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberNextToward(decNumber *, const decNumber *, const decNumber *, decContext *);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberTrim(decNumber *);
+  U_INTERNAL const char * U_EXPORT2 uprv_decNumberVersion(void);
+  U_INTERNAL decNumber  * U_EXPORT2 uprv_decNumberZero(decNumber *);
 
   /* Functions for testing decNumbers (normality depends on context)  */
-  int32_t uprv_decNumberIsNormal(const decNumber *, decContext *);
-  int32_t uprv_decNumberIsSubnormal(const decNumber *, decContext *);
+  U_INTERNAL int32_t U_EXPORT2 uprv_decNumberIsNormal(const decNumber *, decContext *);
+  U_INTERNAL int32_t U_EXPORT2 uprv_decNumberIsSubnormal(const decNumber *, decContext *);
 
   /* Macros for testing decNumber *dn                                 */
   #define decNumberIsCanonical(dn) (1)  /* All decNumbers are saintly */

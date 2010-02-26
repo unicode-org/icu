@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -487,11 +487,15 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
       return;
     }
 
+    // With rounding now being handled by decNumber, we no longer 
+    // set a rounding increment to enable non-default mode rounding,
+    // checking of which was the original point of this test.
+
     // set rounding mode with zero increment.  Rounding 
-    // increment should be set by this operation
+    // increment should not be set by this operation
     pat.setRoundingMode((DecimalFormat::ERoundingMode)0);
     roundingInc = pat.getRoundingIncrement();
-    if (roundingInc == 0.0) {
+    if (roundingInc != 0.0) {
       errln((UnicodeString)"ERROR: Rounding increment zero");
       return;
     }

@@ -2263,6 +2263,7 @@ icu4c/source/test/testdata/casing.txt svneol=native#text/plain
 icu4c/source/test/testdata/confusables.txt svneol=native#text/plain
 icu4c/source/test/testdata/conversion.txt svneol=native#text/plain
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml
+icu4c/source/test/testdata/dcfmtest.txt svneol=native#text/plain
 icu4c/source/test/testdata/default.txt svneol=native#text/plain
 icu4c/source/test/testdata/format.txt svneol=native#text/plain
 icu4c/source/test/testdata/icuio.txt svneol=native#text/plain

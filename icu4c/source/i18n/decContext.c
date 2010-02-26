@@ -51,7 +51,7 @@ const uInt DECPOWERS[10]={1, 10, 100, 1000, 10000, 100000, 1000000,
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decContext *uprv_decContextClearStatus(decContext *context, uInt mask) {
+U_CAPI decContext * U_EXPORT2 uprv_decContextClearStatus(decContext *context, uInt mask) {
   context->status&=~mask;
   return context;
   } /* decContextClearStatus  */
@@ -69,7 +69,7 @@ decContext *uprv_decContextClearStatus(decContext *context, uInt mask) {
 /*      Invalid_operation set in the status field.                    */
 /*  returns a context structure with the appropriate initial values.  */
 /* ------------------------------------------------------------------ */
-decContext * uprv_decContextDefault(decContext *context, Int kind) {
+U_CAPI decContext *  U_EXPORT2 uprv_decContextDefault(decContext *context, Int kind) {
   /* set defaults...  */
   context->digits=9;                         /* 9 digits  */
   context->emax=DEC_MAX_EMAX;                /* 9-digit exponents  */
@@ -134,7 +134,7 @@ decContext * uprv_decContextDefault(decContext *context, Int kind) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-enum rounding uprv_decContextGetRounding(decContext *context) {
+U_CAPI enum rounding  U_EXPORT2 uprv_decContextGetRounding(decContext *context) {
   return context->round;
   } /* decContextGetRounding  */
 
@@ -146,7 +146,7 @@ enum rounding uprv_decContextGetRounding(decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-uInt uprv_decContextGetStatus(decContext *context) {
+U_CAPI uInt  U_EXPORT2 uprv_decContextGetStatus(decContext *context) {
   return context->status;
   } /* decContextGetStatus  */
 
@@ -162,7 +162,7 @@ uInt uprv_decContextGetStatus(decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decContext *uprv_decContextRestoreStatus(decContext *context,
+U_CAPI decContext * U_EXPORT2 uprv_decContextRestoreStatus(decContext *context,
                                     uInt newstatus, uInt mask) {
   context->status&=~mask;               /* clear the selected bits  */
   context->status|=(mask&newstatus);    /* or in the new bits  */
@@ -179,7 +179,7 @@ decContext *uprv_decContextRestoreStatus(decContext *context,
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-uInt uprv_decContextSaveStatus(decContext *context, uInt mask) {
+U_CAPI uInt  U_EXPORT2 uprv_decContextSaveStatus(decContext *context, uInt mask) {
   return context->status&mask;
   } /* decContextSaveStatus  */
 
@@ -192,7 +192,7 @@ uInt uprv_decContextSaveStatus(decContext *context, uInt mask) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decContext *uprv_decContextSetRounding(decContext *context,
+U_CAPI decContext * U_EXPORT2 uprv_decContextSetRounding(decContext *context,
                                   enum rounding newround) {
   context->round=newround;
   return context;
@@ -208,7 +208,7 @@ decContext *uprv_decContextSetRounding(decContext *context,
 /* Control may never return from this routine, if there is a signal   */
 /* handler and it takes a long jump.                                  */
 /* ------------------------------------------------------------------ */
-decContext * uprv_decContextSetStatus(decContext *context, uInt status) {
+U_CAPI decContext *  U_EXPORT2 uprv_decContextSetStatus(decContext *context, uInt status) {
   context->status|=status;
   if (status & context->traps) raise(SIGFPE);
   return context;} /* decContextSetStatus  */
@@ -227,7 +227,7 @@ decContext * uprv_decContextSetStatus(decContext *context, uInt status) {
 /*    DEC_Condition_MU or is not recognized.  In these cases NULL is  */
 /*    returned.                                                       */
 /* ------------------------------------------------------------------ */
-decContext * uprv_decContextSetStatusFromString(decContext *context,
+U_CAPI decContext *  U_EXPORT2 uprv_decContextSetStatusFromString(decContext *context,
                                            const char *string) {
   if (strcmp(string, DEC_Condition_CS)==0)
     return uprv_decContextSetStatus(context, DEC_Conversion_syntax);
@@ -278,7 +278,7 @@ decContext * uprv_decContextSetStatusFromString(decContext *context,
 /*    DEC_Condition_MU or is not recognized.  In these cases NULL is  */
 /*    returned.                                                       */
 /* ------------------------------------------------------------------ */
-decContext * uprv_decContextSetStatusFromStringQuiet(decContext *context,
+U_CAPI decContext *  U_EXPORT2 uprv_decContextSetStatusFromStringQuiet(decContext *context,
                                                 const char *string) {
   if (strcmp(string, DEC_Condition_CS)==0)
     return uprv_decContextSetStatusQuiet(context, DEC_Conversion_syntax);
@@ -324,7 +324,7 @@ decContext * uprv_decContextSetStatusFromStringQuiet(decContext *context,
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decContext * uprv_decContextSetStatusQuiet(decContext *context, uInt status) {
+U_CAPI decContext *  U_EXPORT2 uprv_decContextSetStatusQuiet(decContext *context, uInt status) {
   context->status|=status;
   return context;} /* decContextSetStatusQuiet  */
 
@@ -336,7 +336,7 @@ decContext * uprv_decContextSetStatusQuiet(decContext *context, uInt status) {
 /*  returns a constant string describing the condition.  If multiple  */
 /*    (or no) flags are set, a generic constant message is returned.  */
 /* ------------------------------------------------------------------ */
-const char *uprv_decContextStatusToString(const decContext *context) {
+U_CAPI const char * U_EXPORT2 uprv_decContextStatusToString(const decContext *context) {
   Int status=context->status;
 
   /* test the five IEEE first, as some of the others are ambiguous when  */
@@ -374,7 +374,7 @@ const char *uprv_decContextStatusToString(const decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-Int uprv_decContextTestEndian(Flag quiet) {
+U_CAPI Int  U_EXPORT2 uprv_decContextTestEndian(Flag quiet) {
   Int res=0;                  /* optimist  */
   uInt dle=(uInt)DECLITEND;   /* unsign  */
   if (dle>1) dle=1;           /* ensure 0 or 1  */
@@ -402,7 +402,7 @@ Int uprv_decContextTestEndian(Flag quiet) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-uInt uprv_decContextTestSavedStatus(uInt oldstatus, uInt mask) {
+U_CAPI  uInt U_EXPORT2 uprv_decContextTestSavedStatus(uInt oldstatus, uInt mask) {
   return (oldstatus&mask)!=0;
   } /* decContextTestSavedStatus  */
 
@@ -416,7 +416,7 @@ uInt uprv_decContextTestSavedStatus(uInt oldstatus, uInt mask) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-uInt uprv_decContextTestStatus(decContext *context, uInt mask) {
+U_CAPI uInt  U_EXPORT2 uprv_decContextTestStatus(decContext *context, uInt mask) {
   return (context->status&mask)!=0;
   } /* decContextTestStatus  */
 
@@ -428,7 +428,7 @@ uInt uprv_decContextTestStatus(decContext *context, uInt mask) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decContext *uprv_decContextZeroStatus(decContext *context) {
+U_CAPI decContext * U_EXPORT2 uprv_decContextZeroStatus(decContext *context) {
   context->status=0;
   return context;
   } /* decContextZeroStatus  */
