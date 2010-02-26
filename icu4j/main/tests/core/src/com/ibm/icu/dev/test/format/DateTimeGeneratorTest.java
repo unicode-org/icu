@@ -124,7 +124,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateTimePatternGenerator rootGen = DateTimePatternGenerator.getInstance(ULocale.ROOT);
         SimpleDateFormat rootFormat = new SimpleDateFormat(rootGen.getBestPattern("yMdHms"), ULocale.ROOT);
         rootFormat.setTimeZone(gmt);
-        assertEquals("root format: yMdHms", "1999-10-14 06:58:59", rootFormat.format(sampleDate)); // *** expected result should be "1999-10-14 6:58:59" with current data, changed test temporarily to match current result, needs investigation
+        // *** expected result should be "1999-10-14 6:58:59" with current data, changed test temporarily to match current result, needs investigation
+        assertEquals("root format: yMdHms", "1999-10-14 06:58:59", rootFormat.format(sampleDate)); 
     }
     
     public void TestEmpty() {
@@ -396,7 +397,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
                 for (int style2 = DateFormat.FULL; style2 < style1; ++style2) {
                     checkCompatible(style1, style2, locales[i]);                    
-                }               
+                }
             }
         }
     }
@@ -552,7 +553,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
     DateTimePatternGenerator.FormatParser formatParser = new DateTimePatternGenerator.FormatParser ();
     DateTimePatternGenerator generator = DateTimePatternGenerator.getEmptyInstance();
     
-    private Calendar sampleCalendar = new GregorianCalendar(1999, Calendar.OCTOBER, 13, 23, 58, 59);
+    private Calendar sampleCalendar;
+    {
+        sampleCalendar = new GregorianCalendar(TimeZone.getTimeZone("America/Los_Angeles"));
+        sampleCalendar.set(1999, Calendar.OCTOBER, 13, 23, 58, 59);
+    }
+
     private Date sampleDate = sampleCalendar.getTime();
     private TimeZone gmt = TimeZone.getTimeZone("Etc/GMT");
     
