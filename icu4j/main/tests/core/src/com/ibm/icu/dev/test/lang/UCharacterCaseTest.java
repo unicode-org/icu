@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -841,7 +841,15 @@ public final class UCharacterCaseTest extends TestFmwk
         "\u02bbcAt! \u02bbeTc.",
         "",
         "-2",
-        "AL" // Both options
+        "AL", // Both options
+
+        // Test case for ticket #7251: UCharacter.toTitleCase() throws OutOfMemoryError
+        // when TITLECASE_NO_LOWERCASE encounters a single-letter word
+        "a b c",
+        "A B C",
+        "",
+        "1",
+        "L" // U_TITLECASE_NO_LOWERCASE
     };
 
 

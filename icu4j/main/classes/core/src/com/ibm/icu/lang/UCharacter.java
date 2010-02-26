@@ -4853,9 +4853,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                    appendStr = "J" + appendStr.substring(1);
                                 }
                                 result.append(appendStr);
-                                iter.moveToLimit();
-                                break;
                             }
+                            iter.moveToLimit();
+                            break;
                         } else if((nc=iter.nextCaseMapCP())>=0) {
                             if (isDutch && (nc == 0x004A ||  nc == 0x006A)
                                 && (c == 0x0049) && (FirstIJ == true)) {
