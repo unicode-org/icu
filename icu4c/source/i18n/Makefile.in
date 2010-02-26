@@ -84,7 +84,7 @@ zonemeta.o zstrfmt.o plurrule.o plurfmt.o selfmt.o dtitvfmt.o dtitvinf.o \
 tmunit.o tmutamt.o tmutfmt.o colldata.o bmsearch.o bms.o currpinf.o \
 uspoof.o uspoof_impl.o uspoof_build.o uspoof_conf.o uspoof_wsconf.o \
 ztrans.o zrule.o vzone.o fphdlimp.o fpositer.o locdspnm.o \
-decNumber.o decContext.o
+decNumber.o decContext.o decnumstr.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h

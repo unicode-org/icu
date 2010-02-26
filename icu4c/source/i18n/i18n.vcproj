@@ -1427,6 +1427,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\decnumstr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\decnumstr.h"
+				>
+			</File>
+			<File
 				RelativePath=".\digitlst.cpp"
 				>
 			</File>

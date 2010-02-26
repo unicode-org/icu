@@ -348,7 +348,7 @@ static void decDumpAr(char, const Unit *, Int);
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberFromInt32(decNumber *dn, Int in) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberFromInt32(decNumber *dn, Int in) {
   uInt unsig;
   if (in>=0) unsig=in;
    else {                               /* negative (possibly BADINT)  */
@@ -361,7 +361,7 @@ decNumber * uprv_decNumberFromInt32(decNumber *dn, Int in) {
   return dn;
   } /* decNumberFromInt32  */
 
-decNumber * uprv_decNumberFromUInt32(decNumber *dn, uInt uin) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberFromUInt32(decNumber *dn, uInt uin) {
   Unit *up;                             /* work pointer  */
   uprv_decNumberZero(dn);                    /* clean  */
   if (uin==0) return dn;                /* [or decGetDigits bad call]  */
@@ -383,7 +383,7 @@ decNumber * uprv_decNumberFromUInt32(decNumber *dn, uInt uin) {
 /* Invalid is set if the decNumber does not have exponent==0 or if    */
 /* it is a NaN, Infinite, or out-of-range.                            */
 /* ------------------------------------------------------------------ */
-Int uprv_decNumberToInt32(const decNumber *dn, decContext *set) {
+U_CAPI Int U_EXPORT2 uprv_decNumberToInt32(const decNumber *dn, decContext *set) {
   #if DECCHECK
   if (decCheckOperands(DECUNRESU, DECUNUSED, dn, set)) return 0;
   #endif
@@ -419,7 +419,7 @@ Int uprv_decNumberToInt32(const decNumber *dn, decContext *set) {
   return 0;
   } /* decNumberToInt32  */
 
-uInt uprv_decNumberToUInt32(const decNumber *dn, decContext *set) {
+U_CAPI uInt U_EXPORT2 uprv_decNumberToUInt32(const decNumber *dn, decContext *set) {
   #if DECCHECK
   if (decCheckOperands(DECUNRESU, DECUNUSED, dn, set)) return 0;
   #endif
@@ -462,12 +462,12 @@ uInt uprv_decNumberToUInt32(const decNumber *dn, decContext *set) {
 /*                                                                    */
 /*  No error is possible, and no status can be set.                   */
 /* ------------------------------------------------------------------ */
-char * uprv_decNumberToString(const decNumber *dn, char *string){
+U_CAPI char * U_EXPORT2 uprv_decNumberToString(const decNumber *dn, char *string){
   decToString(dn, string, 0);
   return string;
   } /* DecNumberToString  */
 
-char * uprv_decNumberToEngString(const decNumber *dn, char *string){
+U_CAPI char * U_EXPORT2 uprv_decNumberToEngString(const decNumber *dn, char *string){
   decToString(dn, string, 1);
   return string;
   } /* DecNumberToEngString  */
@@ -492,7 +492,7 @@ char * uprv_decNumberToEngString(const decNumber *dn, char *string){
 /*                                                                    */
 /* If bad syntax is detected, the result will be a quiet NaN.         */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberFromString(decNumber *dn, const char chars[],
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberFromString(decNumber *dn, const char chars[],
                                 decContext *set) {
   Int   exponent=0;                /* working exponent [assume 0]  */
   uByte bits=0;                    /* working flags [assume +ve]  */
@@ -741,7 +741,7 @@ decNumber * uprv_decNumberFromString(decNumber *dn, const char chars[],
 /* This has the same effect as decNumberPlus unless A is negative,    */
 /* in which case it has the same effect as decNumberMinus.            */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberAbs(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberAbs(decNumber *res, const decNumber *rhs,
                          decContext *set) {
   decNumber dzero;                      /* for 0  */
   uInt status=0;                        /* accumulator  */
@@ -773,7 +773,7 @@ decNumber * uprv_decNumberAbs(decNumber *res, const decNumber *rhs,
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
 /* This just calls the routine shared with Subtract                   */
-decNumber * uprv_decNumberAdd(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberAdd(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decAddOp(res, lhs, rhs, set, 0, &status);
@@ -799,7 +799,7 @@ decNumber * uprv_decNumberAdd(decNumber *res, const decNumber *lhs,
 /* Logical function restrictions apply (see above); a NaN is          */
 /* returned with Invalid_operation if a restriction is violated.      */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberAnd(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberAnd(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   const Unit *ua, *ub;                  /* -> operands  */
   const Unit *msua, *msub;              /* -> operand msus  */
@@ -867,7 +867,7 @@ decNumber * uprv_decNumberAnd(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for one digit (or NaN).                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCompare(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCompare(decNumber *res, const decNumber *lhs,
                              const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPARE, &status);
@@ -887,7 +887,7 @@ decNumber * uprv_decNumberCompare(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for one digit (or NaN).                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCompareSignal(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCompareSignal(decNumber *res, const decNumber *lhs,
                                    const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPSIG, &status);
@@ -908,7 +908,7 @@ decNumber * uprv_decNumberCompareSignal(decNumber *res, const decNumber *lhs,
 /* C must have space for one digit; the result will always be one of  */
 /* -1, 0, or 1.                                                       */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCompareTotal(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCompareTotal(decNumber *res, const decNumber *lhs,
                                   const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPTOTAL, &status);
@@ -929,7 +929,7 @@ decNumber * uprv_decNumberCompareTotal(decNumber *res, const decNumber *lhs,
 /* C must have space for one digit; the result will always be one of  */
 /* -1, 0, or 1.                                                       */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCompareTotalMag(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCompareTotalMag(decNumber *res, const decNumber *lhs,
                                      const decNumber *rhs, decContext *set) {
   uInt status=0;                   /* accumulator  */
   uInt needbytes;                  /* for space calculations  */
@@ -994,7 +994,7 @@ decNumber * uprv_decNumberCompareTotalMag(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberDivide(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberDivide(decNumber *res, const decNumber *lhs,
                             const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decDivideOp(res, lhs, rhs, set, DIVIDE, &status);
@@ -1017,7 +1017,7 @@ decNumber * uprv_decNumberDivide(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberDivideInteger(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberDivideInteger(decNumber *res, const decNumber *lhs,
                                    const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decDivideOp(res, lhs, rhs, set, DIVIDEINT, &status);
@@ -1050,7 +1050,7 @@ decNumber * uprv_decNumberDivideInteger(decNumber *res, const decNumber *lhs,
 /* (double) range needed by Ln (which has to be able to calculate     */
 /* exp(-a) where a can be the tiniest number (Ntiny).                 */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberExp(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberExp(decNumber *res, const decNumber *rhs,
                          decContext *set) {
   uInt status=0;                        /* accumulator  */
   #if DECSUBSET
@@ -1106,7 +1106,7 @@ decNumber * uprv_decNumberExp(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberFMA(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberFMA(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, const decNumber *fhs,
                          decContext *set) {
   uInt status=0;                   /* accumulator  */
@@ -1197,7 +1197,7 @@ decNumber * uprv_decNumberFMA(decNumber *res, const decNumber *lhs,
 /* Logical function restrictions apply (see above); a NaN is          */
 /* returned with Invalid_operation if a restriction is violated.      */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberInvert(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberInvert(decNumber *res, const decNumber *rhs,
                             decContext *set) {
   const Unit *ua, *msua;                /* -> operand and its msu  */
   Unit  *uc, *msuc;                     /* -> result and its msu  */
@@ -1270,7 +1270,7 @@ decNumber * uprv_decNumberInvert(decNumber *res, const decNumber *rhs,
 /* (+11) range needed by Ln, Log10, etc. (which may have to be able   */
 /* to calculate at p+e+2).                                            */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberLn(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberLn(decNumber *res, const decNumber *rhs,
                         decContext *set) {
   uInt status=0;                   /* accumulator  */
   #if DECSUBSET
@@ -1336,7 +1336,7 @@ decNumber * uprv_decNumberLn(decNumber *res, const decNumber *rhs,
 /*   A=1 exactly -> 0 (Exact)                                         */
 /*   NaNs are propagated as usual                                     */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberLogB(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberLogB(decNumber *res, const decNumber *rhs,
                           decContext *set) {
   uInt status=0;                   /* accumulator  */
 
@@ -1392,7 +1392,7 @@ decNumber * uprv_decNumberLogB(decNumber *res, const decNumber *rhs,
 /* fastpath in decLnOp.  The final division is done to the requested  */
 /* precision.                                                         */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberLog10(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber *rhs,
                           decContext *set) {
   uInt status=0, ignore=0;         /* status accumulators  */
   uInt needbytes;                  /* for space calculations  */
@@ -1540,7 +1540,7 @@ decNumber * uprv_decNumberLog10(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMax(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMax(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPMAX, &status);
@@ -1563,7 +1563,7 @@ decNumber * uprv_decNumberMax(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMaxMag(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMaxMag(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPMAXMAG, &status);
@@ -1586,7 +1586,7 @@ decNumber * uprv_decNumberMaxMag(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMin(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMin(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPMIN, &status);
@@ -1609,7 +1609,7 @@ decNumber * uprv_decNumberMin(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMinMag(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMinMag(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decCompareOp(res, lhs, rhs, set, COMPMINMAG, &status);
@@ -1634,7 +1634,7 @@ decNumber * uprv_decNumberMinMag(decNumber *res, const decNumber *lhs,
 /* ------------------------------------------------------------------ */
 /* Simply use AddOp for the subtract, which will do the necessary.    */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMinus(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMinus(decNumber *res, const decNumber *rhs,
                            decContext *set) {
   decNumber dzero;
   uInt status=0;                        /* accumulator  */
@@ -1664,7 +1664,7 @@ decNumber * uprv_decNumberMinus(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* This is a generalization of 754 NextDown.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberNextMinus(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberNextMinus(decNumber *res, const decNumber *rhs,
                                decContext *set) {
   decNumber dtiny;                           /* constant  */
   decContext workset=*set;                   /* work  */
@@ -1700,7 +1700,7 @@ decNumber * uprv_decNumberNextMinus(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* This is a generalization of 754 NextUp.                            */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberNextPlus(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberNextPlus(decNumber *res, const decNumber *rhs,
                               decContext *set) {
   decNumber dtiny;                           /* constant  */
   decContext workset=*set;                   /* work  */
@@ -1740,7 +1740,7 @@ decNumber * uprv_decNumberNextPlus(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* This is a generalization of 754-1985 NextAfter.                    */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberNextToward(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberNextToward(decNumber *res, const decNumber *lhs,
                                 const decNumber *rhs, decContext *set) {
   decNumber dtiny;                           /* constant  */
   decContext workset=*set;                   /* work  */
@@ -1808,7 +1808,7 @@ decNumber * uprv_decNumberNextToward(decNumber *res, const decNumber *lhs,
 /* Logical function restrictions apply (see above); a NaN is          */
 /* returned with Invalid_operation if a restriction is violated.      */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberOr(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberOr(decNumber *res, const decNumber *lhs,
                         const decNumber *rhs, decContext *set) {
   const Unit *ua, *ub;                  /* -> operands  */
   const Unit *msua, *msub;              /* -> operand msus  */
@@ -1878,7 +1878,7 @@ decNumber * uprv_decNumberOr(decNumber *res, const decNumber *lhs,
 /* Performance is a concern here, as this routine is often used to    */
 /* check operands and apply rounding and overflow/underflow testing.  */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberPlus(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberPlus(decNumber *res, const decNumber *rhs,
                           decContext *set) {
   decNumber dzero;
   uInt status=0;                        /* accumulator  */
@@ -1908,7 +1908,7 @@ decNumber * uprv_decNumberPlus(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberMultiply(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberMultiply(decNumber *res, const decNumber *lhs,
                               const decNumber *rhs, decContext *set) {
   uInt status=0;                   /* accumulator  */
   decMultiplyOp(res, lhs, rhs, set, &status);
@@ -1945,7 +1945,7 @@ decNumber * uprv_decNumberMultiply(decNumber *res, const decNumber *lhs,
 /* almost always be correctly rounded, but may be up to 1 ulp in      */
 /* error in rare cases.                                               */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberPower(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberPower(decNumber *res, const decNumber *lhs,
                            const decNumber *rhs, decContext *set) {
   #if DECSUBSET
   decNumber *alloclhs=NULL;        /* non-NULL if rounded lhs allocated  */
@@ -2290,7 +2290,7 @@ decNumber * uprv_decNumberPower(decNumber *res, const decNumber *lhs,
 /* Unless there is an error or the result is infinite, the exponent   */
 /* after the operation is guaranteed to be equal to that of B.        */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberQuantize(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberQuantize(decNumber *res, const decNumber *lhs,
                               const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decQuantizeOp(res, lhs, rhs, set, 1, &status);
@@ -2310,12 +2310,12 @@ decNumber * uprv_decNumberQuantize(decNumber *res, const decNumber *lhs,
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
 /* Previously known as Normalize  */
-decNumber * uprv_decNumberNormalize(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberNormalize(decNumber *res, const decNumber *rhs,
                                decContext *set) {
   return uprv_decNumberReduce(res, rhs, set);
   } /* decNumberNormalize  */
 
-decNumber * uprv_decNumberReduce(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberReduce(decNumber *res, const decNumber *rhs,
                             decContext *set) {
   #if DECSUBSET
   decNumber *allocrhs=NULL;        /* non-NULL if rounded rhs allocated  */
@@ -2379,7 +2379,7 @@ decNumber * uprv_decNumberReduce(decNumber *res, const decNumber *rhs,
 /* Unless there is an error or the result is infinite, the exponent   */
 /* after the operation is guaranteed to be equal to B.                */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberRescale(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberRescale(decNumber *res, const decNumber *lhs,
                              const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decQuantizeOp(res, lhs, rhs, set, 0, &status);
@@ -2399,7 +2399,7 @@ decNumber * uprv_decNumberRescale(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberRemainder(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberRemainder(decNumber *res, const decNumber *lhs,
                                const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decDivideOp(res, lhs, rhs, set, REMAINDER, &status);
@@ -2422,7 +2422,7 @@ decNumber * uprv_decNumberRemainder(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberRemainderNear(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberRemainderNear(decNumber *res, const decNumber *lhs,
                                    const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
   decDivideOp(res, lhs, rhs, set, REMNEAR, &status);
@@ -2458,7 +2458,7 @@ decNumber * uprv_decNumberRemainderNear(decNumber *res, const decNumber *lhs,
 /* B must be valid).  No status is set unless B is invalid or an      */
 /* operand is an sNaN.                                                */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberRotate(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberRotate(decNumber *res, const decNumber *lhs,
                            const decNumber *rhs, decContext *set) {
   uInt status=0;              /* accumulator  */
   Int  rotate;                /* rhs as an Int  */
@@ -2579,7 +2579,7 @@ decNumber * uprv_decNumberRotate(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* No errors are possible and no context is needed.                   */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberSameQuantum(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberSameQuantum(decNumber *res, const decNumber *lhs,
                                  const decNumber *rhs) {
   Unit ret=0;                      /* return value  */
 
@@ -2614,7 +2614,7 @@ decNumber * uprv_decNumberSameQuantum(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* The result may underflow or overflow.                              */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberScaleB(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberScaleB(decNumber *res, const decNumber *lhs,
                             const decNumber *rhs, decContext *set) {
   Int  reqexp;                /* requested exponent change [B]  */
   uInt status=0;              /* accumulator  */
@@ -2671,7 +2671,7 @@ decNumber * uprv_decNumberScaleB(decNumber *res, const decNumber *lhs,
 /* B must be valid).  No status is set unless B is invalid or an      */
 /* operand is an sNaN.                                                */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberShift(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberShift(decNumber *res, const decNumber *lhs,
                            const decNumber *rhs, decContext *set) {
   uInt status=0;              /* accumulator  */
   Int  shift;                 /* rhs as an Int  */
@@ -2800,7 +2800,7 @@ decNumber * uprv_decNumberShift(decNumber *res, const decNumber *lhs,
 /* result setexp(approx, e div 2)  % fix exponent                     */
 /* end sqrt                                                           */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberSquareRoot(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decNumber *rhs,
                                 decContext *set) {
   decContext workset, approxset;   /* work contexts  */
   decNumber dzero;                 /* used for constant zero  */
@@ -3142,7 +3142,7 @@ decNumber * uprv_decNumberSquareRoot(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberSubtract(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberSubtract(decNumber *res, const decNumber *lhs,
                               const decNumber *rhs, decContext *set) {
   uInt status=0;                        /* accumulator  */
 
@@ -3175,7 +3175,7 @@ decNumber * uprv_decNumberSubtract(decNumber *res, const decNumber *lhs,
 /* Inexact if the result differs numerically from rhs; the other      */
 /* never signals Inexact.                                             */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberToIntegralExact(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberToIntegralExact(decNumber *res, const decNumber *rhs,
                                      decContext *set) {
   decNumber dn;
   decContext workset;              /* working context  */
@@ -3205,7 +3205,7 @@ decNumber * uprv_decNumberToIntegralExact(decNumber *res, const decNumber *rhs,
   return res;
   } /* decNumberToIntegralExact  */
 
-decNumber * uprv_decNumberToIntegralValue(decNumber *res, const decNumber *rhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberToIntegralValue(decNumber *res, const decNumber *rhs,
                                      decContext *set) {
   decContext workset=*set;         /* working context  */
   workset.traps=0;                 /* no traps  */
@@ -3231,7 +3231,7 @@ decNumber * uprv_decNumberToIntegralValue(decNumber *res, const decNumber *rhs,
 /* Logical function restrictions apply (see above); a NaN is          */
 /* returned with Invalid_operation if a restriction is violated.      */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberXor(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberXor(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set) {
   const Unit *ua, *ub;                  /* -> operands  */
   const Unit *msua, *msub;              /* -> operand msus  */
@@ -3349,7 +3349,7 @@ const char *uprv_decNumberClassToString(enum decClass eclass) {
 /* All fields are updated as required.  This is a utility operation,  */
 /* so special values are unchanged and no error is possible.          */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCopy(decNumber *dest, const decNumber *src) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCopy(decNumber *dest, const decNumber *src) {
 
   #if DECCHECK
   if (src==NULL) return uprv_decNumberZero(dest);
@@ -3389,7 +3389,7 @@ decNumber * uprv_decNumberCopy(decNumber *dest, const decNumber *src) {
 /* No exception or error can occur; this is a quiet bitwise operation.*/
 /* See also decNumberAbs for a checking version of this.              */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCopyAbs(decNumber *res, const decNumber *rhs) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCopyAbs(decNumber *res, const decNumber *rhs) {
   #if DECCHECK
   if (decCheckOperands(res, DECUNUSED, rhs, DECUNCONT)) return res;
   #endif
@@ -3410,7 +3410,7 @@ decNumber * uprv_decNumberCopyAbs(decNumber *res, const decNumber *rhs) {
 /* No exception or error can occur; this is a quiet bitwise operation.*/
 /* See also decNumberMinus for a checking version of this.            */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCopyNegate(decNumber *res, const decNumber *rhs) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCopyNegate(decNumber *res, const decNumber *rhs) {
   #if DECCHECK
   if (decCheckOperands(res, DECUNUSED, rhs, DECUNCONT)) return res;
   #endif
@@ -3431,7 +3431,7 @@ decNumber * uprv_decNumberCopyNegate(decNumber *res, const decNumber *rhs) {
 /* C must have space for set->digits digits.                          */
 /* No exception or error can occur; this is a quiet bitwise operation.*/
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberCopySign(decNumber *res, const decNumber *lhs,
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberCopySign(decNumber *res, const decNumber *lhs,
                               const decNumber *rhs) {
   uByte sign;                           /* rhs sign  */
   #if DECCHECK
@@ -3454,7 +3454,7 @@ decNumber * uprv_decNumberCopySign(decNumber *res, const decNumber *lhs,
 /* bcd must have at least dn->digits bytes.  No error is possible; if */
 /* dn is a NaN or Infinite, digits must be 1 and the coefficient 0.   */
 /* ------------------------------------------------------------------ */
-uByte * uprv_decNumberGetBCD(const decNumber *dn, uByte *bcd) {
+U_CAPI uByte * U_EXPORT2 uprv_decNumberGetBCD(const decNumber *dn, uByte *bcd) {
   uByte *ub=bcd+dn->digits-1;      /* -> lsd  */
   const Unit *up=dn->lsu;          /* Unit pointer, -> lsu  */
 
@@ -3488,7 +3488,7 @@ uByte * uprv_decNumberGetBCD(const decNumber *dn, uByte *bcd) {
 /* if dn is a NaN, or Infinite, or is to become a zero, n must be 1   */
 /* and bcd[0] zero.                                                   */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberSetBCD(decNumber *dn, const uByte *bcd, uInt n) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberSetBCD(decNumber *dn, const uByte *bcd, uInt n) {
   Unit *up=dn->lsu+D2U(dn->digits)-1;   /* -> msu [target pointer]  */
   const uByte *ub=bcd;                  /* -> source msd  */
 
@@ -3557,7 +3557,7 @@ Int uprv_decNumberIsSubnormal(const decNumber *dn, decContext *set) {
 /* so special values are unchanged and no error is possible.  The     */
 /* zeros are removed unconditionally.                                 */
 /* ------------------------------------------------------------------ */
-decNumber * uprv_decNumberTrim(decNumber *dn) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberTrim(decNumber *dn) {
   Int  dropped;                    /* work  */
   decContext set;                  /* ..  */
   #if DECCHECK
@@ -3585,7 +3585,7 @@ const char * uprv_decNumberVersion(void) {
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
 /* Memset is not used as it is much slower in some environments.  */
-decNumber * uprv_decNumberZero(decNumber *dn) {
+U_CAPI decNumber * U_EXPORT2 uprv_decNumberZero(decNumber *dn) {
 
   #if DECCHECK
   if (decCheckOperands(dn, DECUNUSED, DECUNUSED, DECUNCONT)) return dn;
@@ -6001,7 +6001,7 @@ static decNumber * decQuantizeOp(decNumber *res, const decNumber *lhs,
 /* The emphasis here is on speed for common cases, and avoiding       */
 /* coefficient comparison if possible.                                */
 /* ------------------------------------------------------------------ */
-decNumber * decCompareOp(decNumber *res, const decNumber *lhs,
+static decNumber * decCompareOp(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, decContext *set,
                          Flag op, uInt *status) {
   #if DECSUBSET

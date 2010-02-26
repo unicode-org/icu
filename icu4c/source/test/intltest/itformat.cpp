@@ -54,6 +54,7 @@
 #include "dtifmtts.h"       // DateIntervalFormatTest
 #include "tufmtts.h"        // TimeUnitTest
 #include "locnmtst.h"       // LocaleDisplayNamesTest
+#include "dcfmtest.h"       // DecimalFormatTest
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -127,6 +128,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(38,TimeUnitTest);
 	    TESTCLASS(39,SelectFormatTest);
 	    TESTCLASS(40,LocaleDisplayNamesTest);
+        TESTCLASS(41,DecimalFormatTest);
 
         default: name = ""; break; //needed to end loop
     }

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -250,16 +250,24 @@ private:
         }
     }
     /* No comparison operators with other MaybeStackArray's. */
-    bool operator==(const MaybeStackArray &other);
-    bool operator!=(const MaybeStackArray &other);
+    bool operator==(const MaybeStackArray & /*other*/) {return FALSE;};
+    bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;};
     /* No ownership transfer: No copy constructor, no assignment operator. */
-    MaybeStackArray(const MaybeStackArray &other);
-    void operator=(const MaybeStackArray &other);
-    /* No heap allocation. Use only on the stack. */
-    static void * U_EXPORT2 operator new(size_t size);
-    static void * U_EXPORT2 operator new[](size_t size);
+    MaybeStackArray(const MaybeStackArray & /*other*/) {};
+    void operator=(const MaybeStackArray & /*other*/) {};
+
+    // No heap allocation. Use only on the stack.
+    //   (Declaring these functions private triggers a cascade of problems:
+    //      MSVC insists on exporting an instantiation of MaybeStackArray, which
+    //      requires that all functions be defined.
+    //      An empty implementation of new() is rejected, it must return a value.
+    //      Returning NULL is rejected by gcc for operator new.
+    //      The expedient thing is just not to override operator new.
+    //      While relatively pointless, heap allocated instances will function.
+    // static void * U_EXPORT2 operator new(size_t size); 
+    // static void * U_EXPORT2 operator new[](size_t size);
 #if U_HAVE_PLACEMENT_NEW
-    static void * U_EXPORT2 operator new(size_t, void *ptr);
+    // static void * U_EXPORT2 operator new(size_t, void *ptr);
 #endif
 };
 

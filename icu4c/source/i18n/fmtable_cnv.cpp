@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -31,9 +31,9 @@ U_NAMESPACE_BEGIN
 // This is just a grandfathered API.
 
 Formattable::Formattable(const char* stringToCopy)
-    :   UObject(), fType(kString)
 {
-    fBogus.setToBogus();
+    init();
+    fType = kString;
     fValue.fString = new UnicodeString(stringToCopy);
 }
 

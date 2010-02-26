@@ -28,6 +28,9 @@
 
 U_NAMESPACE_BEGIN
 
+class   DecimalNumberString;
+class   DigitList;
+
 /**
  * Formattable objects can be passed to the Format class or
  * its subclasses for formatting.  Formattable is a thin wrapper
@@ -464,10 +467,18 @@ public:
      * the full precision and range of the original input, unconstrained by
      * the limits of a double floating point or a 64 bit int.
      * 
+     * This function is not thread safe, and therfore is not declared const,
+     * even though it is logically const.
+     *
+     * Possible errors include U_MEMORY_ALLOCATION_ERROR, and
+     * U_INVALID_STATE if the formattable object has not been set to
+     * a numeric type.
+     *
+     * @param status the error code.
      * @return the unformatted string representation of a number.
      * @draft ICU 4.4
      */
-    const StringPiece &getDecimalNumber() const;
+    StringPiece getDecimalNumber(UErrorCode &status);
 
      /**
      * Sets the double value of this object and changes the type to
@@ -581,12 +592,36 @@ public:
      */ 
     inline int32_t getLong(UErrorCode* status) const;
 
+    /**
+     * Internal function, do not use.
+     * TODO:  figure out how to make this be non-public.
+     *        NumberFormat::format(Formattable, ...
+     *        needs to get at the DigitList, if it exists, for
+     *        big decimal formatting.
+     *  @internal
+     */
+    DigitList *getDigitList() const { return fDecimalNum;};
+
+    /**
+     *  Adopt, and set value from, a DigitList
+     *     Internal Function, do not use.
+     *  @param dl the Digit List to be adopted
+     *  @param status reports errors
+     *  @internal
+     */
+    void adoptDigitList(DigitList *dl);
+
 private:
     /**
      * Cleans up the memory for unwanted values.  For example, the adopted
      * string or array objects.
      */
     void            dispose(void);
+    
+    /**
+     * Common initialization, for use by constructors.
+     */
+    void            init();
 
     UnicodeString* getBogus() const;
 
@@ -601,6 +636,9 @@ private:
           int32_t       fCount;
         }               fArrayAndCount;
     } fValue;
+
+    DecimalNumberString  *fDecimalStr;
+    DigitList            *fDecimalNum;
 
     Type                fType;
     UnicodeString       fBogus; // Bogus string when it's needed.

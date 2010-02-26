@@ -846,6 +846,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dcfmtest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dcfmtest.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dtfmapts.cpp"
 				>
 			</File>
