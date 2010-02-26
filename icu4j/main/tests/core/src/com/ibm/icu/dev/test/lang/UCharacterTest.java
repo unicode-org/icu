@@ -201,6 +201,52 @@ public final class UCharacterTest extends TestFmwk
                       + " expected to be a non rule white space");
             }
         }
+
+        // TODO: propose public API for constants like uchar.h's U_GC_*_MASK
+        // (http://bugs.icu-project.org/trac/ticket/7461)
+        int GC_Z_MASK =
+            (1 << UCharacter.SPACE_SEPARATOR) |
+            (1 << UCharacter.LINE_SEPARATOR) |
+            (1 << UCharacter.PARAGRAPH_SEPARATOR);
+
+        // UCharacter.isWhitespace(c) should be the same as Character.isWhitespace().
+        // This uses logln() because Character.isWhitespace() differs between Java versions, thus
+        // it is not necessarily an error if there is a difference between
+        // particular Java and ICU versions.
+        // However, you need to run tests with -v to see the output.
+        // Also note that, at least as of Unicode 5.2,
+        // there are no supplementary white space characters.
+        for (int c = 0; c <= 0xffff; ++c) {
+            boolean j = Character.isWhitespace(c);
+            boolean i = UCharacter.isWhitespace(c);
+            boolean u = UCharacter.isUWhiteSpace(c);
+            boolean z = (UCharacter.getIntPropertyValue(c, UProperty.GENERAL_CATEGORY_MASK) &
+                         GC_Z_MASK) != 0;
+            if (j != i) {
+                logln(String.format(
+                    "isWhitespace(U+%04x) difference: JDK %5b ICU %5b Unicode WS %5b Z Separator %5b",
+                    c, j, i, u, z));
+            } else if (j || i || u || z) {
+                logln(String.format(
+                    "isWhitespace(U+%04x) FYI:        JDK %5b ICU %5b Unicode WS %5b Z Separator %5b",
+                    c, j, i, u, z));
+            }
+        }
+        for (char c = 0; c <= 0xff; ++c) {
+            boolean j = Character.isSpace(c);
+            boolean i = UCharacter.isSpace(c);
+            boolean z = (UCharacter.getIntPropertyValue(c, UProperty.GENERAL_CATEGORY_MASK) &
+                         GC_Z_MASK) != 0;
+            if (j != i) {
+                logln(String.format(
+                    "isSpace(U+%04x) difference: JDK %5b ICU %5b Z Separator %5b",
+                    (int)c, j, i, z));
+            } else if (j || i || z) {
+                logln(String.format(
+                    "isSpace(U+%04x) FYI:        JDK %5b ICU %5b Z Separator %5b",
+                    (int)c, j, i, z));
+            }
+        }
     }
 
     /**
