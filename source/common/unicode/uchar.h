@@ -2743,7 +2743,7 @@ u_getPropertyValueName(UProperty property,
  *
  * @return a value integer or UCHAR_INVALID_CODE if the given name
  *         does not match any value of the given property, or if the
- *         property is invalid.  Note: U CHAR_GENERAL_CATEGORY values
+ *         property is invalid.  Note: UCHAR_GENERAL_CATEGORY_MASK values
  *         are not values of UCharCategory, but rather mask values
  *         produced by U_GET_GC_MASK().  This allows grouped
  *         categories such as [:L:] to be represented.
