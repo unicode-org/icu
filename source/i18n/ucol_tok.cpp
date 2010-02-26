@@ -679,8 +679,15 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
 
 
 inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff, int32_t len, UErrorCode *status) {
+    UChar *tempStuff = (UChar *)stuff;
     if(src->extraCurrent+len >= src->extraEnd) {
         /* reallocate */
+        if (stuff >= src->source && stuff <= src->end) {
+          // Copy stuff to a new buffer if stuff points to an address within
+          // src->source buffer.
+          tempStuff = (UChar*)uprv_malloc(len*sizeof(UChar));
+          uprv_memcpy(tempStuff, stuff, len*sizeof(UChar));
+        }
         UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
         if(newSrc != NULL) {
             src->current = newSrc + (src->current - src->source);
@@ -694,13 +701,14 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
         }
     }
     if(len == 1) {
-        *src->extraCurrent++ = *stuff;
+        *src->extraCurrent++ = *tempStuff;
     } else {
-        uprv_memcpy(src->extraCurrent, stuff, len*sizeof(UChar));
+        uprv_memcpy(src->extraCurrent, tempStuff, len*sizeof(UChar));
         src->extraCurrent += len;
     }
-
-
+    if (tempStuff != stuff) {
+        uprv_free(tempStuff);
+    }
 }
 
 inline UBool ucol_tok_doSetTop(UColTokenParser *src, UErrorCode *status) {
