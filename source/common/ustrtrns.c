@@ -49,7 +49,8 @@ u_strFromUTF32WithSub(UChar *dest,
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -163,7 +164,8 @@ u_strToUTF32WithSub(UChar32 *dest,
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -409,7 +411,8 @@ u_strFromUTF8WithSub(UChar *dest,
         return NULL;
     }
         
-    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -742,7 +745,9 @@ u_strFromUTF8Lenient(UChar *dest,
         return NULL;
     }
         
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)) {
+    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0)
+    ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -981,7 +986,8 @@ u_strToUTF8WithSub(char *dest,
         return NULL;
     }
         
-    if( (pSrc==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+    if( (pSrc==NULL && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
