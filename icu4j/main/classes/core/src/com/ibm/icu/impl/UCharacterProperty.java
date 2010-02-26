@@ -117,8 +117,10 @@ public final class UCharacterProperty
     public static final int SRC_NFKC=9;
     /** From normalizer2impl.cpp/nfkc_cf.nrm */
     public static final int SRC_NFKC_CF=10;
+    /** From normalizer2impl.cpp/nfc.nrm canonical iterator data */
+    public static final int SRC_NFC_CANON_ITER=11;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=11;
+    public static final int SRC_COUNT=12;
 
     // public methods ----------------------------------------------------
 
@@ -308,7 +310,7 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKD_INERT */
        new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFC_INERT */
        new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKC_INERT */
-       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_SEGMENT_STARTER */
+       new BinaryProperties( SRC_NFC_CANON_ITER, 0 ),                               /* UCHAR_SEGMENT_STARTER */
        new BinaryProperties(  1,                (  1 << PATTERN_SYNTAX) ),
        new BinaryProperties(  1,                (  1 << PATTERN_WHITE_SPACE) ),
        new BinaryProperties( SRC_CHAR_AND_PROPSVEC,  0 ),                           /* UCHAR_POSIX_ALNUM */

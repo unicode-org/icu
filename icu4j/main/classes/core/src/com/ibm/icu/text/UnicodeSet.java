@@ -3104,6 +3104,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 case UCharacterProperty.SRC_NFKC_CF:
                     Norm2AllModes.getNFKC_CFInstance().impl.addPropertyStarts(incl);
                     break;
+                case UCharacterProperty.SRC_NFC_CANON_ITER:
+                    Norm2AllModes.getNFCInstance().impl.addCanonIterPropertyStarts(incl);
+                    break;
                 case UCharacterProperty.SRC_CASE:
                     UCaseProps.getSingleton().addPropertyStarts(incl);
                     break;
