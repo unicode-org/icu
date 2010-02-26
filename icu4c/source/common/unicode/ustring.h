@@ -147,7 +147,7 @@ u_strcat(UChar     *dst,
  *
  * @param dst The destination string.
  * @param src The source string.
- * @param n The maximum number of characters to compare.
+ * @param n The maximum number of characters to append.
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
