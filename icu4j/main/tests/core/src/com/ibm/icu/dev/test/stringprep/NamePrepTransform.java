@@ -1,21 +1,21 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
 
-//import com.ibm.icu.impl.ICULocaleData;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
-// disable tests that have dependency on Transliterator for now
-// import com.ibm.icu.text.Transliterator;
 
 /**
  * @author ram
@@ -30,7 +30,7 @@ public class NamePrepTransform {
     private UnicodeSet labelSeparatorSet;
     private UnicodeSet prohibitedSet;
     private UnicodeSet unassignedSet;
-  // private Transliterator mapTransform;
+    private MapTransform mapTransform;
     public static final int NONE = 0;
     public static final int ALLOW_UNASSIGNED = 1;
     
@@ -40,7 +40,7 @@ public class NamePrepTransform {
         String  mapRules      = bundle.getString("MapNoNormalization");
         mapRules             += bundle.getString("MapNFKC");
         // disable
-        // mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);
+        mapTransform          = new MapTransform("CaseMap", mapRules, 0 /*Transliterator.FORWARD*/);
         labelSeparatorSet     = new UnicodeSet(bundle.getString("LabelSeparatorSet"));
         prohibitedSet         = new UnicodeSet(bundle.getString("ProhibitedSet"));
         unassignedSet         = new UnicodeSet(bundle.getString("UnassignedSet"));
@@ -91,18 +91,23 @@ public class NamePrepTransform {
               character MUST be the first character of the string, and a
               RandALCat character MUST be the last character of the string.
     */
+
+    public boolean isReady() {
+        return mapTransform.isReady();
+    }
+
     public StringBuffer prepare(UCharacterIterator src,
                                        int options)
                                        throws StringPrepParseException{
              return prepare(src.getText(),options);
     }
+
     private String map ( String src, int options)
                                 throws StringPrepParseException{
         // map 
         boolean allowUnassigned =  ((options & ALLOW_UNASSIGNED)>0);
         // disable test
-        // String caseMapOut = transform.mapTransform.transliterate(src);    
-        String caseMapOut = src;
+        String caseMapOut = mapTransform.transliterate(src);
         UCharacterIterator iter = UCharacterIterator.getInstance(caseMapOut);
         int ch;
         while((ch=iter.nextCodePoint())!=UCharacterIterator.DONE){                          
@@ -165,6 +170,46 @@ public class NamePrepTransform {
         
         return new StringBuffer(mapOut);
 
-      }
-    
+    }
+
+    private static class MapTransform {
+        private Object translitInstance;
+        private Method translitMethod;
+        private boolean isReady;
+
+        MapTransform(String id, String rule, int direction) {
+            isReady = initialize(id, rule, direction);
+        }
+
+        boolean initialize(String id, String rule, int direction) {
+            try {
+                Class cls = Class.forName("com.ibm.icu.text.Transliterator");
+                Method createMethod = cls.getMethod("createFromRules", String.class, String.class, Integer.TYPE);
+                translitInstance = createMethod.invoke(null, id, rule, Integer.valueOf(direction));
+                translitMethod = cls.getMethod("transliterate", String.class);
+            } catch (Throwable e) {
+                return false;
+            }
+            return true;
+        }
+
+        boolean isReady() {
+            return isReady;
+        }
+
+        String transliterate(String text) {
+            if (!isReady) {
+                throw new IllegalStateException("Transliterator is not ready");
+            }
+            String result = null;
+            try {
+                result = (String)translitMethod.invoke(translitInstance, text);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            }
+            return result;
+        }
+    }
 }

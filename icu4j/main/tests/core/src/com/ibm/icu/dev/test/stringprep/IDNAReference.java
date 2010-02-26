@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -33,6 +33,10 @@ public class IDNAReference {
     public static final int USE_STD3_RULES      = 0x0002;
     public static final NamePrepTransform transform = NamePrepTransform.getInstance();
   
+    public static boolean isReady() {
+        return transform.isReady();
+    }
+
     private static boolean startsWithPrefix(StringBuffer src){
         boolean startsWithPrefix = true;
 

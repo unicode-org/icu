@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -23,10 +23,9 @@ public class TestAll extends TestGroup {
     public TestAll() {
         super(
             new String[] {
-                // disable these tests while translit is not available
-                // "TestIDNA",
-                // "TestStringPrep",
-                // "TestIDNARef",
+                "TestIDNA",
+                "TestStringPrep",
+                "TestIDNARef",
                 "IDNAConformanceTest",
                 "TestStringPrepProfiles",
             },

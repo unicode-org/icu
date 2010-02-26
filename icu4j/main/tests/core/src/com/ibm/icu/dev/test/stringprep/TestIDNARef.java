@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -98,6 +98,12 @@ public class TestIDNARef extends TestFmwk {
     
     private void doTestToUnicode(String src, String expected, int options, Object expectedException) 
                 throws Exception{
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestToUnicode.");
+            return;
+        }
+
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try{
@@ -149,6 +155,12 @@ public class TestIDNARef extends TestFmwk {
     
     private void doTestIDNToUnicode(String src, String expected, int options, Object expectedException) 
                 throws Exception{
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestIDNToUnicode.");
+            return;
+        }
+
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try{
@@ -198,6 +210,12 @@ public class TestIDNARef extends TestFmwk {
     }
     private void doTestToASCII(String src, String expected, int options, Object expectedException) 
                 throws Exception{
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestToASCII.");
+            return;
+        }
+
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try{
@@ -248,7 +266,12 @@ public class TestIDNARef extends TestFmwk {
     }
     private void doTestIDNToASCII(String src, String expected, int options, Object expectedException) 
                 throws Exception{
-        
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestIDNToASCII.");
+            return;
+        }
+
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try{
@@ -319,6 +342,10 @@ public class TestIDNARef extends TestFmwk {
     public void TestNamePrepConformance() throws Exception{
         try{
             NamePrepTransform namePrep = NamePrepTransform.getInstance();
+            if (!namePrep.isReady()) {
+                logln("Transliterator is not available on this environment.");
+                return;
+            }
             for(int i=0; i<TestData.conformanceTestCases.length;i++){
                 TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
                 UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
@@ -401,6 +428,12 @@ public class TestIDNARef extends TestFmwk {
         } 
     }
     private void doTestCompare(String s1, String s2, boolean isEqual){
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestCompare.");
+            return;
+        }
+
         try{
             int retVal = IDNAReference.compare(s1,s2,IDNAReference.DEFAULT);
             if(isEqual==true && retVal != 0){
@@ -500,6 +533,12 @@ public class TestIDNARef extends TestFmwk {
     //  test and ascertain
     //  func(func(func(src))) == func(src)
     public void doTestChainingToASCII(String source)throws Exception{
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestChainingToASCII.");
+            return;
+        }
+
         StringBuffer expected; 
         StringBuffer chained;
         
@@ -526,6 +565,12 @@ public class TestIDNARef extends TestFmwk {
     //  test and ascertain
     //  func(func(func(src))) == func(src)
     public void doTestChainingToUnicode(String source)throws Exception{
+
+        if (!IDNAReference.isReady()) {
+            logln("Transliterator is not available on this environment.  Skipping doTestChainingToUnicode.");
+            return;
+        }
+
         StringBuffer expected; 
         StringBuffer chained;
         
