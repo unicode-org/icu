@@ -1728,9 +1728,10 @@ public:
 
   /**
    * Determine if this object contains a valid string.
-   * A bogus string has no value. It is different from an empty string.
-   * It can be used to indicate that no string value is available.
-   * getBuffer() and getTerminatedBuffer() return NULL, and
+   * A bogus string has no value. It is different from an empty string,
+   * although in both cases isEmpty() returns TRUE and length() returns 0.
+   * setToBogus() and isBogus() can be used to indicate that no string value is available.
+   * For a bogus string, getBuffer() and getTerminatedBuffer() return NULL, and
    * length() returns 0.
    *
    * @return TRUE if the string is valid, FALSE otherwise
