@@ -515,21 +515,33 @@ static void TestLetterNumber()
     }
 }
 
+static void testSampleCharProps(UBool propFn(UChar32), const char *propName,
+                                const UChar32 *sampleChars, int32_t sampleCharsLength,
+                                UBool expected) {
+    int32_t i;
+    for (i = 0; i < sampleCharsLength; ++i) {
+        UBool result = propFn(sampleChars[i]);
+        if (result != expected) {
+            log_err("error: character property function %s(U+%04x)=%d is wrong\n",
+                    propName, sampleChars[i], result);
+        }
+    }
+}
+
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue() */
 static void TestMisc()
 {
-    static const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
-    static const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
-    static const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa6e};
-    static const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
-    static const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
-    static const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
+    static const UChar32 sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
+    static const UChar32 sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
+    static const UChar32 sampleUndefined[] = {0xfff1, 0xfff7, 0xfa6e};
+    static const UChar32 sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
+    static const UChar32 sampleBase[] = {0x0061, 0x0031, 0x03d2};
+    static const UChar32 sampleNonBase[] = {0x002B, 0x0020, 0x203B};
 /*    static const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00, 0xFFE8, 0xFFF0};*/
-    static const UChar sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
-    static const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
-    static const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
-    static const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
-
+    static const UChar32 sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
+    static const UChar32 sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
+    static const UChar32 sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
+    static const UChar32 sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f, 0x85, 0x2007, 0xffef};
 
     static const int32_t sampleDigitValues[] = {0, 2, 3, 5};
 
@@ -541,53 +553,34 @@ static void TestMisc()
 
     memset(icuVersion, 0, U_MAX_VERSION_STRING_LENGTH);
 
-    log_verbose("Testing for isspace and nonspaces\n");
-    for (i = 0; i < 5; i++) {
-        if (!(u_isspace(sampleSpaces[i])) ||
-                (u_isspace(sampleNonSpaces[i])))
-        {
-            log_err("Space char test error : %d or %d \n", (int32_t)sampleSpaces[i], (int32_t)sampleNonSpaces[i]);
-        }
-        if (!(u_isJavaSpaceChar(sampleSpaces[i])) ||
-                (u_isJavaSpaceChar(sampleNonSpaces[i])))
-        {
-            log_err("u_isJavaSpaceChar() test error : %d or %d \n", (int32_t)sampleSpaces[i], (int32_t)sampleNonSpaces[i]);
-        }
-    }
+    testSampleCharProps(u_isspace, "u_isspace", sampleSpaces, LENGTHOF(sampleSpaces), TRUE);
+    testSampleCharProps(u_isspace, "u_isspace", sampleNonSpaces, LENGTHOF(sampleNonSpaces), FALSE);
 
-    log_verbose("Testing for isspace and nonspaces\n");
-    for (i = 0; i < 5; i++) {
-        if (!(u_isWhitespace(sampleWhiteSpaces[i])) ||
-                (u_isWhitespace(sampleNonWhiteSpaces[i])))
-        {
-            log_err("White Space char test error : %lx or %lx \n", sampleWhiteSpaces[i], sampleNonWhiteSpaces[i]);
-        }
-    }
+    testSampleCharProps(u_isJavaSpaceChar, "u_isJavaSpaceChar",
+                        sampleSpaces, LENGTHOF(sampleSpaces), TRUE);
+    testSampleCharProps(u_isJavaSpaceChar, "u_isJavaSpaceChar",
+                        sampleNonSpaces, LENGTHOF(sampleNonSpaces), FALSE);
 
-    log_verbose("Testing for isdefined\n");
-    for (i = 0; i < 3; i++) {
-        if ((u_isdefined(sampleUndefined[i])) ||
-                !(u_isdefined(sampleDefined[i])))
-        {
-            log_err("Undefined char test error : U+%04x or U+%04x\n", (int32_t)sampleUndefined[i], (int32_t)sampleDefined[i]);
-        }
-    }
+    testSampleCharProps(u_isWhitespace, "u_isWhitespace",
+                        sampleWhiteSpaces, LENGTHOF(sampleWhiteSpaces), TRUE);
+    testSampleCharProps(u_isWhitespace, "u_isWhitespace",
+                        sampleNonWhiteSpaces, LENGTHOF(sampleNonWhiteSpaces), FALSE);
 
-    log_verbose("Testing for isbase\n");
-    for (i = 0; i < 3; i++) {
-        if ((u_isbase(sampleNonBase[i])) ||
-                !(u_isbase(sampleBase[i])))
-        {
-            log_err("Non-baseform char test error : U+%04x or U+%04x",(int32_t)sampleNonBase[i], (int32_t)sampleBase[i]);
-        }
-    }
+    testSampleCharProps(u_isdefined, "u_isdefined",
+                        sampleDefined, LENGTHOF(sampleDefined), TRUE);
+    testSampleCharProps(u_isdefined, "u_isdefined",
+                        sampleUndefined, LENGTHOF(sampleUndefined), FALSE);
 
-    log_verbose("Testing for isdigit \n");
-    for (i = 0; i < 4; i++) {
-        if ((u_isdigit(sampleDigits[i]) && 
-            (u_charDigitValue(sampleDigits[i])!= sampleDigitValues[i])) ||
-            (u_isdigit(sampleNonDigits[i]))) {
-            log_err("Digit char test error : %lx   or   %lx\n", sampleDigits[i], sampleNonDigits[i]);
+    testSampleCharProps(u_isbase, "u_isbase", sampleBase, LENGTHOF(sampleBase), TRUE);
+    testSampleCharProps(u_isbase, "u_isbase", sampleNonBase, LENGTHOF(sampleNonBase), FALSE);
+
+    testSampleCharProps(u_isdigit, "u_isdigit", sampleDigits, LENGTHOF(sampleDigits), TRUE);
+    testSampleCharProps(u_isdigit, "u_isdigit", sampleNonDigits, LENGTHOF(sampleNonDigits), FALSE);
+
+    for (i = 0; i < LENGTHOF(sampleDigits); i++) {
+        if (u_charDigitValue(sampleDigits[i]) != sampleDigitValues[i]) {
+            log_err("error: u_charDigitValue(U+04x)=%d != %d\n",
+                    sampleDigits[i], u_charDigitValue(sampleDigits[i]), sampleDigitValues[i]);
         }
     }
 
@@ -837,40 +830,19 @@ TestPOSIX() {
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
 static void TestControlPrint()
 {
-    const UChar sampleControl[] = {0x1b, 0x97, 0x82, 0x2028, 0x2029, 0x200c, 0x202b};
-    const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
-    const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
-    const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
+    const UChar32 sampleControl[] = {0x1b, 0x97, 0x82, 0x2028, 0x2029, 0x200c, 0x202b};
+    const UChar32 sampleNonControl[] = {0x61, 0x0031, 0x00e2};
+    const UChar32 samplePrintable[] = {0x0042, 0x005f, 0x2014};
+    const UChar32 sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
     UChar32 c;
-    int i;
 
-    log_verbose("Testing for iscontrol\n");
-    for (i = 0; i < LENGTHOF(sampleControl); i++) {
-        if (!u_iscntrl(sampleControl[i]))
-        {
-            log_err("Control char test error : U+%04x should be control but is not\n", (int32_t)sampleControl[i]);
-        }
-    }
+    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleControl, LENGTHOF(sampleControl), TRUE);
+    testSampleCharProps(u_iscntrl, "u_iscntrl", sampleNonControl, LENGTHOF(sampleNonControl), FALSE);
 
-    log_verbose("Testing for !iscontrol\n");
-    for (i = 0; i < LENGTHOF(sampleNonControl); i++) {
-        if (u_iscntrl(sampleNonControl[i]))
-        {
-            log_err("Control char test error : U+%04x should not be control but is\n", (int32_t)sampleNonControl[i]);
-        }
-    }
-
-    log_verbose("testing for isprintable\n");
-    for (i = 0; i < 3; i++) {
-        if (!u_isprint(samplePrintable[i]))
-        {
-            log_err("Printable char test error : U+%04x should be printable but is not\n", (int32_t)samplePrintable[i]);
-        }
-        if (u_isprint(sampleNonPrintable[i]))
-        {
-            log_err("Printable char test error : U+%04x should not be printable but is\n", (int32_t)sampleNonPrintable[i]);
-        }
-    }
+    testSampleCharProps(u_isprint, "u_isprint",
+                        samplePrintable, LENGTHOF(samplePrintable), TRUE);
+    testSampleCharProps(u_isprint, "u_isprint",
+                        sampleNonPrintable, LENGTHOF(sampleNonPrintable), FALSE);
 
     /* test all ISO 8 controls */
     for(c=0; c<=0x9f; ++c) {
@@ -906,65 +878,49 @@ static void TestControlPrint()
 /* u_isJavaIDStart, u_isJavaIDPart, u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
 static void TestIdentifier()
 {
-    const UChar sampleJavaIDStart[] = {0x0071, 0x00e4, 0x005f};
-    const UChar sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
-    const UChar sampleJavaIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar sampleNonJavaIDPart[] = {0x2030, 0x2020, 0x0020};
-    const UChar sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061};
-    const UChar sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019};
-    const UChar sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020};
-    const UChar sampleIDIgnore[] = {0x0006, 0x0010, 0x206b};
-    const UChar sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
+    const UChar32 sampleJavaIDStart[] = {0x0071, 0x00e4, 0x005f};
+    const UChar32 sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
+    const UChar32 sampleJavaIDPart[] = {0x005f, 0x0032, 0x0045};
+    const UChar32 sampleNonJavaIDPart[] = {0x2030, 0x2020, 0x0020};
+    const UChar32 sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061};
+    const UChar32 sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019};
+    const UChar32 sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045};
+    const UChar32 sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020};
+    const UChar32 sampleIDIgnore[] = {0x0006, 0x0010, 0x206b, 0x85};
+    const UChar32 sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
 
-    int i;
+    testSampleCharProps(u_isJavaIDStart, "u_isJavaIDStart",
+                        sampleJavaIDStart, LENGTHOF(sampleJavaIDStart), TRUE);
+    testSampleCharProps(u_isJavaIDStart, "u_isJavaIDStart",
+                        sampleNonJavaIDStart, LENGTHOF(sampleNonJavaIDStart), FALSE);
 
-    log_verbose("Testing sampleJavaID start \n");
-    for (i = 0; i < 3; i++) {
-        if (!(u_isJavaIDStart(sampleJavaIDStart[i])) ||
-                (u_isJavaIDStart(sampleNonJavaIDStart[i])))
-            log_err("Java ID Start char test error : %lx or %lx\n",
-            sampleJavaIDStart[i], sampleNonJavaIDStart[i]);
-    }
+    testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
+                        sampleJavaIDPart, LENGTHOF(sampleJavaIDPart), TRUE);
+    testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
+                        sampleNonJavaIDPart, LENGTHOF(sampleNonJavaIDPart), FALSE);
 
-    log_verbose("Testing sampleJavaID part \n");
-    for (i = 0; i < 3; i++) {
-        if (!(u_isJavaIDPart(sampleJavaIDPart[i])) ||
-                (u_isJavaIDPart(sampleNonJavaIDPart[i])))
-            log_err("Java ID Part char test error : %lx or %lx\n",
-             sampleJavaIDPart[i], sampleNonJavaIDPart[i]);
-    }
+    /* IDPart should imply IDStart */
+    testSampleCharProps(u_isJavaIDPart, "u_isJavaIDPart",
+                        sampleJavaIDStart, LENGTHOF(sampleJavaIDStart), TRUE);
 
-    log_verbose("Testing sampleUnicodeID start \n");
-    for (i = 0; i < 3; i++) {
-        /* T_test_logln_ustr((int32_t)i); */
-        if (!(u_isIDStart(sampleUnicodeIDStart[i])) ||
-                (u_isIDStart(sampleNonUnicodeIDStart[i])))
-        {
-            log_err("Unicode ID Start char test error : %lx  or  %lx\n", sampleUnicodeIDStart[i],
-                                    sampleNonUnicodeIDStart[i]);
-        }
-    }
+    testSampleCharProps(u_isIDStart, "u_isIDStart",
+                        sampleUnicodeIDStart, LENGTHOF(sampleUnicodeIDStart), TRUE);
+    testSampleCharProps(u_isIDStart, "u_isIDStart",
+                        sampleNonUnicodeIDStart, LENGTHOF(sampleNonUnicodeIDStart), FALSE);
 
-    log_verbose("Testing sample unicode ID part \n");
-    for (i = 2; i < 3; i++) {   /* nos *** starts with 2 instead of 0, until clarified */
-        /* T_test_logln_ustr((int32_t)i); */
-        if (!(u_isIDPart(sampleUnicodeIDPart[i])) ||
-                (u_isIDPart(sampleNonUnicodeIDPart[i])))
-           {
-            log_err("Unicode ID Part char test error : %lx  or  %lx", sampleUnicodeIDPart[i], sampleNonUnicodeIDPart[i]);
-            }
-    }
+    testSampleCharProps(u_isIDPart, "u_isIDPart",
+                        sampleUnicodeIDPart, LENGTHOF(sampleUnicodeIDPart), TRUE);
+    testSampleCharProps(u_isIDPart, "u_isIDPart",
+                        sampleNonUnicodeIDPart, LENGTHOF(sampleNonUnicodeIDPart), FALSE);
 
-    log_verbose("Testing  sampleId ignore\n");
-    for (i = 0; i < 3; i++) {
-        /*T_test_logln_ustr((int32_t)i); */
-        if (!(u_isIDIgnorable(sampleIDIgnore[i])) ||
-                (u_isIDIgnorable(sampleNonIDIgnore[i])))
-        {
-            log_err("ID ignorable char test error : U+%04x  or  U+%04x\n", sampleIDIgnore[i], sampleNonIDIgnore[i]);
-        }
-    }
+    /* IDPart should imply IDStart */
+    testSampleCharProps(u_isIDPart, "u_isIDPart",
+                        sampleUnicodeIDStart, LENGTHOF(sampleUnicodeIDStart), TRUE);
+
+    testSampleCharProps(u_isIDIgnorable, "u_isIDIgnorable",
+                        sampleIDIgnore, LENGTHOF(sampleIDIgnore), TRUE);
+    testSampleCharProps(u_isIDIgnorable, "u_isIDIgnorable",
+                        sampleNonIDIgnore, LENGTHOF(sampleNonIDIgnore), FALSE);
 }
 
 /* for each line of UnicodeData.txt, check some of the properties */
