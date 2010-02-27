@@ -3,7 +3,8 @@
 ## Copyright (c) 2002-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
-ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
+ICUUC_FILE="${libdir}/${ICULIBS_COMMON_LIB_NAME}"
+ICUUC_FILE_A="${libdir}/${ICULIBS_COMMON_LIB_NAME_A}"
     
 #  echo ENABLE RPATH $ENABLE_RPATH and RPATHLDFLAGS=${RPATH_LDFLAGS}
 if [ "x$PKGDATA_MODE" = "x" ]; then
@@ -93,7 +94,7 @@ usage()
 ## Check the sanity of current variables
 sanity()
 {
-    if [ ! -f ${ICUUC_FILE} ] && [ ${IGNORE_ICUUC_FILE_CHECK} = "no" ] && [ ${SANITY} = "sane" ];
+    if [ ! -f "${ICUUC_FILE}" -a ! -f "${ICUUC_FILE_A}" ] && [ ${IGNORE_ICUUC_FILE_CHECK} = "no" ] && [ ${SANITY} = "sane" ];
     then
 	echo "### $ME: Can't find ${ICUUC_FILE} - ICU prefix is wrong."  1>&2
 	echo "###      Try the --prefix= option " 1>&2
@@ -284,8 +285,8 @@ do
 
 	--detect-prefix)
 	    HERE=`echo $0 | sed -e "s/$ME//g"`
-	    if [ -f $HERE/../lib/${ICULIBS_COMMON_LIB_NAME} ]; then
-		prefix=$HERE/..
+	    if [ -f "${HERE}/../lib/${ICULIBS_COMMON_LIB_NAME}" -o -f  "${HERE}/../lib/${ICULIBS_COMMON_LIB_NAME_A}"  ]; then
+		prefix="${HERE}/.."
 		echo "## Using --prefix=${prefix}" 1>&2
 	    fi
 	    loaddefs
