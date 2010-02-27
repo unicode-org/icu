@@ -182,6 +182,12 @@ static void TestRegexCAPI(void) {
     TEST_ASSERT(status == U_REGEX_INVALID_FLAG);
     uregex_close(re);
 
+    /* Open with an unimplemented flag */
+    status = U_ZERO_ERROR;
+    re = uregex_open(pat, -1, UREGEX_LITERAL, 0, &status);
+    TEST_ASSERT(status == U_REGEX_UNIMPLEMENTED);
+    uregex_close(re);
+
     /* openC with an invalid parameter */
     status = U_ZERO_ERROR;
     re = uregex_openC(NULL,

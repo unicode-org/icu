@@ -64,7 +64,7 @@ typedef enum URegexpFlag{
     
     /**  If set, treat the entire pattern as a literal string.  
       *  Metacharacters or escape sequences in the input sequence will be given 
-      *  no special meaning.
+      *  no special meaning. Not implemented yet as of ICU 4.4.
       *
       *  The flags CASE_INSENSITIVE and UNICODE_CASE retain their impact
       *  on matching when used in conjunction with this flag.
