@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2009 International Business Machines 
+ * Copyright (c) 2001-2010 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -343,6 +343,12 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
     int32_t     textlength;
     UChar       matchtext[128];
 
+    usearch_setAttribute(strsrch, USEARCH_ELEMENT_COMPARISON, search.elemCompare, &status);
+    if (U_FAILURE(status)) {
+        log_err("Error setting USEARCH_ELEMENT_COMPARISON attribute %s\n", u_errorName(status));
+        return FALSE;
+    }   
+
     if (usearch_getMatchedStart(strsrch) != USEARCH_DONE ||
         usearch_getMatchedLength(strsrch) != 0) {
         log_err("Error with the initialization of match start and length\n");
@@ -357,9 +363,9 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
             log_err("Text: %s\n", str);
             str = toCharString(usearch_getPattern(strsrch, &textlength));
             log_err("Pattern: %s\n", str);
-            log_err("Error following match found at %d %d\n", 
-                    usearch_getMatchedStart(strsrch), 
-                    usearch_getMatchedLength(strsrch));
+            log_err("Error following match found at idx,len %d,%d; expected %d,%d\n", 
+                    usearch_getMatchedStart(strsrch), usearch_getMatchedLength(strsrch),
+                    matchindex, matchlength);
             return FALSE;
         }
         count ++;
@@ -430,6 +436,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         return FALSE;
     }
 
+    usearch_setAttribute(strsrch, USEARCH_ELEMENT_COMPARISON, USEARCH_STANDARD_ELEMENT_COMPARISON, &status);
     return TRUE;
 }
 
@@ -1106,7 +1113,7 @@ static void TestCompositeBoundaries(void)
 
 static void TestGetSetOffset(void)
 {
-    int            index   = 0;
+    int            searchDataIndex   = 0;
     UChar          pattern[32];
     UChar          text[128];
     UErrorCode     status  = U_ZERO_ERROR;
@@ -1133,9 +1140,9 @@ static void TestGetSetOffset(void)
     if (U_SUCCESS(status)) {
         log_err("Error expecting set offset error\n");
     }
-    while (BASIC[index].text != NULL) {
+    while (BASIC[searchDataIndex].text != NULL) {
         int         count       = 0;
-        SearchData  search      = BASIC[index ++];
+        SearchData  search      = BASIC[searchDataIndex ++];
         int32_t matchindex  = search.offset[count];
         int32_t     textlength;
         
@@ -1404,7 +1411,7 @@ static void TestSetMatch(void)
     while (MATCH[count].text != NULL) {
         SearchData     search = MATCH[count];
         int            size   = 0;
-        int            index = 0;
+        int            offsetIndex = 0;
         UChar          text[128];
         UChar          pattern[32];
         UStringSearch *strsrch;
@@ -1440,25 +1447,25 @@ static void TestSetMatch(void)
             log_err("Error getting last match\n");
         }
         
-        while (index < size) {
-            if (index + 2 < size) {
-                if (usearch_following(strsrch, search.offset[index + 2] - 1,
-                                      &status) != search.offset[index + 2] ||
+        while (offsetIndex < size) {
+            if (offsetIndex + 2 < size) {
+                if (usearch_following(strsrch, search.offset[offsetIndex + 2] - 1,
+                                      &status) != search.offset[offsetIndex + 2] ||
                     U_FAILURE(status)) {
                     log_err("Error getting following match at index %d\n", 
-                            search.offset[index + 2] - 1);
+                            search.offset[offsetIndex + 2] - 1);
                 }
             }
-            if (index + 1 < size) {
-                if (usearch_preceding(strsrch, search.offset[index + 1] + 
-                                               search.size[index + 1] + 1, 
-                                      &status) != search.offset[index + 1] ||
+            if (offsetIndex + 1 < size) {
+                if (usearch_preceding(strsrch, search.offset[offsetIndex + 1] + 
+                                               search.size[offsetIndex + 1] + 1, 
+                                      &status) != search.offset[offsetIndex + 1] ||
                     U_FAILURE(status)) {
                     log_err("Error getting preceeding match at index %d\n", 
-                            search.offset[index + 1] + 1);
+                            search.offset[offsetIndex + 1] + 1);
                 }
             }
-            index += 2;
+            offsetIndex += 2;
         }
         status = U_ZERO_ERROR;
         if (usearch_following(strsrch, u_strlen(text), &status) != 
@@ -2155,7 +2162,7 @@ static void TestCompositeBoundariesCanonical(void)
 
 static void TestGetSetOffsetCanonical(void)
 {
-    int            index   = 0;
+    int            searchDataIndex   = 0;
     UChar          pattern[32];
     UChar          text[128];
     UErrorCode     status  = U_ZERO_ERROR;
@@ -2188,13 +2195,13 @@ static void TestGetSetOffsetCanonical(void)
     if (U_SUCCESS(status)) {
         log_err("Error expecting set offset error\n");
     }
-    while (BASICCANONICAL[index].text != NULL) {
+    while (BASICCANONICAL[searchDataIndex].text != NULL) {
         int         count       = 0;
-        SearchData  search      = BASICCANONICAL[index ++];
+        SearchData  search      = BASICCANONICAL[searchDataIndex ++];
         int32_t matchindex  = search.offset[count];
         int32_t     textlength;
 
-        if (BASICCANONICAL[index].text == NULL) {
+        if (BASICCANONICAL[searchDataIndex].text == NULL) {
             /* skip the last one */
             break;
         }
