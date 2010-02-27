@@ -3746,8 +3746,8 @@ static UCompareCEsResult compareCE64s(int64_t targCE, int64_t patCE, int16_t com
     int64_t mask;
 
     mask = 0xFFFF0000;
-    int32_t targLev1 = targCEshifted & mask;
-    int32_t patLev1 = patCEshifted & mask;
+    int32_t targLev1 = (int32_t)(targCEshifted & mask);
+    int32_t patLev1 = (int32_t)(patCEshifted & mask);
     if ( targLev1 != patLev1 ) {
         if ( targLev1 == 0 ) {
             return U_CE_SKIP_TARG;
@@ -3759,8 +3759,8 @@ static UCompareCEsResult compareCE64s(int64_t targCE, int64_t patCE, int16_t com
     }
 
     mask = 0x0000FFFF;
-    int32_t targLev2 = targCEshifted & mask;
-    int32_t patLev2 = patCEshifted & mask;
+    int32_t targLev2 = (int32_t)(targCEshifted & mask);
+    int32_t patLev2 = (int32_t)(patCEshifted & mask);
     if ( targLev2 != patLev2 ) {
         if ( targLev2 == 0 ) {
             return U_CE_SKIP_TARG;
@@ -3773,8 +3773,8 @@ static UCompareCEsResult compareCE64s(int64_t targCE, int64_t patCE, int16_t com
     }
     
     mask = 0xFFFF0000;
-    int32_t targLev3 = targCE & mask;
-    int32_t patLev3 = patCE & mask;
+    int32_t targLev3 = (int32_t)(targCE & mask);
+    int32_t patLev3 = (int32_t)(patCE & mask);
     if ( targLev3 != patLev3 ) {
         return (patLev3 == U_CE_LEVEL3_BASE || (compareType == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD && targLev3 == U_CE_LEVEL3_BASE) )?
             U_CE_MATCH: U_CE_NO_MATCH;
@@ -3829,7 +3829,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
 
 
     int32_t    targetIx = 0;
-    const CEI *targetCEI;
+    const CEI *targetCEI = NULL;
     int32_t    patIx;
     UBool      found;
 
@@ -3884,7 +3884,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         }
         targetIxOffset += strsrch->pattern.PCELength; // this is now the offset in target CE space to end of the match so far
 
-        if (!found && targetCEI->ce != UCOL_PROCESSED_NULLORDER) {
+        if (!found && ((targetCEI == NULL) || (targetCEI->ce != UCOL_PROCESSED_NULLORDER))) {
             // No match at this targetIx.  Try again at the next.
             continue;
         }
@@ -4102,7 +4102,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
     }
 
 
-   const CEI  *targetCEI;
+    const CEI *targetCEI = NULL;
     int32_t    patIx;
     UBool      found;
 
@@ -4149,7 +4149,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             }
         }
 
-        if (!found && targetCEI->ce != UCOL_PROCESSED_NULLORDER) {
+        if (!found && ((targetCEI == NULL) || (targetCEI->ce != UCOL_PROCESSED_NULLORDER))) {
             // No match at this targetIx.  Try again at the next.
             continue;
         }
