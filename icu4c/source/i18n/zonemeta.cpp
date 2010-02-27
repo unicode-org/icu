@@ -30,8 +30,8 @@ static UHashtable *gOlsonToMeta = NULL;
 static UBool gOlsonToMetaInitialized = FALSE;
 
 // Country info vectors
-static UVector *gSingleZoneCountries = NULL;
-static UVector *gMultiZonesCountries = NULL;
+static U_NAMESPACE_QUALIFIER UVector *gSingleZoneCountries = NULL;
+static U_NAMESPACE_QUALIFIER UVector *gMultiZonesCountries = NULL;
 static UBool gCountryInfoVectorsInitialized = FALSE;
 
 U_CDECL_BEGIN
