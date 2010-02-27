@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -421,7 +421,7 @@ sumUpStates(UCMStates *states) {
 }
 
 U_CAPI void U_EXPORT2
-ucm_processStates(UCMStates *states) {
+ucm_processStates(UCMStates *states, UBool ignoreSISOCheck) {
     int32_t entry, state, cell, count;
 
     if(states->conversionType==UCNV_UNSUPPORTED_CONVERTER) {
@@ -557,10 +557,11 @@ ucm_processStates(UCMStates *states) {
             exit(U_INVALID_TABLE_FORMAT);
         }
         /* are the SI/SO all in the right places? */
-        if( states->stateTable[0][0xe]==MBCS_ENTRY_FINAL(1, MBCS_STATE_CHANGE_ONLY, 0) &&
+        if( ignoreSISOCheck ||
+           (states->stateTable[0][0xe]==MBCS_ENTRY_FINAL(1, MBCS_STATE_CHANGE_ONLY, 0) &&
             states->stateTable[0][0xf]==MBCS_ENTRY_FINAL(0, MBCS_STATE_CHANGE_ONLY, 0) &&
             states->stateTable[1][0xe]==MBCS_ENTRY_FINAL(1, MBCS_STATE_CHANGE_ONLY, 0) &&
-            states->stateTable[1][0xf]==MBCS_ENTRY_FINAL(0, MBCS_STATE_CHANGE_ONLY, 0)
+            states->stateTable[1][0xf]==MBCS_ENTRY_FINAL(0, MBCS_STATE_CHANGE_ONLY, 0))
         ) {
             states->outputType=MBCS_OUTPUT_2_SISO;
         } else {

@@ -79,6 +79,7 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
  */
 UBool VERBOSE = FALSE;
 UBool SMALL = FALSE;
+UBool IGNORE_SISO_CHECK = FALSE;
 
 static void
 createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCode);
@@ -174,6 +175,7 @@ enum {
     OPT_DESTDIR,
     OPT_VERBOSE,
     OPT_SMALL,
+    OPT_IGNORE_SISO_CHECK,
     OPT_COUNT
 };
 
@@ -184,7 +186,8 @@ static UOption options[]={
     UOPTION_VERSION,
     UOPTION_DESTDIR,
     UOPTION_VERBOSE,
-    { "small", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 }
+    { "small", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 },
+    { "ignore-siso-check", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 }
 };
 
 int main(int argc, char* argv[])
@@ -236,7 +239,8 @@ int main(int argc, char* argv[])
             "\t      --small       Generate smaller .cnv files. They will be\n"
             "\t                    significantly smaller but may not be compatible with\n"
             "\t                    older versions of ICU and will require heap memory\n"
-            "\t                    allocation when loaded.\n");
+            "\t                    allocation when loaded.\n"
+            "\t      --ignore-siso-check         Use SI/SO other than 0xf/0xe.\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
@@ -252,6 +256,10 @@ int main(int argc, char* argv[])
     destdir = options[OPT_DESTDIR].value;
     VERBOSE = options[OPT_VERBOSE].doesOccur;
     SMALL = options[OPT_SMALL].doesOccur;
+
+    if (options[OPT_IGNORE_SISO_CHECK].doesOccur) {
+        IGNORE_SISO_CHECK = TRUE;
+    }
 
     if (destdir != NULL && *destdir != 0) {
         uprv_strcpy(outFileName, destdir);
@@ -579,7 +587,7 @@ readFile(ConvData *data, const char* converterName,
     if(data->ucm->baseName[0]==0) {
         dataIsBase=TRUE;
         baseStates=&data->ucm->states;
-        ucm_processStates(baseStates);
+        ucm_processStates(baseStates, IGNORE_SISO_CHECK);
     } else {
         dataIsBase=FALSE;
         baseStates=NULL;
@@ -782,7 +790,7 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                     fprintf(stderr, "       the substitution character byte sequence is illegal in this codepage structure!\n");
                     *pErrorCode=U_INVALID_TABLE_FORMAT;
 
-                } else if(staticData->subChar1!=0 && 1!=ucm_countChars(baseStates, &staticData->subChar1, 1)) {
+                } else if(1!=ucm_countChars(baseStates, &staticData->subChar1, 1)) {
                     fprintf(stderr, "       the subchar1 byte is illegal in this codepage structure!\n");
                     *pErrorCode=U_INVALID_TABLE_FORMAT;
 
