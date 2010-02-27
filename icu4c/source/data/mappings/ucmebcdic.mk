@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2007, International Business Machines Corporation and
+# Copyright (c) 1999-2010, International Business Machines Corporation and
 # others. All Rights Reserved.
 # A list of EBCDIC UCM's to build
 # ibm-37 and ibm-1047 are already mentioned in makedata.mak and Makefile.in
@@ -25,3 +25,5 @@ ibm-297_P100-1995.ucm ibm-420_X120-1999.ucm ibm-424_P100-1995.ucm\
 ibm-4517_P100-2005.ucm ibm-4899_P100-1998.ucm ibm-4971_P100-1999.ucm\
 ibm-500_P100-1995.ucm ibm-5123_P100-1999.ucm ibm-803_P100-1999.ucm\
 ibm-8482_P100-1999.ucm ibm-9067_X100-2005.ucm ibm-16684_P110-2003.ucm
+
+UCM_SOURCE_EBCDIC_IGNORE_SISO =

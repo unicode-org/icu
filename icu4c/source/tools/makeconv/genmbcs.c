@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -687,7 +687,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     maxCharLength=mbcsData->ucm->states.maxCharLength;
 
     if( mbcsData->ucm->states.outputType==MBCS_OUTPUT_2_SISO &&
-        (*bytes==0xe || *bytes==0xf)
+        (!IGNORE_SISO_CHECK && (*bytes==0xe || *bytes==0xf))
     ) {
         fprintf(stderr, "error: illegal mapping to SI or SO for SI/SO codepage: U+%04x<->0x%s\n",
             (int)c, printBytes(buffer, bytes, length));

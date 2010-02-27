@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,6 +25,7 @@
 /* exports from makeconv.c */
 U_CFUNC UBool VERBOSE;
 U_CFUNC UBool SMALL;
+U_CFUNC UBool IGNORE_SISO_CHECK;
 
 /* converter table type for writing */
 enum {
