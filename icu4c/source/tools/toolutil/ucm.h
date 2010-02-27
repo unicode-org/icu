@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2003-2009, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  ucm.h
@@ -237,7 +237,7 @@ U_CAPI void U_EXPORT2
 ucm_addState(UCMStates *states, const char *s);
 
 U_CAPI void U_EXPORT2
-ucm_processStates(UCMStates *states);
+ucm_processStates(UCMStates *states, UBool ignoreSISOCheck);
 
 U_CAPI int32_t U_EXPORT2
 ucm_countChars(UCMStates *states,
