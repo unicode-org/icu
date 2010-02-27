@@ -115,6 +115,8 @@ distclean : distclean-local
 dist: 
 check: all
 
+-include Makefile.local
+
 
 distclean-local: clean
 	$(RMV) Makefile
@@ -163,7 +165,7 @@ endif
 packagedata: icupkg.inc $(PKGDATA_LIST) build-local
 ifneq ($(ENABLE_STATIC),)
 ifeq ($(PKGDATA_MODE),dll)
-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_LIST)
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
 endif
 endif
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)

@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2008, International Business Machines
+#   Copyright (C) 1999-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -113,7 +113,8 @@ ICULIBS_LAYOUTEX = -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_BASE = $(LIBS) -L$(libdir)
 
 # for icu-config to test with
-ICULIBS_COMMON_LIB_NAME = ${LIBICU}uc${ICULIBSUFFIX}${ICULIBSUFFIX_VERSION}.${SO}
+ICULIBS_COMMON_LIB_NAME = ${LIBICU}${COMMON_STUBNAME}${ICULIBSUFFIX}${ICULIBSUFFIX_VERSION}.${SO}
+ICULIBS_COMMON_LIB_NAME_A = ${LIBICU}${COMMON_STUBNAME}${ICULIBSUFFIX}.${A}
 
 # ICULIBS is the set of libraries your application should link
 # with usually. Many applications will want to add $(ICULIBS_I18N) as well. 

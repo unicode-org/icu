@@ -115,9 +115,9 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 static int32_t pkg_createWithAssemblyCode(const char *targetDir, const char mode, const char *gencFilePath);
 static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command = NULL);
 static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UBool reverseExt);
-static void createFileNames(const char mode, const char *version_major, const char *version, const char *libName, const UBool reverseExt);
+static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, const UBool reverseExt);
 
-static int32_t pkg_getOptionsFromICUConfig(UOption *option);
+static int32_t pkg_getOptionsFromICUConfig(UBool verbose, UOption *option);
 static int runCommand(const char* command);
 
 enum {
@@ -285,7 +285,7 @@ main(int argc, char* argv[]) {
 
 #ifndef WINDOWS_WITH_MSVC
         if(!options[BLDOPT].doesOccur && uprv_strcmp(options[MODE].value, "common") != 0) {
-            if (pkg_getOptionsFromICUConfig(&options[BLDOPT]) != 0) {
+          if (pkg_getOptionsFromICUConfig(options[VERBOSE].doesOccur, &options[BLDOPT]) != 0) {
                 fprintf(stderr, " required parameter is missing: -O is required for static and shared builds.\n");
                 fprintf(stderr, "Run '%s --help' for help.\n", progname);
                 return 1;
@@ -380,6 +380,7 @@ main(int argc, char* argv[]) {
     }
 
     o.verbose   = options[VERBOSE].doesOccur;
+
 
 #ifndef WINDOWS_WITH_MSVC /* on UNIX, we'll just include the file... */
     if (options[BLDOPT].doesOccur) {
@@ -502,6 +503,10 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 uprv_strcat(targetDir, PKGDATA_FILE_SEP_STRING);
                 uprv_strcat(targetDir, o->shortName);
             }
+            
+            if(o->verbose) {
+              fprintf(stdout, "# Install: Files mode, copying files to %s..\n", targetDir);
+            }
             result = pkg_installFileMode(targetDir, o->srcDir, o->fileListFiles->str);
         }
         return result;
@@ -519,6 +524,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
         uprv_strcat(datFileNamePath, datFileName);
 
+        if(o->verbose) {
+          fprintf(stdout, "# Writing package file %s ..\n", datFileNamePath);
+        }
         result = writePackageDatFile(datFileNamePath, o->comment, o->srcDir, o->fileListFiles->str, NULL, U_CHARSET_FAMILY ? 'e' :  U_IS_BIG_ENDIAN ? 'b' : 'l');
         if (result != 0) {
             fprintf(stderr,"Error writing package dat file.\n");
@@ -540,6 +548,10 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
             /* Move the dat file created to the target directory. */
             result = rename(datFileNamePath, targetFileNamePath);
+
+            if(o->verbose) {
+              fprintf(stdout, "# Moving package file to %s ..\n", targetFileNamePath);
+            }
             if (result != 0) {
                 fprintf(stderr, "Unable to move dat file (%s) to target location (%s).\n", datFileNamePath, targetFileNamePath);
             }
@@ -567,8 +579,19 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 return -1;
             }
 
+            if(o->verbose) {
+              fprintf(stdout, "# pkgDataFlags=");
+              for(int32_t i=0;i<PKGDATA_FLAGS_SIZE && pkgDataFlags[i][0];i++) {
+                fprintf(stdout, "%c \"%s\"", (i>0)?',':' ',pkgDataFlags[i]);
+              }
+              fprintf(stdout, "\n");
+            }
+
 #ifndef WINDOWS_WITH_MSVC
             /* Read in options file. */
+            if(o->verbose) {
+              fprintf(stdout, "# Reading options file %s\n", o->options);
+            }
             parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
             if (U_FAILURE(status)) {
                 fprintf(stderr,"Unable to open or read \"%s\" option file. status = %s\n", o->options, u_errorName(status));
@@ -595,18 +618,29 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 #endif
             /* Using the base libName and version number, generate the library file names. */
-            createFileNames(mode, version_major, o->version, o->libName, reverseExt);
+            createFileNames(o, mode, version_major, o->version, o->libName, reverseExt);
 
-            if (o->version != 0 && o->rebuild == FALSE) {
+            if ((o->version!=NULL || (mode==MODE_STATIC)) && o->rebuild == FALSE) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
                 sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION]);
                 if (T_FileStream_file_exists(checkLibFile)) {
                     if (isFileModTimeLater(checkLibFile, o->srcDir, TRUE) && isFileModTimeLater(checkLibFile, o->options)) {
                         if (o->install != NULL) {
-                            result = pkg_installLibrary(o->install, targetDir);
+                          if(o->verbose) {
+                            fprintf(stdout, "# Installing already-built library into %s\n", o->install);
+                          }
+                          result = pkg_installLibrary(o->install, targetDir);
+                        } else {
+                          if(o->verbose) {
+                            printf("# Not rebuilding %s - up to date.\n", checkLibFile);
+                          }
                         }
                         return result;
+                    } else if (o->verbose && (o->install!=NULL)) {
+                      fprintf(stdout, "# Not installing up-to-date library %s into %s\n", checkLibFile, o->install);
                     }
+                } else if(o->verbose && (o->install!=NULL)) {
+                  fprintf(stdout, "# Not installing missing %s into %s\n", checkLibFile, o->install);
                 }
             }
 
@@ -616,8 +650,14 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             if (pkgDataFlags[GENCCODE_ASSEMBLY_TYPE][0] != 0) {
                 const char* genccodeAssembly = pkgDataFlags[GENCCODE_ASSEMBLY_TYPE];
 
+                if(o->verbose) {
+                  fprintf(stdout, "# Generating assembly code %s of type %s ..\n", gencFilePath, genccodeAssembly);
+                }
+                
                 /* Offset genccodeAssembly by 3 because "-a " */
-                if (checkAssemblyHeaderName(genccodeAssembly+3)) {
+                if (genccodeAssembly &&
+                    (uprv_strlen(genccodeAssembly)>3) &&
+                    checkAssemblyHeaderName(genccodeAssembly+3)) {
                     writeAssemblyCode(datFileNamePath, o->tmpDir, o->entryName, NULL, gencFilePath);
 
                     result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
@@ -625,13 +665,22 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         fprintf(stderr, "Error generating assembly code for data.\n");
                         return result;
                     } else if (mode == MODE_STATIC) {
-                        return result;
+                      if(o->install != NULL) {
+                        if(o->verbose) {
+                          fprintf(stdout, "# Installing static library into %s\n", o->install);
+                        }
+                        result = pkg_installLibrary(o->install, targetDir);
+                      }
+                      return result;
                     }
                 } else {
                     fprintf(stderr,"Assembly type \"%s\" is unknown.\n", genccodeAssembly);
                     return -1;
                 }
             } else {
+                if(o->verbose) {
+                  fprintf(stdout, "# Writing object code to %s ..\n", gencFilePath);
+                }
 #ifdef CAN_WRITE_OBJ_CODE
                 writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, NULL, NULL, gencFilePath);
 #ifdef U_LINUX
@@ -650,6 +699,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 #ifndef U_WINDOWS
             if(mode != MODE_STATIC) {
                 /* Certain platforms uses archive library. (e.g. AIX) */
+                if(o->verbose) {
+                  fprintf(stdout, "# Creating data archive library file ..\n");
+                }
                 result = pkg_archiveLibrary(targetDir, o->version, reverseExt);
                 if (result != 0) {
                     fprintf(stderr, "Error creating data archive library file.\n");
@@ -666,6 +718,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             } /* !MODE_STATIC */
             /* Install the libraries if option was set. */
             if (o->install != NULL) {
+                if(o->verbose) {
+                  fprintf(stdout, "# Installing library file to %s ..\n", o->install);
+                }
                 result = pkg_installLibrary(o->install, targetDir);
                 if (result != 0) {
                     fprintf(stderr, "Error installing the data library.\n");
@@ -681,10 +736,15 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
  * Given the base libName and version numbers, generate the libary file names and store it in libFileNames.
  * Depending on the configuration, the library name may either end with version number or shared object suffix.
  */
-static void createFileNames(const char mode, const char *version_major, const char *version, const char *libName, UBool reverseExt) {
+static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, UBool reverseExt) {
         sprintf(libFileNames[LIB_FILE], "%s%s",
                 pkgDataFlags[LIBPREFIX],
                 libName);
+
+        if(o->verbose) {
+          fprintf(stdout, "# libFileName[LIB_FILE] = %s\n", libFileNames[LIB_FILE]);
+        }
+
         if (version != NULL) {
 #ifdef U_CYGWIN
             sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s%s.%s",
@@ -718,6 +778,9 @@ static void createFileNames(const char mode, const char *version_major, const ch
                     reverseExt ? version : pkgDataFlags[SO_EXT],
                     reverseExt ? pkgDataFlags[SO_EXT] : version);
 
+            if(o->verbose) {
+              fprintf(stdout, "# libFileName[LIB_FILE_VERSION] = %s\n", libFileNames[LIB_FILE_VERSION]);
+            }
 
 #ifdef U_CYGWIN
             /* Cygwin only deals with the version major number. */
@@ -727,6 +790,9 @@ static void createFileNames(const char mode, const char *version_major, const ch
         if(mode == MODE_STATIC) {
             sprintf(libFileNames[LIB_FILE_VERSION], "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
             libFileNames[LIB_FILE_VERSION_MAJOR][0]=0;
+            if(o->verbose) {
+              fprintf(stdout, "# libFileName[LIB_FILE_VERSION] = %s  (static)\n", libFileNames[LIB_FILE_VERSION]);
+            }
         }
 }
 
@@ -1288,7 +1354,10 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         /* Check if dll file and lib file exists and that it is not newer than genc file. */
         if (!o->rebuild && (T_FileStream_file_exists(dllFilePath) && isFileModTimeLater(dllFilePath, gencFilePath)) &&
             (T_FileStream_file_exists(libFilePath) && isFileModTimeLater(libFilePath, gencFilePath))) {
-            return 0;
+          if(o->verbose) {
+            printf("# Not rebuilding %s - up to date.\n", gencFilePath);
+          }
+          return 0;
         }
 
         sprintf(cmd, "%s\"%s\" %s\"%s\" \"%s\" \"%s\"",
@@ -1423,7 +1492,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 
     for(l = o->fileListFiles; l; l = l->next) {
         if(o->verbose) {
-            fprintf(stdout, "# Reading %s..\n", l->str);
+            fprintf(stdout, "# pkgdata: Reading %s..\n", l->str);
         }
         /* TODO: stdin */
         in = T_FileStream_open(l->str, "r"); /* open files list */
@@ -1514,9 +1583,9 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 }
 
 /* Try calling icu-config directly to get the option file. */
-static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
+ static int32_t pkg_getOptionsFromICUConfig(UBool verbose, UOption *option) {
 #if U_HAVE_POPEN
-    FILE *p;
+    FILE *p = NULL;
     size_t n;
     static char buf[512] = "";
     char cmdBuf[1024];
@@ -1528,10 +1597,17 @@ static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
     if(U_SUCCESS(status)) {
       uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
       uprv_strncat(cmdBuf, cmd, 1024);
+      
+      if(verbose) {
+        fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf);
+      }
       p = popen(cmdBuf, "r");
     }
 
     if(p == NULL) {
+      if(verbose) {
+        fprintf(stdout, "# Calling icu-config: %s\n", cmd);
+      }
       p = popen(cmd, "r");      
     }
 
@@ -1568,6 +1644,10 @@ static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
     {
         fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
         return -1;
+    }
+
+    if(verbose) {
+      fprintf(stdout, "# icu-config said: %s\n", buf);
     }
 
     option->value = buf;
