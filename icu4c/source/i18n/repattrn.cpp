@@ -281,14 +281,14 @@ RegexPattern::compile(const UnicodeString &regex,
     
     const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
     UREGEX_DOTALL   | UREGEX_MULTILINE        | UREGEX_UWORD |
-    UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES;
+    UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES | UREGEX_LITERAL;
     
     if ((flags & ~allFlags) != 0) {
         status = U_REGEX_INVALID_FLAG;
         return NULL;
     }
     
-    if ((flags & UREGEX_CANON_EQ) != 0) {
+    if ((flags & (UREGEX_CANON_EQ | UREGEX_LITERAL)) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }
@@ -332,14 +332,14 @@ RegexPattern::compile(UText                *regex,
 
     const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
                               UREGEX_DOTALL   | UREGEX_MULTILINE        | UREGEX_UWORD |
-                              UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES;
+                              UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES | UREGEX_LITERAL;
 
     if ((flags & ~allFlags) != 0) {
         status = U_REGEX_INVALID_FLAG;
         return NULL;
     }
 
-    if ((flags & UREGEX_CANON_EQ) != 0) {
+    if ((flags & (UREGEX_CANON_EQ | UREGEX_LITERAL)) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }
