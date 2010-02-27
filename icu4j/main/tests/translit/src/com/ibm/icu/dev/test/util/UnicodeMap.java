@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -861,7 +861,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
      * @see java.util.Map#size()
      */
     public int size() {
-        int result = stringMap.size();
+        int result = stringMap == null ? 0 : stringMap.size();
         for (int i = 0; i < length-1; ++i) {
             T value = values[i];
             if (value == null) continue;
