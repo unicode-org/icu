@@ -454,7 +454,7 @@ utext_equals(const UText *a, const UText *b) {
 U_CAPI int32_t U_EXPORT2
 utext_compare(UText *s1, int32_t length1,
               UText *s2, int32_t length2) {
-    UChar32 c1, c2;
+    UChar32 c1 = 0, c2 = 0;
     
     if(length1<0 && length2<0) {
         /* strcmp style, go until end of string */
@@ -1546,7 +1546,7 @@ fillForward:
         int32_t  destIx       = 0;
         int32_t  srcIx        = ix;
         UBool    seenNonAscii = FALSE;
-        UChar32   c;
+        UChar32  c = 0;
 
         // Fill the chunk buffer and mapping arrays.
         while (destIx<UTF8_TEXT_CHUNK_SIZE) {
@@ -1554,9 +1554,9 @@ fillForward:
             if (c>0 && c<0x80) {
                 // Special case ASCII range for speed.
                 //   zero is excluded to simplify bounds checking.
-                buf[destIx] = c;
-                mapToNative[destIx]    = srcIx - ix;
-                mapToUChars[srcIx-ix]  = destIx;
+                buf[destIx] = (UChar)c;
+                mapToNative[destIx]    = (uint8_t)(srcIx - ix);
+                mapToUChars[srcIx-ix]  = (uint8_t)destIx;
                 srcIx++;
                 destIx++;
             } else {
@@ -1581,11 +1581,11 @@ fillForward:
 
                 U16_APPEND_UNSAFE(buf, destIx, c);
                 do {
-                    mapToNative[dIx++] = cIx - ix;
+                    mapToNative[dIx++] = (uint8_t)(cIx - ix);
                 } while (dIx < destIx);
 
                 do {
-                    mapToUChars[cIx++ - ix] = dIxSaved;
+                    mapToUChars[cIx++ - ix] = (uint8_t)dIxSaved;
                 } while (cIx < srcIx);
             }
             if (srcIx>=strLen) {
@@ -1596,8 +1596,8 @@ fillForward:
 
         //  store Native <--> Chunk Map entries for the end of the buffer.
         //    There is no actual character here, but the index position is valid.
-        mapToNative[destIx]     = srcIx - ix;
-        mapToUChars[srcIx - ix] = destIx;
+        mapToNative[destIx]     = (uint8_t)(srcIx - ix);
+        mapToUChars[srcIx - ix] = (uint8_t)destIx;
 
         //  fill in Buffer descriptor
         u8b->bufNativeStart     = ix;
@@ -1663,8 +1663,8 @@ fillReverse:
         // Map to/from Native Indexes, fill in for the position at the end of
         //   the buffer.
         //
-        mapToNative[destIx] = srcIx - toUCharsMapStart;
-        mapToUChars[srcIx - toUCharsMapStart] = destIx;
+        mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
+        mapToUChars[srcIx - toUCharsMapStart] = (uint8_t)destIx;
 
         // Fill the chunk buffer
         // Work backwards, filling from the end of the buffer towards the front.
@@ -1677,9 +1677,9 @@ fillReverse:
             c = s8[srcIx];
             if (c<0x80) {
                 // Special case ASCII range for speed.
-                buf[destIx] = c;
-                mapToUChars[srcIx - toUCharsMapStart] = destIx;
-                mapToNative[destIx] = srcIx - toUCharsMapStart;
+                buf[destIx] = (UChar)c;
+                mapToUChars[srcIx - toUCharsMapStart] = (uint8_t)destIx;
+                mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
             } else {
                 // General case, handle everything non-ASCII.
 
@@ -1698,18 +1698,18 @@ fillReverse:
 
                 // Store the character in UTF-16 buffer.
                 if (c<0x10000) {
-                    buf[destIx] = c;
-                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                    buf[destIx] = (UChar)c;
+                    mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
                 } else {
                     buf[destIx]         = U16_TRAIL(c);
-                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                    mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
                     buf[--destIx]       = U16_LEAD(c);
-                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                    mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
                 }
 
                 // Fill in the map from native indexes to UChars buf index.
                 do {
-                    mapToUChars[sIx-- - toUCharsMapStart] = destIx;
+                    mapToUChars[sIx-- - toUCharsMapStart] = (uint8_t)destIx;
                 } while (sIx >= srcIx);
 
                 // Set native indexing limit to be the current position.

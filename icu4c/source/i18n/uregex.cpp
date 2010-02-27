@@ -446,7 +446,7 @@ uregex_getText(URegularExpression *regexp2,
         int64_t inputNativeLength = utext_nativeLength(inputText);
         if (UTEXT_FULL_TEXT_IN_CHUNK(inputText, inputNativeLength)) {
             regexp->fText = inputText->chunkContents;
-            regexp->fTextLength = inputNativeLength;
+            regexp->fTextLength = (int32_t)inputNativeLength;
             regexp->fOwnsText = FALSE; // because the UText owns it
         } else {
             UErrorCode lengthStatus = U_ZERO_ERROR;
@@ -1242,8 +1242,8 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
         int32_t matchStart;
         int32_t lastMatchEnd;
         if (UTEXT_USES_U16(m->fInputText)) {
-            lastMatchEnd = m->fLastMatchEnd;
-            matchStart = m->fMatchStart;
+            lastMatchEnd = (int32_t)m->fLastMatchEnd;
+            matchStart = (int32_t)m->fMatchStart;
         } else {
             // !!!: Would like a better way to do this!
             UErrorCode status = U_ZERO_ERROR;
@@ -1470,7 +1470,7 @@ int32_t RegexCImpl::appendTail(RegularExpression    *regexp,
         if (nativeIdx == -1) {
             srcIdx = 0;
         } else if (UTEXT_USES_U16(m->fInputText)) {
-            srcIdx = nativeIdx;
+            srcIdx = (int32_t)nativeIdx;
         } else {
             UErrorCode status = U_ZERO_ERROR;
             srcIdx = utext_extract(m->fInputText, 0, nativeIdx, NULL, 0, &status);
