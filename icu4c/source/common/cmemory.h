@@ -169,7 +169,7 @@ public:
     /**
      * Default constructor initializes with internal T[stackCapacity] buffer.
      */
-    MaybeStackArray() : ptr(stackArray), capacity(stackCapacity), needToRelease(FALSE) {}
+    MaybeStackArray() : needToRelease(FALSE), capacity(stackCapacity), ptr(stackArray) {}
     /**
      * Destructor deletes the array (if owned).
      */
@@ -240,9 +240,9 @@ public:
      */
     inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
 private:
-    T *ptr;
-    int32_t capacity;
     UBool needToRelease;
+    int32_t capacity;
+    T *ptr;
     T stackArray[stackCapacity];
     void releaseArray() {
         if(needToRelease) {
