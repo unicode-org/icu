@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008,2010 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -29,6 +29,7 @@ SearchIterator::SearchIterator(const SearchIterator &other)
     m_search_->breakIter        = other.m_search_->breakIter;
     m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
     m_search_->isOverlap        = other.m_search_->isOverlap;
+    m_search_->elementComparisonType = other.m_search_->elementComparisonType;
     m_search_->matchedIndex     = other.m_search_->matchedIndex;
     m_search_->matchedLength    = other.m_search_->matchedLength;
     m_search_->text             = other.m_search_->text;
@@ -57,6 +58,13 @@ void SearchIterator::setAttribute(USearchAttribute       attribute,
         case USEARCH_CANONICAL_MATCH :
             m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
             break;
+        case USEARCH_ELEMENT_COMPARISON :
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                m_search_->elementComparisonType = (int16_t)value;
+            } else {
+                m_search_->elementComparisonType = 0;
+            }
+            break;
         default:
             status = U_ILLEGAL_ARGUMENT_ERROR;
         }
@@ -75,6 +83,15 @@ USearchAttributeValue SearchIterator::getAttribute(
     case USEARCH_CANONICAL_MATCH :
         return (m_search_->isCanonicalMatch == TRUE ? USEARCH_ON : 
                                                                 USEARCH_OFF);
+    case USEARCH_ELEMENT_COMPARISON :
+        {
+            int16_t value = m_search_->elementComparisonType;
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                return (USearchAttributeValue)value;
+            } else {
+                return USEARCH_STANDARD_ELEMENT_COMPARISON;
+            }
+        }
     default :
         return USEARCH_DEFAULT;
     }
@@ -167,6 +184,7 @@ UBool SearchIterator::operator==(const SearchIterator &that) const
     return (m_breakiterator_            == that.m_breakiterator_ &&
             m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
             m_search_->isOverlap        == that.m_search_->isOverlap &&
+            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
             m_search_->matchedIndex     == that.m_search_->matchedIndex &&
             m_search_->matchedLength    == that.m_search_->matchedLength &&
             m_search_->textLength       == that.m_search_->textLength &&
@@ -315,6 +333,7 @@ void SearchIterator::reset()
     setOffset(0, status);
     m_search_->isOverlap          = FALSE;
     m_search_->isCanonicalMatch   = FALSE;
+    m_search_->elementComparisonType = 0;
     m_search_->isForwardSearching = TRUE;
     m_search_->reset              = TRUE;
 }
@@ -327,6 +346,7 @@ SearchIterator::SearchIterator()
     m_search_->breakIter          = NULL;
     m_search_->isOverlap          = FALSE;
     m_search_->isCanonicalMatch   = FALSE;
+    m_search_->elementComparisonType = 0;
     m_search_->isForwardSearching = TRUE;
     m_search_->reset              = TRUE;
     m_search_->matchedIndex       = USEARCH_DONE;
@@ -345,6 +365,7 @@ SearchIterator::SearchIterator(const UnicodeString &text,
     m_search_->breakIter          = NULL;
     m_search_->isOverlap          = FALSE;
     m_search_->isCanonicalMatch   = FALSE;
+    m_search_->elementComparisonType = 0;
     m_search_->isForwardSearching = TRUE;
     m_search_->reset              = TRUE;
     m_search_->matchedIndex       = USEARCH_DONE;
@@ -361,6 +382,7 @@ SearchIterator::SearchIterator(CharacterIterator &text,
     m_search_->breakIter          = NULL;
     m_search_->isOverlap          = FALSE;
     m_search_->isCanonicalMatch   = FALSE;
+    m_search_->elementComparisonType = 0;
     m_search_->isForwardSearching = TRUE;
     m_search_->reset              = TRUE;
     m_search_->matchedIndex       = USEARCH_DONE;
@@ -381,6 +403,7 @@ SearchIterator & SearchIterator::operator=(const SearchIterator &that)
         m_search_->breakIter        = that.m_search_->breakIter;
         m_search_->isCanonicalMatch = that.m_search_->isCanonicalMatch;
         m_search_->isOverlap        = that.m_search_->isOverlap;
+        m_search_->elementComparisonType = that.m_search_->elementComparisonType;
         m_search_->matchedIndex     = that.m_search_->matchedIndex;
         m_search_->matchedLength    = that.m_search_->matchedLength;
         m_search_->text             = that.m_search_->text;

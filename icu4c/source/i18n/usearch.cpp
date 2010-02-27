@@ -25,6 +25,7 @@
 U_NAMESPACE_USE
 
 // don't use Boyer-Moore
+// (and if we decide to turn this on again there are several new TODOs that will need to be addressed)
 #define BOYER_MOORE 0
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -3723,6 +3724,68 @@ static UBool onBreakBoundaries(const UStringSearch *strsrch, int32_t start, int3
 }
 #endif
 
+typedef enum {
+    U_CE_MATCH = -1,
+    U_CE_NO_MATCH = 0,
+    U_CE_SKIP_TARG,
+    U_CE_SKIP_PATN
+} UCompareCEsResult;
+#define U_CE_LEVEL2_BASE 0x00000005
+#define U_CE_LEVEL3_BASE 0x00050000
+
+static UCompareCEsResult compareCE64s(int64_t targCE, int64_t patCE, int16_t compareType) {
+    if (targCE == patCE) {
+        return U_CE_MATCH;
+    }
+    if (compareType == 0) {
+        return U_CE_NO_MATCH;
+    }
+    
+    int64_t targCEshifted = targCE >> 32;
+    int64_t patCEshifted = patCE >> 32;
+    int64_t mask;
+
+    mask = 0xFFFF0000;
+    int32_t targLev1 = targCEshifted & mask;
+    int32_t patLev1 = patCEshifted & mask;
+    if ( targLev1 != patLev1 ) {
+        if ( targLev1 == 0 ) {
+            return U_CE_SKIP_TARG;
+        }
+        if ( patLev1 == 0 && compareType == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD ) {
+            return U_CE_SKIP_PATN;
+        }
+        return U_CE_NO_MATCH;
+    }
+
+    mask = 0x0000FFFF;
+    int32_t targLev2 = targCEshifted & mask;
+    int32_t patLev2 = patCEshifted & mask;
+    if ( targLev2 != patLev2 ) {
+        if ( targLev2 == 0 ) {
+            return U_CE_SKIP_TARG;
+        }
+        if ( patLev2 == 0 && compareType == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD ) {
+            return U_CE_SKIP_PATN;
+        }
+        return (patLev2 == U_CE_LEVEL2_BASE || (compareType == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD && targLev2 == U_CE_LEVEL2_BASE) )?
+            U_CE_MATCH: U_CE_NO_MATCH;
+    }
+    
+    mask = 0xFFFF0000;
+    int32_t targLev3 = targCE & mask;
+    int32_t patLev3 = patCE & mask;
+    if ( targLev3 != patLev3 ) {
+        return (patLev3 == U_CE_LEVEL3_BASE || (compareType == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD && targLev3 == U_CE_LEVEL3_BASE) )?
+            U_CE_MATCH: U_CE_NO_MATCH;
+   }
+
+    return U_CE_MATCH;
+}
+
+#if BOYER_MOORE
+// TODO: #if BOYER_MOORE, need 32-bit version of compareCE64s
+#endif
 
 U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
                                        int32_t        startIdx,
@@ -3779,22 +3842,47 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
 
     // Outer loop moves over match starting positions in the
     //      target CE space.
+    // Here we see the target as a sequence of collation elements, resulting from the following:
+    // 1. Target characters were decomposed, and (if appropriate) other compressions and expansions are applied
+    //    (for example, digraphs such as IJ may be broken into two characters).
+    // 2. An int64_t CE weight is determined for each resulting unit (high 16 bits are primary strength, next
+    //    16 bits are secondary, next 16 (the high 16 bits of the low 32-bit half) are tertiary. Any of these
+    //    fields that are for strengths below that of the collator are set to 0. If this makes the int64_t
+    //    CE weight 0 (as for a combining diacritic with secondary weight when the collator strentgh is primary),
+    //    then the CE is deleted, so the following code sees only CEs that are relevant.
+    // For each CE, the lowIndex and highIndex correspond to where this CE begins and ends in the original text.
+    // If lowIndex==highIndex, either the CE resulted from an expansion/decomposition of one of the original text
+    // characters, or the CE marks the limit of the target text (in which case the CE weight is UCOL_PROCESSED_NULLORDER).
+    //
     for(targetIx=0; ; targetIx++)
     {
         found = TRUE;
         //  Inner loop checks for a match beginning at each
         //  position from the outer loop.
+        int32_t targetIxOffset = 0;
+        int64_t patCE = 0;
         for (patIx=0; patIx<strsrch->pattern.PCELength; patIx++) {
-            int64_t patCE = strsrch->pattern.PCE[patIx];
-            targetCEI = ceb.get(targetIx+patIx);
+            patCE = strsrch->pattern.PCE[patIx];
+            targetCEI = ceb.get(targetIx+patIx+targetIxOffset);
             //  Compare CE from target string with CE from the pattern.
-            //    Note that the target CE will be UCOL_NULLORDER if we reach the end of input,
+            //    Note that the target CE will be UCOL_PROCESSED_NULLORDER if we reach the end of input,
             //    which will fail the compare, below.
-            if (targetCEI->ce != patCE) {
+            UCompareCEsResult ceMatch = compareCE64s(targetCEI->ce, patCE, strsrch->search->elementComparisonType);
+            if ( ceMatch == U_CE_NO_MATCH ) {
                 found = FALSE;
                 break;
+            } else if ( ceMatch > U_CE_NO_MATCH ) {
+                if ( ceMatch == U_CE_SKIP_TARG ) {
+                    // redo with same patCE, next targCE
+                    patIx--;
+                    targetIxOffset++;
+                } else { // ceMatch == U_CE_SKIP_PATN
+                    // redo with same targCE, next patCE
+                    targetIxOffset--;
+                }
             }
         }
+        targetIxOffset += strsrch->pattern.PCELength; // this is now the offset in target CE space to end of the match so far
 
         if (!found && targetCEI->ce != UCOL_PROCESSED_NULLORDER) {
             // No match at this targetIx.  Try again at the next.
@@ -3813,12 +3901,10 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //     an acceptable character range.
         //
         const CEI *firstCEI = ceb.get(targetIx);
-        const CEI *lastCEI  = ceb.get(targetIx + strsrch->pattern.PCELength - 1);
-        const CEI *nextCEI  = ceb.get(targetIx + strsrch->pattern.PCELength);
+        const CEI *lastCEI  = ceb.get(targetIx + targetIxOffset - 1);
 
         mStart   = firstCEI->lowIndex;
         minLimit = lastCEI->lowIndex;
-        maxLimit = nextCEI->lowIndex;
 
         // Look at the CE following the match.  If it is UCOL_NULLORDER the match
         //   extended to the end of input, and the match is good.
@@ -3828,8 +3914,40 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //    1. The match extended to the last CE from the target text, which is OK, or
         //    2. The last CE that was part of the match is in an expansion that extends
         //       to the first CE after the match. In this case, we reject the match.
-        if (nextCEI->lowIndex == nextCEI->highIndex && nextCEI->ce != UCOL_PROCESSED_NULLORDER) {
-            found = FALSE;
+        if (strsrch->search->elementComparisonType == 0) {
+            const CEI *nextCEI  = ceb.get(targetIx + targetIxOffset);
+            maxLimit = nextCEI->lowIndex;
+            if (nextCEI->lowIndex == nextCEI->highIndex && nextCEI->ce != UCOL_PROCESSED_NULLORDER) {
+                found = FALSE;
+            }
+        } else {
+            const CEI *nextCEI;
+            for ( ; ; ++targetIxOffset ) {
+                nextCEI = ceb.get(targetIx + targetIxOffset);
+                maxLimit = nextCEI->lowIndex;
+				// If we are at the end of the target too, match succeeds
+                if (  nextCEI->ce == UCOL_PROCESSED_NULLORDER ) {
+                    break;
+                }
+                // As long as the next CE has primary weight of 0,
+                // it is part of the last target element matched by the pattern;
+                // make sure it can be part of a match with the last patCE
+                if ( (((nextCEI->ce) >> 32) & 0xFFFF0000UL) == 0 ) {
+                	UCompareCEsResult ceMatch = compareCE64s(nextCEI->ce, patCE, strsrch->search->elementComparisonType);
+                	if ( ceMatch == U_CE_NO_MATCH || ceMatch == U_CE_SKIP_PATN ) {
+                		found = FALSE;
+                		break;
+                	}
+                // If lowIndex == highIndex, this target CE is part of an expansion of the last matched
+                // target element, but it has non-zero primary weight => match fails
+                } else if ( nextCEI->lowIndex == nextCEI->highIndex ) {
+                	found = false;
+                	break;
+                // Else the target CE is not part of an expansion of the last matched element, match succeeds
+                } else {
+                	break;
+                }
+            }
         }
 
 
@@ -3998,21 +4116,36 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
 
     // Outer loop moves over match starting positions in the
     //      target CE space.
+    // Here, targetIx values increase toward the beginning of the base text (i.e. we get the text CEs in reverse order).
+    // But  patIx is 0 at the beginning of the pattern and increases toward the end.
+    // So this loop performs a comparison starting with the end of pattern, and prcessd toward the beginning of the pattern
+    // and the beginning of the base text.
     for(targetIx = limitIx; ; targetIx += 1)
     {
         found = TRUE;
         //  Inner loop checks for a match beginning at each
         //  position from the outer loop.
+        int32_t targetIxOffset = 0;
         for (patIx = strsrch->pattern.PCELength - 1; patIx >= 0; patIx -= 1) {
             int64_t patCE = strsrch->pattern.PCE[patIx];
 
-            targetCEI = ceb.getPrevious(targetIx + strsrch->pattern.PCELength - 1 - patIx);
+            targetCEI = ceb.getPrevious(targetIx + strsrch->pattern.PCELength - 1 - patIx + targetIxOffset);
             //  Compare CE from target string with CE from the pattern.
             //    Note that the target CE will be UCOL_NULLORDER if we reach the end of input,
             //    which will fail the compare, below.
-            if (targetCEI->ce != patCE) {
+            UCompareCEsResult ceMatch = compareCE64s(targetCEI->ce, patCE, strsrch->search->elementComparisonType);
+            if ( ceMatch == U_CE_NO_MATCH ) {
                 found = FALSE;
                 break;
+            } else if ( ceMatch > U_CE_NO_MATCH ) {
+                if ( ceMatch == U_CE_SKIP_TARG ) {
+                    // redo with same patCE, next targCE
+                    patIx++;
+                    targetIxOffset++;
+                } else { // ceMatch == U_CE_SKIP_PATN
+                    // redo with same targCE, next patCE
+                    targetIxOffset--;
+                }
             }
         }
 
@@ -4032,7 +4165,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
         //  There still is a chance of match failure if the CE range not correspond to
         //     an acceptable character range.
         //
-        const CEI *firstCEI = ceb.getPrevious(targetIx + strsrch->pattern.PCELength - 1);
+        const CEI *firstCEI = ceb.getPrevious(targetIx + strsrch->pattern.PCELength - 1 + targetIxOffset);
         const CEI *lastCEI  = ceb.getPrevious(targetIx);
         const CEI *nextCEI  = targetIx > 0? ceb.getPrevious(targetIx - 1) : NULL;
 
@@ -4188,6 +4321,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             if (lastce == UCOL_NULLORDER || lastce == UCOL_IGNORABLE) {
                 lastce = targetce;
             }
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             if (targetce == patternce[patternceindex]) {
                 // the first ce can be a contraction
                 found = TRUE;
@@ -4214,6 +4348,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             }
 
             patternceindex --;
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             found = found && targetce == patternce[patternceindex];
         }
 
@@ -4297,6 +4432,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
             if (lastce == UCOL_NULLORDER || lastce == UCOL_IGNORABLE) {
                 lastce = targetce;
             }
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             if (targetce == patternce[patternceindex]) {
                 // the first ce can be a contraction
                 found = TRUE;
@@ -4320,6 +4456,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
             }
 
             patternceindex --;
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             found = found && targetce == patternce[patternceindex];
         }
 
@@ -4417,6 +4554,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
             if (targetce == UCOL_IGNORABLE && strsrch->strength != UCOL_PRIMARY) {
                 continue;
             }
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             if (targetce == patternce[0]) {
                 found = TRUE;
                 break;
@@ -4442,6 +4580,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
                 continue;
             }
 
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             found = found && targetce == patternce[patternceindex];
             patternceindex ++;
         }
@@ -4533,6 +4672,7 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
                 firstce = targetce;
             }
 
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             if (targetce == patternce[0]) {
                 // the first ce can be a contraction
                 found = TRUE;
@@ -4558,6 +4698,7 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
                 continue;
             }
 
+            // TODO: #if BOYER_MOORE, replace with code using 32-bit version of compareCE64s
             found = found && targetce == patternce[patternceindex];
             patternceindex ++;
         }
