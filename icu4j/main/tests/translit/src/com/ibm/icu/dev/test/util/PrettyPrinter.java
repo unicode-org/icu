@@ -50,6 +50,7 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter setQuoter(StringTransform quoter) {
+        this.quoter = quoter;
         return this; // for chaining
     }
 

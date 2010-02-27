@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -45,10 +45,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             
             public String _getValue(int codePoint) {
                 switch(propEnum) {
-                    case UProperty.AGE: String temp = UCharacter.getAge(codePoint).toString();
-                        if (temp.equals("0.0.0.0")) return "unassigned";
-                        if (temp.endsWith(".0.0")) return temp.substring(0,temp.length()-4);
-                        return temp;
+                    case UProperty.AGE: return getAge(codePoint);
                     case UProperty.BIDI_MIRRORING_GLYPH: return UTF16.valueOf(UCharacter.getMirror(codePoint));
                     case UProperty.CASE_FOLDING: return UCharacter.foldCase(UTF16.valueOf(codePoint),true);
                     case UProperty.ISO_COMMENT: return UCharacter.getISOComment(codePoint);
@@ -97,6 +94,13 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 return null;
             }
 
+            private String getAge(int codePoint) {
+                String temp = UCharacter.getAge(codePoint).toString();
+                    if (temp.equals("0.0.0.0")) return "unassigned";
+                    if (temp.endsWith(".0.0")) return temp.substring(0,temp.length()-4);
+                return temp;
+            }
+
             /**
              * @param valueAlias null if unused.
              * @param valueEnum -1 if unused
@@ -130,6 +134,9 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
 
             private static int fixedGetPropertyValueEnum(int propEnum, String valueAlias) {
                 try {
+                    if (propEnum < BINARY_LIMIT) {
+                        propEnum = UProperty.ALPHABETIC;
+                    }
                     return UCharacter.getPropertyValueEnum(propEnum, valueAlias);
                 } catch (Exception e) {
                     return Integer.parseInt(valueAlias);
@@ -183,8 +190,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             public List _getAvailableValues(List result) {
                 if (result == null) result = new ArrayList();
                 if (propEnum == UProperty.AGE) {
-                    addAllUnique(getAges(),
-                        result);
+                    addAllUnique(getAges(), result);
                     return result;
                 }
                 if (propEnum < UProperty.INT_LIMIT) {
@@ -221,8 +227,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 if (AGES == null) {
                   Set ages = new TreeSet();
                   for (int i = 0; i < 0x10FFFF; ++i) {
-                    VersionInfo age = UCharacter.getAge(i);
-                    ages.add(age.toString());
+                    ages.add(getAge(i));
                   }
                   AGES = (String[]) ages.toArray(new String[ages.size()]);
                 }
@@ -333,6 +338,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             isTitlecase = UProperty.BINARY_LIMIT+6,
             isCasefolded = UProperty.BINARY_LIMIT+7,
             isCased = UProperty.BINARY_LIMIT+8,
+            BINARY_LIMIT = UProperty.BINARY_LIMIT+9,
 
             NFC  = UProperty.STRING_LIMIT,
             NFD  = UProperty.STRING_LIMIT+1,
