@@ -64,7 +64,7 @@ import com.ibm.icu.util.ULocale;
 //TODO(markdavis) return an additional character that is the "least greater" character than
 //the last character.
 public class IndexCharacters {
-    public static final char CGJ = '\u034F';
+    private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet("[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
@@ -87,6 +87,10 @@ public class IndexCharacters {
         this(locale, LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD), Collator.getInstance(locale));
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale, UnicodeSet exemplarSet, Collator collator) {
         this.locale = locale;

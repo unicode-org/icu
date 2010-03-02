@@ -212,6 +212,12 @@ public class LocalePriorityList implements Iterable<ULocale> {
         private final Map<ULocale, Double> languageToWeight 
         = new LinkedHashMap<ULocale, Double>();
 
+        /*
+         * Private constructor, only used by LocalePriorityList
+         */
+        private Builder() {
+        }
+
         /**
          * Creates a LocalePriorityList.  This is equivalent to
          * {@link Builder#build(boolean) Builder.build(false)}.

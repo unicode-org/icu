@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -398,5 +398,11 @@ public class CharsetCallback {
         }
         
         return length;
+    }
+
+    /*
+     * No need to create an instance
+     */
+    private CharsetCallback() {
     }
 }

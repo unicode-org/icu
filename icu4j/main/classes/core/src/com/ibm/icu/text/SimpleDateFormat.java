@@ -3110,6 +3110,10 @@ public class SimpleDateFormat extends DateFormat {
         return false;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected NumberFormat getNumberFormat(char ch) {
 
        Character ovrField;

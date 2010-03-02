@@ -484,6 +484,13 @@ public class LocaleMatcher {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        public LanguageMatcherData() {
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public double match(ULocale a, ULocale aMax, ULocale b, ULocale bMax) {
             double diff = 0;
             diff += languageScores.getScore(a, aMax, a.getLanguage(), aMax.getLanguage(), b, bMax, b.getLanguage(), bMax.getLanguage());
