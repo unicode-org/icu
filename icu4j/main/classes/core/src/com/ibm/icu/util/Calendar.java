@@ -1994,6 +1994,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         time = millis;
         areFieldsSet = areAllFieldsSet = false;
         isTimeSet = areFieldsVirtuallySet = true;
+        
+        for (int i=0; i<fields.length; ++i) {
+            fields[i] = stamp[i] = 0; // UNSET == 0
+        }
+        
     }
 
     /**
