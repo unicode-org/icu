@@ -337,11 +337,13 @@ _getStringOrCopyKey(const char *path, const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
+typedef  int32_t U_CALLCONV UDisplayNameGetter(const char *, char *, int32_t, UErrorCode *);
+
 static int32_t
 _getDisplayNameForComponent(const char *locale,
                             const char *displayLocale,
                             UChar *dest, int32_t destCapacity,
-                            int32_t (*getter)(const char *, char *, int32_t, UErrorCode *),
+                            UDisplayNameGetter *getter,
                             const char *tag,
                             UErrorCode *pErrorCode) {
     char localeBuffer[ULOC_FULLNAME_CAPACITY*4];

@@ -1988,6 +1988,11 @@ u_getVersion(UVersionInfo versionArray) {
 #if defined(HAVE_DLOPEN) 
 
 #ifdef HAVE_DLFCN_H
+#ifdef __MVS__
+#ifndef __SUSV3
+#define __SUSV3 1
+#endif
+#endif
 #include <dlfcn.h>
 #endif
 
