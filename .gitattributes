@@ -2385,7 +2385,6 @@ icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
-icu4j/main/shared/build/eclipse-dummy.jar -text
 icu4j/main/shared/data/Transliterator_Han_Latin_Definition.txt svneol=native#text/plain
 icu4j/main/shared/data/Transliterator_Han_Latin_EDICT.txt svneol=native#text/plain
 icu4j/main/shared/data/icudata.jar -text svneol=unset#application/java-archive
