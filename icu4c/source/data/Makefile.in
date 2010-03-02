@@ -725,7 +725,7 @@ $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FIL
 $(BUILDDIR)/pool.res: $(LOCSRCDIR)/pool.res
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(LOCSRCDIR)/pool.res $(BUILDDIR)/pool.res
 
-# if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
+# if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo
 ifeq ($(TZDATA),)
 TZDATA = $(firstword $(wildcard $(top_builddir)/tools/tzcode/tzdata*.tar.gz) $(wildcard $(top_srcdir)/tools/tzcode/tzdata*.tar.gz))
 endif
@@ -733,20 +733,20 @@ endif
 ifneq ($(TZDATA),)
 
 TZCODE_DIR=$(top_builddir)/tools/tzcode
-ZONEINFO=$(TZCODE_DIR)/zoneinfo.txt
+ZONEINFO=$(TZCODE_DIR)/zoneinfo64.txt
 
-# Override the normal genrb for zoneinfo.txt to always pull from
-# icu/source/tools/tzcode/zoneinfo.txt
-$(BUILDDIR)/zoneinfo.res: $(ZONEINFO) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
+# Override the normal genrb for zoneinfo to always pull from
+# icu/source/tools/tzcode/zoneinfo64.txt
+$(BUILDDIR)/zoneinfo64.res: $(ZONEINFO) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	@echo Note: $(MISCSRCDIR)/zoneinfo.txt is IGNORED because $(TZDATA) is present.
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -q -i $(BUILDDIR) -d $(BUILDDIR) $(ZONEINFO)
 
-# Create the tzcode tool and zoneinfo.txt as needed.
+# Create the tzcode tool and zoneinfo as needed.
 $(ZONEINFO): $(TZDATA)
 	@echo "$(MAKE)[$(MAKELEVEL)]: Making \`$(ZONEINFO)' in \`$(TZCODE_DIR)'"; \
 	(cd $(TZCODE_DIR) && $(MAKE)) || exit; \
 
-# end of zoneinfo.txt-generation
+# end of zoneinfo-generation
 endif
 
 # zoneinfo has some issues. Ignore some warnings with -q

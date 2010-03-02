@@ -112,7 +112,7 @@ CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
 
 # more data
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
-ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo64.txt
+ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo64.txt zoneinfo.txt
 
 $(ZICTARG):		$(OBJECTS) $(TDATA) yearistype $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(TZORIG_EXTRA_CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
@@ -140,6 +140,7 @@ posix_only:	$(ZICEXEC) $(TDATA) $(srcdir)/icuzones
 
 icu_data:	$(TZ2ICUEXEC) posix_only
 		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
+		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"` --old
 
 clean:
 		-rm -f core *.o *.out zdump${EXEEXT} $(ZICTARG) yearistype date $(TZ2ICUTARG)
