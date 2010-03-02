@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -901,6 +901,12 @@ class CharsetMBCS extends CharsetICU {
         if (icuCanonicalName.toLowerCase().indexOf("gb18030") >= 0) {
             /* set a flag for GB 18030 mode, which changes the callback behavior */
             this.options |= MBCS_OPTION_GB18030;
+        } else if (icuCanonicalName.toLowerCase().indexOf("keis") >= 0) {
+            this.options |= MBCS_OPTION_KEIS;
+        } else if (icuCanonicalName.toLowerCase().indexOf("jef") >= 0) {
+            this.options |= MBCS_OPTION_JEF;
+        } else if (icuCanonicalName.toLowerCase().indexOf("jips") >= 0) {
+            this.options |= MBCS_OPTION_JIPS;
         }
 
         /* fix maxBytesPerUChar depending on outputType and options etc. */
@@ -1119,7 +1125,69 @@ class CharsetMBCS extends CharsetICU {
 
     /* bit flag for UConverter.options indicating GB 18030 special handling */
     private static final int MBCS_OPTION_GB18030 = 0x8000;
+    
+    /* bit flag for UConverter.options indicating KEIS,JEF,JIF special handling */ 
+    private static final int MBCS_OPTION_KEIS = 0x01000;
+    private static final int MBCS_OPTION_JEF = 0x02000;
+    private static final int MBCS_OPTION_JIPS = 0x04000; 
+    
+    private static enum SISO_Option {
+        SI,
+        SO
+    }
+    
+    private static final byte[] KEIS_SO_CHAR = { 0x0A, 0x42 };
+    private static final byte[] KEIS_SI_CHAR = { 0x0A, 0x41 };
+    private static final byte JEF_SO_CHAR = 0x28;
+    private static final byte JEF_SI_CHAR = 0x29;
+    private static final byte[] JIPS_SO_CHAR = { 0x1A, 0x70 };
+    private static final byte[] JIPS_SI_CHAR = { 0x1A, 0x71 };
+    
+    private static int getSISOBytes(SISO_Option option, int cnvOption, byte[] value) {
+        int SISOLength = 0;
 
+        switch (option) {
+            case SI:
+                if ((cnvOption&MBCS_OPTION_KEIS)!=0) {
+                    value[0] = KEIS_SI_CHAR[0];
+                    value[1] = KEIS_SI_CHAR[1];
+                    SISOLength = 2;
+                } else if ((cnvOption&MBCS_OPTION_JEF)!=0) {
+                    value[0] = JEF_SI_CHAR;
+                    SISOLength = 1;
+                } else if ((cnvOption&MBCS_OPTION_JIPS)!=0) {
+                    value[0] = JIPS_SI_CHAR[0];
+                    value[1] = JIPS_SI_CHAR[1];
+                    SISOLength = 2;
+                } else {
+                    value[0] = UConverterConstants.SI;
+                    SISOLength = 1;
+                }
+                break;
+            case SO:
+                if ((cnvOption&MBCS_OPTION_KEIS)!=0) {
+                    value[0] = KEIS_SO_CHAR[0];
+                    value[1] = KEIS_SO_CHAR[1];
+                    SISOLength = 2;
+                } else if ((cnvOption&MBCS_OPTION_JEF)!=0) {
+                    value[0] = JEF_SO_CHAR;
+                    SISOLength = 1;
+                } else if ((cnvOption&MBCS_OPTION_JIPS)!=0) {
+                    value[0] = JIPS_SO_CHAR[0];
+                    value[1] = JIPS_SO_CHAR[1];
+                    SISOLength = 2;
+                } else {
+                    value[0] = UConverterConstants.SO;
+                    SISOLength = 1;
+                }
+                break;
+            default:
+                /* Should never happen. */
+                break;
+        }
+
+        return SISOLength;
+    }
     // enum {
         static final int MBCS_MAX_STATE_COUNT = 128;
     // };
@@ -2800,6 +2868,10 @@ class CharsetMBCS extends CharsetICU {
             short uniMask;
             // long asciiRoundtrips;
             
+            byte[] si_value = new byte[2];
+            byte[] so_value = new byte[2];
+            int si_value_length = 0, so_value_length = 0;
+
             boolean gotoUnassigned = false;
 
             try {
@@ -2860,6 +2932,10 @@ class CharsetMBCS extends CharsetICU {
                 prevSourceIndex = -1;
                 sourceIndex = c == 0 ? 0 : -1;
                 nextSourceIndex = 0;
+
+                /* Get the SI/SO character for the converter */
+                si_value_length = getSISOBytes(SISO_Option.SI, options, si_value);
+                so_value_length = getSISOBytes(SISO_Option.SO, options, so_value);
 
                 /* conversion loop */
                 /*
@@ -3007,8 +3083,14 @@ class CharsetMBCS extends CharsetICU {
                                         length = 1;
                                     } else {
                                         /* change from double-byte mode to single-byte */
-                                        value |= UConverterConstants.SI << 8;
-                                        length = 2;
+                                        if (si_value_length == 1) {
+                                            value|=si_value[0]<<8;
+                                            length = 2;
+                                        } else if (si_value_length == 2) {
+                                            value|=si_value[1]<<8;
+                                            value|=si_value[0]<<16;
+                                            length = 3;
+                                        }
                                         prevLength = 1;
                                     }
                                 } else {
@@ -3016,8 +3098,14 @@ class CharsetMBCS extends CharsetICU {
                                         length = 2;
                                     } else {
                                         /* change from single-byte mode to double-byte */
-                                        value |= UConverterConstants.SO << 16;
-                                        length = 3;
+                                        if (so_value_length == 1) {
+                                            value|=so_value[0]<<16;
+                                            length = 3;
+                                        } else if (so_value_length == 2) {
+                                            value|=so_value[1]<<16;
+                                            value|=so_value[0]<<24;
+                                            length = 4;
+                                        }
                                         prevLength = 2;
                                     }
                                 }
@@ -3241,15 +3329,27 @@ class CharsetMBCS extends CharsetICU {
 
                     /* EBCDIC_STATEFUL ending with DBCS: emit an SI to return the output stream to SBCS */
                     if (target.hasRemaining()) {
-                        target.put((byte) UConverterConstants.SI);
+                        target.put((byte) si_value[0]);
+                        if (si_value_length == 2) {
+                            if (target.remaining() > 0) {
+                                target.put((byte) si_value[1]);
+                            } else {
+                                errorBuffer[0] = (byte) si_value[1];
+                                errorBufferLength = 1;
+                                cr[0] = CoderResult.OVERFLOW;
+                            }
+                        }
                         if (offsets != null) {
                             /* set the last source character's index (sourceIndex points at sourceLimit now) */
                             offsets.put(prevSourceIndex);
                         }
                     } else {
                         /* target is full */
-                        errorBuffer[0] = (byte) UConverterConstants.SI;
-                        errorBufferLength = 1;
+                        errorBuffer[0] = (byte) si_value[0];
+                        if (si_value_length == 2) {
+                            errorBuffer[1] = (byte) si_value[1];
+                        }
+                        errorBufferLength = si_value_length;
                         cr[0] = CoderResult.OVERFLOW;
                     }
                     prevLength = 1; /* we switched into SBCS */
