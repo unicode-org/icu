@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2007, International Business Machines Corporation and
+# Copyright (c) 1999-2010, International Business Machines Corporation and
 # others. All Rights Reserved.
 # A list of UCM's to build
 # Note: 
@@ -15,6 +15,10 @@
 #  * To add an additional converter to the list: 
 #    _____________________________________________________
 #    |  UCM_SOURCE_LOCAL =  myconverter.ucm ...
+#
+#  * To add EBCDIC coverters that use different SI/SO characters:
+#    _____________________________________________________
+#    |  UCM_SOURCE_EBCDIC_IGNORE_SISO_LOCAL = my_keis_converter.ucm
 #
 #  * To REPLACE the default list and only build with a few
 #     converters:
