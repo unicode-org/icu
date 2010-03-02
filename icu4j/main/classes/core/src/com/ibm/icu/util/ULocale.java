@@ -81,7 +81,8 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * <tt>getLocale()</tt>.  These methods exist in several ICU classes,
  * including {@link com.ibm.icu.util.Calendar}, {@link
  * com.ibm.icu.util.Currency}, {@link com.ibm.icu.text.UFormat},
- * {@link com.ibm.icu.text.BreakIterator}, {@link com.ibm.icu.text.Collator},
+ * {@link com.ibm.icu.text.BreakIterator},
+ * <a href="../text/Collator.html" title="class in com.ibm.icu.text"><code>Collator</code></a>,
  * {@link com.ibm.icu.text.DateFormatSymbols}, and {@link
  * com.ibm.icu.text.DecimalFormatSymbols} and their subclasses, if
  * any.  Once an object of one of these classes has been created,
