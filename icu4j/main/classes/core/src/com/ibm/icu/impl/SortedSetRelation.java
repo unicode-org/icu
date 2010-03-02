@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: M. Davis
@@ -10,8 +10,8 @@
 */
 package com.ibm.icu.impl;
 
-import java.util.SortedSet;
 import java.util.Iterator;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**

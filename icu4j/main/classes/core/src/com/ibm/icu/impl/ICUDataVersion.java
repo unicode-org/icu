@@ -7,10 +7,10 @@
 
 package com.ibm.icu.impl;
 
-import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.util.MissingResourceException;
+
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 
 public final class ICUDataVersion {
     private static final String U_ICU_VERSION_BUNDLE = "icuver";

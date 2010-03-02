@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -8,9 +8,9 @@
 
 package com.ibm.icu.dev.test.timescale;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.UniversalTimeScale;
-import com.ibm.icu.dev.test.TestFmwk;
 
 /**
  * Test UniversalTimeScale API

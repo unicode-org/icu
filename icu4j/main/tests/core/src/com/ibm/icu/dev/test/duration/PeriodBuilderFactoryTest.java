@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -10,12 +10,11 @@
 package com.ibm.icu.dev.test.duration;
 
 import com.ibm.icu.dev.test.TestFmwk;
-
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
-import com.ibm.icu.impl.duration.PeriodBuilder;
-import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.Period;
+import com.ibm.icu.impl.duration.PeriodBuilder;
 import com.ibm.icu.impl.duration.PeriodBuilderFactory;
+import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
 
 public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConstants {

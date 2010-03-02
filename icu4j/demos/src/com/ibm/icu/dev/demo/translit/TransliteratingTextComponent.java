@@ -1,14 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 
-import java.awt.event.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.dev.demo.impl.*;
+import java.awt.event.KeyEvent;
+
+import com.ibm.icu.dev.demo.impl.DumbTextComponent;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.Transliterator;
 
 /**
  * A subclass of {@link DumbTextComponent} that passes key events through

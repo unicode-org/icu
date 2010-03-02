@@ -21,7 +21,6 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TextTrieMap;
-
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;

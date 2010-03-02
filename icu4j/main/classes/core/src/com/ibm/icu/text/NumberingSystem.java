@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
-import com.ibm.icu.impl.ICUCache;
-import com.ibm.icu.impl.SimpleCache;
 
 
 /**

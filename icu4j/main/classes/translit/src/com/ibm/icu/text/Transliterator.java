@@ -6,6 +6,13 @@
  */
 package com.ibm.icu.text;
 
+import java.text.MessageFormat;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.Vector;
+
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
@@ -14,13 +21,6 @@ import com.ibm.icu.text.TransliteratorIDParser.SingleID;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.Vector;
 
 /**
  * <code>Transliterator</code> is an abstract class that

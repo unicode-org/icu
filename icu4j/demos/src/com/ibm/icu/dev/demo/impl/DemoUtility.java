@@ -1,13 +1,22 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.TextComponent;
+import java.util.Locale;
 
 public class DemoUtility
 {

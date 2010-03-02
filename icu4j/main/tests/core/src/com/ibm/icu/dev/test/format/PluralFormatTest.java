@@ -1,19 +1,19 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.util.ULocale;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author tschumann (Tim Schumann)

@@ -1,23 +1,22 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.PluralRulesLoader;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.util.ULocale;
-
 import java.io.Serializable;
-
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import com.ibm.icu.impl.PluralRulesLoader;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.ULocale;
 
 /** 
  * <p>Defines rules for mapping positive double values onto a small set of

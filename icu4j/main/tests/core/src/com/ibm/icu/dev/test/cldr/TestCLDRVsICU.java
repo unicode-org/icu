@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
@@ -34,13 +34,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.ibm.icu.dev.test.TestFmwk;
-// dlf collation is no longer in core, so this test either can't be in core, or can't test it
-// import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-// dlf transliterator is also not in core
-// import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;

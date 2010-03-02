@@ -3,7 +3,9 @@
 package com.ibm.icu.dev.test.bigdec;
 
 import java.math.BigInteger;
+
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.VersionInfo;
 
 /* ------------------------------------------------------------------ */

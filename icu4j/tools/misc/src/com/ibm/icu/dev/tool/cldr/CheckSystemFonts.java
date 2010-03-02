@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2009, Google, International Business Machines
+ * Copyright (c) 2009-2010, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -59,9 +59,9 @@ public class CheckSystemFonts {
         System.out.println("Arguments:\t" + Arrays.asList(args));
         if (args.length < 2) {
             throw new IllegalArgumentException("Need command-line args:" +
-            		"\n\t\tfont-name-regex" +
+                    "\n\t\tfont-name-regex" +
                     "\n\t\toutput-directory"
-            		);
+                    );
         }
         Matcher nameMatcher = Pattern.compile(args[0], Pattern.CASE_INSENSITIVE).matcher("");
         outputDirectoryName = args[1].trim();

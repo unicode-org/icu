@@ -1,21 +1,20 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.ime.indic;
 
-import java.awt.im.spi.InputMethodContext;
-
-import java.awt.event.KeyEvent;
 import java.awt.event.InputMethodEvent;
+import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
+import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedCharacterIterator;
-import java.util.Hashtable;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 

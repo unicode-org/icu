@@ -4,11 +4,17 @@
  *********************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import com.ibm.icu.util.*;
-import com.ibm.icu.text.*;
-
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.text.ChineseDateFormat;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Test of ChineseCalendar.

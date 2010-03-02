@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2010 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
@@ -17,13 +17,15 @@
  
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import java.util.Locale;
-import java.util.Date;
-import java.text.ParsePosition;
-import java.text.Format;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
 
 /**
 * @test 1.4 98/03/06

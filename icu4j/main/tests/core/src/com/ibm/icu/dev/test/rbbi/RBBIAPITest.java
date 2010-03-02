@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,11 +12,12 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
-import java.util.Locale;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.Locale;
+
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
 
 /**
  * API Test the RuleBasedBreakIterator class

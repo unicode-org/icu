@@ -1,13 +1,13 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.UCharacterIterator;
 
 
 /**

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.bidi;
 
 import java.util.Arrays;
+
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiRun;
 

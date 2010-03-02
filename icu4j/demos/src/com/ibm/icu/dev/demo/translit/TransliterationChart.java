@@ -1,21 +1,30 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
-import com.ibm.icu.lang.UScript;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.impl.Utility;
-
-import java.util.*;
-import java.io.*;
 
 public class TransliterationChart {
     public static void main(String[] args) throws IOException {

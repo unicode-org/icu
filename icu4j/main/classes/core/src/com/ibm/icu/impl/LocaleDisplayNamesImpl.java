@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.LocaleDisplayNames;
+import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 

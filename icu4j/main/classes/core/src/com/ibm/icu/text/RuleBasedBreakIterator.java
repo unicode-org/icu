@@ -1,17 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2009 International Business Machines Corporation and          *
+ * Copyright (C) 2005-2010 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.text.CharacterIterator;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUDebug;

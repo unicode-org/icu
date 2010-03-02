@@ -8,15 +8,15 @@
 *****************************************************************
 */
 package com.ibm.icu.text;
-import com.ibm.icu.lang.UScript;
-import java.lang.Math;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.Vector;
+
+import com.ibm.icu.lang.UScript;
 /**
  * A transliterator that translates multiple input scripts to a single
  * output script.  It is named Any-T or Any-T/V, where T is the target

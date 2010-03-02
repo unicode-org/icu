@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
-// remove dependency on this for now
-// import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
 
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,8 +10,10 @@ package com.ibm.icu.dev.test.collator;
 import java.util.Locale;
 import java.util.Random;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
 
 
 /**

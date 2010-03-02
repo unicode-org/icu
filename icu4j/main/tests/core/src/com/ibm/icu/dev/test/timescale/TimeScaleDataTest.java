@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -10,11 +10,12 @@ package com.ibm.icu.dev.test.timescale;
 
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.UniversalTimeScale;
-import com.ibm.icu.dev.test.TestFmwk;
 
 /**
  * @author Owner

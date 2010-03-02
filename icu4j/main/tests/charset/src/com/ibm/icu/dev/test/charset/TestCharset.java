@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -27,8 +27,8 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import com.ibm.icu.charset.CharsetCallback;
-import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetDecoderICU;
+import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.TestFmwk;

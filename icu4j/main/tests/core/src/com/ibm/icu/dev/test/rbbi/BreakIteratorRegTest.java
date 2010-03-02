@@ -1,16 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.BreakIterator;
 import java.text.CharacterIterator;
 import java.util.Arrays;
 import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
 
 public class BreakIteratorRegTest extends TestFmwk
 {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.tool.ime;
 
 import java.awt.Rectangle;
+
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JTextField;

@@ -1,31 +1,36 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and   *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.localeconverter;
 
-import com.ibm.icu.dev.tool.UOption;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.Date;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.XMLConstants;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
+import com.ibm.icu.dev.tool.UOption;
 
 public final class XLIFF2ICUConverter {
     

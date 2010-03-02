@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -406,16 +406,16 @@ public class CopticTest extends CalendarTest
         CopticCalendar testCalendar = new CopticCalendar();
         for ( int i = 0; i < tests.length; i++ ) {
             TestAddSetItem item = tests[i];
-        	testCalendar.set( item.getStartYear(), item.getStartMonth(), item.getStartDay(), 9, 0 );
-        	testCalendar.add( item.getField(), item.getDelta() );
-        	int endYear = testCalendar.get(Calendar.YEAR);
-        	int endMonth = testCalendar.get(Calendar.MONTH);
-        	int endDay = testCalendar.get(Calendar.DATE);
-        	if ( endYear != item.getEndYear() || endMonth != item.getEndMonth() || endDay != item.getEndDay() ) {
-        	    errln("CToJD FAILS: field " + item.getField() + " delta " + item.getDelta() + 
+            testCalendar.set( item.getStartYear(), item.getStartMonth(), item.getStartDay(), 9, 0 );
+            testCalendar.add( item.getField(), item.getDelta() );
+            int endYear = testCalendar.get(Calendar.YEAR);
+            int endMonth = testCalendar.get(Calendar.MONTH);
+            int endDay = testCalendar.get(Calendar.DATE);
+            if ( endYear != item.getEndYear() || endMonth != item.getEndMonth() || endDay != item.getEndDay() ) {
+                errln("CToJD FAILS: field " + item.getField() + " delta " + item.getDelta() + 
                             " expected yr " + item.getEndYear() + " mo " + item.getEndMonth() +  " da " + item.getEndDay() +
                             " got yr " + endYear + " mo " + endMonth +  " da " + endDay);
-        	}
+            }
         }
     }
 }

@@ -1,14 +1,17 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.timezone;
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-import com.ibm.icu.dev.test.*;
 import java.util.Date;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * A test which discovers the boundaries of DST programmatically and verifies

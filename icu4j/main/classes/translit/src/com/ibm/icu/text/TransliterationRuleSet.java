@@ -6,7 +6,8 @@
  */
 package com.ibm.icu.text;
 
-import java.util.*;
+import java.util.Vector;
+
 import com.ibm.icu.impl.UtilityExtensions;
 
 /**

@@ -11,9 +11,19 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.TreeSet;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public final class APIData {
     int version;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,7 +9,7 @@ package com.ibm.icu.dev.demo.calendar;
 
 import java.awt.Frame;
 
-import com.ibm.icu.dev.demo.impl.*;
+import com.ibm.icu.dev.demo.impl.DemoApplet;
 
 /**
  * CalendarApp demonstrates how Calendar works.

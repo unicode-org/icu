@@ -12,12 +12,13 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-
 import java.text.FieldPosition;
 import java.text.ParseException;
-import java.util.Locale;
 import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
 
 /** 
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols

@@ -8,15 +8,15 @@
 package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
 

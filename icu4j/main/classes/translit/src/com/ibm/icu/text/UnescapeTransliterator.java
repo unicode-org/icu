@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -8,7 +8,7 @@
 **********************************************************************
 */
 package com.ibm.icu.text;
-import com.ibm.icu.lang.*;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A transliterator that converts Unicode escape forms to the

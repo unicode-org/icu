@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and        *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -9,13 +9,12 @@
 
 package com.ibm.icu.dev.test.duration;
 
-import com.ibm.icu.dev.test.TestFmwk;
-
-import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
-import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
-
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
+import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
 
 public class ResourceBasedPeriodFormatterDataServiceTest extends TestFmwk {
 

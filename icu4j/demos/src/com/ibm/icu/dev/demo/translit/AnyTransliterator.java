@@ -1,13 +1,22 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeFilter;
 
 public class AnyTransliterator extends Transliterator {
     

@@ -1,13 +1,13 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2007, International Business Machines Corporation and   *
+* Copyright (C) 2003-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.dev.tool.localeconverter;
 
-import java.math.*;
+import java.math.BigInteger;
 
 /*
  *  The code is from  http://www.theorem.com/java/CRC32.java

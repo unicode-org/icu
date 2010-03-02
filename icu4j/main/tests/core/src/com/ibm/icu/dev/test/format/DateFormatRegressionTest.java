@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,16 +12,28 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /** 
  * Performs regression test for DateFormat
@@ -921,8 +933,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DATE);
             if ( year != 2008 || month != 6 || day != 2 ) {
-            	errln("use pattern " + item.getPattern() + " to parse " + item.getResult() +
-            	        ", expected y2008 m6 d2, got " + year + " " + month + " " + day );
+                errln("use pattern " + item.getPattern() + " to parse " + item.getResult() +
+                        ", expected y2008 m6 d2, got " + year + " " + month + " " + day );
             }
         }
     }

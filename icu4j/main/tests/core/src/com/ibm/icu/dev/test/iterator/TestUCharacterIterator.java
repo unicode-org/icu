@@ -1,17 +1,18 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.iterator;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.ReplaceableString;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UTF16;
 
 /**
  * @author ram

@@ -1,18 +1,19 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
 
 /**
 * A class to compare the difference in methods between java.lang.Character and

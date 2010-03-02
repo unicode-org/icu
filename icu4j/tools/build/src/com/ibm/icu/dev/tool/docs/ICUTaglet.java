@@ -7,18 +7,15 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import com.sun.javadoc.*;
-// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
-// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
-// Their registration code casts to the second, not the first, and the
-// second doesn't implement the first, so if you just implement the
-// first, you die.
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-
 import java.text.BreakIterator;
 import java.util.Locale;
 import java.util.Map;
+
+import com.sun.javadoc.Doc;
+import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 
 public abstract class ICUTaglet implements Taglet {
     protected final String name;

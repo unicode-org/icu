@@ -9,7 +9,6 @@
 package com.ibm.icu.util;
 
 import com.ibm.icu.math.BigDecimal;
-import java.lang.IllegalArgumentException;
 
 /** 
  * There are quite a few different conventions for binary datetime, depending on different

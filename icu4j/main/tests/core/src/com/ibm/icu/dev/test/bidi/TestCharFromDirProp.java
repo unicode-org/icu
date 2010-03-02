@@ -1,15 +1,15 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.bidi;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
-import com.ibm.icu.impl.Utility;
 
 /**
  * Regression test for Bidi charFromDirProp

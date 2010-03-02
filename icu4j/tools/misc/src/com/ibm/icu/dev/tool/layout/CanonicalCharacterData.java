@@ -1,19 +1,20 @@
 /**
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.layout;
 
+import java.util.Vector;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.UTF16;
-import java.util.Vector;
+import com.ibm.icu.text.UnicodeSet;
 
 public class CanonicalCharacterData
 {

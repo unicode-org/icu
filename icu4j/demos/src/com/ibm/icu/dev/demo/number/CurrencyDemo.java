@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
@@ -9,14 +9,15 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.demo.number;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.impl.Utility;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
+
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Currency;
 
 /**
  * Demonstration code to illustrate how to obtain ICU 2.6-like currency

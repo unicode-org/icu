@@ -1,17 +1,17 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;
 
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.dev.test.TestFmwk;
-
-import java.util.Locale;
 
 public class TestUScript extends TestFmwk {
 

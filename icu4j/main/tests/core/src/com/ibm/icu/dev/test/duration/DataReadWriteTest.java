@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and        *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -9,13 +9,12 @@
 
 package com.ibm.icu.dev.test.duration;
 
-import com.ibm.icu.dev.test.TestFmwk;
-
-import com.ibm.icu.impl.duration.impl.XMLRecordReader;
-import com.ibm.icu.impl.duration.impl.XMLRecordWriter;
-
 import java.io.StringReader;
 import java.io.StringWriter;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.duration.impl.XMLRecordReader;
+import com.ibm.icu.impl.duration.impl.XMLRecordWriter;
 
 public class DataReadWriteTest extends TestFmwk {
 

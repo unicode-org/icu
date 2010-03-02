@@ -1,14 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
 
 
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.text.BreakIterator;
-import java.awt.*;
 
 public class DemoTextBox {
 

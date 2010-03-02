@@ -1,12 +1,14 @@
 /*
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */ 
 
 package com.ibm.icu.charset;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import com.ibm.icu.impl.ICUBinary;
 

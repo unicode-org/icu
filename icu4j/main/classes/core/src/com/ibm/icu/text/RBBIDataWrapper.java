@@ -8,12 +8,12 @@
 package com.ibm.icu.text;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.impl.Trie;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>

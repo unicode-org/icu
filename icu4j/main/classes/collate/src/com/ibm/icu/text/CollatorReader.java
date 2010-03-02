@@ -1,15 +1,15 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import com.ibm.icu.impl.ICUBinary;
@@ -17,9 +17,9 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.CollationParsedRuleBuilder.InverseUCA;
 import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Internal reader class for ICU data file uca.icu containing 

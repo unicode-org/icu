@@ -1,18 +1,19 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and   *
+* Copyright (C) 1996-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
-import com.ibm.icu.text.UTF16;
+
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
 
 /**
  * <p>A trie is a kind of compressed, serializable table of values 

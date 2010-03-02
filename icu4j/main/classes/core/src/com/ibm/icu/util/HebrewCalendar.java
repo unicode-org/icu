@@ -5,10 +5,10 @@
  *******************************************************************************
  */
 package com.ibm.icu.util;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.impl.CalendarCache;
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.impl.CalendarCache;
 
 /**
  * <code>HebrewCalendar</code> is a subclass of <code>Calendar</code>

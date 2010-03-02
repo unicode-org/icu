@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,10 +9,7 @@ package com.ibm.icu.text;
 import java.io.IOException;
 
 import com.ibm.icu.impl.UCaseProps;
-
 import com.ibm.icu.util.ULocale;
-
-import com.ibm.icu.text.ReplaceableContextIterator;
 
 /**
  * A transliterator that performs locale-sensitive toUpper()

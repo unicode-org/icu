@@ -1,19 +1,20 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.tool.docs;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.PrintWriter;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.io.FileInputStream;
-import java.util.regex.*;
+import java.io.FilenameFilter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Deprecator {
     private boolean undep;

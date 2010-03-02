@@ -1,18 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-
-import java.util.Locale;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.Collator;
 
 public class CollationThreadTest extends TestFmwk {
     public static void main(String[] args) throws Exception {

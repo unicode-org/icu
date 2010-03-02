@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,10 +12,15 @@
 
 package com.ibm.icu.dev.test.search;
 
-import java.util.Locale;
 import java.text.StringCharacterIterator;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.SearchIterator;
+import com.ibm.icu.text.StringSearch;
 
 public class SearchTest extends TestFmwk {
 

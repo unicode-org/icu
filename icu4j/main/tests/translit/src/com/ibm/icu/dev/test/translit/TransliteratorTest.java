@@ -1,19 +1,34 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.dev.test.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Vector;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.StringTransform;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeFilter;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
-import java.util.*;
 
 /***********************************************************************
 

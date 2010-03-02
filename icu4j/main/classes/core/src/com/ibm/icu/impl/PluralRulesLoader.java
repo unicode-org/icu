@@ -6,10 +6,6 @@
  */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +14,10 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
+
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Loader for plural rules data.

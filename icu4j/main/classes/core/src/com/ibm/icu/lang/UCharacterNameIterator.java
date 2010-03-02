@@ -1,15 +1,15 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and   *
+* Copyright (C) 1996-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.lang;
 
-import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
+import com.ibm.icu.util.ValueIterator;
 
 /**
  * <p>Class enabling iteration of the codepoints and their names.</p>

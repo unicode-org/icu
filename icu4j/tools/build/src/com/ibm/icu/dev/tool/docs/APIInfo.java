@@ -11,8 +11,11 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Comparator;
 
 class APIInfo {
     // version id for the format of the APIInfo data

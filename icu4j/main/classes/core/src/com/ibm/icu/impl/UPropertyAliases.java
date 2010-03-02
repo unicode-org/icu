@@ -11,10 +11,14 @@
 
 package com.ibm.icu.impl;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.lang.*;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 
 /**
  * Wrapper for the pnames.icu binary data file.  This data file is

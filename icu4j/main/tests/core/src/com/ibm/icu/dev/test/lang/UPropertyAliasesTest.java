@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,8 +10,9 @@
 */
 package com.ibm.icu.dev.test.lang;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 
 public class UPropertyAliasesTest extends TestFmwk {
   

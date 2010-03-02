@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.EasterHoliday;

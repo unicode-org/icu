@@ -8,13 +8,13 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.VersionInfo;
 
 public final class Normalizer2Impl {

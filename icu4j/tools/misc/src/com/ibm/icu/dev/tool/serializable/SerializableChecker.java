@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -8,8 +8,6 @@
 
 package com.ibm.icu.dev.tool.serializable;
 
-import com.ibm.icu.impl.URLHandler;
-import com.ibm.icu.dev.test.serializable.SerializableTest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,12 +15,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.Class;
-import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import com.ibm.icu.dev.test.serializable.SerializableTest;
+import com.ibm.icu.impl.URLHandler;
 
 /**
  * This class examines all the classes in a Jar file or a directory

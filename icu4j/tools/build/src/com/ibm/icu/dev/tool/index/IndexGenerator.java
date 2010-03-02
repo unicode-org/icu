@@ -1,14 +1,23 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2008, International Business Machines Corporation and    *
+* Copyright (C) 2005-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.dev.tool.index;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class IndexGenerator {
     

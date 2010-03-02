@@ -1,15 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.text.*;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
-import com.ibm.icu.text.UTF16;    
+import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UTF16;
 
 /**
  * DLF docs must define behavior when Replaceable is mutated underneath

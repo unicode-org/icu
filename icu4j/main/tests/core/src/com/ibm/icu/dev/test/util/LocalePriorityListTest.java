@@ -1,15 +1,15 @@
 /*
- ****************************************************************************************
- * Copyright (C) 2009, Google, Inc.; International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                         *
- ****************************************************************************************
+ ******************************************************************************************
+ * Copyright (C) 2009-2010, Google, Inc.; International Business Machines Corporation and *
+ * others. All Rights Reserved.                                                           *
+ ******************************************************************************************
  */
 
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.LocalePriorityList;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Test the LanguagePriorityList

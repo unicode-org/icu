@@ -1,22 +1,22 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.util.ULocale;
-
-import java.text.Collator; // don't need ICU for this example
+import java.text.Collator;
 import java.util.EventListener;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.Map.Entry;
+
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.util.ULocale;
 
 public class ICUServiceTestSample {
     static public void main(String[] args) {

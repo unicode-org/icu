@@ -1,16 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.text.NumberFormat.*;
-import com.ibm.icu.util.ULocale;
-
 import java.util.Arrays;
+
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.util.ULocale;
 
 public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk {
 

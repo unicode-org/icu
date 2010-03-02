@@ -6,9 +6,10 @@
  */
 package com.ibm.icu.text;
 
+import java.util.Map;
+
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.util.ULocale;
-import java.util.Map;
 
 /**
  * Returns currency names localized for a locale.

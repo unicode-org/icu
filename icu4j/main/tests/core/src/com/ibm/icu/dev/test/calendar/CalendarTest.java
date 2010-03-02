@@ -1,21 +1,24 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Hashtable;
-import java.util.Enumeration;
-
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
 
 /**
  * A base class for classes that test individual Calendar subclasses.

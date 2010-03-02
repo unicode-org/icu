@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.UBiDiProps;
-
-import com.ibm.icu.lang.*;
+import com.ibm.icu.lang.UCharacterDirection;
 
 /**
  * Shape Arabic text on a character basis.

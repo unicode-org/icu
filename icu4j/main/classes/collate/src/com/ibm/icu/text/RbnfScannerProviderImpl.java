@@ -7,10 +7,10 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.ULocale;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.ibm.icu.util.ULocale;
 
 /**
  * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat

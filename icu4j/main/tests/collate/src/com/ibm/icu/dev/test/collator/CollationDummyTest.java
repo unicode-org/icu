@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,10 +13,14 @@
  
 package com.ibm.icu.dev.test.collator;
  
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-
 import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.RuleBasedCollator;
  
 public class CollationDummyTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
