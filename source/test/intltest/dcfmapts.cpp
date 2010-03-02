@@ -496,7 +496,7 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
     pat.setRoundingMode((DecimalFormat::ERoundingMode)0);
     roundingInc = pat.getRoundingIncrement();
     if (roundingInc != 0.0) {
-      errln((UnicodeString)"ERROR: Rounding increment zero");
+      errln((UnicodeString)"ERROR: Rounding increment not zero after setRoundingMode");
       return;
     }
 }
