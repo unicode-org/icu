@@ -1020,6 +1020,14 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     fTime = millis;
     fAreFieldsSet = fAreAllFieldsSet = FALSE;
     fIsTimeSet = fAreFieldsVirtuallySet = TRUE;
+
+    for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
+        fFields[i]     = 0;
+        fStamp[i]     = kUnset;
+        fIsSet[i]     = FALSE;
+    }
+    
+
 }
 
 // -------------------------------------
