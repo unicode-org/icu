@@ -77,24 +77,36 @@ typedef struct ILcidPosixMap
 /////////////////////////////////////////////////
 */
 
-/*
- The standard one language/one country mapping for LCID.
- The first element must be the language, and the following
- elements are the language with the country.
+/**
+ * The standard one language/one country mapping for LCID.
+ * The first element must be the language, and the following
+ * elements are the language with the country.
+ * @param hostID LCID in host format such as 0x044d
+ * @param languageID posix ID of just the language such as 'de'
+ * @param posixID posix ID of the language_TERRITORY such as 'de_CH'
  */
 #define ILCID_POSIX_ELEMENT_ARRAY(hostID, languageID, posixID) \
-static const ILcidPosixElement languageID[] = { \
+static const ILcidPosixElement locmap_ ## languageID [] = { \
     {LANGUAGE_LCID(hostID), #languageID},     /* parent locale */ \
     {hostID, #posixID}, \
 };
 
-/*
- Create the map for the posixID. This macro supposes that the language string
- name is the same as the global variable name, and that the first element
- in the ILcidPosixElement is just the language.
+/**
+ * Define a subtable by ID
+ * @param id the POSIX ID, either a language or language_TERRITORY
+ */
+#define ILCID_POSIX_SUBTABLE(id) \
+static const ILcidPosixElement locmap_ ## id [] =
+
+
+/**
+ * Create the map for the posixID. This macro supposes that the language string
+ * name is the same as the global variable name, and that the first element
+ * in the ILcidPosixElement is just the language.
+ * @param _posixID the full POSIX ID for this entry. 
  */
 #define ILCID_POSIX_MAP(_posixID) \
-    {sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
+    {sizeof(locmap_ ## _posixID)/sizeof(ILcidPosixElement), locmap_ ## _posixID}
 
 /*
 ////////////////////////////////////////////
@@ -114,7 +126,7 @@ static const ILcidPosixElement languageID[] = { \
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0436, af, af_ZA)
 
-static const ILcidPosixElement ar[] = {
+ILCID_POSIX_SUBTABLE(ar) {
     {0x01,   "ar"},
     {0x3801, "ar_AE"},
     {0x3c01, "ar_BH"},
@@ -138,7 +150,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x044d, as, as_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x045e, am, am_ET)
 ILCID_POSIX_ELEMENT_ARRAY(0x047a, arn,arn_CL)
 
-static const ILcidPosixElement az[] = {
+ILCID_POSIX_SUBTABLE(az) {
     {0x2c,   "az"},
     {0x082c, "az_Cyrl_AZ"},  /* Cyrillic based */
     {0x742c, "az_Cyrl"},  /* Cyrillic based */
@@ -150,7 +162,7 @@ static const ILcidPosixElement az[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x046d, ba, ba_RU)
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
 
-static const ILcidPosixElement ber[] = {
+ILCID_POSIX_SUBTABLE(ber) {
     {0x5f,   "ber"},
     {0x045f, "ber_Arab_DZ"},
     {0x045f, "ber_Arab"},
@@ -160,13 +172,13 @@ static const ILcidPosixElement ber[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
 
-static const ILcidPosixElement bn[] = {
+ILCID_POSIX_SUBTABLE(bn) {
     {0x45,   "bn"},
     {0x0845, "bn_BD"},
     {0x0445, "bn_IN"}
 };
 
-static const ILcidPosixElement bo[] = {
+ILCID_POSIX_SUBTABLE(bo) {
     {0x51,   "bo"},
     {0x0851, "bo_BT"},
     {0x0451, "bo_CN"}
@@ -183,7 +195,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0405, cs, cs_CZ)
 ILCID_POSIX_ELEMENT_ARRAY(0x0452, cy, cy_GB)
 ILCID_POSIX_ELEMENT_ARRAY(0x0406, da, da_DK)
 
-static const ILcidPosixElement de[] = {
+ILCID_POSIX_SUBTABLE(de) {
     {0x07,   "de"},
     {0x0c07, "de_AT"},
     {0x0807, "de_CH"},
@@ -197,7 +209,7 @@ static const ILcidPosixElement de[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x0465, dv, dv_MV)
 ILCID_POSIX_ELEMENT_ARRAY(0x0408, el, el_GR)
 
-static const ILcidPosixElement en[] = {
+ILCID_POSIX_SUBTABLE(en) {
     {0x09,   "en"},
     {0x0c09, "en_AU"},
     {0x2809, "en_BZ"},
@@ -224,11 +236,11 @@ static const ILcidPosixElement en[] = {
     {0x0409, "en_UM"}   /* Alias for en_US. Leave last. */
 };
 
-static const ILcidPosixElement en_US_POSIX[] = {
+ILCID_POSIX_SUBTABLE(en_US_POSIX) {
     {0x007f, "en_US_POSIX"} /* duplicate for roundtripping */
 };
 
-static const ILcidPosixElement es[] = {
+ILCID_POSIX_SUBTABLE(es) {
     {0x0a,   "es"},
     {0x2c0a, "es_AR"},
     {0x400a, "es_BO"},
@@ -258,14 +270,14 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
 ILCID_POSIX_ELEMENT_ARRAY(0x042d, eu, eu_ES)
 
 /* ISO-639 doesn't distinguish between Persian and Dari.*/
-static const ILcidPosixElement fa[] = {
+ILCID_POSIX_SUBTABLE(fa) {
     {0x29,   "fa"},
     {0x0429, "fa_IR"},  /* Persian/Farsi (Iran) */
     {0x048c, "fa_AF"}   /* Persian/Dari (Afghanistan) */
 };
 
 /* duplicate for roundtripping */
-static const ILcidPosixElement fa_AF[] = {
+ILCID_POSIX_SUBTABLE(fa_AF) {
     {0x8c,   "fa_AF"},  /* Persian/Dari (Afghanistan) */
     {0x048c, "fa_AF"}   /* Persian/Dari (Afghanistan) */
 };
@@ -274,7 +286,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x040b, fi, fi_FI)
 ILCID_POSIX_ELEMENT_ARRAY(0x0464, fil,fil_PH)
 ILCID_POSIX_ELEMENT_ARRAY(0x0438, fo, fo_FO)
 
-static const ILcidPosixElement fr[] = {
+ILCID_POSIX_SUBTABLE(fr) {
     {0x0c,   "fr"},
     {0x080c, "fr_BE"},
     {0x0c0c, "fr_CA"},
@@ -303,7 +315,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0447, gu, gu_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0474, gn, gn_PY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0484, gsw,gsw_FR)
 
-static const ILcidPosixElement ha[] = {
+ILCID_POSIX_SUBTABLE(ha) {
     {0x68,   "ha"},
     {0x7c68, "ha_Latn"},
     {0x0468, "ha_Latn_NG"},
@@ -314,7 +326,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x040d, he, he_IL)
 ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
 
 /* This LCID is really four different locales.*/
-static const ILcidPosixElement hr[] = {
+ILCID_POSIX_SUBTABLE(hr) {
     {0x1a,   "hr"},
     {0x141a, "bs_Latn_BA"},  /* Bosnian, Bosnia and Herzegovina */
     {0x681a, "bs_Latn"},  /* Bosnian, Bosnia and Herzegovina */
@@ -344,13 +356,13 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0470, ig, ig_NG)
 ILCID_POSIX_ELEMENT_ARRAY(0x0478, ii, ii_CN)
 ILCID_POSIX_ELEMENT_ARRAY(0x040f, is, is_IS)
 
-static const ILcidPosixElement it[] = {
+ILCID_POSIX_SUBTABLE(it) {
     {0x10,   "it"},
     {0x0810, "it_CH"},
     {0x0410, "it_IT"}
 };
 
-static const ILcidPosixElement iu[] = {
+ILCID_POSIX_SUBTABLE(iu) {
     {0x5d,   "iu"},
     {0x045d, "iu_Cans_CA"},
     {0x785d, "iu_Cans"},
@@ -366,7 +378,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x046f, kl, kl_GL)
 ILCID_POSIX_ELEMENT_ARRAY(0x0453, km, km_KH)
 ILCID_POSIX_ELEMENT_ARRAY(0x044b, kn, kn_IN)
 
-static const ILcidPosixElement ko[] = {
+ILCID_POSIX_SUBTABLE(ko) {
     {0x12,   "ko"},
     {0x0812, "ko_KP"},
     {0x0412, "ko_KR"}
@@ -375,7 +387,7 @@ static const ILcidPosixElement ko[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x0457, kok, kok_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0471, kr,  kr_NG)
 
-static const ILcidPosixElement ks[] = {         /* We could add PK and CN too */
+ILCID_POSIX_SUBTABLE(ks) {         /* We could add PK and CN too */
     {0x60,   "ks"},
     {0x0860, "ks_IN"},              /* Documentation doesn't mention script */
     {0x0460, "ks_Arab_IN"}
@@ -391,7 +403,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0481, mi, mi_NZ)
 ILCID_POSIX_ELEMENT_ARRAY(0x042f, mk, mk_MK)
 ILCID_POSIX_ELEMENT_ARRAY(0x044c, ml, ml_IN)
 
-static const ILcidPosixElement mn[] = {
+ILCID_POSIX_SUBTABLE(mn) {
     {0x50,   "mn"},
     {0x0450, "mn_MN"},
     {0x7c50, "mn_Mong"},
@@ -404,7 +416,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0458, mni,mni_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x047c, moh,moh_CA)
 ILCID_POSIX_ELEMENT_ARRAY(0x044e, mr, mr_IN)
 
-static const ILcidPosixElement ms[] = {
+ILCID_POSIX_SUBTABLE(ms) {
     {0x3e,   "ms"},
     {0x083e, "ms_BN"},   /* Brunei Darussalam*/
     {0x043e, "ms_MY"}    /* Malaysia*/
@@ -413,20 +425,20 @@ static const ILcidPosixElement ms[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x043a, mt, mt_MT)
 ILCID_POSIX_ELEMENT_ARRAY(0x0455, my, my_MM)
 
-static const ILcidPosixElement ne[] = {
+ILCID_POSIX_SUBTABLE(ne) {
     {0x61,   "ne"},
     {0x0861, "ne_IN"},   /* India*/
     {0x0461, "ne_NP"}    /* Nepal*/
 };
 
-static const ILcidPosixElement nl[] = {
+ILCID_POSIX_SUBTABLE(nl) {
     {0x13,   "nl"},
     {0x0813, "nl_BE"},
     {0x0413, "nl_NL"}
 };
 
 /* The "no" locale split into nb and nn.  By default in ICU, "no" is nb.*/
-static const ILcidPosixElement no[] = {
+ILCID_POSIX_SUBTABLE(no) {
     {0x14,   "no"},     /* really nb_NO */
     {0x7c14, "nb"},     /* really nb */
     {0x0414, "nb_NO"},  /* really nb_NO. Keep first in the 414 list. */
@@ -441,13 +453,13 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0482, oc, oc_FR)
 ILCID_POSIX_ELEMENT_ARRAY(0x0472, om, om_ET)    /* TODO: Verify the country */
 
 /* Declared as or_IN to get around compiler errors*/
-static const ILcidPosixElement or_IN[] = {
+ILCID_POSIX_SUBTABLE(or_IN) {
     {0x48,   "or"},
     {0x0448, "or_IN"},
 };
 
 
-static const ILcidPosixElement pa[] = {
+ILCID_POSIX_SUBTABLE(pa) {
     {0x46,   "pa"},
     {0x0446, "pa_IN"},
     {0x0846, "pa_PK"}
@@ -456,13 +468,13 @@ static const ILcidPosixElement pa[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x0415, pl, pl_PL)
 ILCID_POSIX_ELEMENT_ARRAY(0x0463, ps, ps_AF)
 
-static const ILcidPosixElement pt[] = {
+ILCID_POSIX_SUBTABLE(pt) {
     {0x16,   "pt"},
     {0x0416, "pt_BR"},
     {0x0816, "pt_PT"}
 };
 
-static const ILcidPosixElement qu[] = {
+ILCID_POSIX_SUBTABLE(qu) {
     {0x6b,   "qu"},
     {0x046b, "qu_BO"},
     {0x086b, "qu_EC"},
@@ -473,7 +485,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0486, qut, qut_GT) /* qut is an ISO-639-3 code */
 ILCID_POSIX_ELEMENT_ARRAY(0x0417, rm, rm_CH)
 ILCID_POSIX_ELEMENT_ARRAY(0x0418, ro, ro_RO)
 
-static const ILcidPosixElement root[] = {
+ILCID_POSIX_SUBTABLE(root) {
     {0x00,   "root"}
 };
 
@@ -482,13 +494,13 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0487, rw, rw_RW)
 ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0485, sah,sah_RU)
 
-static const ILcidPosixElement sd[] = {
+ILCID_POSIX_SUBTABLE(sd) {
     {0x59,   "sd"},
     {0x0459, "sd_IN"},
     {0x0859, "sd_PK"}
 };
 
-static const ILcidPosixElement se[] = {
+ILCID_POSIX_SUBTABLE(se) {
     {0x3b,   "se"},
     {0x0c3b, "se_FI"},
     {0x043b, "se_NO"},
@@ -511,7 +523,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0424, sl, sl_SI)
 ILCID_POSIX_ELEMENT_ARRAY(0x0477, so, so_ET)    /* TODO: Verify the country */
 ILCID_POSIX_ELEMENT_ARRAY(0x041c, sq, sq_AL)
 
-static const ILcidPosixElement sv[] = {
+ILCID_POSIX_SUBTABLE(sv) {
     {0x1d,   "sv"},
     {0x081d, "sv_FI"},
     {0x041d, "sv_SE"}
@@ -523,7 +535,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
 
 /* Cyrillic based by default */
-static const ILcidPosixElement tg[] = {
+ILCID_POSIX_SUBTABLE(tg) {
     {0x28,   "tg"},
     {0x7c28, "tg_Cyrl"},
     {0x0428, "tg_Cyrl_TJ"}
@@ -531,7 +543,7 @@ static const ILcidPosixElement tg[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
 
-static const ILcidPosixElement ti[] = {
+ILCID_POSIX_SUBTABLE(ti) {
     {0x73,   "ti"},
     {0x0873, "ti_ER"},
     {0x0473, "ti_ET"}
@@ -542,7 +554,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0432, tn, tn_BW)
 ILCID_POSIX_ELEMENT_ARRAY(0x041f, tr, tr_TR)
 ILCID_POSIX_ELEMENT_ARRAY(0x0444, tt, tt_RU)
 
-static const ILcidPosixElement tzm[] = {
+ILCID_POSIX_SUBTABLE(tzm) {
     {0x5f,   "tzm"},
     {0x7c5f, "tzm_Latn"},
     {0x085f, "tzm_Latn_DZ"}
@@ -551,13 +563,13 @@ static const ILcidPosixElement tzm[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x0480, ug, ug_CN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0422, uk, uk_UA)
 
-static const ILcidPosixElement ur[] = {
+ILCID_POSIX_SUBTABLE(ur) {
     {0x20,   "ur"},
     {0x0820, "ur_IN"},
     {0x0420, "ur_PK"}
 };
 
-static const ILcidPosixElement uz[] = {
+ILCID_POSIX_SUBTABLE(uz) {
     {0x43,   "uz"},
     {0x0843, "uz_Cyrl_UZ"},  /* Cyrillic based */
     {0x7843, "uz_Cyrl"},  /* Cyrillic based */
@@ -569,7 +581,7 @@ static const ILcidPosixElement uz[] = {
 ILCID_POSIX_ELEMENT_ARRAY(0x0433, ve, ve_ZA)    /* TODO: Verify the country */
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
 
-static const ILcidPosixElement wen[] = {
+ILCID_POSIX_SUBTABLE(wen) {
     {0x2E,   "wen"},
     {0x042E, "wen_DE"},
     {0x042E, "hsb_DE"},
@@ -582,7 +594,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0488, wo, wo_SN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0434, xh, xh_ZA)
 ILCID_POSIX_ELEMENT_ARRAY(0x046a, yo, yo_NG)
 
-static const ILcidPosixElement zh[] = {
+ILCID_POSIX_SUBTABLE(zh) {
     {0x0004, "zh_Hans"},
     {0x7804, "zh"},
     {0x0804, "zh_CN"},
