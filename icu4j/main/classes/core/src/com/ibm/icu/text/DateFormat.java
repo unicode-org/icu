@@ -815,8 +815,8 @@ public abstract class DateFormat extends UFormat {
     public static final String MONTH_DAY = "MMMMd";
 
     /**
-     * Constant for date pattern with abbreviated month and day.
-     *{@icu}  @stable ICU 4.0
+     * {@icu} Constant for date pattern with abbreviated month and day.
+     * @stable ICU 4.0
      */
     public static final String ABBR_MONTH_DAY = "MMMd";
 

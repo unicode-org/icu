@@ -1173,7 +1173,7 @@ public final class ArabicShaping {
      * Name    : countSpaceSub
      * Function: Counts number of times the subChar appears in the array
      */
-    public static int countSpaceSub(char [] dest,int length, char subChar){
+    private static int countSpaceSub(char [] dest,int length, char subChar){
         int i = 0;
         int count = 0;
         while (i < length) {
@@ -1189,7 +1189,7 @@ public final class ArabicShaping {
      * Name    : shiftArray
      * Function: Shifts characters to replace space sub characters
      */
-    public static void shiftArray(char [] dest,int start, int e, char subChar){
+    private static void shiftArray(char [] dest,int start, int e, char subChar){
         int w = e;
         int r = e;
         while (--r >= start) {
@@ -1207,7 +1207,7 @@ public final class ArabicShaping {
      * Name    : flipArray
      * Function: inverts array, so that start becomes end and vice versa
      */
-      public static int flipArray(char [] dest, int start, int e, int w){
+      private static int flipArray(char [] dest, int start, int e, int w){
         int r;
         if (w > start) {
         // shift, assume small buffer size so don't use arraycopy

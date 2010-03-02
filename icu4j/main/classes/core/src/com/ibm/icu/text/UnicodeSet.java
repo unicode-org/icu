@@ -4469,6 +4469,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param source The source of the CharSequence to strip from.
      * @param matches A boolean to either strip all that matches or don't match with the current UnicodeSet object.
      * @return The string after it has been stripped.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String stripFrom(CharSequence source, boolean matches) {
         StringBuilder result = new StringBuilder();

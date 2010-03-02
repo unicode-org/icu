@@ -1075,7 +1075,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         /**
-         * Protected method.
+         * Check if the type of this variable field is numeric.
+         * @return true if the type of this variable field is numeric.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
         protected boolean isNumeric() {
             return types[canonicalIndex][2] > 0;

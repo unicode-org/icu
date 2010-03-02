@@ -413,18 +413,35 @@ public abstract class BreakIterator implements Cloneable
      */
     public abstract void setText(CharacterIterator newText);
 
-    /** {@icu} @stable ICU 2.4 */
+    /**
+     * {@icu}
+     * @stable ICU 2.4
+     */
     public static final int KIND_CHARACTER = 0;
-    /** {@icu} @stable ICU 2.4 */
+    /**
+     * {@icu}
+     * @stable ICU 2.4
+     */
     public static final int KIND_WORD = 1;
-    /** {@icu} @stable ICU 2.4 */
+    /** 
+     * {@icu}
+     * @stable ICU 2.4
+     */
     public static final int KIND_LINE = 2;
-    /** {@icu} @stable ICU 2.4 */
+    /** 
+     * {@icu}
+     * @stable ICU 2.4
+     */
     public static final int KIND_SENTENCE = 3;
-    /** {@icu} @stable ICU 2.4 */
+    /** 
+     * {@icu}
+     * @stable ICU 2.4
+     */
     public static final int KIND_TITLE = 4;
 
-    /** @since ICU 2.8 */
+    /**
+     * @since ICU 2.8
+     */
     private static final int KIND_COUNT = 5;
 
     private static final SoftReference<?>[] iterCache = new SoftReference<?>[5];

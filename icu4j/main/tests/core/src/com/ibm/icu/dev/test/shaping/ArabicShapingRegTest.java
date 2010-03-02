@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -613,17 +613,6 @@ public class ArabicShapingRegTest extends TestFmwk {
                         "suppose to return an exception for 'Wrong Tashkeel argument' for " +
                         "an option value of " + invalid_Tashkeel[i]);
             } catch (Exception e) {}
-        }
-    }
-    
-    /* Tests the method
-     *      public static int flipArray(char [] dest, int start, int e, int w)
-     */
-    public void TestFlipArray(){
-        // Tests when "if (w > start)" is false
-        char[] dest = {'d','e','s','t'};
-        if(ArabicShaping.flipArray(dest,2,10,1) != 10){
-            errln("ArabicShaping.flipArray(char[],int,int,int) was suppose to return 10.");
         }
     }
 }
