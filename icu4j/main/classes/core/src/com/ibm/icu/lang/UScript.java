@@ -7,13 +7,13 @@
 
 package com.ibm.icu.lang;
 
+import java.util.Locale;
+import java.util.MissingResourceException;
+
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.util.Locale;
-import java.util.MissingResourceException;
 
 /**
  * A class to reflect UTR #24: Script Names

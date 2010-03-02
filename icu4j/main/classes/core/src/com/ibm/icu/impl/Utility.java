@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeMatcher;
 
 public final class Utility {
 

@@ -6,13 +6,13 @@
  */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.text.CurrencyMetaInfo;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.ibm.icu.text.CurrencyMetaInfo;
 
 /**
  * ICU's currency meta info data.

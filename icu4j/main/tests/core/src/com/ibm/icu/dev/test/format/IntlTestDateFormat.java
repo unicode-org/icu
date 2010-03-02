@@ -1,6 +1,6 @@
 /***************************************************************************************
  *
- *   Copyright (C) 1996-2007, International Business Machines
+ *   Copyright (C) 1996-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -16,13 +16,14 @@
 
 package com.ibm.icu.dev.test.format;
 
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Random;
+
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.Random;
-import java.util.Date;
 
 public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     // Values in milliseconds (== Date)

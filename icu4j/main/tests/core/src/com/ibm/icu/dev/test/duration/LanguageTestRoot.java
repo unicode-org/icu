@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,11 +8,6 @@
 // Copyright 2006 Google Inc.  All Rights Reserved.
 
 package com.ibm.icu.dev.test.duration;
-
-import com.ibm.icu.dev.test.TestFmwk;
-
-import com.ibm.icu.impl.duration.*;
-import com.ibm.icu.impl.duration.impl.DataRecord.*;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -22,6 +17,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
+import com.ibm.icu.impl.duration.Period;
+import com.ibm.icu.impl.duration.PeriodBuilder;
+import com.ibm.icu.impl.duration.PeriodBuilderFactory;
+import com.ibm.icu.impl.duration.PeriodFormatter;
+import com.ibm.icu.impl.duration.PeriodFormatterFactory;
+import com.ibm.icu.impl.duration.TimeUnit;
+import com.ibm.icu.impl.duration.TimeUnitConstants;
+import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
+import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
 
 /**
  * Test cases for en

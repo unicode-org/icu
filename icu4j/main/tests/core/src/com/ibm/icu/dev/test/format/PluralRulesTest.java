@@ -1,15 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.util.ULocale;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -17,6 +12,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @author dougfelt (Doug Felt)

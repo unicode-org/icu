@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,12 +11,16 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-import java.util.Date;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 
 public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     

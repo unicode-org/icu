@@ -5,14 +5,14 @@
  *******************************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.UCaseProps;
-import com.ibm.icu.lang.UCharacter;
-
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.CharacterIterator;
+
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
+import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * Unicode Normalization 

@@ -1,16 +1,21 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2005, International Business Machines Corporation and    *
+* Copyright (C) 2002-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.dev.tool.translit;
 
-import com.ibm.icu.text.*;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Hashtable;
-import java.io.*;
-import com.ibm.icu.impl.*;
-import com.ibm.icu.lang.*;
+
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 /**
  * @author ram
  *

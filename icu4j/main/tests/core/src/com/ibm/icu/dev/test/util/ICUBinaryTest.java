@@ -1,16 +1,17 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUBinary;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
 
 /**
 * Testing class for Trie. Tests here will be simple, since both CharTrie and 

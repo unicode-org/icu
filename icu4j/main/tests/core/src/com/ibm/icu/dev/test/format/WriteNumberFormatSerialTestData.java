@@ -1,15 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
  
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Locale;
-import java.io.*;
+
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * @version     1.0

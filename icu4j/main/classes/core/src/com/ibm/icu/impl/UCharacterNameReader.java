@@ -6,9 +6,9 @@
 */
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**

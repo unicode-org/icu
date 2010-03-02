@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2007, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -8,7 +8,9 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.tool.translit;
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Adjunct class to getIndexFilters.bat.  Just generates source sets

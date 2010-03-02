@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and        *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -10,7 +10,6 @@
 package com.ibm.icu.dev.test.duration.languages;
 
 import com.ibm.icu.dev.test.duration.LanguageTestRoot;
-
 import com.ibm.icu.impl.duration.BasicPeriodFormatterFactory;
 import com.ibm.icu.impl.duration.Period;
 import com.ibm.icu.impl.duration.PeriodFormatter;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,7 +14,9 @@ package com.ibm.icu.dev.test.format;
 
 import java.text.FieldPosition;
 import java.util.Locale;
-import com.ibm.icu.text.*;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * Tests for DecimalFormatSymbols

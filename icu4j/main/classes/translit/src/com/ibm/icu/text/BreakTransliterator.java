@@ -1,15 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
+import java.text.CharacterIterator;
+
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
-
-import java.text.CharacterIterator;
 
 
 /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,14 +14,14 @@ package com.ibm.icu.dev.test.rbbi;
 //          Much of the remaining data has been moved into the rbbitst.txt test data file,
 //            which is common between ICU4C and ICU4J.  The remaining test data should also be moved,
 //            or simply retired if it is no longer interesting.
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.DictionaryBasedBreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.util.ULocale;
-
 import java.text.CharacterIterator;
 import java.util.Vector;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.DictionaryBasedBreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.util.ULocale;
 
 public class RBBITest extends TestFmwk 
 {  

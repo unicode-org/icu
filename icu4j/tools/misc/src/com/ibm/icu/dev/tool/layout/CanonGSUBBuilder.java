@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,8 +10,8 @@ package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author Eric Mader

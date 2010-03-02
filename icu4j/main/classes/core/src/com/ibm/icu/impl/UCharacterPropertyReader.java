@@ -1,14 +1,15 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
 import com.ibm.icu.util.VersionInfo;
 
 /**

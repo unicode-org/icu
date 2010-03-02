@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -10,7 +10,7 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-import java.util.*;
+import java.util.Vector;
 
 import com.ibm.icu.impl.Utility;
 

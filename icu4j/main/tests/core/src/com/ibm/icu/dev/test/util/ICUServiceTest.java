@@ -1,29 +1,11 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUNotifier;
-import com.ibm.icu.impl.ICURWLock;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.Key;
-import com.ibm.icu.impl.ICUService.ServiceListener;
-import com.ibm.icu.impl.ICUService.SimpleFactory;
-import com.ibm.icu.impl.LocaleUtility;
-//import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
-import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.util.ULocale;
-
-// use java collator to remove test dependency on ICU collator
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,9 +16,25 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.Map.Entry;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUNotifier;
+import com.ibm.icu.impl.ICURWLock;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.impl.ICULocaleService.LocaleKey;
+import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
+import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.ICUService.Key;
+import com.ibm.icu.impl.ICUService.ServiceListener;
+import com.ibm.icu.impl.ICUService.SimpleFactory;
+import com.ibm.icu.util.ULocale;
 
 public class ICUServiceTest extends TestFmwk
 {

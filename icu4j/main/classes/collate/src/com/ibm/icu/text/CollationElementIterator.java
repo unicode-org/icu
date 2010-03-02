@@ -13,15 +13,16 @@ package com.ibm.icu.text;
  * import java.text.StringCharacterIterator;
  * import java.text.CharacterIterator;
  */
-import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.StringUCharacterIterator;
-import com.ibm.icu.impl.CharacterIteratorWrapper;
-import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.lang.UCharacter;
 import java.text.CharacterIterator;
 import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.CharacterIteratorWrapper;
+import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
+import com.ibm.icu.impl.StringUCharacterIterator;
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * <p><code>CollationElementIterator</code> is an iterator created by

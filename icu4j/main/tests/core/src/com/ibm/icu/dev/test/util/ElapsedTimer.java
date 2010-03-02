@@ -2,15 +2,16 @@
 //  ElapsedTimer.java
 //
 //  Created by Steven R. Loomis on 11/11/2005.
-//  Copyright 2005-2006 IBM. All rights reserved.
+//  Copyright 2005-2010 IBM. All rights reserved.
 //
 
 package com.ibm.icu.dev.test.util;
 
-import java.util.*;
+import java.util.Locale;
+
+import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;
-import com.ibm.icu.text.MessageFormat;
 
 
 /**

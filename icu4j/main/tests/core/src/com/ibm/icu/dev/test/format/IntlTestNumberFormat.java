@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,7 +14,8 @@ package com.ibm.icu.dev.test.format;
 import java.util.Locale;
 import java.util.Random;
 
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of

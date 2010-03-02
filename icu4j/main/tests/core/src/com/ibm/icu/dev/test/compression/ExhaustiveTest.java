@@ -1,14 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.compression;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UnicodeCompressor;
 import com.ibm.icu.text.UnicodeDecompressor;
-import com.ibm.icu.dev.test.TestFmwk;
 
 public class ExhaustiveTest extends TestFmwk {
     public static void main(String args[]) throws Exception {

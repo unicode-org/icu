@@ -1,19 +1,19 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 
-import java.util.*;
+import java.util.Vector;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
-import com.ibm.icu.impl.Utility;
 
 public class ScriptData extends TagValueData
 {

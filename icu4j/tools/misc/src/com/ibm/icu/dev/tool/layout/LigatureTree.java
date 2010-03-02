@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UTF16;
 
 public class LigatureTree
 {

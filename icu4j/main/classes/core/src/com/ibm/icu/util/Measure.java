@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2009, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,7 +10,6 @@
 */
 package com.ibm.icu.util;
 
-import java.lang.Number;
 
 /**
  * An amount of a specified unit, consisting of a Number and a Unit.

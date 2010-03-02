@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,8 +15,8 @@ import java.nio.charset.CoderResult;
 
 import com.ibm.icu.charset.CharsetMBCS.CharsetDecoderMBCS;
 import com.ibm.icu.charset.CharsetMBCS.CharsetEncoderMBCS;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 /**
  * @author Michael Ow
  *

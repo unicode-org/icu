@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,9 +12,11 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
 import java.util.Locale;
 import java.util.Random;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 
 /** 
  * Performs round-trip tests for NumberFormat

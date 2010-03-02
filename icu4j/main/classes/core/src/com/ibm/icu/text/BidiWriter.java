@@ -11,7 +11,6 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.Bidi;
 
 final class BidiWriter {
 

@@ -1,18 +1,20 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.TestFmwk;
-
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.ULocale;
-
 import java.text.ParsePosition;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.PluralFormat;
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @author tschumann (Tim Schumann)

@@ -1,18 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.normalizer;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.StringCharacterIterator;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;

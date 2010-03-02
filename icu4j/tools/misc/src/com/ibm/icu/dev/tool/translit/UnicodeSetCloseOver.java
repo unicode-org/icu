@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,19 +10,24 @@
 */
 package com.ibm.icu.dev.tool.translit;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.*;
-import com.ibm.icu.impl.Utility;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.Locale;
-import java.io.*;
+
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * This class produces the data tables used by the closeOver() method

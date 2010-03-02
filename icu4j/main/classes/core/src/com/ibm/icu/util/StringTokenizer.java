@@ -9,8 +9,9 @@ package com.ibm.icu.util;
 
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import com.ibm.icu.text.UnicodeSet;
+
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * <p>The string tokenizer class allows an application to break a string 

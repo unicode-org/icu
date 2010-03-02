@@ -1,20 +1,20 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.List;
-import java.util.Arrays;
+import java.util.Set;
 
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;

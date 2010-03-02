@@ -1,19 +1,19 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UTF16;
-
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 abstract public class Pick {
     private static boolean DEBUG = false;

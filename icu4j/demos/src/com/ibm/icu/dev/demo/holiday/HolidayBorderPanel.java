@@ -1,12 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.holiday;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Panel;
 
 /**
  * Various graphical borders. The border itself is a Panel so that it can

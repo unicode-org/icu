@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 import java.io.InputStream;
 
 import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.text.Normalizer;
 
 /**
  * Unicode normalization functionality for standard Unicode normalization or

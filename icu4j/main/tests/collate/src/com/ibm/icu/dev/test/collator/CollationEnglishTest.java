@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,10 +12,11 @@
  
 package com.ibm.icu.dev.test.collator;
  
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-
 import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
  
 public class CollationEnglishTest extends TestFmwk{
     public static void main(String[] args) throws Exception{

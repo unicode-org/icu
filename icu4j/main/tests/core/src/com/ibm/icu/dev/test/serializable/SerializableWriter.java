@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -8,9 +8,9 @@
 
 package com.ibm.icu.dev.test.serializable;
 
-import com.ibm.icu.util.VersionInfo;
-
 import java.net.URL;
+
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * This class writes the test objects for each class to a file. The work is

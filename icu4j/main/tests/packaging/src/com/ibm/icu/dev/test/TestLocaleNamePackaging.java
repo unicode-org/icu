@@ -6,11 +6,13 @@
  */
 package com.ibm.icu.dev.test;
 
+import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.LANG;
+import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.REGION;
+
+import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.LocaleDisplayNamesImpl;
-import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.*;
 
 public class TestLocaleNamePackaging extends TestFmwk {
 

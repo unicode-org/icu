@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,11 +11,15 @@ package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.util.*;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CalendarAstronomer;
-import com.ibm.icu.impl.CalendarAstronomer.*;
+import com.ibm.icu.impl.CalendarAstronomer.Ecliptic;
+import com.ibm.icu.impl.CalendarAstronomer.Equatorial;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
 
 // TODO: try finding next new moon after  07/28/1984 16:00 GMT
 

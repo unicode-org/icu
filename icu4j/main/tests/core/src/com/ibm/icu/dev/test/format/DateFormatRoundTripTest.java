@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,13 +12,17 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-import java.util.Locale;
-import java.util.Date;
-import java.util.Random;
 import java.text.FieldPosition;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /** 
  * Performs round-trip tests for DateFormat

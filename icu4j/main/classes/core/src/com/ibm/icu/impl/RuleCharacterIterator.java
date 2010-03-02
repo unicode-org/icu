@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003, International Business Machines
+* Copyright (c) 2003-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -11,6 +11,7 @@
 package com.ibm.icu.impl;
 
 import java.text.ParsePosition;
+
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 

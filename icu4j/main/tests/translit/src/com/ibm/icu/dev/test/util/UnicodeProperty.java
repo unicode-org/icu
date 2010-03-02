@@ -1,11 +1,10 @@
-package com.ibm.icu.dev.test.util;
-
 /*
  *******************************************************************************
  * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+package com.ibm.icu.dev.test.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -20,9 +19,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.UnicodeLabel;
-import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.CollectionUtilities.InverseMatcher;
 import com.ibm.icu.dev.test.util.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.impl.Utility;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,8 +8,8 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
-import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UnicodeMatcher;
 /**
  * @author Ram
  */

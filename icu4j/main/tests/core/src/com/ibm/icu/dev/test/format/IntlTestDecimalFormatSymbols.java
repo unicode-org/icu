@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2009, International Business Machines
+ *   Copyright (C) 1996-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -17,10 +17,10 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.Currency;
-
 import java.util.Locale;
+
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.util.Currency;
 
 public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 {

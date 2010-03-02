@@ -1,17 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.*;
+import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * A pseudo <code>Calendar</code> that is useful for testing

@@ -1,13 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UTF16;
 
 public abstract class Quoter {
     private static boolean DEBUG = false;

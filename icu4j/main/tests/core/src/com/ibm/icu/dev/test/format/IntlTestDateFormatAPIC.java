@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,10 +12,14 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import java.util.Date;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Date;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 
 /*
  * This is an API test, not a unit test.  It doesn't test very many cases, and doesn't

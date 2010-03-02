@@ -8,10 +8,6 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.UnicodeSet;
-
 /**
  * Normalization filtered by a UnicodeSet.
  * Normalizes portions of the text contained in the filter set and leaves

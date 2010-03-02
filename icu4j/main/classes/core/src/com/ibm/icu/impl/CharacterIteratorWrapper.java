@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,7 @@ package com.ibm.icu.impl;
 
 import java.text.CharacterIterator;
 
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.UCharacterIterator;
 
 /**
  * This class is a wrapper around CharacterIterator and implements the 

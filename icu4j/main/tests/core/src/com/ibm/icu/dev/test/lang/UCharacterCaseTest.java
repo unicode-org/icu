@@ -9,18 +9,19 @@
 package com.ibm.icu.dev.test.lang;
 
 
+import java.io.BufferedReader;
+import java.util.Locale;
+import java.util.Vector;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.Utility;
-import java.util.Locale;
-import java.io.BufferedReader;
-import java.util.Vector;
 
 
 /**

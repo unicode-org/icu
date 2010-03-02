@@ -6,12 +6,12 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICUBinary;
-
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.DataInputStream;
 import java.text.CharacterIterator;
+
+import com.ibm.icu.impl.ICUBinary;
 
 /*
  * This is a class used to load in the compact trie dictionary file

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -19,8 +19,8 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Iterator;
 
 import com.ibm.icu.charset.CharsetCallback;
-import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetDecoderICU;
+import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.ModuleTest;

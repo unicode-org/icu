@@ -1,18 +1,48 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.rbnf;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.DecimalFormat;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.CardLayout;
+import java.awt.Checkbox;
+import java.awt.Choice;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.ScrollPane;
+import java.awt.TextArea;
+import java.awt.TextComponent;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.BreakIterator;
+import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
-import com.ibm.icu.dev.demo.impl.*;
+
+import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 
 public class RbnfDemo extends DemoApplet {

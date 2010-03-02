@@ -1,10 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.util;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -13,8 +16,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import java.util.HashSet;
-import java.util.Arrays;
 
 /**
  * @author ram

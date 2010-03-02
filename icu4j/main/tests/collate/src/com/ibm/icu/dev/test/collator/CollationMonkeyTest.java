@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,10 +12,13 @@
 
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-import java.util.Random;
 import java.util.Locale;
+import java.util.Random;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
 
 /**
  * CollationMonkeyTest is a third level test class.  This tests the random 

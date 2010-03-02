@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,6 +27,7 @@ import java.awt.im.InputMethodHighlight;
 import java.awt.im.spi.InputMethod;
 import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedString;
+import java.text.Collator;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -41,10 +42,6 @@ import javax.swing.ListCellRenderer;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-
-// remove dependency on ICU collator, restore if we actually need it
-// import com.ibm.icu.text.Collator;
-import java.text.Collator;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
 

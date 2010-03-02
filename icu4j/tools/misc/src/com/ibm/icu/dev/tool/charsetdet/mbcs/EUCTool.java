@@ -1,7 +1,7 @@
 /*
  ***********************************************************************
  *
- * Copyright (C) 2005-2006, International Business Machines Corporation and
+ * Copyright (C) 2005-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  ***********************************************************************
@@ -27,8 +27,12 @@
 
 package com.ibm.icu.dev.tool.charsetdet.mbcs;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class EUCTool {
 

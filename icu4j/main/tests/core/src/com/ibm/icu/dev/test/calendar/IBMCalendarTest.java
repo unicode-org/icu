@@ -1,21 +1,28 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and
+ * Copyright (C) 2000-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
-import java.text.ParseException;
 
+import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ZoneMeta;
-import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.BuddhistCalendar;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.TaiwanCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @summary Tests of new functionality in IBMCalendar

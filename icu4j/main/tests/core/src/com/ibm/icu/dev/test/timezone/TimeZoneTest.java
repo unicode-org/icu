@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1598,7 +1598,7 @@ public class TimeZoneTest extends TestFmwk
                     ((Integer)zoneDisplayTestData[testNum][3]).intValue());
             if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
                 if (isReferenceYear
-                		&& (isICUTimeZone || !((Boolean)zoneDisplayTestData[testNum][2]).booleanValue())) {
+                        && (isICUTimeZone || !((Boolean)zoneDisplayTestData[testNum][2]).booleanValue())) {
                     sawAnError = true;
                     errln("Incorrect time zone display name.  zone = "
                             + zoneDisplayTestData[testNum][0] + ",\n"

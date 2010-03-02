@@ -6,9 +6,9 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.UCharacterProperty;
+import java.text.ParsePosition;
 
-import java.text.*;
+import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * A class representing a single rule in a RuleBasedNumberFormat.  A rule

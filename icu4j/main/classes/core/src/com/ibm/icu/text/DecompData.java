@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-*   Copyright (c) 1997-2000, International Business Machines
+*   Copyright (c) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ************************************************************************
 * > THIS FILE WAS MACHINE GENERATED <
@@ -11,7 +11,8 @@
 */
 
 package com.ibm.icu.text;
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.CompactByteArray;
+import com.ibm.icu.util.CompactCharArray;
 
 class DecompData {
     static final int MAX_CANONICAL = 21754;

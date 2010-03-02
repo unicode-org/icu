@@ -1,16 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.dev.test.TestFmwk;
-
-import java.util.Locale;
 
 public class RBNFParseTest extends TestFmwk {
     public static void main(String[] args) {

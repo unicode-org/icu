@@ -7,12 +7,12 @@
  
 package com.ibm.icu.charset;
 
-import com.ibm.icu.impl.ICUBinary;
-
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.DataInputStream;
 import java.nio.ByteBuffer;
+
+import com.ibm.icu.impl.ICUBinary;
 
 /**
  * ucnvmbcs.h

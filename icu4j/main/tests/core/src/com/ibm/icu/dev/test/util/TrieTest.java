@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,11 +8,11 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Trie;
-import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.CharTrie;
-import com.ibm.icu.impl.TrieBuilder;
+import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.IntTrieBuilder;
+import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.TrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.text.UTF16;

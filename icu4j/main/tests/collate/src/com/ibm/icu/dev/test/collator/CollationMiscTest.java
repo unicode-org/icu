@@ -12,9 +12,12 @@
  
 package com.ibm.icu.dev.test.collator;
 
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
+
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.Utility;
@@ -26,11 +29,8 @@ import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.CollationKey.BoundMode;
-
-import java.util.Set;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.TreeSet;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 public class CollationMiscTest extends TestFmwk {
 

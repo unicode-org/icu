@@ -1,13 +1,14 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-import com.ibm.icu.text.*;
+import java.util.Hashtable;
+
 import com.ibm.icu.impl.Utility;
-import java.util.*;
+import com.ibm.icu.text.Transliterator;
 
 /**
  * @test

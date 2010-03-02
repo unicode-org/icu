@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2007, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -9,10 +9,16 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.tool.translit;
-import java.util.*;
-import com.ibm.icu.dev.tool.translit.UnicodeSetClosure;
-import java.io.*;
-import com.ibm.icu.text.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Class that generates source set information for a transliterator.

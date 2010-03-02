@@ -1,23 +1,24 @@
 /*
  * Created on May 5, 2004
  * 
- * Copyright (C) 2004-2006 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2010 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.util.ULocale;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.util.Arrays;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.ULocale;
 
 
 /**

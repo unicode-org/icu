@@ -8,8 +8,6 @@
 package com.ibm.icu.util;
 
 import java.util.Date;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
 
 /**
  * <b>Note:</b> The Holiday framework is a technology preview.

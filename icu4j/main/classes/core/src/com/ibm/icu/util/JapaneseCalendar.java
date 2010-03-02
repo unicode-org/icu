@@ -1,11 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.util;
-import com.ibm.icu.util.TimeZone;
 import java.util.Date;
 import java.util.Locale;
 

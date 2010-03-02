@@ -1,14 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.demo.impl;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public abstract class DemoApplet extends java.applet.Applet {
     private static final long serialVersionUID = -8983602961925702071L;

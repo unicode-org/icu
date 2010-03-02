@@ -3,7 +3,7 @@
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
-import com.ibm.icu.lang.*;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A transliterator that performs character to name mapping.

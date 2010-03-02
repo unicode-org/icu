@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation   *
+ * Copyright (C) 2005-2010, International Business Machines Corporation   *
  * and others. All Rights Reserved.                                       *
  **************************************************************************
  *
@@ -8,15 +8,32 @@
 
 package com.ibm.icu.dev.demo.charsetdet;
 
-import java.awt.event.*;
-import java.awt.*;
-import java.io.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.dev.demo.impl.DemoApplet;

@@ -30,7 +30,12 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import com.sun.javadoc.*;
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.ConstructorDoc;
+import com.sun.javadoc.ExecutableMemberDoc;
+import com.sun.javadoc.ProgramElementDoc;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.Tag;
 
 public class CheckTags {
     RootDoc root;

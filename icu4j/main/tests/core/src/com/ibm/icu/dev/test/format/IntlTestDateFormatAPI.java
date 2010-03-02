@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2008, International Business Machines
+ *   Copyright (C) 1996-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -16,13 +16,16 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.util.*;
-import com.ibm.icu.text.*;
-import java.util.Locale;
-import java.util.Date;
-import java.text.ParsePosition;
 import java.text.FieldPosition;
 import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 
 public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {

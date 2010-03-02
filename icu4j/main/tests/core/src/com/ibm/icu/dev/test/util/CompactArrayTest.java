@@ -1,13 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CompactByteArray;
 import com.ibm.icu.util.CompactCharArray;

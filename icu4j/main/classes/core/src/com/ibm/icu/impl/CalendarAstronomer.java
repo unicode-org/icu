@@ -1,13 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.impl;
 
-import java.util.*;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * <code>CalendarAstronomer</code> is a class that can perform the calculations to

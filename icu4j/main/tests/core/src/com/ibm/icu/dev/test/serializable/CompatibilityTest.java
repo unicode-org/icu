@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -21,7 +21,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.ibm.icu.dev.test.TestFmwk;
-//import com.ibm.icu.dev.test.serializable.SerializableTest;
 
 /**
  * @author emader

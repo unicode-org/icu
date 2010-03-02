@@ -1,14 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
-
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.DictionaryBasedBreakIterator;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -18,6 +14,10 @@ import java.io.InputStream;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.DictionaryBasedBreakIterator;
 
 public class BreakIteratorTest extends TestFmwk
 {

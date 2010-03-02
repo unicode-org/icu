@@ -1,14 +1,17 @@
 /****************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and
+ * Copyright (C) 2000-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ****************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.CalendarData;
-import com.ibm.icu.util.*;
 import java.util.Locale;
+
+import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}.

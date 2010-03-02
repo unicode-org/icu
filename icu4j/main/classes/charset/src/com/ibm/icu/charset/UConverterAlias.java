@@ -8,8 +8,8 @@
 */ 
 package com.ibm.icu.charset;
 
-import java.io.IOException;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 

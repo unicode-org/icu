@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,7 +10,6 @@
 */
 package com.ibm.icu.util;
 
-import java.lang.Number;
 
 /**
  * An amount of currency, consisting of a Number and a Currency.

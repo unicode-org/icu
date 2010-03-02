@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,12 +12,18 @@
  
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-import java.util.Locale;
-import java.util.Comparator;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
-import java.io.*;
+import java.util.Comparator;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
 
 public class CollationThaiTest extends TestFmwk {
     

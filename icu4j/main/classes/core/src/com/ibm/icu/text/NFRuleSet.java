@@ -6,11 +6,11 @@
  */
 package com.ibm.icu.text;
 
+import java.text.ParsePosition;
+import java.util.Vector;
+
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
-
-import java.text.*;
-import java.util.Vector;
 
 /**
  * A collection of rules used by a RuleBasedNumberFormat to format and

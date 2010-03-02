@@ -1,18 +1,19 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and   *
+* Copyright (C) 1996-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
-import java.util.Arrays;
-import java.io.OutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
 
 /**
  * Builder class to manipulate and generate a trie.

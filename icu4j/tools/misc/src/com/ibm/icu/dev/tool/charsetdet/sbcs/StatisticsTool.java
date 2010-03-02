@@ -1,6 +1,6 @@
 /*
  ***********************************************************************
- * Copyright (C) 2005-2007, International Business Machines            *
+ * Copyright (C) 2005-2010, International Business Machines            *
  * Corporation and others. All Rights Reserved.                        *
  ***********************************************************************
  *
@@ -9,9 +9,11 @@
 package com.ibm.icu.dev.tool.charsetdet.sbcs;
 
 
-import java.io.*;
-import java.util.Arrays;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;

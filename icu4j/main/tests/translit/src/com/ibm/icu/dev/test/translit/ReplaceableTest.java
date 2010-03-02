@@ -1,14 +1,16 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.Transliterator;
 
 /**
  * @test

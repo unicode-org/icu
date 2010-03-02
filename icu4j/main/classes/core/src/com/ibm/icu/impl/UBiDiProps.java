@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,17 +19,15 @@
 
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
-import java.io.DataInputStream;
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-
-import com.ibm.icu.util.RangeValueIterator;
-
-import com.ibm.icu.text.UnicodeSet;
+import java.io.InputStream;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.RangeValueIterator;
 
 public final class UBiDiProps {
     // constructors etc. --------------------------------------------------- ***

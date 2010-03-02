@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2005-2008, International Business Machines
+* Copyright (c) 2005-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -38,10 +38,10 @@ import java.io.ObjectOutputStream;
 import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
 
 import com.ibm.icu.text.MessageFormat;
 

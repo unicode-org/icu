@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2003-2008, International Business Machines
+ * Copyright (c) 2003-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -10,8 +10,9 @@
  */
 
 package com.ibm.icu.impl;
-import com.ibm.icu.util.TimeZone;
 import java.util.Date;
+
+import com.ibm.icu.util.TimeZone;
 
 /**
  * <code>TimeZoneAdapter</code> wraps a com.ibm.icu.util.TimeZone
