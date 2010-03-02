@@ -2404,6 +2404,7 @@ icu4j/main/tests/collate/collate-tests-build.launch -text
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_SHORT.txt svneol=native#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_SHORT.txt svneol=native#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/riwords.txt svneol=native#text/plain
+icu4j/main/tests/collate/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
 icu4j/main/tests/core/.settings/org.eclipse.jdt.core.prefs -text
@@ -2445,7 +2446,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UnicodeSetStringSpanTest.jav
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt svneol=native#text/plain
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
