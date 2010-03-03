@@ -553,46 +553,7 @@ ZoneMeta::createMetazoneMappings(const UnicodeString &tzid) {
     ures_close(rb);
     return mzMappings;
 }
-/*
-UnicodeString& U_EXPORT2
-ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &region, UnicodeString &result) {
 
-    char *pRegionSuffix = NULL;
-    char mzidChars[ZID_KEY_MAX + 4];
-    int32_t mzLen = mzid.extract(0, mzid.length(), mzidChars, ZID_KEY_MAX, US_INV);
-
-    if (region.length() ==2 || region.length() == 3) {
-        pRegionSuffix = &mzidChars[mzLen];
-        *pRegionSuffix = ':';
-        region.extract(0, region.length(), &mzidChars[mzLen + 1], sizeof(mzidChars) - mzLen, US_INV);
-    }
-
-    UErrorCode status = U_ZERO_ERROR;
-    const UChar *tzid = NULL;
-    int32_t tzidLen = 0;
-
-    UResourceBundle *rb = ures_openDirect(NULL, gMetaZones, &status);
-    ures_getByKey(rb, gMapTimezonesTag, rb, &status);
-    if (U_SUCCESS(status)) {
-        tzid = ures_getStringByKey(rb, mzidChars, &tzidLen, &status);
-        if (status == U_MISSING_RESOURCE_ERROR && pRegionSuffix != NULL) {
-            status = U_ZERO_ERROR;
-            // try key without region
-            *pRegionSuffix = 0;
-            tzid = ures_getStringByKey(rb, mzidChars, &tzidLen, &status);
-        }
-    }
-    ures_close(rb);
-
-    if (tzidLen > 0) {
-        result.setTo(tzid, tzidLen);
-    } else {
-        result.remove();
-    }
-
-    return result;
-}
-*/
 UnicodeString& U_EXPORT2
 ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &region, UnicodeString &result) {
     UErrorCode status = U_ZERO_ERROR;
@@ -626,6 +587,7 @@ ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &re
             tzid = ures_getStringByKey(rb, gWorldTag, &tzidLen, &status);
         }
     }
+    ures_close(rb);
 
     if (tzid == NULL) {
         result.remove();
