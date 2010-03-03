@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,11 +24,15 @@ public class CurrencyNameTest extends TestFmwk {
             if (l.getCountry().length() == 0) {
                 continue;
             }
-            Currency currency = Currency.getInstance(l);
-            if (currency == null) {
+            try {
+                Currency currency = Currency.getInstance(l);
+                if (currency != null) {
+                    currencies.add(currency);
+                }
+            } catch (IllegalArgumentException iae) {
+                logln("INFO: java.util.Currency.getInstance(Locale) throws IllegalArgumentException for locale: " + l);
                 continue;
             }
-            currencies.add(currency);
         }
 
         for (Currency currency : currencies) {
