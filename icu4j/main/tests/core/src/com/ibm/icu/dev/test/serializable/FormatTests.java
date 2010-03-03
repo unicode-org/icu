@@ -2135,13 +2135,26 @@ public class FormatTests
     }
 
     public static class PluralRulesHandler implements SerializableTest.Handler {
+        // canned rules as of 4.2
+        final String[] cannedRules = {
+                "", // ja
+                "one: n is 1", // da
+                "one: n within 0..2 and n is not 2", // fr
+                "one: n mod 10 is 1 and n mod 100 is not 11; zero: n is 0", // lv
+                "one: n is 1; two: n is 2", // ga
+                "few: n is 0 OR n is not 1 AND n mod 100 in 1..19; one: n is 1", // ro
+                "few: n mod 10 in 2..9 and n mod 100 not in 11..19; one: n mod 10 is 1 and n mod 100 not in 11..19", // lt
+                "few: n mod 10 in 2..4 and n mod 100 not in 12..14; many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14; one: n mod 10 is 1 and n mod 100 is not 11", // hr
+                "few: n in 2..4; one: n is 1", // cs
+                "few: n mod 10 in 2..4 and n mod 100 not in 12..14 and n mod 100 not in 22..24; one: n is 1", // pl
+                "few: n mod 100 in 3..4; one: n mod 100 is 1; two: n mod 100 is 2", // sl
+        };
+
         public Object[] getTestObjects() {
-            String[] localeNames = {"ja","da","fr","lv","ga","ro","lt","hr","cs","pl","sl"};
-            PluralRules[] plrulz = new PluralRules[localeNames.length];
-            for (int i = 0; i < localeNames.length; i++) {
-                ULocale uloc = ULocale.createCanonical(localeNames[i]);
+            PluralRules[] plrulz = new PluralRules[cannedRules.length];
+            for (int i = 0; i < cannedRules.length; i++) {
                 try {
-                    plrulz[i] = PluralRules.forLocale(uloc);
+                    plrulz[i] = PluralRules.parseDescription(cannedRules[i]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -2152,7 +2165,8 @@ public class FormatTests
             return a.equals(b);
         }
     }
-    
+
+
     public static class TimeUnitFormatHandler implements SerializableTest.Handler {
         // TODO - more test coverage!
         public Object[] getTestObjects() {
