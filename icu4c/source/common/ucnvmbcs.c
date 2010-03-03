@@ -1794,11 +1794,14 @@ ucnv_MBCSOpen(UConverter *cnv,
             /* set a flag for GB 18030 mode, which changes the callback behavior */
             cnv->options|=_MBCS_OPTION_GB18030;
         }
-    } else if(uprv_strstr(pArgs->name, "KEIS")!=NULL) {
+    } else if((uprv_strstr(pArgs->name, "KEIS")!=NULL) || (uprv_strstr(pArgs->name, "keis")!=NULL)) {
+        /* set a flag for KEIS converter, which changes the SI/SO character sequence */
         cnv->options|=_MBCS_OPTION_KEIS;
-    } else if(uprv_strstr(pArgs->name, "JEF")!=NULL) {
+    } else if((uprv_strstr(pArgs->name, "JEF")!=NULL) || (uprv_strstr(pArgs->name, "jef")!=NULL)) {
+        /* set a flag for JEF converter, which changes the SI/SO character sequence */
         cnv->options|=_MBCS_OPTION_JEF;
-    } else if(uprv_strstr(pArgs->name, "JIPS")!=NULL) {
+    } else if((uprv_strstr(pArgs->name, "JIPS")!=NULL) || (uprv_strstr(pArgs->name, "jips")!=NULL)) {
+        /* set a flag for JIPS converter, which changes the SI/SO character sequence */
         cnv->options|=_MBCS_OPTION_JIPS;
     }
 
@@ -4101,11 +4104,11 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                         } else {
                             /* change from double-byte mode to single-byte */
                             if (si_value_length == 1) {
-                                value|=si_value[0]<<8;
+                                value|=(uint32_t)si_value[0]<<8;
                                 length = 2;
                             } else if (si_value_length == 2) {
-                                value|=si_value[1]<<8;
-                                value|=si_value[0]<<16;
+                                value|=(uint32_t)si_value[1]<<8;
+                                value|=(uint32_t)si_value[0]<<16;
                                 length = 3;
                             }
                             prevLength=1;
@@ -4116,11 +4119,11 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                         } else {
                             /* change from single-byte mode to double-byte */
                             if (so_value_length == 1) {
-                                value|=so_value[0]<<16;
+                                value|=(uint32_t)so_value[0]<<16;
                                 length = 3;
                             } else if (so_value_length == 2) {
-                                value|=so_value[1]<<16;
-                                value|=so_value[0]<<24;
+                                value|=(uint32_t)so_value[1]<<16;
+                                value|=(uint32_t)so_value[0]<<24;
                                 length = 4;
                             }
                             prevLength=2;
@@ -4333,11 +4336,11 @@ getTrail:
                         } else {
                             /* change from double-byte mode to single-byte */
                             if (si_value_length == 1) {
-                                value|=si_value[0]<<8;
+                                value|=(uint32_t)si_value[0]<<8;
                                 length = 2;
                             } else if (si_value_length == 2) {
-                                value|=si_value[1]<<8;
-                                value|=si_value[0]<<16;
+                                value|=(uint32_t)si_value[1]<<8;
+                                value|=(uint32_t)si_value[0]<<16;
                                 length = 3;
                             }
                             prevLength=1;
@@ -4348,11 +4351,11 @@ getTrail:
                         } else {
                             /* change from single-byte mode to double-byte */
                             if (so_value_length == 1) {
-                                value|=so_value[0]<<16;
+                                value|=(uint32_t)so_value[0]<<16;
                                 length = 3;
                             } else if (so_value_length == 2) {
-                                value|=so_value[1]<<16;
-                                value|=so_value[0]<<24;
+                                value|=(uint32_t)so_value[1]<<16;
+                                value|=(uint32_t)so_value[0]<<24;
                                 length = 4;
                             }
                             prevLength=2;
