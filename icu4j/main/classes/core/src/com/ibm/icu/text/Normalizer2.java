@@ -299,4 +299,13 @@ public abstract class Normalizer2 {
      * @provisional This API might change or be removed in a future release.
      */
     public abstract boolean isInert(int c);
+
+    /**
+     * Sole constructor.  (For invocation by subclass constructors,
+     * typically implicit.)
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected Normalizer2() {
+    }
 }
