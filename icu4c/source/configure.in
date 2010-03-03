@@ -1342,7 +1342,7 @@ echo "is in your PATH so that the configure script can detect its location."
 fi
 
 AC_MSG_CHECKING([the version of "$U_MAKE"])
-if "$U_MAKE" -f "$srcdir/config/gmakever.mk"; then
+if "$U_MAKE" -f "$srcdir/config/gmakever.mk" PLATFORM="$platform"; then
 AC_MSG_RESULT([ok])
 else
 AC_MSG_RESULT([too old or test failed - try upgrading GNU Make])

@@ -12785,7 +12785,7 @@ fi
 
 { $as_echo "$as_me:$LINENO: checking the version of \"$U_MAKE\"" >&5
 $as_echo_n "checking the version of \"$U_MAKE\"... " >&6; }
-if "$U_MAKE" -f "$srcdir/config/gmakever.mk"; then
+if "$U_MAKE" -f "$srcdir/config/gmakever.mk" PLATFORM="$platform"; then
 { $as_echo "$as_me:$LINENO: result: ok" >&5
 $as_echo "ok" >&6; }
 else
