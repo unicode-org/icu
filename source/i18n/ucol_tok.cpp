@@ -679,6 +679,9 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
 
 
 inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff, int32_t len, UErrorCode *status) {
+    if (stuff == NULL || len <= 0) {
+        return;
+    }
     UChar *tempStuff = (UChar *)stuff;
     if(src->extraCurrent+len >= src->extraEnd) {
         /* reallocate */
@@ -686,6 +689,10 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
           // Copy stuff to a new buffer if stuff points to an address within
           // src->source buffer.
           tempStuff = (UChar*)uprv_malloc(len*sizeof(UChar));
+          if (tempStuff == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+          }
           uprv_memcpy(tempStuff, stuff, len*sizeof(UChar));
         }
         UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
@@ -698,6 +705,7 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
             src->source = newSrc;
         } else {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
     }
     if(len == 1) {
