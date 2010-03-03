@@ -5464,12 +5464,9 @@ static void TestSameStrengthList(void)
     UParseError error;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
-    char srules[500] = "&a<*bcd &b<<*klm &k<<<*xyz &a=*123";
-    UChar rules[500];
-    uint32_t length = 0;
+    UChar rules[] =  { 0x26, 0x61, 0x3c, 0x2a, 0x62, 0x63, 0x64, 0x20, 0x26, 0x62, 0x3c, 0x3c, 0x2a, 0x6b, 0x6c, 0x6d, 0x20, 0x26, 0x6b, 0x3c, 0x3c, 0x3c, 0x2a, 0x78, 0x79, 0x7a, 0x20, 0x26, 0x61, 0x3d, 0x2a, 0x31, 0x32, 0x33, 0x00 }; /* &a<*bcd &b<<*klm &k<<<*xyz &a=*123 */
 
-    u_strFromUTF8(rules, 500, &length, srules, strlen(srules), &status);
-    myCollation = ucol_openRules(rules, length, UCOL_ON, UCOL_TERTIARY, &error, &status);
+    myCollation = ucol_openRules(rules, u_strlen(rules), UCOL_ON, UCOL_TERTIARY, &error, &status);
     if(U_FAILURE(status)){
         log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;

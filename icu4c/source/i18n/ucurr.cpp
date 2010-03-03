@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -2170,7 +2170,23 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 break;
             }
+
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
             ures_getUTF8StringByKey(&curbndl, "id", curID, &curIDLength, TRUE, status);
+            /* optimize - use the utf-8 string */
+#else
+            {
+                       const UChar* defString = ures_getStringByKey(&curbndl, "id", &curIDLength, status);
+                       if(U_SUCCESS(*status)) {
+			   if(curIDLength+1 > ULOC_KEYWORDS_CAPACITY) {
+				*status = U_BUFFER_OVERFLOW_ERROR;
+			   } else {
+                           	u_UCharsToChars(defString, curID, curIDLength+1);
+			   }
+                       }
+            }
+#endif	
+
             if (U_FAILURE(*status)) {
                 break;
             }
