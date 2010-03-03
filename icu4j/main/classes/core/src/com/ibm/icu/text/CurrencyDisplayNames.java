@@ -100,4 +100,13 @@ public abstract class CurrencyDisplayNames {
      * @provisional This API might change or be removed in a future release.
      */
     public abstract Map<String, String> nameMap();
+
+    /**
+     * Sole constructor.  (For invocation by subclass constructors,
+     * typically implicit.)
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected CurrencyDisplayNames() {
+    }
 }

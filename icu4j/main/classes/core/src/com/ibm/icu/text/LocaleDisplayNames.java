@@ -178,4 +178,13 @@ public abstract class LocaleDisplayNames {
      * @provisional This API might change or be removed in a future release.
      */
     public abstract String keyValueDisplayName(String key, String value);
+
+    /**
+     * Sole constructor.  (For invocation by subclass constructors,
+     * typically implicit.)
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected LocaleDisplayNames() {
+    }
 }
