@@ -1097,6 +1097,7 @@
                 <include name="**/uprops.icu"/>
                 <include name="**/pnames.icu"/>
                 <include name="**/unames.icu"/>
+                <include name="**/*.nrm"/>
             </patternset>
         </unjar>
     </target>
@@ -1123,6 +1124,13 @@
                 <exclude name="com/ibm/icu/dev/data/unicode/ucdterms.txt"/>
             </fileset>
         </copy>
+
+        <unjar src="${icu4j.testdata.jar}" dest="${module.tests.dir}">
+            <patternset>
+                <include name="**/testnorm.nrm"/>
+            </patternset>
+        </unjar>
+
     </target>
 
     <!-- Character Properties -->
@@ -1136,6 +1144,7 @@
                 <include name="**/ucase.icu"/>
                 <include name="**/pnames.icu"/>
                 <include name="**/unames.icu"/>
+                <include name="**/*.nrm"/>
             </patternset>
         </unjar>
     </target>
@@ -1153,6 +1162,7 @@
                 <include name="**/*.res"/>
                 <include name="**/*.brk"/>
                 <include name="**/*.ctd"/>
+                <include name="**/*.nrm"/>
                 <exclude name="**/coll/*.res"/>
                 <exclude name="**/translit/*.res"/>
                 <exclude name="**/rbnf/*.res"/>
@@ -1237,6 +1247,7 @@
                 <include name="**/pnames.icu"/>
                 <include name="**/*.brk"/>
                 <include name="**/*.ctd"/>
+                <include name="**/*.nrm"/>
                 <include name="**/brkitr/*.res"/>
                 <include name="**/translit/*.res"/>
             </patternset>
