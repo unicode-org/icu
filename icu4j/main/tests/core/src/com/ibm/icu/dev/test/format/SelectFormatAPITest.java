@@ -194,7 +194,6 @@ public class SelectFormatAPITest extends TestFmwk {
      */
     public void TestParseObject(){
         log("Inside TestToPattern");
-        System.out.println("Inside TestToPattern");
 
         //Check parseObject
         try {
