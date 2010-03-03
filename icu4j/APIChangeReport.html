@@ -2,14 +2,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.4</title>
+<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.4</title>
 <!-- Copyright 2010, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.3.4</h1>
+<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.4</h1>
 
 <hr/>
 <h2>Removed from ICU4J 4.2.1</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetCallback
+<ul>
+<li>(draft)      public <i>CharsetCallback</i>()</li>
+</ul>
+</ul>
 
 <h3>Package com.ibm.icu.math</h3>
 <ul>
@@ -22,6 +30,12 @@ BigDecimal
 <h3>Package com.ibm.icu.text</h3>
 <ul>
 <li><span style='color:red'>*internal*  </span>public class <i>BreakDictionary</i></li>
+ArabicShaping
+<ul>
+<li>(draft)      public static int <i>countSpaceSub</i>(char[], int, char)</li>
+<li>(draft)      public static int <i>flipArray</i>(char[], int, int, int)</li>
+<li>(draft)      public static void <i>shiftArray</i>(char[], int, int, char)</li>
+</ul>
 CollationKey
 <ul>
 <li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
@@ -39,6 +53,26 @@ DateTimePatternGenerator
 DecimalFormatSymbols
 <ul>
 <li>(draft)      public static final int CURRENCT_SPC_SURROUNDING_MATCH</li>
+</ul>
+IndexCharacters
+<ul>
+<li>(draft)      public static final char CGJ</li>
+</ul>
+Normalizer
+<ul>
+<li><span style='color:red'>*internal*  </span>public static boolean <i>isNFSkippable</i>(int, Normalizer.Mode)</li>
+</ul>
+Normalizer.Mode
+<ul>
+<li>(stable)     protected int <i>getMask</i>()</li>
+<li>(stable)     protected int <i>getMinC</i>()</li>
+<li>(stable)     protected Normalizer.IsNextBoundary <i>getNextBoundary</i>()</li>
+<li>(stable)     protected Normalizer.IsPrevBoundary <i>getPrevBoundary</i>()</li>
+<li>(stable)     protected boolean <i>isNFSkippable</i>(int)</li>
+<li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, UnicodeSet)</li>
+<li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, int)</li>
+<li>(stable)     protected java.lang.String <i>normalize</i>(java.lang.String, int)</li>
+<li>(stable)     protected Normalizer.QuickCheckResult <i>quickCheck</i>(char[], int, int, boolean, UnicodeSet)</li>
 </ul>
 </ul>
 
@@ -87,7 +121,15 @@ VersionInfo
 
 
 <hr/>
-<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.3.4</h2>
+<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.4</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+SimpleDateFormat
+<ul>
+<li><span style='color:red'>*internal*  </span>protected NumberFormat <i>getNumberFormat</i>(char)</li>
+</ul>
+</ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
@@ -99,7 +141,7 @@ Calendar.FormatConfiguration
 
 
 <hr/>
-<h2>Changed in ICU4J 4.3.4 (old, new)</h2>
+<h2>Changed in ICU4J 4.4 (old, new)</h2>
 
 <h3>Package com.ibm.icu.charset</h3>
 <ul>
@@ -165,7 +207,7 @@ VersionInfo
 
 
 <hr/>
-<h2>Promoted to stable in ICU4J 4.3.4</h2>
+<h2>Promoted to stable in ICU4J 4.4</h2>
 
 <h3>Package com.ibm.icu.charset</h3>
 <ul>
@@ -175,6 +217,10 @@ VersionInfo
 <h3>Package com.ibm.icu.text</h3>
 <ul>
 <li>(stable)     public class <i>CurrencyPluralInfo</i></li>
+ChineseDateFormat
+<ul>
+<li>(draft)      public <i>ChineseDateFormat</i>(java.lang.String, java.lang.String, ULocale)</li>
+</ul>
 Collator
 <ul>
 <li>(stable)     public static final java.lang.String[] <i>getKeywordValuesForLocale</i>(java.lang.String, ULocale, boolean)</li>
@@ -268,7 +314,7 @@ LocaleData
 
 
 <hr/>
-<h2>Added in ICU4J 4.3.4</h2>
+<h2>Added in ICU4J 4.4</h2>
 
 <h3>Package com.ibm.icu.charset</h3>
 <ul>
@@ -356,6 +402,7 @@ UProperty
 <li>(stable)     public static final int CHANGES_WHEN_CASEFOLDED</li>
 <li>(stable)     public static final int CHANGES_WHEN_CASEMAPPED</li>
 <li>(stable)     public static final int CHANGES_WHEN_LOWERCASED</li>
+<li>(stable)     public static final int CHANGES_WHEN_NFKC_CASEFOLDED</li>
 <li>(stable)     public static final int CHANGES_WHEN_TITLECASED</li>
 <li>(stable)     public static final int CHANGES_WHEN_UPPERCASED</li>
 <li><span style='color:red'>*internal*  </span>public static final int UNDEFINED</li>
@@ -380,6 +427,7 @@ UScript
 <li>(draft)      public abstract class <i>LocaleDisplayNames</i></li>
 <li>(draft)      public static final class <i>LocaleDisplayNames.DialectHandling</i></li>
 <li>(draft)      public abstract class <i>Normalizer2</i></li>
+<li>(draft)      public static final class <i>Normalizer2.Mode</i></li>
 <li>(draft)      public interface <i>RbnfLenientScanner</i></li>
 <li>(draft)      public interface <i>RbnfLenientScannerProvider</i></li>
 <li><span style='color:red'>*internal*  </span>public class <i>RbnfScannerProviderImpl</i></li>
@@ -400,7 +448,9 @@ DateTimePatternGenerator
 <ul>
 <li>(draft)      public static final int MATCH_ALL_FIELDS_LENGTH</li>
 <li>(draft)      public static final int MATCH_HOUR_FIELD_LENGTH</li>
+<li><span style='color:red'>*internal*  </span>public static final int MATCH_MINUTE_FIELD_LENGTH</li>
 <li>(draft)      public static final int MATCH_NO_OPTIONS</li>
+<li><span style='color:red'>*internal*  </span>public static final int MATCH_SECOND_FIELD_LENGTH</li>
 <li>(stable)     public DateTimePatternGenerator <i>cloneAsThawed</i>()</li>
 <li>(stable)     public DateTimePatternGenerator <i>freeze</i>()</li>
 <li>(draft)      public java.lang.String <i>getBestPattern</i>(java.lang.String, int)</li>
@@ -410,7 +460,7 @@ DateTimePatternGenerator
 </ul>
 DateTimePatternGenerator.VariableField
 <ul>
-<li>(draft)      protected boolean <i>isNumeric</i>()</li>
+<li><span style='color:red'>*internal*  </span>protected boolean <i>isNumeric</i>()</li>
 </ul>
 DecimalFormatSymbols
 <ul>
@@ -418,7 +468,12 @@ DecimalFormatSymbols
 </ul>
 IndexCharacters
 <ul>
-<li>(draft)      public <i>IndexCharacters</i>(ULocale, UnicodeSet, Collator)</li>
+<li><span style='color:red'>*internal*  </span>public <i>IndexCharacters</i>(ULocale, UnicodeSet, Collator)</li>
+</ul>
+Normalizer.Mode
+<ul>
+<li>(draft)      public <i>Normalizer.Mode</i>()</li>
+<li><span style='color:red'>*internal*  </span>protected abstract Normalizer2 <i>getNormalizer2</i>(int)</li>
 </ul>
 RuleBasedNumberFormat
 <ul>
@@ -456,7 +511,7 @@ UnicodeSet
 <li>(draft)      public int <i>spanBack</i>(java.lang.CharSequence, UnicodeSet.SpanCondition)</li>
 <li>(draft)      public int <i>spanBack</i>(java.lang.CharSequence, int, UnicodeSet.SpanCondition)</li>
 <li>(draft)      public java.lang.Iterable <i>strings</i>()</li>
-<li>(draft)      public java.lang.String <i>stripFrom</i>(java.lang.CharSequence, boolean)</li>
+<li><span style='color:red'>*internal*  </span>public java.lang.String <i>stripFrom</i>(java.lang.CharSequence, boolean)</li>
 <li>(draft)      public static java.lang.String[] <i>toArray</i>(UnicodeSet)</li>
 </ul>
 </ul>
@@ -531,6 +586,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Jan 22 16:46:37 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Mar 03 00:10:36 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
