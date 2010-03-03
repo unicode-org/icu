@@ -221,7 +221,11 @@ typedef enum {
      UCOL_HIRAGANA_QUATERNARY_MODE,
      /** When turned on, this attribute generates a collation key
       * for the numeric value of substrings of digits.
-      * This is a way to get '100' to sort AFTER '2'. */
+      * This is a way to get '100' to sort AFTER '2'. Note that the longest
+      * digit substring that can be treated as a single collation element is
+      * 254 digits (not counting leading zeros). If a digit substring is
+      * longer than that, the digits beyond the limit will be treated as a
+      * separate digit substring associated with a separate collation element. */
      UCOL_NUMERIC_COLLATION, 
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
