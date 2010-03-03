@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -110,6 +110,7 @@ static void TestConvertSafeCloneCallback(void);
 static void TestEBCDICSwapLFNL(void);
 static void TestConvertEx(void);
 static void TestConvertExFromUTF8(void);
+static void TestConvertExFromUTF8_C5F0(void);
 static void TestConvertAlgorithmic(void);
        void TestDefaultConverterError(void);    /* defined in cctest.c */
 static void TestToUCountPending(void);
@@ -143,6 +144,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestEBCDICSwapLFNL,          "tsconv/ccapitst/TestEBCDICSwapLFNL");
     addTest(root, &TestConvertEx,               "tsconv/ccapitst/TestConvertEx");
     addTest(root, &TestConvertExFromUTF8,       "tsconv/ccapitst/TestConvertExFromUTF8");
+    addTest(root, &TestConvertExFromUTF8_C5F0,  "tsconv/ccapitst/TestConvertExFromUTF8_C5F0");
     addTest(root, &TestConvertAlgorithmic,      "tsconv/ccapitst/TestConvertAlgorithmic");
     addTest(root, &TestDefaultConverterError,   "tsconv/ccapitst/TestDefaultConverterError");
 #if !UCONFIG_NO_FILE_IO
@@ -2676,6 +2678,91 @@ static void TestConvertExFromUTF8() {
         }
         testFromTruncatedUTF8(utf8Cnv, cnv, converterNames[i], charUTF8, charUTF8Length, char0, char0Length, char1, char1Length);
         testFromBadUTF8(utf8Cnv, cnv, converterNames[i], charUTF8, charUTF8Length, char0, char0Length, char1, char1Length);
+        ucnv_close(cnv);
+    }
+    ucnv_close(utf8Cnv);
+}
+
+static void TestConvertExFromUTF8_C5F0() {
+    static const char *const converterNames[]={
+#if !UCONFIG_NO_LEGACY_CONVERSION
+        "windows-1251",
+        "shift-jis",
+#endif
+        "us-ascii",
+        "iso-8859-1",
+        "utf-8"
+    };
+
+    UConverter *utf8Cnv, *cnv;
+    UErrorCode errorCode;
+    int32_t i;
+
+    static const char bad_utf8[2]={ 0xC5, 0xF0 };
+    /* Expect "&#65533;&#65533;" (2x U+FFFD as decimal NCRs) */
+    static const char twoNCRs[16]={
+        0x26, 0x23, 0x36, 0x35, 0x35, 0x33, 0x33, 0x3B,
+        0x26, 0x23, 0x36, 0x35, 0x35, 0x33, 0x33, 0x3B
+    };
+    static const char twoFFFD[6]={
+        (char)0xef, (char)0xbf, (char)0xbd,
+        (char)0xef, (char)0xbf, (char)0xbd 
+    };
+    const char *expected;
+    int32_t expectedLength;
+    char dest[20];  /* longer than longest expectedLength */
+
+    const char *src;
+    char *target;
+
+    UChar pivotBuffer[128];
+    UChar *pivotSource, *pivotTarget;
+
+    errorCode=U_ZERO_ERROR;
+    utf8Cnv=ucnv_open("UTF-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open UTF-8 converter - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    for(i=0; i<LENGTHOF(converterNames); ++i) {
+        errorCode=U_ZERO_ERROR;
+        cnv=ucnv_open(converterNames[i], &errorCode);
+        ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC,
+                              NULL, NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_data_err("unable to open %s converter - %s\n",
+                         converterNames[i], u_errorName(errorCode));
+            continue;
+        }
+        src=bad_utf8;
+        target=dest;
+        uprv_memset(dest, 9, sizeof(dest));
+        if(i==LENGTHOF(converterNames)-1) {
+            /* conversion to UTF-8 yields two U+FFFD directly */
+            expected=twoFFFD;
+            expectedLength=6;
+        } else {
+            /* conversion to a non-Unicode charset yields two NCRs */
+            expected=twoNCRs;
+            expectedLength=16;
+        }
+        pivotBuffer[0]=0;
+        pivotBuffer[1]=1;
+        pivotBuffer[2]=2;
+        pivotSource=pivotTarget=pivotBuffer;
+        ucnv_convertEx(
+            cnv, utf8Cnv,
+            &target, dest+expectedLength,
+            &src, bad_utf8+sizeof(bad_utf8),
+            pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer+LENGTHOF(pivotBuffer),
+            TRUE, TRUE, &errorCode);
+        if( errorCode!=U_STRING_NOT_TERMINATED_WARNING || src!=bad_utf8+2 ||
+            target!=dest+expectedLength || 0!=uprv_memcmp(dest, expected, expectedLength) ||
+            dest[expectedLength]!=9
+        ) {
+            log_err("ucnv_convertEx(UTF-8 C5 F0 -> %s/decimal NCRs) failed\n", converterNames[i]);
+        }
         ucnv_close(cnv);
     }
     ucnv_close(utf8Cnv);

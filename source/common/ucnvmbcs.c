@@ -5020,7 +5020,14 @@ ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
-                        if(source<sourceLimit) {
+                        /*
+                         * The sourceLimit may have been adjusted before the conversion loop
+                         * to stop before a truncated sequence.
+                         * Here we need to use the real limit in case we have two truncated
+                         * sequences at the end.
+                         * See ticket #7492.
+                         */
+                        if(source<(uint8_t *)pToUArgs->sourceLimit) {
                             b=*source;
                             if(U8_IS_TRAIL(b)) {
                                 ++source;
@@ -5297,7 +5304,14 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
-                        if(source<sourceLimit) {
+                        /*
+                         * The sourceLimit may have been adjusted before the conversion loop
+                         * to stop before a truncated sequence.
+                         * Here we need to use the real limit in case we have two truncated
+                         * sequences at the end.
+                         * See ticket #7492.
+                         */
+                        if(source<(uint8_t *)pToUArgs->sourceLimit) {
                             b=*source;
                             if(U8_IS_TRAIL(b)) {
                                 ++source;
