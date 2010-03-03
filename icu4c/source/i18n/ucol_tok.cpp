@@ -705,6 +705,9 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
             src->source = newSrc;
         } else {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            if (tempStuff != stuff) {
+                uprv_free(tempStuff);
+            }
             return;
         }
     }
