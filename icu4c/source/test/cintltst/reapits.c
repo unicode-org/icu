@@ -65,6 +65,9 @@ log_data_err("Test Failure at file %s, line %d (Are you missing data?)\n", __FIL
     }
 
 
+/**
+ * @param expected utf-8 array of bytes to be expected
+ */
 static void test_assert_string(const char *expected, const UChar *actual, UBool nulTerm, const char *file, int line) {
      char     buf_inside_macro[120];
      int32_t  len = (int32_t)strlen(expected);
@@ -163,7 +166,7 @@ static void TestRegexCAPI(void) {
     u_uastrncpy(pat, "abc*", sizeof(pat)/2);
     re = uregex_open(pat, -1, 0, 0, &status);
     if (U_FAILURE(status)) {
-         log_data_err("Failed to open regular expression, line %d, error is \"%s\" (Are you missing data?)\n", __LINE__, u_errorName(status));
+         log_data_err("Failed to open regular expression, %s:%d, error is \"%s\" (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));
          return;
     }
     uregex_close(re);
@@ -1357,12 +1360,13 @@ static void TestUTextAPI(void) {
     URegularExpression  *re;
     UText                patternText = UTEXT_INITIALIZER;
     UChar                pat[200];
+    const char           patternTextUTF8[5] = { 0x61, 0x62, 0x63, 0x2a, 0x00 };
 
     /* Mimimalist open/close */
-    utext_openUTF8(&patternText, "abc*", -1, &status);
+    utext_openUTF8(&patternText, patternTextUTF8, -1, &status);
     re = uregex_openUText(&patternText, 0, 0, &status);
     if (U_FAILURE(status)) {
-         log_data_err("Failed to open regular expression, line %d, error is \"%s\" (Are you missing data?)\n", __LINE__, u_errorName(status));
+         log_data_err("Failed to open regular expression, %s:%d, error is \"%s\" (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));
          utext_close(&patternText);
          return;
     }
@@ -1451,10 +1455,12 @@ static void TestUTextAPI(void) {
         const UChar  *resultPat;
         int32_t       resultLen;
         UText        *resultText;
+        const char str_hello[] = { 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x00 }; /* hello */
+        const char str_hel[] = { 0x68, 0x65, 0x6c, 0x00 }; /* hel */
         u_uastrncpy(pat, "hello", sizeof(pat)/2); /* for comparison */
         status = U_ZERO_ERROR;
         
-        utext_openUTF8(&patternText, "hello", -1, &status);
+        utext_openUTF8(&patternText, str_hello, -1, &status);
         re = uregex_open(pat, -1, 0, NULL, &status);
         resultPat = uregex_pattern(re, &resultLen, &status);
         TEST_ASSERT_SUCCESS(status);
@@ -1467,7 +1473,7 @@ static void TestUTextAPI(void) {
         
         resultText = uregex_patternUText(re, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("hello", resultText);
+        TEST_ASSERT_UTEXT(str_hello, resultText);
 
         uregex_close(re);
 
@@ -1485,7 +1491,7 @@ static void TestUTextAPI(void) {
         
         resultText = uregex_patternUText(re, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("hel", resultText);
+        TEST_ASSERT_UTEXT(str_hel, resultText);
 
         uregex_close(re);
     }
@@ -1497,12 +1503,14 @@ static void TestUTextAPI(void) {
         UText  text1 = UTEXT_INITIALIZER;
         UText  text2 = UTEXT_INITIALIZER;
         UBool  result;
-
+        const char str_abcccd[] = { 0x62, 0x63, 0x64, 0x64, 0x64, 0x65, 0x00 }; /* abcccd */
+        const char str_abcccxd[] = { 0x62, 0x63, 0x64, 0x64, 0x64, 0x79, 0x65, 0x00 }; /* abcccxd */
+        const char str_abcd[] = { 0x62, 0x63, 0x64, 0x2b, 0x65, 0x00 }; /* abc*d */
         status = U_ZERO_ERROR;
-        utext_openUTF8(&text1, "abcccd", -1, &status);
-        utext_openUTF8(&text2, "abcccxd", -1, &status);
+        utext_openUTF8(&text1, str_abcccd, -1, &status);
+        utext_openUTF8(&text2, str_abcccxd, -1, &status);
         
-        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        utext_openUTF8(&patternText, str_abcd, -1, &status);
         re = uregex_openUText(&patternText, 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
 
@@ -1545,13 +1553,17 @@ static void TestUTextAPI(void) {
         UText  *resultText;
         const UChar   *result;
         int32_t  textLength;
+        const char str_abcccd[] = { 0x62, 0x63, 0x64, 0x64, 0x64, 0x65, 0x00 }; /* abcccd */
+        const char str_abcccxd[] = { 0x62, 0x63, 0x64, 0x64, 0x64, 0x79, 0x65, 0x00 }; /* abcccxd */
+        const char str_abcd[] = { 0x62, 0x63, 0x64, 0x2b, 0x65, 0x00 }; /* abc*d */
+
 
         status = U_ZERO_ERROR;
-        utext_openUTF8(&text1, "abcccd", -1, &status);
-        u_uastrncpy(text2Chars, "abcccxd", sizeof(text2)/2);
+        utext_openUTF8(&text1, str_abcccd, -1, &status);
+        u_uastrncpy(text2Chars, str_abcccxd, sizeof(text2)/2);
         utext_openUChars(&text2, text2Chars, -1, &status);
         
-        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        utext_openUTF8(&patternText, str_abcd, -1, &status);
         re = uregex_openUText(&patternText, 0, NULL, &status);
 
         /* First set a UText */
@@ -1597,10 +1609,12 @@ static void TestUTextAPI(void) {
         UText   text1 = UTEXT_INITIALIZER;
         UBool   result;
         UText   nullText = UTEXT_INITIALIZER;
+        const char str_abcccde[] = { 0x61, 0x62, 0x63, 0x63, 0x63, 0x64, 0x65, 0x00 }; /* abcccde */
+        const char str_abcd[] = { 0x61, 0x62, 0x63, 0x2a, 0x64, 0x00 }; /* abc*d */
 
         status = U_ZERO_ERROR;
-        utext_openUTF8(&text1, "abcccde", -1, &status);
-        utext_openUTF8(&patternText, "abc*d", -1, &status);
+        utext_openUTF8(&text1, str_abcccde, -1, &status);
+        utext_openUTF8(&patternText, str_abcd, -1, &status);
         re = uregex_openUText(&patternText, 0, NULL, &status);
 
         uregex_setUText(re, &text1, &status);
@@ -1700,6 +1714,11 @@ static void TestUTextAPI(void) {
         UChar    text1[80];
         UText   *actual;
         UBool    result;
+
+        const char str_abcinteriordef[] = { 0x61, 0x62, 0x63, 0x20, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x69, 0x6f, 0x72, 0x20, 0x64, 0x65, 0x66, 0x00 }; /* abc interior def */
+        const char str_interior[] = { 0x20, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x69, 0x6f, 0x72, 0x20, 0x00 }; /* ' interior ' */
+        
+
         u_uastrncpy(text1, "noise abc interior def, and this is off the end",  sizeof(text1)/2);
 
         status = U_ZERO_ERROR;
@@ -1714,14 +1733,14 @@ static void TestUTextAPI(void) {
         status = U_ZERO_ERROR;
         actual = uregex_groupUText(re, 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("abc interior def", actual);
+        TEST_ASSERT_UTEXT(str_abcinteriordef, actual);
         utext_close(actual);
 
         /*  Capture group #1.  Should succeed. */
         status = U_ZERO_ERROR;
         actual = uregex_groupUText(re, 1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT(" interior ", actual);
+        TEST_ASSERT_UTEXT(str_interior, actual);
         utext_close(actual);
 
         /*  Capture group out of range.  Error. */
@@ -1743,11 +1762,15 @@ static void TestUTextAPI(void) {
         UChar    text2[80];
         UText    replText = UTEXT_INITIALIZER;
         UText   *result;
-        
+        const char str_Replxxx[] = { 0x52, 0x65, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x20, 0x3c, 0x61, 0x61, 0x3e, 0x20, 0x78, 0x31, 0x78, 0x20, 0x78, 0x2e, 0x2e, 0x2e, 0x78, 0x2e, 0x00 }; /* Replace <aa> x1x x...x. */
+        const char str_Nomatchhere[] = { 0x4e, 0x6f, 0x20, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x20, 0x68, 0x65, 0x72, 0x65, 0x2e, 0x00 }; /* No match here. */
+        const char str_u00411U00000042a[] =  { 0x5c, 0x5c, 0x5c, 0x75, 0x30, 0x30, 0x34, 0x31, 0x24, 0x31, 0x5c, 0x55, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x34, 0x32, 0x24, 0x5c, 0x61, 0x00 }; /* \\\u0041$1\U00000042$\a */
+        const char str_1x[] = { 0x3c, 0x24, 0x31, 0x3e, 0x00 }; /* <$1> */
+        const char str_ReplaceAaaBax1xxx[] = { 0x52, 0x65, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x20, 0x5c, 0x41, 0x61, 0x61, 0x42, 0x24, 0x61, 0x20, 0x78, 0x31, 0x78, 0x20, 0x78, 0x2e, 0x2e, 0x2e, 0x78, 0x2e, 0x00 }; /* Replace \AaaB$a x1x x...x. */
         status = U_ZERO_ERROR;
         u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
         u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
-        utext_openUTF8(&replText, "<$1>", -1, &status);
+        utext_openUTF8(&replText, str_1x, -1, &status);
 
         re = uregex_openC("x(.*?)x", 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
@@ -1756,22 +1779,22 @@ static void TestUTextAPI(void) {
         uregex_setText(re, text1, -1, &status);
         result = uregex_replaceFirstUText(re, &replText, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("Replace <aa> x1x x...x.", result);
+        TEST_ASSERT_UTEXT(str_Replxxx, result);
         utext_close(result);
 
         /* No match.  Text should copy to output with no changes.  */
         uregex_setText(re, text2, -1, &status);
         result = uregex_replaceFirstUText(re, &replText, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("No match here.", result);
+        TEST_ASSERT_UTEXT(str_Nomatchhere, result);
         utext_close(result);
         
         /* Unicode escapes */
         uregex_setText(re, text1, -1, &status);
-        utext_openUTF8(&replText, "\\\\\\u0041$1\\U00000042$\\a", -1, &status);
+        utext_openUTF8(&replText, str_u00411U00000042a, -1, &status);
         result = uregex_replaceFirstUText(re, &replText, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("Replace \\AaaB$a x1x x...x.", result);
+        TEST_ASSERT_UTEXT(str_ReplaceAaaBax1xxx, result);
         utext_close(result);
 
         uregex_close(re);
@@ -1787,11 +1810,13 @@ static void TestUTextAPI(void) {
         UChar    text2[80];
         UText    replText = UTEXT_INITIALIZER;
         UText   *result;
-
+        const char str_1[] = { 0x3c, 0x24, 0x31, 0x3e, 0x00 }; /* <$1> */
+        const char str_Replaceaa1[] = { 0x52, 0x65, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x20, 0x3c, 0x61, 0x61, 0x3e, 0x20, 0x3c, 0x31, 0x3e, 0x20, 0x3c, 0x2e, 0x2e, 0x2e, 0x3e, 0x2e, 0x00 }; /* Replace <aa> <1> <...>. */
+        const char str_Nomatchhere[] = { 0x4e, 0x6f, 0x20, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x20, 0x68, 0x65, 0x72, 0x65, 0x2e, 0x00 }; /* No match here. */
         status = U_ZERO_ERROR;
         u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
         u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
-        utext_openUTF8(&replText, "<$1>", -1, &status);
+        utext_openUTF8(&replText, str_1, -1, &status);
 
         re = uregex_openC("x(.*?)x", 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
@@ -1800,14 +1825,14 @@ static void TestUTextAPI(void) {
         uregex_setText(re, text1, -1, &status);
         result = uregex_replaceAllUText(re, &replText, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("Replace <aa> <1> <...>.", result);
+        TEST_ASSERT_UTEXT(str_Replaceaa1, result);
         utext_close(result);
 
         /* No match.  Text should copy to output with no changes.  */
         uregex_setText(re, text2, -1, &status);
         result = uregex_replaceAllUText(re, &replText, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_UTEXT("No match here.", result);
+        TEST_ASSERT_UTEXT(str_Nomatchhere, result);
         utext_close(result);
 
         uregex_close(re);
@@ -1824,7 +1849,6 @@ static void TestUTextAPI(void) {
         UChar    buf[100];
         UChar   *bufPtr;
         int32_t  bufCap;
-
 
         status = U_ZERO_ERROR;
         re = uregex_openC(".*", 0, 0, &status);
@@ -1891,10 +1915,13 @@ static void TestUTextAPI(void) {
 
             /* The TEST_ASSERT_SUCCESS call above should change too... */
             if(U_SUCCESS(status)) {
+              const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* 'first ' */
+              const char str_second[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x00 }; /* '  second' */
+              const char str_third[] = { 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /* '  third' */
                 TEST_ASSERT(numFields == 3);
-                TEST_ASSERT_UTEXT("first ",  fields[0]);
-                TEST_ASSERT_UTEXT(" second", fields[1]);
-                TEST_ASSERT_UTEXT("  third", fields[2]);
+                TEST_ASSERT_UTEXT(str_first,  fields[0]);
+                TEST_ASSERT_UTEXT(str_second, fields[1]);
+                TEST_ASSERT_UTEXT(str_third, fields[2]);
                 TEST_ASSERT(fields[3] == NULL);
             }
             for(i = 0; i < numFields; i++) {
@@ -1921,9 +1948,11 @@ static void TestUTextAPI(void) {
 
             /* The TEST_ASSERT_SUCCESS call above should change too... */
             if(U_SUCCESS(status)) {
+                const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+                const char str_secondthird[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x3a, 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /*  second:  third */
                 TEST_ASSERT(numFields == 2);
-                TEST_ASSERT_UTEXT("first ",  fields[0]);
-                TEST_ASSERT_UTEXT(" second:  third", fields[1]);
+                TEST_ASSERT_UTEXT(str_first,  fields[0]);
+                TEST_ASSERT_UTEXT(str_secondthird, fields[1]);
                 TEST_ASSERT(fields[2] == &patternText);
             }
             for(i = 0; i < numFields; i++) {
@@ -1958,12 +1987,18 @@ static void TestUTextAPI(void) {
 
             /* The TEST_ASSERT_SUCCESS call above should change too... */
             if(U_SUCCESS(status)) {
+                const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+                const char str_taga[] = { 0x74, 0x61, 0x67, 0x2d, 0x61, 0x00 }; /* tag-a */
+                const char str_second[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x00 }; /*  second */
+                const char str_tagb[] = { 0x74, 0x61, 0x67, 0x2d, 0x62, 0x00 }; /* tag-b */
+                const char str_third[] = { 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /*   third */
+
                 TEST_ASSERT(numFields == 5);
-                TEST_ASSERT_UTEXT("first ",  fields[0]);
-                TEST_ASSERT_UTEXT("tag-a",   fields[1]);
-                TEST_ASSERT_UTEXT(" second", fields[2]);
-                TEST_ASSERT_UTEXT("tag-b",   fields[3]);
-                TEST_ASSERT_UTEXT("  third", fields[4]);
+                TEST_ASSERT_UTEXT(str_first,  fields[0]);
+                TEST_ASSERT_UTEXT(str_taga,   fields[1]);
+                TEST_ASSERT_UTEXT(str_second, fields[2]);
+                TEST_ASSERT_UTEXT(str_tagb,   fields[3]);
+                TEST_ASSERT_UTEXT(str_third, fields[4]);
                 TEST_ASSERT(fields[5] == NULL);
             }
             for(i = 0; i < numFields; i++) {
@@ -1981,9 +2016,11 @@ static void TestUTextAPI(void) {
 
         /* The TEST_ASSERT_SUCCESS call above should change too... */
         if(U_SUCCESS(status)) {
+            const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+            const char str_secondtagbthird[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x3c, 0x74, 0x61, 0x67, 0x2d, 0x62, 0x3e, 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /*  second<tag-b>  third */
             TEST_ASSERT(numFields == 2);
-            TEST_ASSERT_UTEXT("first ",  fields[0]);
-            TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[1]);
+            TEST_ASSERT_UTEXT(str_first,  fields[0]);
+            TEST_ASSERT_UTEXT(str_secondtagbthird, fields[1]);
             TEST_ASSERT(fields[2] == &patternText);
         }
         for(i = 0; i < numFields; i++) {
@@ -2002,10 +2039,13 @@ static void TestUTextAPI(void) {
 
         /* The TEST_ASSERT_SUCCESS call above should change too... */
         if(U_SUCCESS(status)) {
+            const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+            const char str_taga[] = { 0x74, 0x61, 0x67, 0x2d, 0x61, 0x00 }; /* tag-a */
+            const char str_secondtagbthird[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x3c, 0x74, 0x61, 0x67, 0x2d, 0x62, 0x3e, 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /*  second<tag-b>  third */
             TEST_ASSERT(numFields == 3);
-            TEST_ASSERT_UTEXT("first ",  fields[0]);
-            TEST_ASSERT_UTEXT("tag-a",   fields[1]);
-            TEST_ASSERT_UTEXT(" second<tag-b>  third", fields[2]);
+            TEST_ASSERT_UTEXT(str_first,  fields[0]);
+            TEST_ASSERT_UTEXT(str_taga,   fields[1]);
+            TEST_ASSERT_UTEXT(str_secondtagbthird, fields[2]);
             TEST_ASSERT(fields[3] == &patternText);
         }
         for(i = 0; i < numFields; i++) {
@@ -2025,12 +2065,18 @@ static void TestUTextAPI(void) {
 
         /* The TEST_ASSERT_SUCCESS call above should change too... */
         if(U_SUCCESS(status)) {
+            const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+            const char str_taga[] = { 0x74, 0x61, 0x67, 0x2d, 0x61, 0x00 }; /* tag-a */
+            const char str_second[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x00 }; /*  second */
+            const char str_tagb[] = { 0x74, 0x61, 0x67, 0x2d, 0x62, 0x00 }; /* tag-b */
+            const char str_third[] = { 0x20, 0x20, 0x74, 0x68, 0x69, 0x72, 0x64, 0x00 }; /*   third */
+
             TEST_ASSERT(numFields == 5);
-            TEST_ASSERT_UTEXT("first ",  fields[0]);
-            TEST_ASSERT_UTEXT("tag-a",   fields[1]);
-            TEST_ASSERT_UTEXT(" second", fields[2]);
-            TEST_ASSERT_UTEXT("tag-b",   fields[3]);
-            TEST_ASSERT_UTEXT("  third", fields[4]);
+            TEST_ASSERT_UTEXT(str_first,  fields[0]);
+            TEST_ASSERT_UTEXT(str_taga,   fields[1]);
+            TEST_ASSERT_UTEXT(str_second, fields[2]);
+            TEST_ASSERT_UTEXT(str_tagb,   fields[3]);
+            TEST_ASSERT_UTEXT(str_third, fields[4]);
             TEST_ASSERT(fields[5] == &patternText);
         }
         for(i = 0; i < numFields; i++) {
@@ -2051,11 +2097,16 @@ static void TestUTextAPI(void) {
 
             /* The TEST_ASSERT_SUCCESS call above should change too... */
             if(U_SUCCESS(status)) {
+                const char str_first[] = { 0x66, 0x69, 0x72, 0x73, 0x74, 0x20, 0x00 }; /* first  */
+                const char str_taga[] = { 0x74, 0x61, 0x67, 0x2d, 0x61, 0x00 }; /* tag-a */
+                const char str_second[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x00 }; /*  second */
+                const char str_tagb[] = { 0x74, 0x61, 0x67, 0x2d, 0x62, 0x00 }; /* tag-b */
+
                 TEST_ASSERT(numFields == 4);
-                TEST_ASSERT_UTEXT("first ",  fields[0]);
-                TEST_ASSERT_UTEXT("tag-a",   fields[1]);
-                TEST_ASSERT_UTEXT(" second", fields[2]);
-                TEST_ASSERT_UTEXT("tag-b",   fields[3]);
+                TEST_ASSERT_UTEXT(str_first,  fields[0]);
+                TEST_ASSERT_UTEXT(str_taga,   fields[1]);
+                TEST_ASSERT_UTEXT(str_second, fields[2]);
+                TEST_ASSERT_UTEXT(str_tagb,   fields[3]);
                 TEST_ASSERT(fields[4] == NULL);
                 TEST_ASSERT(fields[8] == NULL);
                 TEST_ASSERT(fields[9] == &patternText);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -919,6 +919,8 @@ static void TestGetKeywordValuesForLocale(void) {
             for (j = 0; j < size; j++) {
                 if ((value = uenum_next(pref, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                     if (uprv_strcmp(value, PREFERRED[i][j+1]) != 0) {
+                        log_err("ERROR: locale %s got keywords #%d %s expected %s\n", loc, j, value, PREFERRED[i][j+1]);
+
                         matchPref = FALSE;
                         break;
                     }
@@ -928,6 +930,8 @@ static void TestGetKeywordValuesForLocale(void) {
                     break;
                 }
             }
+        } else {
+            log_err("FAIL: size of locale \"%s\" %d does not match expected size %d\n", loc, size, EXPECTED_SIZE[i]);
         }
         
         if (!matchPref) {
@@ -956,9 +960,15 @@ static void TestGetKeywordValuesForLocale(void) {
                     break;
                 }
             }
-        }
-        if (!matchAll) {
+           if (!matchAll) {
             log_err("FAIL: All values for locale \"%s\" does not match expected.\n", loc);
+           }
+        } else {
+            if(U_FAILURE(status)) {
+               log_err("ERROR: %s\n", u_errorName(status));
+            } else if(size!=uenum_count(ALL, &status)) {
+               log_err("ERROR: got size of %d, wanted %d\n", size, uenum_count(ALL, &status));
+            }
         }
         
         uenum_close(all);
