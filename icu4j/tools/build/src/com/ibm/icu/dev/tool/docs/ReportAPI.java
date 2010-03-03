@@ -46,11 +46,11 @@ public class ReportAPI {
     boolean html;
     String outputFile;
 
-    TreeSet<APIInfo> added;
-    TreeSet<APIInfo> removed;
-    TreeSet<APIInfo> promoted;
-    TreeSet<APIInfo> obsoleted;
-    ArrayList<DeltaInfo> changed;
+    TreeSet added;
+    TreeSet removed;
+    TreeSet promoted;
+    TreeSet obsoleted;
+    ArrayList changed;
 
     static final class DeltaInfo extends APIInfo {
         APIInfo added;
@@ -132,25 +132,25 @@ public class ReportAPI {
         this.oldData = oldData;
         this.newData = newData;
 
-        removed = (TreeSet<APIInfo>)oldData.set.clone();
+        removed = (TreeSet)oldData.set.clone();
         removed.removeAll(newData.set);
 
-        added = (TreeSet<APIInfo>)newData.set.clone();
+        added = (TreeSet)newData.set.clone();
         added.removeAll(oldData.set);
 
-        changed = new ArrayList<DeltaInfo>();
-        Iterator<APIInfo> ai = added.iterator();
-        Iterator<APIInfo> ri = removed.iterator();
-        Comparator<APIInfo> c = APIInfo.changedComparator();
+        changed = new ArrayList();
+        Iterator ai = added.iterator();
+        Iterator ri = removed.iterator();
+        Comparator c = APIInfo.changedComparator();
 
-        ArrayList<APIInfo> ams = new ArrayList<APIInfo>();
-        ArrayList<APIInfo> rms = new ArrayList<APIInfo>();
+        ArrayList ams = new ArrayList();
+        ArrayList rms = new ArrayList();
         //PrintWriter outpw = new PrintWriter(System.out);
 
         APIInfo a = null, r = null;
         while ((a != null || ai.hasNext()) && (r != null || ri.hasNext())) {
-            if (a == null) a = ai.next();
-            if (r == null) r = ri.next();
+            if (a == null) a = (APIInfo)ai.next();
+            if (r == null) r = (APIInfo)ri.next();
 
             String am = a.getClassName() + "." + a.getName();
             String rm = r.getClassName() + "." + r.getName();
@@ -164,7 +164,7 @@ public class ReportAPI {
             if (!ams.isEmpty()) {
                 // simplest case first
                 if (ams.size() == 1 && rms.size() == 1) {
-                    changed.add(new DeltaInfo(ams.get(0), rms.get(0)));
+                    changed.add(new DeltaInfo((APIInfo)ams.get(0), (APIInfo)rms.get(0)));
                 } else {
                     // dang, what to do now?
                     // TODO: modify deltainfo to deal with lists of added and removed
@@ -186,33 +186,33 @@ public class ReportAPI {
         }
 
         // now clean up added and removed by cleaning out the changed members
-        Iterator<DeltaInfo> ci = changed.iterator();
+        Iterator ci = changed.iterator();
         while (ci.hasNext()) {
-            DeltaInfo di = ci.next();
+            DeltaInfo di = (DeltaInfo)ci.next();
             added.remove(di.added);
             removed.remove(di.removed);
         }
 
-        Set<APIInfo> tempAdded = new HashSet<APIInfo>();
+        Set tempAdded = new HashSet();
         tempAdded.addAll(newData.set);
         tempAdded.removeAll(removed);
-        TreeSet<APIInfo> changedAdded = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        TreeSet changedAdded = new TreeSet(APIInfo.defaultComparator());
         changedAdded.addAll(tempAdded);
 
-        Set<APIInfo> tempRemoved = new HashSet<APIInfo>();
+        Set tempRemoved = new HashSet();
         tempRemoved.addAll(oldData.set);
         tempRemoved.removeAll(added);
-        TreeSet<APIInfo> changedRemoved = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        TreeSet changedRemoved = new TreeSet(APIInfo.defaultComparator());
         changedRemoved.addAll(tempRemoved);
 
-        promoted = new TreeSet<APIInfo>(APIInfo.defaultComparator());
-        obsoleted = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        promoted = new TreeSet(APIInfo.defaultComparator());
+        obsoleted = new TreeSet(APIInfo.defaultComparator());
         ai = changedAdded.iterator();
         ri = changedRemoved.iterator();
         a = r = null;
         while ((a != null || ai.hasNext()) && (r != null || ri.hasNext())) {
-            if (a == null) a = ai.next();
-            if (r == null) r = ri.next();
+            if (a == null) a = (APIInfo)ai.next();
+            if (r == null) r = (APIInfo)ri.next();
             int result = c.compare(a, r);
             if (result < 0) {
                 a = null;
@@ -243,9 +243,7 @@ public class ReportAPI {
             }
         }
         int lstatus = lhs.getVal(APIInfo.STA);
-        if (lstatus == APIInfo.STA_OBSOLETE
-            || lstatus == APIInfo.STA_DEPRECATED
-            || lstatus == APIInfo.STA_INTERNAL) {
+        if (lstatus == APIInfo.STA_OBSOLETE || lstatus == APIInfo.STA_DEPRECATED || lstatus == APIInfo.STA_INTERNAL) {
             return -1;
         }
         return 1;
@@ -276,8 +274,7 @@ public class ReportAPI {
         String year = fmt.format(new Date());
         String title = "ICU4J API Comparison: " + oldData.name + " with " + newData.name;
         String info = "Contents generated by ReportAPI tool on " + new Date().toString();
-        String copyright = "Copyright (C) " + year +
-            ", International Business Machines Corporation, All Rights Reserved.";
+        String copyright = "Copyright (C) " + year + ", International Business Machines Corporation, All Rights Reserved.";
 
         if (html) {
             pw.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
@@ -406,13 +403,12 @@ public class ReportAPI {
         return false;
     }
 
-    private static void printResults(Collection<? extends APIInfo> c, PrintWriter pw, boolean html,
-                                     boolean isChangedAPIs) {
-        Iterator<? extends APIInfo> iter = c.iterator();
+    private static void printResults(Collection c, PrintWriter pw, boolean html, boolean isChangedAPIs) {
+        Iterator iter = c.iterator();
         String pack = null;
         String clas = null;
         while (iter.hasNext()) {
-            APIInfo info = iter.next();
+            APIInfo info = (APIInfo)iter.next();
 
             String packageName = info.getPackageName();
             if (!packageName.equals(pack)) {
@@ -475,19 +471,19 @@ public class ReportAPI {
         pw.println();
     }
 
-    private static TreeSet<APIInfo> stripAndResort(TreeSet<APIInfo> t) {
+    private static TreeSet stripAndResort(TreeSet t) {
         stripClassInfo(t);
-        TreeSet<APIInfo> r = new TreeSet<APIInfo>(APIInfo.classFirstComparator());
+        TreeSet r = new TreeSet(APIInfo.classFirstComparator());
         r.addAll(t);
         return r;
     }
 
-    private static void stripClassInfo(Collection<APIInfo> c) {
+    private static void stripClassInfo(Collection c) {
         // c is sorted with class info first
-        Iterator<? extends APIInfo> iter = c.iterator();
+        Iterator iter = c.iterator();
         String cname = null;
         while (iter.hasNext()) {
-            APIInfo info = iter.next();
+            APIInfo info = (APIInfo)iter.next();
             String className = info.getClassName();
             if (cname != null) {
                 if (cname.equals(className)) {
