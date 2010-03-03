@@ -3329,12 +3329,12 @@ class CharsetMBCS extends CharsetICU {
 
                     /* EBCDIC_STATEFUL ending with DBCS: emit an SI to return the output stream to SBCS */
                     if (target.hasRemaining()) {
-                        target.put((byte) si_value[0]);
+                        target.put(si_value[0]);
                         if (si_value_length == 2) {
                             if (target.remaining() > 0) {
-                                target.put((byte) si_value[1]);
+                                target.put(si_value[1]);
                             } else {
-                                errorBuffer[0] = (byte) si_value[1];
+                                errorBuffer[0] = si_value[1];
                                 errorBufferLength = 1;
                                 cr[0] = CoderResult.OVERFLOW;
                             }
@@ -3345,9 +3345,9 @@ class CharsetMBCS extends CharsetICU {
                         }
                     } else {
                         /* target is full */
-                        errorBuffer[0] = (byte) si_value[0];
+                        errorBuffer[0] = si_value[0];
                         if (si_value_length == 2) {
-                            errorBuffer[1] = (byte) si_value[1];
+                            errorBuffer[1] = si_value[1];
                         }
                         errorBufferLength = si_value_length;
                         cr[0] = CoderResult.OVERFLOW;
