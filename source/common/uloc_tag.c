@@ -13,6 +13,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "putilimp.h"
+#include "uinvchar.h"
 
 /* struct holding a single variant */
 typedef struct VariantListEntry {
@@ -429,7 +430,7 @@ _addVariantToList(VariantListEntry **first, VariantListEntry *var) {
                 var->next = NULL;
                 break;
             }
-            cmp = uprv_strcmp(var->variant, cur->variant);
+            cmp = uprv_compareInvCharsAsAscii(var->variant, cur->variant);
             if (cmp < 0) {
                 if (prev == NULL) {
                     *first = var;
@@ -495,10 +496,10 @@ _addExtensionToList(ExtensionListEntry **first, ExtensionListEntry *ext, UBool l
                 } else if (curlen == 1) {
                     cmp = LDMLEXT - *(cur->key);
                 } else {
-                    cmp = uprv_strcmp(ext->key, cur->key);
+                    cmp = uprv_compareInvCharsAsAscii(ext->key, cur->key);
                 }
             } else {
-                cmp = uprv_strcmp(ext->key, cur->key);
+                cmp = uprv_compareInvCharsAsAscii(ext->key, cur->key);
             }
             if (cmp < 0) {
                 if (prev == NULL) {
@@ -662,7 +663,7 @@ _bcp47ToLDMLKey(const char* bcpKey, int32_t bcpKeyLen,
         }
         u_UCharsToChars(uBcpKey, tmpBcpKeyBuf, tmpBcpKeyLen);
         tmpBcpKeyBuf[tmpBcpKeyLen] = 0;
-        if (uprv_strcmp(bcpKeyBuf, tmpBcpKeyBuf) == 0) {
+        if (uprv_compareInvCharsAsAscii(bcpKeyBuf, tmpBcpKeyBuf) == 0) {
             /* found a matching BCP47 key */
             resKey = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resKey);
@@ -720,7 +721,7 @@ _ldmlTypeToBCP47(const char* key, int32_t keyLen,
     for (i = 0; i < keyLen; i++) {
         keyBuf[i] = uprv_tolower(keyBuf[i]);
     }
-    if (uprv_strcmp(keyBuf, "timezone") == 0) {
+    if (uprv_compareInvCharsAsAscii(keyBuf, "timezone") == 0) {
         isTimezone = TRUE;
     }
 
@@ -877,7 +878,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
         }
         u_UCharsToChars(uBcpType, tmpBcpTypeBuf, tmpBcpTypeLen);
         tmpBcpTypeBuf[tmpBcpTypeLen] = 0;
-        if (uprv_strcmp(bcpTypeBuf, tmpBcpTypeBuf) == 0) {
+        if (uprv_compareInvCharsAsAscii(bcpTypeBuf, tmpBcpTypeBuf) == 0) {
             /* found a matching BCP47 type */
             resType = ures_getKey(mapData);
             resultLen = (int32_t)uprv_strlen(resType);
@@ -904,7 +905,7 @@ _bcp47ToLDMLType(const char* key, int32_t keyLen,
     copyLen = uprv_min(resultLen, typeCapacity);
     uprv_memcpy(type, resType, copyLen);
 
-    if (uprv_strcmp(keyBuf, "timezone") == 0) {
+    if (uprv_compareInvCharsAsAscii(keyBuf, "timezone") == 0) {
         for (i = 0; i < copyLen; i++) {
             if (*(type + i) == ':') {
                 *(type + i) = '/';
@@ -955,7 +956,7 @@ _appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capac
     } else {
         /* resolve deprecated */
         for (i = 0; DEPRECATEDLANGS[i] != NULL; i += 2) {
-            if (uprv_strcmp(buf, DEPRECATEDLANGS[i]) == 0) {
+            if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDLANGS[i]) == 0) {
                 uprv_strcpy(buf, DEPRECATEDLANGS[i + 1]);
                 len = (int32_t)uprv_strlen(buf);
                 break;
@@ -2005,7 +2006,7 @@ static const char*
 ultag_getJDKLanguage(const ULanguageTag* langtag) {
     int32_t i;
     for (i = 0; DEPRECATEDLANGS[i] != NULL; i += 2) {
-        if (uprv_strcmp(DEPRECATEDLANGS[i], langtag->language) == 0) {
+        if (uprv_compareInvCharsAsAscii(DEPRECATEDLANGS[i], langtag->language) == 0) {
             return DEPRECATEDLANGS[i + 1];
         }
     }
@@ -2190,7 +2191,7 @@ uloc_forLanguageTag(const char* langtag,
 
     /* language */
     subtag = ultag_getExtlangSize(lt) > 0 ? ultag_getExtlang(lt, 0) : ultag_getLanguage(lt);
-    if (uprv_strcmp(subtag, LANG_UND) != 0) {
+    if (uprv_compareInvCharsAsAscii(subtag, LANG_UND) != 0) {
         len = (int32_t)uprv_strlen(subtag);
         if (len > 0) {
             if (reslen < localeIDCapacity) {
