@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "meta:Acre"{
             ld{"એકર ગ્રીષ્મ સમય"}

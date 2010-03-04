@@ -44,7 +44,7 @@ bm{
             "kongole Fraŋ",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "suwisi Fraŋ",
         }
         CNY{
@@ -232,5 +232,5 @@ bm{
             "zimbabuwe Dolar",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.53"}
 }

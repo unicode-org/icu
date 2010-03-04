@@ -104,7 +104,7 @@ is{
             "Kanadískur dalur",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Svissneskur franki",
         }
         CLF{
@@ -400,11 +400,11 @@ is{
             "Maltneskt pund",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mexíkóskur pesi",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mexíkóskur silfurpesi (1861-1992)",
         }
         MXV{
@@ -662,5 +662,5 @@ is{
             other{"óþekktur eða ógildur gjaldeyrir"}
         }
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.72"}
 }

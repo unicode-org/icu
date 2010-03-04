@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algier"}
@@ -125,7 +125,6 @@ da{
             lg{"sydafrikansk tid"}
             ls{"sydafrikansk normaltid"}
             sg{"SAT"}
-            ss{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"vestafrikansk sommertid"}
@@ -415,7 +414,7 @@ da{
         }
         "meta:Guam"{
             ls{"Guam, normaltid"}
-            ss{"GT (GU)"}
+            ss{"GT (Guam)"}
         }
         "meta:Guyana"{
             ls{"Guyana-tid"}

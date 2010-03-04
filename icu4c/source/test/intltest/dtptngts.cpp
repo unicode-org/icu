@@ -110,7 +110,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("58:59"),
         CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN 11: yyyyMMMM  -> yyyy\u5E74MMM
 
-        UnicodeString("1999-1"),  // de_DE
+        UnicodeString("1.1999"),  // de_DE
         UnicodeString("Jan 1999"),
         UnicodeString("13.1.1999"),
         UnicodeString("13. Jan 1999"),
@@ -333,12 +333,12 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     UnicodeString testPattern=gen->getBestPattern(UnicodeString("MMMMdd"), status);
     testPattern=gen->getBestPattern(UnicodeString("MMMddHmm"), status);
-    format->applyPattern(gen->getBestPattern(UnicodeString("MMMMddHmm"), status));
+    format->applyPattern(gen->getBestPattern(UnicodeString("MMMMdHmm"), status));
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
     expectedResult=UnicodeString("14. von Oktober 08:58", -1, US_INV);
     if ( dateReturned != expectedResult ) {
-        errln("ERROR: Simple test addPattern failed!: d\'. von\' MMMM  ");
+        errln(UnicodeString("ERROR: Simple test addPattern failed!: d\'. von\' MMMM   Got: ") + dateReturned + UnicodeString(" Expected: ") + expectedResult);
     }
     delete format;
     
@@ -721,7 +721,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
  *      Hm{"H:mm"}
  *      Hms{"H:mm:ss"}
  *      hm{"h:mm a"}
- *  nb/gregorian has
+ *  be/gregorian has
  *      HHmmss{"HH.mm.ss"}
  *      Hm{"HH.mm"}
  *      hm{"h.mm a"}
@@ -743,12 +743,12 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "en", "Hmm",  "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "HHmm", "HH:mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "en", "hhmm", "hh:mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "nb", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
-        { "nb", "HHmm", "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
-        { "nb", "hhmm", "h.mm a",  UDATPG_MATCH_NO_OPTIONS        },
-        { "nb", "Hmm",  "H.mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "nb", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
-        { "nb", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "be", "Hmm",  "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "be", "HHmm", "HH.mm",   UDATPG_MATCH_NO_OPTIONS        },
+        { "be", "hhmm", "h.mm a",  UDATPG_MATCH_NO_OPTIONS        },
+        { "be", "Hmm",  "H.mm",    UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "be", "HHmm", "HH.mm",   UDATPG_MATCH_HOUR_FIELD_LENGTH },
+        { "be", "hhmm", "hh.mm a", UDATPG_MATCH_HOUR_FIELD_LENGTH },
     };
     
     int count = sizeof(testData) / sizeof(testData[0]);

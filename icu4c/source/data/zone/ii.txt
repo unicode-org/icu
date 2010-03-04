@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ii.xml
  */
 ii{
-    Version{"2.0.45.82"}
+    Version{"2.0.47.63"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"ꅉꀋꐚꌠ"}

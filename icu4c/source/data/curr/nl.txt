@@ -216,7 +216,7 @@ nl{
             "WIR euro",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Zwitserse franc",
         }
         CHW{
@@ -640,11 +640,11 @@ nl{
             "Malawische kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mexicaanse peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mexicaanse zilveren peso (1861-1992)",
         }
         MXV{
@@ -1169,5 +1169,5 @@ nl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.63"}
 }

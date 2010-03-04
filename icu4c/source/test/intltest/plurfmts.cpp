@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2007-2009, International Business Machines Corporation and
+ * Copyright (c) 2007-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -317,23 +317,25 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     
     // ====== Test Singular1 locales.
     logln("Testing singular1 locales.");
-    const char* singular1Locales[19] = {"da","de","el","en","eo","es","et","fi",
-                    "fo","he","it","nb","nl","nn","no","pt_PT","sv"};
+    const char* singular1Locales[52] = {"bem","da","de","el","en","eo","es","et","fi",
+                    "fo","gl","he","it","nb","nl","nn","no","pt","pt_PT","sv","af","bg","bn","ca","eu","fur","fy",
+                    "gu","ha","is","ku","lb","ml","mr","nah","ne","om","or","pa","pap","ps","so","sq","sw","ta",
+                    "te","tk","ur","zu","mn","gsw","rm"};
     testPattern = UNICODE_STRING_SIMPLE("one{one} other{other}");
     uprv_memset(pluralResults, -1, sizeof(pluralResults));
     pluralResults[0]= PFT_OTHER;
     pluralResults[1]= PFT_ONE;
     pluralResults[2]= PFT_OTHER;
-    helperTestRusults(singular1Locales, 19, testPattern, pluralResults);
+    helperTestRusults(singular1Locales, 52, testPattern, pluralResults);
     
     // ======== Test Singular01 locales.
     logln("Testing singular1 locales.");
-    const char* singular01Locales[2] = {"fr","pt"};
+    const char* singular01Locales[3] = {"ff","fr","kab"};
     testPattern = UNICODE_STRING_SIMPLE("one{one} other{other}");
     uprv_memset(pluralResults, -1, sizeof(pluralResults));
     pluralResults[0]= PFT_ONE;
     pluralResults[2]= PFT_OTHER;
-    helperTestRusults(singular01Locales, 2, testPattern, pluralResults);
+    helperTestRusults(singular01Locales, 3, testPattern, pluralResults);
     
     // ======== Test ZeroSingular locales.
     logln("Testing singular1 locales.");
@@ -437,7 +439,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     pluralResults[1]= PFT_ONE;
     pluralResults[5]= PFT_OTHER;
     for (int32_t i=0; i<20; ++i) {
-        if ((i==1)||(i==2)||(i==11)||(i==12)) {
+        if ((i==1)||(i==11)) {
             pluralResults[i*10+2] = PFT_OTHER;
             pluralResults[i*10+3] = PFT_OTHER;
             pluralResults[i*10+4] = PFT_OTHER;

@@ -169,5 +169,5 @@ sq{
         ZW{"Zimbabve"}
         ZZ{"Rajon i panjohur ose i pavlefshëm"}
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.69"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kok.xml
  */
 kok{
-    Version{"2.0.45.99"}
+    Version{"2.0.47.68"}
     zoneStrings{
         "meta:India"{
             cu:int{1}

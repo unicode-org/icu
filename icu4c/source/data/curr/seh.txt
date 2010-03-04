@@ -44,7 +44,7 @@ seh{
             "Franco congolês",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franco suíço",
         }
         CNY{
@@ -232,5 +232,5 @@ seh{
             "Dólar do Zimbábue",
         }
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.47.38"}
 }

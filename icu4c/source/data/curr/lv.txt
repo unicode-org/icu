@@ -132,7 +132,7 @@ lv{
             "KDR franks",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Šveices franks",
         }
         CLP{
@@ -468,7 +468,7 @@ lv{
             "Malāvijas kvača",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksikas peso",
         }
         MYR{
@@ -991,5 +991,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.46.29"}
+    Version{"2.0.47.69"}
 }

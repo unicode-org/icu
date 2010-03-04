@@ -44,7 +44,7 @@ kea{
             "Franku kongoles",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franku suisu",
         }
         CNY{
@@ -232,5 +232,5 @@ kea{
             "Dola di Zimbabue",
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.63"}
 }

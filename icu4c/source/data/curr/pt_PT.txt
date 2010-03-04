@@ -49,7 +49,7 @@ pt_PT{
             "Cuacha do Malawi",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Peso Plata mexicano (1861-1992)",
         }
         MXV{
@@ -85,5 +85,5 @@ pt_PT{
             "Tala de Samoa Ocidental",
         }
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.71"}
 }

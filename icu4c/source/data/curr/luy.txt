@@ -44,7 +44,7 @@ luy{
             "Faranga ya Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faranga ya Uswisi",
         }
         CNY{

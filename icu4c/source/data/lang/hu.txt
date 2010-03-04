@@ -494,7 +494,7 @@ hu{
         uz{"üzbég"}
         vai{"vai"}
         ve{"venda"}
-        vi{"vietnámi"}
+        vi{"vietnami"}
         vo{"volapük"}
         vot{"votják"}
         wa{"vallon"}
@@ -709,7 +709,7 @@ hu{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.70"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

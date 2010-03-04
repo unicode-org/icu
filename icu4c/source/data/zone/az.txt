@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    Version{"2.0.45.99"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seuta"}
@@ -510,9 +510,5 @@ az{
             ld{"Volqoqrad/yay"}
             ls{"Volqoqrad"}
         }
-        fallbackFormat{"{1} ({0})"}
-        gmtFormat{"GMT{0}"}
-        hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

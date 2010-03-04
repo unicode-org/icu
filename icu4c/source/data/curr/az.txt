@@ -216,7 +216,7 @@ az{
             "WIR Yevrosu",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "İsveçriya frankası",
         }
         CHW{
@@ -620,11 +620,11 @@ az{
             "Malavi kvaçası",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksika pesosu",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Meksika gümüş pesosu",
         }
         MYR{
@@ -1736,5 +1736,5 @@ az{
             other{"Zimbabve dolları"}
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.53"}
 }

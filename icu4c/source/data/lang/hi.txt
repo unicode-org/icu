@@ -684,7 +684,7 @@ hi{
         POSIX{"कम्प्यूटर"}
         REVISED{"संशोधित वर्तनी"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.53"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

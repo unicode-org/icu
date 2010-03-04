@@ -44,7 +44,7 @@ kab{
             "Afrank Akunguli",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Afrank Aswis",
         }
         CNY{
@@ -228,5 +228,5 @@ kab{
             "Adular Azimbabwi",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.47.70"}
 }

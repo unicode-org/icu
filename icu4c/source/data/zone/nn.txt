@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nn.xml
  */
 nn{
-    Version{"2.0.46.25"}
+    Version{"2.0.47.86"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
@@ -104,14 +104,10 @@ nn{
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommartid"}
             ls{"sentraleuropeisk tid"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"austeuropeisk sommartid"}
             ls{"austeuropeisk tid"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"vesteuropeisk sommartid"}
@@ -125,7 +121,7 @@ nn{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }
 }

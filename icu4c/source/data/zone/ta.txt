@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ta.xml
  */
 ta{
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
     zoneStrings{
         "America:Cambridge_Bay"{
             ec{"கேம்பிரிட்ஜ் பே"}
@@ -615,7 +615,7 @@ ta{
             ls{"தஜிகிஸ்தான் நேரம்"}
         }
         "meta:Tashkent"{
-            ld{"தஷ்கென்ட் நேரம்"}
+            ld{"தஷ்கென்ட் கோடை நேரம்"}
             ls{"தஷ்கென்ட் நேரம்"}
         }
         "meta:Tbilisi"{

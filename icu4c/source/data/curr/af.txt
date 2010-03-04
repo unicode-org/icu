@@ -48,7 +48,7 @@ af{
             "Kongolese frank",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Switserse frank",
         }
         CNY{
@@ -256,5 +256,5 @@ af{
             "Zimbabwiese dollar",
         }
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.68"}
 }

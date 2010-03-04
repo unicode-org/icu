@@ -10,28 +10,16 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.46.25"}
+    Version{"2.0.47.72"}
     zoneStrings{
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
         "America:Cancun"{
             ec{"Kankún"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
         }
         "America:Mexico_City"{
             ec{"Mexíkóborg"}
         }
         "America:Regina"{
             ec{"Regína"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
@@ -59,9 +47,6 @@ is{
         }
         "Pacific:Easter"{
             ec{"Páskaeyja"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
         }
         "Pacific:Marquesas"{
             ec{"Marquesas-eyjar"}

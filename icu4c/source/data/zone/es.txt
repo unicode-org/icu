@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    Version{"2.0.46.69"}
+    Version{"2.0.47.72"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -607,14 +607,10 @@ es{
         "meta:Europe_Central"{
             ld{"Hora de verano de Europa Central"}
             ls{"Hora estándar de Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora de verano de Europa del Este"}
             ls{"Hora estándar de Europa del Este"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Hora de verano de Europa Occidental"}

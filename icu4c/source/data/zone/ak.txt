@@ -10,10 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/ak.xml
  */
 ak{
-    Version{"2.0.46.58"}
-    zoneStrings{
-        gmtFormat{"GMT{0}"}
-        hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
-    }
+    Version{"2.0.47.53"}
 }

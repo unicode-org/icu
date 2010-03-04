@@ -14,7 +14,7 @@ fr{
     collations{
         standard{
             Sequence{" [backwards 2]&ae<<æ<<<Æ"}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }

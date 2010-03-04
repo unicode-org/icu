@@ -3864,6 +3864,7 @@ structLocale:table(nofallback){
     }
     ExemplarCharacters{""}
     ExemplarCharactersCurrency{""}
+    ExemplarCharactersIndex{""}
     AuxExemplarCharacters{""}
     Keys{
         calendar{""}
@@ -7601,6 +7602,14 @@ structLocale:table(nofallback){
         casing{""}
         characters{""}
         lines{""}
+    }
+    listPattern{
+        standard{
+            2{""}
+            end{""}
+            middle{""}
+            start{""}
+        }
     }
     localPatternChars{""}
     localeDisplayPattern{

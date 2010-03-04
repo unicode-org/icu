@@ -188,7 +188,7 @@ gl{
             traditional{"orde tradicional"}
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.53"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

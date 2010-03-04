@@ -44,7 +44,7 @@ nd{
             "Fulenki yase Khongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Fulenki yase Swisi",
         }
         CNY{
@@ -232,5 +232,5 @@ nd{
             "Dola yase Zimbabwe",
         }
     }
-    Version{"2.0.46.70"}
+    Version{"2.0.47.63"}
 }

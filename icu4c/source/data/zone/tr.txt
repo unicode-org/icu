@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.65"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}
@@ -182,33 +182,25 @@ tr{
             ld{"Merkezi Yaz Saati"}
             lg{"Merkezi Saat"}
             ls{"Merkezi Standart Saati"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Doğu Yaz Saati"}
             lg{"Doğu Saati"}
             ls{"Doğu Standart Saati"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"ABD Sıradağlar Yaz Saati"}
             lg{"ABD Sıradağlar Saati"}
             ls{"ABD Sıradağlar Standart Saati"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Pasifik Yaz Saati"}
             lg{"Pasifik Saati"}
             ls{"Pasifik Standart Saati"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadır Yaz Saati"}
@@ -255,9 +247,7 @@ tr{
             ld{"Atlantik Yaz Saati"}
             lg{"Atlantik Saati"}
             ls{"Atlantik Standart Saati"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Orta Avustralya Yaz Saati"}
@@ -404,20 +394,14 @@ tr{
         "meta:Europe_Central"{
             ld{"Orta Avrupa Yaz Saati"}
             ls{"Orta Avrupa Saati"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Doğu Avrupa Yaz Saati"}
             ls{"Doğu Avrupa Saati"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Batı Avrupa Yaz Saati"}
             ls{"Batı Avrupa Saati"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland Adaları Yaz Saati"}
@@ -439,7 +423,6 @@ tr{
         }
         "meta:GMT"{
             ls{"Greenwich Merkez Saati"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Saati"}

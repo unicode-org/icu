@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -134,33 +134,25 @@ ca{
             ld{"Hora d'estiu central"}
             lg{"Hora central"}
             ls{"Hora estàndard central"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Hora d'estiu oriental"}
             lg{"Hora oriental"}
             ls{"Hora estàndard oriental"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Hora d'estiu de muntanya"}
             lg{"Hora de muntanya"}
             ls{"Hora estàndard de muntanya"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Hora d'estiu del Pacífic"}
             lg{"Hora del Pacífic"}
             ls{"Hora estàndard del Pacífic"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Arabian"{
             ld{"Hora d'estiu d'Aràbia"}
@@ -174,9 +166,7 @@ ca{
             ld{"Hora d'estiu de l'Atlàntic"}
             lg{"Hora de l'Atlàntic"}
             ls{"Hora estàndard de l'Atlàntic"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:China"{
             ls{"Hora estàndard de la Xina"}
@@ -184,27 +174,18 @@ ca{
         }
         "meta:Europe_Central"{
             ld{"Hora Central Europea de l'estiu"}
-            lg{"Hora d'Espanya"}
             ls{"Hora Central Europea"}
-            sd{"CEST"}
-            sg{"Hora d'Espanya"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora d'estiu d'Europa de l'Est"}
             ls{"Hora d'Europa de l'Est"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Hora d'estiu d'Europa Occidental"}
             ls{"Hora d'Europa Occidental"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Hora mitjana de Greenwich"}
-            ss{"GMT"}
         }
         "meta:India"{
             ls{"Hora estàndard de l'Índia"}

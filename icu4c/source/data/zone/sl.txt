@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
@@ -194,32 +194,24 @@ sl{
         "meta:Europe_Central"{
             ld{"Srednjeevropski poletni čas"}
             ls{"Srednjeevropski čas"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Vzhodnoevropski poletni čas"}
             ls{"Vzhodnoevropski čas"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Zahodnoevropski poletni čas"}
             ls{"Zahodnoevropski čas"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Greenwiški srednji čas"}
-            ss{"GMT"}
         }
         "meta:India"{
             ls{"Indijski standardni čas"}
         }
         "meta:Israel"{
             ld{"Izraelski poletni čas"}
-            ls{"Izraelski poletni čas"}
-            sd{"Izraelski standardni čas"}
+            ls{"Izraelski standardni čas"}
         }
         "meta:Japan"{
             ls{"Japonski standardni čas"}

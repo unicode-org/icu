@@ -640,11 +640,11 @@ fr{
             "kwacha malawite",
         }
         MXN{
-            "MXN",
+            "MX$",
             "peso mexicain",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "peso d’argent mexicain (1861–1992)",
         }
         MXV{
@@ -2190,5 +2190,5 @@ fr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
 }

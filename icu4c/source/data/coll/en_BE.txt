@@ -14,7 +14,7 @@ en_BE{
     collations{
         standard{
             Sequence{" [backwards 2]"}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }
