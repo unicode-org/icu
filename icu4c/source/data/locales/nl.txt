@@ -16,6 +16,7 @@ nl{
         "z]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -39,7 +40,7 @@ nl{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -67,21 +68,18 @@ nl{
                 MEd{"E d-M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d-MMM"}
                 MMd{"d-MM"}
                 MMdd{"dd-MM"}
                 Md{"d-M"}
                 d{"d"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"M-yyyy"}
-                yMEd{"EEE d-M-yyyy"}
+                yM{"M-y"}
+                yMEd{"EEE d-M-y"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE d MMM y"}
-                yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM-yy"}
@@ -342,14 +340,6 @@ nl{
                         "4e kwartaal",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         hebrew{
@@ -405,6 +395,12 @@ nl{
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
+    }
+    listPattern{
+        standard{
+            2{"{0} en {1}"}
+            end{"{0} en {1}"}
+        }
     }
     measurementSystemNames{
         US{"Amerikaans"}

@@ -12,6 +12,7 @@
 ak{
     AuxExemplarCharacters{"[c j q v z]"}
     ExemplarCharacters{"[a b d e ɛ f g h i k l m n o ɔ p r s t u w y]"}
+    ExemplarCharactersIndex{"[A B C D E Ɛ F G H I J K L M N O Ɔ P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ ak{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.58"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -193,22 +194,6 @@ ak{
                         "Ɔbɛsɛ-Ahinime",
                         "Ɔberɛfɛw-Obubuo",
                         "Mumu-Ɔpɛnimba",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

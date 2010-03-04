@@ -16,6 +16,10 @@ gu{
         " ભ મ ય ર લ વ શ ષ સ હ \u0ABC \u0A81 \u0A82 ઃ ળ ઽ \u0ACD ા િ ી \u0AC1 \u0AC2 "
         "\u0AC3 \u0AC4 \u0AC5 \u0AC7 \u0AC8 ૉ ો ૌ]"
     }
+    ExemplarCharactersIndex{
+        "[અ આ ઇ ઈ ઉ ઊ ઋ એ ઐ ઓ ઔ ક ખ ગ ઘ ઙ ચ છ જ ઝ ઞ ટ ઠ ડ ઢ ણ ત થ દ ધ ન પ ફ બ ભ મ ય ર"
+        " લ વ શ ષ સ હ ળ]"
+    }
     LocaleScript{
         "Gujr",
     }
@@ -25,7 +29,7 @@ gu{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -50,6 +54,9 @@ gu{
             availableFormats{
                 MMMMd{"d MMMM"}
                 MMdd{"dd-MM"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
                 yyQ{"Q yy"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -76,15 +83,6 @@ gu{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "રવિ",
-                        "સોમ",
-                        "મંગળ",
-                        "બુધ",
-                        "ગુરુ",
-                        "શુક્ર",
-                        "શનિ",
-                    }
                     narrow{
                         "ર",
                         "સો",
@@ -94,21 +92,12 @@ gu{
                         "શુ",
                         "શ",
                     }
-                    wide{
-                        "રવિવાર",
-                        "સોમવાર",
-                        "મંગળવાર",
-                        "બુધવાર",
-                        "ગુરુવાર",
-                        "શુક્રવાર",
-                        "શનિવાર",
-                    }
                 }
             }
             eras{
                 abbreviated{
                     "ઈલુના જન્મ પહેસાં",
-                    "CE",
+                    "ઇસવીસન",
                 }
                 narrow{
                     "ઇ સ પુ",
@@ -185,20 +174,6 @@ gu{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "જાન્યુ",
-                        "ફેબ્રુ",
-                        "માર્ચ",
-                        "એપ્રિલ",
-                        "મે",
-                        "જૂન",
-                        "જુલાઈ",
-                        "ઑગસ્ટ",
-                        "સપ્ટે",
-                        "ઑક્ટો",
-                        "નવે",
-                        "ડિસે",
-                    }
                     narrow{
                         "જા",
                         "ફે",
@@ -212,20 +187,6 @@ gu{
                         "ઑ",
                         "ન",
                         "ડિ",
-                    }
-                    wide{
-                        "જાન્યુઆરી",
-                        "ફેબ્રુઆરી",
-                        "માર્ચ",
-                        "એપ્રિલ",
-                        "મે",
-                        "જૂન",
-                        "જુલાઈ",
-                        "ઑગસ્ટ",
-                        "સપ્ટેમ્બર",
-                        "ઑક્ટ્બર",
-                        "નવેમ્બર",
-                        "ડિસેમ્બર",
                     }
                 }
             }
@@ -252,6 +213,12 @@ gu{
         alternateQuotationStart{"\""}
         quotationEnd{"'"}
         quotationStart{"'"}
+    }
+    listPattern{
+        standard{
+            2{"{0} અને {1}"}
+            end{"{0} અને {1}"}
+        }
     }
     measurementSystemNames{
         US{"અમેરિકા"}

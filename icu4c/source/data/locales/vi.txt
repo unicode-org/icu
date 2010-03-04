@@ -17,6 +17,7 @@ vi{
         " ụ ư ừ ử ữ ứ ự v w x y ỳ ỷ ỹ ý ỵ z]"
     }
     ExemplarCharactersCurrency{"[a b c d đ e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A Ă Â B C D Đ E Ê F G H I J K L M N O Ô Ơ P Q R S T U Ư V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -40,7 +41,7 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -63,9 +64,6 @@ vi{
                 "{0} {1}",
             }
             availableFormats{
-                H{"H"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 MEd{"E, d-M"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}

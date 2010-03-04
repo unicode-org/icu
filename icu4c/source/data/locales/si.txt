@@ -17,6 +17,10 @@ si{
         " ෟ \u0DCA ෙ ේ ෛ ො ෝ ෞ]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{
+        "[අ ආ ඇ ඈ ඉ ඊ උ ඌ ඍ එ ඒ ඓ ඔ ඕ ඖ ක ඛ ග ඝ ඞ ඟ ච ඡ ජ ඣ ඥ ඤ ට ඨ ඩ ඪ ණ ඬ ත ථ ද ධ න"
+        " ඳ ප ඵ බ භ ම ඹ ය ර ල ව ශ ෂ ස හ ළ ෆ]"
+    }
     LocaleScript{
         "Sinh",
     }
@@ -26,7 +30,7 @@ si{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.46.46"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ar_KW{
-    Version{"2.0.41.23"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -15,9 +15,9 @@ ar_KW{
                 4,
             }
             weekend:intvector{
-                5,
-                0,
                 6,
+                0,
+                7,
                 86400000,
             }
         }

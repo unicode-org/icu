@@ -11,7 +11,7 @@ en_CA{
         279,
         216,
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -34,14 +34,14 @@ en_CA{
                 "{1} {0}",
             }
             availableFormats{
-                MEd{"E, d/M"}
+                MEd{"E, M-d"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"MM-dd"}
-                Md{"d/M"}
-                yMEd{"EEE, d/M/yyyy"}
+                Md{"M-d"}
+                yMEd{"EEE, y-M-d"}
                 yMMMEd{"EEE, d MMM, y"}
                 yyMMM{"MMM-yy"}
             }

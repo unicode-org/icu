@@ -12,9 +12,13 @@
 hu{
     AuxExemplarCharacters{"[q w x y]"}
     ExemplarCharacters{
-        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j-l {"
-        "ly} {lly} m n {ny} {nny} o ó ö ő p r s {sz} {ssz} t {ty} {tty} u ú ü ű v z {"
-        "zs} {zzs}]"
+        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j k l"
+        " {ly} {lly} m n {ny} {nny} o ó ö ő p r s {sz} {ssz} t {ty} {tty} u ú ü ű v z"
+        " {zs} {zzs}]"
+    }
+    ExemplarCharactersIndex{
+        "[A B C {CS} D {DZ} {DZS} E F G {GY} H I J K L {LY} M N {NY} O Ö P Q R S {SZ}"
+        " T {TY} U Ü V W X Y Z {ZS}]"
     }
     LocaleScript{
         "Latn",
@@ -39,7 +43,7 @@ hu{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.70"}
     calendar{
         buddhist{
             eras{
@@ -69,7 +73,9 @@ hu{
                 "{1} {0}",
             }
             availableFormats{
+                H{"H"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"M. d., E"}
                 MMM{"LLL"}
@@ -109,10 +115,10 @@ hu{
                         "V",
                         "H",
                         "K",
-                        "S",
-                        "C",
+                        "Sz",
+                        "Cs",
                         "P",
-                        "S",
+                        "Sz",
                     }
                 }
             }
@@ -298,7 +304,7 @@ hu{
                         "J",
                         "J",
                         "A",
-                        "S",
+                        "Sz",
                         "O",
                         "N",
                         "D",
@@ -318,14 +324,6 @@ hu{
                         "II. negyedév",
                         "III. negyedév",
                         "IV. negyedév",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
                     }
                 }
             }
@@ -388,6 +386,12 @@ hu{
         alternateQuotationStart{"„"}
         quotationEnd{"”"}
         quotationStart{"„"}
+    }
+    listPattern{
+        standard{
+            2{"{0} és {1}"}
+            end{"{0} és {1}"}
+        }
     }
     measurementSystemNames{
         US{"amerikai"}

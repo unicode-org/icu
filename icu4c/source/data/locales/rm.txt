@@ -3,16 +3,17 @@
 // * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/gsw.xml
+// * Source File:<path>/common/main/rm.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gsw.xml
+ *  ICU <specials> source: <path>/xml/main/rm.xml
  */
-gsw{
-    AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
-    ExemplarCharacters{"[a ä b c d e f g h i j k l m n o ö p q r s t u ü v w x y z]"}
+rm{
+    AuxExemplarCharacters{"[á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ]"}
+    ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ò p q r s t u ù v w x y z]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A À B C D E É È F G H I Ì J K L M N O Ò P Q R S T U Ù V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -36,29 +37,12 @@ gsw{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.47.63"}
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d. MMMM y G",
-                "d. MMMM y G",
-                "d. MMM y G",
-                "d.M.yyyy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         gregorian{
             AmPmMarkers{
-                "vorm.",
-                "nam.",
+                "am",
+                "sm",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -76,6 +60,7 @@ gsw{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"d. EEE"}
                 Ed{"E d."}
                 H{"H"}
                 HHmm{"HH:mm"}
@@ -114,109 +99,91 @@ gsw{
             dayNames{
                 format{
                     abbreviated{
-                        "Su.",
-                        "Mä.",
-                        "Zi.",
-                        "Mi.",
-                        "Du.",
-                        "Fr.",
-                        "Sa.",
+                        "du",
+                        "gli",
+                        "ma",
+                        "me",
+                        "gie",
+                        "ve",
+                        "so",
                     }
                     wide{
-                        "Sunntig",
-                        "Määntig",
-                        "Ziischtig",
-                        "Mittwuch",
-                        "Dunschtig",
-                        "Friitig",
-                        "Samschtig",
+                        "dumengia",
+                        "glindesdi",
+                        "mardi",
+                        "mesemna",
+                        "gievgia",
+                        "venderdi",
+                        "sonda",
                     }
                 }
                 stand-alone{
                     narrow{
-                        "S",
-                        "M",
                         "D",
+                        "G",
                         "M",
-                        "D",
-                        "F",
+                        "M",
+                        "G",
+                        "V",
                         "S",
                     }
                 }
             }
             eras{
                 abbreviated{
-                    "v. Chr.",
-                    "n. Chr.",
+                    "av. Cr.",
+                    "s. Cr.",
                 }
                 wide{
-                    "v. Chr.",
-                    "n. Chr.",
+                    "avant Cristus",
+                    "suenter Cristus",
                 }
             }
             fields{
                 day{
                     dn{"Tag"}
                     relative{
-                        "-1"{"geschter"}
-                        "-2"{"vorgeschter"}
-                        "-3"{"vor drü Tääg"}
-                        "0"{"hüt"}
-                        "1"{"moorn"}
-                        "2"{"übermoorn"}
-                        "3"{"i drü Tääg"}
+                        "-1"{"ier"}
+                        "-2"{"stersas"}
+                        "-3"{"squarsas"}
+                        "0"{"oz"}
+                        "1"{"damaun"}
+                        "2"{"puschmaun"}
+                        "3"{"squartmaun"}
                     }
                 }
                 dayperiod{
-                    dn{"Tageshälfti"}
+                    dn{"mesadad dal di"}
                 }
                 era{
-                    dn{"Epoche"}
+                    dn{"epoca"}
                 }
                 hour{
-                    dn{"Schtund"}
+                    dn{"ura"}
                 }
                 minute{
-                    dn{"Minuute"}
+                    dn{"minuta"}
                 }
                 month{
-                    dn{"Monet"}
+                    dn{"mais"}
                 }
                 second{
-                    dn{"Sekunde"}
+                    dn{"secunda"}
                 }
                 week{
-                    dn{"Wuche"}
+                    dn{"emna"}
                 }
                 weekday{
-                    dn{"Wuchetag"}
+                    dn{"di da l'emna"}
                 }
                 year{
-                    dn{"Jaar"}
+                    dn{"onn"}
                 }
                 zone{
-                    dn{"Zone"}
+                    dn{"zona d'urari"}
                 }
             }
             intervalFormats{
-                H{
-                    H{"HH-HH"}
-                    a{"HH-HH"}
-                }
-                Hm{
-                    H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
-                }
-                Hv{
-                    H{"HH-HH v"}
-                    a{"HH-HH v"}
-                }
                 M{
                     M{"M.-M."}
                 }
@@ -245,24 +212,24 @@ gsw{
                 d{
                     d{"d.-d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} - {1}"}
                 h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
+                    a{"HH-HH"}
+                    h{"HH-HH"}
                 }
                 hm{
-                    a{"h:mm a - h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
                 }
                 hmv{
-                    a{"h:mm a - h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
                 }
                 hv{
-                    a{"h a - h a v"}
-                    h{"h-h a v"}
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
                 }
                 y{
                     y{"y-y"}
@@ -272,9 +239,12 @@ gsw{
                     y{"MM.yy - MM.yy"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E, dd.MM.yy"}
-                    d{"E, dd.MM.yy - E, dd.MM.yy"}
-                    y{"E, dd.MM.yy - E, dd.MM.yy"}
+                    M{"E, dd.MM.yy - E,
+dd.MM.yy"}
+                    d{"E, dd.MM.yy - E,
+dd.MM.yy"}
+                    y{"E, dd.MM.yy - E,
+dd.MM.yy"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -283,7 +253,8 @@ gsw{
                 yMMMEd{
                     M{"E, d. MMM - E, d. MMM y"}
                     d{"E, d. - E, d. MMM y"}
-                    y{"E, d. MMM y - E, d. MMM y"}
+                    y{"E, d. MMM y - E, d. MMM
+y"}
                 }
                 yMMMM{
                     M{"MM – MM.yyyy"}
@@ -303,43 +274,43 @@ gsw{
             monthNames{
                 format{
                     abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mär",
-                        "Apr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Okt",
-                        "Nov",
-                        "Dez",
+                        "schan.",
+                        "favr.",
+                        "mars",
+                        "avr.",
+                        "matg",
+                        "zercl.",
+                        "fan.",
+                        "avust",
+                        "sett.",
+                        "oct.",
+                        "nov.",
+                        "dec.",
                     }
                     wide{
-                        "Januar",
-                        "Februar",
-                        "März",
-                        "April",
-                        "Mai",
-                        "Juni",
-                        "Juli",
-                        "Auguscht",
-                        "Septämber",
-                        "Oktoober",
-                        "Novämber",
-                        "Dezämber",
+                        "schaner",
+                        "favrer",
+                        "mars",
+                        "avrigl",
+                        "matg",
+                        "zercladur",
+                        "fanadur",
+                        "avust",
+                        "settember",
+                        "october",
+                        "november",
+                        "december",
                     }
                 }
                 stand-alone{
                     narrow{
-                        "J",
+                        "S",
                         "F",
                         "M",
                         "A",
                         "M",
-                        "J",
-                        "J",
+                        "Z",
+                        "F",
                         "A",
                         "S",
                         "O",
@@ -350,17 +321,11 @@ gsw{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                     wide{
-                        "1. Quartal",
-                        "2. Quartal",
-                        "3. Quartal",
-                        "4. Quartal",
+                        "1. quartal",
+                        "2. quartal",
+                        "3. quartal",
+                        "4. quartal",
                     }
                 }
             }
@@ -372,44 +337,68 @@ gsw{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
-    listPattern{
-        standard{
-            2{"{0} und {1}"}
-            end{"{0} und {1}"}
-        }
-    }
     measurementSystemNames{
-        US{"angloamerikaanisch"}
-        metric{"metrisch"}
+        US{"unitads americans"}
+        metric{"unitads metrics"}
     }
     units{
         day{
-            one{"{0} Taag"}
-            other{"{0} Tääg"}
+            one{"{0} di"}
+            other{"{0} dis"}
         }
         hour{
-            one{"{0} Schtund"}
-            other{"{0} Schtunde"}
+            one{"{0} ura"}
+            other{"{0} uras"}
         }
         minute{
-            one{"{0} Minuute"}
-            other{"{0} Minuute"}
+            one{"{0} minuta"}
+            other{"{0} minutas"}
         }
         month{
-            one{"{0} Monet"}
-            other{"{0} Mönet"}
+            one{"{0} mais"}
+            other{"{0} mais"}
         }
         second{
-            one{"{0} Sekunde"}
-            other{"{0} Sekunde"}
+            one{"{0} secunda"}
+            other{"{0} secundas"}
         }
         week{
-            one{"{0} Wuche"}
-            other{"{0} Wuche"}
+            one{"{0} emna"}
+            other{"{0} emnas"}
         }
         year{
-            one{"{0} Jahr"}
-            other{"{0} Jahr"}
+            one{"{0} onn"}
+            other{"{0} onns"}
+        }
+    }
+    unitsShort{
+        day{
+            one{"{0} di"}
+            other{"{0} dis"}
+        }
+        hour{
+            one{"{0} ura"}
+            other{"{0} uras"}
+        }
+        minute{
+            one{"{0} min."}
+            other{"{0} mins."}
+        }
+        month{
+            one{"{0} mais"}
+            other{"{0} mais"}
+        }
+        second{
+            one{"{0} sec."}
+            other{"{0} secs."}
+        }
+        week{
+            one{"{0} emna"}
+            other{"{0} emnas"}
+        }
+        year{
+            one{"{0} onn"}
+            other{"{0} onns"}
         }
     }
 }

@@ -12,6 +12,7 @@
 bem{
     AuxExemplarCharacters{"[d h q r v x z]"}
     ExemplarCharacters{"[a b c e f g i j k l m n o p s {sh} t u w y]"}
+    ExemplarCharactersIndex{"[A B C E F G I J K L M N O P S {SH} T U W Y]"}
     LocaleScript{
         "Latn",
     }

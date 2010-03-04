@@ -67,6 +67,7 @@ zh{
         " 鹤 鹰 鹿 麦 麻 黄 黎 黑 默 鼓 鼠 鼻 齐 齿 龄 龙 龟]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Hani",
     }
@@ -90,7 +91,7 @@ zh{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -100,7 +101,7 @@ zh{
             DateTimePatterns{
                 "zzzzah时mm分ss秒",
                 "zah时mm分ss秒",
-                "ahh:mm:ss",
+                "ah:mm:ss",
                 "ah:mm",
                 "y年M月d日EEEE",
                 "y年M月d日",
@@ -115,20 +116,18 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 H{"H时"}
-                HHmm{"H:mm"}
-                HHmmss{"H:mm:ss"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
                 MMMEd{"MMMd日E"}
-                MMMMEd{"MMMMd日E"}
-                MMMMd{"MMMMd日"}
                 MMMMdd{"MMMMdd日"}
                 MMMd{"MMMd日"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
                 d{"d日"}
+                h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -137,7 +136,6 @@ zh{
                 yMEd{"y年M月d日，E"}
                 yMMM{"y年MMM"}
                 yMMMEd{"y年MMMd日EEE"}
-                yMMMM{"y年MMMM"}
                 yMMMd{"y年MMMd日"}
                 yQ{"y年QQQ"}
                 yQQQ{"y年QQQ"}
@@ -183,10 +181,6 @@ zh{
             }
             eras{
                 abbreviated{
-                    "公元前",
-                    "公元",
-                }
-                wide{
                     "公元前",
                     "公元",
                 }
@@ -401,21 +395,13 @@ zh{
                         "第4季度",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         roc{
             DateTimePatterns{
                 "zzzzah时mm分ss秒",
                 "zah时mm分ss秒",
-                "ahh:mm:ss",
+                "ah:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
@@ -428,36 +414,21 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
-                yyyyM{"Gy/M"}
-                yyyyMEd{"Gy/M/d（EEE）"}
-                yyyyMM{"Gy/MM"}
+                yyyyM{"Gy-M"}
+                yyyyMEd{"Gy-M-d（EEE）"}
+                yyyyMM{"Gy-MM"}
                 yyyyMMM{"Gy年MMM"}
                 yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
+                yyyyMd{"Gy-M-d"}
                 yyyyQ{"Gy年第Q季度"}
             }
             eras{
                 abbreviated{
                     "民国前",
                     "民国",
-                }
-            }
-            intervalFormats{
-                yM{
-                    M{"y/M至y/M"}
-                    y{"y/M至y/M"}
-                }
-                yMEd{
-                    M{"y/M/dE至y/M/dE"}
-                    d{"y/M/dE至y/M/dE"}
-                    y{"y/M/dE至y/M/dE"}
-                }
-                yMd{
-                    M{"y/M/d至y/M/d"}
-                    d{"y/M/d至y/M/d"}
-                    y{"y/M/d至y/M/d"}
                 }
             }
         }
@@ -467,6 +438,14 @@ zh{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0}和{1}"}
+            end{"{0}和{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
     }
     measurementSystemNames{
         US{"美制"}

@@ -12,6 +12,7 @@
 sn{
     AuxExemplarCharacters{"[q x]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p r s t u v w y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P R S T U V W Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -21,13 +22,9 @@ sn{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.70"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",

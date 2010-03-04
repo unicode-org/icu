@@ -14,6 +14,7 @@ seh{
         "[a á à â ã b c ç d e é ê f g h i í j k l m n o ó ò ô õ p q r s t u ú v w x y"
         " z]"
     }
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -37,7 +38,7 @@ seh{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.47.38"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -137,12 +138,6 @@ seh{
                         "1"{"Manguana"}
                     }
                 }
-                dayperiod{
-                    dn{""}
-                }
-                era{
-                    dn{""}
-                }
                 hour{
                     dn{"Hora"}
                 }
@@ -154,9 +149,6 @@ seh{
                 }
                 second{
                     dn{"Segundo"}
-                }
-                week{
-                    dn{""}
                 }
                 weekday{
                     dn{"Ntsiku"}

@@ -68,6 +68,7 @@ zh_Hant{
         " 顏 願 類 顧 顯 風 飄 飛 食 飯 飲 飽 飾 餅 養 餐 餘 館 首 香 馬 駐 駕 駛 騎 騙 騷 驅 驗 驚 骨 體 高 髮 鬆 鬥 鬧 鬱"
         " 鬼 魁 魂 魅 魔 魚 魯 鮮 鳥 鳳 鳴 鴻 鵝 鷹 鹿 麗 麥 麵 麻 麼 黃 黎 黑 默 點 黨 鼓 鼠 鼻 齊 齋 齒 齡 龍 龜]"
     }
+    ExemplarCharactersIndex{"[一 丁 三 丑 丙 丞 串 並 亟 乘 乾 傢 亂 僧 億 儒 優 叢 嚥 勸 儷 儼 囌 囑 廳]"}
     LocaleScript{
         "Hani",
         "Bopo",
@@ -78,7 +79,7 @@ zh_Hant{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -120,19 +121,18 @@ zh_Hant{
             availableFormats{
                 Ed{"d日(E)"}
                 H{"H時"}
-                HHmm{"H:mm"}
-                HHmmss{"H:mm:ss"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
-                MEd{"M-d（E）"}
+                MEd{"M/d（E）"}
                 MMM{"LLL"}
                 MMMEd{"MMMd日E"}
-                MMMMd{"MMMMd日"}
                 MMMMdd{"MMMMdd日"}
                 MMMd{"MMMd日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
+                h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -141,7 +141,6 @@ zh_Hant{
                 yMEd{"yyyy/M/d（EEE）"}
                 yMMM{"y年M月"}
                 yMMMEd{"y年M月d日EEE"}
-                yMMMM{"y年M月"}
                 yMMMd{"y年MMMd日"}
                 yQ{"y年QQQ"}
                 yQQQ{"y年QQQ"}
@@ -186,10 +185,6 @@ zh_Hant{
             }
             eras{
                 abbreviated{
-                    "西元前",
-                    "西元",
-                }
-                wide{
                     "西元前",
                     "西元",
                 }
@@ -420,9 +415,15 @@ zh_Hant{
             availableFormats{
                 MMMEd{"M月d日EEE"}
                 MMMd{"M月d日"}
+                h{"ah"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
                 yyyy{"Gy"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy QQQ"}
             }
             eras{
@@ -438,6 +439,14 @@ zh_Hant{
         alternateQuotationStart{"『"}
         quotationEnd{"」"}
         quotationStart{"「"}
+    }
+    listPattern{
+        standard{
+            2{"{0}和{1}"}
+            end{"{0}和{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
     }
     units{
         hour{

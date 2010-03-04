@@ -35,12 +35,9 @@ ka{
         "NaN",
         "+",
     }
-    Version{"2.0.46.66"}
+    Version{"2.0.47.67"}
     calendar{
         gregorian{
-            availableFormats{
-                MMdd{"dd/MM"}
-            }
             quarters{
                 format{
                     abbreviated{
@@ -64,10 +61,6 @@ ka{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
-    }
-    measurementSystemNames{
-        US{"US"}
-        metric{"Metric"}
     }
     units{
         day{

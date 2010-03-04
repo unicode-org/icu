@@ -12,6 +12,7 @@
 el{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
+    ExemplarCharactersIndex{"[Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω]"}
     LocaleScript{
         "Grek",
     }
@@ -35,13 +36,9 @@ el{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.53"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -56,35 +53,6 @@ el{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            availableFormats{
-                MEd{"E, d/M"}
-                MMMEd{"E, d MMM"}
-                MMMMEd{"E, d MMMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"d/M"}
-                yMEd{"EEE, d/M/y"}
-                yMMMEd{"EEE, d MMM, y"}
-                yMMMM{"LLLL, y"}
-            }
-        }
-        chinese{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
-        }
-        coptic{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
-        }
-        ethiopic{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
             }
         }
         gregorian{
@@ -178,10 +146,6 @@ el{
             }
             eras{
                 abbreviated{
-                    "π.Χ.",
-                    "μ.Χ.",
-                }
-                wide{
                     "π.Χ.",
                     "μ.Χ.",
                 }
@@ -391,50 +355,16 @@ el{
                         "4ο τρίμηνο",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "Τ1",
-                        "Τ2",
-                        "Τ3",
-                        "Τ4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         hebrew{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
             eras{
                 abbreviated{
                     "π.μ.",
                 }
             }
         }
-        indian{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
-        }
-        islamic{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
-        }
         japanese{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -459,17 +389,7 @@ el{
                 yyyyQ{"yy GGGGG Q"}
             }
         }
-        persian{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
-        }
         roc{
-            AmPmMarkers{
-                "π.μ.",
-                "μ.μ.",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -511,6 +431,12 @@ el{
         alternateQuotationStart{"‘"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    listPattern{
+        standard{
+            2{"{0} και {1}"}
+            end{"{0} και {1}"}
+        }
     }
     measurementSystemNames{
         US{"Αγγλοσαξωνικό"}

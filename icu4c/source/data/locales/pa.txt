@@ -40,7 +40,7 @@ pa{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -103,7 +103,7 @@ pa{
                 }
             }
             eras{
-                wide{
+                abbreviated{
                     "ਈਸਾਪੂਰਵ",
                     "ਸੰਨ",
                 }

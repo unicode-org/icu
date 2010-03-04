@@ -13,6 +13,7 @@ pl{
     AuxExemplarCharacters{"[q v x]"}
     ExemplarCharacters{"[a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A Ą B C Ć D E Ę F G H I J K L Ł M N Ń O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
     LocaleScript{
         "Latn",
     }
@@ -36,7 +37,7 @@ pl{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.63"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -53,9 +54,6 @@ pl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMd{"d MMM"}
             }
         }
         gregorian{
@@ -79,26 +77,24 @@ pl{
                 "{1} {0}",
             }
             availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E, M-d"}
+                MEd{"E, d-M"}
                 MMM{"LLL"}
                 MMMEd{"d MMM E"}
-                MMMMEd{"d MMMM E"}
                 MMMMd{"d MMMM"}
-                MMMd{"MMM d"}
-                MMdd{"MM-dd"}
-                Md{"d.M"}
+                MMMd{"d MMM"}
+                MMdd{"dd-MM"}
+                Md{"d-M"}
                 d{"d"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                mmss{"mm:ss"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yyyy-M"}
-                yMEd{"EEE, d.M.yyyy"}
+                yM{"M-y"}
+                yMEd{"EEE, d-M-y"}
                 yMMMEd{"EEE, d MMM y"}
                 yMMMM{"LLLL y"}
                 yQ{"yyyy Q"}
@@ -382,12 +378,6 @@ pl{
                         "3 kw.",
                         "4 kw.",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }
@@ -397,6 +387,12 @@ pl{
         alternateQuotationStart{"„"}
         quotationEnd{"’"}
         quotationStart{"‘"}
+    }
+    listPattern{
+        standard{
+            2{"{0} i {1}"}
+            end{"{0} i {1}"}
+        }
     }
     measurementSystemNames{
         US{"anglosaski"}
