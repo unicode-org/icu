@@ -167,7 +167,6 @@ public: // package
 
     void Test6880(void);
 
-    void Test4917(void);
 public:
     /**
      * Test host-specific formatting.
