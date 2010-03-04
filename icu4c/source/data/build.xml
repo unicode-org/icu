@@ -465,7 +465,15 @@
             <fileset id="resfiles" dir="${env.ICU4C_DIR}/source/data/locales">
                 <include name="resfiles.mk" />
             </fileset>
-            <fileset id="locales_split" dir="${env.ICU4C_DIR}/source/data" includes="curr/* lang/* region/* zone/">
+            <fileset id="locales_split" dir="${env.ICU4C_DIR}/source/data">
+               <include name="curr/*.txt" /> 
+               <include name="curr/resfiles.mk" /> 
+               <include name="lang/*.txt" /> 
+               <include name="lang/resfiles.mk" /> 
+               <include name="region/*.txt" /> 
+               <include name="region/resfiles.mk" /> 
+               <include name="zone/*.txt" /> 
+               <include name="zone/resfiles.mk" /> 
 	    </fileset>
             <fileset id="collation" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="*.txt" />
@@ -473,18 +481,32 @@
             <fileset id="colfiles" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="colfiles.mk" />
             </fileset>
-            <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/translit">
+            <fileset id="translit" dir="${env.ICU4C_DIR}/source/data/translit">
                 <include name="*_*.txt" />
                 <include name="root.txt" />
             </fileset>
-            <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/brkitr">
+            <fileset id="brkitr" dir="${env.ICU4C_DIR}/source/data/brkitr">
                 <!-- brkitr directory contains bunch of txt files that are not produced by LDML2ICUConverter.
                      So can't clean up everything. This needs to be updated when new files are added to xml/brkitr directory -->
-                <include name="root.txt, en.txt, en_US.txt, en_US_POSIX.txt, ja.txt" />
+                <include name="root.txt" />
+                <include name="el.txt" />
+                <include name="en.txt" />
+                <include name="en_US.txt" />
+                <include name="en_US_POSIX.txt" />
+                <include name="ja.txt" />
+                <include name="th.txt" />
+            </fileset>
+            <fileset id="brkfiles" dir="${env.ICU4C_DIR}/source/data/brkitr">
                 <include name="brkfiles.mk" />
             </fileset>
             <fileset id="supplementalData" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="supplementalData.txt" />
+            </fileset>
+            <fileset id="rbnf" dir="${env.ICU4C_DIR}/source/data/rbnf">
+                <include name="*.txt" />
+            </fileset>
+            <fileset id="rbnffiles" dir="${env.ICU4C_DIR}/source/data/rbnf">
+                <include name="rbnffiles.mk" />
             </fileset>
             <fileset id="metaZones" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="metaZones.txt" />
@@ -500,6 +522,10 @@
             </fileset>
             <fileset id="numberingSystems" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="numberingSystems.txt" />
+            </fileset>
+            <fileset id="keyTypeData" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="keyTypeData.txt" />
+                <include name="timezoneTypes.txt" />
             </fileset>
         </delete>
     </target>

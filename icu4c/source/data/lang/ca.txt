@@ -87,7 +87,7 @@ ca{
         cau{"llengua caucàsica"}
         cch{"atsam"}
         ce{"txetxè"}
-        ceb{"cebuano"}
+        ceb{"cebuà"}
         cel{"llengua cèltica"}
         ch{"chamorro"}
         chb{"txibtxa"}
@@ -710,7 +710,7 @@ ca{
         VALENCIA{"valencià"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.69"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

@@ -44,7 +44,7 @@ cgg{
             "Faranga ya Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faranga ya Swisi",
         }
         CNY{

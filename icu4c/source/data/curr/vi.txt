@@ -24,7 +24,7 @@ vi{
             "BRL",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franc Thụy sĩ",
         }
         CNY{
@@ -176,7 +176,7 @@ vi{
             "Lia xứ Man-tơ",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Peso Mêhicô",
         }
         MYR{
@@ -287,5 +287,5 @@ vi{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
-    Version{"2.0.45.99"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "America:Argentina:Rio_Gallegos"{
             ec{"Río Gallegos"}

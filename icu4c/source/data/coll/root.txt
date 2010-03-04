@@ -16,7 +16,7 @@ root{
         default{"standard"}
         standard{
             Sequence{""}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

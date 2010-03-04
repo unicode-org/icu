@@ -119,10 +119,6 @@ root{
             "CDF",
             "CDF",
         }
-        CHF{
-            "Fr.",
-            "CHF",
-        }
         CLE{
             "Eº" /** ===  */,
             "CLE",
@@ -399,9 +395,9 @@ root{
             "MURs",
             "MUR",
         }
-        MXP{
-            "MX$" /** ===  */,
-            "MXP",
+        MXN{
+            "MX$",
+            "MXN",
         }
         MYR{
             "RM",
@@ -671,7 +667,7 @@ root{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.87"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[:letter:]"}

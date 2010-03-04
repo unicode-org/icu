@@ -44,7 +44,7 @@ rof{
             "heleri sa Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "heleri sa Uswisi",
         }
         CNY{

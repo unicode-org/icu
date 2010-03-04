@@ -44,7 +44,7 @@ sg{
             "farânga tî Kongöo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "farânga tî Sûîsi",
         }
         CNY{

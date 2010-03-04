@@ -300,5 +300,5 @@ nb{
         ZW{"Zimbabwe"}
         ZZ{"ukjent eller ugyldig område"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.86"}
 }

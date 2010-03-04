@@ -44,7 +44,7 @@ mas{
             "Iropiyianí e Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Iropiyianí e Uswisi",
         }
         CNY{

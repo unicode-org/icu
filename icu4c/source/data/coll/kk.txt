@@ -14,7 +14,7 @@ kk{
     collations{
         standard{
             Sequence{" [normalization on ][suppressContractions [Ѐ-џ] ]&[before 1]ү<ұ<<<Ұ"}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }

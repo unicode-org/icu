@@ -13,8 +13,8 @@ or{
     Version{"2.0.42.63"}
     collations{
         standard{
-            Sequence{" [normalization on ]&ହ<କ୍ଷ<ଡ଼<ଢ଼<ୟ<ୱ<ଵ<ଂ<ଃ<ଁ<୍<଼"}
-            Version{"1.7"}
+            Sequence{" [normalization on ]&ହ<କ୍ଷ<ଡ଼<ଢ଼<*ୟୱଵଂଃଁ<୍<଼"}
+            Version{"1.8"}
         }
     }
 }

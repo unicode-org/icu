@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.86"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -250,19 +250,7 @@ nb{
             ls{"Amazonas-tid"}
         }
         "meta:America_Central"{
-            lg{"normaltid"}
-            sd{"CDT"}
             sg{"CT"}
-        }
-        "meta:America_Eastern"{
-            sd{"EDT"}
-        }
-        "meta:America_Mountain"{
-            ss{"MST"}
-        }
-        "meta:America_Pacific"{
-            sd{"PDT"}
-            ss{"PST"}
         }
         "meta:Arabian"{
             ld{"arabisk sommertid"}
@@ -273,9 +261,7 @@ nb{
             ss{"AST (arabisk)"}
         }
         "meta:Atlantic"{
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"sentralaustralsk sommertid"}
@@ -311,24 +297,17 @@ nb{
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommertid"}
             ls{"sentraleuropeisk normaltid"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"østeuropeisk sommertid"}
             ls{"østeuropeisk normaltid"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"vesteuropeisk sommertid"}
             ls{"vesteuropeisk tid"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Greenwich middeltid"}
-            ss{"GMT"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong-sommertid"}
@@ -372,7 +351,7 @@ nb{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }
 }

@@ -37,8 +37,8 @@ CURR_ALIAS_SOURCE = $(CURR_SYNTHETIC_ALIAS) az_AZ.txt ha_GH.txt ha_NE.txt ha_NG.
  pa_PK.txt sh.txt sh_BA.txt sh_CS.txt sh_YU.txt\
  shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt sr_Cyrl_YU.txt\
  sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_YU.txt\
- tzm_MA.txt uz_AF.txt uz_UZ.txt zh_CN.txt zh_HK.txt\
- zh_MO.txt zh_SG.txt zh_TW.txt
+ tl.txt tzm_MA.txt uz_AF.txt uz_UZ.txt zh_CN.txt\
+ zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # Ordinary resources
@@ -71,7 +71,7 @@ CURR_SOURCE = af.txt ak.txt am.txt ar.txt\
  ne_IN.txt nl.txt nn.txt nyn.txt om.txt\
  or.txt pa.txt pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt\
  pa_Guru_IN.txt pl.txt ps.txt pt.txt pt_PT.txt\
- ro.txt rof.txt ru.txt ru_UA.txt rw.txt\
+ rm.txt ro.txt rof.txt ru.txt rw.txt\
  rwk.txt saq.txt seh.txt ses.txt sg.txt\
  shi.txt shi_Latn.txt shi_Latn_MA.txt shi_Tfng.txt si.txt\
  sk.txt sl.txt sn.txt so.txt sq.txt\

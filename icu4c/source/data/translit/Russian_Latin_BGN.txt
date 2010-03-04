@@ -50,8 +50,8 @@ $wordBoundary{ё → yë ; # CYRILLIC SMALL LETTER IO
 ж → zh ; # CYRILLIC SMALL LETTER ZHE
 З → Z ; # CYRILLIC CAPITAL LETTER ZE
 з → z ; # CYRILLIC SMALL LETTER ZE
-[$consonants - [Йй]]}З → ·Е ;
-[$consonants - [Йй]]}з → ·е ;
+[$consonants - [Йй]]}Э → ·Е ;
+[$consonants - [Йй]]}э → ·е ;
 И → I ; # CYRILLIC CAPITAL LETTER I
 и → i ; # CYRILLIC SMALL LETTER I
 Й}[АаУуЫыЭэ] → Y· ; # CYRILLIC CAPITAL LETTER I

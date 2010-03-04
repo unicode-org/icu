@@ -301,5 +301,5 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd eller ogiltig regionkod"}
     }
-    Version{"2.0.46.49"}
+    Version{"2.0.47.69"}
 }

@@ -44,7 +44,7 @@ teo{
             "Ango'otol lok' Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Ango'otol lok' Uswisi",
         }
         CNY{

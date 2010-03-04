@@ -713,7 +713,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.65"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Betik: {0}"}

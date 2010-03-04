@@ -44,7 +44,7 @@ yo{
             "Faransi ti Orílẹ́ède Kóngò",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faransi ti Orílẹ́ède Siwisi",
         }
         CNY{

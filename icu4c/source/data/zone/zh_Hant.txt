@@ -11,7 +11,7 @@
  */
 zh_Hant{
     %%ParentIsRoot:int{1}
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Bamako"{
             ec{"巴馬科"}

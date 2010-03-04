@@ -44,7 +44,7 @@ ff{
             "Faraa Konngo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faraa Suwiis",
         }
         CNY{

@@ -345,7 +345,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.63"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Skript: {0}"}

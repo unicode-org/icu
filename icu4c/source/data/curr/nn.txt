@@ -652,11 +652,11 @@ nn{
             "malawisk kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "meksikansk peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "meksikansk sølvpeso (1861-1992)",
         }
         MXV{
@@ -1933,5 +1933,5 @@ nn{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.86"}
 }

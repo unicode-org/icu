@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.46.46"}
+    Version{"2.0.47.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -829,27 +829,17 @@ lt{
             ld{"Centro vasaros laikas"}
             lg{"Centro laikas"}
             ls{"Centro žiemos laikas"}
-            sd{"CDT"}
             sg{"Čikaga (Jungtinės Valstijos)"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Rytų vasaros laikas"}
             lg{"Rytų laikas"}
             ls{"Rytų žiemos laikas"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "meta:America_Mountain"{
-            sd{"MDT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Ramiojo vandenyno vasaros laikas"}
             lg{"Ramiojo vandenyno laikas"}
             ls{"Ramiojo vandenyno žiemos laikas"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadyrės vasaros laikas"}
@@ -886,8 +876,6 @@ lt{
             ld{"Atlanto vasaros laikas"}
             lg{"Atlanto laikas"}
             ls{"Atlanto žiemos laikas"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Centrinės Australijos vasaros laikas"}
@@ -1023,18 +1011,10 @@ lt{
         "meta:Europe_Central"{
             ld{"Vidurio Europos vasaros laikas"}
             ls{"Vidurio Europos laikas"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Rytų Europos vasaros laikas"}
             ls{"Rytų Europos laikas"}
-            sd{"EEST"}
-            ss{"EET"}
-        }
-        "meta:Europe_Western"{
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Folklandų salų vasaros laikas"}
@@ -1053,9 +1033,6 @@ lt{
         "meta:Frunze"{
             ld{"Frunzės vasaros laikas"}
             ls{"Frunzės aiklas"}
-        }
-        "meta:GMT"{
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos laikas"}
@@ -1136,7 +1113,7 @@ lt{
         }
         "meta:Kamchatka"{
             ld{"Kamčiatkos Petropavlovsko vasaros laikas"}
-            ls{"Kamčiatkos Petropavlovsko vasaros laikas"}
+            ls{"Kamčiatkos Petropavlovsko laikas"}
         }
         "meta:Karachi"{
             ls{"Karačio laikas"}

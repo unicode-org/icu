@@ -17,5 +17,5 @@ en_JM{
             "US Dollar",
         }
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.53"}
 }

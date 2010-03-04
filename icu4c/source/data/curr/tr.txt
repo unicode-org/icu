@@ -216,7 +216,7 @@ tr{
             "WIR Avrosu",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "İsviçre Frangı",
         }
         CHW{
@@ -640,11 +640,11 @@ tr{
             "Malavi Kvaçası",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksika Pezosu",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Gümüş Meksika Pezosu (1861-1992)",
         }
         MXV{
@@ -1103,5 +1103,5 @@ tr{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.65"}
 }

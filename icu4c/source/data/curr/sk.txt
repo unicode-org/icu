@@ -196,7 +196,7 @@ sk{
             "Konžský frank Congolais",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Švajčiarský frank",
         }
         CLF{
@@ -584,11 +584,11 @@ sk{
             "Malavská kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mexické peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mexické striborné peso (1861-1992)",
         }
         MXV{
@@ -956,5 +956,5 @@ sk{
             "Zimbabský dolár",
         }
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.63"}
 }

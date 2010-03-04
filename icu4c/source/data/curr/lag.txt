@@ -44,7 +44,7 @@ lag{
             "Faráanga ya Kóongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faráaka ya Uswíisi",
         }
         CNY{

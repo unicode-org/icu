@@ -90,7 +90,7 @@ af{
         zh{"Sjinees"}
         zu{"Zoeloe"}
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.68"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}

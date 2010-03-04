@@ -14,7 +14,7 @@ uk{
     collations{
         standard{
             Sequence{"&Г<ґ<<<Ґ"}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }

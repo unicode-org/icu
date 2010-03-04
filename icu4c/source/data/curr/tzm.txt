@@ -44,7 +44,7 @@ tzm{
             "Frank Ukunguli",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Frank Uswisri",
         }
         CNY{

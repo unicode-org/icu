@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/om.xml
  */
 om{
-    Version{"2.0.45.99"}
+    Version{"2.0.47.63"}
     zoneStrings{
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}

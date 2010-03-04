@@ -44,7 +44,7 @@ mer{
             "Faranga ya Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faranga ya Swisilandi",
         }
         CNY{
@@ -228,5 +228,5 @@ mer{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
 }

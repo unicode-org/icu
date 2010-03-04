@@ -148,7 +148,7 @@ ro{
             "franc congolez",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "franc elvețian",
         }
         CLP{
@@ -484,11 +484,11 @@ ro{
             "liră malteză",
         }
         MXN{
-            "MXN",
+            "MX$",
             "peso mexican",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "peso mexican de argint (1861–1992)",
         }
         MYR{
@@ -1528,5 +1528,5 @@ ro{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.63"}
 }

@@ -44,7 +44,7 @@ xog{
             "Faranga ya Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faranga ey'eSwitizirandi",
         }
         CNY{
@@ -228,5 +228,5 @@ xog{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.47.53"}
 }

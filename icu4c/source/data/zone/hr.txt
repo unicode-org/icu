@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
@@ -97,33 +97,25 @@ hr{
             ld{"središnje dnevno vrijeme"}
             lg{"središnje vrijeme"}
             ls{"središnje standardno vrijeme"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"istočno dnevno vrijeme"}
             lg{"istočno vrijeme"}
             ls{"istočno standardno vrijeme"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"planinsko dnevno vrijeme"}
             lg{"planinsko vrijeme"}
             ls{"planinsko standardno vrijeme"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"pacifičko dnevno vrijeme"}
             lg{"pacifičko vrijeme"}
             ls{"pacifičko standardno vrijeme"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Aqtau"{
             sd{"AQTST(Aqtau)"}
@@ -149,9 +141,7 @@ hr{
             ld{"atlantsko dnevno vrijeme"}
             lg{"atlantsko vrijeme"}
             ls{"atlantsko standardno vrijeme"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"središnje australsko ljetno vrijeme"}
@@ -220,22 +210,19 @@ hr{
             ls{"vrijeme Uskršnjih Otoka"}
         }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"srednjoeuropsko ljetno vrijeme"}
             ls{"srednjoeuropsko vrijeme"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"istočnoeuropsko ljetno vrijeme"}
             ls{"istočnoeuropsko vrijeme"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"zapadnoeuropsko ljetno vrijeme"}
             ls{"zapadnoeuropsko vrijeme"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"falklandsko ljetno vrijeme"}
@@ -249,8 +236,8 @@ hr{
             ls{"južno francusko i antarktičko vrijeme"}
         }
         "meta:GMT"{
+            cu:int{1}
             ls{"univerzalno vrijeme"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"vrijeme Galapagosa"}

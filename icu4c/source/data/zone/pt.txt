@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -180,33 +180,25 @@ pt{
             ld{"Horário de Verão Central"}
             lg{"Horário Central"}
             ls{"Horário Padrão Central"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Horário de Verão Oriental"}
             lg{"Horário Oriental"}
             ls{"Horário Padrão Oriental"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Horário de Verão da Montanha"}
             lg{"Horário da Montanha"}
             ls{"Horário Padrão da Montanha"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Horário de Verão do Pacífico"}
             lg{"Horário do Pacífico"}
             ls{"Horário Padrão do Pacífico"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Horário de Verão do Anadyr"}
@@ -249,14 +241,13 @@ pt{
             ld{"Horário de Verão do Atlântico"}
             lg{"Horário do Atlântico"}
             ls{"Horário Padrão do Atlântico"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Horário de Verão da Austrália Central"}
             lg{"Horário da Austrália Central"}
             ls{"Horário Padrão da Austrália Central"}
+            sd{"ACDT (Austrália)"}
             sg{"ACT (Austrália)"}
             ss{"ACST (Austrália)"}
         }
@@ -399,20 +390,14 @@ pt{
         "meta:Europe_Central"{
             ld{"Horário de Verão da Europa Central"}
             ls{"Horário da Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Horário de Verão da Europa Oriental"}
             ls{"Horário Padrão da Europa Oriental"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Horário de Verão da Europa Ocidental"}
             ls{"Horário da Europa Ocidental"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Horário de Verão das Ilhas Falkland"}
@@ -435,7 +420,6 @@ pt{
         "meta:GMT"{
             cu:int{1}
             ls{"Horário do Meridiano de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Horário de Galápagos"}

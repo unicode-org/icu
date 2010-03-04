@@ -44,7 +44,7 @@ sw{
             "faranga ya Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "faranga ya Uswisi",
         }
         CNY{
@@ -232,5 +232,5 @@ sw{
             "dola ya Zimbabwe",
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.68"}
 }

@@ -216,7 +216,7 @@ gsw{
             "WIR-Euro",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Schwiizer Franke",
         }
         CHW{
@@ -636,11 +636,11 @@ gsw{
             "Malawi-Kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mexikanische Peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mexikanische Silber-Peso (1861-1992)",
         }
         MXV{
@@ -1862,5 +1862,5 @@ gsw{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.53"}
 }

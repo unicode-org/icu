@@ -44,7 +44,7 @@ lg{
             "Faranga ey'eKongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Faranga ey'eSwitizirandi",
         }
         CNY{
@@ -232,5 +232,5 @@ lg{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
 }
