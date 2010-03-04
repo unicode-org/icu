@@ -1900,26 +1900,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 int32_t s = subParse(text, pos, ch, count,
                                FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i);
 
-                if (s == -pos-1) {
-                    // era not present, in special cases allow this to continue
-                    s++;
-
-                    if (i+1 < fPattern.length()) {
-                        // move to next pattern character
-                        UChar ch = fPattern.charAt(i+1);
-                        
-                        // check for whitespace
-                        if (uprv_isRuleWhiteSpace(ch)) {
-                            i++;
-                            // Advance over run in pattern
-                            while ((i+1)<fPattern.length() &&
-                                   uprv_isRuleWhiteSpace(fPattern.charAt(i+1))) {
-                                ++i;
-                            }
-                        }
-                    }
-                }
-                else if (s < 0) {
+                if (s < 0) {
                     status = U_PARSE_ERROR;
                     goto ExitParse;
                 }
@@ -2369,7 +2350,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     Formattable number;
     int32_t value = 0;
     int32_t i;
-    int32_t ps = 0;
     ParsePosition pos(0);
     UDateFormatField patternCharIndex;
     NumberFormat *currentNumberFormat;
@@ -2464,10 +2444,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             return matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, cal);
         }
 
-        ps = matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, cal);
-        if (ps == -start) 
-            ps--;
-        return ps;
+        return matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, cal);
 
     case UDAT_YEAR_FIELD:
         // If there are 3 or more YEAR pattern characters, this indicates
