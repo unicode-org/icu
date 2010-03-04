@@ -662,7 +662,7 @@ uloc_getDisplayName(const char *locale,
            if ( p0 != NULL && p1 != NULL ) { /* The pattern is well formed */
               if ( dest ) {
                   int32_t destLen = 0;
-                  UChar *result = (UChar *)uprv_malloc((length+1)*sizeof(UChar)); 
+                  UChar *result = (UChar *)uprv_malloc((length+1)*sizeof(UChar));
                   UChar *upos = (UChar *)dispLocPattern;
                   u_strcpy(result,dest);
                   dest[0] = 0;
@@ -684,7 +684,8 @@ uloc_getDisplayName(const char *locale,
                          destLen++;
                          dest[destLen] = 0; /* Null terminate */
                      }
-                  } 
+                  }
+                  length = destLen;
                   uprv_free(result);
               }
            }

@@ -240,6 +240,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestLikelySubtags);
     TESTCASE(TestToLanguageTag);
     TESTCASE(TestForLanguageTag);
+    TESTCASE(TestTrailingNull);
 }
 
 
@@ -2119,9 +2120,28 @@ static void TestGetBaseName(void) {
             return;
         }
     }
-
 }
 
+static void TestTrailingNull(void) {
+  const char* localeId = "zh_Hans";
+  UChar buffer[128]; /* sufficient for this test */
+  int32_t len;
+  UErrorCode status = U_ZERO_ERROR;
+  int i;
+
+  len = uloc_getDisplayName(localeId, localeId, buffer, 128, &status);
+  if (len > 128) {
+    log_err("buffer too small");
+    return;
+  }
+
+  for (i = 0; i < len; ++i) {
+    if (buffer[i] == 0) {
+      log_err("name contained null");
+      return;
+    }
+  }
+}
 
 /* Jitterbug 4115 */
 static void TestDisplayNameWarning(void) {
@@ -5536,4 +5556,3 @@ static void TestForLanguageTag(void) {
         }
     }
 }
-
