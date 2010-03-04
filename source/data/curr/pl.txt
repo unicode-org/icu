@@ -212,7 +212,7 @@ pl{
             "frank kongijski",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "frank szwajcarski",
         }
         CLP{
@@ -608,11 +608,11 @@ pl{
             "kwacha malawska",
         }
         MXN{
-            "MXN",
+            "MX$",
             "peso meksykańskie",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "peso srebrne meksykańskie (1861-1992)",
         }
         MYR{
@@ -1232,5 +1232,5 @@ pl{
     CurrencyUnitPatterns{
         one{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.63"}
 }

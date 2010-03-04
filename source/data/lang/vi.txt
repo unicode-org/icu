@@ -130,7 +130,7 @@ vi{
             gregorian{"gregorian"}
         }
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

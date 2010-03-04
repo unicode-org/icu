@@ -16,7 +16,7 @@ lt{
             "Andoros peseta",
         }
         AED{
-            "Automatizuotas išorinis defibrilatorius (AED)",
+            "AED",
             "JAE dirhamas",
         }
         AFA{
@@ -248,7 +248,7 @@ lt{
             "WIR eurai",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Šveicarijos frankas",
         }
         CHW{
@@ -708,11 +708,11 @@ lt{
             "Malavio kvača",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksikos pesas",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Meksikos sidabrinis pesas (1861-1992)",
         }
         MXV{
@@ -2642,5 +2642,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.46"}
+    Version{"2.0.47.63"}
 }

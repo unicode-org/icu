@@ -784,7 +784,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("\\u00A51,235")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "Fr.1,234.55"); // 0.05 rounding
+                   1234.56, "CHF1,234.55"); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "$1,234.56");
@@ -3540,7 +3540,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Finnish Markka1.00",
         "Finnish markka1.00",
         "Finnish markkas1.00",
-        "Fr.1.00",
+        "CHF1.00",
         "French Franc1.00",
         "French Gold Franc1.00",
         "French UIC-Franc1.00",

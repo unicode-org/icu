@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1130,29 +1130,21 @@ ko{
             ld{"미 중부 하계 표준시"}
             lg{"중부 표준시"}
             ls{"중부 표준시"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"미 동부 하계 표준시"}
             lg{"동부 표준시"}
             ls{"동부 표준시"}
-            sd{"EDT"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"미 산지 하계 표준시"}
             lg{"산지 표준시"}
             ls{"산악 표준시"}
-            sd{"MDT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"미 태평양 하계 표준시"}
             lg{"태평양 표준시"}
             ls{"태평양 표준시"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "meta:Aqtau"{
             sd{"AQTST (아크타우)"}
@@ -1174,8 +1166,6 @@ ko{
             ld{"미 대서양 하계 표준시"}
             lg{"대서양 표준시"}
             ls{"대서양 표준시"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"오스트레일리아 중부 하계 표준시"}

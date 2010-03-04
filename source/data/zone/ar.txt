@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ar.xml
  */
 ar{
-    Version{"2.0.46.60"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"سيتا"}
@@ -518,6 +518,5 @@ ar{
         }
         gmtFormat{"جرينتش{0}"}
         gmtZeroFormat{"جرينتش"}
-        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

@@ -44,7 +44,7 @@ bez{
             "Lupila lwa Hukongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Lupila lwa Huuswisi",
         }
         CNY{

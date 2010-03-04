@@ -3210,7 +3210,7 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        QU{
+        EU{
             {
                 id{"EUR"}
                 from:intvector{ /** 1999-01-01  */

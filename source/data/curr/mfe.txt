@@ -44,7 +44,7 @@ mfe{
             "fran kongole",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "fran swis",
         }
         CNY{
@@ -232,5 +232,5 @@ mfe{
             "dolar zimbawe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
 }

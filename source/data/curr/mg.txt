@@ -44,7 +44,7 @@ mg{
             "Farantsa kôngôley",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Farantsa soisa",
         }
         CNY{
@@ -232,5 +232,5 @@ mg{
             "Dôlara Zimbaboeanina",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
 }

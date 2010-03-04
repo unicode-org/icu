@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/kl.xml
  */
 kl{
-    Version{"2.0.41.26"}
+    Version{"2.0.47.1"}
     collations{
         standard{
             Sequence{
@@ -18,9 +18,9 @@ kl{
                 "&Q<<ĸ<<<K''&t<<<þ/h"
                 "&T<<<Þ/H"
                 "&Y<<ü<<<Ü<<ű<<<Ű"
-                "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
+                "&[before 1]ǀ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
             }
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }

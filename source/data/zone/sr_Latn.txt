@@ -11,7 +11,7 @@
  */
 sr_Latn{
     %%ParentIsRoot:int{1}
-    Version{"2.0.46.59"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -1097,9 +1097,7 @@ sr_Latn{
             ld{"Bering letnje računanje vremena"}
             lg{"Bering vreme"}
             ls{"Bering standardno vreme"}
-            sd{"BDT (Bering)"}
             sg{"BT (Bering)"}
-            ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Butan vreme"}

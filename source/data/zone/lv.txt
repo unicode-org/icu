@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.46.29"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seūta"}
@@ -555,33 +555,25 @@ lv{
             ld{"Centrālais vasaras laiks"}
             lg{"Centrālais laiks"}
             ls{"Centrālais ziemas laiks"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Austrumu vasaras laiks"}
             lg{"Austrumu laiks"}
             ls{"Austrumu ziemas laiks"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Kalnu vasaras laiks"}
             lg{"Kalnu laiks"}
             ls{"Kalnu ziemas laiks"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Klusā okeāna vasaras laiks"}
             lg{"Klusā okeāna laiks"}
             ls{"Klusā okeāna ziemas laiks"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Aqtau"{
             sd{"AQTST (Aktau)"}
@@ -691,7 +683,7 @@ lv{
             ld{"Ķīnas vasaras laiks"}
             lg{"Ķīnas laiks"}
             ls{"Ķīnas ziemas laiks"}
-            sg{"CR (Ķīna)"}
+            sg{"CT (Ķīna)"}
             ss{"CST (Ķīna)"}
         }
         "meta:Christmas"{
@@ -730,20 +722,14 @@ lv{
         "meta:Europe_Central"{
             ld{"Centrāleiropas vasaras laiks"}
             ls{"Centrāleiropas laiks"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Austrumeiropas vasaras laiks"}
             ls{"Austrumeiropas laiks"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Rietumeiropas vasaras laiks"}
             ls{"Rietumeiropas laiks"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Folklenda salu vasaras laiks"}

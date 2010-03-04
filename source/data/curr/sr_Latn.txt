@@ -217,7 +217,7 @@ sr_Latn{
             "WIR Evro (CHE)",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Švajcarski franak",
         }
         CHW{
@@ -645,11 +645,11 @@ sr_Latn{
             "Malavijska kvača (MWK)",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksički peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Meksijski srebrno pezo (1861-1992) (MXP)",
         }
         MXV{
@@ -2724,5 +2724,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.46.59"}
+    Version{"2.0.47.69"}
 }

@@ -677,7 +677,7 @@ zh{
         SAAHO{"萨霍"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

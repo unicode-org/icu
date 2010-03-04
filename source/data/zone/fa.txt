@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.72"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"سئوتا"}

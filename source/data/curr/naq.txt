@@ -44,7 +44,7 @@ naq{
             "Congolese Franc",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Swiss Franci",
         }
         CNY{

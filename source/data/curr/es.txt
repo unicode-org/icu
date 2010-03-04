@@ -216,7 +216,7 @@ es{
             "euro WIR",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "franco suizo",
         }
         CHW{
@@ -632,11 +632,11 @@ es{
             "kwacha de Malawi",
         }
         MXN{
-            "MXN",
+            "MX$",
             "peso mexicano",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "peso de plata mexicano (1861-1992)",
         }
         MXV{
@@ -1800,5 +1800,5 @@ es{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.72"}
 }

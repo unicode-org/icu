@@ -44,7 +44,7 @@ ha{
             "Kuɗin Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Kuɗin Suwizalan",
         }
         CNY{
@@ -228,5 +228,5 @@ ha{
             "Dalar zimbabuwe",
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.68"}
 }

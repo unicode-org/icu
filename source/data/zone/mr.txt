@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mr.xml
  */
 mr{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.63"}
     zoneStrings{
         "meta:Acre"{
             ld{"ऐकर ग्रीष्म वेळ"}
@@ -632,7 +632,7 @@ mr{
         }
         "meta:Uzbekistan"{
             ld{"उझबेकिस्तान ग्रीष्मकालीन वेळ"}
-            ls{"उझबेकिस्तान ग्रीष्मकालीन वेळ"}
+            ls{"उझबेकिस्तान वेळ"}
         }
         "meta:Vanuatu"{
             ld{"वानाटु ग्रीष्मकालीन वेळ"}

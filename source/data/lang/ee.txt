@@ -57,5 +57,5 @@ ee{
         zh{"Tsanisigbe"}
         zu{"Zulugbe"}
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.47.53"}
 }

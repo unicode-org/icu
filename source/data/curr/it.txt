@@ -212,7 +212,7 @@ it{
             "Franco Congolese",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franco Svizzero",
         }
         CLF{
@@ -632,11 +632,11 @@ it{
             "Kwacha Malawiano",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Peso Messicano",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Peso messicano d’argento (1861-1992)",
         }
         MXV{
@@ -1085,5 +1085,5 @@ it{
             one{"valuta sconosciuta/non valida"}
         }
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
 }

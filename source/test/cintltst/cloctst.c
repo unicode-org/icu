@@ -3160,10 +3160,6 @@ const char* const full_data[][3] = {
     "fil_Latn_PH",
     "fil"
   }, {
-    "fj",
-    "fj_Latn_FJ",
-    "fj"
-  }, {
     "fo",
     "fo_Latn_FO",
     "fo"
@@ -3247,10 +3243,6 @@ const char* const full_data[][3] = {
     "it",
     "it_Latn_IT",
     "it"
-  }, {
-    "iu",
-    "iu_Cans_CA",
-    "iu"
   }, {
     "ja",
     "ja_Jpan_JP",
@@ -3772,9 +3764,9 @@ const char* const full_data[][3] = {
     "cs_Latn_CZ",
     "cs"
   }, {
-    "und_Cans",
-    "crk_Cans_CA",
-    "crk"
+    "und_Cher",
+    "chr_Cher_US",
+    "chr"
   }, {
     "und_Cyrl",
     "ru_Cyrl_RU",
@@ -3848,10 +3840,6 @@ const char* const full_data[][3] = {
     "fi_Latn_FI",
     "fi"
   }, {
-    "und_FJ",
-    "fj_Latn_FJ",
-    "fj"
-  }, {
     "und_FM",
     "chk_Latn_FM",
     "chk"
@@ -3889,8 +3877,8 @@ const char* const full_data[][3] = {
     "fr_GP"
   }, {
     "und_GQ",
-    "fr_Latn_GQ",
-    "fr_GQ"
+    "es_Latn_GQ",
+    "es_GQ"
   }, {
     "und_GR",
     "el_Grek_GR",
@@ -4133,16 +4121,16 @@ const char* const full_data[][3] = {
     "mg"
   }, {
     "und_MH",
-    "mh_Latn_MH",
-    "mh"
+    "en_Latn_MH",
+    "en_MH"
   }, {
     "und_MK",
     "mk_Cyrl_MK",
     "mk"
   }, {
     "und_ML",
-    "fr_Latn_ML",
-    "fr_ML"
+    "bm_Latn_ML",
+    "bm"
   }, {
     "und_MM",
     "my_Mymr_MM",
@@ -4173,8 +4161,8 @@ const char* const full_data[][3] = {
     "dv"
   }, {
     "und_MW",
-    "ny_Latn_MW",
-    "ny"
+    "en_Latn_MW",
+    "en_MW"
   }, {
     "und_MX",
     "es_Latn_MX",
@@ -4229,8 +4217,8 @@ const char* const full_data[][3] = {
     "en_NR"
   }, {
     "und_NU",
-    "niu_Latn_NU",
-    "niu"
+    "en_Latn_NU",
+    "en_NU"
   }, {
     "und_OM",
     "ar_Arab_OM",
@@ -4389,8 +4377,8 @@ const char* const full_data[][3] = {
     "tg"
   }, {
     "und_TK",
-    "en_Latn_TK",
-    "en_TK"
+    "tkl_Latn_TK",
+    "tkl"
   }, {
     "und_TL",
     "pt_Latn_TL",
@@ -4465,8 +4453,8 @@ const char* const full_data[][3] = {
     "vi"
   }, {
     "und_VU",
-    "bi_Latn_VU",
-    "bi"
+    "fr_Latn_VU",
+    "fr_VU"
   }, {
     "und_WF",
     "fr_Latn_WF",

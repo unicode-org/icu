@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ka.xml
  */
 ka{
-    Version{"2.0.46.66"}
+    Version{"2.0.47.67"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"სეუტა"}

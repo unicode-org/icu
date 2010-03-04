@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    Version{"2.0.46.69"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alger"}
@@ -197,33 +197,25 @@ fi{
             ld{"Yhdysvaltain keskinen kesäaika"}
             lg{"Yhdysvaltain keskinen aika"}
             ls{"Yhdysvaltain keskinen normaaliaika"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Yhdysvaltain itäinen kesäaika"}
             lg{"Yhdysvaltain itäinen aika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Kalliovuorten kesäaika"}
             lg{"Kalliovuorten aika"}
             ls{"Kalliovuorten normaaliaika"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Yhdysvaltain Tyynenmeren kesäaika"}
             lg{"Yhdysvaltain Tyynenmeren aika"}
             ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Arabian"{
             ld{"Saudi-Arabian kesäaika"}
@@ -316,20 +308,14 @@ fi{
         "meta:Europe_Central"{
             ld{"Keski-Euroopan kesäaika"}
             ls{"Keski-Euroopan normaaliaika"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Itä-Euroopan kesäaika"}
             ls{"Itä-Euroopan normaaliaika"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Länsi-Euroopan kesäaika"}
             ls{"Länsi-Euroopan aika"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandinsaarten kesäaika"}
@@ -343,7 +329,6 @@ fi{
         }
         "meta:GMT"{
             ls{"Greenwichin normaaliaika"}
-            ss{"GMT"}
         }
         "meta:Georgia"{
             ld{"Georgian kesäaika"}

@@ -300,7 +300,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.53"}
     codePatterns{
         language{"Jazyk: {0}"}
         territory{"Region: {0}"}

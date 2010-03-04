@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.72"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"סאוטה"}
@@ -85,7 +85,7 @@ he{
             ec{"אינדיאנפוליס"}
         }
         "America:Los_Angeles"{
-            ec{"אמריקה/לוס-אנג'לס"}
+            ec{"אמריקה/לוס-אנג׳לס"}
         }
         "America:Louisville"{
             ec{"אמריקה/לואיסוויל"}
@@ -130,7 +130,7 @@ he{
             ec{"רסיפה"}
         }
         "America:Rio_Branco"{
-            ec{"ריאו ברנצ'ו"}
+            ec{"ריאו ברנצ׳ו"}
         }
         "America:Santiago"{
             ec{"אמריקה/סנטיאגו"}
@@ -163,7 +163,7 @@ he{
             ec{"דייויס"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"דומון ד'אורווי"}
+            ec{"דומון ד׳אורווי"}
         }
         "Antarctica:Mawson"{
             ec{"מאוסון"}
@@ -175,7 +175,7 @@ he{
             ec{"אמריקה/פאלמר"}
         }
         "Antarctica:Rothera"{
-            ec{"רות'רה"}
+            ec{"רות׳רה"}
         }
         "Antarctica:South_Pole"{
             ec{"הקוטב הדרומי"}
@@ -196,16 +196,16 @@ he{
             ec{"אקטובה"}
         }
         "Asia:Choibalsan"{
-            ec{"צ'ואיבלסאן"}
+            ec{"צ׳ואיבלסאן"}
         }
         "Asia:Hovd"{
             ec{"חובד"}
         }
         "Asia:Jakarta"{
-            ec{"אסיה/ג'קרטה"}
+            ec{"אסיה/ג׳קרטה"}
         }
         "Asia:Jayapura"{
-            ec{"ג'איאפורה"}
+            ec{"ג׳איאפורה"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"קואלה לומפור"}
@@ -265,7 +265,7 @@ he{
             ec{"אוסטרליה/מלבורן"}
         }
         "Australia:Perth"{
-            ec{"אוסטרליה/פרת'"}
+            ec{"אוסטרליה/פרת׳"}
         }
         "Australia:Sydney"{
             ec{"אוסטרליה/סידני"}
@@ -310,7 +310,7 @@ he{
             ec{"פסיפי/הונולולו"}
         }
         "Pacific:Johnston"{
-            ec{"ג'ונסטון"}
+            ec{"ג׳ונסטון"}
         }
         "Pacific:Kiritimati"{
             ec{"קיריטימאטי"}
@@ -319,7 +319,7 @@ he{
             ec{"קוסרה"}
         }
         "Pacific:Majuro"{
-            ec{"מאג'ורו"}
+            ec{"מאג׳ורו"}
         }
         "Pacific:Marquesas"{
             ec{"איי מרקיז"}
@@ -356,16 +356,16 @@ he{
             ls{"שעון מערב אפריקה"}
         }
         "meta:America_Central"{
-            sg{"שעון מרכז ארה\"ב (שיקגו)"}
+            sg{"שעון מרכז ארה״ב (שיקגו)"}
         }
         "meta:America_Eastern"{
-            sg{"שעון מזרח ארה\"ב (ניו-יורק)"}
+            sg{"שעון מזרח ארה״ב (ניו-יורק)"}
         }
         "meta:America_Mountain"{
-            sg{"שעון אזור ההרים של ארה\"ב (דנוור)"}
+            sg{"שעון אזור ההרים של ארה״ב (דנוור)"}
         }
         "meta:America_Pacific"{
-            sg{"שעון מערב ארה\"ב (לוס אנג'לס)"}
+            sg{"שעון מערב ארה״ב (לוס אנג׳לס)"}
         }
         "meta:Atlantic"{
             sg{"שעון קנדה (הליפקס)"}

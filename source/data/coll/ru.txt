@@ -14,7 +14,7 @@ ru{
     collations{
         standard{
             Sequence{"[suppressContractions [Ѐ-ЗК-зк-џ] ]"}
-            Version{"1.7"}
+            Version{"1.8"}
         }
     }
 }

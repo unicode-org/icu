@@ -378,12 +378,12 @@ static void TestOptions() {
         { "en", skel_Hmm,  UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHcmm   },
         { "en", skel_HHmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHcmm   },
         { "en", skel_hhmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_hhcmm_a },
-        { "nb", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_HHpmm   },
-        { "nb", skel_HHmm, UDATPG_MATCH_NO_OPTIONS,        patn_HHpmm   },
-        { "nb", skel_hhmm, UDATPG_MATCH_NO_OPTIONS,        patn_hpmm_a  },
-        { "nb", skel_Hmm,  UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_Hpmm    },
-        { "nb", skel_HHmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHpmm   },
-        { "nb", skel_hhmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_hhpmm_a },
+        { "be", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_HHpmm   },
+        { "be", skel_HHmm, UDATPG_MATCH_NO_OPTIONS,        patn_HHpmm   },
+        { "be", skel_hhmm, UDATPG_MATCH_NO_OPTIONS,        patn_hpmm_a  },
+        { "be", skel_Hmm,  UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_Hpmm    },
+        { "be", skel_HHmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_HHpmm   },
+        { "be", skel_hhmm, UDATPG_MATCH_HOUR_FIELD_LENGTH, patn_hhpmm_a },
     };
 
     int count = sizeof(testData) / sizeof(testData[0]);

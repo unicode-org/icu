@@ -208,7 +208,7 @@ ga{
             "Franc Congolais an Chongó",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franc na hEilvéise",
         }
         CLF{
@@ -592,11 +592,11 @@ ga{
             "Kwacha na Maláive",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Peso Meicsiceo",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Peso Airgid Meicsiceo (1861-1992)",
         }
         MXV{
@@ -984,5 +984,5 @@ ga{
             "Dollar Siombábach",
         }
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.67"}
 }

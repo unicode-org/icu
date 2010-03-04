@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}

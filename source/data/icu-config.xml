@@ -326,6 +326,8 @@
         <include locales="pt_GW"/>
         <include locales="pt_MZ"/>
         <include locales="pt_PT"/>
+        <include locales="rm"/>         
+        <include locales="rm_CH"/>
         <include locales="ro"/>         
         <include locales="ro_MD"/>
         <include locales="ro_RO"/>
@@ -410,6 +412,7 @@
         <include locales="ti"/>
         <include locales="ti_ER"/>
         <include locales="ti_ET"/>
+        <include locales="tl"/>
         <include locales="to"/>
         <include locales="to_TO"/>
         <include locales="tr"/>        

@@ -216,7 +216,7 @@ pt{
             "Euro WIR",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Franco suíço",
         }
         CHW{
@@ -644,11 +644,11 @@ pt{
             "Cuacha do Maláui",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Peso mexicano",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Peso Prata mexicano (1861-1992)",
         }
         MXV{
@@ -1094,6 +1094,14 @@ pt{
         ZWD{
             "Z$",
             "Dólar do Zimbábue",
+        }
+        ZWL{
+            "ZWL",
+            "Dólar do Zimbábue (2009)",
+        }
+        ZWR{
+            "ZWR" /** ===  */,
+            "Dólar do Zimbábue (2008)",
         }
     }
     CurrencyPlurals{
@@ -2181,10 +2189,18 @@ pt{
             one{"Dólar do Zimbábue"}
             other{"Dólares do Zimbábue"}
         }
+        ZWL{
+            one{"Dólar do Zimbábue (2009)"}
+            other{"Dólares do Zimbábue (2009)"}
+        }
+        ZWR{
+            one{"Dólar do Zimbábue (2008)"}
+            other{"Dólares do Zimbábue (2008)"}
+        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
 }

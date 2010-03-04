@@ -13,5 +13,5 @@ de_BE{
             "Franken",
         }
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.67"}
 }

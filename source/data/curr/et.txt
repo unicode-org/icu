@@ -176,7 +176,7 @@ et{
             "Kanada dollar",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Šveitsi frank",
         }
         CLP{
@@ -459,11 +459,11 @@ et{
             "Malawi kvatša",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mehhiko peeso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mehhiko peeso, 1861-1990",
         }
         MYR{
@@ -873,5 +873,5 @@ et{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.69"}
 }

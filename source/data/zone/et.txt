@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.46.51"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
@@ -49,41 +49,31 @@ et{
             ld{"Kesk-Ameerika suveaeg"}
             lg{"Kesk-Ameerika aeg"}
             ls{"Kesk-Ameerika standardaeg"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Idaranniku suveaeg"}
             lg{"Idaranniku aeg"}
             ls{"Idaranniku standardaeg"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Mäestikuvööndi suveaeg"}
             lg{"Mäestikuvööndi aeg"}
             ls{"Mäestikuvööndi standardaeg"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Vaikse ookeani suveaeg"}
             lg{"Vaikse ookeani aeg"}
             ls{"Vaikse ookeani standardaeg"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Atlantic"{
             ld{"Atlandi suveaeg"}
             lg{"Atlandi aeg"}
             ls{"Atlandi standardaeg"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Kesk-Austraalia suveaeg"}
@@ -145,20 +135,14 @@ et{
         "meta:Europe_Central"{
             ld{"Kesk-Euroopa suveaeg"}
             ls{"Kesk-Euroopa aeg"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Ida-Euroopa suveaeg"}
             ls{"Ida-Euroopa aeg"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Lääne-Euroopa suveaeg"}
             ls{"Lääne-Euroopa aeg"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandi saarte suveaeg"}
@@ -173,7 +157,6 @@ et{
         }
         "meta:GMT"{
             ls{"Greenwich'i aeg"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagose aeg"}

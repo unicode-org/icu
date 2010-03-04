@@ -23,5 +23,5 @@ zu{
         xh{"isiXhosa"}
         zu{"isiZulu"}
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.65"}
 }

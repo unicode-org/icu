@@ -244,7 +244,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.72"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

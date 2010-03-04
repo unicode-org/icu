@@ -216,7 +216,7 @@ da{
             "WIR euro",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Schweizisk franc",
         }
         CHW{
@@ -636,11 +636,11 @@ da{
             "Malawisk kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Mexicansk peso",
         }
         MXP{
-            "MX$",
+            "MXP" /** ===  */,
             "Mexicansk silver peso (1861-1992)",
         }
         MXV{
@@ -1661,5 +1661,5 @@ da{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
 }

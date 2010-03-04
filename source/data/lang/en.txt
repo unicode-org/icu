@@ -82,6 +82,7 @@ en{
         cai{"Central American Indian Language"}
         car{"Carib"}
         cau{"Caucasian Language"}
+        cay{"Cayuga"}
         cch{"Atsam"}
         ce{"Chechen"}
         ceb{"Cebuano"}
@@ -428,6 +429,7 @@ en{
         sco{"Scots"}
         sd{"Sindhi"}
         se{"Northern Sami"}
+        see{"Seneca"}
         seh{"Sena"}
         sel{"Selkup"}
         sem{"Semitic Language"}
@@ -797,7 +799,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.63"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

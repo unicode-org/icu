@@ -44,7 +44,7 @@ shi{
             "frank n kungu",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "afrank n swisra",
         }
         CNY{

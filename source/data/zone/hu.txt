@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.70"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"Kairó"}
@@ -417,33 +417,25 @@ hu{
             ld{"Középső államokbeli nyári idő"}
             lg{"Középső államokbeli idő"}
             ls{"Középső államokbeli zónaidő"}
-            sd{"CDT"}
             sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Keleti államokbeli nyári idő"}
             lg{"Keleti államokbeli idő"}
             ls{"Keleti államokbeli zónaidő"}
-            sd{"EDT"}
             sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Hegyvidéki nyári idő"}
             lg{"Hegyvidéki idő"}
             ls{"Hegyvidéki zónaidő"}
-            sd{"MDT"}
             sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Csendes-óceáni nyári idő"}
             lg{"Csendes-óceáni idő"}
             ls{"Csendes-óceáni zónaidő"}
-            sd{"PDT"}
             sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadíri nyári idő"}
@@ -486,9 +478,7 @@ hu{
             ld{"Atlanti-óceáni nyári idő"}
             lg{"Atlanti-óceáni idő"}
             ls{"Atlanti-óceáni zónaidő"}
-            sd{"ADT"}
             sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Ausztrál középső nyári idő"}
@@ -637,22 +627,16 @@ hu{
             cu:int{1}
             ld{"közép-európai nyári idő"}
             ls{"közép-európai idő"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             cu:int{1}
             ld{"kelet-európai nyári idő"}
             ls{"kelet-európai idő"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             cu:int{1}
             ld{"Nyugat-európai nyári idő"}
             ls{"Nyugat-európai idő"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland-szigeteki nyári idő"}
@@ -675,7 +659,6 @@ hu{
         "meta:GMT"{
             cu:int{1}
             ls{"Greenwichi középidő"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagosi idő"}

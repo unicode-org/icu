@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.46.49"}
+    Version{"2.0.47.67"}
     zoneStrings{
         "meta:Acre"{
             ld{"Waktu Musim Panas Acre"}
@@ -329,7 +329,7 @@ id{
             ld{"Waktu Musim Panas Kep. Malvinas"}
             ls{"Waktu Kep. Malvinas"}
             sd{"Waktu Musim Panas Kep. Malvinas"}
-            ss{"Waktu Musim Panas Kep. Malvinas"}
+            ss{"Waktu Kep. Malvinas"}
         }
         "meta:Fiji"{
             ld{"Waktu Musim Panas Fiji"}

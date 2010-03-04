@@ -282,6 +282,7 @@ timezoneTypes:table(nofallback){
             "America:Manaus"{"brmao"}
             "America:Marigot"{"gpmsb"}
             "America:Martinique"{"mqfdf"}
+            "America:Matamoros"{"mxmam"}
             "America:Mazatlan"{"mxmzt"}
             "America:Mendoza"{"armdz"}
             "America:Menominee"{"usmnm"}
@@ -300,6 +301,7 @@ timezoneTypes:table(nofallback){
             "America:Noronha"{"brfen"}
             "America:North_Dakota:Center"{"usndcnt"}
             "America:North_Dakota:New_Salem"{"usndnsl"}
+            "America:Ojinaga"{"mxoji"}
             "America:Panama"{"papty"}
             "America:Pangnirtung"{"capnt"}
             "America:Paramaribo"{"srpbm"}
@@ -314,6 +316,7 @@ timezoneTypes:table(nofallback){
             "America:Regina"{"careg"}
             "America:Resolute"{"careb"}
             "America:Rio_Branco"{"brrbr"}
+            "America:Santa_Isabel"{"mxstis"}
             "America:Santarem"{"brstm"}
             "America:Santiago"{"clscl"}
             "America:Santo_Domingo"{"dosdq"}

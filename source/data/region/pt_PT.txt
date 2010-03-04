@@ -72,5 +72,5 @@ pt_PT{
         YE{"Iémen"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.71"}
 }

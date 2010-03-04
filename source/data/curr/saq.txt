@@ -44,7 +44,7 @@ saq{
             "Njilingi eel Kongo",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "Njilingi eel Uswisi",
         }
         CNY{

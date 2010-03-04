@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.46.74"}
+    Version{"2.0.47.69"}
     zoneStrings{
         "Africa:Bamako"{
             ec{"Бамако"}

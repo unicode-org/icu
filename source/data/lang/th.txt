@@ -692,7 +692,7 @@ th{
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"2.0.46.74"}
+    Version{"2.0.47.69"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

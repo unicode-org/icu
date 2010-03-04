@@ -94,7 +94,7 @@ plurals:table(nofallback){
         pap{"set2"}
         pl{"set11"}
         ps{"set2"}
-        pt{"set3"}
+        pt{"set2"}
         pt_PT{"set2"}
         rm{"set2"}
         ro{"set7"}
@@ -146,10 +146,7 @@ plurals:table(nofallback){
             one{"n is 1"}
         }
         set11{
-            few{
-                "n mod 10 in 2..4 and n mod 100 not in 12..14 and n mod 100 not in 22"
-                "..24"
-            }
+            few{"n mod 10 in 2..4 and n mod 100 not in 12..14"}
             one{"n is 1"}
         }
         set12{
@@ -163,7 +160,7 @@ plurals:table(nofallback){
             one{"n is 1"}
         }
         set14{
-            one{"n mod 10 is 1"}
+            one{"n mod 10 is 1 and n is not 11"}
         }
         set15{
             many{"n is 8 or n is 11"}
