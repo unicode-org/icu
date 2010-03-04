@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -167,6 +167,7 @@ public: // package
 
     void Test6880(void);
 
+    void Test4917(void);
 public:
     /**
      * Test host-specific formatting.
