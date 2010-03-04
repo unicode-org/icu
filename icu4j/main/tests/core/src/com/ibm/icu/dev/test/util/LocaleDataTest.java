@@ -45,10 +45,13 @@ public class LocaleDataTest extends TestFmwk{
             if(lang.equals("in")){
                 continue;
             }
-            if(locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_CA") >= 0 ||
-               locale.toString().indexOf("_PH") >= 0 || locale.toString().indexOf("_CL") >= 0 ||
-               locale.toString().indexOf("_PR") >= 0 || locale.toString().indexOf("_VE") >= 0 ||
-               locale.toString().indexOf("_CO") >= 0 || locale.toString().indexOf("_MX") >= 0 ){
+            if(locale.toString().indexOf("_BZ") >= 0 || locale.toString().indexOf("_CA") >= 0 ||
+               locale.toString().indexOf("_CL") >= 0 || locale.toString().indexOf("_CO") >= 0 ||
+               locale.toString().indexOf("_CR") >= 0 || locale.toString().indexOf("_GT") >= 0 ||
+               locale.toString().indexOf("_MX") >= 0 || locale.toString().indexOf("_NI") >= 0 ||
+               locale.toString().indexOf("_PA") >= 0 || locale.toString().indexOf("_PH") >= 0 ||
+               locale.toString().indexOf("_PR") >= 0 || locale.toString().indexOf("_SV") >= 0 ||
+               locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_VE") >= 0 ){
                 if(paperSize.getHeight()!= 279 || paperSize.getWidth() != 216 ){
                     errln("PaperSize did not return the expected value for locale "+ locale+
                           " Expected height: 279 width: 216."+
