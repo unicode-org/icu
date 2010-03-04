@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -88,6 +88,8 @@ static  void TestDisplayNames(void);
  static void TestDisplayKeywordValues(void);
 
  static void TestGetBaseName(void);
+
+static void TestTrailingNull(void);
 
 static void TestGetLocale(void);
 
