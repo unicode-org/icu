@@ -16,40 +16,32 @@ sr_Latn{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.46.59"}
+    Version{"2.0.47.69"}
     calendar{
-        buddhist{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        chinese{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        coptic{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        ethiopic{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "pre podne",
                 "popodne",
             }
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, dd. MMMM y.",
+                "dd. MMMM y.",
+                "dd.MM.y.",
+                "d.M.yy.",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             availableFormats{
                 EEEd{"d EEE"}
-                Hm{"H.mm"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
                 yMMM{"y MMM"}
                 yQQQ{"y QQQ"}
             }
@@ -211,47 +203,19 @@ sr_Latn{
                 }
             }
         }
-        hebrew{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        indian{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        islamic{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        japanese{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
-        persian{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
-        }
         roc{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
             eras{
                 abbreviated{
                     "Pre RK",
                     "RK",
                 }
             }
+        }
+    }
+    listPattern{
+        standard{
+            2{"{0} i {1}"}
+            end{"{0} i {1}"}
         }
     }
     measurementSystemNames{

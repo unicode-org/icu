@@ -42,7 +42,7 @@ fa{
         "'‪'%#,##0'‬'",
         "#E0",
     }
-    Version{"2.0.46.51"}
+    Version{"2.0.47.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -70,8 +70,10 @@ fa{
             availableFormats{
                 EEEd{"EEE d"}
                 GGGGyyyyMMMMd{"d MMMM y GGGG"}
+                H{"H"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E M/d"}
                 MMM{"LLL"}
@@ -97,15 +99,6 @@ fa{
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "یکشنبه",
-                        "دوشنبه",
-                        "سه‌شنبه",
-                        "چهارشنبه",
-                        "پنجشنبه",
-                        "جمعه",
-                        "شنبه",
-                    }
                     wide{
                         "یکشنبه",
                         "دوشنبه",
@@ -416,10 +409,6 @@ fa{
             }
         }
         islamic{
-            AmPmMarkers{
-                "قبل از ظهر",
-                "بعد از ظهر",
-            }
             DateTimePatterns{
                 "H:mm:ss (zzzz)",
                 "H:mm:ss (z)",
@@ -479,10 +468,6 @@ fa{
             }
         }
         persian{
-            AmPmMarkers{
-                "قبل از ظهر",
-                "بعد از ظهر",
-            }
             eras{
                 abbreviated{
                     "ه‍. ش.",

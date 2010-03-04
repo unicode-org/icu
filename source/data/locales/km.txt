@@ -40,7 +40,7 @@ km{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.67"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -39,7 +39,7 @@ ps{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.67"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -60,6 +60,11 @@ ps{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
             }
             dayNames{
                 format{

@@ -16,6 +16,7 @@ sr{
     }
     ExemplarCharacters{"[а б в г д ђ е ж з и ј к л љ м н њ о п р с т ћ у ф х ц ч џ ш]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш]"}
     LocaleScript{
         "Cyrl",
     }
@@ -39,30 +40,16 @@ sr{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.59"}
+    Version{"2.0.47.69"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             eras{
                 abbreviated{
                     "БЕ",
                 }
             }
         }
-        chinese{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
-        }
         coptic{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             monthNames{
                 format{
                     wide{
@@ -84,10 +71,6 @@ sr{
             }
         }
         ethiopic{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             monthNames{
                 format{
                     wide{
@@ -132,6 +115,7 @@ sr{
                 EEEd{"d. EEE"}
                 Ed{"E d."}
                 Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -144,9 +128,10 @@ sr{
                 MMdd{"MM-dd"}
                 Md{"d/M"}
                 d{"d"}
-                hhmm{"hh.mm a"}
-                hhmmss{"hh.mm.ss a"}
-                ms{"mm:ss"}
+                h{"hh a"}
+                hm{"hh.mm a"}
+                hms{"hh.mm.ss a"}
+                ms{"mm.ss"}
                 y{"y."}
                 yM{"y-M"}
                 yMEd{"EEE, d. M. yyyy."}
@@ -200,7 +185,7 @@ sr{
             eras{
                 abbreviated{
                     "п. н. е.",
-                    "н. е",
+                    "н. е.",
                 }
                 narrow{
                     "п.н.е.",
@@ -420,21 +405,9 @@ sr{
                         "Четврто тромесечје",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         hebrew{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             monthNames{
                 format{
                     wide{
@@ -457,10 +430,6 @@ sr{
             }
         }
         indian{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             eras{
                 abbreviated{
                     "САКА",
@@ -486,10 +455,6 @@ sr{
             }
         }
         islamic{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             eras{
                 abbreviated{
                     "АХ",
@@ -515,10 +480,6 @@ sr{
             }
         }
         japanese{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
                 "HH.mm.ss z",
@@ -776,10 +737,6 @@ sr{
             }
         }
         persian{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             monthNames{
                 format{
                     wide{
@@ -800,10 +757,6 @@ sr{
             }
         }
         roc{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             eras{
                 abbreviated{
                     "Пре РК",
@@ -817,6 +770,12 @@ sr{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0} и {1}"}
+            end{"{0} и {1}"}
+        }
     }
     measurementSystemNames{
         US{"САД"}

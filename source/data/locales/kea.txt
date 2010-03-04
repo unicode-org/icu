@@ -12,6 +12,7 @@
 kea{
     AuxExemplarCharacters{"[á à â ã c ç é ê h í ñ ó ô q ú w y]"}
     ExemplarCharacters{"[a b d {dj} e f g i j k l {lh} m n {nh} o p r s t {tx} u v x z]"}
+    ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T U V X Z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ kea{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             AmPmMarkers{

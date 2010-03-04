@@ -13,6 +13,7 @@ da{
     AuxExemplarCharacters{"[á é è ê ë ü ä ö]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z æ ø å]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     LocaleScript{
         "Latn",
     }
@@ -36,12 +37,12 @@ da{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     calendar{
         buddhist{
             DateTimePatterns{
                 "HH.mm.ss zzzz",
-                "HH:mm:ss z",
+                "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
                 "EEEE d. MMMM y G",
@@ -62,7 +63,7 @@ da{
             }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
-                "HH:mm:ss z",
+                "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
                 "EEEE 'den' d. MMMM y",
@@ -77,14 +78,13 @@ da{
             }
             availableFormats{
                 H{"HH"}
-                HHmmss{"HH.mm.ss"}
                 Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d-M"}
+                MEd{"E. d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E, d. MMMM"}
-                MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
@@ -93,11 +93,10 @@ da{
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
-                yM{"M-yyyy"}
-                yMEd{"EEE. d-M-yyyy"}
+                yM{"M/y"}
+                yMEd{"EEE. d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE. d. MMM y"}
-                yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
@@ -373,14 +372,6 @@ da{
                         "4. kvartal",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
     }
@@ -389,6 +380,12 @@ da{
         alternateQuotationStart{"”"}
         quotationEnd{"”"}
         quotationStart{"”"}
+    }
+    listPattern{
+        standard{
+            2{"{0} og {1}"}
+            end{"{0} og {1}"}
+        }
     }
     measurementSystemNames{
         US{"De amerikanske målesystemer"}

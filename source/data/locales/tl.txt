@@ -3,19 +3,13 @@
 // * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ar_AE.xml
+// * Source File:<path>/common/main/tl.xml
 // *
 // ***************************************************************************
-ar_AE{
-    Version{"2.0.47.53"}
-    calendar{
-        gregorian{
-            weekend:intvector{
-                6,
-                0,
-                7,
-                86400000,
-            }
-        }
-    }
+/**
+ *  ICU <specials> source: <path>/xml/main/tl.xml
+ */
+tl{
+    "%%ALIAS"{"fil"}
+    Version{"2.0.41.23"}
 }

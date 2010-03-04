@@ -14,6 +14,10 @@ es_AR{
                 "a.m.",
                 "p.m.",
             }
+            DateTimeElements:intvector{
+                1,
+                4,
+            }
             DateTimePatterns{
                 "HH'h'''mm:ss zzzz",
                 "H:mm:ss z",

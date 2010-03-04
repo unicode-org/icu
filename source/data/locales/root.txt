@@ -41,7 +41,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.87"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -75,6 +75,7 @@ root{
             }
             availableFormats{
                 EEEd{"EEE d"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -86,6 +87,7 @@ root{
                 MMMd{"MMM d"}
                 Md{"M-d"}
                 d{"d"}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
@@ -352,17 +354,17 @@ root{
             }
             availableFormats{
                 EEEd{"d EEE"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
                 MMMEd{"E MMM d"}
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
                 Md{"M-d"}
                 d{"d"}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
@@ -371,7 +373,6 @@ root{
                 yMEd{"EEE, y-M-d"}
                 yMMM{"y MMM"}
                 yMMMEd{"EEE, y MMM d"}
-                yMMMM{"y MMMM"}
                 yQ{"y Q"}
                 yQQQ{"y QQQ"}
             }
@@ -833,6 +834,7 @@ root{
                 MMMEd{"E MMM d"}
                 MMMMd{"MMMM d"}
                 Md{"M-d"}
+                h{"hh a"}
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
@@ -1413,12 +1415,14 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}
                 Md{"M/d"}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
@@ -1454,6 +1458,14 @@ root{
     layout{
         characters{"left-to-right"}
         lines{"top-to-bottom"}
+    }
+    listPattern{
+        standard{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
     }
     measurementSystemNames{
         US{"US"}

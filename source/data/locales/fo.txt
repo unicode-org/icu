@@ -12,6 +12,7 @@
 fo{
     AuxExemplarCharacters{"[c q w z]"}
     ExemplarCharacters{"[a á b d ð e f g h i í j k l m n o ó p r s t u ú v x y ý æ ø]"}
+    ExemplarCharactersIndex{"[A Á B C D Ð E F G H I Í J K L M N O Ó P Q R S T U Ú V W X Y Ý Z Æ Ø]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -123,6 +124,12 @@ fo{
                     }
                 }
             }
+        }
+    }
+    listPattern{
+        standard{
+            2{"{0} og {1}"}
+            end{"{0} og {1}"}
         }
     }
 }

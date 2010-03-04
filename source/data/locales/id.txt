@@ -35,7 +35,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.49"}
+    Version{"2.0.47.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -147,6 +147,12 @@ id{
                     }
                 }
             }
+        }
+    }
+    listPattern{
+        standard{
+            2{"{0} dan {1}"}
+            end{"{0}, dan  {1}"}
         }
     }
     units{

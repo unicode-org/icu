@@ -15,6 +15,7 @@ ee{
         "[a b d {dz} ɖ e ɛ f ƒ g {gb} ɣ h i k {kp} l m n {ny} ŋ o ɔ p r s t {ts} u v "
         "ʋ w x y z]"
     }
+    ExemplarCharactersIndex{"[A B C D Ɖ E Ɛ F Ƒ G Ɣ H I J K L M N Ŋ O Ɔ P Q R S T U V Ʋ W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -24,7 +25,7 @@ ee{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -197,22 +198,6 @@ ee{
                         "K",
                         "A",
                         "D",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

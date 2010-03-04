@@ -21,11 +21,11 @@ es_PE{
         "NaN",
         "+",
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.43"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH'H'mm''ss\" zzzz",
+                "HH'H'mm''ss'' zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",

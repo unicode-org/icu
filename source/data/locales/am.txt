@@ -20,7 +20,7 @@ am{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.68"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -193,22 +193,6 @@ am{
                         "ኦ",
                         "ኖ",
                         "ዲ",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

@@ -11,6 +11,7 @@
  */
 lg{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -20,13 +21,9 @@ lg{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",

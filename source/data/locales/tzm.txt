@@ -12,6 +12,7 @@
 tzm{
     AuxExemplarCharacters{"[o p v]"}
     ExemplarCharacters{"[a b c d ḍ e ɛ f g {gʷ} ɣ h ḥ i j k {kʷ} l m n q r ṛ s ṣ t ṭ u w x y z]"}
+    ExemplarCharactersIndex{"[A B C D Ḍ E Ɛ F G Ɣ H Ḥ I J K L M N Q R Ṛ S Ṣ T Ṭ U W X Y Z]"}
     LocaleScript{
         "Latn",
     }

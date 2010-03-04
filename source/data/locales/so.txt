@@ -34,7 +34,7 @@ so{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.68"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -197,10 +197,10 @@ so{
             quarters{
                 format{
                     abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
+                        "R1",
+                        "R2",
+                        "R3",
+                        "R4",
                     }
                     wide{
                         "Rubaca 1aad",

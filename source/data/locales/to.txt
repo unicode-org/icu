@@ -16,10 +16,11 @@ to{
     }
     ExemplarCharacters{"[a ā e ē f h ʻ i ī k l m n {ng} o ō p s t u ū v]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A Ā B C D E Ē F G H ʻ I Ī J K L M N O Ō P Q R S T U Ū V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -80,15 +81,6 @@ to{
                         "Fal",
                         "Tok",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "P",
-                        "T",
-                        "F",
-                        "T",
-                    }
                     wide{
                         "Sāpate",
                         "Mōnite",
@@ -100,15 +92,6 @@ to{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Sāp",
-                        "Mōn",
-                        "Tūs",
-                        "Pul",
-                        "Tuʻa",
-                        "Fal",
-                        "Tok",
-                    }
                     narrow{
                         "S",
                         "M",
@@ -117,15 +100,6 @@ to{
                         "T",
                         "F",
                         "T",
-                    }
-                    wide{
-                        "Sāpate",
-                        "Mōnite",
-                        "Tūsite",
-                        "Pulelulu",
-                        "Tuʻapulelulu",
-                        "Falaite",
-                        "Tokonaki",
                     }
                 }
             }
@@ -287,20 +261,6 @@ to{
                         "Nōv",
                         "Tīs",
                     }
-                    narrow{
-                        "S",
-                        "F",
-                        "M",
-                        "E",
-                        "M",
-                        "S",
-                        "S",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "T",
-                    }
                     wide{
                         "Sānuali",
                         "Fēpueli",
@@ -317,20 +277,6 @@ to{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Sān",
-                        "Fēp",
-                        "Maʻa",
-                        "ʻEpe",
-                        "Mē",
-                        "Sun",
-                        "Siu",
-                        "ʻAok",
-                        "Sep",
-                        "ʻOka",
-                        "Nōv",
-                        "Tīs",
-                    }
                     narrow{
                         "S",
                         "F",
@@ -344,20 +290,6 @@ to{
                         "O",
                         "N",
                         "T",
-                    }
-                    wide{
-                        "Sānuali",
-                        "Fēpueli",
-                        "Maʻasi",
-                        "ʻEpeleli",
-                        "Mē",
-                        "Sune",
-                        "Siulai",
-                        "ʻAokosi",
-                        "Sepitema",
-                        "ʻOkatopa",
-                        "Nōvema",
-                        "Tīsema",
                     }
                 }
             }
@@ -377,18 +309,6 @@ to{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "kuata 1",
                         "kuata 2",
