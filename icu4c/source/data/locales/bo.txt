@@ -22,6 +22,7 @@ bo{
         "\u0F72} \u0F80 {\u0F71\u0F80} \u0F74 {\u0F71\u0F74} {\u0FB2\u0F80} \u0F77 {"
         "\u0FB3\u0F80} \u0F79-\u0F7D \u0F84]"
     }
+    ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
     LocaleScript{
         "Tibt",
     }
@@ -31,7 +32,7 @@ bo{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.47.20"}
     calendar{
         gregorian{
             AmPmMarkers{

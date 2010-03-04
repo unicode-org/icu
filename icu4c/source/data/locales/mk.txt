@@ -13,6 +13,7 @@ mk{
     AuxExemplarCharacters{"[ѐ ѝ]"}
     ExemplarCharacters{"[а б в г ѓ д е ж з ѕ и ј к ќ л љ м н њ о п р с т у ф х ц ч џ ш]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[А Б В Г Ѓ Д Е Ж З Ѕ И Ј К Ќ Л Љ М Н Њ О П Р С Т У Ф Х Ц Ч Џ Ш]"}
     LocaleScript{
         "Cyrl",
     }
@@ -36,7 +37,7 @@ mk{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.46"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -60,8 +61,8 @@ mk{
             }
             availableFormats{
                 EEEd{"d EEE"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -333,18 +334,6 @@ mk{
                         "апр-јун",
                         "јул-сеп",
                         "окт-дек",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "прво тромесечје",
-                        "второ тромесечје",
-                        "трето тромесечје",
-                        "четврто тромесечје",
                     }
                 }
             }

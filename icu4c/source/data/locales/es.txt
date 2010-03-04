@@ -13,6 +13,7 @@ es{
     AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī º ò ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
     ExemplarCharacters{"[a á b c d e é f g h i í j k l m n ñ o ó p q r s t u ú ü v w x y z]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -36,7 +37,7 @@ es{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -60,32 +61,30 @@ es{
             }
             availableFormats{
                 EEEd{"EEE d"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E, d-M"}
+                MEd{"E, d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d MMM"}
                 MMMdd{"dd-MMM"}
                 MMd{"d/MM"}
                 Md{"d/M"}
                 d{"d"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                mmss{"mm:ss"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"M/yyyy"}
-                yMEd{"EEE d/M/yyyy"}
+                yM{"M/y"}
+                yMEd{"EEE d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE, d MMM y"}
                 yMMMM{"MMMM 'de' y"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM-yy"}
                 yyQ{"Q yy"}
@@ -180,10 +179,6 @@ es{
                 }
             }
             intervalFormats{
-                H{
-                    H{"HH–HH"}
-                    a{"HH–HH"}
-                }
                 Hm{
                     H{"HH:mm – HH:mm"}
                     a{"HH:mm – HH:mm"}
@@ -193,10 +188,6 @@ es{
                     H{"HH:mm – HH:mm v"}
                     a{"HH:mm – HH:mm v"}
                     m{"HH:mm – HH:mm v"}
-                }
-                Hv{
-                    H{"HH–HH v"}
-                    a{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -344,14 +335,6 @@ es{
                         "4º trimestre",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
     }
@@ -360,6 +343,12 @@ es{
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
+    }
+    listPattern{
+        standard{
+            2{"{0} y {1}"}
+            end{"{0} y {1}"}
+        }
     }
     measurementSystemNames{
         US{"estadounidense"}

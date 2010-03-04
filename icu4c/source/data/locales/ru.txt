@@ -16,6 +16,7 @@ ru{
     }
     ExemplarCharacters{"[а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ы Э Ю Я]"}
     LocaleScript{
         "Cyrl",
     }
@@ -39,13 +40,9 @@ ru{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "H:mm:ss zzzz",
                 "H:mm:ss z",
@@ -64,27 +61,22 @@ ru{
             availableFormats{
                 Ed{"E d"}
                 H{"H"}
-                HHmm{"H:mm"}
-                HHmmss{"H:mm:ss"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
-                MEd{"E, M-d"}
+                MEd{"E, d.M"}
                 MMM{"LLL"}
-                MMMEd{"E MMM d"}
-                MMMMEd{"E MMMM d"}
-                MMMMd{"d MMMM"}
+                MMMEd{"E d MMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd.MM"}
                 Md{"d.M"}
                 d{"d"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yyyy-M"}
-                yMEd{"EEE, yyyy-M-d"}
+                yM{"M.y"}
+                yMEd{"EEE, d.M.y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
-                yMMMM{"MMMM y"}
                 yQQQ{"y QQQ"}
                 yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
@@ -94,7 +86,7 @@ ru{
                 yyyyLLLL{"LLLL y"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM y"}
-                yyyyQQQQ{"QQQQ y 'г'."}
+                yyyyQQQQ{"QQQQ y 'г'."}
             }
             dayNames{
                 format{
@@ -140,10 +132,6 @@ ru{
             }
             eras{
                 abbreviated{
-                    "до н.э.",
-                    "н.э.",
-                }
-                wide{
                     "до н.э.",
                     "н.э.",
                 }
@@ -383,14 +371,6 @@ ru{
                         "4-й квартал",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         hebrew{
@@ -461,6 +441,12 @@ ru{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    listPattern{
+        standard{
+            2{"{0} и {1}"}
+            end{"{0} и {1}"}
+        }
     }
     measurementSystemNames{
         US{"Англо-американская"}

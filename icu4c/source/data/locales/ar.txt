@@ -16,6 +16,7 @@ ar{
         "ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ى ي]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي]"}
     LocaleScript{
         "Arab",
     }
@@ -39,7 +40,7 @@ ar{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.60"}
+    Version{"2.0.47.53"}
     calendar{
         buddhist{
             eras{
@@ -51,21 +52,6 @@ ar{
         coptic{
             monthNames{
                 format{
-                    abbreviated{
-                        "توت",
-                        "بابه",
-                        "هاتور",
-                        "كيهك",
-                        "طوبة",
-                        "أمشير",
-                        "برمهات",
-                        "برمودة",
-                        "بشنس",
-                        "بؤونة",
-                        "أبيب",
-                        "مسرى",
-                        "نسيئ",
-                    }
                     wide{
                         "توت",
                         "بابه",
@@ -87,21 +73,6 @@ ar{
         ethiopic{
             monthNames{
                 format{
-                    abbreviated{
-                        "مسكريم",
-                        "تكمت",
-                        "هدار",
-                        "تهساس",
-                        "تر",
-                        "يكتت",
-                        "مجابيت",
-                        "ميازيا",
-                        "جنبت",
-                        "سين",
-                        "هامل",
-                        "نهاس",
-                        "باجمن",
-                    }
                     wide{
                         "مسكريم",
                         "تكمت",
@@ -141,7 +112,7 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
                 M{"L"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
@@ -292,20 +263,6 @@ ar{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "يناير",
-                        "فبراير",
-                        "مارس",
-                        "أبريل",
-                        "مايو",
-                        "يونيو",
-                        "يوليو",
-                        "أغسطس",
-                        "سبتمبر",
-                        "أكتوبر",
-                        "نوفمبر",
-                        "ديسمبر",
-                    }
                     wide{
                         "يناير",
                         "فبراير",
@@ -340,12 +297,6 @@ ar{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "الربع الأول",
-                        "الربع الثاني",
-                        "الربع الثالث",
-                        "الربع الرابع",
-                    }
                     wide{
                         "الربع الأول",
                         "الربع الثاني",
@@ -366,7 +317,7 @@ ar{
         hebrew{
             monthNames{
                 format{
-                    abbreviated{
+                    wide{
                         "تشري",
                         "مرحشوان",
                         "كيسلو",
@@ -382,34 +333,10 @@ ar{
                         "أيلول",
                         "آذار الثاني",
                     }
-                    wide{
-                        "تشري",
-                        "مرحشوان",
-                        "كيسلو",
-                        "طيفت",
-                        "شباط",
-                        "آذار الأول",
-                        "آذار",
-                        "نيسان",
-                        "أيار",
-                        "سيفان",
-                        "تموز",
-                        "آب",
-                        "Elul",
-                        "آذار الثاني",
-                    }
                 }
             }
         }
         islamic{
-            AmPmMarkers{
-                "ص",
-                "م",
-            }
-            availableFormats{
-                Md{"d‏/M"}
-                yM{"M‏/yyyy"}
-            }
             eras{
                 abbreviated{
                     "هـ",
@@ -700,20 +627,6 @@ ar{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "فرفردن",
-                        "أذربيهشت",
-                        "خرداد",
-                        "تار",
-                        "مرداد",
-                        "شهرفار",
-                        "مهر",
-                        "آيان",
-                        "آذر",
-                        "دي",
-                        "بهمن",
-                        "اسفندار",
-                    }
                     wide{
                         "فرفردن",
                         "أذربيهشت",
@@ -742,6 +655,14 @@ ar{
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
+    }
+    listPattern{
+        standard{
+            2{"{0} و {1}"}
+            end{"{0}، و {1}"}
+            middle{"{0}، {1}"}
+            start{"{0}، {1}"}
+        }
     }
     measurementSystemNames{
         US{"النظام الأمريكي"}

@@ -13,7 +13,7 @@ en_AU{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.47.52"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -32,8 +32,11 @@ en_AU{
                 "{1} {0}",
             }
             availableFormats{
+                MEd{"E, d/M"}
+                MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
                 MMdd{"dd/MM"}
+                yMEd{"EEE, d/M/y"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

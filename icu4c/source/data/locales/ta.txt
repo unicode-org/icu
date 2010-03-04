@@ -16,6 +16,10 @@ ta{
         "\u0BC0 ு ூ ெ ே ை ொ ோ ௌ \u0BCD]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{
+        "[அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ க ங ச ஞ ட ண த ந ப ம ய ர ல வ ழ ள ற ன ஜ ஶ ஷ ஸ ஹ {க்ஷ}"
+        "]"
+    }
     LocaleScript{
         "Taml",
     }
@@ -25,7 +29,7 @@ ta{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.65"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -168,5 +172,11 @@ ta{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0} மற்றும் {1}"}
+            end{"{0} மற்றும் {1}"}
+        }
     }
 }

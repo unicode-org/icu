@@ -13,7 +13,7 @@ ar_QA{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.41.23"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

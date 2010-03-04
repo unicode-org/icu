@@ -15,6 +15,10 @@ sq{
         "[a b c ç d {dh} e ë f g {gj} h i j k l {ll} m n {nj} o p q r {rr} s {sh} t {"
         "th} u v x {xh} y z {zh}]"
     }
+    ExemplarCharactersIndex{
+        "[A B C Ç D {DH} E Ë F G {GJ} H I J K L {LL} M N {NJ} O P Q R {RR} S {SH} T {"
+        "TH} U V W X {XH} Y Z {ZH}]"
+    }
     LocaleScript{
         "Latn",
     }
@@ -38,7 +42,7 @@ sq{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -61,6 +65,7 @@ sq{
                 "{1} {0}",
             }
             availableFormats{
+                H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
                 M{"L"}
@@ -72,7 +77,10 @@ sq{
                 MMMd{"d MMM"}
                 Md{"M-d"}
                 d{"d"}
-                ms{"mm:ss"}
+                h{"h.a"}
+                hm{"h.mm.a"}
+                hms{"h.mm.ss.a"}
+                ms{"mm.ss"}
                 y{"y"}
                 yM{"M.yyyy"}
                 yMEd{"EEE, d.M.yyyy"}
@@ -181,16 +189,6 @@ sq{
                         "T",
                         "N",
                         "D",
-                    }
-                }
-            }
-            quarters{
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
                     }
                 }
             }

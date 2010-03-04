@@ -12,6 +12,7 @@
 mg{
     AuxExemplarCharacters{"[c q u w x]"}
     ExemplarCharacters{"[a à â b d e é è ê ë f g h i ì î ï j k l m n ñ o ô p r s t v y z]"}
+    ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T V Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -21,13 +22,9 @@ mg{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",

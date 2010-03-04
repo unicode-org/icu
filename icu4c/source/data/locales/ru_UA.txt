@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ru_UA{
-    Version{"2.0.45.82"}
+    Version{"2.0.47.63"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -26,9 +26,5 @@ ru_UA{
                 "{1} {0}",
             }
         }
-    }
-    measurementSystemNames{
-        US{"US"}
-        metric{"Metric"}
     }
 }

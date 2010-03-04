@@ -12,6 +12,7 @@
 az{
     AuxExemplarCharacters{"[w]"}
     ExemplarCharacters{"[a b c ç d e ə f g ğ h x ı i {i\u0307} j k q l m n o ö p r s ş t u ü v y z]"}
+    ExemplarCharactersIndex{"[A B C Ç D E Ə F G Ğ H X I İ J K Q L M N O Ö P R S Ş T U Ü V W Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -35,7 +36,7 @@ az{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.53"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -52,9 +53,6 @@ az{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            availableFormats{
-                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -167,22 +165,6 @@ az{
                         "Oktyabr",
                         "Noyabr",
                         "Dekabr",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                 }
             }

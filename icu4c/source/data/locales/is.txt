@@ -13,6 +13,7 @@ is{
     AuxExemplarCharacters{"[c q w z]"}
     ExemplarCharacters{"[a á b d ð e é f g h i í j k l m n o ó p r s t u ú v y ý þ æ ö]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A Á B C D Ð E É F G H I Í J K L M N O Ó P Q R S T U Ú V W X Y Ý Z Þ Æ Ö]"}
     LocaleScript{
         "Latn",
     }
@@ -36,7 +37,7 @@ is{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.25"}
+    Version{"2.0.47.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -59,9 +60,8 @@ is{
                 "{1} {0}",
             }
             availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"H:mm"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L."}
                 MEd{"E d.M."}
                 MMM{"LLL"}
@@ -319,12 +319,6 @@ is{
                         "3F",
                         "4F",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "1. fjórðungur",
                         "2. fjórðungur",
@@ -340,6 +334,12 @@ is{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    listPattern{
+        standard{
+            2{"{0} og {1}"}
+            end{"{0} og {1}"}
+        }
     }
     measurementSystemNames{
         US{"bandarískt"}

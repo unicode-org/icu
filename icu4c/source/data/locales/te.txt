@@ -16,6 +16,10 @@ te{
         " బ భ మ య ర ఱ ల వ శ ష స హ ఁ ం ః \u0C4D ళ \u0C3E \u0C3F \u0C40 ు ూ ృ ౄ \u0C46 "
         "\u0C47 \u0C48 \u0C4A \u0C4B \u0C4C \u0C55 \u0C56]"
     }
+    ExemplarCharactersIndex{
+        "[అ ఆ ఇ ఈ ఉ ఊ ఋ ౠ ఎ ఏ ఐ ఒ ఓ ఔ క ఖ గ ఘ ఙ చ ఛ జ ఝ ఞ ట ఠ డ ఢ ణ త థ ద ధ న ప ఫ బ భ"
+        " మ య ర ఱ ల వ శ ష స హ ళ]"
+    }
     LocaleScript{
         "Telu",
     }
@@ -25,7 +29,7 @@ te{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.46.43"}
+    Version{"2.0.47.65"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -88,6 +92,10 @@ te{
                 }
             }
             eras{
+                abbreviated{
+                    "ఈసాపూర్వ.",
+                    "సన్.",
+                }
                 wide{
                     "ఈసాపూర్వ.",
                     "సన్.",

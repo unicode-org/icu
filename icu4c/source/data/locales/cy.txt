@@ -15,16 +15,13 @@ cy{
         "[a á à â ä b c {ch} d {dd} e é è ê ë f {ff} g {ng} h i í ì î ï l {ll} m n o "
         "ó ò ô ö p {ph} r {rh} s t {th} u ú ù û ü w ẃ ẁ ŵ ẅ y ý ỳ ŷ ÿ]"
     }
+    ExemplarCharactersIndex{"[A B C {CH} D E F {FF} G H I J L {LL} M N O P {PH} R {RH} S T {TH} U W Y]"}
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.45.99"}
+    Version{"2.0.47.68"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -313,14 +310,6 @@ cy{
                         "2il chwarter",
                         "3ydd chwarter",
                         "4ydd chwarter",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
                     }
                 }
             }

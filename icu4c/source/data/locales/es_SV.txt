@@ -21,5 +21,9 @@ es_SV{
         "NaN",
         "+",
     }
+    PaperSize:intvector{
+        279,
+        216,
+    }
     Version{"2.0.41.23"}
 }

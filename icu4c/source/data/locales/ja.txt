@@ -67,6 +67,7 @@ ja{
         "首 香 馬 駄-駆 駐 騎 騒 験 騰 驚 骨 髄 高 髪 鬼 魂 魅 魔 魚 鮮 鯨 鳥 鳴 鶏 麗 麦 麻 黄 黒 黙 鼓 鼻 齢]"
     }
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[あ か さ た な は ま や ら わ]"}
     LocaleScript{
         "Kana",
         "Hira",
@@ -92,7 +93,7 @@ ja{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.59"}
+    Version{"2.0.47.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -101,7 +102,7 @@ ja{
             }
             DateTimePatterns{
                 "H時mm分ss秒 zzzz",
-                "HH:mm:ss z",
+                "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "y年M月d日EEEE",
@@ -119,16 +120,16 @@ ja{
                 GGGGyMd{"GGGGy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"M/d(E)"}
                 MMM{"LLL"}
                 MMMEd{"M月d日(E)"}
-                MMMMEd{"M月d日(E)"}
-                MMMMd{"M月d日"}
                 MMMd{"M月d日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
+                h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -137,7 +138,6 @@ ja{
                 yMEd{"y/M/d(EEE)"}
                 yMMM{"y年M月"}
                 yMMMEd{"y年M月d日(EEE)"}
-                yMMMM{"y年M月"}
                 yMMMd{"y年M月d日"}
                 yMd{"y/M/d"}
                 yQ{"y/Q"}
@@ -336,20 +336,6 @@ ja{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -366,20 +352,6 @@ ja{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
                     narrow{
                         "1",
                         "2",
@@ -411,24 +383,12 @@ ja{
                         "第4四半期",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         japanese{
-            AmPmMarkers{
-                "午前",
-                "午後",
-            }
             DateTimePatterns{
                 "H時mm分ss秒 zzzz",
-                "HH:mm:ss z",
+                "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "Gy年M月d日EEEE",
@@ -443,14 +403,23 @@ ja{
             }
             availableFormats{
                 Ed{"d日(EEE)"}
+                H{"H時"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                MEd{"M/d(E)"}
                 MMMEd{"M月d日(EEE)"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
+                d{"d日"}
+                h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                y{"Gy年"}
                 yyyy{"Gy年"}
+                yyyyMEd{"Gyy/M/d(E)"}
                 yyyyMM{"Gyy/MM"}
                 yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日(EEE)"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gyy/M/d"}
                 yyyyQ{"Gyy/Q"}
@@ -699,7 +668,7 @@ ja{
         roc{
             DateTimePatterns{
                 "H時mm分ss秒 zzzz",
-                "HH:mm:ss z",
+                "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "Gy年M月d日EEEE",
@@ -725,6 +694,14 @@ ja{
         alternateQuotationStart{"『"}
         quotationEnd{"」"}
         quotationStart{"「"}
+    }
+    listPattern{
+        standard{
+            2{"{0}、{1}"}
+            end{"{0}、{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
     }
     measurementSystemNames{
         US{"ヤード・ポンド法"}

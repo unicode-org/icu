@@ -28,7 +28,7 @@ pt_PT{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.71"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -16,6 +16,7 @@ fr{
         " x y ÿ z]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z ұ]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -39,7 +40,7 @@ fr{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.46.69"}
+    Version{"2.0.47.69"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -114,29 +115,25 @@ fr{
             }
             availableFormats{
                 EEEd{"d EEE"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"EEE d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"EEE d MMMM"}
-                MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMMdd{"dd MMM"}
                 MMd{"d/MM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/yyyy"}
                 yMEd{"EEE d/M/yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE d MMM y"}
-                yMMMM{"MMMM y"}
                 yQ{"'T'Q y"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
@@ -405,14 +402,6 @@ fr{
                         "4e trimestre",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
             }
         }
         hebrew{
@@ -424,8 +413,8 @@ fr{
                         "Kislev",
                         "Tébeth",
                         "Schébat",
+                        "Adar I",
                         "Adar",
-                        "Adar II",
                         "Nissan",
                         "Iyar",
                         "Sivan",
@@ -463,6 +452,12 @@ fr{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    listPattern{
+        standard{
+            2{"{0} et {1}"}
+            end{"{0} et {1}"}
+        }
     }
     measurementSystemNames{
         US{"américain"}
