@@ -592,7 +592,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "\u00A51,235"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                       1234.56, "Fr.1,234.55"); // 0.05 rounding
+                       1234.56, "CHF1,234.55"); // 0.05 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                        1234.56, "$1,234.56");

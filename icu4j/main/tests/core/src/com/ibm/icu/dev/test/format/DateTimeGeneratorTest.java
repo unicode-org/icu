@@ -67,8 +67,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
         gen.addPattern("d'. von' MMMM", true, returnInfo); 
         // the returnInfo is mostly useful for debugging problem cases
-        format.applyPattern(gen.getBestPattern("MMMMddHmm"));
-        assertEquals("modified format: MMMddHmm", "14. von Oktober 08:58", format.format(sampleDate)); // (fixed expected result per ticket 6872<-7180)
+        format.applyPattern(gen.getBestPattern("MMMMdHmm"));
+        assertEquals("modified format: MMMdHmm", "14. von Oktober 08:58", format.format(sampleDate)); // (fixed expected result per ticket 6872<-7180)
 
         // get a pattern and modify it
         format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
@@ -308,7 +308,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "1999\u5E741\u6708"}, // (new item for testing 6872<-5702)
         new ULocale("de_DE"),
-        new String[] {"yM", "1999-1"},
+        new String[] {"yM", "1.1999"},
         new String[] {"yMMM", "Jan 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. Jan 1999"},
@@ -1056,7 +1056,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
        *      Hm{"H:mm"}
        *      Hms{"H:mm:ss"}
        *      hm{"h:mm a"}
-       *  nb/gregorian has
+       *  be/gregorian has
        *      HHmmss{"HH.mm.ss"}
        *      Hm{"HH.mm"}
        *      hm{"h.mm a"}
@@ -1083,12 +1083,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
               new TestOptionsItem( "en", "Hmm",  "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "en", "HHmm", "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "en", "hhmm", "hh:mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-              new TestOptionsItem( "nb", "Hmm",  "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-              new TestOptionsItem( "nb", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-              new TestOptionsItem( "nb", "hhmm", "h.mm a",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-              new TestOptionsItem( "nb", "Hmm",  "H.mm",    DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-              new TestOptionsItem( "nb", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-              new TestOptionsItem( "nb", "hhmm", "hh.mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+              new TestOptionsItem( "be", "Hmm",  "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+              new TestOptionsItem( "be", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+              new TestOptionsItem( "be", "hhmm", "h.mm a",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+              new TestOptionsItem( "be", "Hmm",  "H.mm",    DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+              new TestOptionsItem( "be", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+              new TestOptionsItem( "be", "hhmm", "hh.mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
           };
 
           for (int i = 0; i < testOptionsData.length; ++i) {
