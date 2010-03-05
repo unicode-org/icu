@@ -4,7 +4,7 @@
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
 
-    <title>ReadMe for ICU 4.4 (DRAFT!)</title>
+    <title>ReadMe for ICU 4.4RC1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2010 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -15,11 +15,11 @@
 	<link type="text/css" href="./icu4c.css" rel="stylesheet"/>
   </head>
 
-  <body class="draft">
+  <body>
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.4 (DRAFT!) ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.4 RC1 ReadMe</h1>
 
-    <p>Version: 2010 Feb 17th<br />
+    <p>Last updated: 2010 Mar 5th<br />
      Copyright &copy; 1997-2010 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -211,38 +211,6 @@
     applications migrating from previous ICU releases</em>. --> For more news about
     this release, see the <a href="http://www.icu-project.org/download/">ICU
     download page</a>.</p>
-
-    <!-- The following is in regards of Ticket #6894 done by John Huan Vu -->
-    <h3><a name="LinuxICCValueSafeOptimization">Linux/ICC (Intel C++ Compiler) value-safe optimization on floating-point data</a></h3>
-    <p>
-      To ensure that the behavior of the Linux/ICC compiler are consistent with other compilers and other platforms, the flag <code>-fp-model precise</code> is added to the file <code>runConfigureICU</code>. According to the <a href="http://www.intel.com/software/products/compilers/docs/clin/main_cls/whnjs.htm">Intel C++ Compiler User and Reference Guides</a>, the flag enables value-safe optimizations on floating-point data. In contrast, the default value of the <code>-fp-model</code> option is <code>-fp-model fast=1</code> which enables a more aggressive optimizations on floating-point data. This is particularly important when all of the bits of a <code>float</code> or a <code>double</code> value are used for ICU. 
-    </p>
-    <p>This new functionality fixes <a href="http://bugs.icu-project.org/trac/ticket/6894">Ticket #6894</a>.</p>
-
-    <!-- The following is in regards of Ticket #6332 done by John Huan Vu -->
-    <h3>Static and shared libraries share the same name in the UNIX environment</h3>
-    <p>
-      Previously, static libraries in a UNIX environment would have an 's' in front of their names (i.e. libsicu*.a versus libicu*.so). However, it has been known customary within a UNIX environment to have the static and shared libaries with the same name (i.e. libicu*.a with libicu*.so). This causes problems to some users because they would have to know of this change of library names when producing a fully static executable. Given this, an enhancement is made that whenever the flag <code>--enable-static</code> is given, the static and shared libraries will now have the same name.
-    </p>
-    <p>The following platforms are affected by this change:</p>
-    <ul>
-        <li>Debian Linux 5.0.2 PPC using GCC</li>
-        <li>HP/UX 11iv3 (ia64, 64-bit), aCC A.06.15</li>
-        <li>HP/UX 11i (hppa, 64-bit), aCC A.03.85</li>
-        <li>MacOSX 10.5 Leopard (x86, 64-bit), gcc 4.0.1</li>
-        <li>MacOSX 10.5 Leopard (x86, 32-bit), gcc 4.0.1</li>
-        <li>Solaris 9, Sun Studio 12</li>
-        <li>Solaris 10 (sparc, 64-bit), gcc 4.2.1</li>
-        <li>Solaris 10 (sparc, 64-bit), Sun Studio 12</li>
-        <li>Red Hat Enterprise Linux 4.2 (x86, 32-bit), gcc 3.4.6</li>
-        <li>Red Hat Enterprise Linux 4u7 (x86, 32-bit), gcc 4.2.4</li>
-        <li>Red Hat Enterprise Linux 5 (x86, 32-bit), icc 11.0</li>
-        <li>Red Hat Enterprise Linux 5 (x86, 32-bit), gcc 4.1.2</li>
-        <li>Red Hat Enterprise Linux 5 (x86, 64-bit), gcc 4.1.2</li>
-        <li>SuSe Linux 7.2 (x86, 32-bit), icc 9.0</li>
-        <li>SuSE 10 (x86, 64-bit), gcc 4.1.0</li>
-    </ul>
-    <p>This new enhancement refers to <a href="http://bugs.icu-project.org/trac/ticket/6332">Ticket #6332</a>.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
