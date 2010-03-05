@@ -44,12 +44,6 @@ for line in in_file:
 #   s/; deviation  ; />/
 #   s/   +(\#  [^\#]+)$/  \1/
 #
-# Plus, the following NFC mappings are removed to avoid a conflict
-# with mappings in this file.
-2260-
-226E-
-226F-
-#
 # A circular mapping FFFD>FFFD is avoided by rewriting the line that starts with
 # FFEF..FFFF to two lines, splitting this range and omitting FFFD.
 #
