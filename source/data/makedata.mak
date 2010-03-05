@@ -724,10 +724,12 @@ CLEAN : GODATA
 	@echo Creating $@
 	@"$(ICUTOOLS)\genctd\$(CFG)\genctd" -c -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)" $<
 
+!IFNDEF ICUDATA_SOURCE_ARCHIVE
 # Rule for creating converters
 $(CNV_FILES): $(UCM_SOURCE)
 	@echo Making Charset Conversion tables
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -d"$(ICUBLD_PKG)" $(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)\$(@B).ucm
+!ENDIF
 
 !IFDEF BUILD_SPECIAL_CNV_FILES
 $(CNV_FILES_SPECIAL): $(UCM_SOURCE_SPECIAL)
