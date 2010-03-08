@@ -132,11 +132,11 @@ current and complete version is always found in ICU4J.</p>
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
 <h4>Minimum Java runtime environment requirement</h4>
 <p>
-Starting from this version, you need at least JRE 5.0 for using ICU4J 4.4.
-ICU4J adopted Java 5 language features and no longer compiled with JDK 1.4 or
+Starting with version 4.4, you need at least JRE 5.0 to use ICU4J 4.4.
+ICU4J adopted Java 5 language features and no longer compiles with JDK 1.4 or
 older versions.  This migration also includes some updates in public API signatures,
-such as generics, return/parameter types.  In general, most of these changes
-do not require any changes in existing ICU4J user codes.
+such as generics and return/parameter types.  In general, most of these changes
+do not require any changes in existing ICU4J user code.
 </p>
 <h4>Other updates</h4>
 <p>
@@ -172,10 +172,10 @@ package.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
 <p>
-ICU4J depends on J2SE 5.0 functionalities.  Therefore, ICU4J only runs on
-JRE 5.0 or later releases of Java runtime environment.
-The table below shows operating systems and JRE/VM versions currently
-used by the ICU development team for testing ICU4J.
+ICU4J 4.4 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
+JRE version 5.0 or later.
+The table below shows the operating systems and JRE/VM versions currently
+used by the ICU development team to test ICU4J.
 </p>
 <table border="1">
 <tr>
@@ -402,7 +402,7 @@ ICU4J source archive is extracted.
 <table border="1">
 <tr>
   <th>Path</th>
-  <th>Sub Component Name</th>
+  <th>Sub-component Name</th>
   <th>Build Dependencies</th>
   <th>Public API Packages</th>
   <th>Description</th>
@@ -413,7 +413,7 @@ ICU4J source archive is extracted.
   <td>icu4j-core</td>
   <td>com.ibm.icu.charset</td>
   <td>Implementation of <code>java.nio.charset.spi.CharsetProvider</code>.
-  This sub component is shipped as icu4j-charsets.jar along with
+  This sub-component is shipped as icu4j-charsets.jar along with
   ICU charset converter data files.</td>
 </tr>
 <tr>
@@ -422,9 +422,9 @@ ICU4J source archive is extracted.
   <td>icu4j-core</td>
   <td>com.ibm.icu.text<br>
   com.ibm.icu.util</td>
-  <td>Collator APIs and its implementations.  Also includes some public API classes
-  which depends on Collator.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>Collator APIs and implementation.  Also includes some public API classes
+  that depend on Collator.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 <tr>
   <td>main/classes/core</td>
@@ -434,24 +434,24 @@ ICU4J source archive is extracted.
   com.ibm.icu.math<br>
   com.ibm.icu.text<br>
   com.ibm.icu.util</td>
-  <td>ICU core API classes and its implementations.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>ICU core API classes and implementation.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 <tr>
   <td>main/classes/currdata</td>
   <td>icu4j-currdata</td>
   <td>icu4j-core</td>
   <td>n/a</td>
-  <td>No public API classes.  Providing access to currency display data.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>No public API classes.  Provides access to currency display data.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 <tr>
   <td>main/classes/langdata</td>
   <td>icu4j-langdata</td>
   <td>icu4j-core</td>
   <td>n/a</td>
-  <td>No public API classes.  Providing access to language display data.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>No public API classes.  Provides access to language display data.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 <tr>
   <td>main/classes/localespi</td>
@@ -460,26 +460,26 @@ ICU4J source archive is extracted.
   icu4j-collate<br>
   </td>
   <td>n/a</td>
-  <td>Implementation of various locale sensitive service providers defined
+  <td>Implementation of various locale-sensitive service providers defined
   in <code>java.text.spi</code> and <code>java.util.spi</code> in J2SE 6.0
   or later Java releases.
-  This sub component is shipped as icu4j-localespi.jar.</td>
+  This sub-component is shipped as icu4j-localespi.jar.</td>
 </tr>
 <tr>
   <td>main/classes/regiondata</td>
   <td>icu4j-regiondata</td>
   <td>icu4j-core</td>
   <td>n/a</td>
-  <td>No public API classes.  Providing access to region display data.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>No public API classes.  Provides access to region display data.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 <tr>
   <td>main/classes/translit</td>
   <td>icu4j-translit</td>
   <td>icu4j-core</td>
   <td>com.ibm.icu.text</td>
-  <td>Transliterator APIs and its implementations.
-  This sub component is packaged as a part of icu4j.jar.</td>
+  <td>Transliterator APIs and implementation.
+  This sub-component is packaged as a part of icu4j.jar.</td>
 </tr>
 </table>
 
@@ -487,7 +487,7 @@ ICU4J source archive is extracted.
 <table border="1">
 <tr>
   <th>Path</th>
-  <th>Sub Component Name</th>
+  <th>Sub-component Name</th>
   <th>Runtime Dependencies</th>
   <th>Description</th>
 </tr>
@@ -497,7 +497,7 @@ ICU4J source archive is extracted.
   <td>icu4j-charset<br>
   icu4j-core<br>
   icu4j-test-framework</td>
-  <td>Test suite for charset sub component.</td>
+  <td>Test suite for charset sub-component.</td>
 </tr>
 <tr>
   <td>main/tests/collate</td>
@@ -505,7 +505,7 @@ ICU4J source archive is extracted.
   <td>icu4j-collate<br>
   icu4j-core<br>
   icu4j-test-framework</td>
-  <td>Test suite for collate sub component.</td>
+  <td>Test suite for collate sub-component.</td>
 </tr>
 <tr>
   <td>main/tests/core</td>
@@ -515,7 +515,7 @@ ICU4J source archive is extracted.
   icu4j-langdata<br>
   icu4j-regiondata<br>
   icu4j-test-framework</td>
-  <td>Test suite for core sub component.</td>
+  <td>Test suite for core sub-component.</td>
 </tr>
 <tr>
   <td>main/tests/framework</td>
@@ -533,14 +533,14 @@ ICU4J source archive is extracted.
   icu4j-localespi<br>
   icu4j-regiondata<br>
   icu4j-test-framework</td>
-  <td>Test suite for localespi sub component.</td>
+  <td>Test suite for localespi sub-component.</td>
 </tr>
 <tr>
   <td>main/tests/packaging</td>
   <td>icu4j-packaging-tests</td>
   <td>icu4j-core<br>
   icu4j-test-framework</td>
-  <td>Test suite for sub component packaging.</td>
+  <td>Test suite for sub-component packaging.</td>
 </tr>
 <tr>
   <td>main/tests/translit</td>
@@ -548,7 +548,7 @@ ICU4J source archive is extracted.
   <td>icu4j-core<br>
   icu4j-translit
   icu4j-test-framework</td>
-  <td>Test suite for translit sub component.</td>
+  <td>Test suite for translit sub-component.</td>
 </tr>
 </table>
 
@@ -556,11 +556,11 @@ ICU4J source archive is extracted.
 <table border="1">
 <tr>
   <th>Path</td>
-  <th>Descriptopm</td>
+  <th>Descriptiom</td>
 </tr>
 <tr>
   <td>main/shared</td>
-  <td>Files shared by ICU4J sub components under <code>main</code> directory including:
+  <td>Files shared by ICU4J sub-components under the <code>main</code> directory including:
   <ul>
     <li>ICU4J runtime data archive (icudata.jar).<li>
     <li>ICU4J unit test data archive (testdata.jar).<li>
@@ -575,7 +575,7 @@ ICU4J source archive is extracted.
 </tr>
 <tr>
   <td>perf-tests</td>
-  <td>ICU4J performance test files</td>
+  <td>ICU4J performance test files.</td>
 </tr>
 <tr>
   <td>tools</td>
@@ -646,15 +646,15 @@ multi-lingual searching</a> </li>
 <h3 class="doc"><a name="HowToInstallJavac"></a>How to Install and Build</h3>
 <p>
 To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong>
-on your Java CLASSPATH. If you need Charset API support please place
+on your Java CLASSPATH. If you need Charset API support please also place
 <strong>icu4j-charsets.jar</strong> on your class path along with <strong>icu4j.jar</strong>.
 </p>
 <p>
-To build ICU4J, you will need a J2SE SDK 5.0 or later releases (ICU4J locale SPI
-provider sub components require J2SE SDK 6.0 or later) and the Ant build system.
-It's recommended to install both the J2SE SDK and Ant somewhere <em>outside</em>
-the ICU4J directory. For example, on Linux you might install these in
-/usr/local.</p>
+To build ICU4J, you will need J2SE SDK 5.0 or later (ICU4J locale SPI
+provider sub-components require J2SE SDK 6.0 or later) and the Ant build system
+version 1.7 or later. It's recommended to install both the J2SE SDK and Ant 
+somewhere <em>outside</em>the ICU4J directory. For example, on Linux you might install
+these in <code>/usr/local</code>.</p>
 <ul>
   <li>Install J2SE SDK 6.0.</li>
   <li>Install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
@@ -773,12 +773,12 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 </tr>
 <tr>
   <th>main</th>
-  <td>Build all ICU4J runtime library sub components (under the directory main/classes).
+  <td>Build all ICU4J runtime library sub-components (under the directory main/classes).
   If no target is specified, main is assumed.</td>
 </tr>
 <tr>
   <th>tests</th>
-  <td>Build all ICU4J unit test sub components (under the directory main/tests) and its
+  <td>Build all ICU4J unit test sub-components (under the directory main/tests) and their
   dependencies.</td>
 </tr>
 <tr>
@@ -791,7 +791,7 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 </tr>
 <tr>
   <th>docs</th>
-  <td>Run javadoc over ICU4J runtime library files, generating an HTML documentation tree
+  <td>Run javadoc over the ICU4J runtime library files, generating an HTML documentation tree
   in the subdirectory <strong>doc</strong>.</td>
 </tr>
 <tr>
@@ -811,7 +811,7 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 
 <p>For more information, read the Ant documentation and the <strong>build.xml</strong>
 file.</p>
-<b>Note:</b> If you get a OutOfMemoryError when you are running <tt>"ant check"</tt>,
+<b>Note:</b> If you get an OutOfMemoryError when you are running <tt>"ant check"</tt>,
 you can set the heap size of the jvm by setting the environment variable JVM_OPTIONS
 to the appropriate java options.</p>
 
@@ -840,13 +840,13 @@ demo classes, so unless you build ICU4J there is little to try out.
 </p>
 <h4>Charset</h4>
 To try out the <strong>Charset</strong> package, build <strong>icu4j.jar</strong> and
-<strong>icu4j-charsets.jar</strong> using 'jar' target.
+<strong>icu4j-charsets.jar</strong> using the 'jar' target.
 You can use the charsets by placing these files on your classpath.
 <blockquote><tt>java -cp $icu4j_root/icu4j.jar:$icu4j_root/icu4j-charsets.jar &lt;your program&gt;</tt></blockquote>
 <h4>Other demos</h4>
 <p>The other demo programs are <strong>not supported</strong> and
 exist only to let you experiment with the ICU4J classes. First, build ICU4J using <tt>ant&nbsp;jarDemos</tt>.
-Then launch <strong></strong> as below:
+Then launch the demos as below:
 <blockquote><tt>java -jar $icu4j_root/icu4jdemos.jar</tt></blockquote>
 </p>
 
@@ -885,30 +885,30 @@ of the data in ICU4J.</p>
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based transliterator data</b> is under the directory
-  <tt>icudt44b/translit</tt> as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt44b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based number format data</b> is under the directory
-  <tt>icudt44b/rbnf</tt> as a set of <tt>".res"</tt> files.
+  <tt>icudt44b/rbnf</tt>, as a set of <tt>".res"</tt> files.
 
-  <li>The <b>break iterator data</b> is directly under the data
-  directory, as a set of <tt>".brk"</tt> files, named according to the
+  <li>The <b>break iterator data</b> is directly under the
+  directory <tt>icudt44b</tt>, as a set of <tt>".brk"</tt> files, named according to the
   type of break and the locale where there are locale-specific versions.</li>
 
-  <li>The <b>holiday data</b> is under the <tt>data</tt> directory,
+  <li>The <b>holiday data</b> is under the directory <tt>icudt44b</tt>,
   as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
   followed by the locale ID.</li>
 
   <li>The <b>character property data</b> as well as assorted <b>normalization
   data</b> and default <b>unicode collation algorithm (UCA) data</b>
-  is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
+  is found under the directory <tt>icudt44b</tt>, as a set of <tt>".icu"</tt>
   files. </li>
 
   <li>The <b>character set converter data</b> is under the directory
   <tt>icudt44b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
 
-  <li>The <b>time zone rule data</b> is named <tt>zoneinfo64.res</tt> under
-  the directory <tt>icudt44b</tt>.</li>
+  <li>The <b>time zone rule data</b> is under the directory 
+  <tt>icudt44b</tt>, as <tt>zoneinfo64.res</tt>.</li>
 
   <li>The <b>time zone display name data</b> is under the directory
   <tt>icudt44b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
