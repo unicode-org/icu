@@ -358,6 +358,7 @@
                 <include name="tools/**/*"/>
                 <include name="*.html"/>
                 <include name="*.xml"/>
+                <include name="*.properties"/>
                 <exclude name="**/out/**/*"/>
             </fileset>
         </jar>
