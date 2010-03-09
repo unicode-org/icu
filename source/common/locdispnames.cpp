@@ -241,6 +241,8 @@ Locale::getDisplayName(const Locale &displayLocale,
     return result;
 }
 
+#if ! UCONFIG_NO_BREAK_ITERATION
+
 // -------------------------------------
 // Gets the objectLocale display name in the default locale language.
 UnicodeString& U_EXPORT2
@@ -259,6 +261,9 @@ BreakIterator::getDisplayName(const Locale& objectLocale,
 {
     return objectLocale.getDisplayName(displayLocale, name);
 }
+
+#endif
+
 
 U_NAMESPACE_END
 
