@@ -4,8 +4,6 @@ icu4c/icu4c.css -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
-icu4c/source/common/uvectr64.cpp -text
-icu4c/source/common/uvectr64.h -text
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/char_th.txt svneol=native#text/plain
 icu4c/source/data/brkitr/el.txt svneol=native#text/plain
@@ -1253,10 +1251,15 @@ icu4c/source/data/locales/zu_ZA.txt svneol=native#text/plain
 icu4c/source/data/mappings/convrtrs.txt svneol=native#text/plain
 icu4c/source/data/misc/icustd.txt svneol=native#text/plain
 icu4c/source/data/misc/icuver.txt svneol=native#text/plain
+icu4c/source/data/misc/keyTypeData.txt svneol=native#text/plain
 icu4c/source/data/misc/likelySubtags.txt svneol=native#text/plain
+icu4c/source/data/misc/metaZones.txt svneol=native#text/plain
 icu4c/source/data/misc/numberingSystems.txt svneol=native#text/plain
 icu4c/source/data/misc/plurals.txt svneol=native#text/plain
 icu4c/source/data/misc/supplementalData.txt svneol=native#text/plain
+icu4c/source/data/misc/timezoneTypes.txt svneol=native#text/plain
+icu4c/source/data/misc/windowsZones.txt svneol=native#text/plain
+icu4c/source/data/misc/zoneinfo64.txt svneol=native#text/plain
 icu4c/source/data/rbnf/af.txt svneol=native#text/plain
 icu4c/source/data/rbnf/am.txt svneol=native#text/plain
 icu4c/source/data/rbnf/ar.txt svneol=native#text/plain
@@ -2201,8 +2204,6 @@ icu4c/source/extra/uconv/samples/utf8/simplechinese.txt svneol=native#text/plain
 icu4c/source/extra/uconv/samples/utf8/turkish.txt svneol=native#text/plain
 icu4c/source/extra/uconv/samples/utf8/utf-8-demo.txt svneol=native#text/plain
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
-icu4c/source/i18n/regextxt.cpp -text
-icu4c/source/i18n/regextxt.h -text
 icu4c/source/samples/break/readme.txt svneol=native#text/plain
 icu4c/source/samples/cal/readme.txt svneol=native#text/plain
 icu4c/source/samples/case/readme.txt svneol=native#text/plain
@@ -2289,6 +2290,7 @@ icu4c/source/test/testdata/te_IN.txt svneol=native#text/plain
 icu4c/source/test/testdata/te_IN_REVISED.txt svneol=native#text/plain
 icu4c/source/test/testdata/testaliases.txt svneol=native#text/plain
 icu4c/source/test/testdata/testempty.txt svneol=native#text/plain
+icu4c/source/test/testdata/testnorm.txt svneol=native#text/plain
 icu4c/source/test/testdata/testtypes.txt svneol=native#text/plain
 icu4c/source/test/testdata/translit_rules.txt svneol=native#text/plain
 icu4c/source/test/testdata/uni-text.bin -text
