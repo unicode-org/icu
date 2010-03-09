@@ -589,6 +589,8 @@ uprops_getSource(UProperty which) {
     }
 }
 
+#if !UCONFIG_NO_NORMALIZATION
+
 U_CAPI int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -637,6 +639,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
         return kc2.extract(dest, destCapacity, *pErrorCode);
     }
 }
+#endif
 
 /*----------------------------------------------------------------
  * Inclusions list

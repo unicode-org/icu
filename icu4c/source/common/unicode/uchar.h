@@ -3092,6 +3092,7 @@ u_charAge(UChar32 c, UVersionInfo versionArray);
 U_STABLE void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo versionArray);
 
+#if !UCONFIG_NO_NORMALIZATION
 /**
  * Get the FC_NFKC_Closure property string for a character.
  * See Unicode Standard Annex #15 for details, search for "FC_NFKC_Closure"
@@ -3115,6 +3116,9 @@ u_getUnicodeVersion(UVersionInfo versionArray);
  */
 U_STABLE int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
+
+#endif
+
 
 U_CDECL_END
 
