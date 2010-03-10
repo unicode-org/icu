@@ -921,7 +921,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                         mzPartialLoc[mzPartialLocIdx][2].remove();
                         mzPartialLoc[mzPartialLocIdx][3].remove();
 
-                        if (locationPart != NULL) {
+                        if (locationPart->length() != 0) {
                             FieldPosition fpos;
                             if (!lg.isEmpty()) {
                                 Formattable params [] = {
