@@ -675,25 +675,25 @@ its bin directory to your path. For example: </p>
   </li>
 </ul>
 <p>Once the J2SE SDK and Ant are installed, building is just a matter of
-typing <strong>ant releaseJar</strong> in the ICU4J root directory. This
-causes the Ant build system to perform the build target <strong>releaseJar</strong>
+typing <strong>ant</strong> in the ICU4J root directory. This causes the
+Ant build system to perform the build target <strong>jar</strong>
 as specified by the file <strong>build.xml</strong>, located in the ICU4J
 root directory. You can give Ant options like -verbose, and you can specify
 other targets.  For example:</p>
 <blockquote>
-<pre>C:\icu4j>ant releaseJar
+<pre>C:\icu4j>ant
 Buildfile: build.xml
 
 info:
      [echo] ----- Build Environment Information -------------------
-     [echo] Java Home:    C:\java\ibm32\1.6.0_4\jre
+     [echo] Java Home:    C:\jdk1.6.0
      [echo] Java Version: 1.6.0
-     [echo] Ant Home:     C:\ant\1.7.1
+     [echo] Ant Home:     C:\ant
      [echo] Ant Version:  Apache Ant version 1.7.1 compiled on June 27 2008
      [echo] OS:           Windows Vista
-     [echo] OS Version:   6.0 build 6002 Service Pack 2
+     [echo] OS Version:   6.1 build 7600
      [echo] OS Arch:      x86
-     [echo] Host:         ICUDEV
+     [echo] Host:         YOSHI945
      [echo] -------------------------------------------------------
 
 core:
@@ -720,48 +720,64 @@ compile:
      [copy] Copying 23 files to C:\icu4j\main\classes\core\out\bin
 
 copy-data:
-    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\
-classes\core\out\bin
+    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\classes\core\out\bin
 
 ....
 ....
 ....
 
-docs:
-  [javadoc] Generating Javadoc
-  [javadoc] Javadoc execution
-  [javadoc] Creating destination directory: "C:\icu4j\doc\"
-  [javadoc] Loading source files for package com.ibm.icu.lang...
-  [javadoc] Loading source files for package com.ibm.icu.math...
-  [javadoc] Loading source files for package com.ibm.icu.text...
-  [javadoc] Loading source files for package com.ibm.icu.util...
-  [javadoc] Loading source files for package com.ibm.icu.charset...
-  [javadoc] Constructing Javadoc information...
-  [javadoc] Registered Taglet com.ibm.icu.dev.tool.docs.ICUTaglet ...
-  [javadoc] Standard Doclet version 1.6.0
-  [javadoc] Building tree for all the packages and classes...
-  [javadoc] Building index for all the packages and classes...
-  [javadoc] Building index for all classes...
-  [javadoc] Generating C:\icu4j\doc\stylesheet.css...
-  [javadoc] Note: Custom tags that could override future standard tags:  @icuenh
-anced. To avoid potential overrides, use at least one period character (.) in cu
-stom tag names.
+build:
 
-jarDocs:
-      [jar] Building jar: C:\icu4j\icu4jdocs.jar
+_build-localespi:
 
-jarSrc:
-      [jar] Building jar: C:\icu4j\icu4jsrc.jar
+@compile:
+     [echo] --- java compiler arguments ------------------------
+     [echo] source dir:     C:\icu4j\main\classes\localespi/src
+     [echo] output dir:     C:\icu4j\main\classes\localespi/out/bin
+     [echo] classpath:      C:\icu4j\main\classes\core\out\lib\icu4j-core.jar;C:\icu4j\main\classes\collate\
+out\lib\icu4j-collate.jar
+     [echo] source:         1.6
+     [echo] target:         1.6
+     [echo] debug:          on
+     [echo] encoding:       ascii
+     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann
+     [echo] ----------------------------------------------------
+    [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\bin
+    [javac] Compiling 22 source files to C:\icu4j\main\classes\localespi\out\bin
 
-releaseJar:
+compile:
+
+@copy:
+     [copy] Copying 10 files to C:\icu4j\main\classes\localespi\out\bin
+
+copy:
+
+@jar:
+    [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\lib
+     [copy] Copying 1 file to C:\icu4j\main\classes\localespi\out
+      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localespi.jar
+
+jar:
+
+build:
+
+jar:
+     [copy] Copying 1 file to C:\icu4j
+     [copy] Copying 1 file to C:\icu4j
 
 BUILD SUCCESSFUL
-Total time: 1 minute 45 seconds</pre>
+Total time: 24 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
 For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p>
 <table border="1">
+<tr>
+  <th>jar (default)</th>
+  <td>Create ICU4J runtime library jar archives (<code>icu4j.jar</code>, 
+  <code>icu4j-charsets.jar</code> and <code>icu4j-localespi.jar</code>)
+  in the root ICU4J directory.</td>
+</tr>
 <tr>
   <th>check</th>
   <td>Build all ICU4J runtime library classes and corresponding unit test cases,
@@ -773,17 +789,13 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 </tr>
 <tr>
   <th>main</th>
-  <td>Build all ICU4J runtime library sub-components (under the directory main/classes).
-  If no target is specified, main is assumed.</td>
+  <td>Build all ICU4J runtime library sub-components (under the directory
+  <code>main/classes</code>).</td>
 </tr>
 <tr>
   <th>tests</th>
-  <td>Build all ICU4J unit test sub-components (under the directory main/tests) and their
-  dependencies.</td>
-</tr>
-<tr>
-  <th>demos</th>
-  <td>Build the demos.</td>
+  <td>Build all ICU4J unit test sub-components (under the directory <code>main/tests</code>)
+  and their dependencies.</td>
 </tr>
 <tr>
   <th>tools</th>
@@ -791,21 +803,18 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 </tr>
 <tr>
   <th>docs</th>
-  <td>Run javadoc over the ICU4J runtime library files, generating an HTML documentation tree
-  in the subdirectory <strong>doc</strong>.</td>
-</tr>
-<tr>
-  <th>jar</th>
-  <td>Create a jar archive <strong>icu4j.jar</strong> in the root ICU4J directory containing
-  the main class files.</td>
-</tr>
-<tr>
-  <th>jarSrc</th>
-  <td>Like the <strong>jar</strong> target, but containing only the source files.</td>
+  <td>Run javadoc over the ICU4J runtime library files, generating an HTML documentation
+  tree in the subdirectory <code>doc</code>.</td>
 </tr>
 <tr>
   <th>jarDocs</th>
-  <td>Like the <strong>jar</strong> target, but containing only the docs. </td>
+  <td>Create ICU4J doc jar archive (<code>icu4jdocs.jar</code>) containing API reference
+  docs in the root ICU4J directory. </td>
+</tr>
+<tr>
+  <th>jarDemos</th>
+  <td>Create ICU4J demo jar archive (<code>icu4jdemos.jar</code>) in the root ICU4J
+  directory.</td>
 </tr>
 </table>
 
