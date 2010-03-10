@@ -394,7 +394,8 @@ public:
 
                             UDate parsedDate = sdf->parse(text, status);
                             if (U_FAILURE(status)) {
-                                log.errln((UnicodeString) "Failed to parse " + text);
+                                log.errln((UnicodeString) "Parse failure for text=" + text + ", tzid=" + *tzid + ", locale=" + data.locales[locidx].getName()
+                                        + ", pattern=" + PATTERNS[patidx] + ", time=" + testTimes[testidx]);
                                 status = U_ZERO_ERROR;
                                 continue;
                             }
