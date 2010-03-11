@@ -213,6 +213,44 @@ static int32_t ures_flushCache()
     return rbDeletedNum;
 }
 
+#ifdef URES_DEBUG
+#include <stdio.h>
+
+U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
+  UBool cacheNotEmpty = FALSE;
+  int32_t pos = -1;
+  const UHashElement *e;
+  UResourceDataEntry *resB;
+  
+    umtx_lock(&resbMutex);
+    if (cache == NULL) {
+      umtx_unlock(&resbMutex);
+      fprintf(stderr,"%s:%d: RB Cache is NULL.\n", __FILE__, __LINE__);
+      return FALSE;
+    }
+
+    while ((e = uhash_nextElement(cache, &pos)) != NULL) {
+      cacheNotEmpty=TRUE;
+      resB = (UResourceDataEntry *) e->value.pointer;
+      fprintf(stderr,"%s:%d: RB Cache: Entry @0x%p, refcount %d, name %s:%s.  Pool 0x%p, alias 0x%p, parent 0x%p\n",
+              __FILE__, __LINE__,
+              (void*)resB, resB->fCountExisting,
+              resB->fName?resB->fName:"NULL",
+              resB->fPath?resB->fPath:"NULL",
+              (void*)resB->fPool,
+              (void*)resB->fAlias,
+              (void*)resB->fParent);       
+    }
+    
+    fprintf(stderr,"%s:%d: RB Cache still contains %d items.\n", __FILE__, __LINE__, uhash_count(cache));
+
+    umtx_unlock(&resbMutex);
+    
+    return cacheNotEmpty;
+}
+
+#endif
+
 static UBool U_CALLCONV ures_cleanup(void)
 {
     if (cache != NULL) {
@@ -522,9 +560,15 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             hasRealData = TRUE;
             if ( usingUSRData ) {  /* This code inserts user override data into the inheritance chain */
                u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
-               if ( u1 != NULL && u1->fBogus == U_ZERO_ERROR) {
+               if ( u1 != NULL ) {
+                 if(u1->fBogus == U_ZERO_ERROR) {
                    u1->fParent = t1;
                    r = u1;
+                 } else {
+                   /* the USR override data wasn't found, delete it */
+                   uhash_remove(cache, u1);
+                   free_entry(u1);
+                 }
                }
             }
             while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
@@ -546,6 +590,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                         u2->fParent = t2;
                     } else {
                         t1->fParent = t2;
+                        if(usingUSRData) {
+                          /* the USR override data wasn't found, delete it */
+                          uhash_remove(cache, u2);
+                          free_entry(u2);
+                        }
                     }
                     t1 = t2;
                 } else {
