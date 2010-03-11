@@ -667,8 +667,11 @@ UBool RegexMatcher::find() {
             for (;;) {
                 c = UTEXT_NEXT32(fInputText);
                 pos = UTEXT_GETNATIVEINDEX(fInputText);
-                if (c<256 && fPattern->fInitialChars8->contains(c) ||
-                    c>=256 && fPattern->fInitialChars->contains(c)) {
+                // c will be -1 (U_SENTINEL) at end of text, in which case we
+                // skip this next block (so we don't have a negative array index)
+                // and handle end of text in the following block.
+                if (c >= 0 && (c<256 && fPattern->fInitialChars8->contains(c) ||
+                    c>=256 && fPattern->fInitialChars->contains(c))) {
                     MatchAt(startPos, FALSE, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
