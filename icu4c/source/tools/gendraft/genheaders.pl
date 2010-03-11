@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #*
 #*******************************************************************************
-#*   Copyright (C) 2006-2009, International Business Machines
+#*   Copyright (C) 2006-2010, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -46,6 +46,7 @@ $internalAppend = "INTERNAL_API_DO_NOT_USE";
 $internalDefine = "U_HIDE_INTERNAL_API";
 
 $versionAppend="";
+
 #run the program
 main();
 
@@ -58,7 +59,8 @@ sub main(){
            "--destdir=s" => \$destDir,
            "--version=s"  => \$version,
            "--exclusion-list=s"  => \$exclude,
-           "--include-types" => \$includeTypes
+           "--include-types" => \$includeTypes,
+           "--verbose" => \$verbose
            );
   usage() unless defined $srcDir;
   usage() unless defined $destDir;
@@ -101,6 +103,7 @@ sub getHeaderDef{
 sub writeFile{
   ($infile,$outfile,$destDir, $symbolAppend, $symbolDef, $exclude) = @_;
 
+  my $outFileName = $outfile;
   $headerDef = getHeaderDef($outfile);
   
   $outfile = $destDir."/".$outfile;
@@ -167,6 +170,10 @@ sub parseWriteFile{
                 ($line =~ /Class/) ){
                 next;
             }
+            if( $line =~ /^\<dt\>File [^\>]*\>([^\<]*)/ ) {
+                print "Skipping file-scope $symbolAppend $1\n";
+                next;
+            }
             #<dt>Global <a class="el" href="utrans_8h.html#a21">utrans_unregister</a>  </dt>
             #<dt>Global <a class="el" href="classUnicodeString.html#w1w0">UnicodeString::kInvariant</a>  </dt>
             # the below regular expression works for both the above formats.
@@ -180,13 +187,17 @@ sub parseWriteFile{
                 #print "$value  $exclude->{$value}\n";
                 next;
             }
-            #print  "$value $realSymbol $nonExSymbol\n";
+            print  "$value $realSymbol $nonExSymbol :: $line\n" if defined $verbose;
             next if(isStringAcceptable($value)==1);
+            if($value =~ /^operator[^a-zA-Z]/) {
+                print "Skipping operator $symbolAppend $value from $line\n";
+                next;
+            }
             $realSymbol = $value."_".$versionAppend;
             $nonExSymbol = $value."_".$symbolAppend;
             $disableRenaming{$value} = $nonExSymbol;
             $enableRenaming{$realSymbol} = $nonExSymbol;
-            #print  "$value $realSymbol $nonExSymbol\n";
+            print  "$value $realSymbol $nonExSymbol\n" if defined $verbose;
             
         }
     }

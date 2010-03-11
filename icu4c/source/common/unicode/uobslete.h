@@ -1,10 +1,10 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  
+*   file name:  uobslete.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
