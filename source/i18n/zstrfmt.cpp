@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -921,7 +921,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                         mzPartialLoc[mzPartialLocIdx][2].remove();
                         mzPartialLoc[mzPartialLocIdx][3].remove();
 
-                        if (locationPart != NULL) {
+                        if (locationPart->length() != 0) {
                             FieldPosition fpos;
                             if (!lg.isEmpty()) {
                                 Formattable params [] = {
@@ -1983,13 +1983,13 @@ const UChar *ZSFStringPool::get(const UChar *s, UErrorCode &status) {
         U_ASSERT(length < POOL_CHUNK_SIZE);
         if (length >= POOL_CHUNK_SIZE) {
             status = U_INTERNAL_PROGRAM_ERROR;
-            return EmptyString;
+            return &EmptyString;
         }
         ZSFStringPoolChunk *oldChunk = fChunks;
         fChunks = new ZSFStringPoolChunk;
         if (fChunks == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return EmptyString;
+            return &EmptyString;
         }
         fChunks->fNext = oldChunk;
     }

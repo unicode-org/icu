@@ -1,10 +1,10 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  
+*   file name:  udeprctd.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -34,15 +34,15 @@
 #        define utrans_open utrans_open_DEPRECATED_API_DO_NOT_USE
 #        define utrans_unregister utrans_unregister_DEPRECATED_API_DO_NOT_USE
 #    else
-#        define ucol_getContractions_4_2 ucol_getContractions_DEPRECATED_API_DO_NOT_USE
-#        define ucol_getLocale_4_2 ucol_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_countArrayItems_4_2 ures_countArrayItems_DEPRECATED_API_DO_NOT_USE
-#        define ures_getLocale_4_2 ures_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_getVersionNumber_4_2 ures_getVersionNumber_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getAvailableID_4_2 utrans_getAvailableID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getID_4_2 utrans_getID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_open_4_2 utrans_open_DEPRECATED_API_DO_NOT_USE
-#        define utrans_unregister_4_2 utrans_unregister_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getContractions_4_4 ucol_getContractions_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getLocale_4_4 ucol_getLocale_DEPRECATED_API_DO_NOT_USE
+#        define ures_countArrayItems_4_4 ures_countArrayItems_DEPRECATED_API_DO_NOT_USE
+#        define ures_getLocale_4_4 ures_getLocale_DEPRECATED_API_DO_NOT_USE
+#        define ures_getVersionNumber_4_4 ures_getVersionNumber_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getAvailableID_4_4 utrans_getAvailableID_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getID_4_4 utrans_getID_DEPRECATED_API_DO_NOT_USE
+#        define utrans_open_4_4 utrans_open_DEPRECATED_API_DO_NOT_USE
+#        define utrans_unregister_4_4 utrans_unregister_DEPRECATED_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_DEPRECATED_API */
