@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and   *
+* Copyright (C) 1997-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -548,6 +548,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                         t1->fParent = t2;
                     }
                     t1 = t2;
+                } else {
+                    /* t2->fCountExisting have to be decremented since the call to init_entry increments
+                     * it and if we hit this code, that means it is not set as the parent.
+                     */
+                    t2->fCountExisting--;
                 }
                 hasChopped = chopLocale(name);
             }
