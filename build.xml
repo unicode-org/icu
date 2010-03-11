@@ -4,7 +4,7 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
-<project name="icu4j" default="main" basedir=".">
+<project name="icu4j" default="jar" basedir=".">
     <property file="build.properties"/>
 
     <property name="shared.dir" value="main/shared"/>
@@ -12,14 +12,8 @@
 
     <property name="icu4j.jar.file" value="icu4j.jar"/>
     <property name="icu4jtests.jar.file" value="icu4jtests.jar"/>
-    <property name="icu4j-core.jar.file" value="icu4j-core.jar"/>
-    <property name="icu4j-collate.jar.file" value="icu4j-collate.jar"/>
     <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
-    <property name="icu4j-currdata.jar.file" value="icu4j-currdata.jar"/>
-    <property name="icu4j-langdata.jar.file" value="icu4j-langdata.jar"/>
     <property name="icu4j-localespi.jar.file" value="icu4j-localespi.jar"/>
-    <property name="icu4j-regiondata.jar.file" value="icu4j-regiondata.jar"/>
-    <property name="icu4j-translit.jar.file" value="icu4j-translit.jar"/>
     <property name="icu4jdocs.jar.file" value="icu4jdocs.jar"/>
     <property name="icu4jsrc.jar.file" value="icu4jsrc.jar"/>
     <property name="icu4jdemos.jar.file" value="icu4jdemos.jar"/>
@@ -86,7 +80,7 @@
 
         <!-- delete all .jar files in icu4j root directory -->
         <delete>
-            <fileset dir="." includes="*.jar"/>
+            <fileset dir="." includes="icu4j*.jar"/>
         </delete>
 
         <delete dir="${doc.dir}"/>
@@ -95,9 +89,9 @@
     </target>
 
     <!-- meta build targets -->
-    <target name="all" depends="info, main, tests, localespi, localespi-tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
-    <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit" description="Build ICU4J API classes"/>
-    <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests" description="Build ICU4J API test classes"/>
+    <target name="all" depends="info, main, tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
+    <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit, localespi" description="Build ICU4J runtime library classes"/>
+    <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, localespi-tests" description="Build ICU4J test classes"/>
     <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
 
     <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
@@ -295,15 +289,9 @@
     </target>
 
     <!-- jar targets -->
-    <target name="jar" depends="main, icu4jJar" description="Build ICU4J API jar files">
-        <copy file="${icu4j.core.jar}" tofile="${icu4j-core.jar.file}"/>
-        <copy file="${icu4j.collate.jar}" tofile="${icu4j-collate.jar.file}"/>
+    <target name="jar" depends="icu4jJar, charset, localespi" description="Build ICU4J runtime library jar files">
         <copy file="${icu4j.charset.jar}" tofile="${icu4j-charsets.jar.file}"/>
-        <copy file="${icu4j.currdata.jar}" tofile="${icu4j-currdata.jar.file}"/>
-        <copy file="${icu4j.langdata.jar}" tofile="${icu4j-langdata.jar.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}" failonerror="false"/>
-        <copy file="${icu4j.regiondata.jar}" tofile="${icu4j-regiondata.jar.file}"/>
-        <copy file="${icu4j.translit.jar}" tofile="${icu4j-translit.jar.file}"/>
     </target>
 
     <target name="icu4jJar" depends="info, core, collate, currdata, langdata, regiondata, translit" description="Build ICU4J all-in-one core jar">
@@ -358,6 +346,7 @@
                 <include name="tools/**/*"/>
                 <include name="*.html"/>
                 <include name="*.xml"/>
+                <include name="*.properties"/>
                 <exclude name="**/out/**/*"/>
             </fileset>
         </jar>
@@ -444,7 +433,7 @@
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
     </target>
 
-    <target name="tools" depends="core, core-tests" description="Build tool classes">
+    <target name="tools" depends="core, core-tests, collate, translit, translit-tests" description="Build tool classes">
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
 
