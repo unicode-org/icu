@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -33,6 +33,9 @@
 #include "unicode/ucal.h"
 #include "uoptions.h"
 #include "putilimp.h" /* for uprv_getUTCtime() */
+#ifdef URES_DEBUG
+#include "uresimp.h" /* for ures_dumpCacheContents() */
+#endif
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
@@ -104,6 +107,9 @@ int main(int argc, const char* const argv[])
         defaultDataFound = FALSE;
     }
     u_cleanup();
+#ifdef URES_DEBUG
+    fprintf(stderr, "After initial u_cleanup: RB cache %s empty.\n", ures_dumpCacheContents()?"WAS NOT":"was");
+#endif
 
     while (REPEAT_TESTS > 0) {   /* Loop runs once per complete execution of the tests 
                                   *   used for -r  (repeat) test option.                */
@@ -203,6 +209,14 @@ int main(int argc, const char* const argv[])
         ctst_freeAll();
         /* To check for leaks */
         u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
+#ifdef URES_DEBUG
+        if(ures_dumpCacheContents()) {
+          fprintf(stderr, "Error: After final u_cleanup, RB cache was not empty.\n");
+          nerrors++;
+        } else {
+          fprintf(stderr,"OK: After final u_cleanup, RB cache was empty.\n");
+        }
+#endif
 #endif
 
     }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
