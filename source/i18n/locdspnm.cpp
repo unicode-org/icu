@@ -313,6 +313,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
   : dialectHandling(dialectHandling)
   , langData(U_ICUDATA_LANG, locale)
   , regionData(U_ICUDATA_REGION, locale)
+  , format(NULL)
 {
   LocaleDisplayNamesImpl *nonConstThis = (LocaleDisplayNamesImpl *)this;
   nonConstThis->locale = langData.getLocale() == Locale::getRoot()
@@ -334,6 +335,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
 }
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
+  delete format;
 }
 
 const Locale&
