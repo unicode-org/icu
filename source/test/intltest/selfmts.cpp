@@ -115,6 +115,9 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         }
     }
 
+    delete selFmt;
+    selFmt = NULL;
+
     logln("SelectFormat Unit Test : Creating format object for Testing applying various patterns");
     status = U_ZERO_ERROR;
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
@@ -163,6 +166,9 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         "Key*word-_",       //Contains a sepial character not allowed
         "*Keyword-_"        //Starts with a sepial character not allowed
     };
+
+    delete selFmt;
+    selFmt = NULL;
 
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     for (int32_t i = 0; i< 6; i++ ){
