@@ -598,6 +598,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                     }
                     t1 = t2;
                 } else {
+                    if (usingUSRData) {
+                        /* the USR override data wasn't found, delete it */
+                        uhash_remove(cache, u2);
+                        free_entry(u2);
+                    }
                     /* t2->fCountExisting have to be decremented since the call to init_entry increments
                      * it and if we hit this code, that means it is not set as the parent.
                      */
