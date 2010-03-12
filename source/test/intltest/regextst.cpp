@@ -231,7 +231,6 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 
 
 UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool looking, UBool match, int32_t line) {
-    UConverter          *UTF8Converter = NULL;
     UText               pattern    = UTEXT_INITIALIZER;
     int32_t             inputUTF8Length;
     char                *textChars = NULL;
@@ -252,10 +251,10 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     
     UnicodeString inputString(text, -1, US_INV);
     UnicodeString unEscapedInput = inputString.unescape();
-    UTF8Converter = ucnv_open("UTF8", &status);
-    ucnv_setFromUCallBack(UTF8Converter, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+    LocalUConverterPointer UTF8Converter(ucnv_open("UTF8", &status));
+    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
     
-    inputUTF8Length = unEscapedInput.extract(NULL, 0, UTF8Converter, status);
+    inputUTF8Length = unEscapedInput.extract(NULL, 0, UTF8Converter.getAlias(), status);
     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
         // UTF-8 does not allow unpaired surrogates, so this could actually happen
         logln("RegexTest unable to convert input to UTF8 at line %d.  Status = %s\n", line, u_errorName(status));
@@ -263,7 +262,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     }
     status = U_ZERO_ERROR; // buffer overflow
     textChars = new char[inputUTF8Length+1];
-    unEscapedInput.extract(textChars, inputUTF8Length+1, UTF8Converter, status);
+    unEscapedInput.extract(textChars, inputUTF8Length+1, UTF8Converter.getAlias(), status);
     utext_openUTF8(&inputText, textChars, inputUTF8Length, &status);
     
     REMatcher = REPattern->matcher(&inputText, RegexPattern::PATTERN_IS_UTEXT, status);
@@ -303,7 +302,6 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
 
     delete REPattern;
     delete REMatcher;
-    ucnv_close(UTF8Converter);
     utext_close(&inputText);
     utext_close(&pattern);
     delete[] textChars;
@@ -3914,7 +3912,7 @@ void RegexTest::PerlTestsUTF8() {
     const char *srcPath;
     UErrorCode  status = U_ZERO_ERROR;
     UParseError pe;
-    UConverter *UTF8Converter = ucnv_open("UTF-8", &status);
+    LocalUConverterPointer UTF8Converter(ucnv_open("UTF-8", &status));
     UText       patternText = UTEXT_INITIALIZER;
     char       *patternChars = NULL;
     int32_t     patternLength;
@@ -3924,7 +3922,7 @@ void RegexTest::PerlTestsUTF8() {
     int32_t     inputLength;
     int32_t     inputCapacity = 0;
 
-    ucnv_setFromUCallBack(UTF8Converter, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
 
     //
     //  Open and read the test data file.
@@ -4046,13 +4044,13 @@ void RegexTest::PerlTestsUTF8() {
         // Put the pattern in a UTF-8 UText
         //
         status = U_ZERO_ERROR;
-        patternLength = pattern.extract(patternChars, patternCapacity, UTF8Converter, status);
+        patternLength = pattern.extract(patternChars, patternCapacity, UTF8Converter.getAlias(), status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             status = U_ZERO_ERROR;
             delete[] patternChars;
             patternCapacity = patternLength + 1;
             patternChars = new char[patternCapacity];
-            pattern.extract(patternChars, patternCapacity, UTF8Converter, status);
+            pattern.extract(patternChars, patternCapacity, UTF8Converter.getAlias(), status);
         }
         utext_openUTF8(&patternText, patternChars, patternLength, &status);
 
@@ -4114,13 +4112,13 @@ void RegexTest::PerlTestsUTF8() {
         // Put the input in a UTF-8 UText
         //
         status = U_ZERO_ERROR;
-        inputLength = matchString.extract(inputChars, inputCapacity, UTF8Converter, status);
+        inputLength = matchString.extract(inputChars, inputCapacity, UTF8Converter.getAlias(), status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             status = U_ZERO_ERROR;
             delete[] inputChars;
             inputCapacity = inputLength + 1;
             inputChars = new char[inputCapacity];
-            matchString.extract(inputChars, inputCapacity, UTF8Converter, status);
+            matchString.extract(inputChars, inputCapacity, UTF8Converter.getAlias(), status);
         }
         utext_openUTF8(&inputText, inputChars, inputLength, &status);
 
@@ -4607,6 +4605,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
      */
     
     utext_close(&bufferText);
+    utext_close(&patternText);
 }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */

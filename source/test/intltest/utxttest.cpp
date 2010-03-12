@@ -1304,6 +1304,8 @@ void UTextTest::ComparisonTest()
         utext_close(&emptyUTF8);
         utext_close(&nullUChar);
         utext_close(&nullUTF8);
+        utext_close(&charText);
+        utext_close(&uniCharText);
     }
 }
 
