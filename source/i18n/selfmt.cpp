@@ -420,6 +420,7 @@ SelectFormat::copyHashtable(Hashtable *other, UErrorCode& status) {
     if (U_FAILURE(status)){
         return;
     }
+    parsedValuesHash->setValueDeleter(uhash_deleteUnicodeString);
 
     int32_t pos = -1;
     const UHashElement* elem = NULL;

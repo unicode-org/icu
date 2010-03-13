@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 2001-20109, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *
@@ -684,6 +684,10 @@ ucol_setText(      UCollationElements *elems,
     
     /* free offset buffer to avoid memory leak before initializing. */
     ucol_freeOffsetBuffer(&(elems->iteratordata_));
+    /* Ensure that previously allocated extendCEs is freed before setting to NULL. */
+    if (elems->iteratordata_.extendCEs != NULL) {
+        uprv_free(elems->iteratordata_.extendCEs);
+    }
     uprv_init_collIterate(elems->iteratordata_.coll, text, textLength, 
                           &elems->iteratordata_, status);
 
