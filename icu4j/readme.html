@@ -12,25 +12,22 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.4RC1</h3>
+<h3>Read Me for ICU4J 4.4</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-March 5, 2010<br>
+March 17, 2010<br>
 </p>
 
-<p><b>Note:</b> This is a release candidate of ICU4J 4.4.
-The official release is planned later in March 2010.
-This version is intended for those wishing to evaluate ICU4J 4.4
-and it is not recommended for production use.
+<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 </p>
-
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
 download site</a>. </p>
 <h3 class="doc">Contents</h3>
 <ul type="disc">
   <li><a href="#introduction">Introduction to ICU4J</a></li>
-  <li><a href="#news">What Is New In This Release?</a></li>
+  <li><a href="#changes">Changes In This Release</a></li>
   <li><a href="#license">License Information</a></li>
   <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
   <li><a href="#download">How to Download ICU4J</a></li>
@@ -129,7 +126,7 @@ example, the Thai word-break is now in Java 1.4. However, the most
 current and complete version is always found in ICU4J.</p>
 </blockquote>
 
-<h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
+<h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 <h4>Minimum Java runtime environment requirement</h4>
 <p>
 Starting with version 4.4, you need at least JRE 5.0 to use ICU4J 4.4.
@@ -138,12 +135,35 @@ older versions.  This migration also includes some updates in public API signatu
 such as generics and return/parameter types.  In general, most of these changes
 do not require any changes in existing ICU4J user code.
 </p>
-<h4>Other updates</h4>
+
+<h4>TimeZone serialization compatibility</h4>
 <p>
-See the <a href="http://www.icu-project.org/download/latest_milestone.html">ICU 4.4 milestone download page</a> about
+The new system time zone data format supporting 64bit transition time data
+implemented in ICU4J 4.4 introduced a serialization incompatibility issue
+in the internal TimeZone implementation class (e.g. An instance of TimeZone
+created by <code>TimeZone.getTimeZone(String)</code> with an Olson tzid, such as
+<code>"America/Los_Angeles"</code>).
+
+The new implementation reads only the system time zone identifier string
+when object data was serialized by ICU4J 4.2 or older versions.  Also, ICU4J
+4.2 or older versions cannot read object data created by ICU4J 4.4.
+
+The system time zone implementation class may be used by other ICU4J
+public API classes, such as <code>Calendar</code> and <code>DateFormat</code>,
+therefore, these classes are also affected.
+</p>
+<p>
+For the ICU4J serialization compatibility policy, please refer the user guide section
+<a href="http://userguide.icu-project.org/design#TOC-ICU4J-Serialization-Compatibility">ICU4J
+Serialization Compatibility</a>.
+</p>
+
+<h4>New features and other changes</h4>
+<p>
+See the <a href="http://icu-project.org/download/4.4.html">ICU 4.4 download page</a> about
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-4-3-2/APIChangeReport.html">here</a>.
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-4/APIChangeReport.html">here</a>.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -354,7 +374,7 @@ is to download an official, packaged version of the ICU4J library files.
 These versions are tested more thoroughly than day-to-day development
 builds, and they are packaged in jar files for convenient download.
 These packaged files can be found at the
-<a href="http://www.icu-project.org/download/">ICU Downloads page</a>.
+<a href="http://www.icu-project.org/download/">ICU Download page</a>.
 </li></ul>
 <ul type="disc">
   <li><b>Subversion Source Repository:</b><br>
@@ -369,7 +389,7 @@ directions that are contained on the <a
   </li>
 </ul>
 <p>For more details on how to download ICU4J directly from the web
-site, please see the ICU downloads page at <a
+site, please see the ICU download page at <a
  href="http://www.icu-project.org/download/">http://www.icu-project.org/download/</a>
 </p>
 <h3 class="doc"><a name="WhatContain"></a>The Structure and Contents of
@@ -385,12 +405,12 @@ ICU4J source archive is extracted.
 </tr>
 <tr>
   <td>readme.html</td>
-  <td>A description of ICU4J (International Compopnents for Unicode for Java)</td>
+  <td>A description of ICU4J (International Components for Unicode for Java)</td>
 </tr>
 <tr>
   <td>build.html</td>
   <td>The main Ant build file for ICU4J.  See <a href="#HowToInstallJavac">How to Install
-  and Build</a> for moreinformation</td>
+  and Build</a> for more information</td>
 </tr>
 <tr>
   <td>main/shared/licenses/license.html</td>
@@ -556,7 +576,7 @@ ICU4J source archive is extracted.
 <table border="1">
 <tr>
   <th>Path</td>
-  <th>Descriptiom</td>
+  <th>Description</td>
 </tr>
 <tr>
   <td>main/shared</td>
@@ -693,7 +713,7 @@ info:
      [echo] OS:           Windows Vista
      [echo] OS Version:   6.1 build 7600
      [echo] OS Arch:      x86
-     [echo] Host:         YOSHI945
+     [echo] Host:         ICUDEV
      [echo] -------------------------------------------------------
 
 core:
@@ -1038,7 +1058,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.4RC1 includes time zone data version 2010c, which is the latest one as of
+<p>ICU4J 4.4 includes time zone data version 2010e, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
