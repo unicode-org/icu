@@ -150,35 +150,35 @@
         <td>ICU, ICU4C &amp; ICU4J Homepage</td>
 
         <td><a href=
-        "http://www.icu-project.org/">http://www.icu-project.org/</a></td>
+        "http://icu-project.org/">http://icu-project.org/</a></td>
       </tr>
 
       <tr>
         <td>FAQ - Frequently Asked Questions about ICU</td>
 
         <td><a href=
-        "http://www.icu-project.org/userguide/icufaq.html">http://www.icu-project.org/userguide/icufaq.html</a></td>
+        "http://userguide.icu-project.org/icufaq">http://userguide.icu-project.org/icufaq</a></td>
       </tr>
 
       <tr>
         <td>ICU User's Guide</td>
 
         <td><a href=
-        "http://www.icu-project.org/userguide/">http://www.icu-project.org/userguide/</a></td>
+        "http://userguide.icu-project.org/">http://userguide.icu-project.org/</a></td>
       </tr>
 
       <tr>
         <td>Download ICU Releases</td>
 
         <td><a href=
-        "http://www.icu-project.org/download/">http://www.icu-project.org/download/</a></td>
+        "http://site.icu-project.org/download">http://site.icu-project.org/download</a></td>
       </tr>
 
       <tr>
         <td>ICU4C API Documentation Online</td>
 
         <td><a href=
-        "http://www.icu-project.org/apiref/icu4c/">http://www.icu-project.org/apiref/icu4c/</a></td>
+        "http://icu-project.org/apiref/icu4c/">http://icu-project.org/apiref/icu4c/</a></td>
       </tr>
 
       <tr>
@@ -192,7 +192,7 @@
         <td>Contacts and Bug Reports/Feature Requests</td>
 
         <td><a href=
-        "http://www.icu-project.org/contacts.html">http://www.icu-project.org/contacts.html</a></td>
+        "http://site.icu-project.org/contacts">http://site.icu-project.org/contacts</a></td>
       </tr>
     </table>
 
@@ -209,7 +209,7 @@
 
     <p><!-- The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. --> For more news about
-    this release, see the <a href="http://www.icu-project.org/download/">ICU
+    this release, see the <a href="http://site.icu-project.org/download">ICU
     download page</a>.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
@@ -224,7 +224,7 @@
       tested more thoroughly than day-to-day development builds of the system,
       and they are packaged in zip and tar files for convenient download. These
       packaged files can be found at <a href=
-      "http://www.icu-project.org/download/">http://www.icu-project.org/download/</a>.<br />
+      "http://site.icu-project.org/download">http://site.icu-project.org/download</a>.<br />
        The packaged snapshots are named <strong>icu-nnnn.zip</strong> or
       <strong>icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip
       file is used for Windows platforms, while the .tgz file is preferred on
@@ -236,7 +236,7 @@
       ICU, you should probably be working with the latest version of the ICU
       source code. You will need to check the code out of our Subversion repository to
       ensure that you have the most recent version of all of the files. See our
-      <a href="http://www.icu-project.org/repository/">source
+      <a href="http://site.icu-project.org/repository">source
       repository</a> for details.</li>
     </ul>
 
@@ -246,7 +246,7 @@
     <p>In the descriptions below, <strong><i>&lt;ICU&gt;</i></strong> is the full
     path name of the ICU directory (the top level directory from the distribution
     archives) in your file system. You can also view the <a href=
-    "http://www.icu-project.org/userguide/design.html">ICU Architectural
+    "http://userguide.icu-project.org/design">ICU Architectural
     Design</a> section of the User's Guide to see which libraries you need for
     your software product. You need at least the data (<code>[lib]icudt</code>)
     and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
@@ -332,7 +332,7 @@
           <p>If some of the following directories are missing, it's probably
           because you got an official download. If you need the data source files
           for customization, then please download the ICU source code from <a
-          href="http://www.icu-project.org/repository/">subversion</a>.</p>
+          href="http://site.icu-project.org/repository">subversion</a>.</p>
 
           <ul>
             <li><b>in/</b> A directory that contains a pre-built data library for
@@ -386,7 +386,7 @@
           environment variable to the out/ or the out/build/ directories, but
           this is generally discouraged because most people set it incorrectly.
           You can view the <a href=
-          "http://www.icu-project.org/userguide/icudata.html">ICU Data
+          "http://userguide.icu-project.org/icudata">ICU Data
           Management</a> section of the ICU User's Guide for details.</p>
         </td>
       </tr>
@@ -1483,7 +1483,7 @@ gnumake</pre>
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
-    "http://www.icu-project.org/userguide/">User's Guide</a>. The <a href=
+    "http://userguide.icu-project.org/">User's Guide</a>. The <a href=
     "#SourceCode">ICU Source Code Organization</a> section of this readme.html
     gives a more complete description of the libraries.</p>
 
@@ -1512,7 +1512,7 @@ gnumake</pre>
 
         <td>Data required by the Common and I18n libraries. There are many ways
         to package and <a href=
-        "http://www.icu-project.org/userguide/icudata.html">customize this
+        "http://userguide.icu-project.org/icudata">customize this
         data</a>, but by default this is all you need.</td>
       </tr>
 
@@ -1758,7 +1758,7 @@ gnumake</pre>
     <p>If you are using ICU's Makefiles to build ICU on a new platform, there are
     a few places where you will need to add or modify some files. If you need
     more help, you can always ask the <a href=
-    "http://www.icu-project.org/contacts.html">icu-support mailing list</a>. Once
+    "http://site.icu-project.org/contacts">icu-support mailing list</a>. Once
     you have finished porting ICU to a new platform, it is recommended that you
     contribute your changes back to ICU via the icu-support mailing list. This
     will make it easier for everyone to benefit from your work.</p>
@@ -1773,7 +1773,7 @@ gnumake</pre>
     <p>Data files can be built on a different platform when both platforms share
     the same endianness and the same charset family. This assertion does not
     include platform dependent DLLs/shared/static libraries. For details see the
-    User Guide <a href="http://www.icu-project.org/userguide/icudata.html">ICU
+    User Guide <a href="http://userguide.icu-project.org/icudata">ICU
     Data</a> chapter.</p>
 
     <p>ICU 3.6 removes the requirement that ICU be completely built in the native
