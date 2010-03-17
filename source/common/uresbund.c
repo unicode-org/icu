@@ -62,7 +62,7 @@ static UBool U_CALLCONV compareEntries(const UHashTok p1, const UHashTok p2) {
     name2.pointer = b2->fName;
     path1.pointer = b1->fPath;
     path2.pointer = b2->fPath;
-    return (UBool)(uhash_compareChars(name1, name2) & 
+    return (UBool)(uhash_compareChars(name1, name2) &&
         uhash_compareChars(path1, path2));
 }
 
@@ -665,7 +665,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             if(!hasRealData) {
                 r->fBogus = U_USING_DEFAULT_WARNING;
             }
-            hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
+            hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) || hasRealData);
             t1->fParent = t2;
             t1 = t2;
         }
@@ -673,7 +673,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         while(r != NULL && !isRoot && t1->fParent != NULL) {
             t1->fParent->fCountExisting++;
             t1 = t1->fParent;
-            hasRealData = (UBool)((t1->fBogus == U_ZERO_ERROR) | hasRealData);
+            hasRealData = (UBool)((t1->fBogus == U_ZERO_ERROR) || hasRealData);
         }
     } /* umtx_lock */
 finishUnlock:
