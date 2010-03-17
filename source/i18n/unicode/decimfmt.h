@@ -382,10 +382,10 @@ class FieldPositionHandler;
  * is set to 5.
  *
  * <li>If the number of actual fraction digits exceeds the <em>maximum
- * fraction digits</em>, then half-even rounding it performed to the
+ * fraction digits</em>, then rounding is performed to the
  * maximum fraction digits.  For example, 0.125 is formatted as "0.12"
  * if the maximum fraction digits is 2.  This behavior can be changed
- * by specifying a rounding increment and a rounding mode.
+ * by specifying a rounding increment and/or a rounding mode.
  *
  * <li>If the number of actual fraction digits is less than the
  * <em>minimum fraction digits</em>, then trailing zeros are added.
@@ -615,8 +615,9 @@ class FieldPositionHandler;
  * not affect parsing or change any numerical values.
  *
  * <li>A <em>rounding mode</em> determines how values are rounded; see
- * DecimalFormat::ERoundingMode.  Rounding increments specified in
- * patterns use the default mode, DecimalFormat::kRoundHalfEven.
+ * DecimalFormat::ERoundingMode.  The default rounding mode is
+ * DecimalFormat::kRoundHalfEven.  The rounding mode can only be set
+ * through the API; it can not be set with a pattern.
  *
  * <li>Some locales use rounding in their currency formats to reflect the
  * smallest currency denomination.
@@ -1272,8 +1273,8 @@ public:
 
     /**
      * Get the rounding increment.
-     * @return A positive rounding increment, or 0.0 if rounding
-     * is not in effect.
+     * @return A positive rounding increment, or 0.0 if a rounding
+     * increment is not in effect.
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -1282,9 +1283,9 @@ public:
     virtual double getRoundingIncrement(void) const;
 
     /**
-     * Set the rounding increment.  This method also controls whether
-     * rounding is enabled.
-     * @param newValue A positive rounding increment, or 0.0 to disable rounding.
+     * Set the rounding increment.  In the absence of a rounding increment,
+     *    numbers will be rounded to the number of digits displayed.
+     * @param newValue A positive rounding increment.
      * Negative increments are equivalent to 0.0.
      * @see #getRoundingIncrement
      * @see #getRoundingMode
@@ -1304,8 +1305,7 @@ public:
     virtual ERoundingMode getRoundingMode(void) const;
 
     /**
-     * Set the rounding mode.  This has no effect unless the rounding
-     * increment is greater than zero.
+     * Set the rounding mode.  
      * @param roundingMode A rounding mode
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
