@@ -344,6 +344,7 @@ timezoneTypes:table(nofallback){
             "Antarctica:Casey"{"aqcas"}
             "Antarctica:Davis"{"aqdav"}
             "Antarctica:DumontDUrville"{"aqddu"}
+            "Antarctica:Macquarie"{"aumqi"}
             "Antarctica:Mawson"{"aqmaw"}
             "Antarctica:McMurdo"{"aqmcm"}
             "Antarctica:Palmer"{"aqplm"}
