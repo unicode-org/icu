@@ -50,12 +50,12 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
         if(U_SUCCESS(errorCode)) {
             const UChar *us = str.getBuffer();
             const UChar *uLimit = us + str.length();
-            char *s, *sLimit = buffer + sizeof(buffer);
-            uprv_memset(buffer, 0, sizeof(buffer));
+            char *s, *sLimit = buffer + (sizeof(buffer) - 1);
             do {
                 errorCode = U_ZERO_ERROR;
                 s = buffer;
                 ucnv_fromUnicode(converter, &s, sLimit, &us, uLimit, 0, FALSE, &errorCode);
+                *s = 0;
 
                 // write this chunk
                 if(s > buffer) {
