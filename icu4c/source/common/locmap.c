@@ -610,8 +610,11 @@ ILCID_POSIX_SUBTABLE(zh) {
     {0x0404, "zh_TW"},
     {0x30404,"zh_Hant_TW"},     /* Bopomofo order */
     {0x30404,"zh_TW"},          /* Bopomofo order */
+    {0x20004,"zh@collation=stroke"},
+    {0x20404,"zh_Hant@collation=stroke"},
     {0x20404,"zh_Hant_TW@collation=stroke"},
     {0x20404,"zh_TW@collation=stroke"},
+    {0x20804,"zh_Hans@collation=stroke"},
     {0x20804,"zh_Hans_CN@collation=stroke"},
     {0x20804,"zh_CN@collation=stroke"}
 };
