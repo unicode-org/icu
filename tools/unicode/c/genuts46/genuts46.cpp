@@ -22,6 +22,8 @@
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/usetiter.h"
+#include "unicode/usprep.h"
+#include "sprpimpl.h"  // HACK
 
 /**
  * icu::ErrorCode subclass for easy UErrorCode handling.
@@ -48,6 +50,29 @@ ExitingErrorCode::~ExitingErrorCode() {
 void ExitingErrorCode::handleFailure() const {
     fprintf(stderr, "error at %s: %s\n", location, errorName());
     exit(errorCode);
+}
+
+static int
+toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destString) {
+    UChar src[2];
+    int32_t srcLength=0;
+    U16_APPEND_UNSAFE(src, srcLength, c);
+    UChar *dest;
+    int32_t destLength;
+    dest=destString.getBuffer(32);
+    if(dest==NULL) {
+        return FALSE;
+    }
+    UErrorCode errorCode=U_ZERO_ERROR;
+    destLength=usprep_prepare(prep, src, srcLength,
+                              dest, destString.getCapacity(),
+                              USPREP_DEFAULT, NULL, &errorCode);
+    destString.releaseBuffer(destLength);
+    if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
+        return -1;
+    } else {
+        return U_SUCCESS(errorCode);
+    }
 }
 
 enum Status { DISALLOWED, IGNORED, MAPPED, DEVIATION, VALID };
@@ -96,6 +121,7 @@ main(int argc, const char *argv[]) {
         "-[:ascii:]]"
         "[\\u002Da-zA-Z0-9]]", -1, US_INV), errorCode);
 
+#if 0
     icu::UnicodeSet baseExclusionSet(icu::UnicodeString(
         "[\\u04C0\\u10A0-\\u10C5\\u2132\\u2183"
         "\\U0002F868\\U0002F874\\U0002F91F\\U0002F95F\\U0002F9BF"
@@ -107,12 +133,54 @@ main(int argc, const char *argv[]) {
         "\\u206A-\\u206F"
         "\\U000E0001\\U000E0020-\\U000E007F"
         "[:Cn:]]", -1, US_INV), errorCode);
+#endif
 
     icu::UnicodeSet deviationSet(
         UNICODE_STRING_SIMPLE("[\\u00DF\\u03C2\\u200C\\u200D]"), errorCode);
     errorCode.assertSuccess();
 
     // derived sets
+    icu::LocalUStringPrepProfilePointer namePrep(usprep_openByType(USPREP_RFC3491_NAMEPREP, errorCode));
+    const icu::Normalizer2 *nfkc_cf=
+        icu::Normalizer2::getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode);
+    errorCode.assertSuccess();
+
+    // HACK: The StringPrep API performs a BiDi check according to the data.
+    // We need to override that for this data generation, by resetting an internal flag.
+    namePrep->checkBiDi=FALSE;
+
+    icu::UnicodeSet baseExclusionSet;
+    icu::UnicodeString cString, mapping, namePrepResult;
+    for(UChar32 c=0; c<=0x10ffff; ++c) {
+        if(c==0xd800) {
+            c=0xe000;
+        }
+        int namePrepStatus=toIDNA2003(namePrep.getAlias(), c, namePrepResult);
+        if(namePrepStatus!=0) {
+            // get the UTS #46 base mapping value
+            switch(c) {
+            case 0xff0e:
+            case 0x3002:
+            case 0xff61:
+                mapping.setTo(0x2e);
+                break;
+            default:
+                cString.setTo(c);
+                nfkc_cf->normalize(cString, mapping, errorCode);
+                break;
+            }
+            if(
+                namePrepStatus>0 ?
+                    // c is valid or mapped in IDNA2003
+                    namePrepResult!=mapping :
+                    // namePrepStatus<0: c is prohibited in IDNA2003
+                    baseValidSet.contains(c) || (cString!=mapping && baseValidSet.containsAll(mapping))
+            ) {
+                baseExclusionSet.add(c);
+            }
+        }
+    }
+
     icu::UnicodeSet disallowedSet(0, 0x10ffff);
     disallowedSet.
         removeAll(labelSeparators).
@@ -121,15 +189,13 @@ main(int argc, const char *argv[]) {
         removeAll(baseValidSet).
         addAll(baseExclusionSet);
 
-    const icu::Normalizer2 *nfkc_cf=
-        icu::Normalizer2::getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode);
     const icu::Normalizer2 *nfd=
         icu::Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
     errorCode.assertSuccess();
 
     icu::UnicodeSet ignoredSet;  // will be a subset of mappedSet
     icu::UnicodeSet removeSet;
-    icu::UnicodeString cString, mapping, nfdString;
+    icu::UnicodeString nfdString;
     {
         icu::UnicodeSetIterator iter(mappedSet);
         while(iter.next()) {

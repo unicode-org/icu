@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\icu\trunk\include"
+				AdditionalIncludeDirectories="..\..\..\..\..\icu\trunk\include, ..\..\..\..\..\icu\trunk\source\common"
 				PreprocessorDefinitions="U_USING_ICU_NAMESPACE=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\..\..\icu\trunk\include"
+				AdditionalIncludeDirectories="..\..\..\..\..\icu\trunk\include, ..\..\..\..\..\icu\trunk\source\common"
 				PreprocessorDefinitions="U_USING_ICU_NAMESPACE=0"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
