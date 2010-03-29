@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -29,6 +29,7 @@
 #include <strstream>
 #endif
 #include <fstream>
+#include <iomanip>
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #define USE_OLD_IOSTREAM 1
@@ -125,6 +126,59 @@ static void U_CALLCONV TestStream(void)
     if (U_FAILURE(status)) {
         log_err("Can't get default converter");
         return;
+    }
+
+    /* Test formatting when using '<<' and UnicodeString */
+#ifdef USE_SSTREAM
+    ostringstream outFormatStream;
+#else
+    char testFormatStreamBuf[512];
+    memset(testFormatStreamBuf, 0, sizeof(testFormatStreamBuf));
+    ostrstream outFormatStream(testFormatStreamBuf, sizeof(testFormatStreamBuf));
+#endif
+    UnicodeString ustr("string");
+
+    outFormatStream << "1234567890" << setw(10) << left << ustr << " " << "0123456789";
+
+#ifdef USE_SSTREAM
+    const char *testFormatStreamBuf = outFormatStream.str().c_str();
+#endif
+    const char *format_test_expected = "1234567890string     0123456789";
+    if (strcmp(format_test_expected, testFormatStreamBuf) != 0) {
+        log_err("UnicodeString format test using << operator Got: '%s' Expected: '%s'\n", testFormatStreamBuf, format_test_expected);
+    }
+
+    /* Test large buffer (size > 200) when using '<<' and UnicodeString */
+#ifdef USE_SSTREAM
+    ostringstream outLargeStream;
+#else
+    char testLargeStreamBuf[512];
+    memset(testLargeStreamBuf, 0, sizeof(testLargeStreamBuf));
+    ostrstream outLargeStream(testLargeStreamBuf, sizeof(testLargeStreamBuf));
+#endif
+    UChar large_array[200];
+    int32_t large_array_length = sizeof(large_array)/sizeof(UChar);
+    for (int32_t i = 0; i < large_array_length; i++) {
+        large_array[i] = 0x41;
+    }
+    UnicodeString large_array_unistr(large_array, large_array_length);
+
+    outLargeStream << large_array_unistr;
+
+#ifdef USE_SSTREAM
+    string tmpString = outLargeStream.str();
+    const char *testLargeStreamBuf = tmpString.c_str();
+#endif
+    char expectedLargeStreamBuf[300];
+    int32_t expectedBufLength = sizeof(expectedLargeStreamBuf);
+
+    ucnv_fromUChars(defConv, expectedLargeStreamBuf, expectedBufLength, large_array, large_array_length, &status);
+    if (U_SUCCESS(status)) {
+        if (strcmp(testLargeStreamBuf, expectedLargeStreamBuf) != 0) {
+            log_err("Large UnicodeString operator << output incorrect.\n");
+        }
+    } else {
+        log_err("Error converting string for large stream buffer testing.\n");
     }
     ucnv_close(defConv);
 #else
