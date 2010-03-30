@@ -181,7 +181,7 @@ main(int argc, const char *argv[]) {
             if(
                 namePrepStatus>0 ?
                     // c is valid or mapped in IDNA2003
-                    namePrepResult!=mapping :
+                    !labelSeparators.contains(c) && namePrepResult!=mapping :
                     // namePrepStatus<0: c is prohibited in IDNA2003
                     baseValidSet.contains(c) || (cString!=mapping && baseValidSet.containsAll(mapping))
             ) {
