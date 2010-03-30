@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -97,6 +97,9 @@ unum_open(  UNumberFormatStyle    style,
 
         if(syms == 0) {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+        if (U_FAILURE(*status)) {
             return 0;
         }
 
