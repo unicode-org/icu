@@ -68,9 +68,16 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
                               dest, destString.getCapacity(),
                               USPREP_DEFAULT, NULL, &errorCode);
     destString.releaseBuffer(destLength);
+#if 0
+    if(c==0x2065) {
+        fprintf(stderr, "*** U+2065: %s destLength=%d\n", u_errorName(errorCode), (int)destLength);
+    }
+#endif
     if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
         return -1;
     } else {
+        // Returns FALSE=0 for U_STRINGPREP_UNASSIGNED_ERROR and processing errors,
+        // TRUE=1 if c is valid or mapped.
         return U_SUCCESS(errorCode);
     }
 }
@@ -107,6 +114,8 @@ main(int argc, const char *argv[]) {
     ExitingErrorCode errorCode("genuts46");
 
     // predefined base sets
+    icu::UnicodeSet unassignedSet(UNICODE_STRING_SIMPLE("[:Cn:]"), errorCode);
+
     icu::UnicodeSet labelSeparators(
         UNICODE_STRING_SIMPLE("[\\u002E\\u3002\\uFF0E\\uFF61]"), errorCode);
 
@@ -178,6 +187,12 @@ main(int argc, const char *argv[]) {
             ) {
                 baseExclusionSet.add(c);
             }
+#if 0
+            if(c==0x221 || c==0x2065) {
+                fprintf(stderr, "*** U+%04lX: status=%d baseValidSet.contains(c)=%d .containsAll(NFKC_CF(c))=%d\n",
+                        (long)c, namePrepStatus, baseValidSet.contains(c), baseValidSet.containsAll(mapping));
+            }
+#endif
         }
     }
 
@@ -187,7 +202,8 @@ main(int argc, const char *argv[]) {
         removeAll(deviationSet).
         removeAll(mappedSet).
         removeAll(baseValidSet).
-        addAll(baseExclusionSet);
+        addAll(baseExclusionSet).
+        addAll(unassignedSet);
 
     const icu::Normalizer2 *nfd=
         icu::Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
