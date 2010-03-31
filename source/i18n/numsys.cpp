@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and
+* Copyright (C) 2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -106,6 +106,9 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
         } 
         const UChar *defaultNSName =
             ures_getStringByKeyWithFallback(resource.getAlias(), gDefaultNumberingSystem, &count, &status);
+        if (U_FAILURE(status)) {
+               return NULL;
+        }
         if ( count > 0 && count < ULOC_KEYWORDS_CAPACITY ) { // Default numbering system found
            u_UCharsToChars(defaultNSName,buffer,count); 
            buffer[count] = '\0'; // Make sure it is null terminated.
