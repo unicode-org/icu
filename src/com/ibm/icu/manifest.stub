@@ -5,8 +5,8 @@ Specification-Title: ICU for Java
 Specification-Version: 3.2
 Specification-Vendor: ICU
 Implementation-Title: ICU for Java
-Implementation-Version: 3.2.0
+Implementation-Version: 3.2.0.1
 Implementation-Vendor: IBM Corporation
 Implementation-Vendor-Id: com.ibm
-Copyright-Info: Copyright (c) 2000-2004, International Business Machines Corporation and others.  All Rights Reserved.
+Copyright-Info: Copyright (c) 2000-2010, International Business Machines Corporation and others.  All Rights Reserved.
 Sealed: false

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -99,13 +99,13 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
             new ZoneDescriptor("PNT", -420, false),
-            new ZoneDescriptor("MST", -420, true),
+            new ZoneDescriptor("MST", -420, false),
             new ZoneDescriptor("CST", -360, true),
-            new ZoneDescriptor("IET", -300, false),
-            new ZoneDescriptor("EST", -300, true),
+            new ZoneDescriptor("IET", -300, true),
+            new ZoneDescriptor("EST", -300, false),
             new ZoneDescriptor("PRT", -240, false),
             new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, false),
+            new ZoneDescriptor("AGT", -180, true),
             new ZoneDescriptor("BET", -180, true),
             // new ZoneDescriptor("CAT", -60, false), // Wrong:
             // As of bug 4130885, fix CAT (Central Africa)

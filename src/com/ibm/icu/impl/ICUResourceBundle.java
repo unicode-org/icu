@@ -1,13 +1,17 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and        *
+* Copyright (C) 2004-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -26,6 +30,9 @@ import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import java.util.regex.Pattern;
+
+import com.ibm.icu.impl.URLHandler.URLVisitor;
 import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -842,68 +849,55 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         return locales;
     }
 
-    private static final ArrayList createFullLocaleNameArray(final String baseName, final ClassLoader root){
-        final ArrayList list = new ArrayList();
+    private static final ArrayList createFullLocaleNameArray(
+            final String baseName, final ClassLoader root) {
 
-        java.security.AccessController.
-            doPrivileged(new java.security.PrivilegedAction() {
-                    public Object run() {
-                        URL url = root.getResource(baseName);
+        ArrayList list = (ArrayList) java.security.AccessController
+            .doPrivileged(new java.security.PrivilegedAction() {
+                public Object run() {
+                    // WebSphere class loader will return null for a raw
+                    // directory name without trailing slash
+                    String bn = baseName.endsWith("/")
+                        ? baseName
+                        : baseName + "/";
 
-                        if (!url.getProtocol().equalsIgnoreCase("jar")) {
-                            // assume a file
-                            File file = new File(url.getPath());
-                            File[] files = file.listFiles();
-                            if (files != null) {
-                                // then it's a directory...
-                                for (int i = 0; i < files.length; i++){
-                                    if (!files[i].isDirectory()) {
-                                        String name = files[i].getName();
-                                        if (name.indexOf("res_index") < 0) {
-                                            name = name.substring(0, name.lastIndexOf('.'));
-                                            list.add(name);
-                                        }
-                                    }
-                                }
-                            } else {
-                                // we failed to recognize the url!
-                            }
-                        } else {
-                            // otherwise its a jar file...
-                            try {
-                                String fileName = url.getPath();
-                                int ix = fileName.indexOf("!/");
-                                if (ix >= 0) {
-                                    fileName = fileName.substring(ix + 2); // truncate after "!/"
-                                }
-                                JarURLConnection conn = (JarURLConnection)url.openConnection();
-                                JarFile jarFile = conn.getJarFile();
-                                Enumeration entries = jarFile.entries();
-                                while (entries.hasMoreElements()) {
-                                    JarEntry entry = (JarEntry)entries.nextElement();
-                                    if (!entry.isDirectory()) {
-                                        String name = entry.getName();
-                                        if (name.startsWith(fileName)) {
-                                            name = name.substring(fileName.length() + 1);
-                                            if (name.indexOf('/') == -1 && name.endsWith(".res")) {
-                                                name = name.substring(0, name.lastIndexOf('.'));
-                                                list.add(name);
-                                            }
-                                        }
-                                    }
+                    // look for prebuilt indices first
+                    try {
+                        InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX + ".txt");
+                        if (s != null) {
+                            ArrayList list = new ArrayList();
+                            BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
+                            String line;
+                            while ((line = br.readLine()) != null) {
+                                if (line.length() != 0 && !line.startsWith("#")) {
+                                    list.add(line);
                                 }
                             }
-                            catch (Exception e) {
-                                if (DEBUG){
-                                    System.out.println("icurb jar error: " + e);
-                                    Thread.dumpStack();
-                                }
-                            }
+                            return list;
                         }
-
-                        return null;
+                    } catch (IOException e) {
+                        // swallow it
                     }
-                });
+
+                    URL url = root.getResource(bn);
+                    URLHandler handler = URLHandler.get(url);
+                    if (handler != null) {
+                        final ArrayList list = new ArrayList();
+                        URLVisitor v = new URLVisitor() {
+                            private Pattern p = Pattern.compile(".*\\.res");
+                            public void visit(String s) {
+                                if (p.matcher(s).matches() && !"res_index.res".equals(s)) {
+                                    list.add(s.substring(0, s.length() - 4)); // strip '.res'
+                                }
+                            }
+                        };
+                        handler.guide(v, false);
+                        return list;
+                    }
+
+                    return null;
+                }
+            });
 
         return list;
     }
