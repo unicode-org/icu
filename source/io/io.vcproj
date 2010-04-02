@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio44.dll"
+				OutputFile="..\..\bin\icuio45.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\..\..\lib\icuio.pdb"
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio44d.dll"
+				OutputFile="..\..\bin\icuio45d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
@@ -268,7 +268,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin64\icuio44.dll"
+				OutputFile="..\..\bin64\icuio45.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\..\..\lib64\icuio.pdb"
@@ -366,7 +366,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin64\icuio44d.dll"
+				OutputFile="..\..\bin64\icuio45d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
