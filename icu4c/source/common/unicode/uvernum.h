@@ -54,13 +54,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 4
+#define U_ICU_VERSION_MINOR_NUM 5
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+#define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
@@ -74,7 +74,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _44
+#define U_ICU_VERSION_SUFFIX _45
 
 /** Glued version suffix function for renamers 
  *  This value will change in the subsequent releases of ICU.
@@ -83,7 +83,7 @@
  *  @draft ICU 4.2
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _44
+#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _45
 #endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
@@ -91,13 +91,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "4.4"
+#define U_ICU_VERSION "4.5.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "44"
+#define U_ICU_VERSION_SHORT "45"
 
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
