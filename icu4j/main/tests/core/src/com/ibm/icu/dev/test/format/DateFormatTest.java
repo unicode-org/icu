@@ -3676,5 +3676,29 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("DateFormat.getPatternInstance is not suppose to return an exception.");
         }
     }
-       
+
+    /*
+     * Test case for very long numeric field patterns (ticket#7595)
+     */
+    public void TestLongNumericPattern() {
+        String DATA[] = {
+            "yyyy MM dd",
+
+            "yyyy.MM.dd", "fp", "2010 04 01",
+            "2010.04.01", "2010 04 01",
+
+            "yyyyyyyyyy.MM.dd", "fp", "2010 04 01",
+            "0000002010.04.01", "2010 04 01",
+
+            "yyyyyyyyyyy.MM.dd", "fp", "2010 04 01",
+            "00000002010.04.01", "2010 04 01",
+
+            "yyyyyyyyyyy.M.dddddddddd", "fp", "2010 04 01",
+            "00000002010.4.0000000001", "2010 04 01",
+
+            "y.M.ddddddddddd", "fp", "2010 10 11",
+            "2010.10.00000000011", "2010 10 11",
+        };
+        expect(DATA, new Locale("en", "", ""));
+    }
 }

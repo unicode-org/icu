@@ -1605,11 +1605,17 @@ public class SimpleDateFormat extends DateFormat {
             index--;
         }
         int padding = minDigits - (limit - index);
-        for (; padding > 0; padding--) {
+        while (padding > 0 && index > 0) {
             decimalBuf[--index] = zeroDigit;
+            padding--;
         }
-        int length = limit - index;
-        buf.append(decimalBuf, index, length);
+        while (padding > 0) {
+            // when pattern width is longer than decimalBuf, need extra
+            // leading zeros - ticke#7595
+            buf.append(zeroDigit);
+            padding--;
+        }
+        buf.append(decimalBuf, index, limit - index);
     }
 
     /**
