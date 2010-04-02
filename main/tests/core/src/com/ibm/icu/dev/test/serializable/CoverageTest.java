@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Enumeration;
 
 import com.ibm.icu.impl.URLHandler;
 
@@ -194,11 +195,18 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
         if(serializable==null){
             init();
         }
-        URL url = getClass().getResource("/com/ibm/icu");
-        URLHandler handler  = URLHandler.get(url);
-        
-        handler.guide(this, true, false);
-        
+
+        try {
+            Enumeration<URL> urlEnum = getClass().getClassLoader().getResources("com/ibm/icu");
+            while (urlEnum.hasMoreElements()) {
+                URL url = urlEnum.nextElement();
+                URLHandler handler  = URLHandler.get(url);
+                handler.guide(this, true, false);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return head.getNext();
     }
     
