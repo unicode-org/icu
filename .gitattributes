@@ -2701,6 +2701,7 @@ icu4j/tools/build/icu4j400.api.gz -text
 icu4j/tools/build/icu4j401.api.gz -text
 icu4j/tools/build/icu4j42.api.gz -text
 icu4j/tools/build/icu4j421.api.gz -text
+icu4j/tools/build/icu4j44.api.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/manifest.stub -text
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/cldr/CheckSystemFonts.java svneol=native#text/plain
