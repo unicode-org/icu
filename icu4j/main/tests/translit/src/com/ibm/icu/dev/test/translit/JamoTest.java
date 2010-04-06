@@ -5,7 +5,9 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-import java.util.Hashtable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Transliterator;
@@ -452,12 +454,12 @@ public class JamoTest extends TransliteratorTest {
         "(Hf)", "\u11C2",
     };
 
-    static Hashtable JAMO_TO_NAME;
-    static Hashtable NAME_TO_JAMO;
+    static Map<String, String> JAMO_TO_NAME;
+    static Map<String, String> NAME_TO_JAMO;
 
     static {
-        JAMO_TO_NAME = new Hashtable();
-        NAME_TO_JAMO = new Hashtable();
+        JAMO_TO_NAME = new HashMap<String, String>();
+        NAME_TO_JAMO = new HashMap<String, String>();
         for (int i=0; i<JAMO_NAMES.length; i+=2) {
             JAMO_TO_NAME.put(JAMO_NAMES[i+1], JAMO_NAMES[i]);
             NAME_TO_JAMO.put(JAMO_NAMES[i], JAMO_NAMES[i+1]);
@@ -475,7 +477,7 @@ public class JamoTest extends TransliteratorTest {
             if (c == '(') {
                 int j = input.indexOf(')', i+1);
                 if ((j-i) >= 2 && (j-i) <= 6) { // "(A)", "(IEUNG)"
-                    String jamo = (String) NAME_TO_JAMO.get(input.substring(i, j+1));
+                    String jamo = NAME_TO_JAMO.get(input.substring(i, j+1));
                     if (jamo != null) {
                         buf.append(jamo);
                         i = j;
@@ -497,7 +499,7 @@ public class JamoTest extends TransliteratorTest {
         for (int i=0; i<input.length(); ++i) {
             char c = input.charAt(i);
             if (c >= 0x1100 && c <= 0x11C2) {
-                String name = (String) JAMO_TO_NAME.get(input.substring(i, i+1));
+                String name = JAMO_TO_NAME.get(input.substring(i, i+1));
                 if (name != null) {
                     buf.append(name);
                     continue;

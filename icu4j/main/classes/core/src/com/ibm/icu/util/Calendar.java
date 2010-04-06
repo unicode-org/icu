@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -1377,7 +1376,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Cache to hold the firstDayOfWeek and minimalDaysInFirstWeek
      * of a Locale.
      */
-    private static Hashtable<ULocale, WeekData> cachedLocaleData = new Hashtable<ULocale, WeekData>(3);
+    private static ICUCache<ULocale, WeekData> cachedLocaleData = new SimpleCache<ULocale, WeekData>();
 
     /**
      * Value of the time stamp <code>stamp[]</code> indicating that

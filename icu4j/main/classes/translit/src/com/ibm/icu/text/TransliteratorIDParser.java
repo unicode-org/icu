@@ -12,8 +12,10 @@ package com.ibm.icu.text;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
@@ -58,8 +60,8 @@ class TransliteratorIDParser {
 
     private static final int REVERSE = Transliterator.REVERSE;
 
-    private static final Hashtable<CaseInsensitiveString, String> SPECIAL_INVERSES =
-        new Hashtable<CaseInsensitiveString, String>();
+    private static final Map<CaseInsensitiveString, String> SPECIAL_INVERSES =
+        Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
 
     /**
      * A structure containing the parsed data of a filtered ID, that

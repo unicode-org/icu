@@ -10,11 +10,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.ChoiceFormat;
-import java.util.Hashtable;
 import java.util.Locale;
 
 import com.ibm.icu.impl.CurrencyData;
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
@@ -1092,8 +1093,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * cache to hold the NumberElements of a Locale.
      */
-    private static final Hashtable<ULocale, String[][]> cachedLocaleData =
-        new Hashtable<ULocale, String[][]>(3);
+    private static final ICUCache<ULocale, String[][]> cachedLocaleData =
+        new SimpleCache<ULocale, String[][]>();
 
     /**
      *

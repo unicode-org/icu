@@ -13,9 +13,10 @@ package com.ibm.icu.text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -46,7 +47,7 @@ class TransliteratorRegistry {
      * RuleBasedTransliterator.Data, Transliterator.Factory, or one
      * of the entry classes defined here (AliasEntry or ResourceEntry).
      */
-    private Hashtable<CaseInsensitiveString, Object[]> registry;
+    private Map<CaseInsensitiveString, Object[]> registry;
 
     /**
      * DAG of visible IDs by spec.  Hashtable: source => (Hashtable:
@@ -59,7 +60,7 @@ class TransliteratorRegistry {
      * Values are Hashtable of (CaseInsensitiveString -> Vector of
      * CaseInsensitiveString)
      */
-    private Hashtable<CaseInsensitiveString, Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>>> specDAG;
+    private Map<CaseInsensitiveString, Map<CaseInsensitiveString, List<CaseInsensitiveString>>> specDAG;
 
     /**
      * Vector of public full IDs (CaseInsensitiveString objects).
@@ -288,8 +289,8 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     public TransliteratorRegistry() {
-        registry = new Hashtable<CaseInsensitiveString, Object[]>();
-        specDAG = new Hashtable<CaseInsensitiveString, Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>>>();
+        registry = Collections.synchronizedMap(new HashMap<CaseInsensitiveString, Object[]>());
+        specDAG = Collections.synchronizedMap(new HashMap<CaseInsensitiveString, Map<CaseInsensitiveString, List<CaseInsensitiveString>>>());
         availableIDs = new ArrayList<CaseInsensitiveString>();
     }
 
@@ -423,7 +424,7 @@ class TransliteratorRegistry {
      * @return An <code>Enumeration</code> over <code>String</code> objects
      */
     public Enumeration<String> getAvailableSources() {
-        return new IDEnumeration(specDAG.keys());
+        return new IDEnumeration(Collections.enumeration(specDAG.keySet()));
     }
 
     /**
@@ -434,11 +435,11 @@ class TransliteratorRegistry {
      */
     public Enumeration<String> getAvailableTargets(String source) {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
-        Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
+        Map<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return new IDEnumeration(null);
         }
-        return new IDEnumeration(targets.keys());
+        return new IDEnumeration(Collections.enumeration(targets.keySet()));
     }
 
     /**
@@ -450,7 +451,7 @@ class TransliteratorRegistry {
     public Enumeration<String> getAvailableVariants(String source, String target) {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
-        Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
+        Map<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return new IDEnumeration(null);
         }
@@ -539,9 +540,9 @@ class TransliteratorRegistry {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
         CaseInsensitiveString civar = new CaseInsensitiveString(variant);
-        Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
+        Map<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
-            targets = new Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>>();
+            targets = Collections.synchronizedMap(new HashMap<CaseInsensitiveString, List<CaseInsensitiveString>>());
             specDAG.put(cisrc, targets);
         }
         List<CaseInsensitiveString> variants = targets.get(citrg);
@@ -572,7 +573,7 @@ class TransliteratorRegistry {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
         CaseInsensitiveString civar = new CaseInsensitiveString(variant);
-        Hashtable<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
+        Map<CaseInsensitiveString, List<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return; // should never happen for valid s-t/v
         }

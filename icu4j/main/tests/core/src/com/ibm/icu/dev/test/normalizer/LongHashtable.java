@@ -1,25 +1,24 @@
 package com.ibm.icu.dev.test.normalizer;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2010, International Business Machines Corporation and    *
  * Unicode, Inc. All Rights Reserved.                                          *
  *******************************************************************************
  *
  * Hashtable storing ints addressed by longs. Used
- * for storing of composition data. Uses Java Hashtable
- * for now.
+ * for storing of composition data.
  * @author Vladimir Weinstein
  */
 public class LongHashtable {
-//    static final String copyright = "Copyright (C) 2002-2003 International Business Machines Corporation and Unicode, Inc.";
-    
+
     public LongHashtable (int defaultValue) {
         this.defaultValue = defaultValue;
     }
-    
+
     public void put(long key, int value) {
         if (value == defaultValue) {
             table.remove(new Long(key));
@@ -27,14 +26,14 @@ public class LongHashtable {
             table.put(new Long(key), new Integer(value));
         }
     }
-    
+
     public int get(long key) {
-        Object value = table.get(new Long(key));
+        Integer value = table.get(new Long(key));
         if (value == null) return defaultValue;
-        return ((Integer)value).intValue();
+        return value.intValue();
     }
-    
+
     private int defaultValue;
-    private Hashtable table = new Hashtable();
+    private Map<Long, Integer> table = new HashMap<Long, Integer>();
 
 }
