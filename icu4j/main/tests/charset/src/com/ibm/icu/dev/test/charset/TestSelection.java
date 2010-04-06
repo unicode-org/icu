@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -20,8 +20,8 @@
 package com.ibm.icu.dev.test.charset;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
@@ -57,7 +57,7 @@ public class TestSelection extends TestFmwk {
         }
     }
 
-    private void verifyResultUTF16(String s, Vector encodings, List result,
+    private void verifyResultUTF16(String s, List encodings, List result,
             UnicodeSet excludedEncodings, int mappingTypes) {
         boolean[] resultsFromSystem = new boolean[availableCharsetNames.length];
         boolean[] resultsManually = new boolean[availableCharsetNames.length];
@@ -148,7 +148,7 @@ public class TestSelection extends TestFmwk {
             for (int testCaseIdx = 0, prev = 0; testCaseIdx < encodingsTestCases.length; testCaseIdx++) {
                 if (encodingsTestCases[testCaseIdx] != -1)
                     continue;
-                Vector encodings = new Vector();
+                List encodings = new ArrayList();
                 for (int i = prev; i < testCaseIdx; i++) {
                     encodings.add(availableCharsetNames[encodingsTestCases[i]]);
                 }
@@ -174,7 +174,7 @@ public class TestSelection extends TestFmwk {
     
     /* This test is to provide better code coverage for CharsetSelector */
     public void TestCharsetSelectorCodeCoverage() {
-        Vector emptyList = new Vector();
+        List emptyList = new ArrayList();
         UnicodeSet nonEmptySet = new UnicodeSet();
 
         nonEmptySet.add(0x0001, 0x0FFF);

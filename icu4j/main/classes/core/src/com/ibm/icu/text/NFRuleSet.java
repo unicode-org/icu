@@ -7,7 +7,8 @@
 package com.ibm.icu.text;
 
 import java.text.ParsePosition;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
@@ -133,17 +134,17 @@ final class NFRuleSet {
         // the descriptions of the rules (one rule per element).  The rules
         // are separated by semicolons (there's no escape facility: ALL
         // semicolons are rule delimiters)
-        Vector<String> ruleDescriptions = new Vector<String>();
+        List<String> ruleDescriptions = new ArrayList<String>();
 
         int oldP = 0;
         int p = description.indexOf(';');
         while (oldP != -1) {
             if (p != -1) {
-                ruleDescriptions.addElement(description.substring(oldP, p));
+                ruleDescriptions.add(description.substring(oldP, p));
                 oldP = p + 1;
             } else {
                 if (oldP < description.length()) {
-                    ruleDescriptions.addElement(description.substring(oldP));
+                    ruleDescriptions.add(description.substring(oldP));
                 }
                 oldP = p;
             }
@@ -153,7 +154,7 @@ final class NFRuleSet {
         // now go back through and build a vector of the rules themselves
         // (the number of elements in the description list isn't necessarily
         // the number of rules-- some descriptions may expend into two rules)
-        Vector<NFRule> tempRules = new Vector<NFRule>();
+        List<NFRule> tempRules = new ArrayList<NFRule>();
 
         // we keep track of the rule before the one we're currently working
         // on solely to support >>> substitutions
@@ -162,18 +163,18 @@ final class NFRuleSet {
             // makeRules (a factory method on NFRule) will return either
             // a single rule or an array of rules.  Either way, add them
             // to our rule vector
-            Object temp = NFRule.makeRules(ruleDescriptions.elementAt(i),
+            Object temp = NFRule.makeRules(ruleDescriptions.get(i),
                             this, predecessor, owner);
 
             if (temp instanceof NFRule) {
-                tempRules.addElement((NFRule)temp);
+                tempRules.add((NFRule)temp);
                 predecessor = (NFRule)temp;
             }
             else if (temp instanceof NFRule[]) {
                 NFRule[] rulesToAdd = (NFRule[])temp;
 
                 for (int j = 0; j < rulesToAdd.length; j++) {
-                    tempRules.addElement(rulesToAdd[j]);
+                    tempRules.add(rulesToAdd[j]);
                     predecessor = rulesToAdd[j];
                 }
             }
@@ -192,7 +193,7 @@ final class NFRuleSet {
         // we _didn't_ delete aything from the vector)
         int i = 0;
         while (i < tempRules.size()) {
-            NFRule rule = tempRules.elementAt(i);
+            NFRule rule = tempRules.get(i);
 
             switch ((int)rule.getBaseValue()) {
                 // if the rule's base value is 0, fill in a default
@@ -212,28 +213,28 @@ final class NFRuleSet {
                 // data member and delete it from the list
                 case NFRule.NEGATIVE_NUMBER_RULE:
                     negativeNumberRule = rule;
-                    tempRules.removeElementAt(i);
+                    tempRules.remove(i);
                     break;
 
                 // if it's the improper fraction rule, copy it into the
                 // correct element of fractionRules
                 case NFRule.IMPROPER_FRACTION_RULE:
                     fractionRules[0] = rule;
-                    tempRules.removeElementAt(i);
+                    tempRules.remove(i);
                     break;
 
                 // if it's the proper fraction rule, copy it into the
                 // correct element of fractionRules
                 case NFRule.PROPER_FRACTION_RULE:
                     fractionRules[1] = rule;
-                    tempRules.removeElementAt(i);
+                    tempRules.remove(i);
                     break;
 
                 // if it's the master rule, copy it into the
                 // correct element of fractionRules
                 case NFRule.MASTER_RULE:
                     fractionRules[2] = rule;
-                    tempRules.removeElementAt(i);
+                    tempRules.remove(i);
                     break;
 
                 // if it's a regular rule that already knows its base value,
@@ -256,7 +257,7 @@ final class NFRuleSet {
         // finally, we can copy the rules from the vector into a
         // fixed-length array
         rules = new NFRule[tempRules.size()];
-        tempRules.copyInto((Object[])rules);
+        tempRules.toArray(rules);
     }
 
     /**

@@ -12,8 +12,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
@@ -47,19 +48,19 @@ public class BreakIteratorTest extends TestFmwk
     // general test subroutines
     //=========================================================================
 
-    private void generalIteratorTest(BreakIterator bi, Vector expectedResult) {
+    private void generalIteratorTest(BreakIterator bi, List<String> expectedResult) {
         StringBuffer buffer = new StringBuffer();
         String text;
         for (int i = 0; i < expectedResult.size(); i++) {
-            text = (String)expectedResult.elementAt(i);
+            text = expectedResult.get(i);
             buffer.append(text);
         }
         text = buffer.toString();
 
         bi.setText(text);
 
-        Vector nextResults = _testFirstAndNext(bi, text);
-        Vector previousResults = _testLastAndPrevious(bi, text);
+        List<String> nextResults = _testFirstAndNext(bi, text);
+        List<String> previousResults = _testLastAndPrevious(bi, text);
 
         logln("comparing forward and backward...");
         int errs = getErrorCount();
@@ -75,7 +76,7 @@ public class BreakIteratorTest extends TestFmwk
         boundaries[0] = BreakIterator.DONE;
         boundaries[1] = 0;
         for (int i = 0; i < expectedResult.size(); i++)
-            boundaries[i + 2] = boundaries[i + 1] + ((String)expectedResult.elementAt(i)).
+            boundaries[i + 2] = boundaries[i + 1] + (expectedResult.get(i)).
                             length();
         boundaries[boundaries.length - 1] = BreakIterator.DONE;
 
@@ -86,10 +87,10 @@ public class BreakIteratorTest extends TestFmwk
         doMultipleSelectionTest(bi, text);
     }
 
-    private Vector _testFirstAndNext(BreakIterator bi, String text) {
+    private List<String> _testFirstAndNext(BreakIterator bi, String text) {
         int p = bi.first();
         int lastP = p;
-        Vector result = new Vector();
+        List<String> result = new ArrayList<String>();
 
         if (p != 0)
             errln("first() returned " + p + " instead of 0");
@@ -100,7 +101,7 @@ public class BreakIteratorTest extends TestFmwk
                     errln("next() failed to move forward: next() on position "
                                     + lastP + " yielded " + p);
 
-                result.addElement(text.substring(lastP, p));
+                result.add(text.substring(lastP, p));
             }
             else {
                 if (lastP != text.length())
@@ -112,10 +113,10 @@ public class BreakIteratorTest extends TestFmwk
         return result;
     }
 
-    private Vector _testLastAndPrevious(BreakIterator bi, String text) {
+    private List<String> _testLastAndPrevious(BreakIterator bi, String text) {
         int p = bi.last();
         int lastP = p;
-        Vector result = new Vector();
+        List<String> result = new ArrayList<String>();
 
         if (p != text.length())
             errln("last() returned " + p + " instead of " + text.length());
@@ -126,7 +127,7 @@ public class BreakIteratorTest extends TestFmwk
                     errln("previous() failed to move backward: previous() on position "
                                     + lastP + " yielded " + p);
 
-                result.insertElementAt(text.substring(p, lastP), 0);
+                result.add(0, text.substring(p, lastP));
             }
             else {
                 if (lastP != 0)
@@ -138,7 +139,7 @@ public class BreakIteratorTest extends TestFmwk
         return result;
     }
 
-    private void compareFragmentLists(String f1Name, String f2Name, Vector f1, Vector f2) {
+    private void compareFragmentLists(String f1Name, String f2Name, List<String> f1, List<String> f2) {
         int p1 = 0;
         int p2 = 0;
         String s1;
@@ -147,8 +148,8 @@ public class BreakIteratorTest extends TestFmwk
         int t2 = 0;
 
         while (p1 < f1.size() && p2 < f2.size()) {
-            s1 = (String)f1.elementAt(p1);
-            s2 = (String)f2.elementAt(p2);
+            s1 = f1.get(p1);
+            s2 = f2.get(p2);
             t1 += s1.length();
             t2 += s2.length();
 
@@ -165,24 +166,24 @@ public class BreakIteratorTest extends TestFmwk
 
                 while (tempT1 != tempT2 && tempP1 < f1.size() && tempP2 < f2.size()) {
                     while (tempT1 < tempT2 && tempP1 < f1.size()) {
-                        tempT1 += ((String)f1.elementAt(tempP1)).length();
+                        tempT1 += (f1.get(tempP1)).length();
                         ++tempP1;
                     }
                     while (tempT2 < tempT1 && tempP2 < f2.size()) {
-                        tempT2 += ((String)f2.elementAt(tempP2)).length();
+                        tempT2 += (f2.get(tempP2)).length();
                         ++tempP2;
                     }
                 }
                 logln("*** " + f1Name + " has:");
                 while (p1 <= tempP1 && p1 < f1.size()) {
-                    s1 = (String)f1.elementAt(p1);
+                    s1 = f1.get(p1);
                     t1 += s1.length();
                     debugLogln(" *** >" + s1 + "<");
                     ++p1;
                 }
                 logln("***** " + f2Name + " has:");
                 while (p2 <= tempP2 && p2 < f2.size()) {
-                    s2 = (String)f2.elementAt(p2);
+                    s2 = f2.get(p2);
                     t2 += s2.length();
                     debugLogln(" ***** >" + s2 + "<");
                     ++p2;
@@ -360,10 +361,10 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4097779
      */
     public void TestBug4097779() {
-        Vector wordSelectionData = new Vector();
+        List<String> wordSelectionData = new ArrayList<String>(2);
 
-        wordSelectionData.addElement("aa\u0300a");
-        wordSelectionData.addElement(" ");
+        wordSelectionData.add("aa\u0300a");
+        wordSelectionData.add(" ");
 
         generalIteratorTest(wordBreak, wordSelectionData);
     }
@@ -372,30 +373,30 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4098467
      */
     public void TestBug4098467Words() {
-        Vector wordSelectionData = new Vector();
+        List<String> wordSelectionData = new ArrayList<String>();
 
         // What follows is a string of Korean characters (I found it in the Yellow Pages
         // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
         // it correctly), first as precomposed syllables, and then as conjoining jamo.
         // Both sequences should be semantically identical and break the same way.
         // precomposed syllables...
-        wordSelectionData.addElement("\uc0c1\ud56d");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\ud55c\uc778");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\uc5f0\ud569");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\uc7a5\ub85c\uad50\ud68c");
-        wordSelectionData.addElement(" ");
+        wordSelectionData.add("\uc0c1\ud56d");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\ud55c\uc778");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\uc5f0\ud569");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\uc7a5\ub85c\uad50\ud68c");
+        wordSelectionData.add(" ");
         // conjoining jamo...
-        wordSelectionData.addElement("\u1109\u1161\u11bc\u1112\u1161\u11bc");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\u1112\u1161\u11ab\u110b\u1175\u11ab");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\u110b\u1167\u11ab\u1112\u1161\u11b8");
-        wordSelectionData.addElement(" ");
-        wordSelectionData.addElement("\u110c\u1161\u11bc\u1105\u1169\u1100\u116d\u1112\u116c");
-        wordSelectionData.addElement(" ");
+        wordSelectionData.add("\u1109\u1161\u11bc\u1112\u1161\u11bc");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\u1112\u1161\u11ab\u110b\u1175\u11ab");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\u110b\u1167\u11ab\u1112\u1161\u11b8");
+        wordSelectionData.add(" ");
+        wordSelectionData.add("\u110c\u1161\u11bc\u1105\u1169\u1100\u116d\u1112\u116c");
+        wordSelectionData.add(" ");
 
         generalIteratorTest(wordBreak, wordSelectionData);
     }
@@ -405,20 +406,20 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4111338
      */
     public void TestBug4111338() {
-        Vector sentenceSelectionData = new Vector();
+        List<String> sentenceSelectionData = new ArrayList<String>();
 
         // test for bug #4111338: Don't break sentences at the boundary between CJK
         // and other letters
-        sentenceSelectionData.addElement("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165:\"JAVA\u821c"
+        sentenceSelectionData.add("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165:\"JAVA\u821c"
                 + "\u8165\u7fc8\u51ce\u306d,\u2494\u56d8\u4ec0\u60b1\u8560\u51ba"
                 + "\u611d\u57b6\u2510\u5d46\".\u2029");
-        sentenceSelectionData.addElement("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8"
+        sentenceSelectionData.add("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8"
                 + "\u97e4JAVA\u821c\u8165\u7fc8\u51ce\u306d\ue30b\u2494\u56d8\u4ec0"
                 + "\u60b1\u8560\u51ba\u611d\u57b6\u2510\u5d46\u97e5\u7751\u2029");
-        sentenceSelectionData.addElement("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8\u97e4"
+        sentenceSelectionData.add("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8\u97e4"
                 + "\u6470\u8790JAVA\u821c\u8165\u7fc8\u51ce\u306d\ue30b\u2494\u56d8"
                 + "\u4ec0\u60b1\u8560\u51ba\u611d\u57b6\u2510\u5d46\u97e5\u7751\u2029");
-        sentenceSelectionData.addElement("He said, \"I can go there.\"\u2029");
+        sentenceSelectionData.add("He said, \"I can go there.\"\u2029");
 
         generalIteratorTest(sentenceBreak, sentenceSelectionData);
     }
@@ -428,12 +429,12 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4143071
      */
     public void TestBug4143071() {
-        Vector sentenceSelectionData = new Vector();
+        List<String> sentenceSelectionData = new ArrayList<String>(3);
 
         // Make sure sentences that end with digits work right
-        sentenceSelectionData.addElement("Today is the 27th of May, 1998.  ");
-        sentenceSelectionData.addElement("Tomorrow will be 28 May 1998.  ");
-        sentenceSelectionData.addElement("The day after will be the 30th.\u2029");
+        sentenceSelectionData.add("Today is the 27th of May, 1998.  ");
+        sentenceSelectionData.add("Tomorrow will be 28 May 1998.  ");
+        sentenceSelectionData.add("The day after will be the 30th.\u2029");
 
         generalIteratorTest(sentenceBreak, sentenceSelectionData);
     }
@@ -442,12 +443,12 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4152416
      */
     public void TestBug4152416() {
-        Vector sentenceSelectionData = new Vector();
+        List<String> sentenceSelectionData = new ArrayList<String>(2);
 
         // Make sure sentences ending with a capital letter are treated correctly
-        sentenceSelectionData.addElement("The type of all primitive "
+        sentenceSelectionData.add("The type of all primitive "
                 + "<code>boolean</code> values accessed in the target VM.  ");
-        sentenceSelectionData.addElement("Calls to xxx will return an "
+        sentenceSelectionData.add("Calls to xxx will return an "
                 + "implementor of this interface.\u2029");
 
         generalIteratorTest(sentenceBreak, sentenceSelectionData);
@@ -457,55 +458,55 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4152117
      */
     public void TestBug4152117() {
-        Vector sentenceSelectionData = new Vector();
+        List<String> sentenceSelectionData = new ArrayList<String>(3);
 
         // Make sure sentence breaking is handling punctuation correctly
         // [COULD NOT REPRODUCE THIS BUG, BUT TEST IS HERE TO MAKE SURE
         // IT DOESN'T CROP UP]
-        sentenceSelectionData.addElement("Constructs a randomly generated "
+        sentenceSelectionData.add("Constructs a randomly generated "
                 + "BigInteger, uniformly distributed over the range <tt>0</tt> "
                 + "to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ");
-        sentenceSelectionData.addElement("The uniformity of the distribution "
+        sentenceSelectionData.add("The uniformity of the distribution "
                 + "assumes that a fair source of random bits is provided in "
                 + "<tt>rnd</tt>.  ");
-        sentenceSelectionData.addElement("Note that this constructor always "
+        sentenceSelectionData.add("Note that this constructor always "
                 + "constructs a non-negative BigInteger.\u2029");
 
         generalIteratorTest(sentenceBreak, sentenceSelectionData);
     }
 
     public void TestLineBreak() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>();
 
-        lineSelectionData.addElement("Multi-");
-        lineSelectionData.addElement("Level ");
-        lineSelectionData.addElement("example ");
-        lineSelectionData.addElement("of ");
-        lineSelectionData.addElement("a ");
-        lineSelectionData.addElement("semi-");
-        lineSelectionData.addElement("idiotic ");
-        lineSelectionData.addElement("non-");
-        lineSelectionData.addElement("sensical ");
-        lineSelectionData.addElement("(non-");
-        lineSelectionData.addElement("important) ");
-        lineSelectionData.addElement("sentence. ");
+        lineSelectionData.add("Multi-");
+        lineSelectionData.add("Level ");
+        lineSelectionData.add("example ");
+        lineSelectionData.add("of ");
+        lineSelectionData.add("a ");
+        lineSelectionData.add("semi-");
+        lineSelectionData.add("idiotic ");
+        lineSelectionData.add("non-");
+        lineSelectionData.add("sensical ");
+        lineSelectionData.add("(non-");
+        lineSelectionData.add("important) ");
+        lineSelectionData.add("sentence. ");
 
-        lineSelectionData.addElement("Hi  ");
-        lineSelectionData.addElement("Hello ");
-        lineSelectionData.addElement("How\n");
-        lineSelectionData.addElement("are\r");
-        lineSelectionData.addElement("you\u2028");
-        lineSelectionData.addElement("fine.\t");
-        lineSelectionData.addElement("good.  ");
+        lineSelectionData.add("Hi  ");
+        lineSelectionData.add("Hello ");
+        lineSelectionData.add("How\n");
+        lineSelectionData.add("are\r");
+        lineSelectionData.add("you\u2028");
+        lineSelectionData.add("fine.\t");
+        lineSelectionData.add("good.  ");
 
-        lineSelectionData.addElement("Now\r");
-        lineSelectionData.addElement("is\n");
-        lineSelectionData.addElement("the\r\n");
-        lineSelectionData.addElement("time\n");
-        lineSelectionData.addElement("\r");
-        lineSelectionData.addElement("for\r");
-        lineSelectionData.addElement("\r");
-        lineSelectionData.addElement("all");
+        lineSelectionData.add("Now\r");
+        lineSelectionData.add("is\n");
+        lineSelectionData.add("the\r\n");
+        lineSelectionData.add("time\n");
+        lineSelectionData.add("\r");
+        lineSelectionData.add("for\r");
+        lineSelectionData.add("\r");
+        lineSelectionData.add("all");
 
         generalIteratorTest(lineBreak, lineSelectionData);
     }
@@ -514,17 +515,17 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4068133
      */
     public void TestBug4068133() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(9);
 
-        lineSelectionData.addElement("\u96f6");
-        lineSelectionData.addElement("\u4e00\u3002");
-        lineSelectionData.addElement("\u4e8c\u3001");
-        lineSelectionData.addElement("\u4e09\u3002\u3001");
-        lineSelectionData.addElement("\u56db\u3001\u3002\u3001");
-        lineSelectionData.addElement("\u4e94,");
-        lineSelectionData.addElement("\u516d.");
-        lineSelectionData.addElement("\u4e03.\u3001,\u3002");
-        lineSelectionData.addElement("\u516b");
+        lineSelectionData.add("\u96f6");
+        lineSelectionData.add("\u4e00\u3002");
+        lineSelectionData.add("\u4e8c\u3001");
+        lineSelectionData.add("\u4e09\u3002\u3001");
+        lineSelectionData.add("\u56db\u3001\u3002\u3001");
+        lineSelectionData.add("\u4e94,");
+        lineSelectionData.add("\u516d.");
+        lineSelectionData.add("\u4e03.\u3001,\u3002");
+        lineSelectionData.add("\u516b");
 
         generalIteratorTest(lineBreak, lineSelectionData);
     }
@@ -533,9 +534,9 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4086052
      */
     public void TestBug4086052() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(1);
 
-        lineSelectionData.addElement("foo\u00a0bar ");
+        lineSelectionData.add("foo\u00a0bar ");
 //        lineSelectionData.addElement("foo\ufeffbar");
 
         generalIteratorTest(lineBreak, lineSelectionData);
@@ -545,11 +546,11 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4097920
      */
     public void TestBug4097920() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(3);
 
-        lineSelectionData.addElement("dog,cat,mouse ");
-        lineSelectionData.addElement("(one)");
-        lineSelectionData.addElement("(two)\n");
+        lineSelectionData.add("dog,cat,mouse ");
+        lineSelectionData.add("(one)");
+        lineSelectionData.add("(two)\n");
         generalIteratorTest(lineBreak, lineSelectionData);
     }
 
@@ -559,12 +560,12 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4117554
      */
     public void TestBug4117554Lines() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(3);
 
         // Fullwidth .!? should be treated as postJwrd
-        lineSelectionData.addElement("\u4e01\uff0e");
-        lineSelectionData.addElement("\u4e02\uff01");
-        lineSelectionData.addElement("\u4e03\uff1f");
+        lineSelectionData.add("\u4e01\uff0e");
+        lineSelectionData.add("\u4e02\uff01");
+        lineSelectionData.add("\u4e03\uff1f");
 
         generalIteratorTest(lineBreak, lineSelectionData);
     }
@@ -572,11 +573,11 @@ public class BreakIteratorTest extends TestFmwk
     public void TestLettersAndDigits() {
         // a character sequence such as "X11" or "30F3" or "native2ascii" should
         // be kept together as a single word
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(3);
 
-        lineSelectionData.addElement("X11 ");
-        lineSelectionData.addElement("30F3 ");
-        lineSelectionData.addElement("native2ascii");
+        lineSelectionData.add("X11 ");
+        lineSelectionData.add("30F3 ");
+        lineSelectionData.add("native2ascii");
 
         generalIteratorTest(lineBreak, lineSelectionData);
     }
@@ -589,32 +590,32 @@ public class BreakIteratorTest extends TestFmwk
     private static final String tildeE = "e\u0303";
 
     public void TestCharacterBreak() {
-        Vector characterSelectionData = new Vector();
+        List<String> characterSelectionData = new ArrayList<String>();
 
-        characterSelectionData.addElement(graveS);
-        characterSelectionData.addElement(acuteBelowI);
-        characterSelectionData.addElement("m");
-        characterSelectionData.addElement("p");
-        characterSelectionData.addElement("l");
-        characterSelectionData.addElement(acuteE);
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("s");
-        characterSelectionData.addElement(circumflexA);
-        characterSelectionData.addElement("m");
-        characterSelectionData.addElement("p");
-        characterSelectionData.addElement("l");
-        characterSelectionData.addElement(tildeE);
-        characterSelectionData.addElement(".");
-        characterSelectionData.addElement("w");
-        characterSelectionData.addElement(circumflexA);
-        characterSelectionData.addElement("w");
-        characterSelectionData.addElement("a");
-        characterSelectionData.addElement("f");
-        characterSelectionData.addElement("q");
-        characterSelectionData.addElement("\n");
-        characterSelectionData.addElement("\r");
-        characterSelectionData.addElement("\r\n");
-        characterSelectionData.addElement("\n");
+        characterSelectionData.add(graveS);
+        characterSelectionData.add(acuteBelowI);
+        characterSelectionData.add("m");
+        characterSelectionData.add("p");
+        characterSelectionData.add("l");
+        characterSelectionData.add(acuteE);
+        characterSelectionData.add(" ");
+        characterSelectionData.add("s");
+        characterSelectionData.add(circumflexA);
+        characterSelectionData.add("m");
+        characterSelectionData.add("p");
+        characterSelectionData.add("l");
+        characterSelectionData.add(tildeE);
+        characterSelectionData.add(".");
+        characterSelectionData.add("w");
+        characterSelectionData.add(circumflexA);
+        characterSelectionData.add("w");
+        characterSelectionData.add("a");
+        characterSelectionData.add("f");
+        characterSelectionData.add("q");
+        characterSelectionData.add("\n");
+        characterSelectionData.add("\r");
+        characterSelectionData.add("\r\n");
+        characterSelectionData.add("\n");
 
         generalIteratorTest(characterBreak, characterSelectionData);
     }
@@ -623,56 +624,56 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4098467
      */
     public void TestBug4098467Characters() {
-        Vector characterSelectionData = new Vector();
+        List<String> characterSelectionData = new ArrayList<String>();
 
         // What follows is a string of Korean characters (I found it in the Yellow Pages
         // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
         // it correctly), first as precomposed syllables, and then as conjoining jamo.
         // Both sequences should be semantically identical and break the same way.
         // precomposed syllables...
-        characterSelectionData.addElement("\uc0c1");
-        characterSelectionData.addElement("\ud56d");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\ud55c");
-        characterSelectionData.addElement("\uc778");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\uc5f0");
-        characterSelectionData.addElement("\ud569");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\uc7a5");
-        characterSelectionData.addElement("\ub85c");
-        characterSelectionData.addElement("\uad50");
-        characterSelectionData.addElement("\ud68c");
-        characterSelectionData.addElement(" ");
+        characterSelectionData.add("\uc0c1");
+        characterSelectionData.add("\ud56d");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\ud55c");
+        characterSelectionData.add("\uc778");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\uc5f0");
+        characterSelectionData.add("\ud569");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\uc7a5");
+        characterSelectionData.add("\ub85c");
+        characterSelectionData.add("\uad50");
+        characterSelectionData.add("\ud68c");
+        characterSelectionData.add(" ");
         // conjoining jamo...
-        characterSelectionData.addElement("\u1109\u1161\u11bc");
-        characterSelectionData.addElement("\u1112\u1161\u11bc");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\u1112\u1161\u11ab");
-        characterSelectionData.addElement("\u110b\u1175\u11ab");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\u110b\u1167\u11ab");
-        characterSelectionData.addElement("\u1112\u1161\u11b8");
-        characterSelectionData.addElement(" ");
-        characterSelectionData.addElement("\u110c\u1161\u11bc");
-        characterSelectionData.addElement("\u1105\u1169");
-        characterSelectionData.addElement("\u1100\u116d");
-        characterSelectionData.addElement("\u1112\u116c");
+        characterSelectionData.add("\u1109\u1161\u11bc");
+        characterSelectionData.add("\u1112\u1161\u11bc");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\u1112\u1161\u11ab");
+        characterSelectionData.add("\u110b\u1175\u11ab");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\u110b\u1167\u11ab");
+        characterSelectionData.add("\u1112\u1161\u11b8");
+        characterSelectionData.add(" ");
+        characterSelectionData.add("\u110c\u1161\u11bc");
+        characterSelectionData.add("\u1105\u1169");
+        characterSelectionData.add("\u1100\u116d");
+        characterSelectionData.add("\u1112\u116c");
 
         generalIteratorTest(characterBreak, characterSelectionData);
     }
 
     public void TestTitleBreak()
     {
-        Vector titleData = new Vector();
-        titleData.addElement("   ");
-        titleData.addElement("This ");
-        titleData.addElement("is ");
-        titleData.addElement("a ");
-        titleData.addElement("simple ");
-        titleData.addElement("sample ");
-        titleData.addElement("sentence. ");
-        titleData.addElement("This ");
+        List<String> titleData = new ArrayList<String>();
+        titleData.add("   ");
+        titleData.add("This ");
+        titleData.add("is ");
+        titleData.add("a ");
+        titleData.add("simple ");
+        titleData.add("sample ");
+        titleData.add("sentence. ");
+        titleData.add("This ");
 
         generalIteratorTest(titleBreak, titleData);
     }
@@ -708,11 +709,11 @@ public class BreakIteratorTest extends TestFmwk
 
 
     public void TestBug4146175Lines() {
-        Vector lineSelectionData = new Vector();
+        List<String> lineSelectionData = new ArrayList<String>(2);
 
         // the fullwidth comma should stick to the preceding Japanese character
-        lineSelectionData.addElement("\u7d42\uff0c");
-        lineSelectionData.addElement("\u308f");
+        lineSelectionData.add("\u7d42\uff0c");
+        lineSelectionData.add("\u308f");
 
         generalIteratorTest(lineBreak, lineSelectionData);
     }
@@ -734,8 +735,8 @@ public class BreakIteratorTest extends TestFmwk
     public void TestEmptyString()
     {
         String text = "";
-        Vector x = new Vector();
-        x.addElement(text);
+        List<String> x = new ArrayList<String>(1);
+        x.add(text);
 
         generalIteratorTest(lineBreak, x);
     }
@@ -816,7 +817,7 @@ public class BreakIteratorTest extends TestFmwk
      * Bug 4450804
      */
     public void TestLineBreakContractions() {
-        Vector expected = new Vector();
+        List<String> expected = new ArrayList<String>(7);
         expected.add("These ");
         expected.add("are ");
         expected.add("'foobles'. ");

@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Vector;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUDebug;
@@ -52,8 +51,8 @@ public class Currency extends MeasureUnit implements Serializable {
     private static final boolean DEBUG = ICUDebug.enabled("currency");
 
     // Cache to save currency name trie
-    private static ICUCache<ULocale, Vector<TextTrieMap<CurrencyStringInfo>>> CURRENCY_NAME_CACHE =
-        new SimpleCache<ULocale, Vector<TextTrieMap<CurrencyStringInfo>>>();
+    private static ICUCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>> CURRENCY_NAME_CACHE =
+        new SimpleCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>>();
 
     /**
      * ISO 4217 3-letter code.
@@ -544,15 +543,15 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
-        Vector<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
+        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
         if (currencyTrieVec == null) {
             TextTrieMap<CurrencyStringInfo> currencyNameTrie = 
                 new TextTrieMap<CurrencyStringInfo>(true);
             TextTrieMap<CurrencyStringInfo> currencySymbolTrie = 
                 new TextTrieMap<CurrencyStringInfo>(false);
-            currencyTrieVec = new Vector<TextTrieMap<CurrencyStringInfo>>();
-            currencyTrieVec.addElement(currencySymbolTrie);
-            currencyTrieVec.addElement(currencyNameTrie);
+            currencyTrieVec = new ArrayList<TextTrieMap<CurrencyStringInfo>>();
+            currencyTrieVec.add(currencySymbolTrie);
+            currencyTrieVec.add(currencyNameTrie);
             setupCurrencyTrieVec(locale, currencyTrieVec);
             CURRENCY_NAME_CACHE.put(locale, currencyTrieVec);
         }
@@ -561,7 +560,7 @@ public class Currency extends MeasureUnit implements Serializable {
         String isoResult = null;
 
           // look for the names
-        TextTrieMap<CurrencyStringInfo> currencyNameTrie = currencyTrieVec.elementAt(1);
+        TextTrieMap<CurrencyStringInfo> currencyNameTrie = currencyTrieVec.get(1);
         CurrencyNameResultHandler handler = new CurrencyNameResultHandler();
         currencyNameTrie.find(text, pos.getIndex(), handler);
         List<CurrencyStringInfo> list = handler.getMatchedCurrencyNames();
@@ -577,7 +576,7 @@ public class Currency extends MeasureUnit implements Serializable {
         }
 
         if (type != Currency.LONG_NAME) {  // not long name only
-            TextTrieMap<CurrencyStringInfo> currencySymbolTrie = currencyTrieVec.elementAt(0);
+            TextTrieMap<CurrencyStringInfo> currencySymbolTrie = currencyTrieVec.get(0);
             handler = new CurrencyNameResultHandler();
             currencySymbolTrie.find(text, pos.getIndex(), handler);
             list = handler.getMatchedCurrencyNames();
@@ -599,10 +598,10 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     private static void setupCurrencyTrieVec(ULocale locale, 
-            Vector<TextTrieMap<CurrencyStringInfo>> trieVec) {
+            List<TextTrieMap<CurrencyStringInfo>> trieVec) {
 
-        TextTrieMap<CurrencyStringInfo> symTrie = trieVec.elementAt(0);
-        TextTrieMap<CurrencyStringInfo> trie = trieVec.elementAt(1);
+        TextTrieMap<CurrencyStringInfo> symTrie = trieVec.get(0);
+        TextTrieMap<CurrencyStringInfo> trie = trieVec.get(1);
 
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
         for (Map.Entry<String, String> e : names.symbolMap().entrySet()) {

@@ -8,11 +8,13 @@
 package com.ibm.icu.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -26,7 +28,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
     private ResourceBundle bundle = null;
     private String localeID = null;
     private String baseName = null;
-    private Vector<String> keys = null;
+    private List<String> keys = null;
 //    private int loadingStatus = -1;    
     
     private ResourceBundleWrapper(ResourceBundle bundle){
@@ -59,12 +61,12 @@ public class ResourceBundleWrapper extends UResourceBundle {
     }
     
     public Enumeration<String> getKeys(){
-        return keys.elements();
+        return Collections.enumeration(keys);
     }
     
     private void initKeysVector(){
         ResourceBundleWrapper current = this;
-        keys = new Vector<String>();
+        keys = new ArrayList<String>();
         while(current!=null){
             Enumeration<String> e = current.bundle.getKeys();
             while(e.hasMoreElements()){

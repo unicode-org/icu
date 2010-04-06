@@ -94,7 +94,7 @@ public class DiagBigDecimal extends TestFmwk {
     //private static final java.lang.String $0 = "DiagBigDecimal.nrx";
 
     /* properties shared */
-    java.util.Vector Tests = new java.util.Vector(100); // scaffolding
+    java.util.List Tests = new java.util.ArrayList(100); // scaffolding
 
     /* properties private */
     private int totalcount = 0; // counts tests run
@@ -5425,7 +5425,7 @@ public class DiagBigDecimal extends TestFmwk {
             int $144 = count;
             i = 0;
             for (; $144 > 0; $144--, i++) {
-                item = (Test) (Tests.elementAt(i));
+                item = (Test) (Tests.get(i));
                 if ((!item.ok))
                 {
                     bad++;
@@ -5434,7 +5434,7 @@ public class DiagBigDecimal extends TestFmwk {
             }
         }/*i*/
         totalcount = totalcount + count;
-        Tests = new java.util.Vector(100); // reinitialize
+        Tests = new java.util.ArrayList(100); // reinitialize
         if (bad == 0)
             say("OK" + " " + left(section, 14) + " "
                     + right("[" + count + " " + "tests]", 12));
@@ -5566,7 +5566,7 @@ public class DiagBigDecimal extends TestFmwk {
         public Test(java.lang.String testname) {
             super();
             name = testname; // save the name
-            DiagBigDecimal.this.Tests.addElement((java.lang.Object) this); // and add to parent's list
+            DiagBigDecimal.this.Tests.add((java.lang.Object) this); // and add to parent's list
         }
     }
 

@@ -6,12 +6,13 @@
  */
 package com.ibm.icu.dev.test.translit;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -3615,7 +3616,7 @@ the ::BEGIN/::END stuff)
 
         // Test incremental transliteration -- this result
         // must be the same after we finalize (see below).
-        Vector v = new Vector();
+        List<String> v = new ArrayList<String>();
         v.add(source);
         rsource.replace(0, rsource.length(), "");
         if (pos != null) {
@@ -3643,7 +3644,7 @@ the ::BEGIN/::END stuff)
         v.add(result);
 
         String[] results = new String[v.size()];
-        v.copyInto(results);
+        v.toArray(results);
         expectAux(t.getID() + ":Incremental", results,
                 result.equals(expectedResult),
                 expectedResult);
