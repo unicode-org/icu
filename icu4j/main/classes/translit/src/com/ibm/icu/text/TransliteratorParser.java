@@ -8,8 +8,9 @@ package com.ibm.icu.text;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -65,7 +66,7 @@ class TransliteratorParser {
      * Temporary table of variable names.  When parsing is complete, this is
      * copied into data.variableNames.
      */
-    private Hashtable<String, char[]> variableNames;
+    private Map<String, char[]> variableNames;
 
     /**
      * String of standins for segments.  Used during the parsing of a single
@@ -901,7 +902,7 @@ class TransliteratorParser {
         direction = dir;
         compoundFilter = null;
         variablesVector = new ArrayList<Object>();
-        variableNames = new Hashtable<String, char[]>();
+        variableNames = new HashMap<String, char[]>();
         parseData = new ParseData();
 
         List<RuntimeException> errors = new ArrayList<RuntimeException>();
@@ -1072,7 +1073,7 @@ class TransliteratorParser {
             Data data = dataVector.get(i);
             data.variables = new Object[variablesVector.size()];
             variablesVector.toArray(data.variables);
-            data.variableNames = new Hashtable<String, char[]>();
+            data.variableNames = new HashMap<String, char[]>();
             data.variableNames.putAll(variableNames);
         }
         variablesVector = null;

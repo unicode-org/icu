@@ -19,7 +19,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -501,7 +500,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             fp);
         assertEquals("format", compareStr, result.toString());
         
-        Map<String,Object> map = new Hashtable<String,Object>();
+        Map<String,Object> map = new HashMap<String,Object>();
         try{
             msg.format("", map);
         } catch(Exception e){

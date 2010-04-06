@@ -8,10 +8,12 @@ package com.ibm.icu.text;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -448,7 +450,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     private static TransliteratorRegistry registry;
 
-    private static Hashtable<CaseInsensitiveString, String> displayNameCache;
+    private static Map<CaseInsensitiveString, String> displayNameCache;
 
     /**
      * Prefix for resource bundle key for the display name for a
@@ -1783,7 +1785,7 @@ public abstract class Transliterator implements StringTransform  {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
-        displayNameCache = new Hashtable<CaseInsensitiveString, String>();
+        displayNameCache = Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
         /* The following code parses the index table located in
          * icu/data/translit/root.txt.  The index is an n x 4 table
          * that follows this format:

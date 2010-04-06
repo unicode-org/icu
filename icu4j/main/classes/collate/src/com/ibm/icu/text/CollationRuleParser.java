@@ -8,7 +8,8 @@ package com.ibm.icu.text;
 
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
@@ -43,7 +44,7 @@ final class CollationRuleParser
         m_extraCurrent_ = m_source_.length();
         m_variableTop_ = null;
         m_parsedToken_ = new ParsedToken();
-        m_hashTable_ = new Hashtable<Token, Token>();
+        m_hashTable_ = new HashMap<Token, Token>();
         m_options_ = new OptionSet(RuleBasedCollator.UCA_);
         m_listHeader_ = new TokenListHeader[512];
         m_resultLength_ = 0;
@@ -264,7 +265,7 @@ final class CollationRuleParser
     /**
      * Hash table to keep all tokens
      */
-    Hashtable<Token, Token> m_hashTable_;
+    Map<Token, Token> m_hashTable_;
 
     // package private method ------------------------------------------------
 

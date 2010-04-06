@@ -8,9 +8,9 @@
 package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
@@ -238,7 +238,7 @@ public class CalendarTest extends TestFmwk {
 
         // Keep a record of minima and maxima that we actually see.
         // These are kept in an array of arrays of hashes.
-        Hashtable[][] limits = new Hashtable[fieldsToTest.length][2];
+        Map[][] limits = new Map[fieldsToTest.length][2];
         Object nub = new Object(); // Meaningless placeholder
 
         // This test can run for a long time; show progress.
@@ -267,10 +267,10 @@ public class CalendarTest extends TestFmwk {
 
                 // Fetch the hash for this field and keep track of the
                 // minima and maxima.
-                Hashtable[] h = limits[j];
+                Map[] h = limits[j];
                 if (h[0] == null) {
-                    h[0] = new Hashtable();
-                    h[1] = new Hashtable();
+                    h[0] = new HashMap();
+                    h[1] = new HashMap();
                 }
                 h[0].put(new Integer(minActual), nub);
                 h[1].put(new Integer(maxActual), nub);
@@ -305,7 +305,7 @@ public class CalendarTest extends TestFmwk {
             int f = fieldsToTest[j];
             buf.setLength(0);
             buf.append(FIELD_NAME[f]);
-            Hashtable[] h = limits[j];
+            Map[] h = limits[j];
             boolean fullRangeSeen = true;
             for (int k=0; k<2; ++k) {
                 int rangeLow = (k==0) ?
@@ -319,8 +319,7 @@ public class CalendarTest extends TestFmwk {
                     fullRangeSeen = false;
                 }
                 buf.append(k==0 ? " minima seen=(" : "; maxima seen=(");
-                for (Enumeration e=h[k].keys(); e.hasMoreElements(); ) {
-                    int v = ((Integer) e.nextElement()).intValue();
+                for (Object v : h[k].keySet()) {
                     buf.append(" " + v);
                 }
                 buf.append(") range=" + rangeLow + ".." + rangeHigh);

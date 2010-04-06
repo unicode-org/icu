@@ -1,13 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.util.Hashtable;
-
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <code>RuleBasedTransliterator</code> is a transliterator
@@ -370,7 +370,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
     static class Data {
         public Data() {
-            variableNames = new Hashtable<String, char[]>();
+            variableNames = new HashMap<String, char[]>();
             ruleSet = new TransliterationRuleSet();
         }
 
@@ -388,7 +388,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * data.variables.  The stand-in also represents the UnicodeSet in
          * the stored rules.
          */
-        Hashtable<String, char[]> variableNames;
+        Map<String, char[]> variableNames;
 
         /**
          * Map category variable (Character) to UnicodeMatcher or UnicodeReplacer.

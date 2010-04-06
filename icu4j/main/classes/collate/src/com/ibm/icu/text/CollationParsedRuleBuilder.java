@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ibm.icu.impl.IntTrieBuilder;
 import com.ibm.icu.impl.Norm2AllModes;
@@ -1030,7 +1032,7 @@ final class CollationParsedRuleBuilder {
             // temporary fix for jb3822, 0x100000 -> 30000
             m_mapping_ = new IntTrieBuilder(null, 0x30000, trieinitialvalue,
                     trieinitialvalue, true);
-            m_prefixLookup_ = new Hashtable<Elements, Elements>();
+            m_prefixLookup_ = new HashMap<Elements, Elements>();
             // uhash_open(prefixLookupHash, prefixLookupComp);
             m_contractions_ = new ContractionTable(m_mapping_);
             // copy UCA's maxexpansion and merge as we go along
@@ -1087,7 +1089,7 @@ final class CollationParsedRuleBuilder {
         MaxJamoExpansionTable m_maxJamoExpansions_;
         byte m_unsafeCP_[];
         byte m_contrEndCP_[];
-        Hashtable<Elements, Elements> m_prefixLookup_;
+        Map<Elements, Elements> m_prefixLookup_;
         CombinClassTable cmLookup = null;
     }
 
@@ -3811,7 +3813,7 @@ final class CollationParsedRuleBuilder {
         }
 
         if (t.m_prefixLookup_ != null) {
-            Enumeration<Elements> els = t.m_prefixLookup_.elements();
+            Enumeration<Elements> els = Collections.enumeration(t.m_prefixLookup_.values());
             while (els.hasMoreElements()) {
                 Elements e = els.nextElement();
                 // codepoints here are in the NFD form. We need to add the
