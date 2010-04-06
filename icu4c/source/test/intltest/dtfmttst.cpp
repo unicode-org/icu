@@ -79,9 +79,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(39,Test6726);
         TESTCASE(40,TestGMTParsing);
         TESTCASE(41,Test6880);
+        TESTCASE(42,TestISOEra);
         /*
-        TESTCASE(42,TestRelativeError);
-        TESTCASE(43,TestRelativeOther);
+        TESTCASE(43,TestRelativeError);
+        TESTCASE(44,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3341,6 +3342,47 @@ void DateFormatTest::Test6880() {
 
     delete fmt;
 }
+
+void DateFormatTest::TestISOEra() { 
+   
+    const char* data[] = { 
+    // input, output 
+    "BC 4004-10-23T07:00:00Z", "BC 4004-10-23T07:00:00Z", 
+    "AD 4004-10-23T07:00:00Z", "AD 4004-10-23T07:00:00Z", 
+    "-4004-10-23T07:00:00Z"  , "BC 4005-10-23T07:00:00Z", 
+    "4004-10-23T07:00:00Z"   , "AD 4004-10-23T07:00:00Z", 
+    }; 
+ 
+    int32_t numData = 8; 
+ 
+    UErrorCode status = U_ZERO_ERROR; 
+ 
+    // create formatter 
+    SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("GGG yyyy-MM-dd'T'HH:mm:ss'Z"), status); 
+    failure(status, "new SimpleDateFormat"); 
+
+    for(int i=0; i < numData; i+=2) { 
+        // create input string 
+        UnicodeString in = data[i]; 
+ 
+        // parse string to date 
+        UDate dt1 = fmt1->parse(in, status); 
+        failure(status, "fmt->parse"); 
+ 
+        // format date back to string 
+        UnicodeString out; 
+        out = fmt1->format(dt1, out); 
+        logln(out); 
+ 
+        // check that roundtrip worked as expected 
+        UnicodeString expected = data[i+1]; 
+        if (out != expected) { 
+            errln((UnicodeString)"FAIL: " + in + " -> " + out + " expected -> " + expected); 
+        } 
+    } 
+ 
+    delete fmt1; 	 
+} 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
