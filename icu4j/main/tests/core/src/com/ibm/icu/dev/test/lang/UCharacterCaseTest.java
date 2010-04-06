@@ -10,8 +10,9 @@ package com.ibm.icu.dev.test.lang;
 
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -906,7 +907,7 @@ public final class UCharacterCaseTest extends TestFmwk
      */
     private String[] getUnicodeStrings(String str)
     {
-        Vector v = new Vector(10);
+        List<String> v = new ArrayList<String>(10);
         int start = 0;
         for (int casecount = 4; casecount > 0; casecount --) {
             int end = str.indexOf("; ", start);
@@ -945,7 +946,7 @@ public final class UCharacterCaseTest extends TestFmwk
         int size = v.size();
         String result[] = new String[size];
         for (int i = 0; i < size; i ++) {
-            result[i] = (String)v.elementAt(i);
+            result[i] = v.get(i);
         }
         return result;
     }

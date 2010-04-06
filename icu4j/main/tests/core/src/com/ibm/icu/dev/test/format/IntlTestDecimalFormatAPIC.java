@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,9 +16,10 @@ import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -321,8 +322,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
                 getZeroVector());
     }
 
-    private static Vector getNumberVectorUS() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getNumberVectorUS() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(3);
         v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(3, 4, NumberFormat.Field.DECIMAL_SEPARATOR));
         v.add(new FieldContainer(4, 6, NumberFormat.Field.FRACTION));
@@ -344,8 +345,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
 //        return v;
 //    }
 
-    private static Vector getPositiveCurrencyVectorUS() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getPositiveCurrencyVectorUS() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(4);
         v.add(new FieldContainer(0, 1, NumberFormat.Field.CURRENCY));
         v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(4, 5, NumberFormat.Field.DECIMAL_SEPARATOR));
@@ -353,8 +354,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getNegativeCurrencyVectorUS() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getNegativeCurrencyVectorUS() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(4);
         v.add(new FieldContainer(1, 2, NumberFormat.Field.CURRENCY));
         v.add(new FieldContainer(2, 5, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(5, 6, NumberFormat.Field.DECIMAL_SEPARATOR));
@@ -362,8 +363,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getPercentVectorUS() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getPercentVectorUS() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(5);
         v.add(new FieldContainer(0, 2, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(2, 3, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(2, 3, NumberFormat.Field.GROUPING_SEPARATOR));
@@ -372,15 +373,15 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getPermilleVector() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getPermilleVector() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(2);
         v.add(new FieldContainer(0, 6, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(6, 7, NumberFormat.Field.PERMILLE));
         return v;
     }
 
-    private static Vector getNegativeExponentVector() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getNegativeExponentVector() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(6);
         v.add(new FieldContainer(0, 4, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(4, 5, NumberFormat.Field.DECIMAL_SEPARATOR));
         v.add(new FieldContainer(5, 6, NumberFormat.Field.FRACTION));
@@ -390,8 +391,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getPositiveExponentVector() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getPositiveExponentVector() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(5);
         v.add(new FieldContainer(0, 2, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(2, 3, NumberFormat.Field.DECIMAL_SEPARATOR));
         v.add(new FieldContainer(3, 5, NumberFormat.Field.FRACTION));
@@ -400,8 +401,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getNumberVector2US() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getNumberVector2US() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(7);
         v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
         v.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
         v.add(new FieldContainer(3, 4, NumberFormat.Field.INTEGER));
@@ -412,15 +413,15 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
 
-    private static Vector getZeroVector() {
-        Vector v = new Vector();
+    private static List<FieldContainer> getZeroVector() {
+        List<FieldContainer> v = new ArrayList<FieldContainer>(1);
         v.add(new FieldContainer(0, 1, NumberFormat.Field.INTEGER));
         return v;
     }    
     
     private void t_Format(int count, Object object, Format format,
-            Vector expectedResults) {
-        Vector results = findFields(format.formatToCharacterIterator(object));
+            List<FieldContainer> expectedResults) {
+        List<FieldContainer> results = findFields(format.formatToCharacterIterator(object));
         assertTrue("Test " + count
                 + ": Format returned incorrect CharacterIterator for "
                 + format.format(object), compare(results, expectedResults));
@@ -429,7 +430,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * compares two vectors regardless of the order of their elements
      */
-    private static boolean compare(Vector vector1, Vector vector2) {
+    private static boolean compare(List vector1, List vector2) {
         return vector1.size() == vector2.size() && vector1.containsAll(vector2);
     }
     
@@ -442,8 +443,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
      *         which stores start and end indexes and an attribute this range
      *         has
      */
-    private static Vector findFields(AttributedCharacterIterator iterator) {
-        Vector result = new Vector();
+    private static List<FieldContainer> findFields(AttributedCharacterIterator iterator) {
+        List<FieldContainer> result = new ArrayList<FieldContainer>();
         while (iterator.getIndex() != iterator.getEndIndex()) {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();

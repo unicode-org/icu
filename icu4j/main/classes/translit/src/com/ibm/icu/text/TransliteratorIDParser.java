@@ -11,8 +11,9 @@
 package com.ibm.icu.text;
 
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
@@ -337,11 +338,11 @@ class TransliteratorIDParser {
      */
     public static boolean parseCompoundID(String id, int dir,
                                           StringBuffer canonID,
-                                          Vector<SingleID> list,
+                                          List<SingleID> list,
                                           UnicodeSet[] globalFilter) {
         int[] pos = new int[] { 0 };
         int[] withParens = new int[1];
-        list.removeAllElements();
+        list.clear();
         UnicodeSet filter;
         globalFilter[0] = null;
         canonID.setLength(0);
@@ -367,9 +368,9 @@ class TransliteratorIDParser {
                 break;
             }
             if (dir == FORWARD) {
-                list.addElement(single);
+                list.add(single);
             } else {
-                list.insertElementAt(single, 0);
+                list.add(0, single);
             }
             if (!Utility.parseChar(id, pos, ID_DELIM)) {
                 sawDelimiter = false;
@@ -383,7 +384,7 @@ class TransliteratorIDParser {
 
         // Construct canonical ID
         for (int i=0; i<list.size(); ++i) {
-            SingleID single = list.elementAt(i);
+            SingleID single = list.get(i);
             canonID.append(single.canonID);
             if (i != (list.size()-1)) {
                 canonID.append(ID_DELIM);
@@ -421,9 +422,9 @@ class TransliteratorIDParser {
      * @param ids list vector of SingleID objects.
      * @return Actual transliterators for the list of SingleIDs
      */
-    static Vector<Transliterator> instantiateList(Vector<SingleID> ids) {
+    static List<Transliterator> instantiateList(List<SingleID> ids) {
         Transliterator t;
-        Vector<Transliterator> translits = new Vector<Transliterator>();
+        List<Transliterator> translits = new ArrayList<Transliterator>();
         for (SingleID single : ids) {
             if (single.basicID.length() == 0) {
                 continue;

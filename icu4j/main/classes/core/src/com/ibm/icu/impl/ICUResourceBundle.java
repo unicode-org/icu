@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
@@ -1396,14 +1395,18 @@ public  class ICUResourceBundle extends UResourceBundle {
         {
             return getKeys();
         }
-        Vector<String> v = new Vector<String>();
+        List<String> v = new ArrayList<String>();
         int size = getSize();
         for(int index = 0; index < size; index++)
         {
             String curKey = getKey(index); 
             v.add(curKey);
         }
-        return v.elements();
+
+        //TODO we should use Iterator or List as the return type
+        // instead of Enumeration
+
+        return Collections.enumeration(v);
     }
 
     // This is the worker function for the public getKeys().
