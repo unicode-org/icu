@@ -167,6 +167,8 @@ public: // package
 
     void Test6880(void);
 
+    void TestISOEra(void);
+
 public:
     /**
      * Test host-specific formatting.
