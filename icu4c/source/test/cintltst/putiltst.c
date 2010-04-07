@@ -41,7 +41,7 @@ static void TestPUtilAPI(void){
         log_err("Error in uprv_modf.  Expected IntegralValue=%f, Got=%f, \n Expected FractionalValue=%f, Got=%f\n",
              expn1, n1, expy1, y1);
     }
-    if(VERBOSITY){
+    if(getTestOption(VERBOSITY_OPTION)){
         log_verbose("[float]  x = %f  n = %f y = %f\n", value1, n1, y1);
     }
     log_verbose("Testing the API uprv_fmod()\n");

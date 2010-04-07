@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -2743,7 +2743,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
 
     log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
         sourceLen, targ-junkout);
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
 
         junk[0] = 0;
@@ -2941,7 +2941,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
 
     log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
         sourcelen, targ-junkout);
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
 
         junk[0] = 0;
@@ -3120,7 +3120,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
 
     log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
         sourceLen, targ-junkout);
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
 
         junk[0] = 0;
@@ -3298,7 +3298,7 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
 
     log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
         sourcelen, targ-junkout);
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
 
         junk[0] = 0;

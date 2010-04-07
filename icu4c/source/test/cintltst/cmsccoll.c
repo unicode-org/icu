@@ -770,7 +770,7 @@ static void logFailure (const char *platform, const char *test,
   *sEsc = *tEsc = *s = *t = 0;
   if(error == TRUE) {
     log_err("Difference between expected and generated order. Run test with -v for more info\n");
-  } else if(VERBOSITY == 0) {
+  } else if(getTestOption(VERBOSITY_OPTION) == 0) {
     return;
   }
   for(i = 0; i<sLen; i++) {
@@ -2216,10 +2216,10 @@ static void TestIncrementalNormalize(void) {
     UErrorCode       status = U_ZERO_ERROR;
     UCollationResult result;
 
-    int32_t myQ = QUICK;
+    int32_t myQ = getTestOption(QUICK_OPTION);
 
-    if(QUICK < 0) {
-      QUICK = 1;
+    if(getTestOption(QUICK_OPTION) < 0) {
+        setTestOption(QUICK_OPTION, 1);
     }
 
     {
@@ -2259,7 +2259,7 @@ static void TestIncrementalNormalize(void) {
         }
     }
 
-    QUICK = myQ;
+    setTestOption(QUICK_OPTION, myQ);
 
 
     /*  Test 2:  Non-normal sequence in a string that extends to the last character*/
@@ -2948,12 +2948,12 @@ static void TestVariableTopSetting(void) {
   UChar first[256] = { 0 };
   UChar second[256] = { 0 };
   UParseError parseError;
-  int32_t myQ = QUICK;
+  int32_t myQ = getTestOption(QUICK_OPTION);
 
   src.opts = &opts;
 
-  if(QUICK <= 0) {
-    QUICK = 1;
+  if(getTestOption(QUICK_OPTION) <= 0) {
+    setTestOption(QUICK_OPTION, 1);
   }
 
   /* this test will fail when normalization is turned on */
@@ -3069,7 +3069,7 @@ static void TestVariableTopSetting(void) {
     status = U_ZERO_ERROR;
   }
 
-  QUICK = myQ;
+  setTestOption(QUICK_OPTION, myQ);
 
   log_verbose("Testing setting variable top to contractions\n");
   {
