@@ -1696,7 +1696,7 @@ static void TestCEValidity()
 
     /* testing tailored collation elements */
     log_verbose("Testing tailored elements\n");
-    if(QUICK) {
+    if(getTestOption(QUICK_OPTION)) {
         maxCount = sizeof(locale)/sizeof(locale[0]);
     } else {
         maxCount = uloc_countAvailable();
@@ -1719,7 +1719,7 @@ static void TestCEValidity()
         UColTokenParser src;
         uint32_t strength = 0;
         uint16_t specs = 0;
-        if(QUICK) {
+        if(getTestOption(QUICK_OPTION)) {
             loc = locale[count];
         } else {
             loc = uloc_getAvailable(count);

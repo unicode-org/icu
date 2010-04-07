@@ -428,7 +428,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
     log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
                 sourceLen, targ-junkout);
 
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
       char junk[9999];
       char offset_str[9999];
@@ -589,7 +589,7 @@ static ETestConvertResult testConvertToU( const uint8_t *source, int sourcelen, 
 
     log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
         sourcelen, targ-junkout);
-    if(VERBOSITY)
+    if(getTestOption(VERBOSITY_OPTION))
     {
         char junk[9999];
         char offset_str[9999];
@@ -3530,7 +3530,7 @@ TestFullRoundtrip(const char* cp){
 
 static void
 TestRoundTrippingAllUTF(void){
-    if(!QUICK){
+    if(!getTestOption(QUICK_OPTION)){
         log_verbose("Running exhaustive round trip test for BOCU-1\n");
         TestFullRoundtrip("BOCU-1");
         log_verbose("Running exhaustive round trip test for SCSU\n");

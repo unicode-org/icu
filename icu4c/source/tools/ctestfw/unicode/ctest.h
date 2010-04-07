@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1996-2009, International Business Machines
+ *   Copyright (C) 1996-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -23,53 +23,61 @@ typedef struct TestNode TestNode;
 U_CDECL_END
 
 /**
- * Set this to zero to disable log_verbose() messages.
- * Otherwise nonzero to see log_verbose() messages.
- *
- * @internal Internal APIs for testing purpose only
- */
-extern T_CTEST_EXPORT_API int REPEAT_TESTS;
-
-/**
- * Set this to zero to disable log_verbose() messages.
- * Otherwise nonzero to see log_verbose() messages.
- *
- * @internal Internal APIs for testing purpose only
- */
-extern T_CTEST_EXPORT_API int VERBOSITY;
-
-/**
- * Set this to zero to disable log_verbose() messages.
- * Otherwise nonzero to see log_verbose() messages.
- *
- * @internal Internal APIs for testing purpose only
- */
-extern T_CTEST_EXPORT_API int ERR_MSG;
-
-/**
- * Set this to zero to disable some of the slower tests.
- * Otherwise nonzero to run the slower tests.
- *
- * @internal Internal APIs for testing purpose only
- */
-extern T_CTEST_EXPORT_API int QUICK;
-
-/**
- * Set this to nonzero to warn (not error) on missing data. 
- * Otherwise, zero will cause an error to be propagated when data is not available.
- * Affects the behavior of log_dataerr.
- *
- * @see log_data_err
- * @internal Internal APIs for testing purpose only
- */
-extern T_CTEST_EXPORT_API int WARN_ON_MISSING_DATA;
-
-/**
- * ICU tracing level, is set by command line option
+ * This is use to set or get the option value for REPEAT_TESTS.
+ * Use with set/getTestOption().
  *
  * @internal
  */
-extern T_CTEST_EXPORT_API UTraceLevel ICU_TRACE;
+#define REPEAT_TESTS_OPTION 1
+
+/**
+ * This is use to set or get the option value for VERBOSITY.
+ * When option is set to zero to disable log_verbose() messages.
+ * Otherwise nonzero to see log_verbose() messages.
+ * Use with set/getTestOption().
+ *
+ * @internal
+ */
+#define VERBOSITY_OPTION 2
+
+/**
+ * This is use to set or get the option value for ERR_MSG.
+ * Use with set/getTestOption().
+ *
+ * @internal
+ */
+#define ERR_MSG_OPTION 3
+
+/**
+ * This is use to set or get the option value for QUICK.
+ * When option is zero, disable some of the slower tests.
+ * Otherwise nonzero to run the slower tests.
+ * Use with set/getTestOption().
+ *
+ * @internal
+ */
+#define QUICK_OPTION 4
+
+/**
+ * This is use to set or get the option value for WARN_ON_MISSING_DATA.
+ * When option is nonzero, warn on missing data.
+ * Otherwise, errors are propagated when data is not available.
+ * Affects the behavior of log_dataerr.
+ * Use with set/getTestOption().
+ *
+ * @see log_data_err
+ * @internal
+ */
+#define WARN_ON_MISSING_DATA_OPTION 5
+
+/**
+ * This is use to set or get the option value for ICU_TRACE.
+ * ICU tracing level, is set by command line option.
+ * Use with set/getTestOption().
+ *
+ * @internal
+ */
+#define ICU_TRACE_OPTION 6
 
 /**
  * Maximum amount of memory uprv_malloc should allocate before returning NULL.
@@ -85,6 +93,32 @@ extern T_CTEST_EXPORT_API size_t MAX_MEMORY_ALLOCATION;
  */
 extern T_CTEST_EXPORT_API int32_t ALLOCATION_COUNT;
 
+/**
+ * Pass to setTestOption to decrement the test option value.
+ *
+ * @internal
+ */
+#define DECREMENT_OPTION_VALUE -99
+
+/**
+ * Gets the test option set on commandline.
+ *
+ * @param testOption macro definition for the individual test option
+ * @return value of test option, zero if option is not set or off
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_API int32_t T_CTEST_EXPORT2
+getTestOption ( int32_t testOption );
+
+/**
+ * Sets the test option with value given on commandline.
+ *
+ * @param testOption macro definition for the individual test option
+ * @param value to set the test option to
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_API void T_CTEST_EXPORT2
+setTestOption ( int32_t testOption, int32_t value);
 
 /**
  * Show the names of all nodes.

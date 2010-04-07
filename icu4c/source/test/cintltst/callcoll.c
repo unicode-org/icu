@@ -287,7 +287,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     }
 
     /* convert the strings to UTF-8 and do try comparing with char iterator */
-    if(QUICK <= 0) { /*!QUICK*/
+    if(getTestOption(QUICK_OPTION) <= 0) { /*!QUICK*/
       char utf8Source[256], utf8Target[256];
       int32_t utf8SourceLen = 0, utf8TargetLen = 0;
       u_strToUTF8(utf8Source, 256, &utf8SourceLen, source, sLen, &status);
@@ -329,7 +329,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
       int32_t i = 0;
       int32_t partialSizes[] = { 3, 1, 2, 4, 8, 20, 80 }; /* just size 3 in the quick mode */
       int32_t partialSizesSize = 1;
-      if(QUICK <= 0) {
+      if(getTestOption(QUICK_OPTION) <= 0) {
         partialSizesSize = 7;
       }
       /*log_verbose("partial sortkey test piecesize=");*/
@@ -344,7 +344,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
             aescstrdup(source,-1), aescstrdup(target,-1), partialSizes[i]);
         }
 
-        if(QUICK <= 0 && norm != UCOL_ON) {
+        if(getTestOption(QUICK_OPTION) <= 0 && norm != UCOL_ON) {
           /*log_verbose("N ");*/
           ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
           partialNormalizedSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);

@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
+ * Copyright (c) 1997-2010, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -395,7 +395,7 @@ static void TestSelector()
     int32_t excluded_set_id;
     int32_t num_encodings;
     const char **encodings = getEncodingsFns[testCaseIdx](&num_encodings);
-    if (QUICK && num_encodings > 25) {
+    if (getTestOption(QUICK_OPTION) && num_encodings > 25) {
       uprv_free((void *)encodings);
       continue;
     }
@@ -446,7 +446,7 @@ static void TestSelector()
         int32_t length8, length16;
 
         s = text_nextString(&text, &length8);
-        if (s == NULL || (QUICK && text.number > 3)) {
+        if (s == NULL || (getTestOption(QUICK_OPTION) && text.number > 3)) {
           break;
         }
 
