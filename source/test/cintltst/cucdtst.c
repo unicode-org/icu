@@ -1689,7 +1689,7 @@ TestCharNames() {
     }
 
     /* Test getCharNameCharacters */
-    if(!QUICK) {
+    if(!getTestOption(QUICK_OPTION)) {
         enum { BUFSIZE = 256 };
         UErrorCode ec = U_ZERO_ERROR;
         char buf[BUFSIZE];
@@ -1798,7 +1798,7 @@ TestCharNames() {
         if (!ok) {
             log_err("FAIL: uprv_getCharNameCharacters() returned %s, expected %s (too many lowercase a-z are ok)\n",
                     aescstrdup(pat, l1), aescstrdup(dumbPat, l2));
-        } else if(VERBOSITY) {
+        } else if(getTestOption(VERBOSITY_OPTION)) {
             log_verbose("Ok: uprv_getCharNameCharacters() returned %s\n", aescstrdup(pat, l1));
         }
 

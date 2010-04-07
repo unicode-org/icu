@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -202,7 +202,7 @@ void TestConstruction1()
         int n;
 
         log_err("Construction test failed for ures_open();\n");
-        if(!VERBOSITY)
+        if(!getTestOption(VERBOSITY_OPTION))
             log_info("(run verbose for more information)\n");
 
         log_verbose("\nGot->");

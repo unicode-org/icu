@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -830,3 +830,49 @@ static void help ( const char *argv0 )
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");
 }
 
+int32_t T_CTEST_EXPORT2
+getTestOption ( int32_t testOption ) {
+    switch (testOption) {
+        case VERBOSITY_OPTION:
+            return VERBOSITY;
+        case WARN_ON_MISSING_DATA_OPTION:
+            return WARN_ON_MISSING_DATA;
+        case QUICK_OPTION:
+            return QUICK;
+        case REPEAT_TESTS_OPTION:
+            return REPEAT_TESTS;
+        case ERR_MSG_OPTION:
+            return ERR_MSG;
+        case ICU_TRACE_OPTION:
+            return ICU_TRACE;
+        default :
+            return 0;
+    }
+}
+
+void T_CTEST_EXPORT2
+setTestOption ( int32_t testOption, int32_t value) {
+    if (value == DECREMENT_OPTION_VALUE) {
+        value = getTestOption(testOption);
+        --value;
+    }
+    switch (testOption) {
+        case VERBOSITY_OPTION:
+            VERBOSITY = value;
+            break;
+        case WARN_ON_MISSING_DATA_OPTION:
+            WARN_ON_MISSING_DATA = value;
+            break;
+        case QUICK_OPTION:
+            QUICK = value;
+            break;
+        case REPEAT_TESTS_OPTION:
+            REPEAT_TESTS = value;
+            break;
+        case ICU_TRACE_OPTION:
+            ICU_TRACE = value;
+            break;
+        default :
+            break;
+    }
+}
