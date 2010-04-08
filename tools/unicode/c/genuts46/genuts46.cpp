@@ -68,11 +68,6 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
                               dest, destString.getCapacity(),
                               USPREP_DEFAULT, NULL, &errorCode);
     destString.releaseBuffer(destLength);
-#if 0
-    if(c==0x2065) {
-        fprintf(stderr, "*** U+2065: %s destLength=%d\n", u_errorName(errorCode), (int)destLength);
-    }
-#endif
     if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
         return -1;
     } else {
@@ -130,20 +125,6 @@ main(int argc, const char *argv[]) {
         "-[:ascii:]]"
         "[\\u002Da-zA-Z0-9]]", -1, US_INV), errorCode);
 
-#if 0
-    icu::UnicodeSet baseExclusionSet(icu::UnicodeString(
-        "[\\u04C0\\u10A0-\\u10C5\\u2132\\u2183"
-        "\\U0002F868\\U0002F874\\U0002F91F\\U0002F95F\\U0002F9BF"
-        "\\u3164\\uFFA0\\u115F\\u1160\\u17B4\\u17B5\\u1806\\uFFFC\\uFFFD"
-        "\\u200E\\u200F\\u202A-\\u202E"
-        "\\u2061-\\u2063"
-        "\\U0001D173-\\U0001D17A"
-        "\\u200B\\u2060\\uFEFF"
-        "\\u206A-\\u206F"
-        "\\U000E0001\\U000E0020-\\U000E007F"
-        "[:Cn:]]", -1, US_INV), errorCode);
-#endif
-
     icu::UnicodeSet deviationSet(
         UNICODE_STRING_SIMPLE("[\\u00DF\\u03C2\\u200C\\u200D]"), errorCode);
     errorCode.assertSuccess();
@@ -187,12 +168,6 @@ main(int argc, const char *argv[]) {
             ) {
                 baseExclusionSet.add(c);
             }
-#if 0
-            if(c==0x221 || c==0x2065) {
-                fprintf(stderr, "*** U+%04lX: status=%d baseValidSet.contains(c)=%d .containsAll(NFKC_CF(c))=%d\n",
-                        (long)c, namePrepStatus, baseValidSet.contains(c), baseValidSet.containsAll(mapping));
-            }
-#endif
         }
     }
 
