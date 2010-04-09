@@ -1,6 +1,0 @@
-#
-# Note:   The casing of block names is not normative.
-#         For example, "Basic Latin" and "BASIC LATIN" are equivalent.
-#
-# Format:
-# Start Code..End Code; Block Name

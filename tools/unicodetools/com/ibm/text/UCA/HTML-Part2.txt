@@ -1,8 +1,0 @@
-          <hr width="50%">
-          <p align="center"><script language="Javascript" src="http://www.unicode.org/webscripts/lastModified.js"></script>              
-        </blockquote>
-      </td>
-  </table>
-</form>
-</body>
-</html>
