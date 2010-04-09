@@ -420,6 +420,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
     // private data members ----------------------------------------------
 
     /**
+     * Unicode data version used by the current release
+     */
+    private static final VersionInfo UNICODE_VERSION;
+
+    /**
      * Version number stored as a byte for each of the major, minor, milli and
      * micro numbers in the 32 bit int.
      * Most significant for the major and the least significant contains the
@@ -466,8 +471,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_5_0   = getInstance(5, 0, 0, 0);
         UNICODE_5_1   = getInstance(5, 1, 0, 0);
         UNICODE_5_2   = getInstance(5, 2, 0, 0);
+
         ICU_VERSION   = getInstance(4, 5, 1, 0);
         ICU_DATA_VERSION = getInstance(4, 5, 0, 0);
+        UNICODE_VERSION = UNICODE_5_2;
+
         UCOL_RUNTIME_VERSION = getInstance(6);
         UCOL_BUILDER_VERSION = getInstance(7);
         UCOL_TAILORINGS_VERSION = getInstance(1);
@@ -496,4 +504,70 @@ public final class VersionInfo implements Comparable<VersionInfo>
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
 
+    /**
+     * Main method prints out ICU version information
+     * @param args arguments (currently not used)
+     */
+    public static void main(String[] args) {
+        String icuApiVer;
+
+        if (ICU_VERSION.getMinor() % 2 != 0) {
+            // Development mile stone
+            int major = ICU_VERSION.getMajor();
+            int minor = ICU_VERSION.getMinor() + 1;
+            if (minor >= 10) {
+                minor -= 10;
+                major++;
+            }
+            icuApiVer = "" + major + "." + minor + "M" + ICU_VERSION.getMilli();
+        } else {
+            icuApiVer = ICU_VERSION.getVersionString(2, 2);
+        }
+
+        System.out.println("International Component for Unicode for Java " + icuApiVer);
+
+        System.out.println("");
+        System.out.println("Implementation Version: " + ICU_VERSION.getVersionString(2, 4));
+        System.out.println("Unicode Data Version:   " + UNICODE_VERSION.getVersionString(2, 4));
+        System.out.println("CLDR Data Version:      " + LocaleData.getCLDRVersion().getVersionString(2, 4));
+        System.out.println("Time Zone Data Version: " + TimeZone.getTZDataVersion());
+    }
+
+    /**
+     * Generate version string separated by dots with
+     * the specified digit width.  Version digit 0
+     * after <code>minDigits</code> will be trimmed off.
+     * @param minDigits Minimum number of version digits
+     * @param maxDigits Maximum number of version digits
+     * @return A tailored version string
+     */
+    private String getVersionString(int minDigits, int maxDigits) {
+        if (minDigits < 1 || maxDigits < 1
+                || minDigits > 4 || maxDigits > 4 || minDigits > maxDigits) {
+            throw new IllegalArgumentException("Invalid min/maxDigits range");
+        }
+
+        int[] digits = new int[4];
+        digits[0] = getMajor();
+        digits[1] = getMinor();
+        digits[2] = getMilli();
+        digits[3] = getMicro();
+
+        int numDigits = maxDigits;
+        while (numDigits > minDigits) {
+            if (digits[numDigits - 1] != 0) {
+                break;
+            }
+            numDigits--;
+        }
+
+        StringBuilder verStr = new StringBuilder(7);
+        verStr.append(digits[0]);
+        for (int i = 1; i < numDigits; i++) {
+            verStr.append(".");
+            verStr.append(digits[i]);
+        }
+
+        return verStr.toString();
+    }
 }
