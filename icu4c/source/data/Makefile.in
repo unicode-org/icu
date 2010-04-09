@@ -475,40 +475,20 @@ endif
 ####################################################    DAT
 # DAT FILES
 
-# uprops.icu
-$(BUILDDIR)/uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLBINDIR)/genprops$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
-	$(INVOKE) $(TOOLBINDIR)/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
-	$(INVOKE) $(TOOLBINDIR)/genprops --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
-
-# ubidi.icu
-$(BUILDDIR)/ubidi.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLBINDIR)/genbidi$(TOOLEXEEXT)
-	$(INVOKE) $(TOOLBINDIR)/genbidi -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
-	$(INVOKE) $(TOOLBINDIR)/genbidi --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
-
-# ucase.icu
-$(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLBINDIR)/gencase$(TOOLEXEEXT)
-	$(INVOKE) $(TOOLBINDIR)/gencase -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
-	$(INVOKE) $(TOOLBINDIR)/gencase --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
-
-# pnames.icu
-$(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLBINDIR)/genpname$(TOOLEXEEXT)
-	$(INVOKE) $(TOOLBINDIR)/genpname -d $(BUILDDIR)
-
 # ucadata.icu
 # used to depend on $(BUILDDIR)/$(ICUDT)ucase.icu
 # see Jitterbug 4497
 $(COLBLDDIR)/ucadata.icu $(COLBLDDIR)/invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLBINDIR)/genuca$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)nfc.nrm
 	$(INVOKE) $(TOOLBINDIR)/genuca -s $(UNICODEDATADIR) -d $(COLBLDDIR) -i $(BUILDDIR) 
 
-# unames.icu
-$(BUILDDIR)/unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/NameAliases.txt $(TOOLBINDIR)/gennames$(TOOLEXEEXT)
-	$(INVOKE) $(TOOLBINDIR)/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/NameAliases.txt -u $(UNICODE_VERSION)
-
 # cnvalias.icu
 $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLBINDIR)/gencnval$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # Targets for prebuilt Unicode data
+$(BUILDDIR)/%.icu: $(SRCDATADIR)/in/%.icu
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
+
 $(BUILDDIR)/%.nrm: $(SRCDATADIR)/in/%.nrm
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
@@ -781,7 +761,6 @@ $(BUILDDIR)/$(INDEX_NAME).res: $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 # Changed in Makefile.in revision 1.147. See Jitterbug 4497.
 uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
-	@echo Unicode .c source files built to $(OUTTMPDIR)
 
 # Build the ICU4J icudata.jar.
 # Command line:
