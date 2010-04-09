@@ -2301,8 +2301,6 @@ icu4c/source/test/testdata/translit_rules.txt svneol=native#text/plain
 icu4c/source/test/testdata/uni-text.bin -text
 icu4c/source/test/thaitest/space.txt svneol=native#text/plain
 icu4c/source/tools/gendraft/exclude.txt svneol=native#text/plain
-icu4c/source/tools/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
-icu4c/source/tools/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt svneol=native#text/plain
 icu4c/source/tools/tzcode/readme.txt svneol=native#text/plain
 icu4c/unicode-license.txt svneol=native#text/plain
@@ -2786,6 +2784,8 @@ tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
+tools/unicode/c/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
+tools/unicode/c/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
 tools/unicodetools/com/ibm/rbm/docs/faq.html svneol=native#text/html
 tools/unicodetools/com/ibm/rbm/docs/future_features.html svneol=native#text/html
