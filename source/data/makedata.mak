@@ -490,7 +490,6 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 #   C:\svn\icuproj\icu\trunk\source\data>nmake -f makedata.mak ICUMAKE=C:\svn\icuproj\icu\trunk\source\data\ CFG=x86\Debug uni-core-data
 uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu"
 	@echo Unicode .icu files built to "$(ICUBLD_PKG)"
-	@echo Unicode .c source files built to "$(ICUTMP)"
 
 # Build the ICU4J icudata.jar and testdata.jar.
 # see icu4j-readme.txt
@@ -916,35 +915,6 @@ res_index:table(nofallback) {
 	@echo Creating data DLL version information from $**
 	@rc.exe /i "..\..\..\..\common" /r /fo $@ $**
 
-# Targets for unames.icu
-"$(ICUBLD_PKG)\unames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
-	@echo Creating data file for Unicode Names
-	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) -d "$(ICUBLD_PKG)" "$(ICUUNIDATA)\UnicodeData.txt" "$(ICUUNIDATA)\NameAliases.txt"
-
-# Targets for pnames.icu
-# >> Depends on the Unicode data as well as uchar.h and uscript.h <<
-"$(ICUBLD_PKG)\pnames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genpname\$(CFG)\genpname.exe" "$(ICUP)\source\common\unicode\uchar.h" "$(ICUP)\source\common\unicode\uscript.h"
-	@echo Creating data file for Unicode Property Names
-	@"$(ICUTOOLS)\genpname\$(CFG)\genpname" -d "$(ICUBLD_PKG)"
-
-# Targets for uprops.icu
-"$(ICUBLD_PKG)\uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(ICUBLD_PKG)\pnames.icu"
-	@echo Creating data file for Unicode Character Properties
-	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUBLD_PKG)"
-	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" --csource -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUTMP)"
-
-# Targets for ubidi.icu
-"$(ICUBLD_PKG)\ubidi.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genbidi\$(CFG)\genbidi.exe"
-	@echo Creating data file for Unicode BiDi/Shaping Properties
-	@"$(ICUTOOLS)\genbidi\$(CFG)\genbidi" -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUBLD_PKG)"
-	@"$(ICUTOOLS)\genbidi\$(CFG)\genbidi" --csource -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUTMP)"
-
-# Targets for ucase.icu
-"$(ICUBLD_PKG)\ucase.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gencase\$(CFG)\gencase.exe"
-	@echo Creating data file for Unicode Case Mapping Properties
-	@"$(ICUTOOLS)\gencase\$(CFG)\gencase" -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUBLD_PKG)"
-	@"$(ICUTOOLS)\gencase\$(CFG)\gencase" --csource -u $(UNICODE_VERSION) -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)" -d "$(ICUTMP)"
-
 # Targets for converters
 "$(ICUBLD_PKG)\cnvalias.icu" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
@@ -958,6 +928,21 @@ res_index:table(nofallback) {
 	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD_PKG)\$(ICUCOL)" -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)"
 
 # Targets for prebuilt Unicode data
+"$(ICUBLD_PKG)\pnames.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\pnames.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\ubidi.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\ubidi.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\ucase.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\ucase.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\uprops.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\uprops.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\unames.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\unames.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
 "$(ICUBLD_PKG)\nfc.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\nfc.nrm
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
