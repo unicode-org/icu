@@ -50,6 +50,8 @@ README text !eol
 
 icu4c/icu4c.css -text
 icu4c/source/data/curr/pool.res -text
+icu4c/source/data/in/coll/invuca.icu -text
+icu4c/source/data/in/coll/ucadata.icu -text
 icu4c/source/data/in/nfc.nrm -text
 icu4c/source/data/in/nfkc.nrm -text
 icu4c/source/data/in/nfkc_cf.nrm -text
