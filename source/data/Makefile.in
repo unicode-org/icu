@@ -475,12 +475,6 @@ endif
 ####################################################    DAT
 # DAT FILES
 
-# ucadata.icu
-# used to depend on $(BUILDDIR)/$(ICUDT)ucase.icu
-# see Jitterbug 4497
-$(COLBLDDIR)/ucadata.icu $(COLBLDDIR)/invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLBINDIR)/genuca$(TOOLEXEEXT) $(BUILDDIR)/$(ICUDT)nfc.nrm
-	$(INVOKE) $(TOOLBINDIR)/genuca -s $(UNICODEDATADIR) -d $(COLBLDDIR) -i $(BUILDDIR) 
-
 # cnvalias.icu
 $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLBINDIR)/gencnval$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
@@ -490,6 +484,9 @@ $(BUILDDIR)/%.icu: $(SRCDATADIR)/in/%.icu
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
 $(BUILDDIR)/%.nrm: $(SRCDATADIR)/in/%.nrm
+	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
+
+$(BUILDDIR)/coll/%.icu: $(SRCDATADIR)/in/coll/%.icu
 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
 
 ####################################################    SPP
