@@ -13,7 +13,7 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools
 
-SUBDIRS = toolutil ctestfw makeconv genrb genuca genbrk genctd \
+SUBDIRS = toolutil ctestfw makeconv genrb genbrk genctd \
 gencnval gensprep icuinfo genccode gencmn icupkg pkgdata \
 gentest gennorm2 gencfu
 
