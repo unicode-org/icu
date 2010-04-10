@@ -920,13 +920,6 @@ res_index:table(nofallback) {
 	@echo Creating data file for Converter Aliases
 	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" -d "$(ICUBLD_PKG)" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"
 
-# Targets for ucadata.icu & invuca.icu
-# used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\nfc.nrm"
-# see Jitterbug 4497
-"$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe" "$(ICUBLD_PKG)\nfc.nrm"
-	@echo Creating UCA data files
-	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD_PKG)\$(ICUCOL)" -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)"
-
 # Targets for prebuilt Unicode data
 "$(ICUBLD_PKG)\pnames.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\pnames.icu
 	"$(ICUPBIN)\icupkg" -tl $? $@
@@ -950,6 +943,12 @@ res_index:table(nofallback) {
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
 "$(ICUBLD_PKG)\nfkc_cf.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\nfkc_cf.nrm
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\coll\invuca.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\invuca.icu
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
+"$(ICUBLD_PKG)\coll\ucadata.icu": $(ICUSRCDATA_RELATIVE_PATH)\in\coll\ucadata.icu
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
 # Stringprep .spp file generation.

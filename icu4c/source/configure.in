@@ -1273,7 +1273,6 @@ AC_CONFIG_FILES([icudefs.mk \
 		tools/toolutil/Makefile \
 		tools/makeconv/Makefile \
 		tools/genrb/Makefile \
-		tools/genuca/Makefile \
 		tools/genccode/Makefile \
 		tools/gencmn/Makefile \
 		tools/gencnval/Makefile \
