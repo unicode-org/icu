@@ -585,7 +585,7 @@
             </packageset>
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${icu4j.build-tools.jar}">
                 <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
-                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api"/>
+                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api2"/>
                 <param name="-internal"/>
                 <param name="-gzip"/>
             </doclet>
@@ -593,6 +593,49 @@
     </target>
 
     <target name="apireport" depends="info, gatherapi" description="Run API report generator tool">
+        <java classname="com.ibm.icu.dev.tool.docs.ReportAPI"
+                classpath="${icu4j.build-tools.jar}"
+                failonerror="true">
+            <arg value="-old:" />
+            <arg value="${icu4j.build-tools.dir}/icu4j${api.report.prev.version}.api2.gz" />
+            <arg value="-new:" />
+            <arg value="${out.dir}/icu4j${api.report.version}.api2.gz" />
+            <arg value="-html" />
+            <arg value="-internal" />
+            <arg value="-out:" />
+            <arg value="${out.dir}/icu4j_compare_${api.report.prev.version}_${api.report.version}.html" />
+        </java>
+    </target>
+
+    <target name="gatherapiOld" depends="info, build-tools" description="Run API database generator tool (Pre Java 5 style)">
+        <mkdir dir="${out.dir}"/>
+        <javadoc source="1.5">
+            <packageset dir="${icu4j.core.dir}/src">
+                <include name="com/ibm/icu/lang/**"/>
+                <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.charset.dir}/src">
+                <include name="com/ibm/icu/charset/**"/>
+            </packageset>
+            <packageset dir="${icu4j.translit.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIDataOld" path="${icu4j.build-tools.jar}">
+                <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
+                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api"/>
+                <param name="-internal"/>
+                <param name="-gzip"/>
+            </doclet>
+        </javadoc>
+    </target>
+
+    <target name="apireportOld" depends="info, gatherapiOld" description="Run API report generator tool (Pre Java 5 Style)">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI"
                 classpath="${icu4j.build-tools.jar}"
                 failonerror="true">
