@@ -17,27 +17,27 @@
  * - abstract or non-abstract (AB NA)
  * - constructor, member, field (C M F)
  *
- * Requires JDK 1.5 or later
+ * Requires JDK 1.4.2 or later
  * 
  * Sample compilation:
- * c:/doug/java/jdk1.5/build/windows-i586/bin/javac *.java
+ * c:/doug/java/jdk1.4.2/build/windows-i586/bin/javac *.java
  *
  * Sample execution
- * c:/j2sdk1.5/bin/javadoc
- *   -classpath c:/jd2sk1.5/lib/tools.jar 
+ * c:/j2sdk1.4.2/bin/javadoc
+ *   -classpath c:/jd2sk1.4.2/lib/tools.jar 
  *   -doclet com.ibm.icu.dev.tool.docs.GatherAPIData
- *   -docletpath c:/doug/icu4j/tools/build/out/lib/icu4j-build-tools.jar
- *   -sourcepath c:/doug/icu4j/main/classes/core/src 
- *   -name "ICU4J 4.2"
- *   -output icu4j42.api2
+ *   -docletpath c:/doug/cvsproj/icu4j/src 
+ *   -sourcepath c:/doug/cvsproj/icu4j/src 
+ *   -name "ICU4J 3.0"
+ *   -output icu4j30.api
  *   -gzip
- *   -source 1.5
+ *   -source 1.4
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: provide command-line control of filters of which subclasses/packages to process
- * todo: record full inheritance hierarchy, not just immediate inheritance 
+ * todo: record full inheritance heirarchy, not just immediate inheritance 
  * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it 
- *       were in a different pkg/class hierarchy (facilitates comparison of icu4j and java)
+ *       were in a different pkg/class heirarchy (facilitates comparison of icu4j and java)
  */
 
 package com.ibm.icu.dev.tool.docs;
@@ -58,16 +58,15 @@ import java.util.zip.ZipOutputStream;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.ConstructorDoc;
+import com.sun.javadoc.Doc;
 import com.sun.javadoc.ExecutableMemberDoc;
 import com.sun.javadoc.FieldDoc;
-import com.sun.javadoc.LanguageVersion;
-import com.sun.javadoc.MemberDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 
-public class GatherAPIData {
+public class GatherAPIDataOld {
     RootDoc root;
     TreeSet results;
     String srcName = "Current"; // default source name
@@ -101,18 +100,10 @@ public class GatherAPIData {
     }
 
     public static boolean start(RootDoc root) {
-        return new GatherAPIData(root).run();
+        return new GatherAPIDataOld(root).run();
     }
 
-    /**
-     * If you don't do this, javadoc treats enums like regular classes!
-     * doesn't matter if you pass -source 1.5 or not.
-     */
-    public static LanguageVersion languageVersion() {
-        return LanguageVersion.JAVA_1_5;
-    }
-
-    GatherAPIData(RootDoc root) {
+    GatherAPIDataOld(RootDoc root) {
         this.root = root;
 
         String[][] options = root.options();
@@ -201,9 +192,7 @@ public class GatherAPIData {
             doDocs(cdoc.fields());
             doDocs(cdoc.constructors());
             doDocs(cdoc.methods());
-            // don't call this to iterate over inner classes,
-            // root.classes already includes them
-            // doDocs(cdoc.innerClasses());
+            doDocs(cdoc.innerClasses());
         }
 
         APIInfo info = createInfo(doc);
@@ -212,70 +201,13 @@ public class GatherAPIData {
         }
     }
 
-    // Sigh. Javadoc doesn't indicate when the compiler generates
-    // the values and valueOf enum methods.  The position of the
-    // method for these is not always the same as the position of
-    // the class, though it often is, so we can't use that.
-
-    private boolean isIgnoredEnumMethod(ProgramElementDoc doc) {
-        if (doc.isMethod() && doc.containingClass().isEnum()) {
-            // System.out.println("*** " + doc.qualifiedName() + " pos: " +
-            //                    doc.position().line() +
-            //                    " containined by: " +
-            //                    doc.containingClass().name() +
-            //                    " pos: " +
-            //                    doc.containingClass().position().line());
-            // return doc.position().line() == doc.containingClass().position().line();
-
-            String name = doc.name();
-            // assume we don't have enums that overload these method names.
-            return "values".equals(name) || "valueOf".equals(name);
-        }
-        return false;
-    }
-
-    // isSynthesized also doesn't seem to work.  Let's do this, documenting
-    // synthesized constructors for abstract classes is kind of weird.
-    // We can't actually tell if the constructor was synthesized or is
-    // actually in the docs, but this shouldn't matter.  We don't really
-    // care if we didn't properly document the draft status of
-    // default constructors for abstract classes.
-
-    private boolean isAbstractClassDefaultConstructor(ProgramElementDoc doc) {
-        return doc.isConstructor()
-            && doc.containingClass().isAbstract()
-            && "()".equals(((ConstructorDoc) doc).signature());
-    }
-
     private boolean ignore(ProgramElementDoc doc) {
         if (doc == null) return true;
         if (doc.isPrivate() || doc.isPackagePrivate()) return true;
-        if (doc instanceof MemberDoc && ((MemberDoc)doc).isSynthetic()) return true;
-        if (doc.qualifiedName().indexOf(".misc") != -1) {
-            System.out.println("misc: " + doc.qualifiedName()); return true;
+        if (doc instanceof ConstructorDoc && ((ConstructorDoc)doc).isSynthetic()) return true;
+        if (doc.qualifiedName().indexOf(".misc") != -1) { 
+            System.out.println("misc: " + doc.qualifiedName()); return true; 
         }
-        if (isIgnoredEnumMethod(doc)) {
-            return true;
-        }
-        if (isAbstractClassDefaultConstructor(doc)) {
-            return true;
-        }
-
-        if (false && doc.qualifiedName().indexOf("LocaleDisplayNames") != -1) {
-          System.err.print("*** " + doc.qualifiedName() + ":");
-          if (doc.isClass()) System.err.print(" class");
-          if (doc.isConstructor()) System.err.print(" constructor");
-          if (doc.isEnum()) System.err.print(" enum");
-          if (doc.isEnumConstant()) System.err.print(" enum_constant");
-          if (doc.isError()) System.err.print(" error");
-          if (doc.isException()) System.err.print(" exception");
-          if (doc.isField()) System.err.print(" field");
-          if (doc.isInterface()) System.err.print(" interface");
-          if (doc.isMethod()) System.err.print(" method");
-          if (doc.isOrdinaryClass()) System.err.print(" ordinary_class");
-          System.err.println();
-        }
-
         if (!internal) { // debug
             Tag[] tags = doc.tags();
             for (int i = 0; i < tags.length; ++i) {
@@ -326,7 +258,7 @@ public class GatherAPIData {
         if (version) {
             info.includeStatusVersion(true);
         }
-
+            
         // status
         String[] version = new String[1];
         info.setType(APIInfo.STA, tagStatus(doc, version));
@@ -369,8 +301,8 @@ public class GatherAPIData {
         }
 
         info.setPackage(trimBase(doc.containingPackage().name()));
-        info.setClassName((doc.isClass() || doc.isInterface() || (doc.containingClass() == null))
-                          ? ""
+        info.setClassName((doc.isClass() || doc.isInterface() || (doc.containingClass() == null)) 
+                          ? "" 
                           : trimBase(doc.containingClass().name()));
         info.setName(trimBase(doc.name()));
 
@@ -380,7 +312,7 @@ public class GatherAPIData {
         } else if (doc instanceof ClassDoc) {
             ClassDoc cdoc = (ClassDoc)doc;
 
-            if (cdoc.isClass() && cdoc.isAbstract()) {
+            if (cdoc.isClass() && cdoc.isAbstract()) { 
                 // interfaces are abstract by default, don't mark them as abstract
                 info.setAbstract();
             }
@@ -426,19 +358,17 @@ public class GatherAPIData {
         return info;
     }
 
-    private int tagStatus(final ProgramElementDoc doc, String[] version) {
+    private int tagStatus(final Doc doc, String[] version) {
         class Result {
             int res = -1;
-            void set(int val) {
+            void set(int val) { 
                 if (res != -1) {
                     if (val == APIInfo.STA_DEPRECATED) {
                         // ok to have both a 'standard' tag and deprecated
                         return;
                     } else if (res != APIInfo.STA_DEPRECATED) {
                         // if already not deprecated, this is an error
-                        System.err.println("bad doc: " + doc + " both: "
-                                           + APIInfo.getTypeValName(APIInfo.STA, res) + " and: "
-                                           + APIInfo.getTypeValName(APIInfo.STA, val));
+                        System.err.println("bad doc: " + doc + " both: " + APIInfo.getTypeValName(APIInfo.STA, res) + " and: " + APIInfo.getTypeValName(APIInfo.STA, val)); 
                         return;
                     }
                 }
@@ -553,8 +483,8 @@ public class GatherAPIData {
 
     private static int tagKindIndex(String kind) {
         final String[] tagKinds = {
-            "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see",
-            "@version", "@param", "@return", "@throws", "@obsolete", "@exception", "@serial"
+            "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
+            "@param", "@return", "@throws", "@obsolete", "@exception", "@serial"
         };
 
         for (int i = 0; i < tagKinds.length; ++i) {

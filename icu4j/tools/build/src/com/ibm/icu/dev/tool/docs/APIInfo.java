@@ -24,13 +24,16 @@ class APIInfo {
 
     // public keys and values for queries on info
 
-    public static final int STA = 0, STA_DRAFT = 0, STA_STABLE = 1, STA_DEPRECATED = 2, STA_OBSOLETE = 3, STA_INTERNAL = 4;
-    public static final int VIS = 1, VIS_PACKAGE = 0, VIS_PUBLIC= 1, VIS_PROTECTED = 2, VIS_PRIVATE = 3;
+    public static final int STA = 0, STA_DRAFT = 0, STA_STABLE = 1, STA_DEPRECATED = 2,
+      STA_OBSOLETE = 3, STA_INTERNAL = 4;
+    public static final int VIS = 1, VIS_PACKAGE = 0, VIS_PUBLIC= 1, VIS_PROTECTED = 2,
+      VIS_PRIVATE = 3;
     public static final int STK = 2, STK_STATIC = 1;
     public static final int FIN = 3, FIN_FINAL = 1;
     public static final int SYN = 4, SYN_SYNCHRONIZED = 1;
     public static final int ABS = 5, ABS_ABSTRACT = 1;
-    public static final int CAT = 6, CAT_CLASS = 0, CAT_FIELD = 1, CAT_CONSTRUCTOR = 2, CAT_METHOD = 3;
+    public static final int CAT = 6, CAT_CLASS = 0, CAT_FIELD = 1, CAT_CONSTRUCTOR = 2,
+      CAT_METHOD = 3;
     public static final int PAK = 7;
     public static final int CLS = 8;
     public static final int NAM = 9;
@@ -45,11 +48,14 @@ class APIInfo {
     public static final char SEP = ';';
 
     // Internal State
-    private int    info; // information about numeric values packed into an int as variable-length nibbles
-    private String pack = ""; // package
+
+    private int    info;       // information about numeric values packed into an int
+                               // as variable-length nibbles
+    private String pack = "";  // package
     private String cls  = "";  // enclosing class
-    private String name = ""; // name
-    private String sig  = "";  // signature, class: inheritance, method: signature, field: type, const: signature
+    private String name = "";  // name
+    private String sig  = "";  // signature, class: inheritance, method: signature,
+                               // field: type, const: signature
     private String exc  = "";  // throws
     private String stver = ""; // status version
 
@@ -208,7 +214,8 @@ class APIInfo {
             }
         }
 
-        throw new IllegalArgumentException("unrecognized value '" + val + "' for type '" + typeNames[typ] + "'");
+        throw new IllegalArgumentException(
+            "unrecognized value '" + val + "' for type '" + typeNames[typ] + "'");
     }
 
     /**
@@ -377,7 +384,8 @@ class APIInfo {
                         boolean rcls = rhi.getVal(CAT) == CAT_CLASS;
                         result = lcls == rcls ? 0 : (lcls ? -1 : 1);
                         if (result == 0) {
-                            result = (lcls ? lhi.name : lhi.cls).compareTo(rcls ? rhi.name : rhi.cls);
+                            result = (lcls ? lhi.name : lhi.cls).compareTo(
+                                rcls ? rhi.name : rhi.cls);
                             if (result == 0) {
                                 result = lhi.getVal(CAT)- rhi.getVal(CAT);
                                 if (result == 0) {
