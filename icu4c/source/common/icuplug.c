@@ -692,7 +692,7 @@ static void uplug_loadWaitingPlugs(UErrorCode *status) {
     
 #if UPLUG_TRACE
   DBG((stderr,  " Done Loading Plugs. Level: %d\n", (int32_t)uplug_getCurrentLevel()));
-#endif;
+#endif
 }
 
 #if U_ENABLE_DYLOAD
