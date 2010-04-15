@@ -344,6 +344,7 @@ tools/build/icu4j400.api.gz -text
 tools/build/icu4j401.api.gz -text
 tools/build/icu4j42.api.gz -text
 tools/build/icu4j421.api.gz -text
+tools/build/icu4j44.api2.gz -text
 tools/build/manifest.stub -text
 tools/misc/manifest.stub -text
 
