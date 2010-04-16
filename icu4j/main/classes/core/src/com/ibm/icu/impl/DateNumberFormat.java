@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2009, International Business Machines
+*   Copyright (C) 2007-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -36,7 +36,7 @@ public final class DateNumberFormat extends NumberFormat {
 
     private int maxIntDigits;
     private int minIntDigits;
- 
+
     public DateNumberFormat(ULocale loc, char zeroDigitIn) {
         initialize(loc,zeroDigitIn);
     }
@@ -152,6 +152,8 @@ public final class DateNumberFormat extends NumberFormat {
     /*
      * Note: This method only parse integer numbers which can be represented by long
      */
+    private static final long PARSE_THRESHOLD = 922337203685477579L; // (Long.MAX_VALUE / 10) - 1
+
     public Number parse(String text, ParsePosition parsePosition) {
         long num = 0;
         boolean sawNumber = false;
@@ -170,7 +172,7 @@ public final class DateNumberFormat extends NumberFormat {
                 if (digit < 0 || 9 < digit) {
                     digit = UCharacter.digit(ch);
                 }
-                if (0 <= digit && digit <= 9) {
+                if (0 <= digit && digit <= 9 && num < PARSE_THRESHOLD) {
                     sawNumber = true;
                     num = num * 10 + digit;
                 } else {

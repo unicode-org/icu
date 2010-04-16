@@ -3701,4 +3701,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
         expect(DATA, new Locale("en", "", ""));
     }
+
+    /*
+     * Test case for very long contiguous numeric patterns (ticket#7480)
+     */
+    public void TestLongContiguousNumericPattern() {
+        String DATA[] = {
+                "yyyy-MM-dd HH:mm:ss.SSS",
+
+                "yyyyMMddHHmmssSSSSSS", "fp", "2010-04-16 12:23:34.456",
+                "20100416122334456000", "2010-04-16 12:23:34.456",
+
+                "yyyyyyMMddHHHHmmmmssssSSSSSS", "fp", "2010-04-16 12:23:34.456",
+                "0020100416001200230034456000", "2010-04-16 12:23:34.456",
+        };
+            expect(DATA, new Locale("en", "", ""));
+    }
 }
