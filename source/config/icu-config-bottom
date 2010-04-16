@@ -264,15 +264,15 @@ do
 	    ;;
 
 	--ldflags-icuio)
-	    echo $ECHO_N " ${ICULIBS_ICUIO}${ECHO_C}"
+	    echo $ECHO_N " ${ICULIBS_ICUIO} ${ECHO_C}"
 	    ;;
 
 	--ldflags-obsolete)
-	    echo $ECHO_N "${ICULIBS_OBSOLETE}${ECHO_C}"
+	    echo $ECHO_N "${ICULIBS_OBSOLETE} ${ECHO_C}"
 	    ;;
 
 	--ldflags-toolutil)
-	    echo $ECHO_N " ${ICULIBS_TOOLUTIL}${ECHO_C}"
+	    echo $ECHO_N " ${ICULIBS_TOOLUTIL} ${ECHO_C}"
 	    ;;
 
 	--ldflags-layout)
