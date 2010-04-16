@@ -1085,7 +1085,7 @@ AC_ARG_ENABLE(layout,
 ICU_CONDITIONAL(LAYOUT, test "$layout" = true)
 
 AC_ARG_WITH(data-packaging,
-	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, auto) [default=auto]],
+	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, static, auto) [default=auto]],
 	[case "${withval}" in
                 files|archive|library) datapackaging=$withval ;;
 		auto) datapackaging=$withval ;;
@@ -1112,7 +1112,13 @@ AC_SUBST(thepkgicudatadir)
 dnl# Shouldn't need the AC_SUBST
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
+	# default to library
 	datapackaging=library
+	if test "$ENABLE_STATIC" = "YES"; then
+		if test "$ENABLE_SHARED" != "YES"; then
+			datapackaging=static
+		fi
+	fi
 fi
 
 datapackaging_dir=`eval echo $thedatadir`"/icu/${VERSION}"
