@@ -1477,7 +1477,7 @@ Optional Packages:
   --with-cross-build=dir specify an absolute path to the build directory of an ICU built for the current platform default=no cross dir
   --with-library-bits=bits specify how many bits to use for the library (32, 64, 64else32, nochange) default=nochange
   --with-iostream=version specify the version of iostream to use (none, old, std, auto) default=auto
-  --with-data-packaging=type specify how to package ICU data (files, archive, library, auto) default=auto
+  --with-data-packaging=type specify how to package ICU data (files, archive, library, static, auto) default=auto
   --with-library-suffix=suffix    tag a suffix to the library names default=
 
 Some influential environment variables:
@@ -11284,7 +11284,13 @@ thepkgicudatadir=$thedatadir
 
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
+	# default to library
 	datapackaging=library
+	if test "$ENABLE_STATIC" = "YES"; then
+		if test "$ENABLE_SHARED" != "YES"; then
+			datapackaging=static
+		fi
+	fi
 fi
 
 datapackaging_dir=`eval echo $thedatadir`"/icu/${VERSION}"
