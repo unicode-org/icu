@@ -34,8 +34,7 @@ U_NAMESPACE_BEGIN
 /**
  * DateIntervalFormat is a class for formatting and parsing date
  * intervals in a language-independent manner.
- * Date interval formatting is supported in Gregorian calendar only.
- * And only formatting is supported. Parsing is not supported.
+ * Only formatting is supported, parsing is not supported.
  *
  * <P>
  * Date interval means from one date to another date,
