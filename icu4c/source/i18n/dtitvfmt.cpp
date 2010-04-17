@@ -283,8 +283,7 @@ DateIntervalFormat::format(Calendar& fromCalendar,
 
     // not support different calendar types and time zones
     //if ( fromCalendar.getType() != toCalendar.getType() ) {
-    if ( !fromCalendar.isEquivalentTo(toCalendar) ||
-         uprv_strcmp(fromCalendar.getType(), "gregorian") ) {
+    if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
