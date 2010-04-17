@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -20,13 +20,13 @@
 #ifndef _PTYPES_H
 #define _PTYPES_H
 
+#include <sys/types.h>
+
 #include "unicode/platform.h"
 
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
-
-#include <sys/types.h>
 
 /* If your platform does not have the <inttypes.h> header, you may
    need to edit the typedefs below. */
