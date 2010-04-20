@@ -23,6 +23,8 @@
 
 #include "cstring.h"
 #include "unicode/msgfmt.h"
+#include "unicode/uloc.h"
+#include "unicode/ures.h"
 #include "dtitv_impl.h"
 #include "hash.h"
 #include "gregoimp.h"
@@ -208,6 +210,7 @@ DateIntervalInfo::getFallbackIntervalPattern(UnicodeString& result) const {
     return result;
 }
 
+#define ULOC_LOCALE_IDENTIFIER_CAPACITY (ULOC_FULLNAME_CAPACITY + 1 + ULOC_KEYWORD_AND_VALUES_CAPACITY)
 
 void 
 DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
@@ -225,12 +228,28 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
   if ( U_FAILURE(status) ) {
       return;
   }
+
+  // determine calendar type
+  const char * calendarTypeToUse = gGregorianTag; // initial default
+  char         calendarType[ULOC_KEYWORDS_CAPACITY]; // to be filled in with the type to use, if all goes well
+  char         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
+  // obtain a locale that always has the calendar key value that should be used
+  (void)ures_getFunctionalEquivalent(localeWithCalendarKey, ULOC_LOCALE_IDENTIFIER_CAPACITY, NULL,
+                                     "calendar", "calendar", locName, NULL, FALSE, &status);
+  localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
+  // now get the calendar key value from that locale
+  int32_t calendarTypeLen = uloc_getKeywordValue(localeWithCalendarKey, "calendar", calendarType, ULOC_KEYWORDS_CAPACITY, &status);
+  if (U_SUCCESS(status) && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
+    calendarTypeToUse = calendarType;
+  }
+  status = U_ZERO_ERROR;
+  
   do {
-    UResourceBundle *rb, *calBundle, *gregorianBundle, *itvDtPtnResource;
+    UResourceBundle *rb, *calBundle, *calTypeBundle, *itvDtPtnResource;
     rb = ures_open(NULL, parentLocale, &status);
     calBundle = ures_getByKey(rb, gCalendarTag, NULL, &status); 
-    gregorianBundle = ures_getByKey(calBundle, gGregorianTag, NULL, &status);
-    itvDtPtnResource = ures_getByKeyWithFallback(gregorianBundle, 
+    calTypeBundle = ures_getByKey(calBundle, calendarTypeToUse, NULL, &status);
+    itvDtPtnResource = ures_getByKeyWithFallback(calTypeBundle, 
                          gIntervalDateTimePatternTag, NULL, &status);
 
     if ( U_SUCCESS(status) ) {
@@ -313,7 +332,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
         }
     }
     ures_close(itvDtPtnResource);
-    ures_close(gregorianBundle);
+    ures_close(calTypeBundle);
     ures_close(calBundle);
     ures_close(rb);
     status = U_ZERO_ERROR;

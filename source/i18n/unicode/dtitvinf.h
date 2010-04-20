@@ -151,7 +151,8 @@ U_NAMESPACE_BEGIN
  * <P>
  * DateIntervalInfo are not expected to be subclassed. 
  * Data for a calendar is loaded out of resource bundles. 
- * To ICU 4.0, date interval patterns are only supported in Gregorian calendar. 
+ * Through ICU 4.4, date interval patterns are only supported in the Gregorian
+ * calendar; non-Gregorian calendars are supported from ICU 4.4.1. 
  * @stable ICU 4.0
 **/
 
@@ -175,8 +176,8 @@ public:
 
     /** 
      * Construct DateIntervalInfo for the given locale,
-     * @param locale  the interval patterns are loaded from the Gregorian 
-     *                calendar data in this locale.
+     * @param locale  the interval patterns are loaded from the appropriate calendar
+     *                data (specified calendar or default calendar) in this locale.
      * @param status  output param set to success/failure code on exit
      * @stable ICU 4.0
      */
