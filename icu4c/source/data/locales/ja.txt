@@ -93,7 +93,7 @@ ja{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     calendar{
         gregorian{
             AmPmMarkers{

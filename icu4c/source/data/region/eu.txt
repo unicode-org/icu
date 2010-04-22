@@ -235,5 +235,5 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"ZZ"}
     }
-    Version{"2.0.47.72"}
+    Version{"2.0.48.64"}
 }

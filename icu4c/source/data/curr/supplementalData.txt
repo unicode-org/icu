@@ -1688,17 +1688,21 @@ supplementalData:table(nofallback){
         }
         GW{
             {
+                id{"XOF"}
+                from:intvector{ /** 1997-03-31  */
+                    198,
+                    -29511904,
+                }
+            }
+            {
                 id{"GWP"}
                 from:intvector{ /** 1976-02-28  */
                     44,
                     -1638208320,
                 }
-            }
-            {
-                id{"XOF"}
-                from:intvector{ /** 1997-01-01  */
+                to:intvector{ /** 1997-03-31  */
                     198,
-                    1673335392,
+                    -29511904,
                 }
             }
             {

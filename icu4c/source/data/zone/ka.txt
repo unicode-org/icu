@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ka.xml
  */
 ka{
-    Version{"2.0.47.67"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"სეუტა"}
@@ -533,6 +533,5 @@ ka{
         }
         fallbackFormat{"{1} ({0})"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

@@ -106,7 +106,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2010, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-COLLATION_CLDR_VERSION = 1.7
+COLLATION_CLDR_VERSION = 1.8.1
 # A list of txt's to build
 # Note:
 #

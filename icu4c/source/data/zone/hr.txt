@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
@@ -87,7 +87,6 @@ hr{
         "meta:Africa_Southern"{
             lg{"Južna Afrika"}
             ls{"Južna Afrika"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Zapadna Afrika, ljetno vrijeme"}
@@ -97,25 +96,21 @@ hr{
             ld{"središnje dnevno vrijeme"}
             lg{"središnje vrijeme"}
             ls{"središnje standardno vrijeme"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"istočno dnevno vrijeme"}
             lg{"istočno vrijeme"}
             ls{"istočno standardno vrijeme"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"planinsko dnevno vrijeme"}
             lg{"planinsko vrijeme"}
             ls{"planinsko standardno vrijeme"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"pacifičko dnevno vrijeme"}
             lg{"pacifičko vrijeme"}
             ls{"pacifičko standardno vrijeme"}
-            sg{"PT"}
         }
         "meta:Aqtau"{
             sd{"AQTST(Aqtau)"}
@@ -141,31 +136,26 @@ hr{
             ld{"atlantsko dnevno vrijeme"}
             lg{"atlantsko vrijeme"}
             ls{"atlantsko standardno vrijeme"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"središnje australsko ljetno vrijeme"}
             lg{"središnje australsko vrijeme"}
             ls{"središnje australsko zimsko vrijeme"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"australsko središnje zapadno ljetno vrijeme"}
             lg{"australsko središnje zapadno vrijeme"}
             ls{"australsko središnje zapadno zimsko vrijeme"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"istočno australsko ljetno vrijeme"}
             lg{"istočno australsko vrijeme"}
             ls{"istočno australsko zimsko vrijeme"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"zapadno australsko ljetno vrijeme"}
             lg{"zapadno australsko vrijeme"}
             ls{"zapadno australsko zimsko vrijeme"}
-            sg{"AWT"}
         }
         "meta:Azores"{
             ld{"azorsko ljetno vrijeme"}
@@ -178,7 +168,6 @@ hr{
         "meta:Chamorro"{
             lg{"vrijeme Chamorro"}
             ls{"standardno vrijeme Chamorro"}
-            sg{"Cht"}
         }
         "meta:Chatham"{
             ld{"ljetno vrijeme Chathama"}
@@ -289,7 +278,6 @@ hr{
             ld{"ljetno vrijeme otoka Lord Howe"}
             lg{"vrijeme otoka Lord Howe"}
             ls{"zimsko vrijeme otoka Lord Howe"}
-            sg{"LHT"}
         }
         "meta:Maldives"{
             ls{"vrijeme Maldiva"}
@@ -323,7 +311,6 @@ hr{
             ld{"ljetno vrijeme Novog Zelanda"}
             lg{"vrijeme Novog Zelanda"}
             ls{"standardno vrijeme Novog Zelanda"}
-            sg{"NZT"}
         }
         "meta:Niue"{
             ls{"vrijeme Niuea"}
@@ -414,6 +401,5 @@ hr{
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm; -HH:mm"}
-        regionFormat{"{0}"}
     }
 }

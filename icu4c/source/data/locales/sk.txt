@@ -39,7 +39,7 @@ sk{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -76,15 +76,15 @@ sk{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 yMEd{"EEE, d.M.yyyy"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"EEE, d. MMM y"}
-                yMMMM{"MMMM y"}
+                yMMMM{"LLLL y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM y"}
+                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{

@@ -336,7 +336,7 @@ ro{
         PINYIN{"Pinyin"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

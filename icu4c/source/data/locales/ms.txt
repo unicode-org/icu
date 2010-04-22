@@ -23,14 +23,18 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             availableFormats{
                 MEd{"E, d-M"}
+                MMMEd{"EEE, d MMM"}
+                MMMd{"d MMM"}
                 Md{"d-M"}
                 yM{"M-y"}
                 yMEd{"EEE, d-M-yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
             }
             dayNames{
                 format{

@@ -11,10 +11,25 @@
  */
 zh_Hant{
     %%ParentIsRoot:int{1}
-    Version{"2.0.47.69"}
+    Version{"2.0.48.57"}
     zoneStrings{
+        "Africa:Accra"{
+            ec{"阿克拉"}
+        }
         "Africa:Bamako"{
             ec{"巴馬科"}
+        }
+        "Africa:Bangui"{
+            ec{"班吉"}
+        }
+        "Africa:Bissau"{
+            ec{"幾內亞比索"}
+        }
+        "Africa:Blantyre"{
+            ec{"馬拉威"}
+        }
+        "Africa:Bujumbura"{
+            ec{"蒲隆地"}
         }
         "Africa:Casablanca"{
             ec{"卡薩布蘭卡"}
@@ -22,17 +37,74 @@ zh_Hant{
         "Africa:Ceuta"{
             ec{"休達"}
         }
+        "Africa:Djibouti"{
+            ec{"吉布地"}
+        }
+        "Africa:Douala"{
+            ec{"喀麥隆"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"西撒哈拉"}
+        }
+        "Africa:Freetown"{
+            ec{"獅子山"}
+        }
+        "Africa:Gaborone"{
+            ec{"波札那"}
+        }
+        "Africa:Harare"{
+            ec{"辛巴威"}
+        }
+        "Africa:Kampala"{
+            ec{"坎帕拉"}
+        }
+        "Africa:Kigali"{
+            ec{"盧安達"}
+        }
         "Africa:Kinshasa"{
             ec{"金夏沙"}
         }
+        "Africa:Lagos"{
+            ec{"拉各斯"}
+        }
+        "Africa:Lome"{
+            ec{"多哥"}
+        }
+        "Africa:Luanda"{
+            ec{"安哥拉"}
+        }
         "Africa:Lubumbashi"{
             ec{"蘆佈巴西"}
+        }
+        "Africa:Mogadishu"{
+            ec{"摩加迪沙"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"布吉納法索"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"貝南"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"聖多美普林西比"}
+        }
+        "Africa:Tripoli"{
+            ec{"利比亞"}
+        }
+        "Africa:Tunis"{
+            ec{"坦尚尼亞"}
         }
         "America:Adak"{
             ec{"艾達克"}
         }
         "America:Anchorage"{
             ec{"安克里治"}
+        }
+        "America:Anguilla"{
+            ec{"安吉拉"}
+        }
+        "America:Antigua"{
+            ec{"安地卡及巴布達"}
         }
         "America:Araguaina"{
             ec{"阿拉圭那"}
@@ -42,6 +114,9 @@ zh_Hant{
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"加拉哥斯"}
+        }
+        "America:Argentina:Salta"{
+            ec{"薩爾塔"}
         }
         "America:Argentina:San_Juan"{
             ec{"聖胡安"}
@@ -55,8 +130,17 @@ zh_Hant{
         "America:Argentina:Ushuaia"{
             ec{"烏斯懷亞"}
         }
+        "America:Aruba"{
+            ec{"阿魯巴"}
+        }
+        "America:Asuncion"{
+            ec{"巴拉圭"}
+        }
         "America:Bahia"{
             ec{"巴伊阿"}
+        }
+        "America:Barbados"{
+            ec{"巴貝多"}
         }
         "America:Belem"{
             ec{"貝倫"}
@@ -69,6 +153,9 @@ zh_Hant{
         }
         "America:Boa_Vista"{
             ec{"保維斯塔"}
+        }
+        "America:Bogota"{
+            ec{"哥倫比亞"}
         }
         "America:Boise"{
             ec{"波伊斯"}
@@ -85,8 +172,17 @@ zh_Hant{
         "America:Cancun"{
             ec{"康庫"}
         }
+        "America:Caracas"{
+            ec{"加拉加斯"}
+        }
         "America:Catamarca"{
             ec{"卡塔馬卡"}
+        }
+        "America:Cayenne"{
+            ec{"法屬蓋亞那"}
+        }
+        "America:Chicago"{
+            ec{"芝加哥"}
         }
         "America:Chihuahua"{
             ec{"奇華華"}
@@ -100,6 +196,9 @@ zh_Hant{
         "America:Cuiaba"{
             ec{"古雅巴"}
         }
+        "America:Curacao"{
+            ec{"荷屬安地列斯"}
+        }
         "America:Danmarkshavn"{
             ec{"丹馬沙文"}
         }
@@ -108,6 +207,12 @@ zh_Hant{
         }
         "America:Dawson_Creek"{
             ec{"道生灣"}
+        }
+        "America:Denver"{
+            ec{"丹佛"}
+        }
+        "America:Detroit"{
+            ec{"底特律"}
         }
         "America:Dominica"{
             ec{"多明尼加"}
@@ -133,8 +238,14 @@ zh_Hant{
         "America:Goose_Bay"{
             ec{"鵝灣"}
         }
+        "America:Grand_Turk"{
+            ec{"土克斯和開卡斯群島"}
+        }
         "America:Grenada"{
             ec{"格瑞納達"}
+        }
+        "America:Guadeloupe"{
+            ec{"瓜德羅普"}
         }
         "America:Guatemala"{
             ec{"瓜地馬拉"}
@@ -147,6 +258,9 @@ zh_Hant{
         }
         "America:Halifax"{
             ec{"哈里法克斯"}
+        }
+        "America:Havana"{
+            ec{"哈瓦那"}
         }
         "America:Hermosillo"{
             ec{"厄莫休"}
@@ -193,6 +307,12 @@ zh_Hant{
         "America:Kentucky:Monticello"{
             ec{"蒙提瑟洛"}
         }
+        "America:La_Paz"{
+            ec{"玻利維亞"}
+        }
+        "America:Lima"{
+            ec{"秘魯"}
+        }
         "America:Los_Angeles"{
             ec{"洛杉磯"}
         }
@@ -201,6 +321,9 @@ zh_Hant{
         }
         "America:Maceio"{
             ec{"馬瑟歐"}
+        }
+        "America:Managua"{
+            ec{"尼加拉瓜"}
         }
         "America:Manaus"{
             ec{"瑪瑙斯"}
@@ -222,6 +345,9 @@ zh_Hant{
         }
         "America:Mexico_City"{
             ec{"墨西哥市"}
+        }
+        "America:Miquelon"{
+            ec{"聖皮里及米圭隆"}
         }
         "America:Moncton"{
             ec{"蒙克頓"}
@@ -262,11 +388,17 @@ zh_Hant{
         "America:Phoenix"{
             ec{"鳳凰城"}
         }
+        "America:Port-au-Prince"{
+            ec{"海地"}
+        }
         "America:Port_of_Spain"{
             ec{"千里達"}
         }
         "America:Porto_Velho"{
             ec{"維留港"}
+        }
+        "America:Puerto_Rico"{
+            ec{"波多黎各"}
         }
         "America:Rainy_River"{
             ec{"雨河鎮"}
@@ -285,6 +417,9 @@ zh_Hant{
         }
         "America:Rio_Branco"{
             ec{"布蘭科"}
+        }
+        "America:Santarem"{
+            ec{"聖塔倫"}
         }
         "America:Santiago"{
             ec{"聖地牙哥"}
@@ -306,6 +441,9 @@ zh_Hant{
         }
         "America:St_Lucia"{
             ec{"聖露西亞"}
+        }
+        "America:St_Thomas"{
+            ec{"美屬維京群島"}
         }
         "America:Swift_Current"{
             ec{"瑞夫卡倫特"}
@@ -346,6 +484,9 @@ zh_Hant{
         "Antarctica:DumontDUrville"{
             ec{"杜蒙杜爾維爾"}
         }
+        "Antarctica:Mawson"{
+            ec{"莫森"}
+        }
         "Antarctica:McMurdo"{
             ec{"麥克馬多"}
         }
@@ -367,8 +508,14 @@ zh_Hant{
         "Arctic:Longyearbyen"{
             ec{"隆意耳拜恩"}
         }
+        "Asia:Aden"{
+            ec{"葉門"}
+        }
         "Asia:Almaty"{
             ec{"阿拉木圖"}
+        }
+        "Asia:Amman"{
+            ec{"安曼"}
         }
         "Asia:Anadyr"{
             ec{"阿那底河"}
@@ -379,8 +526,23 @@ zh_Hant{
         "Asia:Aqtobe"{
             ec{"阿克糾賓"}
         }
+        "Asia:Ashgabat"{
+            ec{"阿什哈巴德"}
+        }
+        "Asia:Baghdad"{
+            ec{"伊拉克"}
+        }
+        "Asia:Bahrain"{
+            ec{"巴林"}
+        }
+        "Asia:Bangkok"{
+            ec{"曼谷"}
+        }
         "Asia:Brunei"{
             ec{"汶萊"}
+        }
+        "Asia:Calcutta"{
+            ec{"印度"}
         }
         "Asia:Choibalsan"{
             ec{"卓巴爾塞"}
@@ -388,11 +550,26 @@ zh_Hant{
         "Asia:Chongqing"{
             ec{"重慶"}
         }
+        "Asia:Damascus"{
+            ec{"敘利亞"}
+        }
+        "Asia:Dili"{
+            ec{"帝力"}
+        }
+        "Asia:Dubai"{
+            ec{"迪拜"}
+        }
+        "Asia:Gaza"{
+            ec{"加沙"}
+        }
         "Asia:Harbin"{
             ec{"哈爾濱"}
         }
         "Asia:Hong_Kong"{
             ec{"中華人民共和國香港特別行政區"}
+        }
+        "Asia:Hovd"{
+            ec{"科布多"}
         }
         "Asia:Irkutsk"{
             ec{"伊爾庫次克"}
@@ -403,17 +580,32 @@ zh_Hant{
         "Asia:Jayapura"{
             ec{"加亞布拉"}
         }
+        "Asia:Jerusalem"{
+            ec{"耶路撒冷"}
+        }
+        "Asia:Kabul"{
+            ec{"阿富汗"}
+        }
         "Asia:Kamchatka"{
             ec{"堪查加"}
         }
         "Asia:Kashgar"{
             ec{"喀什米爾"}
         }
+        "Asia:Katmandu"{
+            ec{"尼泊爾"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"克拉斯諾雅斯克"}
         }
+        "Asia:Kuala_Lumpur"{
+            ec{"吉隆坡"}
+        }
         "Asia:Kuching"{
             ec{"古晉"}
+        }
+        "Asia:Kuwait"{
+            ec{"科威特"}
         }
         "Asia:Macau"{
             ec{"中華人民共和國澳門特別行政區"}
@@ -424,11 +616,23 @@ zh_Hant{
         "Asia:Makassar"{
             ec{"馬卡沙爾"}
         }
+        "Asia:Manila"{
+            ec{"菲律賓"}
+        }
+        "Asia:Muscat"{
+            ec{"阿曼"}
+        }
         "Asia:Novosibirsk"{
             ec{"新西伯利亞"}
         }
+        "Asia:Omsk"{
+            ec{"鄂木斯克"}
+        }
         "Asia:Oral"{
             ec{"奧拉爾"}
+        }
+        "Asia:Pontianak"{
+            ec{"坤甸"}
         }
         "Asia:Pyongyang"{
             ec{"北韓"}
@@ -442,6 +646,12 @@ zh_Hant{
         "Asia:Rangoon"{
             ec{"緬甸"}
         }
+        "Asia:Riyadh"{
+            ec{"利雅得"}
+        }
+        "Asia:Saigon"{
+            ec{"胡志明市"}
+        }
         "Asia:Sakhalin"{
             ec{"庫頁島"}
         }
@@ -450,6 +660,24 @@ zh_Hant{
         }
         "Asia:Seoul"{
             ec{"首爾"}
+        }
+        "Asia:Shanghai"{
+            ec{"上海"}
+        }
+        "Asia:Singapore"{
+            ec{"新加坡"}
+        }
+        "Asia:Taipei"{
+            ec{"台北"}
+        }
+        "Asia:Tashkent"{
+            ec{"塔什干"}
+        }
+        "Asia:Tbilisi"{
+            ec{"第比利斯"}
+        }
+        "Asia:Thimphu"{
+            ec{"廷布"}
         }
         "Asia:Tokyo"{
             ec{"東京"}
@@ -487,6 +715,9 @@ zh_Hant{
         "Atlantic:Madeira"{
             ec{"馬得拉群島"}
         }
+        "Atlantic:Reykjavik"{
+            ec{"雷克雅未克"}
+        }
         "Atlantic:South_Georgia"{
             ec{"南喬治亞與南三明治島"}
         }
@@ -508,8 +739,14 @@ zh_Hant{
         "Australia:Darwin"{
             ec{"達爾文"}
         }
+        "Australia:Eucla"{
+            ec{"尤克拉"}
+        }
         "Australia:Hobart"{
             ec{"荷巴特"}
+        }
+        "Australia:Lindeman"{
+            ec{"林德曼"}
         }
         "Australia:Lord_Howe"{
             ec{"羅豪島"}
@@ -526,8 +763,26 @@ zh_Hant{
         "Etc:Unknown"{
             ec{"未知地區"}
         }
+        "Europe:Amsterdam"{
+            ec{"阿姆斯特丹"}
+        }
         "Europe:Andorra"{
             ec{"安道爾"}
+        }
+        "Europe:Athens"{
+            ec{"雅典"}
+        }
+        "Europe:Berlin"{
+            ec{"柏林"}
+        }
+        "Europe:Bucharest"{
+            ec{"布加勒斯特"}
+        }
+        "Europe:Copenhagen"{
+            ec{"哥本哈根"}
+        }
+        "Europe:Dublin"{
+            ec{"都柏林"}
         }
         "Europe:Gibraltar"{
             ec{"直布羅陀"}
@@ -537,6 +792,9 @@ zh_Hant{
         }
         "Europe:Kiev"{
             ec{"基輔"}
+        }
+        "Europe:Lisbon"{
+            ec{"里斯本"}
         }
         "Europe:London"{
             ec{"倫敦"}
@@ -550,8 +808,20 @@ zh_Hant{
         "Europe:Malta"{
             ec{"馬爾他"}
         }
+        "Europe:Minsk"{
+            ec{"明斯克"}
+        }
         "Europe:Monaco"{
             ec{"摩納哥"}
+        }
+        "Europe:Moscow"{
+            ec{"莫斯科"}
+        }
+        "Europe:Paris"{
+            ec{"巴黎"}
+        }
+        "Europe:Riga"{
+            ec{"里加"}
         }
         "Europe:Samara"{
             ec{"沙馬拉"}
@@ -562,8 +832,14 @@ zh_Hant{
         "Europe:Simferopol"{
             ec{"辛非洛浦"}
         }
+        "Europe:Tallinn"{
+            ec{"塔林"}
+        }
         "Europe:Uzhgorod"{
             ec{"烏茲哥洛"}
+        }
+        "Europe:Vaduz"{
+            ec{"列支敦斯登"}
         }
         "Europe:Vatican"{
             ec{"梵蒂岡"}
@@ -579,6 +855,9 @@ zh_Hant{
         }
         "Europe:Zaporozhye"{
             ec{"札波羅結"}
+        }
+        "Indian:Antananarivo"{
+            ec{"馬達加斯加"}
         }
         "Indian:Chagos"{
             ec{"英屬印度洋領地"}
@@ -610,8 +889,14 @@ zh_Hant{
         "Pacific:Easter"{
             ec{"復活島"}
         }
+        "Pacific:Efate"{
+            ec{"埃法特"}
+        }
         "Pacific:Enderbury"{
             ec{"恩得伯理島"}
+        }
+        "Pacific:Fakaofo"{
+            ec{"法考福"}
         }
         "Pacific:Fiji"{
             ec{"斐濟"}
@@ -624,6 +909,9 @@ zh_Hant{
         }
         "Pacific:Guam"{
             ec{"關島"}
+        }
+        "Pacific:Honolulu"{
+            ec{"檀香山"}
         }
         "Pacific:Johnston"{
             ec{"強斯頓"}
@@ -655,6 +943,9 @@ zh_Hant{
         "Pacific:Norfolk"{
             ec{"諾福克群島"}
         }
+        "Pacific:Noumea"{
+            ec{"努美阿"}
+        }
         "Pacific:Palau"{
             ec{"帛琉"}
         }
@@ -664,11 +955,20 @@ zh_Hant{
         "Pacific:Ponape"{
             ec{"波納佩"}
         }
+        "Pacific:Saipan"{
+            ec{"塞班"}
+        }
         "Pacific:Tahiti"{
             ec{"大溪地"}
         }
+        "Pacific:Tarawa"{
+            ec{"塔拉瓦"}
+        }
         "Pacific:Truk"{
             ec{"土魯克群島"}
+        }
+        "Pacific:Wake"{
+            ec{"威克"}
         }
         "Pacific:Wallis"{
             ec{"瓦利斯與富圖納群島"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.47.71"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -334,6 +334,5 @@ de{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

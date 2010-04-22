@@ -37,7 +37,7 @@ fi{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     calendar{
         gregorian{
             AmPmMarkers{

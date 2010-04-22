@@ -35,7 +35,7 @@ ka{
         "NaN",
         "+",
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.48.64"}
     calendar{
         gregorian{
             quarters{

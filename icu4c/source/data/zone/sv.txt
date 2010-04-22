@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -326,7 +326,6 @@ sv{
             ld{"sydafrikansk sommartid"}
             lg{"sydafrikansk tid"}
             ls{"sydafrikansk normaltid"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"västafrikansk sommartid"}
@@ -344,13 +343,11 @@ sv{
             ld{"Alaska, sommartid"}
             lg{"alaskatid"}
             ls{"Alaska, normaltid"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"hawaiisk sommartid"}
             lg{"hawaiiansk tid"}
             ls{"hawaiisk normaltid"}
-            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almatysommartid"}
@@ -368,25 +365,21 @@ sv{
             ld{"Central, sommartid"}
             lg{"centralnordamerikansk tid"}
             ls{"Central, normaltid"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Eastern, sommartid"}
             lg{"östnordamerikansk tid"}
             ls{"Eastern, normaltid"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Mountain, sommartid"}
             lg{"Klippiga Bergentid"}
             ls{"Mountain, normaltid"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Pacific, sommartid"}
             lg{"västnordamerikansk tid"}
             ls{"Pacific, normaltid"}
-            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Anadyrsommartid"}
@@ -442,28 +435,21 @@ sv{
             ld{"Atlantic, sommartid"}
             lg{"nordamerikansk atlanttid"}
             ls{"Atlantic, normaltid"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"centralaustralisk sommartid"}
             lg{"centralaustralisk tid"}
             ls{"centralaustralisk normaltid"}
-            sg{"ACT"}
-        }
-        "meta:Australia_CentralWestern"{
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"östaustralisk sommartid"}
             lg{"östaustralisk tid"}
             ls{"östaustralisk normaltid"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"västaustralisk sommartid"}
             lg{"västaustralisk tid"}
             ls{"västaustralisk normaltid"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"azerbajdzjansk sommartid"}
@@ -493,7 +479,6 @@ sv{
             ld{"beringsundssommartid"}
             lg{"beringsundstid"}
             ls{"beringsundsnormaltid"}
-            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ld{"bhutansk sommartid"}
@@ -538,7 +523,6 @@ sv{
             ld{"Chamorrosommartid"}
             lg{"chamorrotid"}
             ls{"Chamorronormaltid"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ld{"Changbaisommartid"}
@@ -560,7 +544,9 @@ sv{
             ld{"Kina, sommartid"}
             lg{"kinesisk tid"}
             ls{"Kina, normaltid"}
+            sd{"CDT (Kina)"}
             sg{"CT (Kina)"}
+            ss{"CST (Kina)"}
         }
         "meta:Choibalsan"{
             ld{"Tjojbalsansommartid"}
@@ -749,7 +735,6 @@ sv{
             ld{"Persiska vikensommartid"}
             lg{"Persiska vikentid"}
             ls{"Persiska vikennormaltid"}
-            sg{"GT"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Honolulusommartid"}
@@ -829,7 +814,6 @@ sv{
             ld{"Japan, sommartid"}
             lg{"japansk tid"}
             ls{"Japan, normaltid"}
-            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Kamtjatkasommartid"}
@@ -870,7 +854,6 @@ sv{
             ld{"koreansk sommartid"}
             lg{"koreansk tid"}
             ls{"koreansk normaltid"}
-            sg{"KT"}
         }
         "meta:Kosrae"{
             ld{"Kosraesommartid"}
@@ -925,7 +908,6 @@ sv{
             ld{"Lord Howesommartid"}
             lg{"Lord Howetid"}
             ls{"Lord Howenormaltid"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macausommartid"}
@@ -1021,7 +1003,6 @@ sv{
             ld{"nyzeeländsk sommartid"}
             lg{"nyzeeländsk tid"}
             ls{"nyzeeländsk normaltid"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland, sommartid"}
@@ -1201,7 +1182,9 @@ sv{
             ld{"Taipeisommartid"}
             lg{"Taipeitid"}
             ls{"Taipeinormaltid"}
+            sd{"CDT (Taipei)"}
             sg{"CT (Taipei)"}
+            ss{"CST (Taipei)"}
         }
         "meta:Tajikistan"{
             ld{"Tadzjikistansommartid"}
@@ -1334,7 +1317,6 @@ sv{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
-        regionFormat{"{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

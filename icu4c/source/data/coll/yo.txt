@@ -14,7 +14,7 @@ yo{
     collations{
         standard{
             Sequence{" [normalization on ]&E<ẹ<<<Ẹ&G<gb<<<Gb<<<GB&O<ọ<<<Ọ&S<ṣ<<<Ṣ"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }

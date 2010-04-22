@@ -37,7 +37,7 @@ ro{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
     calendar{
         buddhist{
             DateTimePatterns{

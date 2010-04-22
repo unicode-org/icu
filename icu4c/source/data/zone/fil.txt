@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fil.xml
  */
 fil{
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"Unknown"}
@@ -100,6 +100,5 @@ fil{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

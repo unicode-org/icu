@@ -43,7 +43,7 @@ hu{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.70"}
+    Version{"2.0.48.64"}
     calendar{
         buddhist{
             eras{

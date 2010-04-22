@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.47.72"}
+    Version{"2.0.48.56"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1193,6 +1193,7 @@ ko{
         }
         "meta:Bering"{
             sd{"BDT (베링)"}
+            sg{"BT (베링)"}
             ss{"BST (베링)"}
         }
         "meta:Brasilia"{
@@ -1215,6 +1216,7 @@ ko{
             ld{"중국 하계 표준시"}
             ls{"중국 표준시"}
             sd{"CDT (중국)"}
+            sg{"CT (중국)"}
             ss{"CST (중국)"}
         }
         "meta:Christmas"{
@@ -1229,6 +1231,7 @@ ko{
         }
         "meta:Cuba"{
             sd{"CDT (쿠바)"}
+            sg{"CT (쿠바)"}
             ss{"CST (쿠바)"}
         }
         "meta:Davis"{

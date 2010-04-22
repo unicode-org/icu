@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -542,6 +542,7 @@ nl{
             lg{"Cubaanse tijd"}
             ls{"Cubaanse standaardtijd"}
             sd{"CDT (Cuba)"}
+            sg{"CT (Cuba)"}
             ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
