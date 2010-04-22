@@ -2152,5 +2152,5 @@ el{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
 }

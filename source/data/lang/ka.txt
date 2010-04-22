@@ -235,7 +235,7 @@ ka{
             traditional{"ტრადიციული"}
         }
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.48.64"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

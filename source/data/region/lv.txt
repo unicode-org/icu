@@ -300,5 +300,5 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms vai nederīgs reģions"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
 }

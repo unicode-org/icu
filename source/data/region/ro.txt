@@ -301,5 +301,5 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută sau nevalidă"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
 }

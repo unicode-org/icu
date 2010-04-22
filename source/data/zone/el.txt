@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}
@@ -889,10 +889,12 @@ el{
         }
         "meta:Bering"{
             sd{"BDT (Μπερίνγκ)"}
+            sg{"BT (Μπερίνγκ)"}
             ss{"BST (Μπερίνγκ)"}
         }
         "meta:Cuba"{
             sd{"CDT (Κούβα)"}
+            sg{"CT (Κούβα)"}
             ss{"CST (Κούβα)"}
         }
         "meta:Samarkand"{
@@ -901,6 +903,5 @@ el{
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

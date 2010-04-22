@@ -709,7 +709,7 @@ uk{
         VALENCIA{"Валенсійська"}
         WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     codePatterns{
         language{"Мова з кодом {0}"}
         script{"Скрипт із кодом {0}"}

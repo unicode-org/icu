@@ -14,7 +14,7 @@ ro{
     collations{
         standard{
             Sequence{"&A<ă<<<Ă<â<<<Â&D<đ<<<Đ&I<î<<<Î&S<ş=ș<<<Ş=Ș&T<ţ=ț<<<Ţ=Ț&Z<ż<<<Ż"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }

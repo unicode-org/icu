@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.56"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1221,7 +1221,6 @@ zh{
             ld{"澳大利亚中西部夏令时间"}
             lg{"澳大利亚中西部时间"}
             ls{"澳大利亚中西部标准时间"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"澳大利亚东部夏令时间"}
@@ -1278,7 +1277,6 @@ zh{
         "meta:Chamorro"{
             lg{"查莫罗时间"}
             ls{"查莫罗标准时区"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"长白山时间"}
@@ -1322,6 +1320,7 @@ zh{
             lg{"古巴时间"}
             ls{"古巴标准时间"}
             sd{"CDT（古巴）"}
+            sg{"CT（古巴）"}
             ss{"CST（古巴）"}
         }
         "meta:Dacca"{
@@ -1508,7 +1507,6 @@ zh{
             ld{"罗德毫岛夏令时间"}
             lg{"罗德毫岛时间"}
             ls{"罗德毫岛标准时间"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"澳门夏令时间"}

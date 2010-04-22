@@ -1297,5 +1297,5 @@ hu{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.47.70"}
+    Version{"2.0.48.64"}
 }

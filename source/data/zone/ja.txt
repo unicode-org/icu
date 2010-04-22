@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "Africa:Bamako"{
             ec{"アフリカ/バマコ"}

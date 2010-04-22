@@ -37,7 +37,7 @@ pl{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -69,7 +69,7 @@ pl{
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "dd-MM-yyyy",
-                "dd-MM-yy",
+                "dd-MM-yyyy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.47.70"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"Kairó"}
@@ -384,7 +384,6 @@ hu{
         "meta:Africa_Southern"{
             lg{"Dél-afrikai idő"}
             ls{"Dél-afrikai szabvány idő"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Nyugat-afrikai nyári idő"}
@@ -417,25 +416,21 @@ hu{
             ld{"Középső államokbeli nyári idő"}
             lg{"Középső államokbeli idő"}
             ls{"Középső államokbeli zónaidő"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Keleti államokbeli nyári idő"}
             lg{"Keleti államokbeli idő"}
             ls{"Keleti államokbeli zónaidő"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Hegyvidéki nyári idő"}
             lg{"Hegyvidéki idő"}
             ls{"Hegyvidéki zónaidő"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Csendes-óceáni nyári idő"}
             lg{"Csendes-óceáni idő"}
             ls{"Csendes-óceáni zónaidő"}
-            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Anadíri nyári idő"}
@@ -478,31 +473,26 @@ hu{
             ld{"Atlanti-óceáni nyári idő"}
             lg{"Atlanti-óceáni idő"}
             ls{"Atlanti-óceáni zónaidő"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Ausztrál középső nyári idő"}
             lg{"Közép-ausztráliai idő"}
             ls{"Ausztrál középső zónaidő"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Ausztrál középső nyugati nyári idő"}
             lg{"Ausztrál középső nyugati idő"}
             ls{"Ausztrál középső nyugati zónaidő"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Ausztrál keleti nyári idő"}
             lg{"Kelet-ausztrál idő"}
             ls{"Ausztrál keleti zónaidő"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Ausztrál nyugati nyári idő"}
             lg{"Nyugat-ausztrál idő"}
             ls{"Ausztrál nyugati zónaidő"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbajdzsáni nyári idő"}
@@ -525,6 +515,7 @@ hu{
             lg{"Bering idő"}
             ls{"Beringi zónaidő"}
             sd{"BDT (Beringi)"}
+            sg{"BT (Beringi)"}
             ss{"BST (Beringi)"}
         }
         "meta:Bhutan"{
@@ -551,7 +542,6 @@ hu{
         "meta:Chamorro"{
             lg{"Chamorroi idő"}
             ls{"Chamorroi zónaidő"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai idő"}
@@ -595,6 +585,7 @@ hu{
             lg{"Kubai idő"}
             ls{"Kubai zónaidő"}
             sd{"CDT (Kuba)"}
+            sg{"CT (Kuba)"}
             ss{"CST (Kuba)"}
         }
         "meta:Dacca"{
@@ -692,7 +683,6 @@ hu{
         "meta:Gulf"{
             lg{"Arab-öbölbeli idő"}
             ls{"Öbölbeli zónaidő"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Guyanai idő"}
@@ -744,7 +734,6 @@ hu{
             ld{"Japán nyári idő"}
             lg{"Japán idő"}
             ls{"Japán zónaidő"}
-            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovszk-kamcsatkai nyári idő"}
@@ -772,7 +761,6 @@ hu{
             ld{"Koreai nyári idő"}
             lg{"Koreai idő"}
             ls{"Koreai zónaidő"}
-            sg{"KT"}
         }
         "meta:Kosrae"{
             ls{"Kosraei idő"}
@@ -796,7 +784,6 @@ hu{
         }
         "meta:Liberia"{
             lg{"Libériai idő"}
-            sg{"Libériai idő"}
         }
         "meta:Line_Islands"{
             ls{"Line-szigeteki idő"}
@@ -808,7 +795,6 @@ hu{
             ld{"Lord howei nyári idő"}
             lg{"Lord howei idő"}
             ls{"Lord howei zónaidő"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macaui nyári idő"}
@@ -866,13 +852,11 @@ hu{
             ld{"Új-zélandi nyári idő"}
             lg{"Új-zélandi idő"}
             ls{"Új-zélandi zónaidő"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Új-fundlandi nyári idő"}
             lg{"Új-fundlandi idő"}
             ls{"Új-fundlandi zónaidő"}
-            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niuei idő"}
@@ -924,7 +908,6 @@ hu{
             ld{"Pierre és Miquelon-i nyári idő"}
             lg{"Pierre és Miquelon-i idő"}
             ls{"Pierre és Miquelon-i zónaidő"}
-            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairni idő"}
@@ -1077,11 +1060,9 @@ hu{
             ld{"Yukoni nyári idő"}
             lg{"yukoni idő"}
             ls{"yukoni zónaidő"}
-            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

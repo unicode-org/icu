@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uk.xml
  */
 uk{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -1273,6 +1273,5 @@ uk{
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

@@ -2715,5 +2715,5 @@ hr{
             other{"zimbabveanskih dolara"}
         }
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
 }

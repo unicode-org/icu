@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -697,7 +697,6 @@ fr{
         }
         "meta:GMT"{
             ls{"heure moyenne de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ld{"heure avancée des îles Galápagos"}
@@ -1069,6 +1068,5 @@ fr{
         gmtFormat{"UTC{0}"}
         gmtZeroFormat{"UTC"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

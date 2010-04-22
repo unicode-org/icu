@@ -14,7 +14,7 @@ gu{
     collations{
         standard{
             Sequence{" [normalization on ]&હ<઼<ઁ<ં<ઃ&ઽ<્"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }
