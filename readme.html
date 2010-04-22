@@ -7,19 +7,21 @@
   <meta name="COPYRIGHT" content="Copyright 2000-2010, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
+h4.doc { text-decoration: underline }
   </style>
 </head>
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.4</h3>
+<h3>Read Me for ICU4J 4.4.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-March 17, 2010<br>
+April 28, 2010<br>
 </p>
 
-<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality.
+<p><b>Note:</b> This is an update release of ICU4J 4.4.  This release contains
+several bug fixes and updated data, but does not introduce any new APIs or
+functionalities.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -165,6 +167,25 @@ new features in this release.  The list of API changes since the previous ICU4J 
 is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-4/APIChangeReport.html">here</a>.
 </p>
+
+<h4 class="doc">Summary of updates in 4.4.1 (April 28, 2010)</h4>
+<p><b>CLDR 1.8.1 updates</b></p>
+<p>ICU4J 4.4.1 imported locale data updates from <a href="http://cldr.unicode.org/index/downloads/cldr-1-8-1">CLDR
+1.8.1</a> release.
+
+<p><b>Time zone data update</b></p>
+<p>ICU4J 4.4.1 updates the time zone data to version
+<a href="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icunew/2010i/44/">2010i</a>
+from the Olson tz database.</p>
+
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7395">#7395</a> gatherapi tool doesn't handle 'synthetic' methods</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7594">#7594</a> Serialization CoverageTest is broken in ICU 4.4</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/7595">#7595</a> SimpleDateFormat fails to handle very long field patterns</li>
+</ul>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -1041,10 +1062,10 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <ol>
     <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
     the CLDR source files checked out.</li>
-    <li>Update <I>$cldr_root</I>/common to 'release-1-8-0' tag</li>
-    <li>Update <I>$cldr_root</I>/tools to 'release-1-8-0' tag</li>
-    <li>Checkout ICU4C with tag 'release-4-4'</li>
-    <li>Checkout ICU4J with tag 'release-4-4'</li>
+    <li>Update <I>$cldr_root</I>/common to 'release-1-8-1' tag</li>
+    <li>Update <I>$cldr_root</I>/tools to 'release-1-8-1' tag</li>
+    <li>Checkout ICU4C with tag 'release-4-4-1'</li>
+    <li>Checkout ICU4J with tag 'release-4-4-1'</li>
     <li>Build ICU4J</li>
     <li>Build ICU4C</li>
     <li>Change to <I>$cldr_root</I>/tools/java directory</li>
@@ -1058,7 +1079,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.4 includes time zone data version 2010e, which is the latest one as of
+<p>ICU4J 4.4.1 includes time zone data version 2010i, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
