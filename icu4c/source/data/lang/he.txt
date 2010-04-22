@@ -358,7 +358,7 @@ he{
         MONOTON{"מונוטונית"}
         POSIX{"מחשב"}
     }
-    Version{"2.0.47.72"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

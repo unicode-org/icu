@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.47.63"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -795,7 +795,6 @@ lt{
         "meta:Africa_Southern"{
             lg{"Pietų Afrikos laikas"}
             ls{"Pietų Afrikos standartinis laikas"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Vakarų Afrikos vasaros laikas"}
@@ -809,13 +808,11 @@ lt{
             ld{"Aliaskos vasaros laikas"}
             lg{"Aliaskos laikas"}
             ls{"Aliaskos žiemos laikas"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Aliaskos-Havajų vasaros laikas"}
             lg{"Aliaskos-Havajų laikas"}
             ls{"Aliaskos-Havajų žiemos laikas"}
-            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almaty vasaros laikas"}
@@ -829,7 +826,6 @@ lt{
             ld{"Centro vasaros laikas"}
             lg{"Centro laikas"}
             ls{"Centro žiemos laikas"}
-            sg{"Čikaga (Jungtinės Valstijos)"}
         }
         "meta:America_Eastern"{
             ld{"Rytų vasaros laikas"}
@@ -881,25 +877,21 @@ lt{
             ld{"Centrinės Australijos vasaros laikas"}
             lg{"Centrinės Australijos laikas"}
             ls{"Centrinės Australijos žiemos laikas"}
-            sg{"Adelaidė (Australija)"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Centrinės vakarų Australijos vasaros laikas"}
             lg{"Centrinės vakarų Australijos laikas"}
             ls{"Centrinės vakarų Australijos žiemos laikas"}
-            sg{"Eucla (Australija)"}
         }
         "meta:Australia_Eastern"{
             ld{"Rytų Australijos vasaros laikas"}
             lg{"Rytų Australijos laikas"}
             ls{"Centrinės rytų Australijos žiemos laikas"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Vakarų Australijos vasaros laikas"}
             lg{"Vakarų Australijos laikas"}
             ls{"Vakarų Australijos žiemos laikas"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaidžano vasaros laikas"}
@@ -921,7 +913,6 @@ lt{
             ld{"Beringo vasaros laikas"}
             lg{"Beringo laikas"}
             ls{"Beringo žiemos laikas"}
-            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Butano laikas"}
@@ -947,7 +938,6 @@ lt{
         "meta:Chamorro"{
             lg{"Chamorro laikas"}
             ls{"Chamorro vasaros laikas"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai laikas"}
@@ -963,7 +953,9 @@ lt{
         "meta:China"{
             ld{"Kinijos vasaros laikas"}
             lg{"Kinijos laikas"}
+            sd{"CDT (Kinija)"}
             sg{"CT (Kinija)"}
+            ss{"CST (Kinija)"}
         }
         "meta:Choibalsan"{
             ld{"Choibalsan vasaros laikas"}
@@ -1065,7 +1057,6 @@ lt{
         "meta:Gulf"{
             lg{"Gulf laikas"}
             ls{"Gulf žiemos laikas"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Gajanos laikas"}
@@ -1167,7 +1158,6 @@ lt{
             ld{"Lord Howe vasaros laikas"}
             lg{"Lord Howe laikas"}
             ls{"Lord Howe žiemos laikas"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macau vasaros laikas"}
@@ -1222,13 +1212,11 @@ lt{
             ld{"Naujosios Zelandijos vasaros laikas"}
             lg{"Naujosios Zelandijos laikas"}
             ls{"Naujosios Zelandijos žiemos laikas"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Niufaundlendo vasaros laikas"}
             lg{"Niufaundlendo laikas"}
             ls{"Niufaundlendo žiemos laikas"}
-            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niujės laikas"}
@@ -1329,7 +1317,9 @@ lt{
             ld{"Taipėjaus vasaros laikas"}
             lg{"Taipėjaus laikas"}
             ls{"Taipėjaus žiemos laikas"}
+            sd{"CDT (Taipėjus)"}
             sg{"CT (Taipėjus)"}
+            ss{"CST (Taipėjus)"}
         }
         "meta:Tajikistan"{
             ls{"Tadžikijos laikas"}
@@ -1414,6 +1404,5 @@ lt{
         fallbackFormat{"{0} ({1})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;−HH:mm"}
-        regionFormat{"{0}"}
     }
 }

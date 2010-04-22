@@ -795,5 +795,5 @@ ka{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.48.64"}
 }

@@ -29,7 +29,7 @@ te{
         "#,##,##0%",
         "#E0",
     }
-    Version{"2.0.47.65"}
+    Version{"2.0.48.44"}
     calendar{
         gregorian{
             AmPmMarkers{

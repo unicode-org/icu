@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.47.65"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
@@ -24,6 +24,5 @@ vi{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

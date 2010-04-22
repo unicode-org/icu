@@ -41,7 +41,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.47.87"}
+    Version{"2.0.48.64"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -60,46 +60,8 @@ root{
                 "{1} {0}",
                 "{1} {0}",
             }
-            appendItems{
-                Day{"{0} ({2}: {1})"}
-                Day-Of-Week{"{0} {1}"}
-                Era{"{0} {1}"}
-                Hour{"{0} ({2}: {1})"}
-                Minute{"{0} ({2}: {1})"}
-                Month{"{0} ({2}: {1})"}
-                Quarter{"{0} ({2}: {1})"}
-                Second{"{0} ({2}: {1})"}
-                Timezone{"{0} {1}"}
-                Week{"{0} ({2}: {1})"}
-                Year{"{0} {1}"}
-            }
-            availableFormats{
-                EEEd{"EEE d"}
-                H{"HH"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E, M-d"}
-                MMM{"LLL"}
-                MMMEd{"E MMM d"}
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                d{"d"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
-                yMMM{"MMM, y"}
-                yMMMEd{"EEE, MMM d, y"}
-                yMMMM{"MMMM, y"}
-                yQ{"y Q"}
-                yQQQ{"y QQQ"}
-            }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{

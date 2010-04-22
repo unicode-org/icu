@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    Version{"2.0.47.63"}
+    Version{"2.0.48.56"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Aljaška"}

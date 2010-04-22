@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    Version{"2.0.47.72"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -573,6 +573,8 @@ es{
             ld{"Hora de verano de China"}
             lg{"Hora de China"}
             ls{"Hora estándar de China"}
+            sd{"CDT (China)"}
+            sg{"CT (China)"}
             ss{"CST (China)"}
         }
         "meta:Choibalsan"{

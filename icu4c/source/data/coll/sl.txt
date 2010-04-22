@@ -14,7 +14,7 @@ sl{
     collations{
         standard{
             Sequence{"&C<č<<<Č<ć<<<Ć&S<š<<<Š&Z<ž<<<Ž"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }

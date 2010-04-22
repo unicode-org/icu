@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/eu.xml
  */
 eu{
-    Version{"2.0.47.72"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "America:North_Dakota:Center"{
             ec{"Ameriketako Estatu Batuak (Erdialdea, Ipar Dakota)"}
@@ -36,6 +36,5 @@ eu{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

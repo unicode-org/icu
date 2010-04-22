@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alger"}
@@ -197,31 +197,26 @@ fi{
             ld{"Yhdysvaltain keskinen kesäaika"}
             lg{"Yhdysvaltain keskinen aika"}
             ls{"Yhdysvaltain keskinen normaaliaika"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Yhdysvaltain itäinen kesäaika"}
             lg{"Yhdysvaltain itäinen aika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Kalliovuorten kesäaika"}
             lg{"Kalliovuorten aika"}
             ls{"Kalliovuorten normaaliaika"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Yhdysvaltain Tyynenmeren kesäaika"}
             lg{"Yhdysvaltain Tyynenmeren aika"}
             ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
-            sg{"PT"}
         }
         "meta:Arabian"{
             ld{"Saudi-Arabian kesäaika"}
             lg{"Saudi-Arabian aika"}
             ls{"Saudi-Arabian normaaliaika"}
-            sg{"AT (SA)"}
         }
         "meta:Armenia"{
             ls{"Armenian aika"}
@@ -234,32 +229,25 @@ fi{
             ld{"Kanadan Atlantin kesäaika"}
             lg{"Kanadan Atlantin aika"}
             ls{"Kanadan Atlantin normaaliaika"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Keski-Australian kesäaika"}
             lg{"Keski-Australian aika"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Läntisen Keski-Australian kesäaika"}
             lg{"Läntisen Keski-Australian aika"}
             ls{"Läntisen Keski-Australian normaaliaika"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Itä-Australian kesäaika"}
             lg{"Itä-Australian aika"}
             ls{"Itä-Australian normaaliaika"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Länsi-Australian kesäaika"}
             lg{"Länsi-Australian aika"}
             ls{"Länsi-Australian normaaliaika"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaidžanin kesäaika"}
@@ -294,6 +282,7 @@ fi{
             lg{"Kiinan aika"}
             ls{"Kiinan normaaliaika"}
             sd{"CDT (Kiina)"}
+            sg{"CT (Kiina)"}
             ss{"CST (Kiina)"}
         }
         "meta:Choibalsan"{
@@ -336,7 +325,6 @@ fi{
         }
         "meta:Gulf"{
             ls{"Arabiemiirikuntien normaaliaika"}
-            sg{"GT"}
         }
         "meta:Hong_Kong"{
             ld{"Hongkongin kesäaika"}
@@ -375,7 +363,6 @@ fi{
         "meta:Korea"{
             lg{"Korean aika"}
             ls{"Korean normaaliaika"}
-            sg{"KT"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnojarskin kesäaika"}
@@ -392,7 +379,6 @@ fi{
             ld{"Lord Howen kesäaika"}
             lg{"Lord Howen aika"}
             ls{"Lord Howen normaaliaika"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macaon kesäaika"}
@@ -424,7 +410,6 @@ fi{
             ld{"Uuden-Seelannin kesäaika"}
             lg{"Uuden-Seelannin aika"}
             ls{"Uuden-Seelannin normaaliaika"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundlandin kesäaika"}
@@ -507,6 +492,5 @@ fi{
         gmtFormat{"UTC{0}"}
         gmtZeroFormat{"UTC"}
         hourFormat{"+H.mm;-H.mm"}
-        regionFormat{"{0}"}
     }
 }

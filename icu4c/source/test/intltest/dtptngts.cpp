@@ -361,7 +361,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     format->applyPattern(newPattern);
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Frankreich");
+    expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 (Frankreich)");
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test modify the timezone!");
         errln(UnicodeString(" Got: ")+ dateReturned + UnicodeString(" Expected: ") + expectedResult);

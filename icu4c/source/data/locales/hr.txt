@@ -40,7 +40,7 @@ hr{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     calendar{
         buddhist{
             DateTimePatterns{

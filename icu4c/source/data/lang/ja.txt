@@ -670,7 +670,7 @@ ja{
         VALENCIA{"バレンシア方言"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

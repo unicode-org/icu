@@ -91,7 +91,7 @@ zh{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -414,6 +414,7 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                MMMEd{"M月d日E"}
                 h{"ah"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
@@ -421,6 +422,7 @@ zh{
                 yyyyMEd{"Gy-M-d（EEE）"}
                 yyyyMM{"Gy-MM"}
                 yyyyMMM{"Gy年MMM"}
+                yyyyMMMEd{"Gy年M月d日EEE"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy-M-d"}
                 yyyyQ{"Gy年第Q季度"}

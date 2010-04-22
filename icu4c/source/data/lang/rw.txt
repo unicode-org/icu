@@ -118,5 +118,5 @@ rw{
         yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.64"}
 }

@@ -46,7 +46,7 @@ sw{
         rw{"Kinyarwanda"}
         so{"Kisomali"}
         sv{"Kiswidi"}
-        sw{"Kenya"}
+        sw{"Kiswahili"}
         ta{"Kitamil"}
         th{"Kitailandi"}
         tr{"Kituruki"}
@@ -57,5 +57,5 @@ sw{
         zh{"Kichina"}
         zu{"Kizulu"}
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.48.30"}
 }

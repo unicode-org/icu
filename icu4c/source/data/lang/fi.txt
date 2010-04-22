@@ -720,7 +720,7 @@ fi{
         VALENCIA{"katalaanin valencian murre"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

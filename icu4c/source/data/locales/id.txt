@@ -35,7 +35,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -58,6 +58,9 @@ id{
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
+                yM{"M/y"}
+                yMEd{"EEE, d/M/y"}
+                yMMM{"MMM y"}
                 yMMMEd{"EEE, d MMM y"}
             }
             dayNames{

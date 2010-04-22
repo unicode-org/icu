@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.47.67"}
+    Version{"2.0.48.56"}
     zoneStrings{
         "meta:Acre"{
             ld{"Waktu Musim Panas Acre"}

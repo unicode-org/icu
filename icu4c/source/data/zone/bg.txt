@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Bamako"{
             ec{"Бамако"}
@@ -637,10 +637,12 @@ bg{
         "meta:China"{
             ls{"Китайска часова зона"}
             sd{"CDT (Китай)"}
+            sg{"CT (Китай)"}
             ss{"CST (Китай)"}
         }
         "meta:Cuba"{
             sd{"CDT (Куба)"}
+            sg{"CT (Куба)"}
             ss{"CST (Куба)"}
         }
         "meta:Europe_Central"{
@@ -684,6 +686,5 @@ bg{
         gmtFormat{"Гриинуич{0}"}
         gmtZeroFormat{"Гриинуич"}
         hourFormat{"+HHmm;-HHmm"}
-        regionFormat{"{0}"}
     }
 }
