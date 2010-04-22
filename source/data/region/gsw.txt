@@ -295,5 +295,5 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.48.64"}
 }

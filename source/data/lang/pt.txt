@@ -710,7 +710,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Roteiro: {0}"}

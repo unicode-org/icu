@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -159,13 +159,11 @@ pt{
             ld{"Horário de Verão do Alasca"}
             lg{"Horário do Alaska"}
             ls{"Horário Padrão do Alasca"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Horário de Verão do Alaska-Havaí"}
             lg{"Horário do Alasca-Havaí"}
             ls{"Horário Padrão do Alaska-Havaí"}
-            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Horário de Verão do Almaty"}
@@ -180,25 +178,21 @@ pt{
             ld{"Horário de Verão Central"}
             lg{"Horário Central"}
             ls{"Horário Padrão Central"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Horário de Verão Oriental"}
             lg{"Horário Oriental"}
             ls{"Horário Padrão Oriental"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Horário de Verão da Montanha"}
             lg{"Horário da Montanha"}
             ls{"Horário Padrão da Montanha"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Horário de Verão do Pacífico"}
             lg{"Horário do Pacífico"}
             ls{"Horário Padrão do Pacífico"}
-            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Horário de Verão do Anadyr"}
@@ -241,7 +235,6 @@ pt{
             ld{"Horário de Verão do Atlântico"}
             lg{"Horário do Atlântico"}
             ls{"Horário Padrão do Atlântico"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Horário de Verão da Austrália Central"}
@@ -255,19 +248,16 @@ pt{
             ld{"Horário de Verão da Austrália Centro-Ocidental"}
             lg{"Horário da Austrália Centro-Ocidental"}
             ls{"Horário Padrão da Austrália Centro-Ocidental"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Horário de Verão da Austrália Oriental"}
             lg{"Horário da Austrália Oriental"}
             ls{"Horário Padrão da Austrália Oriental"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Horário de Verão da Austrália Ocidental"}
             lg{"Horário da Austrália Ocidental"}
             ls{"Horário Padrão da Austrália Ocidental"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Horário de Verão do Arzeibaijão"}
@@ -288,7 +278,6 @@ pt{
             ld{"Horário de Verão de Bering"}
             lg{"Horário de Bering"}
             ls{"Horário Padrão de Bering"}
-            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Horário do Butão"}
@@ -315,7 +304,6 @@ pt{
         "meta:Chamorro"{
             lg{"Horário de Chamorro"}
             ls{"Horário Padrão de Chamorro"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Horário de Changbai"}
@@ -359,6 +347,7 @@ pt{
             lg{"Horário de Cuba"}
             ls{"Horário Padrão de Cuba"}
             sd{"CDT (Cuba)"}
+            sg{"CT (Cuba)"}
             ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
@@ -453,7 +442,6 @@ pt{
         "meta:Gulf"{
             lg{"Horário do Golfo"}
             ls{"Horário Padrão do Golfo"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Horário da Guiana"}
@@ -506,7 +494,6 @@ pt{
             ld{"Horário de Verão do Japão"}
             lg{"Horário do Japão"}
             ls{"Horário Padrão do Japão"}
-            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Horário de Verão de Petropavlovsk-Kamchatski"}
@@ -565,7 +552,6 @@ pt{
             ld{"Horário de Verão de Lord Howe"}
             lg{"Horário de Lord Howe"}
             ls{"Horário Padrão de Lord Howe"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Horário de Verão de Macau"}
@@ -623,13 +609,11 @@ pt{
             ld{"Horário de Verão da Nova Zelândia"}
             lg{"Horário da Nova Zelândia"}
             ls{"Horário Padrão da Nova Zelândia"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Horário de Verão de Terra Nova"}
             lg{"Horário de Terra Nova"}
             ls{"Horário Padrão de Terra Nova"}
-            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Horário de Niue"}
@@ -681,7 +665,6 @@ pt{
             ld{"Horário de Verão de Pierre e Miquelon"}
             lg{"Horário de Pierre e Miquelon"}
             ls{"Horário Padrão de Pierre e Miquelon"}
-            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Horário de Pitcairn"}
@@ -830,7 +813,6 @@ pt{
             ld{"Horário de Verão de Yukon"}
             lg{"Horário de Yukon"}
             ls{"Horário Padrão de Yukon"}
-            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

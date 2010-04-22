@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
@@ -42,7 +42,6 @@ en{
         "meta:Africa_Southern"{
             lg{"South Africa Time"}
             ls{"South Africa Standard Time"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"West Africa Summer Time"}
@@ -57,13 +56,11 @@ en{
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Daylight Time"}
             lg{"Alaska-Hawaii Time"}
             ls{"Alaska-Hawaii Standard Time"}
-            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almaty Summer Time"}
@@ -78,36 +75,24 @@ en{
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             cu:int{1}
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             cu:int{1}
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             cu:int{1}
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadyr Summer Time"}
@@ -159,25 +144,21 @@ en{
             ld{"Australian Central Daylight Time"}
             lg{"Central Australia Time"}
             ls{"Australian Central Standard Time"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Australian Central Western Daylight Time"}
             lg{"Australian Central Western Time"}
             ls{"Australian Central Western Standard Time"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Australian Eastern Daylight Time"}
             lg{"Eastern Australia Time"}
             ls{"Australian Eastern Standard Time"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Australian Western Daylight Time"}
             lg{"Western Australia Time"}
             ls{"Australian Western Standard Time"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaijan Summer Time"}
@@ -199,7 +180,6 @@ en{
             ld{"Bering Daylight Time"}
             lg{"Bering Time"}
             ls{"Bering Standard Time"}
-            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Time"}
@@ -225,7 +205,6 @@ en{
         "meta:Chamorro"{
             lg{"Chamorro Time"}
             ls{"Chamorro Standard Time"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai Time"}
@@ -269,6 +248,7 @@ en{
             lg{"Cuba Time"}
             ls{"Cuba Standard Time"}
             sd{"CDT (Cuba)"}
+            sg{"CT (Cuba)"}
             ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
@@ -300,20 +280,14 @@ en{
         "meta:Europe_Central"{
             ld{"Central European Summer Time"}
             ls{"Central European Time"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Eastern European Summer Time"}
             ls{"Eastern European Time"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Western European Summer Time"}
             ls{"Western European Time"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland Islands Summer Time"}
@@ -336,7 +310,6 @@ en{
         "meta:GMT"{
             cu:int{1}
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Time"}
@@ -370,7 +343,6 @@ en{
         "meta:Gulf"{
             lg{"Gulf Time"}
             ls{"Gulf Standard Time"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Guyana Time"}
@@ -423,7 +395,6 @@ en{
             ld{"Japan Daylight Time"}
             lg{"Japan Time"}
             ls{"Japan Standard Time"}
-            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamchatski Summer Time"}
@@ -451,7 +422,6 @@ en{
             ld{"Korean Daylight Time"}
             lg{"Korean Time"}
             ls{"Korean Standard Time"}
-            sg{"KT"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Time"}
@@ -483,7 +453,6 @@ en{
             ld{"Lord Howe Daylight Time"}
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macau Summer Time"}
@@ -541,13 +510,11 @@ en{
             ld{"New Zealand Daylight Time"}
             lg{"New Zealand Time"}
             ls{"New Zealand Standard Time"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Daylight Time"}
             lg{"Newfoundland Time"}
             ls{"Newfoundland Standard Time"}
-            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niue Time"}
@@ -599,7 +566,6 @@ en{
             ld{"Pierre and Miquelon Daylight Time"}
             lg{"Pierre and Miquelon Time"}
             ls{"Pierre and Miquelon Standard Time"}
-            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Time"}
@@ -757,7 +723,6 @@ en{
             ld{"Yukon Daylight Time"}
             lg{"Yukon Time"}
             ls{"Yukon Standard Time"}
-            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

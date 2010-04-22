@@ -799,7 +799,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

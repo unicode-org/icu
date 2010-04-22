@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
@@ -111,7 +111,6 @@ sl{
         "meta:Africa_Southern"{
             lg{"Južnoafriški čas"}
             ls{"Južnoafriški standardni čas"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Zahodnoafriški poletni čas"}
@@ -244,6 +243,5 @@ sl{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

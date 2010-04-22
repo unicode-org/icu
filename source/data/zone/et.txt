@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
@@ -39,7 +39,6 @@ et{
         "meta:Africa_Southern"{
             lg{"Lõuna-Aafrika aeg"}
             ls{"Lõuna-Aafrika standardaeg"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Lääne-Aafrika suveaeg"}
@@ -49,31 +48,26 @@ et{
             ld{"Kesk-Ameerika suveaeg"}
             lg{"Kesk-Ameerika aeg"}
             ls{"Kesk-Ameerika standardaeg"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Idaranniku suveaeg"}
             lg{"Idaranniku aeg"}
             ls{"Idaranniku standardaeg"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Mäestikuvööndi suveaeg"}
             lg{"Mäestikuvööndi aeg"}
             ls{"Mäestikuvööndi standardaeg"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Vaikse ookeani suveaeg"}
             lg{"Vaikse ookeani aeg"}
             ls{"Vaikse ookeani standardaeg"}
-            sg{"PT"}
         }
         "meta:Atlantic"{
             ld{"Atlandi suveaeg"}
             lg{"Atlandi aeg"}
             ls{"Atlandi standardaeg"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Kesk-Austraalia suveaeg"}
@@ -249,6 +243,5 @@ et{
         fallbackFormat{"{0} ({1})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

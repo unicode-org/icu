@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seūta"}
@@ -532,7 +532,6 @@ lv{
         "meta:Africa_Southern"{
             lg{"Dienvidāfrikas laiks"}
             ls{"Dienvidāfrikas ziemas laiks"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Rietumāfrikas vasaras laiks"}
@@ -542,7 +541,6 @@ lv{
             ld{"Aļaskas vasaras laiks"}
             lg{"Aļaskas laiks"}
             ls{"Aļaskas ziemas laiks"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             sg{"AHT"}
@@ -555,25 +553,21 @@ lv{
             ld{"Centrālais vasaras laiks"}
             lg{"Centrālais laiks"}
             ls{"Centrālais ziemas laiks"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Austrumu vasaras laiks"}
             lg{"Austrumu laiks"}
             ls{"Austrumu ziemas laiks"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Kalnu vasaras laiks"}
             lg{"Kalnu laiks"}
             ls{"Kalnu ziemas laiks"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Klusā okeāna vasaras laiks"}
             lg{"Klusā okeāna laiks"}
             ls{"Klusā okeāna ziemas laiks"}
-            sg{"PT"}
         }
         "meta:Aqtau"{
             sd{"AQTST (Aktau)"}
@@ -612,33 +606,26 @@ lv{
             ld{"Atlantijas vasaras laiks"}
             lg{"Atlantijas laiks"}
             ls{"Atlantijas ziemas laiks"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Austrālijas centrālais vasaras laiks"}
             lg{"Austrālijas centrālais laiks"}
             ls{"Austrālijas centrālais ziemas laiks"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Austrālijas centrālais rietumu vasaras laiks"}
             lg{"Austrālijas centrālais rietumu laiks"}
             ls{"Austrālijas centrālais rietumu ziemas laiks"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Austrālijas austrumu vasaras laiks"}
             lg{"Austrālijas austrumu laiks"}
             ls{"Austrālijas austrumu ziemas laiks"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Austrālijas rietumu vasaras laiks"}
             lg{"Rietumaustrālijas laiks"}
             ls{"Austrālijas rietumu ziemas laiks"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaidžānas vasaras laiks"}
@@ -658,7 +645,7 @@ lv{
         }
         "meta:Bering"{
             sd{"BDT (Beringa)"}
-            sg{"BT"}
+            sg{"BT (Beringa)"}
             ss{"BST (Beringa)"}
         }
         "meta:Bhutan"{
@@ -683,6 +670,7 @@ lv{
             ld{"Ķīnas vasaras laiks"}
             lg{"Ķīnas laiks"}
             ls{"Ķīnas ziemas laiks"}
+            sd{"CDT (Ķīna)"}
             sg{"CT (Ķīna)"}
             ss{"CST (Ķīna)"}
         }
@@ -751,7 +739,6 @@ lv{
         }
         "meta:GMT"{
             ls{"Griničas laiks"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagu laiks"}
@@ -790,13 +777,11 @@ lv{
             ld{"Japānas vasaras laiks"}
             lg{"Japānas laiks"}
             ls{"Japānas ziemas laiks"}
-            sg{"JT"}
         }
         "meta:Korea"{
             ld{"Korejas vasaras laiks"}
             lg{"Korejas laiks"}
             ls{"Korejas ziemas laiks"}
-            sg{"KT"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnojarskas vasaras laiks"}
@@ -805,9 +790,6 @@ lv{
         "meta:Kuybyshev"{
             ld{"Kuibiševas vasaras laiks"}
             ls{"Kuibiševas laiks"}
-        }
-        "meta:Lord_Howe"{
-            sg{"LHT"}
         }
         "meta:Magadan"{
             ld{"Magadānas vasaras laiks"}
@@ -844,9 +826,6 @@ lv{
             lg{"Jaunzēlandes laiks"}
             ls{"Janzēlandes ziemas laiks"}
         }
-        "meta:Newfoundland"{
-            sg{"NT"}
-        }
         "meta:Norfolk"{
             ls{"Norfolkas salu laiks"}
         }
@@ -879,9 +858,6 @@ lv{
         "meta:Philippines"{
             ld{"Filipīnu vasaras laiks"}
             ls{"Filipīnu laiks"}
-        }
-        "meta:Pierre_Miquelon"{
-            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitkērnas laiks"}
@@ -930,6 +906,7 @@ lv{
         }
         "meta:Taipei"{
             sd{"CDT (Taipeja)"}
+            sg{"CT (Taipeja)"}
             ss{"CST (Taipeja)"}
         }
         "meta:Tashkent"{
@@ -985,11 +962,9 @@ lv{
             ld{"Jukonas vasaras laiks"}
             lg{"Jukonas laiks"}
             ls{"Jukonas ziemas laiks"}
-            sg{"YT"}
         }
         fallbackFormat{"{0} ({1})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;−HH:mm"}
-        regionFormat{"{0}"}
     }
 }

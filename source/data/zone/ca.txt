@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -134,25 +134,21 @@ ca{
             ld{"Hora d'estiu central"}
             lg{"Hora central"}
             ls{"Hora estàndard central"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Hora d'estiu oriental"}
             lg{"Hora oriental"}
             ls{"Hora estàndard oriental"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"Hora d'estiu de muntanya"}
             lg{"Hora de muntanya"}
             ls{"Hora estàndard de muntanya"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Hora d'estiu del Pacífic"}
             lg{"Hora del Pacífic"}
             ls{"Hora estàndard del Pacífic"}
-            sg{"PT"}
         }
         "meta:Arabian"{
             ld{"Hora d'estiu d'Aràbia"}
@@ -166,10 +162,11 @@ ca{
             ld{"Hora d'estiu de l'Atlàntic"}
             lg{"Hora de l'Atlàntic"}
             ls{"Hora estàndard de l'Atlàntic"}
-            sg{"AT"}
         }
         "meta:China"{
             ls{"Hora estàndard de la Xina"}
+            sd{"CDT (Xina)"}
+            sg{"CT (Xina)"}
             ss{"CST (Xina)"}
         }
         "meta:Europe_Central"{

@@ -699,7 +699,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.64"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

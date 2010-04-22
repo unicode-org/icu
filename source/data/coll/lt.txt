@@ -20,7 +20,7 @@ lt{
                 "&[before 1]T<š<<<Š"
                 "&[before 1]Ʒ<ž<<<Ž"
             }
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }

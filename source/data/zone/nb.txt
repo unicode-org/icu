@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.47.86"}
+    Version{"2.0.48.64"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -249,9 +249,6 @@ nb{
             ld{"Amazonas sommertid"}
             ls{"Amazonas-tid"}
         }
-        "meta:America_Central"{
-            sg{"CT"}
-        }
         "meta:Arabian"{
             ld{"arabisk sommertid"}
             lg{"arabisk tid"}
@@ -267,7 +264,6 @@ nb{
             ld{"sentralaustralsk sommertid"}
             lg{"sentralaustralsk tid"}
             ls{"sentralaustralsk standardtid"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"vest-sentralaustralsk sommertid"}
@@ -278,13 +274,11 @@ nb{
             ld{"østaustralsk sommertid"}
             lg{"østaustralsk tid"}
             ls{"østaustralsk standardtid"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"vestaustralsk sommertid"}
             lg{"vestaustralsk tid"}
             ls{"vestaustralsk standardtid"}
-            sg{"AWT"}
         }
         "meta:Brasilia"{
             ld{"Brasilia sommertid"}
@@ -292,6 +286,8 @@ nb{
         }
         "meta:China"{
             ls{"kinesisk standardtid"}
+            sd{"CDT (Kina)"}
+            sg{"CT (Kina)"}
             ss{"CST (Kina)"}
         }
         "meta:Europe_Central"{
@@ -347,11 +343,9 @@ nb{
             ld{"newzealandsk sommertid"}
             lg{"newzealandsk tid"}
             ls{"newzealandsk standardtid"}
-            sg{"NZT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

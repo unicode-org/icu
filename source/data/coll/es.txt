@@ -14,11 +14,11 @@ es{
     collations{
         standard{
             Sequence{"&N<ñ<<<Ñ&ae<<æ<<<Æ"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
         traditional{
             Sequence{"&N<ñ<<<Ñ&C<ch<<<Ch<<<CH&l<ll<<<Ll<<<LL"}
-            Version{"1.8"}
+            Version{"1.8.1"}
         }
     }
 }

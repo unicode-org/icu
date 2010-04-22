@@ -40,7 +40,7 @@ ru{
         "#,##0 %",
         "#E0",
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -75,17 +75,17 @@ ru{
                 y{"y"}
                 yM{"M.y"}
                 yMEd{"EEE, d.M.y"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yQQQ{"y QQQ"}
                 yyMM{"MM.yy"}
-                yyMMM{"MMM yy"}
+                yyMMM{"LLL yy"}
                 yyMMMEEEd{"EEE, d MMM yy"}
                 yyQ{"Q yy"}
                 yyyy{"y"}
                 yyyyLLLL{"LLLL y"}
                 yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM y"}
+                yyyyMMMM{"LLLL y"}
                 yyyyQQQQ{"QQQQ y 'г'."}
             }
             dayNames{

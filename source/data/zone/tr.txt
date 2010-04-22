@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    Version{"2.0.47.65"}
+    Version{"2.0.48.46"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}
@@ -148,7 +148,6 @@ tr{
         "meta:Africa_Southern"{
             lg{"Güney Afrika Saati"}
             ls{"Güney Afrika Standart Saati"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"Batı Afrika Yaz Saati"}
@@ -162,13 +161,11 @@ tr{
             ld{"Alaska Yaz Saati"}
             lg{"Alaska Saati"}
             ls{"Alaska Standart Saati"}
-            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Yaz Saati"}
             lg{"Alaska-Hawaii Saati"}
             ls{"Alaska-Hawaii Standart Saati"}
-            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almatı Yaz Saati"}
@@ -182,25 +179,21 @@ tr{
             ld{"Merkezi Yaz Saati"}
             lg{"Merkezi Saat"}
             ls{"Merkezi Standart Saati"}
-            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Doğu Yaz Saati"}
             lg{"Doğu Saati"}
             ls{"Doğu Standart Saati"}
-            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"ABD Sıradağlar Yaz Saati"}
             lg{"ABD Sıradağlar Saati"}
             ls{"ABD Sıradağlar Standart Saati"}
-            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Pasifik Yaz Saati"}
             lg{"Pasifik Saati"}
             ls{"Pasifik Standart Saati"}
-            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Anadır Yaz Saati"}
@@ -247,31 +240,26 @@ tr{
             ld{"Atlantik Yaz Saati"}
             lg{"Atlantik Saati"}
             ls{"Atlantik Standart Saati"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Orta Avustralya Yaz Saati"}
             lg{"Orta Avustralya Saati"}
             ls{"Orta Avustralya Standart Saati"}
-            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Batı Merkezi Avustralya Yaz Saati"}
             lg{"Batı Merkezi Avustralya Saati"}
             ls{"Batı Merkezi Avustralya Standart Saati"}
-            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Doğu Avustralya Yaz Saati"}
             lg{"Doğu Avustralya Saati"}
             ls{"Doğu Avustralya Standart Saati"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Batı Avustralya Yaz Saati"}
             lg{"Batı Avustralya Saati"}
             ls{"Batı Avustralya Standart Saati"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaycan Yaz Saati"}
@@ -293,7 +281,6 @@ tr{
             ld{"Bering Yaz Saati"}
             lg{"Bering Saati"}
             ls{"Bering Standart Saati"}
-            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Saati"}
@@ -319,7 +306,6 @@ tr{
         "meta:Chamorro"{
             lg{"Chamorro Saati"}
             ls{"Chamorro Standart Saati"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai Saati"}
@@ -363,6 +349,7 @@ tr{
             lg{"Küba Saati"}
             ls{"Küba Standart Saati"}
             sd{"CDT (Küba)"}
+            sg{"CT (Küba)"}
             ss{"CST (Küba)"}
         }
         "meta:Dacca"{
@@ -456,7 +443,6 @@ tr{
         "meta:Gulf"{
             lg{"Körfez Saati"}
             ls{"Körfez Standart Saati"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Guyana Saati"}
@@ -508,7 +494,6 @@ tr{
             ld{"Japonya Yaz Saati"}
             lg{"Japonya Saati"}
             ls{"Japonya Standart Saati"}
-            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamçatski Yaz Saati"}
@@ -536,7 +521,6 @@ tr{
             ld{"Kore Yaz Saati"}
             lg{"Kore Saati"}
             ls{"Kore Standart Saati"}
-            sg{"KT"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Saati"}
@@ -568,7 +552,6 @@ tr{
             ld{"Lord Howe Yaz Saati"}
             lg{"Lord Howe Saati"}
             ls{"Lord Howe Standart Saati"}
-            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Makao Yaz Saati"}
@@ -626,13 +609,11 @@ tr{
             ld{"Yeni Zelanda Yaz Saati"}
             lg{"Yeni Zelanda Saati"}
             ls{"Yeni Zelanda Standart Saati"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Yaz Saati"}
             lg{"Newfoundland Saati"}
             ls{"Newfoundland Standart Saati"}
-            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niue Saati"}
@@ -684,7 +665,6 @@ tr{
             ld{"Pierre ve Miquelon Yaz Saati"}
             lg{"Pierre ve Miquelon Saati"}
             ls{"Pierre ve Miquelon Standart Saati"}
-            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Saati"}
@@ -753,7 +733,9 @@ tr{
             ld{"Taipei Yaz Saati"}
             lg{"Taipei Saati"}
             ls{"Taipei Standart Saati"}
+            sd{"CDT (Taipei)"}
             sg{"CT (Taipei)"}
+            ss{"CST (Taipei)"}
         }
         "meta:Tajikistan"{
             ls{"Tacikistan Saati"}
@@ -842,7 +824,6 @@ tr{
             ld{"Yukon Yaz Saati"}
             lg{"Yukon Saati"}
             ls{"Yukon Standart Saati"}
-            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

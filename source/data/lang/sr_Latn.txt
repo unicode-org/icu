@@ -707,7 +707,7 @@ sr_Latn{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.46"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

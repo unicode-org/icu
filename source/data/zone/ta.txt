@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ta.xml
  */
 ta{
-    Version{"2.0.47.65"}
+    Version{"2.0.48.54"}
     zoneStrings{
         "America:Cambridge_Bay"{
             ec{"கேம்பிரிட்ஜ் பே"}

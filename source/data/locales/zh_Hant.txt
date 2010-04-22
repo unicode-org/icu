@@ -79,7 +79,7 @@ zh_Hant{
         "#,##0%",
         "#E0",
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.48.57"}
     calendar{
         chinese{
             DateTimePatterns{
