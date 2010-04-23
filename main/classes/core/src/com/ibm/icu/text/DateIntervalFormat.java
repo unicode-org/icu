@@ -26,8 +26,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * DateIntervalFormat is a class for formatting and parsing date 
  * intervals in a language-independent manner. 
- * Date interval formatting is supported in Gregorian calendar only.
- * And only formatting is supported. Parsing is not supported.
+ * Only formatting is supported. Parsing is not supported.
  *
  * <P>
  * Date interval means from one date to another date,
@@ -593,7 +592,7 @@ public class DateIntervalFormat extends UFormat {
      * @param pos               On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
      * @return                  Reference to 'appendTo' parameter.
-     * @throws    IllegalArgumentException  if the two calendars are not equivalent, or the calendars are not Gregorian calendar.
+     * @throws    IllegalArgumentException  if the two calendars are not equivalent.
      * @stable ICU 4.0
      */
     public final StringBuffer format(Calendar fromCalendar,
@@ -602,9 +601,8 @@ public class DateIntervalFormat extends UFormat {
                                      FieldPosition pos)
     {
         // not support different calendar types and time zones
-        if ( !fromCalendar.isEquivalentTo(toCalendar) ||
-             !fromCalendar.getType().equals("gregorian") ) {
-            throw new IllegalArgumentException("can not format on two different calendars or non-Gregorian calendars");
+        if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
+            throw new IllegalArgumentException("can not format on two different calendars");
         }
     
         // First, find the largest different calendar field.

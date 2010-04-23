@@ -138,7 +138,8 @@ import com.ibm.icu.util.UResourceBundle;
  * <P>
  * DateIntervalInfo are not expected to be subclassed. 
  * Data for a calendar is loaded out of resource bundles. 
- * To ICU 4.0, date interval patterns are only supported in Gregorian calendar.
+ * Through ICU 4.4, date interval patterns are only supported in the Gregoria
+ * calendar; non-Gregorian calendars are supported from ICU 4.4.1.  
  * 
  * @stable ICU 4.0
  */
@@ -303,8 +304,9 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
     /** 
      * Construct DateIntervalInfo for the given locale,
-     * @param locale  the interval patterns are loaded from the Gregorian 
-     *                calendar data in this locale.
+     * @param locale  the interval patterns are loaded from the appropriate 
+     *                calendar data (specified calendar or default calendar)
+     *                in this locale.
      * @stable ICU 4.0
      */
     public DateIntervalInfo(ULocale locale) 
@@ -362,6 +364,15 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             // loop through all locales to get all available skeletons'
             // interval format
             ULocale parentLocale = locale;
+            // Get the correct calendar type
+            String calendarTypeToUse = locale.getKeywordValue("calendar");
+            if ( calendarTypeToUse == null ) {
+                String[] preferredCalendarTypes = Calendar.getKeywordValuesForLocale("calendar", locale, true);
+                calendarTypeToUse = preferredCalendarTypes[0]; // the most preferred calendar
+            }
+            if ( calendarTypeToUse == null ) {
+                calendarTypeToUse = "gregorian"; // fallback
+            }
             do {
                 String name = parentLocale.getName();
                 if ( name.length() == 0 ) {
@@ -371,9 +382,9 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.
                   getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
                 rb = rb.getWithFallback("calendar");
-                ICUResourceBundle gregorianBundle = rb.getWithFallback(
-                                                              "gregorian");
-                ICUResourceBundle itvDtPtnResource =gregorianBundle.
+                ICUResourceBundle calTypeBundle = rb.getWithFallback(
+                                                              calendarTypeToUse);
+                ICUResourceBundle itvDtPtnResource =calTypeBundle.
                                       getWithFallback("intervalFormats");
                 // look for fallback first, since it establishes the default order
                 String fallback = itvDtPtnResource.getStringWithFallback(
