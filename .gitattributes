@@ -63,8 +63,6 @@ main/classes/core/.classpath -text
 main/classes/core/.project -text
 main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 main/classes/core/manifest.stub -text
-main/classes/core/src/com/ibm/icu/impl/BMPSet.java -text
-main/classes/core/src/com/ibm/icu/impl/UnicodeSetStringSpan.java -text
 main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
 main/classes/currdata/.settings/org.eclipse.jdt.ui.prefs -text
@@ -114,7 +112,6 @@ main/tests/core/manifest.stub -text
 main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
-main/tests/core/src/com/ibm/icu/dev/test/lang/UnicodeSetStringSpanTest.java -text
 main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
