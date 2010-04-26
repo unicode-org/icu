@@ -1,5 +1,5 @@
 ## Cygwin with Microsoft Visual C++ compiler specific setup
-## Copyright (c) 2001-2008, International Business Machines Corporation and
+## Copyright (c) 2001-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # We install sbin tools into the same bin directory because
@@ -221,7 +221,6 @@ INSTALL-L=$(INSTALL_PROGRAM)
 LDLIBRARYPATH_ENVVAR = PATH
 
 # These are needed to allow the pkgdata nmake files to work
-PKGDATA_OPTS = -v
 PKGDATA_INVOKE_OPTS = MAKEFLAGS=
 
 # Include the version information in the shared library
