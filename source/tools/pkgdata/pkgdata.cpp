@@ -76,6 +76,9 @@ U_CDECL_END
 #if defined(WINDOWS_WITH_MSVC) || defined(U_LINUX)
 #define CAN_WRITE_OBJ_CODE
 #endif
+#if defined(U_CYGWIN) || defined(CYGWINMSVC)
+#define USING_CYGWIN
+#endif
 
 /*
  * When building the data library without assembly,
@@ -88,7 +91,7 @@ U_CDECL_END
 #endif
 
 /* Need to fix the file seperator character when using MinGW. */
-#ifdef WINDOWS_WITH_GNUC
+#if defined(WINDOWS_WITH_GNUC) || defined(USING_CYGWIN)
 #define PKGDATA_FILE_SEP_STRING "/"
 #else
 #define PKGDATA_FILE_SEP_STRING U_FILE_SEP_STRING
@@ -104,7 +107,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o);
 #ifdef WINDOWS_WITH_MSVC
 static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, UPKGOptions *o);
 #endif
-static int32_t pkg_createSymLinks(const char *targetDir);
+static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling=FALSE);
 static int32_t pkg_installLibrary(const char *installDir, const char *dir);
 static int32_t pkg_installFileMode(const char *installDir, const char *srcDir, const char *fileListName);
 
@@ -118,7 +121,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
 static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, const UBool reverseExt);
 
 static int32_t pkg_getOptionsFromICUConfig(UBool verbose, UOption *option);
-static int runCommand(const char* command);
+static int runCommand(const char* command, UBool specialHandling=FALSE);
 
 enum {
     NAME,
@@ -210,6 +213,7 @@ enum {
     LIB_FILE_VERSION_TMP,
 #ifdef U_CYGWIN
     LIB_FILE_CYGWIN,
+	LIB_FILE_CYGWIN_VERSION,
 #endif
     LIB_FILENAMES_SIZE
 };
@@ -283,7 +287,7 @@ main(int argc, char* argv[]) {
         }
 
 
-#ifndef WINDOWS_WITH_MSVC
+#if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN)
         if(!options[BLDOPT].doesOccur && uprv_strcmp(options[MODE].value, "common") != 0) {
           if (pkg_getOptionsFromICUConfig(options[VERBOSE].doesOccur, &options[BLDOPT]) != 0) {
                 fprintf(stderr, " required parameter is missing: -O is required for static and shared builds.\n");
@@ -382,7 +386,7 @@ main(int argc, char* argv[]) {
     o.verbose   = options[VERBOSE].doesOccur;
 
 
-#ifndef WINDOWS_WITH_MSVC /* on UNIX, we'll just include the file... */
+#if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN) /* on UNIX, we'll just include the file... */
     if (options[BLDOPT].doesOccur) {
         o.options   = options[BLDOPT].value;
     } else {
@@ -467,9 +471,25 @@ main(int argc, char* argv[]) {
     return result;
 }
 
-static int runCommand(const char* command) { 
-    printf("pkgdata: %s\n", command); 
-    int result = system(command); 
+static int runCommand(const char* command, UBool specialHandling) {
+    char cmd[SMALL_BUFFER_MAX_SIZE];
+
+    if (!specialHandling) {
+#ifdef USING_CYGWIN
+        sprintf(cmd, "bash -c \"%s\"", command);
+
+#elif defined(OS400)
+        sprintf(cmd, "QSH CMD('%s')", command);
+#else
+        goto normal_command_mode;
+#endif
+    } else {
+normal_command_mode:
+        sprintf(cmd, "%s", command);
+    }
+    
+    printf("pkgdata: %s\n", cmd);
+    int result = system(cmd);
     if (result != 0) { 
         printf("-- return status = %d\n", result); 
     }
@@ -587,7 +607,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
               fprintf(stdout, "\n");
             }
 
-#ifndef WINDOWS_WITH_MSVC
+#if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN)
             /* Read in options file. */
             if(o->verbose) {
               fprintf(stdout, "# Reading options file %s\n", o->options);
@@ -686,7 +706,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 #ifdef U_LINUX
                 result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
 #elif defined(WINDOWS_WITH_MSVC)
-                return pkg_createWindowsDLL(mode, gencFilePath, o);
+                result = pkg_createWindowsDLL(mode, gencFilePath, o);
 #endif
 #elif defined(BUILD_DATA_WITHOUT_ASSEMBLY)
                 result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
@@ -716,6 +736,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
 #endif
             } /* !MODE_STATIC */
+#endif
+
+#if !defined(U_WINDOWS) || defined(USING_CYGWIN)
             /* Install the libraries if option was set. */
             if (o->install != NULL) {
                 if(o->verbose) {
@@ -747,7 +770,10 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 
         if (version != NULL) {
 #ifdef U_CYGWIN
-            sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s%s.%s",
+            sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s.%s",
+                    libName,
+                    pkgDataFlags[SO_EXT]);
+            sprintf(libFileNames[LIB_FILE_CYGWIN_VERSION], "cyg%s%s.%s",
                     libName,
                     version_major,
                     pkgDataFlags[SO_EXT]);
@@ -797,11 +823,13 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 }
 
 /* Create the symbolic links for the final library file. */
-static int32_t pkg_createSymLinks(const char *targetDir) {
+static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) {
     int32_t result = 0;
     char cmd[LARGE_BUFFER_MAX_SIZE];
+	char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
+	char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
 
-#ifndef U_CYGWIN
+#ifndef USING_CYGWIN
     /* No symbolic link to make. */
     if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
         return result;
@@ -819,13 +847,27 @@ static int32_t pkg_createSymLinks(const char *targetDir) {
         return result;
     }
 #endif
-    sprintf(cmd, "cd %s && %s %s.%s && %s %s %s.%s",
+
+    if (specialHandling) {
+#ifdef U_CYGWIN
+        sprintf(name1, "%s", libFileNames[LIB_FILE_CYGWIN]);
+        sprintf(name2, "%s", libFileNames[LIB_FILE_CYGWIN_VERSION]);
+#else
+        goto normal_symlink_mode;
+#endif
+    } else {
+normal_symlink_mode:
+        sprintf(name1, "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[SO_EXT]);
+        sprintf(name2, "%s", libFileNames[LIB_FILE_VERSION]);
+    }
+
+    sprintf(cmd, "cd %s && %s %s && %s %s %s",
             targetDir,
             RM_CMD,
-            libFileNames[LIB_FILE], pkgDataFlags[SO_EXT],
+            name1,
             LN_CMD,
-            libFileNames[LIB_FILE_VERSION],
-            libFileNames[LIB_FILE], pkgDataFlags[SO_EXT]);
+            name2,
+            name1);
 
      result = runCommand(cmd);
 
@@ -849,7 +891,33 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
         return result;
     }
 
-    return pkg_createSymLinks(installDir);
+#ifdef CYGWINMSVC
+    sprintf(cmd, "cd %s && %s %s.lib %s",
+            targetDir,
+            pkgDataFlags[INSTALL_CMD],
+            libFileNames[LIB_FILE],
+            installDir
+            );
+    result = runCommand(cmd);
+
+    if (result != 0) {
+        return result;
+    }
+#elif defined (U_CYGWIN)
+    sprintf(cmd, "cd %s && %s %s %s",
+            targetDir,
+            pkgDataFlags[INSTALL_CMD],
+            libFileNames[LIB_FILE_CYGWIN_VERSION],
+            installDir
+            );
+    result = runCommand(cmd);
+
+    if (result != 0) {
+        return result;
+    }
+#endif
+
+    return pkg_createSymLinks(installDir, TRUE);
 }
 
 #ifdef U_WINDOWS_MSVC
@@ -996,29 +1064,21 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
     }
 
     if (mode == MODE_STATIC) {
-#ifdef OS400
-        sprintf(cmd, "QSH CMD('%s %s %s%s %s')",
-#else
         sprintf(cmd, "%s %s %s%s %s",
-#endif
                 pkgDataFlags[AR],
                 pkgDataFlags[ARFLAGS],
                 targetDir,
                 libFileNames[LIB_FILE_VERSION],
                 objectFile);
 
-        result = runCommand(cmd); 
+        result = runCommand(cmd);
         if (result == 0) {
-#ifdef OS400 
-            sprintf(cmd, "QSH CMD('%s %s%s')", 
-#else 
             sprintf(cmd, "%s %s%s", 
-#endif 
                     pkgDataFlags[RANLIB], 
                     targetDir, 
                     libFileNames[LIB_FILE_VERSION]); 
         
-            result = runCommand(cmd); 
+            result = runCommand(cmd);
         }
     } else /* if (mode == MODE_DLL) */ {
 #ifdef U_CYGWIN
@@ -1027,13 +1087,9 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                 targetDir,
                 libFileNames[LIB_FILE_VERSION_TMP],
                 pkgDataFlags[LDICUDTFLAGS],
-                targetDir, libFileNames[LIB_FILE_CYGWIN],
-#else
-#ifdef OS400
-        sprintf(cmd, "QSH CMD('%s %s -o %s%s %s %s%s %s %s')",
+                targetDir, libFileNames[LIB_FILE_CYGWIN_VERSION],
 #else
         sprintf(cmd, "%s %s -o %s%s %s %s%s %s %s",
-#endif
                 pkgDataFlags[GENLIB],
                 pkgDataFlags[LDICUDTFLAGS],
                 targetDir,
@@ -1160,11 +1216,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             uprv_strcpy(tempObjectFile, gencmnFile);
             tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
             
-#ifdef OS400
-            sprintf(cmd, "QSH CMD('%s %s -o %s %s')",
-#else
             sprintf(cmd, "%s %s -o %s %s"
-#endif
                         pkgDataFlags[COMPILER],
                         pkgDataFlags[LIBFLAGS],
                         tempObjectFile,
@@ -1218,11 +1270,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 
             writeCCode(file, o->tmpDir, dataName[0] != 0 ? dataName : o->shortName, newName[0] != 0 ? newName : NULL, gencmnFile);
 #ifdef USE_SINGLE_CCODE_FILE
-#ifdef OS400
-            sprintf(cmd, "QSH CMD('cat %s >> %s')", gencmnFile, icudtAll);
-#else
             sprintf(cmd, "cat %s >> %s", gencmnFile, icudtAll);
-#endif
             
             result = runCommand(cmd);
             if (result != 0) {
@@ -1265,11 +1313,8 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 #ifdef USE_SINGLE_CCODE_FILE
     uprv_strcpy(tempObjectFile, icudtAll);
     tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
-#ifdef OS400
-    sprintf(cmd, "QSH CMD('%s %s -o %s %s')",
-#else
+
     sprintf(cmd, "%s %s -o %s %s",
-#endif
         pkgDataFlags[COMPILER],
         pkgDataFlags[LIBFLAGS],
         tempObjectFile,
@@ -1370,7 +1415,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
                 );
     }
 
-    return runCommand(cmd);
+    return runCommand(cmd, TRUE);
 }
 #endif
 
