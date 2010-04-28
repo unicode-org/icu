@@ -40,6 +40,7 @@ public:
     virtual void API_Replace_UTF8();
     virtual void PerlTestsUTF8();
     virtual void PreAllocatedUTextCAPI();
+    virtual void Bug7651();
 
     // The following functions are internal to the regexp tests.
     virtual void assertUText(const char *expected, UText *actual, const char *file, int line);
