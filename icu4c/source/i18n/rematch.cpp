@@ -243,7 +243,7 @@ void RegexMatcher::init2(UText *input, UErrorCode &status) {
         return;
     }
 
-    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
+    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(fSmallData[0]))) {
         fData = (int64_t *)uprv_malloc(fPattern->fDataSize * sizeof(int64_t)); 
         if (fData == NULL) {
             status = fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
