@@ -98,6 +98,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 14: name = "PreAllocatedUTextCAPI";
           if (exec) PreAllocatedUTextCAPI();
           break;
+        case 15: name = "Bug 7651";
+          if (exec) Bug7651();
+          break;
 
         default: name = "";
             break; //needed to end loop
@@ -4607,6 +4610,42 @@ void RegexTest::PreAllocatedUTextCAPI () {
     utext_close(&bufferText);
     utext_close(&patternText);
 }
+
+//--------------------------------------------------------------
+//
+//  Bug7651   Regex pattern that exceeds default operator stack depth in matcher.
+//
+//---------------------------------------------------------------
+void RegexTest::Bug7651() {
+    UnicodeString pattern1("((?<![A-Za-z0-9])[#\\uff03][A-Za-z0-9_][A-Za-z0-9_\\u00c0-\\u00d6\\u00c8-\\u00f6\\u00f8-\\u00ff]*|(?<![A-Za-z0-9_])[@\\uff20][A-Za-z0-9_]+(?:\\/[\\w-]+)?|(https?\\:\\/\\/|www\\.)\\S+(?<![\\!\\),\\.:;\\]\\u0080-\\uFFFF])|\\$[A-Za-z]+)");
+    //  The following should exceed the default operator stack depth in the matcher, i.e. force the matcher to malloc instead of using fSmallData.
+    UnicodeString pattern2("((https?\\:\\/\\/|www\\.)\\S+(?<![\\!\\),\\.:;\\]\\u0080-\\uFFFF])|(?<![A-Za-z0-9_])[\\@\\uff20][A-Za-z0-9_]+(?:\\/[\\w\\-]+)?|(?<![A-Za-z0-9])[\\#\\uff03][A-Za-z0-9_][A-Za-z0-9_\\u00c0-\\u00d6\\u00c8-\\u00f6\\u00f8-\\u00ff]*|\\$[A-Za-z]+)");
+    UnicodeString s("#ff @abcd This is test");
+    RegexPattern  *REPattern = NULL;
+    RegexMatcher  *REMatcher = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError pe;
+
+    REPattern = RegexPattern::compile(pattern1, 0, pe, status);
+    REGEX_CHECK_STATUS;
+    REMatcher = REPattern->matcher(s, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(REMatcher->find());
+    REGEX_ASSERT(REMatcher->start(status) == 0);
+    delete REPattern;
+    delete REMatcher;
+    status = U_ZERO_ERROR;
+
+    REPattern = RegexPattern::compile(pattern2, 0, pe, status);
+    REGEX_CHECK_STATUS;
+    REMatcher = REPattern->matcher(s, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(REMatcher->find());
+    REGEX_ASSERT(REMatcher->start(status) == 0);
+    delete REPattern;
+    delete REMatcher;
+    status = U_ZERO_ERROR;
+ }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
