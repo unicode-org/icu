@@ -34,6 +34,8 @@ icu4c/source/config.status
 icu4c/source/config/Makefile.inc
 icu4c/source/config/icu-config
 icu4c/source/config/icu-config.1
+icu4c/source/config/icu.pc
+icu4c/source/config/icu.pc.out
 icu4c/source/config/icucross.mk
 icu4c/source/config/pkgdata.inc
 icu4c/source/config/pkgdataMakefile
