@@ -43,7 +43,7 @@ DOCZIP = icu-docs.zip
 CLEANFILES = *~
 
 ## Files built (autoconfed) and installed
-INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%) $(top_builddir)/config/icu.pc.out $(top_builddir)/config/icu.pc
 
 ## Files built (autoconfed) but not installed
 LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk
@@ -136,6 +136,8 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_SCRIPT) $(top_srcdir)/install-sh $(DESTDIR)$(pkgdatadir)/install-sh
+	@$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/pkgconfig
+	$(INSTALL_DATA) $(top_srcdir)/config/icu.pc.out $(DESTDIR)$(libdir)/pkgconfig/icu.pc
 	$(INSTALL_DATA) $(top_srcdir)/../license.html $(DESTDIR)$(pkgdatadir)/license.html
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
@@ -169,7 +171,7 @@ clean-local:
 	$(RMV) Doxyfile doc $(DOCZIP)
 
 distclean-local: clean-local
-	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config
+	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config $(top_builddir)/config/icu.pc $(top_builddir)/config/icu.pc.out
 	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk autom4te.cache
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 
@@ -197,6 +199,18 @@ config/icucross.mk: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile
 	  echo "INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(TOOLLIBDIR):$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$$$'"$(LDLIBRARYPATH_ENVVAR)" ;\
 	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) "'$$'"(PKGDATA_INVOKE_OPTS)" ;\
 	  echo ) >> $@
+
+
+config/icu.pc: $(srcdir)/config/icu.pc.in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+config/icu.pc.out: config/icu.pc config/icu-config
+	@cat config/icu.pc > $@
+	@echo "Libs:" '-L$${libdir}' $(shell config/icu-config --noverify --ldflags-libsonly) >> $@
+	@echo "Libs.private: " $(shell config/icu-config --noverify --ldflags-system) >> $@
+#	@echo "Cflags: " $(shell config/icu-config --noverify --cppflags) >> $@
+	@echo $@ updated.
 
 Makefile: $(srcdir)/Makefile.in icudefs.mk $(top_builddir)/config.status
 	cd $(top_builddir) \
