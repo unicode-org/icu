@@ -472,29 +472,48 @@ main(int argc, char* argv[]) {
 }
 
 static int runCommand(const char* command, UBool specialHandling) {
-    char cmd[SMALL_BUFFER_MAX_SIZE];
+    char *cmd = NULL;
+    char cmdBuffer[SMALL_BUFFER_MAX_SIZE];
+    int32_t len = strlen(command);
+
+    if (len == 0) {
+        return 0;
+    }
 
     if (!specialHandling) {
+#if defined(USING_CYGWIN) || defined(OS400)
+#define CMD_PADDING_SIZE 20
+        if ((len + CMD_PADDING_SIZE) >= SMALL_BUFFER_MAX_SIZE) {
+            cmd = (char *)uprv_malloc(len + CMD_PADDING_SIZE);
+        } else {
+            cmd = cmdBuffer;
+        }
 #ifdef USING_CYGWIN
         sprintf(cmd, "bash -c \"%s\"", command);
 
 #elif defined(OS400)
         sprintf(cmd, "QSH CMD('%s')", command);
+#endif
 #else
         goto normal_command_mode;
 #endif
     } else {
 normal_command_mode:
-        sprintf(cmd, "%s", command);
+        cmd = (char *)command;
     }
-    
+
     printf("pkgdata: %s\n", cmd);
     int result = system(cmd);
-    if (result != 0) { 
-        printf("-- return status = %d\n", result); 
+    if (result != 0) {
+        printf("-- return status = %d\n", result);
     }
-    return result; 
-} 
+
+    if (cmd != cmdBuffer && cmd != command) {
+        uprv_free(cmd);
+    }
+
+    return result;
+}
 
 #define LN_CMD "ln -s"
 #define RM_CMD "rm -f"
