@@ -349,6 +349,10 @@ public class SimpleDateFormat extends DateFormat {
     private static final int millisPerMinute = 60 * 1000;
     private static final int millisPerSecond = 1000;
 
+    // When possessing ISO format, the ERA may be ommitted is the
+    // year specifier is a negative number.
+    private static final int ISOSpecialEra = -32000;
+    
     // This prefix is designed to NEVER MATCH real text, in order to
     // suppress the parsing of negative numbers.  Adjust as needed (if
     // this becomes valid Unicode).
@@ -1741,14 +1745,46 @@ public class SimpleDateFormat extends DateFormat {
                     int s = pos;
                     pos = subParse(text, pos, field.type, field.length,
                             false, true, ambiguousYear, cal);
+                    
                     if (pos < 0) {
-                        parsePos.setIndex(start);
-                        parsePos.setErrorIndex(s);
-                        if (backupTZ != null) {
-                            calendar.setTimeZone(backupTZ);
-                        }
-                        return;
+                        if (pos == ISOSpecialEra) {
+                            // era not present, in special cases allow this to continue
+                            pos = s;
+
+                            if (i+1 < items.length) { 
+                                
+                                // get next item in pattern
+                                String patl = (String)items[i+1];
+                                int plen = patl.length();
+                                int idx=0;
+                                
+                                // White space characters found in patten.
+                                // Skip contiguous white spaces.
+                                while (idx < plen) {
+
+                                    char pch = patl.charAt(idx);
+                                    if (UCharacterProperty.isRuleWhiteSpace(pch))
+                                        idx++;
+                                    else
+                                        break;
+                                }
+                                
+                                // if next item in pattern is all whitespace, skip it
+                                if (idx == plen) {
+                                    i++;
+                                }
+
+                            }
+                        } else {
+                            parsePos.setIndex(start);
+                            parsePos.setErrorIndex(s);
+                            if (backupTZ != null) {
+                                calendar.setTimeZone(backupTZ);
+                            }
+                            return;
+                        }                              
                     }
+                    
                 }
             } else {
                 // Handle literal pattern text literal
@@ -2145,12 +2181,23 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex)
             {
-            case 0: // 'G' - ERA
+            case 0: // 'G' - ERA              
+                int ps = 0;
                 if (count == 4) {
-                    return matchString(text, start, Calendar.ERA, formatData.eraNames, cal);
-                } else {
-                    return matchString(text, start, Calendar.ERA, formatData.eras, cal);
+                    ps = matchString(text, start, Calendar.ERA, formatData.eraNames, cal);
                 }
+                else {
+                    ps = matchString(text, start, Calendar.ERA, formatData.eras, cal);
+                }
+
+                // check return position, if it equals -start, then matchString error
+                // special case the return code so we don't necessarily fail out until we 
+                // verify no year information also
+                if (ps == -start)
+                    ps = ISOSpecialEra;
+
+                return ps;  
+                
             case 1: // 'y' - YEAR
                 // If there are 3 or more YEAR pattern characters, this indicates
                 // that the year value is to be treated literally, without any

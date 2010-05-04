@@ -3717,4 +3717,59 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
             expect(DATA, new Locale("en", "", ""));
     }
+
+    /*
+ * Test case for ISO Era processing (ticket#7357)
+ */
+    public void TestISOEra()
+    {
+
+        String data[] = { 
+        // input, output 
+        "BC 4004-10-23T07:00:00Z", "BC 4004-10-23T07:00:00Z", 
+        "AD 4004-10-23T07:00:00Z", "AD 4004-10-23T07:00:00Z", 
+        "-4004-10-23T07:00:00Z"  , "BC 4005-10-23T07:00:00Z", 
+        "4004-10-23T07:00:00Z"   , "AD 4004-10-23T07:00:00Z", 
+        };
+
+        int numData = 8;
+
+        // create formatter 
+        SimpleDateFormat fmt1 = new SimpleDateFormat("GGG yyyy-MM-dd'T'HH:mm:ss'Z");
+
+        for (int i = 0; i < numData; i += 2)
+        {
+
+            // create input string 
+            String in = data[i];
+
+            // parse string to date 
+            Date dt1;
+            try
+            {
+                dt1 = fmt1.parse(in);
+            }
+            catch (Exception e)
+            {
+                errln("DateFormat.parse is not suppose to return an exception.");
+                break;
+            }
+            // format date back to string 
+            String out;
+            out = fmt1.format(dt1);
+
+            // check that roundtrip worked as expected 
+            String expected = data[i + 1];
+            if (!out.equals(expected))
+            {
+                errln((String)"FAIL: " + in + " -> " + out + " expected -> " + expected);
+            }
+
+        }
+
+    }
+
 }
+
+
+
