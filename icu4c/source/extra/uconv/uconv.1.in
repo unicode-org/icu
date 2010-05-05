@@ -2,7 +2,7 @@
 .\"
 .\" uconv.1: manual page for the uconv utility.
 .\"
-.\" Copyright (C) 2000-2005 IBM, Inc. and others.
+.\" Copyright (C) 2000-2010 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
@@ -431,12 +431,6 @@ inaccurate or unavailable, in which case
 .BR uconv
 will report the offset in the output stream at which the error
 occured.
-.\" .SH FILES
-.\" .TP 15
-.\" .B @pkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
-.\" Compiled resource bundle containing localized messages printed
-.\" by
-.\" .BR uconv .
 .SH AUTHORS
 Jonas Utterstroem
 .br
