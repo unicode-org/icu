@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -243,6 +243,8 @@ class CharsetUTF7 extends CharsetICU {
                                     offsets.put(sourceIndex++);
                                 }
                             } else {  // Get out and set the CoderResult.
+                                charErrorBufferArray[charErrorBufferLength++] = b;
+                                cr = CoderResult.OVERFLOW;
                                 break;
                             }
                         } else { /* PLUS or (AMPERSAND in IMAP)*/

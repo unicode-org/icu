@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -102,7 +102,7 @@ class CharsetUTF16 extends CharsetICU {
                             actualEndianXOR = endianXOR;
                             break;
                         }
-                    } else if (toUBytesArray[toULength - 1] != actualBOM[toULength - 1]) {
+                    } else if (isEndianSpecified || toUBytesArray[toULength - 1] != actualBOM[toULength - 1]) {
                         // we do not have a BOM (and we have toULength bytes)
                         actualBOM = null;
                         actualEndianXOR = endianXOR;
