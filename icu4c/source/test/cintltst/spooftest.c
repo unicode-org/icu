@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2009, International Business Machines Corporation and
+ * Copyright (c) 2009-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -492,7 +492,8 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_EQ(0, u_strcmp(lll_Skel, dest));
         TEST_ASSERT_EQ(u_strlen(lll_Skel), skelLength);
 
-        skelLength = uspoof_getSkeletonUTF8(sc, USPOOF_ANY_CASE, goodLatinUTF8, -1, dest, sizeof(dest)/sizeof(UChar), &status);
+        skelLength = uspoof_getSkeletonUTF8(sc, USPOOF_ANY_CASE, goodLatinUTF8, -1, (char*)dest, 
+                                            sizeof(dest)/sizeof(UChar), &status);
         TEST_ASSERT_SUCCESS(status);
 
         skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, NULL, 0, &status);
