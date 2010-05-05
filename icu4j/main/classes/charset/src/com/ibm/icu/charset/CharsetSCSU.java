@@ -357,7 +357,7 @@ class CharsetSCSU extends CharsetICU{
                 while(source.hasRemaining()){
                     if(!target.hasRemaining()){
                         cr = CoderResult.OVERFLOW;
-                        LabelLoop = false;
+                        label = EndLoop;
                         return label;
                      }
                     b = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
@@ -509,7 +509,7 @@ class CharsetSCSU extends CharsetICU{
                 while(source.hasRemaining()){
                     if(!target.hasRemaining()){
                         cr = CoderResult.OVERFLOW;
-                        LabelLoop = false;
+                        label = EndLoop;
                         return label;
                     }
                     b = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);

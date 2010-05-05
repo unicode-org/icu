@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -143,7 +143,7 @@ class CharsetUTF8 extends CharsetICU {
 
                             if (targetIndex >= targetLimit) {
                                 /* put in overflow buffer (not handled here) */
-                                charErrorBufferArray[charErrorBufferBegin++] = (char) char32;
+                                charErrorBufferArray[charErrorBufferLength++] = (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START);
                                 cr = CoderResult.OVERFLOW;
                                 break;
                             }
@@ -278,7 +278,7 @@ class CharsetUTF8 extends CharsetICU {
 
                             if (targetIndex >= targetLimit) {
                                 /* put in overflow buffer (not handled here) */
-                                charErrorBufferArray[charErrorBufferBegin++] = (char) char32;
+                                charErrorBufferArray[charErrorBufferLength++] = (char) ((char32 & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START);
                                 cr = CoderResult.OVERFLOW;
                                 break;
                             }

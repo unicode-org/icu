@@ -326,7 +326,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             charErrorBufferLength = 0;
         }
     
-        if (!flush && !source.hasRemaining() && preToULength >= 0) {
+        if (!flush && !source.hasRemaining() && toULength == 0 && preToULength >= 0) {
             /* the overflow buffer is emptied and there is no new input: we are done */
             return CoderResult.UNDERFLOW;
         }

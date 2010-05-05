@@ -68,6 +68,11 @@ public class TestConversion extends ModuleTest {
             return "[" + caseNr + "]";
         }
     }
+    
+    /* In the data-driven conversion test, converters that are not available in
+     * ICU4J are marked with the following leading symbol.
+     */
+    private static final char UNSUPPORTED_CHARSET_SYMBOL = '+';
 
     // public methods --------------------------------------------------------
 
@@ -214,8 +219,8 @@ public class TestConversion extends ModuleTest {
             }
             
         } catch (Exception e) {
-            if (skipIfBeforeICU(4,5,1)) { // TIME BOMB
-                logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
+            if (cc.charset.charAt(0) == UNSUPPORTED_CHARSET_SYMBOL) {
+                logln("Skipping test:(" + cc.charset.substring(1) + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
             }
@@ -496,8 +501,8 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(4,5,1)) {
-                logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
+            if (cc.charset.charAt(0) == UNSUPPORTED_CHARSET_SYMBOL) {
+                logln("Skipping test:(" + cc.charset.substring(1) + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
             }
@@ -692,8 +697,10 @@ public class TestConversion extends ModuleTest {
                         cr = decoder.decode(source, target, true);
 
                         //due to limitation of the API we need to check for target limit for expected 
-                        if (target.limit() != cc.unicode.length()) {
-                            target.limit(cc.unicode.length());
+                        if (target.position() != cc.unicode.length()) {
+                            if (target.limit() != cc.unicode.length()) {
+                                target.limit(cc.unicode.length());
+                            }
                             cr = decoder.flush(target);
                             if (cr.isError()) {
                                 errln("Flush operation failed");
@@ -1096,11 +1103,7 @@ public class TestConversion extends ModuleTest {
 
         // test to see if the conversion matches actual results
         if (output.limit() != expected.length()) {
-            if (skipIfBeforeICU(4,5,1)) { // TIME BOMB
-                logln("Skipping test:(" + cc.charset + ") due to time bomb");
-            } else {
-                errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            }
+            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
             res = false;
         } else {
             for (int i = 0; i < expected.length(); i++) {
@@ -1119,9 +1122,6 @@ public class TestConversion extends ModuleTest {
             logln("Output:      " + printchars(output, output.limit()));
             logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
             logln("Passed");
-        }
-        else if (skipIfBeforeICU(4,5,1)) {
-            // TIME BOMB
         } else {
             errln("[" + cc.caseNr + "]:" + cc.charset);
             errln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
