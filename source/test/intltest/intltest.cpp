@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -668,14 +668,16 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
         if (run_this_test) {
             lastErrorCount = errorCount;
             execCount++;
+            char msg[256];
+            sprintf(msg, "%s {", name);
+            LL_message(msg, TRUE);
             this->runIndexedTest( index, TRUE, name, par );
             rval = TRUE; // at least one test has been called
-            char msg[256];
             if (lastErrorCount == errorCount) {
-                sprintf( msg, "---OK:   %s", name );
+                sprintf( msg, "   } OK:   %s", name );
                 lastTestFailed = FALSE;
             }else{
-                sprintf(msg, "---ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
+                sprintf(msg,  "   } ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
 
                 for(int i=0;i<LL_indentlevel;i++) {
                     errorList += " ";
