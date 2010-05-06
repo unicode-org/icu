@@ -3717,7 +3717,8 @@ public class ULocaleTest extends TestFmwk {
             {"en_US",       "en-US"},
             {"iw_IL",       "he-IL"},
             {"sr_Latn_SR",  "sr-Latn-SR"},
-            {"en__POSIX",   "en-posix"},
+            {"en_US_POSIX@ca=japanese", "en-US-u-ca-japanese-va-posix"},
+            {"en__POSIX",   "en-u-va-posix"},
             // {"en_POSIX",    "en"}, /* ICU4J locale parser successfully parse en_POSIX as language:en/variant:POSIX */
             {"und_555",     "und-555"},
             {"123",         "und"},
@@ -3744,6 +3745,8 @@ public class ULocaleTest extends TestFmwk {
             {"en@timezone=US/Eastern",    "en-u-tz-usnyc"},
             {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z"},
             {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
+            {"en_US_POSIX", "en-US-u-va-posix"},
+            {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -3785,6 +3788,7 @@ public class ULocaleTest extends TestFmwk {
             {"und-varzero-var1-vartwo", "__VARZERO",        Integer.valueOf(12)},
             {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
             {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
+            {"en-us-u-va-posix",    "en_US_POSIX",          NOERROR},
             {"ar-x-1-2-3",          "ar@x=1-2-3",           NOERROR},
             {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", NOERROR},
             {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   NOERROR},
