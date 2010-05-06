@@ -175,7 +175,7 @@ static void TestPUtilAPI(void){
             log_verbose("***** WARNING: If testing in the PST timezone, t_timezone should return 28800! *****");
         }
         if ((tzoffset % 1800 != 0)) {
-            log_err("FAIL: t_timezone may be incorrect. It is not a multiple of 30min.");
+            log_info("Note: t_timezone offset of %ld (for %s : %s) is not a multiple of 30min.", tzoffset, uprv_tzname(0), uprv_tzname(1));
         }
         /*tzoffset=uprv_getUTCtime();*/
 
