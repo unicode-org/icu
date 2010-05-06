@@ -3106,7 +3106,12 @@ public final class ULocale implements Serializable {
                         // convert to legacy key/type
                         String lkey = bcp47ToLDMLKey(bcpKey);
                         String ltype = bcp47ToLDMLType(lkey, bcpType);
-                        kwds.put(lkey, ltype);
+                        // special handling for u-va-posix, since this is a variant, not a keyword
+                        if (lkey.equals("va") && ltype.equals("posix")) {
+                            id = id + "_POSIX";
+                        } else {
+                            kwds.put(lkey, ltype);
+                        }
                     }
                 } else {
                     kwds.put(String.valueOf(key), ext.getValue());

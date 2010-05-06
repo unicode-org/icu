@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,6 +31,8 @@ public class LanguageTag {
     private static final String JAVASEP = "_";
 
     private static final SortedMap<Character, Extension> EMPTY_EXTENSION_MAP = new TreeMap<Character, Extension>();
+
+    private static final UnicodeLocaleExtension VA_POSIX = new UnicodeLocaleExtension().put("va", "posix");
 
     //
     // Language tag parser instances
@@ -269,6 +271,7 @@ public class LanguageTag {
     }
 
     public String getID() {
+        boolean putPosixExtension = false;
         if (_grandfathered.length() > 0) {
             return _grandfathered;
         }
@@ -291,8 +294,20 @@ public class LanguageTag {
             }
             if (_variants.size() > 0) {
                 for (String var : _variants) {
-                    buf.append(SEP);
-                    buf.append(var);
+                    // Special handling of the POSIX variant - treat it as a unicode locale extension                    
+                    if ( var.equals("posix")) {
+                        if (_extensions.containsKey(UnicodeLocaleExtension.SINGLETON)){
+                            UnicodeLocaleExtension uext = (UnicodeLocaleExtension) _extensions.get(UnicodeLocaleExtension.SINGLETON);
+                            uext.put("va","posix");
+                            _extensions.put(UnicodeLocaleExtension.SINGLETON, uext);
+                        } else {
+                            _extensions.put(UnicodeLocaleExtension.SINGLETON, VA_POSIX);
+                            putPosixExtension = true;
+                        }
+                    } else {
+                        buf.append(SEP);
+                        buf.append(var);
+                    }
                 }
             }
             if (_extensions.size() > 0) {
@@ -303,6 +318,12 @@ public class LanguageTag {
                     buf.append(SEP);
                     buf.append(ext.getValue().getValue());
                 }
+            }
+            
+            // If we added the POSIX extension explicitly, need to remove it here
+            // otherwise it will hang around until the next call.
+            if ( putPosixExtension ) {
+                _extensions.remove(UnicodeLocaleExtension.SINGLETON);
             }
         }
         if (_privateuse.length() > 0) {
