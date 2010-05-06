@@ -24,6 +24,15 @@
 #define MAXTESTS  512
 #define MAX_TEST_LOG 4096
 
+/**
+ *  How may columns to indent the 'OK' markers.
+ */
+#define FLAG_INDENT 45
+/**
+ *   How many lines of scrollage can go by before we need to remind the user what the test is.
+ */
+#define PAGE_SIZE 25
+
 struct TestNode
 {
   void (*test)(void);
@@ -59,8 +68,8 @@ static void getNextLevel( const char* name,
               int* nameLen,
               const char** nextName );
 
-static void iterateTestsWithLevel( const TestNode *root, int len,
-                   const TestNode** list,
+static void iterateTestsWithLevel( const TestNode *root, int depth,
+                   const TestNode** nodeList,
                    TestMode mode);
 
 static void help ( const char *argv0 );
@@ -75,13 +84,29 @@ static void help ( const char *argv0 );
 static void vlog_err(const char *prefix, const char *pattern, va_list ap);
 static void vlog_verbose(const char *prefix, const char *pattern, va_list ap);
 
+/**
+ * Log test structure, with indent
+ * @param pattern printf pattern
+ */
+static void log_testinfo_i(const char *pattern, ...);
+
+/**
+ * Log test structure, NO indent
+ * @param pattern printf pattern
+ */
+static void log_testinfo(const char *pattern, ...);
+
 /* If we need to make the framework multi-thread safe
    we need to pass around the following vars
 */
 static int ERRONEOUS_FUNCTION_COUNT = 0;
 static int ERROR_COUNT = 0; /* Count of errors from all tests. */
+static int ONE_ERROR = 0; /* were there any other errors? */
 static int DATA_ERROR_COUNT = 0; /* count of data related errors or warnings */
 static int INDENT_LEVEL = 0;
+static UBool ON_LINE = FALSE; /* are we on the top line with our test name? */
+static UBool HANGING_OUTPUT = FALSE; /* did the user leave us without a trailing \n ? */
+static int GLOBAL_PRINT_COUNT = 0; /* global count of printouts */
 int REPEAT_TESTS_INIT = 0; /* Was REPEAT_TESTS initialized? */
 int REPEAT_TESTS = 1; /* Number of times to run the test */
 int VERBOSITY = 0; /* be No-verbose by default */
@@ -92,6 +117,7 @@ UTraceLevel ICU_TRACE = UTRACE_OFF;  /* ICU tracing level */
 size_t MINIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Minimum library memory allocation window that will fail. */
 size_t MAXIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Maximum library memory allocation window that will fail. */
 int32_t ALLOCATION_COUNT = 0;
+static const char *ARGV_0 = "[ALL]";
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -247,9 +273,17 @@ static TestNode *addTestNode ( TestNode *root, const char *name )
     }
 }
 
+/**
+ * Run or list tests (according to mode) in a subtree.
+ *
+ * @param root root of the subtree to operate on
+ * @param depth The depth of this tree (0=root)
+ * @param nodeList an array of MAXTESTS depth that's used for keeping track of where we are. nodeList[depth] points to the 'parent' at depth depth.
+ * @param mode what mode we are operating in.
+ */
 static void iterateTestsWithLevel ( const TestNode* root,
-                 int len,
-                 const TestNode** list,
+                 int depth,
+                 const TestNode** nodeList,
                  TestMode mode)
 {
     int i;
@@ -261,46 +295,113 @@ static void iterateTestsWithLevel ( const TestNode* root,
     if ( root == NULL )
         return;
 
-    list[len++] = root;
+    /* record the current root node, and increment depth. */
+    nodeList[depth++] = root;
+    /* depth is now the depth of root's children. */
 
-    for ( i=0;i<(len-1);i++ )
+    /* Collect the 'path' to the current subtree. */
+    for ( i=0;i<(depth-1);i++ )
     {
-        strcat(pathToFunction, list[i]->name);
+        strcat(pathToFunction, nodeList[i]->name);
         strcat(pathToFunction, separatorString);
     }
+    strcat(pathToFunction, nodeList[i]->name); /* including 'root' */
 
-    strcat(pathToFunction, list[i]->name);
+    /* print test name and space. */
+    INDENT_LEVEL = depth-1;
+    if(root->name[0]) {
+    	log_testinfo_i("%s ", root->name);
+    } else {
+    	log_testinfo_i("(%s) ", ARGV_0);
+    }
+    ON_LINE = TRUE;  /* we are still on the line with the test name */
 
-    INDENT_LEVEL = len;
-    if ( (mode == RUNTESTS) && (root->test != NULL))
+
+    if ( (mode == RUNTESTS) &&
+		(root->test != NULL))  /* if root is a leaf node, run it */
     {
         int myERROR_COUNT = ERROR_COUNT;
+        int myGLOBAL_PRINT_COUNT = GLOBAL_PRINT_COUNT;
         currentTest = root;
-        root->test();
-        currentTest = NULL;
-        if (myERROR_COUNT != ERROR_COUNT)
-        {
-
-            log_info("---[%d ERRORS] ", ERROR_COUNT - myERROR_COUNT);
-            strcpy(ERROR_LOG[ERRONEOUS_FUNCTION_COUNT++], pathToFunction);
+        INDENT_LEVEL = depth;  /* depth of subitems */
+        ONE_ERROR=0;
+        HANGING_OUTPUT=FALSE;
+        /* TODO: start counter */
+        root->test();   /* PERFORM THE TEST */
+        if(HANGING_OUTPUT) {
+        	log_testinfo("\n");
+        	HANGING_OUTPUT=FALSE;
         }
-        else
-            log_info("---[OK] ");
+        /* TODO: stop counter */
+        INDENT_LEVEL = depth-1;  /* depth of root */
+        currentTest = NULL;
+        if((ONE_ERROR>0)&&(ERROR_COUNT==0)) {
+        	ERROR_COUNT++; /* There was an error without a newline */
+        }
+        ONE_ERROR=0;
+
+		if (myERROR_COUNT != ERROR_COUNT) {
+			log_testinfo_i("} ---[%d ERRORS in %s] ", ERROR_COUNT - myERROR_COUNT, pathToFunction);
+			strcpy(ERROR_LOG[ERRONEOUS_FUNCTION_COUNT++], pathToFunction);
+		} else {
+			if(!ON_LINE) { /* had some output */
+				int spaces = FLAG_INDENT-(depth-1);
+				log_testinfo_i("} %*s[OK] ", spaces, "---");
+				if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE) {
+					log_testinfo(" %s ", pathToFunction); /* in case they forgot. */
+				}
+			} else {
+				/* put -- out at 30 sp. */
+				int spaces = FLAG_INDENT-(strlen(root->name)+depth);
+				if(spaces<0) spaces=0;
+				log_testinfo(" %*s[OK] ", spaces,"---");
+			}
+		}
+        /* TODO: print counter */
+        ON_LINE = TRUE; /* we are back on-line */
     }
 
+    INDENT_LEVEL = depth-1; /* root */
 
     /* we want these messages to be at 0 indent. so just push the indent level breifly. */
-    saveIndent = INDENT_LEVEL;
-    INDENT_LEVEL = 0;
-    log_info("%s%s%c\n", (list[i]->test||mode==SHOWTESTS)?"---":"",pathToFunction, list[i]->test?' ':TEST_SEPARATOR );
-    INDENT_LEVEL = saveIndent;
+    if(mode==SHOWTESTS) {
+    	log_testinfo("---%s%c\n",pathToFunction, nodeList[i]->test?' ':TEST_SEPARATOR );
+    }
 
-    iterateTestsWithLevel ( root->child, len, list, mode );
+    INDENT_LEVEL = depth;
 
-    len--;
+    if(root->child) {
+        int myERROR_COUNT = ERROR_COUNT;
+        int myGLOBAL_PRINT_COUNT = GLOBAL_PRINT_COUNT;
+        if(mode!=SHOWTESTS) {
+    		INDENT_LEVEL=depth-1;
+    		log_testinfo("{\n");
+    		INDENT_LEVEL=depth;
+    	}
 
-    if ( len != 0 ) /* DO NOT iterate over siblings of the root. */
-        iterateTestsWithLevel ( root->sibling, len, list, mode );
+    	iterateTestsWithLevel ( root->child, depth, nodeList, mode );
+
+    	if(mode!=SHOWTESTS) {
+    		INDENT_LEVEL=depth-1;
+    		log_testinfo_i("} "); /* TODO:  summarize subtests */
+    		if((depth>1) && (ERROR_COUNT > myERROR_COUNT)) {
+    			log_testinfo("[%d %s in %s] ", ERROR_COUNT-myERROR_COUNT, (ERROR_COUNT-myERROR_COUNT)==1?"error":"errors", pathToFunction);
+    		} else if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE) {
+				log_testinfo(" %s ", pathToFunction); /* in case they forgot. */
+			}
+
+    		ON_LINE=TRUE;
+    	}
+	}
+    depth--;
+
+    if(mode!=SHOWTESTS && ON_LINE) {
+    	log_testinfo("\n");
+    }
+
+    if ( depth != 0 ) { /* DO NOT iterate over siblings of the root. TODO: why not? */
+        iterateTestsWithLevel ( root->sibling, depth, nodeList, mode );
+    }
 }
 
 
@@ -309,12 +410,12 @@ void T_CTEST_EXPORT2
 showTests ( const TestNode *root )
 {
     /* make up one for them */
-    const TestNode *aList[MAXTESTS];
+    const TestNode *nodeList[MAXTESTS];
 
     if (root == NULL)
         log_err("TEST CAN'T BE FOUND!");
 
-    iterateTestsWithLevel ( root, 0, aList, SHOWTESTS );
+    iterateTestsWithLevel ( root, 0, nodeList, SHOWTESTS );
 
 }
 
@@ -322,7 +423,7 @@ void T_CTEST_EXPORT2
 runTests ( const TestNode *root )
 {
     int i;
-    const TestNode *aList[MAXTESTS];
+    const TestNode *nodeList[MAXTESTS];
     /* make up one for them */
 
 
@@ -330,28 +431,34 @@ runTests ( const TestNode *root )
         log_err("TEST CAN'T BE FOUND!\n");
 
     ERRONEOUS_FUNCTION_COUNT = ERROR_COUNT = 0;
-    iterateTestsWithLevel ( root, 0, aList, RUNTESTS );
+    iterateTestsWithLevel ( root, 0, nodeList, RUNTESTS );
 
     /*print out result summary*/
 
+    ON_LINE=FALSE; /* just in case */
+
     if (ERROR_COUNT)
     {
-        log_info("\nSUMMARY:\n******* [Total error count:\t%d]\n Errors in\n", ERROR_COUNT);
+        fprintf(stdout,"\nSUMMARY:\n");
+    	fflush(stdout);
+        fprintf(stdout,"******* [Total error count:\t%d]\n", ERROR_COUNT);
+    	fflush(stdout);
+        fprintf(stdout, " Errors in\n");
         for (i=0;i < ERRONEOUS_FUNCTION_COUNT; i++)
-            log_info("[%s]\n",ERROR_LOG[i]);
+            fprintf(stdout, "[%s]\n",ERROR_LOG[i]);
     }
     else
     {
-      log_info("\n[All tests passed successfully...]\n");
+      log_testinfo("\n[All tests passed successfully...]\n");
     }
 
     if(DATA_ERROR_COUNT) {
       if(WARN_ON_MISSING_DATA==0) {
-        log_info("\t*Note* some errors are data-loading related. If the data used is not the \n"
+    	  log_testinfo("\t*Note* some errors are data-loading related. If the data used is not the \n"
                  "\tstock ICU data (i.e some have been added or removed), consider using\n"
                  "\tthe '-w' option to turn these errors into warnings.\n");
       } else {
-        log_info("\t*WARNING* some data-loading errors were ignored by the -w option.\n");
+    	  log_testinfo("\t*WARNING* some data-loading errors were ignored by the -w option.\n");
       }
     }
 }
@@ -426,56 +533,151 @@ getTest(const TestNode* root, const char* name)
     }
 }
 
+/*  =========== io functions ======== */
+
+static void go_offline_with_marker(const char *mrk) {
+	UBool wasON_LINE = ON_LINE;
+
+	if(ON_LINE) {
+		log_testinfo(" {\n");
+		ON_LINE=FALSE;
+	}
+
+	if(!HANGING_OUTPUT || wasON_LINE) {
+		if(mrk != NULL) {
+			fputs(mrk, stdout);
+		}
+	}
+}
+
+static void go_offline() {
+	go_offline_with_marker(NULL);
+}
+
+static void go_offline_err() {
+	go_offline();
+}
+
+static void first_line_verbose() {
+    go_offline_with_marker("v");
+}
+
+static void first_line_err() {
+    go_offline_with_marker("!");
+}
+
+static void first_line_info() {
+    go_offline_with_marker("\"");
+}
+
+static void first_line_test() {
+	fputs(" ", stdout);
+}
+
+
 static void vlog_err(const char *prefix, const char *pattern, va_list ap)
 {
     if( ERR_MSG == FALSE){
         return;
     }
-    fprintf(stderr, "%-*s", INDENT_LEVEL," " );
-    if(prefix) {
-        fputs(prefix, stderr);
-    }
-    vfprintf(stderr, pattern, ap);
-    fflush(stderr);
-    va_end(ap);
-}
-
-void T_CTEST_EXPORT2
-vlog_info(const char *prefix, const char *pattern, va_list ap)
-{
-    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
+    fputs("!", stdout); /* col 1 - bang */
+    fprintf(stdout, "%-*s", INDENT_LEVEL,"" );
     if(prefix) {
         fputs(prefix, stdout);
     }
     vfprintf(stdout, pattern, ap);
     fflush(stdout);
     va_end(ap);
+    if((*pattern==0) || (pattern[strlen(pattern)-1]!='\n')) {
+    	HANGING_OUTPUT=1;
+    } else {
+    	HANGING_OUTPUT=0;
+    }
+    GLOBAL_PRINT_COUNT++;
 }
+
+void T_CTEST_EXPORT2
+vlog_info(const char *prefix, const char *pattern, va_list ap)
+{
+	first_line_info();
+    fprintf(stdout, "%-*s", INDENT_LEVEL,"" );
+    if(prefix) {
+        fputs(prefix, stdout);
+    }
+    vfprintf(stdout, pattern, ap);
+    fflush(stdout);
+    va_end(ap);
+    if((*pattern==0) || (pattern[strlen(pattern)-1]!='\n')) {
+    	HANGING_OUTPUT=1;
+    } else {
+    	HANGING_OUTPUT=0;
+    }
+    GLOBAL_PRINT_COUNT++;
+}
+/**
+ * Log test structure, with indent
+ */
+static void log_testinfo_i(const char *pattern, ...)
+{
+    va_list ap;
+    first_line_test();
+    fprintf(stdout, "%-*s", INDENT_LEVEL,"" );
+    va_start(ap, pattern);
+    vfprintf(stdout, pattern, ap);
+    fflush(stdout);
+    va_end(ap);
+    GLOBAL_PRINT_COUNT++;
+}
+/**
+ * Log test structure (no ident)
+ */
+static void log_testinfo(const char *pattern, ...)
+{
+    va_list ap;
+    va_start(ap, pattern);
+    first_line_test();
+    vfprintf(stdout, pattern, ap);
+    fflush(stdout);
+    va_end(ap);
+    GLOBAL_PRINT_COUNT++;
+}
+
 
 static void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
 {
     if ( VERBOSITY == FALSE )
         return;
 
-    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
+    first_line_verbose();
+    fprintf(stdout, "%-*s", INDENT_LEVEL,"" );
     if(prefix) {
         fputs(prefix, stdout);
     }
     vfprintf(stdout, pattern, ap);
     fflush(stdout);
     va_end(ap);
+    GLOBAL_PRINT_COUNT++;
+    if((*pattern==0) || (pattern[strlen(pattern)-1]!='\n')) {
+    	HANGING_OUTPUT=1;
+    } else {
+    	HANGING_OUTPUT=0;
+    }
 }
 
 void T_CTEST_EXPORT2
 log_err(const char* pattern, ...)
 {
     va_list ap;
+    first_line_err();
     if(strchr(pattern, '\n') != NULL) {
         /*
          * Count errors only if there is a line feed in the pattern
          * so that we do not exaggerate our error count.
          */
         ++ERROR_COUNT;
+    } else {
+    	/* Count at least one error. */
+    	ONE_ERROR=1;
     }
     va_start(ap, pattern);
     vlog_err(NULL, pattern, ap);
@@ -487,6 +689,7 @@ log_err_status(UErrorCode status, const char* pattern, ...)
     va_list ap;
     va_start(ap, pattern);
     
+    first_line_err();
     if ((status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR)) {
         ++DATA_ERROR_COUNT; /* for informational message at the end */
         
@@ -494,6 +697,8 @@ log_err_status(UErrorCode status, const char* pattern, ...)
             /* Fatal error. */
             if (strchr(pattern, '\n') != NULL) {
                 ++ERROR_COUNT;
+            } else {
+				++ONE_ERROR;
             }
             vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
         } else {
@@ -503,6 +708,8 @@ log_err_status(UErrorCode status, const char* pattern, ...)
         /* Fatal error. */
         if(strchr(pattern, '\n') != NULL) {
             ++ERROR_COUNT;
+        } else {
+			++ONE_ERROR;
         }
         vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
     }
@@ -533,6 +740,7 @@ log_data_err(const char* pattern, ...)
     va_list ap;
     va_start(ap, pattern);
 
+    go_offline_err();
     ++DATA_ERROR_COUNT; /* for informational message at the end */
 
     if(WARN_ON_MISSING_DATA == 0) {
@@ -621,6 +829,8 @@ initArgs( int argc, const char* const argv[], ArgHandlerPtr argHandler, void *co
 
     VERBOSITY = FALSE;
     ERR_MSG = TRUE;
+
+    ARGV_0=argv[0];
 
     for( i=1; i<argc; i++)
     {
@@ -767,10 +977,14 @@ runTestRequest(const TestNode* root,
                 return -1;
             }
 
+            ON_LINE=FALSE; /* just in case */
+
             if( doList == TRUE)
                 showTests(toRun);
             else
                 runTests(toRun);
+
+            ON_LINE=FALSE; /* just in case */
 
             errorCount += ERROR_COUNT;
 
@@ -785,10 +999,12 @@ runTestRequest(const TestNode* root,
 
     if( subtreeOptionSeen == FALSE) /* no other subtree given, run the default */
     {
+        ON_LINE=FALSE; /* just in case */
         if( doList == TRUE)
             showTests(toRun);
         else
             runTests(toRun);
+        ON_LINE=FALSE; /* just in case */
 
         errorCount += ERROR_COUNT;
     }
