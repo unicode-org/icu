@@ -126,9 +126,11 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(36,PluralFormatTest);
         TESTCLASS(37,DateIntervalFormatTest);
         TESTCLASS(38,TimeUnitTest);
-	    TESTCLASS(39,SelectFormatTest);
-	    TESTCLASS(40,LocaleDisplayNamesTest);
+        TESTCLASS(39,SelectFormatTest);
+        TESTCLASS(40,LocaleDisplayNamesTest);
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
         TESTCLASS(41,DecimalFormatTest);
+#endif
 
         default: name = ""; break; //needed to end loop
     }

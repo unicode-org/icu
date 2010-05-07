@@ -11,7 +11,8 @@
 //
 
 #include "intltest.h"
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "unicode/regex.h"
 #include "unicode/uchar.h"
