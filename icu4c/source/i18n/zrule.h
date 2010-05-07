@@ -14,6 +14,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #ifndef UCNV_H
 
 /**
@@ -294,5 +296,7 @@ izrule_getStaticClassID(IZRule* rule);
  */
 U_DRAFT UClassID U_EXPORT2
 izrule_getDynamicClassID(IZRule* rule);
+
+#endif
 
 #endif

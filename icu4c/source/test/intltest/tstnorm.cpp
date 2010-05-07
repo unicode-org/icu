@@ -52,8 +52,10 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(14,FindFoldFCDExceptions);
         CASE(15,TestCompare);
         CASE(16,TestSkippable);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
         CASE(17,TestCustomComp);
         CASE(18,TestCustomFCC);
+#endif
         default: name = ""; break;
     }
 }

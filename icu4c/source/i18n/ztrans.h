@@ -14,6 +14,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #ifndef UCNV_H
 
 /**
@@ -180,5 +182,7 @@ ztrans_getStaticClassID(ZTrans* trans);
  */
 U_DRAFT UClassID U_EXPORT2
 ztrans_getDynamicClassID(ZTrans* trans);
+
+#endif
 
 #endif
