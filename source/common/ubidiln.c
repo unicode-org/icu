@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -664,7 +664,8 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
             limit=0;
             for(i=0; i<runCount; ++i) {
                 ADD_ODD_BIT_FROM_LEVEL(runs[i].logicalStart, levels[runs[i].logicalStart]);
-                limit=runs[i].visualLimit+=limit;
+                limit+=runs[i].visualLimit;
+                runs[i].visualLimit=limit;
             }
 
             /* Set the "odd" bit for the trailing WS run. */
