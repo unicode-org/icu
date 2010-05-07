@@ -136,7 +136,9 @@ main(int argc, char* argv[]) {
         "because UCONFIG_NO_NORMALIZATION is set, \n"
         "see icu/source/common/unicode/uconfig.h\n");
     udata_createDummy(NULL, NULL, options[OUTPUT_FILENAME].value, errorCode);
-    return U_UNSUPPORTED_ERROR;
+    // Should not return an error since this is the expected behaviour if UCONFIG_NO_NORMALIZATION is on.
+    // return U_UNSUPPORTED_ERROR;
+    return 0;
 
 #else
 
