@@ -51,9 +51,6 @@ typedef struct ULanguageTag {
 #define LOCALE_KEYWORD_SEP ';'
 #define LOCALE_KEY_TYPE_SEP '='
 
-#define VA_KEY "va"
-#define VA_POSIX "posix"
-
 #define ISALPHA(c) (((c)>='A' && (c)<='Z') || ((c)>='a' && (c)<='z'))
 #define ISNUMERIC(c) ((c)>='0' && (c)<='9')
 
@@ -1110,7 +1107,7 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
 
                     /* validate */
                     if (_isVariantSubtag(pVar, -1)) {
-                        if (uprv_strcmp(pVar,"posix")) {
+                        if (uprv_strcmp(pVar,POSIX_VALUE)) {
                             /* emit the variant to the list */
                             var = uprv_malloc(sizeof(VariantListEntry));
                             if (var == NULL) {
@@ -1448,7 +1445,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
             /* Special handling for u-va-posix, since we want to treat this as a variant, not */
             /* as a keyword.                                                                  */
 
-            if ( !uprv_strcmp(pKey,VA_KEY) && !uprv_strcmp(pType,VA_POSIX) ) {
+            if ( !uprv_strcmp(pKey,POSIX_KEY) && !uprv_strcmp(pType,POSIX_VALUE) ) {
                 *posixVariant = TRUE;
             } else {
                 /* create an ExtensionListEntry for this keyword */
