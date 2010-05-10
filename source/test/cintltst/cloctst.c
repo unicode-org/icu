@@ -5395,8 +5395,8 @@ const char* const locale_to_langtag[][3] = {
     {"en_US",       "en-US",        "en-US"},
     {"iw_IL",       "he-IL",        "he-IL"},
     {"sr_Latn_SR",  "sr-Latn-SR",   "sr-Latn-SR"},
-    {"en__POSIX",   "en-posix",     "en-posix"},
-    {"en_POSIX",    "en",           "en"},
+    {"en__POSIX",   "en-u-va-posix", "en-u-va-posix"},
+    {"en_US_POSIX@ca=japanese",  "en-US-u-ca-japanese-va-posix", "en-US-u-ca-japanese-va-posix"},
     {"und_555",     "und-555",      "und-555"},
     {"123",         "und",          NULL},
     {"%$#&",        "und",          NULL},
@@ -5421,6 +5421,9 @@ const char* const locale_to_langtag[][3] = {
     {"en@timezone=US/Eastern",  "en-u-tz-usnyc",    "en-u-tz-usnyc"},
     {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z",   NULL},
     {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic",  NULL},
+    {"en_US_POSIX", "en-US-u-va-posix", "en-US-u-va-posix"},
+    {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-EUR-va-posix", "en-US-u-ca-japanese-cu-EUR-va-posix"},
+
     {NULL,          NULL,           NULL}
 };
 
@@ -5509,6 +5512,7 @@ static const struct {
     {"und-varzero-var1-vartwo", "__VARZERO",        11},
     {"en-u-ca-gregory",     "en@calendar=gregorian",    15},
     {"en-U-cu-USD",         "en@currency=usd",      11},
+    {"en-US-u-va-posix",    "en_US_POSIX",          16},
     {"ar-x-1-2-3",          "ar@x=1-2-3",           10},
     {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", 19},
     {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   30},
