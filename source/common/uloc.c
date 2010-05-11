@@ -1932,11 +1932,15 @@ uloc_getVariant(const char* localeID,
         if (_isIDSeparator(*localeID)) {
             const char *cntryID;
             ulocimp_getCountry(localeID+1, NULL, 0, &cntryID);
-            if (cntryID != localeID) {
+            if (cntryID != localeID+1) {
                 /* Found optional country */
                 localeID = cntryID;
             }
             if(_isIDSeparator(*localeID)) {
+                /* If there was no country ID, skip a possible extra IDSeparator */
+                if (localeID != cntryID && _isIDSeparator(localeID[1])) {
+                    localeID++;
+                }
                 i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
             }
         }
