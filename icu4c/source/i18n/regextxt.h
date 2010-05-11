@@ -15,8 +15,8 @@
 #ifndef _REGEXTXT_H
 #define _REGEXTXT_H
 
-#include <unicode/utypes.h>
-#include <unicode/utext.h>
+#include "unicode/utypes.h"
+#include "unicode/utext.h"
 
 U_NAMESPACE_BEGIN
 
