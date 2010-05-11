@@ -395,6 +395,9 @@ static void TestPrefixes() {
         {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", NULL},
         {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", NULL},
         
+        {"zh", "Hans", "", "PINYIN", "zh-Hans-pinyin", "zh_Hans_PINYIN", "zh_Hans@collation=pinyin"},
+        {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy_AREVMDA", NULL},
+        
         {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
         {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
         {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
@@ -5396,6 +5399,7 @@ const char* const locale_to_langtag[][3] = {
     {"iw_IL",       "he-IL",        "he-IL"},
     {"sr_Latn_SR",  "sr-Latn-SR",   "sr-Latn-SR"},
     {"en__POSIX",   "en-u-va-posix", "en-u-va-posix"},
+    {"en_POSIX",    "en-u-va-posix", "en-u-va-posix"},
     {"en_US_POSIX@ca=japanese",  "en-US-u-ca-japanese-va-posix", "en-US-u-ca-japanese-va-posix"},
     {"und_555",     "und-555",      "und-555"},
     {"123",         "und",          NULL},
