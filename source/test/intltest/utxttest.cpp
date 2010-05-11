@@ -8,15 +8,14 @@
 *
 ************************************************************************/
 
-#include "unicode/utypes.h"
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unicode/utext.h>
-#include <unicode/utf8.h>
-#include <unicode/ustring.h>
-#include <unicode/uchriter.h>
+#include "unicode/utypes.h"
+#include "unicode/utext.h"
+#include "unicode/utf8.h"
+#include "unicode/ustring.h"
+#include "unicode/uchriter.h"
 #include "utxttest.h"
 
 static UBool  gFailed = FALSE;

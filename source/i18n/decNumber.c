@@ -175,10 +175,10 @@
 /* ------------------------------------------------------------------ */
 
 #include <stdlib.h>                /* for malloc, free, etc.  */
-#include <cmemory.h>               /* for uprv_malloc, etc., in ICU */
 /*  #include <stdio.h>   */        /* for printf [if needed]  */
 #include <string.h>                /* for strcpy  */
 #include <ctype.h>                 /* for lower  */
+#include "cmemory.h"               /* for uprv_malloc, etc., in ICU */
 #include "decNumber.h"             /* base number library  */
 #include "decNumberLocal.h"        /* decNumber local types, etc.  */
 
