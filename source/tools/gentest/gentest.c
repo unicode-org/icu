@@ -22,7 +22,7 @@
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #include "unewdata.h"
 #include "cmemory.h"
 #include "cstring.h"

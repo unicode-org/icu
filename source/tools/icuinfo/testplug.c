@@ -20,7 +20,7 @@
 #include "unicode/icuplug.h"
 #include <stdio.h> /* for fprintf */
 #include <stdlib.h> /* for malloc */
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #include "unicode/uclean.h"
 #include "cmemory.h"
 

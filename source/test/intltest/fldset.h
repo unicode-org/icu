@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 2007-2008, International Business Machines
+* Copyright (c) 2007-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -13,8 +13,8 @@
 #include "unicode/calendar.h"
 #include "unicode/ucal.h"
 #include "unicode/udat.h"
-#include "unicode/udbgutil.h"
-#include "unicode/dbgutil.h"
+#include "udbgutil.h"
+#include "dbgutil.h"
 #include "unicode/unistr.h"
 
 #define U_FIELDS_SET_MAX  64

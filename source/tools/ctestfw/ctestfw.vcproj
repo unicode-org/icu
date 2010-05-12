@@ -414,10 +414,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dbgutil.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\testdata.cpp"
 				>
 			</File>
@@ -460,10 +456,6 @@
 						DisableLanguageExtensions="false"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\udbgutil.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\uperf.cpp"
@@ -515,10 +507,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\unicode\dbgutil.h"
-				>
-			</File>
-			<File
 				RelativePath=".\unicode\testdata.h"
 				>
 			</File>
@@ -532,10 +520,6 @@
 			</File>
 			<File
 				RelativePath=".\unicode\tstdtmod.h"
-				>
-			</File>
-			<File
-				RelativePath=".\unicode\udbgutil.h"
 				>
 			</File>
 			<File

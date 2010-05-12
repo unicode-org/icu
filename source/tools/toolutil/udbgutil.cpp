@@ -4,7 +4,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #include <string.h>
 
 /*

@@ -34,7 +34,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ulocdata.h"
 #include "unicode/parseerr.h" /* may not be included with some uconfig switches */
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
