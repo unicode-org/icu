@@ -647,6 +647,58 @@
 			RelativePath=".\xmlparser.h"
 			>
 		</File>
+                <File
+                    RelativePath=".\dbgutil.cpp"
+                    >
+                </File>
+                <File
+                    RelativePath=".\udbgutil.cpp"
+                    >
+                </File>
+                <File
+                    RelativePath=".\dbgutil.h"
+                    >
+                </File>
+                <File
+                    RelativePath=".\udbgutil.h"
+                    >
+                </File>
+                <File
+                    RelativePath=".\ucln_tu.c"
+                    >
+                  <FileConfiguration
+                      Name="Release|Win32"
+                      >
+                    <Tool
+                        Name="VCCLCompilerTool"
+                        DisableLanguageExtensions="false"
+                        />
+                  </FileConfiguration>
+                  <FileConfiguration
+                      Name="Debug|Win32"
+                      >
+                    <Tool
+                        Name="VCCLCompilerTool"
+                        DisableLanguageExtensions="false"
+                        />
+                  </FileConfiguration>
+                  <FileConfiguration
+                      Name="Release|x64"
+                      >
+                    <Tool
+                        Name="VCCLCompilerTool"
+                        DisableLanguageExtensions="false"
+                        />
+                  </FileConfiguration>
+                  <FileConfiguration
+                      Name="Debug|x64"
+                      >
+                    <Tool
+                        Name="VCCLCompilerTool"
+                        DisableLanguageExtensions="false"
+                        />
+                  </FileConfiguration>
+                </File>
 	</Files>
 	<Globals>
 	</Globals>

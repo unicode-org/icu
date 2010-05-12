@@ -10,7 +10,6 @@
 #ifndef _UDBGUTIL_H
 #define _UDBGUTIL_H
 
-#include "unicode/testtype.h"
 #include "unicode/utypes.h"
 
 
@@ -42,7 +41,7 @@ typedef enum UDebugEnumType UDebugEnumType;
  * Print how many enums are contained for this type. 
  * Should be equal to the appropriate _COUNT constant or there is an error. Return -1 if unsupported.
  */
-T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumCount(UDebugEnumType type);
+U_CAPI int32_t U_EXPORT2 udbg_enumCount(UDebugEnumType type);
 
 /**
  * Convert an enum to a string
@@ -50,7 +49,7 @@ T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumCount(UDebugEnumType type);
  * @param field field number
  * @return string of the format "ERA", "YEAR", etc, or NULL if out of range or unsupported
  */
-T_CTEST_API const char * T_CTEST_EXPORT2 udbg_enumName(UDebugEnumType type, int32_t field);
+U_CAPI const char * U_EXPORT2 udbg_enumName(UDebugEnumType type, int32_t field);
 
 /**
  * for consistency checking
@@ -58,7 +57,7 @@ T_CTEST_API const char * T_CTEST_EXPORT2 udbg_enumName(UDebugEnumType type, int3
  * Print how many enums should be contained for this type. 
  * This is equal to the appropriate _COUNT constant or there is an error. Returns -1 if unsupported.
  */
-T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumExpectedCount(UDebugEnumType type);
+U_CAPI int32_t U_EXPORT2 udbg_enumExpectedCount(UDebugEnumType type);
 
 /**
  * For consistency checking, returns the expected enum ordinal value for the given index value. 
@@ -66,7 +65,7 @@ T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumExpectedCount(UDebugEnumType type);
  * @param field field number
  * @return should be equal to 'field' or -1 if out of range.
  */
-T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumArrayValue(UDebugEnumType type, int32_t field);
+U_CAPI int32_t U_EXPORT2 udbg_enumArrayValue(UDebugEnumType type, int32_t field);
 
 /**
  * Locate the specified field value by name. 
@@ -74,6 +73,6 @@ T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumArrayValue(UDebugEnumType type, int
  * @param name name of string (case sensitive)
  * @return should be a field value or -1 if not found.
  */
-T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_enumByName(UDebugEnumType type, const char *name);
+U_CAPI int32_t U_EXPORT2 udbg_enumByName(UDebugEnumType type, const char *name);
 
 #endif

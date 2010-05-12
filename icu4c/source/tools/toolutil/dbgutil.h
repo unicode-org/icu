@@ -1,7 +1,7 @@
 
 /*
 ************************************************************************
-* Copyright (c) 2007-2008, International Business Machines
+* Copyright (c) 2007-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -12,31 +12,30 @@
 #define _DBGUTIL_H
 
 #include "unicode/utypes.h"
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #include "unicode/unistr.h"
-#include "unicode/testtype.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 //class UnicodeString;
 
-T_CTEST_API const UnicodeString&  T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field);
+U_CAPI const UnicodeString&  U_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field);
 
 /**
  * @return enum offset, or UDBG_INVALID_ENUM on error
  */ 
-T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string);
+U_CAPI int32_t  U_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string);
 
 /**
  * Convert a UnicodeString (with ascii digits) into a number.
  * @param s string
  * @return numerical value, or 0 on error
  */
-T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_stoi(const UnicodeString &s);
+U_CAPI int32_t U_EXPORT2 udbg_stoi(const UnicodeString &s);
 
-T_CTEST_API double T_CTEST_EXPORT2 udbg_stod(const UnicodeString &s);
+U_CAPI double U_EXPORT2 udbg_stod(const UnicodeString &s);
 
-T_CTEST_API UnicodeString *udbg_escape(const UnicodeString &s, UnicodeString *dst);
+U_CAPI UnicodeString *udbg_escape(const UnicodeString &s, UnicodeString *dst);
 
 #endif
 

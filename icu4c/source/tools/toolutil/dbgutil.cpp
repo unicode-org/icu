@@ -1,11 +1,11 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2009, International Business Machines Corporation and
+ * Copyright (c) 2007-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "unicode/udbgutil.h"
-#include "unicode/dbgutil.h"
+#include "udbgutil.h"
+#include "dbgutil.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -40,14 +40,14 @@ static void udbg_cleanup(void) {
     }
 }
 
-static UBool ctestfw_cleanup(void)
+static UBool tu_cleanup(void)
 {
     udbg_cleanup();
     return TRUE;
 }
 
 static void udbg_register_cleanup(void) {
-   ucln_registerCleanup(UCLN_CTESTFW, ctestfw_cleanup);
+   ucln_registerCleanup(UCLN_TOOLUTIL, tu_cleanup);
 }
 U_CDECL_END
 
@@ -72,7 +72,7 @@ static void udbg_setup(void) {
 
 
 
-T_CTEST_API const UnicodeString& T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field) {
+U_CAPI const UnicodeString& U_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field) {
     if(strs == NULL ) {
         udbg_setup();
     }
@@ -91,7 +91,7 @@ T_CTEST_API const UnicodeString& T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType 
     }
 }
 
-T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string) {
+U_CAPI int32_t  U_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string) {
     if(type<0||type>=UDBG_ENUM_COUNT) {
         return -1;
     }
@@ -109,7 +109,7 @@ T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, cons
 }
 
 // from DataMap::utoi
-T_CTEST_API int32_t 
+U_CAPI int32_t 
 udbg_stoi(const UnicodeString &s)
 {
     char ch[256];
@@ -121,7 +121,7 @@ udbg_stoi(const UnicodeString &s)
 }
 
 
-T_CTEST_API double 
+U_CAPI double 
 udbg_stod(const UnicodeString &s)
 {
     char ch[256];
@@ -132,7 +132,7 @@ udbg_stod(const UnicodeString &s)
     return atof(ch);
 }
 
-T_CTEST_API UnicodeString *
+U_CAPI UnicodeString *
 udbg_escape(const UnicodeString &src, UnicodeString *dst)
 {
     dst->remove();

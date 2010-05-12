@@ -25,7 +25,7 @@ CPPFLAGS += -I$(top_builddir)/common
 endif
 CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil -I$(top_srcdir)/tools/ctestfw 
 CPPFLAGS+= -I$(top_srcdir)/i18n
-LIBS = $(LIBCTESTFW) $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = icuinfo.o
 PLUGIN_OBJECTS = testplug.o
