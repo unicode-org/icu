@@ -51,7 +51,7 @@ DEFS += -DT_CTEST_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSCTESTFW)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o uperf.o dbgutil.o udbgutil.o ucln_ct.o
+OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o uperf.o ucln_ct.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

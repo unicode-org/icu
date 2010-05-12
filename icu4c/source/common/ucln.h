@@ -55,6 +55,7 @@ typedef enum ECleanupLibraryType {
     UCLN_UPLUG,     /* ICU plugins */
     UCLN_CUSTOM,    /* Custom is for anyone else. */
     UCLN_CTESTFW,
+    UCLN_TOOLUTIL,
     UCLN_LAYOUTEX,
     UCLN_LAYOUT,
     UCLN_IO,

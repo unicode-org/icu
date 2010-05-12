@@ -14,7 +14,7 @@
 #include "hebrwcal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
-#include "unicode/dbgutil.h"
+#include "dbgutil.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
 
