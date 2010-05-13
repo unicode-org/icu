@@ -1203,6 +1203,18 @@ static void TestRelativeCrash(void) {
         }
         {
             UErrorCode subStatus = U_ZERO_ERROR;
+            UChar symbolValue = 0x0041;
+            what = "udat_setSymbols";
+            log_verbose("Trying %s on a relative date..\n", what);
+            udat_setSymbols(icudf, UDAT_ERAS,0,&symbolValue,1, &subStatus);  /* bogus values */
+            if(subStatus == expectStatus) {
+                log_verbose("Success: did not crash on %s, but got %s.\n", what, u_errorName(subStatus));
+            } else {
+                log_err("FAIL: didn't crash on %s, but got success %s instead of %s. \n", what, u_errorName(subStatus), u_errorName(expectStatus));
+            }            
+        }
+        {
+            UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_countSymbols";
             log_verbose("Trying %s on a relative date..\n", what);
             udat_countSymbols(icudf, UDAT_ERAS); 
