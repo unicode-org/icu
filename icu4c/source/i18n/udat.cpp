@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -783,7 +783,7 @@ udat_setSymbols(    UDateFormat             *format,
             int32_t                 valueLength,
             UErrorCode              *status)
 {
-
+    verifyIsSimpleDateFormat(format, status);
     if(U_FAILURE(*status)) return;
 
     DateFormatSymbols *syms = (DateFormatSymbols *)((SimpleDateFormat *)format)->getDateFormatSymbols();
