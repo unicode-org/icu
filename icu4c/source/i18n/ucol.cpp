@@ -82,6 +82,19 @@ _getFoldingOffset(uint32_t data) {
 
 U_CDECL_END
 
+// init FCD data
+static inline
+UBool initializeFCD(UErrorCode *status) {
+    if (fcdTrieIndex != NULL) {
+        return TRUE;
+    } else {
+        // The result is constant, until the library is reloaded.
+        fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+        ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
+        return U_SUCCESS(*status);
+    }
+}
+
 static
 inline void IInit_collIterate(const UCollator *collator, const UChar *sourceString,
                               int32_t sourceLen, collIterate *s,
@@ -721,6 +734,9 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->caseLevel = (UColAttributeValue)opts->caseLevel;
     result->frenchCollation = (UColAttributeValue)opts->frenchCollation;
     result->normalizationMode = (UColAttributeValue)opts->normalizationMode;
+    if(result->normalizationMode == UCOL_ON && !initializeFCD(status)) {
+        return;
+    }
     result->strength = (UColAttributeValue)opts->strength;
     result->variableTopValue = opts->variableTopValue;
     result->alternateHandling = (UColAttributeValue)opts->alternateHandling;
@@ -733,6 +749,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->normalizationModeisDefault = TRUE;
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
+    result->alternateHandlingisDefault = TRUE;
     result->hiraganaQisDefault = TRUE;
     result->numericCollationisDefault = TRUE;
 
@@ -802,13 +819,6 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
         result->freeOnClose = FALSE;
     }
 
-    // init FCD data
-    if (fcdTrieIndex == NULL) {
-        // The result is constant, until the library is reloaded.
-        fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
-        ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
-    }
-
     result->image = image;
     result->mapping.getFoldingOffset = _getFoldingOffset;
     const uint8_t *mapping = (uint8_t*)result->image+result->image->mappingPosition;
@@ -821,37 +831,10 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
         return result;
     }
 
-    /*result->latinOneMapping = (uint32_t*)((uint8_t*)result->image+result->image->latinOneMapping);*/
     result->latinOneMapping = UTRIE_GET32_LATIN1(&result->mapping);
     result->contractionCEs = (uint32_t*)((uint8_t*)result->image+result->image->contractionCEs);
     result->contractionIndex = (UChar*)((uint8_t*)result->image+result->image->contractionIndex);
     result->expansion = (uint32_t*)((uint8_t*)result->image+result->image->expansion);
-
-    result->options = (UColOptionSet*)((uint8_t*)result->image+result->image->options);
-    result->freeOptionsOnClose = FALSE;
-
-    /* set attributes */
-    result->caseFirst = (UColAttributeValue)result->options->caseFirst;
-    result->caseLevel = (UColAttributeValue)result->options->caseLevel;
-    result->frenchCollation = (UColAttributeValue)result->options->frenchCollation;
-    result->normalizationMode = (UColAttributeValue)result->options->normalizationMode;
-    result->strength = (UColAttributeValue)result->options->strength;
-    result->variableTopValue = result->options->variableTopValue;
-    result->alternateHandling = (UColAttributeValue)result->options->alternateHandling;
-    result->hiraganaQ = (UColAttributeValue)result->options->hiraganaQ;
-    result->numericCollation = (UColAttributeValue)result->options->numericCollation;
-
-    result->caseFirstisDefault = TRUE;
-    result->caseLevelisDefault = TRUE;
-    result->frenchCollationisDefault = TRUE;
-    result->normalizationModeisDefault = TRUE;
-    result->strengthisDefault = TRUE;
-    result->variableTopValueisDefault = TRUE;
-    result->alternateHandlingisDefault = TRUE;
-    result->hiraganaQisDefault = TRUE;
-    result->numericCollationisDefault = TRUE;
-
-    /*result->scriptOrder = NULL;*/
 
     result->rules = NULL;
     result->rulesLength = 0;
@@ -894,7 +877,12 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->latinOneFailed = FALSE;
     result->UCA = UCA;
 
-    ucol_updateInternalState(result, status);
+    /* set attributes */
+    ucol_setOptionsFromHeader(
+        result,
+        (UColOptionSet*)((uint8_t*)result->image+result->image->options),
+        status);
+    result->freeOptionsOnClose = FALSE;
 
     /* Normally these will be set correctly later. This is the default if you use UCA or the default. */
     result->ucaRules = NULL;
@@ -7000,12 +6988,16 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
         if(value == UCOL_ON) {
             coll->normalizationMode = UCOL_ON;
             coll->normalizationModeisDefault = FALSE;
+            initializeFCD(status);
         } else if (value == UCOL_OFF) {
             coll->normalizationMode = UCOL_OFF;
             coll->normalizationModeisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
             coll->normalizationModeisDefault = TRUE;
             coll->normalizationMode = (UColAttributeValue)coll->options->normalizationMode;
+            if(coll->normalizationMode == UCOL_ON) {
+                initializeFCD(status);
+            }
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
         }
