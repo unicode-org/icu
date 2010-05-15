@@ -1,4 +1,4 @@
-// Copyright (C) 2009, International Business Machines
+// Copyright (C) 2009-2010, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.
@@ -25,13 +25,15 @@ char* ByteSink::GetAppendBuffer(int32_t min_capacity,
 void ByteSink::Flush() {}
 
 CheckedArrayByteSink::CheckedArrayByteSink(char* outbuf, int32_t capacity)
-    : outbuf_(outbuf), capacity_(capacity < 0 ? 0 : capacity), size_(0), overflowed_(false) {
+    : outbuf_(outbuf), capacity_(capacity < 0 ? 0 : capacity),
+      size_(0), appended_(0), overflowed_(false) {
 }
 
 void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
   if (n <= 0) {
     return;
   }
+  appended_ += n;
   int32_t available = capacity_ - size_;
   if (n > available) {
     n = available;
