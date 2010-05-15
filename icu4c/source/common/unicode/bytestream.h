@@ -31,7 +31,7 @@
 #define __BYTESTREAM_H__
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Interface for writing bytes, and implementation classes.
  */
 
@@ -41,7 +41,7 @@
 
 U_NAMESPACE_BEGIN
 
-/** 
+/**
  * A ByteSink can be filled with bytes.
  * @stable ICU 4.2
  */
@@ -55,7 +55,7 @@ public:
   /**
    * Virtual destructor.
    * @stable ICU 4.2
-   */    
+   */
   virtual ~ByteSink() { }
 
   /**
@@ -65,7 +65,7 @@ public:
    * @stable ICU 4.2
    */
   virtual void Append(const char* bytes, int32_t n) = 0;
- 
+
   /**
    * Returns a writable buffer for appending and writes the buffer's capacity to
    * *result_capacity. Guarantees *result_capacity>=min_capacity.
@@ -186,10 +186,19 @@ public:
    * @stable ICU 4.2
    */
   UBool Overflowed() const { return overflowed_; }
+  /**
+   * Returns the number of bytes appended to the sink.
+   * If Overflowed() then NumberOfBytesAppended()>NumberOfBytesWritten()
+   * else they return the same number.
+   * @return number of bytes written to the buffer
+   * @draft ICU 4.6
+   */
+  int32_t NumberOfBytesAppended() const { return appended_; }
 private:
   char* outbuf_;
   const int32_t capacity_;
   int32_t size_;
+  int32_t appended_;
   bool overflowed_;
   CheckedArrayByteSink(); ///< default constructor not implemented 
   CheckedArrayByteSink(const CheckedArrayByteSink &); ///< copy constructor not implemented
