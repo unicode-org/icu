@@ -443,7 +443,8 @@ StringTest::TestCheckedArrayByteSink() {
     CheckedArrayByteSink sink(buffer, (int32_t)sizeof(buffer));
     sink.Append("abc", 3);
     if(!(sink.NumberOfBytesAppended() == 3 && sink.NumberOfBytesWritten() == 3 &&
-         0 == memcmp("abc", buffer, 3) && buffer[3] == '!')
+         0 == memcmp("abc", buffer, 3) && buffer[3] == '!') &&
+         !sink.Overflowed()
     ) {
         errln("CheckedArrayByteSink did not Append() as expected");
         return;
@@ -486,6 +487,14 @@ StringTest::TestCheckedArrayByteSink() {
          sink.Overflowed())
     ) {
         errln("CheckedArrayByteSink did not Append(scratch buffer) as expected");
+        return;
+    }
+    sink.Reset().Append("123", 3);
+    if(!(sink.NumberOfBytesAppended() == 3 && sink.NumberOfBytesWritten() == 3 &&
+         0 == memcmp("123defghijklmnopqrstuvwxyz", buffer, (int32_t)sizeof(buffer)) &&
+         !sink.Overflowed())
+    ) {
+        errln("CheckedArrayByteSink did not Reset().Append() as expected");
         return;
     }
 }
