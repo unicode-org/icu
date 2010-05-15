@@ -26,7 +26,12 @@ void ByteSink::Flush() {}
 
 CheckedArrayByteSink::CheckedArrayByteSink(char* outbuf, int32_t capacity)
     : outbuf_(outbuf), capacity_(capacity < 0 ? 0 : capacity),
-      size_(0), appended_(0), overflowed_(false) {
+      size_(0), appended_(0), overflowed_(FALSE) {
+}
+
+CheckedArrayByteSink& CheckedArrayByteSink::Reset() {
+  size_ = appended_ = 0;
+  overflowed_ = FALSE;
 }
 
 void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
@@ -37,7 +42,7 @@ void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
   int32_t available = capacity_ - size_;
   if (n > available) {
     n = available;
-    overflowed_ = true;
+    overflowed_ = TRUE;
   }
   if (n > 0 && bytes != (outbuf_ + size_)) {
     uprv_memcpy(outbuf_ + size_, bytes, n);
