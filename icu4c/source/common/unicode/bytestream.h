@@ -153,6 +153,7 @@ public:
    * Useful for reusing both the buffer and the sink for multiple streams.
    * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
    * and Overflowed()=FALSE.
+   * @return *this
    * @draft ICU 4.6
    */
   CheckedArrayByteSink& Reset();
