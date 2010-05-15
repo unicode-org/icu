@@ -32,6 +32,7 @@ CheckedArrayByteSink::CheckedArrayByteSink(char* outbuf, int32_t capacity)
 CheckedArrayByteSink& CheckedArrayByteSink::Reset() {
   size_ = appended_ = 0;
   overflowed_ = FALSE;
+  return *this;
 }
 
 void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
