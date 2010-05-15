@@ -149,6 +149,14 @@ public:
    */
   CheckedArrayByteSink(char* outbuf, int32_t capacity);
   /**
+   * Returns the sink to its original state, without modifying the buffer.
+   * Useful for reusing both the buffer and the sink for multiple streams.
+   * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
+   * and Overflowed()=FALSE.
+   * @draft ICU 4.6
+   */
+  CheckedArrayByteSink& Reset();
+  /**
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
@@ -199,7 +207,7 @@ private:
   const int32_t capacity_;
   int32_t size_;
   int32_t appended_;
-  bool overflowed_;
+  UBool overflowed_;
   CheckedArrayByteSink(); ///< default constructor not implemented 
   CheckedArrayByteSink(const CheckedArrayByteSink &); ///< copy constructor not implemented
   CheckedArrayByteSink &operator=(const CheckedArrayByteSink &); ///< assignment operator not implemented
