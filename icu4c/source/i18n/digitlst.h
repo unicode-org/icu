@@ -51,17 +51,17 @@ typedef enum EDigitListValues {
 
 U_NAMESPACE_BEGIN
 
-// Export an explicit template instantiation of the MaybeStackArray that
+// Export an explicit template instantiation of the MaybeStackHeaderAndArray that
 //    is used as a data member of DigitList.
 //
 //    MSVC requires this, even though it should not be necessary. 
-//    No direct access to the MaybeStackArray leaks out of the i18n library.
+//    No direct access to the MaybeStackHeaderAndArray leaks out of the i18n library.
 //
 //    Macintosh produces duplicate definition linker errors with the explicit template
 //    instantiation.
 //
 #if !defined(U_DARWIN)
-template class U_I18N_API MaybeStackArray<char, sizeof(decNumber) + DEFAULT_DIGITS>;
+template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS>;
 #endif
 
 
@@ -354,8 +354,8 @@ private:
 
     decContext    fContext;
     decNumber     *fDecNumber;
-    MaybeStackArray<char, sizeof(decNumber) + DEFAULT_DIGITS>  fStorage;
-    
+    MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS>  fStorage;
+
     /* Cached double value corresponding to this decimal number.
      * This is an optimization for the formatting implementation, which may
      * ask for the double value multiple times.
