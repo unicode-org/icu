@@ -66,9 +66,9 @@ DigitList::DigitList()
     uprv_decContextDefault(&fContext, DEC_INIT_BASE);
     fContext.traps  = 0;
     uprv_decContextSetRounding(&fContext, DEC_ROUND_HALF_EVEN);
-    fContext.digits = fStorage.getCapacity() - sizeof(decNumber);
+    fContext.digits = fStorage.getCapacity();
 
-    fDecNumber = (decNumber *)(fStorage.getAlias());
+    fDecNumber = fStorage.getAlias();
     uprv_decNumberZero(fDecNumber);
 
     fDouble = 0.0;
@@ -86,7 +86,7 @@ DigitList::~DigitList()
 
 DigitList::DigitList(const DigitList &other)
 {
-    fDecNumber = NULL;
+    fDecNumber = fStorage.getAlias();
     *this = other;
 }
 
@@ -101,8 +101,12 @@ DigitList::operator=(const DigitList& other)
     {
         uprv_memcpy(&fContext, &other.fContext, sizeof(decContext));
 
-        fStorage.resize(other.fStorage.getCapacity());
-        fDecNumber = (decNumber *)fStorage.getAlias();
+        if (other.fStorage.getCapacity() > fStorage.getCapacity()) {
+            fDecNumber = fStorage.resize(other.fStorage.getCapacity());
+        }
+        // Always reset the fContext.digits, even if fDecNumber was not reallocated,
+        // because above we copied fContext from other.fContext.
+        fContext.digits = fStorage.getCapacity();
         uprv_decNumberCopy(fDecNumber, other.fDecNumber);
 
         fDouble = other.fDouble;
@@ -679,15 +683,16 @@ DigitList::set(const StringPiece &source, UErrorCode &status) {
     // resize the number up if necessary.
     int32_t numDigits = source.length();
     if (numDigits > fContext.digits) {
-        fContext.digits = numDigits;
-        char *t = fStorage.resize(sizeof(decNumber) + numDigits, fStorage.getCapacity());
+        // fContext.digits == fStorage.getCapacity()
+        decNumber *t = fStorage.resize(numDigits, fStorage.getCapacity());
         if (t == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        fDecNumber = (decNumber *)fStorage.getAlias();
+        fDecNumber = t;
+        fContext.digits = numDigits;
     }
-        
+
     fContext.status = 0;
     uprv_decNumberFromString(fDecNumber, source.data(), &fContext);
     if ((fContext.status & DEC_Conversion_syntax) != 0) {
@@ -778,13 +783,13 @@ DigitList::ensureCapacity(int32_t requestedCapacity, UErrorCode &status) {
         requestedCapacity = DEC_MAX_DIGITS;
     }
     if (requestedCapacity > fContext.digits) {
-        char *newBuffer = fStorage.resize(sizeof(decNumber) + requestedCapacity, fStorage.getCapacity());
+        decNumber *newBuffer = fStorage.resize(requestedCapacity, fStorage.getCapacity());
         if (newBuffer == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
         fContext.digits = requestedCapacity;
-        fDecNumber = (decNumber *)fStorage.getAlias();
+        fDecNumber = newBuffer;
     }
 }
 
