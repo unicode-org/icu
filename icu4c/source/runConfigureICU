@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2009, International Business Machines Corporation and
+# Copyright (c) 1999-2010, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -306,8 +306,8 @@ case $platform in
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(zOSV1R2)'"
         export CXXFLAGS="-Wc,'target(zOSV1R2)'"
-        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
-        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
@@ -371,6 +371,7 @@ export LDFLAGS
 
 # Run configure
 
+echo "export CPP=$CPP CC=$CC CXX=$CXX CPPFLAGS=$CPPFLAGS CFLAGS=$CFLAGS CXXFLAGS=$CXXFLAGS LDFLAGS=$LDFLAGS MAKE=$MAKE"
 echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
 echo
 if $configure $OPTS $@
@@ -383,4 +384,3 @@ else
 	echo $0: ./configure failed
 	exit 1
 fi
-
