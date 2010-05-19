@@ -150,7 +150,7 @@ class U_I18N_API OlsonTimeZone: public BasicTimeZone {
     /**
      * TimeZone API.
      */
-    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * TimeZone API.
