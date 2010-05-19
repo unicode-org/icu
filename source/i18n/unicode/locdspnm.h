@@ -169,12 +169,9 @@ public:
     virtual UnicodeString& keyValueDisplayName(const char* key, const char* value,
 					       UnicodeString& result) const = 0;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @returns a UClassID for this class.
-     * @internal ICU 4.4  // TODO @draft ICU 4.6
-     */
-    static UClassID U_EXPORT2 getStaticClassID();
+private:
+    // No ICU "poor man's RTTI" for this class nor its subclasses.
+    virtual UClassID getDynamicClassID() const;
 };
 
 inline LocaleDisplayNames::~LocaleDisplayNames() {

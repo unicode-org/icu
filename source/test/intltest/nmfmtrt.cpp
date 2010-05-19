@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -182,15 +182,16 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         // I'll get around this by dividing by the multiplier to make sure
         // the double will stay in range.
         //if(fmt->getMultipler() == 1)
-        if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
+        DecimalFormat *df = dynamic_cast<DecimalFormat *>(fmt);
+        if(df != NULL)
         {
 #if !defined(OS390) && !defined(OS400)
             /* DBL_MAX/2 is here because randomDouble does a *2 in the math */
-            test(fmt, randomDouble(DBL_MAX/2.0) / ((DecimalFormat*)fmt)->getMultiplier());
+            test(fmt, randomDouble(DBL_MAX/2.0) / df->getMultiplier());
 #elif IEEE_754
-            test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
+            test(fmt, randomDouble(1e75) / df->getMultiplier());   
 #else
-            test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
+            test(fmt, randomDouble(1e65) / df->getMultiplier());   /*OS390*/
 #endif
         }
 
@@ -229,8 +230,9 @@ void
 NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 {
     fmt->setMaximumFractionDigits(999);
-    if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-        ((DecimalFormat *)fmt)->setRoundingIncrement(0.0);
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(fmt);
+    if(df != NULL) {
+        df->setRoundingIncrement(0.0);
     }
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString s, s2, temp;

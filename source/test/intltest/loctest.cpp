@@ -1835,12 +1835,12 @@ void LocaleTest::TestGetLocale(void) {
     // DecimalFormat, DecimalFormatSymbols
 #if !UCONFIG_NO_FORMATTING
     req = "fr_FR_NICE";
-    DecimalFormat* dec = (DecimalFormat*)
-    NumberFormat::createInstance(Locale::createFromName(req), ec);
+    NumberFormat* nf = NumberFormat::createInstance(Locale::createFromName(req), ec);
     if (U_FAILURE(ec)) {
         dataerrln("FAIL: NumberFormat::createInstance failed - %s", u_errorName(ec));
     } else {
-        if (dec->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+        DecimalFormat* dec = dynamic_cast<DecimalFormat*>(nf);
+        if (dec == NULL) {
             errln("FAIL: NumberFormat::createInstance does not return a DecimalFormat");
             return;
         }
@@ -1865,20 +1865,21 @@ void LocaleTest::TestGetLocale(void) {
             _checklocs("DecimalFormatSymbols", req, valid, actual);
         }        
     }
-    delete dec;
+    delete nf;
 #endif
 
     // DateFormat, DateFormatSymbols
 #if !UCONFIG_NO_FORMATTING
     req = "de_CH_LUCERNE";
-    SimpleDateFormat* dat = (SimpleDateFormat*)
+    DateFormat* df =
         DateFormat::createDateInstance(DateFormat::kDefault,
                                        Locale::createFromName(req));
-    if (dat == 0){
+    if (df == 0){
         dataerrln("Error calling DateFormat::createDateInstance()");
     } else {
-        if (dat->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
-            errln("FAIL: NumberFormat::createInstance does not return a DecimalFormat");
+        SimpleDateFormat* dat = dynamic_cast<SimpleDateFormat*>(df);
+        if (dat == NULL) {
+            errln("FAIL: DateFormat::createInstance does not return a SimpleDateFormat");
             return;
         }
         valid = dat->getLocale(ULOC_VALID_LOCALE, ec);
@@ -1902,7 +1903,7 @@ void LocaleTest::TestGetLocale(void) {
             _checklocs("DateFormatSymbols", req, valid, actual);
         }        
     }
-    delete dat;
+    delete df;
 #endif
 
     // BreakIterator

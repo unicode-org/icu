@@ -38,8 +38,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
 //-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
 // NOTE: As of 3.0, there are limitations to the UObject API.  It does
-// not (yet) support cloning, operator=, nor operator==.  RTTI is also
-// restricted in that subtype testing is not (yet) implemented.  To
+// not (yet) support cloning, operator=, nor operator==.  To
 // work around this, I implement some simple inlines here.  Later
 // these can be modified or removed.  [alan]
 
@@ -60,9 +59,7 @@ static inline UObject* objectClone(const UObject* a) {
 
 // Return TRUE if *a is an instance of Measure.
 static inline UBool instanceOfMeasure(const UObject* a) {
-    // LATER: return a->instanceof(Measure::getStaticClassID());
-    return a->getDynamicClassID() ==
-        CurrencyAmount::getStaticClassID();
+    return dynamic_cast<const Measure*>(a) != NULL;
 }
 
 /**

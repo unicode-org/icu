@@ -8,6 +8,8 @@
 *******************************************************************************
 */
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/dtitvfmt.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -188,8 +190,8 @@ DateIntervalFormat::clone(void) const {
 
 UBool
 DateIntervalFormat::operator==(const Format& other) const {
-    if ( other.getDynamicClassID() == DateIntervalFormat::getStaticClassID() ) {
-        DateIntervalFormat* fmt = (DateIntervalFormat*)&other;
+    if (typeid(*this) == typeid(other)) {
+        const DateIntervalFormat* fmt = (DateIntervalFormat*)&other;
 #ifdef DTITVFMT_DEBUG
     UBool equal;
     equal = (this == fmt);
@@ -241,8 +243,9 @@ DateIntervalFormat::format(const Formattable& obj,
 
     if ( obj.getType() == Formattable::kObject ) {
         const UObject* formatObj = obj.getObject();
-        if (formatObj->getDynamicClassID() == DateInterval::getStaticClassID()){
-            return format((DateInterval*)formatObj, appendTo, fieldPosition, status);
+        const DateInterval* interval = dynamic_cast<const DateInterval*>(formatObj);
+        if (interval != NULL){
+            return format(interval, appendTo, fieldPosition, status);
         }
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;

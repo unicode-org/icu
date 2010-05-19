@@ -145,7 +145,7 @@ ICUDataTable::getNoFallback(const char* tableKey, const char* subTableKey, const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocaleDisplayNames)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(LocaleDisplayNames)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -298,15 +298,11 @@ public:
   virtual UnicodeString& keyValueDisplayName(const char* key,
                                              const char* value,
                                              UnicodeString& result) const;
-  static UClassID U_EXPORT2 getStaticClassID();
-  virtual UClassID getDynamicClassID() const;
 private:
   UnicodeString& localeIdName(const char* localeId,
                               UnicodeString& result) const;
   UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
 };
-
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LocaleDisplayNamesImpl)
 
 LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
                                                UDialectHandling dialectHandling)

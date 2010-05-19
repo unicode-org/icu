@@ -1333,10 +1333,10 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
                 // Check if the zone actually uses daylight saving time around the time
                 TimeZone *tmptz = tz.clone();
                 BasicTimeZone *btz = NULL;
-                if (tmptz->getDynamicClassID() == OlsonTimeZone::getStaticClassID()
-                    || tmptz->getDynamicClassID() == SimpleTimeZone::getStaticClassID()
-                    || tmptz->getDynamicClassID() == RuleBasedTimeZone::getStaticClassID()
-                    || tmptz->getDynamicClassID() == VTimeZone::getStaticClassID()) {
+                if (dynamic_cast<OlsonTimeZone *>(tmptz) != NULL
+                    || dynamic_cast<SimpleTimeZone *>(tmptz) != NULL
+                    || dynamic_cast<RuleBasedTimeZone *>(tmptz) != NULL
+                    || dynamic_cast<VTimeZone *>(tmptz) != NULL) {
                     btz = (BasicTimeZone*)tmptz;
                 }
 

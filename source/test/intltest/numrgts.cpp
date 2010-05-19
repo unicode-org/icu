@@ -503,15 +503,14 @@ void NumberFormatRegressionTest::Test4086575(void)
       return;
     }
     failure(status, "NumberFormat::createInstance", Locale::getFrance());
-    
+
     // C++ workaround to make sure cast works
-    // Wouldn't dynamic_cast<DecimalFormat*> be great?
-    if(nf1->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nf1);
+    if(nf == NULL) {
         errln("NumberFormat::createInstance returned incorrect type.");
         return;
     }
 
-    DecimalFormat *nf = (DecimalFormat*) nf1;
     UnicodeString temp;
     logln("nf toPattern1: " + nf->toPattern(temp));
     logln("nf toLocPattern1: " + nf->toLocalizedPattern(temp));
@@ -842,11 +841,11 @@ void NumberFormatRegressionTest::Test4087244 (void) {
       delete nf;
       return;
     }
-    if (nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    if(df == NULL) {
         errln("expected DecimalFormat!");
         return;
     }
-    DecimalFormat *df = (DecimalFormat*) nf;
     const DecimalFormatSymbols *sym = df->getDecimalFormatSymbols();
     UnicodeString decSep = sym->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
     UnicodeString monSep = sym->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
@@ -1907,12 +1906,12 @@ void NumberFormatRegressionTest::Test4145457() {
         delete nff;
         return;
     };
-    if(nff->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nff);
+    if(nf == NULL) {
         errln("DecimalFormat needed to continue");
         return;
     }
 
-    DecimalFormat *nf = (DecimalFormat*)nff;
     DecimalFormatSymbols *sym = (DecimalFormatSymbols*) nf->getDecimalFormatSymbols();
     sym->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, (UChar)/*'\''*/0x0027);
     nf->setDecimalFormatSymbols(*sym);
@@ -2184,11 +2183,11 @@ void NumberFormatRegressionTest::Test4170798(void) {
         delete nf;
         return;
     };
-    if(nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    if(df == NULL) {
         errln("DecimalFormat needed to continue");
         return;
     }
-    DecimalFormat *df = (DecimalFormat*) nf;
     df->setParseIntegerOnly(TRUE);
     Formattable n;
     ParsePosition pos(0);

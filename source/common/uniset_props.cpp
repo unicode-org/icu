@@ -609,13 +609,14 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             } else if (symbols != 0) {
                 const UnicodeFunctor *m = symbols->lookupMatcher(c);
                 if (m != 0) {
-                    if (m->getDynamicClassID() != UnicodeSet::getStaticClassID()) {
+                    const UnicodeSet *ms = dynamic_cast<const UnicodeSet *>(m);
+                    if (ms == NULL) {
                         ec = U_MALFORMED_SET;
                         return;
                     }
                     // casting away const, but `nested' won't be modified
                     // (important not to modify stored set)
-                    nested = (UnicodeSet*) m;
+                    nested = const_cast<UnicodeSet*>(ms);
                     setMode = 3;
                 }
             }

@@ -9,6 +9,8 @@
 **********************************************************************
 */
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "olsontz.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -299,7 +301,7 @@ OlsonTimeZone::~OlsonTimeZone() {
  */
 UBool OlsonTimeZone::operator==(const TimeZone& other) const {
     return ((this == &other) ||
-            (getDynamicClassID() == other.getDynamicClassID() &&
+            (typeid(*this) == typeid(other) &&
             TimeZone::operator==(other) &&
             hasSameRules(other)));
 }
@@ -592,10 +594,10 @@ OlsonTimeZone::hasSameRules(const TimeZone &other) const {
     if (this == &other) {
         return TRUE;
     }
-    if (other.getDynamicClassID() != OlsonTimeZone::getStaticClassID()) {
+    const OlsonTimeZone* z = dynamic_cast<const OlsonTimeZone*>(&other);
+    if (z == NULL) {
         return FALSE;
     }
-    const OlsonTimeZone* z = (const OlsonTimeZone*) &other;
 
     // [sic] pointer comparison: typeMapData points into
     // memory-mapped or DLL space, so if two zones have the same

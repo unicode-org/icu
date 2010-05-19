@@ -5,6 +5,8 @@
 *******************************************************************************
 */
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -83,8 +85,9 @@ ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec) {
     int32_t result = 0;
     TimeZone* zone = _createTimeZone(zoneID, -1, ec);
     if (U_SUCCESS(*ec)) {
-        if (zone->getDynamicClassID() == SimpleTimeZone::getStaticClassID()) {
-            result = ((SimpleTimeZone*) zone)->getDSTSavings();
+        SimpleTimeZone* stz = dynamic_cast<SimpleTimeZone*>(zone);
+        if (stz != NULL) {
+            result = stz->getDSTSavings();
         } else {
             // Since there is no getDSTSavings on TimeZone, we use a
             // heuristic: Starting with the current time, march
@@ -244,11 +247,15 @@ ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode) {
         return;
     }
     Calendar *cpp_cal = (Calendar *)cal;
-    if(cpp_cal->getDynamicClassID() != GregorianCalendar::getStaticClassID()) {
+    GregorianCalendar *gregocal = dynamic_cast<GregorianCalendar *>(cpp_cal);
+    // Not if(gregocal == NULL) {
+    // because we really want to work only with a GregorianCalendar, not with
+    // its subclasses like BuddhistCalendar.
+    if(typeid(*cpp_cal) != typeid(GregorianCalendar)) {
         *pErrorCode = U_UNSUPPORTED_ERROR;
         return;
     }
-    ((GregorianCalendar *)cpp_cal)->setGregorianChange(date, *pErrorCode);
+    gregocal->setGregorianChange(date, *pErrorCode);
 }
 
 U_CAPI UDate U_EXPORT2
@@ -256,12 +263,15 @@ ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return (UDate)0;
     }
-    Calendar *cpp_cal = (Calendar *)cal;
-    if(cpp_cal->getDynamicClassID() != GregorianCalendar::getStaticClassID()) {
+    const Calendar *cpp_cal = (const Calendar *)cal;
+    const GregorianCalendar *gregocal = dynamic_cast<const GregorianCalendar *>(cpp_cal);
+    // Not if(gregocal == NULL) {
+    // see comments in ucal_setGregorianChange().
+    if(typeid(*cpp_cal) != typeid(GregorianCalendar)) {
         *pErrorCode = U_UNSUPPORTED_ERROR;
         return (UDate)0;
     }
-    return ((GregorianCalendar *)cpp_cal)->getGregorianChange();
+    return gregocal->getGregorianChange();
 }
 
 U_CAPI int32_t U_EXPORT2

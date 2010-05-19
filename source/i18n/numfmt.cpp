@@ -379,11 +379,10 @@ ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErro
     : ncnf((NumberFormat*) &nf), num(&obj), setCurr(FALSE) {
 
     const UObject* o = obj.getObject(); // most commonly o==NULL
-    if (o != NULL &&
-        o->getDynamicClassID() == CurrencyAmount::getStaticClassID()) {
+    const CurrencyAmount* amt;
+    if (o != NULL && (amt = dynamic_cast<const CurrencyAmount*>(o)) != NULL) {
         // getISOCurrency() returns a pointer to internal storage, so we
         // copy it to retain it across the call to setCurrency().
-        const CurrencyAmount* amt = (const CurrencyAmount*) o;
         const UChar* curr = amt->getISOCurrency();
         u_strcpy(save, nf.getCurrency());
         setCurr = (u_strcmp(curr, save) != 0);

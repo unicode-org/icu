@@ -19,6 +19,8 @@
 // This file was generated from the java source file Format.java
 // *****************************************************************************
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 
 /*
@@ -151,7 +153,7 @@ UBool
 Format::operator==(const Format& that) const
 {
     // Subclasses: Call this method and then add more specific checks.
-    return getDynamicClassID() == that.getDynamicClassID();
+    return typeid(*this) == typeid(that);
 }
 //---------------------------------------
 

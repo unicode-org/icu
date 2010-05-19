@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -8,6 +8,8 @@
 * Since: ICU 3.0
 **********************************************************************
 */
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -37,7 +39,7 @@ UBool CurrencyFormat::operator==(const Format& other) const {
     if (this == &other) {
         return TRUE;
     }
-    if (other.getDynamicClassID() != CurrencyFormat::getStaticClassID()) {
+    if (typeid(*this) != typeid(other)) {
         return FALSE;
     }
     const CurrencyFormat* c = (const CurrencyFormat*) &other;

@@ -413,8 +413,8 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
     for (int32_t i=DateFormat::kFull; i<=DateFormat::kShort; i++) {
         DateFormat::EStyle style = (DateFormat::EStyle)i;
         df = DateFormat::createDateInstance(style, locale);
-        if (df != NULL && df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
-            SimpleDateFormat* sdf = (SimpleDateFormat*)df;
+        SimpleDateFormat* sdf;
+        if (df != NULL && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != NULL) {
             conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
         }
         // TODO Maybe we should return an error when the date format isn't simple.
@@ -424,8 +424,7 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
         }
 
         df = DateFormat::createTimeInstance(style, locale);
-        if (df != NULL && df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
-            SimpleDateFormat* sdf = (SimpleDateFormat*)df;
+        if (df != NULL && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != NULL) {
             conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
             // HACK for hh:ss
             if ( i==DateFormat::kMedium ) {

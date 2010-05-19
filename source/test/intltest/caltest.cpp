@@ -2034,7 +2034,7 @@ static UDate doMinDateOfCalendar(Calendar* adopt, UBool &isGregorian, UErrorCode
   adopt->clear();
   adopt->set(UCAL_EXTENDED_YEAR, adopt->getActualMinimum(UCAL_EXTENDED_YEAR, status));
   UDate ret = adopt->getTime(status);
-  isGregorian = (adopt->getDynamicClassID() == GregorianCalendar::getStaticClassID());
+  isGregorian = dynamic_cast<GregorianCalendar*>(adopt) != NULL;
   delete adopt;
   return ret;
 }

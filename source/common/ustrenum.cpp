@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -8,6 +8,8 @@
 * Since: ICU 2.4
 **********************************************************************
 */
+#include <typeinfo>  // for 'typeid' to work 
+
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
 #include "unicode/putil.h"
@@ -113,7 +115,7 @@ StringEnumeration::setChars(const char *s, int32_t length, UErrorCode &status) {
 }
 UBool 
 StringEnumeration::operator==(const StringEnumeration& that)const {
-    return getDynamicClassID() == that.getDynamicClassID();
+    return typeid(*this) == typeid(that); 
 }
 
 UBool

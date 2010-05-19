@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -182,11 +182,11 @@ void ParsePositionTest::TestFieldPosition_example()
         return;
     };
 
-    if(nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    DecimalFormat *fmt = dynamic_cast<DecimalFormat *>(nf);
+    if(fmt == NULL) {
         errln("NumberFormat::createInstance returned unexpected class type");
         return;
     }
-    DecimalFormat *fmt = (DecimalFormat*) nf;
     fmt->setDecimalSeparatorAlwaysShown(TRUE);
 
     const int tempLen = 20;

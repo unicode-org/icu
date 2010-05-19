@@ -89,12 +89,7 @@ class NoopNormalizer2 : public Normalizer2 {
     virtual UBool hasBoundaryBefore(UChar32) const { return TRUE; }
     virtual UBool hasBoundaryAfter(UChar32) const { return TRUE; }
     virtual UBool isInert(UChar32) const { return TRUE; }
-
-    static UClassID U_EXPORT2 getStaticClassID();
-    virtual UClassID getDynamicClassID() const;
 };
-
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NoopNormalizer2)
 
 // Intermediate class:
 // Has Normalizer2Impl and does boilerplate argument checking and setup.
@@ -203,13 +198,8 @@ public:
         return UNORM_YES;
     }
 
-    static UClassID U_EXPORT2 getStaticClassID();
-    virtual UClassID getDynamicClassID() const;
-
     const Normalizer2Impl &impl;
 };
-
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Normalizer2WithImpl)
 
 class DecomposeNormalizer2 : public Normalizer2WithImpl {
 public:
@@ -611,7 +601,7 @@ Normalizer2::getInstance(const char *packageName,
     return NULL;
 }
 
-UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(Normalizer2)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Normalizer2)
 
 U_NAMESPACE_END
 
@@ -646,9 +636,9 @@ unorm2_normalize(const UNormalizer2 *norm2,
     }
     UnicodeString destString(dest, 0, capacity);
     const Normalizer2 *n2=(const Normalizer2 *)norm2;
-    if(n2->getDynamicClassID()==Normalizer2WithImpl::getStaticClassID()) {
+    const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
+    if(n2wi!=NULL) {
         // Avoid duplicate argument checking and support NUL-terminated src.
-        const Normalizer2WithImpl *n2wi=(const Normalizer2WithImpl *)n2;
         ReorderingBuffer buffer(n2wi->impl, destString);
         if(buffer.init(length, *pErrorCode)) {
             n2wi->normalize(src, length>=0 ? src+length : NULL, buffer, *pErrorCode);
@@ -678,9 +668,9 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
     }
     UnicodeString firstString(first, firstLength, firstCapacity);
     const Normalizer2 *n2=(const Normalizer2 *)norm2;
-    if(n2->getDynamicClassID()==Normalizer2WithImpl::getStaticClassID()) {
+    const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
+    if(n2wi!=NULL) {
         // Avoid duplicate argument checking and support NUL-terminated src.
-        const Normalizer2WithImpl *n2wi=(const Normalizer2WithImpl *)n2;
         ReorderingBuffer buffer(n2wi->impl, firstString);
         if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
             n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,

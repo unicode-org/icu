@@ -1,7 +1,7 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2009 International Business Machines Corporation   *
-*   and others. All rights reserved.                                      *
+*   Copyright (C) 1999-2010 International Business Machines Corporation
+*   and others. All rights reserved.
 ***************************************************************************
 */
 //
@@ -9,6 +9,8 @@
 //                   runtime engine and the API implementation for
 //                   class RuleBasedBreakIterator
 //
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
@@ -290,7 +292,7 @@ RuleBasedBreakIterator::clone(void) const {
  */
 UBool
 RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
-    if (that.getDynamicClassID() != getDynamicClassID()) {
+    if (typeid(*this) != typeid(that)) {
         return FALSE;
     }
 

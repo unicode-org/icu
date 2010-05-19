@@ -35,7 +35,7 @@
 // *****************************************************************************
 
 // TODO: We should probably read following data at runtime, so we can update
-// the these values every release with necessary data changes.
+// these values every release with necessary data changes.
 const int32_t TimeZoneTest::REFERENCE_YEAR = 2009;
 const char * TimeZoneTest::REFERENCE_DATA_VERSION = "2009d";
 
@@ -955,7 +955,7 @@ void TimeZoneTest::TestCustomParse()
         TimeZone *zone = TimeZone::createTimeZone(id);
         UnicodeString   itsID, temp;
 
-        if (zone->getDynamicClassID() == OlsonTimeZone::getStaticClassID()) {
+        if (dynamic_cast<OlsonTimeZone *>(zone) != NULL) {
             logln(id + " -> Olson time zone");
         } else {
             zone->getID(itsID);

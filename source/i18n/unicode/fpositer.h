@@ -96,18 +96,6 @@ public:
      */
     UBool next(FieldPosition& fp);
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @draft ICU 4.4
-     */
-    static UClassID U_EXPORT2 getStaticClassID();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     * @draft ICU 4.4
-     */
-    virtual UClassID getDynamicClassID() const;
-
 private:
     friend class FieldPositionIteratorHandler;
 
@@ -120,6 +108,9 @@ private:
 
     UVector32 *data;
     int32_t pos;
+
+    // No ICU "poor man's RTTI" for this class nor its subclasses.
+    virtual UClassID getDynamicClassID() const;
 };
 
 U_NAMESPACE_END

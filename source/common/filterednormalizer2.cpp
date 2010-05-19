@@ -240,8 +240,6 @@ FilteredNormalizer2::isInert(UChar32 c) const {
     return !set.contains(c) || norm2.isInert(c);
 }
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FilteredNormalizer2)
-
 U_NAMESPACE_END
 
 // C API ------------------------------------------------------------------- ***

@@ -5,6 +5,7 @@
  *******************************************************************************
  */
 
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/tmutfmt.h"
 
@@ -172,7 +173,7 @@ TimeUnitFormat::operator=(const TimeUnitFormat& other) {
 
 UBool 
 TimeUnitFormat::operator==(const Format& other) const {
-    if (other.getDynamicClassID() == TimeUnitFormat::getStaticClassID()) {
+    if (typeid(*this) == typeid(other)) {
         TimeUnitFormat* fmt = (TimeUnitFormat*)&other;
         UBool ret =  ( (fNumberFormat && fmt->fNumberFormat && 
                         *fNumberFormat == *fmt->fNumberFormat ||
@@ -203,8 +204,8 @@ TimeUnitFormat::format(const Formattable& obj, UnicodeString& toAppendTo,
     }
     if (obj.getType() == Formattable::kObject) {
         const UObject* formatObj = obj.getObject();
-        if (formatObj->getDynamicClassID() == TimeUnitAmount::getStaticClassID()){
-            TimeUnitAmount* amount = (TimeUnitAmount*)formatObj;
+        const TimeUnitAmount* amount = dynamic_cast<const TimeUnitAmount*>(formatObj);
+        if (amount != NULL){
             Hashtable* countToPattern = fTimeUnitToCountToPatterns[amount->getTimeUnitField()];
             double number;
             const Formattable& amtNumber = amount->getNumber();
