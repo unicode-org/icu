@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2008, International Business Machines Corporation.       *
-* All Rights Reserved.                                                        *
+* Copyright (C) 2001-2010, International Business Machines Corporation.
+* All Rights Reserved.
 *******************************************************************************
 */
 
@@ -948,7 +948,7 @@ ICUService::clearServiceCache()
 UBool 
 ICUService::acceptsListener(const EventListener& l) const 
 {
-    return l.getDynamicClassID() == ServiceListener::getStaticClassID();
+    return dynamic_cast<const ServiceListener*>(&l) != NULL;
 }
 
 void 

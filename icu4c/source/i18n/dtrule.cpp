@@ -1,9 +1,11 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
@@ -80,7 +82,7 @@ DateTimeRule::operator=(const DateTimeRule& right) {
 UBool
 DateTimeRule::operator==(const DateTimeRule& that) const {
     return ((this == &that) ||
-            (getDynamicClassID() == that.getDynamicClassID() &&
+            (typeid(*this) == typeid(that) &&
             fMonth == that.fMonth &&
             fDayOfMonth == that.fDayOfMonth &&
             fDayOfWeek == that.fDayOfWeek &&

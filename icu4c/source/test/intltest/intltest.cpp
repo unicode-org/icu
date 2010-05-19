@@ -123,7 +123,7 @@ operator+(const UnicodeString& left,
 #if !UCONFIG_NO_FORMATTING
 
 /**
- * Return a string display for for this, without surrounding braces.
+ * Return a string display for this, without surrounding braces.
  */
 UnicodeString _toString(const Formattable& f) {
     UnicodeString s;
@@ -170,15 +170,15 @@ UnicodeString _toString(const Formattable& f) {
             }
         }
         break;
-    case Formattable::kObject:
-        if (f.getObject()->getDynamicClassID() ==
-            CurrencyAmount::getStaticClassID()) {
-            const CurrencyAmount& c = (const CurrencyAmount&) *f.getObject();
-            s = _toString(c.getNumber()) + " " + UnicodeString(c.getISOCurrency());
+    case Formattable::kObject: {
+        const CurrencyAmount* c = dynamic_cast<const CurrencyAmount*>(f.getObject());
+        if (c != NULL) {
+            s = _toString(c->getNumber()) + " " + UnicodeString(c->getISOCurrency());
         } else {
             s = UnicodeString("Unknown UObject");
         }
         break;
+    }
     default:
         s = UnicodeString("Unknown Formattable type=") + (int32_t)f.getType();
         break;

@@ -240,20 +240,6 @@ public:
                      Formattable& result,
                      UErrorCode& status) const;
 
-    /**
-     * Returns a unique class ID POLYMORPHICALLY.  Pure virtual method.
-     * This method is to implement a simple version of RTTI, since not all
-     * C++ compilers support genuine RTTI.  Polymorphic operator==() and
-     * clone() methods call this method.
-     * Concrete subclasses of Format must implement getDynamicClassID()
-     *
-     * @return          The class ID for this object. All objects of a
-     *                  given class have the same class ID.  Objects of
-     *                  other classes have different class IDs.
-     * @stable ICU 2.0
-     */
-    virtual UClassID getDynamicClassID() const = 0;
-
     /** Get the locale for this format object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual) 
      *  @param status error code for the operation

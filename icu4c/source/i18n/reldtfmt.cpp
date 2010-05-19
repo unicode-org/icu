@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -288,8 +288,9 @@ RelativeDateFormat::toPatternDate(UnicodeString& result, UErrorCode& status) con
     if (!U_FAILURE(status)) {
         result.remove();
         if ( fDateFormat ) {
-            if ( fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
-                ((SimpleDateFormat*)fDateFormat)->toPattern(result);
+            SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(fDateFormat);
+            if (sdtfmt != NULL) {
+                sdtfmt->toPattern(result);
             } else {
                 status = U_UNSUPPORTED_ERROR;
             }
@@ -304,8 +305,9 @@ RelativeDateFormat::toPatternTime(UnicodeString& result, UErrorCode& status) con
     if (!U_FAILURE(status)) {
         result.remove();
         if ( fTimeFormat ) {
-            if ( fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
-                ((SimpleDateFormat*)fTimeFormat)->toPattern(result);
+            SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(fTimeFormat);
+            if (sdtfmt != NULL) {
+                sdtfmt->toPattern(result);
             } else {
                 status = U_UNSUPPORTED_ERROR;
             }
@@ -318,19 +320,21 @@ void
 RelativeDateFormat::applyPatterns(const UnicodeString& datePattern, const UnicodeString& timePattern, UErrorCode &status)
 {
     if (!U_FAILURE(status)) {
-        if ( fDateFormat && fDateFormat->getDynamicClassID()!=SimpleDateFormat::getStaticClassID() ) {
+        SimpleDateFormat* sdtfmt = NULL;
+        SimpleDateFormat* stmfmt = NULL;
+        if (fDateFormat && (sdtfmt = dynamic_cast<SimpleDateFormat*>(fDateFormat)) == NULL) {
             status = U_UNSUPPORTED_ERROR;
             return;
         }
-        if ( fTimeFormat && fTimeFormat->getDynamicClassID()!=SimpleDateFormat::getStaticClassID() ) {
+        if (fTimeFormat && (stmfmt = dynamic_cast<SimpleDateFormat*>(fTimeFormat)) == NULL) {
             status = U_UNSUPPORTED_ERROR;
             return;
         }
         if ( fDateFormat ) {
-            ((SimpleDateFormat*)fDateFormat)->applyPattern(datePattern);
+            sdtfmt->applyPattern(datePattern);
         }
         if ( fTimeFormat ) {
-            ((SimpleDateFormat*)fTimeFormat)->applyPattern(timePattern);
+            stmfmt->applyPattern(timePattern);
         }
     }
 }

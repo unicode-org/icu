@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -173,11 +173,13 @@ BreakIterator *BreakTransliterator::getBreakIterator() {
 //                         will normally be efficient.
 //
 UnicodeString BreakTransliterator::replaceableAsString(Replaceable &r) {
-    if (r.getDynamicClassID() == UnicodeString::getStaticClassID()) {
-        return (UnicodeString &) r;
-    }
     UnicodeString s;
-    r.extractBetween(0, r.length(), s);
+    UnicodeString *rs = dynamic_cast<UnicodeString *>(&r);
+    if (rs != NULL) {
+        s = *rs;
+    } else {
+        r.extractBetween(0, r.length(), s);
+    }
     return s;
 }
 

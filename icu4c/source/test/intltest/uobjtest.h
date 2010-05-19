@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -21,6 +21,7 @@ private:
     void testIDs();
     void testUMemory();
     void TestMFCCompatibility();
+    void TestCompilerRTTI();
 
     //helper
 
@@ -35,7 +36,8 @@ private:
                const char *className, const char *factory, 
                UClassID staticID);
 
-
+    UObject *testClassNoClassID(UObject *obj,
+               const char *className, const char *factory);
 };
 
 #endif

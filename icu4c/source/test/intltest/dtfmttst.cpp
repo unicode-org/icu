@@ -401,8 +401,9 @@ void DateFormatTest::TestFieldPosition() {
         //  String str;
         DateFormat* df = dateFormats[j];
         df->setTimeZone(*PT);
-        if (df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
-            logln(" Pattern = " + ((SimpleDateFormat*) df)->toPattern(buf.remove()));
+        SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(df);
+        if (sdtfmt != NULL) {
+            logln(" Pattern = " + sdtfmt->toPattern(buf.remove()));
         } else {
             logln(" Pattern = ? (not a SimpleDateFormat)");
         }

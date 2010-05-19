@@ -1093,10 +1093,7 @@ TimeZoneRegressionTest::TestJDK12API()
         return;
     }
 
-    SimpleTimeZone *cst = 0;
-
-    if(cst1->getDynamicClassID() == SimpleTimeZone::getStaticClassID())
-        cst = (SimpleTimeZone*) cst1;
+    SimpleTimeZone *cst = dynamic_cast<SimpleTimeZone *>(cst1);
 
     if(pst->hasSameRules(*cst)) {
         errln("FAILURE: PST and CST have same rules");

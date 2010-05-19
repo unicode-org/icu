@@ -1438,8 +1438,8 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
             }
 
             // Make sure EURO currency formats have exactly 2 fraction digits
-            if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-                DecimalFormat* df = (DecimalFormat*) nf;
+            DecimalFormat* df = dynamic_cast<DecimalFormat*>(nf);
+            if (df != NULL) {
                 if (u_strcmp(EUR, df->getCurrency()) == 0) {
                     if (min != 2 || max != 2) {
                         UnicodeString a;
@@ -2816,6 +2816,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         "US dollars1,234.56",
         "1,234.56 US dollars"
     };
+    const CurrencyAmount* curramt;
     for (uint32_t i = 0; i < sizeof(formats)/sizeof(formats[0]); ++i) {
         UnicodeString stringToBeParsed = ctou(formats[i]);
         Formattable result;
@@ -2824,15 +2825,16 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         if (U_FAILURE(status)) {
           errln("FAIL: measure format parsing: '%s' ec: %s", formats[i], u_errorName(status));
         } else if (result.getType() != Formattable::kObject ||
-            result.getObject()->getDynamicClassID() != CurrencyAmount::getStaticClassID() ||
-            ((CurrencyAmount*)result.getObject())->getNumber().getDouble() != 1234.56 ||
-            UnicodeString(((CurrencyAmount*)result.getObject())->getISOCurrency()).compare(ISO_CURRENCY_USD)) {
+            (curramt = dynamic_cast<const CurrencyAmount*>(result.getObject())) == NULL ||
+            curramt->getNumber().getDouble() != 1234.56 ||
+            UnicodeString(curramt->getISOCurrency()).compare(ISO_CURRENCY_USD)
+        ) {
             errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number ");
-            if (((CurrencyAmount*)result.getObject())->getNumber().getDouble() != 1234.56) {
-                errln((UnicodeString)"wong number, expect: 1234.56" + ", got: " + ((CurrencyAmount*)result.getObject())->getNumber().getDouble());
+            if (curramt->getNumber().getDouble() != 1234.56) {
+                errln((UnicodeString)"wong number, expect: 1234.56" + ", got: " + curramt->getNumber().getDouble());
             }
-            if (((CurrencyAmount*)result.getObject())->getISOCurrency() != ISO_CURRENCY_USD) {
-                errln((UnicodeString)"wong currency, expect: USD" + ", got: " + ((CurrencyAmount*)result.getObject())->getISOCurrency());
+            if (curramt->getISOCurrency() != ISO_CURRENCY_USD) {
+                errln((UnicodeString)"wong currency, expect: USD" + ", got: " + curramt->getISOCurrency());
             }
         }
     }

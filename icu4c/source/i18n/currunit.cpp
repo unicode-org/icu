@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2010, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -8,6 +8,8 @@
 * Since: ICU 3.0
 **********************************************************************
 */
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -49,7 +51,7 @@ CurrencyUnit::~CurrencyUnit() {
     
 UBool CurrencyUnit::operator==(const UObject& other) const {
     const CurrencyUnit& c = (const CurrencyUnit&) other;
-    return other.getDynamicClassID() == CurrencyUnit::getStaticClassID() &&
+    return typeid(*this) == typeid(other) &&
         u_strcmp(isoCode, c.isoCode) == 0;    
 }
 

@@ -108,10 +108,11 @@ void IntlTestDateFormatAPI::TestEquals(void)
     if (!(*a == *b))
         errln("FAIL: DateFormat objects created at different times are unequal.");
 
-    if (b->getDynamicClassID() == SimpleDateFormat::getStaticClassID())
+    SimpleDateFormat *sdtfmt = dynamic_cast<SimpleDateFormat *>(b);
+    if (sdtfmt != NULL)
     {
         double ONE_YEAR = 365*24*60*60*1000.0;
-        ((SimpleDateFormat*)b)->set2DigitYearStart(start + 50*ONE_YEAR, status);
+        sdtfmt->set2DigitYearStart(start + 50*ONE_YEAR, status);
         if (U_FAILURE(status))
             errln("FAIL: setTwoDigitStartDate failed.");
         else if (*a == *b)
