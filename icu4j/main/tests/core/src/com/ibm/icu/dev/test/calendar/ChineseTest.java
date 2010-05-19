@@ -13,6 +13,7 @@ import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -688,4 +689,34 @@ public class ChineseTest extends CalendarTest {
         assertEquals("chinese and gregorian date should match", target, result);
     }
 
+    public void Test6510() 
+    { 
+        Calendar gregorianCalendar; 
+        ChineseCalendar chineseCalendar, chineseCalendar2; 
+        ChineseDateFormat dateFormat; 
+        SimpleDateFormat simpleDateFormat; 
+ 
+        simpleDateFormat = new com.ibm.icu.text.SimpleDateFormat("MM/dd/yyyy G 'at' HH:mm:ss vvvv", Locale.US); 
+        dateFormat = new com.ibm.icu.text.ChineseDateFormat("MM/dd/yyyy(G) HH:mm:ss", Locale.CHINA); 
+ 
+        // lunar to gregorian 
+        chineseCalendar = new ChineseCalendar(77, 26, Calendar.JANUARY, 0, 6, 0, 0, 0); 
+        gregorianCalendar = Calendar.getInstance(Locale.US); 
+        gregorianCalendar.setTime(chineseCalendar.getTime()); 
+ 
+        // gregorian to lunar 
+        chineseCalendar2 = new ChineseCalendar(); 
+        chineseCalendar2.setTimeInMillis(gregorianCalendar.getTimeInMillis()); 
+
+        // validate roundtrip 
+        if (chineseCalendar.getTimeInMillis() != chineseCalendar2.getTimeInMillis()) 
+        { 
+            errln("time1: " + chineseCalendar.getTimeInMillis()); 
+            errln("time2: " + chineseCalendar2.getTimeInMillis()); 
+            errln("Lunar [MM/dd/y(G) HH:mm:ss] " + dateFormat.format(chineseCalendar)); 
+            errln("**PROBLEM Grego [MM/dd/y(G) HH:mm:ss] " + simpleDateFormat.format(gregorianCalendar)); 
+            errln("Grego [MM/dd/y(G) HH:mm:ss] " + simpleDateFormat.format(gregorianCalendar)); 
+            errln("Lunar [MM/dd/y(G) HH:mm:ss] " + dateFormat.format(chineseCalendar2)); 
+        } 
+    }         
 }
