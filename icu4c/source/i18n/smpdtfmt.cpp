@@ -685,8 +685,10 @@ SimpleDateFormat::initialize(const Locale& locale,
         // show the decimal point, and recognizes integers only when parsing
 
         fNumberFormat->setGroupingUsed(FALSE);
-        if (fNumberFormat->getDynamicClassID() == DecimalFormat::getStaticClassID())
-            ((DecimalFormat*)fNumberFormat)->setDecimalSeparatorAlwaysShown(FALSE);
+        DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(fNumberFormat);
+        if (decfmt != NULL) {
+            decfmt->setDecimalSeparatorAlwaysShown(FALSE);
+        }
         fNumberFormat->setParseIntegerOnly(TRUE);
         fNumberFormat->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
 
@@ -1363,8 +1365,10 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
 
                if (U_SUCCESS(status)) {
                    nf->setGroupingUsed(FALSE);
-                   if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID())
-                       ((DecimalFormat*)nf)->setDecimalSeparatorAlwaysShown(FALSE);
+                   DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(nf);
+                   if (decfmt != NULL) {
+                       decfmt->setDecimalSeparatorAlwaysShown(FALSE);
+                   }
                    nf->setParseIntegerOnly(TRUE);
                    nf->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
 
@@ -2044,10 +2048,10 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             const TimeZone & tz = cal.getTimeZone();
             BasicTimeZone *btz = NULL;
 
-            if (tz.getDynamicClassID() == OlsonTimeZone::getStaticClassID()
-                || tz.getDynamicClassID() == SimpleTimeZone::getStaticClassID()
-                || tz.getDynamicClassID() == RuleBasedTimeZone::getStaticClassID()
-                || tz.getDynamicClassID() == VTimeZone::getStaticClassID()) {
+            if (dynamic_cast<const OlsonTimeZone *>(&tz) != NULL
+                || dynamic_cast<const SimpleTimeZone *>(&tz) != NULL
+                || dynamic_cast<const RuleBasedTimeZone *>(&tz) != NULL
+                || dynamic_cast<const VTimeZone *>(&tz) != NULL) {
                 btz = (BasicTimeZone*)&tz;
             }
 
@@ -2930,9 +2934,7 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 NumberFormat *fmt) const {
     UnicodeString oldPrefix;
     DecimalFormat* df = NULL;
-    if (!allowNegative &&
-        fmt->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-        df = (DecimalFormat*)fmt;
+    if (!allowNegative && (df = dynamic_cast<DecimalFormat*>(fmt)) != NULL) {
         df->getNegativePrefix(oldPrefix);
         df->setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
     }
@@ -3161,12 +3163,13 @@ SimpleDateFormat::checkIntSuffix(const UnicodeString& text, int32_t start,
     }
 
     // get the suffix
-    if (fNumberFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(fNumberFormat);
+    if (decfmt != NULL) {
         if (isNegative) {
-            suf = ((DecimalFormat*)fNumberFormat)->getNegativeSuffix(suf);
+            suf = decfmt->getNegativeSuffix(suf);
         }
         else {
-            suf = ((DecimalFormat*)fNumberFormat)->getPositiveSuffix(suf);
+            suf = decfmt->getPositiveSuffix(suf);
         }
     }
 

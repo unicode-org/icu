@@ -5,16 +5,27 @@
  * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************/
 
+#include <stdio.h>
+#include <string.h>
+#include <typeinfo>  // for 'typeid' to work
+
 #include "uobjtest.h"
 #include "cmemory.h" // UAlignedMemory
-#include <string.h>
-#include <stdio.h>
 
 /**
- * 
  * Test for UObject, currently only the classID.
  *
  * Usage
+ *   TESTCLASSID_NONE_DEFAULT(Foo)
+ *      --  Foo is expected to not support "poor man's RTTI".
+ *          Beginning with ICU 4.6, we only use compiler RTTI in new class hierarchies.
+ *
+ *   TESTCLASSID_NONE_CTOR(Foo, (1, 2, 3, status))
+ *      -- Combines TESTCLASSID_NONE_DEFAULT() and TESTCLASSID_CTOR().
+ *
+ *   TESTCLASSID_NONE_FACTORY(Foo, (1, 2, 3, status))
+ *      -- Combines TESTCLASSID_NONE_DEFAULT() and TESTCLASSID_FACTORY().
+ *
  *   TESTCLASSID_ABSTRACT(Bar)
  *      --  Bar is expected to be abstract. Only the static ID will be tested.
  *
@@ -33,13 +44,55 @@
  *      'status' will be tested & reset. This only tests uniqueness.
  */
 
-
-#define TESTCLASSID_FACTORY(c, f) { delete testClass(f, #c, #f, c ::getStaticClassID()); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
-#define TESTCLASSID_TRANSLIT(c, t) { delete testClass(Transliterator::createInstance(UnicodeString(t), UTRANS_FORWARD,parseError,status), #c, "Transliterator: " #t, c ::getStaticClassID()); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - Transliterator: " #t " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
-#define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
-#define TESTCLASSID_DEFAULT(c) delete testClass(new c, #c, "new " #c , c::getStaticClassID())
-#define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
-#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - " #f " - got err status ")  + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_NONE_DEFAULT(c) \
+    delete testClassNoClassID(new c, #c, "new " #c)
+#define TESTCLASSID_NONE_CTOR(c, x) { \
+    delete testClassNoClassID(new c x, #c, "new " #c #x); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
+#define TESTCLASSID_NONE_FACTORY(c, f) { \
+    delete testClassNoClassID(f, #c, #f); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
+#define TESTCLASSID_FACTORY(c, f) { \
+    delete testClass(f, #c, #f, c ::getStaticClassID()); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
+#define TESTCLASSID_TRANSLIT(c, t) { \
+    delete testClass(Transliterator::createInstance(UnicodeString(t), UTRANS_FORWARD,parseError,status), #c, "Transliterator: " #t, c ::getStaticClassID()); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - Transliterator: " #t " - got err status ") + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
+#define TESTCLASSID_CTOR(c, x) { \
+    delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
+#define TESTCLASSID_DEFAULT(c) \
+    delete testClass(new c, #c, "new " #c , c::getStaticClassID())
+#define TESTCLASSID_ABSTRACT(c) \
+    testClass(NULL, #c, NULL, c::getStaticClassID())
+#define TESTCLASSID_FACTORY_HIDDEN(c, f) { \
+    UObject *objVar = f; \
+    delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); \
+    if(U_FAILURE(status)) { \
+        dataerrln(UnicodeString(#c " - " #f " - got err status ")  + UnicodeString(u_errorName(status))); \
+        status = U_ZERO_ERROR; \
+    } \
+}
 
 #define MAX_CLASS_ID 200
 
@@ -117,6 +170,30 @@ UObject *UObjectTest::testClass(UObject *obj,
     return obj;
 }
 
+UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, const char *factory)
+{
+    UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
+    UClassID dynamicID = obj->getDynamicClassID();
+
+    {
+        char tmp[500];
+        sprintf(tmp, " [dynamic=%p] ", dynamicID);
+        logln(what + tmp);
+    }
+
+    if(factory != NULL) {  /* NULL factory means: abstract */
+        if(!obj) {
+            dataerrln( "FAIL: ==NULL! " + what);
+            return obj;
+        }
+
+        if(dynamicID != NULL) {
+            errln("FAIL: dynamicID != NULL! for non-poor-man's-RTTI " + what);
+        }
+    }
+
+    return obj;
+}
 
 // begin actual #includes for things to be tested
 // 
@@ -186,9 +263,11 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/fmtable.h"
 #include "unicode/format.h"
 #include "unicode/gregocal.h"
+#include "unicode/locdspnm.h"
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "unicode/normlzr.h"
+#include "unicode/normalizer2.h"
 #include "unicode/numfmt.h"
 #include "unicode/parsepos.h"
 #include "unicode/plurrule.h"
@@ -240,6 +319,11 @@ void UObjectTest::testIDs()
    
 
 #if !UCONFIG_NO_NORMALIZATION
+    UnicodeString emptyString;
+    TESTCLASSID_CTOR(Normalizer, (emptyString, UNORM_NONE));
+    const Normalizer2 *noNormalizer2 = NULL;
+    UnicodeSet emptySet;
+    TESTCLASSID_NONE_CTOR(FilteredNormalizer2, (*noNormalizer2, emptySet));
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
 #endif
     //TESTCLASSID_DEFAULT(CollationElementIterator);
@@ -268,6 +352,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_DEFAULT(Formattable);
     TESTCLASSID_CTOR(CurrencyAmount, (1.0, SMALL_STR, status));
     TESTCLASSID_CTOR(CurrencyUnit, (SMALL_STR, status));
+    TESTCLASSID_NONE_FACTORY(LocaleDisplayNames, LocaleDisplayNames::createInstance("de"));
     TESTCLASSID_FACTORY_HIDDEN(CurrencyFormat, MeasureFormat::createCurrencyFormat(Locale::getUS(), status));
     TESTCLASSID_FACTORY(GregorianCalendar, Calendar::createInstance(Locale("@calendar=gregorian"), status));
     TESTCLASSID_FACTORY(BuddhistCalendar, Calendar::createInstance(Locale("@calendar=buddhist"), status));
@@ -324,8 +409,6 @@ void UObjectTest::testIDs()
         
     TESTCLASSID_FACTORY(Locale, new Locale("123"));
     TESTCLASSID_FACTORY_HIDDEN(KeywordEnumeration, Locale("@a=b").createKeywords(status));
-    
-    //TESTCLASSID_DEFAULT(Normalizer);
 
     //TESTCLASSID_DEFAULT(NumeratorSubstitution);
     
@@ -463,18 +546,35 @@ void UObjectTest::TestMFCCompatibility() {
 #endif
 }
 
+void UObjectTest::TestCompilerRTTI() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    NumberFormat *nf = NumberFormat::createInstance("de", errorCode);
+    if (U_FAILURE(errorCode)) {
+        errln("NumberFormat::createInstance(de) failed - %s", u_errorName(errorCode));
+        return;
+    }
+    if (dynamic_cast<DecimalFormat *>(nf) == NULL || dynamic_cast<ChoiceFormat *>(nf) != NULL) {
+        errln("dynamic_cast<>(NumberFormat) failed");
+    }
+    UnicodeSet emptySet;
+    if (&typeid(*nf) == NULL || typeid(*nf) == typeid(UObject) || typeid(*nf) == typeid(Format) ||
+        typeid(*nf) != typeid(DecimalFormat) || typeid(*nf) == typeid(ChoiceFormat) ||
+        typeid(*nf) == typeid(emptySet)
+    ) {
+        errln("typeid(NumberFormat) failed");
+    }
+}
+
 /* --------------- */
-
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
-
 
 void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /* par */ )
 {
     switch (index) {
 
-    CASE(0, testIDs);
-    CASE(1, testUMemory);
-    CASE(2, TestMFCCompatibility);
+    TESTCASE(0, testIDs);
+    TESTCASE(1, testUMemory);
+    TESTCASE(2, TestMFCCompatibility);
+    TESTCASE(3, TestCompilerRTTI);
 
     default: name = ""; break; //needed to end loop
     }

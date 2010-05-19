@@ -1,12 +1,14 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2009, International Business Machines
+ *   Copyright (C) 1999-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
  *   11/17/99    aliu        Creation.
  **********************************************************************
  */
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
@@ -1100,7 +1102,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
                 UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector.elementAt(i);
                 if (!idBlock->isEmpty()) {
                     Transliterator* temp = createInstance(*idBlock, UTRANS_FORWARD, parseError, status);
-                    if (temp != NULL && temp->getDynamicClassID() != NullTransliterator::getStaticClassID())
+                    if (temp != NULL && typeid(*temp) != typeid(NullTransliterator))
                         transliterators.addElement(temp, status);
                     else
                         delete temp;
@@ -1156,18 +1158,15 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
 }
 
 int32_t Transliterator::countElements() const {
-    return (this->getDynamicClassID() ==
-            CompoundTransliterator::getStaticClassID()) ?
-        ((const CompoundTransliterator*) this)->getCount() : 0;
+    const CompoundTransliterator* ct = dynamic_cast<const CompoundTransliterator*>(this);
+    return ct != NULL ? ct->getCount() : 0;
 }
 
 const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) const {
     if (U_FAILURE(ec)) {
         return *this;
     }
-    const CompoundTransliterator* cpd =
-        (this->getDynamicClassID() == CompoundTransliterator::getStaticClassID()) ?
-        (const CompoundTransliterator*) this : 0;
+    const CompoundTransliterator* cpd = dynamic_cast<const CompoundTransliterator*>(this);
     int32_t n = (cpd == NULL) ? 1 : cpd->getCount();
     if (index < 0 || index >= n) {
         ec = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -1180,13 +1179,11 @@ const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) 
 UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
     handleGetSourceSet(result);
     if (filter != NULL) {
-        UnicodeSet* filterSet;
+        UnicodeSet* filterSet = dynamic_cast<UnicodeSet*>(filter);
         UBool deleteFilterSet = FALSE;
         // Most, but not all filters will be UnicodeSets.  Optimize for
         // the high-runner case.
-        if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
-            filterSet = (UnicodeSet*) filter;
-        } else {
+        if (filterSet == NULL) {
             filterSet = new UnicodeSet();
             // Check null pointer
             if (filterSet == NULL) {

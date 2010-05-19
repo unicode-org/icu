@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2006, International Business Machines Corporation and others.
+* Copyright (C) 1999-2010, International Business Machines Corporation and others.
 * All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -95,13 +95,6 @@ public:
      * @stable ICU 2.4
      */
     virtual void setData(const TransliterationRuleData*);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 2.2
-     */
-    virtual UClassID getDynamicClassID() const = 0;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

@@ -279,19 +279,9 @@ public:
      */
     virtual UBool isInert(UChar32 c) const = 0;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @returns a UClassID for this class.
-     * @draft ICU 4.4
-     */
-    static UClassID U_EXPORT2 getStaticClassID();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     * @return a UClassID for the actual class.
-     * @draft ICU 4.4
-     */
-    virtual UClassID getDynamicClassID() const = 0;
+private:
+    // No ICU "poor man's RTTI" for this class nor its subclasses.
+    virtual UClassID getDynamicClassID() const;
 };
 
 /**
@@ -442,20 +432,6 @@ public:
      * @draft ICU 4.4
      */
     virtual UBool isInert(UChar32 c) const;
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @returns a UClassID for this class.
-     * @draft ICU 4.4
-     */
-    static UClassID U_EXPORT2 getStaticClassID();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     * @return a UClassID for the actual class.
-     * @draft ICU 4.4
-     */
-    virtual UClassID getDynamicClassID() const;
 private:
     UnicodeString &
     normalize(const UnicodeString &src,

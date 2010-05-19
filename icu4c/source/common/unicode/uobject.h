@@ -317,6 +317,19 @@ protected:
         return (UClassID)&classID; \
     }
 
+/**
+ * This is a simple macro to express that a class and its subclasses do not offer
+ * ICU's "poor man's RTTI".
+ * Beginning with ICU 4.6, ICU requires C++ compiler RTTI.
+ * This does not go into the header. This should only be used in *.cpp files.
+ * Use this with a private getDynamicClassID() in an immediate subclass of UObject.
+ *
+ * @param myClass The name of the class that needs RTTI defined.
+ * @internal
+ */
+#define UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(myClass) \
+    UClassID myClass::getDynamicClassID() const { return NULL; }
+
 // /**
 //  * This macro adds ICU RTTI to an ICU concrete class implementation.
 //  * This macro should be invoked in *.cpp files.  The corresponding

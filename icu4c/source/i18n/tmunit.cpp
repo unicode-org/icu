@@ -1,9 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2010, Google, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/tmunit.h"
 
@@ -95,7 +97,7 @@ TimeUnit::operator=(const TimeUnit& other) {
 
 UBool 
 TimeUnit::operator==(const UObject& other) const {
-    return (other.getDynamicClassID() == TimeUnit::getStaticClassID() 
+    return (typeid(*this) == typeid(other)
             && fTimeUnitField == ((TimeUnit*)&other)->fTimeUnitField);
 }
 

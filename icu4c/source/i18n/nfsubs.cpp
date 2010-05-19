@@ -13,10 +13,11 @@
 * 10/11/2001  Doug      Ported from ICU4J
 */
 
+#include <stdio.h>
+#include <typeinfo>  // for 'typeid' to work
+
 #include "nfsubs.h"
 #include "digitlst.h"
-
-#include <stdio.h>
 
 #if U_HAVE_RBNF
 
@@ -525,7 +526,7 @@ NFSubstitution::operator==(const NFSubstitution& rhs) const
   // compare class and all of the fields all substitutions have
   // in common
   // this should be called by subclasses before their own equality tests
-  return getDynamicClassID() == rhs.getDynamicClassID()
+  return typeid(*this) == typeid(rhs)
   && pos == rhs.pos
   && (ruleSet == NULL) == (rhs.ruleSet == NULL)
   // && ruleSet == rhs.ruleSet causes circularity, other checks to make instead?

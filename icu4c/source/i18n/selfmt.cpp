@@ -14,6 +14,8 @@
  *   11/16/09    kirtig      Improved version 
  ********************************************************************/
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv_err.h"
@@ -347,7 +349,7 @@ SelectFormat::operator==(const Format& other) const {
     if( this == &other){
         return TRUE;
     }
-    if( other.getDynamicClassID() != SelectFormat::getStaticClassID() ){
+    if (typeid(*this) != typeid(other)) {
         return  FALSE;
     }
     SelectFormat* fmt = (SelectFormat*)&other;

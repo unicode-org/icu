@@ -18,7 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FieldPositionIterator)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(FieldPositionIterator)
 
 FieldPositionIterator::~FieldPositionIterator() {
   delete data;

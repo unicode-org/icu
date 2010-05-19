@@ -35,6 +35,8 @@
 *                           available IDs code.  Misc. cleanup.
 *********************************************************************************/
 
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
@@ -382,7 +384,7 @@ TimeZone::operator=(const TimeZone &right)
 UBool
 TimeZone::operator==(const TimeZone& that) const
 {
-    return getDynamicClassID() == that.getDynamicClassID() &&
+    return typeid(*this) == typeid(that) &&
         fID == that.fID;
 }
 

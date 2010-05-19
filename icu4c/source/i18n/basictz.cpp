@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -377,9 +377,9 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
         if (done[i]) {
             continue;
         }
-        if (toRule->getDynamicClassID() == TimeArrayTimeZoneRule::getStaticClassID()) {
-            TimeArrayTimeZoneRule *tar = (TimeArrayTimeZoneRule*)toRule;
-
+        const TimeArrayTimeZoneRule *tar = dynamic_cast<const TimeArrayTimeZoneRule *>(toRule);
+        const AnnualTimeZoneRule *ar;
+        if (tar != NULL) {
             // Get the previous raw offset and DST savings before the very first start time
             TimeZoneTransition tzt0;
             t = start;
@@ -448,8 +448,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                     }
                 }
             }
-        } else if (toRule->getDynamicClassID() == AnnualTimeZoneRule::getStaticClassID()) {
-            AnnualTimeZoneRule *ar = (AnnualTimeZoneRule*)toRule;
+        } else if ((ar = dynamic_cast<const AnnualTimeZoneRule *>(toRule)) != NULL) {
             ar->getFirstStart(tzt.getFrom()->getRawOffset(), tzt.getFrom()->getDSTSavings(), firstStart);
             if (firstStart == tzt.getTime()) {
                 // Just add the rule as is

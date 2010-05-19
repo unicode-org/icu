@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and   *
- * others. All Rights Reserved.                                               *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ******************************************************************************
  */
 
@@ -235,8 +235,8 @@ Collator::createUCollator(const char *loc,
     if (status && U_SUCCESS(*status) && hasService()) {
         Locale desiredLocale(loc);
         Collator *col = (Collator*)gService->get(desiredLocale, *status);
-        if (col && col->getDynamicClassID() == RuleBasedCollator::getStaticClassID()) {
-            RuleBasedCollator *rbc = (RuleBasedCollator *)col;
+        RuleBasedCollator *rbc;
+        if (col && (rbc = dynamic_cast<RuleBasedCollator *>(col))) {
             if (!rbc->dataIsOwned) {
                 result = ucol_safeClone(rbc->ucollator, NULL, NULL, status);
             } else {

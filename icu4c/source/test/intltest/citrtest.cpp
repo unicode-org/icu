@@ -1,6 +1,6 @@
 /****************************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Modification History:
  *
@@ -9,6 +9,8 @@
  ****************************************************************************************/
 
 #include <string.h>
+#include <typeinfo>  // for 'typeid' to work
+
 #include "unicode/chariter.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
@@ -1081,7 +1083,7 @@ public:
     virtual UBool operator==(const ForwardCharacterIterator &that) const {
         return
             this==&that ||
-            getDynamicClassID()==that.getDynamicClassID() && pos==((SubCharIter &)that).pos;
+            (typeid(*this)==typeid(that) && pos==((SubCharIter &)that).pos);
     }
 
     virtual int32_t hashCode() const {

@@ -1,9 +1,11 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2010, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
@@ -1033,8 +1035,7 @@ VTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
         return TRUE;
     }
-    if (getDynamicClassID() != that.getDynamicClassID()
-        || !BasicTimeZone::operator==(that)) {
+    if (typeid(*this) != typeid(that) || !BasicTimeZone::operator==(that)) {
         return FALSE;
     }
     VTimeZone *vtz = (VTimeZone*)&that;
@@ -1563,8 +1564,9 @@ VTimeZone::parse(UErrorCode& status) {
 
     for (n = 0; n < rules->size(); n++) {
         TimeZoneRule *r = (TimeZoneRule*)rules->elementAt(n);
-        if (r->getDynamicClassID() == AnnualTimeZoneRule::getStaticClassID()) {
-            if (((AnnualTimeZoneRule*)r)->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
+        AnnualTimeZoneRule *atzrule = dynamic_cast<AnnualTimeZoneRule *>(r);
+        if (atzrule != NULL) {
+            if (atzrule->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
                 finalRuleCount++;
                 finalRuleIdx = n;
             }
@@ -1920,12 +1922,13 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
         Grego::timeToFields(tzt.getTime() + fromOffset, year, month, dom, dow, doy, mid);
         int32_t weekInMonth = Grego::dayOfWeekInMonth(year, month, dom);
         UBool sameRule = FALSE;
+        const AnnualTimeZoneRule *atzrule;
         if (isDst) {
             if (finalDstRule == NULL
-                && tzt.getTo()->getDynamicClassID() == AnnualTimeZoneRule::getStaticClassID()) {
-                if (((AnnualTimeZoneRule*)tzt.getTo())->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
-                    finalDstRule = (AnnualTimeZoneRule*)tzt.getTo()->clone();
-                }
+                && (atzrule = dynamic_cast<const AnnualTimeZoneRule *>(tzt.getTo())) != NULL
+                && atzrule->getEndYear() == AnnualTimeZoneRule::MAX_YEAR
+            ) {
+                finalDstRule = (AnnualTimeZoneRule*)tzt.getTo()->clone();
             }
             if (dstCount > 0) {
                 if (year == dstStartYear + dstCount
@@ -1973,10 +1976,10 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
             }
         } else {
             if (finalStdRule == NULL
-                && tzt.getTo()->getDynamicClassID() == AnnualTimeZoneRule::getStaticClassID()) {
-                    if (((AnnualTimeZoneRule*)tzt.getTo())->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
-                    finalStdRule = (AnnualTimeZoneRule*)tzt.getTo()->clone();
-                }
+                && (atzrule = dynamic_cast<const AnnualTimeZoneRule *>(tzt.getTo())) != NULL
+                && atzrule->getEndYear() == AnnualTimeZoneRule::MAX_YEAR
+            ) {
+                finalStdRule = (AnnualTimeZoneRule*)tzt.getTo()->clone();
             }
             if (stdCount > 0) {
                 if (year == stdStartYear + stdCount

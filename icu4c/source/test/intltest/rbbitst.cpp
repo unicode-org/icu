@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2009, International Business Machines Corporation and
+ * Copyright (c) 1999-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -8,6 +8,8 @@
 *   12/15/99    Madhu        Creation.
 *   01/12/2000  Madhu        Updated for changed API and added new tests
 ************************************************************************/
+
+#include <typeinfo>  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
@@ -752,8 +754,8 @@ void RBBITest::TestTrieDict() {
         goto cleanup;
     }
 
-    if (enumer1->getDynamicClassID() == enumer2->getDynamicClassID()) {
-        errln("CompactTrieEnumeration and MutableTrieEnumeration ClassIDs are the same");
+    if (typeid(*enumer1) == typeid(*enumer2)) {
+        errln("CompactTrieEnumeration and MutableTrieEnumeration typeids are the same");
     }
     delete enumer1;
     enumer1 = NULL;

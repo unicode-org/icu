@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for Visual Age 5+)
-## Copyright (c) 1999-2009, International Business Machines Corporation and
+## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -10,8 +10,9 @@ GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 # -qroconst make the strings readonly, which is usually the default.
 #           This helps in the data library,
 # -qproto assumes all functions are prototyped (for optimization)
+# -qrtti turns on compiler RTTI, required beginning with ICU 4.6
 CFLAGS += -qproto -qroconst
-CXXFLAGS += -qproto -qroconst
+CXXFLAGS += -qproto -qroconst -qrtti
 
 # If you readd this line, you must change the SO value
 #LDFLAGS += -brtl
