@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.h
@@ -15,7 +15,7 @@
 /*
  * Test character- and string- related settings in utypes.h,
  * macros in putil.h, and constructors in unistr.h .
- * Also basic tests for std_string.h .
+ * Also basic tests for std_string.h and charstr.h .
  */
 
 #ifndef __STRTEST_H__
@@ -41,6 +41,7 @@ private:
     void TestCheckedArrayByteSink();
     void TestStringByteSink();
     void TestSTLCompatibility();
+    void TestCharString();
 };
 
 #endif
