@@ -32,7 +32,6 @@
 #include "decContext.h"
 #include "decNumber.h"
 #include "cmemory.h"
-#include "decnumstr.h"
 
 // Decimal digits in a 64-bit int
 #define INT64_DIGITS 19
@@ -50,6 +49,8 @@ typedef enum EDigitListValues {
 } EDigitListValues;
 
 U_NAMESPACE_BEGIN
+
+class CharString;
 
 // Export an explicit template instantiation of the MaybeStackHeaderAndArray that
 //    is used as a data member of DigitList.
@@ -202,8 +203,8 @@ public:
 
     /**
      *  Utility routine to get the value of the digit list as a decimal string.
-     */  
-    void getDecimal(DecimalNumberString &str, UErrorCode &status);
+     */
+    void getDecimal(CharString &str, UErrorCode &status);
 
     /**
      * Return true if the number represented by this object can fit into

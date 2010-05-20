@@ -73,7 +73,6 @@ public:
     void TestCountChar32(void);
     void TestBogus();
     void TestStringEnumeration();
-    void TestCharString(void);
     void TestNameSpace(void);
     void TestUTF32(void);
     void TestUTF8(void);

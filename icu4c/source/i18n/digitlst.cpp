@@ -28,6 +28,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 #include "unicode/putil.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "putilimp.h"
@@ -525,22 +526,23 @@ int64_t DigitList::getInt64() /*const*/ {
  *     Format is as defined by the decNumber library, for interchange of
  *     decimal numbers.
  */
-void DigitList::getDecimal(DecimalNumberString &str, UErrorCode &status) {
+void DigitList::getDecimal(CharString &str, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    
+
     // A decimal number in string form can, worst case, be 14 characters longer
     //  than the number of digits.  So says the decNumber library doc.
-    int32_t maxLength = fDecNumber->digits + 15;
-    str.setLength(maxLength, status);
+    int32_t maxLength = fDecNumber->digits + 14;
+    int32_t capacity = 0;
+    char *buffer = str.clear().getAppendBuffer(maxLength, 0, capacity, status);
     if (U_FAILURE(status)) {
         return;    // Memory allocation error on growing the string.
     }
-    uprv_decNumberToString(this->fDecNumber, &str[0]);
-    int32_t len = uprv_strlen(&str[0]);
-    U_ASSERT(len <= maxLength);
-    str.setLength(len, status);
+    U_ASSERT(capacity >= maxLength);
+    uprv_decNumberToString(this->fDecNumber, buffer);
+    U_ASSERT(uprv_strlen(buffer) <= maxLength);
+    str.append(buffer, -1, status);
 }
 
 /**
@@ -668,7 +670,7 @@ DigitList::set(int64_t source)
 /**
  * Set the DigitList from a decimal number string.
  *
- * The incoming string _must_ be nul terminated, even thought it is arriving
+ * The incoming string _must_ be nul terminated, even though it is arriving
  * as a StringPiece because that is what the decNumber library wants.
  * We can get away with this for an internal function; it would not
  * be acceptable for a public API.
