@@ -28,8 +28,8 @@
 
 U_NAMESPACE_BEGIN
 
-class   DecimalNumberString;
-class   DigitList;
+class CharString;
+class DigitList;
 
 /**
  * Formattable objects can be passed to the Format class or
@@ -617,7 +617,7 @@ private:
      * string or array objects.
      */
     void            dispose(void);
-    
+
     /**
      * Common initialization, for use by constructors.
      */
@@ -637,7 +637,7 @@ private:
         }               fArrayAndCount;
     } fValue;
 
-    DecimalNumberString  *fDecimalStr;
+    CharString           *fDecimalStr;
     DigitList            *fDecimalNum;
 
     Type                fType;
@@ -672,4 +672,3 @@ U_NAMESPACE_END
 
 #endif //_FMTABLE
 //eof
-

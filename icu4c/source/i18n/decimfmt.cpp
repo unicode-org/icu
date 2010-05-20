@@ -53,6 +53,7 @@
 #include "unicode/currpinf.h"
 #include "unicode/plurrule.h"
 #include "ucurrimp.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "util.h"
 #include "digitlst.h"
@@ -62,7 +63,6 @@
 #include "putilimp.h"
 #include <math.h>
 #include "hash.h"
-#include "decnumstr.h"
 
 
 U_NAMESPACE_BEGIN
@@ -1798,7 +1798,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     //  will be acceptable to the decNumber library, then at the end passes that string
     //  off for conversion to a decNumber.
     UErrorCode err = U_ZERO_ERROR;
-    DecimalNumberString  parsedNum;
+    CharString parsedNum;
     digits.setToZero();
 
     int32_t position = parsePosition.getIndex();
@@ -1901,7 +1901,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 sawDigit = TRUE;
                 // output a regular non-zero digit.
                 ++digitCount;
-                parsedNum.append(digit + '0', err);
+                parsedNum.append((char)(digit + '0'), err);
                 position += U16_LENGTH(ch);
             }
             else if (groupingLen > 0 && !text.compare(position, groupingLen, *grouping) && isGroupingUsed())
@@ -2033,14 +2033,14 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 
     parsePosition.setIndex(position);
 
-    parsedNum[0] = (posMatch >= 0) ? '+' : '-';
+    parsedNum.data()[0] = (posMatch >= 0) ? '+' : '-';
 
     if(parsePosition.getIndex() == oldStart)
     {
         parsePosition.setErrorIndex(position);
         return FALSE;
     }
-    digits.set(parsedNum, err);
+    digits.set(parsedNum.toStringPiece(), err);
 
     if (U_FAILURE(err)) {
         parsePosition.setErrorIndex(position);

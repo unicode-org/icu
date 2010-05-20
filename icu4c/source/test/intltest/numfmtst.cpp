@@ -1898,7 +1898,7 @@ void NumberFormatTest::TestCases() {
         case 1:
             // loc= <locale>
             if (!tokens.next(tok, ec)) goto error;
-            loc = Locale::createFromName(CharString(tok));
+            loc = Locale::createFromName(CharString().appendInvariantChars(tok, ec).data());
             break;
         case 2: // f:
         case 3: // fp:
@@ -1965,7 +1965,8 @@ void NumberFormatTest::TestCases() {
                 mloc = tok;
                 delete mfmt;
                 mfmt = MeasureFormat::createCurrencyFormat(
-                           Locale::createFromName(CharString(mloc)), ec);
+                    Locale::createFromName(
+                        CharString().appendInvariantChars(mloc, ec).data()), ec);
                 if (U_FAILURE(ec)) {
                     errln("FAIL: " + where + "Loc \"" + mloc + "\": " + u_errorName(ec));
                     ec = U_ZERO_ERROR;

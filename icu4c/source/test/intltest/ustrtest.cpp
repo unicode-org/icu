@@ -58,11 +58,10 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
         case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
         case 15: name = "TestStringEnumeration"; if (exec) TestStringEnumeration(); break;
-        case 16: name = "TestCharString"; if (exec) TestCharString(); break;
-        case 17: name = "TestNameSpace"; if (exec) TestNameSpace(); break;
-        case 18: name = "TestUTF32"; if (exec) TestUTF32(); break;
-        case 19: name = "TestUTF8"; if (exec) TestUTF8(); break;
-        case 20: name = "TestReadOnlyAlias"; if (exec) TestReadOnlyAlias(); break;
+        case 16: name = "TestNameSpace"; if (exec) TestNameSpace(); break;
+        case 17: name = "TestUTF32"; if (exec) TestUTF32(); break;
+        case 18: name = "TestUTF8"; if (exec) TestUTF8(); break;
+        case 19: name = "TestReadOnlyAlias"; if (exec) TestReadOnlyAlias(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1741,16 +1740,6 @@ UnicodeStringTest::TestStringEnumeration() {
     }
 
     uenum_close(uten);
-}
-
-void
-UnicodeStringTest::TestCharString() {
-    static const char originalCStr[] =
-        "This is a large string that is meant to over flow the internal buffer of CharString. At the time of writing this test, the internal buffer is 128 bytes.";
-    CharString chStr(originalCStr);
-    if (strcmp(originalCStr, chStr) != 0) {
-        errln("CharString doesn't work with large strings.");
-    }
 }
 
 /*

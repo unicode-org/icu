@@ -71,7 +71,8 @@ CPPFLAGS += "-DDEFAULT_ICU_PLUGINS=\"$(libdir)/icu\" "
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
-OBJECTS = errorcode.o putil.o umath.o utypes.o uinvchar.o umutex.o ucln_cmn.o uinit.o uobject.o cmemory.o \
+OBJECTS = errorcode.o putil.o umath.o utypes.o uinvchar.o umutex.o ucln_cmn.o \
+uinit.o uobject.o cmemory.o charstr.o \
 udata.o ucmndata.o udatamem.o umapfile.o udataswp.o ucol_swp.o utrace.o \
 uhash.o uhash_us.o uenum.o ustrenum.o uvector.o ustack.o uvectr32.o uvectr64.o \
 ucnv.o ucnv_bld.o ucnv_cnv.o ucnv_io.o ucnv_cb.o ucnv_err.o ucnvlat1.o \

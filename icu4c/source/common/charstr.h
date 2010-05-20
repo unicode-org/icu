@@ -1,10 +1,11 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/19/2001  aliu        Creation.
+*   05/19/2010  markus      Rewritten from scratch
 **********************************************************************
 */
 
@@ -12,75 +13,103 @@
 #define CHARSTRING_H
 
 #include "unicode/utypes.h"
-#include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/uobject.h"
 #include "cmemory.h"
-
-//--------------------------------------------------------------------
-// class CharString
-//
-// This is a tiny wrapper class that is used internally to make a
-// UnicodeString look like a const char*.  It can be allocated on the
-// stack.  It only creates a heap buffer if it needs to.
-//--------------------------------------------------------------------
 
 U_NAMESPACE_BEGIN
 
+/**
+ * ICU-internal char * string class.
+ * This class does not assume or enforce any particular character encoding.
+ * Raw bytes can be stored. The string object owns its characters.
+ * A terminating NUL is stored, but the class does not prevent embedded NUL characters.
+ *
+ * This class wants to be convenient but is also deliberately minimalist.
+ * Please do not add methods if they only add minor convenience.
+ * For example:
+ *   cs.data()[5]='a';  // no need for setCharAt(5, 'a')
+ */
 class U_COMMON_API CharString : public UMemory {
 public:
+    CharString() : len(0) { buffer[0]=0; }
+    CharString(const StringPiece &s, UErrorCode &errorCode) : len(0) {
+        buffer[0]=0;
+        append(s, errorCode);
+    }
+    CharString(const CharString &s, UErrorCode &errorCode) : len(0) {
+        buffer[0]=0;
+        append(s, errorCode);
+    }
+    CharString(const char *s, int32_t sLength, UErrorCode &errorCode) : len(0) {
+        buffer[0]=0;
+        append(s, sLength, errorCode);
+    }
+    ~CharString() {}
 
-#if !UCONFIG_NO_CONVERSION
-    // Constructor
-    //     @param  str    The unicode string to be converted to char *
-    //     @param  codepage   The char * code page.  ""   for invariant conversion.
-    //                                               NULL for default code page.
-//    inline CharString(const UnicodeString& str, const char *codepage);
-#endif
+    /**
+     * Replaces this string's contents with the other string's contents.
+     * CharString does not support the standard copy constructor nor
+     * the assignment operator, to make copies explicit and to
+     * use a UErrorCode where memory allocations might be needed.
+     */
+    CharString &copyFrom(const CharString &other, UErrorCode &errorCode);
 
-    inline CharString(const UnicodeString& str);
-    inline ~CharString();
-    inline operator const char*() const { return ptr; }
+    UBool isEmpty() { return len==0; }
+    const int32_t length() const { return len; }
+    char operator[] (int32_t index) const { return buffer[index]; }
+    StringPiece toStringPiece() const { return StringPiece(buffer.getAlias(), len); }
+
+    const char *data() const { return buffer.getAlias(); }
+    char *data() { return buffer.getAlias(); }
+
+    CharString &clear() { len=0; return *this; }
+    CharString &truncate(int32_t newLength);
+
+    CharString &append(char c, UErrorCode &errorCode);
+    CharString &append(const StringPiece &s, UErrorCode &errorCode) {
+        return append(s.data(), s.length(), errorCode);
+    }
+    CharString &append(const CharString &s, UErrorCode &errorCode) {
+        return append(s.data(), s.length(), errorCode);
+    }
+    CharString &append(const char *s, int32_t sLength, UErrorCode &status);
+    /**
+     * Returns a writable buffer for appending and writes the buffer's capacity to
+     * resultCapacity. Guarantees resultCapacity>=minCapacity if U_SUCCESS().
+     * There will additionally be space for a terminating NUL right at resultCapacity.
+     * (This function is similar to ByteSink.GetAppendBuffer().)
+     *
+     * The returned buffer is only valid until the next write operation
+     * on this string.
+     *
+     * After writing at most resultCapacity bytes, call append() with the
+     * pointer returned from this function and the number of bytes written.
+     *
+     * @param minCapacity required minimum capacity of the returned buffer;
+     *                    must be non-negative
+     * @param desiredCapacityHint desired capacity of the returned buffer;
+     *                            must be non-negative
+     * @param resultCapacity will be set to the capacity of the returned buffer
+     * @param errorCode in/out error code
+     * @return a buffer with resultCapacity>=min_capacity
+     */
+    char *getAppendBuffer(int32_t minCapacity,
+                          int32_t desiredCapacityHint,
+                          int32_t &resultCapacity,
+                          UErrorCode &errorCode);
+
+    CharString &appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode);
 
 private:
-    char buf[128];
-    char* ptr;
+    MaybeStackArray<char, 40> buffer;
+    int32_t len;
+
+    UBool ensureCapacity(int32_t capacity, int32_t desiredCapacityHint, UErrorCode &errorCode);
 
     CharString(const CharString &other); // forbid copying of this class
     CharString &operator=(const CharString &other); // forbid copying of this class
 };
-
-#if !UCONFIG_NO_CONVERSION
-
-// PLEASE DON'T USE THIS FUNCTION.
-// We don't want the static dependency on conversion or the performance hit that comes from a codepage conversion.
-/*
-inline CharString::CharString(const UnicodeString& str, const char *codepage) {
-    int32_t    len;
-    ptr = buf;
-    len = str.extract(0, 0x7FFFFFFF, buf ,sizeof(buf)-1, codepage);
-    if (len >= (int32_t)(sizeof(buf)-1)) {
-        ptr = (char *)uprv_malloc(len+1);
-        str.extract(0, 0x7FFFFFFF, ptr, len+1, codepage);
-    }
-}*/
-
-#endif
-
-inline CharString::CharString(const UnicodeString& str) {
-    int32_t    len;
-    ptr = buf;
-    len = str.extract(0, 0x7FFFFFFF, buf, (int32_t)(sizeof(buf)-1), US_INV);
-    if (len >= (int32_t)(sizeof(buf)-1)) {
-        ptr = (char *)uprv_malloc(len+1);
-        str.extract(0, 0x7FFFFFFF, ptr, len+1, US_INV);
-    }
-}
-
-inline CharString::~CharString() {
-    if (ptr != buf) {
-        uprv_free(ptr);
-    }
-}
 
 U_NAMESPACE_END
 

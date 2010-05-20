@@ -3944,6 +3944,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\charstr.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\charstr.h"
 				>
 			</File>
