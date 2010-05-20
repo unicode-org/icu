@@ -19,6 +19,12 @@
 
 U_NAMESPACE_BEGIN
 
+// Windows needs us to DLL-export the MaybeStackArray template specialization,
+// but MacOS X cannot handle it. Same as in digitlst.h.
+#if !defined(U_DARWIN)
+template class U_COMMON_API MaybeStackArray<char, 40>;
+#endif
+
 /**
  * ICU-internal char * string class.
  * This class does not assume or enforce any particular character encoding.
@@ -56,7 +62,7 @@ public:
     CharString &copyFrom(const CharString &other, UErrorCode &errorCode);
 
     UBool isEmpty() { return len==0; }
-    const int32_t length() const { return len; }
+    int32_t length() const { return len; }
     char operator[] (int32_t index) const { return buffer[index]; }
     StringPiece toStringPiece() const { return StringPiece(buffer.getAlias(), len); }
 
