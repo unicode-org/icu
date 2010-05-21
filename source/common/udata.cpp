@@ -1103,9 +1103,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* remap from alternate path char to the main one */
     CharString altSepPath;
     if(path) {
-        char *p;
-        if((p=uprv_strchr(path,U_FILE_ALT_SEP_CHAR))) {
+        if(uprv_strchr(path,U_FILE_ALT_SEP_CHAR) != NULL) {
             altSepPath.append(path, *pErrorCode);
+            char *p;
             while((p=uprv_strchr(altSepPath.data(), U_FILE_ALT_SEP_CHAR))) {
                 *p = U_FILE_SEP_CHAR;
             }
