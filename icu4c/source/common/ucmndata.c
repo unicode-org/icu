@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -232,7 +232,7 @@ static const commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCou
  *                    and set the appropriate error code.               *
  *                                                                      *
  *----------------------------------------------------------------------*/
-void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
+U_CFUNC void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
     if (U_FAILURE(*err)) {
         return;
     }
