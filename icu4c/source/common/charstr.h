@@ -69,7 +69,7 @@ public:
     const char *data() const { return buffer.getAlias(); }
     char *data() { return buffer.getAlias(); }
 
-    CharString &clear() { len=0; return *this; }
+    CharString &clear() { len=0; buffer[0]=0; return *this; }
     CharString &truncate(int32_t newLength);
 
     CharString &append(char c, UErrorCode &errorCode);

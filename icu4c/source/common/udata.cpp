@@ -24,18 +24,18 @@ might have to #include some other header
 #endif
 
 #include "unicode/putil.h"
-#include "umutex.h"
-#include "cmemory.h"
-#include "cstring.h"
 #include "unicode/udata.h"
 #include "unicode/uversion.h"
-#include "uhash.h"
-#include "ucln_cmn.h"
+#include "charstr.h"
+#include "cmemory.h"
+#include "cstring.h"
 #include "putilimp.h"
-
-#include "udatamem.h"
-#include "umapfile.h"
+#include "ucln_cmn.h"
 #include "ucmndata.h"
+#include "udatamem.h"
+#include "uhash.h"
+#include "umapfile.h"
+#include "umutex.h"
 
 /***********************************************************************
 *
@@ -169,7 +169,7 @@ setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to ca
 }
 
 static UBool
-setCommonICUDataPointer(const void *pData, UBool warn, UErrorCode *pErrorCode) {
+setCommonICUDataPointer(const void *pData, UBool /*warn*/, UErrorCode *pErrorCode) {
     UDataMemory tData;
     UDataMemory_init(&tData);
     tData.pHeader = (const DataHeader *)pData;
@@ -314,7 +314,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     /* Create a new DataCacheElement - the thingy we store in the hash table -
      * and copy the supplied path and UDataMemoryItems into it.
      */
-    newElement = uprv_malloc(sizeof(DataCacheElement));
+    newElement = (DataCacheElement *)uprv_malloc(sizeof(DataCacheElement));
     if (newElement == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -328,7 +328,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
 
     baseName = findBasename(path);
     nameLen = (int32_t)uprv_strlen(baseName);
-    newElement->name = uprv_malloc(nameLen+1);
+    newElement->name = (char *)uprv_malloc(nameLen+1);
     if (newElement->name == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(newElement->item);
@@ -370,85 +370,6 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     return newElement->item;
 }
 
-
-
-/*-------------------------------------------------------------------------------
- *
- *   TinyString   -  a small set of really simple string functions, for 
- *                   the purpose of consolidating buffer overflow code in one place
- *
- *                   Use wherever you would otherwise declare a fixed sized  char[xx] buffer.
- *                   Do non-growing ops by accessing fields of struct directly
- *                   Grow using the append function to automatically extend buffer
- *                   as needed.
- *
- *-------------------------------------------------------------------------------*/
-typedef struct TinyString {
-    char      *s;
-    int32_t    length;
-    char       fStaticBuf[100];
-    int32_t    fCapacity;
-} TinyString;
-
-static void TinyString_init(TinyString *This) {
-    This->s = This->fStaticBuf;
-    *This->s = 0;
-    This->length = 0;
-    This->fCapacity = sizeof(This->fStaticBuf)-1;
-}
-
-static void TinyString_append(TinyString *This, const char *what) {
-    int32_t  newLen;
-    newLen = This->length + (int32_t)uprv_strlen(what); 
-    if (newLen >= This->fCapacity) { 
-        int32_t newCapacity = newLen * 2; 
-        char *newBuf = (char *)uprv_malloc(newCapacity+1); 
-        if (newBuf != NULL) { 
-            uprv_strcpy(newBuf, This->s); 
-            if (This->s != This->fStaticBuf) { 
-                uprv_free(This->s);
-            } 
-            This->s = newBuf; 
-            This->fCapacity = newCapacity; 
-        } 
-    }
-    if (newLen < This->fCapacity) { 
-        uprv_strcat(This->s+This->length, what);
-        This->length = newLen;
-    } 
-}
-
-static void TinyString_appendn(TinyString *This, const char *what, int32_t n) {
-    int32_t  newLen;
-    newLen = This->length + n;
-    if (newLen >= This->fCapacity) { 
-        int32_t newCapacity = newLen * 2; 
-        char *newBuf = (char *)uprv_malloc(newCapacity+1); 
-        if (newBuf != NULL) { 
-            uprv_strcpy(newBuf, This->s); 
-            if (This->s != This->fStaticBuf) { 
-                uprv_free(This->s);
-            } 
-            This->s = newBuf; 
-            This->fCapacity = newCapacity; 
-        } 
-    }
-    if (newLen < This->fCapacity) { 
-        uprv_strncat(This->s+This->length, what, n);
-        This->length = newLen;
-    } 
-}
-    
-static void TinyString_dt(TinyString *This) {
-    if (This->s != This->fStaticBuf) { 
-        uprv_free(This->s); 
-    }
-    TinyString_init(This);
-}
-
-
-
-
 /*----------------------------------------------------------------------*==============
  *                                                                      *
  *  Path management.  Could be shared with other tools/etc if need be   *
@@ -459,8 +380,15 @@ static void TinyString_dt(TinyString *This) {
 #define U_DATA_PATHITER_BUFSIZ  128        /* Size of local buffer for paths         */
                                            /*   Overflow causes malloc of larger buf */
 
-typedef struct 
+class UDataPathIterator
 {
+public:
+    UDataPathIterator(const char *path, const char *pkg,
+                      const char *item, const char *suffix, UBool doCheckLastFour,
+                      UErrorCode *pErrorCode);
+    const char *next(UErrorCode *pErrorCode);
+
+private:
     const char *path;                              /* working path (u_icudata_Dir) */
     const char *nextPath;                          /* path following this one */
     const char *basename;                          /* item's basename (icudt22e_mt.res)*/
@@ -468,26 +396,16 @@ typedef struct
 
     uint32_t    basenameLen;                       /* length of basename */
 
-    char       *itemPath;                          /* path passed in with item name */
-    char        itemPathBuf[U_DATA_PATHITER_BUFSIZ];
-
-    char       *pathBuffer;                        /* output path for this it'ion */
-    char        pathBufferA[U_DATA_PATHITER_BUFSIZ];
-
-    char       *packageStub;                       /* example:  "/icudt28b". Will ignore that leaf in set paths. */
-    char        packageStubBuf[U_DATA_PATHITER_BUFSIZ];
-    uint32_t    packageStubLen;
+    CharString  itemPath;                          /* path passed in with item name */
+    CharString  pathBuffer;                        /* output path for this it'ion */
+    CharString  packageStub;                       /* example:  "/icudt28b". Will ignore that leaf in set paths. */
 
     UBool       checkLastFour;                     /* if TRUE then allow paths such as '/foo/myapp.dat'
                                                     * to match, checks last 4 chars of suffix with
                                                     * last 4 of path, then previous chars. */
-    
-}  UDataPathIterator;
+};
 
-/** 
- * Initialize (or re-initialize) a user-supplied UDataPathIterator
- * Note: UDataPathIterator does not allocate storage, so it doesn't need to be closed.
- * 
+/**
  * @param iter  The iterator to be initialized. Its current state does not matter. 
  * @param path  The full pathname to be iterated over.  If NULL, defaults to U_ICUDATA_NAME 
  * @param pkg   Package which is being searched for, ex "icudt28l".  Will ignore leave directories such as /icudt28l 
@@ -496,107 +414,65 @@ typedef struct
  *               Ex:   'stuff.dat' would be found in '/a/foo:/tmp/stuff.dat:/bar/baz' as item #2.   
  *                     '/blarg/stuff.dat' would also be found.
  */
-static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const char *pkg,
-                                const char *item, const char *suffix, UBool doCheckLastFour)
+UDataPathIterator::UDataPathIterator(const char *inPath, const char *pkg,
+                                     const char *item, const char *inSuffix, UBool doCheckLastFour,
+                                     UErrorCode *pErrorCode)
 {
 #ifdef UDATA_DEBUG
-        fprintf(stderr, "SUFFIX1=%s PATH=%s\n", suffix, path);
+        fprintf(stderr, "SUFFIX1=%s PATH=%s\n", inSuffix, inPath);
 #endif
     /** Path **/
-    if(path == NULL) {
-        iter->path = u_getDataDirectory();
+    if(inPath == NULL) {
+        path = u_getDataDirectory();
     } else {
-        iter->path = path;
+        path = inPath;
     }
 
     /** Package **/
-    if(pkg == NULL) {
-      iter->packageStubLen = 0;
-      iter->packageStub=iter->packageStubBuf;
-      iter->packageStub[0] = 0;
-    } else {
-      if(uprv_strlen(pkg) + 2 > U_DATA_PATHITER_BUFSIZ) {
-          iter->packageStub = uprv_malloc(uprv_strlen(pkg)+2);
-          /* Check for null pointer. */
-          if (iter->packageStub == NULL) {
-        	  return;
-          }
-      } else {
-          iter->packageStub = iter->packageStubBuf;
-      }
-      iter->packageStub[0] = U_FILE_SEP_CHAR;
-      uprv_strcpy(iter->packageStub+1, pkg);
-      iter->packageStubLen = (int32_t)uprv_strlen(iter->packageStub);
-
+    if(pkg != NULL) {
+      packageStub.append(U_FILE_SEP_CHAR, *pErrorCode).append(pkg, *pErrorCode);
 #ifdef UDATA_DEBUG
-        fprintf(stderr, "STUB=%s [%d]\n", iter->packageStub, iter->packageStubLen);
+      fprintf(stderr, "STUB=%s [%d]\n", packageStub.data(), packageStub.length());
 #endif
     }
 
     /** Item **/
-    iter->basename = findBasename(item);
-    iter->basenameLen = (int32_t)uprv_strlen(iter->basename);
+    basename = findBasename(item);
+    basenameLen = (int32_t)uprv_strlen(basename);
 
     /** Item path **/
-    iter->itemPath   = iter->itemPathBuf;
-    if(iter->basename == item) {
-        iter->itemPath[0] = 0;
-        iter->nextPath = iter->path;
-    } else { 
-        int32_t  itemPathLen = (int32_t)(iter->basename-item);
-        if (itemPathLen >= U_DATA_PATHITER_BUFSIZ) {
-            char *t = (char *)uprv_malloc(itemPathLen+1);
-            if (t != NULL) {
-                iter->itemPath = t;
-            } else {
-                /* Malloc failed.  Ignore the itemPath. */
-                itemPathLen = 0;
-            }
-        }
-        uprv_strncpy(iter->itemPath, item, itemPathLen);
-        iter->itemPath[itemPathLen]=0;
-        iter->nextPath = iter->itemPath;
+    if(basename == item) {
+        nextPath = path;
+    } else {
+        itemPath.append(item, (int32_t)(basename-item), *pErrorCode);
+        nextPath = itemPath.data();
     }
 #ifdef UDATA_DEBUG
-    fprintf(stderr, "SUFFIX=%s [%p]\n", suffix, suffix);
+    fprintf(stderr, "SUFFIX=%s [%p]\n", inSuffix, inSuffix);
 #endif
-    
+
     /** Suffix  **/
-    if(suffix != NULL) {
-        iter->suffix = suffix;
+    if(inSuffix != NULL) {
+        suffix = inSuffix;
     } else {
-        iter->suffix = "";
+        suffix = "";
     }
-    
-    iter->checkLastFour = doCheckLastFour;
-    
-    /* pathBuffer will hold the output path strings returned by the this iterator
-     *   Get an upper bound of possible string size, and make sure that the buffer
-     *   is big enough (sum of length of each piece, 2 extra delimiters, + trailing NULL) */
-    {
-        int32_t  maxPathLen = (int32_t)(uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + iter->packageStubLen + 3);
-        iter->pathBuffer = iter->pathBufferA;
-        if (maxPathLen >= U_DATA_PATHITER_BUFSIZ) {
-            iter->pathBuffer = (char *)uprv_malloc(maxPathLen);
-            if (iter->pathBuffer == NULL) {
-                iter->pathBuffer = iter->pathBufferA;
-                iter->path = "";
-            }
-        }
-    }
+
+    checkLastFour = doCheckLastFour;
+
+    /* pathBuffer will hold the output path strings returned by this iterator */
 
 #ifdef UDATA_DEBUG
     fprintf(stderr, "%p: init %s -> [path=%s], [base=%s], [suff=%s], [itempath=%s], [nextpath=%s], [checklast4=%s]\n",
             iter,
             item,
-            iter->path,
-            iter->basename,
-            iter->suffix,
-            iter->itemPath,
-            iter->nextPath,
-            iter->checkLastFour?"TRUE":"false");
+            path,
+            basename,
+            suffix,
+            itemPath.data(),
+            nextPath,
+            checkLastFour?"TRUE":"false");
 #endif
-
 }
 
 /**
@@ -606,35 +482,37 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
  * @param len  If set, pointer to the length of the returned path, for convenience. 
  * @return Pointer to the next path segment, or NULL if there are no more.
  */
-static const char *udata_pathiter_next(UDataPathIterator *iter)
+const char *UDataPathIterator::next(UErrorCode *pErrorCode)
 {
-    const char *path = NULL;
-    uint32_t     pathLen = 0;
+    if(U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+
+    const char *currentPath = NULL;
+    int32_t     pathLen = 0;
     const char *pathBasename;
 
     do
     {
-        if( iter->nextPath == NULL ) {
+        if( nextPath == NULL ) {
             break;
         }
-        
-        path = iter->nextPath;
-        
-        if(iter->nextPath == iter->itemPath) { /* we were processing item's path. */
-            iter->nextPath = iter->path; /* start with regular path next tm. */
-            pathLen = (int32_t)uprv_strlen(path);
+        currentPath = nextPath;
+
+        if(nextPath == itemPath.data()) { /* we were processing item's path. */
+            nextPath = path; /* start with regular path next tm. */
+            pathLen = (int32_t)uprv_strlen(currentPath);
         } else {
             /* fix up next for next time */
-            iter->nextPath = uprv_strchr(path, U_PATH_SEP_CHAR);
-            if(iter->nextPath == NULL) {
+            nextPath = uprv_strchr(currentPath, U_PATH_SEP_CHAR);
+            if(nextPath == NULL) {
                 /* segment: entire path */
-                pathLen = (int32_t)uprv_strlen(path); 
+                pathLen = (int32_t)uprv_strlen(currentPath); 
             } else {
                 /* segment: until next segment */
-                pathLen = (int32_t)(iter->nextPath - path);
-                if(*iter->nextPath) { /* skip divider */
-                    iter->nextPath ++;
-                }
+                pathLen = (int32_t)(nextPath - currentPath);
+                /* skip divider */
+                nextPath ++;
             }
         }
 
@@ -643,7 +521,7 @@ static const char *udata_pathiter_next(UDataPathIterator *iter)
         }
 
 #ifdef UDATA_DEBUG
-        fprintf(stderr, "rest of path (IDD) = %s\n", path);
+        fprintf(stderr, "rest of path (IDD) = %s\n", currentPath);
         fprintf(stderr, "                     ");
         { 
             uint32_t qqq;
@@ -655,92 +533,65 @@ static const char *udata_pathiter_next(UDataPathIterator *iter)
             fprintf(stderr, "^\n");
         }
 #endif
-        uprv_strncpy(iter->pathBuffer, path, pathLen);
-        iter->pathBuffer[pathLen] = 0;
+        pathBuffer.clear().append(currentPath, pathLen, *pErrorCode);
 
         /* check for .dat files */
-        pathBasename = findBasename(iter->pathBuffer);
+        pathBasename = findBasename(pathBuffer.data());
 
-        if(iter->checkLastFour == TRUE && 
+        if(checkLastFour == TRUE && 
            (pathLen>=4) &&
-           uprv_strncmp(iter->pathBuffer +(pathLen-4),iter->suffix,4)==0 && /* suffix matches */
-           uprv_strncmp(findBasename(iter->pathBuffer),iter->basename,iter->basenameLen)==0  && /* base matches */
-           uprv_strlen(pathBasename)==(iter->basenameLen+4)) { /* base+suffix = full len */
-            
+           uprv_strncmp(pathBuffer.data() +(pathLen-4), suffix, 4)==0 && /* suffix matches */
+           uprv_strncmp(findBasename(pathBuffer.data()), basename, basenameLen)==0  && /* base matches */
+           uprv_strlen(pathBasename)==(basenameLen+4)) { /* base+suffix = full len */
+
 #ifdef UDATA_DEBUG
-            fprintf(stderr, "Have %s file on the path: %s\n", iter->suffix, iter->pathBuffer);
+            fprintf(stderr, "Have %s file on the path: %s\n", suffix, pathBuffer.data());
 #endif
             /* do nothing */
         }
         else 
         {       /* regular dir path */
-            if(iter->pathBuffer[pathLen-1] != U_FILE_SEP_CHAR) {
+            if(pathBuffer[pathLen-1] != U_FILE_SEP_CHAR) {
                 if((pathLen>=4) &&
-                   uprv_strncmp(iter->pathBuffer+(pathLen-4), ".dat", 4) == 0)
+                   uprv_strncmp(pathBuffer.data()+(pathLen-4), ".dat", 4) == 0)
                 {
 #ifdef UDATA_DEBUG
-                    fprintf(stderr, "skipping non-directory .dat file %s\n", iter->pathBuffer);
+                    fprintf(stderr, "skipping non-directory .dat file %s\n", pathBuffer.data());
 #endif
                     continue;
                 }
 
                 /* Check if it is a directory with the same name as our package */
-                if(iter->packageStubLen &&  
-                   (pathLen > iter->packageStubLen) &&
-                   !uprv_strcmp(iter->pathBuffer + pathLen - iter->packageStubLen, iter->packageStub)) {
+                if(!packageStub.isEmpty() &&
+                   (pathLen > packageStub.length()) &&
+                   !uprv_strcmp(pathBuffer.data() + pathLen - packageStub.length(), packageStub.data())) {
 #ifdef UDATA_DEBUG
-                  fprintf(stderr, "Found stub %s ( will add package %s of len %d)\n", iter->packageStub, iter->basename, iter->basenameLen);
+                  fprintf(stderr, "Found stub %s (will add package %s of len %d)\n", packageStub.data(), basename, basenameLen);
 #endif
-                  pathLen -= iter->packageStubLen;
+                  pathBuffer.truncate(pathLen - packageStub.length());
                 }
-                     
-                iter->pathBuffer[pathLen++] = U_FILE_SEP_CHAR;
-            } 
-            
-            uprv_strncpy(iter->pathBuffer + pathLen,  /* + basename */
-                         iter->packageStub+1,
-                         iter->packageStubLen-1);
-
-            pathLen += iter->packageStubLen-1;
-
-            if(*iter->suffix)  /* tack on suffix */
-            {
-                uprv_strcpy(iter->pathBuffer + pathLen,
-                            iter->suffix);
-                pathLen += (int32_t)uprv_strlen(iter->suffix);
+                pathBuffer.append(U_FILE_SEP_CHAR, *pErrorCode);
             }
-            
+
+            /* + basename */
+            pathBuffer.append(packageStub.data()+1, packageStub.length()-1, *pErrorCode);
+
+            if(*suffix)  /* tack on suffix */
+            {
+                pathBuffer.append(suffix, *pErrorCode);
+            }
         }
 
 #ifdef UDATA_DEBUG
-        fprintf(stderr, " -->  %s\n", iter->pathBuffer);
+        fprintf(stderr, " -->  %s\n", pathBuffer.data());
 #endif
 
-        return iter->pathBuffer;
+        return pathBuffer.data();
 
-    } while(iter->path);
+    } while(path);
 
     /* fell way off the end */
     return NULL;
-}
-
-
-/*
- *   Path Iterator Destructor.  Clean up any allocated storage
- */
-static void udata_pathiter_dt(UDataPathIterator *iter) {
-     if (iter->itemPath != iter->itemPathBuf) {
-         uprv_free(iter->itemPath);
-         iter->itemPath = NULL;
-     }
-     if (iter->pathBuffer != iter->pathBufferA) {
-         uprv_free(iter->pathBuffer);
-         iter->pathBuffer = NULL;
-     }
-     if (iter->packageStub != iter->packageStubBuf) {
-         uprv_free(iter->packageStub);
-         iter->packageStub = NULL;
-     }
 }
 
 /* ==================================================================================*/
@@ -781,7 +632,6 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
                UErrorCode *pErrorCode)
 {
     UDataMemory tData;
-    UDataPathIterator iter;
     const char *pathBuffer;
     const char *inBasename;
 
@@ -858,10 +708,9 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
      * Hunt it down, trying all the path locations
      */
 
-    udata_pathiter_init(&iter, u_getDataDirectory(), inBasename, path, ".dat", TRUE);
+    UDataPathIterator iter(u_getDataDirectory(), inBasename, path, ".dat", TRUE, pErrorCode);
 
-    while((UDataMemory_isLoaded(&tData)==FALSE) && 
-          (pathBuffer = udata_pathiter_next(&iter)) != NULL)
+    while((UDataMemory_isLoaded(&tData)==FALSE) && (pathBuffer = iter.next(pErrorCode)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "ocd: trying path %s - ", pathBuffer);
@@ -871,7 +720,6 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&tData)?"LOADED":"not loaded");
 #endif
     }
-    udata_pathiter_dt(&iter);    /* Note:  this call may invalidate "pathBuffer" */
 
 #if defined(OS390_STUBDATA) && defined(OS390BATCH)
     if (!UDataMemory_isLoaded(&tData)) {
@@ -1080,17 +928,15 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
              UErrorCode *subErrorCode,
              UErrorCode *pErrorCode)
 {
-    UDataMemory *retVal = NULL;
     const char         *pathBuffer;
     UDataMemory         dataMemory;
     UDataMemory *pEntryData;
 
-    UDataPathIterator   iter;
     /* look in ind. files: package\nam.typ  ========================= */
     /* init path iterator for individual files */
-    udata_pathiter_init(&iter, dataPath, pkgName, path, tocEntryPathSuffix, FALSE);
+    UDataPathIterator iter(dataPath, pkgName, path, tocEntryPathSuffix, FALSE, pErrorCode);
 
-    while((pathBuffer = udata_pathiter_next(&iter)))
+    while((pathBuffer = iter.next(pErrorCode)))
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
@@ -1108,8 +954,7 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
 #ifdef UDATA_DEBUG
                 fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
 #endif
-                retVal = pEntryData;
-                goto commonReturn;
+                return pEntryData;
             }
 
             /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
@@ -1117,8 +962,7 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
 
             /* If we had a nasty error, bail out completely.  */
             if (U_FAILURE(*pErrorCode)) {
-                retVal = NULL;
-                goto commonReturn;
+                return NULL;
             }
 
             /* Otherwise remember that we found data but didn't like it for some reason  */
@@ -1128,16 +972,14 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
 #endif
     }
-commonReturn:
-    udata_pathiter_dt(&iter);
-    return retVal;
+    return NULL;
 }
 
 /**
  * @return 0 if not loaded, 1 if loaded or err 
  */
-static UDataMemory *doLoadFromCommonData(UBool isICUData, const char *pkgName, 
-        const char *dataPath, const char *tocEntryPathSuffix, const char *tocEntryName,
+static UDataMemory *doLoadFromCommonData(UBool isICUData, const char * /*pkgName*/, 
+        const char * /*dataPath*/, const char * /*tocEntryPathSuffix*/, const char *tocEntryName,
             /* following arguments are the same as doOpenChoice itself */
             const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
@@ -1236,15 +1078,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
              UErrorCode *pErrorCode)
 {
     UDataMemory         *retVal = NULL;
-    
-    TinyString          tocEntryName; /* entry name in tree format. ex:  'icudt28b/coll/ar.res' */
-    TinyString          tocEntryPath; /* entry name in path format. ex:  'icudt28b\\coll\\ar.res' */
-
-    TinyString          pkgName;
-    TinyString          treeName;
-#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)  /*  '/' vs '\' */
-    TinyString          altSepPath;
-#endif
 
     const char         *dataPath;
 
@@ -1268,31 +1101,31 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)  /* Windows:  try "foo\bar" and "foo/bar" */
     /* remap from alternate path char to the main one */
-    TinyString_init(&altSepPath);
+    CharString altSepPath;
     if(path) {
         char *p;
         if((p=uprv_strchr(path,U_FILE_ALT_SEP_CHAR))) {
-            TinyString_append(&altSepPath, path);
-            while((p=uprv_strchr(altSepPath.s,U_FILE_ALT_SEP_CHAR))) {
+            altSepPath.append(path, *pErrorCode);
+            while((p=uprv_strchr(altSepPath.data(), U_FILE_ALT_SEP_CHAR))) {
                 *p = U_FILE_SEP_CHAR;
             }
 #if defined (UDATA_DEBUG)
             fprintf(stderr, "Changed path from [%s] to [%s]\n", path, altSepPath.s);
 #endif
-            path = altSepPath.s;
+            path = altSepPath.data();
         }
     }
 #endif
 
-    TinyString_init(&tocEntryName);
-    TinyString_init(&tocEntryPath);
+    CharString tocEntryName; /* entry name in tree format. ex:  'icudt28b/coll/ar.res' */
+    CharString tocEntryPath; /* entry name in path format. ex:  'icudt28b\\coll\\ar.res' */
 
-    TinyString_init(&pkgName);
-    TinyString_init(&treeName);
+    CharString pkgName;
+    CharString treeName;
 
     /* ======= Set up strings */
     if(path==NULL) {
-        TinyString_append(&pkgName, U_ICUDATA_NAME); 
+        pkgName.append(U_ICUDATA_NAME, *pErrorCode);
     } else {
         const char *pkg;
         const char *first;
@@ -1301,38 +1134,38 @@ doOpenChoice(const char *path, const char *type, const char *name,
         if(uprv_pathIsAbsolute(path) || (pkg != first)) { /* more than one slash in the path- not a tree name */
             /* see if this is an /absolute/path/to/package  path */
             if(pkg) {
-                TinyString_append(&pkgName, pkg+1);
+                pkgName.append(pkg+1, *pErrorCode);
             } else {
-                TinyString_append(&pkgName, path);
+                pkgName.append(path, *pErrorCode);
             }
         } else {
             treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
             if(treeChar) { 
-                TinyString_append(&treeName, treeChar+1); /* following '-' */
+                treeName.append(treeChar+1, *pErrorCode); /* following '-' */
                 if(isICUData) {
-                    TinyString_append(&pkgName, U_ICUDATA_NAME);
+                    pkgName.append(U_ICUDATA_NAME, *pErrorCode);
                 } else {
-                    TinyString_appendn(&pkgName, path, (int32_t)(treeChar-path));
+                    pkgName.append(path, (int32_t)(treeChar-path), *pErrorCode);
                     if (first == NULL) {
                         /*
                         This user data has no path, but there is a tree name.
                         Look up the correct path from the data cache later.
                         */
-                        path = pkgName.s;
+                        path = pkgName.data();
                     }
                 }
             } else {
                 if(isICUData) {
-                    TinyString_append(&pkgName, U_ICUDATA_NAME);
+                    pkgName.append(U_ICUDATA_NAME, *pErrorCode);
                 } else {
-                    TinyString_append(&pkgName, path);
+                    pkgName.append(path, *pErrorCode);
                 }
             }
         }
     }
 
 #ifdef UDATA_DEBUG
-    fprintf(stderr, " P=%s T=%s\n", pkgName.s, treeName.s);
+    fprintf(stderr, " P=%s T=%s\n", pkgName.data(), treeName.data());
 #endif
 
     /* setting up the entry name and file name 
@@ -1341,34 +1174,27 @@ doOpenChoice(const char *path, const char *type, const char *name,
      */
 
     /* prepend the package */
-    TinyString_append(&tocEntryName, pkgName.s);
-    TinyString_append(&tocEntryPath, pkgName.s);
-    tocEntrySuffixIndex = tocEntryName.length;
+    tocEntryName.append(pkgName, *pErrorCode);
+    tocEntryPath.append(pkgName, *pErrorCode);
+    tocEntrySuffixIndex = tocEntryName.length();
 
-    if(treeName.s[0]) {
-        TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
-        TinyString_append(&tocEntryName, treeName.s);
-
-        TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
-        TinyString_append(&tocEntryPath, treeName.s);
+    if(!treeName.isEmpty()) {
+        tocEntryName.append(U_TREE_ENTRY_SEP_CHAR, *pErrorCode).append(treeName, *pErrorCode);
+        tocEntryPath.append(U_FILE_SEP_CHAR, *pErrorCode).append(treeName, *pErrorCode);
     }
 
-    TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
-    TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
-    TinyString_append(&tocEntryName, name);
-    TinyString_append(&tocEntryPath, name);
+    tocEntryName.append(U_TREE_ENTRY_SEP_CHAR, *pErrorCode).append(name, *pErrorCode);
+    tocEntryPath.append(U_FILE_SEP_CHAR, *pErrorCode).append(name, *pErrorCode);
     if(type!=NULL && *type!=0) {
-        TinyString_append(&tocEntryName, ".");
-        TinyString_append(&tocEntryName, type);
-        TinyString_append(&tocEntryPath, ".");
-        TinyString_append(&tocEntryPath, type);
+        tocEntryName.append(".", *pErrorCode).append(type, *pErrorCode);
+        tocEntryPath.append(".", *pErrorCode).append(type, *pErrorCode);
     }
-    tocEntryPathSuffix = tocEntryPath.s+tocEntrySuffixIndex; /* suffix starts here */
+    tocEntryPathSuffix = tocEntryPath.data()+tocEntrySuffixIndex; /* suffix starts here */
 
 #ifdef UDATA_DEBUG
-    fprintf(stderr, " tocEntryName = %s\n", tocEntryName.s);
-    fprintf(stderr, " tocEntryPath = %s\n", tocEntryName.s);
-#endif    
+    fprintf(stderr, " tocEntryName = %s\n", tocEntryName.data());
+    fprintf(stderr, " tocEntryPath = %s\n", tocEntryName.data());
+#endif
 
     if(path == NULL) {
         path = COMMON_DATA_NAME; /* "icudt26e" */
@@ -1389,13 +1215,13 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #endif
         /* #2 */
         retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, dataPath, tocEntryPathSuffix, tocEntryName.s,
+                            pkgName.data(), dataPath, tocEntryPathSuffix, tocEntryName.data(),
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
-            goto commonReturn;
+            return retVal;
         }
     }
-    
+
     /****    INDIVIDUAL FILES  */
     if((gDataFileAccess==UDATA_PACKAGES_FIRST) ||
        (gDataFileAccess==UDATA_FILES_FIRST)) {
@@ -1404,10 +1230,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #endif
         /* Check to make sure that there is a dataPath to iterate over */
         if ((dataPath && *dataPath) || !isICUData) {
-            retVal = doLoadFromIndividualFiles(pkgName.s, dataPath, tocEntryPathSuffix,
+            retVal = doLoadFromIndividualFiles(pkgName.data(), dataPath, tocEntryPathSuffix,
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
             if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
-                goto commonReturn;
+                return retVal;
             }
         }
     }
@@ -1418,11 +1244,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #ifdef UDATA_DEBUG
         fprintf(stderr, "Trying packages (UDATA_ONLY_PACKAGES || UDATA_FILES_FIRST)\n");
 #endif
-        retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, dataPath, tocEntryPathSuffix, tocEntryName.s,
+        retVal = doLoadFromCommonData(isICUData,
+                            pkgName.data(), dataPath, tocEntryPathSuffix, tocEntryName.data(),
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
-            goto commonReturn;
+            return retVal;
         }
     }
     
@@ -1433,11 +1259,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #ifdef UDATA_DEBUG
         fprintf(stderr, "Trying common data (UDATA_NO_FILES)\n");
 #endif
-        retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, "", tocEntryPathSuffix, tocEntryName.s,
+        retVal = doLoadFromCommonData(isICUData,
+                            pkgName.data(), "", tocEntryPathSuffix, tocEntryName.data(),
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
-            goto commonReturn;
+            return retVal;
         }
     }
 
@@ -1451,15 +1277,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
             *pErrorCode=subErrorCode;
         }
     }
-
-commonReturn:
-    TinyString_dt(&tocEntryName);
-    TinyString_dt(&tocEntryPath);
-    TinyString_dt(&pkgName);
-    TinyString_dt(&treeName);
-#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
-    TinyString_dt(&altSepPath);
-#endif
     return retVal;
 }
 
@@ -1529,7 +1346,7 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
 }
 
 
-U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess access, UErrorCode *status)
+U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess access, UErrorCode * /*status*/)
 {
     gDataFileAccess = access;
 }

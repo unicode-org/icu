@@ -26,8 +26,8 @@
 #include "unicode/putil.h"
 #include "unicode/udata.h"
 
-UBool   uprv_mapFile(UDataMemory *pdm, const char *path);
-void    uprv_unmapFile(UDataMemory *pData);
+U_CFUNC UBool uprv_mapFile(UDataMemory *pdm, const char *path);
+U_CFUNC void  uprv_unmapFile(UDataMemory *pData);
 
 /* MAP_NONE: no memory mapping, no file access at all */
 #define MAP_NONE        0

@@ -8,7 +8,7 @@
 
 
 /*----------------------------------------------------------------------------
- *                           
+ *
  *       Memory mapped file wrappers for use by the ICU Data Implementation
  *       All of the platform-specific implementation for mapping data files
  *         is here.  The rest of the ICU Data implementation uses only the
@@ -80,17 +80,17 @@
  *                                                                            *
  *----------------------------------------------------------------------------*/
 #if MAP_IMPLEMENTATION==MAP_NONE
-    UBool
+    U_CFUNC UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
         UDataMemory_init(pData); /* Clear the output struct. */
         return FALSE;            /* no file access */
     }
 
-    void uprv_unmapFile(UDataMemory *pData) {
+    U_CFUNC void uprv_unmapFile(UDataMemory *pData) {
         /* nothing to do */
     }
 #elif MAP_IMPLEMENTATION==MAP_WIN32
-    UBool
+    U_CFUNC UBool
     uprv_mapFile(
          UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
                                 /*   Output only; any original contents are cleared.  */
@@ -146,8 +146,7 @@
         return TRUE;
     }
 
-
-    void
+    U_CFUNC void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             UnmapViewOfFile(pData->pHeader);
@@ -160,7 +159,7 @@
 
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
-    UBool
+    U_CFUNC UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
         int fd;
         int length;
@@ -201,9 +200,7 @@
         return TRUE;
     }
 
-    
-    
-    void
+    U_CFUNC void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             size_t dataLen = (char *)pData->map - (char *)pData->mapAddr;
@@ -232,7 +229,7 @@
         return size;
     }
 
-    UBool
+    U_CFUNC UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
         FILE *file;
         int32_t fileLength;
@@ -273,7 +270,7 @@
         return TRUE;
     }
 
-    void
+    U_CFUNC void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
@@ -361,7 +358,7 @@
 
 #   define DATA_TYPE "dat"
 
-    UBool uprv_mapFile(UDataMemory *pData, const char *path) {
+    U_CFUNC UBool uprv_mapFile(UDataMemory *pData, const char *path) {
         const char *inBasename;
         char *basename;
         char pathBuffer[1024];
@@ -454,9 +451,7 @@
          }
     }
 
-
-
-    void uprv_unmapFile(UDataMemory *pData) {
+    U_CFUNC void uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
             pData->map     = NULL;
