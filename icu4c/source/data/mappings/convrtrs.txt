@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2009, International Business Machines
+# *   Copyright (C) 1995-2010, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -270,6 +270,16 @@ UTF-16LE,version=1		UnicodeLittle { JAVA* }  x-UTF-16LE-BOM { JAVA }
 #   In this case, ICU4C sets a U_ILLEGAL_ESCAPE_SEQUENCE UErrorCode value
 #   and a UCNV_ILLEGAL UConverterCallbackReason.
 UTF-16,version=1
+
+# This is the same as standard UTF-16 but always writes a big-endian byte stream,
+# regardless of the platform endianness, as expected by the Java compatibility tests.
+# See the java.nio.charset.Charset API documentation at
+# http://java.sun.com/javase/6/docs/api/java/nio/charset/Charset.html
+# or a newer version of this document.
+#
+# From Unicode: Write BE BOM and BE bytes
+# To Unicode: Detects and consumes BOM. Defaults to BE.
+UTF-16,version=2
 
 # Note: ICU does not currently support Java-specific, non-Unicode-standard UTF-32 variants.
 # Presumably, these behave analogously to the UTF-16 variants with similar names.
