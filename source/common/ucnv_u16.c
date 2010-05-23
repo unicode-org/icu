@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u16.c
@@ -1279,11 +1279,23 @@ _UTF16Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
+static const UConverterSharedData _UTF16v2Data;
+
 static void
 _UTF16Open(UConverter *cnv,
            UConverterLoadArgs *pArgs,
            UErrorCode *pErrorCode) {
-    if(UCNV_GET_VERSION(cnv)<=1) {
+    if(UCNV_GET_VERSION(cnv)<=2) {
+        if(UCNV_GET_VERSION(cnv)==2 && !pArgs->onlyTestIsLoadable) {
+            /*
+             * Switch implementation, and switch the staticData that's different
+             * and was copied into the UConverter.
+             * (See ucnv_createConverterFromSharedData() in ucnv_bld.c.)
+             * UTF-16,version=2 fromUnicode() always writes a big-endian byte stream.
+             */
+            cnv->sharedData=&_UTF16v2Data;
+            uprv_memcpy(cnv->subChars, _UTF16v2Data.staticData->subChar, UCNV_MAX_SUBCHAR_LEN);
+        }
         _UTF16Reset(cnv, UCNV_RESET_BOTH);
     } else {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1294,8 +1306,10 @@ static const char *
 _UTF16GetName(const UConverter *cnv) {
     if(UCNV_GET_VERSION(cnv)==0) {
         return "UTF-16";
-    } else {
+    } else if(UCNV_GET_VERSION(cnv)==1) {
         return "UTF-16,version=1";
+    } else {
+        return "UTF-16,version=2";
     }
 }
 
@@ -1303,7 +1317,7 @@ const UConverterSharedData _UTF16Data;
 
 #define IS_UTF16BE(cnv) ((cnv)->sharedData==&_UTF16BEData)
 #define IS_UTF16LE(cnv) ((cnv)->sharedData==&_UTF16LEData)
-#define IS_UTF16(cnv) ((cnv)->sharedData==&_UTF16Data)
+#define IS_UTF16(cnv) ((cnv)->sharedData==&_UTF16Data || (cnv)->sharedData==&_UTF16v2Data)
 
 static void
 _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
@@ -1500,6 +1514,47 @@ static const UConverterStaticData _UTF16StaticData = {
 const UConverterSharedData _UTF16Data = {
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16StaticData, FALSE, &_UTF16Impl, 
+    0
+};
+
+static const UConverterImpl _UTF16v2Impl = {
+    UCNV_UTF16,
+
+    NULL,
+    NULL,
+
+    _UTF16Open,
+    NULL,
+    _UTF16Reset,
+
+    _UTF16ToUnicodeWithOffsets,
+    _UTF16ToUnicodeWithOffsets,
+    _UTF16BEFromUnicodeWithOffsets,
+    _UTF16BEFromUnicodeWithOffsets,
+    _UTF16GetNextUChar,
+
+    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
+    _UTF16GetName,
+    NULL,
+    NULL,
+    ucnv_getNonSurrogateUnicodeSet
+};
+
+static const UConverterStaticData _UTF16v2StaticData = {
+    sizeof(UConverterStaticData),
+    "UTF-16,version=2",
+    1204, /* CCSID for BOM sensitive UTF-16 */
+    UCNV_IBM, UCNV_UTF16, 2, 2,
+    { 0xff, 0xfd, 0, 0 }, 2,
+    FALSE, FALSE,
+    0,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+static const UConverterSharedData _UTF16v2Data = {
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_UTF16v2StaticData, FALSE, &_UTF16v2Impl, 
     0
 };
 
