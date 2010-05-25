@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_lmb.cpp
@@ -952,7 +952,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
             uprv_memset(groups_tried, 0, sizeof(groups_tried));
 
             /* check for non-default optimization group (Strategy 3A )*/
-            if (extraInfo->OptGroup != 1 && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup))
+            if ((extraInfo->OptGroup != 1) && (ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup)))
             {
                 /*zhujin: upgrade, merge #39299 here (Lotus) */
                 /*To make R5 compatible translation, look for exceptional group first for non-DBCS*/

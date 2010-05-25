@@ -2817,7 +2817,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         "US dollars1,234.56",
         "1,234.56 US dollars"
     };
-    const CurrencyAmount* curramt;
+    const CurrencyAmount* curramt = NULL;
     for (uint32_t i = 0; i < sizeof(formats)/sizeof(formats[0]); ++i) {
         UnicodeString stringToBeParsed = ctou(formats[i]);
         Formattable result;

@@ -191,7 +191,7 @@ ZoneMeta::getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemI
         // check canonical mapping in CLDR
         char id[ZID_KEY_MAX];
         int32_t len = u_strlen(canonical);
-        if (len < sizeof(id)) {
+        if (len < (int32_t)sizeof(id)) {
             u_UCharsToChars(canonical, id, len + 1 /* include the terminator */);
             // replace '/' with ':'
             char *p = id;
@@ -310,7 +310,7 @@ ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
             getCanonicalSystemID(*id, canonical, status);
             if (U_SUCCESS(status)) {
                 // check if there are any other canonical zone in the group
-                while (id = ids->snext(status)) {
+                while ((id = ids->snext(status))!=NULL) {
                     getCanonicalSystemID(*id, tmp, status);
                     if (U_FAILURE(status)) {
                         break;

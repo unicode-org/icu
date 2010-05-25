@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -65,7 +65,7 @@ extern IntlTest *createBiDiConformanceTest() {
     return new BiDiConformanceTest();
 }
 
-void BiDiConformanceTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
+void BiDiConformanceTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite BiDiConformanceTest: ");
     }
@@ -180,7 +180,7 @@ static const UChar charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
 U_CDECL_BEGIN
 
 static UCharDirection U_CALLCONV
-biDiConfUBiDiClassCallback(const void *context, UChar32 c) {
+biDiConfUBiDiClassCallback(const void * /*context*/, UChar32 c) {
     for(int i=0; i<U_CHAR_DIRECTION_COUNT; ++i) {
         if(c==charFromBiDiClass[i]) {
             return (UCharDirection)i;

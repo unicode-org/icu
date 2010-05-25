@@ -409,7 +409,7 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
 
     Formattable fmtbl;
     fmtbl.setDecimalNumber(spInput, status);
-    NumberFormat &nfmtr = fmtr;
+    //NumberFormat &nfmtr = fmtr;
     fmtr.format(fmtbl, result, NULL, status);
 
     if (U_FAILURE(status)) {

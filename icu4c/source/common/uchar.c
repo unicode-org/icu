@@ -29,6 +29,7 @@
 #include "utrie2.h"
 #include "udataswp.h"
 #include "uprops.h"
+#include "ustr_imp.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 

@@ -3939,7 +3939,7 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     uint32_t asciiRoundtrips;
     uint32_t value;
     uint8_t si_value[2], so_value[2], si_value_length, so_value_length;
-    int32_t length, prevLength;
+    int32_t length = 0, prevLength;
     uint8_t unicodeMask;
 
     cnv=pArgs->converter;

@@ -81,7 +81,6 @@ void cmd_millis()
 void cmd_version(UBool noLoad)
 {
     UVersionInfo icu;
-    UErrorCode status = U_ZERO_ERROR;
     char str[200];
     printf("<ICUINFO>\n");
     printf("International Components for Unicode for C/C++\n");

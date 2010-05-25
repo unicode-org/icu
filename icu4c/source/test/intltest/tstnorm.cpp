@@ -1705,27 +1705,6 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT]) {
         , ""), errorCode);
 }
 
-U_CDECL_BEGIN
-
-// USetAdder implementation
-// Does not use uset.h to reduce code dependencies
-static void U_CALLCONV
-_set_add(USet *set, UChar32 c) {
-    uset_add(set, c);
-}
-
-static void U_CALLCONV
-_set_addRange(USet *set, UChar32 start, UChar32 end) {
-    uset_addRange(set, start, end);
-}
-
-static void U_CALLCONV
-_set_addString(USet *set, const UChar *str, int32_t length) {
-    uset_addString(set, str, length);
-}
-
-U_CDECL_END
-
 void
 BasicNormalizerTest::TestSkippable() {
     UnicodeSet diff, skipSets[UNORM_MODE_COUNT], expectSets[UNORM_MODE_COUNT];
