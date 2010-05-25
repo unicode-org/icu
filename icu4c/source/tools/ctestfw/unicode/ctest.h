@@ -254,6 +254,13 @@ runTestRequest(const TestNode* root,
 T_CTEST_API const char* T_CTEST_EXPORT2
 getTestName(void);
 
+/**
+ * Append a time delta to str if it is significant (>5 ms) otherwise no change
+ * @param delta a delta in millis
+ * @param str a string to append to.
+ */
+T_CTEST_API void T_CTEST_EXPORT2
+str_timeDelta(char *str, UDate delta);
 
 
 #endif

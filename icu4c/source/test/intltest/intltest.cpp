@@ -35,9 +35,9 @@
 #include "cmemory.h"
 #include "uoptions.h"
 
-#include "putilimp.h" // for uprv_getUTCtime()
+#include "putilimp.h" // for uprv_getRawUTCtime()
 #include "unicode/locid.h"
-
+#include "unicode/ctest.h" // for str_timeDelta
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -671,13 +671,17 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
             char msg[256];
             sprintf(msg, "%s {", name);
             LL_message(msg, TRUE);
+            UDate timeStart = uprv_getRawUTCtime();
             this->runIndexedTest( index, TRUE, name, par );
+            UDate timeStop = uprv_getRawUTCtime();
             rval = TRUE; // at least one test has been called
             if (lastErrorCount == errorCount) {
-                sprintf( msg, "   } OK:   %s", name );
+                sprintf( msg, "   } OK:   %s ", name );
+                str_timeDelta(msg+strlen(msg),timeStop-timeStart);
                 lastTestFailed = FALSE;
             }else{
                 sprintf(msg,  "   } ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
+                str_timeDelta(msg+strlen(msg),timeStop-timeStart);
 
                 for(int i=0;i<LL_indentlevel;i++) {
                     errorList += " ";
@@ -1037,7 +1041,7 @@ main(int argc, char* argv[])
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    startTime = uprv_getUTCtime();
+    startTime = uprv_getRawUTCtime();
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -1319,7 +1323,7 @@ main(int argc, char* argv[])
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
-    endTime = uprv_getUTCtime();
+    endTime = uprv_getRawUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
         (int)((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
