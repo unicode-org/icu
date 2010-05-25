@@ -249,7 +249,7 @@ Normalizer2Impl::~Normalizer2Impl() {
 
 UBool U_CALLCONV
 Normalizer2Impl::isAcceptable(void *context,
-                              const char *type, const char *name,
+                              const char * /* type */, const char * /*name*/,
                               const UDataInfo *pInfo) {
     if(
         pInfo->size>=20 &&
@@ -336,7 +336,7 @@ enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uin
 U_CDECL_END
 
 void
-Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const {
+Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode*/) const {
     /* add the start code point of each same-value range of each trie */
     utrie2_enum(normTrie, NULL, enumPropertyStartsRange, sa);
 
@@ -1356,7 +1356,7 @@ enumRangeHandler(const void *context, UChar32 start, UChar32 end, uint32_t value
 // Collect (OR together) the FCD values for a range of supplementary characters,
 // for their lead surrogate code unit.
 static UBool U_CALLCONV
-enumRangeOrValue(const void *context, UChar32 start, UChar32 end, uint32_t value) {
+enumRangeOrValue(const void *context, UChar32 /*start*/, UChar32 /*end*/, uint32_t value) {
     *((uint32_t *)context)|=value;
     return TRUE;
 }
@@ -1678,7 +1678,7 @@ unorm2_swap(const UDataSwapper *ds,
 
     if(length>=0) {
         length-=headerSize;
-        if(length<sizeof(indexes)) {
+        if(length<(int32_t)sizeof(indexes)) {
             udata_printError(ds, "unorm2_swap(): too few bytes (%d after header) for Normalizer2 data\n",
                              length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;

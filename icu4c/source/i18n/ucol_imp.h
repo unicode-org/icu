@@ -373,6 +373,9 @@ struct UCollationElements : public U_NAMESPACE_QUALIFIER UMemory
         U_NAMESPACE_QUALIFIER UCollationPCE     *pce;
 };
 
+#else
+/*opaque type*/
+struct UCollationElements;
 #endif
 
 U_CAPI void U_EXPORT2

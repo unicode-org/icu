@@ -1905,8 +1905,8 @@ ures_getUTF8StringByKey(const UResourceBundle *resB,
  *  INTERNAL: Get the name of the first real locale (not placeholder) 
  *  that has resource bundle data.
  */
-U_CAPI const char*  U_EXPORT2
-ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
+U_INTERNAL const char*  U_EXPORT2
+ures_getLocaleInternal(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
     if (status==NULL || U_FAILURE(*status)) {
         return NULL;
@@ -1918,6 +1918,14 @@ ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
       return resourceBundle->fData->fName;
     }
 }
+
+U_CAPI const char* U_EXPORT2 
+ures_getLocale(const UResourceBundle* resourceBundle, 
+               UErrorCode* status)
+{
+  return ures_getLocaleInternal(resourceBundle, status);
+}
+
 
 U_CAPI const char* U_EXPORT2 
 ures_getLocaleByType(const UResourceBundle* resourceBundle, 
@@ -2154,8 +2162,18 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
     }
 }
 
-U_CAPI const char*  U_EXPORT2
-ures_getVersionNumber(const UResourceBundle*   resourceBundle)
+/**
+ * Internal function.
+ * Return the version number associated with this ResourceBundle as a string.
+ *
+ * @param resourceBundle The resource bundle for which the version is checked.
+ * @return  A version number string as specified in the resource bundle or its parent.
+ *          The caller does not own this string.
+ * @see ures_getVersion
+ * @internal
+ */
+U_INTERNAL const char* U_EXPORT2 
+ures_getVersionNumberInternal(const UResourceBundle *resourceBundle)
 {
     if (!resourceBundle) return NULL;
 
@@ -2198,10 +2216,16 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
     return resourceBundle->fVersion;
 }
 
+U_CAPI const char*  U_EXPORT2
+ures_getVersionNumber(const UResourceBundle*   resourceBundle)
+{
+    return ures_getVersionNumberInternal(resourceBundle);
+}
+
 U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo) {
     if (!resB) return;
 
-    u_versionFromString(versionInfo, ures_getVersionNumber(resB));
+    u_versionFromString(versionInfo, ures_getVersionNumberInternal(resB));
 }
 
 /** Tree support functions *******************************/

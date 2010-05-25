@@ -1293,7 +1293,7 @@ _UTF16Open(UConverter *cnv,
              * (See ucnv_createConverterFromSharedData() in ucnv_bld.c.)
              * UTF-16,version=2 fromUnicode() always writes a big-endian byte stream.
              */
-            cnv->sharedData=&_UTF16v2Data;
+            cnv->sharedData=(UConverterSharedData*)&_UTF16v2Data;
             uprv_memcpy(cnv->subChars, _UTF16v2Data.staticData->subChar, UCNV_MAX_SUBCHAR_LEN);
         }
         _UTF16Reset(cnv, UCNV_RESET_BOTH);

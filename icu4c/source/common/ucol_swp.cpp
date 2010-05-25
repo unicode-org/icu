@@ -47,7 +47,7 @@ utrie_swap(const UDataSwapper *ds,
     }
 
     /* setup and swapping */
-    if(length>=0 && length<sizeof(UTrieHeader)) {
+    if(length>=0 && (uint32_t)length<sizeof(UTrieHeader)) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
@@ -108,7 +108,7 @@ ucol_looksLikeCollationBinary(const UDataSwapper *ds,
                               const void *inData, int32_t length) {
     const uint8_t *inBytes;
     const UCATableHeader *inHeader;
-    UCATableHeader header={ 0 };
+    UCATableHeader header={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0 };
 
     if(ds==NULL || inData==NULL || length<-1) {
         return FALSE;
@@ -155,7 +155,7 @@ ucol_swapBinary(const UDataSwapper *ds,
 
     const UCATableHeader *inHeader;
     UCATableHeader *outHeader;
-    UCATableHeader header={ 0 };
+    UCATableHeader header={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0 };
 
     uint32_t count;
 
@@ -363,7 +363,7 @@ ucol_swapInverseUCA(const UDataSwapper *ds,
 
     const InverseUCATableHeader *inHeader;
     InverseUCATableHeader *outHeader;
-    InverseUCATableHeader header={ 0 };
+    InverseUCATableHeader header={ 0,0,0,0,0,{0,0,0,0},{0,0,0,0,0,0,0,0} };
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);

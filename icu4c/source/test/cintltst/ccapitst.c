@@ -2698,13 +2698,13 @@ static void TestConvertExFromUTF8_C5F0() {
     UErrorCode errorCode;
     int32_t i;
 
-    static const char bad_utf8[2]={ 0xC5, 0xF0 };
+    static const unsigned char bad_utf8[2]={ 0xC5, 0xF0 };
     /* Expect "&#65533;&#65533;" (2x U+FFFD as decimal NCRs) */
-    static const char twoNCRs[16]={
+    static const unsigned char twoNCRs[16]={
         0x26, 0x23, 0x36, 0x35, 0x35, 0x33, 0x33, 0x3B,
         0x26, 0x23, 0x36, 0x35, 0x35, 0x33, 0x33, 0x3B
     };
-    static const char twoFFFD[6]={
+    static const unsigned char twoFFFD[6]={
         (char)0xef, (char)0xbf, (char)0xbd,
         (char)0xef, (char)0xbf, (char)0xbd 
     };

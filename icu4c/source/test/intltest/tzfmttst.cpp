@@ -287,7 +287,6 @@ public:
         }
 
         int32_t testCounts = 0;
-        UBool done = false;
 
         while (true) {
             umtx_lock(NULL); // Lock to increment the index

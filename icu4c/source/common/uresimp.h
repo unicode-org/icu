@@ -242,4 +242,33 @@ ures_getVersionByKey(const UResourceBundle *resB,
                      UErrorCode *status);
 
 
+/**
+ * Internal function.
+ * Return the version number associated with this ResourceBundle as a string.
+ *
+ * @param resourceBundle The resource bundle for which the version is checked.
+ * @return  A version number string as specified in the resource bundle or its parent.
+ *          The caller does not own this string.
+ * @see ures_getVersion
+ * @internal
+ */
+U_INTERNAL const char* U_EXPORT2 
+ures_getVersionNumberInternal(const UResourceBundle *resourceBundle);
+
+/**
+ * Return the name of the Locale associated with this ResourceBundle. This API allows
+ * you to query for the real locale of the resource. For example, if you requested 
+ * "en_US_CALIFORNIA" and only "en_US" bundle exists, "en_US" will be returned. 
+ * For subresources, the locale where this resource comes from will be returned.
+ * If fallback has occured, getLocale will reflect this.
+ *
+ * @param resourceBundle resource bundle in question
+ * @param status just for catching illegal arguments
+ * @return  A Locale name
+ * @deprecated ICU 2.8 Use ures_getLocaleByType instead.
+ */
+U_INTERNAL const char* U_EXPORT2 
+ures_getLocaleInternal(const UResourceBundle* resourceBundle, 
+               UErrorCode* status);
+
 #endif /*URESIMP_H*/

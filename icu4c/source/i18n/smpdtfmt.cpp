@@ -1797,7 +1797,6 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t abutStart = 0;
     int32_t abutPass = 0;
     UBool inQuote = FALSE;
-    UBool skipwhsp = FALSE;
 
     const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
 
