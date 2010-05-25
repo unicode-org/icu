@@ -32,7 +32,7 @@
 #include "unicode/uclean.h"
 #include "unicode/ucal.h"
 #include "uoptions.h"
-#include "putilimp.h" /* for uprv_getUTCtime() */
+#include "putilimp.h" /* for uprv_getRawUTCtime() */
 #ifdef URES_DEBUG
 #include "uresimp.h" /* for ures_dumpCacheContents() */
 #endif
@@ -82,7 +82,7 @@ int main(int argc, const char* const argv[])
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    startTime = uprv_getUTCtime();
+    startTime = uprv_getRawUTCtime();
 
     gOrigArgc = argc;
     gOrigArgv = argv;
@@ -226,7 +226,7 @@ int main(int argc, const char* const argv[])
         fprintf(stderr, "There were %d blocks leaked!\n", ALLOCATION_COUNT);
         nerrors++;
     }
-    endTime = uprv_getUTCtime();
+    endTime = uprv_getRawUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
         (int)((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),

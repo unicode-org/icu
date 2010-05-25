@@ -257,13 +257,21 @@ typedef union {
   implementations.
 ---------------------------------------------------------------------------*/
 
-/* Return UTC (GMT) time measured in milliseconds since 0:00 on 1/1/70.*/
 U_CAPI UDate U_EXPORT2
 uprv_getUTCtime()
 {
 #if defined(U_DEBUG_FAKETIME)
     return getUTCtime_fake(); /* Hook for overriding the clock */
-#elif defined(XP_MAC)
+#else
+    return uprv_getRawUTCtime();
+#endif
+}
+
+/* Return UTC (GMT) time measured in milliseconds since 0:00 on 1/1/70.*/
+U_CAPI UDate U_EXPORT2
+uprv_getRawUTCtime()
+{
+#if defined(XP_MAC)
     time_t t, t1, t2;
     struct tm tmrec;
 

@@ -213,10 +213,20 @@ U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
 
 /**
  * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.
+ * This function is affected by 'faketime' and should be the bottleneck for all user-visible ICU time functions.
  * @return the UTC time measured in milliseconds
  * @internal
  */
 U_INTERNAL UDate U_EXPORT2 uprv_getUTCtime(void);
+
+/**
+ * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.
+ * This function is not affected by 'faketime', so it should only be used by low level test functions- not by anything that
+ * exposes time to the end user.
+ * @return the UTC time measured in milliseconds
+ * @internal
+ */
+U_INTERNAL UDate U_EXPORT2 uprv_getRawUTCtime(void);
 
 /**
  * Determine whether a pathname is absolute or not, as defined by the platform.
