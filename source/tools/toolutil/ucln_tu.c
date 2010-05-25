@@ -9,8 +9,8 @@
 #define UCLN_TYPE UCLN_TOOLUTIL
 #include "ucln_imp.h"
 
-int dummyFunction();
-int dummyFunction()
+int dummyFunction(void);
+int dummyFunction(void)
 {
   /* this is here to prevent the compiler from complaining about an empty file */
   return 0;

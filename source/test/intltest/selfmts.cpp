@@ -190,7 +190,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
 {
     int numOfConstructors =3;
     UErrorCode status[3];
-    SelectFormat* selFmt[3];
+    SelectFormat* selFmt[3] = { NULL, NULL, NULL };
 
     // ========= Test constructors
     logln("SelectFormat API test: Testing SelectFormat constructors ...");
@@ -221,7 +221,13 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
             if ( *selFmt[1] != *selFmt[0] ) {
                 errln("ERROR: SelectFormat API test clone test failed!");
             }
+        } else {
+          errln("ERROR: SelectFormat API test clone test failed with NULL!");
+          return;
         }
+    } else {
+      errln("ERROR: could not create [0]: %s\n", u_errorName(status[0]));
+      return;
     }
 
     // ======= Test assignment operator && == operator.

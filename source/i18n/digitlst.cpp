@@ -541,7 +541,7 @@ void DigitList::getDecimal(CharString &str, UErrorCode &status) {
     }
     U_ASSERT(capacity >= maxLength);
     uprv_decNumberToString(this->fDecNumber, buffer);
-    U_ASSERT(uprv_strlen(buffer) <= maxLength);
+    U_ASSERT((int32_t)uprv_strlen(buffer) <= maxLength);
     str.append(buffer, -1, status);
 }
 

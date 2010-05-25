@@ -163,7 +163,7 @@ CalendarLimitTest::TestLimits(void) {
         {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END},
-        {NULL,              FALSE,      0.0}
+        {NULL,              FALSE,      0, 0}
     };
 
     int16_t i = 0;

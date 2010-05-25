@@ -1090,7 +1090,7 @@ Locale::getBaseName() const
         // the computation of variantBegin leaves it equal to the length
         // of fullName if there is no variant.  It should instead be
         // the length of the baseName.  Patch around this for now.
-        if (variantBegin == uprv_strlen(fullName)) {
+        if (variantBegin == (int32_t)uprv_strlen(fullName)) {
           ((Locale*)this)->variantBegin = baseNameSize;
         }
     }

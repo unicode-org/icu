@@ -1959,8 +1959,8 @@ void RBBITest::TestTailoredBreaks() {
     Locale rootLocale = Locale("root");
     for (tbItemPtr = tbItems; tbItemPtr->escapedText != NULL; ++tbItemPtr) {
         Locale testLocale = Locale(tbItemPtr->locale);
-        BreakIterator * tailoredBrkiter;
-        BreakIterator * rootBrkiter;
+        BreakIterator * tailoredBrkiter = NULL;
+        BreakIterator * rootBrkiter = NULL;
         UErrorCode status = U_ZERO_ERROR;
         switch (tbItemPtr->type) {
             case UBRK_CHARACTER:

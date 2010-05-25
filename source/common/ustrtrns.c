@@ -1507,7 +1507,7 @@ u_strToJavaModifiedUTF8(
         int32_t srcLength,
         UErrorCode *pErrorCode) {
     int32_t reqLength=0;
-    uint32_t ch=0,ch2=0;
+    uint32_t ch=0;
     uint8_t *pDest = (uint8_t *)dest;
     uint8_t *pDestLimit = pDest + destCapacity;
     const UChar *pSrcLimit;

@@ -143,7 +143,7 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
     }
 
     /* enough data for a trie header? */
-    if(length<sizeof(UTrie2Header)) {
+    if(length<(int32_t)sizeof(UTrie2Header)) {
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return 0;
     }
@@ -412,7 +412,7 @@ utrie2_swap(const UDataSwapper *ds,
     }
 
     /* setup and swapping */
-    if(length>=0 && length<sizeof(UTrie2Header)) {
+    if(length>=0 && length<(int32_t)sizeof(UTrie2Header)) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
@@ -487,7 +487,7 @@ utrie2_swap(const UDataSwapper *ds,
 
 /* default UTrie2EnumValue() returns the input value itself */
 static uint32_t U_CALLCONV
-enumSameValue(const void *context, uint32_t value) {
+enumSameValue(const void * /*context*/, uint32_t value) {
     return value;
 }
 

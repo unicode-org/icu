@@ -92,19 +92,19 @@ static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 U_CDECL_BEGIN
 
+#if !UNORM_HARDCODE_DATA
 static UBool U_CALLCONV
 unorm_cleanup(void) {
-#if !UNORM_HARDCODE_DATA
     if(normData!=NULL) {
         udata_close(normData);
         normData=NULL;
     }
     dataErrorCode=U_ZERO_ERROR;
     haveNormData=0;
-#endif
 
     return TRUE;
 }
+#endif
 
 #if !UNORM_HARDCODE_DATA
 

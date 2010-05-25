@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -360,7 +360,7 @@ UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) c
 const char*
 ResourceBundle::getVersionNumber()  const
 {
-    return ures_getVersionNumber(fResource);
+    return ures_getVersionNumberInternal(fResource);
 }
 
 void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
@@ -373,7 +373,7 @@ const Locale &ResourceBundle::getLocale(void) const
     UMTX_CHECK(NULL, (fLocale == NULL), needInit);
     if(needInit) {
         UErrorCode status = U_ZERO_ERROR;
-        const char *localeName = ures_getLocale(fResource, &status);
+        const char *localeName = ures_getLocaleInternal(fResource, &status);
         Locale  *tLocale = new Locale(localeName);
         // Null pointer check
         if (tLocale == NULL) {

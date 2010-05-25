@@ -65,7 +65,12 @@ static void TestISO_2022_JP_2(void);
 static void TestISO_2022_KR(void);
 static void TestISO_2022_KR_1(void);
 static void TestISO_2022_CN(void);
+#if 0
+   /*
+    * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
+    */
 static void TestISO_2022_CN_EXT(void);
+#endif
 static void TestJIS(void);
 static void TestHZ(void);
 #endif
@@ -78,7 +83,12 @@ static void TestGB18030(void);
 static void TestLMBCS(void);
 static void TestJitterbug255(void);
 static void TestEBCDICUS4XML(void);
+#if 0
+   /*
+    * ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
+    */
 static void TestJitterbug915(void);
+#endif
 static void TestISCII(void);
 
 static void TestCoverageMBCS(void);
@@ -4235,6 +4245,10 @@ TestJIS(){
 
 }
 
+
+#if 0
+ ICU 4.4 (ticket #7314) removes mappings for CNS 11643 planes 3..7
+
 static void TestJitterbug915(){
 /* tests for roundtripping of the below sequence
 \x1b$)G\x0E#!#"###$#%#&#'#(#)#*#+          / *plane 1 * /
@@ -4422,6 +4436,7 @@ TestISO_2022_CN_EXT() {
     free(cBuf);
     free(offsets);
 }
+#endif
 
 static void
 TestISO_2022_CN() {
