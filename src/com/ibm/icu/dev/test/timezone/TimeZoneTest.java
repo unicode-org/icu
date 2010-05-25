@@ -107,7 +107,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestShortZoneIDs() throws Exception {
 
         ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, false), // updated to false when merging 2009u
+            new ZoneDescriptor("MIT", -660, true), // updated to false when merging 2010j
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
@@ -137,7 +137,7 @@ public class TimeZoneTest extends TestFmwk
             // PLT behaves differently under different JDKs, so we don't check it
             // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
             new ZoneDescriptor("IST", 330, false),
-            new ZoneDescriptor("BST", 360, true), // updated Oct 2009 yoshito
+            new ZoneDescriptor("BST", 360, false), // updated May 2010 - no DST in year 2010+
             new ZoneDescriptor("VST", 420, false),
             new ZoneDescriptor("CTT", 480, false), // updated Oct 2003 aliu
             new ZoneDescriptor("JST", 540, false),
