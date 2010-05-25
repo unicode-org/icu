@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -993,7 +993,7 @@ public class SimpleTimeZone extends BasicTimeZone {
             if (startMonth < Calendar.JANUARY || startMonth > Calendar.DECEMBER) {
                 throw new IllegalArgumentException();
             }
-            if (startTime < 0 || startTime >= Grego.MILLIS_PER_DAY ||
+            if (startTime < 0 || startTime > Grego.MILLIS_PER_DAY ||
                 startTimeMode < WALL_TIME || startTimeMode > UTC_TIME) {
                 throw new IllegalArgumentException();
             }
