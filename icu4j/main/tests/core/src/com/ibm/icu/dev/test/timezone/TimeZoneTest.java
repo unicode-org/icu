@@ -1622,6 +1622,27 @@ public class TimeZoneTest extends TestFmwk
             logln("Note: Errors could be the result of changes to zoneStrings locale data");
         }
     }
+
+    /*
+     * Test case for hashCode problem reported by ticket#7690 OlsonTimeZone.hashCode() throws NPE.
+     */
+    public void TestHashCode() {
+        String[] ids = TimeZone.getAvailableIDs();
+
+        for (String id: ids) {
+            TimeZone tz1 = TimeZone.getTimeZone(id);
+            TimeZone tz2 = TimeZone.getTimeZone(id);
+
+            // hash code are same for the same time zone
+            if (tz1.hashCode() != tz2.hashCode()) {
+                errln("Fail: Two time zone instances for " + id + " have different hash values.");
+            }
+            // string representation should be also same
+            if (!tz1.toString().equals(tz2.toString())) {
+                errln("Fail: Two time zone instances for " + id + " have different toString() values.");
+            }
+        }
+    }
 }
 
 //eof
