@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- * Copyright (C) 1996-2009, International Business Machines
+ * Copyright (C) 1996-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **/
 
@@ -1000,7 +1000,16 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
             symbols.setDecimalSeparator(monSep);
             DecimalFormat fmt2 = new DecimalFormat(buf.toString(), symbols);
-            
+
+            // Actual width of decimal fractions and rounding option are inherited
+            // from the currency, not the pattern itself.  So we need to force 
+            // maximum/minimumFractionDigits and rounding option for the second
+            // DecimalForamt instance.  The fix for ticket#7282 requires this test
+            // code change to make it work properly.
+            fmt2.setMaximumFractionDigits(fmt1.getMaximumFractionDigits());
+            fmt2.setMinimumFractionDigits(fmt1.getMinimumFractionDigits());
+            fmt2.setRoundingIncrement(fmt1.getRoundingIncrement());
+
             String result2 = fmt2.format(1.111);
             
             // NOTE: en_IN is a special case (ChoiceFormat currency display name)
