@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2009, International Business Machines
+ *   Copyright (C) 2009-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -118,10 +118,10 @@ static const struct AssemblyType {
 } assemblyHeader[] = {
     {"gcc",
         ".globl %s\n"
-        "\t.section .note.GNU-stack,\"\",@progbits\n"
+        "\t.section .note.GNU-stack,\"\",%%progbits\n"
         "\t.section .rodata\n"
         "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
-        "\t.type %s,@object\n"
+        "\t.type %s,%%object\n"
         "%s:\n\n",
 
         ".long ","",HEX_0X
