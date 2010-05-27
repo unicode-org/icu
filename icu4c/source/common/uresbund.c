@@ -565,9 +565,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                    u1->fParent = t1;
                    r = u1;
                  } else {
-                   /* the USR override data wasn't found, delete it */
-                   uhash_remove(cache, u1);
-                   free_entry(u1);
+                   /* the USR override data wasn't found, set it to be deleted */
+                   u1->fCountExisting = 0;
                  }
                }
             }
@@ -591,17 +590,15 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
                     } else {
                         t1->fParent = t2;
                         if(usingUSRData) {
-                          /* the USR override data wasn't found, delete it */
-                          uhash_remove(cache, u2);
-                          free_entry(u2);
+                            /* the USR override data wasn't found, set it to be deleted */
+                            u2->fCountExisting = 0;
                         }
                     }
                     t1 = t2;
                 } else {
                     if (usingUSRData) {
-                        /* the USR override data wasn't found, delete it */
-                        uhash_remove(cache, u2);
-                        free_entry(u2);
+                        /* the USR override data wasn't found, set it to be deleted */
+                        u2->fCountExisting = 0;
                     }
                     /* t2->fCountExisting have to be decremented since the call to init_entry increments
                      * it and if we hit this code, that means it is not set as the parent.
