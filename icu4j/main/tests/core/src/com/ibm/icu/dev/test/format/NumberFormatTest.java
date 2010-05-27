@@ -2608,4 +2608,26 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Set the configuration back to the default
         System.setProperty("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
     }
+
+    /*
+     * Testing currency driven max/min fraction digits problem
+     * reported by ticket#7282
+     */
+    public void TestCurrencyFractionDigits() {
+        double value = 99.12345;
+
+        // Create currency instance
+        NumberFormat cfmt  = NumberFormat.getCurrencyInstance(new ULocale("ja_JP"));
+        String text1 = cfmt.format(value);
+
+        // Reset the same currency and format the test value again
+        cfmt.setCurrency(cfmt.getCurrency());
+        String text2 = cfmt.format(value);
+
+        // output1 and output2 must be identical
+        if (!text1.equals(text2)) {
+            errln("NumberFormat.format() should return the same result - text1="
+                    + text1 + " text2=" + text2);
+        }
+    }
 }

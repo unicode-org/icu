@@ -4264,6 +4264,7 @@ public class DecimalFormat extends NumberFormat {
             long incrementVal = 0;
             byte expDigits = -1;
             boolean expSignAlways = false;
+            int currencySignCnt = 0;
 
             // The affix is either the prefix or the suffix.
             StringBuilder affix = prefix;
@@ -4440,12 +4441,12 @@ public class DecimalFormat extends NumberFormat {
                                 pattern.charAt(pos + 1) == CURRENCY_SIGN) {
                                 ++pos; // Skip over the tripled character
                                 affix.append(ch); // append again
-                                currencySignCount = CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT;
+                                currencySignCnt = CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT;
                             } else {
-                                currencySignCount = CURRENCY_SIGN_COUNT_IN_ISO_FORMAT;
+                                currencySignCnt = CURRENCY_SIGN_COUNT_IN_ISO_FORMAT;
                             }
                         } else {
-                            currencySignCount = CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT;
+                            currencySignCnt = CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT;
                         }
                         // Fall through to append(ch)
                     } else if (ch == QUOTE) {
@@ -4641,6 +4642,9 @@ public class DecimalFormat extends NumberFormat {
                 } else {
                     setRoundingIncrement((BigDecimal) null);
                 }
+
+                // Update currency sign count for the new pattern
+                currencySignCount = currencySignCnt;
             } else {
                 // Bug 4212072 To meet the need of expandAffix(String, StirngBuffer)
                 // [Richard/GCL]
@@ -4675,10 +4679,24 @@ public class DecimalFormat extends NumberFormat {
         setLocale(null, null);
         // save the pattern
         formatPattern = pattern;
-        // initialize currencyPluralInfo if needed
-        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT
-            && currencyPluralInfo == null) {
-            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+
+        // special handlings for currency instance
+        if (currencySignCount > 0) {
+            // reset rounding increment and max/min fractional digits
+            // by the currency
+            Currency theCurrency = getCurrency();
+            if (theCurrency != null) {
+                setRoundingIncrement(theCurrency.getRoundingIncrement());
+                int d = theCurrency.getDefaultFractionDigits();
+                setMinimumFractionDigits(d);
+                setMaximumFractionDigits(d);
+            }
+
+            // initialize currencyPluralInfo if needed
+            if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT
+                && currencyPluralInfo == null) {
+                currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+            }
         }
     }
 
@@ -4845,7 +4863,11 @@ public class DecimalFormat extends NumberFormat {
                 setMinimumFractionDigits(d);
                 setMaximumFractionDigits(d);
             }
-            expandAffixes(null);
+            if (currencySignCount != CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+                // This is not necessary for plural format type
+                // because affixes will be resolved in subformat
+                expandAffixes(null);
+            }
         }
     }
 
