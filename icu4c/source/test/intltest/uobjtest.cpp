@@ -563,6 +563,7 @@ void UObjectTest::TestCompilerRTTI() {
     ) {
         errln("typeid(NumberFormat) failed");
     }
+    delete nf;
 }
 
 /* --------------- */
