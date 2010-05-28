@@ -146,6 +146,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFieldPositionIterator();
 
     void TestDecimal();
+    void TestCurrencyFractionDigits();
 
  private:
 
