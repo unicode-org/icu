@@ -630,22 +630,28 @@ unorm2_normalize(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(src==NULL || length<-1 || capacity<0 || (dest==NULL && capacity>0) || src==dest) {
+    if( (src==NULL && length!=0) || length<-1 ||
+        capacity<0 || (dest==NULL && capacity>0) ||
+        (src==dest && src!=NULL)
+    ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString destString(dest, 0, capacity);
-    const Normalizer2 *n2=(const Normalizer2 *)norm2;
-    const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
-    if(n2wi!=NULL) {
-        // Avoid duplicate argument checking and support NUL-terminated src.
-        ReorderingBuffer buffer(n2wi->impl, destString);
-        if(buffer.init(length, *pErrorCode)) {
-            n2wi->normalize(src, length>=0 ? src+length : NULL, buffer, *pErrorCode);
+    // length==0: Nothing to do, and n2wi->normalize(NULL, NULL, buffer, ...) would crash.
+    if(length!=0) {
+        const Normalizer2 *n2=(const Normalizer2 *)norm2;
+        const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
+        if(n2wi!=NULL) {
+            // Avoid duplicate argument checking and support NUL-terminated src.
+            ReorderingBuffer buffer(n2wi->impl, destString);
+            if(buffer.init(length, *pErrorCode)) {
+                n2wi->normalize(src, length>=0 ? src+length : NULL, buffer, *pErrorCode);
+            }
+        } else {
+            UnicodeString srcString(length<0, src, length);
+            n2->normalize(srcString, destString, *pErrorCode);
         }
-    } else {
-        UnicodeString srcString(length<0, src, length);
-        n2->normalize(srcString, destString, *pErrorCode);
     }
     return destString.extract(dest, capacity, *pErrorCode);
 }
@@ -659,29 +665,32 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if( second==NULL || secondLength<-1 ||
+    if( (second==NULL && secondLength!=0) || secondLength<-1 ||
         firstCapacity<0 || (first==NULL && firstCapacity>0) || firstLength<-1 ||
-        first==second
+        (first==second && first!=NULL)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString firstString(first, firstLength, firstCapacity);
-    const Normalizer2 *n2=(const Normalizer2 *)norm2;
-    const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
-    if(n2wi!=NULL) {
-        // Avoid duplicate argument checking and support NUL-terminated src.
-        ReorderingBuffer buffer(n2wi->impl, firstString);
-        if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
-            n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,
-                                     doNormalize, buffer, *pErrorCode);
-        }
-    } else {
-        UnicodeString secondString(secondLength<0, second, secondLength);
-        if(doNormalize) {
-            n2->normalizeSecondAndAppend(firstString, secondString, *pErrorCode);
+    // secondLength==0: Nothing to do, and n2wi->normalizeAndAppend(NULL, NULL, buffer, ...) would crash.
+    if(secondLength!=0) {
+        const Normalizer2 *n2=(const Normalizer2 *)norm2;
+        const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
+        if(n2wi!=NULL) {
+            // Avoid duplicate argument checking and support NUL-terminated src.
+            ReorderingBuffer buffer(n2wi->impl, firstString);
+            if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
+                n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,
+                                        doNormalize, buffer, *pErrorCode);
+            }
         } else {
-            n2->append(firstString, secondString, *pErrorCode);
+            UnicodeString secondString(secondLength<0, second, secondLength);
+            if(doNormalize) {
+                n2->normalizeSecondAndAppend(firstString, secondString, *pErrorCode);
+            } else {
+                n2->append(firstString, secondString, *pErrorCode);
+            }
         }
     }
     return firstString.extract(first, firstCapacity, *pErrorCode);
@@ -716,7 +725,7 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(s==NULL || length<-1) {
+    if((s==NULL && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -731,7 +740,7 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return UNORM_NO;
     }
-    if(s==NULL || length<-1) {
+    if((s==NULL && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return UNORM_NO;
     }
@@ -746,7 +755,7 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(s==NULL || length<-1) {
+    if((s==NULL && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
