@@ -643,8 +643,8 @@ int32_t Normalizer2Impl::combine(const uint16_t *list, UChar32 trail) {
         // trail character is 3400..10FFFF
         // result entry has 3 units
         key1=(uint16_t)(COMP_1_TRAIL_LIMIT+
-                        ((trail>>COMP_1_TRAIL_SHIFT))&
-                         ~COMP_1_TRIPLE);
+                        (((trail>>COMP_1_TRAIL_SHIFT))&
+                          ~COMP_1_TRIPLE));
         uint16_t key2=(uint16_t)(trail<<COMP_2_TRAIL_SHIFT);
         uint16_t secondUnit;
         for(;;) {
@@ -854,17 +854,6 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                          UBool doCompose,
                          ReorderingBuffer &buffer,
                          UErrorCode &errorCode) const {
-    UChar32 minNoMaybeCP=minCompNoMaybeCP;
-    if(limit==NULL) {
-        src=copyLowPrefixFromNulTerminated(src, minNoMaybeCP,
-                                           doCompose ? &buffer : NULL,
-                                           errorCode);
-        if(U_FAILURE(errorCode)) {
-            return FALSE;
-        }
-        limit=u_strchr(src, 0);
-    }
-
     /*
      * prevBoundary points to the last character before the current one
      * that has a composition boundary before it with ccc==0 and quick check "yes".
@@ -878,6 +867,21 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
      * must correspond 1:1 to destination units at the end of the destination buffer.
      */
     const UChar *prevBoundary=src;
+    UChar32 minNoMaybeCP=minCompNoMaybeCP;
+    if(limit==NULL) {
+        src=copyLowPrefixFromNulTerminated(src, minNoMaybeCP,
+                                           doCompose ? &buffer : NULL,
+                                           errorCode);
+        if(U_FAILURE(errorCode)) {
+            return FALSE;
+        }
+        if(prevBoundary<src) {
+            // Set prevBoundary to the last character in the prefix.
+            prevBoundary=src-1;
+        }
+        limit=u_strchr(src, 0);
+    }
+
     const UChar *prevSrc;
     UChar32 c=0;
     uint16_t norm16=0;
@@ -1108,18 +1112,22 @@ const UChar *
 Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                                    UBool onlyContiguous,
                                    UNormalizationCheckResult *pQCResult) const {
-    UChar32 minNoMaybeCP=minCompNoMaybeCP;
-    if(limit==NULL) {
-        UErrorCode errorCode=U_ZERO_ERROR;
-        src=copyLowPrefixFromNulTerminated(src, minNoMaybeCP, NULL, errorCode);
-        limit=u_strchr(src, 0);
-    }
-
     /*
      * prevBoundary points to the last character before the current one
      * that has a composition boundary before it with ccc==0 and quick check "yes".
      */
     const UChar *prevBoundary=src;
+    UChar32 minNoMaybeCP=minCompNoMaybeCP;
+    if(limit==NULL) {
+        UErrorCode errorCode=U_ZERO_ERROR;
+        src=copyLowPrefixFromNulTerminated(src, minNoMaybeCP, NULL, errorCode);
+        if(prevBoundary<src) {
+            // Set prevBoundary to the last character in the prefix.
+            prevBoundary=src-1;
+        }
+        limit=u_strchr(src, 0);
+    }
+
     const UChar *prevSrc;
     UChar32 c=0;
     uint16_t norm16=0;
@@ -1450,10 +1458,23 @@ const UChar *
 Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
                          ReorderingBuffer *buffer,
                          UErrorCode &errorCode) const {
+    // Tracks the last FCD-safe boundary, before lccc=0 or after properly-ordered tccc<=1.
+    // Similar to the prevBoundary in the compose() implementation.
+    const UChar *prevBoundary=src;
+    int32_t prevFCD16=0;
     if(limit==NULL) {
         src=copyLowPrefixFromNulTerminated(src, MIN_CCC_LCCC_CP, buffer, errorCode);
         if(U_FAILURE(errorCode)) {
             return src;
+        }
+        if(prevBoundary<src) {
+            prevBoundary=src;
+            // We know that the previous character's lccc==0.
+            // Fetching the fcd16 value was deferred for this below-U+0300 code point.
+            prevFCD16=getFCD16FromSingleLead(*(src-1));
+            if(prevFCD16>1) {
+                --prevBoundary;
+            }
         }
         limit=u_strchr(src, 0);
     }
@@ -1466,12 +1487,8 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
 
     const UTrie2 *trie=fcdTrie();
 
-    // Tracks the last FCD-safe boundary, before lccc=0 or after properly-ordered tccc<=1.
-    // Similar to the prevBoundary in the compose() implementation.
-    const UChar *prevBoundary=src;
     const UChar *prevSrc;
     UChar32 c=0;
-    int32_t prevFCD16=0;
     uint16_t fcd16=0;
 
     for(;;) {

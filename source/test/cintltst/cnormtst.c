@@ -58,7 +58,10 @@ TestQuickCheckPerCP(void);
 static void
 TestComposition(void);
 
-const static char* canonTests[][3] = {
+static void
+TestFCD(void);
+
+static const char* const canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
     { "\\u00e0ardvark",            "a\\u0300ardvark",            "\\u00e0ardvark",        },
@@ -91,10 +94,11 @@ const static char* canonTests[][3] = {
     { "\\uFF76\\uFF9E",            "\\uFF76\\uFF9E",            "\\uFF76\\uFF9E"        }, /* hw_ka + hw_ten*/
     { "\\u30AB\\uFF9E",            "\\u30AB\\uFF9E",            "\\u30AB\\uFF9E"        }, /* ka + hw_ten*/
     { "\\uFF76\\u3099",            "\\uFF76\\u3099",            "\\uFF76\\u3099"        },  /* hw_ka + ten*/
-    { "A\\u0300\\u0316",           "A\\u0316\\u0300",           "\\u00C0\\u0316"        }  /* hw_ka + ten*/
+    { "A\\u0300\\u0316",           "A\\u0316\\u0300",           "\\u00C0\\u0316"        },  /* hw_ka + ten*/
+    { "", "", "" }
 };
 
-const static char* compatTests[][3] = {
+static const char* const compatTests[][3] = {
     /* Input*/                        /*Decomposed    */                /*Composed*/
     { "cat",                        "cat",                            "cat"                },
 
@@ -113,8 +117,14 @@ const static char* compatTests[][3] = {
 
     /*These two are broken in Unicode 2.1.2 but fixed in 2.1.5 and later*/
     { "\\uFF76\\uFF9E",                "\\u30AB\\u3099",                "\\u30AC"            }, /* hw_ka + hw_ten*/
-    { "\\u30AB\\uFF9E",                "\\u30AB\\u3099",                "\\u30AC"            } /* ka + hw_ten*/
-    
+    { "\\u30AB\\uFF9E",                "\\u30AB\\u3099",                "\\u30AC"            }, /* ka + hw_ten*/
+    { "", "", "" }
+};
+
+static const char* const fcdTests[][3] = {
+    /* Added for testing the below-U+0300 prefix of a NUL-terminated string. */
+    { "\\u010e\\u0327", "D\\u0327\\u030c", NULL },  /* D-caron + cedilla */
+    { "\\u010e", "\\u010e", NULL }  /* D-caron */
 };
 
 void addNormTest(TestNode** root);
@@ -125,7 +135,8 @@ void addNormTest(TestNode** root)
     addTest(root, &TestDecomp, "tsnorm/cnormtst/TestDecomp");
     addTest(root, &TestCompatDecomp, "tsnorm/cnormtst/TestCompatDecomp");
     addTest(root, &TestCanonDecompCompose, "tsnorm/cnormtst/TestCanonDecompCompose");
-    addTest(root, &TestCompatDecompCompose, "tsnorm/cnormtst/CompatDecompCompose");
+    addTest(root, &TestCompatDecompCompose, "tsnorm/cnormtst/TestCompatDecompCompose");
+    addTest(root, &TestFCD, "tsnorm/cnormtst/TestFCD");
     addTest(root, &TestNull, "tsnorm/cnormtst/TestNull");
     addTest(root, &TestQuickCheck, "tsnorm/cnormtst/TestQuickCheck");
     addTest(root, &TestQuickCheckPerCP, "tsnorm/cnormtst/TestQuickCheckPerCP");
@@ -138,132 +149,75 @@ void addNormTest(TestNode** root)
     addTest(root, &TestComposition, "tsnorm/cnormtst/TestComposition");
 }
 
-void TestDecomp() 
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t x, neededLen, resLen;
-    UChar *source=NULL, *result=NULL; 
-    status = U_ZERO_ERROR;
-    resLen=0;
-    log_verbose("Testing unorm_normalize with  Decomp canonical\n");
-    for(x=0; x < LENGTHOF(canonTests); x++)
+static const char* const modeStrings[]={
+    "UNORM_NONE",
+    "UNORM_NFD",
+    "UNORM_NFKD",
+    "UNORM_NFC",
+    "UNORM_NFKC",
+    "UNORM_FCD",
+    "UNORM_MODE_COUNT"
+};
+
+static void TestNormCases(UNormalizationMode mode,
+                          const char* const cases[][3], int32_t lengthOfCases) {
+    int32_t x, neededLen, length2;
+    int32_t expIndex= (mode==UNORM_NFC || mode==UNORM_NFKC) ? 2 : 1;
+    UChar *source=NULL;
+    UChar result[16];
+    log_verbose("Testing unorm_normalize(%s)\n", modeStrings[mode]);
+    for(x=0; x < lengthOfCases; x++)
     {
-        source=CharsToUChars(canonTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, NULL, 0, &status); 
+        UErrorCode status = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
+        source=CharsToUChars(cases[x][0]);
+        neededLen= unorm_normalize(source, u_strlen(source), mode, 0, NULL, 0, &status);
+        length2= unorm_normalize(source, -1, mode, 0, NULL, 0, &status2);
+        if(neededLen!=length2) {
+          log_err("ERROR in unorm_normalize(%s)[%d]: "
+                  "preflight length/NUL %d!=%d preflight length/srcLength\n",
+                  modeStrings[mode], (int)x, (int)neededLen, (int)length2);
+        }
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
-            resLen=neededLen+1;
-            result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, result, resLen, &status); 
         }
-        if(U_FAILURE(status)){
-            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
+        length2=unorm_normalize(source, u_strlen(source), mode, 0, result, LENGTHOF(result), &status); 
+        if(U_FAILURE(status) || neededLen!=length2) {
+            log_data_err("ERROR in unorm_normalize(%s/NUL) at %s:  %s - (Are you missing data?)\n",
+                         modeStrings[mode], austrdup(source), myErrorName(status));
         } else {
-          assertEqual(result, canonTests[x][1], x);
+            assertEqual(result, cases[x][expIndex], x);
         }
-        free(result);
+        length2=unorm_normalize(source, -1, mode, 0, result, LENGTHOF(result), &status); 
+        if(U_FAILURE(status) || neededLen!=length2) {
+            log_data_err("ERROR in unorm_normalize(%s/srcLength) at %s:  %s - (Are you missing data?)\n",
+                         modeStrings[mode], austrdup(source), myErrorName(status));
+        } else {
+            assertEqual(result, cases[x][expIndex], x);
+        }
         free(source);
     }
 }
 
-void TestCompatDecomp() 
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t x, neededLen, resLen;
-    UChar *source=NULL, *result=NULL; 
-    status = U_ZERO_ERROR;
-    resLen=0;
-    log_verbose("Testing unorm_normalize with  Decomp compat\n");
-    for(x=0; x < LENGTHOF(compatTests); x++)
-    {
-        source=CharsToUChars(compatTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, NULL, 0, &status); 
-        if(status==U_BUFFER_OVERFLOW_ERROR)
-        {
-            status=U_ZERO_ERROR;
-            resLen=neededLen+1;
-            result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, result, resLen, &status); 
-        }
-        if(U_FAILURE(status)){
-            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
-        } else {
-          assertEqual(result, compatTests[x][1], x);
-        }
-        free(result);
-        free(source);
-    }
+void TestDecomp() {
+    TestNormCases(UNORM_NFD, canonTests, LENGTHOF(canonTests));
 }
 
-void TestCanonDecompCompose() 
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t x, neededLen, resLen;
-    UChar *source=NULL, *result=NULL; 
-    status = U_ZERO_ERROR;
-    resLen=0;
-    log_verbose("Testing unorm_normalize with Decomp can compose compat\n");
-    for(x=0; x < LENGTHOF(canonTests); x++)
-    {
-        source=CharsToUChars(canonTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, NULL, 0, &status); 
-        if(status==U_BUFFER_OVERFLOW_ERROR)
-        {
-            status=U_ZERO_ERROR;
-            resLen=neededLen+1;
-            result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, result, resLen, &status); 
-        }
-        if(U_FAILURE(status)){
-            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source),myErrorName(status) );
-        } else {
-          assertEqual(result, canonTests[x][2], x);
-        }
-        free(result);
-        free(source);
-    }
+void TestCompatDecomp() {
+    TestNormCases(UNORM_NFKD, compatTests, LENGTHOF(compatTests));
 }
 
-void TestCompatDecompCompose() 
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t x, neededLen, resLen;
-    UChar *source=NULL, *result=NULL;
-    status = U_ZERO_ERROR;
-    resLen=0;
-    log_verbose("Testing unorm_normalize with compat decomp compose can\n");
-    for(x=0; x < LENGTHOF(compatTests); x++)
-    {
-        source=CharsToUChars(compatTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, NULL, 0, &status); 
-        if(status==U_BUFFER_OVERFLOW_ERROR)
-        {
-            status=U_ZERO_ERROR;
-            resLen=neededLen+1;
-            result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, result, resLen, &status); 
-        }
-        if(U_FAILURE(status)){
-            log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source), myErrorName(status) );
-        } else {
-          assertEqual(result, compatTests[x][2], x);
-        }
-        free(result);
-        free(source);
-    }
+void TestCanonDecompCompose() {
+    TestNormCases(UNORM_NFC, canonTests, LENGTHOF(canonTests));
 }
 
-
-/*
-static void assertEqual(const UChar* result, const UChar* expected, int32_t index)
-{
-    if(u_strcmp(result, expected)!=0){
-        log_err("ERROR in decomposition at index = %d. EXPECTED: %s , GOT: %s\n", index, austrdup(expected),
-            austrdup(result) );
-    }
+void TestCompatDecompCompose() {
+    TestNormCases(UNORM_NFKC, compatTests, LENGTHOF(compatTests));
 }
-*/
+
+void TestFCD() {
+    TestNormCases(UNORM_FCD, fcdTests, LENGTHOF(fcdTests));
+}
 
 static void assertEqual(const UChar* result, const char* expected, int32_t index)
 {
@@ -762,6 +716,16 @@ TestAPI() {
     }
     if(length!=3 || out[2]!=0x308 || out[3]!=0xffff) {
         log_err("unorm_normalize(NFD ma<umlaut>)=%ld failed with out[]=U+%04x U+%04x U+%04x U+%04x\n", length, out[0], out[1], out[2], out[3]);
+        return;
+    }
+    length=unorm_normalize(NULL, 0, UNORM_NFC, 0, NULL, 0, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unorm_normalize(src NULL[0], NFC, dest NULL[0])=%ld failed with %s\n", (long)length, u_errorName(errorCode));
+        return;
+    }
+    length=unorm_normalize(NULL, 0, UNORM_NFC, 0, out, 20, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unorm_normalize(src NULL[0], NFC, dest out[20])=%ld failed with %s\n", (long)length, u_errorName(errorCode));
         return;
     }
 }
