@@ -1673,7 +1673,7 @@ public final class Normalizer2Impl {
         } else {
             // trail character is 3400..10FFFF
             // result entry has 3 units
-            key1=COMP_1_TRAIL_LIMIT+((trail>>COMP_1_TRAIL_SHIFT))&~COMP_1_TRIPLE;
+            key1=COMP_1_TRAIL_LIMIT+(((trail>>COMP_1_TRAIL_SHIFT))&~COMP_1_TRIPLE);
             int key2=(trail<<COMP_2_TRAIL_SHIFT)&0xffff;
             int secondUnit;
             for(;;) {
