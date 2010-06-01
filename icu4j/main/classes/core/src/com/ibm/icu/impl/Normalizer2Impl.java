@@ -1699,8 +1699,8 @@ public final class Normalizer2Impl {
         return -1;
     }
     /**
-     * @param c Character which has compositions
-     * @param set recursively receives the composites from c's compositions
+     * @param list some character's compositions list
+     * @param set recursively receives the composites from these compositions
      */
     private void addComposites(int list, UnicodeSet set) {
         int firstUnit, compositeAndFwd;
