@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Linux-specific setup for Visual Age
-## Copyright (c) 2003-2009, International Business Machines Corporation and
+## Copyright (c) 2003-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -24,7 +24,7 @@ THREADSCPPFLAGS = -D_REENTRANT
 LIBCPPFLAGS =
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
+LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
 #LD_RPATH_PRE = -Wl,-rpath,
 
 ## Compiler switch to embed a library name

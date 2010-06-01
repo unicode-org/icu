@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using Sun's compilers
-## Copyright (c) 1999-2009, International Business Machines Corporation and
+## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -44,7 +44,7 @@ SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
 SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH=       -R'$$'ORIGIN
+LD_RPATH=       -R'$$'ORIGIN 
 LD_RPATH_PRE=   -R
 
 #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
