@@ -105,12 +105,12 @@ UBool Normalizer::operator==(const Normalizer& that) const
 {
     return
         this==&that ||
-        fUMode==that.fUMode &&
+        (fUMode==that.fUMode &&
         fOptions==that.fOptions &&
         *text==*that.text &&
         buffer==that.buffer &&
         bufferPos==that.bufferPos &&
-        nextIndex==that.nextIndex;
+        nextIndex==that.nextIndex);
 }
 
 //-------------------------------------------------------------------------

@@ -32,7 +32,6 @@
 #include "uprops.h"
 #include "uset_imp.h"
 #include "usc_impl.h"
-#include "unormimp.h"
 #include "udatamem.h" /* for testing ucase_openBinary() */
 #include "cucdapi.h"
 
@@ -2875,33 +2874,13 @@ TestPropertyValues(void) {
     }
 }
 
-/* add characters from a serialized set to a normal one */
-static void
-_setAddSerialized(USet *set, const USerializedSet *sset) {
-    UChar32 start, end;
-    int32_t i, count;
-
-    count=uset_getSerializedRangeCount(sset);
-    for(i=0; i<count; ++i) {
-        uset_getSerializedRange(sset, i, &start, &end);
-        uset_addRange(set, start, end);
-    }
-}
-
 /* various tests for consistency of UCD data and API behavior */
 static void
 TestConsistency() {
-#if !UCONFIG_NO_NORMALIZATION
-    UChar buffer16[300];
-#endif
     char buffer[300];
     USet *set1, *set2, *set3, *set4;
     UErrorCode errorCode;
 
-#if !UCONFIG_NO_NORMALIZATION
-    const UNormalizer2 *norm2;
-    USerializedSet sset;
-#endif
     UChar32 start, end;
     int32_t i, length;
 
@@ -3016,53 +2995,6 @@ TestConsistency() {
         log_data_err("error opening [:Lowercase:] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
     uset_close(set1);
-
-#if !UCONFIG_NO_NORMALIZATION
-
-    /*
-     * Test for an example that unorm_getCanonStartSet() delivers
-     * all characters that compose from the input one,
-     * even in multiple steps.
-     * For example, the set for "I" (0049) should contain both
-     * I-diaeresis (00CF) and I-diaeresis-acute (1E2E).
-     * In general, the set for the middle such character should be a subset
-     * of the set for the first.
-     */
-    errorCode=U_ZERO_ERROR;
-    norm2=unorm2_getInstance(NULL, "nfc", UNORM2_DECOMPOSE, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_data_err("unorm2_getInstance(NFD) failed - %s\n", u_errorName(errorCode));
-        return;
-    }
-
-    set1=uset_open(1, 0);
-    set2=uset_open(1, 0);
-
-    if (unorm_getCanonStartSet(0x49, &sset)) {
-        UChar source[1];
-
-        _setAddSerialized(set1, &sset);
-
-        /* enumerate all characters that are plausible to be latin letters */
-        for(start=0xa0; start<0x2000; ++start) {
-            source[0]=(UChar)start;
-            length=unorm2_normalize(norm2, source, 1, buffer16, LENGTHOF(buffer16), &errorCode);
-            if(length>1 && buffer16[0]==0x49) {
-                uset_add(set2, start);
-            }
-        }
-
-        compareUSets(set1, set2,
-                     "[canon start set of 0049]", "[all c with canon decomp with 0049]",
-                     TRUE);
-    } else {
-      log_err("error calling unorm_getCanonStartSet()\n");
-    }
-
-    uset_close(set1);
-    uset_close(set2);
-
-#endif
 
     /* verify that all assigned characters in Math blocks are exactly Math characters */
     errorCode=U_ZERO_ERROR;

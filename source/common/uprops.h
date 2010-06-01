@@ -322,8 +322,6 @@ enum UPropertySource {
     UPROPS_SRC_PROPSVEC,
     /** From unames.c/unames.icu */
     UPROPS_SRC_NAMES,
-    /** From unorm.cpp/unorm.icu */
-    UPROPS_SRC_NORM,
     /** From ucase.c/ucase.icu */
     UPROPS_SRC_CASE,
     /** From ubidi_props.c/ubidi.icu */
@@ -338,6 +336,8 @@ enum UPropertySource {
     UPROPS_SRC_NFKC,
     /** From normalizer2impl.cpp/nfkc_cf.nrm */
     UPROPS_SRC_NFKC_CF,
+    /** From normalizer2impl.cpp/nfc.nrm canonical iterator data */
+    UPROPS_SRC_NFC_CANON_ITER,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };

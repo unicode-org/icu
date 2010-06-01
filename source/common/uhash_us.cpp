@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -57,12 +57,12 @@ uhash_deleteHashtable(void *obj) {
 }
 
 /**
- * Deleter for UVector objects.
+ * Deleter for UObject instances.
  */
 U_CAPI void U_EXPORT2
-uhash_deleteUVector(void *obj) {
+uhash_deleteUObject(void *obj) {
     U_NAMESPACE_USE
-    delete (UVector*) obj;
+    delete (UObject*) obj;
 }
 
 //eof

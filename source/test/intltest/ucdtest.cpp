@@ -10,6 +10,7 @@
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "hash.h"
+#include "normalizer2impl.h"
 #include "uparse.h"
 #include "ucdtest.h"
 
@@ -53,6 +54,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     switch (index) {
         case 0: name = "TestAdditionalProperties"; if(exec) TestAdditionalProperties(); break;
         case 1: name = "TestBinaryValues"; if(exec) TestBinaryValues(); break;
+        case 2: name = "TestConsistency"; if(exec) TestConsistency(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -321,4 +323,49 @@ void UnicodeTest::TestBinaryValues() {
             errln("UnicodeSet([:Alphabetic=%s:])!=UnicodeSet([:Alphabetic:])\n", trueValues[i]);
         }
     }
+}
+
+void UnicodeTest::TestConsistency() {
+#if !UCONFIG_NO_NORMALIZATION
+    /*
+     * Test for an example that getCanonStartSet() delivers
+     * all characters that compose from the input one,
+     * even in multiple steps.
+     * For example, the set for "I" (0049) should contain both
+     * I-diaeresis (00CF) and I-diaeresis-acute (1E2E).
+     * In general, the set for the middle such character should be a subset
+     * of the set for the first.
+     */
+    IcuTestErrorCode errorCode(*this, "TestConsistency");
+    const Normalizer2 *nfd=Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
+    const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
+    if(errorCode.isFailure()) {
+        dataerrln("Normalizer2::getInstance(NFD) or Normalizer2Factory::getNFCImpl() failed - %s\n",
+                  errorCode.errorName());
+        errorCode.reset();
+        return;
+    }
+
+    UnicodeSet set1, set2;
+    if (nfcImpl->getCanonStartSet(0x49, set1)) {
+        /* enumerate all characters that are plausible to be latin letters */
+        for(UChar start=0xa0; start<0x2000; ++start) {
+            UnicodeString decomp=nfd->normalize(UnicodeString(start), errorCode);
+            if(decomp.length()>1 && decomp[0]==0x49) {
+                set2.add(start);
+            }
+        }
+
+        if (set1!=set2) {
+            errln("[canon start set of 0049] != [all c with canon decomp with 0049]");
+        }
+        // This was available in cucdtst.c but the test had to move to intltest
+        // because the new internal normalization functions are in C++.
+        //compareUSets(set1, set2,
+        //             "[canon start set of 0049]", "[all c with canon decomp with 0049]",
+        //             TRUE);
+    } else {
+        errln("NFC.getCanonStartSet() returned FALSE");
+    }
+#endif
 }

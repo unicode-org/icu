@@ -34,7 +34,6 @@
 #include "uprops.h"
 #include "propname.h"
 #include "normalizer2impl.h"
-#include "unormimp.h"
 #include "ucase.h"
 #include "ubidi_props.h"
 #include "uinvchar.h"
@@ -206,13 +205,14 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 upropsvec_addPropertyStarts(&sa, &status);
                 break;
 #if !UCONFIG_NO_NORMALIZATION
-            case UPROPS_SRC_NORM:
-                unorm_addPropertyStarts(&sa, &status);
-                break;
-            case UPROPS_SRC_CASE_AND_NORM:
+            case UPROPS_SRC_CASE_AND_NORM: {
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(status);
+                if(U_SUCCESS(status)) {
+                    impl->addPropertyStarts(&sa, status);
+                }
                 ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
-                unorm_addPropertyStarts(&sa, &status);
                 break;
+            }
             case UPROPS_SRC_NFC: {
                 const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(status);
                 if(U_SUCCESS(status)) {
@@ -231,6 +231,13 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 const Normalizer2Impl *impl=Normalizer2Factory::getNFKC_CFImpl(status);
                 if(U_SUCCESS(status)) {
                     impl->addPropertyStarts(&sa, status);
+                }
+                break;
+            }
+            case UPROPS_SRC_NFC_CANON_ITER: {
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(status);
+                if(U_SUCCESS(status)) {
+                    impl->addCanonIterPropertyStarts(&sa, status);
                 }
                 break;
             }
