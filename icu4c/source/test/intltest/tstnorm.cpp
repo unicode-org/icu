@@ -15,7 +15,7 @@
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
 #include "cstring.h"
-#include "unormimp.h"
+#include "normalizer2impl.h"
 #include "tstnorm.h"
 
 #define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
@@ -1103,20 +1103,22 @@ BasicNormalizerTest::TestCompare() {
 
     // test cases with i and I to make sure Turkic works
     static const UChar iI[]={ 0x49, 0x69, 0x130, 0x131 };
-    USerializedSet sset;
-    UnicodeSet set;
+    UnicodeSet iSet, set;
 
     UnicodeString s1, s2;
     UChar32 start, end;
 
+    const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
+    if(U_FAILURE(errorCode) || !nfcImpl->ensureCanonIterData(errorCode)) {
+        errln("Normalizer2Factory::getNFCImpl().ensureCanonIterData() failed: %s",
+              u_errorName(errorCode));
+        return;
+    }
+
     // collect all sets into one for contiguous output
     for(i=0; i<LENGTHOF(iI); ++i) {
-        if(unorm_getCanonStartSet(iI[i], &sset)) {
-            count=uset_getSerializedRangeCount(&sset);
-            for(j=0; j<count; ++j) {
-                uset_getSerializedRange(&sset, j, &start, &end);
-                set.add(start, end);
-            }
+        if(nfcImpl->getCanonStartSet(iI[i], iSet)) {
+            set.addAll(iSet);
         }
     }
 

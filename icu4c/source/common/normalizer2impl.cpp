@@ -25,8 +25,10 @@
 #include "mutex.h"
 #include "normalizer2impl.h"
 #include "uassert.h"
+#include "uhash.h"
 #include "uset_imp.h"
 #include "utrie2.h"
+#include "uvector.h"
 
 U_NAMESPACE_BEGIN
 
@@ -241,10 +243,19 @@ void ReorderingBuffer::insert(UChar32 c, uint8_t cc) {
 
 // Normalizer2Impl --------------------------------------------------------- ***
 
+struct CanonIterData : public UMemory {
+    CanonIterData(UErrorCode &errorCode);
+    ~CanonIterData();
+    void addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode);
+    UTrie2 *trie;
+    UVector canonStartSets;  // contains UnicodeSet *
+};
+
 Normalizer2Impl::~Normalizer2Impl() {
     udata_close(memory);
     utrie2_close(normTrie);
     UTrie2Singleton(fcdTrieSingleton).deleteInstance();
+    delete (CanonIterData *)canonIterDataSingleton.fInstance;
 }
 
 UBool U_CALLCONV
@@ -333,6 +344,11 @@ enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uin
     return TRUE;
 }
 
+static uint32_t U_CALLCONV
+segmentStarterMapper(const void * /*context*/, uint32_t value) {
+    return value&CANON_NOT_SEGMENT_STARTER;
+}
+
 U_CDECL_END
 
 void
@@ -346,6 +362,16 @@ Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode
         sa->add(sa->set, c+1);
     }
     sa->add(sa->set, Hangul::HANGUL_LIMIT); /* add Hangul+1 to continue with other properties */
+}
+
+void
+Normalizer2Impl::addCanonIterPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const {
+    /* add the start code point of each same-value range of the canonical iterator data trie */
+    if(ensureCanonIterData(errorCode)) {
+        // currently only used for the SEGMENT_STARTER property
+        utrie2_enum(((CanonIterData *)canonIterDataSingleton.fInstance)->trie,
+                    segmentStarterMapper, enumPropertyStartsRange, sa);
+    }
 }
 
 const UChar *
@@ -668,6 +694,30 @@ int32_t Normalizer2Impl::combine(const uint16_t *list, UChar32 trail) {
         }
     }
     return -1;
+}
+
+/**
+  * @param list some character's compositions list
+  * @param set recursively receives the composites from these compositions
+  */
+void Normalizer2Impl::addComposites(const uint16_t *list, UnicodeSet &set) const {
+    uint16_t firstUnit;
+    int32_t compositeAndFwd;
+    do {
+        firstUnit=*list;
+        if((firstUnit&COMP_1_TRIPLE)==0) {
+            compositeAndFwd=list[1];
+            list+=2;
+        } else {
+            compositeAndFwd=(((int32_t)list[1]&~COMP_2_TRAIL_MASK)<<16)|list[2];
+            list+=3;
+        }
+        UChar32 composite=compositeAndFwd>>1;
+        if((compositeAndFwd&1)!=0) {
+            addComposites(getCompositionsListForComposite(getNorm16(composite)), set);
+        }
+        set.add(composite);
+    } while((firstUnit&COMP_1_LAST_TUPLE)==0);
 }
 
 /*
@@ -1642,6 +1692,217 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
         fcd16=iter.next16();
     } while(fcd16>0xff);
     return iter.codePointStart;
+}
+
+// CanonicalIterator data -------------------------------------------------- ***
+
+CanonIterData::CanonIterData(UErrorCode &errorCode) :
+        trie(utrie2_open(0, 0, &errorCode)),
+        canonStartSets(uhash_deleteUObject, NULL, errorCode) {}
+
+CanonIterData::~CanonIterData() {
+    utrie2_close(trie);
+}
+
+void CanonIterData::addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode) {
+    uint32_t canonValue=utrie2_get32(trie, decompLead);
+    if((canonValue&(CANON_HAS_SET|CANON_VALUE_MASK))==0 && origin!=0) {
+        // origin is the first character whose decomposition starts with
+        // the character for which we are setting the value.
+        utrie2_set32(trie, decompLead, canonValue|origin, &errorCode);
+    } else {
+        // origin is not the first character, or it is U+0000.
+        UnicodeSet *set;
+        if((canonValue&CANON_HAS_SET)==0) {
+            set=new UnicodeSet;
+            if(set==NULL) {
+                errorCode=U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            UChar32 firstOrigin=(UChar32)(canonValue&CANON_VALUE_MASK);
+            canonValue=(canonValue&~CANON_VALUE_MASK)|CANON_HAS_SET|(uint32_t)canonStartSets.size();
+            utrie2_set32(trie, decompLead, canonValue, &errorCode);
+            canonStartSets.addElement(set, errorCode);
+            if(firstOrigin!=0) {
+                set->add(firstOrigin);
+            }
+        } else {
+            set=(UnicodeSet *)canonStartSets[(int32_t)(canonValue&CANON_VALUE_MASK)];
+        }
+        set->add(origin);
+    }
+}
+
+class CanonIterDataSingleton {
+public:
+    CanonIterDataSingleton(SimpleSingleton &s, Normalizer2Impl &ni, UErrorCode &ec) :
+        singleton(s), impl(ni), errorCode(ec) {}
+    CanonIterData *getInstance(UErrorCode &errorCode) {
+        void *duplicate;
+        CanonIterData *instance=
+            (CanonIterData *)singleton.getInstance(createInstance, this, duplicate, errorCode);
+        delete (CanonIterData *)duplicate;
+        return instance;
+    }
+    static void *createInstance(const void *context, UErrorCode &errorCode);
+    UBool rangeHandler(UChar32 start, UChar32 end, uint32_t value) {
+        if(value!=0) {
+            impl.makeCanonIterDataFromNorm16(start, end, (uint16_t)value, *newData, errorCode);
+        }
+        return U_SUCCESS(errorCode);
+    }
+
+private:
+    SimpleSingleton &singleton;
+    Normalizer2Impl &impl;
+    CanonIterData *newData;
+    UErrorCode &errorCode;
+};
+
+U_CDECL_BEGIN
+
+// Call Normalizer2Impl::makeCanonIterDataFromNorm16() for a range of same-norm16 characters.
+static UBool U_CALLCONV
+enumCIDRangeHandler(const void *context, UChar32 start, UChar32 end, uint32_t value) {
+    return ((CanonIterDataSingleton *)context)->rangeHandler(start, end, value);
+}
+
+U_CDECL_END
+
+void *CanonIterDataSingleton::createInstance(const void *context, UErrorCode &errorCode) {
+    CanonIterDataSingleton *me=(CanonIterDataSingleton *)context;
+    me->newData=new CanonIterData(errorCode);
+    if(me->newData==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if(U_SUCCESS(errorCode)) {
+        utrie2_enum(me->impl.getNormTrie(), NULL, enumCIDRangeHandler, me);
+        utrie2_freeze(me->newData->trie, UTRIE2_32_VALUE_BITS, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            return me->newData;
+        }
+    }
+    delete me->newData;
+    return NULL;
+}
+
+void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
+                                                  CanonIterData &newData,
+                                                  UErrorCode &errorCode) const {
+    if(norm16==0 || (minYesNo<=norm16 && norm16<minNoNo)) {
+        // Inert, or 2-way mapping (including Hangul syllable).
+        // We do not write a canonStartSet for any yesNo character.
+        // Composites from 2-way mappings are added at runtime from the
+        // starter's compositions list, and the other characters in
+        // 2-way mappings get CANON_NOT_SEGMENT_STARTER set because they are
+        // "maybe" characters.
+        return;
+    }
+    for(UChar32 c=start; c<=end; ++c) {
+        uint32_t oldValue=utrie2_get32(newData.trie, c);
+        uint32_t newValue=oldValue;
+        if(norm16>=minMaybeYes) {
+            // not a segment starter if it occurs in a decomposition or has cc!=0
+            newValue|=CANON_NOT_SEGMENT_STARTER;
+            if(norm16<MIN_NORMAL_MAYBE_YES) {
+                newValue|=CANON_HAS_COMPOSITIONS;
+            }
+        } else if(norm16<minYesNo) {
+            newValue|=CANON_HAS_COMPOSITIONS;
+        } else {
+            // c has a one-way decomposition
+            UChar32 c2=c;
+            uint16_t norm16_2=norm16;
+            while(limitNoNo<=norm16_2 && norm16_2<minMaybeYes) {
+                c2=mapAlgorithmic(c2, norm16_2);
+                norm16_2=getNorm16(c2);
+            }
+            if(minYesNo<=norm16_2 && norm16_2<limitNoNo) {
+                // c decomposes, get everything from the variable-length extra data
+                const uint16_t *mapping=getMapping(norm16_2);
+                uint16_t firstUnit=*mapping++;
+                int32_t length=firstUnit&MAPPING_LENGTH_MASK;
+                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                    if(c==c2 && (*mapping&0xff)!=0) {
+                        newValue|=CANON_NOT_SEGMENT_STARTER;  // original c has cc!=0
+                    }
+                    ++mapping;
+                }
+                // Skip empty mappings (no characters in the decomposition).
+                if(length!=0) {
+                    // add c to first code point's start set
+                    int32_t i=0;
+                    U16_NEXT_UNSAFE(mapping, i, c2);
+                    newData.addToStartSet(c, c2, errorCode);
+                    // Set CANON_NOT_SEGMENT_STARTER for each remaining code point of a
+                    // one-way mapping. A 2-way mapping is possible here after
+                    // intermediate algorithmic mapping.
+                    if(norm16_2>=minNoNo) {
+                        while(i<length) {
+                            U16_NEXT_UNSAFE(mapping, i, c2);
+                            uint32_t c2Value=utrie2_get32(newData.trie, c2);
+                            if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
+                                utrie2_set32(newData.trie, c2, c2Value|CANON_NOT_SEGMENT_STARTER,
+                                             &errorCode);
+                            }
+                        }
+                    }
+                }
+            } else {
+                // c decomposed to c2 algorithmically; c has cc==0
+                newData.addToStartSet(c, c2, errorCode);
+            }
+        }
+        if(newValue!=oldValue) {
+            utrie2_set32(newData.trie, c, newValue, &errorCode);
+        }
+    }
+}
+
+UBool Normalizer2Impl::ensureCanonIterData(UErrorCode &errorCode) const {
+    // Logically const: Synchronized instantiation.
+    Normalizer2Impl *me=const_cast<Normalizer2Impl *>(this);
+    CanonIterDataSingleton(me->canonIterDataSingleton, *me, errorCode).getInstance(errorCode);
+    return U_SUCCESS(errorCode);
+}
+
+int32_t Normalizer2Impl::getCanonValue(UChar32 c) const {
+    return (int32_t)utrie2_get32(((CanonIterData *)canonIterDataSingleton.fInstance)->trie, c);
+}
+
+const UnicodeSet &Normalizer2Impl::getCanonStartSet(int32_t n) const {
+    return *(const UnicodeSet *)(
+        ((CanonIterData *)canonIterDataSingleton.fInstance)->canonStartSets[n]);
+}
+
+UBool Normalizer2Impl::isCanonSegmentStarter(UChar32 c) const {
+    return getCanonValue(c)>=0;
+}
+
+UBool Normalizer2Impl::getCanonStartSet(UChar32 c, UnicodeSet &set) const {
+    int32_t canonValue=getCanonValue(c)&~CANON_NOT_SEGMENT_STARTER;
+    if(canonValue==0) {
+        return FALSE;
+    }
+    set.clear();
+    int32_t value=canonValue&CANON_VALUE_MASK;
+    if((canonValue&CANON_HAS_SET)!=0) {
+        set.addAll(getCanonStartSet(value));
+    } else if(value!=0) {
+        set.add(value);
+    }
+    if((canonValue&CANON_HAS_COMPOSITIONS)!=0) {
+        uint16_t norm16=getNorm16(c);
+        if(norm16==JAMO_L) {
+            UChar32 syllable=
+                (UChar32)(Hangul::HANGUL_BASE+(c-Hangul::JAMO_L_BASE)*Hangul::JAMO_VT_COUNT);
+            set.add(syllable, syllable+Hangul::JAMO_VT_COUNT-1);
+        } else {
+            addComposites(getCompositionsList(norm16), set);
+        }
+    }
+    return TRUE;
 }
 
 U_NAMESPACE_END
