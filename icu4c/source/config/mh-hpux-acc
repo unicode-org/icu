@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HP/UX-specific setup using aCC
-## Copyright (c) 1999-2009, International Business Machines Corporation and
+## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -66,7 +66,13 @@ LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Shared library options
-LD_SOOPTIONS= -Bprotected_def
+## HPUX PA-risc does not recognize -Bprotected_def aC++ option.
+## Use linker option -Wl,-B,symbolic instead.
+ifeq ($(shell uname -m),ia64)
+    LD_SOOPTIONS= -Bprotected_def
+else
+    LD_SOOPTIONS= -Wl,-B,symbolic
+endif
 
 ## Commands to make a shared library
 #SHLIB.c=	$(LD) $(LDFLAGS) -b
