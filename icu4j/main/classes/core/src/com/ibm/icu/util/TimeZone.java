@@ -480,7 +480,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
             format = (SimpleDateFormat)tmpfmt.clone();
         }
 
-        String[] patterns = { "z", "zzzz", "v", "vvvv", "Z", "ZZZZ", "V", "VVVV" };
+        String[] patterns = { "V", "zzzz", "v", "vvvv", "Z", "ZZZZ", "z", "VVVV" };
         format.applyPattern(patterns[style]);
         format.setTimeZone(this);
         Date d = new Date();
