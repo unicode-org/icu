@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using gcc
-## Copyright (c) 1999-2009, International Business Machines Corporation and
+## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -19,7 +19,7 @@ LDFLAGSICUDT=-nodefaultlibs -nostdlib
 THREADSCPPFLAGS = -D_REENTRANT
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH=       -R'$$'ORIGIN
+LD_RPATH=       -R'$$'ORIGIN 
 LD_RPATH_PRE=   -R
 
 ## Compiler switch to embed a library name
