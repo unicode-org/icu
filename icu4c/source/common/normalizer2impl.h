@@ -31,6 +31,8 @@
 
 U_NAMESPACE_BEGIN
 
+class CanonIterData;
+
 class Hangul {
 public:
     /* Korean Hangul and Jamo constants */
@@ -193,17 +195,21 @@ class U_COMMON_API Normalizer2Impl : public UMemory {
 public:
     Normalizer2Impl() : memory(NULL), normTrie(NULL) {
         fcdTrieSingleton.fInstance=NULL;
+        canonIterDataSingleton.fInstance=NULL;
     }
     ~Normalizer2Impl();
 
     void load(const char *packageName, const char *name, UErrorCode &errorCode);
 
     void addPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const;
+    void addCanonIterPropertyStarts(const USetAdder *sa, UErrorCode &errorCode) const;
 
     // low-level properties ------------------------------------------------ ***
 
     const UTrie2 *getNormTrie() const { return normTrie; }
     const UTrie2 *getFCDTrie(UErrorCode &errorCode) const ;
+
+    UBool ensureCanonIterData(UErrorCode &errorCode) const;
 
     uint16_t getNorm16(UChar32 c) const { return UTRIE2_GET16(normTrie, c); }
 
@@ -246,6 +252,9 @@ public:
     void setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
                             UTrie2 *newFCDTrie, UErrorCode &errorCode) const;
 
+    void makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
+                                     CanonIterData &newData, UErrorCode &errorCode) const;
+
     /**
      * Get the decomposition for one code point.
      * @param c code point
@@ -254,6 +263,9 @@ public:
      * @return pointer to the decomposition, or NULL if none
      */
     const UChar *getDecomposition(UChar32 c, UChar buffer[4], int32_t &length) const;
+
+    UBool isCanonSegmentStarter(UChar32 c) const;
+    UBool getCanonStartSet(UChar32 c, UnicodeSet &set) const;
 
     enum {
         MIN_CCC_LCCC_CP=0x300
@@ -426,6 +438,15 @@ private:
             (*list&MAPPING_LENGTH_MASK)+  // + mapping length
             ((*list>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
     }
+    /**
+     * @param c code point must have compositions
+     * @return compositions list pointer
+     */
+    const uint16_t *getCompositionsList(uint16_t norm16) const {
+        return isDecompYes(norm16) ?
+                getCompositionsListForDecompYes(norm16) :
+                getCompositionsListForComposite(norm16);
+    }
 
     const UChar *copyLowPrefixFromNulTerminated(const UChar *src,
                                                 UChar32 minNeedDataCP,
@@ -437,6 +458,7 @@ private:
                     ReorderingBuffer &buffer, UErrorCode &errorCode) const;
 
     static int32_t combine(const uint16_t *list, UChar32 trail);
+    void addComposites(const uint16_t *list, UnicodeSet &set) const;
     void recompose(ReorderingBuffer &buffer, int32_t recomposeStartIndex,
                    UBool onlyContiguous) const;
 
@@ -448,6 +470,9 @@ private:
 
     const UChar *findPreviousFCDBoundary(const UChar *start, const UChar *p) const;
     const UChar *findNextFCDBoundary(const UChar *p, const UChar *limit) const;
+
+    int32_t getCanonValue(UChar32 c) const;
+    const UnicodeSet &getCanonStartSet(int32_t n) const;
 
     UDataMemory *memory;
     UVersionInfo dataVersion;
@@ -467,7 +492,14 @@ private:
     const uint16_t *extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
 
     SimpleSingleton fcdTrieSingleton;
+    SimpleSingleton canonIterDataSingleton;
 };
+
+// bits in canonIterData
+#define CANON_NOT_SEGMENT_STARTER 0x80000000
+#define CANON_HAS_COMPOSITIONS 0x40000000
+#define CANON_HAS_SET 0x200000
+#define CANON_VALUE_MASK 0x1fffff
 
 /**
  * ICU-internal shortcut for quick access to standard Unicode normalization.

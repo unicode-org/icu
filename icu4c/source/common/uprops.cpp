@@ -29,10 +29,10 @@
 #include "normalizer2impl.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
-#include "unormimp.h"
 #include "ubidi_props.h"
 #include "uprops.h"
 #include "ucase.h"
+#include "ustr_imp.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -141,7 +141,7 @@ static const struct {
     { UPROPS_SRC_NFKC,  0 },                                    /* UCHAR_NFKD_INERT */
     { UPROPS_SRC_NFC,   0 },                                    /* UCHAR_NFC_INERT */
     { UPROPS_SRC_NFKC,  0 },                                    /* UCHAR_NFKC_INERT */
-    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_SEGMENT_STARTER */
+    { UPROPS_SRC_NFC_CANON_ITER, 0 },                           /* UCHAR_SEGMENT_STARTER */
     {  1,               U_MASK(UPROPS_PATTERN_SYNTAX) },
     {  1,               U_MASK(UPROPS_PATTERN_WHITE_SPACE) },
     { UPROPS_SRC_CHAR_AND_PROPSVEC,  0 },                       /* UCHAR_POSIX_ALNUM */
@@ -173,16 +173,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         } else {
             if(column==UPROPS_SRC_CASE) {
                 return ucase_hasBinaryProperty(c, which);
-            } else if(column==UPROPS_SRC_NORM) {
-#if !UCONFIG_NO_NORMALIZATION
-                /* normalization properties from unorm.icu */
-                switch(which) {
-                case UCHAR_SEGMENT_STARTER:
-                    return unorm_isCanonSafeStart(c);
-                default:
-                    break;
-                }
-#endif
             } else if(column==UPROPS_SRC_NFC) {
 #if !UCONFIG_NO_NORMALIZATION
                 UErrorCode errorCode=U_ZERO_ERROR;
@@ -230,6 +220,16 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                     }
                     return U_SUCCESS(errorCode) && dest!=src;
                 }
+#endif
+            } else if(column==UPROPS_SRC_NFC_CANON_ITER) {
+                /* normalization properties from nfc.nrm canonical iterator data */
+                // UCHAR_SEGMENT_STARTER
+#if !UCONFIG_NO_NORMALIZATION
+                UErrorCode errorCode=U_ZERO_ERROR;
+                const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
+                return
+                    U_SUCCESS(errorCode) && impl->ensureCanonIterData(errorCode) &&
+                    impl->isCanonSegmentStarter(c);
 #endif
             } else if(column==UPROPS_SRC_BIDI) {
                 /* bidi/shaping properties */

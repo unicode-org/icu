@@ -936,7 +936,7 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
         if (U_FAILURE(status) || targets == 0) {
             return;
         }
-        targets->setValueDeleter(uhash_deleteUVector);
+        targets->setValueDeleter(uhash_deleteUObject);
         specDAG.put(source, targets, status);
     }
     UVector *variants = (UVector*) targets->get(target);
