@@ -1021,13 +1021,15 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         pat = ZZZZ_UC_STR;
         break;
     case SHORT_COMMONLY_USED:
-        pat = V_UC_STR;
+        //pat = V_UC_STR;
+        pat = Z_STR;
         break;
     case GENERIC_LOCATION:
         pat = VVVV_UC_STR;
         break;
     default: // SHORT
-        pat = Z_STR;
+        //pat = Z_STR;
+        pat = V_UC_STR;
         break;
     }
 
