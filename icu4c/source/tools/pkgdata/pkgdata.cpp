@@ -98,6 +98,7 @@ U_CDECL_END
 #endif
 
 #define LARGE_BUFFER_MAX_SIZE 2048
+#define MEDIUM_BUFFER_MAX_SIZE 1024
 #define SMALL_BUFFER_MAX_SIZE 512
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
@@ -605,7 +606,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
             if (pkgDataFlags != NULL) {
                 for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-                    pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * SMALL_BUFFER_MAX_SIZE);
+                    pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * MEDIUM_BUFFER_MAX_SIZE);
                     if (pkgDataFlags[i] != NULL) {
                         pkgDataFlags[i][0] = 0;
                     } else {
