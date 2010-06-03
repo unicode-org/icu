@@ -43,7 +43,7 @@
 
 #if defined(U_PALMOS)
 #   include "unicode/ppalmos.h"
-#elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#elif !defined(__MINGW32__) && (defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64))
 #ifdef CYGWINMSVC
 #   include "unicode/platform.h"
 #endif
