@@ -46,14 +46,6 @@ CURDIR=.
 endif
 PKGDATA = $(TOOLBINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR)
 
-# If cross compiling, gencfu will be from cross_buildroot and is already built.
-# Skip check for gencfu because check can fail on some platforms when cross compiling.
-ifeq ($(cross_compiling),yes)
-GENCFU =
-else
-GENCFU = $(TOOLBINDIR)/gencfu$(EXEEXT)
-endif
-
 ifeq ($(OS390_STUBDATA),1)
 OS390PKG=package390
 OS390INSTALL=install390
@@ -527,7 +519,7 @@ $(BRKBLDDIR)/%.ctd: $(BRKSRCDIR)/%.txt $(TOOLBINDIR)/genctd$(TOOLEXEEXT) $(DAT_F
 #          The $(word n, ...) selects the nth word from the following stuff.
 #          There must be a nicer way to do this.
 
-$(CFU_FILES): $(ALL_CFU_SOURCE) $(GENCFU) $(DAT_FILES)
+$(CFU_FILES): $(ALL_CFU_SOURCE) $(TOOLBINDIR)/gencfu$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) echo ALL_CFU_SOURCE: $(ALL_CFU_SOURCE)
 	$(INVOKE) echo CFU_FILES: $(CFU_FILES)
 	$(INVOKE) echo CFU_FILES_SHORT: $(CFU_FILES_SHORT)
