@@ -35,6 +35,12 @@
 #   include <sys/stat.h>
 #   include <sys/types.h>
 #endif
+
+/* In MinGW environment, io.h needs to be included for _mkdir() */
+#ifdef __MINGW32__
+#include <io.h>
+#endif
+
 #include <errno.h>
 
 #include "unicode/errorcode.h"
@@ -160,7 +166,7 @@ U_CAPI void U_EXPORT2
 uprv_mkdir(const char *pathname, UErrorCode *status) {
 
     int retVal = 0;
-#if defined(U_WINDOWS)
+#if defined(U_WINDOWS) || defined(__MINGW32__)
     retVal = _mkdir(pathname);
 #else
     retVal = mkdir(pathname, S_IRWXU | (S_IROTH | S_IXOTH) | (S_IROTH | S_IXOTH));

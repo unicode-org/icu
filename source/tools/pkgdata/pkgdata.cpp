@@ -851,7 +851,8 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
 
 #ifndef USING_CYGWIN
     /* No symbolic link to make. */
-    if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
+    if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0 ||
+        uprv_strcmp(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
         return result;
     }
     
