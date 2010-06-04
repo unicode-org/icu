@@ -14,6 +14,7 @@ import com.ibm.icu.impl.Norm2AllModes;
  * Unicode normalization functionality for standard Unicode normalization or
  * for using custom mapping tables.
  * All instances of this class are unmodifiable/immutable.
+ * The Normalizer2 class is not intended for public subclassing.
  * <p>
  * The primary functions are to produce a normalized string and to detect whether
  * a string is already normalized.
@@ -171,7 +172,7 @@ public abstract class Normalizer2 {
      * @param src source string
      * @param dest destination Appendable; gets normalized src appended
      * @return dest
-     * @internal ICU 4.4 TODO: propose for 4.6
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public abstract Appendable normalize(CharSequence src, Appendable dest);
