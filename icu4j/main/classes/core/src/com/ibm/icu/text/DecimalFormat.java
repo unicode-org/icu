@@ -5393,10 +5393,10 @@ public class DecimalFormat extends NumberFormat {
     public static final int PAD_AFTER_SUFFIX = 3;
 
     // Constants for characters used in programmatic (unlocalized) patterns.
-    private static final char PATTERN_ZERO_DIGIT = '0';
-    private static final char PATTERN_GROUPING_SEPARATOR = ',';
-    private static final char PATTERN_DECIMAL_SEPARATOR = '.';
-    private static final char PATTERN_DIGIT = '#';
+    static final char PATTERN_ZERO_DIGIT = '0';
+    static final char PATTERN_GROUPING_SEPARATOR = ',';
+    static final char PATTERN_DECIMAL_SEPARATOR = '.';
+    static final char PATTERN_DIGIT = '#';
     static final char PATTERN_SIGNIFICANT_DIGIT = '@';
     static final char PATTERN_EXPONENT = 'E';
     static final char PATTERN_PLUS_SIGN = '+';

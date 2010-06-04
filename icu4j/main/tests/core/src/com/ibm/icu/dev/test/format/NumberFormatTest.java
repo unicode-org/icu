@@ -1253,16 +1253,22 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale loc2 = new ULocale("en_US@numbers=hebr");
         ULocale loc3 = new ULocale("en_US@numbers=arabext");
         ULocale loc4 = new ULocale("hi_IN@numbers=foobar");
+        ULocale loc5 = new ULocale("ar_EG"); // ar_EG uses arab numbering system
+        ULocale loc6 = new ULocale("ar_MA"); // ar_MA users latn numbering system
         
         NumberFormat fmt1 = NumberFormat.getInstance(loc1);
         NumberFormat fmt2 = NumberFormat.getInstance(loc2);
         NumberFormat fmt3 = NumberFormat.getInstance(loc3);
         NumberFormat fmt4 = NumberFormat.getInstance(loc4);
+        NumberFormat fmt5 = NumberFormat.getInstance(loc5);
+        NumberFormat fmt6 = NumberFormat.getInstance(loc6);
         
         expect2(fmt1,1234.567,"\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57");
         expect3(fmt2,5678.0,"\u05d4\u05f3\u05ea\u05e8\u05e2\u05f4\u05d7");
         expect2(fmt3,1234.567,"\u06f1,\u06f2\u06f3\u06f4.\u06f5\u06f6\u06f7");
         expect2(fmt4,1234.567,"\u0967,\u0968\u0969\u096a.\u096b\u096c\u096d");
+        expect2(fmt5,1234.567,"\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667");
+        expect2(fmt6,1234.567,"1.234,567");
 
     }
 

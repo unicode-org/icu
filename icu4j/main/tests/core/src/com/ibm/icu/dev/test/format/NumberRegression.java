@@ -44,7 +44,6 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
@@ -962,16 +961,14 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         Locale[] locales = NumberFormat.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i++) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locales[i]);
+            ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locales[i]);
 
             //
             // Get the currency pattern for this locale.  We have to fish it
             // out of the ResourceBundle directly, since DecimalFormat.toPattern
             // will return the localized symbol, not \00a4
             //
-            UResourceBundle numPatterns = rb.get("NumberPatterns");
-            String pattern = numPatterns.getString(1);
-            
+            String pattern = rb.getStringWithFallback("NumberElements/latn/patterns/currencyFormat");
             if (pattern.indexOf('\u00A4') == -1 ) { // 'x' not "x" -- workaround bug in IBM JDK 1.4.1
                 errln("Currency format for " + locales[i] +
                         " does not contain generic currency symbol:" +

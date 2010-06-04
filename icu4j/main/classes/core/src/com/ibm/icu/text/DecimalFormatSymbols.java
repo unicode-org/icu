@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.ChoiceFormat;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.ICUCache;
@@ -707,7 +708,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         padEscape == other.padEscape &&
         plusSign == other.plusSign &&
         exponentSeparator.equals(other.exponentSeparator) &&
-        monetarySeparator == other.monetarySeparator);
+        monetarySeparator == other.monetarySeparator &&
+        monetaryGroupingSeparator == other.monetaryGroupingSeparator);
     }
 
     /**
@@ -730,6 +732,17 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         this.requestedLocale = locale.toLocale();
         this.ulocale = locale;
 
+        String nsName;
+        // Attempt to set the zero digit based on the numbering system for the locale requested
+        NumberingSystem ns = NumberingSystem.getInstance(locale);
+        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic()) {
+            zeroDigit = ns.getDescription().charAt(0);
+            nsName = ns.getName();
+        } else {
+            zeroDigit = DecimalFormat.PATTERN_ZERO_DIGIT;
+            nsName = "latn"; // Default numbering system
+        }
+
         /* try the cache first */
         String[][] data = cachedLocaleData.get(locale);
         String[] numberElements;
@@ -737,7 +750,29 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             data = new String[1][];
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
                 getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-            data[0] = rb.getStringArray("NumberElements");
+            boolean isLatn = nsName.equals("latn");
+            String baseKey = "NumberElements/" + nsName + "/symbols/";
+            String latnKey = "NumberElements/latn/symbols/";
+            String[] symbolKeys = { "decimal", "group", "list", "percentSign", "minusSign", "plusSign", "exponential", "perMille", "infinity", "nan", "currencyDecimal", "currencyGroup" };
+            String[] fallbackElements = { ".", ",", ";", "%", "-", "+", "E", "\u2030", "\u221e", "NaN", null, null };
+            String[] symbolsArray = new String[symbolKeys.length];
+            for ( int i = 0 ; i < symbolKeys.length; i++ ) {
+                try {
+                    symbolsArray[i] = rb.getStringWithFallback(baseKey+symbolKeys[i]);
+                } catch (MissingResourceException ex) {
+                    if (!isLatn) { // Fall back to latn numbering system for symbols if desired symbol isn't found.
+                        try {
+                            symbolsArray[i] = rb.getStringWithFallback(latnKey+symbolKeys[i]);
+                        } catch (MissingResourceException ex1) {
+                            symbolsArray[i] = fallbackElements[i];
+                        }
+                    } else {
+                        symbolsArray[i] = fallbackElements[i];
+                    }
+                }
+            }
+
+            data[0] = symbolsArray;
             /* update cache */
             cachedLocaleData.put(locale, data);
         }
@@ -750,28 +785,34 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         ULocale uloc = r.getULocale();
         setLocale(uloc, uloc);
 
+
         decimalSeparator = numberElements[0].charAt(0);
         groupingSeparator = numberElements[1].charAt(0);
         patternSeparator = numberElements[2].charAt(0);
         percent = numberElements[3].charAt(0);
-        zeroDigit = numberElements[4].charAt(0); //different for Arabic,etc.
-        digit = numberElements[5].charAt(0);
-        minusSign = numberElements[6].charAt(0);
+        minusSign = numberElements[4].charAt(0);
+        plusSign  =numberElements[5].charAt(0);
+        exponentSeparator = numberElements[6];
+        perMill = numberElements[7].charAt(0);
+        infinity = numberElements[8];
+        NaN = numberElements[9];
 
-        exponentSeparator = numberElements[7];
-        perMill = numberElements[8].charAt(0);
-        infinity = numberElements[9];
-        NaN = numberElements[10];
-
-        plusSign  =numberElements[11].charAt(0);
+        if ( numberElements[10] != null) {
+            monetarySeparator = numberElements[10].charAt(0);
+        } else {
+            monetarySeparator = decimalSeparator;
+        }
+        
+        if ( numberElements[11] != null) {
+            monetaryGroupingSeparator = numberElements[11].charAt(0);
+        } else {
+            monetaryGroupingSeparator = groupingSeparator;
+        }
+        
+        digit = DecimalFormat.PATTERN_DIGIT;  // Localized pattern character no longer in CLDR
         padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
         sigDigit  = DecimalFormat.PATTERN_SIGNIFICANT_DIGIT;
 
-        // Attempt to set the zero digit based on the numbering system for the locale requested
-        NumberingSystem ns = NumberingSystem.getInstance(locale);
-        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic()) {
-            zeroDigit = ns.getDescription().charAt(0);
-        }
 
         CurrencyDisplayInfo info = CurrencyData.provider.getInstance(locale, true);
 
@@ -796,8 +837,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
 
         // Get currency pattern/separator overrides if they exist.
-        monetarySeparator = decimalSeparator;
-        monetaryGroupingSeparator = groupingSeparator;
         Currency curr = Currency.getInstance(locale);
         if (curr != null){
             CurrencyFormatInfo fmtInfo = info.getFormatInfo(curr.getCurrencyCode());
