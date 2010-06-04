@@ -24,24 +24,14 @@ mr{
         "Deva",
     }
     NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "०",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
+        default{"deva"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+        }
     }
     Version{"2.0.47.63"}
     calendar{
@@ -205,7 +195,6 @@ mr{
             }
         }
     }
-    defaultNumberingSystem{"deva"}
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}

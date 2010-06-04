@@ -20,24 +20,27 @@ ps{
         "Arab",
     }
     NumberElements{
-        "٫",
-        "٬",
-        ";",
-        "٪",
-        "۰",
-        "#",
-        "−",
-        "×۱۰^",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
+        arabext{
+            symbols{
+                decimal{"٫"}
+                exponential{"×۱۰^"}
+                group{"٬"}
+                percentSign{"٪"}
+            }
+        }
+        default{"arabext"}
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+            }
+            symbols{
+                decimal{","}
+                exponential{"E"}
+                group{"."}
+                minusSign{"−"}
+                percentSign{"%"}
+            }
+        }
     }
     Version{"2.0.47.67"}
     calendar{
@@ -125,7 +128,6 @@ ps{
             }
         }
     }
-    defaultNumberingSystem{"arabext"}
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}

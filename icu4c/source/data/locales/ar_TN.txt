@@ -7,13 +7,16 @@
 // *
 // ***************************************************************************
 ar_TN{
-    NumberPatterns{
-        "#0.###;#0.###-",
-        "¤#0.00",
-        "#,##0%",
-        "#E0",
+    NumberElements{
+        default{"latn"}
+        latn{
+            patterns{
+                currencyFormat{"¤#0.00"}
+                decimalFormat{"#0.###;#0.###-"}
+            }
+        }
     }
-    Version{"2.0.48.49"}
+    Version{"2.0.48.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -79,5 +82,4 @@ ar_TN{
             }
         }
     }
-    defaultNumberingSystem{"latn"}
 }

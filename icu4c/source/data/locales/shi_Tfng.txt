@@ -17,24 +17,15 @@ shi_Tfng{
         "Tfng",
     }
     NumberElements{
-        ",",
-        " ",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00¤",
-        "#,##0%",
-        "#E0",
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00¤"}
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
     }
     Version{"2.0.46.25"}
     calendar{

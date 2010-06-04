@@ -23,13 +23,16 @@ te{
     LocaleScript{
         "Telu",
     }
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+        }
     }
-    Version{"2.0.48.44"}
+    Version{"2.0.48.45"}
     calendar{
         gregorian{
             AmPmMarkers{

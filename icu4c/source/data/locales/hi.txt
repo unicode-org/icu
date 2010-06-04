@@ -24,26 +24,29 @@ hi{
         "Deva",
     }
     NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "०",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
+        default{"deva"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
     }
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
-    }
-    Version{"2.0.48.64"}
+    Version{"2.0.48.76"}
     calendar{
         ethiopic{
             monthNames{
@@ -781,7 +784,6 @@ hi{
             }
         }
     }
-    defaultNumberingSystem{"deva"}
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -50,6 +50,7 @@ static const char gCurrencyMatchTag[] = "currencyMatch";
 static const char gCurrencySudMatchTag[] = "surroundingMatch";
 static const char gCurrencyInsertBtnTag[] = "insertBetween";
 
+
 static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 
 // -------------------------------------
@@ -59,7 +60,7 @@ DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
     : UObject(),
     locale()
 {
-    initialize(locale, status, TRUE);
+    initialize(locale, status);
 }
 
 // -------------------------------------
@@ -138,9 +139,35 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 // -------------------------------------
 
 void
-DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
-                                 UBool useLastResortData)
+DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status)
 {
+    static const char *gNumberElementKeys[kFormatSymbolCount] = {
+        "decimal",
+        "group",
+        "list",
+        "percentSign",
+        NULL, /* Native zero digit is deprecated from CLDR - get it from the numbering system */
+        NULL, /* Pattern digit character is deprecated from CLDR - use # by default always */
+        "minusSign",
+        "plusSign",
+        NULL, /* currency symbol - We don't really try to load this directly from CLDR until we know the currency */
+        NULL, /* intl currency symbol - We don't really try to load this directly from CLDR until we know the currency */
+        "currencyDecimal",
+        "exponential",
+        "perMille",
+        NULL, /* Escape padding character - not in CLDR */
+        "infinity",
+        "nan",
+        NULL, /* Significant digit symbol - not in CLDR */
+        "currencyGroup",
+    };
+
+    static const char *gLatn =  "latn";
+    static const char *gSymbols = "symbols";
+    const char *nsName;
+    const UChar *sym = NULL;
+    int32_t len = 0;
+
     *validLocale = *actualLocale = 0;
     currPattern = NULL;
     if (U_FAILURE(status))
@@ -148,75 +175,113 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 
     const char* locStr = loc.getName();
     UResourceBundle *resource = ures_open((char *)0, locStr, &status);
-    UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
+    UResourceBundle *numberElementsRes = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
 
-    if (U_FAILURE(status))
-    {
-        // Initializes with last resort data if necessary.
-        if (useLastResortData)
-        {
-            status = U_USING_FALLBACK_WARNING;
-            initialize();
-        }
-    }
-    else {
-        // Gets the number element array.
-        int32_t numberElementsLength = ures_getSize(numberElementsRes);
+    if (U_FAILURE(status)) {
+        status = U_USING_FALLBACK_WARNING;
+        initialize();
+        return;
+    } else {
 
-        if (numberElementsLength > (int32_t)kFormatSymbolCount) {
-            /* Warning: Invalid format. Array too large. */
-            numberElementsLength = (int32_t)kFormatSymbolCount;
+        // First initialize all the symbols to the fallbacks for anything we can't find
+        initialize();
+
+        //
+        // Next get the numbering system for this locale and set zero digit
+        // and the digit string based on the numbering system for the locale
+        //
+
+        NumberingSystem* ns = NumberingSystem::createInstance(loc,status);
+        if (U_SUCCESS(status) && ns->getRadix() == 10 && !ns->isAlgorithmic()) {
+            nsName = ns->getName();
+            UnicodeString *zeroDigit = new UnicodeString(ns->getDescription(),0,1);
+            setSymbol(kZeroDigitSymbol,*zeroDigit);
+            delete zeroDigit;
+        } else {
+            nsName = gLatn;
         }
-        // If the array size is too small, something is wrong with the resource
-        // bundle, returns the failure error code.
-        if (numberElementsLength != 12 || U_FAILURE(status)) {
-            status = U_INVALID_FORMAT_ERROR;
+       
+        UBool isLatn = !uprv_strcmp(nsName,gLatn);
+
+        UErrorCode nlStatus = U_ZERO_ERROR;
+        UResourceBundle *nonLatnSymbols = NULL;
+        if ( !isLatn ) {
+            nonLatnSymbols = ures_getByKeyWithFallback(numberElementsRes, nsName, NULL, &nlStatus);
+            nonLatnSymbols = ures_getByKeyWithFallback(nonLatnSymbols, gSymbols, nonLatnSymbols, &nlStatus);
         }
-        else {
-            const UChar *numberElements[kFormatSymbolCount];
-            int32_t numberElementsStrLen[kFormatSymbolCount];
-            int32_t i = 0;
-            for(i = 0; i<numberElementsLength; i++) {
-                numberElements[i] = ures_getStringByIndex(numberElementsRes, i, &numberElementsStrLen[i], &status);
+
+        UResourceBundle *latnSymbols = ures_getByKeyWithFallback(numberElementsRes, gLatn, NULL, &status);
+        latnSymbols = ures_getByKeyWithFallback(latnSymbols, gSymbols, latnSymbols, &status);
+
+        UBool kMonetaryDecimalSet = FALSE;
+        UBool kMonetaryGroupingSet = FALSE;
+        for(int32_t i = 0; i<kFormatSymbolCount; i++) {
+            if ( gNumberElementKeys[i] != NULL ) {
+                UErrorCode localStatus = U_ZERO_ERROR;
+                if ( !isLatn ) {
+                    sym = ures_getStringByKeyWithFallback(nonLatnSymbols,gNumberElementKeys[i],&len,&localStatus);
+                    // If we can't find the symbol in the numbering system specific resources,
+                    // use the "latn" numbering system as the fallback.
+                    if ( U_FAILURE(localStatus) ) {
+                        localStatus = U_ZERO_ERROR;
+                        sym = ures_getStringByKeyWithFallback(latnSymbols,gNumberElementKeys[i],&len,&localStatus);
+                    }
+                } else {
+                        sym = ures_getStringByKeyWithFallback(latnSymbols,gNumberElementKeys[i],&len,&localStatus);
+                }
+
+                if ( U_SUCCESS(localStatus) ) {
+                    setSymbol((ENumberFormatSymbol)i,sym);
+                    if ( i == kMonetarySeparatorSymbol ) {
+                        kMonetaryDecimalSet = TRUE;
+                    } else if ( i == kMonetaryGroupingSeparatorSymbol ) {
+                        kMonetaryGroupingSet = TRUE;
+                    }
+                }
             }
-
-            if (U_SUCCESS(status)) {
-                initialize(numberElements, numberElementsStrLen, numberElementsLength);
-
-                // Attempt to set the zero digit based on the numbering system for the locale requested
-                //
-                NumberingSystem* ns = NumberingSystem::createInstance(loc,status);
-                if (U_SUCCESS(status) && ns->getRadix() == 10 && !ns->isAlgorithmic()) {
-                    UnicodeString zeroDigit(ns->getDescription(),0,1);
-                    setSymbol(kZeroDigitSymbol,zeroDigit);
-                }
-                if (ns) {
-                    delete ns;
-                }
-
-                // Obtain currency data from the currency API.  This is strictly
-                // for backward compatibility; we don't use DecimalFormatSymbols
-                // for currency data anymore.
-                UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
-                UChar curriso[4];
-                UnicodeString tempStr;
-                ucurr_forLocale(locStr, curriso, 4, &internalStatus);
-
-                // Reuse numberElements[0] as a temporary buffer
-                uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
-                if (U_SUCCESS(internalStatus)) {
-                    fSymbols[kIntlCurrencySymbol] = curriso;
-                    fSymbols[kCurrencySymbol] = tempStr;
-                }
-                /* else use the default values. */
-            }
-
-            U_LOCALE_BASED(locBased, *this);
-            locBased.setLocaleIDs(ures_getLocaleByType(numberElementsRes,
-                                       ULOC_VALID_LOCALE, &status),
-                                  ures_getLocaleByType(numberElementsRes,
-                                       ULOC_ACTUAL_LOCALE, &status));
         }
+
+        ures_close(latnSymbols);
+        if ( !isLatn ) {
+            ures_close(nonLatnSymbols);
+        }
+
+        // If monetary decimal or grouping were not explicitly set, then set them to be the
+        // same as their non-monetary counterparts.
+
+        if ( !kMonetaryDecimalSet ) {
+            setSymbol(kMonetarySeparatorSymbol,fSymbols[kDecimalSeparatorSymbol]);
+        }
+        if ( !kMonetaryGroupingSet ) {
+            setSymbol(kMonetaryGroupingSeparatorSymbol,fSymbols[kGroupingSeparatorSymbol]);
+        }
+
+        if (ns) {
+            delete ns;
+        }
+
+        // Obtain currency data from the currency API.  This is strictly
+        // for backward compatibility; we don't use DecimalFormatSymbols
+        // for currency data anymore.
+        UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
+        UChar curriso[4];
+        UnicodeString tempStr;
+        ucurr_forLocale(locStr, curriso, 4, &internalStatus);
+
+        // Reuse numberElements[0] as a temporary buffer
+        uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
+        if (U_SUCCESS(internalStatus)) {
+            fSymbols[kIntlCurrencySymbol] = curriso;
+            fSymbols[kCurrencySymbol] = tempStr;
+        }
+        /* else use the default values. */
+
+        U_LOCALE_BASED(locBased, *this);
+        locBased.setLocaleIDs(ures_getLocaleByType(numberElementsRes,
+                              ULOC_VALID_LOCALE, &status),
+                              ures_getLocaleByType(numberElementsRes,
+                              ULOC_ACTUAL_LOCALE, &status));
+        
         //load the currency data
         UChar ucc[4]={0}; //Currency Codes are always 3 chars long
         int32_t uccLen = 4;
@@ -249,86 +314,48 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             /* else An explicit currency was requested and is unknown or locale data is malformed. */
             /* ucurr_* API will get the correct value later on. */
         }
-        // else ignore the error if no currency
-    }
-    ures_close(numberElementsRes);
+            // else ignore the error if no currency
 
-    // Currency Spacing.
-    UErrorCode localStatus = U_ZERO_ERROR;
-    UResourceBundle *currencyResource = ures_open(U_ICUDATA_CURR, locStr, &localStatus);
-    UResourceBundle *currencySpcRes = ures_getByKeyWithFallback(currencyResource,
-                                       gCurrencySpacingTag, NULL, &localStatus);
-
-    if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-        const char* keywords[kCurrencySpacingCount] = {
-            gCurrencyMatchTag, gCurrencySudMatchTag, gCurrencyInsertBtnTag
-        };
+        // Currency Spacing.
         localStatus = U_ZERO_ERROR;
-        UResourceBundle *dataRes = ures_getByKeyWithFallback(currencySpcRes,
-                                   gBeforeCurrencyTag, NULL, &localStatus);
+        UResourceBundle *currencyResource = ures_open(U_ICUDATA_CURR, locStr, &localStatus);
+        UResourceBundle *currencySpcRes = ures_getByKeyWithFallback(currencyResource,
+                                           gCurrencySpacingTag, NULL, &localStatus);
+
         if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+            const char* keywords[kCurrencySpacingCount] = {
+                gCurrencyMatchTag, gCurrencySudMatchTag, gCurrencyInsertBtnTag
+            };
             localStatus = U_ZERO_ERROR;
-            for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
-              currencySpcBeforeSym[i] = ures_getStringByKey(dataRes, keywords[i],
-                                                        NULL, &localStatus);
-            }
-            ures_close(dataRes);
-        }
-        dataRes = ures_getByKeyWithFallback(currencySpcRes,
-                                  gAfterCurrencyTag, NULL, &localStatus);
-        if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-            localStatus = U_ZERO_ERROR;
-            for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
-              currencySpcAfterSym[i] = ures_getStringByKey(dataRes, keywords[i],
+            UResourceBundle *dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                       gBeforeCurrencyTag, NULL, &localStatus);
+            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+                localStatus = U_ZERO_ERROR;
+                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+                  currencySpcBeforeSym[i] = ures_getStringByKey(dataRes, keywords[i],
                                                             NULL, &localStatus);
+                }
+                ures_close(dataRes);
             }
-            ures_close(dataRes);
+            dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                      gAfterCurrencyTag, NULL, &localStatus);
+            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+                localStatus = U_ZERO_ERROR;
+                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+                  currencySpcAfterSym[i] = ures_getStringByKey(dataRes, keywords[i],
+                                                                NULL, &localStatus);
+                }
+                ures_close(dataRes);
+            }
+            ures_close(currencySpcRes);
+            ures_close(currencyResource);
         }
-        ures_close(currencySpcRes);
-        ures_close(currencyResource);
     }
     ures_close(resource);
+    ures_close(numberElementsRes);
+
 }
 
-// Initializes the DecimalFormatSymbol instance with the data obtained
-// from ResourceBundle in the desired locale.
-
-void
-DecimalFormatSymbols::initialize(const UChar** numberElements, int32_t *numberElementsStrLen, int32_t numberElementsLength)
-{
-    static const int8_t TYPE_MAPPING[][2] = {
-        {kDecimalSeparatorSymbol, 0},
-        {kGroupingSeparatorSymbol, 1},
-        {kPatternSeparatorSymbol, 2},
-        {kPercentSymbol, 3},
-        {kZeroDigitSymbol, 4},
-        {kDigitSymbol, 5},
-        {kMinusSignSymbol, 6},
-        {kExponentialSymbol, 7},
-        {kPerMillSymbol, 8},
-        {kInfinitySymbol, 9},
-        {kNaNSymbol, 10},
-        {kPlusSignSymbol, 11},
-        {kMonetarySeparatorSymbol, 0}
-    };
-    int32_t idx;
-
-    for (idx = 0; idx < (int32_t)(sizeof(TYPE_MAPPING)/sizeof(TYPE_MAPPING[0])); idx++) {
-        if (TYPE_MAPPING[idx][1] < numberElementsLength) {
-            fSymbols[TYPE_MAPPING[idx][0]].setTo(TRUE, numberElements[TYPE_MAPPING[idx][1]], numberElementsStrLen[TYPE_MAPPING[idx][1]]);
-        }
-    }
-
-    // Default values until it's set later on.
-    fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
-    fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
-    // TODO: read from locale data, if this makes it into CLDR
-    fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
-    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // TODO: '*' Hard coded for now; get from resource later
-    fSymbols[kMonetaryGroupingSeparatorSymbol] = fSymbols[kGroupingSeparatorSymbol];
-}
-
-// initialize with default values
 void
 DecimalFormatSymbols::initialize() {
     /*
@@ -353,6 +380,7 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
     fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
+    fSymbols[kMonetaryGroupingSeparatorSymbol].remove(); // 
 }
 
 Locale

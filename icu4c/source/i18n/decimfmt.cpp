@@ -226,7 +226,12 @@ const int32_t DecimalFormat::kMaxScientificIntegerDigits = 8;
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char DecimalFormat::fgNumberPatterns[]="NumberPatterns";
+const char DecimalFormat::fgNumberPatterns[]="NumberPatterns"; // Deprecated - not used
+static const char fgNumberElements[]="NumberElements";
+static const char fgLatn[]="latn";
+static const char fgPatterns[]="patterns";
+static const char fgDecimalFormat[]="decimalFormat";
+static const char fgCurrencyFormat[]="currencyFormat";
 static const UChar fgTripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
 
 inline int32_t _min(int32_t a, int32_t b) { return (a<b) ? a : b; }
@@ -386,8 +391,11 @@ DecimalFormat::construct(UErrorCode&             status,
         int32_t len = 0;
         UResourceBundle *resource = ures_open(NULL, Locale::getDefault().getName(), &status);
 
-        resource = ures_getByKey(resource, fgNumberPatterns, resource, &status);
-        const UChar *resStr = ures_getStringByIndex(resource, (int32_t)0, &len, &status);
+        resource = ures_getByKey(resource, fgNumberElements, resource, &status);
+        // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
+        resource = ures_getByKey(resource, fgLatn, resource, &status);
+        resource = ures_getByKey(resource, fgPatterns, resource, &status);
+        const UChar *resStr = ures_getStringByKey(resource, fgDecimalFormat, &len, &status);
         str.setTo(TRUE, resStr, len);
         pattern = &str;
         ures_close(resource);
@@ -478,12 +486,15 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
     // Here, chose onlyApplyPatternWithoutExpandAffix without
     // expanding the affix patterns into affixes.
     UnicodeString currencyPattern;
-    UErrorCode error = U_ZERO_ERROR;
-    UResourceBundle *resource = ures_open((char *)0, fSymbols->getLocale().getName(), &error);
-    UResourceBundle *numberPatterns = ures_getByKey(resource, fgNumberPatterns, NULL, &error);
+    UErrorCode error = U_ZERO_ERROR;   
+    
+    UResourceBundle *resource = ures_open(NULL, fSymbols->getLocale().getName(), &error);
+    resource = ures_getByKey(resource, fgNumberElements, resource, &error);
+    // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
+    resource = ures_getByKey(resource, fgLatn, resource, &error);
+    resource = ures_getByKey(resource, fgPatterns, resource, &error);
     int32_t patLen = 0;
-    const UChar *patResStr = ures_getStringByIndex(numberPatterns, kCurrencyStyle,  &patLen, &error);
-    ures_close(numberPatterns);
+    const UChar *patResStr = ures_getStringByKey(resource, fgCurrencyFormat,  &patLen, &error);
     ures_close(resource);
 
     if (U_SUCCESS(error)) {

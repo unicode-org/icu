@@ -293,16 +293,7 @@ private:
      *                             failure code upon return.
      * @param useLastResortData    determine if use last resort data
      */
-    void initialize(const Locale& locale, UErrorCode& success, UBool useLastResortData = FALSE);
-
-    /**
-     * Initialize the symbols from the given array of UnicodeStrings.
-     * The array must be of the correct size.
-     *
-     * @param numberElements    the number format symbols
-     * @param numberElementsLength length of numberElements
-     */
-    void initialize(const UChar** numberElements, int32_t *numberElementsStrLen, int32_t numberElementsLength);
+    void initialize(const Locale& locale, UErrorCode& success);
 
     /**
      * Initialize the symbols with default values.

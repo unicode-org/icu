@@ -23,24 +23,37 @@ fa{
         "Arab",
     }
     NumberElements{
-        "٫",
-        "٬",
-        "؛",
-        "٪",
-        "۰",
-        "#",
-        "−",
-        "×۱۰^",
-        "؉",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##0.###;'‪'-#,##0.###'‬'",
-        "#,##0.00 ¤;'‪'-#,##0.00'‬' ¤",
-        "'‪'%#,##0'‬'",
-        "#E0",
+        arabext{
+            symbols{
+                decimal{"٫"}
+                exponential{"×۱۰^"}
+                group{"٬"}
+                list{"؛"}
+                perMille{"؉"}
+                percentSign{"٪"}
+            }
+        }
+        default{"arabext"}
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤;'‪'-#,##0.00'‬' ¤"}
+                decimalFormat{"#,##0.###;'‪'-#,##0.###'‬'"}
+                percentFormat{"'‪'%#,##0'‬'"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{"/"}
+                exponential{"E"}
+                group{"،"}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"−"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
     }
     Version{"2.0.47.72"}
     calendar{
@@ -512,7 +525,6 @@ fa{
             }
         }
     }
-    defaultNumberingSystem{"arabext"}
     delimiters{
         alternateQuotationEnd{"›"}
         alternateQuotationStart{"‹"}
