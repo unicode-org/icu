@@ -19,18 +19,15 @@ ne{
         "Deva",
     }
     NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "०",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
+        default{"deva"}
+        latn{
+            symbols{
+                decimal{"."}
+                group{","}
+                list{";"}
+                minusSign{"-"}
+            }
+        }
     }
     Version{"2.0.47.63"}
     calendar{
@@ -128,7 +125,6 @@ ne{
             }
         }
     }
-    defaultNumberingSystem{"deva"}
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}

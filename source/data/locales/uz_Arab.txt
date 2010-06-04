@@ -21,21 +21,24 @@ uz_Arab{
         "Arab",
     }
     NumberElements{
-        "٫",
-        "٬",
-        ";",
-        "٪",
-        "۰",
-        "#",
-        "−",
-        "×۱۰^",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
+        arabext{
+            symbols{
+                decimal{"٫"}
+                exponential{"×۱۰^"}
+                group{"٬"}
+                percentSign{"٪"}
+            }
+        }
+        default{"arabext"}
+        latn{
+            symbols{
+                decimal{","}
+                group{"."}
+                minusSign{"−"}
+            }
+        }
     }
     Version{"2.0.47.70"}
-    defaultNumberingSystem{"arabext"}
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}

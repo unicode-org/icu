@@ -17,18 +17,12 @@ uz_Latn{
         "Latn",
     }
     NumberElements{
-        ",",
-        " ",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
+        latn{
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
     }
     Version{"2.0.47.68"}
     calendar{

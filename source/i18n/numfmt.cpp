@@ -104,6 +104,13 @@ static const UChar * const gLastResortNumberPatterns[] =
     gLastResortPluralCurrencyPat,
 };
 
+// Keys used for accessing resource bundles
+
+static const char *gNumberElements = "NumberElements";
+static const char *gLatn = "latn";
+static const char *gPatterns = "patterns";
+static const char *gFormatKeys[] = { "decimalFormat", "currencyFormat", "percentFormat", "scientificFormat" };
+
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
 static UHashtable * NumberingSystem_cache = NULL;
 
@@ -1083,8 +1090,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     NumberFormat* f = NULL;
     DecimalFormatSymbols* symbolsToAdopt = NULL;
     UnicodeString pattern;
-    UResourceBundle *resource = ures_open((char *)0, desiredLocale.getName(), &status);
-    UResourceBundle *numberPatterns = ures_getByKey(resource, DecimalFormat::fgNumberPatterns, NULL, &status);
+    UResourceBundle *resource = ures_open(NULL, desiredLocale.getName(), &status);
     NumberingSystem *ns = NULL;
     UBool deleteSymbols = TRUE;
     UHashtable * cache = NULL;
@@ -1102,13 +1108,6 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         pattern.setTo(TRUE, gLastResortNumberPatterns[style], -1);
     }
     else {
-        // If not all the styled patterns exists for the NumberFormat in this locale,
-        // sets the status code to failure and returns nil.
-        if (ures_getSize(numberPatterns) < (int32_t)(sizeof(gLastResortNumberPatterns)/sizeof(gLastResortNumberPatterns[0])) -2 ) { //minus 2: ISO and plural
-            status = U_INVALID_FORMAT_ERROR;
-            goto cleanup;
-        }
-
         // Loads the decimal symbols of the desired locale.
         symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
 
@@ -1123,7 +1122,12 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                                      style == kPluralCurrencyStyle) ?
                                     kCurrencyStyle : style);
 
-        const UChar *patResStr = ures_getStringByIndex(numberPatterns, (int32_t)styleInNumberPattern, &patLen, &status);
+        resource = ures_getByKeyWithFallback(resource, gNumberElements, resource, &status);
+        // TODO : Get patterns on a per numbering system basis, for right now assumes "latn" for patterns
+        resource = ures_getByKeyWithFallback(resource, gLatn, resource, &status);
+        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
+
+        const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[styleInNumberPattern], &patLen, &status);
 
         // Creates the specified decimal format style of the desired locale.
         pattern.setTo(TRUE, patResStr, patLen);
@@ -1258,11 +1262,10 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         deleteSymbols = FALSE;
     }
 
-    f->setLocaleIDs(ures_getLocaleByType(numberPatterns, ULOC_VALID_LOCALE, &status),
-                    ures_getLocaleByType(numberPatterns, ULOC_ACTUAL_LOCALE, &status));
+    f->setLocaleIDs(ures_getLocaleByType(resource, ULOC_VALID_LOCALE, &status),
+                    ures_getLocaleByType(resource, ULOC_ACTUAL_LOCALE, &status));
 
 cleanup:
-    ures_close(numberPatterns);
     ures_close(resource);
 
     if (deleteNS && ns) {

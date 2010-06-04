@@ -23,24 +23,14 @@ kn{
         "Knda",
     }
     NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "೦",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
+        default{"knda"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+        }
     }
     Version{"2.0.47.63"}
     calendar{
@@ -156,5 +146,4 @@ kn{
             }
         }
     }
-    defaultNumberingSystem{"knda"}
 }
