@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -37,6 +37,11 @@ static void TestSpelloutNumberParse(void);
  * The function used to test significant digits in the Number format API
  **/
 static void TestSignificantDigits(void);
+
+/**
+ * The function used to test Number format API rounding with significant digits
+ **/
+static void TestSigDigRounding(void);
 
 /**
  * The function used to test the Number format API with padding
