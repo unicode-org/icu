@@ -513,8 +513,9 @@ public class SimpleDateFormat extends DateFormat {
                 numberFormat = NumberFormat.getInstance(locale);
             } else {
                 char digit0 = ns.getDescription().charAt(0);
+                String nsName = ns.getName();
                 // Use a NumberFormat optimized for date formatting
-                numberFormat = new DateNumberFormat(locale, digit0);
+                numberFormat = new DateNumberFormat(locale, digit0, nsName);
             }
         }
         // Note: deferring calendar calculation until when we really need it.

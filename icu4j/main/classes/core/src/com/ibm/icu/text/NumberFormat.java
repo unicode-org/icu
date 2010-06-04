@@ -1387,27 +1387,12 @@ public abstract class NumberFormat extends UFormat {
 
         // TEMPORARY, until we get scientific patterns into the main
         // resources:  Retrieve scientific patterns from our resources.
-        if (choice == SCIENTIFICSTYLE) {
+        //if (choice == SCIENTIFICSTYLE) {
             // Temporarily hard code; retrieve from resource later
             /*For ICU compatibility [Richard/GCL]*/
-            return "#E0";
+        //    return "#E0";
             // return NumberFormat.getBaseStringArray("NumberPatterns")[SCIENTIFICSTYLE];
-        }
-        // TEMPORARY: Use rounding for Swiss currency
-        //if (choice == CURRENCYSTYLE &&
-        //    forLocale.getCountry().equals("CH")) {
-        //    return "'Fr. '#,##0.05;'Fr.-'#,##0.05";
         //}
-        // TEMPORARY: Special case IN number format
-        //if (choice == NUMBERSTYLE &&
-        //    forLocale.getCountry().equals("IN")) {
-        //    return "#,##,##0.###";
-        //}
-
-        // {dlf}
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
-        String[] numberPatterns = rb.getStringArray("NumberPatterns");
 
         /* {dlf}
         // Try the cache first
@@ -1421,9 +1406,6 @@ public abstract class NumberFormat extends UFormat {
         }
         */
 
-        /*Bug 4408066
-         Add codes for the new method getIntegerInstance() [Richard/GCL]
-        */
         /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
          * the pattern is the same as the pattern of CURRENCYSTYLE
          * but by replacing the single currency sign with
@@ -1432,7 +1414,16 @@ public abstract class NumberFormat extends UFormat {
         int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE :
                 ((choice == ISOCURRENCYSTYLE || choice == PLURALCURRENCYSTYLE)?
                 CURRENCYSTYLE : choice); //[Richard/GCL]
-        return numberPatterns[entry]; //[Richard/GCL]
+        
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
+        getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
+        String[] numberPatternKeys = { "decimalFormat", "currencyFormat", "percentFormat", "scientificFormat" };
+        return rb.getStringWithFallback("NumberElements/latn/patterns/"+numberPatternKeys[entry]);
+        //
+        // TODO: Make lookups of patterns depend on the locale's numbering system.
+        //       Right now we assume "latn" because no locales have any variations this way.
+        //       But we have the structure in CLDR to do this.
+        //
     }
 
     /**

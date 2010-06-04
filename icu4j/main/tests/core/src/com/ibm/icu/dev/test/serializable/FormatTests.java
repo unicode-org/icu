@@ -2077,7 +2077,7 @@ public class FormatTests
             DateNumberFormat[] dnfmts = new DateNumberFormat[locales.length];
             for (int i = 0; i < locales.length; i++) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
-                dnfmts[i] = new DateNumberFormat(uloc,'0');
+                dnfmts[i] = new DateNumberFormat(uloc,'0',"latn");
             }
             return dnfmts;
         }
