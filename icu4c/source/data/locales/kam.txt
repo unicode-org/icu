@@ -15,11 +15,12 @@ kam{
     LocaleScript{
         "Latn",
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤#,##0.00;(¤#,##0.00)",
-        "#,##0%",
-        "#E0",
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+            }
+        }
     }
     Version{"2.0.46.85"}
     calendar{

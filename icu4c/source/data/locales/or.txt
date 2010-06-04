@@ -24,24 +24,18 @@ or{
         "Orya",
     }
     NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "୦",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
+        default{"orya"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+            symbols{
+                decimal{"."}
+                group{","}
+            }
+        }
     }
     Version{"2.0.47.70"}
     calendar{
@@ -141,5 +135,4 @@ or{
             }
         }
     }
-    defaultNumberingSystem{"orya"}
 }

@@ -2664,6 +2664,8 @@ void NumberFormatTest::TestNumberingSystems() {
     Locale loc2("en", "US", "", "numbers=hebr");
     Locale loc3("en", "US", "", "numbers=arabext");
     Locale loc4("en", "US", "", "numbers=foobar");
+    Locale loc5("ar", "EG", "", ""); // ar_EG uses arab numbering system
+    Locale loc6("ar", "MA", "", ""); // ar_MA uses latn numbering system
 
     NumberFormat* fmt1= NumberFormat::createInstance(loc1, ec);
     if (U_FAILURE(ec)) {
@@ -2677,11 +2679,21 @@ void NumberFormatTest::TestNumberingSystems() {
     if (U_FAILURE(ec)) {
         dataerrln("FAIL: getInstance(en_US@numbers=arabext) - %s", u_errorName(ec));
     }
+    NumberFormat* fmt5= NumberFormat::createInstance(loc5, ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: getInstance(ar_EG) - %s", u_errorName(ec));
+    }
+    NumberFormat* fmt6= NumberFormat::createInstance(loc6, ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: getInstance(ar_MA) - %s", u_errorName(ec));
+    }
 
-    if (U_SUCCESS(ec) && fmt1 != NULL && fmt2 != NULL && fmt3 != NULL) {
+    if (U_SUCCESS(ec) && fmt1 != NULL && fmt2 != NULL && fmt3 != NULL && fmt5 != NULL && fmt6 != NULL) {
         expect2(*fmt1, 1234.567, CharsToUnicodeString("\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57"));
         expect3(*fmt2, 5678.0, CharsToUnicodeString("\\u05D4\\u05F3\\u05EA\\u05E8\\u05E2\\u05F4\\u05D7"));
         expect2(*fmt3, 1234.567, CharsToUnicodeString("\\u06F1,\\u06F2\\u06F3\\u06F4.\\u06F5\\u06F6\\u06F7"));
+        expect2(*fmt5, 1234.567, CharsToUnicodeString("\\u0661\\u066c\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667"));
+        expect2(*fmt6, 1234.567, CharsToUnicodeString("1.234,567"));
     }
 
     // Test bogus keyword value
@@ -3008,7 +3020,7 @@ NumberFormatTest::TestCurrencyParsing() {
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
         {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
-        {"pa_PK", "1", "USD", "US$\\u00a0\\u0a67.\\u0a66\\u0a66", "USD\\u00a0\\u0a67.\\u0a66\\u0a66", "\\u0a67.\\u0a66\\u0a66 USD"},
+        {"pa_IN", "1", "USD", "US$\\u00a0\\u0a67.\\u0a66\\u0a66", "USD\\u00a0\\u0a67.\\u0a66\\u0a66", "\\u0a67.\\u0a66\\u0a66 USD"},
         {"es_AR", "1", "USD", "US$\\u00a01,00", "USD\\u00a01,00", "1,00 d\\u00f3lar estadounidense"},
         {"ar_EG", "1", "USD", "US$\\u00a0\\u0661\\u066b\\u0660\\u0660", "USD\\u00a0\\u0661\\u066b\\u0660\\u0660", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
         {"fa_CA", "1", "USD", "\\u06f1\\u066b\\u06f0\\u06f0\\u00a0US$", "\\u06f1\\u066b\\u06f0\\u06f0\\u00a0USD", "\\u06f1\\u066b\\u06f0\\u06f0\\u0020\\u062f\\u0644\\u0627\\u0631\\u0020\\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627"},

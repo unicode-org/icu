@@ -1640,15 +1640,21 @@ void NumberFormatRegressionTest::Test4122840(void)
             NULL/*"java.text.resources.LocaleElements"*/, 
             locales[i], status);
         failure(status, "new ResourceBundle");
-        ResourceBundle numPat = rb->get("NumberPatterns", status);
-        failure(status, "new ResourceBundle(NumberPatterns)");
-        //
+        ResourceBundle numPat = rb->getWithFallback("NumberElements", status);
+        failure(status, "rb.get(NumberElements)");
+        numPat = numPat.getWithFallback("latn",status);
+        failure(status, "rb.get(latn)");
+        numPat = numPat.getWithFallback("patterns",status);
+        failure(status, "rb.get(patterns)");
+        numPat = numPat.getWithFallback("currencyFormat",status);
+        failure(status, "rb.get(currencyFormat)");
+       //
         // Get the currency pattern for this locale.  We have to fish it
         // out of the ResourceBundle directly, since DecimalFormat.toPattern
         // will return the localized symbol, not \00a4
         //
-        UnicodeString pattern = numPat.getStringEx(1, status);
-        failure(status, "rb->getStringArray");
+        UnicodeString pattern = numPat.getString(status);
+        failure(status, "rb->getString()");
 
         UChar fo[] = { 0x00A4 };
         UnicodeString foo(fo, 1, 1);

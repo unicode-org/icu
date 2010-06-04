@@ -9,24 +9,14 @@
 pt_PT{
     AuxExemplarCharacters{"[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ù ŭ û ü ū ÿ]"}
     NumberElements{
-        ",",
-        " ",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+            }
+            symbols{
+                group{" "}
+            }
+        }
     }
     Version{"2.0.47.71"}
     calendar{

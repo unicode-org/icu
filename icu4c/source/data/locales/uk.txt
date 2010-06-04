@@ -18,26 +18,26 @@ uk{
         "Cyrl",
     }
     NumberElements{
-        ",",
-        " ",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
     }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"2.0.48.64"}
+    Version{"2.0.48.76"}
     calendar{
         coptic{
             monthNames{
