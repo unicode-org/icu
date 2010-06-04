@@ -1108,19 +1108,17 @@ DecimalFormat::_format(const DigitList &number,
         return appendTo;
     }
 
-    if (fRoundingIncrement == NULL) {
-        if (fUseExponentialNotation || areSignificantDigitsUsed()) {
-            int32_t sigDigits = precision();
-            if (sigDigits > 0) {
-                adjustedNum.round(sigDigits);
-            }
-        } else {
-            // Fixed point format.  Round to a set number of fraction digits.
-            int32_t numFractionDigits = precision();
-            adjustedNum.roundFixedPoint(numFractionDigits);
+    if (fUseExponentialNotation || areSignificantDigitsUsed()) {
+        int32_t sigDigits = precision();
+        if (sigDigits > 0) {
+            adjustedNum.round(sigDigits);
         }
+    } else {
+        // Fixed point format.  Round to a set number of fraction digits.
+        int32_t numFractionDigits = precision();
+        adjustedNum.roundFixedPoint(numFractionDigits);
     }
-
+ 
     return subformat(appendTo, handler, adjustedNum, FALSE);
 }
 

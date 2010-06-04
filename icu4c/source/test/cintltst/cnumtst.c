@@ -44,6 +44,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNumberFormat);
     TESTCASE(TestSpelloutNumberParse);
     TESTCASE(TestSignificantDigits);
+    TESTCASE(TestSigDigRounding);
     TESTCASE(TestNumberFormatPadding);
     TESTCASE(TestInt64Format);
     TESTCASE(TestNonExistentCurrency);
@@ -883,6 +884,43 @@ static void TestSignificantDigits()
     else
         log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
     free(result);
+    unum_close(fmt);
+}
+
+static void TestSigDigRounding()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UChar expected[128];
+    UChar result[128];
+    char		temp1[128];
+    char		temp2[128];
+    UNumberFormat* fmt;
+    double d = 123.4;
+
+    fmt=unum_open(UNUM_DECIMAL, NULL, 0, NULL /* "en_US"*/, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
+        return;
+    }
+    unum_setAttribute(fmt, UNUM_LENIENT_PARSE, FALSE);
+    unum_setAttribute(fmt, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
+    unum_setAttribute(fmt, UNUM_MAX_SIGNIFICANT_DIGITS, 2);
+//	unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 0);
+
+    unum_setAttribute(fmt, UNUM_ROUNDING_MODE, UNUM_ROUND_UP);
+    unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, 20.0);
+
+    (void)unum_formatDouble(fmt, d, result, sizeof(result) / sizeof(result[0]), NULL, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
+        return;
+    }
+
+    u_uastrcpy(expected, "140");
+    if(u_strcmp(result, expected)!=0)
+        log_err("FAIL: Error in unum_formatDouble result %s instead of %s\n", u_austrcpy(temp1, result), u_austrcpy(temp2, expected) );
+    
     unum_close(fmt);
 }
 
