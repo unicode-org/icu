@@ -586,7 +586,9 @@ public final class CollationElementIterator
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
         m_buffer_ = new StringBuilder();
         m_utilSpecialBackUp_ = new Backup();
-        m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
+        if (collator.getDecomposition() != Collator.NO_DECOMPOSITION) {
+            m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
+        }
     }
 
     /**
