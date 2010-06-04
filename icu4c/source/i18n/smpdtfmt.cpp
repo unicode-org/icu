@@ -1556,9 +1556,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             currentNumberFormat->setMinimumIntegerDigits((count > 3) ? 3 : count);
             currentNumberFormat->setMaximumIntegerDigits(maxIntCount);
             if (count == 1) {
-                value = (value + 50) / 100;
+                value /= 100;
             } else if (count == 2) {
-                value = (value + 5) / 10;
+                value /= 10;
             }
             FieldPosition p(0);
             currentNumberFormat->format(value, appendTo, p);
