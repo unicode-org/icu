@@ -912,9 +912,9 @@ public class SimpleDateFormat extends DateFormat {
                 numberFormat.setMinimumIntegerDigits(Math.min(3, count));
                 numberFormat.setMaximumIntegerDigits(maxIntCount);
                 if (count == 1) {
-                    value = (value + 50) / 100;
+                    value /= 100;
                 } else if (count == 2) {
-                    value = (value + 5) / 10;
+                    value /= 10;
                 }
                 FieldPosition p = new FieldPosition(-1);
                 numberFormat.format((long) value, buf, p);
