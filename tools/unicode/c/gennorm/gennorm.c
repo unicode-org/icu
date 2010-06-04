@@ -39,7 +39,7 @@ U_CDECL_BEGIN
 #include "gennorm.h"
 U_CDECL_END
 
-UBool beVerbose=FALSE, haveCopyright=TRUE;
+UBool beVerbose=FALSE;
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -55,28 +55,18 @@ enum {
     HELP_H,
     HELP_QUESTION_MARK,
     VERBOSE,
-    COPYRIGHT,
     DESTDIR,
     SOURCEDIR,
-    UNICODE_VERSION,
-    ICUDATADIR,
-    CSOURCE,
-    STORE_FLAGS,
-    WRITE_NORM2
+    ICUDATADIR
 };
 
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
-    UOPTION_ICUDATADIR,
-    UOPTION_DEF("csource", 'C', UOPT_NO_ARG),
-    UOPTION_DEF("prune", 'p', UOPT_REQUIRES_ARG),
-    UOPTION_DEF("write-norm2", '\1', UOPT_NO_ARG)
+    UOPTION_ICUDATADIR
 };
 
 extern int
@@ -91,9 +81,8 @@ main(int argc, char* argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
-    options[4].value=u_getDataDirectory();
-    options[5].value="";
-    options[6].value="3.0.0";
+    options[DESTDIR].value=u_getDataDirectory();
+    options[SOURCEDIR].value="";
     options[ICUDATADIR].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
@@ -103,7 +92,7 @@ main(int argc, char* argv[]) {
             "error in command line argument \"%s\"\n",
             argv[-argc]);
     }
-    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+    if(argc<0 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         /*
          * Broken into chucks because the C89 standard says the minimum
          * required supported string length is 509 bytes.
@@ -112,27 +101,13 @@ main(int argc, char* argv[]) {
             "Usage: %s [-options] [suffix]\n"
             "\n"
             "Read the UnicodeData.txt file and other Unicode properties files and\n"
-            "create a binary file " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " with the normalization data\n"
+            "write nfc.txt and nfkc.txt files for gennorm2\n"
             "\n",
             argv[0]);
         fprintf(stderr,
             "Options:\n"
             "\t-h or -? or --help  this usage text\n"
-            "\t-v or --verbose     verbose output\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
-            "\t-C or --csource     generate a .c source file rather than the .icu binary\n");
-        fprintf(stderr,
-            "\t-p or --prune flags Prune for data modularization:\n"
-            "\t                    Determine what data is to be stored.\n"
-            "\t        0 (zero) stores minimal data (only for NFD)\n"
-            "\t        lowercase letters turn off data, uppercase turn on (use with 0)\n");
-        fprintf(stderr,
-            "\t        k: compatibility decompositions (NFKC, NFKD)\n"
-            "\t        c: composition data (NFC, NFKC)\n"
-            "\t        f: FCD data (will be generated at load time)\n"
-            "\t        a: auxiliary data (canonical closure etc.)\n"
-            "\t        x: exclusion sets (Unicode 3.2-level normalization)\n");
+            "\t-v or --verbose     verbose output\n");
         fprintf(stderr,
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
@@ -142,16 +117,13 @@ main(int argc, char* argv[]) {
             "\t                    to the source file basenames before opening;\n"
             "\t                    'gennorm new' will read UnicodeData-new.txt etc.\n",
             u_getDataDirectory());
-        fprintf(stderr,
-            "\t--write-norm2      write nfc.txt and nfkc.txt files for gennorm2\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     /* get the options values */
-    beVerbose=options[2].doesOccur;
-    haveCopyright=options[3].doesOccur;
-    srcDir=options[5].value;
-    destDir=options[4].value;
+    beVerbose=options[VERBOSE].doesOccur;
+    srcDir=options[SOURCEDIR].value;
+    destDir=options[DESTDIR].value;
 
     if(argc>=2) {
         suffix=argv[1];
@@ -159,71 +131,10 @@ main(int argc, char* argv[]) {
         suffix=NULL;
     }
 
-#if UCONFIG_NO_NORMALIZATION
-
-    fprintf(stderr,
-        "gennorm writes a dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
-        " because UCONFIG_NO_NORMALIZATION is set, \n"
-        "see icu/source/common/unicode/uconfig.h\n");
-    generateData(destDir, options[CSOURCE].doesOccur);
-
-#else
-
-    setUnicodeVersion(options[6].value);
+#if !UCONFIG_NO_NORMALIZATION
 
     if (options[ICUDATADIR].doesOccur) {
         u_setDataDirectory(options[ICUDATADIR].value);
-    }
-
-    if(options[STORE_FLAGS].doesOccur) {
-        const char *s=options[STORE_FLAGS].value;
-        char c;
-
-        while((c=*s++)!=0) {
-            switch(c) {
-            case '0':
-                gStoreFlags=0;  /* store minimal data (only for NFD) */
-                break;
-
-            /* lowercase letters: omit data */
-            case 'k':
-                gStoreFlags&=~U_MASK(UGENNORM_STORE_COMPAT);
-                break;
-            case 'c':
-                gStoreFlags&=~U_MASK(UGENNORM_STORE_COMPOSITION);
-                break;
-            case 'f':
-                gStoreFlags&=~U_MASK(UGENNORM_STORE_FCD);
-                break;
-            case 'a':
-                gStoreFlags&=~U_MASK(UGENNORM_STORE_AUX);
-                break;
-            case 'x':
-                gStoreFlags&=~U_MASK(UGENNORM_STORE_EXCLUSIONS);
-                break;
-
-            /* uppercase letters: include data (use with 0) */
-            case 'K':
-                gStoreFlags|=U_MASK(UGENNORM_STORE_COMPAT);
-                break;
-            case 'C':
-                gStoreFlags|=U_MASK(UGENNORM_STORE_COMPOSITION);
-                break;
-            case 'F':
-                gStoreFlags|=U_MASK(UGENNORM_STORE_FCD);
-                break;
-            case 'A':
-                gStoreFlags|=U_MASK(UGENNORM_STORE_AUX);
-                break;
-            case 'X':
-                gStoreFlags|=U_MASK(UGENNORM_STORE_EXCLUSIONS);
-                break;
-
-            default:
-                fprintf(stderr, "ignoring undefined prune flag '%c'\n", c);
-                break;
-            }
-        }
     }
 
     /*
@@ -290,14 +201,7 @@ main(int argc, char* argv[]) {
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
-        if(options[WRITE_NORM2].doesOccur) {
-            writeNorm2(destDir);
-        }
-
-        processData();
-
-        /* write the properties data file */
-        generateData(destDir, options[CSOURCE].doesOccur);
+        writeNorm2(destDir);
 
         cleanUpData();
     }
@@ -319,7 +223,6 @@ derivedNormalizationPropertiesLineFn(void *context,
     char *s;
     uint32_t start, end;
     int32_t count;
-    uint8_t qcFlags;
 
     /* get code point range */
     count=u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
@@ -335,77 +238,10 @@ derivedNormalizationPropertiesLineFn(void *context,
 
     /* get property - ignore unrecognized ones */
     s=(char *)u_skipWhitespace(fields[1][0]);
-    if(*s=='N' && s[1]=='F') {
-        /* quick check flag */
-        qcFlags=0x11;
-        s+=2;
-        if(*s=='K') {
-            qcFlags<<=1;
-            ++s;
-        }
-
-        if(*s=='C' && s[1]=='_') {
-            s+=2;
-        } else if(*s=='D' && s[1]=='_') {
-            qcFlags<<=2;
-            s+=2;
-        } else {
-            return;
-        }
-
-        if(0==uprv_strncmp(s, "NO", 2)) {
-            qcFlags&=0xf;
-        } else if(0==uprv_strncmp(s, "MAYBE", 5)) {
-            qcFlags&=0x30;
-        } else if(0==uprv_strncmp(s, "QC", 2) && *(s=(char *)u_skipWhitespace(s+2))==';') {
-            /*
-             * Unicode 4.0.1:
-             * changes single field "NFD_NO" -> two fields "NFD_QC; N" etc.
-             */
-            /* start of the field */
-            s=(char *)u_skipWhitespace(s+1);
-            if(*s=='N') {
-                qcFlags&=0xf;
-            } else if(*s=='M') {
-                qcFlags&=0x30;
-            } else {
-                return; /* do nothing for "Yes" because it's the default value */
-            }
-        } else {
-            return; /* do nothing for "Yes" because it's the default value */
-        }
-
-        /* set this flag for all code points in this range */
-        while(start<=end) {
-            setQCFlags(start++, qcFlags);
-        }
-    } else if(0==uprv_memcmp(s, "Comp_Ex", 7) || 0==uprv_memcmp(s, "Full_Composition_Exclusion", 26)) {
+    if(0==uprv_memcmp(s, "Comp_Ex", 7) || 0==uprv_memcmp(s, "Full_Composition_Exclusion", 26)) {
         /* full composition exclusion */
         while(start<=end) {
             setCompositionExclusion(start++);
-        }
-    } else if(
-        ((0==uprv_memcmp(s, "FNC", 3) && *(s=(char *)u_skipWhitespace(s+3))==';') || 
-        (0==uprv_memcmp(s, "FC_NFKC", 7) && *(s=(char *)u_skipWhitespace(s+7))==';'))
-        
-    ) {
-        /* FC_NFKC_Closure, parse field 2 to get the string */
-        char *t;
-
-        /* start of the field */
-        s=(char *)u_skipWhitespace(s+1);
-
-        /* find the end of the field */
-        for(t=s; *t!=';' && *t!='#' && *t!=0 && *t!='\n' && *t!='\r'; ++t) {}
-        *t=0;
-
-        string[0]=(UChar)u_parseString(s, string+1, 31, NULL, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            fprintf(stderr, "gennorm error: illegal FNC string at %s\n", fields[0][0]);
-            exit(*pErrorCode);
-        }
-        while(start<=end) {
-            setFNC(start++, string);
         }
     }
 }
@@ -449,12 +285,6 @@ unicodeDataLineFn(void *context,
 
     /* reset the properties */
     uprv_memset(&norm, 0, sizeof(Norm));
-
-    /*
-     * The combiningIndex must not be initialized to 0 because 0 is the
-     * combiningIndex of the first forward-combining character.
-     */
-    norm.combiningIndex=0xffff;
 
     /* get the character code, field 0 */
     code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
