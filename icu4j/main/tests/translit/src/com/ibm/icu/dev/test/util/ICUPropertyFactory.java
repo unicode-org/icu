@@ -40,8 +40,10 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             setName(propName);
             this.propEnum = propEnum;
             setType(internalGetPropertyType(propEnum));
-            if (propEnum == UProperty.DEFAULT_IGNORABLE_CODE_POINT || propEnum == UProperty.BIDI_CLASS) {
+            if (propEnum == UProperty.DEFAULT_IGNORABLE_CODE_POINT || propEnum == UProperty.BIDI_CLASS || propEnum == UProperty.GENERAL_CATEGORY) {
                 setUniformUnassigned(false);
+            } else {
+                setUniformUnassigned(true);
             }
         }
 
