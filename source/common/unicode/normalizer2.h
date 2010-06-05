@@ -37,6 +37,7 @@ U_NAMESPACE_BEGIN
  * for using custom mapping tables.
  * All instances of this class are unmodifiable/immutable.
  * Instances returned by getInstance() are singletons that must not be deleted by the caller.
+ * The Normalizer2 class is not intended for public subclassing.
  *
  * The primary functions are to produce a normalized string and to detect whether
  * a string is already normalized.
