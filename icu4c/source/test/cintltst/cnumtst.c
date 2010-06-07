@@ -905,7 +905,7 @@ static void TestSigDigRounding()
     unum_setAttribute(fmt, UNUM_LENIENT_PARSE, FALSE);
     unum_setAttribute(fmt, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
     unum_setAttribute(fmt, UNUM_MAX_SIGNIFICANT_DIGITS, 2);
-//	unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 0);
+    /* unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 0); */
 
     unum_setAttribute(fmt, UNUM_ROUNDING_MODE, UNUM_ROUND_UP);
     unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, 20.0);
