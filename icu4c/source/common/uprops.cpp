@@ -269,29 +269,22 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                 }
             } else if(column==UPROPS_SRC_CASE_AND_NORM) {
 #if !UCONFIG_NO_NORMALIZATION
-                UChar nfdBuffer[4];
-                const UChar *nfd;
-                int32_t nfdLength;
+                UnicodeString nfd;
                 UErrorCode errorCode=U_ZERO_ERROR;
-                const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
+                const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
                 if(U_FAILURE(errorCode)) {
                     return FALSE;
                 }
                 switch(which) {
                 case UCHAR_CHANGES_WHEN_CASEFOLDED:
-                    nfd=nfcImpl->getDecomposition(c, nfdBuffer, nfdLength);
-                    if(nfd!=NULL) {
+                    if(nfcNorm2->getDecomposition(c, nfd)) {
                         /* c has a decomposition */
-                        if(nfdLength==1) {
+                        if(nfd.length()==1) {
                             c=nfd[0];  /* single BMP code point */
-                        } else if(nfdLength<=U16_MAX_LENGTH) {
-                            int32_t i=0;
-                            U16_NEXT(nfd, i, nfdLength, c);
-                            if(i==nfdLength) {
-                                /* single supplementary code point */
-                            } else {
-                                c=U_SENTINEL;
-                            }
+                        } else if(nfd.length()<=U16_MAX_LENGTH &&
+                                  nfd.length()==U16_LENGTH(c=nfd.char32At(0))
+                        ) {
+                            /* single supplementary code point */
                         } else {
                             c=U_SENTINEL;
                         }
@@ -308,8 +301,12 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                         /* guess some large but stack-friendly capacity */
                         UChar dest[2*UCASE_MAX_STRING_LENGTH];
                         int32_t destLength;
-                        destLength=u_strFoldCase(dest, LENGTHOF(dest), nfd, nfdLength, U_FOLD_CASE_DEFAULT, &errorCode);
-                        return (UBool)(U_SUCCESS(errorCode) && 0!=u_strCompare(nfd, nfdLength, dest, destLength, FALSE));
+                        destLength=u_strFoldCase(dest, LENGTHOF(dest),
+                                                 nfd.getBuffer(), nfd.length(),
+                                                 U_FOLD_CASE_DEFAULT, &errorCode);
+                        return (UBool)(U_SUCCESS(errorCode) &&
+                                       0!=u_strCompare(nfd.getBuffer(), nfd.length(),
+                                                       dest, destLength, FALSE));
                     }
                 default:
                     break;

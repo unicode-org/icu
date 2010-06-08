@@ -1401,7 +1401,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
             UnicodeSet foldSet(*this);
             UnicodeString str;
             USetAdder sa = {
-                (USet *)&foldSet,
+                foldSet.toUSet(),
                 _set_add,
                 _set_addRange,
                 _set_addString,

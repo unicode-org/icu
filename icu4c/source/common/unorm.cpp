@@ -31,6 +31,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
+#include "unicode/unorm2.h"
 #include "normalizer2impl.h"
 #include "unormimp.h"
 #include "uprops.h"
@@ -58,7 +59,9 @@ unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength,
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
-        return unorm2_quickCheck((const UNormalizer2 *)&fn2, src, srcLength, pErrorCode);
+        return unorm2_quickCheck(
+            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
+            src, srcLength, pErrorCode);
     } else {
         return unorm2_quickCheck((const UNormalizer2 *)n2, src, srcLength, pErrorCode);
     }
@@ -79,7 +82,9 @@ unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
-        return unorm2_isNormalized((const UNormalizer2 *)&fn2, src, srcLength, pErrorCode);
+        return unorm2_isNormalized(
+            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
+            src, srcLength, pErrorCode);
     } else {
         return unorm2_isNormalized((const UNormalizer2 *)n2, src, srcLength, pErrorCode);
     }
@@ -96,7 +101,8 @@ unorm_normalize(const UChar *src, int32_t srcLength,
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
-        return unorm2_normalize((const UNormalizer2 *)&fn2,
+        return unorm2_normalize(
+            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
             src, srcLength, dest, destCapacity, pErrorCode);
     } else {
         return unorm2_normalize((const UNormalizer2 *)n2,
