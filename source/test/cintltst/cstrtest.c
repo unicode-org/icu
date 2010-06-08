@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2009, International Business Machines Corporation 
+* Copyright (C) 1998-2010, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -302,25 +302,25 @@ TestCompareInvEbcdicAsAscii() {
     static const char *const invStrings[][2]={
         /* invariant-character strings in ascending ASCII order */
         /* EBCDIC       native */
-        "",             "",
-        "\x6c",         "%",
-        "\xf0",         "0",
-        "\xf0\xf0",     "00",
-        "\xf0\xf0\x81", "00a",
-        "\x7e",         "=",
-        "\xc1",         "A",
-        "\xc1\xf0\xf0", "A00",
-        "\xc1\xf0\xf0", "A00",
-        "\xc1\xc1",     "AA",
-        "\xc1\xc1\xf0", "AA0",
-        "\x6d",         "_",
-        "\x81",         "a",
-        "\x81\xf0\xf0", "a00",
-        "\x81\xf0\xf0", "a00",
-        "\x81\x81",     "aa",
-        "\x81\x81\xf0", "aa0",
-        "\x81\x81\x81", "aaa",
-        "\x81\x81\x82", "aab"
+        { "",             "" },
+        { "\x6c",         "%" },
+        { "\xf0",         "0" },
+        { "\xf0\xf0",     "00" },
+        { "\xf0\xf0\x81", "00a" },
+        { "\x7e",         "=" },
+        { "\xc1",         "A" },
+        { "\xc1\xf0\xf0", "A00" },
+        { "\xc1\xf0\xf0", "A00" },
+        { "\xc1\xc1",     "AA" },
+        { "\xc1\xc1\xf0", "AA0" },
+        { "\x6d",         "_" },
+        { "\x81",         "a" },
+        { "\x81\xf0\xf0", "a00" },
+        { "\x81\xf0\xf0", "a00" },
+        { "\x81\x81",     "aa" },
+        { "\x81\x81\xf0", "aa0" },
+        { "\x81\x81\x81", "aaa" },
+        { "\x81\x81\x82", "aab" }
     };
     int32_t i;
     for(i=1; i<LENGTHOF(invStrings); ++i) {
