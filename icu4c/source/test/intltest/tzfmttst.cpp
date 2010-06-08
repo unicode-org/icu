@@ -32,6 +32,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
     switch (index) {
         TESTCASE(0, TestTimeZoneRoundTrip);
         TESTCASE(1, TestTimeRoundTrip);
+        TESTCASE(2, TestTimeZoneRoundTripPerf);
         default: name = ""; break;
     }
 }
@@ -231,6 +232,235 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                     delete outcal;
                 }
                 delete tz;
+            }
+            delete sdf;
+        }
+    }
+    delete cal;
+    delete tzids;
+}
+
+void
+TimeZoneFormatTest::TestTimeZoneRoundTripPerf(void) {
+    UErrorCode status = U_ZERO_ERROR;
+
+    SimpleTimeZone unknownZone(-31415, (UnicodeString)"Etc/Unknown");
+    int32_t badDstOffset = -1234;
+    int32_t badZoneOffset = -2345;
+
+    int32_t testDateData[][3] = {
+        {2007, 1, 15},
+        {2007, 6, 15},
+        {1990, 1, 15},
+        {1990, 6, 15},
+        {1960, 1, 15},
+        {1960, 6, 15},
+    };
+
+    Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone((UnicodeString)"UTC"), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Calendar::createInstance failed: %s", u_errorName(status));
+        return;
+    }
+
+    // Set up rule equivalency test range
+    UDate low, high;
+    cal->set(1900, UCAL_JANUARY, 1);
+    low = cal->getTime(status);
+    cal->set(2040, UCAL_JANUARY, 1);
+    high = cal->getTime(status);
+    if (U_FAILURE(status)) {
+        errln("getTime failed");
+        return;
+    }
+
+    // Set up test dates
+    UDate DATES[(sizeof(testDateData)/sizeof(int32_t))/3];
+    const int32_t nDates = (sizeof(testDateData)/sizeof(int32_t))/3;
+    cal->clear();
+    for (int32_t i = 0; i < nDates; i++) {
+        cal->set(testDateData[i][0], testDateData[i][1], testDateData[i][2]);
+        DATES[i] = cal->getTime(status);
+        if (U_FAILURE(status)) {
+            errln("getTime failed");
+            return;
+        }
+    }
+
+    // Set up test locales
+    const Locale testLocales[] = {
+        Locale("en"),
+        Locale("en_US"),
+        Locale("en_AU"),
+        Locale("de_DE"),
+        Locale("fr"),
+        Locale("ja_JP"),
+        Locale("ko"),
+        Locale("pt"),
+        Locale("th_TH"),
+        Locale("zh_Hans"),
+
+        Locale("it"),
+
+        Locale("en"),
+        Locale("en_US"),
+        Locale("en_AU"),
+        Locale("de_DE"),
+        Locale("fr"),
+        Locale("ja_JP"),
+        Locale("ko"),
+        Locale("pt"),
+        Locale("th_TH"),
+        Locale("zh_Hans"),
+    };
+
+    const Locale *LOCALES;
+    LOCALES = testLocales;
+
+    int32_t nLocales = 0;
+    const char* testAllProp = getProperty("TimeZoneRoundTripLocs");
+    if(testAllProp && uprv_strcmp(testAllProp, "one") == 0)
+        nLocales = 1;
+    else if (testAllProp && uprv_strcmp(testAllProp, "some") == 0)
+        nLocales = 10;
+    else if (testAllProp && uprv_strcmp(testAllProp, "limit") == 0)
+        nLocales = 11;
+    else
+        nLocales = sizeof(testLocales)/sizeof(Locale);
+
+    StringEnumeration *tzids = TimeZone::createEnumeration();
+    if (U_FAILURE(status)) {
+        errln("tzids->count failed");
+        return;
+    }
+
+    int32_t inRaw, inDst;
+    int32_t outRaw, outDst;
+
+    // Run the roundtrip test
+    for (int32_t locidx = 0; locidx < nLocales; locidx++) {
+        for (int32_t patidx = 0; patidx < NUM_PATTERNS; patidx++) {
+            SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
+            if (U_FAILURE(status)) {
+                errcheckln(status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
+                    PATTERNS[patidx] + " for locale " + LOCALES[locidx].getName() + " - " + u_errorName(status));
+                status = U_ZERO_ERROR;
+                continue;
+            }
+
+            tzids->reset(status);
+            const UnicodeString *tzid;
+            while ((tzid = tzids->snext(status))) {
+                TimeZone *tz = TimeZone::createTimeZone(*tzid);
+
+                for (int32_t datidx = 0; datidx < nDates; datidx++) {
+                    UnicodeString tzstr;
+                    FieldPosition fpos(0);
+                    // Format
+                    sdf->setTimeZone(*tz);
+                    sdf->format(DATES[datidx], tzstr, fpos);
+
+                    // Before parse, set unknown zone to SimpleDateFormat instance
+                    // just for making sure that it does not depends on the time zone
+                    // originally set.
+                    sdf->setTimeZone(unknownZone);
+
+                    // Parse
+                    ParsePosition pos(0);
+                    Calendar *outcal = Calendar::createInstance(unknownZone, status);
+                    if (U_FAILURE(status)) {
+                        errln("Failed to create an instance of calendar for receiving parse result.");
+                        status = U_ZERO_ERROR;
+                        continue;
+                    }
+                    outcal->set(UCAL_DST_OFFSET, badDstOffset);
+                    outcal->set(UCAL_ZONE_OFFSET, badZoneOffset);
+
+                    sdf->parse(tzstr, *outcal, pos);
+
+                    // Check the result
+                    const TimeZone &outtz = outcal->getTimeZone();
+                    UnicodeString outtzid;
+                    outtz.getID(outtzid);
+
+                    tz->getOffset(DATES[datidx], false, inRaw, inDst, status);
+                    if (U_FAILURE(status)) {
+                        errln((UnicodeString)"Failed to get offsets from time zone" + *tzid);
+                        status = U_ZERO_ERROR;
+                    }
+                    outtz.getOffset(DATES[datidx], false, outRaw, outDst, status);
+                    if (U_FAILURE(status)) {
+                        errln((UnicodeString)"Failed to get offsets from time zone" + outtzid);
+                        status = U_ZERO_ERROR;
+                    }
+
+                    if (uprv_strcmp(PATTERNS[patidx], "VVVV") == 0) {
+                        // Location: time zone rule must be preserved except
+                        // zones not actually associated with a specific location.
+                        // Time zones in this category do not have "/" in its ID.
+                        UnicodeString canonical;
+                        TimeZone::getCanonicalID(*tzid, canonical, status);
+                        if (U_FAILURE(status)) {
+                            // Uknown ID - we should not get here
+                            errln((UnicodeString)"Unknown ID " + *tzid);
+                            status = U_ZERO_ERROR;
+                        } else if (outtzid != canonical) {
+                            // Canonical ID did not match - check the rules
+                            if (!((BasicTimeZone*)&outtz)->hasEquivalentTransitions((BasicTimeZone&)*tz, low, high, TRUE, status)) {
+                                if (canonical.indexOf((UChar)0x27 /*'/'*/) == -1) {
+                                    // Exceptional cases, such as CET, EET, MET and WET
+                                    logln("Canonical round trip failed (as expected); tz=" + *tzid
+                                            + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                            + ", outtz=" + outtzid);
+                                } else {
+                                    errln("Canonical round trip failed; tz=" + *tzid
+                                        + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                        + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                        + ", outtz=" + outtzid);
+                                }
+                                if (U_FAILURE(status)) {
+                                    errln("hasEquivalentTransitions failed");
+                                    status = U_ZERO_ERROR;
+                                }
+                            }
+                        }
+
+                    } else {
+                        // Check if localized GMT format or RFC format is used.
+                        int32_t numDigits = 0;
+                        for (int n = 0; n < tzstr.length(); n++) {
+                            if (u_isdigit(tzstr.charAt(n))) {
+                                numDigits++;
+                            }
+                        }
+                        if (numDigits >= 3) {
+                            // Localized GMT or RFC: total offset (raw + dst) must be preserved.
+                            int32_t inOffset = inRaw + inDst;
+                            int32_t outOffset = outRaw + outDst;
+                            if (inOffset != outOffset) {
+                                errln((UnicodeString)"Offset round trip failed; tz=" + *tzid
+                                    + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                    + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                            }
+                        } else {
+                            // Specific or generic: raw offset must be preserved.
+                            if (inRaw != outRaw) {
+                                errln((UnicodeString)"Raw offset round trip failed; tz=" + *tzid
+                                    + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                    + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                    + ", inRawOffset=" + inRaw + ", outRawOffset=" + outRaw);
+                            }
+                        }
+                    }
+                    delete outcal;
+
+                }
+                delete tz;
+                // break  time zone loop
+                break;
+
             }
             delete sdf;
         }
