@@ -233,8 +233,8 @@ $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config
 	$(INSTALL_SCRIPT) $(top_srcdir)/config/icu-config-top $@
 	chmod u+w $@
 	@echo "# Following from @platform_make_fragment@" >> $@
-	sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
-	sed -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
+	LC_ALL=C sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
+	LC_ALL=C sed -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
 	cat $(top_srcdir)/config/icu-config-bottom >> $@
 	echo "# Rebuilt on "`date` >> $@
 	chmod u-w $@
