@@ -260,6 +260,27 @@ unorm2_append(const UNormalizer2 *norm2,
               UErrorCode *pErrorCode);
 
 /**
+ * Gets the decomposition mapping of c. Equivalent to unorm2_normalize(string(c))
+ * on a UNORM2_DECOMPOSE UNormalizer2 instance, but much faster.
+ * This function is independent of the mode of the UNormalizer2.
+ * @param norm2 UNormalizer2 instance
+ * @param c code point
+ * @param decomposition String buffer which will be set to c's
+ *                      decomposition mapping, if there is one.
+ * @param capacity number of UChars that can be written to decomposition
+ * @param pErrorCode Standard ICU error code. Its input value must
+ *                   pass the U_SUCCESS() test, or else the function returns
+ *                   immediately. Check for U_FAILURE() on output or use with
+ *                   function chaining. (See User Guide for details.)
+ * @return the non-negative length of c's decomposition, if there is one; otherwise a negative value
+ * @draft ICU 4.6
+ */
+U_DRAFT int32_t U_EXPORT2
+unorm2_getDecomposition(const UNormalizer2 *norm2,
+                        UChar32 c, UChar *decomposition, int32_t capacity,
+                        UErrorCode *pErrorCode);
+
+/**
  * Tests if the string is normalized.
  * Internally, in cases where the quickCheck() method would return "maybe"
  * (which is only possible for the two COMPOSE modes) this method
