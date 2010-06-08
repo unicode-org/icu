@@ -18,8 +18,7 @@
 */
 
 #include "unicode/utypes.h"
-#include "unicode/std_string.h"  // U_HAVE_STD_STRING, #include <string>
-#include "n2builder.h"  // UCONFIG_NO_NORMALIZATION=1 if !U_HAVE_STD_STRING
+#include "n2builder.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,6 +38,7 @@
 #include "toolutil.h"
 #include "unewdata.h"
 #include "utrie2.h"
+#include "uvectr32.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -110,12 +110,22 @@ struct Norm {
         }
     }
 
+    const CompositionPair *getCompositionPairs(int32_t &length) const {
+        if(compositions==NULL) {
+            length=0;
+            return NULL;
+        } else {
+            length=compositions->size()/2;
+            return reinterpret_cast<const CompositionPair *>(compositions->getBuffer());
+        }
+    }
+
     UnicodeString *mapping;
     UChar32 mappingCP;  // >=0 if mapping to 1 code point
     int32_t mappingPhase;
     MappingType mappingType;
 
-    U_STD_NSQ vector<CompositionPair> *compositions;
+    UVector32 *compositions;  // (trail, composite) pairs
     uint8_t cc;
     UBool combinesBack;
     UBool hasNoCompBoundaryAfter;
@@ -340,39 +350,42 @@ Normalizer2DataBuilder::addComposition(UChar32 start, UChar32 end, uint32_t valu
         // Flag for trailing character.
         createNorm(trail)->combinesBack=TRUE;
         // Insert (trail, composite) pair into compositions list for the lead character.
-        CompositionPair pair(trail, start);
+        IcuToolErrorCode errorCode("gennorm2/addComposition()");
         Norm *leadNorm=createNorm(lead);
-        U_STD_NSQ vector<CompositionPair> *compositions=leadNorm->compositions;
+        UVector32 *compositions=leadNorm->compositions;
+        int32_t i;
         if(compositions==NULL) {
-            compositions=leadNorm->compositions=new U_STD_NSQ vector<CompositionPair>;
-            compositions->push_back(pair);
+            compositions=leadNorm->compositions=new UVector32(errorCode);
+            i=0;  // "insert" the first pair at index 0
         } else {
             // Insertion sort, and check for duplicate trail characters.
-            U_STD_NSQ vector<CompositionPair>::iterator it;
-            for(it=compositions->begin(); it!=compositions->end(); ++it) {
-                if(trail==it->trail) {
+            int32_t length;
+            const CompositionPair *pairs=leadNorm->getCompositionPairs(length);
+            for(i=0; i<length; ++i) {
+                if(trail==pairs[i].trail) {
                     fprintf(stderr,
                             "gennorm2 error: same round-trip mapping for "
                             "more than 1 code point (e.g., U+%04lX) to U+%04lX + U+%04lX\n",
                             (long)start, (long)lead, (long)trail);
                     exit(U_INVALID_FORMAT_ERROR);
                 }
-                if(trail<it->trail) {
+                if(trail<pairs[i].trail) {
                     break;
                 }
             }
-            compositions->insert(it, pair);
         }
+        compositions->insertElementAt(trail, 2*i, errorCode);
+        compositions->insertElementAt(start, 2*i+1, errorCode);
     }
 }
 
 UBool Normalizer2DataBuilder::combinesWithCCBetween(const Norm &norm,
                                                     uint8_t lowCC, uint8_t highCC) const {
-    const U_STD_NSQ vector<CompositionPair> *compositions=norm.compositions;
-    if(compositions!=NULL && (highCC-lowCC)>=2) {
-        U_STD_NSQ vector<CompositionPair>::const_iterator it;
-        for(it=compositions->begin(); it!=compositions->end(); ++it) {
-            uint8_t trailCC=getCC(it->trail);
+    if((highCC-lowCC)>=2) {
+        int32_t length;
+        const CompositionPair *pairs=norm.getCompositionPairs(length);
+        for(int32_t i=0; i<length; ++i) {
+            uint8_t trailCC=getCC(pairs[i].trail);
             if(lowCC<trailCC && trailCC<highCC) {
                 return TRUE;
             }
@@ -382,16 +395,14 @@ UBool Normalizer2DataBuilder::combinesWithCCBetween(const Norm &norm,
 }
 
 UChar32 Normalizer2DataBuilder::combine(const Norm &norm, UChar32 trail) const {
-    const U_STD_NSQ vector<CompositionPair> *compositions=norm.compositions;
-    if(compositions!=NULL) {
-        U_STD_NSQ vector<CompositionPair>::const_iterator it;
-        for(it=compositions->begin(); it!=compositions->end(); ++it) {
-            if(trail==it->trail) {
-                return it->composite;
-            }
-            if(trail<it->trail) {
-                break;
-            }
+    int32_t length;
+    const CompositionPair *pairs=norm.getCompositionPairs(length);
+    for(int32_t i=0; i<length; ++i) {
+        if(trail==pairs[i].trail) {
+            return pairs[i].composite;
+        }
+        if(trail<pairs[i].trail) {
+            break;
         }
     }
     return U_SENTINEL;
@@ -672,9 +683,10 @@ void Normalizer2DataBuilder::writeCompositions(UChar32 c, const Norm *p, Unicode
                 (long)c);
         exit(U_INVALID_FORMAT_ERROR);
     }
-    int32_t length=p->compositions->size();
+    int32_t length;
+    const CompositionPair *pairs=p->getCompositionPairs(length);
     for(int32_t i=0; i<length; ++i) {
-        CompositionPair &pair=p->compositions->at(i);
+        const CompositionPair &pair=pairs[i];
         // 22 bits for the composite character and whether it combines forward.
         UChar32 compositeAndFwd=pair.composite<<1;
         if(getNormRef(pair.composite).compositions!=NULL) {
