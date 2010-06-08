@@ -108,7 +108,7 @@ ucol_looksLikeCollationBinary(const UDataSwapper *ds,
                               const void *inData, int32_t length) {
     const uint8_t *inBytes;
     const UCATableHeader *inHeader;
-    UCATableHeader header={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0 };
+    UCATableHeader header;
 
     if(ds==NULL || inData==NULL || length<-1) {
         return FALSE;
@@ -123,6 +123,7 @@ ucol_looksLikeCollationBinary(const UDataSwapper *ds,
      * sizeof(UCATableHeader)==42*4 in ICU 2.8
      * check the length against the header size before reading the size field
      */
+    uprv_memset(&header, 0, sizeof(header));
     if(length<0) {
         header.size=udata_readInt32(ds, inHeader->size);
     } else if((length<(42*4) || length<(header.size=udata_readInt32(ds, inHeader->size)))) {
