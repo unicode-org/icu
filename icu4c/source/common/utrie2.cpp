@@ -128,7 +128,7 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
     const uint16_t *p16;
     int32_t actualLength;
 
-    UTrie2 tempTrie={ NULL };
+    UTrie2 tempTrie;
     UTrie2 *trie;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -162,6 +162,7 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
     }
 
     /* get the length values and offsets */
+    uprv_memset(&tempTrie, 0, sizeof(tempTrie));
     tempTrie.indexLength=header->indexLength;
     tempTrie.dataLength=header->shiftedDataLength<<UTRIE2_INDEX_SHIFT;
     tempTrie.index2NullOffset=header->index2NullOffset;
