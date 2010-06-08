@@ -1106,7 +1106,6 @@ BasicNormalizerTest::TestCompare() {
     UnicodeSet iSet, set;
 
     UnicodeString s1, s2;
-    UChar32 start, end;
 
     const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
     if(U_FAILURE(errorCode) || !nfcImpl->ensureCanonIterData(errorCode)) {
@@ -1123,45 +1122,47 @@ BasicNormalizerTest::TestCompare() {
     }
 
     // test all of these precomposed characters
+    const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
     UnicodeSetIterator it(set);
-    while(it.nextRange() && !it.isString()) {
-        start=it.getCodepoint();
-        end=it.getCodepointEnd();
-        while(start<=end) {
-            s1.setTo(start);
+    while(it.next() && !it.isString()) {
+        UChar32 c=it.getCodepoint();
+        if(!nfcNorm2->getDecomposition(c, s2)) {
+            dataerrln("NFC.getDecomposition(i-composite U+%04lx) failed", (long)c);
+            return;
+        }
+
+        s1.setTo(c);
+        for(k=0; k<LENGTHOF(opt); ++k) {
+            // test Normalizer::compare
             errorCode=U_ZERO_ERROR;
-            Normalizer::decompose(s1, FALSE, 0, s2, errorCode);
-            if(U_FAILURE(errorCode)) {
-                dataerrln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
-                return;
+            result=_norm_compare(s1, s2, opt[k].options, errorCode);
+            refResult=ref_norm_compare(s1, s2, opt[k].options, errorCode);
+            if(_sign(result)!=_sign(refResult)) {
+                errln("Normalizer::compare(U+%04x with its NFD, %s)%s should be %s %s",
+                    c, opt[k].name, _signString(result), _signString(refResult),
+                    U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
             }
 
-            for(k=0; k<LENGTHOF(opt); ++k) {
-                // test Normalizer::compare
+            // test UnicodeString::caseCompare - same internal implementation function
+            if(opt[k].options&U_COMPARE_IGNORE_CASE) {
                 errorCode=U_ZERO_ERROR;
-                result=_norm_compare(s1, s2, opt[k].options, errorCode);
-                refResult=ref_norm_compare(s1, s2, opt[k].options, errorCode);
+                result=s1.caseCompare(s2, opt[k].options);
+                refResult=ref_case_compare(s1, s2, opt[k].options);
                 if(_sign(result)!=_sign(refResult)) {
-                    errln("Normalizer::compare(U+%04x with its NFD, %s)%s should be %s %s",
-                        start, opt[k].name, _signString(result), _signString(refResult),
+                    errln("UniStr::caseCompare(U+%04x with its NFD, %s)%s should be %s %s",
+                        c, opt[k].name, _signString(result), _signString(refResult),
                         U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
                 }
-
-                // test UnicodeString::caseCompare - same internal implementation function
-                if(opt[k].options&U_COMPARE_IGNORE_CASE) {
-                    errorCode=U_ZERO_ERROR;
-                    result=s1.caseCompare(s2, opt[k].options);
-                    refResult=ref_case_compare(s1, s2, opt[k].options);
-                    if(_sign(result)!=_sign(refResult)) {
-                        errln("UniStr::caseCompare(U+%04x with its NFD, %s)%s should be %s %s",
-                            start, opt[k].name, _signString(result), _signString(refResult),
-                            U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
-                    }
-                }
             }
-
-            ++start;
         }
+    }
+
+    // test getDecomposition() for some characters that do not decompose
+    if( nfcNorm2->getDecomposition(0x20, s2) ||
+        nfcNorm2->getDecomposition(0x4e00, s2) ||
+        nfcNorm2->getDecomposition(0x20002, s2)
+    ) {
+        errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
     }
 }
 

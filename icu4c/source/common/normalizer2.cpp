@@ -75,6 +75,10 @@ class NoopNormalizer2 : public Normalizer2 {
         return first;
     }
     virtual UBool
+    getDecomposition(UChar32, UnicodeString &) const {
+        return FALSE;
+    }
+    virtual UBool
     isNormalized(const UnicodeString &, UErrorCode &) const {
         return TRUE;
     }
@@ -160,6 +164,21 @@ public:
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
+    virtual UBool
+    getDecomposition(UChar32 c, UnicodeString &decomposition) const {
+        UChar buffer[4];
+        int32_t length;
+        const UChar *d=impl.getDecomposition(c, buffer, length);
+        if(d==NULL) {
+            return FALSE;
+        }
+        if(d==buffer) {
+            decomposition.setTo(buffer, length);  // copy the string (Jamos from Hangul syllable c)
+        } else {
+            decomposition.setTo(FALSE, d, length);  // read-only alias
+        }
+        return TRUE;
+    }
 
     // quick checks
     virtual UBool
@@ -630,8 +649,8 @@ unorm2_normalize(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if( (src==NULL && length!=0) || length<-1 ||
-        capacity<0 || (dest==NULL && capacity>0) ||
+    if( (src==NULL ? length!=0 : length<-1) ||
+        (dest==NULL ? capacity!=0 : capacity<0) ||
         (src==dest && src!=NULL)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -665,8 +684,9 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if( (second==NULL && secondLength!=0) || secondLength<-1 ||
-        firstCapacity<0 || (first==NULL && firstCapacity>0) || firstLength<-1 ||
+    if( (second==NULL ? secondLength!=0 : secondLength<-1) ||
+        (first==NULL ? (firstCapacity!=0 || firstLength!=0) :
+                       (firstCapacity<0 || firstLength<-1)) ||
         (first==second && first!=NULL)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -716,6 +736,25 @@ unorm2_append(const UNormalizer2 *norm2,
                                     first, firstLength, firstCapacity,
                                     second, secondLength,
                                     FALSE, pErrorCode);
+}
+
+U_DRAFT int32_t U_EXPORT2
+unorm2_getDecomposition(const UNormalizer2 *norm2,
+                        UChar32 c, UChar *decomposition, int32_t capacity,
+                        UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(decomposition==NULL ? capacity!=0 : capacity<0) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString destString(decomposition, 0, capacity);
+    if(reinterpret_cast<const Normalizer2 *>(norm2)->getDecomposition(c, destString)) {
+        return destString.extract(decomposition, capacity, *pErrorCode);
+    } else {
+        return -1;
+    }
 }
 
 U_DRAFT UBool U_EXPORT2

@@ -61,6 +61,9 @@ TestComposition(void);
 static void
 TestFCD(void);
 
+static void
+TestGetDecomposition(void);
+
 static const char* const canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -147,6 +150,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestNextPrevious, "tsnorm/cnormtst/TestNextPrevious");
     addTest(root, &TestFCNFKCClosure, "tsnorm/cnormtst/TestFCNFKCClosure");
     addTest(root, &TestComposition, "tsnorm/cnormtst/TestComposition");
+    addTest(root, &TestComposition, "tsnorm/cnormtst/TestGetDecomposition");
 }
 
 static const char* const modeStrings[]={
@@ -1461,6 +1465,49 @@ TestComposition(void) {
         ) {
             log_data_err("unexpected result for case %d - (Are you missing data?)\n", i);
         }
+    }
+}
+
+static void
+TestGetDecomposition() {
+    UChar decomp[32];
+    int32_t length;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UNormalizer2 *n2=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE_CONTIGUOUS, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getInstance(nfc/FCC) failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    length=unorm2_getDecomposition(n2, 0x20, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length>=0) {
+        log_err("unorm2_getDecomposition(space) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getDecomposition(n2, 0xe4, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0x61 || decomp[1]!=0x308 || decomp[2]!=0) {
+        log_err("unorm2_getDecomposition(a-umlaut) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getDecomposition(n2, 0xac01, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=3 || decomp[0]!=0x1100 || decomp[1]!=0x1161 || decomp[2]!=0x11a8 || decomp[3]!=0) {
+        log_err("unorm2_getDecomposition(Hangul syllable U+AC01) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getDecomposition(n2, 0xac01, NULL, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
+        log_err("unorm2_getDecomposition(Hangul syllable U+AC01) overflow failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getDecomposition(n2, 0xac01, decomp, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("unorm2_getDecomposition(capacity<0) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getDecomposition(n2, 0xac01, NULL, 4, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("unorm2_getDecomposition(decomposition=NULL) failed\n");
     }
 }
 

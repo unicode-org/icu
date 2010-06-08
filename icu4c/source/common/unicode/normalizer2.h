@@ -175,6 +175,19 @@ public:
            UErrorCode &errorCode) const = 0;
 
     /**
+     * Gets the decomposition mapping of c. Equivalent to normalize(UnicodeString(c))
+     * on a UNORM2_DECOMPOSE Normalizer2 instance, but much faster.
+     * This function is independent of the mode of the Normalizer2.
+     * @param c code point
+     * @param decomposition String object which will be set to c's
+     *                      decomposition mapping, if there is one.
+     * @return TRUE if c has a decomposition, otherwise FALSE
+     * @draft ICU 4.6
+     */
+    virtual UBool
+    getDecomposition(UChar32 c, UnicodeString &decomposition) const = 0;
+
+    /**
      * Tests if the string is normalized.
      * Internally, in cases where the quickCheck() method would return "maybe"
      * (which is only possible for the two COMPOSE modes) this method
@@ -364,6 +377,19 @@ public:
     append(UnicodeString &first,
            const UnicodeString &second,
            UErrorCode &errorCode) const;
+
+    /**
+     * Gets the decomposition mapping of c. Equivalent to normalize(UnicodeString(c))
+     * on a UNORM2_DECOMPOSE Normalizer2 instance, but much faster.
+     * This function is independent of the mode of the Normalizer2.
+     * @param c code point
+     * @param decomposition String object which will be set to c's
+     *                      decomposition mapping, if there is one.
+     * @return TRUE if c has a decomposition, otherwise FALSE
+     * @draft ICU 4.6
+     */
+    virtual UBool
+    getDecomposition(UChar32 c, UnicodeString &decomposition) const;
 
     /**
      * Tests if the string is normalized.

@@ -149,6 +149,11 @@ FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString &first,
 }
 
 UBool
+FilteredNormalizer2::getDecomposition(UChar32 c, UnicodeString &decomposition) const {
+    return !set.contains(c) && norm2.getDecomposition(c, decomposition);
+}
+
+UBool
 FilteredNormalizer2::isNormalized(const UnicodeString &s, UErrorCode &errorCode) const {
     uprv_checkCanGetBuffer(s, errorCode);
     if(U_FAILURE(errorCode)) {
