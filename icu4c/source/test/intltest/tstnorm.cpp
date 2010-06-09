@@ -1164,6 +1164,15 @@ BasicNormalizerTest::TestCompare() {
     ) {
         errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
     }
+
+    // test FilteredNormalizer2::getDecomposition()
+    UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff]"), errorCode);
+    FilteredNormalizer2 fn2(*nfcNorm2, filter);
+    if( fn2.getDecomposition(0xe4, s1) || !fn2.getDecomposition(0x100, s2) ||
+        s2.length()!=2 || s2[0]!=0x41 || s2[1]!=0x304
+    ) {
+        errln("FilteredNormalizer2(NFC, ^A0-FF).getDecomposition() failed");
+    }
 }
 
 // verify that case-folding does not un-FCD strings
