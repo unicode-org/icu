@@ -78,6 +78,14 @@ public class FilteredNormalizer2 extends Normalizer2 {
     public StringBuilder append(StringBuilder first, CharSequence second) {
         return normalizeSecondAndAppend(first, second, false);
     }
+    /** {@inheritDoc}
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public String getDecomposition(int c) {
+        return set.contains(c) ? norm2.getDecomposition(c) : null;
+    }
 
     /** {@inheritDoc}
      * @draft ICU 4.4

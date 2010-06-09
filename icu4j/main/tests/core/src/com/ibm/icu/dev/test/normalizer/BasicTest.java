@@ -18,6 +18,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.FilteredNormalizer2;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UCharacterIterator;
@@ -2005,7 +2006,6 @@ public class BasicTest extends TestFmwk {
         nfcImpl.ensureCanonIterData();
 
         String s1, s2;
-        int start, end;
     
         // collect all sets into one for contiguous output
         for(i=0; i<iI.length; ++i) {
@@ -2015,52 +2015,58 @@ public class BasicTest extends TestFmwk {
         }
 
         // test all of these precomposed characters
+        Normalizer2 nfcNorm2 = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
         UnicodeSetIterator it = new UnicodeSetIterator(set);
-        while(it.nextRange() && it.codepoint!=UnicodeSetIterator.IS_STRING) {
-            start=it.codepoint;
-            end=it.codepointEnd;
-            while(start<=end) {
-                s1 = Integer.toString(start);
-                s2 = Normalizer.decompose(s1, false, 0);
-//                if(U_FAILURE(errorCode)) {
-//                    errln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
-//                    return;
-//                }
-                for(k=0; k<opt.length; ++k) {
-                    // test Normalizer::compare
+        int c;
+        while(it.next() && (c=it.codepoint)!=UnicodeSetIterator.IS_STRING) {
+            s1 = UTF16.valueOf(c);
+            s2 = nfcNorm2.getDecomposition(c);
+            for(k=0; k<opt.length; ++k) {
+                // test Normalizer::compare
 
-                    result= norm_compare(s1, s2, opt[k].options);
-                    refResult=ref_norm_compare(s1, s2, opt[k].options);
-                    if(sign(result)!=sign(refResult)) {
-                        errln("Normalizer.compare(U+"+hex(start)+" with its NFD, "+opt[k].name+")" 
-                              + signString(result)+" should be "+signString(refResult));
+                result= norm_compare(s1, s2, opt[k].options);
+                refResult=ref_norm_compare(s1, s2, opt[k].options);
+                if(sign(result)!=sign(refResult)) {
+                    errln("Normalizer.compare(U+"+hex(c)+" with its NFD, "+opt[k].name+")" 
+                          + signString(result)+" should be "+signString(refResult));
+                }
+
+                // test UnicodeString::caseCompare - same internal implementation function
+                if((opt[k].options & Normalizer.COMPARE_IGNORE_CASE)>0) {
+                     if ((opt[k].options & Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I) == 0)
+                    {
+                        comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
                     }
-    
-                    // test UnicodeString::caseCompare - same internal implementation function
-                    if((opt[k].options & Normalizer.COMPARE_IGNORE_CASE)>0) {
-                         if ((opt[k].options & Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I) == 0)
-                        {
-                            comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
-                        }
-                        else {
-                            comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
-                        }
-                        
-                        comp.setCodePointCompare((opt[k].options & Normalizer.COMPARE_CODE_POINT_ORDER) != 0);
-         
-                        result=comp.compare(s1,s2);
-                        refResult=ref_case_compare(s1, s2, opt[k].options);
-                        if(sign(result)!=sign(refResult)) {
-                            errln("UTF16.compare(U+"+hex(start)+" with its NFD, "
-                                  +opt[k].name+")"+signString(result) +" should be "+signString(refResult));
-                        }
+                    else {
+                        comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
+                    }
+                    
+                    comp.setCodePointCompare((opt[k].options & Normalizer.COMPARE_CODE_POINT_ORDER) != 0);
+     
+                    result=comp.compare(s1,s2);
+                    refResult=ref_case_compare(s1, s2, opt[k].options);
+                    if(sign(result)!=sign(refResult)) {
+                        errln("UTF16.compare(U+"+hex(c)+" with its NFD, "
+                              +opt[k].name+")"+signString(result) +" should be "+signString(refResult));
                     }
                 }
-    
-                ++start;
             }
         }
 
+        // test getDecomposition() for some characters that do not decompose
+        if( nfcNorm2.getDecomposition(0x20)!=null ||
+            nfcNorm2.getDecomposition(0x4e00)!=null ||
+            nfcNorm2.getDecomposition(0x20002)!=null
+        ) {
+            errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
+        }
+
+        // test FilteredNormalizer2.getDecomposition()
+        UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff]");
+        FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
+        if(fn2.getDecomposition(0xe4)!=null || !"A\u0304".equals(fn2.getDecomposition(0x100))) {
+            errln("FilteredNormalizer2(NFC, ^A0-FF).getDecomposition() failed");
+        }
     }
 
     // verify that case-folding does not un-FCD strings
