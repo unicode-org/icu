@@ -201,6 +201,16 @@ public abstract class Normalizer2 {
      * @provisional This API might change or be removed in a future release.
      */
     public abstract StringBuilder append(StringBuilder first, CharSequence second);
+    /**
+     * Gets the decomposition mapping of c. Equivalent to normalize(String(c))
+     * on a DECOMPOSE Normalizer2 instance, but much faster.
+     * This function is independent of the mode of the Normalizer2.
+     * @param c code point
+     * @return c's decomposition mapping, if any; otherwise null
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract String getDecomposition(int c);
 
     /**
      * Tests if the string is normalized.

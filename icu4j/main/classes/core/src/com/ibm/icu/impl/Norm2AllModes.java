@@ -56,6 +56,10 @@ public final class Norm2AllModes {
             }
         }
         @Override
+        public String getDecomposition(int c) {
+            return null;
+        }
+        @Override
         public boolean isNormalized(CharSequence s) { return true; }
         @Override
         public Normalizer.QuickCheckResult quickCheck(CharSequence s) { return Normalizer.YES; }
@@ -120,6 +124,11 @@ public final class Norm2AllModes {
         }
         protected abstract void normalizeAndAppend(
                 CharSequence src, boolean doNormalize, Normalizer2Impl.ReorderingBuffer buffer);
+
+        @Override
+        public String getDecomposition(int c) {
+            return impl.getDecomposition(c);
+        }
 
         // quick checks
         @Override
