@@ -14,7 +14,7 @@ eo{
     collations{
         standard{
             Sequence{"&C<ĉ<<<Ĉ&G<ĝ<<<Ĝ&H<ĥ<<<Ĥ&J<ĵ<<<Ĵ&S<ŝ<<<Ŝ&U<ŭ<<<Ŭ"}
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }

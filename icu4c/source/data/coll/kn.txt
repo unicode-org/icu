@@ -14,7 +14,7 @@ kn{
     collations{
         standard{
             Sequence{" [normalization on ]&ಔ<ಂ<ಃ&ೞ<ಽ"}
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
         traditional{
             Sequence{
@@ -655,7 +655,7 @@ kn{
                 "&ಫೋ<<<ಫ಼ೋ"
                 "&ಫೌ<<<ಫ಼ೌ"
             }
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }

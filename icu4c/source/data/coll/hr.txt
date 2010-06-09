@@ -10,18 +10,18 @@
  *  ICU <specials> source: <path>/xml/collation/hr.xml
  */
 hr{
-    Version{"2.0.41.26"}
+    Version{"2.0.49.40"}
     collations{
         standard{
             Sequence{
                 "&C<č<<<Č<ć<<<Ć"
-                "&D<dž<<<Dž<<<DŽ"
-                "&L<lj<<<Lj<<<LJ"
-                "&N<nj<<<Nj<<<NJ"
+                "&D<dž=ǆ<<<dŽ<<<Dž=ǅ<<<DŽ=Ǆ<đ<<<Đ"
+                "&L<lj=ǉ<<<lJ<<<Lj=ǈ<<<LJ=Ǉ"
+                "&N<nj=ǌ<<<nJ<<<Nj=ǋ<<<NJ=Ǌ"
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }

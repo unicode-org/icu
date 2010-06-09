@@ -14,7 +14,7 @@ ca{
     collations{
         standard{
             Sequence{" [backwards 2]&C<ch<<<Ch<<<CH&L<ll<<<l·l<<<Ll<<<L·l<<<LL<<<L·L"}
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }

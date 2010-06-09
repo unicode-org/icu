@@ -11,12 +11,12 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.0.42.8"}
+    Version{"2.0.49.33"}
     collations{
         default{"standard"}
         standard{
             Sequence{""}
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}
