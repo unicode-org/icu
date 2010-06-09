@@ -53,7 +53,7 @@ hu{
                 "&Zs<<<Zzs/zs"
                 "&ZS<<<ZZS/ZS"
             }
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }

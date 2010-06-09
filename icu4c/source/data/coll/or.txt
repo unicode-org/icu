@@ -14,7 +14,7 @@ or{
     collations{
         standard{
             Sequence{" [normalization on ]&ହ<କ୍ଷ<ଡ଼<ଢ଼<ୟ<ୱ<ଵ<ଂ<ଃ<ଁ<୍<଼"}
-            Version{"1.8.1"}
+            Version{"1.8.99.1"}
         }
     }
 }
