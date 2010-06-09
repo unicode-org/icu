@@ -10,15 +10,15 @@
  *  ICU <specials> source: <path>/xml/collation/de.xml
  */
 de{
-    Version{"2.0.41.26"}
+    Version{"2.0.49.50"}
     collations{
         phonebook{
-            Sequence{"&a<<æ/e<<ä/e&A<<Æ/E<<Ä/E&œ<<ö/e&Œ<<Ö/E&u<<ü/e&U<<Ü/E"}
-            Version{"1.8.1"}
+            Sequence{"&a<<ä/e&A<<Ä/E&o<<ö/e&O<<Ö/E&u<<ü/e&U<<Ü/E"}
+            Version{"1.8.99.1"}
         }
         standard{
-            Sequence{"&ae<<æ<<<Æ"}
-            Version{"1.8.1"}
+            Sequence{""}
+            Version{"1.8.99.1"}
         }
     }
 }
