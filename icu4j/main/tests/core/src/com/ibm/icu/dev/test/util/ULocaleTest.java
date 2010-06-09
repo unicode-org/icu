@@ -1212,8 +1212,8 @@ public class ULocaleTest extends TestFmwk {
         h[1] = new HashMap<String, String>();
 
         //display in English
-        h[0].put("collation", "collation");
-        h[0].put("calendar", "calendar");
+        h[0].put("collation", "Collation");
+        h[0].put("calendar", "Calendar");
         h[0].put("currency", "Currency");
         h[0].put("phonebook", "Phonebook Order");
         h[0].put("pinyin", "Simplified Chinese Pinyin Sort Order");

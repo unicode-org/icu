@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -393,7 +393,7 @@ public class CollationServiceTest extends TestFmwk {
                           "nl_BE@collation=pinyin", "root", "t",
                           "nl_BE@collation=big5han", "root", "t",
                           "nl_BE@collation=phonebook", "root", "t",
-                          "en_US_VALLEYGIRL","en","f"
+                          "en_US_VALLEYGIRL","root","f"
                         };
         final int DATA_COUNT=(DATA.length/3);
         
