@@ -150,7 +150,7 @@ FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString &first,
 
 UBool
 FilteredNormalizer2::getDecomposition(UChar32 c, UnicodeString &decomposition) const {
-    return !set.contains(c) && norm2.getDecomposition(c, decomposition);
+    return set.contains(c) && norm2.getDecomposition(c, decomposition);
 }
 
 UBool
