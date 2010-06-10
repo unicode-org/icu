@@ -64,7 +64,7 @@ ff{
             "Dinaar Alaseri",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Liibar Ejipt",
         }
         ERN{

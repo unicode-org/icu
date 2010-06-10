@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    AuxExemplarCharacters{"[\u200C \u200D ৸ ৹ ৲ ৳ ৰ ৱ ৴ ৵ ৶ ৷ a d e h l m q s v y]"}
+    AuxExemplarCharacters{"[\u200C\u200D ৴-৹ ৲ ৳ ৰ ৱ]"}
     ExemplarCharacters{
         "[৺ অ আ ই ঈ উ ঊ ঋ ৠ ঌ ৡ এ ঐ ও ঔ \u09BC ং ঃ \u0981 ক খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড {"
         "ড\u09BC} ঢ {ঢ\u09BC} ণ ৎ ত থ দ ধ ন প ফ ব ভ ম য {য\u09BC} র ল শ ষ স হ ঽ া ি ী"
@@ -52,7 +52,7 @@ bn{
             }
         }
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.49.7"}
     calendar{
         gregorian{
             AmPmMarkers{

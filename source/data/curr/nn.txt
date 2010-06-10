@@ -324,7 +324,7 @@ nn{
             "estisk kroon",
         }
         EGP{
-            "EG£",
+            "EGP",
             "egyptisk pund",
         }
         ERN{

@@ -64,7 +64,7 @@ ee{
             "Algeriatɔwoƒɛgadudu",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Egypt-tɔwoƒɛgadudu",
         }
         ERN{

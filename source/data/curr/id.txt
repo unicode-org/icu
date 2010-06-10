@@ -44,5 +44,5 @@ id{
             "Polandia Zloty",
         }
     }
-    Version{"2.0.48.56"}
+    Version{"2.0.49.20"}
 }

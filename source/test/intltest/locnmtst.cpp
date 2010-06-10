@@ -102,7 +102,7 @@ void LocaleDisplayNamesTest::TestWithKeywordsAndEverything() {
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
   const char *target = "English (Traditional Han, United States, VALLEY, "
-    "calendar=Gregorian Calendar, collation=Phonebook Sort Order)";
+    "Calendar=Gregorian Calendar, Collation=Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   delete ldn;
   test_assert_equal(target, temp);
@@ -149,7 +149,7 @@ void LocaleDisplayNamesTest::TestUldnWithKeywordsAndEverything() {
   UChar result[150];
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
   const char *target = "English (Traditional Han, United States, VALLEY, "
-    "calendar=Gregorian Calendar, collation=Phonebook Sort Order)";
+    "Calendar=Gregorian Calendar, Collation=Phonebook Sort Order)";
   ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_STANDARD_NAMES, &status);
   int32_t len = uldn_localeDisplayName(ldn, locname, result, kMaxResultSize, &status);
   uldn_close(ldn);
@@ -224,7 +224,7 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "@collation=phonebook";
-  const char *target = "Root (collation=Phonebook Sort Order)";
+  const char *target = "Root (Collation=Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   test_assert_equal(target, temp);
 

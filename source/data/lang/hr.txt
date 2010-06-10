@@ -710,7 +710,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.49.23"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

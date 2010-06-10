@@ -289,5 +289,5 @@ is{
         ZM{"Sambía"}
         ZZ{"Óþekkt eða ógilt svæði"}
     }
-    Version{"2.0.47.72"}
+    Version{"2.0.49.7"}
 }

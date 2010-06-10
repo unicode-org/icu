@@ -43,7 +43,7 @@ he{
             }
         }
     }
-    Version{"2.0.48.47"}
+    Version{"2.0.48.46"}
     calendar{
         gregorian{
             AmPmMarkers{

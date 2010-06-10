@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    AuxExemplarCharacters{"[i v x {а\u0300} ѐ ѝ {о\u0300} {у\u0300} {ъ\u0300} ѣ {ю\u0300} {я\u0300} ѫ]"}
+    AuxExemplarCharacters{"[{а̀} ѐ ѝ {о̀} {у̀} { ъ̀} ѣ {ю̀} {я̀} ѫ]"}
     ExemplarCharacters{"[а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ь ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
     LocaleScript{
@@ -35,7 +35,7 @@ bg{
             }
         }
     }
-    Version{"2.0.48.76"}
+    Version{"2.0.49.23"}
     calendar{
         gregorian{
             AmPmMarkers{

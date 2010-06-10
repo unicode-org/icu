@@ -14,7 +14,7 @@ az_Cyrl{
     Currencies{
         AZN{
             "ман.",
-            "Azərbaycan manatı",
+            "AZN",
         }
     }
     Version{"2.0.47.53"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.47.72"}
+    Version{"2.0.49.7"}
     zoneStrings{
         "America:Cancun"{
             ec{"Kankún"}

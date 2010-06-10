@@ -64,7 +64,7 @@ bm{
             "alizeri Dinar",
         }
         EGP{
-            "EG£",
+            "EGP",
             "eziputi Livri",
         }
         ERN{

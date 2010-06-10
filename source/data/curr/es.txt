@@ -255,6 +255,10 @@ es{
             "CSK" /** ===  */,
             "corona fuerte checoslovaca",
         }
+        CUC{
+            "CUC$",
+            "peso cubano convertible",
+        }
         CUP{
             "CU$",
             "peso cubano",
@@ -308,7 +312,7 @@ es{
             "corona estonia",
         }
         EGP{
-            "EG£",
+            "EGP",
             "libra egipcia",
         }
         ERN{
@@ -366,6 +370,10 @@ es{
         GHC{
             "₵",
             "cedi ghanés (1979-2007)",
+        }
+        GHS{
+            "GH₵",
+            "cedi ghanés",
         }
         GIP{
             "GI£",
@@ -867,6 +875,10 @@ es{
             "TMM",
             "manat turcomano",
         }
+        TMT{
+            "TMT",
+            "nuevo manat turcomano",
+        }
         TND{
             "DT",
             "dinar tunecino",
@@ -1082,6 +1094,10 @@ es{
         ZWD{
             "Z$",
             "dólar de Zimbabue",
+        }
+        ZWL{
+            "ZWL",
+            "dólar zimbabuense",
         }
     }
     CurrencyPlurals{
@@ -1800,5 +1816,5 @@ es{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.49.58"}
 }

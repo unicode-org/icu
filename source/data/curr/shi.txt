@@ -64,7 +64,7 @@ shi{
             "adinar n dzayr",
         }
         EGP{
-            "EG£",
+            "EGP",
             "ajnih n miṣṛ",
         }
         ERN{

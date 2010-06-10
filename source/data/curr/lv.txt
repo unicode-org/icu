@@ -200,7 +200,7 @@ lv{
             "Igaunijas krona",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Ēģiptes mārciņa",
         }
         ERN{

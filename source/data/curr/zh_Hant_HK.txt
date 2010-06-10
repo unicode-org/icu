@@ -50,7 +50,7 @@ zh_Hant_HK{
         }
         USD{
             "US$",
-            "美元",
+            "USD",
         }
     }
     Version{"2.0.46.25"}

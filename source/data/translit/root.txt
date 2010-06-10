@@ -468,6 +468,13 @@ root {
             }
         }
 
+        Han-Latin/Names {
+            file {
+                resource:process(transliterator) {"Han_Latin_Names.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Han-Spacedhan {
             internal {
                 resource:process(transliterator) {"Han_Spacedhan.txt"}
