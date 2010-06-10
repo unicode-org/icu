@@ -64,7 +64,7 @@ mas{
             "Iropiyianí e Algeria",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Iropiyianí e Misri",
         }
         ERN{

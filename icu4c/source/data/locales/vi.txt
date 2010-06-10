@@ -43,7 +43,7 @@ vi{
             }
         }
     }
-    Version{"2.0.48.76"}
+    Version{"2.0.49.24"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -73,7 +73,9 @@ vi{
                 MMMd{"d MMM"}
                 MMdd{"dd-MM"}
                 Md{"d-M"}
+                d{"'Ngày' d"}
                 mmss{"mm:ss"}
+                y{"'Năm' y"}
                 yMEd{"EEE, d-M-yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE, d MMM y"}

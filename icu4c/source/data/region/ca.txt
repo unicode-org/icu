@@ -300,5 +300,5 @@ ca{
         ZW{"Zimbabwe"}
         ZZ{"Regió desconeguda o no vàlida"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.49.23"}
 }

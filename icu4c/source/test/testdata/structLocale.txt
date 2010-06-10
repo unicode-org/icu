@@ -3865,6 +3865,7 @@ structLocale:table(nofallback){
     ExemplarCharacters{""}
     ExemplarCharactersCurrency{""}
     ExemplarCharactersIndex{""}
+    ExemplarCharactersPunctuation{""}
     AuxExemplarCharacters{""}
     Keys{
         calendar{""}
@@ -8062,6 +8063,7 @@ structLocale:table(nofallback){
         separator{", "}
     }
     measurementSystemNames{
+        UK{"UK"}
         US{"US"}
         metric{"Metric"}
     }

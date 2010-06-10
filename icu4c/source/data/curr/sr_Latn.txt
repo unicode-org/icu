@@ -269,7 +269,7 @@ sr_Latn{
             "Kipratska funta (CYP)",
         }
         CZK{
-            "Кч",
+            "Kč",
             "Češka kruna",
         }
         DDM{
@@ -309,7 +309,7 @@ sr_Latn{
             "Estonska kruna",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Egipatska funta",
         }
         ERN{
@@ -489,7 +489,7 @@ sr_Latn{
             "Jordanski dinar (JOD)",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japanski jen",
         }
         KES{
@@ -737,7 +737,7 @@ sr_Latn{
             "Pakistanski rupi",
         }
         PLN{
-            "зл",
+            "zł",
             "Poljski zlot (PLN)",
         }
         PLZ{
@@ -897,7 +897,7 @@ sr_Latn{
             "Stara turska lira (TRL)",
         }
         TRY{
-            "Тл",
+            "TL",
             "Turska lira",
         }
         TTD{

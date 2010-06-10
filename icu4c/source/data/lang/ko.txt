@@ -660,7 +660,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"2.0.48.56"}
+    Version{"2.0.49.58"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

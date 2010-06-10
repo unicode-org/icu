@@ -201,6 +201,9 @@ metaZones:table(nofallback){
         Cape_Verde{
             001{"Atlantic/Cape_Verde"}
         }
+        Casey{
+            001{"Antarctica/Casey"}
+        }
         Chamorro{
             001{"Pacific/Saipan"}
             GU{"Pacific/Guam"}
@@ -1267,6 +1270,23 @@ metaZones:table(nofallback){
         "America:Bahia"{
             {
                 "Brasilia",
+            }
+        }
+        "America:Bahia_Banderas"{
+            {
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1970-01-01 08:00",
+            }
+            {
+                "America_Mountain",
+                "1970-01-01 08:00",
+                "2010-04-04 07:00",
+            }
+            {
+                "America_Central",
+                "2010-04-04 07:00",
+                "9999-12-31 23:59",
             }
         }
         "America:Barbados"{
@@ -2350,6 +2370,11 @@ metaZones:table(nofallback){
                 "Australia_Western",
                 "1970-01-01 00:00",
                 "2009-10-17 18:00",
+            }
+            {
+                "Casey",
+                "2009-10-17 18:00",
+                "2010-03-04 15:00",
             }
             {
                 "Australia_Western",

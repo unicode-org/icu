@@ -57,5 +57,5 @@ sw{
         zh{"Kichina"}
         zu{"Kizulu"}
     }
-    Version{"2.0.48.30"}
+    Version{"2.0.49.7"}
 }

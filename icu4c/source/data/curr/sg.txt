@@ -64,7 +64,7 @@ sg{
             "dinäri tî Alzerïi",
         }
         EGP{
-            "EG£",
+            "EGP",
             "pôndo tî Kâmitâ",
         }
         ERN{

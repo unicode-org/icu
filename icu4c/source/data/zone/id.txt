@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.48.56"}
+    Version{"2.0.49.20"}
     zoneStrings{
         "meta:Acre"{
             ld{"Waktu Musim Panas Acre"}
@@ -512,6 +512,6 @@ id{
             ss{"Waktu Vostok"}
         }
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

@@ -64,7 +64,7 @@ xog{
             "Dinaali y'Aligerya",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Pawunda ya Misiri",
         }
         ERN{

@@ -64,7 +64,7 @@ khq{
             "Alžeeri Dinar",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Misra Pund",
         }
         ERN{

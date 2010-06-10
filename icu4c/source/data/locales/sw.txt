@@ -10,12 +10,8 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
-    AuxExemplarCharacters{"[q x]"}
-    ExemplarCharacters{
-        "[a b c d {dh} e f g h i j k l m n {ng} {ng'} {ny} o p r s {sh} t {th} u v w "
-        "y z]"
-    }
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    AuxExemplarCharacters{"[c q x]"}
+    ExemplarCharacters{"[a b {ch} d e f g h i j k l m n o p r s t  u v w y z]"}
     LocaleScript{
         "Latn",
     }
@@ -26,7 +22,7 @@ sw{
             }
         }
     }
-    Version{"2.0.48.31"}
+    Version{"2.0.49.7"}
     calendar{
         gregorian{
             AmPmMarkers{

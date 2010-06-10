@@ -239,6 +239,10 @@ pl{
             "CSK" /** ===  */,
             "korona czechosłowacka",
         }
+        CUC{
+            "CUC$",
+            "peso kubańskie wymienialne",
+        }
         CUP{
             "CU$",
             "peso kubańskie",
@@ -288,7 +292,7 @@ pl{
             "korona estońska",
         }
         EGP{
-            "EG£",
+            "EGP",
             "funt egipski",
         }
         ERN{
@@ -839,6 +843,10 @@ pl{
             "TMM",
             "manat turkmeński",
         }
+        TMT{
+            "TMT",
+            "nowy mandat turkmeński",
+        }
         TND{
             "DT",
             "dinar tunezyjski",
@@ -978,6 +986,10 @@ pl{
         XPT{
             "XPT",
             "platyna",
+        }
+        XTS{
+            "XTS",
+            "testowy kod waluty",
         }
         XXX{
             "XXX",
@@ -1232,5 +1244,5 @@ pl{
     CurrencyUnitPatterns{
         one{"{0} {1}"}
     }
-    Version{"2.0.48.65"}
+    Version{"2.0.49.64"}
 }

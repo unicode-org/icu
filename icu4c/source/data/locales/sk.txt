@@ -30,7 +30,7 @@ sk{
             }
         }
     }
-    Version{"2.0.48.72"}
+    Version{"2.0.48.56"}
     calendar{
         gregorian{
             AmPmMarkers{

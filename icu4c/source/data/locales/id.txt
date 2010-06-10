@@ -26,14 +26,14 @@ id{
             }
         }
     }
-    Version{"2.0.48.72"}
+    Version{"2.0.49.20"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H.mm.ss zzzz",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
+                "H:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, dd MMMM yyyy",
                 "d MMMM yyyy",
                 "d MMM yyyy",

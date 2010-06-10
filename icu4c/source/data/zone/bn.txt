@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    Version{"2.0.47.53"}
+    Version{"2.0.49.7"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"সেউটা"}

@@ -1628,6 +1628,7 @@ icu4c/source/data/translit/Gurmukhi_Oriya.txt svneol=native#text/plain
 icu4c/source/data/translit/Gurmukhi_Tamil.txt svneol=native#text/plain
 icu4c/source/data/translit/Gurmukhi_Telugu.txt svneol=native#text/plain
 icu4c/source/data/translit/Han_Latin.txt svneol=native#text/plain
+icu4c/source/data/translit/Han_Latin_Names.txt svneol=native#text/plain
 icu4c/source/data/translit/Han_Spacedhan.txt svneol=native#text/plain
 icu4c/source/data/translit/Hangul_Latin.txt svneol=native#text/plain
 icu4c/source/data/translit/Hebrew_Latin.txt svneol=native#text/plain

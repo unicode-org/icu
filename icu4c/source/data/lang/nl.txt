@@ -713,7 +713,7 @@ nl{
         VALENCIA{"Valenciaans"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.49.58"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

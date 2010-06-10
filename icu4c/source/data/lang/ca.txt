@@ -710,7 +710,7 @@ ca{
         VALENCIA{"valencià"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.49.23"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

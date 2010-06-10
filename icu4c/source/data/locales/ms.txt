@@ -24,9 +24,24 @@ ms{
             }
         }
     }
-    Version{"2.0.48.72"}
+    Version{"2.0.49.21"}
     calendar{
         gregorian{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "dd/MM/yyyy",
+                "d/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             availableFormats{
                 MEd{"E, d-M"}
                 MMMEd{"EEE, d MMM"}

@@ -13,6 +13,7 @@ root{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
+    ExemplarCharactersPunctuation{"[\- , ; \: ! ? . ( ) \[ \] \{ \}]"}
     LocaleScript{
         "Zyyy",
     }
@@ -44,7 +45,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.48.76"}
+    Version{"2.0.49.62"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -1432,6 +1433,7 @@ root{
         }
     }
     measurementSystemNames{
+        UK{"UK"}
         US{"US"}
         metric{"Metric"}
     }

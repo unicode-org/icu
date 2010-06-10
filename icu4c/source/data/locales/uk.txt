@@ -37,7 +37,7 @@ uk{
             }
         }
     }
-    Version{"2.0.48.76"}
+    Version{"2.0.49.23"}
     calendar{
         coptic{
             monthNames{

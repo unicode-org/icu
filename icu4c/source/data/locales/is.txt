@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    AuxExemplarCharacters{"[c q w z]"}
+    AuxExemplarCharacters{"[c q w x z]"}
     ExemplarCharacters{"[a á b d ð e é f g h i í j k l m n o ó p r s t u ú v y ý þ æ ö]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A Á B C D Ð E É F G H I Í J K L M N O Ó P Q R S T U Ú V W X Y Ý Z Þ Æ Ö]"}
@@ -39,7 +39,7 @@ is{
             }
         }
     }
-    Version{"2.0.47.72"}
+    Version{"2.0.49.7"}
     calendar{
         gregorian{
             AmPmMarkers{
