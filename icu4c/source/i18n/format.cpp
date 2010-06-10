@@ -65,6 +65,7 @@ FieldPosition::clone() const {
 
 Format::Format()
     : UObject()
+    , fLenient(TRUE)
 {
     *validLocale = *actualLocale = 0;
 }
@@ -93,6 +94,7 @@ Format::operator=(const Format& that)
     if (this != &that) {
         uprv_strcpy(validLocale, that.validLocale);
         uprv_strcpy(actualLocale, that.actualLocale);
+        fLenient = that.fLenient;
     }
     return *this;
 }
@@ -204,6 +206,16 @@ void
 Format::setLocaleIDs(const char* valid, const char* actual) {
     U_LOCALE_BASED(locBased, *this);
     locBased.setLocaleIDs(valid, actual);
+}
+
+void
+Format::setLenient(UBool lenient) {
+    fLenient = lenient;
+}
+
+UBool
+Format::isLenient() const {
+    return fLenient;
 }
 
 U_NAMESPACE_END

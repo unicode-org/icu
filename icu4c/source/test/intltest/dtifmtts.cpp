@@ -114,9 +114,14 @@ void DateIntervalFormatTest::testAPI() {
         return;
     } 
     // not deleted, test clone 
+    
+    // check default value of lenient
+    if ( !dtitvfmt->isLenient() ) {
+        errln("ERROR: isLenient() not TRUE by default for DateIntervalFormat");
+    }
 
 
-    // ====== Test clone()
+    // ====== Test clone() and setLenient() (latter from Format superclass)
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat clone");
 
@@ -125,6 +130,10 @@ void DateIntervalFormatTest::testAPI() {
         dataerrln("ERROR: clone failed");
     }
 
+    another->setLenient(!dtitvfmt->isLenient());
+    if( another->isLenient() == dtitvfmt->isLenient()) {
+        errln("ERROR: isLenient() after setLenient(!isLenient()) failed");
+    } // don't check that == fails, not relevant for subclass that does not check lenient
  
     // ====== Test getDateIntervalInfo, setDateIntervalInfo, adoptDateIntervalInfo
     status = U_ZERO_ERROR;

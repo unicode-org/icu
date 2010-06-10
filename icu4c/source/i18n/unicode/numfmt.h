@@ -102,6 +102,9 @@ class StringEnumeration;
  *    nf->parse(myString, result, success);
  * \endcode
  * </pre>
+ * Note that while lenient parsing is on by default for the Format base class,
+ * it is off by default for NumberFormat and its subclasses.
+ * <P>
  * Use createInstance to get the normal number format for that country.
  * There are other static factory methods available.  Use getCurrency
  * to get the currency number format for that country.  Use getPercent
