@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -152,6 +152,12 @@ IntlTestRBNF::TestAPI() {
   }
 
   logln("RBNF API test starting");
+  
+  //  check default value of lenient
+  if ( formatter->isLenient() ) {
+     errln("ERROR: isLenient() not FALSE by default for RuleBasedNumberFormat");
+  }
+  
   // test clone
   {
     logln("Testing Clone");
@@ -159,6 +165,14 @@ IntlTestRBNF::TestAPI() {
     if(rbnfClone != NULL) {
       if(!(*rbnfClone == *formatter)) {
         errln("Clone should be semantically equivalent to the original!");
+      }
+      rbnfClone->setLenient(!formatter->isLenient());
+      if( rbnfClone->isLenient() == formatter->isLenient()) {
+        errln("ERROR: isLenient() after setLenient(!isLenient()) failed");
+#if !UCONFIG_NO_COLLATION
+      } else if (*rbnfClone == *formatter) {
+        errln("ERROR: operator == is TRUE, should be FALSE if isLenient() differs");
+#endif
       }
       delete rbnfClone;
     } else {

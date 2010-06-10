@@ -189,6 +189,23 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 
     logln((UnicodeString)"Testing getters and setters");
 
+    //  check default value of lenient
+    if ( def.isLenient() ) {
+         errln("ERROR: isLenient() not FALSE by default for DecimalFormat");
+    }
+    DecimalFormat *defMod = new DecimalFormat(def);
+    // check setting & comparison of lenient
+    if (defMod != NULL) {
+        if ( !(*defMod == def) ) {
+            errln("ERROR: operator == is FALSE, should be TRUE afer copy");
+        }
+        defMod->setLenient(!def.isLenient());
+        if( defMod->isLenient() == def.isLenient()) {
+            errln("ERROR: isLenient() after setLenient(!isLenient()) failed");
+        } // don't check that == fails, not relevant for subclass that does not check lenient
+        delete defMod;
+    }
+
     const DecimalFormatSymbols *syms = pat.getDecimalFormatSymbols();
     DecimalFormatSymbols *newSyms = new DecimalFormatSymbols(*syms);
     def.setDecimalFormatSymbols(*newSyms);

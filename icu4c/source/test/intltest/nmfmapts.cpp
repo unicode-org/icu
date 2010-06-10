@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -192,6 +192,20 @@ if (fr != NULL && def != NULL)
     for(int32_t i = 0; i < count; i++) {
         UnicodeString name(locales[i].getName(),"");
         logln(name);
+    }
+
+    // check default value of lenient, and setting/testing
+    if ( def->isLenient() ) {
+         errln("ERROR: isLenient() not FALSE by default for NumberFormat");
+    } else {
+    	def->setLenient(TRUE);
+    	if ( !def->isLenient() ) {
+    	    errln("ERROR: isLenient() after setLenient(TRUE) failed");
+    	}
+    }
+    def->setLenient(fr->isLenient());
+    if(def->isLenient() != fr->isLenient()) {
+        errln("ERROR: setLenient() failed");
     }
 
     fr->setParseIntegerOnly( def->isParseIntegerOnly() );
