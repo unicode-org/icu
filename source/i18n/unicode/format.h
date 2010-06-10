@@ -86,6 +86,11 @@ U_NAMESPACE_BEGIN
  * If there is no match when parsing, a parse failure UErrorCode is
  * retured for methods which take no ParsePosition.  For the method
  * that takes a ParsePosition, the index parameter is left unchanged.
+ * The Format class can support either strict or lenient parsing where
+ * appropriate (see isLenient, setLenient). By default parsing is
+ * lenient in the Format base class; subclasses may have a different
+ * default (for example, in NumberFormat, parsing is strict by default
+ * for backwards compatibility).
  * <P>
  * <em>User subclasses are not supported.</em> While clients may write
  * subclasses, such code will not necessarily work and will not be
@@ -256,6 +261,28 @@ public:
      */
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
 
+    /**
+     * Controls lenient parse behavior. At the Format class level, lenient parse
+     * is on by default. Format subclasses may have different default behavior
+     * for lenient parse.
+     *
+     * @see #isLenient
+     * @param lenient Sets lenient parse mode on (if TRUE) or off (if FALSE).
+     * @draft ICU 4.6
+     */
+    virtual void setLenient(UBool lenient);
+
+    /**
+     * Returns the status of lenient parse mode. At the Format class level,
+     * lenient parse is on by default. Format subclasses may have different
+     * default behavior for lenient parse.
+     *
+     * @see #setLenient
+     * @return Lenient parse mode status: TRUE if on, FALSE if off.
+     * @stable ICU 2.0
+     */
+    virtual UBool isLenient(void) const;
+
  protected:
     /** @stable ICU 2.8 */
     void setLocaleIDs(const char* valid, const char* actual);
@@ -293,6 +320,7 @@ protected:
  private:
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     char validLocale[ULOC_FULLNAME_CAPACITY];
+    UBool fLenient;
 };
 
 U_NAMESPACE_END
