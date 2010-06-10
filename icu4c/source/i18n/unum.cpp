@@ -100,6 +100,7 @@ unum_open(  UNumberFormatStyle    style,
             return 0;
         }
         if (U_FAILURE(*status)) {
+            delete syms;
             return 0;
         }
 
