@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/te.xml
  */
 te{
-    Version{"2.0.48.44"}
+    Version{"2.0.49.7"}
     zoneStrings{
         "meta:Acre"{
             ld{"ఏకర్ వేసవి సమయం"}

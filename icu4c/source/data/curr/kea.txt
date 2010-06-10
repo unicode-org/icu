@@ -64,7 +64,7 @@ kea{
             "Dinar arjelinu",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Libra ejipsiu",
         }
         ERN{

@@ -85,8 +85,55 @@ zh{
             }
         }
     }
-    Version{"2.0.48.72"}
+    Version{"2.0.49.58"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "zzzzah时mm分ss秒",
+                "zah时mm分ss秒",
+                "ah:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gyyyy-M-d",
+                "Gy-M-d",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EEEd{"d日EEE"}
+                H{"H时"}
+                M{"M月"}
+                MEd{"M-dE"}
+                MMMEd{"M月d日E"}
+                MMMMEd{"M月d日E"}
+                MMMMd{"M月d日"}
+                MMMd{"M月d日"}
+                d{"d日"}
+                h{"ah时"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy-M"}
+                yyyyMEd{"Gy-M-dEEE"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyMMMM{"Gy年M月"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy-M-d"}
+                yyyyQ{"Gy年QQQ"}
+                yyyyQQQ{"Gy年QQQQ"}
+            }
+            eras{
+                abbreviated{
+                    "佛历",
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "上午",
@@ -112,7 +159,7 @@ zh{
                 H{"H时"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                M{"L"}
+                M{"M月"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
                 MMMEd{"MMMd日E"}
@@ -121,7 +168,7 @@ zh{
                 MMdd{"MM-dd"}
                 Md{"M-d"}
                 d{"d日"}
-                h{"ah"}
+                h{"ah时"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -391,6 +438,327 @@ zh{
                 }
             }
         }
+        islamic{
+            DateTimePatterns{
+                "zzzzah时mm分ss秒",
+                "zah时mm分ss秒",
+                "ah:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gyy-MM-dd",
+                "Gyy-MM-dd",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d日E"}
+                H{"H时"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                M{"M月"}
+                MEd{"M-dE"}
+                MMM{"LLL"}
+                MMMEd{"MMMd日E"}
+                MMMMdd{"MMMMdd日"}
+                MMMd{"MMMd日"}
+                MMdd{"MM-dd"}
+                Md{"M-d"}
+                d{"d日"}
+                h{"ah时"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
+                ms{"mm:ss"}
+                yyyy{"GGGyy年"}
+                yyyyM{"GGGGGyy-MM"}
+                yyyyMMM{"GGGGGyy年MMM"}
+                yyyyMMMd{"GGGGGyy年MMMd日"}
+                yyyyMd{"GGGGGyy-MM-dd"}
+                yyyyQ{"Gy年QQQ"}
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "zzzzah时mm分ss秒",
+                "zah时mm分ss秒",
+                "ah:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gyy-MM-dd",
+                "Gyy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d日E"}
+                H{"H时"}
+                M{"M月"}
+                MEd{"M-dE"}
+                MMM{"LLL"}
+                MMMEd{"M月d日E"}
+                MMMMd{"M月d日"}
+                Md{"M-d"}
+                d{"d日"}
+                h{"ah时"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy-MM"}
+                yyyyMEd{"Gy-M-d（EEE）"}
+                yyyyMMM{"Gy年MMM"}
+                yyyyMMMEd{"Gy年MMMd日E"}
+                yyyyMMMd{"Gy年MMMd日"}
+                yyyyMd{"Gy-MM-dd"}
+                yyyyQ{"Gy年QQQ"}
+            }
+            eras{
+                abbreviated{
+                    "大化",
+                    "白雉",
+                    "白凤",
+                    "朱鸟",
+                    "大宝",
+                    "庆云",
+                    "和铜",
+                    "灵龟",
+                    "养老",
+                    "神龟",
+                    "天平",
+                    "天平感宝",
+                    "天平胜宝",
+                    "天平宝字",
+                    "天平神护",
+                    "神护景云",
+                    "宝龟",
+                    "天应",
+                    "延历",
+                    "大同",
+                    "弘仁",
+                    "天长",
+                    "承和",
+                    "嘉祥",
+                    "仁寿",
+                    "齐衡",
+                    "天安",
+                    "贞观",
+                    "元庆",
+                    "仁和",
+                    "宽平",
+                    "昌泰",
+                    "延喜",
+                    "延长",
+                    "承平",
+                    "天庆",
+                    "天历",
+                    "天德",
+                    "应和",
+                    "康保",
+                    "安和",
+                    "天禄",
+                    "天延",
+                    "贞元",
+                    "天元",
+                    "永观",
+                    "宽和",
+                    "永延",
+                    "永祚",
+                    "正历",
+                    "长德",
+                    "长保",
+                    "宽弘",
+                    "长和",
+                    "宽仁",
+                    "治安",
+                    "万寿",
+                    "长元",
+                    "长历",
+                    "长久",
+                    "宽德",
+                    "永承",
+                    "天喜",
+                    "康平",
+                    "治历",
+                    "延久",
+                    "承保",
+                    "延久",
+                    "永保",
+                    "应德",
+                    "宽治",
+                    "嘉保",
+                    "永长",
+                    "承德",
+                    "承德",
+                    "长治",
+                    "嘉承",
+                    "天仁",
+                    "天永",
+                    "永久",
+                    "元永",
+                    "保安",
+                    "天治",
+                    "大治",
+                    "天承",
+                    "长承",
+                    "保延",
+                    "永治",
+                    "康治",
+                    "天养",
+                    "久安",
+                    "仁平",
+                    "久寿",
+                    "保元",
+                    "平治",
+                    "永历",
+                    "应保",
+                    "长宽",
+                    "永万",
+                    "仁安",
+                    "嘉应",
+                    "承安",
+                    "安元",
+                    "治承",
+                    "养和",
+                    "寿永",
+                    "元历",
+                    "文治",
+                    "建久",
+                    "正治",
+                    "建仁",
+                    "元久",
+                    "建永",
+                    "承元",
+                    "建历",
+                    "建保",
+                    "承久",
+                    "贞应",
+                    "元仁",
+                    "嘉禄",
+                    "安贞",
+                    "宽喜",
+                    "贞永",
+                    "天福",
+                    "文历",
+                    "嘉祯",
+                    "历仁",
+                    "延应",
+                    "仁治",
+                    "宽元",
+                    "宝治",
+                    "建长",
+                    "康元",
+                    "正嘉",
+                    "正元",
+                    "文应",
+                    "弘长",
+                    "文永",
+                    "建治",
+                    "弘安",
+                    "正应",
+                    "永仁",
+                    "正安",
+                    "干元",
+                    "嘉元",
+                    "德治",
+                    "延庆",
+                    "应长",
+                    "正和",
+                    "文保",
+                    "元应",
+                    "元亨",
+                    "正中",
+                    "嘉历",
+                    "元德",
+                    "元弘",
+                    "建武",
+                    "延元",
+                    "兴国",
+                    "正平",
+                    "建德",
+                    "文中",
+                    "天授",
+                    "康历",
+                    "弘和",
+                    "元中",
+                    "至德",
+                    "嘉庆",
+                    "康应",
+                    "明德",
+                    "应永",
+                    "正长",
+                    "永享",
+                    "嘉吉",
+                    "文安",
+                    "宝德",
+                    "享德",
+                    "康正",
+                    "长禄",
+                    "宽正",
+                    "文正",
+                    "应仁",
+                    "文明",
+                    "长享",
+                    "延德",
+                    "明应",
+                    "文龟",
+                    "永正",
+                    "大永",
+                    "享禄",
+                    "天文",
+                    "弘治",
+                    "永禄",
+                    "元龟",
+                    "天正",
+                    "文禄",
+                    "庆长",
+                    "元和",
+                    "宽永",
+                    "正保",
+                    "庆安",
+                    "承应",
+                    "明历",
+                    "万治",
+                    "宽文",
+                    "延宝",
+                    "天和",
+                    "贞享",
+                    "元禄",
+                    "宝永",
+                    "正德",
+                    "享保",
+                    "元文",
+                    "宽保",
+                    "延享",
+                    "宽延",
+                    "宝历",
+                    "明和",
+                    "安永",
+                    "天明",
+                    "宽政",
+                    "享和",
+                    "文化",
+                    "文政",
+                    "天保",
+                    "弘化",
+                    "嘉永",
+                    "安政",
+                    "万延",
+                    "文久",
+                    "元治",
+                    "庆应",
+                    "明治",
+                    "大正",
+                    "昭和",
+                    "平成",
+                }
+            }
+        }
         roc{
             DateTimePatterns{
                 "zzzzah时mm分ss秒",
@@ -408,10 +776,17 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                H{"H时"}
+                M{"M月"}
+                MEd{"M-dE"}
+                MMM{"LLL"}
                 MMMEd{"M月d日E"}
-                h{"ah"}
+                Md{"M-d"}
+                d{"d日"}
+                h{"ah时"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                yyyy{"Gy年"}
                 yyyyM{"Gy-M"}
                 yyyyMEd{"Gy-M-d（EEE）"}
                 yyyyMM{"Gy-MM"}

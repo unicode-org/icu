@@ -26,7 +26,7 @@ yo{
             }
         }
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.49.29"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -150,7 +150,7 @@ yo{
             monthNames{
                 format{
                     abbreviated{
-                        "Ṣẹ́rẹ̣",
+                        "Ṣẹ́rẹ́",
                         "Èrèlè",
                         "Ẹrẹ̀nà",
                         "Ìgbé",
@@ -164,18 +164,18 @@ yo{
                         "Ọ̀pẹ̀",
                     }
                     wide{
-                        "OṢù ṢẸ́rẹ́",
-                        "OṢù Èrèlè",
-                        "OṢù Ẹrẹ̀nà",
-                        "OṢù Ìgbé",
-                        "OṢù Ẹ̀bibi",
-                        "OṢù Òkúdu",
-                        "OṢù Agẹmọ",
-                        "OṢù Ògún",
-                        "OṢù Owewe",
-                        "OṢù Ọ̀wàrà",
-                        "OṢù Bélú",
-                        "OṢù Ọ̀pẹ̀",
+                        "Oṣù Ṣẹ́rẹ́",
+                        "Oṣù Èrèlè",
+                        "Oṣù Ẹrẹ̀nà",
+                        "Oṣù Ìgbé",
+                        "Oṣù Ẹ̀bibi",
+                        "Oṣù Òkúdu",
+                        "Oṣù Agẹmọ",
+                        "Oṣù Ògún",
+                        "Oṣù Owewe",
+                        "Oṣù Ọ̀wàrà",
+                        "Oṣù Bélú",
+                        "Oṣù Ọ̀pẹ̀",
                     }
                 }
             }

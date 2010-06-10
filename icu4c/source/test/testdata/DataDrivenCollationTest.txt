@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2001-2008 International Business Machines
+﻿// Copyright (c) 2001-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 DataDrivenCollationTest:table(nofallback) {
     Info {
@@ -40,7 +40,7 @@ DataDrivenCollationTest:table(nofallback) {
                     TestLocale { "lt" }
                 }
             }
-            Cases { "cz<č<d<iz<y<j<sz<š<t<zz<ž" } 
+            Cases { "cz<č<d<iz<j<sz<š<t<zz<ž" } 
         }
         TestLatvian {
             Info {
@@ -51,7 +51,7 @@ DataDrivenCollationTest:table(nofallback) {
                     TestLocale { "lv" }
                 }
             }
-            Cases { "cz<č<d<gz<ģ<h<iz<y<j<kz<ķ<l<lz<ļ<m<nz<ņ<o<rz<ŗ<s<sz<š<t<zz<ž" }
+            Cases { "cz<č<d<gz<ģ<h<iz<j<kz<ķ<l<lz<ļ<m<nz<ņ<o<rz<ŗ<s<sz<š<t<zz<ž" }
         }
         TestEstonian {
             Info {

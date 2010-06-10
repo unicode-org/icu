@@ -293,7 +293,7 @@ void TestProperty()
      * needs to be adjusted.
      * Same in intltest/apicoll.cpp.
      */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x2A};
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x05, 0x2A};
     UVersionInfo currUCAVersionArray = {5, 2, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
@@ -395,7 +395,7 @@ void TestProperty()
         buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
         tempLength = ucol_getRulesEx(col,UCOL_TAILORING_ONLY,buffer,bufLen );
-        doAssert( tempLength == 0x0a, "getRulesEx() result incorrect" );
+        doAssert( tempLength == 0x00, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
 
         log_verbose("ucol_getRulesEx() testing ...\n");
@@ -1337,9 +1337,9 @@ void TestGetLocale() {
     const char* validLocale;
     const char* actualLocale;
   } testStruct[] = {
-    { "sr_RS", "sr_Cyrl_RS", "ru" },
+    { "sr_RS", "sr_Cyrl_RS", "sr" },
     { "sh_YU", "sr_Latn_RS", "hr" }, /* this used to be sh, but now sh collation aliases hr */
-    { "en_BE_FOO", "en_BE", "en_BE" },
+    { "en_BE_FOO", "en_BE", "root" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
   };
 
@@ -1954,7 +1954,7 @@ static void TestShortString(void)
          */
         {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2D00_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
 
-        {"LEN_RUS_NO_AS_S4","AS_LEN_NO_S4", NULL, U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LEN_RUS_NO_AS_S4","AS_LROOT_NO_S4", NULL, U_USING_DEFAULT_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"Xqde_DE@collation=phonebookq_S3_EX","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
@@ -2066,20 +2066,19 @@ TestGetContractionsAndUnsafes(void)
         const char* safeCodeUnits;
     } tests[] = {
         { "ru",
-            "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}]",
-            "[{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
+            "[{\\u0418\\u0306}{\\u0438\\u0306}]",
+            "[\\u0439\\u0457]",
             "[\\u00e6]",
-            "[a]",
-            "[\\u0474\\u0475\\u04d8\\u04d9\\u04e8\\u04e9]",
+            "[ae]",
+            "[\\u0418\\u0438]",
             "[aAbB\\u0430\\u0410\\u0433\\u0413]"
         },
         { "uk",
-            "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}"
-            "{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
-            "[]",
+            "[{\\u0406\\u0308}{\\u0456\\u0308}{\\u0418\\u0306}{\\u0438\\u0306}]",
+            "[\\u0407\\u0419\\u0439\\u0457]",
             "[\\u00e6]",
-            "[a]",
-            "[\\u0474\\u0475\\u04D8\\u04D9\\u04E8\\u04E9\\u0430\\u0410\\u0433\\u0413]",
+            "[ae]",
+            "[\\u0406\\u0456\\u0418\\u0438]",
             "[aAbBxv]",
         },
         { "sh",

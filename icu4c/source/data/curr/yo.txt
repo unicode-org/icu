@@ -64,7 +64,7 @@ yo{
             "Dina ti Orílẹ́ède Àlùgèríánì",
         }
         EGP{
-            "EG£",
+            "EGP",
             "pọọn ti Orílẹ́ède Egipiti",
         }
         ERN{
@@ -232,5 +232,5 @@ yo{
             "Dọla ti Orílẹ́ède Siibabuwe",
         }
     }
-    Version{"2.0.46.79"}
+    Version{"2.0.49.29"}
 }

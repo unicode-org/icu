@@ -259,6 +259,10 @@ fr{
             "CSK" /** ===  */,
             "couronne forte tchécoslovaque",
         }
+        CUC{
+            "CUC$",
+            "peso cubain convertible",
+        }
         CUP{
             "$CU",
             "peso cubain",
@@ -875,6 +879,10 @@ fr{
             "TMM",
             "manat turkmène",
         }
+        TMT{
+            "TMT",
+            "nouveau manat turkmène",
+        }
         TND{
             "DT",
             "dinar tunisien",
@@ -1348,6 +1356,10 @@ fr{
         CSK{
             one{"couronne forte tchécoslovaque"}
             other{"couronnes fortes tchécoslovaques"}
+        }
+        CUC{
+            one{"peso cubain convertible"}
+            other{"pesos cubains convertibles"}
         }
         CUP{
             one{"peso cubain"}
@@ -1965,6 +1977,10 @@ fr{
             one{"manat turkmène"}
             other{"manats turkmènes"}
         }
+        TMT{
+            one{"nouveau manat turkmène"}
+            other{"nouveaux manats turkmènes"}
+        }
         TND{
             one{"dinar tunisien"}
             other{"dinars tunisiens"}
@@ -2190,5 +2206,5 @@ fr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.49.58"}
 }

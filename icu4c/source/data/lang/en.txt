@@ -10,6 +10,12 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
+    Keys{
+        calendar{"Calendar"}
+        collation{"Collation"}
+        currency{"Currency"}
+        numbers{"Numbers"}
+    }
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
@@ -516,7 +522,7 @@ en{
         uga{"Ugaritic"}
         uk{"Ukrainian"}
         umb{"Umbundu"}
-        und{"Unknown or Invalid Language"}
+        und{"Unknown Language"}
         ur{"Urdu"}
         uz{"Uzbek"}
         vai{"Vai"}
@@ -694,7 +700,7 @@ en{
         Zsym{"Symbols"}
         Zxxx{"Unwritten"}
         Zyyy{"Common"}
-        Zzzz{"Unknown or Invalid Script"}
+        Zzzz{"Unknown Script"}
     }
     Types{
         calendar{
@@ -799,7 +805,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.49.71"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

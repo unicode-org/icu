@@ -64,7 +64,7 @@ asa{
             "dinari ya Aljeria",
         }
         EGP{
-            "EG£",
+            "EGP",
             "pauni ya Mithri",
         }
         ERN{

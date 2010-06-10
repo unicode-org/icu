@@ -301,5 +301,5 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany lub nieprawidłowy region"}
     }
-    Version{"2.0.48.65"}
+    Version{"2.0.49.64"}
 }

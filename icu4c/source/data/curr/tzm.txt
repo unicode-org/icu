@@ -64,7 +64,7 @@ tzm{
             "Ḍinar Udzayri",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Junih Umiṣṛi",
         }
         ERN{

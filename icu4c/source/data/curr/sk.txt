@@ -276,7 +276,7 @@ sk{
             "Estónska kroon",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Egyptská libra",
         }
         ERN{

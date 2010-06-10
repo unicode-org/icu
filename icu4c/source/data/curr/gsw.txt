@@ -308,7 +308,7 @@ gsw{
             "Eestnischi Chroone",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Ägüptischs Pfund",
         }
         ERN{

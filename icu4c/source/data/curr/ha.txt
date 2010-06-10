@@ -64,7 +64,7 @@ ha{
             "Kuɗin Aljeriya",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Fam kin Masar",
         }
         ERN{

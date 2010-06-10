@@ -296,7 +296,7 @@ it{
             "Corona dell’Estonia",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Sterlina Egiziana",
         }
         ERN{
@@ -1085,5 +1085,5 @@ it{
             one{"valuta sconosciuta/non valida"}
         }
     }
-    Version{"2.0.47.69"}
+    Version{"2.0.49.58"}
 }

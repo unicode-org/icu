@@ -81,21 +81,18 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("58:59"),
         UnicodeString("January 1999"),                        // en_US 11: yyyyMMMM
 
-        // currently the following for en_US@calendar=japanese just verify the correct fallback behavior for ticket:5702;
-        // however some are not the "correct" results. To fix that, root needs better DateTimePatterns/availableFormats
-        // data; cldrbug #1994 is for that.
-        UnicodeString("H 11-01"),                             // en_US@calendar=japanese  0: yM
-        UnicodeString("H 11 Jan"),                            // en_US@calendar=japanese  1: yMMM
+        UnicodeString("1/11 Heisei"),                         // en_US@calendar=japanese  0: yM
+        UnicodeString("Jan 11 Heisei"),                       // en_US@calendar=japanese  1: yMMM
         UnicodeString("H 11-01-13"),                          // en_US@calendar=japanese  2: yMd
         UnicodeString("H 11 Jan 13"),                         // en_US@calendar=japanese  3: yMMMd
-        UnicodeString("1-13"),                                // en_US@calendar=japanese  4: Md
+        UnicodeString("1/13"),                                // en_US@calendar=japanese  4: Md
         UnicodeString("Jan 13"),                              // en_US@calendar=japanese  5: MMMd
-        UnicodeString("H 11 Q1"),                             // en_US@calendar=japanese  6: yQQQ
+        UnicodeString("Q1 11 Heisei"),                        // en_US@calendar=japanese  6: yQQQ
         UnicodeString("11:58 PM"),                            // en_US@calendar=japanese  7: hhmm
         UnicodeString("23:58"),                               // en_US@calendar=japanese  8: HHmm
-        UnicodeString("23:58"),                               // en_US@calendar=japanese  9: jjmm
+        UnicodeString("11:58 PM"),                            // en_US@calendar=japanese  9: jjmm
         UnicodeString("58:59"),                               // en_US@calendar=japanese 10: mmss
-        UnicodeString("H 11 January"),                        // en_US@calendar=japanese 11: yyyyMMMM
+        UnicodeString("January 11 Heisei"),                   // en_US@calendar=japanese 11: yyyyMMMM
 
         UnicodeString("1999-1", -1, US_INV),                  // zh_Hans_CN: yM
         CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)

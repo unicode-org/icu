@@ -64,7 +64,7 @@ guz{
             "Dinari ya Aljeria",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Pauni ya Misri",
         }
         ERN{

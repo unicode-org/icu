@@ -64,7 +64,7 @@ lag{
             "Dináairi ya Alijéria",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Páundi ya Mísiri",
         }
         ERN{

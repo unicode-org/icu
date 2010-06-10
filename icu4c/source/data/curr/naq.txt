@@ -64,7 +64,7 @@ naq{
             "Algerian Dinar",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Egytian Ponds",
         }
         ERN{

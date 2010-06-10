@@ -18,7 +18,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.47.71"}
+    Version{"2.0.49.64"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -26,15 +26,20 @@ pt_PT{
                 "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yyyy",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "d 'de' MMM 'de' y G",
+                "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                yQ{"QQQ 'de' y G"}
+                yQQQ{"QQQ 'de' y G"}
+                yyQ{"QQQ 'de' yy G"}
             }
         }
         gregorian{
@@ -141,21 +146,70 @@ pt_PT{
                 }
             }
         }
+        islamic{
+            DateTimePatterns{
+                "HH'h'mm'min'ss's' zzzz",
+                "HH'h'mm'min'ss's' z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "d 'de' MMM 'de' y G",
+                "d/M/y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yQ{"QQQ 'de' y G"}
+                yQQQ{"QQQ 'de' y G"}
+                yyQ{"QQQ 'de' yy G"}
+            }
+        }
         japanese{
             DateTimePatterns{
                 "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yy",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "d 'de' MMM 'de' y G",
+                "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                yQ{"QQQ 'de' y G"}
+                yQQQ{"QQQ 'de' y G"}
+                yyQ{"QQQ 'de' yy G"}
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "HH'h'mm'min'ss's' zzzz",
+                "HH'h'mm'min'ss's' z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "d 'de' MMM 'de' y G",
+                "d/M/y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yQ{"QQQ 'de' y G"}
+                yQQQ{"QQQ 'de' y G"}
+                yyQ{"QQQ 'de' yy G"}
             }
         }
     }

@@ -255,6 +255,10 @@ da{
             "CSK" /** ===  */,
             "Tjekkoslovakisk hard koruna",
         }
+        CUC{
+            "CUC$",
+            "Cubansk konvertibel peso",
+        }
         CUP{
             "CU$",
             "Cubansk peso",
@@ -308,7 +312,7 @@ da{
             "Estisk kroon",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Egyptisk pund",
         }
         ERN{
@@ -867,6 +871,10 @@ da{
             "TMM",
             "Turkmensk manat",
         }
+        TMT{
+            "TMT",
+            "Ny turkmensk manat",
+        }
         TND{
             "DT",
             "Tunesisk dinar",
@@ -983,6 +991,14 @@ da{
             "XBB",
             "EMU",
         }
+        XBC{
+            "XBC",
+            "European Unit of Account (XBC)",
+        }
+        XBD{
+            "XBD",
+            "European Unit of Account (XBD)",
+        }
         XCD{
             "EC$",
             "Østkaribisk dollar",
@@ -1074,6 +1090,10 @@ da{
         ZWD{
             "Z$",
             "Zimbabwisk dollar",
+        }
+        ZWL{
+            "ZWL",
+            "Zimbabwisk dollar (2009)",
         }
     }
     CurrencyPlurals{
@@ -1661,5 +1681,5 @@ da{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.49.58"}
 }

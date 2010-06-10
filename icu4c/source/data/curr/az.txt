@@ -296,7 +296,7 @@ az{
             "Estoniya krunu",
         }
         EGP{
-            "EG£",
+            "EGP",
             "misir paundu",
         }
         ERN{

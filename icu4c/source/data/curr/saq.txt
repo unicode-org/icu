@@ -64,7 +64,7 @@ saq{
             "Njilingi eel Aljeria",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Njilingi eel Misri",
         }
         ERN{

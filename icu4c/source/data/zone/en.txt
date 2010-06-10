@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.48.46"}
+    Version{"2.0.49.71"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
@@ -201,6 +201,9 @@ en{
         "meta:Cape_Verde"{
             ld{"Cape Verde Summer Time"}
             ls{"Cape Verde Time"}
+        }
+        "meta:Casey"{
+            ls{"Casey Time"}
         }
         "meta:Chamorro"{
             lg{"Chamorro Time"}

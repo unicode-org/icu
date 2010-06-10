@@ -215,6 +215,7 @@ timezoneTypes:table(nofallback){
             "America:Aruba"{"awaua"}
             "America:Asuncion"{"pyasu"}
             "America:Bahia"{"brssa"}
+            "America:Bahia_Banderas"{"mxpvr"}
             "America:Barbados"{"bbbgi"}
             "America:Belem"{"brbel"}
             "America:Belize"{"bzbze"}

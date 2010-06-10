@@ -85,5 +85,5 @@ pt_PT{
             "Tala de Samoa Ocidental",
         }
     }
-    Version{"2.0.47.71"}
+    Version{"2.0.49.64"}
 }

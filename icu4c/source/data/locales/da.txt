@@ -39,7 +39,7 @@ da{
             }
         }
     }
-    Version{"2.0.48.76"}
+    Version{"2.0.49.58"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -56,6 +56,37 @@ da{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                H{"HH"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                M{"M"}
+                MEd{"E. d/M"}
+                MMM{"MMM"}
+                MMMEd{"E d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d."}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
+                y{"y G"}
+                yM{"M/y G"}
+                yMEd{"EEE. d/M/y G"}
+                yMMM{"MMM y G"}
+                yMMMEd{"EEE. d. MMM y G"}
+                yMd{"d/M/y G"}
+                yQ{"Q y G"}
+                yQQQ{"QQQ y G"}
+                yyMM{"MM/y G"}
+                yyMMM{"MMM y G"}
+                yyQ{"Q. 'kvartal' y G"}
+                yyyy{"y G"}
+                yyyyMM{"MM/y G"}
+                yyyyMMM{"MMM y G"}
             }
         }
         gregorian{
@@ -374,6 +405,140 @@ da{
                         "4. kvartal",
                     }
                 }
+            }
+        }
+        islamic{
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM y G",
+                "d. MMMM y G",
+                "d. MMM y G",
+                "d/M/y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                H{"HH"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                M{"M"}
+                MEd{"E. d/M"}
+                MMM{"MMM"}
+                MMMEd{"E d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d."}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
+                yyMM{"MM/y G"}
+                yyMMM{"MMM y G"}
+                yyQ{"Q. 'kvartal' y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"EEE. d/M/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"EEE. d. MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM y G",
+                "d. MMMM y G",
+                "d. MMM y G",
+                "d/M/y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                H{"HH"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                M{"M"}
+                MEd{"E. d/M"}
+                MMM{"MMM"}
+                MMMEd{"E d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d."}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
+                yyMM{"MM/y G"}
+                yyMMM{"MMM y G"}
+                yyQ{"Q. 'kvartal' y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"EEE. d/M/y G"}
+                yyyyMM{"MM/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"EEE. d. MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM y G",
+                "d. MMMM y G",
+                "d. MMM y G",
+                "d/M/y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                H{"HH"}
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                M{"M"}
+                MEd{"E. d/M"}
+                MMM{"MMM"}
+                MMMEd{"E d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d."}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
+                yyMM{"MM/y G"}
+                yyMMM{"MMM y G"}
+                yyQ{"Q. 'kvartal' y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"EEE. d/M/y G"}
+                yyyyMM{"MM/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"EEE. d. MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
             }
         }
     }

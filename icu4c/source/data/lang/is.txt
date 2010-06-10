@@ -548,7 +548,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"2.0.47.72"}
+    Version{"2.0.49.7"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

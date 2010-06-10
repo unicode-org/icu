@@ -64,7 +64,7 @@ nyn{
             "Dinari ya Arigyeriya",
         }
         EGP{
-            "EG£",
+            "EGP",
             "Paundi ya Misiri",
         }
         ERN{
