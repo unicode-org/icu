@@ -10,17 +10,34 @@
     <property name="shared.dir" value="main/shared"/>
     <import file="${shared.dir}/build/common-targets.xml"/>
 
+    <property environment="env"/>
+
+    <!-- icu4j binaries -->
     <property name="icu4j.jar.file" value="icu4j.jar"/>
     <property name="icu4jtests.jar.file" value="icu4jtests.jar"/>
     <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
     <property name="icu4j-localespi.jar.file" value="icu4j-localespi.jar"/>
-    <property name="icu4jdocs.jar.file" value="icu4jdocs.jar"/>
-    <property name="icu4jsrc.jar.file" value="icu4jsrc.jar"/>
+
     <property name="icu4jdemos.jar.file" value="icu4jdemos.jar"/>
 
-    <property name="doc.dir" value="doc"/>
+    <!-- icu4j release files -->
+    <property name="icu4j.jar.versioned.file" value="icu4j-${release.file.ver}.jar"/>
+    <property name="icu4j-charsets.jar.versioned.file" value="icu4j-charsets-${release.file.ver}.jar"/>
+    <property name="icu4j-localespi.jar.versioned.file" value="icu4j-localespi-${release.file.ver}.jar"/>
 
-    <property environment="env"/>
+    <property name="icu4j-src.jar.versioned.file" value="icu4j-${release.file.ver}-src.jar"/>
+    <property name="icu4j-charsets-src.jar.versioned.file" value="icu4j-charsets-${release.file.ver}-src.jar"/>
+    <property name="icu4j-localespi-src.jar.versioned.file" value="icu4j-localespi-${release.file.ver}-src.jar"/>
+
+    <property name="icu4jsrc.zip.file" value="icu4j-${release.file.ver}.zip"/>
+    <property name="icu4jsrc.tgz.file" value="icu4j-${release.file.ver}.tgz"/>
+
+    <property name="icu4jdocs.jar.file" value="icu4j-${release.file.ver}-docs.jar"/>
+
+    <!-- directories -->
+    <property name="release.dir" value="release"/>
+    <property name="doc.dir" value="doc"/>
+    <property name="release.dir" value="release"/>
 
     <!-- Java version check -->
     <condition property="is.java6.plus">
@@ -78,11 +95,12 @@
         <ant dir="${icu4j.tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
 
-        <!-- delete all .jar files in icu4j root directory -->
+        <!-- delete all .jar files root directory -->
         <delete>
             <fileset dir="." includes="icu4j*.jar"/>
         </delete>
 
+        <delete dir="${release.dir}"/>
         <delete dir="${doc.dir}"/>
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
@@ -92,7 +110,7 @@
     <target name="all" depends="info, main, tests, build-tools, tools, demos, jar, docs" description="Build all primary targets"/>
     <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit, localespi" description="Build ICU4J runtime library classes"/>
     <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, localespi-tests" description="Build ICU4J test classes"/>
-    <target name="releaseJar" depends="info, jar, jarDocs, jarSrc" description="Build all jar files for distribution"/>
+    <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution"/>
 
     <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
     
@@ -334,26 +352,143 @@
         </jar>
     </target>
 
-    <target name="jarDocs" depends="docs" description="Build ICU4J API doc jar file">
-        <jar jarfile="${icu4jdocs.jar.file}" compress="true" basedir="${doc.dir}"/>
-    </target>
-
-    <target name="jarSrc" description="Build ICU4J source jar file">
-        <jar jarfile="${icu4jsrc.jar.file}" compress="true">
-            <fileset dir=".">
-                <include name="main/**/*"/>
-                <include name="demos/**/*"/>
-                <include name="tools/**/*"/>
-                <include name="*.html"/>
-                <include name="*.xml"/>
-                <include name="*.properties"/>
-                <exclude name="**/out/**/*"/>
-            </fileset>
-        </jar>
-    </target>
-
     <target name="jarDemos" depends="demos" description="Build ICU4J demo jar file">
         <copy file="${icu4j.demos.jar}" tofile="${icu4jdemos.jar.file}"/>
+    </target>
+
+
+    <!-- release targests -->
+    <target name="releaseBinaries" depends="icu4jJar, charset, localespi" description="Build ICU4J binary files for distribution">
+        <mkdir dir="${release.dir}"/>
+        <copy file="${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
+        <copy file="${icu4j.charset.jar}" tofile="${release.dir}/${icu4j-charsets.jar.versioned.file}"/>
+        <copy file="${icu4j.localespi.jar}" tofile="${release.dir}/${icu4j-localespi.jar.versioned.file}"/>
+    </target>
+
+    <target name="releaseSrcJars" description="Build ICU4J src jar files for distribution">
+        <!-- icu4j src-jar -->
+        <mkdir dir="${out.dir}"/>
+        <copy file="${icu4j.core.dir}/manifest.stub" todir="${out.dir}">
+            <filterset>
+                <filter token="SPECVERSION" value="${jar.spec.version}"/>
+                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
+                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+            </filterset>
+        </copy>
+
+        <mkdir dir="${release.dir}"/>
+        <jar jarfile="${release.dir}/${icu4j-src.jar.versioned.file}"
+                compress="true"
+                manifest="${out.dir}/manifest.stub">
+            <fileset dir="${icu4j.core.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${icu4j.collate.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${icu4j.currdata.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${icu4j.langdata.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${icu4j.regiondata.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${icu4j.translit.dir}/${src.dir}" includes="**/*.java"/>
+            <fileset dir="${shared.dir}/licenses">
+                <include name="license.html"/>
+                <include name="unicode-license.txt"/>
+            </fileset>
+        </jar>
+
+        <!-- charset/localespi src-jar -->
+        <ant dir="${icu4j.charset.dir}" target="src-jar" inheritAll="false"/>
+        <ant dir="${icu4j.localespi.dir}" target="src-jar" inheritAll="false"/>
+
+        <copy file="${icu4j.charset.dir}/${out.dir}/lib/icu4j-charset-src.jar" tofile="${release.dir}/${icu4j-charsets-src.jar.versioned.file}"/>
+        <copy file="${icu4j.localespi.dir}/${out.dir}/lib/icu4j-localespi-src.jar" tofile="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"/>
+    </target>
+
+
+    <target name="releaseDocs" depends="docs" description="Build ICU4J API reference doc jar file for distribution">
+        <mkdir dir="${release.dir}"/>
+        <jar jarfile="${release.dir}/${icu4jdocs.jar.file}" compress="true" basedir="${doc.dir}"/>
+    </target>
+
+    <property name="src.release.wrk.dir" value="${out.dir}/tmpsrc"/>
+
+    <target name="releaseSourceArchiveZip" description="Build ICU4J source release archive (.zip)">
+        <delete dir="${src.release.wrk.dir}"/>
+        <delete file="${icu4jsrc.zip.file}"/>
+
+        <mkdir dir="${src.release.wrk.dir}"/>
+
+        <fixcrlf srcdir="."
+                destdir="${src.release.wrk.dir}"
+                encoding="UTF-8"
+                eol="crlf">
+            <include name="main/**/*"/>
+            <include name="demos/**/*"/>
+            <include name="tools/**/*"/>
+            <include name="*.html"/>
+            <include name="*.xml"/>
+            <include name="*.properties"/>
+            <exclude name="**/out/**/*"/>
+            <exclude name="**/*.jar"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
+            <exclude name="tools/build/icu4j*.api*.gz"/>
+        </fixcrlf>
+
+        <mkdir dir="${release.dir}"/>
+        <zip destfile="${release.dir}/${icu4jsrc.zip.file}">
+            <fileset dir="${src.release.wrk.dir}" includes="**/*"/>
+            <fileset dir="${basedir}">
+                <include name="main/shared/data/*.jar"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
+                <include name="tools/build/icu4j*.api*.gz"/>
+            </fileset>
+        </zip>
+
+        <delete dir="${src.release.wrk.dir}"/>
+    </target>
+
+    <target name="releaseSourceArchiveTgz" description="Build ICU4J source release archive (.tgz)">
+        <delete dir="${src.release.wrk.dir}"/>
+        <delete file="${icu4jsrc.tgz.file}"/>
+
+        <mkdir dir="${src.release.wrk.dir}"/>
+
+        <fixcrlf srcdir="."
+                destdir="${src.release.wrk.dir}"
+                encoding="UTF-8"
+                eol="lf">
+            <include name="main/**/*"/>
+            <include name="demos/**/*"/>
+            <include name="tools/**/*"/>
+            <include name="*.html"/>
+            <include name="*.xml"/>
+            <include name="*.properties"/>
+            <exclude name="**/out/**/*"/>
+            <exclude name="**/*.jar"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
+            <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
+            <exclude name="tools/build/icu4j*.api*.gz"/>
+        </fixcrlf>
+
+        <property name="icu4jsrc.tar" value="${out.dir}/icu4jsrc.tar"/>
+
+        <tar destfile="${icu4jsrc.tar}" longfile="gnu">
+            <fileset dir="${src.release.wrk.dir}" includes="**/*"/>
+            <fileset dir="${basedir}">
+                <include name="main/shared/data/*.jar"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
+                <include name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
+                <include name="tools/build/icu4j*.api*.gz"/>
+            </fileset>
+        </tar>
+
+        <mkdir dir="${release.dir}"/>
+        <gzip destfile="${release.dir}/${icu4jsrc.tgz.file}" src="${icu4jsrc.tar}"/>
+
+        <delete dir="${src.release.wrk.dir}"/>
+        <delete file="${icu4jsrc.tar}"/>
     </target>
 
     <!-- compile targets -->
