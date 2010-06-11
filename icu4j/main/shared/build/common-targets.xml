@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -8,6 +8,7 @@
     <dirname property="common-targets.dir" file="${ant.file.common-targets}"/>
     <property file="${common-targets.dir}/locations.properties"/>
     <property file="${common-targets.dir}/common.properties"/>
+    <property environment="env"/>
 
     <!-- common targets -->
 
@@ -34,7 +35,8 @@
             classpathref="javac.classpathref"
             source="${javac.source}"
             target="${javac.target}"
-            debug="${javac.debug}">
+            debug="${javac.debug}"
+            includeAntRuntime="no">
             <compilerarg value="${javac.compilerarg}"/>
         </javac>
     </target>
@@ -59,8 +61,28 @@
             </filterset>
         </copy>
 
-        <jar jarfile="${jar.file}" manifest="${out.dir}/manifest.stub" compress="true">
+        <jar jarfile="${jar.dir}/${jar.name}" manifest="${out.dir}/manifest.stub" compress="true">
             <fileset dir="${bin.dir}" includes="**/*"/>
+            <fileset dir="${shared.dir}/licenses">
+                <include name="license.html"/>
+                <include name="unicode-license.txt"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="@src-jar">
+        <mkdir dir="${jar.dir}"/>
+
+        <copy file="manifest.stub" todir="${out.dir}">
+            <filterset>
+                <filter token="SPECVERSION" value="${jar.spec.version}"/>
+                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
+                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+            </filterset>
+        </copy>
+
+        <jar jarfile="${jar.dir}/${src.jar.name}" manifest="${out.dir}/manifest.stub" compress="true">
+            <fileset dir="${src.dir}" includes="**/*.java"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
                 <include name="unicode-license.txt"/>
@@ -222,7 +244,9 @@
     </target>
 
     <!-- build-tools -->
-    <path id="javac.classpathref.build-tools"/>
+    <path id="javac.classpathref.build-tools">
+        <pathelement location="${env.JAVA_HOME}/lib/tools.jar"/>
+    </path>
 
     <target name="_all.build-tools">
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
