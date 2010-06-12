@@ -26,6 +26,8 @@
 #include "unicode/ucnv.h"
 #include "unicode/localpointer.h"
 
+#if !UCONFIG_NO_USET
+
 /**
  * \file
  *
@@ -179,4 +181,5 @@ U_STABLE UEnumeration * U_EXPORT2
 ucnvsel_selectForUTF8(const UConverterSelector* sel,
                       const char *s, int32_t length, UErrorCode *status);
 
+#endif
 #endif  /* __ICU_UCNV_SEL_H__ */

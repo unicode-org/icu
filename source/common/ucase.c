@@ -326,6 +326,7 @@ ucase_getDummy(UErrorCode *pErrorCode) {
 
 /* set of property starts for UnicodeSet ------------------------------------ */
 
+#if !UCONFIG_NO_USET
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* add the start code point to the USet */
@@ -352,6 +353,7 @@ ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *
      * because we do not build property UnicodeSets for them right now.
      */
 }
+#endif
 
 /* data access primitives --------------------------------------------------- */
 

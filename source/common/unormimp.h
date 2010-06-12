@@ -193,6 +193,7 @@ unorm_haveData(UErrorCode *pErrorCode);
 U_CFUNC UBool U_EXPORT2
 unorm_isCanonSafeStart(UChar32 c);
 
+#if !UCONFIG_NO_USET
 /**
  * Internal API, used by enumeration of canonically equivalent strings
  * @internal
@@ -207,6 +208,7 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  */
 U_CAPI void U_EXPORT2
 unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
+#endif
 
 /**
  * Swap unorm.icu. See udataswp.h.

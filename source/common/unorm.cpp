@@ -287,6 +287,7 @@ unorm_isCanonSafeStart(UChar32 c) {
     }
 }
 
+#if !UCONFIG_NO_USET
 U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
 #if !UNORM_HARDCODE_DATA
@@ -405,6 +406,7 @@ unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     }
     sa->add(sa->set, Hangul::HANGUL_LIMIT); /* add Hangul+1 to continue with other properties */
 }
+#endif
 
 /* quick check functions ---------------------------------------------------- */
 

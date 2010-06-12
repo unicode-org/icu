@@ -30,11 +30,13 @@
 #include "ucnv_imp.h"
 #include "putilimp.h"
 
+
 U_CAPI int32_t U_EXPORT2
 ucnv_getDisplayName(const UConverter *cnv,
                     const char *displayLocale,
                     UChar *displayName, int32_t displayNameCapacity,
                     UErrorCode *pErrorCode) {
+#ifndef ICU4C0
     UResourceBundle *rb;
     const UChar *name;
     int32_t length;
@@ -72,6 +74,12 @@ ucnv_getDisplayName(const UConverter *cnv,
         u_charsToUChars(cnv->sharedData->staticData->name, displayName, uprv_min(length, displayNameCapacity));
     }
     return u_terminateUChars(displayName, displayNameCapacity, length, pErrorCode);
+#else
+    if(U_SUCCESS(*pErrorCode)) {
+      *pErrorCode = U_UNSUPPORTED_ERROR;
+    }
+    return 0;
+#endif
 }
 
 #endif

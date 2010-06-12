@@ -31,6 +31,7 @@
 #include "unicode/uchar.h"
 #include "unicode/localpointer.h"
 
+
 #ifndef UCNV_H
 struct USet;
 /**
@@ -234,6 +235,8 @@ typedef struct USerializedSet {
      */
     uint16_t staticArray[USET_SERIALIZED_STATIC_ARRAY_CAPACITY];
 } USerializedSet;
+
+#if !UCONFIG_NO_USET
 
 /*********************************************************************
  * USet API
@@ -1116,5 +1119,7 @@ uset_getSerializedRangeCount(const USerializedSet* set);
 U_STABLE UBool U_EXPORT2
 uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
                         UChar32* pStart, UChar32* pEnd);
+
+#endif
 
 #endif

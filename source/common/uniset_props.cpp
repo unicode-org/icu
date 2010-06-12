@@ -206,6 +206,7 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 upropsvec_addPropertyStarts(&sa, &status);
                 break;
 #if !UCONFIG_NO_NORMALIZATION
+#if !UCONFIG_NO_USET
             case UPROPS_SRC_NORM:
                 unorm_addPropertyStarts(&sa, &status);
                 break;
@@ -213,6 +214,7 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
                 unorm_addPropertyStarts(&sa, &status);
                 break;
+#endif
             case UPROPS_SRC_NFC: {
                 const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(status);
                 if(U_SUCCESS(status)) {

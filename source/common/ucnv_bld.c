@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2009, International Business Machines Corporation and
+ * Copyright (c) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -79,7 +79,7 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
 
     &_SCSUData,
 
-#if UCONFIG_NO_LEGACY_CONVERSION
+#if UCONFIG_NO_LEGACY_CONVERSION || UCONFIG_NO_USET
     NULL,
 #else
     &_ISCIIData,

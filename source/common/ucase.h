@@ -20,8 +20,11 @@
 #define __UCASE_H__
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#if !UCONFIG_NO_USET
 #include "unicode/uset.h"
 #include "uset_imp.h"
+#endif
 #include "udataswp.h"
 
 U_CDECL_BEGIN
@@ -62,8 +65,10 @@ ucase_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
 
+#if !UCONFIG_NO_USET
 U_CFUNC void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode);
+#endif
 
 /**
  * Requires non-NULL locale ID but otherwise does the equivalent of
@@ -112,6 +117,7 @@ ucase_totitle(const UCaseProps *csp, UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options);
 
+#if !UCONFIG_NO_USET
 /**
  * Adds all simple case mappings and the full case folding for c to sa,
  * and also adds special case closure mappings.
@@ -138,6 +144,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa);
  */
 U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa);
+#endif
 
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2
@@ -253,7 +260,6 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
 
 U_CFUNC int32_t U_EXPORT2
 ucase_hasBinaryProperty(UChar32 c, UProperty which);
-
 
 U_CDECL_BEGIN
 

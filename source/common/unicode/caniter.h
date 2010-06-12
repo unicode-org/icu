@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_NORMALIZATION
+#if !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_USET
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"

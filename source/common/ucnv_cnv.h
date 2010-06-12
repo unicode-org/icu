@@ -190,6 +190,7 @@ typedef enum UConverterSetFilter {
     UCNV_SET_FILTER_COUNT
 } UConverterSetFilter;
 
+#if !UCONFIG_NO_USET
 /**
  * Fills the set of Unicode code points that can be converted by an ICU converter.
  * The API function ucnv_getUnicodeSet() clears the USet before calling
@@ -205,6 +206,13 @@ typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
                                          const USetAdder *sa,
                                          UConverterUnicodeSet which,
                                          UErrorCode *pErrorCode);
+#else
+/* will not be called. */
+typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
+                                         void *unused,
+                                         UConverterUnicodeSet which,
+                                         UErrorCode *pErrorCode);
+#endif
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 

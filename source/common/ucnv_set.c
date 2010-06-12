@@ -24,7 +24,7 @@
 #include "ucnv_bld.h"
 #include "uset_imp.h"
 
-#if !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_USET
 
 U_CAPI void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,

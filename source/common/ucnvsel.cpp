@@ -41,6 +41,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+#if !UCONFIG_NO_USET
+
 U_NAMESPACE_USE
 
 struct UConverterSelector {
@@ -809,3 +811,4 @@ ucnvsel_selectForUTF8(const UConverterSelector* sel,
   }
   return selectForMask(sel, mask, status);
 }
+#endif

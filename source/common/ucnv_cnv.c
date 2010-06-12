@@ -31,7 +31,13 @@ ucnv_getCompleteUnicodeSet(const UConverter *cnv,
                    const USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode) {
+#if !UCONFIG_NO_USET
     sa->addRange(sa->set, 0, 0x10ffff);
+#else
+    if(U_SUCCESS(*pErrorCode)) {
+      *pErrorCode = U_UNSUPPORTED_ERROR;
+    }
+#endif
 }
 
 U_CFUNC void
@@ -39,8 +45,14 @@ ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
                                const USetAdder *sa,
                                UConverterUnicodeSet which,
                                UErrorCode *pErrorCode) {
+#if !UCONFIG_NO_USET
     sa->addRange(sa->set, 0, 0xd7ff);
     sa->addRange(sa->set, 0xe000, 0x10ffff);
+#else
+    if(U_SUCCESS(*pErrorCode)) {
+      *pErrorCode = U_UNSUPPORTED_ERROR;
+    }
+#endif
 }
 
 U_CFUNC void

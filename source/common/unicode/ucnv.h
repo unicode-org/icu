@@ -899,6 +899,7 @@ typedef enum UConverterUnicodeSet {
     UCNV_SET_COUNT
 } UConverterUnicodeSet;
 
+#if !UCONFIG_NO_USET
 
 /**
  * Returns the set of Unicode code points that can be converted by an ICU converter.
@@ -950,9 +951,10 @@ ucnv_getUnicodeSet(const UConverter *cnv,
                    USet *setFillIn,
                    UConverterUnicodeSet whichSet,
                    UErrorCode *pErrorCode);
+#endif
 
 /**
- * Gets the current calback function used by the converter when an illegal
+ * Gets the current callback function used by the converter when an illegal
  *  or invalid codepage sequence is found. 
  * Context pointers are always owned by the caller.
  *

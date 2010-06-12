@@ -18,6 +18,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "unicode/uchar.h"
 #include "cstring.h"
 #include "cwchar.h"
 #include "cmemory.h"

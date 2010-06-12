@@ -26,6 +26,8 @@
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
 
+#if !UCONFIG_NO_USET
+
 U_NAMESPACE_USE
 
 U_CAPI USet* U_EXPORT2
@@ -642,3 +644,5 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
 // uset_remove(USet* set, UChar32 c) {
 //     addRemove(set, c, 1);
 // }
+#endif
+
