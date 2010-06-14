@@ -5664,7 +5664,6 @@ static void TestInvalidListsAndRanges(void)
     length = u_unescape(invalidRules[rule_no], rule, 500);
     if (length == 0) {
         log_err("ERROR: The rule cannot be unescaped: %s\n");
->>>>>>> .merge-right.r28177
         return;
     }
     myCollation = ucol_openRules(rule, length, UCOL_ON, UCOL_TERTIARY, &parse_error, &status);
