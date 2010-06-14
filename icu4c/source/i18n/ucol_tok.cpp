@@ -682,18 +682,17 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
     if (stuff == NULL || len <= 0) {
         return;
     }
-    UChar *tempStuff = (UChar *)stuff;
+    UnicodeString tempStuff(FALSE, stuff, len);
     if(src->extraCurrent+len >= src->extraEnd) {
         /* reallocate */
         if (stuff >= src->source && stuff <= src->end) {
-          // Copy stuff to a new buffer if stuff points to an address within
-          // src->source buffer.
-          tempStuff = (UChar*)uprv_malloc(len*sizeof(UChar));
-          if (tempStuff == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-          }
-          uprv_memcpy(tempStuff, stuff, len*sizeof(UChar));
+            // Copy the "stuff" contents into tempStuff's own buffer.
+            // UnicodeString is copy-on-write.
+            if (len > 0) {
+                tempStuff.setCharAt(0, tempStuff[0]);
+            } else {
+                tempStuff.remove();
+            }
         }
         UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
         if(newSrc != NULL) {
@@ -705,20 +704,14 @@ inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff,
             src->source = newSrc;
         } else {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            if (tempStuff != stuff) {
-                uprv_free(tempStuff);
-            }
             return;
         }
     }
     if(len == 1) {
-        *src->extraCurrent++ = *tempStuff;
+        *src->extraCurrent++ = tempStuff[0];
     } else {
-        uprv_memcpy(src->extraCurrent, tempStuff, len*sizeof(UChar));
+        u_memcpy(src->extraCurrent, tempStuff.getBuffer(), len);
         src->extraCurrent += len;
-    }
-    if (tempStuff != stuff) {
-        uprv_free(tempStuff);
     }
 }
 
@@ -757,13 +750,103 @@ static UBool isCharNewLine(UChar c){
     }
 }
 
-U_CAPI const UChar* U_EXPORT2
-ucol_tok_parseNextToken(UColTokenParser *src,
-                        UBool startOfRules,
-                        UParseError *parseError,
-                        UErrorCode *status)
+/*
+ * This function is called several times when a range is processed.  Each time, the next code point
+ * is processed.
+ * The following variables must be set before calling this function:
+ *   src->currentRangeCp:  The current code point to process.
+ *   src->lastRangeCp: The last code point in the range.
+ * Pre-requisite: src->currentRangeCp <= src->lastRangeCp.
+ */
+static const UChar*
+ucol_tok_processNextCodePointInRange(UColTokenParser *src,
+                                     UErrorCode *status)
 {
-    /* parsing part */
+  // Append current code point to source
+  UChar buff[U16_MAX_LENGTH];
+  uint32_t i = 0;
+
+  uint32_t nChars = U16_LENGTH(src->currentRangeCp);
+  src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
+  src->parsedToken.charsLen = nChars;
+
+  U16_APPEND_UNSAFE(buff, i, src->currentRangeCp);
+  ucol_tok_addToExtraCurrent(src, buff, nChars, status);
+
+  ++src->currentRangeCp;
+  if (src->currentRangeCp > src->lastRangeCp) {
+    src->inRange = FALSE;
+
+    if (src->currentStarredCharIndex > src->lastStarredCharIndex) {
+      src->isStarred = FALSE;
+    }
+  } else {
+    src->previousCp = src->currentRangeCp;
+  }
+  return src->current;
+}
+
+/*
+ * This function is called several times when a starred list is processed.  Each time, the next code point
+ * in the list is processed.
+ * The following variables must be set before calling this function:
+ *   src->currentStarredCharIndex:  Index (in src->source) of the first char of the current code point.
+ *   src->lastStarredCharIndex: Index to the last character in the list.
+ * Pre-requisite: src->currentStarredCharIndex <= src->lastStarredCharIndex.
+ */
+static const UChar*
+ucol_tok_processNextTokenInStarredList(UColTokenParser *src)
+{
+  // Extract the characters corresponding to the next code point.
+  uint32_t cp;
+  src->parsedToken.charsOffset = src->currentStarredCharIndex;
+  int32_t prev = src->currentStarredCharIndex;
+  U16_NEXT(src->source, src->currentStarredCharIndex, (uint32_t)(src->end - src->source), cp);
+  src->parsedToken.charsLen = src->currentStarredCharIndex - prev;
+
+  // When we are done parsing the starred string, turn the flag off so that
+  // the normal processing is restored.
+  if (src->currentStarredCharIndex > src->lastStarredCharIndex) {
+    src->isStarred = FALSE;
+  }
+  src->previousCp = cp;
+  return src->current;
+}
+
+/*
+ * Partially parses the next token, keeps the indices in src->parsedToken, and updates the counters.
+ *
+ * This routine parses and separates almost all tokens. The following are the syntax characters recognized.
+ *  # : Comment character
+ *  & : Reset operator
+ *  = : Equality
+ *  < : Primary collation
+ *  << : Secondary collation
+ *  <<< : Tertiary collation
+ *  ; : Secondary collation
+ *  , : Tertiary collation
+ *  / : Expansions
+ *  | : Prefix
+ *  - : Range
+
+ *  ! : Java Thai modifier, ignored
+ *  @ : French only
+
+ * [] : Options
+ * '' : Quotes
+ *
+ *  Along with operators =, <, <<, <<<, the operator * is supported to indicate a list.  For example, &a<*bcdexyz
+ *  is equivalent to &a<b<c<d<e<x<y<z.  In lists, ranges also can be given, so &a*b-ex-z is equivalent to the above.
+ *  This function do not separate the tokens in a list.  Instead, &a<*b-ex-z is parsed as three tokens - "&a",
+ *  "<*b", "-ex", "-z".  The strength (< in this case), whether in a list, whether in a range and the previous
+ *  character returned as cached so that the calling program can do further splitting.
+ */
+static const UChar*
+ucol_tok_parseNextTokenInternal(UColTokenParser *src,
+                                UBool startOfRules,
+                                UParseError *parseError,
+                                UErrorCode *status)
+{
     UBool variableTop = FALSE;
     UBool top = FALSE;
     UBool inChars = TRUE;
@@ -771,6 +854,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     UBool wasInQuote = FALSE;
     uint8_t before = 0;
     UBool isEscaped = FALSE;
+
     // TODO: replace these variables with src->parsedToken counterparts
     // no need to use them anymore since we have src->parsedToken.
     // Ideally, token parser would be a nice class... Once, when I have
@@ -779,7 +863,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     uint32_t extensionOffset = 0;
     uint32_t newStrength = UCOL_TOK_UNSET;
     UChar buff[10];
-    UChar32 codepoint;
 
     src->parsedToken.charsOffset = 0;  src->parsedToken.charsLen = 0;
     src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
@@ -845,9 +928,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     newStrength = UCOL_IDENTICAL;
                     if(*(src->current+1) == 0x002A) {/*'*'*/
                         src->current++;
-                        src->prevStrength = newStrength;
-                    }else{
-                        src->prevStrength = UCOL_TOK_UNSET;
+                        src->isStarred = TRUE;
                     }
                     break;
 
@@ -864,7 +945,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         goto EndOfLoop;
                     }
                     newStrength = UCOL_TERTIARY;
-                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case  0x003B/*';'*/:
@@ -880,7 +960,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         goto EndOfLoop;
                     }
                     newStrength = UCOL_SECONDARY;
-                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case 0x003C/*'<'*/:
@@ -910,9 +989,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     }
                     if(*(src->current+1) == 0x002A) {/*'*'*/
                         src->current++;
-                        src->prevStrength = newStrength;
-                    }else{
-                        src->prevStrength = UCOL_TOK_UNSET;
+                        src->isStarred = TRUE;
                     }
                     break;
 
@@ -923,7 +1000,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     }
 
                     newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
-                    src->prevStrength = UCOL_TOK_UNSET;
                     break;
 
                 case 0x005b/*'['*/:
@@ -988,15 +1064,11 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     /* found a quote, we're gonna start copying */
                 case 0x0027/*'\''*/:
                     if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
-                        if(src->prevStrength == UCOL_TOK_UNSET){
-                            *status = U_INVALID_FORMAT_ERROR;
-                            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                            return NULL;
-                            // enabling rules to start with a non-token character a < b
-                            // newStrength = UCOL_TOK_RESET;
-                        }else{
-                            newStrength = src->prevStrength;
-                        }
+                      *status = U_INVALID_FORMAT_ERROR;
+                      syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                      return NULL;
+                      // enabling rules to start with a non-token character a < b
+                      // newStrength = UCOL_TOK_RESET;
                     }
 
                     inQuote = TRUE;
@@ -1067,6 +1139,27 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     //newCharsLen = 0;
                     //break; // We want to store the whole prefix/character sequence. If we break
                     // the '|' is going to get lost.
+
+                case 0x002D /*-*/: /* A range. */
+                    if (newStrength != UCOL_TOK_UNSET) {
+                      // While processing the pending token, the isStarred field
+                      // is reset, so it needs to be saved for the next
+                      // invocation.
+                      src->savedIsStarred = src->isStarred;
+                      goto EndOfLoop;
+                   }
+                   src->isStarred = src->savedIsStarred;
+
+                   // Ranges are valid only in starred tokens.
+                   if (!src->isStarred) {
+                     *status = U_INVALID_FORMAT_ERROR;
+                     syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                     return NULL;
+                   }
+                   newStrength = src->parsedToken.strength;
+                   src->inRange = TRUE;
+                   break;
+
                 case 0x0023 /*#*/: /* this is a comment, skip everything through the end of line */
                     do {
                         ch = *(++(src->current));
@@ -1075,13 +1168,9 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     break;
                 default:
                     if (newStrength == UCOL_TOK_UNSET) {
-                        if(src->prevStrength == UCOL_TOK_UNSET){
-                            *status = U_INVALID_FORMAT_ERROR;
-                            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                            return NULL;
-                        }else{
-                            newStrength = src->prevStrength;
-                        }
+                      *status = U_INVALID_FORMAT_ERROR;
+                      syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                      return NULL;
                     }
 
                     if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
@@ -1099,11 +1188,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                             src->parsedToken.charsOffset = (uint32_t)(src->current - src->source);
                         }
                         src->parsedToken.charsLen++;
-                        if(src->prevStrength != UCOL_TOK_UNSET){
-                            U16_NEXT(0, src->current, src->end, codepoint);
-                            src->parsedToken.charsLen+= U16_LENGTH(codepoint) - 1;
-                            goto EndOfLoop;
-                        }
                     } else {
                         if(newExtensionLen == 0) {
                             extensionOffset = (uint32_t)(src->current - src->source);
@@ -1117,10 +1201,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         }
 
         if(wasInQuote) {
-            if(src->prevStrength != UCOL_TOK_UNSET && !inQuote){
-                src->current++;
-                goto EndOfLoop;
-            }
             if(ch != 0x27) {
                 if(inQuote || !uprv_isRuleWhiteSpace(ch)) {
                     ucol_tok_addToExtraCurrent(src, &ch, 1, status);
@@ -1152,12 +1232,95 @@ EndOfLoop:
 }
 
 /*
+ * Parses the next token, keeps the indices in src->parsedToken, and updates the counters.
+ * @see ucol_tok_parseNextTokenInternal() for the description of what operators are supported.
+ *
+ * In addition to what ucol_tok_parseNextTokenInternal() does, this function does the following:
+ *  1) ucol_tok_parseNextTokenInternal() returns a range as a single token.  This function separates
+ *     it to separate tokens and returns one by one.  In order to do that, the necessary states are
+ *     cached as member variables of the token parser.
+ *  2) When encountering a range, ucol_tok_parseNextTokenInternal() processes characters up to the
+ *     starting character as a single list token (which is separated into individual characters here)
+ *     and as another list token starting with the last character in the range.  Before expanding it
+ *     as a list of tokens, this function expands the range by filling the intermediate characters and
+ *     returns them one by one as separate tokens.
+ * Necessary checks are done for invalid combinations.
+ */
+U_CAPI const UChar* U_EXPORT2
+ucol_tok_parseNextToken(UColTokenParser *src,
+                        UBool startOfRules,
+                        UParseError *parseError,
+                        UErrorCode *status)
+{
+  const UChar *nextToken;
+
+  if (src->inRange) {
+    // We are not done processing a range.  Continue it.
+    return ucol_tok_processNextCodePointInRange(src, status);
+  } else if (src->isStarred) {
+    // We are not done processing a starred token.  Continue it.
+    return ucol_tok_processNextTokenInStarredList(src);
+  }
+
+  // Get the next token.
+  nextToken = ucol_tok_parseNextTokenInternal(src, startOfRules, parseError, status);
+
+  if (nextToken == NULL) {
+    return NULL;
+  }
+
+  if (src->inRange) {
+    // A new range has started.
+    // Check whether it is a chain of ranges with more than one hyphen.
+    if (src->lastRangeCp > 0 && src->lastRangeCp == src->previousCp) {
+        *status = U_INVALID_FORMAT_ERROR;
+        syntaxError(src->source,src->parsedToken.charsOffset-1,
+                    src->parsedToken.charsOffset+src->parsedToken.charsLen, parseError);
+        return NULL;
+    }
+
+    // The current token indicates the second code point of the range.
+    // Process just that, and then proceed with the star.
+    src->currentStarredCharIndex = src->parsedToken.charsOffset;
+    U16_NEXT(src->source, src->currentStarredCharIndex, 
+             (uint32_t)(src->end - src->source), src->lastRangeCp);
+    if (src->lastRangeCp <= src->previousCp) {
+        *status = U_INVALID_FORMAT_ERROR;
+        syntaxError(src->source,src->parsedToken.charsOffset-1,
+                    src->parsedToken.charsOffset+src->parsedToken.charsLen,parseError);
+        return NULL;
+    }
+
+    // Set current range code point to process the range loop
+    src->currentRangeCp = src->previousCp + 1;
+
+    src->lastStarredCharIndex = src->parsedToken.charsOffset + src->parsedToken.charsLen - 1;
+
+    return ucol_tok_processNextCodePointInRange(src, status);
+ } else if (src->isStarred) {
+    // We define two indices m_currentStarredCharIndex_ and m_lastStarredCharIndex_ so that
+    // [m_currentStarredCharIndex_ .. m_lastStarredCharIndex_], both inclusive, need to be
+    // separated into several tokens and returned.
+    src->currentStarredCharIndex = src->parsedToken.charsOffset;
+    src->lastStarredCharIndex =  src->parsedToken.charsOffset + src->parsedToken.charsLen - 1;
+
+    return ucol_tok_processNextTokenInStarredList(src);
+  } else {
+    // Set previous codepoint
+    U16_GET(src->source, 0, src->parsedToken.charsOffset, (uint32_t)(src->end - src->source), src->previousCp);
+  }
+  return nextToken;
+}
+
+
+/*
 Processing Description
 1 Build a ListList. Each list has a header, which contains two lists (positive
 and negative), a reset token, a baseCE, nextCE, and previousCE. The lists and
 reset may be null.
 2 As you process, you keep a LAST pointer that points to the last token you
 handled.
+
 */
 
 static UColToken *ucol_tok_initAReset(UColTokenParser *src, const UChar *expand, uint32_t *expandNext,
@@ -1429,7 +1592,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
         return 0;
     }
 
-    while(src->current < src->end) {
+    while(src->current < src->end || src->isStarred) {
         src->parsedToken.prefixOffset = 0;
 
         parseEnd = ucol_tok_parseNextToken(src,
@@ -1878,7 +2041,10 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
     src->parsedToken.flags = 0;
     src->parsedToken.strength = UCOL_TOK_UNSET;
     src->buildCCTabFlag = FALSE;
-    src->prevStrength = UCOL_TOK_UNSET;
+    src->isStarred = FALSE;
+    src->inRange = FALSE;
+    src->lastRangeCp = 0;
+    src->previousCp = 0;
 
     if(U_FAILURE(*status)) {
         return;

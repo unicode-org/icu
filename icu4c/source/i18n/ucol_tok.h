@@ -123,7 +123,18 @@ typedef struct {
   USet *copySet;
   USet *removeSet;
   UBool buildCCTabFlag;  /* Tailoring rule requirs building combining class table. */
-  uint32_t prevStrength;
+
+  uint32_t previousCp;               /* Previous code point. */
+  /* For processing starred lists. */
+  UBool isStarred;                   /* Are we processing a starred token? */
+  UBool savedIsStarred;
+  uint32_t currentStarredCharIndex;  /* Index of the current charrecter in the starred expression. */
+  uint32_t lastStarredCharIndex;    /* Index to the last character in the starred expression. */
+
+  /* For processing ranges. */
+  UBool inRange;                     /* Are we in a range? */
+  uint32_t currentRangeCp;           /* Current code point in the range. */
+  uint32_t lastRangeCp;              /* The last code point in the range. */
 } UColTokenParser;
 
 typedef struct {
@@ -162,6 +173,7 @@ U_CAPI const UChar* U_EXPORT2 ucol_tok_parseNextToken(UColTokenParser *src,
                         UBool startOfRules,
                         UParseError *parseError,
                         UErrorCode *status);
+
 
 U_CAPI const UChar * U_EXPORT2
 ucol_tok_getNextArgument(const UChar *start, const UChar *end, 

@@ -1,3 +1,4 @@
+
 /********************************************************************
  * COPYRIGHT:
  * Copyright (c) 2001-2010, International Business Machines Corporation and
@@ -551,6 +552,8 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   UChar *rulesCopy = NULL;
   UParseError parseError;
 
+  uprv_memset(&src, 0, sizeof(UColTokenParser));
+
   src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
@@ -929,6 +932,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   uint32_t Windiff = 1;
   UParseError parseError;
 
+  uprv_memset(&src, 0, sizeof(UColTokenParser));
   src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
@@ -1204,10 +1208,10 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             if(strength == UCOL_TOK_RESET) {
                 before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
                 if(top_ == TRUE) {
-                    int32_t index = src.parsedToken.indirectIndex;
+                    int32_t tokenIndex = src.parsedToken.indirectIndex;
 
-                    nextCE = baseCE = currCE = ucolIndirectBoundaries[index].startCE;
-                    nextContCE = baseContCE = currContCE = ucolIndirectBoundaries[index].startContCE;
+                    nextCE = baseCE = currCE = ucolIndirectBoundaries[tokenIndex].startCE;
+                    nextContCE = baseContCE = currContCE = ucolIndirectBoundaries[tokenIndex].startContCE;
                 } else {
                     nextCE = baseCE = currCE;
                     nextContCE = baseContCE = currContCE;
@@ -5433,53 +5437,244 @@ static void TestHiragana(void) {
     ucol_close(ucol);
 }
 
-const static UChar testSameStrengthSourceCases[][MAX_TOKEN_LEN] = {
-    {0x0061},
-    {0x0061},
-    {0x006c, 0x0061},
-    {0x0061, 0x0061, 0x0061},
-    {0x0062}
-};
+/* Convenient struct for running collation tests */
+typedef struct {
+  const UChar source[MAX_TOKEN_LEN];  /* String on left */
+  const UChar target[MAX_TOKEN_LEN];  /* String on right */
+  UCollationResult result;            /* -1, 0 or +1, depending on collation */
+} OneTestCase;
 
-const static UChar testSameStrengthTargetCases[][MAX_TOKEN_LEN] = {
-    {0x0031},
-    {0x006d},
-    {0x006b, 0x0062},
-    {0x0031, 0x0032, 0x0033},
-    {0x007a}
-};
-
-const static UCollationResult sameStrengthResults[] = {
-    UCOL_EQUAL,
-    UCOL_LESS,
-    UCOL_LESS,
-    UCOL_EQUAL,
-    UCOL_LESS
-};
-
-static void TestSameStrengthList(void)
+/*
+ * Utility function to test one collation test case.
+ * @param testcases Array of test cases.
+ * @param n_testcases Size of the array testcases.
+ * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
+ * @param n_rules Size of the array str_rules.
+ */
+static void doTestOneTestCase(const OneTestCase testcases[],
+                              int n_testcases,
+                              const char* str_rules[],
+                              int n_rules)
 {
+  int rule_no, testcase_no;
+  UChar rule[500]; 
+  int32_t length = 0;
+  UErrorCode status = U_ZERO_ERROR;
+  UParseError parse_error;
+  UCollator  *myCollation;
 
-    int32_t i;
-    UParseError error;
-    UErrorCode status = U_ZERO_ERROR;
-    UCollator  *myCollation;
-    UChar rules[] =  { 0x26, 0x61, 0x3c, 0x2a, 0x62, 0x63, 0x64, 0x20, 0x26, 0x62, 0x3c, 0x3c, 0x2a, 0x6b, 0x6c, 0x6d, 0x20, 0x26, 0x6b, 0x3c, 0x3c, 0x3c, 0x2a, 0x78, 0x79, 0x7a, 0x20, 0x26, 0x61, 0x3d, 0x2a, 0x31, 0x32, 0x33, 0x00 }; /* &a<*bcd &b<<*klm &k<<<*xyz &a=*123 */
+  for (rule_no = 0; rule_no < n_rules; ++rule_no) {
 
-    myCollation = ucol_openRules(rules, u_strlen(rules), UCOL_ON, UCOL_TERTIARY, &error, &status);
+    length = u_unescape(str_rules[rule_no], rule, 500);
+    if (length == 0) {
+        log_err("ERROR: The rule cannot be unescaped: %s\n");
+        return;
+    }
+    myCollation = ucol_openRules(rule, length, UCOL_ON, UCOL_TERTIARY, &parse_error, &status);
     if(U_FAILURE(status)){
         log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing the <<* syntax\n");
-    /*ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-      ucol_setStrength(myCollation, UCOL_TERTIARY);*/
-    for (i = 0; i < 5 ; i++)
-    {
-        doTest(myCollation, testSameStrengthSourceCases[i], testSameStrengthTargetCases[i], sameStrengthResults[i]);
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    for (testcase_no = 0; testcase_no < n_testcases; ++testcase_no) {
+      doTest(myCollation,
+             testcases[testcase_no].source,
+             testcases[testcase_no].target,
+             testcases[testcase_no].result
+             );
     }
     ucol_close(myCollation);
+  }
 }
+
+const static OneTestCase rangeTestcases[] = {
+  { {0x0061},                            {0x0062},                          UCOL_LESS }, /* "a" < "b" */
+  { {0x0062},                            {0x0063},                          UCOL_LESS }, /* "b" < "c" */
+  { {0x0061},                            {0x0063},                          UCOL_LESS }, /* "a" < "c" */
+
+  { {0x0062},                            {0x006b},                          UCOL_LESS }, /* "b" << "k" */
+  { {0x006b},                            {0x006c},                          UCOL_LESS }, /* "k" << "l" */
+  { {0x0062},                            {0x006c},                          UCOL_LESS }, /* "b" << "l" */
+  { {0x0061},                            {0x006c},                          UCOL_LESS }, /* "a" < "l" */
+  { {0x0061},                            {0x006d},                          UCOL_LESS },  /* "a" < "m" */
+
+  { {0x0079},                            {0x006d},                          UCOL_LESS },  /* "y" < "f" */
+  { {0x0079},                            {0x0067},                          UCOL_LESS },  /* "y" < "g" */
+  { {0x0061},                            {0x0068},                          UCOL_LESS },  /* "y" < "h" */
+  { {0x0061},                            {0x0065},                          UCOL_LESS },  /* "g" < "e" */
+
+  { {0x0061},                            {0x0031},                          UCOL_EQUAL }, /* "a" = "1" */
+  { {0x0061},                            {0x0032},                          UCOL_EQUAL }, /* "a" = "2" */
+  { {0x0061},                            {0x0033},                          UCOL_EQUAL }, /* "a" = "3" */
+  { {0x0061},                            {0x0066},                          UCOL_LESS }, /* "a" < "f" */
+  { {0x006c, 0x0061},                    {0x006b, 0x0062},                  UCOL_LESS },  /* "la" < "123" */
+  { {0x0061, 0x0061, 0x0061},            {0x0031, 0x0032, 0x0033},          UCOL_EQUAL }, /* "aaa" = "123" */
+  { {0x0062},                            {0x007a},                          UCOL_LESS },  /* "b" < "z" */
+  { {0x0061, 0x007a, 0x0062},            {0x0032, 0x0079, 0x006d},          UCOL_LESS }, /* "azm" = "2yc" */
+};
+
+static int nRangeTestcases = LEN(rangeTestcases);
+
+const static OneTestCase rangeTestcasesSupplemental[] = {
+  { {0xfffe},                            {0xffff},                          UCOL_LESS }, /* U+FFFE < U+FFFF */
+  { {0xffff},                            {0xd800, 0xdc00},                  UCOL_LESS }, /* U+FFFF < U+10000 */
+  { {0xd800, 0xdc00},                    {0xd800, 0xdc01},                  UCOL_LESS }, /* U+10000 < U+10001 */
+  { {0xfffe},                            {0xd800, 0xdc01},                  UCOL_LESS }, /* U+FFFE < U+10001 */
+  { {0xd800, 0xdc01},                    {0xd800, 0xdc02},                  UCOL_LESS }, /* U+10000 < U+10001 */
+  { {0xd800, 0xdc01},                    {0xd800, 0xdc02},                  UCOL_LESS }, /* U+10000 < U+10001 */
+  { {0xfffe},                            {0xd800, 0xdc02},                  UCOL_LESS }, /* U+FFFE < U+10001 */
+};
+
+static int nRangeTestcasesSupplemental = LEN(rangeTestcasesSupplemental);
+
+const static OneTestCase rangeTestcasesQwerty[] = {
+  { {0x0071},                            {0x0077},                          UCOL_LESS }, /* "q" < "w" */
+  { {0x0077},                            {0x0065},                          UCOL_LESS }, /* "w" < "e" */
+
+  { {0x0079},                            {0x0075},                          UCOL_LESS }, /* "y" < "u" */
+  { {0x0071},                            {0x0075},                          UCOL_LESS }, /* "q" << "u" */
+
+  { {0x0074},                            {0x0069},                          UCOL_LESS }, /* "t" << "i" */
+  { {0x006f},                            {0x0070},                          UCOL_LESS }, /* "o" << "p" */
+
+  { {0x0079},                            {0x0065},                          UCOL_LESS },  /* "y" < "e" */
+  { {0x0069},                            {0x0075},                          UCOL_LESS },  /* "i" < "u" */
+
+  { {0x0071, 0x0075, 0x0065, 0x0073, 0x0074},
+    {0x0077, 0x0065, 0x0072, 0x0065},                                       UCOL_LESS }, /* "quest" < "were" */
+  { {0x0071, 0x0075, 0x0061, 0x0063, 0x006b},
+    {0x0071, 0x0075, 0x0065, 0x0073, 0x0074},                               UCOL_LESS }, /* "quack" < "quest" */
+};
+
+static int nRangeTestcasesQwerty = LEN(rangeTestcasesQwerty);
+
+static void TestSameStrengthList(void)
+{
+  const char* strRules[] = {
+    /* Normal */
+    "&a<b<c<d &b<<k<<l<<m &k<<<x<<<y<<<z  &y<f<g<h<e &a=1=2=3", 
+
+    /* Lists */
+    "&a<*bcd &b<<*klm &k<<<*xyz &y<*fghe &a=*123", 
+  };
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListQuoted(void)
+{
+  const char* strRules[] = {
+    /* Lists with quoted characters */
+    "&'\\u0061'<*bcd &b<<*klm &k<<<*xyz &y<*f'\\u0067\\u0068'e &a=*123",
+    "&'\\u0061'<*b'\\u0063'd &b<<*klm &k<<<*xyz &'\\u0079'<*fgh'\\u0065' &a=*'\\u0031\\u0032\\u0033'",
+    "&'\\u0061'<*'\\u0062'c'\\u0064' &b<<*klm &k<<<*xyz  &y<*fghe &a=*'\\u0031\\u0032\\u0033'", 
+  };
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListSupplemental(void)
+{
+  const char* strRules[] = {
+    "&\\ufffe<\\uffff<\\U00010000<\\U00010001<\\U00010002",
+    "&\\ufffe<\\uffff<\\ud800\\udc00<\\ud800\\udc01<\\ud800\\udc02",
+    "&\\ufffe<*\\uffff\\U00010000\\U00010001\\U00010002",
+    "&\\ufffe<*\\uffff\\ud800\\udc00\\ud800\\udc01\\ud800\\udc02",
+  };
+  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListQwerty(void)
+{
+  const char* strRules[] = {
+    "&q<w<e<r &w<<t<<y<<u &t<<<i<<<o<<<p &o=a=s=d",   /* Normal */
+    "&q<*wer &w<<*tyu &t<<<*iop &o=*asd",             /* Lists  */
+  };
+  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListRanges(void)
+{
+  const char* strRules[] = {
+    "&a<*b-d &b<<*k-m &k<<<*x-z &y<*f-he &a=*1-3",
+  };
+  doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListSupplementalRanges(void)
+{
+  const char* strRules[] = {
+    "&\\ufffe<*\\uffff-\\U00010002",
+  };
+  doTestOneTestCase(rangeTestcasesSupplemental, nRangeTestcasesSupplemental, strRules, LEN(strRules));
+}
+
+static void TestSpecialCharacters(void)
+{
+  const char* strRules[] = {
+    /* Normal */
+    "&';'<'+'<','<'-'<'&'<'*'",
+
+    /* List */
+    "&';'<*'+,-&*'",
+
+    /* Range */
+    "&';'<*'+'-'-&*'", 
+  };
+
+  const static OneTestCase specialCharacterStrings[] = {
+    { {0x003b}, {0x002b}, UCOL_LESS },  /* ; < + */
+    { {0x002b}, {0x002c}, UCOL_LESS },  /* + < , */
+    { {0x002c}, {0x002d}, UCOL_LESS },  /* , < - */
+    { {0x002d}, {0x0026}, UCOL_LESS },  /* - < & */
+  };
+  doTestOneTestCase(specialCharacterStrings, LEN(specialCharacterStrings), strRules, LEN(strRules));
+}
+
+static void TestInvalidListsAndRanges(void)
+{
+  const char* invalidRules[] = {
+    /* Range not in starred expression */
+    "&\\ufffe<\\uffff-\\U00010002",
+
+    /* Range without start */
+    "&a<*-c",
+
+    /* Range without end */
+    "&a<*b-",
+
+    /* More than one hyphen */
+    "&a<*b-g-l",
+
+    /* Range in the wrong order */
+    "&a<*k-b",
+
+  };
+
+  UChar rule[500];
+  UErrorCode status = U_ZERO_ERROR;
+  UParseError parse_error;
+  int n_rules = LEN(invalidRules);
+  int rule_no;
+  int length;
+  UCollator  *myCollation;
+
+  for (rule_no = 0; rule_no < n_rules; ++rule_no) {
+
+    length = u_unescape(invalidRules[rule_no], rule, 500);
+    if (length == 0) {
+        log_err("ERROR: The rule cannot be unescaped: %s\n");
+>>>>>>> .merge-right.r28177
+        return;
+    }
+    myCollation = ucol_openRules(rule, length, UCOL_ON, UCOL_TERTIARY, &parse_error, &status);
+    if(!U_FAILURE(status)){
+      log_err("ERROR: Could not cause a failure as expected: \n");
+    }
+    status = U_ZERO_ERROR;
+  }
+}
+
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -5557,6 +5752,13 @@ void addMiscCollTest(TestNode** root)
     TEST(TestUCAPrecontext);
     TEST(TestOutOfBuffer5468);
     TEST(TestSameStrengthList);
+    TEST(TestSameStrengthListQuoted);
+    TEST(TestSameStrengthListSupplemental);
+    TEST(TestSameStrengthListQwerty);
+    TEST(TestSameStrengthListRanges);
+    TEST(TestSameStrengthListSupplementalRanges);
+    TEST(TestSpecialCharacters);
+    TEST(TestInvalidListsAndRanges);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
