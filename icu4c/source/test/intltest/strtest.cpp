@@ -568,7 +568,7 @@ StringTest::TestCharString() {
         errln("CharString.appendInvariantChars(longStr) failed.");
     }
     int32_t appendCapacity = 0;
-    char *buffer = chStr.getAppendBuffer(2, 10, appendCapacity, errorCode);
+    char *buffer = chStr.getAppendBuffer(5, 10, appendCapacity, errorCode);
     if (errorCode.isFailure()) {
         return;
     }
