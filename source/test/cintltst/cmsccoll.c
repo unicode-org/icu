@@ -1118,6 +1118,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
         return;
     }
 
+    uprv_memset(&src, 0, sizeof(UColTokenParser));
+
     consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
     UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0];
     /*UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1]; */
@@ -2953,6 +2955,8 @@ static void TestVariableTopSetting(void) {
   UChar second[256] = { 0 };
   UParseError parseError;
   int32_t myQ = getTestOption(QUICK_OPTION);
+
+  uprv_memset(&src, 0, sizeof(UColTokenParser));
 
   src.opts = &opts;
 
