@@ -280,6 +280,7 @@
         <include locales="mk_MK"/>
         <include locales="ml"/>
         <include locales="ml_IN"/>
+        <include locales="mo"/>
         <include locales="mr"/>        
         <include locales="mr_IN"/>
         <include locales="ms"/> 
