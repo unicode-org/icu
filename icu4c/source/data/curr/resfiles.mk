@@ -33,12 +33,12 @@ CURR_SYNTHETIC_ALIAS = en_RH.txt en_ZW.txt he_IL.txt id_ID.txt\
 
 # All aliases (to not be included under 'installed'), but not including root.
 CURR_ALIAS_SOURCE = $(CURR_SYNTHETIC_ALIAS) az_AZ.txt ha_GH.txt ha_NE.txt ha_NG.txt\
- in.txt iw.txt kk_KZ.txt no.txt pa_IN.txt\
- pa_PK.txt sh.txt sh_BA.txt sh_CS.txt sh_YU.txt\
- shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt sr_Cyrl_YU.txt\
- sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_YU.txt\
- tl.txt tzm_MA.txt uz_AF.txt uz_UZ.txt zh_CN.txt\
- zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
+ in.txt iw.txt kk_KZ.txt mo.txt no.txt\
+ pa_IN.txt pa_PK.txt sh.txt sh_BA.txt sh_CS.txt\
+ sh_YU.txt shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt\
+ sr_Cyrl_YU.txt sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt\
+ sr_YU.txt tl.txt tzm_MA.txt uz_AF.txt uz_UZ.txt\
+ zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # Ordinary resources
@@ -71,17 +71,17 @@ CURR_SOURCE = af.txt ak.txt am.txt ar.txt\
  ne_IN.txt nl.txt nn.txt nyn.txt om.txt\
  or.txt pa.txt pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt\
  pa_Guru_IN.txt pl.txt ps.txt pt.txt pt_PT.txt\
- rm.txt ro.txt rof.txt ru.txt rw.txt\
- rwk.txt saq.txt seh.txt ses.txt sg.txt\
- shi.txt shi_Latn.txt shi_Latn_MA.txt shi_Tfng.txt si.txt\
- sk.txt sl.txt sn.txt so.txt sq.txt\
- sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_RS.txt sr_Latn.txt\
- sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv.txt sw.txt\
- ta.txt te.txt teo.txt th.txt ti.txt\
- to.txt tr.txt tzm.txt tzm_Latn.txt tzm_Latn_MA.txt\
- uk.txt ur.txt uz.txt uz_Arab.txt uz_Arab_AF.txt\
- uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt vi.txt vun.txt\
- xog.txt yo.txt zh.txt zh_Hans.txt zh_Hans_CN.txt\
- zh_Hans_HK.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
- zh_Hant_TW.txt zu.txt
+ rm.txt ro.txt ro_MD.txt rof.txt ru.txt\
+ rw.txt rwk.txt saq.txt seh.txt ses.txt\
+ sg.txt shi.txt shi_Latn.txt shi_Latn_MA.txt shi_Tfng.txt\
+ si.txt sk.txt sl.txt sn.txt so.txt\
+ sq.txt sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_RS.txt\
+ sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv.txt\
+ sw.txt ta.txt te.txt teo.txt th.txt\
+ ti.txt to.txt tr.txt tzm.txt tzm_Latn.txt\
+ tzm_Latn_MA.txt uk.txt ur.txt uz.txt uz_Arab.txt\
+ uz_Arab_AF.txt uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt vi.txt\
+ vun.txt xog.txt yo.txt zh.txt zh_Hans.txt\
+ zh_Hans_CN.txt zh_Hans_HK.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt
 
