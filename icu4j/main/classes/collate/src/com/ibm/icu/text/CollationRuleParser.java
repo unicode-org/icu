@@ -37,18 +37,26 @@ final class CollationRuleParser
      */
     CollationRuleParser(String rules) throws ParseException
     {
+        // Prepares m_copySet_ and m_removeSet_.
         extractSetsFromRules(rules);
+
+        // Save the rules as a long string.  The StringBuilder object is
+        // used to store the result of token parsing as well.
         m_source_ = new StringBuilder(Normalizer.decompose(rules, false).trim());
         m_rules_ = m_source_.toString();
+
+        // Index of the next unparsed character.
         m_current_ = 0;
+
+        // Index of the next unwritten character in the parsed result.
         m_extraCurrent_ = m_source_.length();
+
         m_variableTop_ = null;
         m_parsedToken_ = new ParsedToken();
         m_hashTable_ = new HashMap<Token, Token>();
         m_options_ = new OptionSet(RuleBasedCollator.UCA_);
         m_listHeader_ = new TokenListHeader[512];
         m_resultLength_ = 0;
-        m_prevStrength_ = TOKEN_UNSET_;
         // call assembleTokenList() manually, so that we can
         // init a parser and manually parse tokens
         //assembleTokenList();
@@ -411,11 +419,6 @@ final class CollationRuleParser
      * the UCA.
      */
     UnicodeSet m_removeSet_;
-    /**
-     * Stores the previous token's strength when making a list of same level
-     * differences.
-     */
-    private int m_prevStrength_;
 
     /*
      * This is space for the extra strings that need to be unquoted during the
@@ -675,6 +678,24 @@ final class CollationRuleParser
                       = RuleBasedCollator.UCA_.getCollationElementIterator("");
     private int m_utilCEBuffer_[] = new int[2];
 
+    private boolean m_isStarred_;
+
+    private int m_currentStarredCharIndex_;
+
+
+    private int m_lastStarredCharIndex_;
+
+    private int m_currentRangeCp_;
+
+    private int m_lastRangeCp_;
+
+    private boolean m_inRange_;
+
+    private int m_previousCp_;
+
+    private boolean m_savedIsStarred_;
+
+
     // private methods -------------------------------------------------------
 
     /**
@@ -688,7 +709,9 @@ final class CollationRuleParser
         int sourcelimit = m_source_.length();
         int expandNext = 0;
 
-        while (m_current_ < sourcelimit) {
+        m_isStarred_ = false;
+
+        while (m_current_ < sourcelimit || m_isStarred_) {
             m_parsedToken_.m_prefixOffset_ = 0;
             if (parseNextToken(lastToken == null) < 0) {
                 // we have reached the end
@@ -734,6 +757,8 @@ final class CollationRuleParser
                     if (sourceToken.m_strength_ != TOKEN_RESET_
                         && lastToken != sourceToken) {
                         // otherwise remove sourceToken from where it was.
+
+                        // Take care of the next node
                         if (sourceToken.m_next_ != null) {
                             if (sourceToken.m_next_.m_strength_
                                                    > sourceToken.m_strength_) {
@@ -744,14 +769,20 @@ final class CollationRuleParser
                                                     = sourceToken.m_previous_;
                         }
                         else {
+                            // sourcetoken is the last token.
+                            // Redefine the tail token.
                             sourceToken.m_listHeader_.m_last_
                                                     = sourceToken.m_previous_;
                         }
+
+                        // Take care of the previous node.
                         if (sourceToken.m_previous_ != null) {
                             sourceToken.m_previous_.m_next_
                                                         = sourceToken.m_next_;
                         }
                         else {
+                            // sourcetoken is the first token.
+                            // Redefine the head node.
                             sourceToken.m_listHeader_.m_first_
                                                         = sourceToken.m_next_;
                         }
@@ -1148,18 +1179,150 @@ final class CollationRuleParser
     }
 
     /**
-     * Getting the next token
+     * Parses the next token.
      *
+     * It updates/accesses the following member variables:
+     * m_current_: Index to the next unparsed character (not code point)
+     *    in the character array (a StringBuilder object) m_source_.
+     * m_parsedToken_:  The parsed token.  The following of the token are updated.
+     *    .m_strength: The strength of the token.
+     *    .m_charsOffset, m_charsLen_: Index to the first character (after operators),
+     *         and number of characters in the token.
+     *         This may be in the main string, or in the appended string.
+     *    .m_extensionOffset_,  .m_extensionLen_:
+     *    .m_flags:
+     *    .m_prefixOffset, .m_prefixLen:  Used when "|" is used to specify "context before".
+     *    .m_indirectIndex:
      * @param startofrules
      *            flag indicating if we are at the start of rules
-     * @return the offset of the rules
+     * @return the offset of the next unparsed char
      * @exception ParseException
      *                thrown when rule parsing fails
      */
-    @SuppressWarnings("fallthrough")
     private int parseNextToken(boolean startofrules) throws ParseException
     {
-        // parsing part
+
+        if (m_inRange_) {
+            // We are not done processing a range.  Continue it.
+            return processNextCodePointInRange();
+        } else if (m_isStarred_) {
+            // We are not done processing a starred token.  Continue it.
+            return processNextTokenInTheStarredList();
+        }
+
+        // Get the next token.
+        int nextOffset = parseNextTokenInternal(startofrules);
+
+        // If the next token is starred and/or in range, we need to handle it here.
+        if (m_inRange_) {
+            // A new range has started.
+            // Check whether it is a chain of ranges with more than one hyphen.
+            if (m_lastRangeCp_ > 0 && m_lastRangeCp_ == m_previousCp_) {
+                throw new ParseException("Chained range syntax", m_current_);
+            }
+            
+            // The current token is the first character of the second code point of the range.
+            // Process just that, and then proceed with the star.
+            m_lastRangeCp_ = m_source_.codePointAt(this.m_parsedToken_.m_charsOffset_);
+            if (m_lastRangeCp_ <= m_previousCp_) {
+                throw new ParseException("Invalid range", m_current_);
+            }
+
+            // Set current range code point to process the range loop
+            m_currentRangeCp_ = m_previousCp_ + 1;
+
+            // Set current starred char index to continue processing the starred
+            // expression after the range is done.
+            m_currentStarredCharIndex_ = m_parsedToken_.m_charsOffset_
+                + Character.charCount(m_lastRangeCp_);
+            m_lastStarredCharIndex_ = m_parsedToken_.m_charsOffset_ + m_parsedToken_.m_charsLen_ - 1;
+
+            return processNextCodePointInRange();
+        } else if (m_isStarred_) {
+            // We define two indices m_currentStarredCharIndex_ and m_lastStarredCharIndex_ so that
+            // [m_currentStarredCharIndex_ .. m_lastStarredCharIndex_], both inclusive, need to be
+            // separated into several tokens and returned.
+            m_currentStarredCharIndex_ = m_parsedToken_.m_charsOffset_;
+            m_lastStarredCharIndex_ =  m_parsedToken_.m_charsOffset_ + m_parsedToken_.m_charsLen_ - 1;
+
+            return processNextTokenInTheStarredList();
+        }
+        return nextOffset;
+    }
+
+    private int processNextCodePointInRange() throws ParseException {
+        int nChars = Character.charCount(m_currentRangeCp_);
+        m_source_.appendCodePoint(m_currentRangeCp_);
+
+        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+        m_parsedToken_.m_charsLen_ = nChars;
+
+        m_extraCurrent_ += nChars;
+        ++m_currentRangeCp_;
+        if (m_currentRangeCp_ > m_lastRangeCp_) {
+            // All the code points in the range are processed.
+            // Turn the range flag off.
+            m_inRange_ = false;
+
+            // If there is a starred portion remaining in the current
+            // parsed token, resume the starred operation.
+            if (m_currentStarredCharIndex_ <= m_lastStarredCharIndex_) {
+                m_isStarred_ = true;
+            } else {
+                m_isStarred_ = false;
+            }
+        } else {
+            m_previousCp_ = m_currentRangeCp_;
+        }
+       return m_current_;
+    }
+
+
+    /**
+     * Extracts the next token from the starred token from
+     *   m_currentStarredCharIndex_ and returns it.
+     * @return the offset of the next unparsed char
+     * @throws ParseException
+     */
+    private int processNextTokenInTheStarredList() throws ParseException {
+        // Extract the characters corresponding to the next code point.
+        int cp = m_source_.codePointAt(m_currentStarredCharIndex_);
+        int nChars = Character.charCount(cp);
+
+        m_parsedToken_.m_charsLen_ = nChars;
+        m_parsedToken_.m_charsOffset_ = m_currentStarredCharIndex_;
+        m_currentStarredCharIndex_ += nChars;
+
+        // When we are done parsing the starred string, turn the flag off so that
+        // the normal processing is restored.
+        if (m_currentStarredCharIndex_ > m_lastStarredCharIndex_) {
+            m_isStarred_ = false;
+        }
+        m_previousCp_ = cp;
+        return m_current_;
+    }
+
+    private int resetToTop(boolean top, boolean variableTop,
+                           int extensionOffset, int newExtensionLen,
+                           byte byteBefore) throws ParseException {
+        m_parsedToken_.m_indirectIndex_ = 5;
+        top = doSetTop();
+        return doEndParseNextToken(TOKEN_RESET_,
+                                   top,
+                                   extensionOffset,
+                                   newExtensionLen,
+                                   variableTop, byteBefore);
+    }
+
+    /**
+     * Gets the next token and sets the necessary internal variables.
+     * This function parses a starred string as a single token, which will be separated
+     * in the calling function.
+     * @param startofrules Boolean value indicating whether this is the first rule
+     * @return the offset of the next unparsed char
+     * @throws ParseException
+     */
+    private int parseNextTokenInternal(boolean startofrules) throws ParseException {
         boolean variabletop = false;
         boolean top = false;
         boolean inchars = true;
@@ -1171,11 +1334,7 @@ final class CollationRuleParser
         int /*charsoffset = 0,*/ extensionoffset = 0;
         int newstrength = TOKEN_UNSET_;
 
-        m_parsedToken_.m_charsLen_ = 0;
-        m_parsedToken_.m_charsOffset_ = 0;
-        m_parsedToken_.m_prefixOffset_ = 0;
-        m_parsedToken_.m_prefixLen_ = 0;
-        m_parsedToken_.m_indirectIndex_ = 0;
+        initializeParsedToken();
 
         int limit = m_rules_.length();
         while (m_current_ < limit) {
@@ -1186,10 +1345,10 @@ final class CollationRuleParser
                 }
                 else {
                     if ((m_parsedToken_.m_charsLen_ == 0) || inchars) {
-                         if (m_parsedToken_.m_charsLen_ == 0) {
-                             m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
-                         }
-                         m_parsedToken_.m_charsLen_ ++;
+                        if (m_parsedToken_.m_charsLen_ == 0) {
+                            m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+                        }
+                        m_parsedToken_.m_charsLen_ ++;
                     }
                     else {
                         if (newextensionlen == 0) {
@@ -1233,20 +1392,13 @@ final class CollationRuleParser
                         }
                         // if we start with strength, we'll reset to top
                         if (startofrules == true) {
-                            m_parsedToken_.m_indirectIndex_ = 5;
-                            top = doSetTop();
-                            return doEndParseNextToken(TOKEN_RESET_,
-                                                       top,
-                                                       extensionoffset,
-                                                       newextensionlen,
-                                                       variabletop, before);
+                            return resetToTop(top, variabletop, extensionoffset,
+                                              newextensionlen, before);
                         }
                         newstrength = Collator.IDENTICAL;
-                        if(m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
+                        if (m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
                             m_current_++;
-                            m_prevStrength_ = newstrength;
-                        }else{
-                            m_prevStrength_ = TOKEN_UNSET_;
+                            m_isStarred_ = true;
                         }
                         break;
                     case 0x002C : // ','
@@ -1259,16 +1411,10 @@ final class CollationRuleParser
                         }
                         // if we start with strength, we'll reset to top
                         if (startofrules == true) {
-                            m_parsedToken_.m_indirectIndex_ = 5;
-                            top = doSetTop();
-                            return doEndParseNextToken(TOKEN_RESET_,
-                                                       top,
-                                                       extensionoffset,
-                                                       newextensionlen,
-                                                       variabletop, before);
+                            return resetToTop(top, variabletop, extensionoffset,
+                                              newextensionlen, before);
                         }
                         newstrength = Collator.TERTIARY;
-                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x003B : // ';'
                         if (newstrength != TOKEN_UNSET_) {
@@ -1278,18 +1424,12 @@ final class CollationRuleParser
                                                        newextensionlen,
                                                        variabletop, before);
                         }
-                        // if we start with strength, we'll reset to top
-                        if (startofrules == true) {
-                            m_parsedToken_.m_indirectIndex_ = 5;
-                            top = doSetTop();
-                            return doEndParseNextToken(TOKEN_RESET_,
-                                                       top,
-                                                       extensionoffset,
-                                                       newextensionlen,
-                                                       variabletop, before);
+                        //if we start with strength, we'll reset to top
+                        if(startofrules == true) {
+                            return resetToTop(top, variabletop, extensionoffset,
+                                              newextensionlen, before);
                         }
                         newstrength = Collator.SECONDARY;
-                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x003C : // '<'
                         if (newstrength != TOKEN_UNSET_) {
@@ -1299,15 +1439,10 @@ final class CollationRuleParser
                                                        newextensionlen,
                                                        variabletop, before);
                         }
-                        // if we start with strength, we'll reset to top
-                        if (startofrules == true) {
-                            m_parsedToken_.m_indirectIndex_ = 5;
-                            top = doSetTop();
-                            return doEndParseNextToken(TOKEN_RESET_,
-                                                       top,
-                                                       extensionoffset,
-                                                       newextensionlen,
-                                                       variabletop, before);
+                       // if we start with strength, we'll reset to top
+                       if (startofrules == true) {
+                            return resetToTop(top, variabletop, extensionoffset,
+                                              newextensionlen, before);
                         }
                         // before this, do a scan to verify whether this is
                         // another strength
@@ -1324,14 +1459,12 @@ final class CollationRuleParser
                         else { // just one
                             newstrength = Collator.PRIMARY;
                         }
-
-                        if(m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
+                        if (m_source_.charAt(m_current_ + 1) == 0x002A) { // '*'
                             m_current_++;
-                            m_prevStrength_ = newstrength;
-                        }else{
-                            m_prevStrength_ = TOKEN_UNSET_;
+                            m_isStarred_ = true;
                         }
                         break;
+
                     case 0x0026 : // '&'
                         if (newstrength != TOKEN_UNSET_) {
                             return doEndParseNextToken(newstrength,
@@ -1341,7 +1474,6 @@ final class CollationRuleParser
                                                        variabletop, before);
                         }
                         newstrength = TOKEN_RESET_; // PatternEntry::RESET = 0
-                        m_prevStrength_ = TOKEN_UNSET_;
                         break;
                     case 0x005b : // '['
                         // options - read an option, analyze it
@@ -1413,12 +1545,8 @@ final class CollationRuleParser
                     // found a quote, we're gonna start copying
                     case 0x0027 : //'\''
                         if (newstrength == TOKEN_UNSET_) {
-                            if (m_prevStrength_ == TOKEN_UNSET_) {
-                                // quote is illegal until we have a strength
-                                throwParseException(m_rules_, m_current_);
-                            }else{
-                                newstrength = m_prevStrength_;
-                            }
+                            // quote is illegal until we have a strength
+                            throwParseException(m_rules_, m_current_);
                         }
                         inquote = true;
                         if (inchars) { // we're doing characters
@@ -1426,6 +1554,9 @@ final class CollationRuleParser
                                 m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
                             }
                             if (m_parsedToken_.m_charsLen_ != 0) {
+                                // We are processing characters in quote together.
+                                // Copy whatever is in the current token, so that
+                                // the unquoted string can be appended to that.
                                 m_source_.append(m_source_.substring(
                                        m_current_ - m_parsedToken_.m_charsLen_,
                                        m_current_));
@@ -1495,6 +1626,26 @@ final class CollationRuleParser
                             // skip whitespace between '|' and the character
                         } while (UCharacterProperty.isRuleWhiteSpace(ch));
                         break;
+                   case 0x002D : // '-', indicates a range.
+                       if (newstrength != TOKEN_UNSET_) {
+                           m_savedIsStarred_ = m_isStarred_;
+                           return doEndParseNextToken(newstrength,
+                                                      top,
+                                                      extensionoffset,
+                                                      newextensionlen,
+                                                      variabletop, before);
+                       }
+
+                       m_isStarred_ = m_savedIsStarred_;
+                       // Ranges are valid only in starred tokens.
+                       if (!m_isStarred_) {
+                           throwParseException(m_rules_, m_current_);
+                       }
+
+                       newstrength = m_parsedToken_.m_strength_;
+                       m_inRange_ = true;
+                       break;
+
                     case 0x0023: // '#' // this is a comment, skip everything through the end of line
                         do {
                             m_current_ ++;
@@ -1505,14 +1656,10 @@ final class CollationRuleParser
                         break;
                     default :
                         if (newstrength == TOKEN_UNSET_) {
-                            if(m_prevStrength_ == TOKEN_UNSET_){
-                                throwParseException(m_rules_, m_current_);
-                            }else{
-                                newstrength = m_prevStrength_;
-                            }
+                            throwParseException(m_rules_, m_current_);
                         }
                         if (isSpecialChar(ch) && (inquote == false)) {
-                            throwParseException(m_rules_, m_current_);
+                                throwParseException(m_rules_, m_current_);
                         }
                         if (ch == 0x0000 && m_current_ + 1 == limit) {
                             break;
@@ -1522,16 +1669,6 @@ final class CollationRuleParser
                                 m_parsedToken_.m_charsOffset_ = m_current_;
                             }
                             m_parsedToken_.m_charsLen_++;
-                            if(m_prevStrength_ != TOKEN_UNSET_){
-                                char[] fullchar = Character.toChars(Character.codePointAt(m_source_, m_current_));
-                                m_current_ += fullchar.length;
-                                m_parsedToken_.m_charsLen_ += fullchar.length - 1;
-                                return doEndParseNextToken(newstrength,
-                                                           top,
-                                                           extensionoffset,
-                                                           newextensionlen,
-                                                           variabletop, before);
-                            }
                         }
                         else {
                             if (newextensionlen == 0) {
@@ -1554,6 +1691,18 @@ final class CollationRuleParser
         return doEndParseNextToken(newstrength, top,
                                    extensionoffset, newextensionlen,
                                    variabletop, before);
+    }
+
+
+    /**
+     * 
+     */
+    private void initializeParsedToken() {
+        m_parsedToken_.m_charsLen_ = 0;
+        m_parsedToken_.m_charsOffset_ = 0;
+        m_parsedToken_.m_prefixOffset_ = 0;
+        m_parsedToken_.m_prefixLen_ = 0;
+        m_parsedToken_.m_indirectIndex_ = 0;
     }
 
     /**
@@ -1941,7 +2090,7 @@ final class CollationRuleParser
         else if (i == 7) { // variable top
             return TOKEN_SUCCESS_MASK_ | TOKEN_VARIABLE_TOP_MASK_;
         }
-        else if (i == 8) { // rearange
+        else if (i == 8) { // rearrange
             return TOKEN_SUCCESS_MASK_;
         }
         else if (i == 9) { // before
@@ -2086,7 +2235,7 @@ final class CollationRuleParser
       int setStart = 0;
       int i = 0;
       while(i < rules.length()) {
-        if(rules.charAt(i) == 0x005B) {
+        if(rules.charAt(i) == 0x005B) { // [
           optionNumber = readOption(rules, i+1, rules.length());
           setStart = m_optionarg_;
           if(optionNumber == 13) { /* copy - parts of UCA to tailoring */
