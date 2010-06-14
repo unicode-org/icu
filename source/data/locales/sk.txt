@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ù ŭ û ü ū ÿ]"}
+    AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ř ù ŭ û ü ū ÿ]"}
     ExemplarCharacters{
         "[a á ä b c č d ď e é f g h {ch} i í j k l ĺ ľ m n ň o ó ô p q r ŕ s š t ť u "
         "ú v w x y ý z ž]"
@@ -30,7 +30,7 @@ sk{
             }
         }
     }
-    Version{"2.0.48.56"}
+    Version{"2.0.49.77"}
     calendar{
         gregorian{
             AmPmMarkers{

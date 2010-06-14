@@ -10,10 +10,10 @@
  *  ICU <specials> source: <path>/xml/collation/kn.xml
  */
 kn{
-    Version{"2.0.42.63"}
+    Version{"2.0.49.81"}
     collations{
         standard{
-            Sequence{" [normalization on ]&ಔ<ಂ<ಃ&ೞ<ಽ"}
+            Sequence{" [normalization on ]&ಔ<ಂ<ಃ<ೱ<ೲ"}
             Version{"1.8.99.1"}
         }
         traditional{

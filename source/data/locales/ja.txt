@@ -87,7 +87,7 @@ ja{
             }
         }
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.49.83"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -119,7 +119,7 @@ ja{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah"}
+                h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -168,7 +168,7 @@ ja{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah"}
+                h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
@@ -451,7 +451,7 @@ ja{
                 MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah"}
+                h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 y{"Gy年"}
@@ -733,7 +733,7 @@ ja{
                 MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah"}
+                h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 y{"Gy年"}
