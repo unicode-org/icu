@@ -402,7 +402,6 @@ icu4j/main/tests/framework/manifest.stub -text
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text
-icu4j/main/tests/packaging/.externalToolBuilders/copy-test-data.launch -text
 icu4j/main/tests/packaging/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/packaging/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/packaging/packaging-tests-build.launch -text
