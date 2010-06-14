@@ -1915,6 +1915,8 @@ static void TestSortKeyValidity(void)
         uint32_t strength = 0;
         uint16_t specs = 0;
 
+        uprv_memset(&src, 0, sizeof(UColTokenParser));
+
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
             log_err("%s collator creation failed\n", locale[count]);
