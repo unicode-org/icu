@@ -10,14 +10,12 @@
  *  ICU <specials> source: <path>/xml/collation/ta.xml
  */
 ta{
-    Version{"2.0.42.63"}
+    Version{"2.0.49.78"}
     collations{
         standard{
             Sequence{
                 " [normalization on ]"
-                "&୦<<௦"
                 "&ஔ<ஂ<ஃ"
-                "&வ<ழ<ள<ற<ன<ஜ<ஶ"
                 "&ஹ<க்ஷ"
                 "&[before 1]க<க்"
                 "&[before 1]ங<ங்"
