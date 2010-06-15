@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -66,6 +66,36 @@ UnicodeString toString(int32_t n);
             test();                   \
         }                             \
         break
+
+// More convenient macros. These allow easy reordering of the test cases.
+//
+//| void MyTest::runIndexedTest(int32_t index, UBool exec,
+//|                             const char* &name, char* /*par*/) {
+//|     TESTCASE_AUTO_BEGIN;
+//|     TESTCASE_AUTO(TestSomething);
+//|     TESTCASE_AUTO(TestSomethingElse);
+//|     TESTCASE_AUTO(TestAnotherThing);
+//|     TESTCASE_AUTO_END;
+//| }
+#define TESTCASE_AUTO_BEGIN \
+    for(;;) { \
+        int32_t testCaseAutoNumber = 0
+
+#define TESTCASE_AUTO(test) \
+        if (index == testCaseAutoNumber++) { \
+            name = #test; \
+            if (exec) { \
+                logln(#test "---"); \
+                logln(); \
+                test(); \
+            } \
+            break; \
+        }
+
+#define TESTCASE_AUTO_END \
+        name = ""; \
+        break; \
+    }
 
 class IntlTest : public TestLog {
 public:

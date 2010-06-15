@@ -1286,6 +1286,10 @@
 				RelativePath=".\testidna.h"
 				>
 			</File>
+			<File
+				RelativePath=".\uts46test.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="locales &amp; resources"

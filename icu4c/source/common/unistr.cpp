@@ -867,6 +867,7 @@ UnicodeString::toUTF8(ByteSink &sink) const {
     }
     if(U_SUCCESS(errorCode)) {
       sink.Append(utf8, length8);
+      sink.Flush();
     }
     if(utf8IsOwned) {
       uprv_free(utf8);

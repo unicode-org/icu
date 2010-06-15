@@ -271,6 +271,7 @@ void LocalPointerTest::TestLocalArray() {
 #include "unicode/ucnvsel.h"
 #include "unicode/ucal.h"
 #include "unicode/udatpg.h"
+#include "unicode/uidna.h"
 #include "unicode/uldnames.h"
 #include "unicode/umsg.h"
 #include "unicode/unorm2.h"
@@ -344,6 +345,17 @@ void LocalPointerTest::TestLocalXyzPointer() {
         return;
     }
 #endif /* !UCONFIG_NO_NORMALIZATION */
+
+#if !UCONFIG_NO_IDNA
+    LocalUIDNAPointer idna(uidna_openUTS46(0, errorCode));
+    if(errorCode.logIfFailureAndReset("uidna_openUTS46()")) {
+        return;
+    }
+    if(idna.isNull()) {
+        errln("LocalUIDNAPointer failure");
+        return;
+    }
+#endif  /* !UCONFIG_NO_IDNA */
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");

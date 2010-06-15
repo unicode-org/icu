@@ -89,17 +89,17 @@ typedef enum {
  * @stable ICU 2.0
  */
 typedef enum UNormalizationCheckResult {
-  /** 
+  /**
    * The input string is not in the normalization form.
    * @stable ICU 2.0
    */
   UNORM_NO,
-  /** 
+  /**
    * The input string is in the normalization form.
    * @stable ICU 2.0
    */
   UNORM_YES,
-  /** 
+  /**
    * The input string may or may not be in the normalization form.
    * This value is only returned for composition forms like NFC and FCC,
    * when a backward-combining character is found for which the surrounding text
@@ -151,7 +151,7 @@ unorm2_getInstance(const char *packageName,
  * Both are aliased and must not be modified or deleted while this object
  * is used.
  * The filter set should be frozen; otherwise the performance will suffer greatly.
- * @param norm2 wrapped Normalizer2 instance
+ * @param norm2 wrapped UNormalizer2 instance
  * @param filterSet USet which determines the characters to be normalized
  * @param pErrorCode Standard ICU error code. Its input value must
  *                   pass the U_SUCCESS() test, or else the function returns

@@ -263,6 +263,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 #include "unicode/fmtable.h"
 #include "unicode/format.h"
 #include "unicode/gregocal.h"
+#include "unicode/idna.h"
 #include "unicode/locdspnm.h"
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
@@ -325,6 +326,9 @@ void UObjectTest::testIDs()
     UnicodeSet emptySet;
     TESTCLASSID_NONE_CTOR(FilteredNormalizer2, (*noNormalizer2, emptySet));
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
+#endif
+#if !UCONFIG_NO_IDNA
+    TESTCLASSID_NONE_FACTORY(IDNA, IDNA::createUTS46Instance(0, status));
 #endif
     //TESTCLASSID_DEFAULT(CollationElementIterator);
 #if !UCONFIG_NO_COLLATION

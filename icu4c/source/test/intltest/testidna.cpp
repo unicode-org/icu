@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2009, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include "unicode/localpointer.h"
 #include "unicode/ustring.h"
 #include "unicode/usprep.h"
 #include "unicode/uniset.h"
@@ -1235,6 +1236,8 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
 // runIndexedTest
 //---------------------------------------------
 
+extern IntlTest *createUTS46Test();
+
 void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par)
 {
     if (exec) logln((UnicodeString)"TestSuite IDNA API ");
@@ -1266,6 +1269,14 @@ void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                 }
                 break;
             }
+        case 13:
+            name = "UTS46Test";
+            if (exec) {
+                logln("TestSuite UTS46Test---"); logln();
+                LocalPointer<IntlTest> test(createUTS46Test());
+                callTest(*test, par);
+            }
+            break;
         default: name = ""; break; /*needed to end loop*/
     }
 }

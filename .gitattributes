@@ -570,6 +570,7 @@ icu4c/source/data/in/ubidi.icu -text
 icu4c/source/data/in/ucase.icu -text
 icu4c/source/data/in/unames.icu -text
 icu4c/source/data/in/uprops.icu -text
+icu4c/source/data/in/uts46.nrm -text
 icu4c/source/data/lang/af.txt svneol=native#text/plain
 icu4c/source/data/lang/ak.txt svneol=native#text/plain
 icu4c/source/data/lang/am.txt svneol=native#text/plain

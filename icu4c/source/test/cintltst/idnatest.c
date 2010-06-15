@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2009, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -37,6 +37,8 @@ static void TestJB4490(void);
 static void TestJB4475(void); 
 static void TestLength(void);
 static void TestJB5273(void);
+static void TestUTS46(void);
+
 void addIDNATest(TestNode** root);
 
 
@@ -64,6 +66,7 @@ addIDNATest(TestNode** root)
    addTest(root, &TestJB4475,       "idna/TestJB4475");
    addTest(root, &TestLength,       "idna/TestLength");
    addTest(root, &TestJB5273,       "idna/TestJB5273");
+   addTest(root, &TestUTS46,        "idna/TestUTS46");
 }
 
 static void
@@ -847,6 +850,177 @@ static void TestJB5273(){
         log_err_status(status, "uidna_toUnicode failed with error: %s\n", u_errorName(status));
     }
 }
+
+/*
+ * Test the new (ICU 4.6/2010) C API that was added for UTS #46.
+ * Just an API test: Functionality is tested via C++ intltest.
+ */
+static void TestUTS46() {
+    static const UChar fA_sharps16[] = { 0x66, 0x41, 0xdf, 0 };
+    static const char fA_sharps8[] = { 0x66, 0x41, (char)0xc3, (char)0x9f, 0 };
+    static const UChar fa_sharps16[] = { 0x66, 0x61, 0xdf, 0 };
+    static const char fa_sharps8[] = { 0x66, 0x61, (char)0xc3, (char)0x9f, 0 };
+    static const UChar fass16[] = { 0x66, 0x61, 0x73, 0x73, 0 };
+    static const char fass8[] = { 0x66, 0x61, 0x73, 0x73, 0 };
+    static const UChar fA_BEL[] = { 0x66, 0x41, 7, 0 };
+    static const UChar fa_FFFD[] = { 0x66, 0x61, 0xfffd, 0 };
+
+    UChar dest16[10];
+    char dest8[10];
+    int32_t length;
+
+    UIDNAInfo info = UIDNA_INFO_INITIALIZER;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UIDNA *uts46 = uidna_openUTS46(UIDNA_USE_STD3_RULES|UIDNA_NONTRANSITIONAL_TO_UNICODE,
+                                   &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "uidna_openUTS46() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* These calls should succeed. */
+    length = uidna_labelToASCII(uts46, fA_sharps16, -1,
+                                dest16, LENGTHOF(dest16), &info, &errorCode);
+    if( U_FAILURE(errorCode) || length != 4 || 0 != u_memcmp(dest16, fass16, 5) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_labelToASCII() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToUnicode(uts46, fA_sharps16, u_strlen(fA_sharps16),
+                                  dest16, LENGTHOF(dest16), &info, &errorCode);
+    if( U_FAILURE(errorCode) || length != 3 || 0 != u_memcmp(dest16, fa_sharps16, 4) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_labelToUnicode() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToASCII(uts46, fA_sharps16, u_strlen(fA_sharps16),
+                               dest16, 4, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 4 || 0 != u_memcmp(dest16, fass16, 4) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_nameToASCII() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToUnicode(uts46, fA_sharps16, -1,
+                                 dest16, 3, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 3 || 0 != u_memcmp(dest16, fa_sharps16, 3) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_nameToUnicode() failed: %s\n", u_errorName(errorCode));
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToASCII_UTF8(uts46, fA_sharps8, -1,
+                                     dest8, LENGTHOF(dest8), &info, &errorCode);
+    if( U_FAILURE(errorCode) || length != 4 || 0 != memcmp(dest8, fass8, 5) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_labelToASCII_UTF8() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+                                      dest8, LENGTHOF(dest8), &info, &errorCode);
+    if( U_FAILURE(errorCode) || length != 4 || 0 != memcmp(dest8, fa_sharps8, 5) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_labelToUnicodeUTF8() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToASCII_UTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+                                    dest8, 4, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 4 || 0 != memcmp(dest8, fass8, 4) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_nameToASCII_UTF8() failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToUnicodeUTF8(uts46, fA_sharps8, -1,
+                                     dest8, 4, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 4 || 0 != memcmp(dest8, fa_sharps8, 4) ||
+        !info.isTransitionalDifferent || info.errors != 0
+    ) {
+        log_err("uidna_nameToUnicodeUTF8() failed: %s\n", u_errorName(errorCode));
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToASCII(uts46, NULL, 0,
+                               dest16, 0, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 0 ||
+        info.isTransitionalDifferent || info.errors != UIDNA_ERROR_EMPTY_LABEL
+    ) {
+        log_err("uidna_nameToASCII(empty) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToUnicode(uts46, fA_BEL, -1,
+                                 dest16, 3, &info, &errorCode);
+    if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
+        length != 3 || 0 != u_memcmp(dest16, fa_FFFD, 3) ||
+        info.isTransitionalDifferent || info.errors == 0
+    ) {
+        log_err("uidna_nameToUnicode(fa<BEL>) failed: %s\n", u_errorName(errorCode));
+    }
+
+    /* These calls should fail. */
+    errorCode = U_USELESS_COLLATOR_ERROR;
+    length = uidna_labelToASCII(uts46, fA_sharps16, -1,
+                                dest16, LENGTHOF(dest16), &info, &errorCode);
+    if(errorCode != U_USELESS_COLLATOR_ERROR) {
+        log_err("uidna_labelToASCII(failure) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToUnicode(uts46, fA_sharps16, u_strlen(fA_sharps16),
+                                  dest16, LENGTHOF(dest16), NULL, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_labelToUnicode(UIDNAInfo=NULL) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToASCII(uts46, NULL, u_strlen(fA_sharps16),
+                               dest16, 4, &info, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_nameToASCII(src=NULL) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToUnicode(uts46, fA_sharps16, -2,
+                                 dest16, 3, &info, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_nameToUnicode(length<-1) failed: %s\n", u_errorName(errorCode));
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToASCII_UTF8(uts46, fA_sharps8, -1,
+                                     NULL, LENGTHOF(dest8), &info, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_labelToASCII_UTF8(dest=NULL) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+                                      dest8, -1, &info, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_labelToUnicodeUTF8(capacity<0) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToASCII_UTF8(uts46, dest8, strlen(fA_sharps8),
+                                    dest8, 4, &info, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uidna_nameToASCII_UTF8(src==dest!=NULL) failed: %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = uidna_nameToUnicodeUTF8(uts46, fA_sharps8, -1,
+                                     dest8, 3, &info, &errorCode);
+    if(errorCode != U_BUFFER_OVERFLOW_ERROR || length != 4) {
+        log_err("uidna_nameToUnicodeUTF8() overflow failed: %s\n", u_errorName(errorCode));
+    }
+
+    uidna_close(uts46);
+}
+
 #endif
 
 /*
@@ -857,4 +1031,3 @@ static void TestJB5273(){
  * End:
  *
  */
-
