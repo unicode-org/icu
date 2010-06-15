@@ -31,6 +31,8 @@
 #include "cmemory.h"
 #include "util.h"
 
+U_NAMESPACE_USE
+
 U_CDECL_BEGIN
 static int32_t U_CALLCONV
 uhash_hashTokens(const UHashTok k)
