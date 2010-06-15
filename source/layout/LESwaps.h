@@ -1,7 +1,6 @@
-
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
  *
  */
 
@@ -23,7 +22,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 2.8
  */
-#define SWAPW(value) LESwaps::swapWord((const le_uint16 &) (value))
+#define SWAPW(value) LESwaps::swapWord((le_uint16)(value))
 
 /**
  * A convenience macro which invokes the swapLong member function
@@ -31,7 +30,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 2.8
  */
-#define SWAPL(value) LESwaps::swapLong((const le_uint32 &) (value))
+#define SWAPL(value) LESwaps::swapLong((le_uint32)(value))
 
 /**
  * This class is used to access data which stored in big endian order
@@ -55,11 +54,9 @@ public:
      *
      * @stable ICU 2.8
      */
-    static le_uint16 swapWord(const le_uint16 &value)
+    static le_uint16 swapWord(le_uint16 value)
     {
-        const le_uint8 *p = (const le_uint8 *) &value;
-
-        return ((p[0] << 8) + p[1]);
+        return (le_uint16)((value << 8) | (value >> 8));
     };
 
     /**
@@ -72,11 +69,13 @@ public:
      *
      * @stable ICU 2.8
      */
-    static le_uint32 swapLong(const le_uint32 &value)
+    static le_uint32 swapLong(le_uint32 value)
     {
-        const le_uint8 *p = (const le_uint8 *) &value;
-
-        return ((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
+        return (le_uint32)(
+            (value << 24) |
+            ((value << 8) & 0xff0000) |
+            ((value >> 8) & 0xff00) |
+            (value >> 24));
     };
 
 private:
