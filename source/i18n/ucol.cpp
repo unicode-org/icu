@@ -5556,7 +5556,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     goto cleanup;
                 }
             } else {
-                *status = U_MEMORY_ALLOCATION_ERROR;
+                *status = U_BUFFER_OVERFLOW_ERROR;
             }
         }
 
