@@ -1820,6 +1820,14 @@ UnicodeStringTest::TestUTF32() {
     }
 }
 
+class TestCheckedArrayByteSink : public CheckedArrayByteSink {
+public:
+    TestCheckedArrayByteSink(char* outbuf, int32_t capacity)
+            : CheckedArrayByteSink(outbuf, capacity), calledFlush(FALSE) {}
+    virtual void Flush() { calledFlush = TRUE; }
+    UBool calledFlush;
+};
+
 void
 UnicodeStringTest::TestUTF8() {
     static const uint8_t utf8[] = {
@@ -1869,12 +1877,15 @@ UnicodeStringTest::TestUTF8() {
     UnicodeString us(FALSE, utf16, LENGTHOF(utf16));
 
     char buffer[64];
-    CheckedArrayByteSink sink(buffer, (int32_t)sizeof(buffer));
+    TestCheckedArrayByteSink sink(buffer, (int32_t)sizeof(buffer));
     us.toUTF8(sink);
     if( sink.NumberOfBytesWritten() != (int32_t)sizeof(expected_utf8) ||
         0 != uprv_memcmp(buffer, expected_utf8, sizeof(expected_utf8))
     ) {
         errln("UnicodeString::toUTF8() did not create the expected string.");
+    }
+    if(!sink.calledFlush) {
+        errln("UnicodeString::toUTF8(sink) did not sink.Flush().");
     }
 #if U_HAVE_STD_STRING
     // Initial contents for testing that toUTF8String() appends.

@@ -1600,6 +1600,7 @@ public:
    * Calls u_strToUTF8WithSub().
    *
    * @param sink A ByteSink to which the UTF-8 version of the string is written.
+   *             sink.Flush() is called at the end.
    * @stable ICU 4.2
    * @see toUTF8String
    */

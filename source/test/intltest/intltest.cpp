@@ -258,6 +258,10 @@ IntlTest::appendHex(uint32_t number,
     return target;
 }
 
+static inline UBool isPrintable(UChar32 c) {
+    return c <= 0x7E && (c >= 0x20 || c == 9 || c == 0xA || c == 0xD);
+}
+
 // Replace nonprintable characters with unicode escapes
 UnicodeString&
 IntlTest::prettify(const UnicodeString &source,
@@ -271,9 +275,9 @@ IntlTest::prettify(const UnicodeString &source,
     for (i = 0; i < source.length(); )
     {
         UChar32 ch = source.char32At(i);
-        i += UTF_CHAR_LENGTH(ch);
+        i += U16_LENGTH(ch);
 
-        if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+        if (!isPrintable(ch))
         {
             if (ch <= 0xFFFF) {
                 target += "\\u";
@@ -306,9 +310,9 @@ IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
     for (i = 0; i < source.length();)
     {
         UChar32 ch = source.char32At(i);
-        i += UTF_CHAR_LENGTH(ch);
+        i += U16_LENGTH(ch);
 
-        if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+        if (!isPrintable(ch))
         {
             if (parseBackslash) {
                 // If we are preceded by an odd number of backslashes,
@@ -1466,12 +1470,11 @@ const char *  IntlTest::pathToDataDirectory()
 
 /*
  * This is a variant of cintltst/ccolltst.c:CharsToUChars().
- * It converts a character string into a UnicodeString, with
+ * It converts an invariant-character string into a UnicodeString, with
  * unescaping \u sequences.
  */
 UnicodeString CharsToUnicodeString(const char* chars){
-    UnicodeString str(chars, ""); // Invariant conversion
-    return str.unescape();
+    return UnicodeString(chars, -1, US_INV).unescape();
 }
 
 UnicodeString ctou(const char* chars) {
