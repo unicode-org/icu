@@ -18,6 +18,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+U_NAMESPACE_USE
+
 static UnicodeString **strs = NULL;
 
 static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, UnicodeString& fillin) {
