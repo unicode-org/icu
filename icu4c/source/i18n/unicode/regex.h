@@ -1548,6 +1548,40 @@ public:
                                   UErrorCode              &status);
 
 
+  /**
+    * Set a progress callback function for use with find operations on this Matcher.
+    * During find operations, the callback will be invoked after each return from a
+    * match attempt, giving the application the opportunity to terminate a long-running
+    * find operation.
+    *
+    *    @param   callback    A pointer to the user-supplied callback function.
+    *    @param   context     User context pointer.  The value supplied at the
+    *                         time the callback function is set will be saved
+    *                         and passed to the callback each time that it is called.
+    *    @param   status      A reference to a UErrorCode to receive any errors.
+    *    @draft ICU 4.6
+    */
+    virtual void setFindProgressCallback(URegexFindProgressCallback      *callback,
+                                              const void                              *context,
+                                              UErrorCode                              &status);
+
+
+  /**
+    *  Get the find progress callback function for this URegularExpression.
+    *
+    *    @param   callback    Out paramater, receives a pointer to the user-supplied 
+    *                         callback function.
+    *    @param   context     Out parameter, receives the user context pointer that
+    *                         was set when uregex_setFindProgressCallback() was called.
+    *    @param   status      A reference to a UErrorCode to receive any errors.
+    *    @draft ICU 4.6
+    */
+    virtual void getFindProgressCallback(URegexFindProgressCallback      *&callback,
+                                              const void                      *&context,
+                                              UErrorCode                      &status);
+
+
+
    /**
      *   setTrace   Debug function, enable/disable tracing of the matching engine.
      *              For internal ICU development use only.  DO NO USE!!!!
@@ -1598,6 +1632,7 @@ private:
     REStackFrame        *resetStack();
     inline REStackFrame *StateSave(REStackFrame *fp, int64_t savePatIdx, UErrorCode &status);
     void                 IncrementTime(UErrorCode &status);
+    UBool                ReportFindProgress(int64_t matchIndex, UErrorCode &status);
     
     int64_t              appendGroup(int32_t groupNum, UText *dest, UErrorCode &status) const;
     
@@ -1672,6 +1707,11 @@ private:
     URegexMatchCallback *fCallbackFn;       // Pointer to match progress callback funct.
                                            //   NULL if there is no callback.
     const void         *fCallbackContext;  // User Context ptr for callback function.
+
+    URegexFindProgressCallback  *fFindProgressCallbackFn;  // Pointer to match progress callback funct.
+                                                           //   NULL if there is no callback.
+    const void         *fFindProgressCallbackContext;      // User Context ptr for callback function.
+
 
     UBool               fInputUniStrMaybeMutable;  // Set when fInputText wraps a UnicodeString that may be mutable - compatibility.
 

@@ -34,6 +34,7 @@ public:
     virtual void PerlTests();
     virtual void Bug6149();
     virtual void Callbacks();
+    virtual void FindProgressCallbacks();
     virtual void UTextBasic();
     virtual void API_Match_UTF8();
     virtual void API_Pattern_UTF8();
