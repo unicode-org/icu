@@ -19,6 +19,7 @@
 #include "putilimp.h"
 #include "cstring.h"
 #include "olsontz.h"
+#include "utimezone.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -61,6 +62,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(15, TestFebruary);
         CASE(16, TestCanonicalID);
         CASE(17, TestDisplayNamesMeta);
+        CASE(18, TestTZWrapper);
        default: name = ""; break;
     }
 }
@@ -1974,6 +1976,89 @@ void TimeZoneTest::TestDisplayNamesMeta() {
     if (sawAnError) {
         dataerrln("***Note: Errors could be the result of changes to zoneStrings locale data");
     }
+}
+
+void TimeZoneTest::TestTZWrapper() {
+
+    // local variables
+    UErrorCode status = U_ZERO_ERROR;
+
+    UBool b;
+    UChar * data = NULL;
+    int32_t length = 0;
+    int32_t rawOffset;
+    int32_t dstOffset; 
+    UDate base = 1231027200000.0; //2009-01-04T00:00:00
+    UChar * data2 = NULL;
+    int32_t length2 = 0;
+
+    UTimeZone *tz1;
+    UTimeZone *tz2;
+    UTimeZone *tz3;
+
+    // test constructors
+    length = (int32_t)sizeof("America/Chicago");
+    tz1 = utimezone_createTimeZone((UChar*)"America/Chicago", &length);
+    tz2 = utimezone_createDefault();
+    tz3 = utimezone_getGMT(tz1);
+
+    // test equality
+    b = utimezone_equals(tz1, tz1);
+    b = utimezone_equals(tz1, tz2);
+    b = utimezone_hasSameRules(tz1, tz1);
+    b = utimezone_hasSameRules(tz1, tz2);
+   
+    // get time zone offset
+    utimezone_getOffset(tz1, base, false, &rawOffset, &dstOffset, &status);
+
+    // get time zone id
+    length = 0;
+    utimezone_getID(tz1,NULL,&length);
+    data = (UChar*)malloc(length);
+    utimezone_getID(tz1,data,&length);
+
+    // test accessors
+    int32_t count = utimezone_countEquivalentIDs(tz1, data, &length);
+
+    length2 = 0;
+    utimezone_getEquivalentID(tz1, data, &length, 1, data2, &length2);
+    data2 = (UChar*)malloc(length2);
+    utimezone_getEquivalentID(tz1, data, &length, 1, data2, &length2);
+    free(data2);
+
+    length2 = 0;
+    utimezone_getCanonicalID(tz1, data, &length, data2, &length2, &status);
+    data2 = (UChar*)malloc(length2);
+    utimezone_getCanonicalID(tz1, data, &length, data2, &length2, &status);
+    free(data2);
+
+    length2 = 0;
+    b = false;
+    utimezone_getCanonicalIDSys(tz1, data, &length, data2, &length2, &b, &status);
+    data2 = (UChar*)malloc(length2);
+    utimezone_getCanonicalIDSys(tz1, data, &length, data2, &length2, &b, &status);
+    free(data2);
+
+    const char * data3;
+    data3 = utimezone_getTZDataVersion(tz1, &status);
+
+    utimezone_setDefault(tz1, tz3);
+ 
+    // set time zone id
+    length = sizeof("TZ1");
+    utimezone_setID(tz1,(UChar*)"TZ1",&length);
+
+    free(data);
+    length = 0;
+    utimezone_getID(tz1,NULL,&length);
+    data = (UChar*)malloc(length);
+    utimezone_getID(tz1,data,&length);
+
+    // close resources
+    utimezone_close(tz3);
+    utimezone_close(tz2);
+    utimezone_close(tz1);
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
