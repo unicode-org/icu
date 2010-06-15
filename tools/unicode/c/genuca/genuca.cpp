@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -706,10 +706,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
             pointer++;
         }
     }
-    // Check for valid bytes in CE weights.
-    // TODO: Tighten this so that it allows 03 & 04 in intermediate bytes
-    // but not in final bytes.
-    // See http://bugs.icu-project.org/trac/ticket/7167
+    // Rudimentary check for valid bytes in CE weights.
+    // For a more comprehensive check see cintltst /tscoll/citertst/TestCEValidity
     for (i = 0; i < (int32_t)CEindex; ++i) {
         uint32_t value = element->CEs[i];
         uint8_t bytes[4] = {
@@ -719,14 +717,16 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
             (uint8_t)(value & UCOL_NEW_TERTIARYORDERMASK)
         };
         for (int j = 0; j < 4; ++j) {
-            uint8_t maxByte =
-                (isContinuation(value) || j == 1) ?
-                    UCOL_BYTE_FIRST_TAILORED :
-                    UCOL_BYTE_COMMON;
-            if (0 != bytes[j] && bytes[j] < maxByte) {
+            if (0 != bytes[j] && bytes[j] < 3) {
                 fprintf(stderr, "Warning: invalid UCA weight byte %02X for %s\n", bytes[j], buffer);
-                // TODO: return NULL;
+                return NULL;
             }
+        }
+        // Primary second bytes 03 and FF are compression terminators.
+        if (!isContinuation(value) && (bytes[1] == 3 || bytes[1] == 0xFF)) {
+            fprintf(stderr, "Warning: invalid UCA primary second weight byte %02X for %s\n",
+                    bytes[1], buffer);
+            return NULL;
         }
     }
 
