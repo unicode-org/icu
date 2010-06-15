@@ -1979,7 +1979,7 @@ void TimeZoneTest::TestDisplayNamesMeta() {
 }
 
 void TimeZoneTest::TestTZWrapper() {
-
+/*
     // local variables
     UErrorCode status = U_ZERO_ERROR;
 
@@ -2058,7 +2058,7 @@ void TimeZoneTest::TestTZWrapper() {
     utimezone_close(tz3);
     utimezone_close(tz2);
     utimezone_close(tz1);
-
+*/
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
