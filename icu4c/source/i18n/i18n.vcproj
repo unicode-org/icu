@@ -3239,6 +3239,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\utimezone.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\utimezone.h"
+				>
+			</File>
+			<File
 				RelativePath=".\utmscale.c"
 				>
 			</File>
