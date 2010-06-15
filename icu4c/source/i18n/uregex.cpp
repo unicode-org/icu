@@ -999,6 +999,40 @@ uregex_getMatchCallback(const URegularExpression    *regexp2,
 
 //------------------------------------------------------------------------------
 //
+//    uregex_setMatchProgressCallback
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2
+uregex_setFindProgressCallback(URegularExpression              *regexp2,
+                                URegexFindProgressCallback      *callback,
+                                const void                      *context,
+                                UErrorCode                      *status) {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, status)) {
+        regexp->fMatcher->setFindProgressCallback(callback, context, *status);
+    }
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_getMatchCallback
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2 
+uregex_getFindProgressCallback(const URegularExpression          *regexp2,
+                                URegexFindProgressCallback        **callback,
+                                const void                        **context,
+                                UErrorCode                        *status) {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+     if (validateRE(regexp, status)) {
+         regexp->fMatcher->getFindProgressCallback(*callback, *context, *status);
+     }
+}
+
+
+//------------------------------------------------------------------------------
+//
 //    uregex_replaceAll
 //
 //------------------------------------------------------------------------------

@@ -216,6 +216,8 @@ void RegexMatcher::init(UErrorCode &status) {
     fStackLimit        = DEFAULT_BACKTRACK_STACK_CAPACITY;
     fCallbackFn        = NULL;
     fCallbackContext   = NULL;
+    fFindProgressCallbackFn      = NULL;
+    fFindProgressCallbackContext = NULL;
     fTraceDebug        = FALSE;
     fDeferredStatus    = status;
     fData              = fSmallData;
@@ -548,7 +550,6 @@ int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
 }
 
 
-
 //--------------------------------------------------------------------------------
 //
 //   find()
@@ -641,6 +642,8 @@ UBool RegexMatcher::find() {
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
             //   runs with startPos == testStartLimit the last time through.
+            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                return FALSE;
         }
         U_ASSERT(FALSE);
 
@@ -687,6 +690,8 @@ UBool RegexMatcher::find() {
                     return FALSE;
                 }
                 startPos = pos;
+                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                    return FALSE;
             }
         }
         U_ASSERT(FALSE);
@@ -718,6 +723,8 @@ UBool RegexMatcher::find() {
                     return FALSE;
                 }
                 startPos = pos;
+                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                    return FALSE;
            }
         }
         U_ASSERT(FALSE);
@@ -764,6 +771,8 @@ UBool RegexMatcher::find() {
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
                     //   runs with startPos == testStartLimit the last time through.
+                    if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                        return FALSE;
                 }
             } else {
                 for (;;) {
@@ -792,6 +801,8 @@ UBool RegexMatcher::find() {
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
                     //   runs with startPos == testStartLimit the last time through.
+                    if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                        return FALSE;
                 }
             }
         }
@@ -925,6 +936,8 @@ UBool RegexMatcher::findUsingChunk() {
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
             //   runs with startPos == testLen the last time through.
+            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                return FALSE;
         }
         U_ASSERT(FALSE);
         
@@ -964,6 +977,8 @@ UBool RegexMatcher::findUsingChunk() {
                 fHitEnd = TRUE;
                 return FALSE;
             }
+            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                return FALSE;
         }
     }
         U_ASSERT(FALSE);
@@ -991,6 +1006,8 @@ UBool RegexMatcher::findUsingChunk() {
                 fHitEnd = TRUE;
                 return FALSE;
             }
+            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                return FALSE;
         }
     }
         U_ASSERT(FALSE);
@@ -1030,6 +1047,8 @@ UBool RegexMatcher::findUsingChunk() {
                 // Note that it's perfectly OK for a pattern to have a zero-length
                 //   match at the end of a string, so we must make sure that the loop
                 //   runs with startPos == testLen the last time through.
+                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                    return FALSE;
             }
         } else {
             for (;;) {
@@ -1056,6 +1075,8 @@ UBool RegexMatcher::findUsingChunk() {
                 // Note that it's perfectly OK for a pattern to have a zero-length
                 //   match at the end of a string, so we must make sure that the loop
                 //   runs with startPos == testLen the last time through.
+                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+                    return FALSE;
             }
         }
     }
@@ -1889,7 +1910,6 @@ RegexMatcher &RegexMatcher::reset(UText *input) {
     return *this;
 }*/
 
-
 RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return *this;
@@ -2330,6 +2350,38 @@ void RegexMatcher::getMatchCallback(URegexMatchCallback   *&callback,
 }
 
 
+//--------------------------------------------------------------------------------
+//
+//     setMatchCallback
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::setFindProgressCallback(URegexFindProgressCallback      *callback,
+                                                const void                      *context,
+                                                UErrorCode                      &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fFindProgressCallbackFn = callback;
+    fFindProgressCallbackContext = context;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     getMatchCallback
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::getFindProgressCallback(URegexFindProgressCallback    *&callback,
+                                                const void                    *&context,
+                                                UErrorCode                    &status) {
+    if (U_FAILURE(status)) {
+       return;
+    }
+    callback = fFindProgressCallbackFn;
+    context  = fFindProgressCallbackContext;
+}
+
+
 //================================================================================
 //
 //    Code following this point in this file is the internal
@@ -2515,6 +2567,29 @@ void RegexMatcher::IncrementTime(UErrorCode &status) {
     if (fTimeLimit > 0 && fTime >= fTimeLimit) {
         status = U_REGEX_TIME_OUT;
     }
+}
+
+//--------------------------------------------------------------------------------
+//
+//   ReportFindProgress     This function is called once for each advance in the target
+//                          string from the find() function, and calls the user progress callback
+//                          function if there is one installed.
+//                          
+//                          NOTE:  
+//
+//                          If the match operation needs to be aborted because the user
+//                          callback asked for it, just set an error status.
+//                          The engine will pick that up and stop in its outer loop.
+//
+//--------------------------------------------------------------------------------
+UBool RegexMatcher::ReportFindProgress(int64_t matchIndex, UErrorCode &status) {
+    if (fFindProgressCallbackFn != NULL) {
+        if ((*fFindProgressCallbackFn)(fFindProgressCallbackContext, matchIndex) == FALSE) {
+            status = U_ZERO_ERROR /*U_REGEX_STOPPED_BY_CALLER*/;
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 //--------------------------------------------------------------------------------
