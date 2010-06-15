@@ -117,6 +117,7 @@ public:
    * Flush internal buffers.
    * Some byte sinks use internal buffers or provide buffering
    * and require calling Flush() at the end of the stream.
+   * The ByteSink should be ready for further Append() calls after Flush().
    * The default implementation of Flush() does nothing.
    * @stable ICU 4.2
    */
@@ -156,7 +157,7 @@ public:
    * @return *this
    * @draft ICU 4.6
    */
-  CheckedArrayByteSink& Reset();
+  virtual CheckedArrayByteSink& Reset();
   /**
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes

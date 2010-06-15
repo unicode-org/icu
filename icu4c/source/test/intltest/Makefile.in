@@ -54,8 +54,8 @@ itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o \
 testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
-uobjtest.o idnaref.o idnaconf.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
-calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o \
+uobjtest.o idnaref.o idnaconf.o nptrans.o punyref.o testidn.o testidna.o uts46test.o \
+incaltst.o calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o \
 windttst.o winnmtst.o winutil.o csdetest.o tzrulets.o tzoffloc.o tzfmttst.o ssearch.o dtifmtts.o \
 tufmtts.o itspoof.o simplethread.o bidiconf.o locnmtst.o dcfmtest.o
 

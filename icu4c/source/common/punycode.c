@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -245,8 +245,8 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
             }
             c=src[j];
             if(IS_BASIC(c)) {
+                cpBuffer[srcCPCount++]=0;
                 if(destLength<destCapacity) {
-                    cpBuffer[srcCPCount++]=0;
                     dest[destLength]=
                         caseFlags!=NULL ?
                             asciiCaseMap((char)c, caseFlags[j]) :
@@ -323,7 +323,7 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
                 /* Represent delta as a generalized variable-length integer: */
                 for(q=delta, k=BASE; /* no condition */; k+=BASE) {
 
-                    /** RAM: comment out the old code for conformance with draft-ietf-idn-punycode-03.txt   
+                    /** RAM: comment out the old code for conformance with draft-ietf-idn-punycode-03.txt
 
                     t=k-bias;
                     if(t<TMIN) {
@@ -332,7 +332,7 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
                         t=TMAX;
                     }
                     */
-                    
+
                     t=k-bias;
                     if(t<TMIN) {
                         t=TMIN;
@@ -345,14 +345,16 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
                     }
 
                     if(destLength<destCapacity) {
-                        dest[destLength++]=digitToBasic(t+(q-t)%(BASE-t), 0);
+                        dest[destLength]=digitToBasic(t+(q-t)%(BASE-t), 0);
                     }
+                    ++destLength;
                     q=(q-t)/(BASE-t);
                 }
 
                 if(destLength<destCapacity) {
-                    dest[destLength++]=digitToBasic(q, (UBool)(cpBuffer[j]<0));
+                    dest[destLength]=digitToBasic(q, (UBool)(cpBuffer[j]<0));
                 }
+                ++destLength;
                 bias=adaptBias(delta, handledCPCount+1, (UBool)(handledCPCount==basicLength));
                 delta=0;
                 ++handledCPCount;

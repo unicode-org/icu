@@ -60,6 +60,7 @@ icu4c/source/data/in/ubidi.icu -text
 icu4c/source/data/in/ucase.icu -text
 icu4c/source/data/in/unames.icu -text
 icu4c/source/data/in/uprops.icu -text
+icu4c/source/data/in/uts46.nrm -text
 icu4c/source/data/lang/pool.res -text
 icu4c/source/data/locales/pool.res -text
 icu4c/source/data/region/pool.res -text
