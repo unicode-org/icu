@@ -77,30 +77,33 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 7: name = "Callbacks";
             if (exec) Callbacks();
             break;
-        case 8: name = "Bug 6149";
+        case 8: name = "FindProgressCallbacks";
+            if (exec) FindProgressCallbacks();
+            break;
+        case 9: name = "Bug 6149";
              if (exec) Bug6149();
              break;
-        case 9: name = "UTextBasic";
+        case 10: name = "UTextBasic";
           if (exec) UTextBasic();
           break;
-        case 10: name = "API_Match_UTF8";
+        case 11: name = "API_Match_UTF8";
           if (exec) API_Match_UTF8();
           break;
-        case 11: name = "API_Replace_UTF8";
+        case 12: name = "API_Replace_UTF8";
           if (exec) API_Replace_UTF8();
           break;
-        case 12: name = "API_Pattern_UTF8";
+        case 13: name = "API_Pattern_UTF8";
           if (exec) API_Pattern_UTF8();
           break;
-        case 13: name = "PerlTestsUTF8";
+        case 14: name = "PerlTestsUTF8";
           if (exec) PerlTestsUTF8();
           break;
-        case 14: name = "PreAllocatedUTextCAPI";
+        case 15: name = "PreAllocatedUTextCAPI";
           if (exec) PreAllocatedUTextCAPI();
           break;
-        case 15: name = "Bug 7651";
-          if (exec) Bug7651();
-          break;
+        case 16: name = "Bug 7651";
+             if (exec) Bug7651();
+             break;
 
         default: name = "";
             break; //needed to end loop
@@ -4411,6 +4414,114 @@ void RegexTest::Callbacks() {
 }
 
 
+//
+//   FindProgressCallbacks()    Test the find "progress" callback function.
+//                  When set, the find progress callback will be invoked during a find operations
+//                  after each return from a match attempt, giving the application the opportunity
+//                  to terminate a long-running find operation before it's normal completion.
+//
+
+struct progressCallBackContext {
+    RegexTest        *test;
+    int64_t          lastIndex;
+    int32_t          maxCalls;
+    int32_t          numCalls;
+    void reset(int32_t max) {maxCalls=max; numCalls=0;lastIndex=0;};
+};
+
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+testProgressCallBackFn(const void *context, int64_t matchIndex) {
+    progressCallBackContext  *info = (progressCallBackContext *)context;
+    info->numCalls++;
+    info->lastIndex = matchIndex;
+//    info->test->infoln("ProgressCallback - matchIndex = %d, numCalls = %d\n", matchIndex, info->numCalls);
+    return (info->numCalls < info->maxCalls);
+}
+U_CDECL_END
+
+void RegexTest::FindProgressCallbacks() {
+   {
+        // Getter returns NULLs if no callback has been set
+        
+        //   The variables that the getter will fill in.
+        //   Init to non-null values so that the action of the getter can be seen.
+        const void                  *returnedContext = &returnedContext;
+        URegexFindProgressCallback  *returnedFn = &testProgressCallBackFn;
+        
+        UErrorCode status = U_ZERO_ERROR;
+        RegexMatcher matcher("x", 0, status);
+        REGEX_CHECK_STATUS;
+        matcher.getFindProgressCallback(returnedFn, returnedContext, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(returnedFn == NULL);
+        REGEX_ASSERT(returnedContext == NULL);
+    }
+    
+   {
+        // Set and Get work
+        progressCallBackContext cbInfo = {this, 0, 0, 0};
+        const void                  *returnedContext;
+        URegexFindProgressCallback  *returnedFn;
+        UErrorCode status = U_ZERO_ERROR;
+        RegexMatcher matcher(UNICODE_STRING_SIMPLE("((.)+\\2)+x"), 0, status);  // A pattern that can run long.
+        REGEX_CHECK_STATUS;
+        matcher.setFindProgressCallback(testProgressCallBackFn, &cbInfo, status);
+        REGEX_CHECK_STATUS;
+        matcher.getFindProgressCallback(returnedFn, returnedContext, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(returnedFn == testProgressCallBackFn);
+        REGEX_ASSERT(returnedContext == &cbInfo);
+        
+        // A short-running match should NOT invoke the callback.
+        status = U_ZERO_ERROR;
+        cbInfo.reset(100);
+        UnicodeString s = "abxxx";
+        matcher.reset(s);
+#if 0
+        matcher.setTrace(TRUE);
+#endif
+        REGEX_ASSERT(matcher.find(0, status));
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(cbInfo.numCalls == 0);
+        
+        // A medium running match that causes matcher.find() to invoke our callback for each index.
+        status = U_ZERO_ERROR;
+        s = "aaaaaaaaaaaaaaaaaaab";
+        cbInfo.reset(s.length()); //  Some upper limit for number of calls that is greater than size of our input string
+        matcher.reset(s);
+        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(cbInfo.numCalls > 0 && cbInfo.numCalls < 25);
+        
+        // A longer running match that causes matcher.find() to invoke our callback which we cancel/interrupt at some point.
+        status = U_ZERO_ERROR;
+        UnicodeString s1 = "aaaaaaaaaaaaaaaaaaaaaaab";
+        cbInfo.reset(s1.length() - 5); //  Bail early somewhere near the end of input string
+        matcher.reset(s1);
+        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(cbInfo.numCalls == s1.length() - 5);
+
+#if 0
+        // Now a match that will succeed, but after an interruption
+        status = U_ZERO_ERROR;
+        UnicodeString s2 = "aaaaaaaaaaaaaa aaaaaaaaab xxx";
+        cbInfo.reset(s2.length() - 10); //  Bail early somewhere near the end of input string
+        matcher.reset(s2);
+        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_CHECK_STATUS;
+        // Now retry the match from where left off
+        cbInfo.maxCalls = 100; //  No callback limit
+        REGEX_ASSERT(matcher.find(cbInfo.lastIndex, status));
+        REGEX_CHECK_STATUS;
+#endif
+    }
+ 
+
+}
+
+
 //---------------------------------------------------------------------------
 //
 //    PreAllocatedUTextCAPI    Check the C API with pre-allocated mutable
@@ -4619,6 +4730,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
 void RegexTest::Bug7651() {
     UnicodeString pattern1("((?<![A-Za-z0-9])[#\\uff03][A-Za-z0-9_][A-Za-z0-9_\\u00c0-\\u00d6\\u00c8-\\u00f6\\u00f8-\\u00ff]*|(?<![A-Za-z0-9_])[@\\uff20][A-Za-z0-9_]+(?:\\/[\\w-]+)?|(https?\\:\\/\\/|www\\.)\\S+(?<![\\!\\),\\.:;\\]\\u0080-\\uFFFF])|\\$[A-Za-z]+)");
     //  The following should exceed the default operator stack depth in the matcher, i.e. force the matcher to malloc instead of using fSmallData.
+    //  It will cause a segfault if RegexMatcher tries to use fSmallData instead of malloc'ing the memory needed (see init2) for the pattern operator stack allocation.
     UnicodeString pattern2("((https?\\:\\/\\/|www\\.)\\S+(?<![\\!\\),\\.:;\\]\\u0080-\\uFFFF])|(?<![A-Za-z0-9_])[\\@\\uff20][A-Za-z0-9_]+(?:\\/[\\w\\-]+)?|(?<![A-Za-z0-9])[\\#\\uff03][A-Za-z0-9_][A-Za-z0-9_\\u00c0-\\u00d6\\u00c8-\\u00f6\\u00f8-\\u00ff]*|\\$[A-Za-z]+)");
     UnicodeString s("#ff @abcd This is test");
     RegexPattern  *REPattern = NULL;
