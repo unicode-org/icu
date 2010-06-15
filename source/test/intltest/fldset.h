@@ -54,8 +54,8 @@ class FieldsSet {
        * @return a formatted string listing which fields are set in 
        *   this, with the comparison made agaainst those fields in other.
        */
-      UnicodeString diffFrom(const FieldsSet& other, UErrorCode &status) const;
-      
+      U_NAMESPACE_QUALIFIER UnicodeString diffFrom(const FieldsSet& other, UErrorCode &status) const;
+
     public:
       /**
        * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
@@ -63,8 +63,10 @@ class FieldsSet {
        * @param status status of parse
        * @return the number of valid parsed fields on success, or a negative number on failure.
        */
-      int32_t parseFrom(const UnicodeString& str, UErrorCode& status) { return parseFrom(str,NULL,status); }
-      
+      int32_t parseFrom(const U_NAMESPACE_QUALIFIER UnicodeString& str, UErrorCode& status) {
+          return parseFrom(str,NULL,status);
+      }
+
       /**
        * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
        * @param inheritFrom if a field's value is given as 0-length, such as NAME1 in "NAME1=,NAME2=VALUE2", 
@@ -73,8 +75,12 @@ class FieldsSet {
        * @param status status of parse
        * @return the number of valid parsed fields on success, or a negative number on failure.
        */
-      int32_t parseFrom(const UnicodeString& str, const FieldsSet& inheritFrom, UErrorCode& status) { return parseFrom(str, &inheritFrom, status); }
-      
+      int32_t parseFrom(const U_NAMESPACE_QUALIFIER UnicodeString& str,
+                        const FieldsSet& inheritFrom,
+                        UErrorCode& status) {
+          return parseFrom(str, &inheritFrom, status);
+      }
+
       /**
        * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
        * @param inheritFrom if a field's value is given as 0-length, such as NAME1 in "NAME1=,NAME2=VALUE2", 
@@ -83,9 +89,10 @@ class FieldsSet {
        * @param status status of parse
        * @return the number of valid parsed fields on success, or a negative number on failure.
        */
-      int32_t parseFrom(const UnicodeString& str, const 
-              FieldsSet* inheritFrom, UErrorCode& status);
-      
+      int32_t parseFrom(const U_NAMESPACE_QUALIFIER UnicodeString& str,
+                        const FieldsSet* inheritFrom,
+                        UErrorCode& status);
+
     protected:
       /**
        * Callback interface for subclass.
@@ -101,7 +108,10 @@ class FieldsSet {
        * @param status error status - set to error for failure.
        * @return field number, or negative if field should be skipped.
        */
-      virtual int32_t handleParseName(const FieldsSet* inheritFrom, const UnicodeString& name, const UnicodeString& substr, UErrorCode& status);
+      virtual int32_t handleParseName(const FieldsSet* inheritFrom,
+                                      const U_NAMESPACE_QUALIFIER UnicodeString& name,
+                                      const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                                      UErrorCode& status);
 
       /**
        * Callback interface for subclass.
@@ -112,15 +122,21 @@ class FieldsSet {
        * @param status error status - set to error for failure.
        * @see parseValueDefault
        */
-      virtual void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
-                
+      virtual void handleParseValue(const FieldsSet* inheritFrom,
+                                    int32_t field,
+                                    const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                                    UErrorCode& status);
+
       /**
        * the default implementation for handleParseValue.
        * Base implementation is to parse a decimal integer value, or inherit from inheritFrom if the string is 0-length.
        * Implementations of this function should call set(field,...) on successful parse.
        * @see handleParseValue
        */
-      void parseValueDefault(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);      
+      void parseValueDefault(const FieldsSet* inheritFrom,
+                             int32_t field,
+                             const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                             UErrorCode& status);      
 
 
       /**
@@ -129,7 +145,11 @@ class FieldsSet {
        * if fails, will call parseValueDefault()
        * @see handleParseValue
        */
-      void parseValueEnum(UDebugEnumType type, const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
+      void parseValueEnum(UDebugEnumType type,
+                          const FieldsSet* inheritFrom,
+                          int32_t field,
+                          const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                          UErrorCode& status);
 
     private:
       /** 
@@ -214,8 +234,9 @@ public:
      * @param matches fillin to hold any fields different. Will have the calendar's value set on them.
      * @return true if the calendar matches in these fields.
      */
-    UBool matches(Calendar *cal, CalendarFieldsSet &diffSet,
-            UErrorCode& status) const;
+    UBool matches(U_NAMESPACE_QUALIFIER Calendar *cal,
+                  CalendarFieldsSet &diffSet,
+                  UErrorCode& status) const;
 
     /**
      * For each set field, set the same field on this Calendar.
@@ -223,13 +244,16 @@ public:
      * @param cal Calendar to modify
      * @param status Contains any errors propagated by the Calendar.
      */
-    void setOnCalendar(Calendar *cal, UErrorCode& status) const;
+    void setOnCalendar(U_NAMESPACE_QUALIFIER Calendar *cal, UErrorCode& status) const;
         
 protected:
     /**
      * subclass override 
      */
-    void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
+    void handleParseValue(const FieldsSet* inheritFrom,
+                          int32_t field,
+                          const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                          UErrorCode& status);
 };
 
 /**
@@ -253,8 +277,14 @@ class DateTimeStyleSet : public FieldsSet {
          */
         UDateFormatStyle getTimeStyle() const;
     protected:
-        void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
-        int32_t handleParseName(const FieldsSet* inheritFrom, const UnicodeString& name, const UnicodeString& substr, UErrorCode& status);
+        void handleParseValue(const FieldsSet* inheritFrom,
+                              int32_t field,
+                              const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                              UErrorCode& status);
+        int32_t handleParseName(const FieldsSet* inheritFrom,
+                                const U_NAMESPACE_QUALIFIER UnicodeString& name,
+                                const U_NAMESPACE_QUALIFIER UnicodeString& substr,
+                                UErrorCode& status);
 };
 
 
