@@ -1294,7 +1294,7 @@ U_CDECL_END
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @draft ICU 4.6
  */
-U_STABLE void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uregex_setFindProgressCallback(URegularExpression              *regexp,
                                 URegexFindProgressCallback      *callback,
                                 const void                      *context,
@@ -1312,7 +1312,7 @@ uregex_setFindProgressCallback(URegularExpression              *regexp,
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @draft ICU 4.6
  */
-U_STABLE void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uregex_getFindProgressCallback(const URegularExpression          *regexp,
                                 URegexFindProgressCallback        **callback,
                                 const void                        **context,
