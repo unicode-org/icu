@@ -311,7 +311,8 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
     int64_t  destLen = utext_nativeLength(dest);
     if (fMatchStart > fAppendPosition) {
         if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
-            destLen += utext_replace(dest, destLen, destLen, fInputText->chunkContents+fAppendPosition, (int32_t)(fMatchStart-fAppendPosition), &status);
+            destLen += utext_replace(dest, destLen, destLen, fInputText->chunkContents+fAppendPosition, 
+                                     (int32_t)(fMatchStart-fAppendPosition), &status);
         } else {
             int32_t len16;
             if (UTEXT_USES_U16(fInputText)) {
@@ -321,6 +322,10 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
                 len16 = utext_extract(fInputText, fAppendPosition, fMatchStart, NULL, 0, &lengthStatus);
             }
             UChar *inputChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16+1));
+            if (inputChars == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return *this;
+            }
             utext_extract(fInputText, fAppendPosition, fMatchStart, inputChars, len16+1, &status);
             destLen += utext_replace(dest, destLen, destLen, inputChars, len16, &status);
             uprv_free(inputChars);
@@ -481,7 +486,8 @@ UText *RegexMatcher::appendTail(UText *dest) {
         UErrorCode status = U_ZERO_ERROR;
         if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
             int64_t destLen = utext_nativeLength(dest);
-            utext_replace(dest, destLen, destLen, fInputText->chunkContents+fAppendPosition, (int32_t)(fInputLength-fAppendPosition), &status);
+            utext_replace(dest, destLen, destLen, fInputText->chunkContents+fAppendPosition, 
+                          (int32_t)(fInputLength-fAppendPosition), &status);
         } else {
             int32_t len16;
             if (UTEXT_USES_U16(fInputText)) {
@@ -492,12 +498,14 @@ UText *RegexMatcher::appendTail(UText *dest) {
             }
             
             UChar *inputChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16));
-            utext_extract(fInputText, fAppendPosition, fInputLength, inputChars, len16, &status); // unterminated 
-            
-            int64_t destLen = utext_nativeLength(dest);
-            utext_replace(dest, destLen, destLen, inputChars, len16, &status);
-            
-            uprv_free(inputChars);
+            if (inputChars == NULL) {
+                fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+            } else {
+                utext_extract(fInputText, fAppendPosition, fInputLength, inputChars, len16, &status); // unterminated 
+                int64_t destLen = utext_nativeLength(dest);
+                utext_replace(dest, destLen, destLen, inputChars, len16, &status);
+                uprv_free(inputChars);
+            }
         }
     }
     return dest;
@@ -1108,6 +1116,9 @@ UText *RegexMatcher::group(UText *dest, MatcherDestIsUTextFlag /*flag*/, UErrorC
 
 UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
     UnicodeString result;
+    if (U_FAILURE(status)) {
+        return result;
+    }
     UText resultText = UTEXT_INITIALIZER;
     utext_openUnicodeString(&resultText, &result, &status);
     group(groupNum, &resultText, status);
@@ -1119,7 +1130,7 @@ UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
 UText *RegexMatcher::group(int32_t groupNum, UText *dest, UErrorCode &status) const {
     UBool bailOut = FALSE;
     if (U_FAILURE(status)) {
-        bailOut = TRUE;
+        return dest;
     }
     if (U_FAILURE(fDeferredStatus)) {
         status = fDeferredStatus;
@@ -1186,6 +1197,10 @@ UText *RegexMatcher::group(int32_t groupNum, UText *dest, UErrorCode &status) co
             len16 = utext_extract(fInputText, s, e, NULL, 0, &lengthStatus);
         }
         UChar *groupChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16+1));
+        if (groupChars == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return dest;
+        }
         utext_extract(fInputText, s, e, groupChars, len16+1, &status);
 
         if (dest) {
@@ -1210,15 +1225,14 @@ UText *RegexMatcher::group(int32_t groupNum, UText *dest, UErrorCode &status) co
 //--------------------------------------------------------------------------------
 
 int64_t RegexMatcher::appendGroup(int32_t groupNum, UText *dest, UErrorCode &status) const {
-    int64_t destLen = utext_nativeLength(dest);
-
     if (U_FAILURE(status)) {
-        return utext_replace(dest, destLen, destLen, NULL, 0, &status);
+        return 0;
     }
     if (U_FAILURE(fDeferredStatus)) {
         status = fDeferredStatus;
-        return utext_replace(dest, destLen, destLen, NULL, 0, &status);
+        return 0;
     }
+    int64_t destLen = utext_nativeLength(dest);
     
     if (fMatch == FALSE) {
         status = U_REGEX_INVALID_STATE;
@@ -1260,6 +1274,10 @@ int64_t RegexMatcher::appendGroup(int32_t groupNum, UText *dest, UErrorCode &sta
             len16 = utext_extract(fInputText, s, e, NULL, 0, &lengthStatus);
         }
         UChar *groupChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16+1));
+        if (groupChars == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         utext_extract(fInputText, s, e, groupChars, len16+1, &status);
     
         deltaLen = utext_replace(dest, destLen, destLen, groupChars, len16, &status);
@@ -1368,6 +1386,9 @@ UText *RegexMatcher::getInput (UText *dest) const {
                 input16Len = utext_extract(fInputText, 0, fInputLength, NULL, 0, &lengthStatus); // buffer overflow error
             }
             UChar *inputChars = (UChar *)uprv_malloc(sizeof(UChar)*(input16Len));
+            if (inputChars == NULL) {
+                return dest;
+            }
             
             status = U_ZERO_ERROR;
             utext_extract(fInputText, 0, fInputLength, inputChars, input16Len, &status); // not terminated warning
@@ -1713,6 +1734,9 @@ UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorC
     UText replacementText = UTEXT_INITIALIZER;
     UText resultText = UTEXT_INITIALIZER;
     UnicodeString resultString;
+    if (U_FAILURE(status)) {
+        return resultString;
+    }
     
     utext_openConstUnicodeString(&replacementText, &replacement, &status);
     utext_openUnicodeString(&resultText, &resultString, &status);
@@ -1731,11 +1755,11 @@ UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorC
 //
 UText *RegexMatcher::replaceAll(UText *replacement, UText *dest, UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return getInput(dest);
+        return dest;
     }
     if (U_FAILURE(fDeferredStatus)) {
         status = fDeferredStatus;
-        return getInput(dest);
+        return dest;
     }
     
     if (dest == NULL) {
@@ -1788,11 +1812,11 @@ UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErro
 //
 UText *RegexMatcher::replaceFirst(UText *replacement, UText *dest, UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return getInput(dest);
+        return dest;
     }
     if (U_FAILURE(fDeferredStatus)) {
         status = fDeferredStatus;
-        return getInput(dest);
+        return dest;
     }
 
     reset();
@@ -1862,7 +1886,9 @@ void RegexMatcher::resetPreserveRegion() {
 
 RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     fInputText = utext_openConstUnicodeString(fInputText, &input, &fDeferredStatus);
-    if (fPattern->fNeedsAltInput) fAltInputText = utext_clone(fAltInputText, fInputText, FALSE, TRUE, &fDeferredStatus);
+    if (fPattern->fNeedsAltInput) {
+        fAltInputText = utext_clone(fAltInputText, fInputText, FALSE, TRUE, &fDeferredStatus);
+    }
     fInputLength = utext_nativeLength(fInputText);
     
     reset();
@@ -1974,8 +2000,15 @@ int32_t  RegexMatcher::split(const UnicodeString &input,
 {
     UText inputText = UTEXT_INITIALIZER;
     utext_openConstUnicodeString(&inputText, &input, &status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
 
-	UText **destText = (UText **)uprv_malloc(sizeof(UText*)*destCapacity);
+    UText **destText = (UText **)uprv_malloc(sizeof(UText*)*destCapacity);
+    if (destText == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     int32_t i;
     for (i = 0; i < destCapacity; i++) {
         destText[i] = utext_openUnicodeString(NULL, &dest[i], &status);
@@ -1987,7 +2020,7 @@ int32_t  RegexMatcher::split(const UnicodeString &input,
         utext_close(destText[i]);
     }
 
-	uprv_free(destText);
+    uprv_free(destText);
     utext_close(&inputText);
     return fieldCount;
 }
@@ -2038,18 +2071,26 @@ int32_t  RegexMatcher::split(UText *input,
             if (fActiveLimit > nextOutputStringStart) {
                 if (UTEXT_FULL_TEXT_IN_CHUNK(input, fInputLength)) {
                     if (dest[i]) {
-                        utext_replace(dest[i], 0, utext_nativeLength(dest[i]), input->chunkContents+nextOutputStringStart, (int32_t)(fActiveLimit-nextOutputStringStart), &status);
+                        utext_replace(dest[i], 0, utext_nativeLength(dest[i]), 
+                                      input->chunkContents+nextOutputStringStart, 
+                                      (int32_t)(fActiveLimit-nextOutputStringStart), &status);
                     } else {
                         UText remainingText = UTEXT_INITIALIZER;
-                        utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, fActiveLimit-nextOutputStringStart, &status);
+                        utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, 
+                                         fActiveLimit-nextOutputStringStart, &status);
                         dest[i] = utext_clone(NULL, &remainingText, TRUE, FALSE, &status);
                         utext_close(&remainingText);
                     }
                 } else {
                     UErrorCode lengthStatus = U_ZERO_ERROR;
-                    int32_t remaining16Length = utext_extract(input, nextOutputStringStart, fActiveLimit, NULL, 0, &lengthStatus);
+                    int32_t remaining16Length = 
+                        utext_extract(input, nextOutputStringStart, fActiveLimit, NULL, 0, &lengthStatus);
                     UChar *remainingChars = (UChar *)uprv_malloc(sizeof(UChar)*(remaining16Length+1));
-                    
+                    if (remainingChars == NULL) {
+                        status = U_MEMORY_ALLOCATION_ERROR;
+                        break;
+                    }
+
                     utext_extract(input, nextOutputStringStart, fActiveLimit, remainingChars, remaining16Length+1, &status);
                     if (dest[i]) {
                         utext_replace(dest[i], 0, utext_nativeLength(dest[i]), remainingChars, remaining16Length, &status);
@@ -2070,10 +2111,13 @@ int32_t  RegexMatcher::split(UText *input,
             //  up until the start of the delimiter into the next output string.
             if (UTEXT_FULL_TEXT_IN_CHUNK(input, fInputLength)) {
                 if (dest[i]) {
-                    utext_replace(dest[i], 0, utext_nativeLength(dest[i]), input->chunkContents+nextOutputStringStart, (int32_t)(fMatchStart-nextOutputStringStart), &status);
+                    utext_replace(dest[i], 0, utext_nativeLength(dest[i]), 
+                                  input->chunkContents+nextOutputStringStart, 
+                                  (int32_t)(fMatchStart-nextOutputStringStart), &status);
                 } else {
                     UText remainingText = UTEXT_INITIALIZER;
-                    utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, fMatchStart-nextOutputStringStart, &status);
+                    utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, 
+                                      fMatchStart-nextOutputStringStart, &status);
                     dest[i] = utext_clone(NULL, &remainingText, TRUE, FALSE, &status);
                     utext_close(&remainingText);
                 }
@@ -2081,7 +2125,10 @@ int32_t  RegexMatcher::split(UText *input,
                 UErrorCode lengthStatus = U_ZERO_ERROR;
                 int32_t remaining16Length = utext_extract(input, nextOutputStringStart, fMatchStart, NULL, 0, &lengthStatus);
                 UChar *remainingChars = (UChar *)uprv_malloc(sizeof(UChar)*(remaining16Length+1));
-                
+                if (remainingChars == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
                 utext_extract(input, nextOutputStringStart, fMatchStart, remainingChars, remaining16Length+1, &status);
                 if (dest[i]) {
                     utext_replace(dest[i], 0, utext_nativeLength(dest[i]), remainingChars, remaining16Length, &status);
@@ -2127,10 +2174,13 @@ int32_t  RegexMatcher::split(UText *input,
             // All the remaining text goes into the current output string.
             if (UTEXT_FULL_TEXT_IN_CHUNK(input, fInputLength)) {
                 if (dest[i]) {
-                    utext_replace(dest[i], 0, utext_nativeLength(dest[i]), input->chunkContents+nextOutputStringStart, (int32_t)(fActiveLimit-nextOutputStringStart), &status);
+                    utext_replace(dest[i], 0, utext_nativeLength(dest[i]), 
+                                  input->chunkContents+nextOutputStringStart, 
+                                  (int32_t)(fActiveLimit-nextOutputStringStart), &status);
                 } else {
                     UText remainingText = UTEXT_INITIALIZER;
-                    utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, fActiveLimit-nextOutputStringStart, &status);
+                    utext_openUChars(&remainingText, input->chunkContents+nextOutputStringStart, 
+                                     fActiveLimit-nextOutputStringStart, &status);
                     dest[i] = utext_clone(NULL, &remainingText, TRUE, FALSE, &status);
                     utext_close(&remainingText);
                 }
@@ -2138,6 +2188,10 @@ int32_t  RegexMatcher::split(UText *input,
                 UErrorCode lengthStatus = U_ZERO_ERROR;
                 int32_t remaining16Length = utext_extract(input, nextOutputStringStart, fActiveLimit, NULL, 0, &lengthStatus);
                 UChar *remainingChars = (UChar *)uprv_malloc(sizeof(UChar)*(remaining16Length+1));
+                if (remainingChars == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
                 
                 utext_extract(input, nextOutputStringStart, fActiveLimit, remainingChars, remaining16Length+1, &status);
                 if (dest[i]) {
@@ -2153,7 +2207,10 @@ int32_t  RegexMatcher::split(UText *input,
             }
             break;
         }
-    }
+        if (U_FAILURE(status)) {
+            break;
+        }
+    }   // end of for loop
     return i+1;
 }
 
