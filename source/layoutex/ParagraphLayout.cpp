@@ -275,6 +275,19 @@ static const le_bool complexTable[scriptCodeCount] = {
 
 const char ParagraphLayout::fgClassID = 0;
 
+static void fillMissingCharToGlyphMapValues(le_int32 *charToGlyphMap,
+                                            le_int32 charCount) {
+    le_int32 lastValidGlyph = -1;
+    le_int32 ch;
+    for (ch = 0; ch <= charCount; ch += 1) {
+        if (charToGlyphMap[ch] == -1) {
+            charToGlyphMap[ch] = lastValidGlyph;
+        } else {
+            lastValidGlyph = charToGlyphMap[ch];
+        }
+    }
+}
+
 /*
  * How to deal with composite fonts:
  *
@@ -478,6 +491,14 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
     fGlyphToCharMap[fGlyphCount] = fCharCount;
 
+    // Initialize the char-to-glyph maps to -1 so that we can later figure out
+    // whether any of the entries in the map aren't filled in below.
+    le_int32 chIndex;
+    for (chIndex = 0; chIndex <= fCharCount; chIndex += 1) {
+        fCharToMinGlyphMap[chIndex] = -1;
+        fCharToMaxGlyphMap[chIndex] = -1;
+    }
+
     for (glyph = fGlyphCount - 1; glyph >= 0; glyph -= 1) {
         le_int32 ch = fGlyphToCharMap[glyph];
 
@@ -493,6 +514,10 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     }
 
     fCharToMaxGlyphMap[fCharCount] = fGlyphCount;
+
+    // Now fill in the missing values in the char-to-glyph maps.
+    fillMissingCharToGlyphMapValues(fCharToMinGlyphMap, fCharCount);
+    fillMissingCharToGlyphMapValues(fCharToMaxGlyphMap, fCharCount);
 }
 
 ParagraphLayout::~ParagraphLayout()
