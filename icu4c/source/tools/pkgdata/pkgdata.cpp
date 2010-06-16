@@ -769,12 +769,8 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
         return -1;
     }
 
-    if(o->verbose) {
-        fprintf(stdout, "# pkgDataFlags=");
-        for(int32_t i=0;i<PKGDATA_FLAGS_SIZE && pkgDataFlags[i][0];i++) {
-            fprintf(stdout, "%c \"%s\"", (i>0)?',':' ',pkgDataFlags[i]);
-        }
-        fprintf(stdout, "\n");
+    if (o->options == NULL) {
+        return result;
     }
 
 #if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN)
@@ -788,6 +784,15 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
         return -1;
     }
 #endif
+
+    if(o->verbose) {
+        fprintf(stdout, "# pkgDataFlags=");
+        for(int32_t i=0;i<PKGDATA_FLAGS_SIZE && pkgDataFlags[i][0];i++) {
+            fprintf(stdout, "%c \"%s\"", (i>0)?',':' ',pkgDataFlags[i]);
+        }
+        fprintf(stdout, "\n");
+    }
+
     return result;
 }
 
