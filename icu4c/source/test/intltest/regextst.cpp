@@ -104,6 +104,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 16: name = "Bug 7651";
              if (exec) Bug7651();
              break;
+        case 17: name = "Bug 7740";
+            if (exec) Bug7740();
+            break;
 
         default: name = "";
             break; //needed to end loop
@@ -4758,6 +4761,24 @@ void RegexTest::Bug7651() {
     delete REMatcher;
     status = U_ZERO_ERROR;
  }
+
+void RegexTest::Bug7740() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern = "(a)";
+    UnicodeString text = "abcdef";
+    RegexMatcher *m = new RegexMatcher(pattern, text, 0, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(m->lookingAt(status));
+    REGEX_CHECK_STATUS;
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    UnicodeString s = m->group(1, status);    // Bug 7740: segfault here.
+    REGEX_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+    REGEX_ASSERT(s == "");
+    delete m;
+}
+
+
+     
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
