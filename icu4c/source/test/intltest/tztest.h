@@ -92,8 +92,6 @@ public:
     
     virtual void TestDisplayNamesMeta();
 
-    void TestTZWrapper(void);
-
     static const UDate INTERVAL;
 
 private:
