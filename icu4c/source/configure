@@ -746,6 +746,9 @@ UNICODE_VERSION
 LIB_VERSION_MAJOR
 LIB_VERSION
 VERSION
+ICU_ECHO_T
+ICU_ECHO_C
+ICU_ECHO_N
 PACKAGE
 target_alias
 host_alias
@@ -1938,6 +1941,24 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers common/icucfg.h"
 
 PACKAGE="icu"
+
+
+# Use custom echo test for newline option
+# Current autoconf (2.65) gives incorrect echo newline option
+# for icu-config
+# This may be removed later - mow (June 17, 2010)
+ICU_ECHO_C= ICU_ECHO_N= ICU_ECHO_T=
+case `/bin/sh -c "echo -n x"` in
+-n*)
+  case `/bin/sh -c "echo 'x\c'"` in
+  *c*) ICU_ECHO_T=' ';;     # ECHO_T is single tab character.
+  *)   ICU_ECHO_C='\c';;
+  esac;;
+*)
+  ICU_ECHO_N='-n';;
+esac
+
+
 
 
 { $as_echo "$as_me:$LINENO: checking for ICU version numbers" >&5
