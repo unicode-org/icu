@@ -2,7 +2,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2009, International Business Machines Corporation and others.
+# Copyright (C) 2000-2010, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -156,8 +156,8 @@ ENABLE_SHARED = @ENABLE_SHARED@
 
 # Echo w/o newline
 
-#ECHO_N = @ECHO_N@
-#ECHO_C = @ECHO_C@
+#ECHO_N = @ICU_ECHO_N@
+#ECHO_C = @ICU_ECHO_C@
 
 # Commands to compile
 COMPILE.c=    $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
