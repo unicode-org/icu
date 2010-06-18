@@ -1,4 +1,4 @@
-## Copyright (c) 2002-2005, International Business Machines Corporation 
+## Copyright (c) 2002-2010, International Business Machines Corporation 
 ## and others. All Rights Reserved.
 
 This directory contains sample code
@@ -60,6 +60,12 @@ ustring  - demonstrates ICU string manipulation functions
  - See the Readme in each subdirectory
 
  To build all samples at once:
+
+    Windows MSVC:   
+            - build ICU
+	    - open 'all' project file in 'all' subdirectory
+            - build project
+            - sample executables will be located in /x86/Debug folders of each sample subdirectory
 
     Unix:   - build and install (make install) ICU
             - be sure 'icu-config' is accessible from the PATH
