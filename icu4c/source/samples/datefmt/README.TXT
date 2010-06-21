@@ -1,14 +1,14 @@
-Copyright (c) 2002-2007, International Business Machines Corporation and others. All Rights Reserved.
-This is an exercise for the ICU Workshop (September 2000).
+Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
+
+IMPORTANT:
+
+This sample was originally intended as an exercise for the ICU Workshop (September 2000).
+The code currently provided in the solution file is the answer to the exercises, each step can still be found in the 'answers' subdirectory.
+
+
+
 ** Workshop homepage is:  
   http://www.icu-project.org/docs/workshop_2000/agenda.html
-
-  Day 2: September 12th 2000
-  Pre-requsit:
-  1. All the hardware and software requirements from Day 1.
-  2. Attended or fully understand Day 1 material.
-  3. Read through the ICU user's guide at
-  http://www.icu-project.org/userguide/.
 
   #Date/Time/Number Formatting Support
   9:30am - 10:30am

@@ -1,4 +1,4 @@
-Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
 udata: Low level ICU data
 
 This sample demonstrates
@@ -27,6 +27,7 @@ To Run on Windows
     4.  Run it
             writer
             reader
+    IMPORTANT: On some systems, the reader and writer executables may not be in the same directory.  If this is the case, this will likely cause a problem with reader looking for the .dat file in the wrong directory).
 
 To Build on Unixes
     1.  Build ICU.  

@@ -1,4 +1,4 @@
-Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
 break: Boundary Analysis
 
 This sample demonstrates
@@ -24,8 +24,8 @@ To Run on Windows
         (Use the path to where ever ICU is on your system.)
     3.  cd into the break directory, e.g.
             cd c:\icu\source\samples\break\debug
-    4.  Run it
-            break
+    4.  Run it (Warning: Be careful, 'break' is also a system command on many systems)
+            .\break
 
 To Build on Unixes
     1.  Build ICU.  

@@ -1,4 +1,4 @@
-Copyright (c) 2001-2005 International Business Machines
+Copyright (c) 2001-2010 International Business Machines
 Corporation and others. All Rights Reserved.
 uresb: Resource Bundle
 
@@ -33,6 +33,7 @@ To Run on Windows
             cd c:\icu\source\samples\uresb\debug
     4.  Run it  (with a locale name, ex. english)
             uresb  en
+    WARNING: The .txt files must be in the same directory as the executable, which is not the case by default on some systems.
 
 To Build on Unixes
     1.  Build ICU.  

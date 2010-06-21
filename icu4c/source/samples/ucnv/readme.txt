@@ -1,4 +1,4 @@
-Copyright (C) 2002-2005, International Business Machines
+Copyright (C) 2002-2010, International Business Machines
 Corporation and others.  All Rights Reserved.
 
 convsamp: a sample program which demonstrates using ICU conversion
@@ -31,6 +31,7 @@ To Run on Windows
             cd c:\icu\source\samples\ucnv\debug
     4.  Run it
             ucnv
+    WARNING: The .bin and .txt files must be in the same directory as the executable, which is not the case by default on some systems.
 
 To Build on Unixes
     1.  Build ICU.  
