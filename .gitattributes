@@ -448,6 +448,10 @@ tools/trac/IcuCodeTools/icucodetools/templates/nothing.html -text
 tools/trac/IcuCodeTools/icucodetools/templates/review.html -text
 tools/trac/IcuCodeTools/icucodetools/ticketmgr.py -text
 tools/trac/IcuCodeTools/icucodetools/tktlist.py -text
+tools/trac/IcuCodeTools/license.html -text
+tools/trac/IcuCodeTools/readme.txt -text
+tools/trac/IcuCodeTools/setup.cfg -text
+tools/trac/IcuCodeTools/setup.py -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text
