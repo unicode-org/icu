@@ -1413,6 +1413,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 #define LINK_CMD "link.exe /nologo /release /out:"
 #define LINK_FLAGS "/DLL /NOENTRY /MANIFEST:NO  /base:0x4ad00000 /implib:"
 #define LIB_CMD "LIB.exe /nologo /out:"
+#define LIB_FILE "icudt.lib"
 #define LIB_EXT UDATA_LIB_SUFFIX
 #define DLL_EXT UDATA_SO_SUFFIX
 
@@ -1445,13 +1446,19 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         uprv_strcat(dllFilePath, PKGDATA_FILE_SEP_STRING);
         uprv_strcpy(libFilePath, dllFilePath);
 
+#ifdef CYGWINMSVC
         uprv_strcat(libFilePath, o->libName);
         uprv_strcat(libFilePath, ".lib");
         
-#ifdef CYGWINMSVC
         uprv_strcat(dllFilePath, o->libName);
         uprv_strcat(dllFilePath, o->version);
 #else
+        if (strstr(o->libName, "icudt")) {
+            uprv_strcat(libFilePath, LIB_FILE);
+        } else {
+            uprv_strcat(libFilePath, o->libName);
+            uprv_strcat(libFilePath, ".lib");
+        }
         uprv_strcat(dllFilePath, o->entryName);
 #endif
         uprv_strcat(dllFilePath, DLL_EXT);
@@ -1461,7 +1468,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         uprv_strcat(tmpResFilePath, ICUDATA_RES_FILE);
 
         if (T_FileStream_file_exists(tmpResFilePath)) {
-            sprintf(resFilePath, "\"%s\"", tmpResFilePath)
+            sprintf(resFilePath, "\"%s\"", tmpResFilePath);
         }
 
         /* Check if dll file and lib file exists and that it is not newer than genc file. */
