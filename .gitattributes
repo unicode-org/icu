@@ -2795,6 +2795,14 @@ tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
+tools/trac/IcuCodeTools/icucodetools/__init__.py -text
+tools/trac/IcuCodeTools/icucodetools/dcut.py -text
+tools/trac/IcuCodeTools/icucodetools/htdocs/css/icuxtn.css -text
+tools/trac/IcuCodeTools/icucodetools/review.py -text
+tools/trac/IcuCodeTools/icucodetools/templates/nothing.html -text
+tools/trac/IcuCodeTools/icucodetools/templates/review.html -text
+tools/trac/IcuCodeTools/icucodetools/ticketmgr.py -text
+tools/trac/IcuCodeTools/icucodetools/tktlist.py -text
 tools/unicode/c/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
 tools/unicode/c/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
