@@ -1322,6 +1322,7 @@ final class CollationRuleParser
      * @return the offset of the next unparsed char
      * @throws ParseException
      */
+    @SuppressWarnings("fallthrough")
     private int parseNextTokenInternal(boolean startofrules) throws ParseException {
         boolean variabletop = false;
         boolean top = false;
