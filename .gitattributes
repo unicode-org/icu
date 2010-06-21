@@ -2803,6 +2803,10 @@ tools/trac/IcuCodeTools/icucodetools/templates/nothing.html -text
 tools/trac/IcuCodeTools/icucodetools/templates/review.html -text
 tools/trac/IcuCodeTools/icucodetools/ticketmgr.py -text
 tools/trac/IcuCodeTools/icucodetools/tktlist.py -text
+tools/trac/IcuCodeTools/license.html -text
+tools/trac/IcuCodeTools/readme.txt -text
+tools/trac/IcuCodeTools/setup.cfg -text
+tools/trac/IcuCodeTools/setup.py -text
 tools/unicode/c/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
 tools/unicode/c/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
