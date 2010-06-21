@@ -1,5 +1,13 @@
-Copyright (c) 2002-2007, International Business Machines Corporation and others. All Rights Reserved.
-This is an exercise for the ICU Workshop (September 2000).
+Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
+
+
+IMPORTANT:
+
+This sample was originally intended as an exercise for the ICU Workshop (September 2000).
+The code currently provided in the solution file is the answer to the exercises, each step can still be found in the 'answers' subdirectory.
+
+
+
   http://www.icu-project.org/docs/workshop_2000/agenda.html
 
   Day 2: September 12th 2000

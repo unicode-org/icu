@@ -5,7 +5,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
   <meta name="COPYRIGHT" content=
-  "Copyright (c) 2001-2006 IBM Corporation and others. All Rights Reserved." />
+  "Copyright (c) 2001-2010 IBM Corporation and others. All Rights Reserved." />
   <meta name="Author" content="Eric Mader" />
 
   <title>Readme file for the ICU LayoutEngine demo</title>
@@ -53,17 +53,14 @@
   Windows. Here's how to get the fonts:</p>
 
   <p>First, download the Thai font. Go to <a href=
-  "http://www.into-asia.com/thai_language/thaifont/">into-asia.com</a> and
-  click on the link for the Angsana font. This will download a .ZIP file.
-  Extract the font file, angsd___.ttf On Windows, copy this font file to your
-  Fonts folder, on Linux, copy this font file to the directory from which
+  "http://www.freelang.net/fonts/index.php">freelang.net</a> and
+  click on the link for the Courier Thai font. This will download a .ZIP file.
+  Extract the Courpro.ttf font. On Windows, copy this font file to your
+  Fonts folder (note the name of the font after it is installed), on Linux, copy this font file to the directory from which
   you'll run the layout demo.</p>
 
-  <p>Next is the Hindi font. Go to the NCST site and download <a href=
-  "http://rohini.ncst.ernet.in/indix/download/font/raghu.ttf">raghu.ttf</a>. Be
-  sure to look at the <a href=
-  "http://rohini.ncst.ernet.in/indix/download/font/README">README</a> file
-  before you download the font. On Linux, you can download raghu.ttf into the
+  <p>Next is the Hindi font. Download the font from <a href=
+  "http://www.ffonts.net/Raghindi.font.download">Raghindi</a>. On Linux, you can download the font into the
   directory from which you'll run the layout demo. On Windows, you'll need to
   install it in your Fonts folder.</p>
 
@@ -79,6 +76,13 @@
   <p><strong>Note:</strong> The Code2000 font is shareware. If you want to use
   it for longer than a trial period, you should send a shareware fee to James.
   Directions for how to do this are in CODE2000.HTM.</p>
+
+  <p>Be sure that your FontMap.GDI (on Windows) or FontMap.Gnome file (on Linux) contains accurate
+  font names for each script type.  For example, the following is a valid FontMap.GDI (assuming you have the correct fonts):
+  <br><br>DEVANAGARI: Raghindi<br>THAI: Courier MonoThai<br>DEFAULT: Code2000<br><br>Note that only the Code2000 default font is strictly necessary,
+  and that the other two can simply be commented out by a '#' if you do not wish to use them.</p>
+
+  <p>Also note that the FontMap and the sample.txt files have to be in the same directory as the layout executable.</p>
 
   <p>That's it! Now all you have to do is run letest (CTRL+F5 in Visual C++, or
   "./gnomelayout" in Linux)</p>

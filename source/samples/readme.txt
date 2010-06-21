@@ -10,6 +10,8 @@ cal      - prints out a calendar.
 
 case    - demonstrates how to do Unicode case conversion in C and C++.
 
+csdet   -  demonstrates using ICU's CharSet Detection API
+
 date     - prints out the current date, localized. 
 
 datefmt  - an exercise using the date formatting API
@@ -32,7 +34,7 @@ uciter8.c - demonstrates how to leniently read 8-bit Unicode text.
 
 ucnv     - demonstrates the use of ICU codepage conversion
 
-udata    - demonstrates the use of ICU low level data routines
+udata    - demonstrates the use of ICU low level data routines (reader/writer in 'all' MSVC solution)
 
 ufortune - demonstrates packaging and use of resources in an application
 
