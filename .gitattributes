@@ -440,6 +440,14 @@ tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/icu4c.css -text
+tools/trac/IcuCodeTools/icucodetools/__init__.py -text
+tools/trac/IcuCodeTools/icucodetools/dcut.py -text
+tools/trac/IcuCodeTools/icucodetools/htdocs/css/icuxtn.css -text
+tools/trac/IcuCodeTools/icucodetools/review.py -text
+tools/trac/IcuCodeTools/icucodetools/templates/nothing.html -text
+tools/trac/IcuCodeTools/icucodetools/templates/review.html -text
+tools/trac/IcuCodeTools/icucodetools/ticketmgr.py -text
+tools/trac/IcuCodeTools/icucodetools/tktlist.py -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text

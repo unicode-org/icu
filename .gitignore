@@ -785,6 +785,9 @@ tools/release/java/APIChangeReport.html
 tools/release/java/Makefile.local
 tools/release/java/classes
 tools/release/java/lib
+tools/trac/IcuCodeTools/*.egg-info
+tools/trac/IcuCodeTools/build
+tools/trac/IcuCodeTools/icucodetools/*.pyc
 tools/unicode/c/genbidi/*.d
 tools/unicode/c/genbidi/*.o
 tools/unicode/c/genbidi/*.pdb
