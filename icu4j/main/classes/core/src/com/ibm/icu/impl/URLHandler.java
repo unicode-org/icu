@@ -122,15 +122,19 @@ public abstract class URLHandler {
     }
     
     protected static URLHandler getDefault(URL url) {
+        URLHandler handler = null;
+
         String protocol = url.getProtocol();
-        
-        if (protocol.equals("file")) {
-            return new FileURLHandler(url);
-        } else if (protocol.equals("jar")) {
-            return new JarURLHandler(url);
-        } else {
-            return null;
+        try {
+            if (protocol.equals("file")) {
+                handler = new FileURLHandler(url);
+            } else if (protocol.equals("jar") || protocol.equals("wsjar")) {
+                handler = new JarURLHandler(url);
+            }
+        } catch (Exception e) {
+            // ignore - just return null
         }
+        return handler;
     }
     
     private static class FileURLHandler extends URLHandler {
@@ -174,7 +178,7 @@ public abstract class URLHandler {
     private static class JarURLHandler extends URLHandler {
         JarFile jarFile;
         String prefix;
-        
+
         JarURLHandler(URL url) {
             try {
                 prefix = url.getPath();
@@ -184,9 +188,19 @@ public abstract class URLHandler {
                 if (ix >= 0) {
                     prefix = prefix.substring(ix + 2); // truncate after "!/"
                 }
-                
+
+                String protocol = url.getProtocol();
+                if (!protocol.equals("jar")) {
+                    // change the protocol to "jar"
+                    // Note: is this really OK?
+                    String urlStr = url.toString();
+                    int idx = urlStr.indexOf(":");
+                    if (idx != -1) {
+                        url = new URL("jar" + urlStr.substring(idx));
+                    }
+                }
+
                 JarURLConnection conn = (JarURLConnection)url.openConnection();
-                
                 jarFile = conn.getJarFile();
             }
             catch (Exception e) {
@@ -230,7 +244,7 @@ public abstract class URLHandler {
             }
         }
     }
-    
+
     public void guide(URLVisitor visitor, boolean recurse)
     {
         guide(visitor, recurse, true);

@@ -563,58 +563,77 @@ public  class ICUResourceBundle extends UResourceBundle {
                         ? baseName
                         : baseName + "/";
 
-                    // look for prebuilt indices first
-                    try {
-                        InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX + ".txt");
-                        if (s != null) {
-                            List<String> lst = new ArrayList<String>();
-                            BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                if (line.length() != 0 && !line.startsWith("#")) {
-                                    if (line.equalsIgnoreCase("root")) {
-                                        lst.add(ULocale.ROOT.toString());
-                                    } else {
-                                        lst.add(line);
-                                    }
-                                }
-                            }
-                            return lst;
-                        }
-                    } catch (IOException e) {
-                        // swallow it
-                    }
+                    List<String> resList = null;
 
+                    // scan available locale resources under the base url first
                     try {
                         Enumeration<URL> urls = root.getResources(bn);
-                        final List<String> lst = new ArrayList<String>();
                         while (urls.hasMoreElements()) {
                             URL url = urls.nextElement();
                             URLHandler handler = URLHandler.get(url);
                             if (handler != null) {
+                                final List<String> lst = new ArrayList<String>();
                                 URLVisitor v = new URLVisitor() {
                                         public void visit(String s) {
-                                            if (s.endsWith(".res") && !"res_index.res".equals(s)) {
+                                            //TODO: This is ugly hack.  We have to figure out how
+                                            // we can distinguish locale data from others
+                                            if (s.endsWith(".res")) {
                                                 String locstr = s.substring(0, s.length() - 4);
-                                                if (locstr.equalsIgnoreCase("root")) {
-                                                    lst.add(ULocale.ROOT.toString());
-                                                } else {
+                                                if (locstr.contains("_") && !locstr.equals("res_index")) {
+                                                    // locale data with country/script contain "_",
+                                                    // except for res_index.res
                                                     lst.add(locstr);
+                                                } else if (locstr.length() == 2 || locstr.length() == 3) {
+                                                    // all 2-letter or 3-letter entries are all locale
+                                                    // data at least for now
+                                                    lst.add(locstr);
+                                                } else if (locstr.equalsIgnoreCase("root")) {
+                                                    // root locale is a special case
+                                                    lst.add(ULocale.ROOT.toString());
                                                 }
                                             }
                                         }
                                     };
                                 handler.guide(v, false);
+
+                                if (resList == null) {
+                                    resList = new ArrayList<String>(lst);
+                                } else {
+                                    resList.addAll(lst);
+                                }
                             } else {
-                                System.out.println("handler for " + url + " is null");
+                                if (DEBUG) System.out.println("handler for " + url + " is null");
                             }
                         }
-                        return lst;
                     } catch (IOException e) {
-                        System.out.println("ouch: " + e.getMessage());
+                        if (DEBUG) System.out.println("ouch: " + e.getMessage());
+                        resList = null;
                     }
 
-                    return null;
+                    if (resList == null) {
+                        // look for prebuilt indices next
+                        try {
+                            InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX + ".txt");
+                            if (s != null) {
+                                resList = new ArrayList<String>();
+                                BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
+                                String line;
+                                while ((line = br.readLine()) != null) {
+                                    if (line.length() != 0 && !line.startsWith("#")) {
+                                        if (line.equalsIgnoreCase("root")) {
+                                            resList.add(ULocale.ROOT.toString());
+                                        } else {
+                                            resList.add(line);
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (IOException e) {
+                            // swallow it
+                        }
+                    }
+
+                    return resList;
                 }
             });
 
@@ -623,10 +642,12 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     private static Set<String> createFullLocaleNameSet(String baseName, ClassLoader loader) {
         List<String> list = createFullLocaleNameArray(baseName, loader);
-        HashSet<String> set = new HashSet<String>();
         if(list == null){
-            throw new MissingResourceException("Could not find "+  ICU_RESOURCE_INDEX, "", "");
+            if (DEBUG) System.out.println("createFullLocaleNameArray returned null");
+            // Use locale name set as the last resort fallback
+            return createLocaleNameSet(baseName, loader);
         }
+        HashSet<String> set = new HashSet<String>();
         set.addAll(list);
         return Collections.unmodifiableSet(set);
     }
