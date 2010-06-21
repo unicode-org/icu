@@ -2227,6 +2227,7 @@ icu4c/source/samples/cal/readme.txt svneol=native#text/plain
 icu4c/source/samples/case/readme.txt svneol=native#text/plain
 icu4c/source/samples/citer/readme.txt svneol=native#text/plain
 icu4c/source/samples/coll/readme.txt svneol=native#text/plain
+icu4c/source/samples/csdet/readme.txt svneol=native#text/plain
 icu4c/source/samples/date/readme.txt svneol=native#text/plain
 icu4c/source/samples/layout/Sample.txt svneol=native#text/plain
 icu4c/source/samples/layout/readme.html svneol=native#text/html

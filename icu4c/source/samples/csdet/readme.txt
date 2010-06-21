@@ -1,21 +1,18 @@
-Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
-icudate: a sample program which displays the current date
+Copyright (c) 2001-2010 International Business Machines
+Corporation and others. All Rights Reserved.
+uresb: Resource Bundle
 
 This sample demonstrates
-         Formatting a date
-         Outputting text in the default codepage to the console
+        Using ICU's CharSet Detection API
 
          
 Files:
-    date.c                      Main source file
-    uprint.h                    codepage output convenience header
-    uprint.h                    codepage output convenience implementation
-    date.sln                    Windows MSVC workspace.  Double-click this to get started.
-    date.vcproj                 Windows MSVC project file
+    csdet.c        Main source file
+    *.txt          Various sample .txt files
 
-To Build icudate on Windows
+To Build uresb on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\date\date.sln
+    2.  In MSVC, open the workspace file icu\samples\uresb\uresb.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	
@@ -24,13 +21,14 @@ To Run on Windows
     2.  Add ICU's bin directory to the path, e.g.
             set PATH=c:\icu\bin;%PATH%
         (Use the path to where ever ICU is on your system.)
-    3.  cd into the icudate directory, e.g.
-            cd c:\icu\source\samples\date\debug
-    4.  Run it (Warning: Be careful, 'date' is also a system command on many systems)
-            .\date
+    3.  cd into the uresb directory, e.g.
+            cd c:\icu\source\samples\uresb\debug
+    4.  Run it  (with a locale name, ex. english)
+            csdet eucJP.txt
+    WARNING: The .txt files must be in the same directory as the executable, which is not the case by default on some systems.
 
 To Build on Unixes
-    1.  Build ICU.  icudate is built automatically by default unless samples are turned off.
+    1.  Build ICU.  
         Specify an ICU install directory when running configure,
         using the --prefix option.  The steps to build ICU will look something
         like this:
@@ -40,15 +38,19 @@ To Build on Unixes
            
     2.  Install ICU, 
            gmake install
+ 
+    3.  Compile
+           cd <icu directory>/source/samples/uresb
+           gmake ICU_PREFIX=<icu install directory) ICU_PATH=<icu source directory>
            
  To Run on Unixes
-           cd <icu directory>/source/samples/date
+           cd <icu directory>/source/samples/uresb
            
-           gmake check
+           gmake ICU_PREFIX=<icu install directory>  check
                -or- 
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
-           date
+           csdet eucJP.txt
            
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
