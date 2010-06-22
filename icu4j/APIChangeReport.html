@@ -2,590 +2,69 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.4</title>
+<title>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.1</title>
 <!-- Copyright 2010, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 4.2.1 with ICU4J 4.4</h1>
+<h1>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 4.2.1</h2>
+<h2>Removed from ICU4J 4.4</h2>
+<p>(no API removed)</p>
 
-<h3>Package com.ibm.icu.charset</h3>
-<ul>
-CharsetCallback
-<ul>
-<li>(draft)      public <i>CharsetCallback</i>()</li>
-</ul>
-</ul>
+<hr/>
+<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.5.1</h2>
+<p>(no API obsoleted)</p>
 
-<h3>Package com.ibm.icu.math</h3>
-<ul>
-BigDecimal
-<ul>
-<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
-</ul>
-</ul>
+<hr/>
+<h2>Changed in ICU4J 4.5.1 (old, new)</h2>
+<p>(no API changed)</p>
+
+<hr/>
+<h2>Promoted to stable in ICU4J 4.5.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li><span style='color:red'>*internal*  </span>public class <i>BreakDictionary</i></li>
-ArabicShaping
+FilteredNormalizer2
 <ul>
-<li>(draft)      public static int <i>countSpaceSub</i>(char[], int, char)</li>
-<li>(draft)      public static int <i>flipArray</i>(char[], int, int, int)</li>
-<li>(draft)      public static void <i>shiftArray</i>(char[], int, int, char)</li>
+<li>(draft)      public java.lang.Appendable <i>normalize</i>(java.lang.CharSequence, java.lang.Appendable)</li>
 </ul>
-CollationKey
+Normalizer2
 <ul>
-<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
+<li>(draft)      public abstract java.lang.Appendable <i>normalize</i>(java.lang.CharSequence, java.lang.Appendable)</li>
 </ul>
-DateIntervalInfo
-<ul>
-<li>(stable)     public java.lang.Object <i>cloneAsThawed</i>()</li>
-<li>(stable)     public java.lang.Object <i>freeze</i>()</li>
 </ul>
-DateTimePatternGenerator
+
+
+<hr/>
+<h2>Added in ICU4J 4.5.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
 <ul>
-<li>(stable)     public java.lang.Object <i>cloneAsThawed</i>()</li>
-<li>(stable)     public java.lang.Object <i>freeze</i>()</li>
+FilteredNormalizer2
+<ul>
+<li>(draft)      public java.lang.String <i>getDecomposition</i>(int)</li>
 </ul>
-DecimalFormatSymbols
+Normalizer2
 <ul>
-<li>(draft)      public static final int CURRENCT_SPC_SURROUNDING_MATCH</li>
-</ul>
-IndexCharacters
-<ul>
-<li>(draft)      public static final char CGJ</li>
-</ul>
-Normalizer
-<ul>
-<li><span style='color:red'>*internal*  </span>public static boolean <i>isNFSkippable</i>(int, Normalizer.Mode)</li>
-</ul>
-Normalizer.Mode
-<ul>
-<li>(stable)     protected int <i>getMask</i>()</li>
-<li>(stable)     protected int <i>getMinC</i>()</li>
-<li>(stable)     protected Normalizer.IsNextBoundary <i>getNextBoundary</i>()</li>
-<li>(stable)     protected Normalizer.IsPrevBoundary <i>getPrevBoundary</i>()</li>
-<li>(stable)     protected boolean <i>isNFSkippable</i>(int)</li>
-<li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, UnicodeSet)</li>
-<li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, int)</li>
-<li>(stable)     protected java.lang.String <i>normalize</i>(java.lang.String, int)</li>
-<li>(stable)     protected Normalizer.QuickCheckResult <i>quickCheck</i>(char[], int, int, boolean, UnicodeSet)</li>
+<li>(draft)      public abstract java.lang.String <i>getDecomposition</i>(int)</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-Calendar
-<ul>
-<li>(stable)     public int <i>compareTo</i>(java.lang.Object)</li>
-</ul>
 ChineseCalendar
 <ul>
-<li>(stable)     public static int IS_LEAP_MONTH</li>
-<li>(stable)     protected int[] <i>handleCreateFields</i>()</li>
-</ul>
-GlobalizationPreferences
-<ul>
-<li>(draft)      public java.lang.Object <i>cloneAsThawed</i>()</li>
-<li>(draft)      public java.lang.Object <i>freeze</i>()</li>
-</ul>
-ULocale
-<ul>
-<li>(draft)      public static final char LDML_EXTENSION</li>
-<li>(draft)      public static VersionInfo <i>getCLDRVersion</i>()</li>
-<li>(draft)      public java.util.Set <i>getLDMLExtensionKeys</i>()</li>
-<li>(draft)      public java.lang.String <i>getLDMLExtensionValue</i>(java.lang.String)</li>
-</ul>
-ULocale.Builder
-<ul>
-<li>(draft)      public ULocale <i>create</i>()</li>
-<li>(draft)      public ULocale.Builder <i>setLDMLExtensionValue</i>(java.lang.String, java.lang.String)</li>
-</ul>
-UResourceBundle
-<ul>
-<li><span style='color:red'>*internal*  </span>protected static final int ALIAS</li>
-<li><span style='color:red'>*internal*  </span>protected static final int TABLE32</li>
-<li><span style='color:red'>*internal*  </span>protected boolean isTopLevel</li>
-<li><span style='color:red'>*internal*  </span>protected java.lang.String key</li>
-<li><span style='color:red'>*internal*  </span>protected long resource</li>
-<li><span style='color:red'>*internal*  </span>protected int size</li>
+<li>(draft)      public <i>ChineseCalendar</i>(int, int, int, int, int)</li>
+<li>(draft)      public <i>ChineseCalendar</i>(int, int, int, int, int, int, int, int)</li>
 </ul>
 VersionInfo
 <ul>
-<li>(draft)      public int <i>compareTo</i>(java.lang.Object)</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 4.4</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-SimpleDateFormat
-<ul>
-<li><span style='color:red'>*internal*  </span>protected NumberFormat <i>getNumberFormat</i>(char)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-Calendar.FormatConfiguration
-<ul>
-<li><span style='color:red'>*internal*  </span>public java.lang.String <i>getOverrideString</i>()</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Changed in ICU4J 4.4 (old, new)</h2>
-
-<h3>Package com.ibm.icu.charset</h3>
-<ul>
-CharsetProviderICU
-<ul>
-<li>    <span style='color:red'>*internal*  </span>public static final java.lang.Object[] <i>getAvailableNames</i>()</br>
-<span style='color:red'>*internal*  </span>public static final java.lang.String[] <i>getAvailableNames</i>()</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-CharsetMatch
-<ul>
-<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
-(stable)     public int <i>compareTo</i>(com.ibm.icu.text.CharsetMatch)</li>
-</ul>
-RawCollationKey
-<ul>
-<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
-(stable)     public int <i>compareTo</i>(com.ibm.icu.text.RawCollationKey)</li>
-<li>    (stable)     public interface <i>StringTransform</i> </br>
-(stable)     public interface <i>StringTransform</i> implements com.ibm.icu.text.Transform</li>
-</ul>
-UTF16.StringComparator
-<ul>
-<li>    (stable)     public int <i>compare</i>(java.lang.Object, java.lang.Object)</br>
-(stable)     public int <i>compare</i>(java.lang.String, java.lang.String)</li>
-<li>    (stable)     public class <i>UnicodeSet</i> extends com.ibm.icu.text.UnicodeFilter implements com.ibm.icu.util.Freezable</br>
-(stable)     public class <i>UnicodeSet</i> extends com.ibm.icu.text.UnicodeFilter implements java.lang.Iterable, java.lang.Comparable, com.ibm.icu.util.Freezable</li>
-</ul>
-UnicodeSet
-<ul>
-<li>    (stable)     public void <i>addAll</i>(java.util.Collection)</br>
-(draft)      public com.ibm.icu.text.UnicodeSet <i>addAll</i>(int, int)</li>
-<li>    (stable)     public void <i>addAllTo</i>(java.util.Collection)</br>
-(draft)      public static java.lang.Object[] <i>addAllTo</i>(java.lang.Iterable, T[])</li>
-<li>    (stable)     public java.lang.Object <i>cloneAsThawed</i>()</br>
-(stable)     public com.ibm.icu.text.UnicodeSet <i>cloneAsThawed</i>()</li>
-<li>    (stable)     public java.lang.Object <i>freeze</i>()</br>
-(stable)     public com.ibm.icu.text.UnicodeSet <i>freeze</i>()</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-ByteArrayWrapper
-<ul>
-<li>    (stable)     public int <i>compareTo</i>(java.lang.Object)</br>
-(stable)     public int <i>compareTo</i>(com.ibm.icu.util.ByteArrayWrapper)</li>
-</ul>
-UResourceBundle
-<ul>
-<li>    <span style='color:red'>*internal*  </span>protected static void <i>addToCache</i>(java.lang.ClassLoader, java.lang.String, com.ibm.icu.util.ULocale, com.ibm.icu.util.UResourceBundle)</br>
-<span style='color:red'>*internal*  </span>protected static com.ibm.icu.util.UResourceBundle <i>addToCache</i>(java.lang.ClassLoader, java.lang.String, com.ibm.icu.util.ULocale, com.ibm.icu.util.UResourceBundle)</li>
-</ul>
-VersionInfo
-<ul>
-<li>    <span style='color:red'>*internal*  </span>public static final java.lang.String ICU_DATA_VERSION</br>
-<span style='color:red'>*internal*  </span>public static final com.ibm.icu.util.VersionInfo ICU_DATA_VERSION</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Promoted to stable in ICU4J 4.4</h2>
-
-<h3>Package com.ibm.icu.charset</h3>
-<ul>
-<li>(stable)     public final class <i>CharsetSelector</i></li>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-<li>(stable)     public class <i>CurrencyPluralInfo</i></li>
-ChineseDateFormat
-<ul>
-<li>(draft)      public <i>ChineseDateFormat</i>(java.lang.String, java.lang.String, ULocale)</li>
-</ul>
-Collator
-<ul>
-<li>(stable)     public static final java.lang.String[] <i>getKeywordValuesForLocale</i>(java.lang.String, ULocale, boolean)</li>
-</ul>
-DecimalFormat
-<ul>
-<li>(stable)     public <i>DecimalFormat</i>(java.lang.String, DecimalFormatSymbols, CurrencyPluralInfo, int)</li>
-<li>(stable)     public CurrencyPluralInfo <i>getCurrencyPluralInfo</i>()</li>
-<li>(stable)     public java.math.MathContext <i>getMathContext</i>()</li>
-<li>(stable)     public MathContext <i>getMathContextICU</i>()</li>
-<li>(stable)     public void <i>setCurrencyPluralInfo</i>(CurrencyPluralInfo)</li>
-<li>(stable)     public void <i>setMathContext</i>(java.math.MathContext)</li>
-<li>(stable)     public void <i>setMathContextICU</i>(MathContext)</li>
-</ul>
-NumberFormat
-<ul>
-<li>(stable)     public static final int CURRENCYSTYLE</li>
-<li>(stable)     public static final int INTEGERSTYLE</li>
-<li>(stable)     public static final int ISOCURRENCYSTYLE</li>
-<li>(stable)     public static final int NUMBERSTYLE</li>
-<li>(stable)     public static final int PERCENTSTYLE</li>
-<li>(stable)     public static final int PLURALCURRENCYSTYLE</li>
-<li>(stable)     public static final int SCIENTIFICSTYLE</li>
-<li>(stable)     public static NumberFormat <i>getInstance</i>(ULocale, int)</li>
-<li>(stable)     public static final NumberFormat <i>getInstance</i>(int)</li>
-<li>(stable)     public static NumberFormat <i>getInstance</i>(java.util.Locale, int)</li>
-</ul>
-PluralFormat
-<ul>
-<li>(stable)     public java.lang.String <i>toPattern</i>()</li>
-</ul>
-RuleBasedNumberFormat
-<ul>
-<li>(stable)     public static final int NUMBERING_SYSTEM</li>
-</ul>
-SimpleDateFormat
-<ul>
-<li>(stable)     public <i>SimpleDateFormat</i>(java.lang.String, java.lang.String, ULocale)</li>
-</ul>
-StringPrep
-<ul>
-<li>(stable)     public static final int RFC3491_NAMEPREP</li>
-<li>(stable)     public static final int RFC3530_NFS4_CIS_PREP</li>
-<li>(stable)     public static final int RFC3530_NFS4_CS_PREP</li>
-<li>(stable)     public static final int RFC3530_NFS4_CS_PREP_CI</li>
-<li>(stable)     public static final int RFC3530_NFS4_MIXED_PREP_PREFIX</li>
-<li>(stable)     public static final int RFC3530_NFS4_MIXED_PREP_SUFFIX</li>
-<li>(stable)     public static final int RFC3722_ISCSI</li>
-<li>(stable)     public static final int RFC3920_NODEPREP</li>
-<li>(stable)     public static final int RFC3920_RESOURCEPREP</li>
-<li>(stable)     public static final int RFC4011_MIB</li>
-<li>(stable)     public static final int RFC4013_SASLPREP</li>
-<li>(stable)     public static final int RFC4505_TRACE</li>
-<li>(stable)     public static final int RFC4518_LDAP</li>
-<li>(stable)     public static final int RFC4518_LDAP_CI</li>
-<li>(stable)     public static StringPrep <i>getInstance</i>(int)</li>
-<li>(stable)     public java.lang.String <i>prepare</i>(java.lang.String, int)</li>
-</ul>
-TimeUnitFormat
-<ul>
-<li>(stable)     public static final int ABBREVIATED_NAME</li>
-<li>(stable)     public static final int FULL_NAME</li>
-<li>(stable)     public <i>TimeUnitFormat</i>(ULocale, int)</li>
-<li>(stable)     public <i>TimeUnitFormat</i>(java.util.Locale, int)</li>
-</ul>
-UnicodeSet
-<ul>
-<li>(stable)     public final UnicodeSet <i>removeAllStrings</i>()</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-Calendar
-<ul>
-<li>(stable)     public static final java.lang.String[] <i>getKeywordValuesForLocale</i>(java.lang.String, ULocale, boolean)</li>
-</ul>
-Currency
-<ul>
-<li>(stable)     public static final int PLURAL_LONG_NAME</li>
-<li>(stable)     public static final java.lang.String[] <i>getKeywordValuesForLocale</i>(java.lang.String, ULocale, boolean)</li>
-<li>(stable)     public java.lang.String <i>getName</i>(ULocale, int, java.lang.String, boolean[])</li>
-<li>(stable)     public java.lang.String <i>getName</i>(java.util.Locale, int, java.lang.String, boolean[])</li>
-</ul>
-LocaleData
-<ul>
-<li>(stable)     public java.lang.String <i>getLocaleDisplayPattern</i>()</li>
-<li>(stable)     public java.lang.String <i>getLocaleSeparator</i>()</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Added in ICU4J 4.4</h2>
-
-<h3>Package com.ibm.icu.charset</h3>
-<ul>
-CharsetDecoderICU
-<ul>
-<li><span style='color:red'>*internal*  </span>protected static final int EXT_MAX_BYTES</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.lang</h3>
-<ul>
-UCharacter
-<ul>
-<li>(draft)      public static int <i>getCharFromNameAlias</i>(java.lang.String)</li>
-<li>(draft)      public static java.lang.String <i>getNameAlias</i>(int)</li>
-</ul>
-UCharacter.JoiningGroup
-<ul>
-<li>(stable)     public static final int FARSI_YEH</li>
-<li>(stable)     public static final int NYA</li>
-</ul>
-UCharacter.LineBreak
-<ul>
-<li>(stable)     public static final int CLOSE_PARENTHESIS</li>
-</ul>
-UCharacter.UnicodeBlock
-<ul>
-<li>(stable)     public static final UCharacter.UnicodeBlock AVESTAN</li>
-<li>(stable)     public static final int AVESTAN_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock BAMUM</li>
-<li>(stable)     public static final int BAMUM_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C</li>
-<li>(stable)     public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock COMMON_INDIC_NUMBER_FORMS</li>
-<li>(stable)     public static final int COMMON_INDIC_NUMBER_FORMS_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock DEVANAGARI_EXTENDED</li>
-<li>(stable)     public static final int DEVANAGARI_EXTENDED_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock EGYPTIAN_HIEROGLYPHS</li>
-<li>(stable)     public static final int EGYPTIAN_HIEROGLYPHS_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock ENCLOSED_ALPHANUMERIC_SUPPLEMENT</li>
-<li>(stable)     public static final int ENCLOSED_ALPHANUMERIC_SUPPLEMENT_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock ENCLOSED_IDEOGRAPHIC_SUPPLEMENT</li>
-<li>(stable)     public static final int ENCLOSED_IDEOGRAPHIC_SUPPLEMENT_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock HANGUL_JAMO_EXTENDED_A</li>
-<li>(stable)     public static final int HANGUL_JAMO_EXTENDED_A_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock HANGUL_JAMO_EXTENDED_B</li>
-<li>(stable)     public static final int HANGUL_JAMO_EXTENDED_B_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock IMPERIAL_ARAMAIC</li>
-<li>(stable)     public static final int IMPERIAL_ARAMAIC_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock INSCRIPTIONAL_PAHLAVI</li>
-<li>(stable)     public static final int INSCRIPTIONAL_PAHLAVI_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock INSCRIPTIONAL_PARTHIAN</li>
-<li>(stable)     public static final int INSCRIPTIONAL_PARTHIAN_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock JAVANESE</li>
-<li>(stable)     public static final int JAVANESE_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock KAITHI</li>
-<li>(stable)     public static final int KAITHI_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock LISU</li>
-<li>(stable)     public static final int LISU_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock MEETEI_MAYEK</li>
-<li>(stable)     public static final int MEETEI_MAYEK_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock MYANMAR_EXTENDED_A</li>
-<li>(stable)     public static final int MYANMAR_EXTENDED_A_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock OLD_SOUTH_ARABIAN</li>
-<li>(stable)     public static final int OLD_SOUTH_ARABIAN_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock OLD_TURKIC</li>
-<li>(stable)     public static final int OLD_TURKIC_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock RUMI_NUMERAL_SYMBOLS</li>
-<li>(stable)     public static final int RUMI_NUMERAL_SYMBOLS_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock SAMARITAN</li>
-<li>(stable)     public static final int SAMARITAN_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock TAI_THAM</li>
-<li>(stable)     public static final int TAI_THAM_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock TAI_VIET</li>
-<li>(stable)     public static final int TAI_VIET_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED</li>
-<li>(stable)     public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_ID</li>
-<li>(stable)     public static final UCharacter.UnicodeBlock VEDIC_EXTENSIONS</li>
-<li>(stable)     public static final int VEDIC_EXTENSIONS_ID</li>
-</ul>
-UProperty
-<ul>
-<li>(stable)     public static final int CASED</li>
-<li>(stable)     public static final int CASE_IGNORABLE</li>
-<li>(stable)     public static final int CHANGES_WHEN_CASEFOLDED</li>
-<li>(stable)     public static final int CHANGES_WHEN_CASEMAPPED</li>
-<li>(stable)     public static final int CHANGES_WHEN_LOWERCASED</li>
-<li>(stable)     public static final int CHANGES_WHEN_NFKC_CASEFOLDED</li>
-<li>(stable)     public static final int CHANGES_WHEN_TITLECASED</li>
-<li>(stable)     public static final int CHANGES_WHEN_UPPERCASED</li>
-<li><span style='color:red'>*internal*  </span>public static final int UNDEFINED</li>
-</ul>
-UScript
-<ul>
-<li>(stable)     public static final int BAMUM</li>
-<li>(stable)     public static final int LISU</li>
-<li>(stable)     public static final int NAKHI_GEBA</li>
-<li>(stable)     public static final int OLD_SOUTH_ARABIAN</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-<li>(draft)      public abstract class <i>CurrencyDisplayNames</i></li>
-<li>(draft)      public class <i>CurrencyMetaInfo</i></li>
-<li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyDigits</i></li>
-<li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyFilter</i></li>
-<li>(draft)      public static final class <i>CurrencyMetaInfo.CurrencyInfo</i></li>
-<li>(draft)      public class <i>FilteredNormalizer2</i></li>
-<li>(draft)      public abstract class <i>LocaleDisplayNames</i></li>
-<li>(draft)      public static final class <i>LocaleDisplayNames.DialectHandling</i></li>
-<li>(draft)      public abstract class <i>Normalizer2</i></li>
-<li>(draft)      public static final class <i>Normalizer2.Mode</i></li>
-<li>(draft)      public interface <i>RbnfLenientScanner</i></li>
-<li>(draft)      public interface <i>RbnfLenientScannerProvider</i></li>
-<li><span style='color:red'>*internal*  </span>public class <i>RbnfScannerProviderImpl</i></li>
-<li>(draft)      public class <i>SelectFormat</i></li>
-<li>(draft)      public interface <i>Transform</i></li>
-<li>(draft)      public static final class <i>UnicodeSet.ComparisonStyle</i></li>
-<li>(draft)      public static final class <i>UnicodeSet.SpanCondition</i></li>
-Collator
-<ul>
-<li><span style='color:red'>*internal*  </span>public Collator <i>setStrength2</i>(int)</li>
-</ul>
-DateIntervalInfo
-<ul>
-<li>(stable)     public DateIntervalInfo <i>cloneAsThawed</i>()</li>
-<li>(stable)     public DateIntervalInfo <i>freeze</i>()</li>
-</ul>
-DateTimePatternGenerator
-<ul>
-<li>(draft)      public static final int MATCH_ALL_FIELDS_LENGTH</li>
-<li>(draft)      public static final int MATCH_HOUR_FIELD_LENGTH</li>
-<li><span style='color:red'>*internal*  </span>public static final int MATCH_MINUTE_FIELD_LENGTH</li>
-<li>(draft)      public static final int MATCH_NO_OPTIONS</li>
-<li><span style='color:red'>*internal*  </span>public static final int MATCH_SECOND_FIELD_LENGTH</li>
-<li>(stable)     public DateTimePatternGenerator <i>cloneAsThawed</i>()</li>
-<li>(stable)     public DateTimePatternGenerator <i>freeze</i>()</li>
-<li>(draft)      public java.lang.String <i>getBestPattern</i>(java.lang.String, int)</li>
-<li><span style='color:red'>*internal*  </span>public static DateTimePatternGenerator <i>getFrozenInstance</i>(ULocale)</li>
-<li>(draft)      public java.lang.String <i>replaceFieldTypes</i>(java.lang.String, java.lang.String, int)</li>
-<li><span style='color:red'>*internal*  </span>public boolean <i>skeletonsAreSimilar</i>(java.lang.String, java.lang.String)</li>
-</ul>
-DateTimePatternGenerator.VariableField
-<ul>
-<li><span style='color:red'>*internal*  </span>protected boolean <i>isNumeric</i>()</li>
-</ul>
-DecimalFormatSymbols
-<ul>
-<li>(draft)      public static final int CURRENCY_SPC_SURROUNDING_MATCH</li>
-</ul>
-IndexCharacters
-<ul>
-<li><span style='color:red'>*internal*  </span>public <i>IndexCharacters</i>(ULocale, UnicodeSet, Collator)</li>
-</ul>
-Normalizer.Mode
-<ul>
-<li>(draft)      public <i>Normalizer.Mode</i>()</li>
-<li><span style='color:red'>*internal*  </span>protected abstract Normalizer2 <i>getNormalizer2</i>(int)</li>
-</ul>
-RuleBasedNumberFormat
-<ul>
-<li>(draft)      public RbnfLenientScannerProvider <i>getLenientScannerProvider</i>()</li>
-<li>(draft)      public void <i>setLenientScannerProvider</i>(RbnfLenientScannerProvider)</li>
-</ul>
-UnicodeSet
-<ul>
-<li>(draft)      public <i>UnicodeSet</i>(int[])</li>
-<li>(stable)     public UnicodeSet <i>add</i>(java.util.Collection)</li>
-<li>(draft)      public UnicodeSet <i>addAll</i>(java.lang.String[])</li>
-<li>(stable)     public UnicodeSet <i>addAll</i>(java.util.Collection)</li>
-<li>(draft)      public java.lang.String[] <i>addAllTo</i>(java.lang.String[])</li>
-<li>(draft)      public java.util.Collection <i>addAllTo</i>(T)</li>
-<li>(draft)      public static java.util.Collection <i>addAllTo</i>(java.lang.Iterable, U)</li>
-<li><span style='color:red'>*internal*  </span>public UnicodeSet <i>addBridges</i>(UnicodeSet)</li>
-<li>(draft)      public static int <i>compare</i>(int, java.lang.String)</li>
-<li>(draft)      public static int <i>compare</i>(java.lang.Iterable, java.lang.Iterable)</li>
-<li>(draft)      public static int <i>compare</i>(java.lang.String, int)</li>
-<li>(draft)      public static int <i>compare</i>(java.util.Collection, java.util.Collection, UnicodeSet.ComparisonStyle)</li>
-<li>(draft)      public int <i>compareTo</i>(UnicodeSet)</li>
-<li>(draft)      public int <i>compareTo</i>(UnicodeSet, UnicodeSet.ComparisonStyle)</li>
-<li>(draft)      public int <i>compareTo</i>(java.lang.Iterable)</li>
-<li>(draft)      public boolean <i>containsAll</i>(java.util.Collection)</li>
-<li>(draft)      public boolean <i>containsNone</i>(java.util.Collection)</li>
-<li>(draft)      public final boolean <i>containsSome</i>(java.util.Collection)</li>
-<li><span style='color:red'>*internal*  </span>public int <i>findIn</i>(java.lang.CharSequence, int, boolean)</li>
-<li><span style='color:red'>*internal*  </span>public int <i>findLastIn</i>(java.lang.CharSequence, int, boolean)</li>
-<li><span style='color:red'>*internal*  </span>public static int <i>getSingleCodePoint</i>(java.lang.String)</li>
-<li>(draft)      public java.util.Iterator <i>iterator</i>()</li>
-<li>(draft)      public UnicodeSet <i>removeAll</i>(java.util.Collection)</li>
-<li>(draft)      public UnicodeSet <i>retainAll</i>(java.util.Collection)</li>
-<li>(draft)      public int <i>span</i>(java.lang.CharSequence, UnicodeSet.SpanCondition)</li>
-<li>(draft)      public int <i>span</i>(java.lang.CharSequence, int, UnicodeSet.SpanCondition)</li>
-<li>(draft)      public int <i>spanBack</i>(java.lang.CharSequence, UnicodeSet.SpanCondition)</li>
-<li>(draft)      public int <i>spanBack</i>(java.lang.CharSequence, int, UnicodeSet.SpanCondition)</li>
-<li>(draft)      public java.lang.Iterable <i>strings</i>()</li>
-<li><span style='color:red'>*internal*  </span>public java.lang.String <i>stripFrom</i>(java.lang.CharSequence, boolean)</li>
-<li>(draft)      public static java.lang.String[] <i>toArray</i>(UnicodeSet)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-<li>(draft)      public class <i>LocaleMatcher</i></li>
-<li><span style='color:red'>*internal*  </span>public static class <i>LocaleMatcher.LanguageMatcherData</i></li>
-<li>(draft)      public class <i>LocalePriorityList</i></li>
-<li>(draft)      public static class <i>LocalePriorityList.Builder</i></li>
-Calendar
-<ul>
-<li>(draft)      public static final int IS_LEAP_MONTH</li>
-</ul>
-GlobalizationPreferences
-<ul>
-<li>(draft)      public GlobalizationPreferences <i>cloneAsThawed</i>()</li>
-<li>(draft)      public GlobalizationPreferences <i>freeze</i>()</li>
-</ul>
-HebrewCalendar
-<ul>
-<li><span style='color:red'>*internal*  </span>public static boolean <i>isLeapYear</i>(int)</li>
-</ul>
-LocaleData
-<ul>
-<li>(stable)     public static VersionInfo <i>getCLDRVersion</i>()</li>
-</ul>
-TimeZone
-<ul>
-<li>(draft)      public static final int GENERIC_LOCATION</li>
-<li>(draft)      public static final int LONG_GENERIC</li>
-<li>(draft)      public static final int LONG_GMT</li>
-<li>(draft)      public static final int SHORT_COMMONLY_USED</li>
-<li>(draft)      public static final int SHORT_GENERIC</li>
-<li>(draft)      public static final int SHORT_GMT</li>
-<li>(draft)      public static ICULogger TimeZoneLogger</li>
-</ul>
-ULocale
-<ul>
-<li>(draft)      public static final char UNICODE_LOCALE_EXTENSION</li>
-<li>(draft)      public java.lang.String <i>getDisplayLanguageWithDialect</i>()</li>
-<li>(draft)      public java.lang.String <i>getDisplayLanguageWithDialect</i>(ULocale)</li>
-<li>(draft)      public static java.lang.String <i>getDisplayLanguageWithDialect</i>(java.lang.String, ULocale)</li>
-<li>(draft)      public static java.lang.String <i>getDisplayLanguageWithDialect</i>(java.lang.String, java.lang.String)</li>
-<li>(draft)      public java.lang.String <i>getDisplayNameWithDialect</i>()</li>
-<li>(draft)      public java.lang.String <i>getDisplayNameWithDialect</i>(ULocale)</li>
-<li>(draft)      public static java.lang.String <i>getDisplayNameWithDialect</i>(java.lang.String, ULocale)</li>
-<li>(draft)      public static java.lang.String <i>getDisplayNameWithDialect</i>(java.lang.String, java.lang.String)</li>
-<li>(draft)      public java.util.Set <i>getUnicodeLocaleKeys</i>()</li>
-<li>(draft)      public java.lang.String <i>getUnicodeLocaleType</i>(java.lang.String)</li>
-</ul>
-ULocale.Builder
-<ul>
-<li>(draft)      public <i>ULocale.Builder</i>(boolean)</li>
-<li>(draft)      public ULocale <i>build</i>()</li>
-<li>(draft)      public boolean <i>isLenientVariant</i>()</li>
-<li>(draft)      public ULocale.Builder <i>setUnicodeLocaleKeyword</i>(java.lang.String, java.lang.String)</li>
-</ul>
-UResourceBundle
-<ul>
-<li><span style='color:red'>*internal*  </span>protected UResourceBundle <i>findTopLevel</i>(int)</li>
-<li><span style='color:red'>*internal*  </span>protected UResourceBundle <i>findTopLevel</i>(java.lang.String)</li>
-<li><span style='color:red'>*internal*  </span>protected java.util.Set <i>handleKeySet</i>()</li>
-<li><span style='color:red'>*internal*  </span>protected boolean <i>isTopLevelResource</i>()</li>
-<li><span style='color:red'>*internal*  </span>public java.util.Set <i>keySet</i>()</li>
-</ul>
-VersionInfo
-<ul>
-<li><span style='color:red'>*internal*  </span>public static final java.lang.String ICU_DATA_VERSION_PATH</li>
-<li>(stable)     public static final VersionInfo UNICODE_5_2</li>
+<li>(draft)      public static void <i>main</i>(java.lang.String[])</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Mar 03 00:10:36 EST 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Jun 22 09:20:38 EDT 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
