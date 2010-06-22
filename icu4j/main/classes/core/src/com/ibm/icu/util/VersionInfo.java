@@ -507,6 +507,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Main method prints out ICU version information
      * @param args arguments (currently not used)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static void main(String[] args) {
         String icuApiVer;
