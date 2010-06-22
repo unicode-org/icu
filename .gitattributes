@@ -1778,6 +1778,7 @@ icu4c/source/data/unidata/confusablesWholeScript.txt svneol=native#text/plain
 icu4c/source/data/unidata/norm2/nfc.txt svneol=native#text/plain
 icu4c/source/data/unidata/norm2/nfkc.txt svneol=native#text/plain
 icu4c/source/data/unidata/norm2/nfkc_cf.txt svneol=native#text/plain
+icu4c/source/data/unidata/norm2/uts46.txt svneol=native#text/plain
 icu4c/source/data/unidata/ucdterms.txt svneol=native#text/plain
 icu4c/source/data/xml/brkitr/el.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
