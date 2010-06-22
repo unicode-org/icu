@@ -10,13 +10,18 @@ Requirements:
 
 Installing:
 	1. install the plugin - at least the ticketmanager and review portion.
+
+         a. There is no source release at this time: I recommend
+             that you check out this code with svn
+             and in this directory, run: 
+                "python setup.py develop"
 	
-	In trac.ini under '[components]' add:
+	 b. In trac.ini under '[components]' add:
 		icucodetools.review.reviewmodule = enabled
 		icucodetools.ticketmgr.ticketmanager = enabled
 	
 	NOTE: DCUT and TKTLIST parts are not working yet. 
-	Don't worry about enabling them.
+	Don't bother to enable them.
 
 	2. in your trac.ini describe how your changesets describe a ticket. 
 	Our changesets look like this:  "ticket:1234: fixed the broken code"
