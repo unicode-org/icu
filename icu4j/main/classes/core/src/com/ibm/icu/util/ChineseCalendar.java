@@ -230,6 +230,7 @@ public class ChineseCalendar extends Calendar {
      *                  time field. 
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field. 
      * @draft ICU 4.6 
+     * @provisional This API might change or be removed in a future release.
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date) 
     { 
@@ -267,7 +268,8 @@ public class ChineseCalendar extends Calendar {
      *              in the calendar. 
      * @param second the value used to set the {@link #SECOND SECOND} time field 
      *              in the calendar. 
-     * @draft ICU 4.6 
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date, int hour, 
                            int minute, int second) 
