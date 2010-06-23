@@ -15,7 +15,14 @@
 
 #ifndef NUMSYS
 #define NUMSYS
+
+/**
+ * \def NUMSYS_NAME_CAPACITY
+ * Size of a numbering system name.
+ * @internal
+ */
 #define NUMSYS_NAME_CAPACITY 8
+
 #include "unicode/utypes.h"
 
 /**
