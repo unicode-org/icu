@@ -382,6 +382,8 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
 #define U_DATA_PATHITER_BUFSIZ  128        /* Size of local buffer for paths         */
                                            /*   Overflow causes malloc of larger buf */
 
+U_NAMESPACE_BEGIN
+
 class UDataPathIterator
 {
 public:
@@ -595,6 +597,8 @@ const char *UDataPathIterator::next(UErrorCode *pErrorCode)
     /* fell way off the end */
     return NULL;
 }
+
+U_NAMESPACE_END
 
 /* ==================================================================================*/
 
