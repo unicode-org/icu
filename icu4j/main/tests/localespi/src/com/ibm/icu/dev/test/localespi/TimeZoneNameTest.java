@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,15 +27,22 @@ public class TimeZoneNameTest extends TestFmwk {
             if (TestUtil.isProblematicIBMLocale(loc)) {
                 warningOnly = true;
             }
-            else if ((TestUtil.isSUNJRE() || TestUtil.isIBMJRE()) && loc.toString().startsWith("eu")) {
-                warningOnly = true;
-            }
 
             for (String tzid : tzids) {
-                TimeZone tz = TimeZone.getTimeZone(tzid);
                 com.ibm.icu.util.TimeZone tzIcu = com.ibm.icu.util.TimeZone.getTimeZone(tzid);
-                checkDisplayNamePair(TimeZone.SHORT, tz, tzIcu, loc, warningOnly);
-                checkDisplayNamePair(TimeZone.LONG, tz, tzIcu, loc, warningOnly);
+
+                // Java does not pick up time zone names for ID/Locale from an SPI
+                // when long standard display name is not available.
+
+                String icuStdLong = getIcuDisplayName(tzIcu, false, TimeZone.LONG, loc);
+                if (icuStdLong != null) {
+                    TimeZone tz = TimeZone.getTimeZone(tzid);
+                    checkDisplayNamePair(TimeZone.SHORT, tz, tzIcu, loc, warningOnly);
+                    checkDisplayNamePair(TimeZone.LONG, tz, tzIcu, loc, warningOnly);
+                } else {
+                    logln("Localized long standard name is not available for "
+                            + tzid + " in locale " + loc + " in ICU");
+                }
             }
         }
     }
