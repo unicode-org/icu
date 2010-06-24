@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Main-Class: com.ibm.icu.util.VersionInfo
+
+Name: com/ibm/icu/
+Specification-Title: ICU for Java
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@
