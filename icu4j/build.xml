@@ -736,7 +736,6 @@
             <arg value="-new:" />
             <arg value="${out.dir}/icu4j${api.report.version}.api2.gz" />
             <arg value="-html" />
-            <arg value="-internal" />
             <arg value="-out:" />
             <arg value="${out.dir}/icu4j_compare_${api.report.prev.version}_${api.report.version}.html" />
         </java>
