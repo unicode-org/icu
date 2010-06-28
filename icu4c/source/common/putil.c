@@ -651,6 +651,10 @@ extern U_IMPORT char *U_TZNAME[];
 #endif
 #if U_HAVE_DIRENT_H
 #define TZFILE_SKIP     "posixrules" /* tz file to skip when searching. */
+/* Some Linux distributions have 'localtime' in /usr/share/zoneinfo
+   symlinked to /etc/localtime, which makes searchForTZFile return
+   'localtime' when it's the first match. */
+#define TZFILE_SKIP2    "localtime"
 #define SEARCH_TZFILE
 #include <dirent.h>  /* Needed to search through system timezone files */
 #endif
@@ -897,7 +901,17 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 closedir(subDirp);
                 uprv_strcat(newpath, "/");
                 result = searchForTZFile(newpath, tzInfo);
-            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0) {
+                /*
+                 Have to get out here. Otherwise, we'd keep looking
+                 and return the first match in the top-level directory
+                 if there's a match in the top-level. If not, this function
+                 would return NULL and set gTimeZoneBufferPtr to NULL in initDefault().
+                 It worked without this in most cases because we have a fallback of calling
+                 localtime_r to figure out the default timezone.
+                */
+                if (result != NULL)
+                    break;
+            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0 && uprv_strcmp(TZFILE_SKIP2, dirEntry->d_name) != 0) {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
                     uprv_strcpy(SEARCH_TZFILE_RESULT, newpath + (sizeof(TZZONEINFO) - 1));
                     result = SEARCH_TZFILE_RESULT;
