@@ -414,6 +414,7 @@
         <include locales="ti_ER"/>
         <include locales="ti_ET"/>
         <include locales="tl"/>
+        <include locales="tl_PH"/>
         <include locales="to"/>
         <include locales="to_TO"/>
         <include locales="tr"/>        
