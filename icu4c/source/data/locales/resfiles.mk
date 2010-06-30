@@ -36,8 +36,9 @@ GENRB_ALIAS_SOURCE = $(GENRB_SYNTHETIC_ALIAS) az_AZ.txt ha_GH.txt ha_NE.txt ha_N
  pa_IN.txt pa_PK.txt sh.txt sh_BA.txt sh_CS.txt\
  sh_YU.txt shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt\
  sr_Cyrl_YU.txt sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt\
- sr_YU.txt tl.txt tzm_MA.txt uz_AF.txt uz_UZ.txt\
- zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
+ sr_YU.txt tl.txt tl_PH.txt tzm_MA.txt uz_AF.txt\
+ uz_UZ.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt\
+ zh_TW.txt
 
 
 # Ordinary resources
