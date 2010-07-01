@@ -1272,6 +1272,19 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    public void Test6816() {
+		Currency cur1 = Currency.getInstance(new Locale("und", "PH"));
+
+		NumberFormat nfmt = NumberFormat.getCurrencyInstance(new Locale("und", "PH"));
+		DecimalFormatSymbols decsym = ((DecimalFormat)nfmt).getDecimalFormatSymbols();
+		Currency cur2 = decsym.getCurrency();
+        
+		if ( !cur1.getCurrencyCode().equals("PHP") || !cur2.getCurrencyCode().equals("PHP")) {
+            errln("FAIL: Currencies should match PHP: cur1 = "+cur1.getCurrencyCode()+"; cur2 = "+cur2.getCurrencyCode());
+        }
+
+    }
+    
     public void TestThreadedFormat() {
 
         class FormatTask implements Runnable {

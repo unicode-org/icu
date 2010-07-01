@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2086,6 +2086,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             errln("Error: adjusted day of week, and year jumped from " + year1 + " to " + year2);
         } else {
             logln("Year remained " + year2 + " - PASS.");
+        }
+    }
+    public void TestCalendarType6816() {
+        Locale loc = new Locale("en", "TH");
+        Calendar cal = Calendar.getInstance(loc);
+        String calType = cal.getType();
+        if ( !calType.equals("buddhist")) {
+            errln("FAIL: Calendar type for en_TH should still be buddhist");
         }
     }
 

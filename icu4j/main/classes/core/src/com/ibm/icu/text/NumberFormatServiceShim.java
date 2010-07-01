@@ -19,6 +19,7 @@ import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
@@ -88,6 +89,14 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             throw new MissingResourceException("Unable to construct NumberFormat", "", "");
         }
         fmt = (NumberFormat)fmt.clone();
+
+        // If we are creating a currency type formatter, then we may have to set the currency
+        // explicitly, since the actualLoc may be different than the desiredLocale        
+        if ( choice == NumberFormat.CURRENCYSTYLE ||
+             choice == NumberFormat.ISOCURRENCYSTYLE || 
+             choice == NumberFormat.PLURALCURRENCYSTYLE) {
+            fmt.setCurrency(Currency.getInstance(desiredLocale));
+        }
 
         ULocale uloc = actualLoc[0];
         fmt.setLocale(uloc, uloc); // services make no distinction between actual & valid

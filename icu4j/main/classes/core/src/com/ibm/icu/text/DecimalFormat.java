@@ -4852,8 +4852,8 @@ public class DecimalFormat extends NumberFormat {
             boolean[] isChoiceFormat = new boolean[1];
             String s = theCurrency.getName(symbols.getULocale(),
                                            Currency.SYMBOL_NAME, isChoiceFormat);
+            symbols.setCurrency(theCurrency);
             symbols.setCurrencySymbol(s);
-            symbols.setInternationalCurrencySymbol(theCurrency.getCurrencyCode());
         }
 
         if (currencySignCount > 0) {
