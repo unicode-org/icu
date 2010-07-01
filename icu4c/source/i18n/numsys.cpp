@@ -70,6 +70,10 @@ NumberingSystem::NumberingSystem(const NumberingSystem& other)
 NumberingSystem* U_EXPORT2
 NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const UnicodeString & desc_in, UErrorCode &status) {
 
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
     if ( radix_in < 2 ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -95,6 +99,10 @@ NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const 
 
 NumberingSystem* U_EXPORT2
 NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
+
+    if (U_FAILURE(status)) {
+        return NULL;
+    } 
 
     char buffer[ULOC_KEYWORDS_CAPACITY];
     int32_t count = inLocale.getKeywordValue("numbers",buffer, sizeof(buffer),status);
