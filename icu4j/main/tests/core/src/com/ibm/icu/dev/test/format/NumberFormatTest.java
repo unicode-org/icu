@@ -1280,7 +1280,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 		Currency cur2 = decsym.getCurrency();
         
 		if ( !cur1.getCurrencyCode().equals("PHP") || !cur2.getCurrencyCode().equals("PHP")) {
-            errln("FAIL: Currencies should match PHP: cur1 = "+cur1.getCurrencyCode()+"; cur2 = "+cur2.getCurrencyCode());
+		    errln("FAIL: Currencies should match PHP: cur1 = "+cur1.getCurrencyCode()+"; cur2 = "+cur2.getCurrencyCode());
         }
 
     }
