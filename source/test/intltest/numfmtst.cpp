@@ -2702,14 +2702,18 @@ void NumberFormatTest::TestNumberingSystems() {
         errln("FAIL: getInstance(en_US@numbers=foobar) should have returned U_UNSUPPORTED_ERROR");
     }
 
+    ec = U_ZERO_ERROR;
     NumberingSystem *ns = NumberingSystem::createInstance(ec);
     if (U_FAILURE(ec)) {
         dataerrln("FAIL: NumberingSystem::createInstance(ec); - %s", u_errorName(ec));
     }
 
-    ns->getDynamicClassID();
-
-    ns->getStaticClassID();
+    if ( ns != NULL ) {
+        ns->getDynamicClassID();
+        ns->getStaticClassID();
+    } else {
+        errln("FAIL: getInstance() returned NULL.");
+    }
 
     NumberingSystem *ns1 = new NumberingSystem(*ns);
     if (ns1 == NULL) {
