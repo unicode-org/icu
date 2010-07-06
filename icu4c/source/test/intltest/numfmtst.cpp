@@ -109,6 +109,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(46,TestFieldPositionIterator);
         CASE(47,TestDecimal);
         CASE(48,TestCurrencyFractionDigits);
+        CASE(49,TestExponentParse); 
         default: name = ""; break;
     }
 }
@@ -6156,5 +6157,39 @@ void NumberFormatTest::TestCurrencyFractionDigits() {
     }
     delete fmt;
 }
+
+void NumberFormatTest::TestExponentParse() { 
+ 
+    UErrorCode status = U_ZERO_ERROR; 
+    Formattable result; 
+    ParsePosition parsePos(0); 
+ 
+    // set the exponent symbol 
+    status = U_ZERO_ERROR; 
+    DecimalFormatSymbols *symbols = new DecimalFormatSymbols(Locale::getDefault(), status); 
+    if(U_FAILURE(status)) { 
+        errln((UnicodeString)"ERROR: Could not create DecimalFormatSymbols (Default)"); 
+        return; 
+    } 
+    symbols->setSymbol(DecimalFormatSymbols::kExponentialSymbol,"e"); 
+ 
+    // create format instance 
+    status = U_ZERO_ERROR; 
+    DecimalFormat fmt("#####", symbols, status); 
+ 	if(U_FAILURE(status)) { 
+        errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern, symbols*)"); 
+    } 
+ 
+    // parse the text 
+    fmt.parse("123E4", result, parsePos); 
+    if(result.getType() != Formattable::kDouble &&  
+       result.getDouble() != (double)123 && 
+       parsePos.getIndex() != 3 
+       ) 
+    { 
+        errln("ERROR: parse failed - expected 123.0, 3  - returned %d, %i", 
+               result.getDouble(), parsePos); 
+    } 
+} 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
