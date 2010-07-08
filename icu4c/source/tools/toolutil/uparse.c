@@ -28,12 +28,9 @@
 
 #include <stdio.h>
 
-/* Is c a whitespace character? */
-#define IS_INV_WHITESPACE(c) ((c)==' ' || (c)=='\t' || (c)=='\r' || (c)=='\n')
-
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s) {
-    while(IS_INV_WHITESPACE(*s)) {
+    while(U_IS_INV_WHITESPACE(*s)) {
         ++s;
     }
     return s;
@@ -42,7 +39,7 @@ u_skipWhitespace(const char *s) {
 U_CAPI char * U_EXPORT2
 u_rtrim(char *s) {
     char *end=uprv_strchr(s, 0);
-    while(s<end && IS_INV_WHITESPACE(*(end-1))) {
+    while(s<end && U_IS_INV_WHITESPACE(*(end-1))) {
         *--end = 0;
     }
     return end;
@@ -126,7 +123,7 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         limit=uprv_strchr(start, '#');
         if(limit!=NULL) {
             /* get white space before the pound sign */
-            while(limit>start && IS_INV_WHITESPACE(*(limit-1))) {
+            while(limit>start && U_IS_INV_WHITESPACE(*(limit-1))) {
                 --limit;
             }
 
@@ -210,7 +207,7 @@ u_parseCodePoints(const char *s,
 
         /* read one code point */
         value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
+        if(end<=s || (!U_IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
             *pErrorCode=U_PARSE_ERROR;
             return 0;
         }
@@ -269,7 +266,7 @@ u_parseString(const char *s,
 
         /* read one code point */
         value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (!IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
+        if(end<=s || (!U_IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) || value>=0x110000) {
             *pErrorCode=U_PARSE_ERROR;
             return 0;
         }
