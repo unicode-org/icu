@@ -461,7 +461,7 @@ typedef struct CanonicalizationMap {
  */
 static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "",               "en_US_POSIX", NULL, NULL }, /* .NET name */
-    { "C",              "en_US_POSIX", NULL, NULL }, /* POSIX name */
+    { "c",              "en_US_POSIX", NULL, NULL }, /* POSIX name */
     { "posix",          "en_US_POSIX", NULL, NULL }, /* POSIX name (alias of C) */
     { "art_LOJBAN",     "jbo", NULL, NULL }, /* registered name */
     { "az_AZ_CYRL",     "az_Cyrl_AZ", NULL, NULL }, /* .NET name */
