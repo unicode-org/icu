@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -2584,7 +2584,7 @@ public class Bidi {
         levState.impAct = impTabPair.impact[levState.runLevel & 1];
         processPropertySeq(levState, sor, start, start);
         /* initialize for property state table */
-        if (dirProps[start] == NSM) {
+        if (NoContextRTL(dirProps[start]) == NSM) {
             stateImp = (short)(1 + sor);
         } else {
             stateImp = 0;

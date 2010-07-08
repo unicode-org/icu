@@ -2434,6 +2434,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=na
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.txt svneol=native#text/plain
@@ -2441,6 +2442,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt svn
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/ucdterms.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
