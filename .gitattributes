@@ -137,6 +137,8 @@ icu4j/main/tests/core/manifest.stub -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
