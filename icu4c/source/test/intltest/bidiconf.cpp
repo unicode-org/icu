@@ -115,9 +115,6 @@ char *BiDiConformanceTest::getUnidataPath(char path[]) {
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 
-// TODO: Make "public" in uparse.h.
-#define U_IS_INV_WHITESPACE(c) ((c)==' ' || (c)=='\t' || (c)=='\r' || (c)=='\n')
-
 UBool BiDiConformanceTest::parseLevels(const char *start) {
     directionBits=0;
     levelsCount=0;
@@ -336,15 +333,15 @@ void BiDiConformanceTest::TestBidiTest() {
             }
             start=u_skipWhitespace(start+1);
             char *end;
-            uint32_t bitset=(uint32_t)strtoul(start, &end, 10);
+            uint32_t bitset=(uint32_t)strtoul(start, &end, 16);
             if(end<=start || (!U_IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0)) {
                 errln("input bitset parse error at %s", start);
                 return;
             }
             // Loop over the bitset.
-            static const UBiDiLevel paraLevels[]={ UBIDI_DEFAULT_LTR, 0, 1 };
-            static const char *const paraLevelNames[]={ "auto/LTR", "LTR", "RTL" };
-            for(int i=0; i<=2; ++i) {
+            static const UBiDiLevel paraLevels[]={ UBIDI_DEFAULT_LTR, 0, 1, UBIDI_DEFAULT_RTL };
+            static const char *const paraLevelNames[]={ "auto/LTR", "LTR", "RTL", "auto/RTL" };
+            for(int i=0; i<=3; ++i) {
                 if(bitset&(1<<i)) {
                     ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
                                   paraLevels[i], NULL, errorCode);
