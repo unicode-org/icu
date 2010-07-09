@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utrie2perf", "utrie2perf\ut
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnvavailperf", "ucnvavailperf\ucnvavailperf.vcproj", "{EE2259BF-280D-4E0E-8A08-D77A26AE4191}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateFmtPerf", "DateFmtPerf\DateFmtPerf.vcproj", "{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -124,6 +126,12 @@ Global
 		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|Win32.ActiveCfg = Release|Win32
 		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|Win32.Build.0 = Release|Win32
 		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|x64.ActiveCfg = Release|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Debug|Win32.Build.0 = Debug|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Debug|x64.ActiveCfg = Debug|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Release|Win32.ActiveCfg = Release|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Release|Win32.Build.0 = Release|Win32
+		{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
