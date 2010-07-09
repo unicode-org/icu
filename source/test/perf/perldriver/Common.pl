@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2008, International Business Machines Corporation and
+#  * Copyright (c) 2010, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
 # Settings by user
-$ICULatestVersion = "4.0";     # Change to respective version number
-$ICUPreviousVersion = "3.8";   # Change to respective version number
-$ICUPrevious2Version = "3.6";  # Change to respective version number
+$ICULatestVersion = "";     # Change to respective version number
+$ICUPreviousVersion = "";   # Change to respective version number
+$ICUPrevious2Version = "";  # Change to respective version number
 
 $PerformanceDataPath = "";          #Change to Performance Data Path
 
