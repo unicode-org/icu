@@ -245,7 +245,7 @@ SelectFormat::format(const Formattable& obj,
 UnicodeString&
 SelectFormat::format(const UnicodeString& keyword,
                      UnicodeString& appendTo, 
-                     FieldPosition& pos,
+                     FieldPosition& /*pos */,
                      UErrorCode& status) const {
 
     if (U_FAILURE(status)) return appendTo;

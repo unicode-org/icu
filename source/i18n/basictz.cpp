@@ -101,8 +101,8 @@ BasicTimeZone::hasEquivalentTransitions(/*const*/ BasicTimeZone& tz, UDate start
         if (ignoreDstAmount) {
             if (tr1.getTo()->getRawOffset() + tr1.getTo()->getDSTSavings()
                         != tr2.getTo()->getRawOffset() + tr2.getTo()->getDSTSavings()
-                    || tr1.getTo()->getDSTSavings() != 0 &&  tr2.getTo()->getDSTSavings() == 0
-                    || tr1.getTo()->getDSTSavings() == 0 &&  tr2.getTo()->getDSTSavings() != 0) {
+                    || (tr1.getTo()->getDSTSavings() != 0 &&  tr2.getTo()->getDSTSavings() == 0)
+                    || (tr1.getTo()->getDSTSavings() == 0 &&  tr2.getTo()->getDSTSavings() != 0)) {
                 return FALSE;
             }
         } else {

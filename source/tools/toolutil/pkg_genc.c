@@ -623,14 +623,22 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
 #ifdef CAN_GENERATE_OBJECTS
 static void
 getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char *optMatchArch) {
-    int64_t buffer[256];
+    union {
+        char        bytes[2048];
+#ifdef U_ELF
+        Elf32_Ehdr  header32;
+        /* Elf32_Ehdr and ELF64_Ehdr are identical for the necessary fields. */
+#elif defined(U_WINDOWS)
+        IMAGE_FILE_HEADER header;
+#endif
+    } buffer;
+
     const char *filename;
     FileStream *in;
     int32_t length;
 
 #ifdef U_ELF
-    /* Pointer to ELF header. Elf32_Ehdr and ELF64_Ehdr are identical for the necessary fields. */
-    const Elf32_Ehdr *pHeader32;
+
 #elif defined(U_WINDOWS)
     const IMAGE_FILE_HEADER *pHeader;
 #else
@@ -668,26 +676,25 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
         fprintf(stderr, "genccode: unable to open match-arch file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
-    length=T_FileStream_read(in, buffer, sizeof(buffer));
+    length=T_FileStream_read(in, buffer.bytes, sizeof(buffer.bytes));
 
 #ifdef U_ELF
     if(length<sizeof(Elf32_Ehdr)) {
         fprintf(stderr, "genccode: match-arch file %s is too short\n", filename);
         exit(U_UNSUPPORTED_ERROR);
     }
-    pHeader32=(const Elf32_Ehdr *)buffer;
     if(
-        pHeader32->e_ident[0]!=ELFMAG0 ||
-        pHeader32->e_ident[1]!=ELFMAG1 ||
-        pHeader32->e_ident[2]!=ELFMAG2 ||
-        pHeader32->e_ident[3]!=ELFMAG3 ||
-        pHeader32->e_ident[EI_CLASS]<ELFCLASS32 || pHeader32->e_ident[EI_CLASS]>ELFCLASS64
+        buffer.header32.e_ident[0]!=ELFMAG0 ||
+        buffer.header32.e_ident[1]!=ELFMAG1 ||
+        buffer.header32.e_ident[2]!=ELFMAG2 ||
+        buffer.header32.e_ident[3]!=ELFMAG3 ||
+        buffer.header32.e_ident[EI_CLASS]<ELFCLASS32 || buffer.header32.e_ident[EI_CLASS]>ELFCLASS64
     ) {
         fprintf(stderr, "genccode: match-arch file %s is not an ELF object file, or not supported\n", filename);
         exit(U_UNSUPPORTED_ERROR);
     }
 
-    *pBits= pHeader32->e_ident[EI_CLASS]==ELFCLASS32 ? 32 : 64; /* only 32 or 64: see check above */
+    *pBits= buffer.header32.e_ident[EI_CLASS]==ELFCLASS32 ? 32 : 64; /* only 32 or 64: see check above */
 #ifdef U_ELF64
     if(*pBits!=32 && *pBits!=64) {
         fprintf(stderr, "genccode: currently only supports 32-bit and 64-bit ELF format\n");
@@ -700,20 +707,21 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
     }
 #endif
 
-    *pIsBigEndian=(UBool)(pHeader32->e_ident[EI_DATA]==ELFDATA2MSB);
+    *pIsBigEndian=(UBool)(buffer.header32.e_ident[EI_DATA]==ELFDATA2MSB);
     if(*pIsBigEndian!=U_IS_BIG_ENDIAN) {
         fprintf(stderr, "genccode: currently only same-endianness ELF formats are supported\n");
         exit(U_UNSUPPORTED_ERROR);
     }
     /* TODO: Support byte swapping */
 
-    *pCPU=pHeader32->e_machine;
+    *pCPU=buffer.header32.e_machine;
 #elif defined(U_WINDOWS)
     if(length<sizeof(IMAGE_FILE_HEADER)) {
         fprintf(stderr, "genccode: match-arch file %s is too short\n", filename);
         exit(U_UNSUPPORTED_ERROR);
     }
-    pHeader=(const IMAGE_FILE_HEADER *)buffer;
+    /* TODO: Use buffer.header.  Keep aliasing legal.  */
+    pHeader=(const IMAGE_FILE_HEADER *)buffer.bytes;
     *pCPU=pHeader->Machine;
     /*
      * The number of bits is implicit with the Machine value.

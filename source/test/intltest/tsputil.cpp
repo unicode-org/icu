@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -255,19 +255,19 @@ PUtilTest::testPositiveInfinity(void)
         errln("FAIL: isNegativeInfinity(+Infinity) returned TRUE, should be FALSE.");
     }
 
-    if(pinf > DBL_MAX != TRUE) {
+    if((pinf > DBL_MAX) != TRUE) {
         errln("FAIL: +Infinity > DBL_MAX returned FALSE, should be TRUE.");
     }
 
-    if(pinf > DBL_MIN != TRUE) {
+    if((pinf > DBL_MIN) != TRUE) {
         errln("FAIL: +Infinity > DBL_MIN returned FALSE, should be TRUE.");
     }
 
-    if(pinf > ninf != TRUE) {
+    if((pinf > ninf) != TRUE) {
         errln("FAIL: +Infinity > -Infinity returned FALSE, should be TRUE.");
     }
 
-    if(pinf > ten != TRUE) {
+    if((pinf > ten) != TRUE) {
         errln("FAIL: +Infinity > 10.0 returned FALSE, should be TRUE.");
     }
 }
@@ -293,19 +293,19 @@ PUtilTest::testNegativeInfinity(void)
         errln("FAIL: isPositiveInfinity(-Infinity) returned TRUE, should be FALSE.");
     }
 
-    if(ninf < DBL_MAX != TRUE) {
+    if((ninf < DBL_MAX) != TRUE) {
         errln("FAIL: -Infinity < DBL_MAX returned FALSE, should be TRUE.");
     }
 
-    if(ninf < DBL_MIN != TRUE) {
+    if((ninf < DBL_MIN) != TRUE) {
         errln("FAIL: -Infinity < DBL_MIN returned FALSE, should be TRUE.");
     }
 
-    if(ninf < pinf != TRUE) {
+    if((ninf < pinf) != TRUE) {
         errln("FAIL: -Infinity < +Infinity returned FALSE, should be TRUE.");
     }
 
-    if(ninf < ten != TRUE) {
+    if((ninf < ten) != TRUE) {
         errln("FAIL: -Infinity < 10.0 returned FALSE, should be TRUE.");
     }
 }
@@ -325,23 +325,23 @@ PUtilTest::testZero(void)
 
     nzero *= -1;
 
-    if(pzero == nzero != TRUE) {
+    if((pzero == nzero) != TRUE) {
         errln("FAIL: 0.0 == -0.0 returned FALSE, should be TRUE.");
     }
 
-    if(pzero > nzero != FALSE) {
+    if((pzero > nzero) != FALSE) {
         errln("FAIL: 0.0 > -0.0 returned TRUE, should be FALSE.");
     }
 
-    if(pzero >= nzero != TRUE) {
+    if((pzero >= nzero) != TRUE) {
         errln("FAIL: 0.0 >= -0.0 returned FALSE, should be TRUE.");
     }
 
-    if(pzero < nzero != FALSE) {
+    if((pzero < nzero) != FALSE) {
         errln("FAIL: 0.0 < -0.0 returned TRUE, should be FALSE.");
     }
 
-    if(pzero <= nzero != TRUE) {
+    if((pzero <= nzero) != TRUE) {
         errln("FAIL: 0.0 <= -0.0 returned FALSE, should be TRUE.");
     }
 #ifndef OS400 /* OS/400 will generate divide by zero exception MCH1214 */
@@ -400,19 +400,19 @@ PUtilTest::NaNGT(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan > nan != FALSE) {
+    if((nan > nan) != FALSE) {
         logln("WARNING: NaN > NaN returned TRUE, should be FALSE");
     }
 
-    if(nan > pinf != FALSE) {
+    if((nan > pinf) != FALSE) {
         logln("WARNING: NaN > +Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan > ninf != FALSE) {
+    if((nan > ninf) != FALSE) {
         logln("WARNING: NaN > -Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan > ten != FALSE) {
+    if((nan > ten) != FALSE) {
         logln("WARNING: NaN > 10.0 returned TRUE, should be FALSE");
     }
 }
@@ -427,19 +427,19 @@ PUtilTest::NaNLT(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan < nan != FALSE) {
+    if((nan < nan) != FALSE) {
         logln("WARNING: NaN < NaN returned TRUE, should be FALSE");
     }
 
-    if(nan < pinf != FALSE) {
+    if((nan < pinf) != FALSE) {
         logln("WARNING: NaN < +Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan < ninf != FALSE) {
+    if((nan < ninf) != FALSE) {
         logln("WARNING: NaN < -Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan < ten != FALSE) {
+    if((nan < ten) != FALSE) {
         logln("WARNING: NaN < 10.0 returned TRUE, should be FALSE");
     }
 }
@@ -454,19 +454,19 @@ PUtilTest::NaNGTE(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan >= nan != FALSE) {
+    if((nan >= nan) != FALSE) {
         logln("WARNING: NaN >= NaN returned TRUE, should be FALSE");
     }
 
-    if(nan >= pinf != FALSE) {
+    if((nan >= pinf) != FALSE) {
         logln("WARNING: NaN >= +Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan >= ninf != FALSE) {
+    if((nan >= ninf) != FALSE) {
         logln("WARNING: NaN >= -Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan >= ten != FALSE) {
+    if((nan >= ten) != FALSE) {
         logln("WARNING: NaN >= 10.0 returned TRUE, should be FALSE");
     }
 }
@@ -481,19 +481,19 @@ PUtilTest::NaNLTE(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan <= nan != FALSE) {
+    if((nan <= nan) != FALSE) {
         logln("WARNING: NaN <= NaN returned TRUE, should be FALSE");
     }
 
-    if(nan <= pinf != FALSE) {
+    if((nan <= pinf) != FALSE) {
         logln("WARNING: NaN <= +Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan <= ninf != FALSE) {
+    if((nan <= ninf) != FALSE) {
         logln("WARNING: NaN <= -Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan <= ten != FALSE) {
+    if((nan <= ten) != FALSE) {
         logln("WARNING: NaN <= 10.0 returned TRUE, should be FALSE");
     }
 }
@@ -508,19 +508,19 @@ PUtilTest::NaNE(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan == nan != FALSE) {
+    if((nan == nan) != FALSE) {
         logln("WARNING: NaN == NaN returned TRUE, should be FALSE");
     }
 
-    if(nan == pinf != FALSE) {
+    if((nan == pinf) != FALSE) {
         logln("WARNING: NaN == +Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan == ninf != FALSE) {
+    if((nan == ninf) != FALSE) {
         logln("WARNING: NaN == -Infinity returned TRUE, should be FALSE");
     }
 
-    if(nan == ten != FALSE) {
+    if((nan == ten) != FALSE) {
         logln("WARNING: NaN == 10.0 returned TRUE, should be FALSE");
     }
 }
@@ -535,19 +535,19 @@ PUtilTest::NaNNE(void)
     double  nan     = uprv_getNaN();
     double  ten     = 10.0;
 
-    if(nan != nan != TRUE) {
+    if((nan != nan) != TRUE) {
         logln("WARNING: NaN != NaN returned FALSE, should be TRUE");
     }
 
-    if(nan != pinf != TRUE) {
+    if((nan != pinf) != TRUE) {
         logln("WARNING: NaN != +Infinity returned FALSE, should be TRUE");
     }
 
-    if(nan != ninf != TRUE) {
+    if((nan != ninf) != TRUE) {
         logln("WARNING: NaN != -Infinity returned FALSE, should be TRUE");
     }
 
-    if(nan != ten != TRUE) {
+    if((nan != ten) != TRUE) {
         logln("WARNING: NaN != 10.0 returned FALSE, should be TRUE");
     }
 }

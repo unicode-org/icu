@@ -824,7 +824,7 @@ void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCoun
         //   or whether the lead surrogate of the pair is extracted.
         //   It's a buffer overflow error in either case.
         TEST_ASSERT(buf[0] == us.charAt(0) ||
-                    buf[0] == 0x5555 && U_IS_SUPPLEMENTARY(us.char32At(0)));
+                    (buf[0] == 0x5555 && U_IS_SUPPLEMENTARY(us.char32At(0))));
         TEST_ASSERT(buf[1] == 0x5555);
         if (us.length() == 1) {
             TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);

@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2008 International Business Machines Corporation   *
+*   Copyright (C) 1999-2010 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -74,13 +74,14 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         return;
     }
     fHeader = data;
-    if (fHeader->fMagic != 0xb1a0 || 
-        !(fHeader->fFormatVersion[0] == 3 ||         // ICU 3.4 
-          *(int32_t *)fHeader->fFormatVersion == 1))  // ICU 3.2 and earlier.
+    if (fHeader->fMagic != 0xb1a0 || fHeader->fFormatVersion[0] != 3) 
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
+    // Note: in ICU version 3.2 and earlier, there was a formatVersion 1
+    //       that is no longer supported.  At that time fFormatVersion was
+    //       an int32_t field, rather than an array of 4 bytes.
 
     fDontFreeData = FALSE;
     fUDataMem     = NULL;
@@ -320,9 +321,8 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     const uint8_t  *inBytes =(const uint8_t *)inData+headerSize;
     RBBIDataHeader *rbbiDH = (RBBIDataHeader *)inBytes;
-    UBool           formatVersionOne = ds->readUInt32(*(int32_t *)rbbiDH->fFormatVersion) == 1;
-    if (ds->readUInt32(rbbiDH->fMagic)   != 0xb1a0 ||
-        !(formatVersionOne || rbbiDH->fFormatVersion[0] == 3)   ||
+    if (ds->readUInt32(rbbiDH->fMagic) != 0xb1a0 || 
+        rbbiDH->fFormatVersion[0] != 3 ||
         ds->readUInt32(rbbiDH->fLength)  <  sizeof(RBBIDataHeader)) 
     {
         udata_printError(ds, "ubrk_swap(): RBBI Data header is invalid.\n");
@@ -433,15 +433,11 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
                         outBytes+ds->readUInt32(rbbiDH->fStatusTable), status);
 
     // And, last, the header.
-    //   For the old version one format, the entire header consists of int32_t values.
-    //   For the newer formats, the fDataFormat field is an array of four bytes.
-    //   Swap the whole thing as int32_t, then, for the newer format, re-swap the one field.
+    //   It is all int32_t values except for fFormataVersion, which is an array of four bytes.
+    //   Swap the whole thing as int32_t, then re-swap the one field.
     //
     ds->swapArray32(ds, inBytes, sizeof(RBBIDataHeader), outBytes, status);
-    if (formatVersionOne == FALSE) {
-        ds->swapArray32(ds, outputDH->fFormatVersion, 4, outputDH->fFormatVersion, status);
-    }
-
+    ds->swapArray32(ds, outputDH->fFormatVersion, 4, outputDH->fFormatVersion, status);
 
     return totalSize;
 }

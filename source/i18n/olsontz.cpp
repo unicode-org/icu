@@ -51,7 +51,7 @@ static UBool arrayEqual(const void *a1, const void *a2, int32_t size) {
     if (a1 == NULL && a2 == NULL) {
         return TRUE;
     }
-    if (a1 != NULL && a2 == NULL || a1 == NULL && a2 != NULL) {
+    if ((a1 != NULL && a2 == NULL) || (a1 == NULL && a2 != NULL)) {
         return FALSE;
     }
     if (a1 == a2) {
@@ -608,9 +608,9 @@ OlsonTimeZone::hasSameRules(const TimeZone &other) const {
     
     // If the pointers are not equal, the zones may still
     // be equal if their rules and transitions are equal
-    if (finalZone == NULL && z->finalZone != NULL
-        || finalZone != NULL && z->finalZone == NULL
-        || finalZone != NULL && z->finalZone != NULL && *finalZone != *z->finalZone) {
+    if ((finalZone == NULL && z->finalZone != NULL)
+        || (finalZone != NULL && z->finalZone == NULL)
+        || (finalZone != NULL && z->finalZone != NULL && *finalZone != *z->finalZone)) {
         return FALSE;
     }
 

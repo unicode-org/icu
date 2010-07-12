@@ -150,7 +150,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestNextPrevious, "tsnorm/cnormtst/TestNextPrevious");
     addTest(root, &TestFCNFKCClosure, "tsnorm/cnormtst/TestFCNFKCClosure");
     addTest(root, &TestComposition, "tsnorm/cnormtst/TestComposition");
-    addTest(root, &TestComposition, "tsnorm/cnormtst/TestGetDecomposition");
+    addTest(root, &TestGetDecomposition, "tsnorm/cnormtst/TestGetDecomposition");
 }
 
 static const char* const modeStrings[]={

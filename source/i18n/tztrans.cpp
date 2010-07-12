@@ -72,10 +72,10 @@ TimeZoneTransition::operator==(const TimeZoneTransition& that) const {
     if (fTime != that.fTime) {
         return FALSE;
     }
-    if (fFrom == NULL && that.fFrom == NULL
-        || fFrom != NULL && that.fFrom != NULL && *fFrom == *(that.fFrom)) {
-        if (fTo == NULL && that.fTo == NULL
-            || fTo != NULL && that.fTo != NULL && *fTo == *(that.fTo)) {
+    if ((fFrom == NULL && that.fFrom == NULL)
+        || (fFrom != NULL && that.fFrom != NULL && *fFrom == *(that.fFrom))) {
+        if ((fTo == NULL && that.fTo == NULL)
+            || (fTo != NULL && that.fTo != NULL && *fTo == *(that.fTo))) {
             return TRUE;
         }
     }

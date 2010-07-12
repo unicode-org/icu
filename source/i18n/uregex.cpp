@@ -1048,7 +1048,7 @@ uregex_replaceAll(URegularExpression    *regexp2,
         return 0;
     }
     if (replacementText == NULL || replacementLength < -1 ||
-        destBuf == NULL && destCapacity > 0 ||
+        (destBuf == NULL && destCapacity > 0) ||
         destCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1122,7 +1122,7 @@ uregex_replaceFirst(URegularExpression  *regexp2,
         return 0;
     }
     if (replacementText == NULL || replacementLength < -1 ||
-        destBuf == NULL && destCapacity > 0 ||
+        (destBuf == NULL && destCapacity > 0) ||
         destCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1247,7 +1247,7 @@ int32_t RegexCImpl::appendReplacement(RegularExpression    *regexp,
     }
     if (replacementText == NULL || replacementLength < -1 ||
         destCapacity == NULL || destBuf == NULL || 
-        *destBuf == NULL && *destCapacity > 0 ||
+        (*destBuf == NULL && *destCapacity > 0) ||
         *destCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1485,7 +1485,7 @@ int32_t RegexCImpl::appendTail(RegularExpression    *regexp,
     }
     
     if (destCapacity == NULL || destBuf == NULL || 
-        *destBuf == NULL && *destCapacity > 0 ||
+        (*destBuf == NULL && *destCapacity > 0) ||
         *destCapacity < 0)
     {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1783,7 +1783,7 @@ uregex_split(URegularExpression      *regexp2,
     if (validateRE(regexp, status) == FALSE) {
         return 0;
     }
-    if (destBuf == NULL && destCapacity > 0 ||
+    if ((destBuf == NULL && destCapacity > 0) ||
         destCapacity < 0 ||
         destFields == NULL ||
         destFieldsCapacity < 1 ) {

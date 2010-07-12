@@ -730,7 +730,7 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
 
     utext_setNativeIndex(fText, offset);
     if (offset==0 || 
-        offset==1  && utext_getNativeIndex(fText)==0) {
+        (offset==1  && utext_getNativeIndex(fText)==0)) {
         return next();
     }
     result = previous();
@@ -1189,12 +1189,10 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     for (;;) {
         if (c == U_SENTINEL) {
             // Reached end of input string.
-            if (mode == RBBI_END || 
-                *(int32_t *)fData->fHeader->fFormatVersion == 1 ) {
+            if (mode == RBBI_END) {
                 // We have already run the loop one last time with the 
                 //   character set to the psueudo {eof} value.  Now it is time
                 //   to unconditionally bail out.
-                //  (Or we have an old format binary rule file that does not support {eof}.)
                 if (lookaheadResult < result) {
                     // We ran off the end of the string with a pending look-ahead match.
                     // Treat this as if the look-ahead condition had been met, and return

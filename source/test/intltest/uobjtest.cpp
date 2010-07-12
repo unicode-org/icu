@@ -481,12 +481,16 @@ void UObjectTest::testIDs()
 void UObjectTest::testUMemory() {
     // additional tests for code coverage
 #if U_OVERRIDE_CXX_ALLOCATION && U_HAVE_PLACEMENT_NEW
-    UAlignedMemory stackMemory[sizeof(UnicodeString)/sizeof(UAlignedMemory)+1];
+    union {
+        UAlignedMemory   align_;
+        char             bytes_[sizeof(UnicodeString)];
+    } stackMemory;
+    char *bytes = stackMemory.bytes_;
     UnicodeString *p;
     enum { len=20 };
 
-    p=new(stackMemory) UnicodeString(len, (UChar32)0x20ac, len);
-    if((void *)p!=(void *)stackMemory) {
+    p=new(bytes) UnicodeString(len, (UChar32)0x20ac, len);
+    if((void *)p!=(void *)bytes) {
         errln("placement new did not place the object at the expected address");
     }
     if(p->length()!=len || p->charAt(0)!=0x20ac || p->charAt(len-1)!=0x20ac) {
@@ -523,7 +527,11 @@ void UObjectTest::testUMemory() {
      */
     // destroy object and delete space manually
     p->~UnicodeString(); 
-    UnicodeString::operator delete(p, stackMemory); 
+
+    // You normally wouldn't call an operator delete for object placed on the
+    // stack with a placement new().
+    // This overload of delete is a nop, and is called here for code coverage purposes.
+    UnicodeString::operator delete(p, bytes); 
 
     // Jitterbug 4452, for coverage
     UnicodeString *pa = new UnicodeString[2];

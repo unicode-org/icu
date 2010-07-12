@@ -629,7 +629,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
         if(optionArg) {
             for(j = 0; j<rulesOptions[i].subSize; j++) {
                 if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
-                    result = UCOL_TOK_SUCCESS | rulesOptions[i].subopts[j].attrVal + 1;
+                    result = UCOL_TOK_SUCCESS | (rulesOptions[i].subopts[j].attrVal + 1);
                 }
             }
         }
@@ -1438,12 +1438,12 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     UColToken key;
 
     if((baseCE & 0xFF000000) >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */
-        uint32_t primary = baseCE & UCOL_PRIMARYMASK | (baseContCE & UCOL_PRIMARYMASK) >> 16;
+        uint32_t primary = (baseCE & UCOL_PRIMARYMASK) | ((baseContCE & UCOL_PRIMARYMASK) >> 16);
         uint32_t raw = uprv_uca_getRawFromImplicit(primary);
         ch = uprv_uca_getCodePointFromRaw(raw-1);
         uint32_t primaryCE = uprv_uca_getImplicitFromRaw(raw-1);
-        CE = primaryCE & UCOL_PRIMARYMASK | 0x0505;
-        SecondCE = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+        CE = (primaryCE & UCOL_PRIMARYMASK) | 0x0505;
+        SecondCE = ((primaryCE << 16) & UCOL_PRIMARYMASK) | UCOL_CONTINUATION_MARKER;
 
         src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
         *src->extraCurrent++ = 0xFFFE;
@@ -1865,12 +1865,13 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
                         UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
-                        if((baseCE & 0xFF000000) >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */
-                            uint32_t primary = baseCE & UCOL_PRIMARYMASK | (baseContCE & UCOL_PRIMARYMASK) >> 16;
+                        if((baseCE & 0xFF000000) >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && 
+                           (baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */
+                            uint32_t primary = (baseCE & UCOL_PRIMARYMASK) | ((baseContCE & UCOL_PRIMARYMASK) >> 16);
                             uint32_t raw = uprv_uca_getRawFromImplicit(primary);
                             uint32_t primaryCE = uprv_uca_getImplicitFromRaw(raw-1);
-                            CE = primaryCE & UCOL_PRIMARYMASK | 0x0505;
-                            SecondCE = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+                            CE = (primaryCE & UCOL_PRIMARYMASK) | 0x0505;
+                            SecondCE = ((primaryCE << 16) & UCOL_PRIMARYMASK) | UCOL_CONTINUATION_MARKER;
                         } else {
                             /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
                             ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);

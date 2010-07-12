@@ -175,14 +175,12 @@ UBool
 TimeUnitFormat::operator==(const Format& other) const {
     if (typeid(*this) == typeid(other)) {
         TimeUnitFormat* fmt = (TimeUnitFormat*)&other;
-        UBool ret =  ( (fNumberFormat && fmt->fNumberFormat && 
-                        *fNumberFormat == *fmt->fNumberFormat ||
-                        fNumberFormat == fmt->fNumberFormat ) &&
-                       fLocale == fmt->fLocale &&
-                       (fPluralRules && fmt->fPluralRules &&
-                        *fPluralRules == *fmt->fPluralRules ||
-                        fPluralRules == fmt->fPluralRules) &&
-                      fStyle == fmt->fStyle); 
+        UBool ret =  ( ((fNumberFormat && fmt->fNumberFormat && *fNumberFormat == *fmt->fNumberFormat)
+                            || fNumberFormat == fmt->fNumberFormat ) 
+                        && fLocale == fmt->fLocale 
+                        && ((fPluralRules && fmt->fPluralRules && *fPluralRules == *fmt->fPluralRules) 
+                            || fPluralRules == fmt->fPluralRules) 
+                        && fStyle == fmt->fStyle); 
         if (ret) {
             for (TimeUnit::UTimeUnitFields i = TimeUnit::UTIMEUNIT_YEAR;
                  i < TimeUnit::UTIMEUNIT_FIELD_COUNT && ret;
@@ -724,7 +722,7 @@ TimeUnitFormat::setLocale(const Locale& locale, UErrorCode& status) {
 
 void 
 TimeUnitFormat::setNumberFormat(const NumberFormat& format, UErrorCode& status){
-    if (U_FAILURE(status) || fNumberFormat && format == *fNumberFormat) {
+    if (U_FAILURE(status) || (fNumberFormat && format == *fNumberFormat)) {
         return;
     }
     delete fNumberFormat;
