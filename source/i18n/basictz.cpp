@@ -360,7 +360,14 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
         if (!avail) {
             break;
         }
-        time = tzt.getTime();
+        UDate updatedTime = tzt.getTime();
+        if (updatedTime == time) {
+            // Time zones that have been manually initialized with inconsistent transtion rules
+            // can bring us here.  Bail out to prevent an infinite loop.
+            status =  U_INVALID_STATE_ERROR;
+            goto error;
+        }
+        time = updatedTime;
  
         const TimeZoneRule *toRule = tzt.getTo();
         for (i = 0; i < ruleCount; i++) {
@@ -511,6 +518,14 @@ error:
         delete orgRules;
     }
     if (done != NULL) {
+        if (filteredRules != NULL) {
+            while (!filteredRules->isEmpty()) {
+                r = (TimeZoneRule*)filteredRules->orphanElementAt(0);
+                delete r;
+            }
+            delete filteredRules;
+        }
+        delete res_initial;
         uprv_free(done);
     }
 
