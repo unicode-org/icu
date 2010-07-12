@@ -3190,8 +3190,8 @@ int32_t Calendar::getActualHelper(UCalendarDateFields field, int32_t startValue,
     // not unique.  For example, last several days in the previous month
     // is week 5, and the rest of week is week 1.
     int32_t result = startValue;
-    if (work->get(field, status) != startValue
-        && field != UCAL_WEEK_OF_MONTH && delta > 0 || U_FAILURE(status)) {
+    if ((work->get(field, status) != startValue
+         && field != UCAL_WEEK_OF_MONTH && delta > 0 ) || U_FAILURE(status)) {
 #if defined (U_DEBUG_CAL) 
         fprintf(stderr, "getActualHelper(fld %d) - got  %d (not %d) - %s\n", field, work->get(field,status), startValue, u_errorName(status));
 #endif

@@ -4308,8 +4308,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
         primary1 = (uint8_t)(order >> 8);
 
 
-        if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
-            || (!notIsContinuation && wasShifted))
+        if((shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
+                      || (!notIsContinuation && wasShifted)))
             || (wasShifted && primary1 == 0)) { /* amendment to the UCA says that primary ignorables */
                 /* and other ignorables should be removed if following a shifted code point */
                 if(primary1 == 0) { /* if we were shifted and we got an ignorable code point */
@@ -4750,8 +4750,8 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary1 = scriptOrder[primary1];
             }*/
 
-            if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
-                || (!notIsContinuation && wasShifted))
+            if((shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
+                           || (!notIsContinuation && wasShifted)))
                 || (wasShifted && primary1 == 0)) /* amendment to the UCA says that primary ignorables */
             {
                 /* and other ignorables should be removed if following a shifted code point */
@@ -5596,8 +5596,8 @@ static inline
 UBool isShiftedCE(uint32_t CE, uint32_t LVT, UBool *wasShifted) {
     UBool notIsContinuation = !isContinuation(CE);
     uint8_t primary1 = (uint8_t)((CE >> 24) & 0xFF);
-    if(LVT && ((notIsContinuation && (CE & 0xFFFF0000)<= LVT && primary1 > 0)
-        || (!notIsContinuation && *wasShifted))
+    if((LVT && ((notIsContinuation && (CE & 0xFFFF0000)<= LVT && primary1 > 0)
+               || (!notIsContinuation && *wasShifted)))
         || (*wasShifted && primary1 == 0)) /* amendment to the UCA says that primary ignorables */
     {
         // The stuff below should probably be in the sortkey code... maybe not...
@@ -7743,7 +7743,7 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
         sCE = sCEs.buf;
         tCE = tCEs.buf;
         for(;;) {
-            while(secS == 0 && secS != UCOL_NO_MORE_CES || (isContinuation(secS) && !sInShifted)) {
+            while((secS == 0 && secS != UCOL_NO_MORE_CES) || (isContinuation(secS) && !sInShifted)) {
                 secS = *(sCE++);
                 if(isContinuation(secS)) {
                     if(!sInShifted) {
@@ -7759,7 +7759,7 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
             secS &= UCOL_PRIMARYMASK;
 
 
-            while(secT == 0 && secT != UCOL_NO_MORE_CES || (isContinuation(secT) && !tInShifted)) {
+            while((secT == 0 && secT != UCOL_NO_MORE_CES) || (isContinuation(secT) && !tInShifted)) {
                 secT = *(tCE++);
                 if(isContinuation(secT)) {
                     if(!tInShifted) {
@@ -8384,8 +8384,8 @@ ucol_strcoll( const UCollator    *coll,
         // These values should already be set by the code above.
         //pSrc  = source + equalLength;        /* point to the first differing chars   */
         //pTarg = target + equalLength;
-        if (pSrc  != source+sourceLength && ucol_unsafeCP(*pSrc, coll) ||
-            pTarg != target+targetLength && ucol_unsafeCP(*pTarg, coll))
+        if ((pSrc  != source+sourceLength && ucol_unsafeCP(*pSrc, coll)) ||
+            (pTarg != target+targetLength && ucol_unsafeCP(*pTarg, coll)))
         {
             // We are stopped in the middle of a contraction.
             // Scan backwards through the == part of the string looking for the start of the contraction.

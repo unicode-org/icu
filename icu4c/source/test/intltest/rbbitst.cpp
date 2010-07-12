@@ -3601,11 +3601,11 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         //        NU x CL,  NU x CP  and NU x IS are not matched here so that they will
         //        fall into LB 17 and the more general number regular expression.
         //
-        if (!fNU->contains(prevChar) && fCL->contains(thisChar) ||
-            !fNU->contains(prevChar) && fCP->contains(thisChar) ||
-                                        fEX->contains(thisChar) ||
-            !fNU->contains(prevChar) && fIS->contains(thisChar) ||
-            !fNU->contains(prevChar) && fSY->contains(thisChar))    {
+        if ((!fNU->contains(prevChar) && fCL->contains(thisChar)) ||
+            (!fNU->contains(prevChar) && fCP->contains(thisChar)) ||
+                                         fEX->contains(thisChar)  ||
+            (!fNU->contains(prevChar) && fIS->contains(thisChar)) ||
+            (!fNU->contains(prevChar) && fSY->contains(thisChar)))    {
             continue;
         }
 
@@ -3708,10 +3708,10 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 22
-        if (fAL->contains(prevChar) && fIN->contains(thisChar) ||
-            fID->contains(prevChar) && fIN->contains(thisChar) ||
-            fIN->contains(prevChar) && fIN->contains(thisChar) ||
-            fNU->contains(prevChar) && fIN->contains(thisChar) )   {
+        if ((fAL->contains(prevChar) && fIN->contains(thisChar)) ||
+            (fID->contains(prevChar) && fIN->contains(thisChar)) ||
+            (fIN->contains(prevChar) && fIN->contains(thisChar)) ||
+            (fNU->contains(prevChar) && fIN->contains(thisChar)) )   {
             continue;
         }
 
@@ -3719,9 +3719,9 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         // LB 23    ID x PO
         //          AL x NU
         //          NU x AL
-        if (fID->contains(prevChar) && fPO->contains(thisChar) ||
-            fAL->contains(prevChar) && fNU->contains(thisChar) ||
-            fNU->contains(prevChar) && fAL->contains(thisChar) )   {
+        if ((fID->contains(prevChar) && fPO->contains(thisChar)) ||
+            (fAL->contains(prevChar) && fNU->contains(thisChar)) ||
+            (fNU->contains(prevChar) && fAL->contains(thisChar)) )   {
             continue;
         }
 
@@ -3729,9 +3729,9 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         //        PR x ID
         //        PR x AL
         //        PO x AL
-        if (fPR->contains(prevChar) && fID->contains(thisChar) ||
-            fPR->contains(prevChar) && fAL->contains(thisChar) ||
-            fPO->contains(prevChar) && fAL->contains(thisChar) )   {
+        if ((fPR->contains(prevChar) && fID->contains(thisChar)) ||
+            (fPR->contains(prevChar) && fAL->contains(thisChar)) ||
+            (fPO->contains(prevChar) && fAL->contains(thisChar)) )   {
             continue;
         }
 
@@ -4560,7 +4560,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
             if (breakPos <= i ||
                 breakPos < lastBreakPos ||
                 breakPos > testText.length() ||
-                breakPos > lastBreakPos && lastBreakPos > i ) {
+                (breakPos > lastBreakPos && lastBreakPos > i)) {
                 errln("%s break monkey test: "
                     "Out of range value returned by BreakIterator::following().\n"
                         "Random seed=%d  index=%d; following returned %d;  lastbreak=%d",

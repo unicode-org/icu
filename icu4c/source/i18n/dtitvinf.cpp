@@ -385,8 +385,8 @@ UBool
 DateIntervalInfo::stringNumeric(int32_t fieldWidth, int32_t anotherFieldWidth,
                                 char patternLetter) {
     if ( patternLetter == 'M' ) {
-        if ( fieldWidth <= 2 && anotherFieldWidth > 2 ||
-             fieldWidth > 2 && anotherFieldWidth <= 2 ) {
+        if ( (fieldWidth <= 2 && anotherFieldWidth > 2) ||
+             (fieldWidth > 2 && anotherFieldWidth <= 2 )) {
             return true;
         }
     }

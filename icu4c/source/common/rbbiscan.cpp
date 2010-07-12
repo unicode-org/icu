@@ -2,7 +2,7 @@
 //
 //  file:  rbbiscan.cpp
 //
-//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2010, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the Rule Based Break Iterator Rule Builder functions for
@@ -802,7 +802,7 @@ UChar32  RBBIRuleScanner::nextCharLL() {
     if (ch == chCR ||
         ch == chNEL ||
         ch == chLS   ||
-        ch == chLF && fLastChar != chCR) {
+        (ch == chLF && fLastChar != chCR)) {
         // Character is starting a new line.  Bump up the line number, and
         //  reset the column to 0.
         fLineNum++;

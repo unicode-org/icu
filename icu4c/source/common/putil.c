@@ -191,7 +191,6 @@ u_topNBytesOfDouble(double* d, int n)
     return (char*)(d + 1) - n;
 #endif
 }
-#endif
 
 static char*
 u_bottomNBytesOfDouble(double* d, int n)
@@ -202,6 +201,22 @@ u_bottomNBytesOfDouble(double* d, int n)
     return (char*)d;
 #endif
 }
+#endif   /* !IEEE_754 */
+
+#if IEEE_754
+static UBool
+u_signBit(double d) {
+    uint8_t hiByte;
+#if U_IS_BIG_ENDIAN
+    hiByte = *(uint8_t *)&d;
+#else
+    hiByte = *(((uint8_t *)&d) + sizeof(double) - 1);
+#endif
+    return (hiByte & 0x80) != 0;
+}
+#endif
+
+
 
 #if defined (U_DEBUG_FAKETIME)
 /* Override the clock to test things without having to move the system clock.
@@ -468,20 +483,17 @@ U_CAPI double U_EXPORT2
 uprv_fmax(double x, double y)
 {
 #if IEEE_754
-    int32_t lowBits;
-
     /* first handle NaN*/
     if(uprv_isNaN(x) || uprv_isNaN(y))
         return uprv_getNaN();
 
     /* check for -0 and 0*/
-    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
-    if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
+    if(x == 0.0 && y == 0.0 && u_signBit(x))
         return y;
 
 #endif
 
-    /* this should work for all flt point w/o NaN and Infpecial cases */
+    /* this should work for all flt point w/o NaN and Inf special cases */
     return (x > y ? x : y);
 }
 
@@ -489,15 +501,12 @@ U_CAPI double U_EXPORT2
 uprv_fmin(double x, double y)
 {
 #if IEEE_754
-    int32_t lowBits;
-
     /* first handle NaN*/
     if(uprv_isNaN(x) || uprv_isNaN(y))
         return uprv_getNaN();
 
     /* check for -0 and 0*/
-    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
-    if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
+    if(x == 0.0 && y == 0.0 && u_signBit(y))
         return y;
 
 #endif
@@ -517,16 +526,13 @@ U_CAPI double U_EXPORT2
 uprv_trunc(double d)
 {
 #if IEEE_754
-    int32_t lowBits;
-
     /* handle error cases*/
     if(uprv_isNaN(d))
         return uprv_getNaN();
     if(uprv_isInfinite(d))
         return uprv_getInfinity();
 
-    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-    if( (d == 0.0 && (lowBits & SIGN)) || d < 0)
+    if(u_signBit(d))    /* Signbit() picks up -0.0;  d<0 does not. */
         return ceil(d);
     else
         return floor(d);

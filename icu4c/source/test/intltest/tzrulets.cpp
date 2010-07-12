@@ -1130,7 +1130,7 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
             if (initial == NULL) {
                 errln("FAIL: initial rule must not be NULL");
                 break;
-            } else if (!(std == NULL && dst == NULL || std != NULL && dst != NULL)) {
+            } else if (!((std == NULL && dst == NULL) || (std != NULL && dst != NULL))) {
                 errln("FAIL: invalid std/dst pair.");
                 break;
             }
