@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,6 +24,7 @@ public class TestAllCore extends TestGroup {
                   "com.ibm.icu.dev.test.calendar.TestAll",
                   "com.ibm.icu.dev.test.timezone.TestAll",
                   "com.ibm.icu.dev.test.lang.TestAll",
+                  "com.ibm.icu.dev.test.text.TestAll",
                   "com.ibm.icu.dev.test.normalizer.TestAll",
                   "com.ibm.icu.dev.test.util.TestAll",
                   "com.ibm.icu.dev.test.iterator.TestUCharacterIterator", // not a group
