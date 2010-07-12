@@ -65,7 +65,7 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles
+doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -78,6 +78,10 @@ distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive
 check-recursive: all
+xcheck: all xcheck-recursive
+
+xcheck-recursive: all xcheck-local
+	@$(MAKE) -C test xcheck
 
 ifeq ($(DOXYGEN),)
 doc:
@@ -166,6 +170,7 @@ tests: all
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	-$(RMV) "test-*.xml"
 	$(RMV) Doxyfile doc $(DOCZIP)
 
 distclean-local: clean-local
@@ -174,7 +179,10 @@ distclean-local: clean-local
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 	$(RMV) $(DISTY_DIR)
 
-check-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc
+check-local: xcheck-local
+	-$(RMV) test-local.xml
+
+xcheck-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc
 	@echo verifying that icu-config --selfcheck can operate
 	@test "passed" = "$(shell $(top_builddir)/config/icu-config --selfcheck 2>&1)" || (echo "FAIL: icu-config could not run properly." ; exit 1)
 	@echo verifying that $(MAKE) -f Makefile.inc selfcheck can operate

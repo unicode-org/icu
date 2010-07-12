@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2008, International Business Machines
+#   Copyright (C) 1999-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -19,7 +19,7 @@ include $(top_builddir)/icudefs.mk
 subdir = test/iotest
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) $(TESTXML)
 
 ## Target information
 TARGET = iotest$(EXEEXT)
@@ -47,7 +47,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check check-local
+distclean distclean-local dist dist-local check check-local xcheck
 
 ## Clear suffix list
 .SUFFIXES :
@@ -59,6 +59,7 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+xcheck: all xcheck-local
 
 all-local: $(TARGET)
 
@@ -75,6 +76,10 @@ distclean-local: clean-local
 
 check-local: all-local
 	$(INVOKE) ./$(TARGET) $(IOTEST_OPTS) 
+
+TESTXML=$(top_builddir)/test-$(TARGET).xml
+xcheck-local: all-local
+	$(INVOKE) ./$(TARGET) $(IOTEST_OPTS) -x $(TESTXML)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

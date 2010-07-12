@@ -516,6 +516,7 @@ IntlTest::IntlTest()
     testoutfp = stdout;
     LL_indentlevel = indentLevel_offset;
     numProps = 0;
+    strcpy(basePath, "/");
 }
 
 void IntlTest::setCaller( IntlTest* callingTest )
@@ -539,7 +540,10 @@ UBool IntlTest::callTest( IntlTest& testToBeCalled, char* par )
 {
     execCount--; // correct a previously assumed test-exec, as this only calls a subtest
     testToBeCalled.setCaller( this );
-    return testToBeCalled.runTest( testPath, par );
+    strcpy(testToBeCalled.basePath, this->basePath );
+    UBool result = testToBeCalled.runTest( testPath, par, testToBeCalled.basePath );
+    strcpy(testToBeCalled.basePath, this->basePath ); // reset it.
+    return result;
 }
 
 void IntlTest::setPath( char* pathVal )
@@ -599,10 +603,18 @@ int32_t IntlTest::getDataErrors( void )
     return dataErrorCount;
 }
 
-UBool IntlTest::runTest( char* name, char* par )
+UBool IntlTest::runTest( char* name, char* par, char *baseName )
 {
     UBool rval;
     char* pos = NULL;
+
+    char* baseNameBuffer = NULL;
+
+    if(baseName == NULL) {
+      baseNameBuffer = (char*)malloc(1024);
+      baseName=baseNameBuffer;
+      strcpy(baseName, "/");
+    }
 
     if (name)
         pos = strchr( name, delim ); // check if name contains path (by looking for '/')
@@ -614,18 +626,21 @@ UBool IntlTest::runTest( char* name, char* par )
     }
 
     if (!name || (name[0] == 0) || (strcmp(name, "*") == 0)) {
-        rval = runTestLoop( NULL, par );
+      rval = runTestLoop( NULL, par, baseName );
 
     }else if (strcmp( name, "LIST" ) == 0) {
         this->usage();
         rval = TRUE;
 
     }else{
-        rval = runTestLoop( name, par );
+      rval = runTestLoop( name, par, baseName );
     }
 
     if (pos)
         *pos = delim;  // restore original value at pos
+    if(baseNameBuffer!=NULL) {
+      free(baseNameBuffer);
+    }
     return rval;
 }
 
@@ -645,7 +660,7 @@ void IntlTest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 }
 
 
-UBool IntlTest::runTestLoop( char* testname, char* par )
+UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
 {
     int32_t    index = 0;
     const char*   name;
@@ -653,6 +668,15 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
     int32_t    lastErrorCount;
     UBool  rval = FALSE;
     UBool   lastTestFailed;
+
+    if(baseName == NULL) {
+      printf("ERROR: baseName can't be null.\n");
+      return FALSE;
+    } else {
+      strcpy(this->basePath, baseName);
+    }
+
+    char * saveBaseLoc = baseName+strlen(baseName);
 
     IntlTest* saveTest = gTest;
     gTest = this;
@@ -676,9 +700,25 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
             sprintf(msg, "%s {", name);
             LL_message(msg, TRUE);
             UDate timeStart = uprv_getRawUTCtime();
+            strcpy(saveBaseLoc,name);
+            strcat(saveBaseLoc,"/");
+
             this->runIndexedTest( index, TRUE, name, par );
+
             UDate timeStop = uprv_getRawUTCtime();
             rval = TRUE; // at least one test has been called
+            char secs[256];
+            sprintf(secs, "%f", (timeStop-timeStart)/1000.0);
+            
+
+            strcpy(saveBaseLoc,name);
+
+
+            ctest_xml_testcase(baseName, name, secs, (lastErrorCount!=errorCount)?"err":NULL);
+            
+
+            saveBaseLoc[0]=0; /* reset path */
+            
             if (lastErrorCount == errorCount) {
                 sprintf( msg, "   } OK:   %s ", name );
                 str_timeDelta(msg+strlen(msg),timeStop-timeStart);
@@ -706,6 +746,8 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
         }
         index++;
     }while(name);
+
+    *saveBaseLoc = 0;
 
     gTest = saveTest;
     return rval;
@@ -1065,7 +1107,15 @@ main(int argc, char* argv[])
             else if (strcmp("leaks", str) == 0 ||
                      strcmp("l", str) == 0)
                 leaks = TRUE;
-            else if (strcmp("w", str) == 0) {
+            else if (strcmp("x", str)==0) {
+              if(++i>=argc) {
+                printf("* Error: '-x' option requires an argument. usage: '-x outfile.xml'.\n");
+                syntax = TRUE;
+              }
+              if(ctest_xml_setFileName(argv[i])) { /* set the name */
+                return 1; /* error */
+              }
+            } else if (strcmp("w", str) == 0) {
               warnOnMissingData = TRUE;
               warnOrErr = "WARNING";
             }
@@ -1098,7 +1148,7 @@ main(int argc, char* argv[])
                 "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
                 "### \n"
                 "### Options are: verbose (v), all (a), noerrormsg (n), \n"
-                "### exhaustive (e), leaks (l), prop:<propery>=<value>, \n"
+                "### exhaustive (e), leaks (l), -x xmlfile.xml, prop:<propery>=<value>, \n"
                 "### threads:<threadCount> (Mulithreading must first be \n"
                 "###     enabled otherwise this will be ignored. \n"
                 "###     The default thread count is 1.),\n"
@@ -1132,9 +1182,13 @@ main(int argc, char* argv[])
     for (int32_t i = 0; i < nProps; i++) {
         major.setProperty(props[i]);
     }
+
+
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
     fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
+
+
     {
 	const char *charsetFamily = "Unknown";
         int32_t voidSize = (int32_t)sizeof(void*);
@@ -1254,6 +1308,10 @@ main(int argc, char* argv[])
 
     Locale originalLocale;  // Save the default locale for comparison later on.
 
+    if(ctest_xml_init("intltest")) 
+      return 1;
+
+
     /* TODO: Add option to call u_cleanup and rerun tests. */
     if (all) {
         major.runTest();
@@ -1265,13 +1323,17 @@ main(int argc, char* argv[])
             if (argv[i][0] != '-') {
                 char* name = argv[i];
                 fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
+
+                char baseName[1024];
+                sprintf(baseName, "/%s/", name);
+
                 char* parameter = strchr( name, '@' );
                 if (parameter) {
                     *parameter = 0;
                     parameter += 1;
                 }
                 execCount = 0;
-                UBool res = major.runTest( name, parameter );
+                UBool res = major.runTest( name, parameter, baseName );
                 if (leaks && res) {
                     major.run_phase2( name, parameter );
                 }
@@ -1279,9 +1341,12 @@ main(int argc, char* argv[])
                     fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
                     all_tests_exist = FALSE;
                 }
+            } else if(!strcmp(argv[i],"-x")) {
+              i++;
             }
         }
     }
+
 
 #if !UCONFIG_NO_FORMATTING
     CalendarTimeZoneTest::cleanup();
@@ -1334,6 +1399,10 @@ main(int argc, char* argv[])
         (int)((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
         (int)((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
         (int)(diffTime%U_MILLIS_PER_SECOND));
+
+    if(ctest_xml_fini())
+      return 1;
+
     return major.getErrors();
 }
 

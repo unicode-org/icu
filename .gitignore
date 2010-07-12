@@ -48,6 +48,7 @@ icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/out
 icu4c/source/data/pkgdataMakefile
+icu4c/source/dist
 icu4c/source/doc
 icu4c/source/extra/Makefile
 icu4c/source/extra/scrptrun/Makefile
@@ -294,6 +295,7 @@ icu4c/source/stubdata/stubdata.vcproj.*.*.user
 icu4c/source/stubdata/stubdatabuilt.txt
 icu4c/source/stubdata/x64
 icu4c/source/stubdata/x86
+icu4c/source/test-*.xml
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d
 icu4c/source/test/cintltst/*.dSYM
