@@ -681,8 +681,8 @@ UBool RegexMatcher::find() {
                 // c will be -1 (U_SENTINEL) at end of text, in which case we
                 // skip this next block (so we don't have a negative array index)
                 // and handle end of text in the following block.
-                if (c >= 0 && (c<256 && fPattern->fInitialChars8->contains(c) ||
-                    c>=256 && fPattern->fInitialChars->contains(c))) {
+                if (c >= 0 && ((c<256 && fPattern->fInitialChars8->contains(c)) ||
+                              (c>=256 && fPattern->fInitialChars->contains(c)))) {
                     MatchAt(startPos, FALSE, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
@@ -970,8 +970,8 @@ UBool RegexMatcher::findUsingChunk() {
         for (;;) {
             int32_t pos = startPos;
             U16_NEXT(inputBuf, startPos, fActiveLimit, c);  // like c = inputBuf[startPos++];
-            if (c<256 && fPattern->fInitialChars8->contains(c) ||
-                c>=256 && fPattern->fInitialChars->contains(c)) {
+            if ((c<256 && fPattern->fInitialChars8->contains(c)) ||
+                (c>=256 && fPattern->fInitialChars->contains(c))) {
                 MatchChunkAt(pos, FALSE, fDeferredStatus);
                 if (U_FAILURE(fDeferredStatus)) {
                     return FALSE;
@@ -3175,7 +3175,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
 
 
         case URX_BACKSLASH_G:          // Test for position at end of previous match
-            if (!((fMatch && fp->fInputIdx==fMatchEnd) || fMatch==FALSE && fp->fInputIdx==fActiveStart)) {
+            if (!((fMatch && fp->fInputIdx==fMatchEnd) || (fMatch==FALSE && fp->fInputIdx==fActiveStart))) {
                 fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
@@ -4292,10 +4292,10 @@ GC_Done:
                             break;
                         }
                         UChar32 c = UTEXT_NEXT32(fInputText);
-                        if ((c & 0x7f) <= 0x29) {        // Fast filter of non-new-line-s
-                            if ((c == 0x0a) ||            //  0x0a is newline in both modes.
-                               ((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
-                                    (c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029) {
+                        if ((c & 0x7f) <= 0x29) {          // Fast filter of non-new-line-s
+                            if ((c == 0x0a) ||             //  0x0a is newline in both modes.
+                               (((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
+                                    (c<=0x0d && c>=0x0a)) || c==0x85 ||c==0x2028 || c==0x2029) {
                                 //  char is a line ending.  Exit the scanning loop.
                                 break;
                             }
@@ -4876,7 +4876,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
             
             
         case URX_BACKSLASH_G:          // Test for position at end of previous match
-            if (!((fMatch && fp->fInputIdx==fMatchEnd) || fMatch==FALSE && fp->fInputIdx==fActiveStart)) {
+            if (!((fMatch && fp->fInputIdx==fMatchEnd) || (fMatch==FALSE && fp->fInputIdx==fActiveStart))) {
                 fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
@@ -5961,10 +5961,10 @@ GC_Done:
                         }
                         UChar32   c;
                         U16_NEXT(inputBuf, ix, fActiveLimit, c);   // c = inputBuf[ix++]
-                        if ((c & 0x7f) <= 0x29) {        // Fast filter of non-new-line-s
-                            if ((c == 0x0a) ||            //  0x0a is newline in both modes.
-                                ((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
-                                (c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029) {
+                        if ((c & 0x7f) <= 0x29) {          // Fast filter of non-new-line-s
+                            if ((c == 0x0a) ||             //  0x0a is newline in both modes.
+                                (((opValue & 2) == 0) &&    // IF not UNIX_LINES mode
+                                   ((c<=0x0d && c>=0x0a) || c==0x85 || c==0x2028 || c==0x2029))) {
                                 //  char is a line ending.  Put the input pos back to the
                                 //    line ending char, and exit the scanning loop.
                                 U16_BACK_1(inputBuf, 0, ix);

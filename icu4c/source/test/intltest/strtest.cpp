@@ -82,8 +82,8 @@ void StringTest::TestSizeofTypes(void) {
 
 void StringTest::TestCharsetFamily(void) {
     unsigned char c='A';
-    if( U_CHARSET_FAMILY==U_ASCII_FAMILY && c!=0x41 ||
-        U_CHARSET_FAMILY==U_EBCDIC_FAMILY && c!=0xc1
+    if( (U_CHARSET_FAMILY==U_ASCII_FAMILY && c!=0x41) ||
+        (U_CHARSET_FAMILY==U_EBCDIC_FAMILY && c!=0xc1)
     ) {
         errln("TestCharsetFamily: U_CHARSET_FAMILY needs to be fixed in platform.h");
     }

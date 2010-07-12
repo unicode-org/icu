@@ -2651,13 +2651,10 @@ TestICCRunout() {
 
     const char *cnvName = "ibm-1363";
     UErrorCode status = U_ZERO_ERROR;
-    const uint8_t sourceData[] = { 0xa2, 0xae, 0xa2 };
-    UChar   expectUData[] = { 0x00a1, 0x001a };
-    const uint8_t *source = sourceData;
-    const uint8_t *sourceLim = sourceData+sizeof(sourceData);
-    UChar   targetBuf[256];
-    UChar   *target = targetBuf;
-    UChar   *targetLim = target+256;
+    const char sourceData[] = { (char)0xa2, (char)0xae, (char)0xa2 };
+    /* UChar   expectUData[] = { 0x00a1, 0x001a }; */
+    const char *source = sourceData;
+    const char *sourceLim = sourceData+sizeof(sourceData);
     UChar c1, c2, c3;
     UConverter *cnv=ucnv_open(cnvName, &status);
     if(U_FAILURE(status)) {
@@ -2666,6 +2663,10 @@ TestICCRunout() {
     }
     
 #if 0
+    {
+    UChar   targetBuf[256];
+    UChar   *target = targetBuf;
+    UChar   *targetLim = target+256;
     ucnv_toUnicode(cnv, &target, targetLim, &source, sourceLim, NULL, TRUE, &status);
 
     log_info("After convert: target@%d, source@%d, status%s\n",
@@ -2675,6 +2676,7 @@ TestICCRunout() {
 	log_err("Failed to convert: %s\n", u_errorName(status));
     } else {
 	
+    }
     }
 #endif
 
@@ -5120,11 +5122,14 @@ TestLMBCS() {
          errorCode=U_ZERO_ERROR;
 
          /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
-         ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn-1,off,FALSE, &errorCode);
+         pUIn++;
+         ucnv_fromUnicode(cnv, &pLOut, pLOut+1, &pUIn, pUIn-1, off, FALSE, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
          {
             log_err("Unexpected Error on negative source request to ucnv_fromUnicode: %s\n", u_errorName(errorCode));
          }
+         pUIn--;
+         
          errorCode=U_ZERO_ERROR;
          ucnv_toUnicode(cnv, &pUOut,pUOut+1,(const char **)&pLIn,(const char *)(pLIn-1),off,FALSE, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)

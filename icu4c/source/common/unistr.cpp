@@ -1539,7 +1539,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
    */
   if(forceClone ||
      fFlags & kBufferIsReadonly ||
-     fFlags & kRefCounted && refCount() > 1 ||
+     (fFlags & kRefCounted && refCount() > 1) ||
      newCapacity > getCapacity()
   ) {
     // check growCapacity for default value and use of the stack buffer
@@ -1569,7 +1569,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
 
     // allocate a new array
     if(allocate(growCapacity) ||
-       newCapacity < growCapacity && allocate(newCapacity)
+       (newCapacity < growCapacity && allocate(newCapacity))
     ) {
       if(doCopyArray && oldArray != 0) {
         // copy the contents

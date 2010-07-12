@@ -347,10 +347,10 @@ static void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh
         lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
         lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
         lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
-        uint32_t primaryCE = t1 & UCOL_PRIMARYMASK | (t2 & UCOL_PRIMARYMASK) >> 16;
+        uint32_t primaryCE = (t1 & UCOL_PRIMARYMASK) | ((t2 & UCOL_PRIMARYMASK) >> 16);
         primaryCE = uprv_uca_getImplicitFromRaw(uprv_uca_getRawFromImplicit(primaryCE)+1);
 
-        t1 = primaryCE & UCOL_PRIMARYMASK | 0x0505;
+        t1 = (primaryCE & UCOL_PRIMARYMASK) | 0x0505;
         t2 = (primaryCE << 16) & UCOL_PRIMARYMASK; // | UCOL_CONTINUATION_MARKER;
 
         lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;

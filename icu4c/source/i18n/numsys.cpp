@@ -110,7 +110,6 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
         buffer[count] = '\0'; // Make sure it is null terminated.
         return NumberingSystem::createInstanceByName(buffer,status);
     } else { // Find the default numbering system for this locale.
-        const char *ln = inLocale.getName();
         UResourceBundle *resource = ures_open(NULL, inLocale.getName(), &status);
         UResourceBundle *numberElementsRes = ures_getByKey(resource,gNumberElements,NULL,&status);
         const UChar *defaultNSName =

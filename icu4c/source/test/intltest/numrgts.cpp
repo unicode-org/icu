@@ -2487,7 +2487,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
             } else {
                 double d = num.getType() == Formattable::kDouble ?
                     num.getDouble() : (double) num.getLong();
-                if (d > 0 != DATA[i] > 0) {
+                if ((d > 0) != (DATA[i] > 0)) {
                     errln(UnicodeString("\"") + str + "\" parse(x " +
                           fmt->getMultiplier() +
                           ") => " + toString(num));

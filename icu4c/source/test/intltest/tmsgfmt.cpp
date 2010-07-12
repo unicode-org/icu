@@ -29,8 +29,7 @@
 #include "unicode/gregocal.h"
 #include <stdio.h>
 
-#define E_WITH_ACUTE ((UChar)0x00E9)
-#define A_WITH_GRAVE ((UChar)0x00E0)
+#define E_WITH_ACUTE ((char)0x00E9)
 static const char E_ACCENTED[]={E_WITH_ACUTE,0};
 
 void
