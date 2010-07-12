@@ -123,6 +123,10 @@ size_t MINIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Minimum library memory alloc
 size_t MAXIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Maximum library memory allocation window that will fail. */
 int32_t ALLOCATION_COUNT = 0;
 static const char *ARGV_0 = "[ALL]";
+static const char *XML_FILE_NAME=NULL;
+static char XML_PREFIX[256];
+
+FILE *XML_FILE = NULL;
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -186,6 +190,7 @@ cleanUpTestTree(TestNode *tn)
     }
 
     free(tn);
+
 }
 
 
@@ -362,6 +367,11 @@ static void iterateTestsWithLevel ( const TestNode* root,
         int myGLOBAL_PRINT_COUNT = GLOBAL_PRINT_COUNT;
 #if SHOW_TIMES
         UDate startTime, stopTime;
+        char timeDelta[256];
+        char timeSeconds[256];
+#else 
+        const char timeDelta[] = "(unknown)";
+        const char timeSeconds[] = "0.000";
 #endif
         currentTest = root;
         INDENT_LEVEL = depth;  /* depth of subitems */
@@ -385,6 +395,12 @@ static void iterateTestsWithLevel ( const TestNode* root,
         }
         ONE_ERROR=0;
 
+#if SHOW_TIMES
+        str_timeDelta(timeDelta, stopTime-startTime);
+        sprintf(timeSeconds, "%f", (stopTime-startTime)/1000.0);
+#endif        
+        ctest_xml_testcase(pathToFunction, pathToFunction, timeSeconds, (myERROR_COUNT!=ERROR_COUNT)?"error":NULL);
+
         if (myERROR_COUNT != ERROR_COUNT) {
           log_testinfo_i("} ---[%d ERRORS in %s] ", ERROR_COUNT - myERROR_COUNT, pathToFunction);
           strcpy(ERROR_LOG[ERRONEOUS_FUNCTION_COUNT++], pathToFunction);
@@ -402,9 +418,9 @@ static void iterateTestsWithLevel ( const TestNode* root,
             log_testinfo(" %*s[OK] ", spaces,"---");
           }
         }
-
+                           
 #if SHOW_TIMES
-        print_timeDelta(stopTime-startTime);
+        if(timeDelta[0]) printf("%s", timeDelta);
 #endif
          
         ON_LINE = TRUE; /* we are back on-line */
@@ -964,6 +980,16 @@ initArgs( int argc, const char* const argv[], ArgHandlerPtr argHandler, void *co
                 REPEAT_TESTS++;
             }
         }
+        else if (strcmp( argv[i], "-x") == 0)
+        {
+          if(++i>=argc) {
+            printf("* Error: '-x' option requires an argument. usage: '-x outfile.xml'.\n");
+            return 0;
+          }
+          if(ctest_xml_setFileName(argv[i])) { /* set the name */
+            return 0;
+          }
+        }
         else if (strcmp( argv[i], "-t_info") == 0) {
             ICU_TRACE = UTRACE_INFO;
         }
@@ -1020,6 +1046,10 @@ runTestRequest(const TestNode* root,
 
     toRun = root;
 
+    if(ctest_xml_init(ARGV_0)) {
+      return 1; /* couldn't fire up XML thing */
+    }
+
     for( i=1; i<argc; i++)
     {
         if ( argv[i][0] == '/' )
@@ -1075,6 +1105,10 @@ runTestRequest(const TestNode* root,
     }
 
     REPEAT_TESTS_INIT = 1;
+    
+    if(ctest_xml_fini()) {
+      errorCount++;
+    }
 
     return errorCount; /* total error count */
 }
@@ -1093,6 +1127,7 @@ static void help ( const char *argv0 )
     printf("    -e  to do exhaustive testing\n");
     printf("    -verbose To turn ON verbosity\n");
     printf("    -v  To turn ON verbosity(same as -verbose)\n");
+    printf("    -x file.xml   Write junit format output to file.xml\n");
     printf("    -h  To print this message\n");
     printf("    -n  To turn OFF printing error messages\n");
     printf("    -w  Don't fail on data-loading errs, just warn. Useful if\n"
@@ -1152,3 +1187,72 @@ setTestOption ( int32_t testOption, int32_t value) {
             break;
     }
 }
+
+
+/*
+ * ================== JUnit support ================================
+ */
+
+int32_t
+T_CTEST_EXPORT2
+ctest_xml_setFileName(const char *name) {
+  XML_FILE_NAME=name;
+  return 0;
+}
+
+
+int32_t
+T_CTEST_EXPORT2
+ctest_xml_init(const char *rootName) {
+  if(!XML_FILE_NAME) return 0;
+  XML_FILE = fopen(XML_FILE_NAME,"w");
+  if(!XML_FILE) {
+    perror("fopen");
+    fprintf(stderr," Error: couldn't open XML output file %s\n", XML_FILE_NAME);
+    return 1;
+  }
+  while(*rootName&&!isalnum(*rootName)) {
+    rootName++;
+  }
+  strcpy(XML_PREFIX,rootName);
+  {
+    char *p = XML_PREFIX+strlen(XML_PREFIX);
+    for(p--;*p&&p>XML_PREFIX&&!isalnum(*p);p--) {
+      *p=0;
+    }
+  }
+  /* write prefix */
+  fprintf(XML_FILE, "<testsuite name=\"%s\">\n", XML_PREFIX);
+
+  return 0;
+}
+
+int32_t
+T_CTEST_EXPORT2
+ctest_xml_fini(void) {
+  if(!XML_FILE) return 0;
+
+  fprintf(XML_FILE, "</testsuite>\n");
+  fclose(XML_FILE);
+  printf(" ( test results written to %s )\n", XML_FILE_NAME);
+  XML_FILE=0;
+  return 0;
+}
+
+
+int32_t
+T_CTEST_EXPORT2
+ctest_xml_testcase(const char *classname, const char *name, const char *time, const char *failMsg) {
+  if(!XML_FILE) return 0;
+
+  fprintf(XML_FILE, "\t<testcase classname=\"%s:%s\" name=\"%s:%s\" time=\"%s\"", XML_PREFIX, classname, XML_PREFIX, name, time);
+  if(failMsg) {
+    fprintf(XML_FILE, ">\n\t\t<failure type=\"err\" message=\"%s\"/>\n\t</testcase>\n", failMsg);
+  } else {
+    fprintf(XML_FILE, "/>\n");
+  }
+
+  return 0;
+}
+
+

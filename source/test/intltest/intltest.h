@@ -103,7 +103,7 @@ public:
     IntlTest();
     // TestLog has a virtual destructor.
 
-    virtual UBool runTest( char* name = NULL, char* par = NULL ); // not to be overidden
+    virtual UBool runTest( char* name = NULL, char* par = NULL, char *baseName = NULL); // not to be overidden
 
     virtual UBool setVerbose( UBool verbose = TRUE );
     virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
@@ -210,7 +210,7 @@ protected:
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
-    virtual UBool runTestLoop( char* testname, char* par );
+    virtual UBool runTestLoop( char* testname, char* par, char *baseName );
 
     virtual int32_t IncErrorCount( void );
 
@@ -234,6 +234,8 @@ private:
     int32_t     dataErrorCount;
     IntlTest*   caller;
     char*       testPath;           // specifies subtests
+    
+    char basePath[1024];
 
     //FILE *testoutfp;
     void *testoutfp;

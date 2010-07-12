@@ -19,7 +19,7 @@ include $(top_builddir)/icudefs.mk
 subdir = test/intltest
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) $(TESTXML)
 
 ## Target information
 TARGET = intltest$(EXEEXT)
@@ -65,7 +65,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check check-local
+distclean distclean-local dist dist-local check check-local xcheck xcheck-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -77,6 +77,7 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+xcheck: all xcheck-local
 
 all-local: $(TARGET)
 
@@ -93,6 +94,10 @@ distclean-local: clean-local
 
 check-local: all-local
 	$(INVOKE) ./$(TARGET) $(INTLTEST_OPTS) 
+
+TESTXML=$(top_builddir)/test-$(TARGET).xml
+xcheck-local: all-local
+	$(INVOKE) ./$(TARGET) $(INTLTEST_OPTS) -x $(TESTXML)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
