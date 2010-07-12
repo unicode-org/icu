@@ -2370,6 +2370,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/data/package.html svneol=native#tex
 icu4j/main/classes/core/src/com/ibm/icu/impl/duration/impl/data/index.txt svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/math/package.html svneol=native#text/html
+icu4j/main/classes/core/src/com/ibm/icu/text/SpoofChecker.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#text/plain
@@ -2442,6 +2443,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.t
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/ucdterms.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
@@ -2717,6 +2720,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.VTimeZone.dat -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/text/SpoofCheckerTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/text/TestAll.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
