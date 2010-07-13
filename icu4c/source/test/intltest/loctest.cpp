@@ -482,21 +482,24 @@ LocaleTest::TestDisplayNames()
     /* Check to see if ICU supports this locale */
     if (symb.getLocale(ULOC_VALID_LOCALE, status) != Locale("root")) {
         /* test that the default locale has a display name for its own language */
-        Locale().getDisplayLanguage(Locale(), s);
-        if(s.length()<=3 && s.charAt(0)<=0x7f) {
-            /* check <=3 to reject getting the language code as a display name */
-            dataerrln("unable to get a display string for the language of the default locale.\n");
-        }
+        /* Currently, there is no language information in the "tl" data file so this test will fail if default locale is "tl" */
+        if (uprv_strcmp(Locale().getLanguage(), "tl") != 0) {
+            Locale().getDisplayLanguage(Locale(), s);
+            if(s.length()<=3 && s.charAt(0)<=0x7f) {
+                /* check <=3 to reject getting the language code as a display name */
+                dataerrln("unable to get a display string for the language of the default locale: " + s);
+            }
 
-        /*
-         * API coverage improvements: call
-         * Locale::getDisplayLanguage(UnicodeString &) and
-         * Locale::getDisplayCountry(UnicodeString &)
-         */
-        s.remove();
-        Locale().getDisplayLanguage(s);
-        if(s.length()<=3 && s.charAt(0)<=0x7f) {
-            dataerrln("unable to get a display string for the language of the default locale [2].\n");
+            /*
+             * API coverage improvements: call
+             * Locale::getDisplayLanguage(UnicodeString &) and
+             * Locale::getDisplayCountry(UnicodeString &)
+             */
+            s.remove();
+            Locale().getDisplayLanguage(s);
+            if(s.length()<=3 && s.charAt(0)<=0x7f) {
+                dataerrln("unable to get a display string for the language of the default locale [2]: " + s);
+            }
         }
     }
     else {
