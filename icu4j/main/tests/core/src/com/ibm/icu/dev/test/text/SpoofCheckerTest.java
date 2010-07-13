@@ -120,9 +120,9 @@ public class SpoofCheckerTest extends TestFmwk {
 
       try {
           fileName = "unicode" + File.separator + "confusables.txt";
-          confusables = TestUtil.getDataReader(fileName);
+          confusables = TestUtil.getDataReader(fileName, "UTF-8");
           fileName = "unicode" + File.separator + "confusablesWholeScript.txt";
-          confusablesWholeScript = TestUtil.getDataReader(fileName);
+          confusablesWholeScript = TestUtil.getDataReader(fileName, "UTF-8");
 
           rsc = builder.setData(confusables, confusablesWholeScript).build();
       } catch (java.io.IOException e) {
@@ -504,7 +504,7 @@ public class SpoofCheckerTest extends TestFmwk {
       try {
       // Read in the confusables.txt file.  (Distributed by Unicode.org)
       String fileName = "unicode" + File.separator + "confusables.txt";
-      BufferedReader confusablesRdr = TestUtil.getDataReader(fileName);
+      BufferedReader confusablesRdr = TestUtil.getDataReader(fileName, "UTF-8");
       
       // Create a default spoof checker to use in this test.
       SpoofChecker sc = new SpoofChecker.Builder().build();
