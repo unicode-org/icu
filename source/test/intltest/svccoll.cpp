@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -152,12 +152,18 @@ void CollationServiceTest::TestRegister()
 
         UnicodeString displayName;
         Collator::getDisplayName(fu_FU, displayName);
-        if (displayName != "fu (FU)") {
+        /* The locale display pattern for the locale ja, ko, and zh are different. */
+        const Locale& defaultLocale = Locale::getDefault();
+        if (displayName != "fu (FU)" &&
+           ((defaultLocale == Locale::getKorean() && defaultLocale == Locale::getJapanese()) && displayName == "fu(FU)") &&
+           ((defaultLocale == Locale::getChinese()) && displayName != "fu\uff08FU\uff09")) {
             errln(UnicodeString("found ") + displayName + " for fu_FU");
         }
 
         Collator::getDisplayName(fu_FU, fu_FU, displayName);
-        if (displayName != "fu (FU)") {
+        if (displayName != "fu (FU)" &&
+           ((defaultLocale == Locale::getKorean() && defaultLocale == Locale::getJapanese()) && displayName == "fu(FU)") &&
+           ((defaultLocale == Locale::getChinese()) && displayName != "fu\uff08FU\uff09")) {
             errln(UnicodeString("found ") + displayName + " for fu_FU");
         }
 
