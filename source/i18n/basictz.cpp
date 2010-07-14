@@ -362,9 +362,10 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
         }
         UDate updatedTime = tzt.getTime();
         if (updatedTime == time) {
-            // Time zones that have been manually initialized with inconsistent transtion rules
-            // can bring us here.  Bail out to prevent an infinite loop.
-            status =  U_INVALID_STATE_ERROR;
+            // Can get here if rules for start & end of daylight time have exactly
+            // the same time.  
+            // TODO:  fix getNextTransition() to prevent it?
+            status = U_INVALID_STATE_ERROR;
             goto error;
         }
         time = updatedTime;
