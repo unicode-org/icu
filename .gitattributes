@@ -88,6 +88,8 @@ icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/IDNA2003.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/UTS46.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/SpoofChecker.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -142,6 +144,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/UTS46Test.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text

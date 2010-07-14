@@ -340,6 +340,9 @@ public final class Normalizer2Impl {
          * @draft ICU 4.6
          */
         public static boolean equal(CharSequence s1,  CharSequence s2) {
+            if(s1==s2) {
+                return true;
+            }
             int length=s1.length();
             if(length!=s2.length()) {
                 return false;
@@ -367,6 +370,9 @@ public final class Normalizer2Impl {
                                     CharSequence s2, int start2, int limit2) {
             if((limit1-start1)!=(limit2-start2)) {
                 return false;
+            }
+            if(s1==s2 && start1==start2) {
+                return true;
             }
             while(start1<limit1) {
                 if(s1.charAt(start1++)!=s2.charAt(start2++)) {
