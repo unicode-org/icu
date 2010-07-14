@@ -153,17 +153,19 @@ void CollationServiceTest::TestRegister()
         UnicodeString displayName;
         Collator::getDisplayName(fu_FU, displayName);
         /* The locale display pattern for the locale ja, ko, and zh are different. */
+        const UChar zh_fuFU_Array[] = { 0x0066, 0x0075, 0xff08, 0x0046, 0x0055, 0xff09 };
+        const UnicodeString zh_fuFU(zh_fuFU_Array);
         const Locale& defaultLocale = Locale::getDefault();
         if (displayName != "fu (FU)" &&
            ((defaultLocale == Locale::getKorean() && defaultLocale == Locale::getJapanese()) && displayName == "fu(FU)") &&
-           ((defaultLocale == Locale::getChinese()) && displayName != "fu\uff08FU\uff09")) {
+           ((defaultLocale == Locale::getChinese()) && displayName != zh_fuFU)) {
             errln(UnicodeString("found ") + displayName + " for fu_FU");
         }
 
         Collator::getDisplayName(fu_FU, fu_FU, displayName);
         if (displayName != "fu (FU)" &&
            ((defaultLocale == Locale::getKorean() && defaultLocale == Locale::getJapanese()) && displayName == "fu(FU)") &&
-           ((defaultLocale == Locale::getChinese()) && displayName != "fu\uff08FU\uff09")) {
+           ((defaultLocale == Locale::getChinese()) && displayName != zh_fuFU)) {
             errln(UnicodeString("found ") + displayName + " for fu_FU");
         }
 
