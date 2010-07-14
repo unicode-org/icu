@@ -48,6 +48,7 @@ static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 #define CHECK(status,str) if (U_FAILURE(status)) { errcheckln(status, UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
+#define CHECK_DATA(status,str) if (U_FAILURE(status)) { dataerrln(UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
 
 void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -630,11 +631,11 @@ NumberFormatTest::TestCurrencySign(void)
     pat.truncate(0);
     logln((UnicodeString)"Pattern \"" + fmt->toPattern(pat) + "\"");
     logln((UnicodeString)" Format " + 1234.56 + " -> " + escape(s));
-    if (s != "$1,234.56") errln((UnicodeString)"FAIL: Expected $1,234.56");
+    if (s != "$1,234.56") dataerrln((UnicodeString)"FAIL: Expected $1,234.56");
     s.truncate(0);
     ((NumberFormat*)fmt)->format(- 1234.56, s);
     logln((UnicodeString)" Format " + (-1234.56) + " -> " + escape(s));
-    if (s != "-$1,234.56") errln((UnicodeString)"FAIL: Expected -$1,234.56");
+    if (s != "-$1,234.56") dataerrln((UnicodeString)"FAIL: Expected -$1,234.56");
     delete fmt;
     pat.truncate(0);
     // "\xA4\xA4 #,##0.00;\xA4\xA4 -#,##0.00"
@@ -647,11 +648,11 @@ NumberFormatTest::TestCurrencySign(void)
     ((NumberFormat*)fmt)->format(1234.56, s);
     logln((UnicodeString)"Pattern \"" + fmt->toPattern(pat) + "\"");
     logln((UnicodeString)" Format " + 1234.56 + " -> " + escape(s));
-    if (s != "USD 1,234.56") errln((UnicodeString)"FAIL: Expected USD 1,234.56");
+    if (s != "USD 1,234.56") dataerrln((UnicodeString)"FAIL: Expected USD 1,234.56");
     s.truncate(0);
     ((NumberFormat*)fmt)->format(-1234.56, s);
     logln((UnicodeString)" Format " + (-1234.56) + " -> " + escape(s));
-    if (s != "USD -1,234.56") errln((UnicodeString)"FAIL: Expected USD -1,234.56");
+    if (s != "USD -1,234.56") dataerrln((UnicodeString)"FAIL: Expected USD -1,234.56");
     delete fmt;
     delete sym;
     if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + u_errorName(status));
@@ -887,7 +888,7 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     expect2(f, (int32_t)123456789L, "12,3456,789");
     expectPat(f, "#,####,###");
     NumberFormat *g = NumberFormat::createInstance(Locale("hi", "IN"), status);
-    CHECK(status, "createInstance(hi_IN)");
+    CHECK_DATA(status, "createInstance(hi_IN)");
 
     UnicodeString out;
     int32_t l = (int32_t)1876543210L;
@@ -1718,7 +1719,7 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
     if (str == "$ 2,350.75") {
         logln(str);
     } else {
-        errln("Fail: " + str + ", expected $ 2,350.75");
+        dataerrln("Fail: " + str + ", expected $ 2,350.75");
     }
 
     sym = new DecimalFormatSymbols(Locale::getUS(), ec);
@@ -1735,7 +1736,7 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
     if (str == "Q 2,350.75") {
         logln(str);
     } else {
-        errln("Fail: adoptDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
+        dataerrln("Fail: adoptDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
     }
 
     sym = new DecimalFormatSymbols(Locale::getUS(), ec);
@@ -1763,7 +1764,7 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
     if (str == "Q 2,350.75") {
         logln(str);
     } else {
-        errln("Fail: setDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
+        dataerrln("Fail: setDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
     }
 }
 
@@ -2116,8 +2117,8 @@ void NumberFormatTest::expect2(NumberFormat& fmt, const Formattable& n, const Un
 void NumberFormatTest::expect2(NumberFormat* fmt, const Formattable& n,
                                const UnicodeString& exp,
                                UErrorCode status) {
-    if (U_FAILURE(status)) {
-        errln("FAIL: NumberFormat constructor");
+    if (fmt == NULL || U_FAILURE(status)) {
+        dataerrln("FAIL: NumberFormat constructor");
     } else {
         expect2(*fmt, n, exp);
     }
@@ -2129,7 +2130,7 @@ void NumberFormatTest::expect(NumberFormat& fmt, const UnicodeString& str, const
     Formattable num;
     fmt.parse(str, num, status);
     if (U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: Parse failed for \"") + str + "\"");
+        dataerrln(UnicodeString("FAIL: Parse failed for \"") + str + "\" - " + u_errorName(status));
         return;
     }
     UnicodeString pat;
@@ -2139,7 +2140,7 @@ void NumberFormatTest::expect(NumberFormat& fmt, const UnicodeString& str, const
               pat + " = " +
               toString(num));
     } else {
-        errln(UnicodeString("FAIL \"") + str + "\" x " +
+        dataerrln(UnicodeString("FAIL \"") + str + "\" x " +
               pat + " = " +
               toString(num) + ", expected " + toString(n));
     }
@@ -2218,7 +2219,7 @@ void NumberFormatTest::expect(NumberFormat& fmt, const Formattable& n,
             Formattable n2;
             fmt.parse(exp, n2, status);
             if (U_FAILURE(status)) {
-                errln(UnicodeString("FAIL: Parse failed for \"") + exp + "\"");
+                errln(UnicodeString("FAIL: Parse failed for \"") + exp + "\" - " + u_errorName(status));
                 return;
             }
             UnicodeString saw2;
@@ -2230,7 +2231,7 @@ void NumberFormatTest::expect(NumberFormat& fmt, const Formattable& n,
             }
         }
     } else {
-        errln(UnicodeString("FAIL ") + toString(n) + " x " +
+        dataerrln(UnicodeString("FAIL ") + toString(n) + " x " +
               escape(pat) + " = \"" +
               escape(saw) + "\", expected \"" + exp + "\"");
     }
@@ -2239,8 +2240,8 @@ void NumberFormatTest::expect(NumberFormat& fmt, const Formattable& n,
 void NumberFormatTest::expect(NumberFormat* fmt, const Formattable& n,
                               const UnicodeString& exp,
                               UErrorCode status) {
-    if (U_FAILURE(status)) {
-        errln("FAIL: NumberFormat constructor");
+    if (fmt == NULL || U_FAILURE(status)) {
+        dataerrln("FAIL: NumberFormat constructor");
     } else {
         expect(*fmt, n, exp);
     }
@@ -6188,7 +6189,7 @@ void NumberFormatTest::TestExponentParse() {
        ) 
     { 
         errln("ERROR: parse failed - expected 123.0, 3  - returned %d, %i", 
-               result.getDouble(), parsePos); 
+               result.getDouble(), parsePos.getIndex()); 
     } 
 } 
 

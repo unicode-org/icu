@@ -172,6 +172,9 @@ UObject *UObjectTest::testClass(UObject *obj,
 
 UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, const char *factory)
 {
+    if (!obj) {
+        return NULL;
+    }
     UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
     UClassID dynamicID = obj->getDynamicClassID();
 
@@ -562,7 +565,7 @@ void UObjectTest::TestCompilerRTTI() {
     UErrorCode errorCode = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance("de", errorCode);
     if (U_FAILURE(errorCode)) {
-        errln("NumberFormat::createInstance(de) failed - %s", u_errorName(errorCode));
+        dataerrln("NumberFormat::createInstance(de) failed - %s", u_errorName(errorCode));
         return;
     }
     if (dynamic_cast<DecimalFormat *>(nf) == NULL || dynamic_cast<ChoiceFormat *>(nf) != NULL) {
