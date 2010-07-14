@@ -8,7 +8,6 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.MissingResourceException;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Normalizer2;
@@ -328,13 +327,12 @@ public final class Norm2AllModes {
     private static CacheBase<String, Norm2AllModes, InputStream> cache =
         new SoftCache<String, Norm2AllModes, InputStream>() {
             protected Norm2AllModes createInstance(String key, InputStream data) {
+                Normalizer2Impl impl;
                 if(data==null) {
-                    throw new MissingResourceException(
-                            "No Normalizer2 data name \""+key+"\" cached, and InputStream is null",
-                            "Normalizer2",
-                            key);
+                    impl=new Normalizer2Impl().load(ICUResourceBundle.ICU_BUNDLE+"/"+key+".nrm");
+                } else {
+                    impl=new Normalizer2Impl().load(data);
                 }
-                Normalizer2Impl impl=new Normalizer2Impl().load(data);
                 return new Norm2AllModes(impl);
             }
         };

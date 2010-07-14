@@ -1,17 +1,35 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.Punycode;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
+import com.ibm.icu.impl.IDNA2003;
+import com.ibm.icu.impl.UTS46;
 
 /**
- *
- * IDNA API implements the IDNA protocol as defined in the <a href="http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.
+ * Abstract base class for IDNA processing.
+ * See http://www.unicode.org/reports/tr46/
+ * and http://www.ietf.org/rfc/rfc3490.txt
+ * <p>
+ * The IDNA class is not intended for public subclassing.
+ * <p>
+ * The non-static methods implement UTS #46 and IDNA2008.
+ * IDNA2008 is implemented according to UTS #46, see getUTS46Instance().
+ * <p>
+ * The static methods implement IDNA2003.
+ * <p>
+ * IDNA2003 API Overview:
+ * <p>
+ * The static IDNA API methods implement the IDNA protocol as defined in the
+ * <a href="http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.
  * The draft defines 2 operations: ToASCII and ToUnicode. Domain labels 
  * containing non-ASCII code points are required to be processed by
  * ToASCII operation before passing it to resolver libraries. Domain names
@@ -30,177 +48,369 @@ import com.ibm.icu.impl.Punycode;
  * ToUnicode(ToUnicode(ToUnicode...(ToUnicode(string)))) == ToUnicode(string) 
  * ToASCII(ToASCII(ToASCII...(ToASCII(string))) == ToASCII(string).
  * 
- * @author Ram Viswanadha
+ * @author Ram Viswanadha, Markus Scherer
  * @stable ICU 2.8
  */
-public final class IDNA {
-
-    /* IDNA ACE Prefix is "xn--" */
-    private static char[] ACE_PREFIX                = new char[]{ 0x0078,0x006E,0x002d,0x002d } ;
-    //private static final int ACE_PREFIX_LENGTH      = ACE_PREFIX.length;
-
-    private static final int MAX_LABEL_LENGTH       = 63;
-    private static final int HYPHEN                 = 0x002D;
-    private static final int CAPITAL_A              = 0x0041;
-    private static final int CAPITAL_Z              = 0x005A;
-    private static final int LOWER_CASE_DELTA       = 0x0020;
-    private static final int FULL_STOP              = 0x002E;
-    private static final int MAX_DOMAIN_NAME_LENGTH = 255;
+public abstract class IDNA {
     /** 
-     * Option to prohibit processing of unassigned codepoints in the input and
-     * do not check if the input conforms to STD-3 ASCII rules.
-     * 
-     * @see  #convertToASCII #convertToUnicode
+     * Default options value: None of the other options are set.
      * @stable ICU 2.8
      */
-    public static final int DEFAULT             = 0x0000;
+    public static final int DEFAULT = 0;
     /** 
-     * Option to allow processing of unassigned codepoints in the input
-     * 
-     * @see  #convertToASCII #convertToUnicode
+     * Option to allow unassigned code points in domain names and labels.
+     * This option is ignored by the UTS46 implementation.
+     * (UTS #46 disallows unassigned code points.)
      * @stable ICU 2.8
      */
-    public static final int ALLOW_UNASSIGNED    = 0x0001;
+    public static final int ALLOW_UNASSIGNED = 1;
     /** 
-     * Option to check if input conforms to STD-3 ASCII rules
-     * 
-     * @see #convertToASCII #convertToUnicode
+     * Option to check whether the input conforms to the STD3 ASCII rules,
+     * for example the restriction of labels to LDH characters
+     * (ASCII Letters, Digits and Hyphen-Minus).
      * @stable ICU 2.8
      */
-    public static final int USE_STD3_RULES      = 0x0002;
-    
-    // static final singleton object that is initialized
-    // at class initialization time, hence guaranteed to
-    // be initialized and thread safe
-    private static final IDNA singleton  = new IDNA();
-    
-    // The NamePrep profile object
-    private StringPrep namePrep;
-    
-    /* private constructor to prevent construction of the object */
-    private IDNA(){
-        namePrep = StringPrep.getInstance(StringPrep.RFC3491_NAMEPREP);
-    }
-    
-    private static boolean startsWithPrefix(StringBuffer src){
-        boolean startsWithPrefix = true;
-
-        if(src.length() < ACE_PREFIX.length){
-            return false;
-        }
-        for(int i=0; i<ACE_PREFIX.length;i++){
-            if(toASCIILower(src.charAt(i)) != ACE_PREFIX[i]){
-                startsWithPrefix = false;
-            }
-        }
-        return startsWithPrefix;
-    }
-
-    private static char toASCIILower(char ch){
-        if(CAPITAL_A <= ch && ch <= CAPITAL_Z){
-            return (char)(ch + LOWER_CASE_DELTA);
-        }
-        return ch;
-    }
-
-    private static StringBuffer toASCIILower(StringBuffer src){
-        StringBuffer dest = new StringBuffer();
-        for(int i=0; i<src.length();i++){
-            dest.append(toASCIILower(src.charAt(i)));
-        }
-        return dest;
-    }
-
-    private static int compareCaseInsensitiveASCII(StringBuffer s1, StringBuffer s2){
-        char c1,c2;
-        int rc;
-        for(int i =0;/* no condition */;i++) {
-            /* If we reach the ends of both strings then they match */
-            if(i == s1.length()) {
-                return 0;
-            }
-
-            c1 = s1.charAt(i);
-            c2 = s2.charAt(i);
-        
-            /* Case-insensitive comparison */
-            if(c1!=c2) {
-                rc=toASCIILower(c1)-toASCIILower(c2);
-                if(rc!=0) {
-                    return rc;
-                }
-            }
-        }
-    }
-   
-    private static int getSeparatorIndex(char[] src,int start, int limit){
-        for(; start<limit;start++){
-            if(isLabelSeparator(src[start])){
-                return start;
-            }
-        }
-        // we have not found the separator just return length
-        return start;
-    }
-    
-    /*
-    private static int getSeparatorIndex(UCharacterIterator iter){
-        int currentIndex = iter.getIndex();
-        int separatorIndex = 0;
-        int ch;
-        while((ch=iter.next())!= UCharacterIterator.DONE){
-            if(isLabelSeparator(ch)){
-                separatorIndex = iter.getIndex();
-                iter.setIndex(currentIndex);
-                return separatorIndex;
-            }
-        }
-        // reset index
-        iter.setIndex(currentIndex);
-        // we have not found the separator just return the length
-       
-    }
-    */
-    
-
-    private static boolean isLDHChar(int ch){
-        // high runner case
-        if(ch>0x007A){
-            return false;
-        }
-        //[\\u002D \\u0030-\\u0039 \\u0041-\\u005A \\u0061-\\u007A]
-        if( (ch==0x002D) || 
-            (0x0030 <= ch && ch <= 0x0039) ||
-            (0x0041 <= ch && ch <= 0x005A) ||
-            (0x0061 <= ch && ch <= 0x007A)
-          ){
-            return true;
-        }
-        return false;
-    }
-    
+    public static final int USE_STD3_RULES = 2;
     /**
-     * Ascertain if the given code point is a label separator as 
-     * defined by the IDNA RFC
-     * 
-     * @param ch The code point to be ascertained
-     * @return true if the char is a label separator
-     * @stable ICU 2.8
+     * IDNA option to check for whether the input conforms to the BiDi rules.
+     * This option is ignored by the IDNA2003 implementation.
+     * (IDNA2003 always performs a BiDi check.)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
-    private static boolean isLabelSeparator(int ch){
-        switch(ch){
-            case 0x002e:
-            case 0x3002:
-            case 0xFF0E:
-            case 0xFF61:
-                return true;
-            default:
-                return false;           
+    public static final int CHECK_BIDI = 4;
+    /**
+     * IDNA option to check for whether the input conforms to the CONTEXTJ rules.
+     * This option is ignored by the IDNA2003 implementation.
+     * (The CONTEXTJ check is new in IDNA2008.)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int CHECK_CONTEXTJ = 8;
+    /**
+     * IDNA option for nontransitional processing in ToASCII().
+     * By default, ToASCII() uses transitional processing.
+     * This option is ignored by the IDNA2003 implementation.
+     * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int NONTRANSITIONAL_TO_ASCII = 0x10;
+    /**
+     * IDNA option for nontransitional processing in ToUnicode().
+     * By default, ToUnicode() uses transitional processing.
+     * This option is ignored by the IDNA2003 implementation.
+     * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int NONTRANSITIONAL_TO_UNICODE = 0x20;
+
+    /**
+     * Returns an IDNA instance which implements UTS #46.
+     * Returns an unmodifiable instance, owned by the caller.
+     * Cache it for multiple operations, and delete it when done.
+     * The instance is thread-safe, that is, it can be used concurrently.
+     * <p>
+     * UTS #46 defines Unicode IDNA Compatibility Processing,
+     * updated to the latest version of Unicode and compatible with both
+     * IDNA2003 and IDNA2008.
+     * <p>
+     * The worker functions use transitional processing, including deviation mappings,
+     * unless NONTRANSITIONAL_TO_ASCII or NONTRANSITIONAL_TO_UNICODE
+     * is used in which case the deviation characters are passed through without change.
+     * <p>
+     * Disallowed characters are mapped to U+FFFD.
+     * <p>
+     * Operations with the UTS #46 instance do not support the
+     * ALLOW_UNASSIGNED option.
+     * <p>
+     * By default, the UTS #46 implementation allows all ASCII characters (as valid or mapped).
+     * When the USE_STD3_RULES option is used, ASCII characters other than
+     * letters, digits, hyphen (LDH) and dot/full stop are disallowed and mapped to U+FFFD.
+     *
+     * @param options Bit set to modify the processing and error checking.
+     * @return the UTS #46 IDNA instance, if successful
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static IDNA getUTS46Instance(int options) {
+        return new UTS46(options);
+    }
+
+    /**
+     * Converts a single domain name label into its ASCII form for DNS lookup.
+     * If any processing step fails, then info.hasErrors() will be true and
+     * the result might not be an ASCII string.
+     * The label might be modified according to the types of errors.
+     * Labels with severe errors will be left in (or turned into) their Unicode form.
+     *
+     * @param label Input domain name label
+     * @param dest Destination string object
+     * @param info Output container of IDNA processing details.
+     * @return dest
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract StringBuilder labelToASCII(CharSequence label, StringBuilder dest, Info info);
+
+    /**
+     * Converts a single domain name label into its Unicode form for human-readable display.
+     * If any processing step fails, then info.hasErrors() will be true.
+     * The label might be modified according to the types of errors.
+     *
+     * @param label Input domain name label
+     * @param dest Destination string object
+     * @param info Output container of IDNA processing details.
+     * @return dest
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract StringBuilder labelToUnicode(CharSequence label, StringBuilder dest, Info info);
+
+    /**
+     * Converts a whole domain name into its ASCII form for DNS lookup.
+     * If any processing step fails, then info.hasErrors() will be true and
+     * the result might not be an ASCII string.
+     * The domain name might be modified according to the types of errors.
+     * Labels with severe errors will be left in (or turned into) their Unicode form.
+     *
+     * @param name Input domain name
+     * @param dest Destination string object
+     * @param info Output container of IDNA processing details.
+     * @return dest
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract StringBuilder nameToASCII(CharSequence name, StringBuilder dest, Info info);
+
+    /**
+     * Converts a whole domain name into its Unicode form for human-readable display.
+     * If any processing step fails, then info.hasErrors() will be true.
+     * The domain name might be modified according to the types of errors.
+     *
+     * @param name Input domain name
+     * @param dest Destination string object
+     * @param info Output container of IDNA processing details.
+     * @return dest
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public abstract StringBuilder nameToUnicode(CharSequence name, StringBuilder dest, Info info);
+
+    /**
+     * Output container for IDNA processing errors.
+     * The Info class is not suitable for subclassing.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class Info {
+        /**
+         * Constructor.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Info() {
+            errors=EnumSet.noneOf(Error.class);
+            labelErrors=EnumSet.noneOf(Error.class);
+            isTransDiff=false;
+            isBiDi=false;
+            isOkBiDi=true;
+        }
+        /**
+         * Were there IDNA processing errors?
+         * @return true if there were processing errors
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public boolean hasErrors() { return !errors.isEmpty(); }
+        /**
+         * Returns a set indicating IDNA processing errors.
+         * @return set of processing errors (modifiable, and not null)
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Set<Error> getErrors() { return errors; }
+        /**
+         * Returns true if transitional and nontransitional processing produce different results.
+         * This is the case when the input label or domain name contains
+         * one or more deviation characters outside a Punycode label (see UTS #46).
+         * <ul>
+         * <li>With nontransitional processing, such characters are
+         * copied to the destination string.
+         * <li>With transitional processing, such characters are
+         * mapped (sharp s/sigma) or removed (joiner/nonjoiner).
+         * </ul>
+         * @return true if transitional and nontransitional processing produce different results
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public boolean isTransitionalDifferent() { return isTransDiff; }
+
+        private void reset() {
+            errors.clear();
+            labelErrors.clear();
+            isTransDiff=false;
+            isBiDi=false;
+            isOkBiDi=true;
+        }
+
+        private EnumSet<Error> errors, labelErrors;
+        private boolean isTransDiff;
+        private boolean isBiDi;
+        private boolean isOkBiDi;
+    }
+
+    // The following protected methods give IDNA subclasses access to the private IDNAInfo fields.
+    // The IDNAInfo also provides intermediate state that is publicly invisible,
+    // avoiding the allocation of another worker object.
+    protected static void resetInfo(Info info) {
+        info.reset();
+    }
+    protected static boolean hasCertainErrors(Info info, EnumSet<Error> errors) {
+        return !info.errors.isEmpty() && !Collections.disjoint(info.errors, errors);
+    }
+    protected static boolean hasCertainLabelErrors(Info info, EnumSet<Error> errors) {
+        return !info.labelErrors.isEmpty() && !Collections.disjoint(info.labelErrors, errors);
+    }
+    protected static void addLabelError(Info info, Error error) {
+        info.labelErrors.add(error);
+    }
+    protected static void promoteAndResetLabelErrors(Info info) {
+        if(!info.labelErrors.isEmpty()) {
+            info.errors.addAll(info.labelErrors);
+            info.labelErrors.clear();
         }
     }
-       
+    protected static void addError(Info info, Error error) {
+        info.errors.add(error);
+    }
+    protected static void setTransitionalDifferent(Info info) {
+        info.isTransDiff=true;
+    }
+    protected static void setBiDi(Info info) {
+        info.isBiDi=true;
+    }
+    protected static boolean isBiDi(Info info) {
+        return info.isBiDi;
+    }
+    protected static void setNotOkBiDi(Info info) {
+        info.isOkBiDi=false;
+    }
+    protected static boolean isOkBiDi(Info info) {
+        return info.isOkBiDi;
+    }
+
     /**
-     * This function implements the ToASCII operation as defined in the IDNA RFC.
+     * IDNA error bit set values.
+     * When a domain name or label fails a processing step or does not meet the
+     * validity criteria, then one or more of these error bits are set.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum Error {
+        /**
+         * A non-final domain name label (or the whole domain name) is empty.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        EMPTY_LABEL,
+        /**
+         * A domain name label is longer than 63 bytes.
+         * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
+         * This is only checked in ToASCII operations, and only if the output label is all-ASCII.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        LABEL_TOO_LONG,
+        /**
+         * A domain name is longer than 255 bytes in its storage form.
+         * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
+         * This is only checked in ToASCII operations, and only if the output domain name is all-ASCII.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        DOMAIN_NAME_TOO_LONG,
+        /**
+         * A label starts with a hyphen-minus ('-').
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        LEADING_HYPHEN,
+        /**
+         * A label ends with a hyphen-minus ('-').
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        TRAILING_HYPHEN,
+        /**
+         * A label contains hyphen-minus ('-') in the third and fourth positions.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        HYPHEN_3_4,
+        /**
+         * A label starts with a combining mark.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        LEADING_COMBINING_MARK,
+        /**
+         * A label or domain name contains disallowed characters.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        DISALLOWED,
+        /**
+         * A label starts with "xn--" but does not contain valid Punycode.
+         * That is, an xn-- label failed Punycode decoding.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        PUNYCODE,
+        /**
+         * A label contains a dot=full stop.
+         * This can occur in an input string for a single-label function.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        LABEL_HAS_DOT,
+        /**
+         * An ACE label does not contain a valid label string.
+         * The label was successfully ACE (Punycode) decoded but the resulting
+         * string had severe validation errors. For example,
+         * it might contain characters that are not allowed in ACE labels,
+         * or it might not be normalized.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        INVALID_ACE_LABEL,
+        /**
+         * A label does not meet the IDNA BiDi requirements (for right-to-left characters).
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        BIDI,
+        /**
+         * A label does not meet the IDNA CONTEXTJ requirements.
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        CONTEXTJ
+    }
+
+    /**
+     * Sole constructor. (For invocation by subclass constructors, typically implicit.)
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected IDNA() {
+    }
+
+    /* IDNA2003 API ------------------------------------------------------------- */
+
+    /**
+     * IDNA2003: This function implements the ToASCII operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * ASCII names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; e.g." "www.example.com" is composed of 3 labels 
@@ -231,7 +441,7 @@ public final class IDNA {
     }
     
     /**
-     * This function implements the ToASCII operation as defined in the IDNA RFC.
+     * IDNA2003: This function implements the ToASCII operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * ASCII names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; e.g." "www.example.com" is composed of 3 labels 
@@ -261,7 +471,7 @@ public final class IDNA {
     }
     
     /**
-     * This function implements the ToASCII operation as defined in the IDNA RFC.
+     * IDNA2003: This function implements the ToASCII operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * ASCII names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; e.g." "www.example.com" is composed of 3 labels 
@@ -286,115 +496,11 @@ public final class IDNA {
      */
     public static StringBuffer convertToASCII(UCharacterIterator src, int options)
                 throws StringPrepParseException{
-        
-        boolean[] caseFlags = null;
-    
-        // the source contains all ascii codepoints
-        boolean srcIsASCII  = true;
-        // assume the source contains all LDH codepoints
-        boolean srcIsLDH = true; 
-
-        //get the options
-        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
-        int ch;
-        // step 1
-        while((ch = src.next())!= UCharacterIterator.DONE){
-            if(ch> 0x7f){
-                srcIsASCII = false;
-            }
-        }
-        int failPos = -1;
-        src.setToStart();
-        StringBuffer processOut = null;
-        // step 2 is performed only if the source contains non ASCII
-        if(!srcIsASCII){
-            // step 2
-            processOut = singleton.namePrep.prepare(src, options);
-        }else{
-            processOut = new StringBuffer(src.getText());
-        }
-        int poLen = processOut.length();
-        
-        if(poLen==0){
-            throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
-        }
-        StringBuffer dest = new StringBuffer();
-        
-        // reset the variable to verify if output of prepare is ASCII or not
-        srcIsASCII = true;
-        
-        // step 3 & 4
-        for(int j=0;j<poLen;j++ ){
-            ch=processOut.charAt(j);
-            if(ch > 0x7F){
-                srcIsASCII = false;
-            }else if(isLDHChar(ch)==false){
-                // here we do not assemble surrogates
-                // since we know that LDH code points
-                // are in the ASCII range only
-                srcIsLDH = false;
-                failPos = j;
-            }
-        }
-    
-        if(useSTD3ASCIIRules == true){
-            // verify 3a and 3b
-            if( srcIsLDH == false /* source contains some non-LDH characters */
-                || processOut.charAt(0) ==  HYPHEN 
-                || processOut.charAt(processOut.length()-1) == HYPHEN){
-
-                /* populate the parseError struct */
-                if(srcIsLDH==false){
-                     throw new StringPrepParseException( "The input does not conform to the STD 3 ASCII rules",
-                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                              processOut.toString(),
-                                             (failPos>0) ? (failPos-1) : failPos);
-                }else if(processOut.charAt(0) == HYPHEN){
-                    throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),0);
-     
-                }else{
-                     throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                              processOut.toString(),
-                                              (poLen>0) ? poLen-1 : poLen);
-
-                }
-            }
-        }
-        if(srcIsASCII){
-            dest =  processOut;
-        }else{
-            // step 5 : verify the sequence does not begin with ACE prefix
-            if(!startsWithPrefix(processOut)){
-
-                //step 6: encode the sequence with punycode
-                caseFlags = new boolean[poLen];
-
-                StringBuffer punyout = Punycode.encode(processOut,caseFlags);
-
-                // convert all codepoints to lower case ASCII
-                StringBuffer lowerOut = toASCIILower(punyout);
-
-                //Step 7: prepend the ACE prefix
-                dest.append(ACE_PREFIX,0,ACE_PREFIX.length);
-                //Step 6: copy the contents in b2 into dest
-                dest.append(lowerOut);
-            }else{
-
-                throw new StringPrepParseException("The input does not start with the ACE Prefix.",
-                                         StringPrepParseException.ACE_PREFIX_ERROR,processOut.toString(),0);
-            }
-        }
-        if(dest.length() > MAX_LABEL_LENGTH){
-            throw new StringPrepParseException("The labels in the input are too long. Length > 63.", 
-                                     StringPrepParseException.LABEL_TOO_LONG_ERROR,dest.toString(),0);
-        }
-        return dest;
+        return IDNA2003.convertToASCII(src, options);
     }
-        
+
     /**
-     * Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      * It is important to note that this operation can fail. If it fails, then the input 
      * domain name cannot be used as an Internationalized Domain Name and the application
@@ -428,7 +534,7 @@ public final class IDNA {
     }
     
     /**
-     * Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      * It is important to note that this operation can fail. If it fails, then the input 
      * domain name cannot be used as an Internationalized Domain Name and the application
@@ -462,7 +568,7 @@ public final class IDNA {
     }
     
     /**
-     * Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      * It is important to note that this operation can fail. If it fails, then the input 
      * domain name cannot be used as an Internationalized Domain Name and the application
@@ -492,37 +598,12 @@ public final class IDNA {
      */
     public static StringBuffer convertIDNToASCII(String src,int options)
             throws StringPrepParseException{
-
-        char[] srcArr = src.toCharArray();
-        StringBuffer result = new StringBuffer();
-        int sepIndex=0;
-        int oldSepIndex=0;
-        for(;;){
-            sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
-            //make sure this is not a root label separator.
-            if(!(label.length()==0 && sepIndex==srcArr.length)){
-                UCharacterIterator iter = UCharacterIterator.getInstance(label);
-                result.append(convertToASCII(iter,options));
-            }
-            if(sepIndex==srcArr.length){
-                break;
-            }
-            
-            // increment the sepIndex to skip past the separator
-            sepIndex++;
-            oldSepIndex = sepIndex;
-            result.append((char)FULL_STOP);
-        }
-        if(result.length() > MAX_DOMAIN_NAME_LENGTH){
-            throw new StringPrepParseException("The output exceed the max allowed length.", StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR);
-        }
-        return result;
+        return IDNA2003.convertIDNToASCII(src, options);
     }
 
     
     /**
-     * This function implements the ToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: This function implements the ToUnicode operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * Unicode names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
@@ -552,7 +633,7 @@ public final class IDNA {
     }
     
     /**
-     * This function implements the ToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: This function implements the ToUnicode operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * Unicode names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
@@ -582,7 +663,7 @@ public final class IDNA {
     }
        
     /**
-     * Function that implements the ToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: Function that implements the ToUnicode operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
      * Unicode names. A label is an individual part of a domain name. Labels are usually
      * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
@@ -607,116 +688,11 @@ public final class IDNA {
      */
     public static StringBuffer convertToUnicode(UCharacterIterator src, int options)
            throws StringPrepParseException{
-        
-        boolean[] caseFlags = null;
-                
-        // the source contains all ascii codepoints
-        boolean srcIsASCII  = true;
-        // assume the source contains all LDH codepoints
-        //boolean srcIsLDH = true; 
-        
-        //get the options
-        //boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
-        
-        //int failPos = -1;
-        int ch;
-        int saveIndex = src.getIndex();
-        // step 1: find out if all the codepoints in src are ASCII  
-        while((ch=src.next())!= UCharacterIterator.DONE){
-            if(ch>0x7F){
-                srcIsASCII = false;
-            }/*else if((srcIsLDH = isLDHChar(ch))==false){
-                failPos = src.getIndex();
-            }*/
-        }
-        StringBuffer processOut;
-        
-        if(srcIsASCII == false){
-            try {
-                // step 2: process the string
-                src.setIndex(saveIndex);
-                processOut = singleton.namePrep.prepare(src,options);
-            } catch (StringPrepParseException ex) {
-                return new StringBuffer(src.getText());
-            }
-
-        }else{
-            //just point to source
-            processOut = new StringBuffer(src.getText());
-        }
-        // TODO:
-        // The RFC states that 
-        // <quote>
-        // ToUnicode never fails. If any step fails, then the original input
-        // is returned immediately in that step.
-        // </quote>
-        
-        //step 3: verify ACE Prefix
-        if(startsWithPrefix(processOut)){
-            StringBuffer decodeOut = null;
-
-            //step 4: Remove the ACE Prefix
-            String temp = processOut.substring(ACE_PREFIX.length,processOut.length());
-
-            //step 5: Decode using punycode
-            try {
-                decodeOut = Punycode.decode(new StringBuffer(temp),caseFlags);
-            } catch (StringPrepParseException e) {
-                decodeOut = null;
-            }
-        
-            //step 6:Apply toASCII
-            if (decodeOut != null) {
-                StringBuffer toASCIIOut = convertToASCII(decodeOut, options);
-    
-                //step 7: verify
-                if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
-//                    throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
-//                                             StringPrepParseException.VERIFICATION_ERROR); 
-                    decodeOut = null;
-                }
-            }
-
-            //step 8: return output of step 5
-             if (decodeOut != null) {
-                 return decodeOut;
-             }
-        }
-            
-//        }else{
-//            // verify that STD3 ASCII rules are satisfied
-//            if(useSTD3ASCIIRules == true){
-//                if( srcIsLDH == false /* source contains some non-LDH characters */
-//                    || processOut.charAt(0) ==  HYPHEN 
-//                    || processOut.charAt(processOut.length()-1) == HYPHEN){
-//    
-//                    if(srcIsLDH==false){
-//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
-//                                                 (failPos>0) ? (failPos-1) : failPos);
-//                    }else if(processOut.charAt(0) == HYPHEN){
-//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
-//                                                 processOut.toString(),0);
-//         
-//                    }else{
-//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
-//                                                 processOut.toString(),
-//                                                 processOut.length());
-//    
-//                    }
-//                }
-//            }
-//            // just return the source
-//            return new StringBuffer(src.getText());
-//        }  
-        
-        return new StringBuffer(src.getText());
+        return IDNA2003.convertToUnicode(src, options);
     }
     
     /**
-     * Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      *
      * <b>Note:</b> IDNA RFC specifies that a conformant application should divide a domain name
@@ -747,7 +723,7 @@ public final class IDNA {
     }
     
     /**
-     * Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      *
      * <b>Note:</b> IDNA RFC specifies that a conformant application should divide a domain name
@@ -778,7 +754,7 @@ public final class IDNA {
     }
     
     /**
-     * Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
+     * IDNA2003: Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
      * This operation is done on complete domain names, e.g: "www.example.com". 
      *
      * <b>Note:</b> IDNA RFC specifies that a conformant application should divide a domain name
@@ -804,37 +780,12 @@ public final class IDNA {
      * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(String src, int options)
-        throws StringPrepParseException{
-            
-        char[] srcArr = src.toCharArray();
-        StringBuffer result = new StringBuffer();
-        int sepIndex=0;
-        int oldSepIndex=0;
-        for(;;){
-            sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
-            if(label.length()==0 && sepIndex!=srcArr.length ){
-                throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
-            }
-            UCharacterIterator iter = UCharacterIterator.getInstance(label);
-            result.append(convertToUnicode(iter,options));
-            if(sepIndex==srcArr.length){
-                break;
-            }
-            // Unlike the ToASCII operation we don't normalize the label separators
-            result.append(srcArr[sepIndex]);
-            // increment the sepIndex to skip past the separator
-            sepIndex++;
-            oldSepIndex =sepIndex;
-        }
-        if(result.length() > MAX_DOMAIN_NAME_LENGTH){
-            throw new StringPrepParseException("The output exceed the max allowed length.", StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR);
-        }
-        return result;
+            throws StringPrepParseException{
+        return IDNA2003.convertIDNToUnicode(src, options);
     }
     
     /**
-     * Compare two IDN strings for equivalence.
+     * IDNA2003: Compare two IDN strings for equivalence.
      * This function splits the domain names into labels and compares them.
      * According to IDN RFC, whenever two labels are compared, they are 
      * considered equal if and only if their ASCII forms (obtained by 
@@ -860,19 +811,16 @@ public final class IDNA {
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @stable ICU 2.8
      */
-    //  TODO: optimize
     public static int compare(StringBuffer s1, StringBuffer s2, int options)
         throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
-        StringBuffer s1Out = convertIDNToASCII(s1.toString(),options);
-        StringBuffer s2Out = convertIDNToASCII(s2.toString(), options);
-        return compareCaseInsensitiveASCII(s1Out,s2Out);
+        return IDNA2003.compare(s1.toString(), s2.toString(), options);
     }
     
     /**
-     * Compare two IDN strings for equivalence.
+     * IDNA2003: Compare two IDN strings for equivalence.
      * This function splits the domain names into labels and compares them.
      * According to IDN RFC, whenever two labels are compared, they are 
      * considered equal if and only if their ASCII forms (obtained by 
@@ -898,18 +846,14 @@ public final class IDNA {
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @stable ICU 2.8
      */
-    //  TODO: optimize
-    public static int compare(String s1, String s2, int options)
-        throws StringPrepParseException{
+    public static int compare(String s1, String s2, int options) throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
-        StringBuffer s1Out = convertIDNToASCII(s1, options);
-        StringBuffer s2Out = convertIDNToASCII(s2, options);
-        return compareCaseInsensitiveASCII(s1Out,s2Out);
+        return IDNA2003.compare(s1, s2, options);
     }
     /**
-     * Compare two IDN strings for equivalence.
+     * IDNA2003: Compare two IDN strings for equivalence.
      * This function splits the domain names into labels and compares them.
      * According to IDN RFC, whenever two labels are compared, they are 
      * considered equal if and only if their ASCII forms (obtained by 
@@ -935,14 +879,11 @@ public final class IDNA {
      * @return 0 if the strings are equal, > 0 if i1 > i2 and < 0 if i1 < i2
      * @stable ICU 2.8
      */
-    //  TODO: optimize
     public static int compare(UCharacterIterator s1, UCharacterIterator s2, int options)
         throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
-        StringBuffer s1Out = convertIDNToASCII(s1.getText(), options);
-        StringBuffer s2Out = convertIDNToASCII(s2.getText(), options);
-        return compareCaseInsensitiveASCII(s1Out,s2Out);
+        return IDNA2003.compare(s1.getText(), s2.getText(), options);
     }
 }

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.normalizer;
@@ -25,6 +25,7 @@ public class TestAll extends TestGroup {
             "TestCanonicalIterator",
             "NormalizationMonkeyTest",
             "NormalizerRegressionTests",
+            "UTS46Test"
         });
     }
 
