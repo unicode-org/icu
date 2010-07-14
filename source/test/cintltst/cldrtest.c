@@ -1257,7 +1257,7 @@ static void TestLocaleDisplayPattern(void){
     ULocaleData *uld = ulocdata_open(uloc_getDefault(), &status);
 
     if(U_FAILURE(status)){
-        log_err("ulocdata_open error");
+        log_data_err("ulocdata_open error");
         return;
     }
     ulocdata_getLocaleDisplayPattern(uld, pattern, 32, &status);
@@ -1286,7 +1286,7 @@ static void TestCoverage(void){
     ULocaleData *uld = ulocdata_open(uloc_getDefault(), &status);
 
     if(U_FAILURE(status)){
-        log_err("ulocdata_open error");
+        log_data_err("ulocdata_open error");
         return;
     }
 

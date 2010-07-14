@@ -374,7 +374,7 @@ static void TestCurrencySign(void)
     if(U_SUCCESS(status) && str) {
         res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
         u_uastrcpy(res, "$1,234.56");
-        if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
+        if (u_strcmp(str, res) !=0) log_data_err("FAIL: Expected $1,234.56\n");
     } else {
         log_err_status(status, "Error formatting -> %s\n", u_errorName(status));
     }
@@ -395,7 +395,7 @@ static void TestCurrencySign(void)
     if(str) {
         res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
         u_uastrcpy(res, "-$1,234.56");
-        if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
+        if (u_strcmp(str, res) != 0) log_data_err("FAIL: Expected -$1,234.56\n");
         free(str);
         free(res);
     }

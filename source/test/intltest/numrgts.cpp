@@ -1241,7 +1241,7 @@ void NumberFormatRegressionTest::Test4074454(void)
         FieldPosition pos(FieldPosition::DONT_CARE);
         tempString = newFmt->format(3456.78, tempString, pos);
         if (tempString != UnicodeString("3,456.78 p'ieces"))
-            errln("Failed!  3456.78 p'ieces expected, but got : " + tempString);
+            dataerrln("Failed!  3456.78 p'ieces expected, but got : " + tempString);
     /*} catch (Exception foo) {
         errln("An exception was thrown for any inconsistent negative pattern.");
     }*/

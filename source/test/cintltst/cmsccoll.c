@@ -1513,7 +1513,7 @@ static void TestChMove(void) {
         }
     }
     else {
-        log_err("Can't open collator");
+        log_data_err("Can't open collator");
     }
     ucol_close(coll);
 }

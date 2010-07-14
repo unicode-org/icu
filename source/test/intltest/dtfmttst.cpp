@@ -3360,7 +3360,7 @@ void DateFormatTest::TestISOEra() {
  
     // create formatter 
     SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("GGG yyyy-MM-dd'T'HH:mm:ss'Z"), status); 
-    failure(status, "new SimpleDateFormat"); 
+    failure(status, "new SimpleDateFormat", TRUE); 
 
     for(int i=0; i < numData; i+=2) { 
         // create input string 
@@ -3368,7 +3368,7 @@ void DateFormatTest::TestISOEra() {
  
         // parse string to date 
         UDate dt1 = fmt1->parse(in, status); 
-        failure(status, "fmt->parse"); 
+        failure(status, "fmt->parse", TRUE); 
  
         // format date back to string 
         UnicodeString out; 
@@ -3378,7 +3378,7 @@ void DateFormatTest::TestISOEra() {
         // check that roundtrip worked as expected 
         UnicodeString expected = data[i+1]; 
         if (out != expected) { 
-            errln((UnicodeString)"FAIL: " + in + " -> " + out + " expected -> " + expected); 
+            dataerrln((UnicodeString)"FAIL: " + in + " -> " + out + " expected -> " + expected); 
         } 
     } 
  
