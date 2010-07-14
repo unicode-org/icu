@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2009, International Business Machines Corporation and
+ * Copyright (c) 1996-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -1043,7 +1043,7 @@ ucnv_flushCache ()
     UTRACE_ENTRY_OC(UTRACE_UCNV_FLUSH_CACHE);
 
     /* Close the default converter without creating a new one so that everything will be flushed. */
-    ucnv_close(u_getDefaultConverter(&status));
+    u_flushDefaultConverter();
 
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
@@ -1317,6 +1317,9 @@ ucnv_setDefaultName(const char *converterName) {
 
         /* The close may make the current name go away. */
         ucnv_close(cnv);
+  
+        /* reset the converter cache */
+        u_flushDefaultConverter();
     }
 #endif
 }
