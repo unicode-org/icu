@@ -1109,7 +1109,7 @@ BasicNormalizerTest::TestCompare() {
 
     const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
     if(U_FAILURE(errorCode) || !nfcImpl->ensureCanonIterData(errorCode)) {
-        errln("Normalizer2Factory::getNFCImpl().ensureCanonIterData() failed: %s",
+        dataerrln("Normalizer2Factory::getNFCImpl().ensureCanonIterData() failed: %s",
               u_errorName(errorCode));
         return;
     }
@@ -1776,7 +1776,7 @@ BasicNormalizerTest::TestCustomComp() {
     const Normalizer2 *customNorm2=
         Normalizer2::getInstance(loadTestData(errorCode), "testnorm",
                                  UNORM2_COMPOSE, errorCode);
-    if(errorCode.logIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
+    if(errorCode.logDataIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
         return;
     }
     for(int32_t i=0; i<LENGTHOF(pairs); ++i) {
@@ -1808,7 +1808,7 @@ BasicNormalizerTest::TestCustomFCC() {
     const Normalizer2 *customNorm2=
         Normalizer2::getInstance(loadTestData(errorCode), "testnorm",
                                  UNORM2_COMPOSE_CONTIGUOUS, errorCode);
-    if(errorCode.logIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
+    if(errorCode.logDataIfFailureAndReset("unable to load testdata/testnorm.nrm")) {
         return;
     }
     for(int32_t i=0; i<LENGTHOF(pairs); ++i) {

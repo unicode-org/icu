@@ -899,7 +899,7 @@ static void TestSigDigRounding()
 
     fmt=unum_open(UNUM_DECIMAL, NULL, 0, NULL /* "en_US"*/, NULL, &status);
     if (U_FAILURE(status)) {
-        log_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
+        log_data_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
         return;
     }
     unum_setAttribute(fmt, UNUM_LENIENT_PARSE, FALSE);
@@ -1007,7 +1007,7 @@ free(result);
             if(u_strcmp(result, temp1)==0)
                 log_verbose("Pass: Number Formatting using unum_formatDouble() padding Successful\n");
             else
-                log_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
+                log_data_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
             if(pos1.beginIndex == 13 && pos1.endIndex == 15)
                 log_verbose("Pass: Complete number formatting using unum_formatDouble() successful\n");
             else
@@ -1347,24 +1347,28 @@ static void TestRBNFFormat() {
     formats[0] = unum_open(UNUM_PATTERN_DECIMAL, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "unable to open decimal pattern -> %s\n", u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     formats[1] = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "unable to open spellout -> %s\n", u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     formats[2] = unum_open(UNUM_ORDINAL, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "unable to open ordinal -> %s\n", u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     formats[3] = unum_open(UNUM_DURATION, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "unable to open duration %s\n", u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
