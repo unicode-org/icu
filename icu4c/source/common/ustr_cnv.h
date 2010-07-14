@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_cnv.h
@@ -36,6 +36,13 @@ u_getDefaultConverter(UErrorCode *status);
  */
 U_CAPI void U_EXPORT2
 u_releaseDefaultConverter(UConverter *converter);
+
+/**
+ * Flush the default converter, if cached. 
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+u_flushDefaultConverter(void);
 
 #endif
 

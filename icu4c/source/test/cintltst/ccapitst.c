@@ -113,6 +113,7 @@ static void TestConvertExFromUTF8(void);
 static void TestConvertExFromUTF8_C5F0(void);
 static void TestConvertAlgorithmic(void);
        void TestDefaultConverterError(void);    /* defined in cctest.c */
+       void TestDefaultConverterSet(void);    /* defined in cctest.c */
 static void TestToUCountPending(void);
 static void TestFromUCountPending(void);
 static void TestDefaultName(void);
@@ -147,6 +148,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestConvertExFromUTF8_C5F0,  "tsconv/ccapitst/TestConvertExFromUTF8_C5F0");
     addTest(root, &TestConvertAlgorithmic,      "tsconv/ccapitst/TestConvertAlgorithmic");
     addTest(root, &TestDefaultConverterError,   "tsconv/ccapitst/TestDefaultConverterError");
+    addTest(root, &TestDefaultConverterSet,     "tsconv/ccapitst/TestDefaultConverterSet");
 #if !UCONFIG_NO_FILE_IO
     addTest(root, &TestToUCountPending,         "tsconv/ccapitst/TestToUCountPending");
     addTest(root, &TestFromUCountPending,       "tsconv/ccapitst/TestFromUCountPending");

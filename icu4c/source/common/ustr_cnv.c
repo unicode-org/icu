@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -79,6 +79,29 @@ u_releaseDefaultConverter(UConverter *converter)
         ucnv_close(converter);
     }
 }
+
+U_CAPI void U_EXPORT2
+u_flushDefaultConverter()
+{
+    UConverter *converter = NULL;
+    
+    if (gDefaultConverter != NULL) {
+        umtx_lock(NULL);
+        
+        /* need to check to make sure it wasn't taken out from under us */
+        if (gDefaultConverter != NULL) {
+            converter = gDefaultConverter;
+            gDefaultConverter = NULL;
+        }
+        umtx_unlock(NULL);
+    }
+
+    /* if the cache was populated, flush it */
+    if(converter != NULL) {
+         ucnv_close(converter);
+    }
+}
+
 
 /* conversions between char* and UChar* ------------------------------------- */
 
