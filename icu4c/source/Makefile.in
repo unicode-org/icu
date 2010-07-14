@@ -177,7 +177,7 @@ distclean-local: clean-local
 	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config $(top_builddir)/config/icu.pc $(top_builddir)/config/icu.pc.out
 	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk autom4te.cache
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
-	$(RMV) $(DISTY_DIR)
+	-$(RMV) dist
 
 check-local: xcheck-local
 	-$(RMV) test-local.xml
@@ -290,63 +290,5 @@ update-windows-makefiles: config.status
 	@echo Please check over the changes carefully before checking them in.
 
 # For building a source distribution.
-DISTY_DIR=dist
-DISTY_TMP=dist/tmp
-DISTY_ICU=$(DISTY_TMP)/icu
-DISTY_DATA=$(DISTY_ICU)/source/data
-DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone
-DISTY_RMDIR=$(DISTY_RMV:%=$(DISTY_DATA)/%)
-DISTY_IN=$(DISTY_DATA)/in
-
-SVNTOP=$(top_srcdir)/..
-SVNDOT=$(SVNTOP)/.svn
-SVNVER=$(shell svnversion $(SVNTOP) | tr -cd 'a-zA-Z0-9')
-SVNURL=$(shell svn info $(SVNTOP) | grep '^URL:' | cut -d: -f2-)
-DISTY_VER=$(shell echo $(VERSION) | tr '.' '_' )
-DISTY_PREFIX=icu4c
-DISTY_FILE_DIR=$(shell pwd)/$(DISTY_DIR)
-DISTY_FILE_TGZ=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-src-$(DISTY_VER)-r$(SVNVER).tgz
-DISTY_FILE_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-src-$(DISTY_VER)-r$(SVNVER).zip
-DISTY_DOC_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-docs-$(DISTY_VER)-r$(SVNVER).zip
-DISTY_DAT=$(firstword $(wildcard data/out/tmp/icudt$(SO_TARGET_VERSION_MAJOR)*.dat))
-
-DISTY_FILES_SRC=$(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP)
-DISTY_FILES=$(DISTY_FILES_SRC) $(DISTY_DOC_ZIP)
-
-$(SVNDOT):
-	@echo "ERROR: 'dist' will not work unless the parent of the top_srcdir ( $(SVNTOP) ) is checked out from svn, and svn is installed."
-	false
-
-$(DISTY_FILE_DIR):
-	$(MKINSTALLDIRS) $(DISTY_FILE_DIR)
-
-$(DISTY_TMP):
-	$(MKINSTALLDIRS) $(DISTY_TMP)
-
-$(DISTY_DOC_ZIP): $(SVNDOT) $(DOCZIP) $(DISTY_FILE_DIR)
-	cp $(DOCZIP) $(DISTY_DOC_ZIP)
-
-$(DISTY_DAT): all-recursive
-
-$(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP): $(SVNDOT) $(DISTY_DAT) $(DISTY_TMP)
-	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
-	$(MKINSTALLDIRS) $(DISTY_TMP)
-	svn export -r $(shell echo $(SVNVER) | tr -d 'a-zA-Z' ) $(SVNURL) "$(DISTY_TMP)/icu"
-	$(RMV) $(DISTY_RMDIR)
-	$(MKINSTALLDIRS) $(DISTY_IN)
-	cp $(DISTY_DAT) $(DISTY_IN)
-	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
-	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
-	ls -l $(DISTY_FILE)
-
-dist-local: $(DISTY_FILES)
-
-distcheck: distcheck-tgz
-
-DISTY_CHECK=$(DISTY_TMP)/check
-
-distcheck-tgz: $(DISTY_FILE_TGZ)
-	@echo Checking $(DISTY_FILE_TGZ)
-	@-$(RMV) $(DISTY_CHECK)
-	@$(MKINSTALLDIRS) $(DISTY_CHECK)
-	@(cd $(DISTY_CHECK) && tar xfpz $(DISTY_FILE_TGZ) && cd icu/source && $(SHELL) ./configure $(DISTCHECK_CONFIG_OPTIONS) && $(MAKE) check $(DISTCHECK_MAKE_OPTIONS) ) && (echo "!!! PASS: $(DISTY_FILE_TGZ)" )
+distcheck dist-local:
+	$(MAKE) -C . -f config/dist.mk srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $@
