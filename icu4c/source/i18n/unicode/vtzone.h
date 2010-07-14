@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and         *
+* Copyright (C) 2007-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -30,7 +30,9 @@ class UVector;
  * With the <code>VTimeZone</code> instance created from the ID, you can write out the rule
  * in RFC2445 VTIMEZONE format.  Also, you can create a <code>VTimeZone</code> instance
  * from RFC2445 VTIMEZONE data stream, which allows you to calculate time
- * zone offset by the rules defined by the data.<br><br>
+ * zone offset by the rules defined by the data. Or, you can create a
+ * <code>VTimeZone</code> from any other ICU <code>BasicTimeZone</code>.
+ * <br><br>
  * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to
  * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
  * do nothing with MIME encoding.
@@ -86,6 +88,16 @@ public:
      * @stable ICU 3.8
      */
     static VTimeZone* createVTimeZoneByID(const UnicodeString& ID);
+
+    /**
+     * Create a <code>VTimeZone</code> instance using a basic time zone.
+     * @param basicTZ The basic time zone instance
+     * @param status Output param to filled in with a success or an error.
+     * @return A <code>VTimeZone</code> object initialized by the basic time zone.
+     * @draft ICU 4.6
+     */
+    static VTimeZone* createVTimeZoneFromBasicTimeZone(const BasicTimeZone& basicTZ,
+                                                       UErrorCode &status);
 
     /**
      * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data

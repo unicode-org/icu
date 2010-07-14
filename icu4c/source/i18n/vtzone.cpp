@@ -1064,8 +1064,39 @@ VTimeZone::createVTimeZoneByID(const UnicodeString& ID) {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *bundle = NULL;
     const UChar* versionStr = NULL;
-    int32_t len;
-    bundle = ures_openDirect(NULL, "zoneinfo", &status);
+    int32_t len = 0;
+    bundle = ures_openDirect(NULL, "zoneinfo64", &status);
+    versionStr = ures_getStringByKey(bundle, "TZVersion", &len, &status);
+    if (U_SUCCESS(status)) {
+        vtz->icutzver.setTo(versionStr, len);
+    }
+    ures_close(bundle);
+    return vtz;
+}
+
+VTimeZone*
+VTimeZone::createVTimeZoneFromBasicTimeZone(const BasicTimeZone& basic_time_zone, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    VTimeZone *vtz = new VTimeZone();
+    if (vtz == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    vtz->tz = (BasicTimeZone *)basic_time_zone.clone();
+    if (vtz->tz == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete vtz;
+        return NULL;
+    }
+    vtz->tz->getID(vtz->olsonzid);
+
+    // Set ICU tzdata version
+    UResourceBundle *bundle = NULL;
+    const UChar* versionStr = NULL;
+    int32_t len = 0;
+    bundle = ures_openDirect(NULL, "zoneinfo64", &status);
     versionStr = ures_getStringByKey(bundle, "TZVersion", &len, &status);
     if (U_SUCCESS(status)) {
         vtz->icutzver.setTo(versionStr, len);
@@ -2580,4 +2611,3 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
-
