@@ -1,5 +1,5 @@
 #!/usr/bin/qsh
-#   Copyright (C) 2000-2009, International Business Machines
+#   Copyright (C) 2000-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -30,7 +30,7 @@ export QSH
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 #****************************************************************************
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML nrm NRM'
 data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 #****************************************************************************
