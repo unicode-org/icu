@@ -358,6 +358,7 @@ UTS46::process(const UnicodeString &src,
             if(c==0x2d) {  // hyphen
                 if(i==(labelStart+3) && srcArray[i-1]==0x2d) {
                     // "??--..." is Punycode or forbidden.
+                    ++i;  // '-' was copied to dest already
                     break;
                 }
                 if(i==labelStart) {
@@ -370,7 +371,9 @@ UTS46::process(const UnicodeString &src,
                 }
             } else if(c==0x2e) {  // dot
                 if(isLabel) {
-                    break;  // Replacing with U+FFFD can be complicated for toASCII.
+                    // Replacing with U+FFFD can be complicated for toASCII.
+                    ++i;  // '.' was copied to dest already
+                    break;
                 }
                 if(toASCII) {
                     // Permit an empty label at the end but not elsewhere.

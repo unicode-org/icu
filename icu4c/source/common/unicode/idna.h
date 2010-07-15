@@ -51,6 +51,7 @@ public:
      * Returns an IDNA instance which implements UTS #46.
      * Returns an unmodifiable instance, owned by the caller.
      * Cache it for multiple operations, and delete it when done.
+     * The instance is thread-safe, that is, it can be used concurrently.
      *
      * UTS #46 defines Unicode IDNA Compatibility Processing,
      * updated to the latest version of Unicode and compatible with both
@@ -109,7 +110,7 @@ public:
     /**
      * Converts a single domain name label into its Unicode form for human-readable display.
      * If any processing step fails, then info.hasErrors() will be TRUE.
-     * The domain name might be modified according to the types of errors.
+     * The label might be modified according to the types of errors.
      *
      * The UErrorCode indicates an error only in exceptional cases,
      * such as a U_MEMORY_ALLOCATION_ERROR.
