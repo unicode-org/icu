@@ -673,7 +673,9 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
       printf("ERROR: baseName can't be null.\n");
       return FALSE;
     } else {
-      strcpy(this->basePath, baseName);
+      if ((char *)this->basePath != baseName) {
+        strcpy(this->basePath, baseName);
+      }
     }
 
     char * saveBaseLoc = baseName+strlen(baseName);
