@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2001-2007, International Business Machines
+# Copyright (C) 2001-2010, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -15,7 +15,7 @@
 
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML nrm NRM'
 
 usage()
 {
