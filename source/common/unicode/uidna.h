@@ -102,6 +102,7 @@ typedef struct UIDNA UIDNA;  /**< C typedef for struct UIDNA. @draft ICU 4.6 */
  * Returns a UIDNA instance which implements UTS #46.
  * Returns an unmodifiable instance, owned by the caller.
  * Cache it for multiple operations, and uidna_close() it when done.
+ * The instance is thread-safe, that is, it can be used concurrently.
  *
  * For details about the UTS #46 implementation see the IDNA C++ class in idna.h.
  *
@@ -216,7 +217,7 @@ uidna_labelToASCII(const UIDNA *idna,
 /**
  * Converts a single domain name label into its Unicode form for human-readable display.
  * If any processing step fails, then pInfo->errors will be non-zero.
- * The domain name might be modified according to the types of errors.
+ * The label might be modified according to the types of errors.
  *
  * The UErrorCode indicates an error only in exceptional cases,
  * such as a U_MEMORY_ALLOCATION_ERROR.
@@ -404,14 +405,14 @@ enum {
     /**
      * A domain name label is longer than 63 bytes.
      * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
-     * This is only checked in ToASCII operations, and only if the UIDNA_USE_STD3_RULES is set.
+     * This is only checked in ToASCII operations, and only if the output label is all-ASCII.
      * @draft ICU 4.6
      */
     UIDNA_ERROR_LABEL_TOO_LONG=2,
     /**
      * A domain name is longer than 255 bytes in its storage form.
      * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
-     * This is only checked in ToASCII operations, and only if the UIDNA_USE_STD3_RULES is set.
+     * This is only checked in ToASCII operations, and only if the output domain name is all-ASCII.
      * @draft ICU 4.6
      */
     UIDNA_ERROR_DOMAIN_NAME_TOO_LONG=4,
