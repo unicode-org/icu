@@ -835,7 +835,9 @@ public class SimpleDateFormat extends DateFormat {
         final boolean COMMONLY_USED = true;
         final int maxIntCount = Integer.MAX_VALUE;
         final int bufstart = buf.length();
-
+        TimeZone tz = cal.getTimeZone();
+        long date = cal.getTimeInMillis();
+        
         // final int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
         int patternCharIndex = -1;
         if ('A' <= ch && ch <= 'z') {
@@ -959,9 +961,9 @@ public class SimpleDateFormat extends DateFormat {
             if (count < 4) {
                 // "z", "zz", "zzz"
                 zoneString = formatData.getZoneStringFormat()
-                    .getSpecificShortString(cal, COMMONLY_USED);
+                    .getSpecificShortString(tz, date, COMMONLY_USED);
             } else {
-                zoneString = formatData.getZoneStringFormat().getSpecificLongString(cal);
+                zoneString = formatData.getZoneStringFormat().getSpecificLongString(tz, date);
             }
             if (zoneString != null && zoneString.length() != 0) {
                 buf.append(zoneString);
@@ -1012,10 +1014,10 @@ public class SimpleDateFormat extends DateFormat {
             if (count == 1) {
                 // "v"
                 zoneString = formatData.getZoneStringFormat()
-                    .getGenericShortString(cal, COMMONLY_USED);
+                    .getGenericShortString(tz, date, COMMONLY_USED);
             } else if (count == 4) {
                 // "vvvv"
-                zoneString = formatData.getZoneStringFormat().getGenericLongString(cal);
+                zoneString = formatData.getZoneStringFormat().getGenericLongString(tz, date);
             }
             if (zoneString != null && zoneString.length() != 0) {
                 buf.append(zoneString);
@@ -1073,10 +1075,10 @@ public class SimpleDateFormat extends DateFormat {
             if (count == 1) {
                 // "V"
                 zoneString = formatData.getZoneStringFormat()
-                    .getSpecificShortString(cal, !COMMONLY_USED);
+                    .getSpecificShortString(tz, date, !COMMONLY_USED);
             } else if (count == 4) {
                 // "VVVV"
-                zoneString = formatData.getZoneStringFormat().getGenericLocationString(cal);
+                zoneString = formatData.getZoneStringFormat().getGenericLocationString(tz,date);
             }
             if (zoneString != null && zoneString.length() != 0) {
                 buf.append(zoneString);
