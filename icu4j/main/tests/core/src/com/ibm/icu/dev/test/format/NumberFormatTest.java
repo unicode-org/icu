@@ -26,6 +26,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat;
@@ -1650,11 +1651,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String formatedBigDecimal = nf.format(iValue);
         String formattedDouble = nf.format(iValue.doubleValue());
         if (!equalButForTrailingZeros(formatedBigDecimal, formattedDouble)) {
+
             errln("Failure at: " + iValue + " (" + iValue.doubleValue() + ")"
                   + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
                   + ",\tRounding-increment: " + nf.getRoundingIncrement()
                   + ",\tdouble: " + formattedDouble
                   + ",\tBigDecimal: " + formatedBigDecimal);
+                  
         } else {
             logln("Value: " + iValue
                   + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
@@ -1699,6 +1702,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int len1 = formatted.length();
         char ch;
         while (len1 > 0 && ((ch = formatted.charAt(len1-1)) == '0' || ch == '.')) --len1;
+        if (len1==1 && ((ch = formatted.charAt(len1-1)) == '-')) --len1;
         return formatted.substring(0,len1);
     }
 
@@ -2648,5 +2652,28 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("NumberFormat.format() should return the same result - text1="
                     + text1 + " text2=" + text2);
         }
+    }
+    
+    /*
+     * Testing rounding to negative zero problem
+     * reported by ticket#7609
+     */
+    public void TestNegZeroRounding() {    
+  
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(); 
+        df.setRoundingMode(MathContext.ROUND_HALF_UP); 
+        df.setMinimumFractionDigits(1); 
+        df.setMaximumFractionDigits(1); 
+
+        System.out.println(df.format(-0.01)); 
+        //will print -0.0, and the DecimalFormat support 
+        //in JDK will result in -0.0 when used with 
+        //setRoundingMode(RoundingMode.HALF_UP);
+        
+        df.setRoundingIncrement(0.1);         
+        
+        System.out.println(df.format(-0.01)); 
+        // will print 0.0, but: 
+        
     }
 }
