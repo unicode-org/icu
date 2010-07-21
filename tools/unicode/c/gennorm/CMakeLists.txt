@@ -3,5 +3,7 @@
 #
 # created on: 2010jun03
 # created by: Markus W. Scherer
+# edited on: 2010jul20
+# edited by: Stuart G. Gill
 add_executable(gennorm gennorm.c store.c)
-target_link_libraries(gennorm libicuuc.so libicutu.so)
+target_link_libraries(gennorm icuuc icutu)

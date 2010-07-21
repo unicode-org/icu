@@ -3,5 +3,7 @@
 #
 # created on: 2010jun03
 # created by: Markus W. Scherer
+# edited on: 2010jul20
+# edited by: Stuart G. Gill
 add_executable(genpname genpname.cpp)
-target_link_libraries(genpname libicuuc.so libicutu.so)
+target_link_libraries(genpname icuuc icutu)
