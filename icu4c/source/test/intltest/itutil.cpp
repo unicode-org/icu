@@ -44,9 +44,23 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
 {
     if (exec) logln("TestSuite Utilities: ");
     switch (index) {
-        CASE(0, UObjectTest); 
-        CASE(1, ErrorCodeTest);
-        case 2:
+        CASE(0, MultithreadTest);
+        CASE(1, StringTest);
+        CASE(2, UnicodeStringTest);
+        CASE(3, LocaleTest);
+        CASE(4, CharIterTest);
+        CASE(5, UObjectTest);
+        CASE(6, UnicodeTest);
+        CASE(7, ResourceBundleTest);
+        CASE(8, NewResourceBundleTest);
+        CASE(9, PUtilTest);
+        CASE(10, UVector32Test);
+        CASE(11, UVectorTest);
+        CASE(12, UTextTest);
+        CASE(13, LocaleAliasTest);
+        CASE(14, UnicodeSetTest);
+        CASE(15, ErrorCodeTest);
+        case 16:
             name = "LocalPointerTest";
             if (exec) {
                 logln("TestSuite LocalPointerTest---"); logln();
@@ -54,20 +68,6 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest(*test, par);
             }
             break;
-        CASE(3, StringTest); 
-        CASE(4, UnicodeStringTest); 
-        CASE(5, CharIterTest); 
-        CASE(6, UTextTest); 
-        CASE(7, UnicodeSetTest);
-        CASE(8, UnicodeTest); 
-        CASE(9, UVector32Test); 
-        CASE(10, UVectorTest); 
-        CASE(11, PUtilTest); 
-        CASE(12, LocaleTest); 
-        CASE(13, ResourceBundleTest); 
-        CASE(14, NewResourceBundleTest); 
-        CASE(15, LocaleAliasTest); 
-        CASE(16, MultithreadTest); 
         default: name = ""; break; //needed to end loop
     }
 }
