@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -165,6 +165,7 @@ enum {
     UNI_5_0,
     UNI_5_1,
     UNI_5_2,
+    UNI_6_0,
     UNI_VER_COUNT
 };
 
@@ -181,7 +182,8 @@ unicodeVersions[]={
     { 4, 1, 0, 0 },
     { 5, 0, 0, 0 },
     { 5, 1, 0, 0 },
-    { 5, 2, 0, 0 }
+    { 5, 2, 0, 0 },
+    { 6, 0, 0, 0 }
 };
 
 static int32_t ucdVersion=UNI_5_2;
@@ -1220,6 +1222,11 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
         0, 5,
         sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
     };
+    static AlgorithmicRange cjkExtD={
+        0x2b740, 0x2b81d,
+        0, 5,
+        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
+    };
 
     static char jamo[]=
         "HANGUL SYLLABLE \0"
@@ -1266,6 +1273,9 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
     /* number of ranges of algorithmic names */
     if(!storeOptions->storeNames) {
         countAlgRanges=0;
+    } else if(ucdVersion>=UNI_6_0) {
+        /* Unicode 6.0 and up has 6 ranges including CJK Extension D */
+        countAlgRanges=6;
     } else if(ucdVersion>=UNI_5_2) {
         /* Unicode 5.2 and up has 5 ranges including CJK Extension C */
         countAlgRanges=5;
@@ -1349,6 +1359,19 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
     if(countAlgRanges>=5) {
         if(pData!=NULL) {
             udata_writeBlock(pData, &cjkExtC, sizeof(AlgorithmicRange));
+            udata_writeString(pData, prefix, PREFIX_LENGTH);
+            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
+                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            }
+        } else {
+            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
+        }
+    }
+
+    /* range 5: cjk extension d */
+    if(countAlgRanges>=6) {
+        if(pData!=NULL) {
+            udata_writeBlock(pData, &cjkExtD, sizeof(AlgorithmicRange));
             udata_writeString(pData, prefix, PREFIX_LENGTH);
             if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
                 udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);

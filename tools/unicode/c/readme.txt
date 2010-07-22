@@ -19,9 +19,8 @@ There are autoconf makefiles (Makefile.in) and Visual C++ project files (.vcproj
 in the subfolders. They are copied over from the ICU source tree and will not
 work without modifications. However, I started to use CMake (CMakeLists.txt)
 which is much simpler, and if it works well enough then I plan to just
-delete the old makefiles and project files. The CMake files will currently
-work only on Linux, just because I hardcoded the ICU library filenames
-(e.g., libicuuc.so).
+delete the old makefiles and project files. The CMake files should
+work on Linux and MacOS X.
 I should use more variables to make the CMake files more portable, and should
 use ICU's installed icu-config or Makefile.inc to get the values for these
 variables.

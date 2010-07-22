@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (c) 2003-2005, International Business Machines
+# Copyright (c) 2003-2010, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # Author: Alan Liu
@@ -14,11 +14,12 @@
 # ================================================
 
 # ================================================
-# Non-enumerated Properties
+# Miscellaneous Properties
 # ================================================
+scx; Script_Extensions
 
 # ================================================
-# Enumerated Non-Binary Properties
+# Enumerated Properties
 # ================================================
 
 # lccc(c)=ccc(NFD(c)[0])
