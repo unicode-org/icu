@@ -2163,28 +2163,28 @@ void RBBITest::TestUnicodeFiles() {
     RuleBasedBreakIterator  *bi;
     UErrorCode               status = U_ZERO_ERROR;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    bi =  (RuleBasedBreakIterator *)BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("GraphemeBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getDefault(), status);
+    bi =  (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("WordBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    bi =  (RuleBasedBreakIterator *)BreakIterator::createSentenceInstance(Locale::getEnglish(), status);
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("SentenceBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
+    bi =  (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("LineBreakTest.txt", bi);
