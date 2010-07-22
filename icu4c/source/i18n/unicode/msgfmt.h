@@ -259,60 +259,34 @@ class DateFormat;
  * arguments, or arguments that are not of the right class for the
  * specified format, a failing UErrorCode result is set.
  * <P>
- * For more sophisticated patterns, you can use a ChoiceFormat to get
- * output:
+ * <strong>Creating internationalized messages that include plural forms, you
+ * can use a PluralFormat:</strong>
  * <pre>
  * \code
- *     UErrorCode success = U_ZERO_ERROR;
- *     MessageFormat* form("The disk \"{1}\" contains {0}.", success);
- *     double filelimits[] = {0,1,2};
- *     UnicodeString filepart[] = {"no files","one file","{0,number} files"};
- *     ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3);
- *     form.setFormat(1, *fileform); // NOT zero, see below
+ *  UErrorCode err = U_ZERO_ERROR;
+ *  UnicodeString t1("{0, plural, one{C''est # fichier} other{Ce sont # fichiers}} dans la liste.");
+ *  MessageFormat* msgFmt = new MessageFormat(t1, Locale("fr"), err);
+ *  if (U_FAILURE(err)) {
+ *      return err;
+ *  }
  *
- *     Formattable testArgs[] = {1273L, "MyDisk"};
+ *  Formattable args1[] = {(int32_t)0};
+ *  Formattable args2[] = {(int32_t)3};
+ *  FieldPosition ignore(FieldPosition::DONT_CARE);
+ *  UnicodeString result;
+ *  msgFmt->format(args1, 1, result, ignore, status);
+ *  cout << result << endl;
+ *  result.remove();
+ *  msgFmt->format(args2, 1, result, ignore, status);
+ *  cout << result << endl;
  *
- *     UnicodeString string;
- *     FieldPosition fpos = 0;
- *     cout << form.format(testArgs, 2, string, fpos, success) << endl;
- *
- *     // output, with different testArgs
- *     // output: The disk "MyDisk" contains no files.
- *     // output: The disk "MyDisk" contains one file.
- *     // output: The disk "MyDisk" contains 1,273 files.
+ *  // output, with different args
+ *  // output: C'est 0,0 fichier dans la liste.
+ *  // output: Ce sont 3 fichiers dans la liste."
  * \endcode
  * </pre>
- * You can either do this programmatically, as in the above example,
- * or by using a pattern (see ChoiceFormat for more information) as in:
- * <pre>
- * \code
- *    form.applyPattern(
- *      "There {0,choice,0#are no files|1#is one file|1<are {0,number,integer} files}.");
- * \endcode
- * </pre>
- * <P>
- * <EM>Note:</EM> As we see above, the string produced by a ChoiceFormat in
- * MessageFormat is treated specially; occurences of '{' are used to
- * indicated subformats, and cause recursion.  If you create both a
- * MessageFormat and ChoiceFormat programmatically (instead of using
- * the string patterns), then be careful not to produce a format that
- * recurses on itself, which will cause an infinite loop.
- * <P>
- * <EM>Note:</EM> Subformats are numbered by their order in the pattern.
- * This is <EM>not</EM> the same as the argumentIndex.
- * <pre>
- * \code
- *    For example: with "abc{2}def{3}ghi{0}...",
- *
- *    format0 affects the first variable {2}
- *    format1 affects the second variable {3}
- *    format2 affects the second variable {0}
- * \endcode
- * </pre>
- *
- * <p><em>User subclasses are not supported.</em> While clients may write
- * subclasses, such code will not necessarily work and will not be
- * guaranteed to work stably from release to release.
+ * Please check PluralFormat and PluralRules for details.
+ * </P>
  */
 class U_I18N_API MessageFormat : public Format {
 public:
