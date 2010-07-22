@@ -66,7 +66,9 @@ class Hashtable;
  *     need not worry about the plural cases of a language. On the flip side,
  *     the localizer does not have to specify the plural cases; he can simply
  *     use the predefined keywords. The whole plural formatting of messages can
- *     be done using localized patterns from resource bundles.
+ *     be done using localized patterns from resource bundles. For predefined plural
+ *     rules, see CLDR <i>Language Plural Rules</i> page at 
+ *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  * </ul>
  * </p>
  * <h4>Usage of <code>PluralFormat</code></h4>
@@ -88,7 +90,8 @@ class Hashtable;
  * space characters. Each clause assigns the message <code><i>message</i></code>
  * to the plural case identified by <code><i>caseKeyword</i></code>.
  * </p><p>
- * You always have to define a message text for the default plural case
+ * There are 6 predefined casekeyword in ICU - 'zero', 'one', 'two', 'few', 'many' and
+ * 'other'. You always have to define a message text for the default plural case
  * "<code>other</code>" which is contained in every rule set. If the plural
  * rules of the <code>PluralFormat</code> object do not contain a plural case
  * identified by <code><i>caseKeyword</i></code>, U_DEFAULT_KEYWORD_MISSING
@@ -121,6 +124,7 @@ class Hashtable;
  * </p>
  * Example
  * <pre>
+ * \code
  * UErrorCode status = U_ZERO_ERROR;
  * MessageFormat* msgFmt = new MessageFormat(UnicodeString("{0, plural,
  *   one{{0, number, C''est #,##0.0#  fichier}} other {Ce sont # fichiers}} dans la liste."),
@@ -137,24 +141,25 @@ class Hashtable;
  * result.remove();
  * msgFmt->format(args2, 1, result, ignore, status);
  * cout << result << endl;
+ * \endcode
  * </pre>
  * Produces the output:<br>
  * <code>C'est 0,0 fichier dans la liste.</code><br>
- * <code>Ce sont 3 fichiers dans la liste."</code>
+ * <code>Ce sont 3 fichiers dans la liste.</code>
  * <p>
  * <strong>Note:</strong><br>
  *   Currently <code>PluralFormat</code>
  *   does not make use of quotes like <code>MessageFormat</code>.
  *   If you use plural format strings with <code>MessageFormat</code> and want
- *   to use a quote sign "<code>'</code>", you have to write "<code>''</code>".
+ *   to use a quote sign <code>'</code>, you have to write <code>''</code>.
  *   <code>MessageFormat</code> unquotes this pattern and  passes the unquoted
  *   pattern to <code>PluralFormat</code>. It's a bit trickier if you use
  *   nested formats that do quoting. In the example above, we wanted to insert
- *   "<code>'</code>" in the number format pattern. Since
+ *   <code>'</code> in the number format pattern. Since
  *   <code>NumberFormat</code> supports quotes, we had to insert
- *   "<code>''</code>". But since <code>MessageFormat</code> unquotes the
+ *   <code>''</code>. But since <code>MessageFormat</code> unquotes the
  *   pattern before it gets passed to <code>PluralFormat</code>, we have to
- *   double these quotes, i.e. write "<code>''''</code>".
+ *   double these quotes, i.e. write <code>''''</code>.
  * </p>
  * <h4>Defining Custom Plural Rules</h4>
  * <p>If you need to use <code>PluralFormat</code> with custom rules, you can
