@@ -293,7 +293,7 @@ private:
      *                             failure code upon return.
      * @param useLastResortData    determine if use last resort data
      */
-    void initialize(const Locale& locale, UErrorCode& success);
+    void initialize(const Locale& locale, UErrorCode& success, UBool useLastResortData = FALSE);
 
     /**
      * Initialize the symbols with default values.
