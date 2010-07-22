@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2009, International Business Machines Corporation and
+# Copyright (c) 2002-2010, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -13,17 +13,6 @@
 # binary data file.
 #
 # See usage note below.
-#
-# TODO: The Property[Value]Alias.txt files state that they can support
-# more than 2 names per property|value.  Currently (Unicode 3.2) there
-# are always 1 or 2 names.  If more names were supported, presumably
-# the format would be something like:
-#    nv        ; Numeric_Value
-#    nv        ; Value_Numerique
-# CURRENTLY, this script assumes that there are 1 or two names.  Any
-# duplicates it sees are flagged as an error.  If multiple aliases
-# appear in a future version of Unicode, modify this script to support
-# that.
 #
 # NOTE: As of ICU 2.6, this script has been modified to know about the
 # pseudo-property gcm/General_Category_Mask, which corresponds to the
@@ -70,23 +59,17 @@ my $propNA = 0;
 my $valueNA = 0;
 
 #----------------------------------------------------------------------
-# Top level property keys for binary, enumerated, string, and double props
-my @TOP     = qw( _bp _ep _sp _dp _mp );
+# Top level property keys for binary, enumerated, string, double, and other props
+my @TOP     = qw( _bp _ep _sp _dp _op );
 
-# This hash governs how top level properties are grouped into output arrays.
-#my %TOP_PROPS = ( "VALUED"   => [ '_bp', '_ep' ],
-#                  "NO_VALUE" => [ '_sp', '_dp' ] );m
-#my %TOP_PROPS = ( "BINARY"   => [ '_bp' ],
-#                  "ENUMERATED" => [ '_ep' ],
-#                  "STRING" => [ '_sp' ],
-#                  "DOUBLE" => [ '_dp' ] );
-my %TOP_PROPS = ( ""   => [ '_bp', '_ep', '_sp', '_dp', '_mp' ] );
+# Top level properties are grouped into output arrays.
+my %TOP_PROPS = ( ""   => [ '_bp', '_ep', '_sp', '_dp', '_op' ] );
 
 my %PROP_TYPE = (Binary => "_bp",
                  String => "_sp",
                  Double => "_dp",
                  Enumerated => "_ep",
-                 Bitmask => "_mp");
+                 Other => "_op");
 #----------------------------------------------------------------------
 
 # Properties that are unsupported in ICU
@@ -1079,7 +1062,7 @@ sub read_uscript {
 # @param a filename for uchar.h
 #
 # @return a ref to a hash.  The keys of the hash are '_bp' for binary
-# properties, '_ep' for enumerated properties, '_dp'/'_sp'/'_mp' for
+# properties, '_ep' for enumerated properties, '_dp'/'_sp'/'_op' for
 # double/string/mask properties, and 'gc', 'gcm', 'bc', 'blk',
 # 'ea', 'dt', 'jt', 'jg', 'lb', or 'nt' for corresponding property
 # value aliases.  The values of the hash are subhashes.  The subhashes
@@ -1137,9 +1120,13 @@ sub read_uchar {
 
             elsif (m|^\s*/\*\*\s*(\w+)\s+property\s+(\w+)|i) {
                 die "Error: Unmatched tag $submode" if ($submode);
-                die "Error: Unrecognized UProperty comment: $_"
-                    unless (exists $PROP_TYPE{$1});
-                $key = $PROP_TYPE{$1};
+                #die "Error: Unrecognized UProperty comment: $_"
+                #    unless (exists $PROP_TYPE{$1});
+                if (exists $PROP_TYPE{$1}) {
+                    $key = $PROP_TYPE{$1};
+                } else {
+                    $key = $PROP_TYPE{"Other"};
+                }
                 $submode = $2;
             }
         }

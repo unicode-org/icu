@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2006-2009, International Business Machines
+# Copyright (c) 2006-2010, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ########################################################################
 #   file name:      SyntheticPropertyValueAliases.txt
@@ -24,9 +24,7 @@
 
 # Script (sc)
 
-sc ; Batk ; Batk 
 sc ; Blis ; Blis 
-sc ; Brah ; Brah 
 sc ; Cirt ; Cirt 
 sc ; Cyrs ; Cyrs 
 sc ; Egyd ; Egyd 
@@ -41,7 +39,6 @@ sc ; Jpan ; Jpan
 sc ; Latf ; Latf 
 sc ; Latg ; Latg 
 sc ; Lina ; Lina 
-sc ; Mand ; Mand 
 sc ; Maya ; Maya 
 sc ; Mero ; Mero 
 sc ; Moon ; Moon 
@@ -66,3 +63,17 @@ sc ; Zmth ; Zmth
 sc ; Zsym ; Zsym
 
 sc ; Nkgb ; Nkgb
+
+sc ; Bass ; Bass
+sc ; Dupl ; Dupl
+sc ; Elba ; Elba
+sc ; Gran ; Gran
+sc ; Kpel ; Kpel
+sc ; Loma ; Loma
+sc ; Mend ; Mend
+sc ; Merc ; Merc
+sc ; Narb ; Narb
+sc ; Nbat ; Nbat
+sc ; Palm ; Palm
+sc ; Sind ; Sind
+sc ; Wara ; Wara

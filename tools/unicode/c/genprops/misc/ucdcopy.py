@@ -1,5 +1,5 @@
 #!/usr/bin/python2.4
-# Copyright (c) 2009 International Business Machines
+# Copyright (c) 2009-2010 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #   file name:  ucdcopy.py
@@ -120,6 +120,7 @@ _unidata_files = {
   "NormalizationCorrections.txt": shutil.copy,
   "PropertyAliases.txt": shutil.copy,
   "PropertyValueAliases.txt": shutil.copy,
+  "ScriptExtensions.txt": shutil.copy,
   "SpecialCasing.txt": shutil.copy,
   "UnicodeData.txt": shutil.copy,
 
