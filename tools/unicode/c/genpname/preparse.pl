@@ -1120,8 +1120,6 @@ sub read_uchar {
 
             elsif (m|^\s*/\*\*\s*(\w+)\s+property\s+(\w+)|i) {
                 die "Error: Unmatched tag $submode" if ($submode);
-                #die "Error: Unrecognized UProperty comment: $_"
-                #    unless (exists $PROP_TYPE{$1});
                 if (exists $PROP_TYPE{$1}) {
                     $key = $PROP_TYPE{$1};
                 } else {
