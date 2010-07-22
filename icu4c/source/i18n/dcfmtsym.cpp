@@ -60,7 +60,7 @@ DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
     : UObject(),
     locale()
 {
-    initialize(locale, status);
+    initialize(locale, status, TRUE);
 }
 
 // -------------------------------------
@@ -139,7 +139,7 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 // -------------------------------------
 
 void
-DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status)
+DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool useLastResortData)
 {
     static const char *gNumberElementKeys[kFormatSymbolCount] = {
         "decimal",
@@ -178,8 +178,10 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status)
     UResourceBundle *numberElementsRes = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
 
     if (U_FAILURE(status)) {
-        status = U_USING_FALLBACK_WARNING;
-        initialize();
+        if ( useLastResortData ) {
+            status = U_USING_FALLBACK_WARNING;
+            initialize();
+        }
         return;
     } else {
 
