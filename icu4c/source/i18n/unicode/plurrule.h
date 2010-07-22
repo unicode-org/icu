@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation and
+* Copyright (C) 2008-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -100,6 +100,12 @@ class RuleParser;
  * }
  * else if ( ... )
  * </pre>
+ * <strong>Note:</strong><br>
+ *  <p>
+ *   ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
+ *   For these predefined rules, see CLDR page at 
+ *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+ * </p>
  */
 class U_I18N_API PluralRules : public UObject {
 public:
