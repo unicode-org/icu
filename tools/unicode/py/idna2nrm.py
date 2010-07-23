@@ -24,17 +24,18 @@ replacements = [
   (re.compile(r"005B..0060    ; disallowed"), "# 005B..0060 (allow ASCII)"),
   (re.compile(r"007B..00A0    ; disallowed                                 #"),
    "0080..00A0    >FFFD  # (allow ASCII)"),
+  # Several versions of avoiding circular FFFD>FFFD mappings,
+  # depending on the version of the input file.
+  (re.compile(r"FFFD          ; disallowed"), "# FFFD (avoid circular mapping)"),
+  (re.compile(r"\.\.FFFD"), "..FFFC"),
+  (re.compile(r"(FFF[^E])\.\.FFFF"), "\1..FFFC"),
   # Normal transformations.
   (re.compile(r"; disallowed   "), ">FFFD"),
   (re.compile(r"; ignored      "), ">"),
   (re.compile(r"^([^;]+)  ; valid"), r"# \1valid"),
   (re.compile(r"; mapped     ; "), ">"),
   (re.compile(r"^([^;]+)  ; deviation"), r"# \1deviation"),
-  (re.compile(r"   +(\#  [^\#]+)$"), r"  \1"),
-  # Two versions of avoiding circular FFFD>FFFD mappings,
-  # depending on the version of the input file.
-  (re.compile(r"\.\.FFFD"), "..FFFC"),
-  (re.compile(r"(FFF[^E])\.\.FFFF"), "\1..FFFC")
+  (re.compile(r"   +(\#  [^\#]+)$"), r"  \1")
 ]
 
 in_file = open("IdnaMappingTable.txt", "r")
@@ -61,8 +62,8 @@ for line in in_file:
 # they are handled in code.
 # Deviation characters are also handled in code.
 #
-# A circular mapping FFFD>FFFD is avoided by rewriting the line that contains
-# ..FFFD to contain ..FFFC instead.
+# A circular mapping FFFD>FFFD is avoided by
+# rewriting the line that contains FFFD.
 #
 # Use this file as the second gennorm2 input file after nfc.txt.
 # ================================================
