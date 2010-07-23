@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -466,7 +466,9 @@ generateData(const char *dataDir, UBool csource) {
         pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
                         haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
         if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "genprops: unable to create data memory, %s\n", u_errorName(errorCode));
+            fprintf(stderr, "genprops: udata_create(%s, %s.%s) failed - %s\n",
+                    dataDir, DATA_NAME, DATA_TYPE,
+                    u_errorName(errorCode));
             exit(errorCode);
         }
 
