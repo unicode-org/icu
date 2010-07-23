@@ -144,7 +144,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #endif
         case 24: name = "TestDictRules";
             if (exec) TestDictRules();                         break;
-
+        case 25: name = "TestBug5532";
+            if (exec) TestBug5532();                           break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -4696,6 +4697,50 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     }
 #endif
 }
+
+
+//  Bug 5532.  UTF-8 based UText fails in dictionary code.
+//             This test checks the initial patch,
+//             which is to just keep it from crashing.  Correct word boundaries
+//             await a proper fix to the dictionary code.
+//
+void RBBITest::TestBug5532(void)  {
+   // Text includes a mixture of Thai and Latin.
+   const unsigned char utf8Data[] = {
+           0xE0u, 0xB8u, 0x82u, 0xE0u, 0xB8u, 0xB2u, 0xE0u, 0xB8u, 0xA2u, 0xE0u,
+           0xB9u, 0x80u, 0xE0u, 0xB8u, 0x84u, 0xE0u, 0xB8u, 0xA3u, 0xE0u, 0xB8u, 
+           0xB7u, 0xE0u, 0xB9u, 0x88u, 0xE0u, 0xB8u, 0xADu, 0xE0u, 0xB8u, 0x87u,
+           0xE0u, 0xB9u, 0x80u, 0xE0u, 0xB8u, 0xA5u, 0xE0u, 0xB9u, 0x88u, 0xE0u,
+           0xB8u, 0x99u, 0xE0u, 0xB8u, 0x8Bu, 0xE0u, 0xB8u, 0xB5u, 0xE0u, 0xB8u,
+           0x94u, 0xE0u, 0xB8u, 0xB5u, 0x20u, 0x73u, 0x69u, 0x6Du, 0x20u, 0x61u, 
+           0x75u, 0x64u, 0x69u, 0x6Fu, 0x2Fu, 0x20u, 0x4Du, 0x4Fu, 0x4Fu, 0x4Eu, 
+           0x20u, 0x65u, 0x63u, 0x6Cu, 0x69u, 0x70u, 0x73u, 0x65u, 0x20u, 0xE0u, 
+           0xB8u, 0xA3u, 0xE0u, 0xB8u, 0xB2u, 0xE0u, 0xB8u, 0x84u, 0xE0u, 0xB8u, 
+           0xB2u, 0x20u, 0x34u, 0x37u, 0x30u, 0x30u, 0x20u, 0xE0u, 0xB8u, 0xA2u, 
+           0xE0u, 0xB8u, 0xB9u, 0xE0u, 0xB9u, 0x82u, 0xE0u, 0xB8u, 0xA3u, 0x00};
+
+    UErrorCode status = U_ZERO_ERROR;
+    UText utext=UTEXT_INITIALIZER;
+    utext_openUTF8(&utext, (const char *)utf8Data, -1, &status);
+    TEST_ASSERT_SUCCESS(status);
+
+    BreakIterator *bi = BreakIterator::createWordInstance(Locale("th"), status);
+    TEST_ASSERT_SUCCESS(status);
+    bi->setText(&utext, status);
+    TEST_ASSERT_SUCCESS(status);
+
+    int32_t breakCount = 0;
+    int32_t previousBreak = -1;
+    for (bi->first(); bi->next() != BreakIterator::DONE; breakCount++) {
+        // For now, just make sure that the break iterator doesn't hang.
+        TEST_ASSERT(previousBreak < bi->current());
+        previousBreak = bi->current();
+    }
+    TEST_ASSERT(breakCount > 0);
+    delete bi;
+    utext_close(&utext);
+}
+
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
