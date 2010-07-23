@@ -1562,6 +1562,30 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         return (reverse ? startPos : endPos);
     }
     
+    // Bug 5532.  The dictionary code will crash if the input text is UTF-8
+    //      because native indexes are different from UTF-16 indexes.
+    //      Temporary hack: skip dictionary lookup for UTF-8 encoded text.
+    //      It wont give the right breaks, but it's better than a crash.
+    //
+    //      Check the type of the UText by checking its pFuncs field, which
+    //      is UText's function dispatch table.  It will be the same for all
+    //      UTF-8 UTexts and different for any other UText type.
+    //
+    //      We have no other type of UText available with non-UTF-16 native indexing.
+    //      This whole check will go away once the dictionary code is fixed.
+    static const void *utext_utf8Funcs;
+    if (utext_utf8Funcs == NULL) {
+        // Cache the UTF-8 UText function pointer value.
+        UErrorCode status = U_ZERO_ERROR;
+        UText tempUText = UTEXT_INITIALIZER; 
+        utext_openUTF8(&tempUText, NULL, 0, &status);
+        utext_utf8Funcs = tempUText.pFuncs;
+        utext_close(&tempUText);
+    }
+    if (fText->pFuncs == utext_utf8Funcs) {
+        return (reverse ? startPos : endPos);
+    }
+
     // Starting from the starting point, scan towards the proposed result,
     // looking for the first dictionary character (which may be the one
     // we're on, if we're starting in the middle of a range).
