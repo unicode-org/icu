@@ -1779,7 +1779,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     }
     vtzFromBasic = VTimeZone::createVTimeZoneFromBasicTimeZone(*simpleTZ, status);
     if (U_FAILURE(status) || vtzFromBasic == NULL) {
-        errln("File %s, line %d, failed with status = %s", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("File %s, line %d, failed with status = %s", __FILE__, __LINE__, u_errorName(status));
         goto end_basic_tz_test;
     }
 
