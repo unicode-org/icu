@@ -4726,17 +4726,19 @@ void RBBITest::TestBug5532(void)  {
 
     BreakIterator *bi = BreakIterator::createWordInstance(Locale("th"), status);
     TEST_ASSERT_SUCCESS(status);
-    bi->setText(&utext, status);
-    TEST_ASSERT_SUCCESS(status);
+    if (U_SUCCESS(status)) {
+        bi->setText(&utext, status);
+        TEST_ASSERT_SUCCESS(status);
 
-    int32_t breakCount = 0;
-    int32_t previousBreak = -1;
-    for (bi->first(); bi->next() != BreakIterator::DONE; breakCount++) {
-        // For now, just make sure that the break iterator doesn't hang.
-        TEST_ASSERT(previousBreak < bi->current());
-        previousBreak = bi->current();
+        int32_t breakCount = 0;
+        int32_t previousBreak = -1;
+        for (bi->first(); bi->next() != BreakIterator::DONE; breakCount++) {
+            // For now, just make sure that the break iterator doesn't hang.
+            TEST_ASSERT(previousBreak < bi->current());
+            previousBreak = bi->current();
+        }
+        TEST_ASSERT(breakCount > 0);
     }
-    TEST_ASSERT(breakCount > 0);
     delete bi;
     utext_close(&utext);
 }

@@ -101,11 +101,14 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     else {
          dataerrln("ERROR: PluralFormat constructor failed! - [0]%s [1]%s", u_errorName(status[0]), u_errorName(status[1]));
     }
-    plFmt[2]= new PluralFormat(locale, status[2]);
-    if ( U_SUCCESS(status[2]) ) {
-        *plFmt[1] = *plFmt[2];
+    delete plFmt[0];
+
+    status[0] = U_ZERO_ERROR;
+    plFmt[0]= new PluralFormat(locale, status[0]);
+    if ( U_SUCCESS(status[0]) ) {
+        *plFmt[1] = *plFmt[0];
         if (plFmt[1]!=NULL) {
-            if ( *plFmt[1] != *plFmt[2] ) {
+            if ( *plFmt[1] != *plFmt[0] ) {
                 errln("ERROR:  assignment operator test failed!");
             }
         }
@@ -115,22 +118,21 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     }
 
     if ( U_SUCCESS(status[1]) ) {
-        plFmt[3] = (PluralFormat*) plFmt[1]->clone();
+        plFmt[2] = (PluralFormat*) plFmt[1]->clone();
 
         if (plFmt[1]!=NULL) {
-            if ( *plFmt[1] != *plFmt[3] ) {
+            if ( *plFmt[1] != *plFmt[2] ) {
                 errln("ERROR:  clone function test failed!");
             }
         }
         delete plFmt[1];
-        delete plFmt[3];
+        delete plFmt[2];
     }
     else {
          dataerrln("ERROR: PluralFormat clone failed! - %s", u_errorName(status[1]));
     }
 
     delete plFmt[0];
-    delete plFmt[2];
     delete numFmt;
     delete plRules;
 
