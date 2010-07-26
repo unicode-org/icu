@@ -2445,8 +2445,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.t
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/ucdterms.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
