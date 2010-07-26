@@ -141,8 +141,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/UTS46Test.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
