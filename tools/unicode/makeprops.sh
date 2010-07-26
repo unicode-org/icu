@@ -5,6 +5,11 @@
 #
 # Invoke as
 #   ./makeprops.sh path/to/ICU/src/tree path/to/ICU/build/tree
+#
+# Prerequisite:
+# In a Unicode version upgrade, pnames.icu must be generated first so that the
+# tools here see new property names and property value names.
+# See (ICU)/source/data/unidata/changes.txt.
 ICU_SRC=$1
 ICU_BLD=$2
 source ./makedefs.sh
@@ -34,5 +39,12 @@ $ICU_BLD/bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfkc.txt    
 $ICU_BLD/bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfkc.txt nfkc_cf.txt -u $UNICODE_VERSION
 $ICU_BLD/bin/gennorm2 -o $SRC_DATA_IN/uts46.nrm   -s $UNIDATA/norm2 nfc.txt uts46.txt    -u $UNICODE_VERSION
 
+# Let genuca see the latest normalization data.
+cp $SRC_DATA_IN/nfc.nrm $BLD_DATA_FILES
+
 # UCA
 $UNITOOLS_BLD/c/genuca/genuca -d $SRC_DATA_IN/coll -s $UNIDATA -i $BLD_DATA_FILES
+# If this is the first pass through rebuilding ICU data files,
+# then genuca has not yet seen the new core properties (e.g., case mappings)
+# from genprops --csource. Rebuild ICU and then the UCA data (makeuca.sh).
+# See (ICU)/source/data/unidata/changes.txt.
