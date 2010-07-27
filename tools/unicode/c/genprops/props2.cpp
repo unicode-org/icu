@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  props2.c
+*   file name:  props2.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/unistr.h"
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -32,10 +33,14 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+U_NAMESPACE_USE
+
 /* data --------------------------------------------------------------------- */
 
 static UNewTrie *newTrie;
 UPropsVectors *pv;
+
+static UnicodeString *scriptExtensions;
 
 /* miscellaneous ------------------------------------------------------------ */
 
@@ -45,7 +50,7 @@ trimTerminateField(char *s, char *limit) {
     s=(char *)u_skipWhitespace(s);
 
     /* trim trailing whitespace */
-    while(s<limit && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+    while(s<limit && U_IS_INV_WHITESPACE(*(limit-1))) {
         --limit;
     }
     *limit=0;
@@ -76,6 +81,11 @@ static void U_CALLCONV
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode);
+
+static void U_CALLCONV
+scriptExtensionsLineFn(void *context,
+                       char *fields[][2], int32_t fieldCount,
+                       UErrorCode *pErrorCode);
 
 static void
 parseMultiFieldFile(char *filename, char *basename,
@@ -415,12 +425,14 @@ initAdditionalProperties() {
         fprintf(stderr, "error: upvec_open() failed - %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
+    scriptExtensions=new UnicodeString;
 }
 
 U_CFUNC void
 exitAdditionalProperties() {
     utrie_close(newTrie);
     upvec_close(pv);
+    delete scriptExtensions;
 }
 
 U_CFUNC void
@@ -436,21 +448,9 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
-    /*
-     * UTR 24 says:
-     * Section 2:
-     *   "Common - For characters that may be used
-     *             within multiple scripts,
-     *             or any unassigned code points."
-     *
-     * Section 4:
-     *   "The value COMMON is the default value,
-     *    given to all code points that are not
-     *    explicitly mentioned in the data file."
-     *
-     * COMMON==USCRIPT_COMMON==0 - nothing to do
-     */
     parseSingleEnumFile(filename, basename, suffix, &scriptSingleEnum, pErrorCode);
+
+    parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
 
     parseSingleEnumFile(filename, basename, suffix, &blockSingleEnum, pErrorCode);
 
@@ -565,6 +565,135 @@ ageLineFn(void *context,
         fprintf(stderr, "genprops error: unable to set character age: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
+}
+
+/* ScriptExtensions.txt ----------------------------------------------------- */
+
+static void U_CALLCONV
+scriptExtensionsLineFn(void *context,
+                       char *fields[][2], int32_t fieldCount,
+                       UErrorCode *pErrorCode) {
+    uint32_t start, end;
+    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in ScriptExtensions.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+
+    /* parse list of script codes */
+    UnicodeString codes;  // vector of 16-bit UScriptCode values
+    char *s=fields[1][0];
+    for(;;) {
+        // skip whitespace before each token
+        s=(char *)u_skipWhitespace(s);
+        if(*s==0 || *s==';') {
+            break;
+        }
+        // skip non-whitespace, non-terminator characters to find the token limit
+        char *limit=s;
+        char c;
+        do {
+            c=*++limit;
+        } while(!U_IS_INV_WHITESPACE(c) && c!=0 && c!=';');
+        // NUL-terminated this token
+        *limit=0;
+        // convert the token (script property value alias) into a UScriptCode value
+        int32_t value=u_getPropertyValueEnum(UCHAR_SCRIPT, s);
+        if(value<0) {
+            fprintf(stderr, "genprops: syntax error in ScriptExtensions.txt field 1 at %s\n", s);
+            exit(U_INVALID_FORMAT_ERROR);
+        }
+        // Insertion sort into the list of script codes.
+        for(int32_t i=0;; ++i) {
+            if(i<codes.length()) {
+                if(value<codes[i]) {
+                    codes.insert(i, (UChar)value);
+                    break;
+                } else if(value==codes[i]) {
+                    fprintf(stderr,
+                            "genprops: duplicate script code in ScriptExtensions.txt field 1 at %s "
+                            "for U+%04lx..U+%04lx\n",
+                            s, (long)start, (long)end);
+                    exit(U_INVALID_FORMAT_ERROR);
+                }
+                // continue while value>codes[i]
+            } else {
+                codes.append((UChar)value);
+                break;
+            }
+        }
+        if(c==0 || c==';') {
+            // the token ended at a terminator
+            break;
+        } else {
+            // the token ended at U_IS_INV_WHITESPACE(c), continue after c
+            s=limit+1;
+        }
+    }
+    int32_t length=codes.length();
+    if(length==0) {
+        fprintf(stderr,
+                "genprops: missing values in ScriptExtensions.txt field 1 "
+                "for U+%04lx..U+%04lx\n",
+                (long)start, (long)end);
+        exit(U_INVALID_FORMAT_ERROR);
+    }
+    // Set bit 15 on the last script code, for termination.
+    codes.setCharAt(length-1, (UChar)(codes[length-1]|0x8000));
+    // Find this list of codes in the Script_Extensions data so far, or add this list.
+    int32_t index=scriptExtensions->indexOf(codes);
+    if(index<0) {
+        index=scriptExtensions->length();
+        scriptExtensions->append(codes);
+    }
+    // Modify the Script data for each of the start..end code points
+    // to include the Script_Extensions index.
+    do {
+        uint32_t scriptX=upvec_getValue(pv, (UChar32)start, 0)&UPROPS_SCRIPT_X_MASK;
+        // Find the next code point that has a different script value.
+        // We want to add the Script_Extensions index to the code point range start..next-1.
+        UChar32 next;
+        for(next=(UChar32)start+1;
+            next<=(UChar32)end && scriptX==(upvec_getValue(pv, next, 0)&UPROPS_SCRIPT_X_MASK);
+            ++next) {}
+        if(scriptX>=UPROPS_SCRIPT_X_WITH_COMMON) {
+            fprintf(stderr,
+                    "genprops: ScriptExtensions.txt has values for U+%04lx..U+%04lx "
+                    "which overlaps with a range including U+%04lx..U+%04lx\n",
+                    (long)start, (long)end, (long)start, (long)(next-1));
+            exit(U_INVALID_FORMAT_ERROR);
+        }
+        // Encode the (Script, Script_Extensions index) pair.
+        if(scriptX==USCRIPT_COMMON) {
+            scriptX=UPROPS_SCRIPT_X_WITH_COMMON|(uint32_t)index;
+        } else if(scriptX==USCRIPT_INHERITED) {
+            scriptX=UPROPS_SCRIPT_X_WITH_INHERITED|(uint32_t)index;
+        } else {
+            // Store an additional pair of 16-bit units for an unusual main Script code
+            // together with the Script_Extensions index.
+            UnicodeString codeIndexPair;
+            codeIndexPair.append((UChar)scriptX).append((UChar)index);
+            index=scriptExtensions->indexOf(codeIndexPair);
+            if(index<0) {
+                index=scriptExtensions->length();
+                scriptExtensions->append(codeIndexPair);
+            }
+            scriptX=UPROPS_SCRIPT_X_WITH_OTHER|(uint32_t)index;
+        }
+        if(index>UPROPS_SCRIPT_MASK) {
+            fprintf(stderr, "genprops: Script_Extensions indexes overflow bit field\n");
+            exit(U_BUFFER_OVERFLOW_ERROR);
+        }
+        // Write the (Script, Script_Extensions index) pair into
+        // the properties vector for start..next-1.
+        upvec_setValue(pv, (UChar32)start, (UChar32)(next-1),
+                        0, scriptX, UPROPS_SCRIPT_X_MASK, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            fprintf(stderr, "genprops error: unable to set Script_Extensions: %s\n", u_errorName(*pErrorCode));
+            exit(*pErrorCode);
+        }
+        start=next;
+    } while(start<=end);
 }
 
 /* DerivedNumericValues.txt ------------------------------------------------- */
@@ -719,7 +848,36 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
         fprintf(stderr, "genprops error: unable to serialize trie for additional properties: %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
-    if(p!=NULL) {
+
+    /* round up scriptExtensions to multiple of 4 bytes */
+    if(scriptExtensions->length()&1) {
+        scriptExtensions->append((UChar)0);
+    }
+
+    /* set indexes */
+    indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
+        indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+length/4;
+    indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
+    indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]=
+        indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
+    indexes[UPROPS_RESERVED_INDEX_7]=
+        indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]+scriptExtensions->length()/2;
+    indexes[UPROPS_RESERVED_INDEX_8]=indexes[UPROPS_RESERVED_INDEX_7];
+    indexes[UPROPS_DATA_TOP_INDEX]=indexes[UPROPS_RESERVED_INDEX_8];
+
+    indexes[UPROPS_MAX_VALUES_INDEX]=
+        (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
+        (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
+        (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
+    indexes[UPROPS_MAX_VALUES_2_INDEX]=
+        (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
+        (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
+        (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
+        (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
+        ((int32_t)U_DT_COUNT-1);
+
+    int32_t additionalPropsSize=4*(indexes[UPROPS_DATA_TOP_INDEX]-indexes[UPROPS_ADDITIONAL_TRIE_INDEX]);
+    if(p!=NULL && additionalPropsSize<=capacity) {
         if(beVerbose) {
             printf("size in bytes of additional props trie:%5u\n", (int)length);
         }
@@ -756,7 +914,7 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
                 if(U_FAILURE(errorCode)) {
                     fprintf(
                         stderr,
-                        "genbidi error: deleting lead surrogate code unit values failed - %s\n",
+                        "genprops error: deleting lead surrogate code unit values failed - %s\n",
                         u_errorName(errorCode));
                     exit(errorCode);
                 }
@@ -772,47 +930,33 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
                 "};\n\n");
 
             utrie2_close(trie2);
-        }
 
-        p+=length;
-        capacity-=length;
-
-        /* set indexes */
-        indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
-            indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+length/4;
-        indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
-        indexes[UPROPS_RESERVED_INDEX]=
-            indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
-
-        indexes[UPROPS_MAX_VALUES_INDEX]=
-            (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
-            (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
-            (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
-        indexes[UPROPS_MAX_VALUES_2_INDEX]=
-            (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
-            (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
-            (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
-            (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
-            ((int32_t)U_DT_COUNT-1);
-    }
-
-    if(p!=NULL && (pvCount*4)<=capacity) {
-        if(f!=NULL) {
             usrc_writeArray(f,
                 "static const uint32_t propsVectors[%ld]={\n",
                 pvArray, 32, pvCount,
                 "};\n\n");
             fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
             fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]);
+
+            usrc_writeArray(f,
+                "static const uint16_t scriptExtensions[%ld]={\n",
+                scriptExtensions->getBuffer(), 16, scriptExtensions->length(),
+                "};\n\n");
         } else {
-            uprv_memcpy(p, pvArray, pvCount*4);
+            p+=length;
+            length=pvCount*4;
+            uprv_memcpy(p, pvArray, length);
+
+            p+=length;
+            length=scriptExtensions->length()*2;
+            uprv_memcpy(p, scriptExtensions->getBuffer(), length);
         }
         if(beVerbose) {
             printf("number of additional props vectors:    %5u\n", (int)pvRows);
             printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
+            printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions->length());
         }
     }
-    length+=pvCount*4;
 
-    return length;
+    return additionalPropsSize;
 }

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,13 +34,13 @@ typedef struct {
 } Props;
 
 /* global flags */
-extern UBool beVerbose, haveCopyright;
+U_CFUNC UBool beVerbose, haveCopyright;
 
-extern const char *const
+U_CFUNC const char *const
 genCategoryNames[];
 
-/* properties vectors in props2.c */
-extern UPropsVectors *pv;
+/* properties vectors in props2.cpp */
+U_CFUNC UPropsVectors *pv;
 
 /* prototypes */
 U_CFUNC void
@@ -52,28 +52,28 @@ isToken(const char *token, const char *s);
 U_CFUNC int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
 
-extern void
+U_CFUNC void
 setUnicodeVersion(const char *v);
 
-extern void
+U_CFUNC void
 initStore(void);
 
-extern void
+U_CFUNC void
 exitStore(void);
 
-extern uint32_t
+U_CFUNC uint32_t
 makeProps(Props *p);
 
-extern void
+U_CFUNC void
 addProps(uint32_t c, uint32_t props);
 
-extern uint32_t
+U_CFUNC uint32_t
 getProps(uint32_t c);
 
-extern void
+U_CFUNC void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
-extern void
+U_CFUNC void
 generateData(const char *dataDir, UBool csource);
 
 /* props2.c */

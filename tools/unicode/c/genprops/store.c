@@ -41,7 +41,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 6 .
+The following is a description of format version 7 .
 
 Data contents:
 
@@ -74,8 +74,10 @@ Formally, the file contains the following structures:
     i4 additionalVectorsIndex; -- 32-bit unit index to the table of properties vectors
     i5 additionalVectorsColumns; -- number of 32-bit words per properties vector
 
-    i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table
-    i7..i9 reservedIndexes; -- reserved values; 0 for now
+    i6 scriptExtensionsIndex; -- 32-bit unit index to the Script_Extensions data
+    i7 reservedIndex7; -- 32-bit unit index to the top of the Script_Extensions data
+    i8 reservedIndex8; -- for now: i7, i8 and i9 have the same values
+    i9 dataTopIndex; -- size of the data file (number of 32-bit units after the header)
 
     i10 maxValues; -- maximum code values for vector word 0, see uprops.h (new in format version 3.1+)
     i11 maxValues2; -- maximum code values for vector word 2, see uprops.h (new in format version 3.2)
@@ -91,6 +93,20 @@ Formally, the file contains the following structures:
 
     AT serialized trie for additional properties (byte size: 4*(i4-i3))
     PV const uint32_t propsVectors[(i6-i4)/i5][i5]==uint32_t propsVectors[i6-i4];
+
+    SCX const uint16_t scriptExtensions[2*(i7-i6)];
+
+      SCX contains Script_Extensions lists and (Script code, Script_Extensions index) pairs.
+      A Script_Extensions list is a sequence of UScriptCode values in ascending order,
+      with the last code having bit 15 set for termination.
+      A (Script code, Script_Extensions index) pair is the main UScriptCode (Script value)
+      followed by the index of the Script_Extensions list.
+      If the propsVectors[] column 0 value indicates that there are Script_Extensions,
+      then the UPROPS_SCRIPT_MASK bit field is an index to either a list or a pair in SCX,
+      rather than the Script itself. The high bits in the UPROPS_SCRIPT_X_MASK fields
+      indicate whether the main Script value is Common or Inherited (and the index is to a list)
+      vs. another value (and the index is to a pair).
+      (See UPROPS_SCRIPT_X_WITH_COMMON etc. in uprops.h.)
 
 Trie lookup and properties:
 
@@ -206,6 +222,12 @@ Format version 6 became necessary because Unicode 5.2 adds fractions with
 denominators 9, 10 and 16, and it was easier to redesign the encoding of numeric
 types and values rather than add another variant to the previous format.
 
+--- Changes in format version 7 ---
+
+Unicode 6.0 adds Script_Extensions. For characters with script extensions data,
+the script code bits are an index into the new Script_Extensions array rather
+than a script code.
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -227,14 +249,14 @@ static UNewTrie *pTrie=NULL;
 
 /* -------------------------------------------------------------------------- */
 
-extern void
+U_CFUNC void
 setUnicodeVersion(const char *v) {
     UVersionInfo version;
     u_versionFromString(version, v);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
-extern void
+U_CFUNC void
 initStore() {
     pTrie=utrie_open(NULL, NULL, 40000, 0, 0, TRUE);
     if(pTrie==NULL) {
@@ -245,7 +267,7 @@ initStore() {
     initAdditionalProperties();
 }
 
-extern void
+U_CFUNC void
 exitStore() {
     utrie_close(pTrie);
     exitAdditionalProperties();
@@ -253,7 +275,7 @@ exitStore() {
 
 /* store a character's properties ------------------------------------------- */
 
-extern uint32_t
+U_CFUNC uint32_t
 makeProps(Props *p) {
     uint32_t den;
     int32_t type, value, exp, ntv;
@@ -327,7 +349,7 @@ makeProps(Props *p) {
         (ntv<<UPROPS_NUMERIC_TYPE_VALUE_SHIFT);
 }
 
-extern void
+U_CFUNC void
 addProps(uint32_t c, uint32_t x) {
     if(!utrie_set32(pTrie, (UChar32)c, x)) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
@@ -335,14 +357,14 @@ addProps(uint32_t c, uint32_t x) {
     }
 }
 
-extern uint32_t
+U_CFUNC uint32_t
 getProps(uint32_t c) {
     return utrie_get32(pTrie, (UChar32)c, NULL);
 }
 
 /* areas of same properties ------------------------------------------------- */
 
-extern void
+U_CFUNC void
 repeatProps(uint32_t first, uint32_t last, uint32_t x) {
     if(!utrie_setRange32(pTrie, (UChar32)first, (UChar32)(last+1), x, FALSE)) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
@@ -352,7 +374,7 @@ repeatProps(uint32_t first, uint32_t last, uint32_t x) {
 
 /* generate output data ----------------------------------------------------- */
 
-extern void
+U_CFUNC void
 generateData(const char *dataDir, UBool csource) {
     static int32_t indexes[UPROPS_INDEX_COUNT]={
         0, 0, 0, 0,

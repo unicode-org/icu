@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genprops.c
+*   file name:  genprops.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -39,6 +39,8 @@ U_CDECL_BEGIN
 U_CDECL_END
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
+U_NAMESPACE_USE
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
