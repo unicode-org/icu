@@ -5,5 +5,5 @@
 # created by: Markus W. Scherer
 # edited on: 2010jul20
 # edited by: Stuart G. Gill
-add_executable(genprops genprops.c props2.c store.c)
+add_executable(genprops genprops.cpp props2.cpp store.c)
 target_link_libraries(genprops icuuc icutu)
