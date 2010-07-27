@@ -475,6 +475,7 @@
 #define ubidi_setReorderingOptions U_ICU_ENTRY_POINT_RENAME(ubidi_setReorderingOptions)
 #define ubidi_writeReordered U_ICU_ENTRY_POINT_RENAME(ubidi_writeReordered)
 #define ubidi_writeReverse U_ICU_ENTRY_POINT_RENAME(ubidi_writeReverse)
+#define ubidi_getBaseDirection U_ICU_ENTRY_POINT_RENAME(ubidi_getBaseDirection)
 #define ublock_getCode U_ICU_ENTRY_POINT_RENAME(ublock_getCode)
 #define ubrk_close U_ICU_ENTRY_POINT_RENAME(ubrk_close)
 #define ubrk_countAvailable U_ICU_ENTRY_POINT_RENAME(ubrk_countAvailable)
