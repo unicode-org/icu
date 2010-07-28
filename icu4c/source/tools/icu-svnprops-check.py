@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-# Copyright (C) 2009, International Business Machines Corporation, Google and Others.
+# Copyright (C) 2009-2010, International Business Machines Corporation, Google and Others.
 # All rights reserved.
 
 #
@@ -142,6 +142,39 @@ def usage():
     print "usage: " + sys.argv[0] + " [-f | --fix] [-h | --help]"
 
     
+#
+#  UTF-8 file check.   For text files, add a charset to the mime-type if their contents are UTF-8
+#    file_name:        name of a text file.
+#    base_mime_type:   svn:mime-type property value from the auto-props file (no charset= part)
+#    actual_mime_type: existing svn:mime-type property value for the file.
+#    return:           svn:mime-type property value, with charset added when appropriate.
+#
+def check_utf8(file_name, base_mime_type, actual_mime_type):
+
+    # If the file already has a charset in its mime-type, don't make any change.
+
+    if actual_mime_type.find("charset=") > 0:
+        return actual_mime_type;
+
+    f = open(file_name, 'r')
+    bytes = f.read()
+    f.close()
+
+    if all(ord(byte) < 128 for byte in bytes):
+        # pure ASCII.
+        print "Pure ASCII " + file_name
+        return base_mime_type
+
+    try:
+        bytes.decode("UTF-8")
+    except UnicodeDecodeError:
+        print "warning: %s: not ASCII, not UTF-8" % file_name
+        return base_mime_type
+
+    # Append charset=utf-8.  Need to escape the ';' because it is ultimately going to a shell.
+    return base_mime_type + '\\;charset=utf-8'
+
+
 def main(argv):
     fix_problems = False;
     try:
@@ -179,6 +212,9 @@ def main(argv):
                 for propname, propval in props:
                     actual_propval = runCommand("svn propget --strict " + propname + " " + f)
                     #print propname + ": " + actual_propval
+                    if propname == "svn:mime-type" and propval.find("text/") == 0:
+                        # check for UTF-8 text files, should have svn:mime-type=text/something; charset=utf8
+                        propval = check_utf8(f, propval, actual_propval)
                     if not (propval == actual_propval or (propval == "" and actual_propval == "*")):
                         print "svn propset %s %s %s" % (propname, propval, f)
                         if fix_problems:
@@ -190,6 +226,7 @@ def main(argv):
                                 os.system("sed -i s/\r// " + f);
                             else:
                                 print f + " contains DOS CR characters."
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
