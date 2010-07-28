@@ -2250,7 +2250,16 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //  Scan through each test case, building up the string to be broken in testString,
     //   and the positions that should be boundaries in the breakPositions vector.
     //
+    int spin = 0;
     while (tokenMatcher.find()) {
+      	if(tokenMatcher.hitEnd()) {
+          /* Shouldnt Happen(TM).  This means we didn't find the symbols we were looking for.
+             This occurred when the text file was corrupt (wasn't marked as UTF-8)
+             and caused an infinite loop here on EBCDIC systems!
+          */
+          fprintf(stderr,"FAIL: hit end of file %s for the %8dth time- corrupt data file?\r", fileName, ++spin);
+          //	   return;
+      	}
         if (tokenMatcher.start(1, status) >= 0) {
             // Scanned a divide sign, indicating a break position in the test data.
             if (testString.length()>0) {

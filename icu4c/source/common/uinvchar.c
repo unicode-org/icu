@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -534,3 +534,51 @@ uprv_compareInvEbcdicAsAscii(const char *s1, const char *s2) {
         }
     }
 }
+
+
+U_INTERNAL uint8_t* U_EXPORT2
+uprv_aestrncpy(uint8_t *dst, const uint8_t *src, int32_t n)
+{
+  uint8_t *orig_dst = dst;
+
+  if(n==-1) { 
+    n = uprv_strlen((const char*)src)+1; /* copy NUL */
+  }
+  /* copy non-null */
+  while(*src && n>0) {
+    *(dst++) = asciiFromEbcdic[*(src++)];
+    n--;
+  }
+  /* pad */
+  while(n>0) {
+    *(dst++) = 0;
+    n--;
+  }
+  return orig_dst;
+}
+
+U_INTERNAL uint8_t* U_EXPORT2
+uprv_eastrncpy(uint8_t *dst, const uint8_t *src, int32_t n)
+{
+  uint8_t *orig_dst = dst;
+
+  if(n==-1) { 
+    n = uprv_strlen((const char*)src)+1; /* copy NUL */
+  }
+  /* copy non-null */
+  while(*src && n>0) {
+    char ch = ebcdicFromAscii[*(src++)];
+    if(ch == 0) {
+      ch = ebcdicFromAscii[0x3f]; /* questionmark (subchar) */
+    }
+    *(dst++) = ch;
+    n--;
+  }
+  /* pad */
+  while(n>0) {
+    *(dst++) = 0;
+    n--;
+  }
+  return orig_dst;
+}
+

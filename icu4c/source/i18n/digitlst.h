@@ -113,7 +113,7 @@ template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGI
  *
  *       digitList exponent = decNumber exponent + digit count
  *
- *    digitList, digits are chars, '0' - '9'
+ *    digitList, digits are platform invariant chars, '0' - '9'
  *    decNumber, digits are binary, one per byte, 0 - 9.
  *
  *       (decNumber library is configurable in how digits are stored, ICU has configured
@@ -174,6 +174,7 @@ public:
      *              inefficient, and the interaction with the exponent value is confusing.
      *              Best avoided.
      *              TODO:  remove this function once all use has been replaced.
+     *              TODO:  describe alternative to append()
      * @param digit The digit to be appended.
      */
     void append(char digit);
@@ -318,8 +319,28 @@ public:
     void     setCount(int32_t c);
     int32_t  getCount() const;
     
+    /**
+     * Set the digit in platform (invariant) format, from '0'..'9'
+     * @param i index of digit
+     * @param v digit value, from '0' to '9' in platform invariant format
+     */
     void     setDigit(int32_t i, char v);
+
+    /**
+     * Get the digit in platform (invariant) format, from '0'..'9' inclusive
+     * @param i index of digit
+     * @return invariant format of the digit
+     */
     char     getDigit(int32_t i);
+
+
+    /**
+     * Get the digit's value, as an integer from 0..9 inclusive.
+     * Note that internally this value is a decNumberUnit, but ICU configures it to be a uint8_t.
+     * @param i index of digit
+     * @return value of that digit
+     */
+    uint8_t     getDigitValue(int32_t i);
 
 
 private:
