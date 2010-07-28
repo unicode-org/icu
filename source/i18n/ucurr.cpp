@@ -875,9 +875,8 @@ collectCurrencyNames(const char* locale,
             // Add currency ISO code.
             (*currencySymbols)[*total_currency_symbol_count].IsoCode = iso;
             (*currencySymbols)[*total_currency_symbol_count].currencyName = (UChar*)uprv_malloc(sizeof(UChar)*3);
-            (*currencySymbols)[*total_currency_symbol_count].currencyName[0] = iso[0];
-            (*currencySymbols)[*total_currency_symbol_count].currencyName[1] = iso[1];
-            (*currencySymbols)[*total_currency_symbol_count].currencyName[2] = iso[2];
+            // Must convert iso[] into Unicode
+            u_charsToUChars(iso, (*currencySymbols)[*total_currency_symbol_count].currencyName, 3);
             (*currencySymbols)[*total_currency_symbol_count].flag = NEED_TO_BE_DELETED;
             (*currencySymbols)[(*total_currency_symbol_count)++].currencyNameLen = 3;
 

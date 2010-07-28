@@ -14,11 +14,17 @@
 #include "unicode/selfmt.h"
 #include "stdio.h"
 
-const UnicodeString SIMPLE_PATTERN = UnicodeString("feminine {feminineVerbValue} other{otherVerbValue}");
+#define SIMPLE_PATTERN_STRING                                                    "feminine {feminineVerbValue} other{otherVerbValue}"
+
+
 #define SELECT_PATTERN_DATA 4
 #define SELECT_SYNTAX_DATA 10
 #define EXP_FORMAT_RESULT_DATA 12
 #define NUM_OF_FORMAT_ARGS 3
+
+#define VERBOSE_INT(x) {logln("%s:%d:  int %s=%d\n", __FILE__, __LINE__, #x, (x));}
+#define VERBOSE_USTRING(text) {logln("%s:%d: UnicodeString %s(%d) = ", __FILE__, __LINE__, #text, text.length()); logln(UnicodeString(" \"")+text+UnicodeString("\";"));}
+
 
 void SelectFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -36,6 +42,8 @@ void SelectFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
  */
 void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
 {
+  const UnicodeString SIMPLE_PATTERN(SIMPLE_PATTERN_STRING); /* Don't static init this! */
+
     UnicodeString patternTestData[SELECT_PATTERN_DATA] = {
         UNICODE_STRING_SIMPLE("fem {femValue} other{even}"),
         UNICODE_STRING_SIMPLE("other{odd or even}"),
@@ -99,6 +107,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     };
 
     UErrorCode status = U_ZERO_ERROR;
+    VERBOSE_USTRING(SIMPLE_PATTERN);
     SelectFormat* selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     if (U_FAILURE(status)) {
         dataerrln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exitting");
@@ -109,6 +118,8 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     logln("SelectFormat Unit Test : Testing SelectFormat pattern syntax.");
     for (int32_t i=0; i<SELECT_SYNTAX_DATA; ++i) {
         status = U_ZERO_ERROR;
+        VERBOSE_INT(i);
+        VERBOSE_USTRING(checkSyntaxData[i]);
         selFmt->applyPattern(checkSyntaxData[i], status);
         if( status!= expErrorCodes[i] ){
             errln("\nERROR: Unexpected result - SelectFormat Unit Test failed to detect syntax error with pattern: "+checkSyntaxData[i]+" and expected status="+ u_errorName(expErrorCodes[i]) + " and resulted status="+u_errorName(status));
@@ -188,6 +199,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
  */
 void SelectFormatTest::selectFormatAPITest(/*char *par*/)
 {
+  const UnicodeString SIMPLE_PATTERN(SIMPLE_PATTERN_STRING); /* Don't static init this! */
     int numOfConstructors =3;
     UErrorCode status[3];
     SelectFormat* selFmt[3] = { NULL, NULL, NULL };
@@ -200,7 +212,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
 
     selFmt[0]= new SelectFormat(SIMPLE_PATTERN, status[0]);
     if ( U_FAILURE(status[0]) ) {
-        errln("ERROR: SelectFormat API test constructor with pattern and status failed!");
+      errln("ERROR: SelectFormat API test constructor with pattern and status failed! with %s\n", u_errorName(status[0]));
         return;
     }
 

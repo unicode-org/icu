@@ -2841,6 +2841,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
     const CurrencyAmount* curramt = NULL;
     for (uint32_t i = 0; i < sizeof(formats)/sizeof(formats[0]); ++i) {
         UnicodeString stringToBeParsed = ctou(formats[i]);
+        logln(UnicodeString("stringToBeParsed: ") + stringToBeParsed);
         Formattable result;
         UErrorCode status = U_ZERO_ERROR;
         curFmt->parseObject(stringToBeParsed, result, status);
@@ -2961,12 +2962,8 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
             dataerrln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k + " - " + u_errorName(status));
             continue;
         }
-        // TODO: need to be UChar*
         UChar currencyCode[4];
-        currencyCode[0] = currencyISOCode[0];
-        currencyCode[1] = currencyISOCode[1];
-        currencyCode[2] = currencyISOCode[2];
-        currencyCode[3] = currencyISOCode[3];
+        u_charsToUChars(currencyISOCode, currencyCode, 4);
         numFmt->setCurrency(currencyCode, status);
         if (U_FAILURE(status)) {
             delete numFmt;
