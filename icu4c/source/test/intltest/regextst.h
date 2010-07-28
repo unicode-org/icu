@@ -46,10 +46,11 @@ public:
 
     // The following functions are internal to the regexp tests.
     virtual void assertUText(const char *expected, UText *actual, const char *file, int line);
+    virtual void assertUTextInvariant(const char *invariant, UText *actual, const char *file, int line);
     virtual UBool doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int32_t line);
     virtual UBool doRegexLMTestUTF8(const char *pat, const char *text, UBool looking, UBool match, int32_t line);
     virtual void regex_find(const UnicodeString &pat, const UnicodeString &flags,
-        const UnicodeString &input, int32_t line);
+                            const UnicodeString &input, const char *srcPath, int32_t line);
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int32_t line);
     virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, const char *charset, UErrorCode &status);

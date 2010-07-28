@@ -47,6 +47,7 @@
 
 /**
  * This is the zero digit.  The base for the digits returned by getDigit()
+ * Note that it is the platform invariant digit, and is not Unicode.
  */
 #define kZero '0'
 
@@ -327,6 +328,14 @@ DigitList::getDigit(int32_t i) {
     int32_t count = fDecNumber->digits;
     U_ASSERT(i<count);
     return fDecNumber->lsu[count-i-1] + '0';
+}
+
+// copied from DigitList::getDigit()
+uint8_t
+DigitList::getDigitValue(int32_t i) {
+    int32_t count = fDecNumber->digits;
+    U_ASSERT(i<count);
+    return fDecNumber->lsu[count-i-1];
 }
 
 // -------------------------------------

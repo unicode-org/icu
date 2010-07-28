@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -82,5 +82,24 @@ uprv_compareInvEbcdicAsAscii(const char *s1, const char *s2);
 #else
 #   error Unknown charset family!
 #endif
+
+/**
+ * Copy EBCDIC to ASCII
+ * @internal
+ * @see uprv_strncpy
+ */
+U_INTERNAL uint8_t* U_EXPORT2
+uprv_aestrncpy(uint8_t *dst, const uint8_t *src, int32_t n);
+
+
+/**
+ * Copy ASCII to EBCDIC
+ * @internal
+ * @see uprv_strncpy
+ */
+U_INTERNAL uint8_t* U_EXPORT2
+uprv_eastrncpy(uint8_t *dst, const uint8_t *src, int32_t n);
+
+
 
 #endif

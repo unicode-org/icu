@@ -2424,6 +2424,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
                 errln(UnicodeString("FAIL: ") + type[j] + avail[i].getDisplayName(l) +
                       " -> \"" + pat +
                       "\" -> \"" + f2.toPattern(p) + "\"");
+            } else {
+                UnicodeString l, p;
+                logln(UnicodeString("PASS: ") + type[j] + avail[i].getDisplayName(l) +
+                      " -> \"" + pat +
+                      "\"");
             }
 
             // Test toLocalizedPattern/applyLocalizedPattern round trip

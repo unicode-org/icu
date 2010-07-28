@@ -1,3 +1,4 @@
+﻿# Note: Please make sure that this utf-8 file contains a BOM.
 # LineBreakTest-5.2.0.txt
 # Date: 2009-08-26, 01:14:01 GMT [MD]
 #

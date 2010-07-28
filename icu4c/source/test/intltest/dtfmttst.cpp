@@ -3244,19 +3244,22 @@ void DateFormatTest::Test6726(void)
     strm = fmtm->format(dt, strm);
     strs = fmts->format(dt, strs);
 
+
 /* Locale data is not yet updated
-    if (strf.charAt(13) == UChar(' ')) {
-        errln((UnicodeString)"FAIL: Improper formated date: " + strf);
+    if (strf.charAt(13) == UChar(0x20)) {
+        errln((UnicodeString)"FAIL: Improper formatted date: " + strf);
     }
-    if (strl.charAt(10) == UChar(' ')) {
-        errln((UnicodeString)"FAIL: Improper formated date: " + strl);
+    if (strl.charAt(10) == UChar(0x20)) {
+        errln((UnicodeString)"FAIL: Improper formatted date: " + strl);
     }
 */
-    if (strm.charAt(10) != UChar(' ')) {
-        errln((UnicodeString)"FAIL: Improper formated date: " + strm);
+    logln("strm.charAt(10)=%04X wanted 0x20\n", strm.charAt(10));
+    if (strm.charAt(10) != UChar(0x0020)) {
+      errln((UnicodeString)"FAIL: Improper formatted date: " + strm );
     }
-    if (strs.charAt(8)  != UChar(' ')) {
-        errln((UnicodeString)"FAIL: Improper formated date: " + strs);
+    logln("strs.charAt(10)=%04X wanted 0x20\n", strs.charAt(8));
+    if (strs.charAt(8)  != UChar(0x0020)) {
+        errln((UnicodeString)"FAIL: Improper formatted date: " + strs);
     }
 
     delete fmtf;
