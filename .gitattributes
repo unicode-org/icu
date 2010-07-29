@@ -66,6 +66,7 @@ icu4c/source/data/locales/pool.res -text
 icu4c/source/data/region/pool.res -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/samples/ucnv/data02.bin -text
+icu4c/source/test/perf/DateFmtPerf/collationdata.h -text
 icu4c/source/test/perf/README -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/importtest.bin -text
