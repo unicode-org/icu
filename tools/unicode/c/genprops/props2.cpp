@@ -24,7 +24,7 @@
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "uprops.h"
 #include "propsvec.h"
 #include "uparse.h"
@@ -37,7 +37,7 @@ U_NAMESPACE_USE
 
 /* data --------------------------------------------------------------------- */
 
-static UNewTrie *newTrie;
+static UTrie2 *newTrie;
 UPropsVectors *pv;
 
 static UnicodeString *scriptExtensions;
@@ -430,7 +430,7 @@ initAdditionalProperties() {
 
 U_CFUNC void
 exitAdditionalProperties() {
-    utrie_close(newTrie);
+    utrie2_close(newTrie);
     upvec_close(pv);
     delete scriptExtensions;
 }
@@ -502,15 +502,11 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* parse EastAsianWidth.txt */
     parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
-    {
-        UPVecToUTrieContext toUTrie={ NULL, 50000 /* capacity */, 0, TRUE /* latin1Linear */ };
-        upvec_compact(pv, upvec_compactToUTrieHandler, &toUTrie, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
-                    u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
-        newTrie=toUTrie.newTrie;
+    newTrie=upvec_compactToUTrie2WithRowIndexes(pv, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
+                u_errorName(*pErrorCode));
+        exit(*pErrorCode);
     }
 }
 
@@ -843,9 +839,12 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
     pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     errorCode=U_ZERO_ERROR;
-    length=utrie_serialize(newTrie, p, capacity, NULL, TRUE, &errorCode);
+    utrie2_freeze(newTrie, UTRIE2_16_VALUE_BITS, &errorCode);
+    length=utrie2_serialize(newTrie, p, capacity, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: unable to serialize trie for additional properties: %s\n", u_errorName(errorCode));
+        fprintf(stderr,
+                "genprops error: utrie2_freeze(additional properties)+utrie2_serialize() failed: %s\n",
+                u_errorName(errorCode));
         exit(errorCode);
     }
 
@@ -882,54 +881,14 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
             printf("size in bytes of additional props trie:%5u\n", (int)length);
         }
         if(f!=NULL) {
-            UTrie trie={ NULL };
-            UTrie2 *trie2;
-
-            utrie_unserialize(&trie, p, length, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                fprintf(
-                    stderr,
-                    "genprops error: failed to utrie_unserialize(trie for additional properties) - %s\n",
-                    u_errorName(errorCode));
-                exit(errorCode);
-            }
-
-            /* use UTrie2 */
-            trie2=utrie2_fromUTrie(&trie, trie.initialValue, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                fprintf(
-                    stderr,
-                    "genprops error: utrie2_fromUTrie() failed - %s\n",
-                    u_errorName(errorCode));
-                exit(errorCode);
-            }
-            {
-                /* delete lead surrogate code unit values */
-                UChar lead;
-                trie2=utrie2_cloneAsThawed(trie2, &errorCode);
-                for(lead=0xd800; lead<0xdc00; ++lead) {
-                    utrie2_set32ForLeadSurrogateCodeUnit(trie2, lead, trie2->initialValue, &errorCode);
-                }
-                utrie2_freeze(trie2, UTRIE2_16_VALUE_BITS, &errorCode);
-                if(U_FAILURE(errorCode)) {
-                    fprintf(
-                        stderr,
-                        "genprops error: deleting lead surrogate code unit values failed - %s\n",
-                        u_errorName(errorCode));
-                    exit(errorCode);
-                }
-            }
-
             usrc_writeUTrie2Arrays(f,
                 "static const uint16_t propsVectorsTrie_index[%ld]={\n", NULL,
-                trie2,
+                newTrie,
                 "\n};\n\n");
             usrc_writeUTrie2Struct(f,
                 "static const UTrie2 propsVectorsTrie={\n",
-                trie2, "propsVectorsTrie_index", NULL,
+                newTrie, "propsVectorsTrie_index", NULL,
                 "};\n\n");
-
-            utrie2_close(trie2);
 
             usrc_writeArray(f,
                 "static const uint32_t propsVectors[%ld]={\n",
