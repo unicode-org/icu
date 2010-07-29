@@ -9,6 +9,7 @@
 #include "DateFmtPerf.h"
 #include "uoptions.h"
 #include <stdio.h>
+#include <fstream>
 
 #include <iostream>
 using namespace std;
@@ -16,6 +17,9 @@ using namespace std;
 DateFormatPerfTest::DateFormatPerfTest(int32_t argc, const char* argv[], UErrorCode& status)
 : UPerfTest(argc,argv,status) {
 
+    if (locale == NULL){
+        locale = "en_US";   // set default locale
+    }
 }
 
 DateFormatPerfTest::~DateFormatPerfTest()
@@ -34,6 +38,10 @@ UPerfFunction* DateFormatPerfTest::runIndexedTest(int32_t index, UBool exec,cons
 		TESTCASE(4,BreakItWord10000);
 		TESTCASE(5,BreakItChar250);
 		TESTCASE(6,BreakItChar10000);
+        TESTCASE(7,NumFmt10000);
+        TESTCASE(8,NumFmt100000);
+        TESTCASE(9,Collation10000);
+        TESTCASE(10,Collation100000);
 
         default: 
             name = ""; 
@@ -44,17 +52,17 @@ UPerfFunction* DateFormatPerfTest::runIndexedTest(int32_t index, UBool exec,cons
 
 
 UPerfFunction* DateFormatPerfTest::DateFmt250(){
-    DateFmtFunction* func= new DateFmtFunction(1);
+    DateFmtFunction* func= new DateFmtFunction(1, locale);
     return func;
 }
 
 UPerfFunction* DateFormatPerfTest::DateFmt10000(){
-    DateFmtFunction* func= new DateFmtFunction(40);
+    DateFmtFunction* func= new DateFmtFunction(40, locale);
     return func;
 }
 
 UPerfFunction* DateFormatPerfTest::DateFmt100000(){
-    DateFmtFunction* func= new DateFmtFunction(400);
+    DateFmtFunction* func= new DateFmtFunction(400, locale);
     return func;
 }
 
@@ -78,23 +86,94 @@ UPerfFunction* DateFormatPerfTest::BreakItChar10000(){
     return func;
 }
 
+UPerfFunction* DateFormatPerfTest::NumFmt10000(){
+    NumFmtFunction* func= new NumFmtFunction(10000, locale);
+    return func;
+}
+
+UPerfFunction* DateFormatPerfTest::NumFmt100000(){
+    NumFmtFunction* func= new NumFmtFunction(100000, locale);
+    return func;
+}
+
+UPerfFunction* DateFormatPerfTest::Collation10000(){
+    CollationFunction* func= new CollationFunction(40, locale);
+    return func;
+}
+
+UPerfFunction* DateFormatPerfTest::Collation100000(){
+    CollationFunction* func= new CollationFunction(400, locale);
+    return func;
+}
+
+
 
 int main(int argc, const char* argv[]){
 
-	cout << "ICU version - " << U_ICU_VERSION << endl;
+    // -x Filename.xml
+    if(strcmp(argv[1],"-x") == 0)
+    {
+        if(argc < 3) return 0; // not enough arguments
 
-    UErrorCode status = U_ZERO_ERROR;
+	    cout << "ICU version - " << U_ICU_VERSION << endl;
+        UErrorCode status = U_ZERO_ERROR;
+
+        // Declare functions
+        UPerfFunction *functions[5];
+        functions[0] = new DateFmtFunction(40, "en");
+        functions[1] = new BreakItFunction(10000, true); // breakIterator word
+        functions[2] = new BreakItFunction(10000, false); // breakIterator char
+        functions[3] = new NumFmtFunction(100000, "en");
+        functions[4] = new CollationFunction(400, "en");
+        
+        // Perform time recording
+        double t[5];
+        for(int i = 0; i < 5; i++) t[i] = 0;
+
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 5; j++)
+               t[j] += (functions[j]->time(1, &status) / 10);
+
+
+        // Output results as .xml
+        ofstream out;
+        out.open(argv[2]);
+
+        for(int i = 0; i < 5; i++)
+        {
+            switch(i)
+            {
+                case 0: out << "<DateFormat> "; break;
+                case 1: out << "<BreakIterator Word> "; break;
+                case 2: out << "<BreakIterator Char> "; break;
+                case 3: out << "<NumbFormat> "; break;
+                case 4: out << "<Collation> "; break;
+            }
+            out << t[i] << endl;
+        }
+        out.close();
+
+        return 0;
+    }
+    
+    
+    // Normal performance test mode
+
     DateFormatPerfTest test(argc, argv, status);
+
+
     if(U_FAILURE(status)){   // ERROR HERE!!!
 		cout << "initialize failed! " << status << endl;
         return status;
     }
 	//cout << "Done initializing!\n" << endl;
+    
     if(test.run()==FALSE){
 		cout << "run failed!" << endl;
         fprintf(stderr,"FAILED: Tests could not be run please check the arguments.\n");
         return -1;
     }
 	cout << "done!" << endl;
+
     return 0;
 }
