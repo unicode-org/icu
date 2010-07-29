@@ -68,6 +68,11 @@ LDFLAGS += $(LDFLAGSICUUC)
 # for plugin configuration
 CPPFLAGS += "-DDEFAULT_ICU_PLUGINS=\"$(libdir)/icu\" "
 
+# for icu data location
+ifeq ($(PKGDATA_MODE),common)
+CPPFLAGS += "-DU_ICU_DATA_DEFAULT_DIR=\"$(ICUDATA_DIR)\""
+endif
+
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
