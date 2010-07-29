@@ -162,7 +162,7 @@ def check_utf8(file_name, base_mime_type, actual_mime_type):
 
     if all(ord(byte) < 128 for byte in bytes):
         # pure ASCII.
-        print "Pure ASCII " + file_name
+        # print "Pure ASCII " + file_name
         return base_mime_type
 
     try:
@@ -171,7 +171,10 @@ def check_utf8(file_name, base_mime_type, actual_mime_type):
         print "warning: %s: not ASCII, not UTF-8" % file_name
         return base_mime_type
 
-    # Append charset=utf-8.  Need to escape the ';' because it is ultimately going to a shell.
+    if ord(bytes[0]) != 0xef:
+      print "UTF-8 file with no BOM: " + file_name
+
+    # Append charset=utf-8.  Need to escape the ';' because it is ultimately going to a shell.
     return base_mime_type + '\\;charset=utf-8'
 
 
