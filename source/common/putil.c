@@ -1184,10 +1184,20 @@ u_getDataDirectory(void) {
     path=getenv("ICU_DATA");
 #   endif
 
-    /* ICU_DATA_DIR may be set as a compile option */
-#   ifdef ICU_DATA_DIR
+    /* ICU_DATA_DIR may be set as a compile option.
+     * U_ICU_DATA_DEFAULT_DIR is provided and is set by ICU at compile time
+     * and is used only when data is built in archive mode eliminating the need
+     * for ICU_DATA_DIR to be set. U_ICU_DATA_DEFAULT_DIR is set to the installation
+     * directory of the data dat file. Users should use ICU_DATA_DIR if they want to
+     * set their own path.
+     */
+#if defined(ICU_DATA_DIR) || defined(U_ICU_DATA_DEFAULT_DIR)
     if(path==NULL || *path==0) {
+#   ifdef ICU_DATA_DIR
         path=ICU_DATA_DIR;
+#   else
+        path=U_ICU_DATA_DEFAULT_DIR;
+#   endif
 #if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
         simulator_root=getenv("IPHONE_SIMULATOR_ROOT");
         if (simulator_root != NULL) {
