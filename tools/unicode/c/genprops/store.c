@@ -83,7 +83,7 @@ Formally, the file contains the following structures:
     i11 maxValues2; -- maximum code values for vector word 2, see uprops.h (new in format version 3.2)
     i12..i15 reservedIndexes; -- reserved values; 0 for now
 
-    PT serialized properties trie, see utrie.h (byte size: 4*(i0-16))
+    PT serialized properties trie, see utrie2.h (byte size: 4*(i0-16))
 
   P, E, and U are not used (empty) in format versions 4 and above
 
@@ -243,8 +243,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 6, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 5, 1, 0, 0 }                              /* dataVersion */
+    { 7, 0, 0, 0 },                             /* formatVersion */
+    { 6, 0, 0, 0 }                              /* dataVersion */
 };
 
 static UTrie2 *pTrie=NULL;

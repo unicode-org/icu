@@ -839,7 +839,6 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
     pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     errorCode=U_ZERO_ERROR;
-    utrie2_freeze(newTrie, UTRIE2_16_VALUE_BITS, &errorCode);
     length=utrie2_serialize(newTrie, p, capacity, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr,
