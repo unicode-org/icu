@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,7 +23,6 @@
 #include "unicode/uchar.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "utrie.h"
 #include "utrie2.h"
 #include "uarrsort.h"
 #include "unicode/udata.h"
@@ -33,7 +32,7 @@
 #include "ubidi_props.h"
 #include "genbidi.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /* Unicode bidi/shaping properties file format ---------------------------------
 
@@ -45,7 +44,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 1.0 .
+The following is a description of format version 2.0 .
 
 The file contains the following structures:
 
@@ -66,7 +65,7 @@ The file contains the following structures:
                       bits 23..16 contain the max value for Joining_Group,
                       otherwise the bits are used like enum fields in the trie word
 
-    Serialized trie, see utrie.h;
+    Serialized trie, see utrie2.h;
 
     const uint32_t mirrors[mirrorLength];
 
@@ -122,6 +121,10 @@ containing the Joining_Group value.
 
 All code points outside of this range have No_Joining_Group (0).
 
+--- Changes in format version 2 ---
+
+Change from UTrie to UTrie2.
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -136,8 +139,8 @@ static UDataInfo dataInfo={
 
     /* dataFormat="BiDi" */
     { UBIDI_FMT_0, UBIDI_FMT_1, UBIDI_FMT_2, UBIDI_FMT_3 },
-    { 1, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 4, 0, 1, 0 }                              /* dataVersion */
+    { 2, 0, 0, 0 },                             /* formatVersion */
+    { 6, 0, 0, 0 }                              /* dataVersion */
 };
 
 /* exceptions values */
@@ -297,25 +300,26 @@ generateData(const char *dataDir, UBool csource) {
     int32_t i;
 
     UNewDataMemory *pData;
-    UNewTrie *pTrie;
+    UTrie2 *pTrie;
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t trieSize;
     long dataLength;
 
     makeMirror();
 
-    pTrie=utrie_open(NULL, NULL, 20000, 0, 0, TRUE);
-    if(pTrie==NULL) {
-        fprintf(stderr, "genbidi error: unable to create a UNewTrie\n");
-        exit(U_MEMORY_ALLOCATION_ERROR);
+    pTrie=utrie2_open(0, 0, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genbidi error: utrie2_open() failed - %s\n", u_errorName(errorCode));
+        exit(errorCode);
     }
 
     prev=jgStart=0;
     for(i=0; (row=upvec_getRow(pv, i, &start, &end))!=NULL && start<UPVEC_FIRST_SPECIAL_CP; ++i) {
         /* store most values from vector column 0 in the trie */
-        if(!utrie_setRange32(pTrie, start, end+1, *row, TRUE)) {
-            fprintf(stderr, "genbidi error: unable to set trie value (overflow)\n");
-            exit(U_BUFFER_OVERFLOW_ERROR);
+        utrie2_setRange32(pTrie, start, end, *row, TRUE, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genbidi error: utrie2_setRange32() failed - %s\n", u_errorName(errorCode));
+            exit(errorCode);
         }
 
         /* store Joining_Group values from vector column 1 in a simple byte array */
@@ -350,9 +354,11 @@ generateData(const char *dataDir, UBool csource) {
     indexes[UBIDI_IX_JG_START]=jgStart;
     indexes[UBIDI_IX_JG_LIMIT]=prev;
 
-    trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), NULL, TRUE, &errorCode);
+    utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
+    trieSize=utrie2_serialize(pTrie, trieBlock, sizeof(trieBlock), &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genbidi error: utrie_serialize failed: %s (length %ld)\n", u_errorName(errorCode), (long)trieSize);
+        fprintf(stderr, "genbidi error: utrie2_freeze()+utrie2_serialize() failed: %s (length %ld)\n",
+                u_errorName(errorCode), (long)trieSize);
         exit(errorCode);
     }
 
@@ -378,49 +384,7 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
         /* write .c file for hardcoded data */
-        UTrie trie={ NULL };
-        UTrie2 *trie2;
-        FILE *f;
-
-        utrie_unserialize(&trie, trieBlock, trieSize, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(
-                stderr,
-                "genbidi error: failed to utrie_unserialize(ubidi.icu trie) - %s\n",
-                u_errorName(errorCode));
-            exit(errorCode);
-        }
-
-        /* use UTrie2 */
-        dataInfo.formatVersion[0]=2;
-        dataInfo.formatVersion[2]=0;
-        dataInfo.formatVersion[3]=0;
-        trie2=utrie2_fromUTrie(&trie, 0, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(
-                stderr,
-                "genbidi error: utrie2_fromUTrie() failed - %s\n",
-                u_errorName(errorCode));
-            exit(errorCode);
-        }
-        {
-            /* delete lead surrogate code unit values */
-            UChar lead;
-            trie2=utrie2_cloneAsThawed(trie2, &errorCode);
-            for(lead=0xd800; lead<0xdc00; ++lead) {
-                utrie2_set32ForLeadSurrogateCodeUnit(trie2, lead, trie2->initialValue, &errorCode);
-            }
-            utrie2_freeze(trie2, UTRIE2_16_VALUE_BITS, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                fprintf(
-                    stderr,
-                    "genbidi error: deleting lead surrogate code unit values failed - %s\n",
-                    u_errorName(errorCode));
-                exit(errorCode);
-            }
-        }
-
-        f=usrc_create(dataDir, "ubidi_props_data.c");
+        FILE *f=usrc_create(dataDir, "ubidi_props_data.c");
         if(f!=NULL) {
             usrc_writeArray(f,
                 "static const UVersionInfo ubidi_props_dataVersion={",
@@ -432,7 +396,7 @@ generateData(const char *dataDir, UBool csource) {
                 "};\n\n");
             usrc_writeUTrie2Arrays(f,
                 "static const uint16_t ubidi_props_trieIndex[%ld]={\n", NULL,
-                trie2,
+                pTrie,
                 "\n};\n\n");
             usrc_writeArray(f,
                 "static const uint32_t ubidi_props_mirrors[%ld]={\n",
@@ -451,17 +415,16 @@ generateData(const char *dataDir, UBool csource) {
                 f);
             usrc_writeUTrie2Struct(f,
                 "  {\n",
-                trie2, "ubidi_props_trieIndex", NULL,
+                pTrie, "ubidi_props_trieIndex", NULL,
                 "  },\n");
             usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
             fputs("};\n", f);
             fclose(f);
         }
-        utrie2_close(trie2);
     } else {
         /* write the data */
         pData=udata_create(dataDir, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &dataInfo,
-                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                           haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
         if(U_FAILURE(errorCode)) {
             fprintf(stderr, "genbidi: unable to create data memory, %s\n", u_errorName(errorCode));
             exit(errorCode);
@@ -486,7 +449,7 @@ generateData(const char *dataDir, UBool csource) {
         }
     }
 
-    utrie_close(pTrie);
+    utrie2_close(pTrie);
     upvec_close(pv);
 }
 
