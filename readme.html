@@ -895,9 +895,10 @@
     <ul>
       <li><b>Data path:</b> For a system-level library, it is best to load
         ICU data from the .dat package file because the file system path
-        to the .dat package file can be hardcoded.
-        Set <code>-DICU_DATA_DIR=/path/to/icu/data</code> when building
-        the ICU code. (Used by source/common/putil.c.)<br>
+        to the .dat package file can be hardcoded. ICU will automatically set
+        the path to the final install location using U_ICU_DATA_DEFAULT_DIR.
+        Alternatively, you can set <code>-DICU_DATA_DIR=/path/to/icu/data</code>
+        when building the ICU code. (Used by source/common/putil.c.)<br>
         Consider also setting <code>-DICU_NO_USER_DATA_OVERRIDE</code>
         if you do not want the "ICU_DATA" environment variable to be used.
         (An application can still override the data path via
