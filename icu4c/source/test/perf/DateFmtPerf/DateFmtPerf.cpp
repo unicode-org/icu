@@ -139,18 +139,27 @@ int main(int argc, const char* argv[]){
         ofstream out;
         out.open(argv[2]);
 
+        out << "<perfTestResults icu=\"c\" version=\"" << U_ICU_VERSION << "\">" << endl;
+
         for(int i = 0; i < 5; i++)
         {
+            out << "    <perfTestResult" << endl;
+            out << "        test=\"";
             switch(i)
             {
-                case 0: out << "<DateFormat> "; break;
-                case 1: out << "<BreakIterator Word> "; break;
-                case 2: out << "<BreakIterator Char> "; break;
-                case 3: out << "<NumbFormat> "; break;
-                case 4: out << "<Collation> "; break;
+                case 0: out << "DateFormat"; break;
+                case 1: out << "BreakIterator Word"; break;
+                case 2: out << "BreakIterator Char"; break;
+                case 3: out << "NumbFormat"; break;
+                case 4: out << "Collation"; break;
             }
-            out << t[i] << endl;
+            out << "\"" << endl;
+            int iter = 10000;
+            if(i > 2) iter = 100000;
+            out << "        iterations=\"" << iter << "\"" << endl;
+            out << "        time=\"" << t[i] << "\" />" << endl;
         }
+        out << "</perfTestResults>" << endl;
         out.close();
 
         return 0;
@@ -158,6 +167,7 @@ int main(int argc, const char* argv[]){
     
     
     // Normal performance test mode
+    UErrorCode status = U_ZERO_ERROR;
 
     DateFormatPerfTest test(argc, argv, status);
 
