@@ -41,10 +41,22 @@ public final class LocaleData {
     public static final int ES_AUXILIARY = 1;
 
     /**
+     * EXType for {@link #getExemplarSet(int, int)}.
+     * @stable ICU 3.4
+     */
+   public static final int ES_INDEX = 2;
+
+   /**
+    * EXType for {@link #getExemplarSet(int, int)}.
+    * @stable ICU 3.4
+    */
+    public static final int ES_CURRENCY = 3;
+
+    /**
      * Count of EXTypes for {@link #getExemplarSet(int, int)}.
      * @stable ICU 3.4
      */
-    public static final int ES_COUNT = 2;
+    public static final int ES_COUNT = 4;
     
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
@@ -98,10 +110,29 @@ public final class LocaleData {
      * @stable ICU 3.0
      */
     public static UnicodeSet getExemplarSet(ULocale locale, int options) {
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        String pattern = bundle.getString(EXEMPLAR_CHARS);
-        return new UnicodeSet(pattern, UnicodeSet.IGNORE_SPACE | options);
-    }
+        return LocaleData.getInstance(locale).getExemplarSet(options, ES_STANDARD);
+     }
+    
+    /**
+     * Returns the set of exemplar characters for a locale.
+     *
+     * @param locale    Locale for which the exemplar character set
+     *                  is to be retrieved.
+     * @param options   Bitmask for options to apply to the exemplar pattern.
+     *                  Specify zero to retrieve the exemplar set as it is
+     *                  defined in the locale data.  Specify
+     *                  UnicodeSet.CASE to retrieve a case-folded exemplar
+     *                  set.  See {@link UnicodeSet#applyPattern(String,
+     *                  int)} for a complete list of valid options.  The
+     *                  IGNORE_SPACE bit is always set, regardless of the
+     *                  value of 'options'.
+     * @param extype    The type of exemplar character set to retrieve.
+     * @return          The set of exemplar characters for the given locale.
+     * @stable ICU 3.0
+     */
+    public static UnicodeSet getExemplarSet(ULocale locale, int options, int extype) {
+        return LocaleData.getInstance(locale).getExemplarSet(options, extype);
+     }
     
     /**
      * Returns the set of exemplar characters for a locale.
@@ -114,13 +145,17 @@ public final class LocaleData {
      *                  int)} for a complete list of valid options.  The
      *                  IGNORE_SPACE bit is always set, regardless of the
      *                  value of 'options'.
-     * @param extype      The type of exemplar set to be retrieved,
-     *                  ES_STANDARD or ES_AUXILIARY
+     * @param extype    The type of exemplar set to be retrieved,
+     *                  ES_STANDARD, ES_INDEX, ES_CURRENCY,  or ES_AUXILIARY
      * @return          The set of exemplar characters for the given locale.
      * @stable ICU 3.4
      */
     public UnicodeSet getExemplarSet(int options, int extype) {
-        String [] exemplarSetTypes = { "ExemplarCharacters", "AuxExemplarCharacters" };
+        String [] exemplarSetTypes = { 
+            "ExemplarCharacters", "AuxExemplarCharacters",
+            "ExemplarCharactersIndex", "ExemplarCharactersCurrency"
+        };
+
         try{
             ICUResourceBundle stringBundle = (ICUResourceBundle) bundle.get(exemplarSetTypes[extype]);
     
@@ -131,6 +166,8 @@ public final class LocaleData {
         }catch(MissingResourceException ex){
             if(extype==LocaleData.ES_AUXILIARY){
                 return new UnicodeSet();
+            } else if (extype==LocaleData.ES_INDEX){
+                return null;
             }
             throw ex;
         }

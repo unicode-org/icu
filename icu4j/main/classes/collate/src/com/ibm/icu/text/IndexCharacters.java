@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -84,7 +85,7 @@ public class IndexCharacters {
      * @provisional This API might change or be removed in a future release.
      */
     public IndexCharacters(ULocale locale) {
-        this(locale, LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD), Collator.getInstance(locale));
+        this(locale, Collator.getInstance(locale));
     }
 
     /**
@@ -92,7 +93,7 @@ public class IndexCharacters {
      * @deprecated This API is ICU internal only.
      */
     @SuppressWarnings("unchecked")
-    public IndexCharacters(ULocale locale, UnicodeSet exemplarSet, Collator collator) {
+    public IndexCharacters(ULocale locale, Collator collator) {
         this.locale = locale;
         try {
             comparator = (Collator) collator.clone();
@@ -101,24 +102,33 @@ public class IndexCharacters {
         }
         comparator.setStrength(Collator.PRIMARY);
 
-        // get the exemplars, and handle special cases
+        boolean gotFromLocale = true;
+        UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
 
-        UnicodeSet exemplars = exemplarSet.cloneAsThawed();
-        // question: should we add auxiliary exemplars?
-        if (exemplars.containsSome(CORE_LATIN)) {
-            exemplars.addAll(CORE_LATIN);
-        }
-        if (exemplars.containsSome(HANGUL)) {
-            // cut down to small list
-            exemplars.removeAll(new UnicodeSet("[:block=hangul_syllables:]")).addAll(HANGUL);
-        }
-        if (exemplars.containsSome(ETHIOPIC)) {
-            // cut down to small list
-            // make use of the fact that Ethiopic is allocated in 8's, where
-            // the base is 0 mod 8.
-            for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
-                if ((it.codepoint & 0x7) != 0) {
-                    exemplars.remove(it.codepoint);
+        if (exemplars == null) {
+            gotFromLocale = false;
+            // manufacture a set
+            exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
+
+            // get the exemplars, and handle special cases
+
+            exemplars = exemplars.cloneAsThawed();
+            // question: should we add auxiliary exemplars?
+            if (exemplars.containsSome(CORE_LATIN)) {
+                exemplars.addAll(CORE_LATIN);
+            }
+            if (exemplars.containsSome(HANGUL)) {
+                // cut down to small list
+                exemplars.removeAll(new UnicodeSet("[:block=hangul_syllables:]")).addAll(HANGUL);
+            }
+            if (exemplars.containsSome(ETHIOPIC)) {
+                // cut down to small list
+                // make use of the fact that Ethiopic is allocated in 8's, where
+                // the base is 0 mod 8.
+                for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
+                    if ((it.codepoint & 0x7) != 0) {
+                        exemplars.remove(it.codepoint);
+                    }
                 }
             }
         }
@@ -142,7 +152,9 @@ public class IndexCharacters {
         // So we make a pass through, filtering out those cases.
 
         for (String item : preferenceSorting) {
-            item = UCharacter.toUpperCase(locale, item);
+            if (!gotFromLocale) {
+                item = UCharacter.toUpperCase(locale, item);
+            }
             if (indexCharacters.contains(item)) {
                 for (String itemAlreadyIn : indexCharacters) {
                     if (comparator.compare(item, itemAlreadyIn) == 0) {
@@ -220,6 +232,10 @@ public class IndexCharacters {
      */
     public ULocale getLocale() {
         return locale;
+    }
+
+    public Collator getCollator() {
+        return comparator;
     }
 
     /**
