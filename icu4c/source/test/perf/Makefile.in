@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -11,20 +11,23 @@ top_builddir = ../..
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-subdir = test
+subdir = test/perf
 
 @ICUIO_TRUE@IOTEST = iotest
 
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = collationperf charperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf
+SUBDIRS = collationperf charperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf DateFmtPerf
+
+# Subdirs that support 'xperf'
+XSUBDIRS = DateFmtPerf
 
 ## List of phony targets
 .PHONY : everything all all-local all-recursive install install-local		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-recursive dist-local	\
-check check-recursive check-local
+check check-recursive check-local xperf xperf-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -45,6 +48,11 @@ distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: everything check-recursive check-local
 check-recursive: all-recursive
+
+xperf: everything
+	list='$(XSUBDIRS)'; for xsubdir in $$list; do \
+		$(MAKE) -w -C $$xsubdir xperf; \
+	done
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
