@@ -9,15 +9,18 @@
 #ifndef _DATEFMTPERF_H
 #define _DATEFMTPERF_H
 
-#include "unicode/uperf.h"
+
+#include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
+#include "unicode/uperf.h"
+
+#include "unicode/utypes.h"
 #include "unicode/datefmt.h"
 #include "unicode/calendar.h"
 #include "unicode/uclean.h"
 #include "unicode/brkiter.h"
 #include "unicode/numfmt.h"
 #include "unicode/coll.h"
-#include "unicode/utypes.h"
 #include "util.h"
 
 #include "datedata.h"
