@@ -1327,6 +1327,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/charperf/Makefile \
 		test/perf/convperf/Makefile \
 		test/perf/normperf/Makefile \
+		test/perf/DateFmtPerf/Makefile \
 		test/perf/strsrchperf/Makefile \
 		test/perf/unisetperf/Makefile \
 		test/perf/usetperf/Makefile \

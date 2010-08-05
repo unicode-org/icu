@@ -65,7 +65,7 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive
+doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive xperf xcheck xperf-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -79,9 +79,13 @@ dist: dist-recursive dist-local
 check: all check-recursive
 check-recursive: all
 xcheck: all xcheck-recursive
+xperf: all xperf-recursive
 
 xcheck-recursive: all xcheck-local
 	@$(MAKE) -C test xcheck
+
+xperf-recursive: all tests
+	@$(MAKE) -C test/perf xperf
 
 ifeq ($(DOXYGEN),)
 doc:
@@ -171,6 +175,7 @@ tests: all
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	-$(RMV) "test-*.xml"
+	-$(RMV) "perf-*.xml"
 	$(RMV) Doxyfile doc $(DOCZIP)
 
 distclean-local: clean-local

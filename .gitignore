@@ -39,6 +39,7 @@ icu4c/source/config/icu.pc.out
 icu4c/source/config/icucross.mk
 icu4c/source/config/pkgdata.inc
 icu4c/source/config/pkgdataMakefile
+icu4c/source/configure-local.mk
 icu4c/source/data/*.plg
 icu4c/source/data/Debug
 icu4c/source/data/Makefile
@@ -128,6 +129,7 @@ icu4c/source/layoutex/release
 icu4c/source/layoutex/x64
 icu4c/source/layoutex/x86
 icu4c/source/lib
+icu4c/source/perf-*.xml
 icu4c/source/samples/Makefile
 icu4c/source/samples/all/all.ncb
 icu4c/source/samples/all/all.suo
@@ -355,6 +357,9 @@ icu4c/source/test/letest/letest.vcproj.*.*.user
 icu4c/source/test/letest/release
 icu4c/source/test/letest/x64
 icu4c/source/test/letest/x86
+icu4c/source/test/perf/DateFmtPerf/DateFmtPerf
+icu4c/source/test/perf/DateFmtPerf/DateFmtPerf.d
+icu4c/source/test/perf/DateFmtPerf/Makefile
 icu4c/source/test/perf/Makefile
 icu4c/source/test/perf/charperf/*.d
 icu4c/source/test/perf/charperf/*.o
@@ -429,6 +434,7 @@ icu4c/source/test/perf/ustrperf/Release
 icu4c/source/test/perf/ustrperf/charperf
 icu4c/source/test/perf/ustrperf/debug
 icu4c/source/test/perf/ustrperf/release
+icu4c/source/test/perf/ustrperf/stringperf
 icu4c/source/test/perf/ustrperf/stringperf.vcproj.*.*.user
 icu4c/source/test/perf/utfperf/*.d
 icu4c/source/test/perf/utfperf/*.o
@@ -440,6 +446,8 @@ icu4c/source/test/perf/utfperf/release
 icu4c/source/test/perf/utfperf/utfperf
 icu4c/source/test/perf/utfperf/utfperf.vcproj.*.*.user
 icu4c/source/test/perf/utrie2perf/Makefile
+icu4c/source/test/perf/utrie2perf/utrie2perf
+icu4c/source/test/perf/utrie2perf/utrie2perf.d
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
