@@ -59,10 +59,12 @@ import com.ibm.icu.util.ULocale;
  */
 public class IndexCharacters {
 
+    private static final char OVERFLOW_MARKER = '\uFFFF';
+    private static final char INFLOW_MARKER = '\uFFFD';
     private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet(
-            "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
+    "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
     private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
 
@@ -101,6 +103,20 @@ public class IndexCharacters {
     }
 
     /**
+     * Create the index object.
+     * 
+     * @param locale
+     *            The locale to be passed.
+     * @param additions
+     *            Additional characters to be added, eg A-Z for non-Latin locales.
+     * @draft ICU 4.4
+     * @provisional This API might change or be removed in a future release.
+     */
+    public IndexCharacters(ULocale locale, ULocale... additionalLocales) {
+        this(locale, (RuleBasedCollator) Collator.getInstance(locale), null, getIndexExemplars(additionalLocales));
+    }
+
+    /**
      * @internal
      * @param exemplarChars TODO
      * @deprecated This API is ICU internal only, for testing purposes.
@@ -111,50 +127,18 @@ public class IndexCharacters {
         comparator = (RuleBasedCollator) collator;
         comparator.setStrength(Collator.PRIMARY);
 
-        boolean gotFromLocale = true;
-        UnicodeSet exemplars = exemplarChars != null ? exemplarChars : LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
 
-        if (exemplars == null) {
-            gotFromLocale = false;
-            // manufacture a set
-            exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
+        boolean[] explicitIndexChars = {true};
+        UnicodeSet exemplars = exemplarChars != null ? exemplarChars : getIndexExemplars(locale, explicitIndexChars);
 
-            // get the exemplars, and handle special cases
-
-            exemplars = exemplars.cloneAsThawed();
-            // question: should we add auxiliary exemplars?
-            if (exemplars.containsSome(CORE_LATIN)) {
-                exemplars.addAll(CORE_LATIN);
-            }
-            if (exemplars.containsSome(HANGUL)) {
-                // cut down to small list
-                exemplars.removeAll(new UnicodeSet("[:block=hangul_syllables:]")).addAll(HANGUL);
-            }
-            if (exemplars.containsSome(ETHIOPIC)) {
-                // cut down to small list
-                // make use of the fact that Ethiopic is allocated in 8's, where
-                // the base is 0 mod 8.
-                for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
-                    if ((it.codepoint & 0x7) != 0) {
-                        exemplars.remove(it.codepoint);
-                    }
-                }
-            }
-        }
         if (additions != null) {
             exemplars.addAll(additions);
         }
 
         // first sort them, with an "best" ordering among items that are the same according
         // to the collator
-        Comparator<Object>[] comparators = (Comparator<Object>[]) new Comparator[2];
-        comparators[0] = comparator;
-        comparators[1] = PREFERENCE_COMPARATOR;
-
         Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparator, PREFERENCE_COMPARATOR));
-        for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
-            preferenceSorting.add(it.getString());
-        }
+        exemplars.addAllTo(preferenceSorting);
 
         TreeSet<String> indexCharacterSet = new TreeSet<String>(comparator);
 
@@ -164,7 +148,7 @@ public class IndexCharacters {
         // So we make a pass through, filtering out those cases.
 
         for (String item : preferenceSorting) {
-            if (!gotFromLocale) {
+            if (!explicitIndexChars[0]) {
                 item = UCharacter.toUpperCase(locale, item);
             }
             if (indexCharacterSet.contains(item)) {
@@ -187,16 +171,16 @@ public class IndexCharacters {
             }
         }
 
-        // if the result is still too large, cut down to 100 elements
+        // if the result is still too large, cut down to maxCount elements, by removing every nth element
 
         final int size = indexCharacterSet.size() - 1;
-        if (size > 99) {
+        if (size > maxCount) {
             int count = 0;
             int old = -1;
             for (Iterator<String> it = indexCharacterSet.iterator(); it.hasNext();) {
                 ++count;
                 it.next();
-                final int bump = count * 99 / size;
+                final int bump = count * maxCount / size;
                 if (bump == old) {
                     it.remove();
                 } else {
@@ -206,6 +190,50 @@ public class IndexCharacters {
         }
         indexCharacters = Collections.unmodifiableList(new ArrayList(indexCharacterSet));
         firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS; // TODO, use collation method when fast enough. firstStringsInScript(comparator);
+    }
+
+    private static UnicodeSet getIndexExemplars(ULocale locale, boolean[] explicitIndexChars) {
+        UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
+
+        if (exemplars != null) {
+            explicitIndexChars[0] = true;
+            return exemplars;
+        }
+        explicitIndexChars[0] = false;
+
+        exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
+
+        // get the exemplars, and handle special cases
+
+        exemplars = exemplars.cloneAsThawed();
+        // question: should we add auxiliary exemplars?
+        if (exemplars.containsSome(CORE_LATIN)) {
+            exemplars.addAll(CORE_LATIN);
+        }
+        if (exemplars.containsSome(HANGUL)) {
+            // cut down to small list
+            exemplars.removeAll(new UnicodeSet("[:block=hangul_syllables:]")).addAll(HANGUL);
+        }
+        if (exemplars.containsSome(ETHIOPIC)) {
+            // cut down to small list
+            // make use of the fact that Ethiopic is allocated in 8's, where
+            // the base is 0 mod 8.
+            for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
+                if ((it.codepoint & 0x7) != 0) {
+                    exemplars.remove(it.codepoint);
+                }
+            }
+        }
+        return exemplars;
+    }
+
+    private static UnicodeSet getIndexExemplars(ULocale... additionalLocales) {
+        UnicodeSet additions = new UnicodeSet();
+        boolean[] explicitIndexChars = {true};
+        for (ULocale other : additionalLocales) {
+            additions.addAll(getIndexExemplars(other, explicitIndexChars));
+        }
+        return additions;
     }
 
     /*
@@ -308,17 +336,20 @@ public class IndexCharacters {
      */
     public static class Bucket {
         private String label;
+        boolean isSpecial;
         private List<String> values = new ArrayList<String>();
 
         /**
          * Set up the bucket.
          * 
          * @param label label for the bucket
+         * @param special is an underflow, overflow, or inflow bucket
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public Bucket(String label) {
+        public Bucket(String label, boolean special) {
             this.label = label;
+            isSpecial = special;
         }
 
         /**
@@ -330,6 +361,14 @@ public class IndexCharacters {
          */
         public String getLabel() {
             return label;
+        }
+        
+        /**
+         * Is an underflow, overflow, or inflow bucket
+         * @return is an underflow, overflow, or inflow bucket
+         */
+        public boolean isSpecial() {
+            return isSpecial;
         }
 
         /**
@@ -356,7 +395,10 @@ public class IndexCharacters {
     }
 
     /**
-     * Convenience routine to bucket a list of input strings according to the index.
+     * Convenience routine to bucket a list of input strings according to the index.<br>
+     * Warning: if a UI suppresses buckets that are empty,
+     * this may result in the special buckets (underflow, overflow, inflow) being adjacent.
+     * In that case, the application may want to combine them.
      * 
      * @param inputList
      *            List of strings to be sorted and bucketed according to the index characters.
@@ -379,7 +421,7 @@ public class IndexCharacters {
                 // check for adjacent
                 String overflowComparisonString = getOverflowComparisonString(last);
                 if (comparator.compare(overflowComparisonString, current) < 0) {
-                    characters.add(i, "\uFFFD" + overflowComparisonString);
+                    characters.add(i, INFLOW_MARKER + overflowComparisonString);
                     i++;
                     lastSet = set;
                 }
@@ -392,7 +434,7 @@ public class IndexCharacters {
         String afterMarker = getOverflowLabel();
         String inMarker = getInflowLabel();
         String limitString = getOverflowComparisonString(characters.get(characters.size() - 1));
-        characters.add("\uFFFF" + limitString); // final, overflow bucket
+        characters.add(OVERFLOW_MARKER + limitString); // final, overflow bucket
 
         // Set up an array of sorted elements
         String[] sortedInput = inputList.toArray(new String[inputList.size()]);
@@ -404,26 +446,30 @@ public class IndexCharacters {
         // not be unique
 
         Bucket currentBucket;
-        buckets.add(currentBucket = new Bucket(beforeMarker));
+        buckets.add(currentBucket = new Bucket(beforeMarker, true));
         Iterator<String> characterIterator = characters.iterator();
-        String nextChar = characterIterator.next(); // there is always at least
+        String nextChar = characterIterator.next(); // there is always at least one
         String nextLabel = nextChar;
         // one
         boolean atEnd = false;
+        boolean nextCharIsSpecial = false;
         for (String s : sortedInput) {
             while (!atEnd && comparator.compare(s, nextChar) >= 0) {
-                buckets.add(currentBucket = new Bucket(nextLabel));
+                buckets.add(currentBucket = new Bucket(nextLabel, nextCharIsSpecial));
+                nextCharIsSpecial = false;
                 // now reset nextChar
                 if (characterIterator.hasNext()) {
                     nextLabel = nextChar = characterIterator.next();
                     switch (nextChar.charAt(0)) {
-                    case 0xFFFD:
-                        nextChar = nextChar.substring(0);
+                    case INFLOW_MARKER:
+                        nextChar = nextChar.substring(1); // the rest of the string is the comparison value
                         nextLabel = inMarker;
+                        nextCharIsSpecial = true;
                         break;
-                    case 0xFFFF:
-                        nextChar = nextChar.substring(0);
+                    case OVERFLOW_MARKER:
+                        nextChar = nextChar.substring(1); // the rest of the string is the comparison value
                         nextLabel = afterMarker;
+                        nextCharIsSpecial = true;
                         break;
                     }
                 } else {
@@ -454,6 +500,16 @@ public class IndexCharacters {
             }
         }
         return null;
+    }
+
+    /**
+     * Return a list of the first character in each script, in collation order. Only exposed for testing.
+     * @return
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public List<String> getFirstScriptCharacters() {
+        return firstScriptCharacters;
     }
 
     /**
@@ -493,11 +549,11 @@ public class IndexCharacters {
         return new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, UScript.getScript(codePoint.codePointAt(0)));
     }
 
-    private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet("[[:sc=Common:][:sc=inherited:]]").freeze();
-    private static final UnicodeSet TO_TRY = new UnicodeSet("[^[:cn:][:co:][:cs:]]").addAll(IGNORE_SCRIPTS).freeze();
+    private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet("[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
+    private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
     private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
-    
+
     /**
      * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
      * collation.
@@ -510,44 +566,40 @@ public class IndexCharacters {
      */
 
     private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
-        ruleBasedCollator.setStrength(Collator.TERTIARY);
         String[] results = new String[UScript.CODE_LIMIT];
-        Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
         for (String current : TO_TRY) {
-            if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not symbols.
                 continue;
             }
             int script = UScript.getScript(current.codePointAt(0));
-            if (script == UScript.COMMON || script == UScript.INHERITED) {
-                continue;
-            }
-            String bestSoFar = results[script];
-            if (bestSoFar == null || ruleBasedCollator.compare(current, bestSoFar) < 0) {
+            if (results[script] == null) {
+                results[script] = current;
+            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
                 results[script] = current;
             }
         }
 
-        UnicodeSet extras = new UnicodeSet();
-        UnicodeSet expansions = new UnicodeSet();
         try {
+            UnicodeSet extras = new UnicodeSet();
+            UnicodeSet expansions = new UnicodeSet();
             ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
-        } catch (Exception e) {
-        } // why have a checked exception???
-
-        extras.addAll(expansions).removeAll(TO_TRY);
-        for (String current : extras) {
-            if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
-                continue;
+            extras.addAll(expansions).removeAll(TO_TRY);
+            if (extras.size() != 0) {
+                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
+                for (String current : extras) {
+                    if (!TO_TRY.containsAll(current)) continue;
+                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+                        continue;
+                    }
+                    int script = UScript.getScript(current.codePointAt(0));
+                    if (results[script] == null) {
+                        results[script] = current;
+                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+                        results[script] = current;
+                    }
+                }
             }
-            int script = UScript.getScript(current.codePointAt(0));
-            if (script == UScript.COMMON || script == UScript.INHERITED) {
-                continue;
-            }
-            String bestSoFar = results[script];
-            if (bestSoFar == null || ruleBasedCollator.compare(current, bestSoFar) < 0) {
-                results[script] = current;
-            }
-        }
+        } catch (Exception e) {} // why have a checked exception???
 
         TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
         for (int i = 0; i < results.length; ++i) {
@@ -555,11 +607,11 @@ public class IndexCharacters {
                 sorted.add(results[i]);
             }
         }
-        ruleBasedCollator.setStrength(Collator.PRIMARY);
         return Collections.unmodifiableList(new ArrayList<String>(sorted));
     }
 
     private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
+    private int maxCount = 99;
 
     /**
      * Comparator that returns "better" items first, where shorter NFKD is better, and otherwise NFKD binary order is
