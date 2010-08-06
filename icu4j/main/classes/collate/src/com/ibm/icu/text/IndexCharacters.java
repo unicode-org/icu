@@ -205,7 +205,7 @@ public class IndexCharacters {
             }
         }
         indexCharacters = Collections.unmodifiableList(new ArrayList(indexCharacterSet));
-        firstScriptCharacters = firstStringsInScript();
+        firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS; // TODO, use collation method when fast enough. firstStringsInScript(comparator);
     }
 
     /*
@@ -496,22 +496,25 @@ public class IndexCharacters {
     private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet("[[:sc=Common:][:sc=inherited:]]").freeze();
     private static final UnicodeSet TO_TRY = new UnicodeSet("[^[:cn:][:co:][:cs:]]").addAll(IGNORE_SCRIPTS).freeze();
 
+    private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
+    
     /**
      * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
      * collation.
-     * 
+     * @param ruleBasedCollator TODO
      * @param comparator
      * @param lowerLimit
      * @param testScript
+     * 
      * @return
      */
 
-    private List<String> firstStringsInScript() {
-        comparator.setStrength(Collator.TERTIARY);
+    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
+        ruleBasedCollator.setStrength(Collator.TERTIARY);
         String[] results = new String[UScript.CODE_LIMIT];
         Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
         for (String current : TO_TRY) {
-            if (!normalizer.isNormalized(current) || comparator.compare(current, "a") < 0) {
+            if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
                 continue;
             }
             int script = UScript.getScript(current.codePointAt(0));
@@ -519,7 +522,7 @@ public class IndexCharacters {
                 continue;
             }
             String bestSoFar = results[script];
-            if (bestSoFar == null || comparator.compare(current, bestSoFar) < 0) {
+            if (bestSoFar == null || ruleBasedCollator.compare(current, bestSoFar) < 0) {
                 results[script] = current;
             }
         }
@@ -527,13 +530,13 @@ public class IndexCharacters {
         UnicodeSet extras = new UnicodeSet();
         UnicodeSet expansions = new UnicodeSet();
         try {
-            comparator.getContractionsAndExpansions(extras, expansions, true);
+            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
         } catch (Exception e) {
         } // why have a checked exception???
 
         extras.addAll(expansions).removeAll(TO_TRY);
         for (String current : extras) {
-            if (!normalizer.isNormalized(current) || comparator.compare(current, "a") < 0) {
+            if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
                 continue;
             }
             int script = UScript.getScript(current.codePointAt(0));
@@ -541,18 +544,18 @@ public class IndexCharacters {
                 continue;
             }
             String bestSoFar = results[script];
-            if (bestSoFar == null || comparator.compare(current, bestSoFar) < 0) {
+            if (bestSoFar == null || ruleBasedCollator.compare(current, bestSoFar) < 0) {
                 results[script] = current;
             }
         }
 
-        TreeSet<String> sorted = new TreeSet<String>(comparator);
+        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
         for (int i = 0; i < results.length; ++i) {
             if (results[i] != null) {
                 sorted.add(results[i]);
             }
         }
-        comparator.setStrength(Collator.PRIMARY);
+        ruleBasedCollator.setStrength(Collator.PRIMARY);
         return Collections.unmodifiableList(new ArrayList<String>(sorted));
     }
 
