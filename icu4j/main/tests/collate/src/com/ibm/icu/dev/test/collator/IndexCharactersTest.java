@@ -5,6 +5,8 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.IndexCharacters;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.Set;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.IndexCharacters;
+import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.IndexCharacters.Bucket;
 import com.ibm.icu.util.ULocale;
@@ -149,16 +152,40 @@ public class IndexCharactersTest extends TestFmwk {
         new IndexCharactersTest().run(args);
     }
     
+    public void TestFirstCharacters() {
+        IndexCharacters indexCharacters = new IndexCharacters(ULocale.ENGLISH);
+        RuleBasedCollator collator = indexCharacters.getCollator();
+        collator.setStrength(Collator.IDENTICAL);
+        List<String> firsts = indexCharacters.getFirstScriptCharacters();
+        // Verify that they are all in order, and that each script is represented exactly once.
+        UnicodeSet missingScripts = new UnicodeSet("[^[:sc=inherited:][:sc=unknown:][:sc=common:][:Script=Braille:]]");
+        String last = "";
+        for (String index : firsts) {
+            if (collator.compare(last,index) >= 0) {
+                errln("Characters not in order: " + last + " !< " + index);
+            }
+            int script = UScript.getScript(index.codePointAt(0)); // we actually look at just the first char
+            UnicodeSet s = new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, script);
+            if (missingScripts.containsNone(s)) {
+                errln("2nd character in script: " + index + "\t" + new UnicodeSet(missingScripts).retainAll(s).toPattern(false));
+            }
+            missingScripts.removeAll(s);
+        }
+        if (missingScripts.size() != 0) {
+            errln("Missing character from: " + missingScripts);
+        }
+    }
+    
     public void TestBuckets() {
         String[] test = { "$", "£", "12", "2", 
-                "Edgar", "edgar", "Abbot", "Effron", "Zach", "Ƶ", 
+                "Edgar", "edgar", "Abbot", "Effron", "Zach", "Ƶ", "İstanbul", "Istanbul", "istanbul", "ıstanbul",
                 "Þor", "Åberg", "Östlund",
                 "Ἥρα", "Ἀθηνᾶ", "Ζεύς", "Ποσειδὣν", "Ἅιδης", "Δημήτηρ", "Ἑστιά", 
                 //"Ἀπόλλων", "Ἄρτεμις", "Ἑρμἣς", "Ἄρης", "Ἀφροδίτη", "Ἥφαιστος", "Διόνυσος",
                 "斉藤", "佐藤", "鈴木", "高橋", "田中", "渡辺", "伊藤", "山本", "中村", "小林", "斎藤", "加藤",
                 //"吉田", "山田", "佐々木", "山口", "松本", "井上", "木村", "林", "清水"
                 };
-        UnicodeSet additions = new UnicodeSet("[A-Z]");
+        ULocale additions = ULocale.ENGLISH;
         StringBuilder buffer = new StringBuilder();
 
         for (String[] pair : localeAndIndexCharactersLists) {
@@ -307,5 +334,8 @@ public class IndexCharactersTest extends TestFmwk {
                     + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
             }
         }
+    }
+    public void TestZZZ() {
+        // stub
     }
 }
