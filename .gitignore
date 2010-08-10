@@ -7,7 +7,9 @@ icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
 icu4c/source/allinone/*.ncb
+icu4c/source/allinone/*.opensdf
 icu4c/source/allinone/*.opt
+icu4c/source/allinone/*.sdf
 icu4c/source/allinone/*.suo
 icu4c/source/autom4te.cache
 icu4c/source/bin
@@ -15,6 +17,7 @@ icu4c/source/common/*.ao
 icu4c/source/common/*.d
 icu4c/source/common/*.o
 icu4c/source/common/*.plg
+icu4c/source/common/*.vcxproj.user
 icu4c/source/common/Debug
 icu4c/source/common/Makefile
 icu4c/source/common/Release
@@ -41,14 +44,18 @@ icu4c/source/config/pkgdata.inc
 icu4c/source/config/pkgdataMakefile
 icu4c/source/configure-local.mk
 icu4c/source/data/*.plg
+icu4c/source/data/*.vcxproj.user
 icu4c/source/data/Debug
 icu4c/source/data/Makefile
 icu4c/source/data/Release
 icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
+icu4c/source/data/obj
 icu4c/source/data/out
 icu4c/source/data/pkgdataMakefile
+icu4c/source/data/x64
+icu4c/source/data/x86
 icu4c/source/dist
 icu4c/source/doc
 icu4c/source/extra/Makefile
@@ -58,6 +65,7 @@ icu4c/source/extra/scrptrun/srtest
 icu4c/source/extra/scrptrun/srtest.d
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/*.o
+icu4c/source/extra/uconv/*.vcxproj.user
 icu4c/source/extra/uconv/Debug
 icu4c/source/extra/uconv/Makefile
 icu4c/source/extra/uconv/Release
@@ -78,6 +86,7 @@ icu4c/source/i18n/*.ao
 icu4c/source/i18n/*.d
 icu4c/source/i18n/*.o
 icu4c/source/i18n/*.plg
+icu4c/source/i18n/*.vcxproj.user
 icu4c/source/i18n/Debug
 icu4c/source/i18n/Makefile
 icu4c/source/i18n/Makefile.local
@@ -93,6 +102,7 @@ icu4c/source/icudefs.mk
 icu4c/source/io/*.ao
 icu4c/source/io/*.d
 icu4c/source/io/*.o
+icu4c/source/io/*.vcxproj.user
 icu4c/source/io/Debug
 icu4c/source/io/Makefile
 icu4c/source/io/Release
@@ -106,6 +116,7 @@ icu4c/source/layout/*.ao
 icu4c/source/layout/*.d
 icu4c/source/layout/*.o
 icu4c/source/layout/*.pdb
+icu4c/source/layout/*.vcxproj.user
 icu4c/source/layout/Debug
 icu4c/source/layout/Makefile
 icu4c/source/layout/Release
@@ -119,6 +130,7 @@ icu4c/source/layoutex/*.ao
 icu4c/source/layoutex/*.d
 icu4c/source/layoutex/*.o
 icu4c/source/layoutex/*.pdb
+icu4c/source/layoutex/*.vcxproj.user
 icu4c/source/layoutex/Debug
 icu4c/source/layoutex/Makefile
 icu4c/source/layoutex/Release
@@ -141,6 +153,7 @@ icu4c/source/samples/break/break.vcproj.*.*.user
 icu4c/source/samples/break/release
 icu4c/source/samples/cal/*.d
 icu4c/source/samples/cal/*.pdb
+icu4c/source/samples/cal/*.vcxproj.user
 icu4c/source/samples/cal/Debug
 icu4c/source/samples/cal/Makefile
 icu4c/source/samples/cal/Release
@@ -174,6 +187,7 @@ icu4c/source/samples/csdet/csdet.vcproj.*.*.user
 icu4c/source/samples/csdet/release
 icu4c/source/samples/date/*.d
 icu4c/source/samples/date/*.pdb
+icu4c/source/samples/date/*.vcxproj.user
 icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
@@ -285,6 +299,7 @@ icu4c/source/stubdata/*.ao
 icu4c/source/stubdata/*.d
 icu4c/source/stubdata/*.o
 icu4c/source/stubdata/*.plg
+icu4c/source/stubdata/*.vcxproj.user
 icu4c/source/stubdata/Debug
 icu4c/source/stubdata/Makefile
 icu4c/source/stubdata/Release
@@ -303,6 +318,7 @@ icu4c/source/test/cintltst/*.d
 icu4c/source/test/cintltst/*.dSYM
 icu4c/source/test/cintltst/*.o
 icu4c/source/test/cintltst/*.plg
+icu4c/source/test/cintltst/*.vcxproj.user
 icu4c/source/test/cintltst/Debug
 icu4c/source/test/cintltst/Makefile
 icu4c/source/test/cintltst/Makefile.local
@@ -321,6 +337,7 @@ icu4c/source/test/hdrtst/cfiles.txt
 icu4c/source/test/intltest/*.d
 icu4c/source/test/intltest/*.o
 icu4c/source/test/intltest/*.plg
+icu4c/source/test/intltest/*.vcxproj.user
 icu4c/source/test/intltest/Debug
 icu4c/source/test/intltest/Makefile
 icu4c/source/test/intltest/Makefile.local
@@ -335,6 +352,7 @@ icu4c/source/test/intltest/x86
 icu4c/source/test/iotest/*.d
 icu4c/source/test/iotest/*.dSYM
 icu4c/source/test/iotest/*.o
+icu4c/source/test/iotest/*.vcxproj.user
 icu4c/source/test/iotest/Debug
 icu4c/source/test/iotest/Makefile
 icu4c/source/test/iotest/Release
@@ -347,6 +365,7 @@ icu4c/source/test/iotest/x64
 icu4c/source/test/iotest/x86
 icu4c/source/test/letest/*.d
 icu4c/source/test/letest/*.o
+icu4c/source/test/letest/*.vcxproj.user
 icu4c/source/test/letest/Debug
 icu4c/source/test/letest/Makefile
 icu4c/source/test/letest/Release
@@ -465,6 +484,7 @@ icu4c/source/tools/ctestfw/*.ao
 icu4c/source/tools/ctestfw/*.d
 icu4c/source/tools/ctestfw/*.o
 icu4c/source/tools/ctestfw/*.pdb
+icu4c/source/tools/ctestfw/*.vcxproj.user
 icu4c/source/tools/ctestfw/*icutest*.dll
 icu4c/source/tools/ctestfw/*icutest*.exp
 icu4c/source/tools/ctestfw/*icutest*.lib
@@ -489,6 +509,7 @@ icu4c/source/tools/genbrk/*.d
 icu4c/source/tools/genbrk/*.o
 icu4c/source/tools/genbrk/*.pdb
 icu4c/source/tools/genbrk/*.plg
+icu4c/source/tools/genbrk/*.vcxproj.user
 icu4c/source/tools/genbrk/Debug
 icu4c/source/tools/genbrk/Makefile
 icu4c/source/tools/genbrk/Release
@@ -503,6 +524,7 @@ icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.o
 icu4c/source/tools/genccode/*.pdb
 icu4c/source/tools/genccode/*.plg
+icu4c/source/tools/genccode/*.vcxproj.user
 icu4c/source/tools/genccode/Debug
 icu4c/source/tools/genccode/Makefile
 icu4c/source/tools/genccode/Release
@@ -516,6 +538,7 @@ icu4c/source/tools/genccode/x86
 icu4c/source/tools/gencfu/*.d
 icu4c/source/tools/gencfu/*.o
 icu4c/source/tools/gencfu/*.pdb
+icu4c/source/tools/gencfu/*.vcxproj.user
 icu4c/source/tools/gencfu/Debug
 icu4c/source/tools/gencfu/Makefile
 icu4c/source/tools/gencfu/Release
@@ -530,6 +553,7 @@ icu4c/source/tools/gencmn/*.d
 icu4c/source/tools/gencmn/*.o
 icu4c/source/tools/gencmn/*.pdb
 icu4c/source/tools/gencmn/*.plg
+icu4c/source/tools/gencmn/*.vcxproj.user
 icu4c/source/tools/gencmn/Debug
 icu4c/source/tools/gencmn/Makefile
 icu4c/source/tools/gencmn/Release
@@ -547,6 +571,7 @@ icu4c/source/tools/gencnval/*.o
 icu4c/source/tools/gencnval/*.opt
 icu4c/source/tools/gencnval/*.pdb
 icu4c/source/tools/gencnval/*.plg
+icu4c/source/tools/gencnval/*.vcxproj.user
 icu4c/source/tools/gencnval/Debug
 icu4c/source/tools/gencnval/Makefile
 icu4c/source/tools/gencnval/Release
@@ -562,6 +587,7 @@ icu4c/source/tools/genctd/*.d
 icu4c/source/tools/genctd/*.o
 icu4c/source/tools/genctd/*.pdb
 icu4c/source/tools/genctd/*.plg
+icu4c/source/tools/genctd/*.vcxproj.user
 icu4c/source/tools/genctd/Debug
 icu4c/source/tools/genctd/Makefile
 icu4c/source/tools/genctd/Release
@@ -580,6 +606,7 @@ icu4c/source/tools/gennorm2/*.d
 icu4c/source/tools/gennorm2/*.o
 icu4c/source/tools/gennorm2/*.pdb
 icu4c/source/tools/gennorm2/*.plg
+icu4c/source/tools/gennorm2/*.vcxproj.user
 icu4c/source/tools/gennorm2/Debug
 icu4c/source/tools/gennorm2/Makefile
 icu4c/source/tools/gennorm2/Release
@@ -595,6 +622,7 @@ icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.o
 icu4c/source/tools/genrb/*.pdb
 icu4c/source/tools/genrb/*.plg
+icu4c/source/tools/genrb/*.vcxproj.user
 icu4c/source/tools/genrb/Debug
 icu4c/source/tools/genrb/Makefile
 icu4c/source/tools/genrb/Makefile.local
@@ -618,6 +646,7 @@ icu4c/source/tools/gensprep/*.8
 icu4c/source/tools/gensprep/*.d
 icu4c/source/tools/gensprep/*.o
 icu4c/source/tools/gensprep/*.pdb
+icu4c/source/tools/gensprep/*.vcxproj.user
 icu4c/source/tools/gensprep/Debug
 icu4c/source/tools/gensprep/Makefile
 icu4c/source/tools/gensprep/Release
@@ -632,6 +661,7 @@ icu4c/source/tools/gensprep/x86
 icu4c/source/tools/gentest/*.d
 icu4c/source/tools/gentest/*.o
 icu4c/source/tools/gentest/*.pdb
+icu4c/source/tools/gentest/*.vcxproj.user
 icu4c/source/tools/gentest/Debug
 icu4c/source/tools/gentest/Makefile
 icu4c/source/tools/gentest/Release
@@ -648,6 +678,7 @@ icu4c/source/tools/icuinfo/*.dylib
 icu4c/source/tools/icuinfo/*.o
 icu4c/source/tools/icuinfo/*.so
 icu4c/source/tools/icuinfo/*.user
+icu4c/source/tools/icuinfo/*.vcxproj.user
 icu4c/source/tools/icuinfo/Debug
 icu4c/source/tools/icuinfo/Makefile
 icu4c/source/tools/icuinfo/Makefile.local
@@ -663,6 +694,7 @@ icu4c/source/tools/icupkg/*.o
 icu4c/source/tools/icupkg/*.opt
 icu4c/source/tools/icupkg/*.pdb
 icu4c/source/tools/icupkg/*.plg
+icu4c/source/tools/icupkg/*.vcxproj.user
 icu4c/source/tools/icupkg/Debug
 icu4c/source/tools/icupkg/Makefile
 icu4c/source/tools/icupkg/Release
@@ -692,6 +724,7 @@ icu4c/source/tools/makeconv/*.d
 icu4c/source/tools/makeconv/*.o
 icu4c/source/tools/makeconv/*.pdb
 icu4c/source/tools/makeconv/*.plg
+icu4c/source/tools/makeconv/*.vcxproj.user
 icu4c/source/tools/makeconv/Debug
 icu4c/source/tools/makeconv/Makefile
 icu4c/source/tools/makeconv/Release
@@ -708,6 +741,7 @@ icu4c/source/tools/pkgdata/*.ncb
 icu4c/source/tools/pkgdata/*.o
 icu4c/source/tools/pkgdata/*.opt
 icu4c/source/tools/pkgdata/*.pdb
+icu4c/source/tools/pkgdata/*.vcxproj.user
 icu4c/source/tools/pkgdata/Debug
 icu4c/source/tools/pkgdata/Makefile
 icu4c/source/tools/pkgdata/Release
@@ -726,6 +760,7 @@ icu4c/source/tools/toolutil/*.o
 icu4c/source/tools/toolutil/*.opt
 icu4c/source/tools/toolutil/*.pdb
 icu4c/source/tools/toolutil/*.plg
+icu4c/source/tools/toolutil/*.vcxproj.user
 icu4c/source/tools/toolutil/Debug
 icu4c/source/tools/toolutil/Makefile
 icu4c/source/tools/toolutil/Release
