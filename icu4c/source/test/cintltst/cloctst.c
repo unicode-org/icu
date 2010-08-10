@@ -42,6 +42,8 @@ static void TestNonexistentLanguageExemplars(void);
 static void TestLocDataErrorCodeChaining(void);
 static void TestLanguageExemplarsFallbacks(void);
 
+static void TestUnicodeDefines(void);
+
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -241,6 +243,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToLanguageTag);
     TESTCASE(TestForLanguageTag);
     TESTCASE(TestTrailingNull);
+    TESTCASE(TestUnicodeDefines);
 }
 
 
@@ -5551,4 +5554,25 @@ static void TestForLanguageTag(void) {
             }
         }
     }
+}
+
+static void test_unicode_define(const char *namech, char ch, const char *nameu, UChar uch)
+{
+  UChar asUch[1];
+  asUch[0]=0;
+  log_verbose("Testing whether %s[\\x%02x,'%c'] == %s[U+%04X]\n", namech, ch,(int)ch, nameu, (int) uch);
+  u_charsToUChars(&ch, asUch, 1);
+  if(asUch[0] != uch) {
+    log_err("FAIL:  %s[\\x%02x,'%c'] maps to U+%04X, but %s = U+%04X\n", namech, ch, (int)ch, (int)asUch[0], nameu, (int)uch);
+  } else {
+    log_verbose(" .. OK, == U+%04X\n", (int)asUch[0]);
+  }
+}
+
+#define TEST_UNICODE_DEFINE(x,y) test_unicode_define(#x, (char)(x), #y, (UChar)(y))
+
+static void TestUnicodeDefines(void) {
+  TEST_UNICODE_DEFINE(ULOC_KEYWORD_SEPARATOR, ULOC_KEYWORD_SEPARATOR_UNICODE);
+  TEST_UNICODE_DEFINE(ULOC_KEYWORD_ASSIGN, ULOC_KEYWORD_ASSIGN_UNICODE);
+  TEST_UNICODE_DEFINE(ULOC_KEYWORD_ITEM_SEPARATOR, ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE);
 }
