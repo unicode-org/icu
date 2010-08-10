@@ -289,7 +289,7 @@
 /**
   * Unicode code point for '@' separating keywords from the locale string.
   * @see ULOC_KEYWORD_SEPARATOR
-  * @internal
+  * @draft ICU 4.6
   */
 #define ULOC_KEYWORD_SEPARATOR_UNICODE 0x40
 
@@ -302,7 +302,7 @@
 /**
   * Unicode code point for '=' for assigning value to a keyword.
   * @see ULOC_KEYWORD_ASSIGN
-  * @internal 
+  * @draft ICU 4.6 
   */
 #define ULOC_KEYWORD_ASSIGN_UNICODE 0x3D
 
@@ -315,7 +315,7 @@
 /**
   * Unicode code point for ';' separating keywords
   * @see ULOC_KEYWORD_ITEM_SEPARATOR
-  * @internal
+  * @draft ICU 4.6
   */
 #define ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE 0x3B
 
