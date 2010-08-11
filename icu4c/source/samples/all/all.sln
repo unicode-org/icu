@@ -1,55 +1,52 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "break", "..\break\break.vcproj", "{DEEADF02-9C14-4854-A395-E505D2904D65}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "break", "..\break\break.vcxproj", "{DEEADF02-9C14-4854-A395-E505D2904D65}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\cal\cal.vcproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\cal\cal.vcxproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "case", "..\case\case.vcproj", "{2316BE8C-189D-4C8B-B506-9D9EE25AC46D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "case", "..\case\case.vcxproj", "{2316BE8C-189D-4C8B-B506-9D9EE25AC46D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\date\date.vcproj", "{38B5751A-C6F9-4409-950C-F4F9DA17275F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\date\date.vcxproj", "{38B5751A-C6F9-4409-950C-F4F9DA17275F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datefmt", "..\datefmt\datefmt.vcproj", "{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datefmt", "..\datefmt\datefmt.vcxproj", "{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "layout", "..\layout\layout.vcproj", "{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "layout", "..\layout\layout.vcxproj", "{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "legacy", "..\legacy\legacy.vcproj", "{57F56795-1802-4605-88A0-013AAE9998F6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "legacy", "..\legacy\legacy.vcxproj", "{57F56795-1802-4605-88A0-013AAE9998F6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgfmt", "..\msgfmt\msgfmt.vcproj", "{5FF1D1A2-1630-446C-B6EA-93EFD4F975C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgfmt", "..\msgfmt\msgfmt.vcxproj", "{5FF1D1A2-1630-446C-B6EA-93EFD4F975C3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "numfmt", "..\numfmt\numfmt.vcproj", "{721FBD47-E458-4C35-90DA-FF192907D5E2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "numfmt", "..\numfmt\numfmt.vcxproj", "{721FBD47-E458-4C35-90DA-FF192907D5E2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "props", "..\props\props.vcproj", "{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "props", "..\props\props.vcxproj", "{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reader", "..\udata\reader.vcproj", "{BFEFC070-C5A9-42E3-BAAE-A51FB2C4BA28}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reader", "..\udata\reader.vcxproj", "{BFEFC070-C5A9-42E3-BAAE-A51FB2C4BA28}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resources", "..\uresb\resources.vcproj", "{69437707-2FEF-4E2C-8C3F-6E6B3D241366}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resources", "..\uresb\resources.vcxproj", "{69437707-2FEF-4E2C-8C3F-6E6B3D241366}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrch", "..\strsrch\strsrch.vcproj", "{E97790D1-7ABE-4C8E-9627-251ABEAA3EEC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrch", "..\strsrch\strsrch.vcxproj", "{E97790D1-7ABE-4C8E-9627-251ABEAA3EEC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "translit", "..\translit\translit.vcproj", "{D1BEC124-303A-4F44-BA70-55769B8FE96A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "translit", "..\translit\translit.vcxproj", "{D1BEC124-303A-4F44-BA70-55769B8FE96A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uciter8", "..\uciter8\uciter8.vcproj", "{94379DD9-E6CC-47AC-8E62-0A4ABD8EB121}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uciter8", "..\uciter8\uciter8.vcxproj", "{94379DD9-E6CC-47AC-8E62-0A4ABD8EB121}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnv", "..\ucnv\ucnv.vcproj", "{8C95060E-61F5-464E-BB42-95B788C0D7E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnv", "..\ucnv\ucnv.vcxproj", "{8C95060E-61F5-464E-BB42-95B788C0D7E4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ufortune", "..\ufortune\ufortune.vcproj", "{25F534DF-93C9-4853-A88E-DB7D8CF74042}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ufortune", "..\ufortune\ufortune.vcxproj", "{25F534DF-93C9-4853-A88E-DB7D8CF74042}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugrep", "..\ugrep\ugrep.vcproj", "{63166CEB-02CC-472C-B3B7-E6C559939BDA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugrep", "..\ugrep\ugrep.vcxproj", "{63166CEB-02CC-472C-B3B7-E6C559939BDA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uresb", "..\uresb\uresb.vcproj", "{92580BF4-F4DA-4024-B3F8-444F982BC72F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{69437707-2FEF-4E2C-8C3F-6E6B3D241366} = {69437707-2FEF-4E2C-8C3F-6E6B3D241366}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uresb", "..\uresb\uresb.vcxproj", "{92580BF4-F4DA-4024-B3F8-444F982BC72F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ustring", "..\ustring\ustring.vcproj", "{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ustring", "..\ustring\ustring.vcxproj", "{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "writer", "..\udata\writer.vcproj", "{40A90302-F173-4629-A003-F571D2D93D16}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "writer", "..\udata\writer.vcxproj", "{40A90302-F173-4629-A003-F571D2D93D16}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "citer", "..\citer\citer.vcproj", "{247E2681-6C84-408B-B40C-5DB50BC5E18F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "citer", "..\citer\citer.vcxproj", "{247E2681-6C84-408B-B40C-5DB50BC5E18F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coll", "..\coll\coll.vcproj", "{7664D0D2-0263-4BFB-AE19-9A1CAD231440}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coll", "..\coll\coll.vcxproj", "{7664D0D2-0263-4BFB-AE19-9A1CAD231440}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csdet", "..\csdet\csdet.vcproj", "{683745AD-3BC2-4B89-898B-93490D7F2757}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csdet", "..\csdet\csdet.vcxproj", "{683745AD-3BC2-4B89-898B-93490D7F2757}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
