@@ -30,7 +30,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * @author       John Emmons
  * @stable ICU 4.2
  */
-class NumberingSystem {
+public class NumberingSystem {
 
     /**
      * Default constructor.  Returns a numbering system that uses the Western decimal

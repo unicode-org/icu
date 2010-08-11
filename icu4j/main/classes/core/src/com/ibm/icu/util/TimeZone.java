@@ -19,8 +19,8 @@ import com.ibm.icu.impl.ICULogger;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TimeZoneAdapter;
+import com.ibm.icu.impl.TimeZoneFormat;
 import com.ibm.icu.impl.ZoneMeta;
-import com.ibm.icu.text.SimpleDateFormat;
 
 /**
  * {@icuenhanced java.util.TimeZone}.{@icu _usage_}
@@ -209,8 +209,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
      */
-    private static ICUCache<ULocale, SimpleDateFormat> cachedLocaleData =
-        new SimpleCache<ULocale, SimpleDateFormat>();
+    private static ICUCache<ULocale, TimeZoneFormat> cachedLocaleData =
+        new SimpleCache<ULocale, TimeZoneFormat>();
 
     /**
      * Gets the time zone offset, for current date, modified in case of
@@ -351,7 +351,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName() {
-        return _getDisplayName(false, LONG_GENERIC, ULocale.getDefault());
+        return _getDisplayName(false, false, LONG_GENERIC, ULocale.getDefault());
     }
 
     /**
@@ -366,7 +366,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName(Locale locale) {
-        return _getDisplayName(false, LONG_GENERIC, ULocale.forLocale(locale));
+        return _getDisplayName(false, false, LONG_GENERIC, ULocale.forLocale(locale));
     }
 
     /**
@@ -381,7 +381,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 3.2
      */
     public final String getDisplayName(ULocale locale) {
-        return _getDisplayName(false, LONG_GENERIC, locale);
+        return _getDisplayName(false, false, LONG_GENERIC, locale);
     }
 
     /**
@@ -444,8 +444,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
         if (style < SHORT || style > GENERIC_LOCATION) {
             throw new IllegalArgumentException("Illegal style: " + style);
         }
-
-        return _getDisplayName(daylight, style, locale);
+        
+        return _getDisplayName(daylight, true, style, locale);
     }
 
     /**
@@ -453,83 +453,39 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT,
      * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
-    private synchronized String _getDisplayName(boolean daylight, int style, ULocale locale) {
+    private synchronized String _getDisplayName(boolean daylight, boolean daylightRequested, int style, ULocale locale) {
         if (locale == null) {
             throw new NullPointerException("locale is null");
         }
 
-        /* NOTES:
-         * (1) We use SimpleDateFormat for simplicity; we could do this
-         * more efficiently but it would duplicate the SimpleDateFormat code
-         * here, which is undesirable.
-         * (2) Attempts to move the code from SimpleDateFormat to here also run
-         * around because this requires SimpleDateFormat to keep a Locale
-         * object around, which it currently doesn't; to synthesize such a
-         * locale upon resurrection; and to somehow handle the special case of
-         * construction from a DateFormatSymbols object.
-         */
-
-        // We keep a cache, indexed by locale.  The cache contains a
-        // SimpleDateFormat object, which we create on demand.
-        SimpleDateFormat format;
-        SimpleDateFormat tmpfmt = cachedLocaleData.get(locale);
-        if (tmpfmt == null) {
-            format = new SimpleDateFormat(null, locale);
-            cachedLocaleData.put(locale, format);
-        } else {
-            format = (SimpleDateFormat)tmpfmt.clone();
+         // We keep a cache, indexed by locale.  
+        TimeZoneFormat tzf = null;
+        tzf = cachedLocaleData.get(locale);
+        if (tzf == null) {
+            tzf = TimeZoneFormat.createInstance(locale);
+            cachedLocaleData.put(locale, tzf);
         }
 
-        String[] patterns = { "V", "zzzz", "v", "vvvv", "Z", "ZZZZ", "z", "VVVV" };
-        format.applyPattern(patterns[style]);
-        format.setTimeZone(this);
-        Date d = new Date();
-        if ((style == SHORT_GENERIC) || (style == LONG_GENERIC)) {
-            // Generic names may change time to time even for a single time zone.
-            // This method returns the one used for the zone now.
-            return format.format(d);
+        
+        String result;
+        if ( daylightRequested ) {
+            result = tzf.format(this, style, daylight);
+            if ( result == null) {
+                result = tzf.format( this, LONG_GMT, daylight);
+            }
         } else {
-            int[] offsets = new int[2];
-            getOffset(d.getTime(), false, offsets);
-            if ((daylight && offsets[1] != 0) || (!daylight && offsets[1] == 0)) {
-                return format.format(d);
+            long now = System.currentTimeMillis();
+            result = tzf.format(this, now, style);
+            if ( result == null) {
+                result = tzf.format( this, now, LONG_GMT);
             }
-
-            // Create a new SimpleTimeZone as a stand-in for this zone; the stand-in
-            // will have no DST, or DST during July, but the same ID and offset,
-            // and hence the same display name.  We don't cache these because
-            // they're small and cheap to create.
-            SimpleTimeZone tz;
-            if (daylight && useDaylightTime()) {
-                // The display name for daylight saving time was requested, but currently
-                // not in DST
-
-                // Set a fixed date (July 1) in this Gregorian year
-                GregorianCalendar cal = new GregorianCalendar(this);
-                cal.set(Calendar.MONTH, Calendar.JULY);
-                cal.set(Calendar.DATE, 1);
-
-                // Get July 1 date
-                d = cal.getTime();
-
-                // Check if it is in DST
-                if (cal.get(Calendar.DST_OFFSET) == 0) {
-                    // We need to create a fake time zone
-                    tz = new SimpleTimeZone(offsets[0], getID(),
-                            Calendar.JUNE, 1, 0, 0,
-                            Calendar.AUGUST, 1, 0, 0,
-                            getDSTSavings());
-                    format.setTimeZone(tz);
-                }
-            } else {
-                // The display name for standard time was requested, but currently in DST
-                // or display name for daylight saving time was requested, but this zone
-                // no longer observes DST.
-                tz = new SimpleTimeZone(offsets[0], getID());
-                format.setTimeZone(tz);
-            }
-            return format.format(d);
+            
         }
+            
+        if ( result == null )
+            result = tzf.format(this, LONG_GMT, daylight);
+        
+        return result;
     }
 
     /**
