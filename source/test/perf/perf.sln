@@ -1,30 +1,30 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "charperf", "charperf\charperf.vcproj", "{D850A4B6-7D94-476E-9392-E9272DA4EAAF}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "charperf", "charperf\charperf.vcxproj", "{D850A4B6-7D94-476E-9392-E9272DA4EAAF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "normperf", "normperf\normperf.vcproj", "{56CCC661-8D33-4F0A-B62F-C619CE843C68}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "normperf", "normperf\normperf.vcxproj", "{56CCC661-8D33-4F0A-B62F-C619CE843C68}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "convperf", "convperf\convperf.vcproj", "{B4C03939-D417-41F0-85B4-848ECF105E3A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "convperf", "convperf\convperf.vcxproj", "{B4C03939-D417-41F0-85B4-848ECF105E3A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stringperf", "ustrperf\stringperf.vcproj", "{523710EA-349D-45BF-8B39-289CC86E7D91}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stringperf", "ustrperf\stringperf.vcxproj", "{523710EA-349D-45BF-8B39-289CC86E7D91}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ubrkperf", "ubrkperf\ubrkperf.vcproj", "{7E280294-49BD-43D1-9903-CF29648D88CA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ubrkperf", "ubrkperf\ubrkperf.vcxproj", "{7E280294-49BD-43D1-9903-CF29648D88CA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utfperf", "utfperf\utfperf.vcproj", "{E7728E98-0469-43F4-AF37-4529A3D52C6B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utfperf", "utfperf\utfperf.vcxproj", "{E7728E98-0469-43F4-AF37-4529A3D52C6B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "collperf", "collperf\collperf.vcproj", "{01807B4A-E3B5-4B97-A7F3-207746DCD71E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "collperf", "collperf\collperf.vcxproj", "{01807B4A-E3B5-4B97-A7F3-207746DCD71E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usetperf", "usetperf\usetperf.vcproj", "{EC5DF28A-D789-4C46-A55D-0AD55B50ECE8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usetperf", "usetperf\usetperf.vcxproj", "{EC5DF28A-D789-4C46-A55D-0AD55B50ECE8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unisetperf", "unisetperf\unisetperf.vcproj", "{E7728E98-0469-AF37-43F4-4529A3D52C6B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unisetperf", "unisetperf\unisetperf.vcxproj", "{E7728E98-0469-AF37-43F4-4529A3D52C6B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrchperf", "strsrchperf\strsrchperf.vcproj", "{241DED26-1635-45E6-9564-7742AC8043B5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrchperf", "strsrchperf\strsrchperf.vcxproj", "{241DED26-1635-45E6-9564-7742AC8043B5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utrie2perf", "utrie2perf\utrie2perf.vcproj", "{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utrie2perf", "utrie2perf\utrie2perf.vcxproj", "{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnvavailperf", "ucnvavailperf\ucnvavailperf.vcproj", "{EE2259BF-280D-4E0E-8A08-D77A26AE4191}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnvavailperf", "ucnvavailperf\ucnvavailperf.vcxproj", "{EE2259BF-280D-4E0E-8A08-D77A26AE4191}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateFmtPerf", "DateFmtPerf\DateFmtPerf.vcproj", "{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateFmtPerf", "DateFmtPerf\DateFmtPerf.vcxproj", "{B5E59422-0C52-4469-AB69-0C2AFD6E37A5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dtfmtrtperf", "dtfmrtperf\dtfmtrtperf.vcproj", "{1FCAA83C-955C-4DEF-9CEF-3679AE75C44D}"
 EndProject
