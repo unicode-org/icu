@@ -17,6 +17,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ZoneMeta.OlsonToMetaMappingEntry;
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneTransition;
@@ -28,6 +29,14 @@ import com.ibm.icu.util.UResourceBundle;
  *
  */
 public class ZoneStringFormat {
+
+    private static final int millisPerHour = 60 * 60 * 1000;
+    private static final int millisPerMinute = 60 * 1000;
+    private static final int millisPerSecond = 1000;
+    private static final String DEFAULT_DIGIT_STRING = "0123456789";
+    private static final String DEFAULT_GMT_FORMAT = "GMT{0}";
+    private static final String DEFAULT_HOUR_FORMAT = "+HH:mm;-HH:mm";
+    
     /**
      * Constructs a ZoneStringFormat by zone strings array.
      * The internal structure of zoneStrings is compatible with
@@ -67,12 +76,12 @@ public class ZoneStringFormat {
      * @return An instance of ZoneStringFormat for the locale
      */
     public static ZoneStringFormat getInstance(ULocale locale) {
-        ZoneStringFormat tzf = TZFORMAT_CACHE.get(locale);
-        if (tzf == null) {
-            tzf = new ZoneStringFormat(locale);
-            TZFORMAT_CACHE.put(locale, tzf);
+        ZoneStringFormat zzf = ZSFORMAT_CACHE.get(locale);
+        if (zzf == null) {
+            zzf = new ZoneStringFormat(locale);
+            ZSFORMAT_CACHE.put(locale, zzf);
         }
-        return tzf;
+        return zzf;
     }
 
     public String[][] getZoneStrings() {
@@ -105,7 +114,136 @@ public class ZoneStringFormat {
     public String getGenericLocationString(TimeZone tz, long date) {
         return getString(tz.getID(), ZSIDX_LOCATION, date, false /* not used */);
     }
+    public String getLongGMTString( TimeZone tz, long date, boolean daylight ) {
+        int offset;
+        if (daylight && tz.useDaylightTime()) {
+            offset = tz.getRawOffset() + tz.getDSTSavings();
+        } else {
+            offset = tz.getRawOffset();
+        }
+        return getLongGMTString(tz,date,offset);
+    }
+    
+    public String getLongGMTString( TimeZone tz, long date ) {
+        return getLongGMTString(tz,date,tz.getOffset(date));
+    }
+    
+    public String getLongGMTString( TimeZone tz, long date, int offsetIn) {
+        // Note: This code is optimized for performance, but as a result, it makes assumptions
+        // about the content and structure of the underlying CLDR data.
+        // Specifically, it assumes that the H or HH in the pattern occurs before the mm,
+        // and that there are no quoted literals in the pattern that contain H or m.
+        // As of CLDR 1.8.1, all of the data conforms to these rules, so we should probably be OK.
+        
+        StringBuffer buf = new StringBuffer();
+        int offset = offsetIn;
+        int hfPosition = 0;
+        if (offset < 0) {
+            offset = -offset;
+            hfPosition = 1;
+        }
+            
+        int offsetH = offset / millisPerHour;
+        offset = offset % millisPerHour;
+        int offsetM = offset / millisPerMinute;
+        offset = offset % millisPerMinute;
+        int offsetS = offset / millisPerSecond;
 
+        int subPosition = gmtFormat.indexOf("{0}");
+        for ( int i = 0 ; i < gmtFormat.length(); i++ ) {
+            if ( i == subPosition ) {
+                String hmString = hourFormats[hfPosition];
+                for ( int j = 0 ; j < hmString.length() ; j++) {
+                    switch (hmString.charAt(j)) {
+                    case 'H':
+                        if ( j+1 < hmString.length() && hmString.charAt(j+1) == 'H' ) {
+                            j++;
+                            if (offsetH < 10) {
+                                buf.append(digitString.charAt(0));
+                            }
+                        }
+                        if ( offsetH >= 10 ) {
+                            buf.append(digitString.charAt(offsetH/10));
+                        }
+                        buf.append(digitString.charAt(offsetH%10));
+                        break;
+                    case 'm':
+                        if ( j+1 < hmString.length() && hmString.charAt(j+1) == 'm' ) {
+                            j++;
+                        }
+                        buf.append(digitString.charAt(offsetM/10));
+                        buf.append(digitString.charAt(offsetM%10));
+                        if ( offsetS > 0 ) {
+                            int lastH = hmString.lastIndexOf('H');
+                            int firstm = hmString.indexOf('m');
+                            if ( lastH + 1 < firstm ) {
+                                buf.append(hmString.substring(lastH+1,firstm));
+                            }
+                            buf.append(digitString.charAt(offsetS/10));
+                            buf.append(digitString.charAt(offsetS%10));
+                        }
+                        break;
+                    default:
+                        buf.append(hmString.charAt(j));
+                        break;
+                    }
+                }
+                i += 3;
+            } else {
+                buf.append(gmtFormat.charAt(i));
+            }
+        }
+        return buf.toString();
+    }
+    public String getShortGMTString( TimeZone tz, long date, boolean daylight ) {
+        int offset;
+        if (daylight && tz.useDaylightTime()) {
+            offset = tz.getRawOffset() + tz.getDSTSavings();
+        } else {
+            offset = tz.getRawOffset();
+        }
+        return getShortGMTString(tz,date,offset);
+    }
+    
+    public String getShortGMTString( TimeZone tz, long date ) {
+        return getShortGMTString(tz,date,tz.getOffset(date));
+    }
+  
+    public String getShortGMTString( TimeZone tz, long date, int offset ) {
+        StringBuffer buf = new StringBuffer();
+        // RFC822 format, must use ASCII digits
+        int val = offset;
+        char sign = '+';
+        if (val < 0) {
+            val = -val;
+            sign = '-';
+        }
+        buf.append(sign);
+
+        int offsetH = val / millisPerHour;
+        val = val % millisPerHour;
+        int offsetM = val / millisPerMinute;
+        val = val % millisPerMinute;
+        int offsetS = val / millisPerSecond;
+
+        int num = 0, denom = 0;
+        if (offsetS == 0) {
+            val = offsetH*100 + offsetM; // HHmm
+            num = val % 10000;
+            denom = 1000;
+        } else {
+            val = offsetH*10000 + offsetM*100 + offsetS; // HHmmss
+            num = val % 1000000;
+            denom = 100000;
+        }
+        while (denom >= 1) {
+            char digit = (char)((num / denom) + '0');
+            buf.append(digit);
+            num = num % denom;
+            denom /= 10;
+        }
+        return buf.toString();
+    }
     // APIs used by SimpleDateFormat to lookup a zone string
     public static class ZoneStringInfo {
         private String id;
@@ -218,6 +356,30 @@ public class ZoneStringFormat {
         tzidToStrings = new HashMap<String, ZoneStrings>();
         mzidToStrings = new HashMap<String, ZoneStrings>();
         zoneStringsTrie = new TextTrieMap<ZoneStringInfo>(true);
+        NumberingSystem ns = NumberingSystem.getInstance(locale);
+        if (ns.isAlgorithmic()) {
+            digitString = DEFAULT_DIGIT_STRING; // Using complex ns for GMT formatting doesn't make sense
+        } else {
+            digitString = ns.getDescription();
+        }
+
+        gmtFormat = null;
+        String hourFormatString = null;
+        try {
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
+            gmtFormat = bundle.getStringWithFallback("zoneStrings/gmtFormat");
+            hourFormatString = bundle.getStringWithFallback("zoneStrings/hourFormat");
+        } catch (MissingResourceException e) {
+        }
+
+        if ( gmtFormat == null) {
+            gmtFormat = DEFAULT_GMT_FORMAT;
+        }
+        if ( hourFormatString == null) {
+            hourFormatString = DEFAULT_HOUR_FORMAT;
+        }
+        
+        hourFormats = hourFormatString.split(";", 2);
     }
 
     // Load only a single zone
@@ -484,7 +646,7 @@ public class ZoneStringFormat {
     private static final int ZSIDX_MAX = ZSIDX_SHORT_GENERIC + 1;
 
     // ZoneStringFormat cache
-    private static ICUCache<ULocale, ZoneStringFormat> TZFORMAT_CACHE = new SimpleCache<ULocale, ZoneStringFormat>();
+    private static ICUCache<ULocale, ZoneStringFormat> ZSFORMAT_CACHE = new SimpleCache<ULocale, ZoneStringFormat>();
 
     /*
      * The translation type of the translated zone strings
@@ -520,6 +682,13 @@ public class ZoneStringFormat {
     // Loading status
     private boolean isFullyLoaded = false;
 
+    // Digit string - used for fast GMT formatting
+    private String digitString;
+    
+    private String gmtFormat;
+    
+    private String[] hourFormats;
+    
     /*
      * Private method to get a zone string except generic partial location types.
      */

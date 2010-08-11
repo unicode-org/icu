@@ -19,6 +19,7 @@ import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.TimeZoneFormat;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.impl.ZoneStringFormat;
@@ -466,6 +467,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
       * called.
       */
     private transient ZoneStringFormat zsformat = null;
+    private transient TimeZoneFormat tzformat = null;
 
      /**
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
@@ -880,7 +882,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public void setZoneStrings(String[][] newZoneStrings) {
         zoneStrings = duplicate(newZoneStrings);
-        zsformat = new ZoneStringFormat(zoneStrings);
+        if ( tzformat == null ) {
+            tzformat = TimeZoneFormat.createInstance(requestedLocale);
+        }
+        tzformat.zsf = new ZoneStringFormat(zoneStrings);
     }
 
     /**
@@ -1328,7 +1333,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // itself.
         return ZoneStringFormat.getInstance(requestedLocale);
     }
-
+    TimeZoneFormat getTimeZoneFormat() {
+        if (tzformat != null) {
+            return tzformat;
+        }
+        
+        tzformat = TimeZoneFormat.createInstance(requestedLocale);
+        
+        if (zoneStrings != null) {
+            tzformat.zsf = new ZoneStringFormat(zoneStrings);
+        }
+        
+        return tzformat;
+    }
     /*
      * save the input locale
      */
