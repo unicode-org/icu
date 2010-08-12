@@ -5,25 +5,23 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
-import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.IndexCharacters;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.IndexCharacters;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.IndexCharacters.Bucket;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -178,29 +176,33 @@ public class IndexCharactersTest extends TestFmwk {
     
     public void TestBuckets() {
         String[] test = { "$", "£", "12", "2", 
-                "Edgar", "edgar", "Abbot", "Effron", "Zach", "Ƶ", "İstanbul", "Istanbul", "istanbul", "ıstanbul",
+                "Edgar", "edgar", "Abbot", "Effron", "Zach", "Effron", "Ƶ", "İstanbul", "Istanbul", "istanbul", "ıstanbul",
                 "Þor", "Åberg", "Östlund",
                 "Ἥρα", "Ἀθηνᾶ", "Ζεύς", "Ποσειδὣν", "Ἅιδης", "Δημήτηρ", "Ἑστιά", 
                 //"Ἀπόλλων", "Ἄρτεμις", "Ἑρμἣς", "Ἄρης", "Ἀφροδίτη", "Ἥφαιστος", "Διόνυσος",
                 "斉藤", "佐藤", "鈴木", "高橋", "田中", "渡辺", "伊藤", "山本", "中村", "小林", "斎藤", "加藤",
                 //"吉田", "山田", "佐々木", "山口", "松本", "井上", "木村", "林", "清水"
                 };
-        ULocale additions = ULocale.ENGLISH;
+        ULocale additions = ULocale.ENGLISH;            
         StringBuilder buffer = new StringBuilder();
 
         for (String[] pair : localeAndIndexCharactersLists) {
             ULocale testLocale = new ULocale(pair[0]);
-            IndexCharacters indexCharacters = new IndexCharacters(testLocale, additions);
+            IndexCharacters<Integer> indexCharacters = new IndexCharacters<Integer>(testLocale, additions);
             Collator.getInstance(testLocale);
-            List<Bucket> buckets = indexCharacters.getIndexBuckets(Arrays.asList(test));
+            int counter = 0;
+            for (String item : test) {
+                indexCharacters.add(item, counter++);
+            }
 
             // show index at top. We can skip or gray out empty buckets
+            logln(testLocale + "\t" + testLocale.getDisplayName(ULocale.ENGLISH) + " - " + testLocale.getDisplayName(testLocale) + "\t");
             buffer.setLength(0);
-            buffer.append("Locale: " + testLocale + " = " + testLocale.getDisplayName(testLocale) + "\t");
+            buffer.append(testLocale + "\t");
             boolean showAll = true;
-            for (Bucket entry : buckets) {
-                String label = entry.getLabel();
-                if (showAll || entry.getValues().size() != 0) {
+            for (IndexCharacters.Bucket<Integer> bucket : indexCharacters) {
+                String label = bucket.getLabel();
+                if (showAll || bucket.size() != 0) {
                     buffer.append(label + " ");
                 }
             }
@@ -208,24 +210,42 @@ public class IndexCharactersTest extends TestFmwk {
 
             // show buckets with contents
 
-            for (Bucket entry : buckets) {
-                if (entry.getValues().size() != 0) {
+            for (IndexCharacters.Bucket<Integer> bucket : indexCharacters) {
+                if (bucket.size() != 0) {
                     buffer.setLength(0);
-                    buffer.append(entry.getLabel() + "\t:");
-                    for (String item : entry.getValues()) {
-                        buffer.append("\t\t" + item);
+                    buffer.append(testLocale + "\t" + bucket.getLabel() + "\t:");
+                    for (IndexCharacters.Record<Integer> item : bucket) {
+                        buffer.append("\t" + item);
                     }
                     logln(buffer.toString());
-                    if (entry.getLabel().equals("E") && !entry.getValues().contains("edgar")) {
-                        errln("Error: 'edgar' should be under 'E'");
+                    if (bucket.getLabel().equals("E")) {
+                        Map<String, Integer> keys = getKeys(bucket);
+                        Integer count = keys.get("edgar");
+                        if (count == null || 1 != count.intValue()) {
+                            errln("Error: 'edgar' should be under 'E'");
+                        }
+                        count = keys.get("Effron");
+                        if (count == null || 2 != count.intValue()) {
+                            errln("Error: 'Effron' should be under 'E', twice");
+                        }
                     }
                 } else {
-                    if (entry.getLabel().equals("E")) {
+                    if (bucket.getLabel().equals("E")) {
                         errln("Error: 'E' is empty");
                     }
                 }
             }
         }
+    }
+
+    private Map<String,Integer> getKeys(IndexCharacters.Bucket<Integer> entry) {
+        Map<String,Integer> keys = new LinkedHashMap<String,Integer>();
+        for (IndexCharacters.Record x : entry) {
+            String key = x.getKey().toString();
+            Integer old = keys.get(key);
+            keys.put(key, old == null ? 1 : old + 1);
+        }
+        return keys;
     }
 
     public void TestIndexCharactersList() {
@@ -250,7 +270,6 @@ public class IndexCharactersTest extends TestFmwk {
                       "\n  Expected = |" + expectedIndexCharacters + "|\n  actual   = |" + actualIndexCharacters + "|");
              }
         }
-        logln("ok");
     }
 
     public void TestBasics() {
@@ -304,19 +323,6 @@ public class IndexCharactersTest extends TestFmwk {
     private void showIfNotEmpty(String title, Map alreadyIn) {
         if (alreadyIn.size() != 0) {
             logln("\t" + title + ":\t" + alreadyIn);
-        }
-    }
-    
-    /* Test the method public ULocale getLocale() */
-    public void TestGetLocale(){
-        IndexCharacters ic = new IndexCharacters(new ULocale("en_US"));
-        if(!ic.getLocale().equals(new ULocale("en_US"))){
-            errln("IndexCharacter.getLocale() was suppose to return the same " +
-                    "ULocale that was passed for the object.");
-        }
-        if(ic.getLocale().equals(new ULocale("jp_JP"))){
-            errln("IndexCharacter.getLocale() was not suppose to return the same " +
-                    "ULocale that was passed for the object.");
         }
     }
     

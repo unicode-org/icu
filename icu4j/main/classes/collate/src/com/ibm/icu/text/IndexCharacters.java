@@ -7,7 +7,6 @@
 package com.ibm.icu.text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,41 +25,51 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.IndexCharacters.Bucket;
 
 /**
  * A set of characters for use as a UI "index", that is, a list of clickable characters (or character sequences) that
- * allow the user to see a segment (bucket) of a larger "target" list. That is, each character corresponds to a bucket in the
- * target list, where everything in the bucket is greater than or equal to the character (according to the locale's
- * collation). This class produces the index list, and also has a convenience method for producing the sorted buckets.
+ * allow the user to see a segment (bucket) of a larger "target" list. That is, each character corresponds to a bucket
+ * in the target list, where everything in the bucket is greater than or equal to the character (according to the
+ * locale's collation). This class produces the index list, and also has a convenience method for producing the sorted
+ * buckets.
  * <p>
  * A list would be presented as something like
+ * 
  * <pre>
- *  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+ *  … A B C D E F G H I J K L M N O P Q R S T U V W X Y Z …
  * </pre>
  * 
- * In the UI, an index character could be omitted if its bucket is empty. For example, if there is nothing in the bucket
- * for Q, then Q could be omitted.
+ * In the UI, an index character could be omitted or grayed-out if its bucket is empty. For example, if there is nothing
+ * in the bucket for Q, then Q could be omitted. Small buckets could also be combined based on size, such as:
+ * 
+ * <pre>
+ *  … A-F G-N O-Z …
+ * </pre>
+ * 
+ * Such uses are up to the caller.
  * <p>
  * <b>Important Notes:</b>
  * <ul>
  * <li>Although we say "character" above, the index character could be a sequence, like "CH".</li>
  * <li>There could be items in a target list that are less than the first or (much) greater than the last; examples
- * include words from other scripts. The UI could have some symbol
- * for those categories. There are suggested symbols supplied via methods, and also for a bucket that is "between" scripts.</li>
- * <li>For languages without widely accepted sorting methods (eg Chinese/Japanese) the results may appear arbitrary, and
- * it may be best not to use these methods.</li>
- * <li>Additional collation parameters can be passed in as part of the locale name. For example, German plus numeric sorting would be "de@kn-true"
- * <li>In the initial version, an arbitrary limit of 100 items is placed on these lists.</li>
+ * include words from other scripts. There are suggested symbols supplied via methods, and also for a bucket that is
+ * "between" scripts. A method indicates whether such a label is being uses, so that the caller can replace them if
+ * needed.</li>
+ * <li>For Chinese, the results are not yet optimal, and it is probably best best not to use these index characters. The
+ * class can still be used to get the correct sorting order, but the index characters should be suppressed.</li>
+ * <li>Additional collation parameters can be passed in as part of the locale name. For example, German plus numeric
+ * sorting would be "de@kn-true".
+ * <li>In the initial version, a limit of 100 items is placed on these lists. This may change or become configureable in
+ * the future. When the limit is reached, then every nth value is removed to bring the list down below the limit.</li>
  * </ul>
  * 
  * @author markdavis
  * @draft ICU 4.2
  * @provisional This API might change or be removed in a future release.
  */
-public class IndexCharacters {
+public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket<V>> {
 
-    private static final char OVERFLOW_MARKER = '\uFFFF';
-    private static final char INFLOW_MARKER = '\uFFFD';
     private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet(
@@ -68,19 +77,20 @@ public class IndexCharacters {
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
     private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
 
-    private final ULocale locale;
     private final RuleBasedCollator comparator;
     private final List<String> indexCharacters;
     private final LinkedHashMap<String, Set<String>> alreadyIn = new LinkedHashMap<String, Set<String>>();
     private final List<String> noDistinctSorting = new ArrayList<String>();
     private final List<String> notAlphabetic = new ArrayList<String>();
-    private final List<String> firstScriptCharacters;
+    private final List<String> firstScriptCharacters;    
+    private Collection<Record<V>> inputList = new ArrayList<Record<V>>();
+    private BucketList buckets; 
 
     /**
      * Create the index object.
      * 
      * @param locale
-     *            The locale to be passed.
+     *            The locale for the index.
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
@@ -95,7 +105,7 @@ public class IndexCharacters {
      *            The locale to be passed.
      * @param additions
      *            Additional characters to be added, eg A-Z for non-Latin locales.
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public IndexCharacters(ULocale locale, UnicodeSet additions) {
@@ -106,10 +116,10 @@ public class IndexCharacters {
      * Create the index object.
      * 
      * @param locale
-     *            The locale to be passed.
-     * @param additions
-     *            Additional characters to be added, eg A-Z for non-Latin locales.
-     * @draft ICU 4.4
+     *            The locale for the index.
+     * @param additionalLocales
+     *            Additional characters to be added based on the index characters for those locales.
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public IndexCharacters(ULocale locale, ULocale... additionalLocales) {
@@ -118,17 +128,13 @@ public class IndexCharacters {
 
     /**
      * @internal
-     * @param exemplarChars TODO
      * @deprecated This API is ICU internal only, for testing purposes.
      */
-    @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars, UnicodeSet additions) {
-        this.locale = locale;
         comparator = (RuleBasedCollator) collator;
         comparator.setStrength(Collator.PRIMARY);
 
-
-        boolean[] explicitIndexChars = {true};
+        boolean[] explicitIndexChars = { true };
         UnicodeSet exemplars = exemplarChars != null ? exemplarChars : getIndexExemplars(locale, explicitIndexChars);
 
         if (additions != null) {
@@ -137,7 +143,8 @@ public class IndexCharacters {
 
         // first sort them, with an "best" ordering among items that are the same according
         // to the collator
-        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparator, PREFERENCE_COMPARATOR));
+        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparator,
+                PREFERENCE_COMPARATOR));
         exemplars.addAllTo(preferenceSorting);
 
         TreeSet<String> indexCharacterSet = new TreeSet<String>(comparator);
@@ -188,8 +195,11 @@ public class IndexCharacters {
                 }
             }
         }
-        indexCharacters = Collections.unmodifiableList(new ArrayList(indexCharacterSet));
-        firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS; // TODO, use collation method when fast enough. firstStringsInScript(comparator);
+        indexCharacters = Collections.unmodifiableList(new ArrayList<String>(indexCharacterSet));
+        firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS; // TODO, use collation method when fast enough.
+        // firstStringsInScript(comparator);
+
+        buckets = new BucketList(indexCharacters);
     }
 
     private static UnicodeSet getIndexExemplars(ULocale locale, boolean[] explicitIndexChars) {
@@ -229,7 +239,7 @@ public class IndexCharacters {
 
     private static UnicodeSet getIndexExemplars(ULocale... additionalLocales) {
         UnicodeSet additions = new UnicodeSet();
-        boolean[] explicitIndexChars = {true};
+        boolean[] explicitIndexChars = { true };
         for (ULocale other : additionalLocales) {
             additions.addAll(getIndexExemplars(other, explicitIndexChars));
         }
@@ -267,21 +277,10 @@ public class IndexCharacters {
     }
 
     /**
-     * Get the locale
-     * 
-     * @return The locale.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
-     */
-    public ULocale getLocale() {
-        return locale;
-    }
-
-    /**
      * Get a clone of the collator used internally
      * 
      * @return a clone of the collator used internally
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedCollator getCollator() {
@@ -298,7 +297,7 @@ public class IndexCharacters {
      * the index characters for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
      * 
      * @return inflow label
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public String getInflowLabel() {
@@ -309,7 +308,7 @@ public class IndexCharacters {
      * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: … A B C
      * 
      * @return overflow label
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public String getOverflowLabel() {
@@ -320,165 +319,86 @@ public class IndexCharacters {
      * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z …
      * 
      * @return underflow label
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public String getUnderflowLabel() {
         return "\u2026"; // TODO get localized version
     }
 
-    /**
-     * Associates a label with a set of values V in the bucket for that label. Used for the return value from
-     * getIndexBucketCharacters.
-     * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static class Bucket {
-        private String label;
-        boolean isSpecial;
-        private List<String> values = new ArrayList<String>();
+    public IndexCharacters<V> add(CharSequence key, V value) {
+        buckets = null; // invalidate old bucketlist
+        inputList.add(new Record<V>(key, value));
+        return this;
+    }
 
-        /**
-         * Set up the bucket.
-         * 
-         * @param label label for the bucket
-         * @param special is an underflow, overflow, or inflow bucket
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public Bucket(String label, boolean special) {
-            this.label = label;
-            isSpecial = special;
+    public int size() {
+        if (buckets == null) {
+            buckets = getIndexBuckets();
         }
+        return buckets.bucketList.size();
+    }
 
-        /**
-         * Get the label
-         * 
-         * @return label for the bucket
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public String getLabel() {
-            return label;
+    public Iterator<Bucket<V>> iterator() {
+        if (buckets == null) {
+            buckets = getIndexBuckets();
         }
-        
-        /**
-         * Is an underflow, overflow, or inflow bucket
-         * @return is an underflow, overflow, or inflow bucket
-         */
-        public boolean isSpecial() {
-            return isSpecial;
-        }
-
-        /**
-         * Add a value to a bucket.
-         * 
-         * @param value value to add to the bucket
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public void add(String value) {
-            getValues().add(value);
-        }
-
-        /**
-         * Get the values.
-         * 
-         * @return values in the bucket, in order
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public List<String> getValues() {
-            return values;
-        }
+        return buckets.iterator();
     }
 
     /**
      * Convenience routine to bucket a list of input strings according to the index.<br>
-     * Warning: if a UI suppresses buckets that are empty,
-     * this may result in the special buckets (underflow, overflow, inflow) being adjacent.
-     * In that case, the application may want to combine them.
+     * Warning: if a UI suppresses buckets that are empty, this may result in the special buckets (underflow, overflow,
+     * inflow) being adjacent. In that case, the application may want to combine them.
      * 
      * @param inputList
      *            List of strings to be sorted and bucketed according to the index characters.
      * @return List of buckets, where each bucket has a label (typically an index character) and the strings in order in
      *         that bucket.
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public <T extends CharSequence> List<Bucket> getIndexBuckets(Collection<T> inputList) {
-        // fix up the list, adding underflow, additions, overflow
-        List<String> characters = new ArrayList<String>(indexCharacters);
+    private BucketList getIndexBuckets() {
+        BucketList output = new BucketList(indexCharacters);
 
-        // insert infix labels as needed, using \uFFFF.
-        String last = characters.get(0);
-        UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
-        for (int i = 1; i < characters.size(); ++i) {
-            String current = characters.get(i);
-            UnicodeSet set = getScriptSet(current).removeAll(IGNORE_SCRIPTS);
-            if (lastSet.containsNone(set)) {
-                // check for adjacent
-                String overflowComparisonString = getOverflowComparisonString(last);
-                if (comparator.compare(overflowComparisonString, current) < 0) {
-                    characters.add(i, INFLOW_MARKER + overflowComparisonString);
-                    i++;
-                    lastSet = set;
-                }
-            }
-            last = current;
-            lastSet = set;
-        }
-
-        String beforeMarker = getUnderflowLabel();
-        String afterMarker = getOverflowLabel();
-        String inMarker = getInflowLabel();
-        String limitString = getOverflowComparisonString(characters.get(characters.size() - 1));
-        characters.add(OVERFLOW_MARKER + limitString); // final, overflow bucket
-
-        // Set up an array of sorted elements
-        String[] sortedInput = inputList.toArray(new String[inputList.size()]);
+        // Set up an array of sorted intput key/value pairs
         comparator.setStrength(Collator.TERTIARY);
-        Arrays.sort(sortedInput, 0, sortedInput.length, comparator);
+        Comparator<Record<V>> fullComparator = new Comparator<Record<V>>() {
+            public int compare(Record<V> o1, Record<V> o2) {
+                CharSequence key1 = o1.getKey();
+                CharSequence key2 = o2.getKey();
+                int result = comparator.compare(key1, key2);
+                if (result != 0)
+                    return result;
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        };
+        TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
+        sortedInput.addAll(inputList);
         comparator.setStrength(Collator.PRIMARY); // used for bucketing
-        List<Bucket> buckets = new ArrayList<Bucket>(); // Can't use Map,
-        // because keys might
-        // not be unique
 
-        Bucket currentBucket;
-        buckets.add(currentBucket = new Bucket(beforeMarker, true));
-        Iterator<String> characterIterator = characters.iterator();
-        String nextChar = characterIterator.next(); // there is always at least one
-        String nextLabel = nextChar;
-        // one
+        Iterator<Bucket<V>> bucketIterator = output.iterator();
+        Bucket<V> currentBucket = bucketIterator.next();
+        Bucket<V> nextBucket = bucketIterator.next();
+        String upperBoundary = nextBucket.lowerBoundary; // there is always at least one
         boolean atEnd = false;
-        boolean nextCharIsSpecial = false;
-        for (String s : sortedInput) {
-            while (!atEnd && comparator.compare(s, nextChar) >= 0) {
-                buckets.add(currentBucket = new Bucket(nextLabel, nextCharIsSpecial));
-                nextCharIsSpecial = false;
+        for (Record<V> s : sortedInput) {
+            while (!atEnd && comparator.compare(s.getKey(), upperBoundary) >= 0) {
+                currentBucket = nextBucket;
                 // now reset nextChar
-                if (characterIterator.hasNext()) {
-                    nextLabel = nextChar = characterIterator.next();
-                    switch (nextChar.charAt(0)) {
-                    case INFLOW_MARKER:
-                        nextChar = nextChar.substring(1); // the rest of the string is the comparison value
-                        nextLabel = inMarker;
-                        nextCharIsSpecial = true;
-                        break;
-                    case OVERFLOW_MARKER:
-                        nextChar = nextChar.substring(1); // the rest of the string is the comparison value
-                        nextLabel = afterMarker;
-                        nextCharIsSpecial = true;
-                        break;
+                if (bucketIterator.hasNext()) {
+                    nextBucket = bucketIterator.next();
+                    upperBoundary = nextBucket.lowerBoundary;
+                    if (upperBoundary == null) {
+                        atEnd = true;
                     }
                 } else {
                     atEnd = true;
                 }
             }
-            currentBucket.add(s);
+            currentBucket.values.add(s);
         }
-        return buckets;
+        return output;
     }
 
     /**
@@ -490,7 +410,7 @@ public class IndexCharacters {
      * @param lowerLimit
      *            The character below the overflow (or inflow) bucket
      * @return string that defines top of the overflow buck for lowerLimit, or null if there is none
-     * @draft ICU 4.4
+     * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public String getOverflowComparisonString(String lowerLimit) {
@@ -504,7 +424,8 @@ public class IndexCharacters {
 
     /**
      * Return a list of the first character in each script, in collation order. Only exposed for testing.
-     * @return
+     * 
+     * @return list of first characters in each script
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -549,15 +470,19 @@ public class IndexCharacters {
         return new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, UScript.getScript(codePoint.codePointAt(0)));
     }
 
-    private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet("[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
+    private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet(
+    "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
     private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
-    private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
+    private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator
+            .getInstance(ULocale.ROOT));
 
     /**
      * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
      * collation.
-     * @param ruleBasedCollator TODO
+     * 
+     * @param ruleBasedCollator
+     *            TODO
      * @param comparator
      * @param lowerLimit
      * @param testScript
@@ -568,7 +493,8 @@ public class IndexCharacters {
     private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
         String[] results = new String[UScript.CODE_LIMIT];
         for (String current : TO_TRY) {
-            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not symbols.
+            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
+                // symbols.
                 continue;
             }
             int script = UScript.getScript(current.codePointAt(0));
@@ -587,7 +513,8 @@ public class IndexCharacters {
             if (extras.size() != 0) {
                 Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
                 for (String current : extras) {
-                    if (!TO_TRY.containsAll(current)) continue;
+                    if (!TO_TRY.containsAll(current))
+                        continue;
                     if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
                         continue;
                     }
@@ -599,7 +526,8 @@ public class IndexCharacters {
                     }
                 }
             }
-        } catch (Exception e) {} // why have a checked exception???
+        } catch (Exception e) {
+        } // why have a checked exception???
 
         TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
         for (int i = 0; i < results.length; ++i) {
@@ -639,6 +567,137 @@ public class IndexCharacters {
                 return result;
             }
             return binary.compare(s1, s2);
+        }
+    }
+
+    /**
+     * A record to be sorted into buckets with getIndexBucketCharacters.
+     * 
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static class Record<V> {
+        private CharSequence key;
+        private V value;
+
+        private Record(CharSequence key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public CharSequence getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public String toString() {
+            return key + "=" + value;
+        }
+    }
+
+
+    /**
+     * A "bucket", containing records sorted under an index string by getIndexBucketCharacters. Is created by the
+     * addBucket method in BucketList. A typical implementation will provide methods getLabel(), getSpecial(), and
+     * getValues().<br>
+     * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
+     * 
+     * @param <V> Value type
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static class Bucket<V> implements Iterable<Record<V>> {
+        private final String label;
+        private final String lowerBoundary;
+        private final LabelType labelType;
+        private final List<Record<V>> values = new ArrayList<Record<V>>();
+
+        /**
+         * Type of the label
+         */
+        public enum LabelType {NORMAL, UNDERFLOW, INFLOW, OVERFLOW}
+
+        /**
+         * Set up the bucket.
+         * 
+         * @param label
+         *            label for the bucket
+         * @param labelType
+         *            is an underflow, overflow, or inflow bucket
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        private Bucket(String label, String lowerBoundary, LabelType labelType) {
+            this.label = label;
+            this.lowerBoundary = lowerBoundary;
+            this.labelType = labelType;
+        }
+
+        /**
+         * Get the label
+         * 
+         * @return label for the bucket
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public String getLabel() {
+            return label;
+        }
+
+        /**
+         * Is an underflow, overflow, or inflow bucket
+         * 
+         * @return is an underflow, overflow, or inflow bucket
+         */
+        public LabelType getLabelType() {
+            return labelType;
+        }
+
+        public int size() {
+            return values.size();
+        }
+
+        public Iterator<Record<V>> iterator() {
+            return values.iterator();
+        }
+    }
+
+    private class BucketList implements Iterable<Bucket<V>> {
+        private ArrayList<Bucket<V>> bucketList = new ArrayList<Bucket<V>>();
+
+        BucketList(List<String> indexChars) {
+            bucketList.add(new Bucket<V>(getUnderflowLabel(), "", Bucket.LabelType.UNDERFLOW));
+
+            // fix up the list, adding underflow, additions, overflow
+            // insert infix labels as needed, using \uFFFF.
+            String last = indexChars.get(0);
+            bucketList.add(new Bucket<V>(last, last, Bucket.LabelType.NORMAL));
+            UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
+            for (int i = 1; i < indexCharacters.size(); ++i) {
+                String current = indexCharacters.get(i);
+                UnicodeSet set = getScriptSet(current).removeAll(IGNORE_SCRIPTS);
+                if (lastSet.containsNone(set)) {
+                    // check for adjacent
+                    String overflowComparisonString = getOverflowComparisonString(last);
+                    if (comparator.compare(overflowComparisonString, current) < 0) {
+                        bucketList.add(new Bucket<V>(getInflowLabel(), overflowComparisonString, Bucket.LabelType.INFLOW));
+                        i++;
+                        lastSet = set;
+                    }
+                }
+                bucketList.add(new Bucket<V>(current, current, Bucket.LabelType.NORMAL));
+                last = current;
+                lastSet = set;
+            }
+            String limitString = getOverflowComparisonString(last);
+            bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final, overflow bucket
+        }
+
+        public Iterator<Bucket<V>> iterator() {
+            return bucketList.iterator();
         }
     }
 }
