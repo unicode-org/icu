@@ -896,8 +896,44 @@ typedef enum UNumberFormatSymbol {
    * @stable ICU 3.6
    */
   UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,  
+  /** One
+   * @draft ICU 4.6
+   */
+  UNUM_ONE_DIGIT_SYMBOL = 18,
+  /** Two
+   * @draft ICU 4.6
+   */
+  UNUM_TWO_DIGIT_SYMBOL = 19,
+  /** Three
+   * @draft ICU 4.6
+   */
+  UNUM_THREE_DIGIT_SYMBOL = 20,
+  /** Four
+   * @draft ICU 4.6
+   */
+  UNUM_FOUR_DIGIT_SYMBOL = 21,
+  /** Five
+   * @draft ICU 4.6
+   */
+  UNUM_FIVE_DIGIT_SYMBOL = 22,
+  /** Six
+   * @draft ICU 4.6
+   */
+  UNUM_SIX_DIGIT_SYMBOL = 23,
+  /** Seven
+    * @draft ICU 4.6
+   */
+  UNUM_SEVEN_DIGIT_SYMBOL = 24,
+  /** Eight
+   * @draft ICU 4.6
+   */
+  UNUM_EIGHT_DIGIT_SYMBOL = 25,
+  /** Nine
+   * @draft ICU 4.6
+   */
+  UNUM_NINE_DIGIT_SYMBOL = 26,
   /** count symbol constants */
-  UNUM_FORMAT_SYMBOL_COUNT = 18
+  UNUM_FORMAT_SYMBOL_COUNT = 27
 } UNumberFormatSymbol;
 
 /**

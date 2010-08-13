@@ -160,6 +160,15 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
         "nan",
         NULL, /* Significant digit symbol - not in CLDR */
         "currencyGroup",
+        NULL, /* one digit - get it from the numbering system */
+        NULL, /* two digit - get it from the numbering system */
+        NULL, /* three digit - get it from the numbering system */
+        NULL, /* four digit - get it from the numbering system */
+        NULL, /* five digit - get it from the numbering system */
+        NULL, /* six digit - get it from the numbering system */
+        NULL, /* seven digit - get it from the numbering system */
+        NULL, /* eight digit - get it from the numbering system */
+        NULL, /* nine digit - get it from the numbering system */
     };
 
     static const char *gLatn =  "latn";
@@ -196,9 +205,18 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
         NumberingSystem* ns = NumberingSystem::createInstance(loc,status);
         if (U_SUCCESS(status) && ns->getRadix() == 10 && !ns->isAlgorithmic()) {
             nsName = ns->getName();
-            UnicodeString *zeroDigit = new UnicodeString(ns->getDescription(),0,1);
-            setSymbol(kZeroDigitSymbol,*zeroDigit);
-            delete zeroDigit;
+            UnicodeString *DigitString = new UnicodeString(ns->getDescription());
+                setSymbol(kZeroDigitSymbol,DigitString->charAt(0),FALSE);
+                setSymbol(kOneDigitSymbol,DigitString->charAt(1),FALSE);
+                setSymbol(kTwoDigitSymbol,DigitString->charAt(2),FALSE);
+                setSymbol(kThreeDigitSymbol,DigitString->charAt(3),FALSE);
+                setSymbol(kFourDigitSymbol,DigitString->charAt(4),FALSE);
+                setSymbol(kFiveDigitSymbol,DigitString->charAt(5),FALSE);
+                setSymbol(kSixDigitSymbol,DigitString->charAt(6),FALSE);
+                setSymbol(kSevenDigitSymbol,DigitString->charAt(7),FALSE);
+                setSymbol(kEightDigitSymbol,DigitString->charAt(8),FALSE);
+                setSymbol(kNineDigitSymbol,DigitString->charAt(9),FALSE);
+            delete DigitString;
         } else {
             nsName = gLatn;
         }
@@ -370,6 +388,15 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kPatternSeparatorSymbol] = (UChar)0x3b;    // ';' pattern separator
     fSymbols[kPercentSymbol] = (UChar)0x25;             // '%' percent sign
     fSymbols[kZeroDigitSymbol] = (UChar)0x30;           // '0' native 0 digit
+    fSymbols[kOneDigitSymbol] = (UChar)0x31;            // '1' native 1 digit
+    fSymbols[kTwoDigitSymbol] = (UChar)0x32;            // '2' native 2 digit
+    fSymbols[kThreeDigitSymbol] = (UChar)0x33;          // '3' native 3 digit
+    fSymbols[kFourDigitSymbol] = (UChar)0x34;           // '4' native 4 digit
+    fSymbols[kFiveDigitSymbol] = (UChar)0x35;           // '5' native 5 digit
+    fSymbols[kSixDigitSymbol] = (UChar)0x36;            // '6' native 6 digit
+    fSymbols[kSevenDigitSymbol] = (UChar)0x37;          // '7' native 7 digit
+    fSymbols[kEightDigitSymbol] = (UChar)0x38;          // '8' native 8 digit
+    fSymbols[kNineDigitSymbol] = (UChar)0x39;           // '9' native 9 digit
     fSymbols[kDigitSymbol] = (UChar)0x23;               // '#' pattern digit
     fSymbols[kPlusSignSymbol] = (UChar)0x002b;          // '+' plus sign
     fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign

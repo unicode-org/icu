@@ -1391,7 +1391,13 @@ void NumberFormatTest::TestSurrogateSupport(void) {
            1.0/3, "0decimal33333 g-m/s^2", status);
 
     UnicodeString zero((UChar32)0x10000);
+    UnicodeString one((UChar32)0x10001);
+    UnicodeString two((UChar32)0x10002);
+    UnicodeString five((UChar32)0x10005);
     custom.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, zero);
+    custom.setSymbol(DecimalFormatSymbols::kOneDigitSymbol, one);
+    custom.setSymbol(DecimalFormatSymbols::kTwoDigitSymbol, two);
+    custom.setSymbol(DecimalFormatSymbols::kFiveDigitSymbol, five);
     expStr = UnicodeString("\\U00010001decimal\\U00010002\\U00010005\\U00010000", "");
     expStr = expStr.unescape();
     status = U_ZERO_ERROR;
@@ -2668,6 +2674,7 @@ void NumberFormatTest::TestNumberingSystems() {
     Locale loc4("en", "US", "", "numbers=foobar");
     Locale loc5("ar", "EG", "", ""); // ar_EG uses arab numbering system
     Locale loc6("ar", "MA", "", ""); // ar_MA uses latn numbering system
+    Locale loc7("en", "US", "", "numbers=hanidec");
 
     NumberFormat* fmt1= NumberFormat::createInstance(loc1, ec);
     if (U_FAILURE(ec)) {
@@ -2690,12 +2697,19 @@ void NumberFormatTest::TestNumberingSystems() {
         dataerrln("FAIL: getInstance(ar_MA) - %s", u_errorName(ec));
     }
 
-    if (U_SUCCESS(ec) && fmt1 != NULL && fmt2 != NULL && fmt3 != NULL && fmt5 != NULL && fmt6 != NULL) {
+    NumberFormat* fmt7= NumberFormat::createInstance(loc7, ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: getInstance(en_US@numbers=hanidec) - %s", u_errorName(ec));
+    }
+
+    if (U_SUCCESS(ec) && fmt1 != NULL && fmt2 != NULL && fmt3 != NULL && 
+                         fmt5 != NULL && fmt6 != NULL && fmt7 != NULL) {
         expect2(*fmt1, 1234.567, CharsToUnicodeString("\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57"));
         expect3(*fmt2, 5678.0, CharsToUnicodeString("\\u05D4\\u05F3\\u05EA\\u05E8\\u05E2\\u05F4\\u05D7"));
         expect2(*fmt3, 1234.567, CharsToUnicodeString("\\u06F1,\\u06F2\\u06F3\\u06F4.\\u06F5\\u06F6\\u06F7"));
         expect2(*fmt5, 1234.567, CharsToUnicodeString("\\u0661\\u066c\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667"));
         expect2(*fmt6, 1234.567, CharsToUnicodeString("1.234,567"));
+        expect2(*fmt7, 1234.567, CharsToUnicodeString("\\u4e00,\\u4e8c\\u4e09\\u56db.\\u4e94\\u516d\\u4e03"));
     }
 
     // Test bogus keyword value

@@ -26,6 +26,7 @@
 #define DCFMTSYM_H
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -125,6 +126,42 @@ public:
          * @stable ICU 3.6
          */
         kMonetaryGroupingSeparatorSymbol,
+        /** One
+         * @draft ICU 4.6
+         */
+        kOneDigitSymbol,
+        /** Two
+         * @draft ICU 4.6
+         */
+        kTwoDigitSymbol,
+        /** Three
+         * @draft ICU 4.6
+         */
+        kThreeDigitSymbol,
+        /** Four
+         * @draft ICU 4.6
+         */
+        kFourDigitSymbol,
+        /** Five
+         * @draft ICU 4.6
+         */
+        kFiveDigitSymbol,
+        /** Six
+         * @draft ICU 4.6
+         */
+        kSixDigitSymbol,
+        /** Seven
+         * @draft ICU 4.6
+         */
+        kSevenDigitSymbol,
+        /** Eight
+         * @draft ICU 4.6
+         */
+        kEightDigitSymbol,
+        /** Nine
+         * @draft ICU 4.6
+         */
+        kNineDigitSymbol,
         /** count symbol constants */
         kFormatSymbolCount
     };
@@ -216,9 +253,12 @@ public:
      *
      * @param symbol    Constant to indicate a number format symbol.
      * @param value     value of the format symbol
-     * @stable ICU 2.0
+     * @param propogateDigits If false, setting the zero digit will not automatically set 1-9.
+     *     The default behavior is to automatically set 1-9 if zero is being set and the value
+     *     it is being set to corresponds to a known Unicode zero digit.
+     * @draft ICU 4.6
      */
-    void setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value);
+    void setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value, const UBool propogateDigits);
 
     /**
      * Returns the locale for which this object was constructed.
@@ -383,9 +423,21 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
 // -------------------------------------
 
 inline void
-DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value) {
+DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value, const UBool propogateDigits = TRUE) {
     if(symbol<kFormatSymbolCount) {
         fSymbols[symbol]=value;
+    }
+
+    // If the zero digit is being set to a known zero digit according to Unicode,
+    // then we automatically set the corresponding 1-9 digits
+    if ( propogateDigits && symbol == kZeroDigitSymbol && value.countChar32() == 1 ) {
+        UChar32 sym = value.char32At(0);
+        if ( u_charDigitValue(sym) == 0 ) {
+            for ( int8_t i = 1 ; i<= 9 ; i++ ) {
+                sym++;
+                fSymbols[kOneDigitSymbol+i-1] = UnicodeString(sym);
+            }
+        }
     }
 }
 
