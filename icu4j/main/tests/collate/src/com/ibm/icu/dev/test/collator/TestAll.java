@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,7 +46,7 @@ public class TestAll extends TestGroup {
                   "UCAConformanceTest",
                   // don't test Search API twice!
                   //"com.ibm.icu.dev.test.search.SearchTest"
-                  "IndexCharactersTest"
+                  "IndexTest"
               },
               "All Collation Tests"
               );
