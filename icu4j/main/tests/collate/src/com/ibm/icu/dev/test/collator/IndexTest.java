@@ -19,7 +19,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.IndexCharacters;
+import com.ibm.icu.text.Index;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
@@ -28,7 +28,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
-public class IndexCharactersTest extends TestFmwk {
+public class IndexTest extends TestFmwk {
     public static Set<String> KEY_LOCALES = new LinkedHashSet(Arrays.asList(
             "en", "es", "de", "fr", "ja", "it", "tr", "pt", "zh", "nl", 
             "pl", "ar", "ru", "zh_Hant", "ko", "th", "sv", "fi", "da", 
@@ -147,11 +147,11 @@ public class IndexCharactersTest extends TestFmwk {
             
     };
     public static void main(String[] args) throws Exception{
-        new IndexCharactersTest().run(args);
+        new IndexTest().run(args);
     }
     
     public void TestFirstCharacters() {
-        IndexCharacters indexCharacters = new IndexCharacters(ULocale.ENGLISH);
+        Index indexCharacters = new Index(ULocale.ENGLISH);
         RuleBasedCollator collator = indexCharacters.getCollator();
         collator.setStrength(Collator.IDENTICAL);
         List<String> firsts = indexCharacters.getFirstScriptCharacters();
@@ -183,39 +183,38 @@ public class IndexCharactersTest extends TestFmwk {
                 "斉藤", "佐藤", "鈴木", "高橋", "田中", "渡辺", "伊藤", "山本", "中村", "小林", "斎藤", "加藤",
                 //"吉田", "山田", "佐々木", "山口", "松本", "井上", "木村", "林", "清水"
                 };
-        ULocale additions = ULocale.ENGLISH;            
+        ULocale additionalLocale = ULocale.ENGLISH;            
         StringBuilder buffer = new StringBuilder();
 
         for (String[] pair : localeAndIndexCharactersLists) {
-            ULocale testLocale = new ULocale(pair[0]);
-            IndexCharacters<Integer> indexCharacters = new IndexCharacters<Integer>(testLocale, additions);
-            Collator.getInstance(testLocale);
+            ULocale desiredLocale = new ULocale(pair[0]);
+            
+            // Create a simple index where the values for the strings are Integers, and add the strings
+            Index<Integer> index = new Index<Integer>(desiredLocale, additionalLocale);
             int counter = 0;
             for (String item : test) {
-                indexCharacters.add(item, counter++);
+                index.add(item, counter++); 
             }
 
-            // show index at top. We can skip or gray out empty buckets
-            logln(testLocale + "\t" + testLocale.getDisplayName(ULocale.ENGLISH) + " - " + testLocale.getDisplayName(testLocale) + "\t");
+            logln(desiredLocale + "\t" + desiredLocale.getDisplayName(ULocale.ENGLISH) + " - " + desiredLocale.getDisplayName(desiredLocale) + "\t");
             buffer.setLength(0);
-            buffer.append(testLocale + "\t");
+            buffer.append(desiredLocale + "\t");
             boolean showAll = true;
-            for (IndexCharacters.Bucket<Integer> bucket : indexCharacters) {
-                String label = bucket.getLabel();
+            
+            // Show index at top. We could skip or gray out empty buckets
+            for (Index.Bucket<Integer> bucket : index) {
                 if (showAll || bucket.size() != 0) {
-                    buffer.append(label + " ");
+                    showLabelAtTopInUI(buffer, bucket.getLabel());
                 }
             }
             logln(buffer.toString());
 
-            // show buckets with contents
-
-            for (IndexCharacters.Bucket<Integer> bucket : indexCharacters) {
+            // Show the buckets with their contents, skipping empty buckets
+            for (Index.Bucket<Integer> bucket : index) {
                 if (bucket.size() != 0) {
-                    buffer.setLength(0);
-                    buffer.append(testLocale + "\t" + bucket.getLabel() + "\t:");
-                    for (IndexCharacters.Record<Integer> item : bucket) {
-                        buffer.append("\t" + item);
+                    showLabelInUIList(buffer, bucket.getLabel());
+                    for (Index.Record<Integer> item : bucket) {
+                        showIndexedItemInUI(buffer, item.getKey(), item.getValue());
                     }
                     logln(buffer.toString());
                     if (bucket.getLabel().equals("E")) {
@@ -238,9 +237,22 @@ public class IndexCharactersTest extends TestFmwk {
         }
     }
 
-    private Map<String,Integer> getKeys(IndexCharacters.Bucket<Integer> entry) {
+    private void showLabelAtTopInUI(StringBuilder buffer, String label) {
+        buffer.append(label + " ");
+    }
+
+    private void showIndexedItemInUI(StringBuilder buffer, CharSequence key, Integer value) {
+        buffer.append("\t " + key + "→" + value);
+    }
+
+    private void showLabelInUIList(StringBuilder buffer, String label) {
+        buffer.setLength(0);
+        buffer.append(label);
+    }
+
+    private Map<String,Integer> getKeys(Index.Bucket<Integer> entry) {
         Map<String,Integer> keys = new LinkedHashMap<String,Integer>();
-        for (IndexCharacters.Record x : entry) {
+        for (Index.Record x : entry) {
             String key = x.getKey().toString();
             Integer old = keys.get(key);
             keys.put(key, old == null ? 1 : old + 1);
@@ -252,7 +264,7 @@ public class IndexCharactersTest extends TestFmwk {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
             String expectedIndexCharacters = localeAndIndexCharacters[1];
-            Collection<String> indexCharacters = new IndexCharacters(locale).getIndexCharacters();
+            Collection<String> indexCharacters = new Index(locale).getLabels();
 
             // Join the elements of the list to a string with delimiter ":"
             StringBuilder sb = new StringBuilder();
@@ -298,8 +310,8 @@ public class IndexCharactersTest extends TestFmwk {
                 if (locale.getCountry().length() != 0) {
                     continue;
                 }
-                IndexCharacters indexCharacters = new IndexCharacters(locale);
-                final Collection mainChars = indexCharacters.getIndexCharacters();
+                Index indexCharacters = new Index(locale);
+                final Collection mainChars = indexCharacters.getLabels();
                 String mainCharString = mainChars.toString();
                 if (mainCharString.length() > 500) {
                     mainCharString = mainCharString.substring(0,500) + "...";

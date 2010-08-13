@@ -25,37 +25,73 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.text.IndexCharacters.Bucket;
+import com.ibm.icu.text.Index.Bucket;
 
 /**
- * A set of characters for use as a UI "index", that is, a list of clickable characters (or character sequences) that
- * allow the user to see a segment (bucket) of a larger "target" list. That is, each character corresponds to a bucket
- * in the target list, where everything in the bucket is greater than or equal to the character (according to the
- * locale's collation). This class produces the index list, and also has a convenience method for producing the sorted
- * buckets.
- * <p>
- * A list would be presented as something like
+ * A class that supports the creation of a UI index appropriate for a given language, such as:
  * 
  * <pre>
- *  … A B C D E F G H I J K L M N O P Q R S T U V W X Y Z …
+ *  <b>… A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å …</b>
+ *  
+ *  <b>A</b>
+ *     Addison
+ *     Albertson
+ *     Azensky
+ *  <b>B</b>
+ *     Bäcker
+ *  ...
  * </pre>
  * 
- * In the UI, an index character could be omitted or grayed-out if its bucket is empty. For example, if there is nothing
- * in the bucket for Q, then Q could be omitted. Small buckets could also be combined based on size, such as:
+ * The class can generate a list of labels for use as a UI "index", that is, a list of clickable characters (or
+ * character sequences) that allow the user to see a segment (bucket) of a larger "target" list. That is, each label
+ * corresponds to a bucket in the target list, where everything in the bucket is greater than or equal to the character
+ * (according to the locale's collation). Strings can be added to the index; they will be in sorted order in the right bucket.
+ * <p>
+ * The class also supports having buckets for strings before the first (underflow), after the last (overflow), and between
+ * scripts (inflow). For example, if the index is constructed with labels for Russian and English, Greek characters
+ * would fall into an inflow bucket between the other two scripts.
+ * <p>
+ * <i>Example</i>
+ * <p>
+ * The "show..." methods below are just to illustrate usage.
+ * 
+ * <pre>
+ * // Create a simple index where the values for the strings are Integers, and add the strings
+ * 
+ * Index<Integer> index = new Index<Integer>(desiredLocale, additionalLocale);
+ * int counter = 0;
+ * for (String item : test) {
+ *     index.add(item, counter++); 
+ * }
+ * ...
+ * // Show index at top. We could skip or gray out empty buckets
+ * 
+ * for (Index.Bucket<Integer> bucket : index) {
+ *     if (showAll || bucket.size() != 0) {
+ *         showLabelAtTopInUI(buffer, bucket.getLabel());
+ *     }
+ * }
+ *  ...
+ * // Show the buckets with their contents, skipping empty buckets
+ * 
+ * for (Index.Bucket<Integer> bucket : index) {
+ *     if (bucket.size() != 0) {
+ *         showLabelInUIList(buffer, bucket.getLabel());
+ *         for (Index.Record<Integer> item : bucket) {
+ *             showIndexedItemInUI(buffer, item.getKey(), item.getValue());
+ *         }
+ * </pre>
+ * 
+ * The caller can build different UIs using this class. For example, an index character could be omitted or grayed-out
+ * if its bucket is empty. Small buckets could also be combined based on size, such as:
  * 
  * <pre>
  *  … A-F G-N O-Z …
  * </pre>
  * 
- * Such uses are up to the caller.
  * <p>
  * <b>Important Notes:</b>
  * <ul>
- * <li>Although we say "character" above, the index character could be a sequence, like "CH".</li>
- * <li>There could be items in a target list that are less than the first or (much) greater than the last; examples
- * include words from other scripts. There are suggested symbols supplied via methods, and also for a bucket that is
- * "between" scripts. A method indicates whether such a label is being uses, so that the caller can replace them if
- * needed.</li>
  * <li>For Chinese, the results are not yet optimal, and it is probably best best not to use these index characters. The
  * class can still be used to get the correct sorting order, but the index characters should be suppressed.</li>
  * <li>Additional collation parameters can be passed in as part of the locale name. For example, German plus numeric
@@ -68,7 +104,7 @@ import com.ibm.icu.text.IndexCharacters.Bucket;
  * @draft ICU 4.2
  * @provisional This API might change or be removed in a future release.
  */
-public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket<V>> {
+public class Index<V extends Comparable<V>> implements Iterable<Bucket<V>> {
 
     private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
@@ -94,7 +130,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public IndexCharacters(ULocale locale) {
+    public Index(ULocale locale) {
         this(locale, (RuleBasedCollator) Collator.getInstance(locale), null, null);
     }
 
@@ -108,7 +144,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public IndexCharacters(ULocale locale, UnicodeSet additions) {
+    public Index(ULocale locale, UnicodeSet additions) {
         this(locale, (RuleBasedCollator) Collator.getInstance(locale), null, additions);
     }
 
@@ -122,7 +158,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public IndexCharacters(ULocale locale, ULocale... additionalLocales) {
+    public Index(ULocale locale, ULocale... additionalLocales) {
         this(locale, (RuleBasedCollator) Collator.getInstance(locale), null, getIndexExemplars(additionalLocales));
     }
 
@@ -130,7 +166,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * @internal
      * @deprecated This API is ICU internal only, for testing purposes.
      */
-    public IndexCharacters(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars, UnicodeSet additions) {
+    public Index(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars, UnicodeSet additions) {
         comparator = (RuleBasedCollator) collator;
         comparator.setStrength(Collator.PRIMARY);
 
@@ -266,13 +302,13 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
     }
 
     /**
-     * Get the index characters.
+     * Get the labels.
      * 
-     * @return A collection including the index characters
+     * @return A collection including the labels
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public List<String> getIndexCharacters() {
+    public List<String> getLabels() {
         return indexCharacters;
     }
 
@@ -293,8 +329,8 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
     }
 
     /**
-     * Get the default label used for abbreviated buckets <i>between</i> other index characters. For example, consider
-     * the index characters for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
+     * Get the default label used for abbreviated buckets <i>between</i> other labels. For example, consider
+     * the labels for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
      * 
      * @return inflow label
      * @draft ICU 4.6
@@ -326,7 +362,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
         return "\u2026"; // TODO get localized version
     }
 
-    public IndexCharacters<V> add(CharSequence key, V value) {
+    public Index<V> add(CharSequence key, V value) {
         buckets = null; // invalidate old bucketlist
         inputList.add(new Record<V>(key, value));
         return this;
@@ -352,7 +388,7 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * inflow) being adjacent. In that case, the application may want to combine them.
      * 
      * @param inputList
-     *            List of strings to be sorted and bucketed according to the index characters.
+     *            List of strings to be sorted and bucketed according to the labels.
      * @return List of buckets, where each bucket has a label (typically an index character) and the strings in order in
      *         that bucket.
      * @draft ICU 4.6
@@ -410,8 +446,8 @@ public class IndexCharacters<V extends Comparable<V>> implements Iterable<Bucket
      * @param lowerLimit
      *            The character below the overflow (or inflow) bucket
      * @return string that defines top of the overflow buck for lowerLimit, or null if there is none
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getOverflowComparisonString(String lowerLimit) {
         for (String s : firstScriptCharacters) {
