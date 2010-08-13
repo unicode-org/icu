@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008, International Business Machines
+ *   Copyright (C) 2008-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -19,7 +19,6 @@
 #include "pkg_gencmn.h"
 
 #define STRING_STORE_SIZE 100000
-#define MAX_FILE_COUNT 2000
 
 #define COMMON_DATA_NAME U_ICUDATA_NAME
 #define DATA_TYPE "dat"
@@ -85,8 +84,11 @@ typedef struct {
     uint32_t basenameLength, basenameOffset, fileSize, fileOffset;
 } File;
 
-static File files[MAX_FILE_COUNT];
+#define CHUNK_FILE_COUNT 256
+static File *files = NULL;
 static uint32_t fileCount=0;
+static uint32_t fileMax = 0;
+
 
 static char *symPrefix = NULL;
 
@@ -383,9 +385,13 @@ addFile(const char *filename, const char *name, const char *source, UBool source
     uint32_t length;
     char *fullPath = NULL;
 
-    if(fileCount==MAX_FILE_COUNT) {
-        fprintf(stderr, "gencmn: too many files, maximum is %d\n", MAX_FILE_COUNT);
-        exit(U_BUFFER_OVERFLOW_ERROR);
+    if(fileCount==fileMax) {
+      fileMax += CHUNK_FILE_COUNT;
+      files = uprv_realloc(files, fileMax*sizeof(files[0])); /* note: never freed. */
+      if(files==NULL) {
+        fprintf(stderr, "pkgdata/gencmn: Could not allocate %ld bytes for %d files\n", (fileMax*sizeof(files[0])), fileCount);
+        exit(U_MEMORY_ALLOCATION_ERROR);
+      }
     }
 
     if(!sourceTOC) {
