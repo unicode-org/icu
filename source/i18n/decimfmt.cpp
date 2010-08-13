@@ -1177,9 +1177,22 @@ DecimalFormat::subformat(UnicodeString& appendTo,
                          DigitList&     digits,
                          UBool          isInteger) const
 {
-    // Gets the localized zero Unicode character.
-    UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
-    int32_t zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
+    char zero = '0'; 
+    // DigitList returns digits as '0' thru '9', so we will need to 
+    // always need to subtract the character 0 to get the numeric value to use for indexing.
+
+    UChar32 localizedDigits[10];
+    localizedDigits[0] = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+    localizedDigits[1] = getConstSymbol(DecimalFormatSymbols::kOneDigitSymbol).char32At(0);
+    localizedDigits[2] = getConstSymbol(DecimalFormatSymbols::kTwoDigitSymbol).char32At(0);
+    localizedDigits[3] = getConstSymbol(DecimalFormatSymbols::kThreeDigitSymbol).char32At(0);
+    localizedDigits[4] = getConstSymbol(DecimalFormatSymbols::kFourDigitSymbol).char32At(0);
+    localizedDigits[5] = getConstSymbol(DecimalFormatSymbols::kFiveDigitSymbol).char32At(0);
+    localizedDigits[6] = getConstSymbol(DecimalFormatSymbols::kSixDigitSymbol).char32At(0);
+    localizedDigits[7] = getConstSymbol(DecimalFormatSymbols::kSevenDigitSymbol).char32At(0);
+    localizedDigits[8] = getConstSymbol(DecimalFormatSymbols::kEightDigitSymbol).char32At(0);
+    localizedDigits[9] = getConstSymbol(DecimalFormatSymbols::kNineDigitSymbol).char32At(0);
+
     const UnicodeString *grouping ;
     if(fCurrencySignCount > fgCurrencySignCountZero) {
         grouping = &getConstSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol);
@@ -1280,8 +1293,8 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             }
             // Restores the digit character or pads the buffer with zeros.
             UChar32 c = (UChar32)((i < digits.getCount()) ?
-                          (digits.getDigit(i) + zeroDelta) :
-                          zero);
+                          localizedDigits[digits.getDigitValue(i)] :
+                          localizedDigits[0]);
             appendTo += c;
         }
 
@@ -1327,12 +1340,13 @@ DecimalFormat::subformat(UnicodeString& appendTo,
                 expDig = 1;
             }
             for (i=expDigits.getDecimalAt(); i<expDig; ++i)
-                appendTo += (zero);
+                appendTo += (localizedDigits[0]);
         }
         for (i=0; i<expDigits.getDecimalAt(); ++i)
         {
             UChar32 c = (UChar32)((i < expDigits.getCount()) ?
-                          (expDigits.getDigit(i) + zeroDelta) : zero);
+                          localizedDigits[expDigits.getDigitValue(i)] : 
+                          localizedDigits[0]);
             appendTo += c;
         }
 
@@ -1380,13 +1394,13 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             if (i < digits.getDecimalAt() && digitIndex < digits.getCount() &&
                 sigCount < maxSigDig) {
                 // Output a real digit
-                appendTo += ((UChar32)(digits.getDigit(digitIndex++) + zeroDelta));
+                appendTo += (UChar32)localizedDigits[digits.getDigitValue(digitIndex++)];
                 ++sigCount;
             }
             else
             {
                 // Output a zero (leading or trailing)
-                appendTo += (zero);
+                appendTo += localizedDigits[0];
                 if (sigCount > 0) {
                     ++sigCount;
                 }
@@ -1415,7 +1429,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         // integer digits, then print a zero.  Otherwise we won't print
         // _any_ digits, and we won't be able to parse this string.
         if (!fractionPresent && appendTo.length() == sizeBeforeIntegerPart)
-            appendTo += (zero);
+            appendTo += localizedDigits[0];
 
         currentLength = appendTo.length();
         handler.addAttribute(kIntegerField, intBegin, currentLength);
@@ -1453,16 +1467,16 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             // significant digits.  These are only output if
             // abs(number being formatted) < 1.0.
             if (-1-i > (digits.getDecimalAt()-1)) {
-                appendTo += zero;
+                appendTo += localizedDigits[0];
                 continue;
             }
 
             // Output a digit, if we have any precision left, or a
             // zero if we don't.  We don't want to output noise digits.
             if (!isInteger && digitIndex < digits.getCount()) {
-                appendTo += ((UChar32)(digits.getDigit(digitIndex++) + zeroDelta));
+                appendTo += (UChar32)localizedDigits[digits.getDigitValue(digitIndex++)];
             } else {
-                appendTo += zero;
+                appendTo += localizedDigits[0];
             }
 
             // If we reach the maximum number of significant
@@ -1900,6 +1914,20 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             if (digit < 0 || digit > 9)
             {
                 digit = u_charDigitValue(ch);
+            }
+            
+            // As a last resort, look through the localized digits if the zero digit
+            // is not a "standard" Unicode digit.
+            if ( (digit < 0 || digit > 9) && u_charDigitValue(zero) != 0) {
+                digit = 0;
+                if ( getConstSymbol((DecimalFormatSymbols::ENumberFormatSymbol)(DecimalFormatSymbols::kZeroDigitSymbol)).char32At(0) == ch ) {
+                    break;
+                }
+                for (digit = 1 ; digit < 10 ; digit++ ) {
+                    if ( getConstSymbol((DecimalFormatSymbols::ENumberFormatSymbol)(DecimalFormatSymbols::kOneDigitSymbol+digit-1)).char32At(0) == ch ) {
+                        break;
+                    }
+                }
             }
 
             if (digit >= 0 && digit <= 9)

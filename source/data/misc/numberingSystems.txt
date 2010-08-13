@@ -73,6 +73,11 @@ numberingSystems:table(nofallback){
             desc{"੦੧੨੩੪੫੬੭੮੯"}
             radix:int{10}
         }
+        hanidec{
+            algorithmic:int{0}
+            desc{"〇一二三四五六七八九"}
+            radix:int{10}
+        }
         hans{
             algorithmic:int{1}
             desc{"zh/SpelloutRules/%spellout-cardinal"}
