@@ -169,6 +169,8 @@ public: // package
 
     void TestISOEra(void);
 
+    void TestFormalChineseDate(void);
+
 public:
     /**
      * Test host-specific formatting.

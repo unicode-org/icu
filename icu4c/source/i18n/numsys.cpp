@@ -232,12 +232,6 @@ UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
 
     for ( it.setToStart(); it.hasNext(); ) {
        c = it.next32PostInc();
-       if ( u_charDigitValue(c) != i ) {  // Digits outside the Unicode decimal digit class are not currently supported
-           return FALSE;
-       }
-       if ( prev != 0 && c != prev + 1 ) { // Non-contiguous digits are not currently supported
-          return FALSE;
-       }
        if ( c > 0xFFFF ) { // Digits outside the BMP are not currently supported
           return FALSE;
        }

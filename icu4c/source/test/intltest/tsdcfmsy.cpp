@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -202,13 +202,13 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 
     UnicodeString customDecSeperator("S");
     Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34.50");
-    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)0, customDecSeperator);
+    sym.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, customDecSeperator);
     Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34S50");
-    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)3, (UnicodeString)"P");
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (UnicodeString)"P");
     Verify(34.5, (UnicodeString)"00 %", sym, (UnicodeString)"3450 P");
-    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)8, (UnicodeString)"D");
+    sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, (UnicodeString)"D");
     Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D34.5");
-    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)1, (UnicodeString)"|");
+    sym.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, (UnicodeString)"|");
     Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
 
 }

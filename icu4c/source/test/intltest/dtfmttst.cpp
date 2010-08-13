@@ -80,6 +80,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(40,TestGMTParsing);
         TESTCASE(41,Test6880);
         TESTCASE(42,TestISOEra);
+        TESTCASE(43,TestFormalChineseDate);
         /*
         TESTCASE(43,TestRelativeError);
         TESTCASE(44,TestRelativeOther);
@@ -3386,6 +3387,40 @@ void DateFormatTest::TestISOEra() {
     } 
  
     delete fmt1; 	 
+} 
+void DateFormatTest::TestFormalChineseDate() { 
+   
+    UErrorCode status = U_ZERO_ERROR; 
+    UnicodeString pattern ("y\\u5e74M\\u6708d\\u65e5", -1, US_INV );
+    pattern = pattern.unescape();
+    UnicodeString override ("y=hanidec;M=hans;d=hans", -1, US_INV );
+    
+    // create formatter 
+    SimpleDateFormat *sdf = new SimpleDateFormat(pattern,override,Locale::getChina(),status);
+    failure(status, "new SimpleDateFormat with override", TRUE); 
+
+    UDate thedate = date(2009-1900, UCAL_JULY, 28);
+    FieldPosition pos(0);
+    UnicodeString result;
+    sdf->format(thedate,result,pos);
+ 
+    UnicodeString expected = "\\u4e8c\\u3007\\u3007\\u4e5d\\u5e74\\u4e03\\u6708\\u4e8c\\u5341\\u516b\\u65e5"; 
+    expected = expected.unescape();
+    if (result != expected) { 
+        dataerrln((UnicodeString)"FAIL: -> " + result + " expected -> " + expected); 
+    } 
+ 
+    UDate parsedate = sdf->parse(expected,status);
+    if ( parsedate != thedate ) {
+        UnicodeString pat1 ("yyyy-MM-dd'T'HH:mm:ss'Z'", -1, US_INV );
+        SimpleDateFormat *usf = new SimpleDateFormat(pat1,Locale::getEnglish(),status);
+        UnicodeString parsedres,expres;
+        usf->format(parsedate,parsedres,pos);
+        usf->format(thedate,expres,pos);
+        errln((UnicodeString)"FAIL: parsed -> " + parsedres + " expected -> " + expres); 
+        delete usf;
+    }
+    delete sdf; 	 
 } 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
