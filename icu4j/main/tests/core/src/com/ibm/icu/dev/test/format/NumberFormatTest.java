@@ -2664,16 +2664,16 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         df.setRoundingMode(MathContext.ROUND_HALF_UP); 
         df.setMinimumFractionDigits(1); 
         df.setMaximumFractionDigits(1); 
-
-        System.out.println(df.format(-0.01)); 
-        //will print -0.0, and the DecimalFormat support 
-        //in JDK will result in -0.0 when used with 
-        //setRoundingMode(RoundingMode.HALF_UP);
+        String text1 = df.format(-0.01);
         
         df.setRoundingIncrement(0.1);         
+        String text2 = df.format(-0.01);
         
-        System.out.println(df.format(-0.01)); 
-        // will print 0.0, but: 
-        
+        // output1 and output2 must be identical
+        if (!text1.equals(text2)) {
+            errln("NumberFormat.format() should return the same result - text1="
+                    + text1 + " text2=" + text2);
+        }
+  
     }
 }

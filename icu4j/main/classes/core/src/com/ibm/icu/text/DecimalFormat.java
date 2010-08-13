@@ -824,8 +824,6 @@ public class DecimalFormat extends NumberFormat {
             //    * round(number / roundingDouble, roundingMode, isNegative);
             double newNumber = round(number, roundingDouble, roundingDoubleReciprocal, roundingMode,
                                      isNegative);
-            //if (newNumber == 0.0 && number != newNumber)
-            //    isNegative = false; // if we touched it, then make zero be zero.
             number = newNumber;
         }
 
