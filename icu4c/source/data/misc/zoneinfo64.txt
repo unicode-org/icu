@@ -3,17 +3,17 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Tue May 25 09:38:00 2010
+// Build date: Fri Aug 13 16:18:48 2010
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2010j
-// ICU version: 4.5.1
+// Olson version: 2010k
+// ICU version: 4.5.2
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2010j" }
+ TZVersion { "2010k" }
  Zones:array { 
   /* ACT */ :int { 337 } //Z#0
   /* AET */ :int { 349 } //Z#1
@@ -89,9 +89,9 @@ zoneinfo64:table(nofallback) {
   } //Z#17
   /* Africa/Cairo */ :table {
     transPre32:intvector { -1, 2109558196 }
-    trans:intvector { -929844000, -923108400, -906170400, -892868400, -875844000, -857790000, -844308000, -825822000, -812685600, -794199600, -779853600, -762663600, -399088800, -386650800, -368330400, -355114800, -336790800, -323654400, -305168400, -292032000, -273632400, -260496000, -242096400, -228960000, -210560400, -197424000, -178938000, -165801600, -147402000, -134265600, -115866000, -102643200, -84330000, -71107200, -52707600, -39484800, -21171600, -7948800, 10364400, 23587200, 41900400, 55123200, 73522800, 86745600, 105058800, 118281600, 136594800, 149817600, 168130800, 181353600, 199753200, 212976000, 231289200, 244512000, 262825200, 276048000, 294361200, 307584000, 325983600, 339206400, 357519600, 370742400, 396399600, 402278400, 426812400, 433814400, 452214000, 465436800, 483750000, 496972800, 515286000, 528508800, 546822000, 560044800, 578444400, 591667200, 610412400, 623203200, 641516400, 654739200, 673052400, 686275200, 704674800, 717897600, 736210800, 749433600, 767746800, 780969600, 799020000, 812322000, 830469600, 843771600, 861919200, 875221200, 893368800, 906670800, 925423200, 938725200, 956872800, 970174800, 988322400, 1001624400, 1019772000, 1033074000, 1051221600, 1064523600, 1083276000, 1096578000, 1114725600, 1128027600, 1146175200, 1158872400, 1177624800, 1189112400, 1209074400, 1219957200, 1240524000, 1250802000, 1272578400, 1285880400 }
+    trans:intvector { -929844000, -923108400, -906170400, -892868400, -875844000, -857790000, -844308000, -825822000, -812685600, -794199600, -779853600, -762663600, -399088800, -386650800, -368330400, -355114800, -336790800, -323654400, -305168400, -292032000, -273632400, -260496000, -242096400, -228960000, -210560400, -197424000, -178938000, -165801600, -147402000, -134265600, -115866000, -102643200, -84330000, -71107200, -52707600, -39484800, -21171600, -7948800, 10364400, 23587200, 41900400, 55123200, 73522800, 86745600, 105058800, 118281600, 136594800, 149817600, 168130800, 181353600, 199753200, 212976000, 231289200, 244512000, 262825200, 276048000, 294361200, 307584000, 325983600, 339206400, 357519600, 370742400, 396399600, 402278400, 426812400, 433814400, 452214000, 465436800, 483750000, 496972800, 515286000, 528508800, 546822000, 560044800, 578444400, 591667200, 610412400, 623203200, 641516400, 654739200, 673052400, 686275200, 704674800, 717897600, 736210800, 749433600, 767746800, 780969600, 799020000, 812322000, 830469600, 843771600, 861919200, 875221200, 893368800, 906670800, 925423200, 938725200, 956872800, 970174800, 988322400, 1001624400, 1019772000, 1033074000, 1051221600, 1064523600, 1083276000, 1096578000, 1114725600, 1128027600, 1146175200, 1158872400, 1177624800, 1189112400, 1209074400, 1219957200, 1240524000, 1250802000, 1272578400, 1281474000, 1283983200, 1285880400 }
     typeOffsets:intvector { 7500, 0, 7200, 0, 7200, 3600 }
-    typeMap:bin { "01020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201" }
+    typeMap:bin { "010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201" }
     finalRule { "Egypt" }
     finalRaw:int { 7200 }
     finalYear:int { 2011 }
@@ -312,7 +312,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -36000 }
     finalYear:int { 2008 }
-    links:intvector { 58, 79, 593 }
+    links:intvector { 58, 79, 595 }
   } //Z#58
   /* America/Anchorage */ :table {
     transPre32:intvector { -1, 1069604872, -1, 2106016072 }
@@ -322,7 +322,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -32400 }
     finalYear:int { 2008 }
-    links:intvector { 4, 59, 589, 592 }
+    links:intvector { 4, 59, 591, 594 }
   } //Z#59
   /* America/Anguilla */ :table {
     trans:intvector { -1825098464 }
@@ -443,12 +443,12 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "0102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201" }
   } //Z#80
   /* America/Bahia_Banderas */ :table {
-    trans:intvector { -1514739600, -1343066400, -1234807200, -1220292000, -1207159200, -1191344400, -873828000, -661539600, 28800, 828867600, 846403200, 860317200, 877852800, 891766800, 909302400, 923216400, 941356800, 954666000, 972806400, 989139600, 1001836800, 1018170000, 1035705600, 1049619600, 1067155200, 1081069200, 1099209600, 1112518800, 1130659200, 1143968400, 1162108800, 1175418000, 1193558400, 1207472400, 1225008000, 1238922000, 1256457600, 1270364400, 1270368000, 1288508400 }
+    trans:intvector { -1514739600, -1343066400, -1234807200, -1220292000, -1207159200, -1191344400, -873828000, -661539600, 28800, 828867600, 846403200, 860317200, 877852800, 891766800, 909302400, 923216400, 941356800, 954666000, 972806400, 989139600, 1001836800, 1018170000, 1035705600, 1049619600, 1067155200, 1081069200, 1099209600, 1112518800, 1130659200, 1143968400, 1162108800, 1175418000, 1193558400, 1207472400, 1225008000, 1238922000, 1256457600, 1270371600, 1288508400, 1301817600, 1319958000 }
     typeOffsets:intvector { -25260, 0, -28800, 0, -25200, 0, -25200, 3600, -21600, 0, -21600, 3600 }
-    typeMap:bin { "02040204020402010203020302030203020302030203020302030203020302030203020302040504" }
+    typeMap:bin { "0204020402040201020302030203020302030203020302030203020302030203020302030205040504" }
     finalRule { "Mexico" }
     finalRaw:int { -21600 }
-    finalYear:int { 2011 }
+    finalYear:int { 2012 }
   } //Z#81
   /* America/Barbados */ :table {
     trans:intvector { -1199217692, 234943200, 244616400, 261554400, 276066000, 293004000, 307515600, 325058400, 338706000 }
@@ -542,7 +542,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -21600 }
     finalYear:int { 2008 }
-    links:intvector { 97, 363, 580, 595 }
+    links:intvector { 97, 363, 582, 597 }
   } //Z#97
   /* America/Chihuahua */ :table {
     trans:intvector { -1514739600, -1343066400, -1234807200, -1220292000, -1207159200, -1191344400, 828864000, 846399600, 860313600, 877849200, 891766800, 909302400, 923216400, 941356800, 954666000, 972806400, 989139600, 1001836800, 1018170000, 1035705600 }
@@ -601,7 +601,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -25200 }
     finalYear:int { 2008 }
-    links:intvector { 107, 196, 524, 585, 601 }
+    links:intvector { 107, 196, 524, 587, 603 }
   } //Z#107
   /* America/Detroit */ :table {
     trans:intvector { -2051202469, -1724083200, -880218000, -765396000, -684349200, -671047200, -80499600, -68666400, 104914800, 120636000, 126687600, 152085600, 167814000, 183535200, 199263600, 215589600, 230713200, 247039200, 262767600, 278488800, 294217200, 309938400, 325666800, 341388000, 357116400, 372837600, 388566000, 404892000, 420015600, 436341600, 452070000, 467791200, 483519600, 499240800, 514969200, 530690400, 544604400, 562140000, 576054000, 594194400, 607503600, 625644000, 638953200, 657093600, 671007600, 688543200, 702457200, 719992800, 733906800, 752047200, 765356400, 783496800, 796806000, 814946400, 828860400, 846396000, 860310000, 877845600, 891759600, 909295200, 923209200, 941349600, 954658800, 972799200, 986108400, 1004248800, 1018162800, 1035698400, 1049612400, 1067148000, 1081062000, 1099202400, 1112511600, 1130652000, 1143961200, 1162101600, 1173596400, 1194156000 }
@@ -610,7 +610,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -18000 }
     finalYear:int { 2008 }
-    links:intvector { 108, 600 }
+    links:intvector { 108, 602 }
   } //Z#108
   /* America/Dominica */ :table {
     trans:intvector { -1846266804 }
@@ -711,7 +711,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "Canada" }
     finalRaw:int { -14400 }
     finalYear:int { 2008 }
-    links:intvector { 125, 366, 578 }
+    links:intvector { 125, 366, 580 }
   } //Z#125
   /* America/Havana */ :table {
     transPre32:intvector { -1, 1770465464 }
@@ -736,7 +736,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -18000 }
     finalYear:int { 2008 }
-    links:intvector { 114, 128, 136, 489, 596 }
+    links:intvector { 114, 128, 136, 489, 598 }
   } //Z#128
   /* America/Indiana/Knox */ :table {
     transPre32:intvector { -1, 1577320096 }
@@ -746,7 +746,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -21600 }
     finalYear:int { 2008 }
-    links:intvector { 129, 144, 599 }
+    links:intvector { 129, 144, 601 }
   } //Z#129
   /* America/Indiana/Marengo */ :table {
     transPre32:intvector { -1, 1577320096 }
@@ -874,7 +874,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -28800 }
     finalYear:int { 2008 }
-    links:intvector { 147, 529, 587, 602, 603 }
+    links:intvector { 147, 529, 589, 604, 605 }
   } //Z#147
   /* America/Louisville */ :int { 142 } //Z#148
   /* America/Maceio */ :table {
@@ -1007,7 +1007,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "US" }
     finalRaw:int { -18000 }
     finalYear:int { 2008 }
-    links:intvector { 167, 582, 597 }
+    links:intvector { 167, 584, 599 }
   } //Z#167
   /* America/Nipigon */ :table {
     transPre32:intvector { -1, 1928233280 }
@@ -1083,7 +1083,7 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -1633273200, -1615132800, -1601823600, -1583683200, -880210800, -820519140, -812653140, -796845540, -84380400, -68659200 }
     typeOffsets:intvector { -26898, 0, -25200, 0, -25200, 3600 }
     typeMap:bin { "0102010201020102010201" }
-    links:intvector { 177, 526, 594 }
+    links:intvector { 177, 526, 596 }
   } //Z#177
   /* America/Port-au-Prince */ :table {
     transPre32:intvector { -1, 1770463056 }
@@ -1539,7 +1539,7 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -2005974400, -1855983920, -1819954800, -1220428800 }
     typeOffsets:intvector { 25600, 0, 25200, 0, 25580, 0, 28800, 0 }
     typeMap:bin { "02010301" }
-    links:intvector { 256, 296, 607 }
+    links:intvector { 256, 296, 609 }
   } //Z#256
   /* Asia/Hong_Kong */ :table {
     trans:intvector { -2056692996, -907389000, -891667800, -884246400, -766746000, -747981000, -728544600, -717049800, -694503000, -683785800, -668064600, -654755400, -636615000, -623305800, -605165400, -591856200, -573715800, -559801800, -542352600, -528352200, -510211800, -498112200, -478762200, -466662600, -446707800, -435213000, -415258200, -403158600, -383808600, -371709000, -352359000, -340259400, -320909400, -308809800, -288855000, -277360200, -257405400, -245910600, -225955800, -213856200, -194506200, -182406600, -163056600, -148537800, -132816600, -117088200, -101367000, -85638600, -69312600, -53584200, -37863000, -22134600, -6413400, 9315000, 25036200, 40764600, 56485800, 72214200, 88540200, 104268600, 119989800, 126041400, 151439400, 167167800, 182889000, 198617400, 214338600, 230067000, 245788200, 295385400, 309292200 }
@@ -1785,7 +1785,7 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -2053931400, -1325494800, -1199262600, -498128400, -303984000, -293533200, -264931200, -39515400, 547570800, 560872800, 579020400, 592322400 }
     typeOffsets:intvector { 30472, 0, 28800, 0, 28800, 3600, 30600, 0, 32400, 0, 32400, 3600 }
     typeMap:bin { "03040304010201030405040504" }
-    links:intvector { 299, 574 }
+    links:intvector { 299, 576 }
   } //Z#299
   /* Asia/Shanghai */ :table {
     trans:intvector { -1325491552, -933494400, -923130000, -908784000, -891594000, 515520000, 527007600, 545155200, 558457200, 576604800, 589906800, 608659200, 621961200, 640108800, 653410800, 671558400, 684860400 }
@@ -1797,14 +1797,14 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -2038200925, -1167634800, -1073028000, -894180000, -879665400, -767005200, 378664200 }
     typeOffsets:intvector { 24925, 0, 25200, 0, 25200, 1200, 26400, 0, 27000, 0, 28800, 0, 32400, 0 }
     typeMap:bin { "01020304060405" }
-    links:intvector { 301, 576 }
+    links:intvector { 301, 578 }
   } //Z#301
   /* Asia/Taipei */ :table {
     transPre32:intvector { -1, 1959718936 }
     trans:intvector { -778579200, -765363600, -747043200, -733827600, -715507200, -702291600, -683884800, -670669200, -652348800, -639133200, -620812800, -607597200, -589276800, -576061200, -562924800, -541760400, -528710400, -510224400, -497174400, -478688400, -465638400, -449830800, -434016000, -418208400, -402480000, -386672400, -370944000, -355136400, -339408000, -323600400, -302515200, -291978000, -270979200, -260442000, 133977600, 149785200, 165513600, 181321200, 299520000, 307465200 }
     typeOffsets:intvector { 29160, 0, 28800, 0, 28800, 3600 }
     typeMap:bin { "0102010201020102010201020102010201020102010201020102010201020102010201020102010201" }
-    links:intvector { 302, 573 }
+    links:intvector { 302, 575 }
   } //Z#302
   /* Asia/Tashkent */ :table {
     trans:intvector { -1441168632, -1247547600, 354909600, 370717200, 386445600, 402253200, 417981600, 433789200, 449604000, 465336000, 481060800, 496785600, 512510400, 528235200, 543960000, 559684800, 575409600, 591134400, 606859200, 622584000, 638308800, 654638400, 670363200, 686091600 }
@@ -2111,7 +2111,7 @@ zoneinfo64:table(nofallback) {
   /* Canada/Saskatchewan */ :int { 186 } //Z#373
   /* Canada/Yukon */ :int { 212 } //Z#374
   /* Chile/Continental */ :int { 192 } //Z#375
-  /* Chile/EasterIsland */ :int { 534 } //Z#376
+  /* Chile/EasterIsland */ :int { 535 } //Z#376
   /* Cuba */ :int { 126 } //Z#377
   /* EAT */ :int { 7 } //Z#378
   /* ECT */ :int { 454 } //Z#379
@@ -2146,7 +2146,7 @@ zoneinfo64:table(nofallback) {
   } //Z#387
   /* Etc/GMT+10 */ :table {
     typeOffsets:intvector { -36000, 0 }
-    links:intvector { 388, 583 }
+    links:intvector { 388, 585 }
   } //Z#388
   /* Etc/GMT+11 */ :table {
     typeOffsets:intvector { -39600, 0 }
@@ -2162,27 +2162,27 @@ zoneinfo64:table(nofallback) {
   } //Z#392
   /* Etc/GMT+4 */ :table {
     typeOffsets:intvector { -14400, 0 }
-    links:intvector { 393, 577 }
+    links:intvector { 393, 579 }
   } //Z#393
   /* Etc/GMT+5 */ :table {
     typeOffsets:intvector { -18000, 0 }
-    links:intvector { 394, 581 }
+    links:intvector { 394, 583 }
   } //Z#394
   /* Etc/GMT+6 */ :table {
     typeOffsets:intvector { -21600, 0 }
-    links:intvector { 395, 579 }
+    links:intvector { 395, 581 }
   } //Z#395
   /* Etc/GMT+7 */ :table {
     typeOffsets:intvector { -25200, 0 }
-    links:intvector { 396, 584 }
+    links:intvector { 396, 586 }
   } //Z#396
   /* Etc/GMT+8 */ :table {
     typeOffsets:intvector { -28800, 0 }
-    links:intvector { 397, 586 }
+    links:intvector { 397, 588 }
   } //Z#397
   /* Etc/GMT+9 */ :table {
     typeOffsets:intvector { -32400, 0 }
-    links:intvector { 398, 588 }
+    links:intvector { 398, 590 }
   } //Z#398
   /* Etc/GMT-0 */ :int { 385 } //Z#399
   /* Etc/GMT-1 */ :table {
@@ -2231,11 +2231,11 @@ zoneinfo64:table(nofallback) {
   /* Etc/Greenwich */ :int { 385 } //Z#415
   /* Etc/UCT */ :table {
     typeOffsets:intvector { 0, 0 }
-    links:intvector { 416, 591 }
+    links:intvector { 416, 593 }
   } //Z#416
   /* Etc/UTC */ :table {
     typeOffsets:intvector { 0, 0 }
-    links:intvector { 417, 418, 420, 605, 606, 610 }
+    links:intvector { 417, 418, 420, 607, 608, 612 }
   } //Z#417
   /* Etc/Universal */ :int { 417 } //Z#418
   /* Etc/Unknown */ :table {
@@ -2354,7 +2354,7 @@ zoneinfo64:table(nofallback) {
   } //Z#434
   /* Europe/Guernsey */ :int { 444 } //Z#435
   /* Europe/Helsinki */ :table {
-    trans:intvector { -1535938792, -875671200, -859863600, 354675600, 370400400, 386125200, 401850000, 417574800, 433299600, 449024400, 465354000, 481078800, 496803600, 512528400, 528253200, 543978000, 559702800, 575427600, 591152400, 606877200, 622602000, 638326800, 654656400, 670381200, 686106000, 701830800, 717555600, 733280400, 749005200, 764730000, 780454800, 796179600, 811904400, 828234000, 846378000 }
+    trans:intvector { -1535938792, -875671200, -859863600, 354672000, 370396800, 386121600, 401846400, 417574800, 433299600, 449024400, 465354000, 481078800, 496803600, 512528400, 528253200, 543978000, 559702800, 575427600, 591152400, 606877200, 622602000, 638326800, 654656400, 670381200, 686106000, 701830800, 717555600, 733280400, 749005200, 764730000, 780454800, 796179600, 811904400, 828234000, 846378000 }
     typeOffsets:intvector { 5992, 0, 7200, 0, 7200, 3600 }
     typeMap:bin { "0102010201020102010201020102010201020102010201020102010201020102010201" }
     finalRule { "EU" }
@@ -2371,7 +2371,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "EU" }
     finalRaw:int { 7200 }
     finalYear:int { 2008 }
-    links:intvector { 260, 438, 590 }
+    links:intvector { 260, 438, 592 }
   } //Z#438
   /* Europe/Jersey */ :int { 444 } //Z#439
   /* Europe/Kaliningrad */ :table {
@@ -2398,7 +2398,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "EU" }
     finalRaw:int { 0 }
     finalYear:int { 1997 }
-    links:intvector { 442, 572 }
+    links:intvector { 442, 574 }
   } //Z#442
   /* Europe/Ljubljana */ :int { 425 } //Z#443
   /* Europe/London */ :table {
@@ -2464,7 +2464,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "Russia" }
     finalRaw:int { 10800 }
     finalYear:int { 1997 }
-    links:intvector { 451, 608 }
+    links:intvector { 451, 610 }
   } //Z#451
   /* Europe/Nicosia */ :int { 281 } //Z#452
   /* Europe/Oslo */ :table {
@@ -2622,7 +2622,7 @@ zoneinfo64:table(nofallback) {
     finalRule { "EU" }
     finalRaw:int { 3600 }
     finalYear:int { 1997 }
-    links:intvector { 475, 571 }
+    links:intvector { 475, 573 }
   } //Z#475
   /* Europe/Zagreb */ :int { 425 } //Z#476
   /* Europe/Zaporozhye */ :table {
@@ -2720,7 +2720,7 @@ zoneinfo64:table(nofallback) {
   /* JST */ :int { 309 } //Z#505
   /* Jamaica */ :int { 139 } //Z#506
   /* Japan */ :int { 309 } //Z#507
-  /* Kwajalein */ :int { 548 } //Z#508
+  /* Kwajalein */ :int { 549 } //Z#508
   /* Libya */ :int { 55 } //Z#509
   /* MET */ :table {
     trans:intvector { -1693706400, -1680483600, -1663455600, -1650150000, -1632006000, -1618700400, -938905200, -857257200, -844556400, -828226800, -812502000, -796777200, -781052400, -766623600, 228877200, 243997200, 260326800, 276051600, 291776400, 307501200, 323830800, 338950800, 354675600, 370400400, 386125200, 401850000, 417574800, 433299600, 449024400, 465354000, 481078800, 496803600, 512528400, 528253200, 543978000, 559702800, 575427600, 591152400, 606877200, 622602000, 638326800, 654656400, 670381200, 686106000, 701830800, 717555600, 733280400, 749005200, 764730000, 780454800, 796179600, 811904400, 828234000, 846378000 }
@@ -2792,6 +2792,12 @@ zoneinfo64:table(nofallback) {
     finalYear:int { 2009 }
     links:intvector { 523, 533 }
   } //Z#533
+  /* Pacific/Chuuk */ :table {
+    transPre32:intvector { -1, 2117478068 }
+    typeOffsets:intvector { 36428, 0, 36000, 0 }
+    typeMap:bin { "01" }
+    links:intvector { 534, 569, 572 }
+  } //Z#534
   /* Pacific/Easter */ :table {
     transPre32:intvector { -1, 1770471960 }
     trans:intvector { -1178124152, -870552000, -865278000, -736376400, -36619200, -23922000, -3355200, 7527600, 24465600, 37767600, 55915200, 69217200, 87969600, 100666800, 118209600, 132116400, 150868800, 163566000, 182318400, 195620400, 213768000, 227070000, 245217600, 258519600, 277272000, 289969200, 308721600, 321418800, 340171200, 353473200, 371620800, 384922800, 403070400, 416372400, 434520000, 447822000, 466574400, 479271600, 498024000, 510721200, 529473600, 545194800, 560923200, 574225200, 591768000, 605674800, 624427200, 637729200, 653457600, 668574000, 687326400, 700628400, 718776000, 732078000, 750225600, 763527600, 781675200, 794977200, 813729600, 826426800, 845179200, 859690800, 876628800, 889930800, 906868800, 923194800, 939528000, 952830000, 971582400, 984279600, 1003032000, 1015729200, 1034481600, 1047178800, 1065931200, 1079233200, 1097380800, 1110682800, 1128830400, 1142132400, 1160884800, 1173582000, 1192334400, 1206846000, 1223784000, 1237086000, 1255233600, 1270350000, 1286683200, 1299985200, 1318132800 }
@@ -2800,235 +2806,232 @@ zoneinfo64:table(nofallback) {
     finalRule { "Chile" }
     finalRaw:int { -21600 }
     finalYear:int { 2012 }
-    links:intvector { 376, 534 }
-  } //Z#534
+    links:intvector { 376, 535 }
+  } //Z#535
   /* Pacific/Efate */ :table {
     trans:intvector { -1829387596, 433256400, 448977600, 467298000, 480427200, 496760400, 511876800, 528210000, 543931200, 559659600, 575380800, 591109200, 606830400, 622558800, 638280000, 654008400, 669729600, 686062800, 696340800, 719931600, 727790400 }
     typeOffsets:intvector { 40396, 0, 39600, 0, 39600, 3600 }
     typeMap:bin { "010201020102010201020102010201020102010201" }
-  } //Z#535
+  } //Z#536
   /* Pacific/Enderbury */ :table {
     transPre32:intvector { -1, 2117555556 }
     trans:intvector { 307627200, 788958000 }
     typeOffsets:intvector { -41060, 0, -43200, 0, -39600, 0, 46800, 0 }
     typeMap:bin { "010203" }
-  } //Z#536
+  } //Z#537
   /* Pacific/Fakaofo */ :table {
     transPre32:intvector { -1, 2117555592 }
     typeOffsets:intvector { -41096, 0, -36000, 0 }
     typeMap:bin { "01" }
-  } //Z#537
+  } //Z#538
   /* Pacific/Fiji */ :table {
     trans:intvector { -1709985220, 909842400, 920124000, 941896800, 951573600, 1259416800, 1269698400, 1287842400, 1301148000 }
     typeOffsets:intvector { 42820, 0, 43200, 0, 43200, 3600 }
     typeMap:bin { "010201020102010201" }
-  } //Z#538
+  } //Z#539
   /* Pacific/Funafuti */ :table {
     transPre32:intvector { -1, 2117471484 }
     typeOffsets:intvector { 43012, 0, 43200, 0 }
     typeMap:bin { "01" }
-  } //Z#539
+  } //Z#540
   /* Pacific/Galapagos */ :table {
     trans:intvector { -1230746496, 504939600 }
     typeOffsets:intvector { -21504, 0, -21600, 0, -18000, 0 }
     typeMap:bin { "0201" }
-  } //Z#540
+  } //Z#541
   /* Pacific/Gambier */ :table {
     trans:intvector { -1806678012 }
     typeOffsets:intvector { -32388, 0, -32400, 0 }
     typeMap:bin { "01" }
-  } //Z#541
+  } //Z#542
   /* Pacific/Guadalcanal */ :table {
     trans:intvector { -1806748788 }
     typeOffsets:intvector { 38388, 0, 39600, 0 }
     typeMap:bin { "01" }
-    links:intvector { 542, 575 }
-  } //Z#542
+    links:intvector { 543, 577 }
+  } //Z#543
   /* Pacific/Guam */ :table {
     transPre32:intvector { -1, 350340556, -1, 2117479756 }
     typeOffsets:intvector { -51660, 0, 34740, 0, 36000, 0 }
     typeMap:bin { "0102" }
-  } //Z#543
+  } //Z#544
   /* Pacific/Honolulu */ :table {
     transPre32:intvector { -1, 2086059582 }
     trans:intvector { -1157283000, -1155472200, -880198200, -765376200, -712150200 }
     typeOffsets:intvector { -37886, 0, -37800, 0, -37800, 3600, -36000, 0 }
     typeMap:bin { "010201020103" }
-    links:intvector { 544, 598 }
-  } //Z#544
+    links:intvector { 545, 600 }
+  } //Z#545
   /* Pacific/Johnston */ :table {
     typeOffsets:intvector { -36000, 0 }
-  } //Z#545
+  } //Z#546
   /* Pacific/Kiritimati */ :table {
     transPre32:intvector { -1, 2117552256 }
     trans:intvector { 307622400, 788954400 }
     typeOffsets:intvector { -37760, 0, -38400, 0, -36000, 0, 50400, 0 }
     typeMap:bin { "010203" }
-  } //Z#546
+  } //Z#547
   /* Pacific/Kosrae */ :table {
     transPre32:intvector { -1, 2117475380 }
     trans:intvector { -7988400, 915105600 }
     typeOffsets:intvector { 39116, 0, 39600, 0, 43200, 0 }
     typeMap:bin { "010201" }
-  } //Z#547
+  } //Z#548
   /* Pacific/Kwajalein */ :table {
     transPre32:intvector { -1, 2117474336 }
     trans:intvector { -7988400, 745848000 }
     typeOffsets:intvector { 40160, 0, -43200, 0, 39600, 0, 43200, 0 }
     typeMap:bin { "020103" }
-    links:intvector { 508, 548 }
-  } //Z#548
+    links:intvector { 508, 549 }
+  } //Z#549
   /* Pacific/Majuro */ :table {
     transPre32:intvector { -1, 2117473408 }
     trans:intvector { -7988400 }
     typeOffsets:intvector { 41088, 0, 39600, 0, 43200, 0 }
     typeMap:bin { "0102" }
-  } //Z#549
+  } //Z#550
   /* Pacific/Marquesas */ :table {
     trans:intvector { -1806676920 }
     typeOffsets:intvector { -33480, 0, -34200, 0 }
     typeMap:bin { "01" }
-  } //Z#550
+  } //Z#551
   /* Pacific/Midway */ :table {
     transPre32:intvector { -1, 2117557064 }
     trans:intvector { -428504400, -420645600 }
     typeOffsets:intvector { -42568, 0, -39600, 0, -39600, 3600 }
     typeMap:bin { "010201" }
-  } //Z#551
+  } //Z#552
   /* Pacific/Nauru */ :table {
     trans:intvector { -1545131260, -877347000, -800960400, 294323400 }
     typeOffsets:intvector { 40060, 0, 32400, 0, 41400, 0, 43200, 0 }
     typeMap:bin { "02010203" }
-  } //Z#552
+  } //Z#553
   /* Pacific/Niue */ :table {
     transPre32:intvector { -1, 2117555276 }
     trans:intvector { -599575200, 276089400 }
     typeOffsets:intvector { -40780, 0, -41400, 0, -40800, 0, -39600, 0 }
     typeMap:bin { "020103" }
-  } //Z#553
+  } //Z#554
   /* Pacific/Norfolk */ :table {
     transPre32:intvector { -1, 2117474184 }
     trans:intvector { -599656320 }
     typeOffsets:intvector { 40312, 0, 40320, 0, 41400, 0 }
     typeMap:bin { "0102" }
-  } //Z#554
+  } //Z#555
   /* Pacific/Noumea */ :table {
     trans:intvector { -1829387148, 250002000, 257342400, 281451600, 288878400, 849366000, 857228400 }
     typeOffsets:intvector { 39948, 0, 39600, 0, 39600, 3600 }
     typeMap:bin { "01020102010201" }
-  } //Z#555
+  } //Z#556
   /* Pacific/Pago_Pago */ :table {
     transPre32:intvector { -1, 1439229064 }
     trans:intvector { -1861879032, -631110600 }
     typeOffsets:intvector { 45432, 0, -41400, 0, -40968, 0, -39600, 0 }
     typeMap:bin { "020103" }
-    links:intvector { 556, 563, 604 }
-  } //Z#556
+    links:intvector { 557, 565, 606 }
+  } //Z#557
   /* Pacific/Palau */ :table {
     transPre32:intvector { -1, 2117482220 }
     typeOffsets:intvector { 32276, 0, 32400, 0 }
     typeMap:bin { "01" }
-  } //Z#557
+  } //Z#558
   /* Pacific/Pitcairn */ :table {
     transPre32:intvector { -1, 2117545716 }
     trans:intvector { 893665800 }
     typeOffsets:intvector { -31220, 0, -30600, 0, -28800, 0 }
     typeMap:bin { "0102" }
-  } //Z#558
-  /* Pacific/Ponape */ :table {
+  } //Z#559
+  /* Pacific/Pohnpei */ :table {
     transPre32:intvector { -1, 2117476524 }
     typeOffsets:intvector { 37972, 0, 39600, 0 }
     typeMap:bin { "01" }
-  } //Z#559
+    links:intvector { 560, 561 }
+  } //Z#560
+  /* Pacific/Ponape */ :int { 560 } //Z#561
   /* Pacific/Port_Moresby */ :table {
     transPre32:intvector { -1, 1454791176, -1, 1928176784 }
     typeOffsets:intvector { 35320, 0, 35312, 0, 36000, 0 }
     typeMap:bin { "0102" }
-  } //Z#560
+  } //Z#562
   /* Pacific/Rarotonga */ :table {
     transPre32:intvector { -1, 2117552840 }
     trans:intvector { 279714600, 289387800, 309952800, 320837400, 341402400, 352287000, 372852000, 384341400, 404906400, 415791000, 436356000, 447240600, 467805600, 478690200, 499255200, 510139800, 530704800, 541589400, 562154400, 573643800, 594208800, 605093400, 625658400, 636543000, 657108000, 667992600 }
     typeOffsets:intvector { -38344, 0, -37800, 0, -36000, 0, -36000, 1800 }
     typeMap:bin { "010302030203020302030203020302030203020302030203020302" }
-  } //Z#561
+  } //Z#563
   /* Pacific/Saipan */ :table {
     transPre32:intvector { -1, 350340316, -1, 2117479516 }
     trans:intvector { -7981200 }
     typeOffsets:intvector { -51420, 0, 32400, 0, 34980, 0, 36000, 0 }
     typeMap:bin { "020103" }
-  } //Z#562
-  /* Pacific/Samoa */ :int { 556 } //Z#563
+  } //Z#564
+  /* Pacific/Samoa */ :int { 557 } //Z#565
   /* Pacific/Tahiti */ :table {
     trans:intvector { -1806674504 }
     typeOffsets:intvector { -35896, 0, -36000, 0 }
     typeMap:bin { "01" }
-  } //Z#564
+  } //Z#566
   /* Pacific/Tarawa */ :table {
     transPre32:intvector { -1, 2117472972 }
     typeOffsets:intvector { 41524, 0, 43200, 0 }
     typeMap:bin { "01" }
-  } //Z#565
+  } //Z#567
   /* Pacific/Tongatapu */ :table {
     transPre32:intvector { -1, 2117470136 }
     trans:intvector { -915193200, 939214800, 953384400, 973342800, 980596800, 1004792400, 1012046400 }
     typeOffsets:intvector { 44360, 0, 44400, 0, 46800, 0, 46800, 3600 }
     typeMap:bin { "0102030203020302" }
-  } //Z#566
-  /* Pacific/Truk */ :table {
-    transPre32:intvector { -1, 2117478068 }
-    typeOffsets:intvector { 36428, 0, 36000, 0 }
-    typeMap:bin { "01" }
-    links:intvector { 567, 570 }
-  } //Z#567
+  } //Z#568
+  /* Pacific/Truk */ :int { 534 } //Z#569
   /* Pacific/Wake */ :table {
     transPre32:intvector { -1, 2117474508 }
     typeOffsets:intvector { 39988, 0, 43200, 0 }
     typeMap:bin { "01" }
-  } //Z#568
+  } //Z#570
   /* Pacific/Wallis */ :table {
     transPre32:intvector { -1, 2117470376 }
     typeOffsets:intvector { 44120, 0, 43200, 0 }
     typeMap:bin { "01" }
-  } //Z#569
-  /* Pacific/Yap */ :int { 567 } //Z#570
-  /* Poland */ :int { 475 } //Z#571
-  /* Portugal */ :int { 442 } //Z#572
-  /* ROC */ :int { 302 } //Z#573
-  /* ROK */ :int { 299 } //Z#574
-  /* SST */ :int { 542 } //Z#575
-  /* Singapore */ :int { 301 } //Z#576
-  /* SystemV/AST4 */ :int { 393 } //Z#577
-  /* SystemV/AST4ADT */ :int { 125 } //Z#578
-  /* SystemV/CST6 */ :int { 395 } //Z#579
-  /* SystemV/CST6CDT */ :int { 97 } //Z#580
-  /* SystemV/EST5 */ :int { 394 } //Z#581
-  /* SystemV/EST5EDT */ :int { 167 } //Z#582
-  /* SystemV/HST10 */ :int { 388 } //Z#583
-  /* SystemV/MST7 */ :int { 396 } //Z#584
-  /* SystemV/MST7MDT */ :int { 107 } //Z#585
-  /* SystemV/PST8 */ :int { 397 } //Z#586
-  /* SystemV/PST8PDT */ :int { 147 } //Z#587
-  /* SystemV/YST9 */ :int { 398 } //Z#588
-  /* SystemV/YST9YDT */ :int { 59 } //Z#589
-  /* Turkey */ :int { 438 } //Z#590
-  /* UCT */ :int { 416 } //Z#591
-  /* US/Alaska */ :int { 59 } //Z#592
-  /* US/Aleutian */ :int { 58 } //Z#593
-  /* US/Arizona */ :int { 177 } //Z#594
-  /* US/Central */ :int { 97 } //Z#595
-  /* US/East-Indiana */ :int { 128 } //Z#596
-  /* US/Eastern */ :int { 167 } //Z#597
-  /* US/Hawaii */ :int { 544 } //Z#598
-  /* US/Indiana-Starke */ :int { 129 } //Z#599
-  /* US/Michigan */ :int { 108 } //Z#600
-  /* US/Mountain */ :int { 107 } //Z#601
-  /* US/Pacific */ :int { 147 } //Z#602
-  /* US/Pacific-New */ :int { 147 } //Z#603
-  /* US/Samoa */ :int { 556 } //Z#604
-  /* UTC */ :int { 417 } //Z#605
-  /* Universal */ :int { 417 } //Z#606
-  /* VST */ :int { 256 } //Z#607
-  /* W-SU */ :int { 451 } //Z#608
+  } //Z#571
+  /* Pacific/Yap */ :int { 534 } //Z#572
+  /* Poland */ :int { 475 } //Z#573
+  /* Portugal */ :int { 442 } //Z#574
+  /* ROC */ :int { 302 } //Z#575
+  /* ROK */ :int { 299 } //Z#576
+  /* SST */ :int { 543 } //Z#577
+  /* Singapore */ :int { 301 } //Z#578
+  /* SystemV/AST4 */ :int { 393 } //Z#579
+  /* SystemV/AST4ADT */ :int { 125 } //Z#580
+  /* SystemV/CST6 */ :int { 395 } //Z#581
+  /* SystemV/CST6CDT */ :int { 97 } //Z#582
+  /* SystemV/EST5 */ :int { 394 } //Z#583
+  /* SystemV/EST5EDT */ :int { 167 } //Z#584
+  /* SystemV/HST10 */ :int { 388 } //Z#585
+  /* SystemV/MST7 */ :int { 396 } //Z#586
+  /* SystemV/MST7MDT */ :int { 107 } //Z#587
+  /* SystemV/PST8 */ :int { 397 } //Z#588
+  /* SystemV/PST8PDT */ :int { 147 } //Z#589
+  /* SystemV/YST9 */ :int { 398 } //Z#590
+  /* SystemV/YST9YDT */ :int { 59 } //Z#591
+  /* Turkey */ :int { 438 } //Z#592
+  /* UCT */ :int { 416 } //Z#593
+  /* US/Alaska */ :int { 59 } //Z#594
+  /* US/Aleutian */ :int { 58 } //Z#595
+  /* US/Arizona */ :int { 177 } //Z#596
+  /* US/Central */ :int { 97 } //Z#597
+  /* US/East-Indiana */ :int { 128 } //Z#598
+  /* US/Eastern */ :int { 167 } //Z#599
+  /* US/Hawaii */ :int { 545 } //Z#600
+  /* US/Indiana-Starke */ :int { 129 } //Z#601
+  /* US/Michigan */ :int { 108 } //Z#602
+  /* US/Mountain */ :int { 107 } //Z#603
+  /* US/Pacific */ :int { 147 } //Z#604
+  /* US/Pacific-New */ :int { 147 } //Z#605
+  /* US/Samoa */ :int { 557 } //Z#606
+  /* UTC */ :int { 417 } //Z#607
+  /* Universal */ :int { 417 } //Z#608
+  /* VST */ :int { 256 } //Z#609
+  /* W-SU */ :int { 451 } //Z#610
   /* WET */ :table {
     trans:intvector { 228877200, 243997200, 260326800, 276051600, 291776400, 307501200, 323830800, 338950800, 354675600, 370400400, 386125200, 401850000, 417574800, 433299600, 449024400, 465354000, 481078800, 496803600, 512528400, 528253200, 543978000, 559702800, 575427600, 591152400, 606877200, 622602000, 638326800, 654656400, 670381200, 686106000, 701830800, 717555600, 733280400, 749005200, 764730000, 780454800, 796179600, 811904400, 828234000, 846378000 }
     typeOffsets:intvector { 0, 0, 0, 3600 }
@@ -3036,8 +3039,8 @@ zoneinfo64:table(nofallback) {
     finalRule { "EU" }
     finalRaw:int { 0 }
     finalYear:int { 1997 }
-  } //Z#609
-  /* Zulu */ :int { 417 } //Z#610
+  } //Z#611
+  /* Zulu */ :int { 417 } //Z#612
  }
  Names {
     "ACT","AET","AGT","ART","AST","Africa/Abidjan","Africa/Accra" // 6
@@ -3196,27 +3199,27 @@ zoneinfo64:table(nofallback) {
     ,"Mideast/Riyadh88","Mideast/Riyadh89","NET","NST" // 521
     ,"NZ","NZ-CHAT","Navajo","PLT","PNT","PRC","PRT","PST" // 529
     ,"PST8PDT","Pacific/Apia","Pacific/Auckland","Pacific/Chatham" // 533
-    ,"Pacific/Easter","Pacific/Efate","Pacific/Enderbury" // 536
-    ,"Pacific/Fakaofo","Pacific/Fiji","Pacific/Funafuti" // 539
-    ,"Pacific/Galapagos","Pacific/Gambier","Pacific/Guadalcanal" // 542
-    ,"Pacific/Guam","Pacific/Honolulu","Pacific/Johnston" // 545
-    ,"Pacific/Kiritimati","Pacific/Kosrae","Pacific/Kwajalein" // 548
-    ,"Pacific/Majuro","Pacific/Marquesas","Pacific/Midway" // 551
-    ,"Pacific/Nauru","Pacific/Niue","Pacific/Norfolk","Pacific/Noumea" // 555
-    ,"Pacific/Pago_Pago","Pacific/Palau","Pacific/Pitcairn" // 558
-    ,"Pacific/Ponape","Pacific/Port_Moresby","Pacific/Rarotonga" // 561
-    ,"Pacific/Saipan","Pacific/Samoa","Pacific/Tahiti" // 564
-    ,"Pacific/Tarawa","Pacific/Tongatapu","Pacific/Truk" // 567
-    ,"Pacific/Wake","Pacific/Wallis","Pacific/Yap","Poland" // 571
-    ,"Portugal","ROC","ROK","SST","Singapore","SystemV/AST4" // 577
-    ,"SystemV/AST4ADT","SystemV/CST6","SystemV/CST6CDT" // 580
-    ,"SystemV/EST5","SystemV/EST5EDT","SystemV/HST10","SystemV/MST7" // 584
-    ,"SystemV/MST7MDT","SystemV/PST8","SystemV/PST8PDT" // 587
-    ,"SystemV/YST9","SystemV/YST9YDT","Turkey","UCT","US/Alaska" // 592
-    ,"US/Aleutian","US/Arizona","US/Central","US/East-Indiana" // 596
-    ,"US/Eastern","US/Hawaii","US/Indiana-Starke","US/Michigan" // 600
-    ,"US/Mountain","US/Pacific","US/Pacific-New","US/Samoa" // 604
-    ,"UTC","Universal","VST","W-SU","WET","Zulu" // 610
+    ,"Pacific/Chuuk","Pacific/Easter","Pacific/Efate","Pacific/Enderbury" // 537
+    ,"Pacific/Fakaofo","Pacific/Fiji","Pacific/Funafuti" // 540
+    ,"Pacific/Galapagos","Pacific/Gambier","Pacific/Guadalcanal" // 543
+    ,"Pacific/Guam","Pacific/Honolulu","Pacific/Johnston" // 546
+    ,"Pacific/Kiritimati","Pacific/Kosrae","Pacific/Kwajalein" // 549
+    ,"Pacific/Majuro","Pacific/Marquesas","Pacific/Midway" // 552
+    ,"Pacific/Nauru","Pacific/Niue","Pacific/Norfolk","Pacific/Noumea" // 556
+    ,"Pacific/Pago_Pago","Pacific/Palau","Pacific/Pitcairn" // 559
+    ,"Pacific/Pohnpei","Pacific/Ponape","Pacific/Port_Moresby" // 562
+    ,"Pacific/Rarotonga","Pacific/Saipan","Pacific/Samoa" // 565
+    ,"Pacific/Tahiti","Pacific/Tarawa","Pacific/Tongatapu" // 568
+    ,"Pacific/Truk","Pacific/Wake","Pacific/Wallis","Pacific/Yap" // 572
+    ,"Poland","Portugal","ROC","ROK","SST","Singapore" // 578
+    ,"SystemV/AST4","SystemV/AST4ADT","SystemV/CST6","SystemV/CST6CDT" // 582
+    ,"SystemV/EST5","SystemV/EST5EDT","SystemV/HST10","SystemV/MST7" // 586
+    ,"SystemV/MST7MDT","SystemV/PST8","SystemV/PST8PDT" // 589
+    ,"SystemV/YST9","SystemV/YST9YDT","Turkey","UCT","US/Alaska" // 594
+    ,"US/Aleutian","US/Arizona","US/Central","US/East-Indiana" // 598
+    ,"US/Eastern","US/Hawaii","US/Indiana-Starke","US/Michigan" // 602
+    ,"US/Mountain","US/Pacific","US/Pacific-New","US/Samoa" // 606
+    ,"UTC","Universal","VST","W-SU","WET","Zulu" // 612
  }
  Rules { 
   AN:intvector {
@@ -3854,82 +3857,84 @@ zoneinfo64:table(nofallback) {
   "WS", //Z#531 Pacific/Apia
   "NZ", //Z#532 Pacific/Auckland
   "NZ", //Z#533 Pacific/Chatham
-  "CL", //Z#534 Pacific/Easter
-  "VU", //Z#535 Pacific/Efate
-  "KI", //Z#536 Pacific/Enderbury
-  "TK", //Z#537 Pacific/Fakaofo
-  "FJ", //Z#538 Pacific/Fiji
-  "TV", //Z#539 Pacific/Funafuti
-  "EC", //Z#540 Pacific/Galapagos
-  "PF", //Z#541 Pacific/Gambier
-  "SB", //Z#542 Pacific/Guadalcanal
-  "GU", //Z#543 Pacific/Guam
-  "US", //Z#544 Pacific/Honolulu
-  "UM", //Z#545 Pacific/Johnston
-  "KI", //Z#546 Pacific/Kiritimati
-  "FM", //Z#547 Pacific/Kosrae
-  "MH", //Z#548 Pacific/Kwajalein
-  "MH", //Z#549 Pacific/Majuro
-  "PF", //Z#550 Pacific/Marquesas
-  "UM", //Z#551 Pacific/Midway
-  "NR", //Z#552 Pacific/Nauru
-  "NU", //Z#553 Pacific/Niue
-  "NF", //Z#554 Pacific/Norfolk
-  "NC", //Z#555 Pacific/Noumea
-  "AS", //Z#556 Pacific/Pago_Pago
-  "PW", //Z#557 Pacific/Palau
-  "PN", //Z#558 Pacific/Pitcairn
-  "FM", //Z#559 Pacific/Ponape
-  "PG", //Z#560 Pacific/Port_Moresby
-  "CK", //Z#561 Pacific/Rarotonga
-  "MP", //Z#562 Pacific/Saipan
-  "AS", //Z#563 Pacific/Samoa
-  "PF", //Z#564 Pacific/Tahiti
-  "KI", //Z#565 Pacific/Tarawa
-  "TO", //Z#566 Pacific/Tongatapu
-  "FM", //Z#567 Pacific/Truk
-  "UM", //Z#568 Pacific/Wake
-  "WF", //Z#569 Pacific/Wallis
-  "FM", //Z#570 Pacific/Yap
-  "PL", //Z#571 Poland
-  "PT", //Z#572 Portugal
-  "TW", //Z#573 ROC
-  "KR", //Z#574 ROK
-  "SB", //Z#575 SST
-  "SG", //Z#576 Singapore
-  "001",//Z#577 SystemV/AST4
-  "CA", //Z#578 SystemV/AST4ADT
-  "001",//Z#579 SystemV/CST6
-  "US", //Z#580 SystemV/CST6CDT
-  "001",//Z#581 SystemV/EST5
-  "US", //Z#582 SystemV/EST5EDT
-  "001",//Z#583 SystemV/HST10
-  "001",//Z#584 SystemV/MST7
-  "US", //Z#585 SystemV/MST7MDT
-  "001",//Z#586 SystemV/PST8
-  "US", //Z#587 SystemV/PST8PDT
-  "001",//Z#588 SystemV/YST9
-  "US", //Z#589 SystemV/YST9YDT
-  "TR", //Z#590 Turkey
-  "001",//Z#591 UCT
-  "US", //Z#592 US/Alaska
-  "US", //Z#593 US/Aleutian
-  "US", //Z#594 US/Arizona
-  "US", //Z#595 US/Central
-  "US", //Z#596 US/East-Indiana
-  "US", //Z#597 US/Eastern
-  "US", //Z#598 US/Hawaii
-  "US", //Z#599 US/Indiana-Starke
-  "US", //Z#600 US/Michigan
-  "US", //Z#601 US/Mountain
-  "US", //Z#602 US/Pacific
-  "US", //Z#603 US/Pacific-New
-  "AS", //Z#604 US/Samoa
-  "001",//Z#605 UTC
-  "001",//Z#606 Universal
-  "VN", //Z#607 VST
-  "RU", //Z#608 W-SU
-  "001",//Z#609 WET
-  "001",//Z#610 Zulu
+  "FM", //Z#534 Pacific/Chuuk
+  "CL", //Z#535 Pacific/Easter
+  "VU", //Z#536 Pacific/Efate
+  "KI", //Z#537 Pacific/Enderbury
+  "TK", //Z#538 Pacific/Fakaofo
+  "FJ", //Z#539 Pacific/Fiji
+  "TV", //Z#540 Pacific/Funafuti
+  "EC", //Z#541 Pacific/Galapagos
+  "PF", //Z#542 Pacific/Gambier
+  "SB", //Z#543 Pacific/Guadalcanal
+  "GU", //Z#544 Pacific/Guam
+  "US", //Z#545 Pacific/Honolulu
+  "UM", //Z#546 Pacific/Johnston
+  "KI", //Z#547 Pacific/Kiritimati
+  "FM", //Z#548 Pacific/Kosrae
+  "MH", //Z#549 Pacific/Kwajalein
+  "MH", //Z#550 Pacific/Majuro
+  "PF", //Z#551 Pacific/Marquesas
+  "UM", //Z#552 Pacific/Midway
+  "NR", //Z#553 Pacific/Nauru
+  "NU", //Z#554 Pacific/Niue
+  "NF", //Z#555 Pacific/Norfolk
+  "NC", //Z#556 Pacific/Noumea
+  "AS", //Z#557 Pacific/Pago_Pago
+  "PW", //Z#558 Pacific/Palau
+  "PN", //Z#559 Pacific/Pitcairn
+  "FM", //Z#560 Pacific/Pohnpei
+  "FM", //Z#561 Pacific/Ponape
+  "PG", //Z#562 Pacific/Port_Moresby
+  "CK", //Z#563 Pacific/Rarotonga
+  "MP", //Z#564 Pacific/Saipan
+  "AS", //Z#565 Pacific/Samoa
+  "PF", //Z#566 Pacific/Tahiti
+  "KI", //Z#567 Pacific/Tarawa
+  "TO", //Z#568 Pacific/Tongatapu
+  "FM", //Z#569 Pacific/Truk
+  "UM", //Z#570 Pacific/Wake
+  "WF", //Z#571 Pacific/Wallis
+  "FM", //Z#572 Pacific/Yap
+  "PL", //Z#573 Poland
+  "PT", //Z#574 Portugal
+  "TW", //Z#575 ROC
+  "KR", //Z#576 ROK
+  "SB", //Z#577 SST
+  "SG", //Z#578 Singapore
+  "001",//Z#579 SystemV/AST4
+  "CA", //Z#580 SystemV/AST4ADT
+  "001",//Z#581 SystemV/CST6
+  "US", //Z#582 SystemV/CST6CDT
+  "001",//Z#583 SystemV/EST5
+  "US", //Z#584 SystemV/EST5EDT
+  "001",//Z#585 SystemV/HST10
+  "001",//Z#586 SystemV/MST7
+  "US", //Z#587 SystemV/MST7MDT
+  "001",//Z#588 SystemV/PST8
+  "US", //Z#589 SystemV/PST8PDT
+  "001",//Z#590 SystemV/YST9
+  "US", //Z#591 SystemV/YST9YDT
+  "TR", //Z#592 Turkey
+  "001",//Z#593 UCT
+  "US", //Z#594 US/Alaska
+  "US", //Z#595 US/Aleutian
+  "US", //Z#596 US/Arizona
+  "US", //Z#597 US/Central
+  "US", //Z#598 US/East-Indiana
+  "US", //Z#599 US/Eastern
+  "US", //Z#600 US/Hawaii
+  "US", //Z#601 US/Indiana-Starke
+  "US", //Z#602 US/Michigan
+  "US", //Z#603 US/Mountain
+  "US", //Z#604 US/Pacific
+  "US", //Z#605 US/Pacific-New
+  "AS", //Z#606 US/Samoa
+  "001",//Z#607 UTC
+  "001",//Z#608 Universal
+  "VN", //Z#609 VST
+  "RU", //Z#610 W-SU
+  "001",//Z#611 WET
+  "001",//Z#612 Zulu
  }
 }
