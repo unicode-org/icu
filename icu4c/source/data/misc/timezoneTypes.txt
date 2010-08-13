@@ -81,6 +81,8 @@ timezoneTypes:table(nofallback){
             "Mexico:BajaNorte"{"America/Tijuana"}
             "Mexico:BajaSur"{"America/Mazatlan"}
             "Mexico:General"{"America/Mexico_City"}
+            "Pacific:Chuuk"{"Pacific/Truk"}
+            "Pacific:Pohnpei"{"Pacific/Ponape"}
             "Pacific:Samoa"{"Pacific/Pago_Pago"}
             "Pacific:Yap"{"Pacific/Truk"}
             "SystemV:AST4"{"Etc/GMT+4"}
