@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,10 +31,14 @@
 #include "swapimpl.h"
 #include "toolutil.h"
 #include "package.h"
+#include "cmemory.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+static const int32_t kItemsChunk = 256; /* How much to increase the filesarray by each time */
 
 // general definitions ----------------------------------------------------- ***
 
@@ -387,6 +391,9 @@ Package::Package() {
     inIsBigEndian=U_IS_BIG_ENDIAN;
 
     itemCount=0;
+    itemMax=0;
+    items=NULL;
+
     inStringTop=outStringTop=0;
 
     matchMode=0;
@@ -420,6 +427,8 @@ Package::~Package() {
             free(items[idx].data);
         }
     }
+
+    uprv_free((void*)items);
 }
 
 void
@@ -495,6 +504,7 @@ Package::readPackage(const char *filename) {
         offset=0x7fffffff;
     } else {
         itemCount=udata_readInt32(ds, *(const int32_t *)inBytes);
+        setItemCapacity(itemCount); /* resize so there's space */
         if(itemCount==0) {
             offset=4;
         } else if(length<(4+8*itemCount)) {
@@ -517,8 +527,8 @@ Package::readPackage(const char *filename) {
         char *s, *inItemStrings;
         int32_t inPkgNameLength, prefixLength, stringsOffset;
 
-        if(itemCount>MAX_FILE_COUNT) {
-            fprintf(stderr, "icupkg: too many items, maximum is %d\n", MAX_FILE_COUNT);
+        if(itemCount>itemMax) {
+            fprintf(stderr, "icupkg: too many items, maximum is %d\n", itemMax);
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
 
@@ -967,10 +977,7 @@ Package::addItem(const char *name, uint8_t *data, int32_t length, UBool isDataOw
     idx=findItem(name);
     if(idx<0) {
         // new item, make space at the insertion point
-        if(itemCount>=MAX_FILE_COUNT) {
-            fprintf(stderr, "icupkg: too many items, maximum is %d\n", MAX_FILE_COUNT);
-            exit(U_BUFFER_OVERFLOW_ERROR);
-        }
+        ensureItemCapacity();
         // move the following items down
         idx=~idx;
         if(idx<itemCount) {
@@ -1218,6 +1225,32 @@ Package::sortItems() {
         fprintf(stderr, "icupkg: sorting item names failed - %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
+}
+
+void Package::setItemCapacity(int32_t max) 
+{
+  if(max<=itemMax) {
+    return;
+  }
+  Item *newItems = (Item*)uprv_malloc(max * sizeof(items[0]));
+  Item *oldItems = items;
+  if(newItems == NULL) {
+    fprintf(stderr, "icupkg: Out of memory trying to allocate %ld bytes for %d items\n", max*sizeof(items[0]), max);
+    exit(U_MEMORY_ALLOCATION_ERROR);
+  }
+  if(items && itemCount>0) {
+    uprv_memcpy((void*)newItems, (const void*)items, itemCount*sizeof(items[0]));
+  }
+  itemMax = max;
+  items = newItems;
+  uprv_free(oldItems);
+}
+
+void Package::ensureItemCapacity()
+{
+  if((itemCount+1)>itemMax) {
+    setItemCapacity(itemCount+kItemsChunk);
+  }
 }
 
 U_NAMESPACE_END
