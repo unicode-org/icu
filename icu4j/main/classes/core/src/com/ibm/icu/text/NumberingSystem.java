@@ -229,31 +229,24 @@ public class NumberingSystem {
      * Convenience method to determine if a given digit string is valid for use as a 
      * descriptor of a numeric ( non-algorithmic ) numbering system.  In order for
      * a digit string to be valid, it must meet the following criteria:
-     * 1. It must only contain characters that are decimal digits as defined by Unicode.
-     * 2. It must contain characters that are contiguous code points.
-     * 3. Digits must be in Unicode's basic multilingual plane.
+     * 1. Digits must be in Unicode's basic multilingual plane.
      * @stable ICU 4.2
      */
     public static boolean isValidDigitString(String str) {
 
         int c;
-        int prev = 0;
         int i = 0;
         UCharacterIterator it = UCharacterIterator.getInstance(str);
 
         it.setToStart();
         while ( (c = it.nextCodePoint()) != UCharacterIterator.DONE) {
-            if ( UCharacter.digit(c) != i ) { // Digits outside the Unicode decimal digit class are not currently supported
-                return false;
-            }
-            if ( prev != 0 && c != prev + 1 ) { // Non-contiguous digits are not currently supported
-                return false;
-            }
             if ( UCharacter.isSupplementary(c)) { // Digits outside the BMP are not currently supported
                 return false;
             }
             i++;
-            prev = c;
+        }
+        if ( i != 10 ) {
+            return false;
         }
         return true;
     }

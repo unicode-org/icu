@@ -27,7 +27,8 @@ public final class DateNumberFormat extends NumberFormat {
 
     private static final long serialVersionUID = -6315692826916346953L;
 
-    private char zeroDigit;
+    private char[] digits;
+    private char zeroDigit; // For backwards compatibility
     private char minusSign;
     private boolean positiveOnly = false;
 
@@ -38,17 +39,19 @@ public final class DateNumberFormat extends NumberFormat {
     private int maxIntDigits;
     private int minIntDigits;
 
-    public DateNumberFormat(ULocale loc, char zeroDigitIn, String nsName) {
-        initialize(loc,zeroDigitIn,nsName);
+    public DateNumberFormat(ULocale loc, String digitString, String nsName) {
+        initialize(loc,digitString,nsName);
     }
 
-/*    public DateNumberFormat(char zeroDigit, char minusSign) {
-        this.zeroDigit = zeroDigit;
-        this.minusSign = minusSign;
+    public DateNumberFormat(ULocale loc, char zeroDigit, String nsName) {
+        StringBuffer buf = new StringBuffer();
+        for ( int i = 0 ; i < 10 ; i++ ) {
+            buf.append((char)(zeroDigit+i));
+        }
+        initialize(loc,buf.toString(),nsName);
     }
-*/
 
-    private void initialize(ULocale loc,char zeroDigitIn,String nsName) {
+    private void initialize(ULocale loc,String digitString,String nsName) {
         char[] elems = CACHE.get(loc);
         if (elems == null) {
             // Missed cache
@@ -67,13 +70,19 @@ public final class DateNumberFormat extends NumberFormat {
                     minusString = "-";
                 }
             }
-            elems = new char[2];
-            elems[0] = zeroDigitIn;
-            elems[1] = minusString.charAt(0);
+            elems = new char[11];
+            for ( int i = 0 ; i < 10 ; i++ ) {
+                 elems[i] = digitString.charAt(i);
+            }
+            elems[10] = minusString.charAt(0);
             CACHE.put(loc, elems);
         }
-        zeroDigit = elems[0];
-        minusSign = elems[1];
+        
+        digits = new char[10];
+        for ( int i = 0 ; i < 10 ; i++ ) {
+           digits[i] = elems[i]; 
+        }
+        minusSign = elems[10];
     }
 
     public void setMaximumIntegerDigits(int newValue) {
@@ -98,11 +107,24 @@ public final class DateNumberFormat extends NumberFormat {
     }
 
     public char getZeroDigit() {
-        return zeroDigit;
+        if ( digits != null ) {
+            return digits[0];
+        } else {
+            return zeroDigit;
+        }
     }
 
     public void setZeroDigit(char zero) {
-        zeroDigit = zero;
+        if ( digits == null ) {
+            digits = new char[10];
+        }
+        digits[0] = zero;
+        if (Character.digit(zero,10) == 0) {
+            for ( int i = 1 ; i < 10 ; i++ ) {
+                digits[i] = (char)(zero+i);
+            }
+        }
+ 
     }
 
     public StringBuffer format(double number, StringBuffer toAppendTo,
@@ -126,7 +148,7 @@ public final class DateNumberFormat extends NumberFormat {
         int limit = decimalBuf.length < maxIntDigits ? decimalBuf.length : maxIntDigits;
         int index = limit - 1;
         while (true) {
-            decimalBuf[index] = (char)((number % 10) + zeroDigit);
+            decimalBuf[index] = digits[(number % 10)];
             number /= 10;
             if (index == 0 || number == 0) {
                 break;
@@ -135,7 +157,7 @@ public final class DateNumberFormat extends NumberFormat {
         }
         int padding = minIntDigits - (limit - index);
         for (; padding > 0; padding--) {
-            decimalBuf[--index] = zeroDigit;
+            decimalBuf[--index] = digits[0];
         }
         int length = limit - index;
         toAppendTo.append(decimalBuf, index, length);
@@ -182,9 +204,16 @@ public final class DateNumberFormat extends NumberFormat {
                 }
                 negative = true;
             } else {
-                int digit = ch - zeroDigit;
+                int digit = ch - digits[0];
                 if (digit < 0 || 9 < digit) {
                     digit = UCharacter.digit(ch);
+                }
+                if (digit < 0 || 9 < digit) {
+                    for ( digit = 0 ; digit < 10 ; digit++ ) {
+                        if ( ch == digits[digit]) {
+                            break;
+                        }
+                    }
                 }
                 if (0 <= digit && digit <= 9 && num < PARSE_THRESHOLD) {
                     sawNumber = true;
@@ -208,9 +237,27 @@ public final class DateNumberFormat extends NumberFormat {
             return false;
         }
         DateNumberFormat other = (DateNumberFormat)obj;
+
+        for (int i = 0 ; i < 10 ; i++) {
+            char check1, check2;
+            if ( digits != null ) {
+                check1 = digits[i];
+            } else {
+                check1 = (char)(zeroDigit+i);
+            }
+            if ( other.digits != null ) {
+                check2 = other.digits[i];
+            } else {
+                check2 = (char)(other.zeroDigit+i);
+            }
+            
+            if (check1 != check2) {
+                return false;
+            }
+        }
+
         return (this.maxIntDigits == other.maxIntDigits
                 && this.minIntDigits == other.minIntDigits
-                && this.zeroDigit == other.zeroDigit
                 && this.minusSign == other.minusSign
                 && this.positiveOnly == other.positiveOnly);
     }

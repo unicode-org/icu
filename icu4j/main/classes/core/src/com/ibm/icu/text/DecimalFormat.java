@@ -1206,8 +1206,8 @@ public class DecimalFormat extends NumberFormat {
         // }
 
         int i;
-        char zero = symbols.getZeroDigit();
-        int zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
+        char [] digits = symbols.getDigits();
+        
         char grouping = currencySignCount > 0 ? symbols.getMonetaryGroupingSeparator() :
             symbols.getGroupingSeparator();
         char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() :
@@ -1329,13 +1329,13 @@ public class DecimalFormat extends NumberFormat {
                     }
                 }
                 result.append((i < digitList.count)
-                              ? (char) (digitList.digits[i] + zeroDelta)
-                              : zero);
+                              ? digits[digitList.getDigitValue(i)]
+                              : digits[0]);
             }
 
             // For ICU compatibility and format 0 to 0E0 with pattern "#E0" [Richard/GCL]
             if (digitList.isZero() && (totalDigits == 0)) {
-                result.append(zero);
+                result.append(digits[0]);
             }
 
             // Record field information
@@ -1412,11 +1412,11 @@ public class DecimalFormat extends NumberFormat {
                     expDig = 1;
                 }
                 for (i = digitList.decimalAt; i < expDig; ++i)
-                    result.append(zero);
+                    result.append(digits[0]);
             }
             for (i = 0; i < digitList.decimalAt; ++i) {
-                result.append((i < digitList.count) ? (char) (digitList.digits[i] + zeroDelta)
-                              : zero);
+                result.append((i < digitList.count) ? digits[digitList.getDigitValue(i)]
+                              : digits[0]);
             }
             // [Spark/CDL] Add attribute for exponent part.
             if (parseAttr) {
@@ -1464,12 +1464,11 @@ public class DecimalFormat extends NumberFormat {
                 if (i < digitList.decimalAt && digitIndex < digitList.count
                     && sigCount < maxSigDig) {
                     // Output a real digit
-                    byte d = digitList.digits[digitIndex++];
-                    result.append((char) (d + zeroDelta));
+                    result.append(digits[digitList.getDigitValue(digitIndex++)]);
                     ++sigCount;
                 } else {
                     // Output a zero (leading or trailing)
-                    result.append(zero);
+                    result.append(digits[0]);
                     if (sigCount > 0) {
                         ++sigCount;
                     }
@@ -1502,7 +1501,7 @@ public class DecimalFormat extends NumberFormat {
             // then print a zero. Otherwise we won't print _any_ digits, and we won't be
             // able to parse this string.
             if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
-                result.append(zero);
+                result.append(digits[0]);
             // [Spark/CDL] Add attribute for integer part.
             if (parseAttr) {
                 addAttribute(Field.INTEGER, intBegin, result.length());
@@ -1546,16 +1545,16 @@ public class DecimalFormat extends NumberFormat {
                 // decimal but before any significant digits. These are only output if
                 // abs(number being formatted) < 1.0.
                 if (-1 - i > (digitList.decimalAt - 1)) {
-                    result.append(zero);
+                    result.append(digits[0]);
                     continue;
                 }
 
                 // Output a digit, if we have any precision left, or a zero if we
                 // don't. We don't want to output noise digits.
                 if (!isInteger && digitIndex < digitList.count) {
-                    result.append((char) (digitList.digits[digitIndex++] + zeroDelta));
+                    result.append(digits[digitList.getDigitValue(digitIndex++)]);
                 } else {
-                    result.append(zero);
+                    result.append(digits[0]);
                 }
 
                 // If we reach the maximum number of significant digits, or if we output
@@ -2121,7 +2120,7 @@ public class DecimalFormat extends NumberFormat {
             // DigitList, and adjust the exponent as needed.
 
             digits.decimalAt = digits.count = 0;
-            char zero = symbols.getZeroDigit();
+            char [] digitSymbols = symbols.getDigits();
             char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() : symbols
                     .getDecimalSeparator();
             char grouping = symbols.getGroupingSeparator();
@@ -2174,9 +2173,17 @@ public class DecimalFormat extends NumberFormat {
                 // standard Unicode digit range. If this fails, try using the standard
                 // Unicode digit ranges by calling UCharacter.digit(). If this also fails,
                 // digit will have a value outside the range 0..9.
-                digit = ch - zero;
+                digit = ch - digitSymbols[0];
                 if (digit < 0 || digit > 9)
                     digit = UCharacter.digit(ch, 10);
+                if (digit < 0 || digit > 9) {
+                    for ( digit = 0 ; digit < 10 ; digit++) {
+                        if ( ch == digitSymbols[digit] )
+                            break;
+                    }
+                }
+                    
+
 
                 if (digit == 0) {
                     // Cancel out backup setting (see grouping handler below)
@@ -2324,7 +2331,7 @@ public class DecimalFormat extends NumberFormat {
                     DigitList exponentDigits = new DigitList();
                     exponentDigits.count = 0;
                     while (pos < text.length()) {
-                        digit = text.charAt(pos) - zero;
+                        digit = text.charAt(pos) - digitSymbols[0];
                         if (digit < 0 || digit > 9) {
                             // Can't parse "[1E0]" when pattern is "0.###E0;[0.###E0]"
                             // Should update reassign the value of 'ch' in the code: digit
@@ -5392,6 +5399,15 @@ public class DecimalFormat extends NumberFormat {
 
     // Constants for characters used in programmatic (unlocalized) patterns.
     static final char PATTERN_ZERO_DIGIT = '0';
+    static final char PATTERN_ONE_DIGIT = '1';
+    static final char PATTERN_TWO_DIGIT = '2';
+    static final char PATTERN_THREE_DIGIT = '3';
+    static final char PATTERN_FOUR_DIGIT = '4';
+    static final char PATTERN_FIVE_DIGIT = '5';
+    static final char PATTERN_SIX_DIGIT = '6';
+    static final char PATTERN_SEVEN_DIGIT = '7';
+    static final char PATTERN_EIGHT_DIGIT = '8';
+    static final char PATTERN_NINE_DIGIT = '9';
     static final char PATTERN_GROUPING_SEPARATOR = ',';
     static final char PATTERN_DECIMAL_SEPARATOR = '.';
     static final char PATTERN_DIGIT = '#';
