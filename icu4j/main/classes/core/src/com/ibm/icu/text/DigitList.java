@@ -112,6 +112,11 @@ final class DigitList {
         ensureCapacity(count+1, count);
         digits[count++] = (byte) digit;
     }
+    
+    public byte getDigitValue(int i) {
+        return (byte) (digits[i] - '0');
+    }
+    
     /**
      * Utility routine to get the value of the digit list
      * If (count == 0) this throws a NumberFormatException, which

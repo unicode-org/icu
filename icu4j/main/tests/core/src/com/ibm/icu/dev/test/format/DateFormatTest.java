@@ -3768,6 +3768,33 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
 
     }
+    public void TestFormalChineseDate() { 
+        
+        String pattern = "y\u5e74M\u6708d\u65e5";
+        String override = "y=hanidec;M=hans;d=hans";
+        
+        // create formatter 
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern,override,ULocale.CHINA);
+
+        Calendar cal = Calendar.getInstance(ULocale.ENGLISH);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(2009, 6, 28, 0,0,0);
+        FieldPosition pos = new FieldPosition(0);
+        StringBuffer result = new StringBuffer();
+        sdf.format(cal,result,pos);
+        String res1 = result.toString();
+        String expected = "\u4e8c\u3007\u3007\u4e5d\u5e74\u4e03\u6708\u4e8c\u5341\u516b\u65e5"; 
+        if (! res1.equals(expected)) { 
+            errln((String)"FAIL: -> " + result.toString() + " expected -> " + expected); 
+        } 
+        ParsePosition pp = new ParsePosition(0);
+        Date parsedate = sdf.parse(expected, pp);
+        long time1 = parsedate.getTime();
+        long time2 = cal.getTimeInMillis();
+        if ( time1 != time2 ) {            
+            errln("FAIL: parsed -> " + parsedate.toString() + " expected -> " + cal.toString()); 
+        }
+    } 
 
 }
 

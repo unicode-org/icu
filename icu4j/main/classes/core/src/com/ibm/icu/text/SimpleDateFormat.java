@@ -512,10 +512,10 @@ public class SimpleDateFormat extends DateFormat {
             if ( ns.isAlgorithmic() ) {
                 numberFormat = NumberFormat.getInstance(locale);
             } else {
-                char digit0 = ns.getDescription().charAt(0);
+                String digitString = ns.getDescription();
                 String nsName = ns.getName();
                 // Use a NumberFormat optimized for date formatting
-                numberFormat = new DateNumberFormat(locale, digit0, nsName);
+                numberFormat = new DateNumberFormat(locale, digitString, nsName);
             }
         }
         // Note: deferring calendar calculation until when we really need it.
@@ -3218,7 +3218,8 @@ public class SimpleDateFormat extends DateFormat {
 
             ULocale ovrLoc = new ULocale(loc.getBaseName()+"@numbers="+nsName);
             NumberFormat nf = NumberFormat.createInstance(ovrLoc,NumberFormat.NUMBERSTYLE);
-
+            nf.setGroupingUsed(false);
+            
             if (fullOverride) {
                 setNumberFormat(nf);
             } else {

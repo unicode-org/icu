@@ -160,7 +160,27 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public char getZeroDigit() {
-        return zeroDigit;
+        if ( digits != null ) {
+            return digits[0];
+        } else {
+            return zeroDigit;
+        }
+    }
+    /**
+     * Returns the array of characters used as digits, in order from 0 through 9
+     * @return The array
+     * @draft ICU 4.6
+     */
+    public char[] getDigits() {
+        if ( digits != null ) {
+            return digits;
+        } else {
+            char [] digitArray = new char[10];
+            for ( int i = 0 ; i < 10 ; i++ ) {
+                digitArray[i] = (char) (zeroDigit + i);
+            }
+            return digitArray;
+        }
     }
 
     /**
@@ -169,7 +189,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public void setZeroDigit(char zeroDigit) {
-        this.zeroDigit = zeroDigit;
+        if ( digits != null ) {
+            this.digits[0] = zeroDigit;
+            if (Character.digit(zeroDigit,10) == 0) {
+                for ( int i = 1 ; i < 10 ; i++ ) {
+                    this.digits[i] = (char)(zeroDigit+i);
+                }
+            }
+        } else {
+            this.zeroDigit = zeroDigit;
+        }
     }
 
     /**
@@ -692,8 +721,22 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
                 return false;
             }
         }
+        
+        if ( other.digits == null ) {
+            for (int i = 0 ; i < 10 ; i++) {
+                if (digits[i] != other.zeroDigit + i) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 0 ; i < 10 ; i++) {
+                if (digits[i] != other.digits[i]) {
+                    return false;
+                }
+            }
+        }
 
-        return (zeroDigit == other.zeroDigit &&
+        return (
         groupingSeparator == other.groupingSeparator &&
         decimalSeparator == other.decimalSeparator &&
         percent == other.percent &&
@@ -717,7 +760,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public int hashCode() {
-            int result = zeroDigit;
+            int result = digits[0];
             result = result * 37 + groupingSeparator;
             result = result * 37 + decimalSeparator;
             return result;
@@ -735,11 +778,32 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         String nsName;
         // Attempt to set the zero digit based on the numbering system for the locale requested
         NumberingSystem ns = NumberingSystem.getInstance(locale);
-        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic()) {
-            zeroDigit = ns.getDescription().charAt(0);
+        digits = new char[10];
+        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic() &&
+             NumberingSystem.isValidDigitString(ns.getDescription())) {
+            String digitString = ns.getDescription();
+            digits[0] = digitString.charAt(0);
+            digits[1] = digitString.charAt(1);
+            digits[2] = digitString.charAt(2);
+            digits[3] = digitString.charAt(3);
+            digits[4] = digitString.charAt(4);
+            digits[5] = digitString.charAt(5);
+            digits[6] = digitString.charAt(6);
+            digits[7] = digitString.charAt(7);
+            digits[8] = digitString.charAt(8);
+            digits[9] = digitString.charAt(9);
             nsName = ns.getName();
         } else {
-            zeroDigit = DecimalFormat.PATTERN_ZERO_DIGIT;
+            digits[0] = DecimalFormat.PATTERN_ZERO_DIGIT;
+            digits[1] = DecimalFormat.PATTERN_ONE_DIGIT;
+            digits[2] = DecimalFormat.PATTERN_TWO_DIGIT;
+            digits[3] = DecimalFormat.PATTERN_THREE_DIGIT;
+            digits[4] = DecimalFormat.PATTERN_FOUR_DIGIT;
+            digits[5] = DecimalFormat.PATTERN_FIVE_DIGIT;
+            digits[6] = DecimalFormat.PATTERN_SIX_DIGIT;
+            digits[7] = DecimalFormat.PATTERN_SEVEN_DIGIT;
+            digits[8] = DecimalFormat.PATTERN_EIGHT_DIGIT;
+            digits[9] = DecimalFormat.PATTERN_NINE_DIGIT;
             nsName = "latn"; // Default numbering system
         }
 
@@ -928,12 +992,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Character used for zero.
+     * Character used for zero.  This remains only for backward compatibility
+     * purposes.  The digits array below is now used to actively store the digits.
      *
      * @serial
      * @see #getZeroDigit
      */
     private  char    zeroDigit;
+    
+    /**
+     * Array of characters used for the digits 0-9 in order.
+     *
+     */   
+    private  char    digits[];
 
     /**
      * Character used for thousands separator.
