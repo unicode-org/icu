@@ -117,13 +117,18 @@ public:
     UBool checkDependencies();
 
     /*
-     * Enumerate all the dependencies and give the results to context and check
+     * Enumerate all the dependencies and give the results to context and call CheckDependency callback
+     * @param context user context (will be passed to check function)
+     * @param check will be called with context and any missing items
      */
     void enumDependencies(void *context, CheckDependency check);
 
 private:
     void enumDependencies(Item *pItem, void *context, CheckDependency check);
 
+    /**
+     * Default CheckDependency function used by checkDependencies()
+     */
     static void checkDependency(void *context, const char *itemName, const char *targetName);
 
     /*
