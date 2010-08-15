@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1998-2008, International Business Machines
+ *   Copyright (C) 1998-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -235,6 +235,17 @@ ufile_flush_translit(UFILE *f)
 #endif
 
     u_file_write_flush(NULL, 0, f, FALSE, TRUE);
+}
+
+
+void
+ufile_flush_io(UFILE *f)
+{
+  if((!f) || (!f->fFile)) {
+    return; /* skip if no file */
+  }
+
+  u_file_write_flush(NULL, 0, f, TRUE, FALSE);
 }
 
 

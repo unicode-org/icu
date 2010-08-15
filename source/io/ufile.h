@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1998-2007, International Business Machines
+ *   Copyright (C) 1998-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -120,6 +120,13 @@ ufile_close_translit(UFILE *f);
  */
 void 
 ufile_flush_translit(UFILE *f);
+
+/**
+ * Flush the IO buffer
+ * @param f UFile to flush
+ */
+void 
+ufile_flush_io(UFILE *f);
 
 
 #endif
