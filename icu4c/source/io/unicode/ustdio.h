@@ -302,9 +302,10 @@ u_fstropen(UChar      *stringBuf,
            const char *locale);
 
 /**
- * Close a UFILE.
+ * Close a UFILE. Implies u_fflush first.
  * @param file The UFILE to close.
  * @stable ICU 3.0
+ * @see u_fflush
  */
 U_STABLE void U_EXPORT2
 u_fclose(UFILE *file);
@@ -344,6 +345,8 @@ u_feof(UFILE  *f);
  * converter/transliterator state. (That is, a logical break is
  * made in the output stream - for example if a different type of
  * output is desired.)  The underlying OS level file is also flushed.
+ * Note that for a stateful encoding, the converter may write additional
+ * bytes to return the stream to default state.
  * @param file The UFILE to flush.
  * @stable ICU 3.0
  */
