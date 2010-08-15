@@ -856,6 +856,7 @@ int main(int argc, char* argv[])
         /* This should delete any temporary files. */
         if (fileToRemove) {
             fclose(fileToRemove);
+            log_verbose("Deleting: %s\n", STANDARD_TEST_FILE);
             if (remove(STANDARD_TEST_FILE) != 0) {
                 /* Maybe someone didn't close the file correctly. */
                 fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);
