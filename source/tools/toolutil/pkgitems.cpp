@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2009, International Business Machines
+*   Copyright (C) 2003-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -284,6 +284,7 @@ ures_enumDependencies(const char *itemName,
                       const ResourceData *pResData,
                       Resource res, const char *inKey, const char *parentKey, int32_t depth,
                       CheckDependency check, void *context,
+                      Package *pkg,
                       UErrorCode *pErrorCode) {
     switch(res_getPublicType(res)) {
     case URES_STRING:
@@ -329,6 +330,7 @@ ures_enumDependencies(const char *itemName,
                         item, itemKey,
                         inKey, depth+1,
                         check, context,
+                        pkg,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     fprintf(stderr, "icupkg/ures_enumDependencies(%s table res=%08x)[%d].recurse(%s: %08x) failed\n",
@@ -349,6 +351,7 @@ ures_enumDependencies(const char *itemName,
                         item, NULL,
                         inKey, depth+1,
                         check, context,
+                        pkg,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     fprintf(stderr, "icupkg/ures_enumDependencies(%s array res=%08x)[%d].recurse(%08x) failed\n",
@@ -367,6 +370,7 @@ static void
 ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
                       const uint8_t *inBytes, int32_t length,
                       CheckDependency check, void *context,
+                      Package *pkg,
                       UErrorCode *pErrorCode) {
     ResourceData resData;
 
@@ -397,9 +401,6 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
             return;
         }
         check(context, itemName, poolName);
-        // TODO: The Package should be passed in.
-        // Since the context is always a Package, we could just redeclare it.
-        U_NAMESPACE_QUALIFIER Package *pkg=(U_NAMESPACE_QUALIFIER Package *)context;
         int32_t index=pkg->findItem(poolName);
         if(index<0) {
             // We cannot work with a bundle if its pool resource is missing.
@@ -433,6 +434,7 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
         itemName, &resData,
         resData.rootRes, NULL, NULL, 0,
         check, context,
+        pkg,
         pErrorCode);
 }
 
@@ -595,7 +597,7 @@ Package::enumDependencies(Item *pItem, void *context, CheckDependency check) {
                  * We do not want to duplicate that code, especially not together with on-the-fly swapping.
                  */
                 NativeItem nrb(pItem, ures_swap);
-                ures_enumDependencies(pItem->name, nrb.getDataInfo(), nrb.getBytes(), nrb.getLength(), check, context, &errorCode);
+                ures_enumDependencies(pItem->name, nrb.getDataInfo(), nrb.getBytes(), nrb.getLength(), check, context, this, &errorCode);
                 break;
             }
         case FMT_CNV:
