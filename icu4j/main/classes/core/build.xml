@@ -35,7 +35,7 @@
                 <exclude name="**/coll/*"/>
                 <exclude name="**/curr/*"/>
                 <exclude name="**/*.cnv"/>
-                <exclude name="**/convalias.icu"/>
+                <exclude name="**/cnvalias.icu"/>
                 <exclude name="**/lang/*"/>
                 <exclude name="**/region/*"/>
                 <exclude name="**/translit/*"/>
