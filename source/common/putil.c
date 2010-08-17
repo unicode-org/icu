@@ -238,13 +238,17 @@ static UDate getUTCtime_fake() {
     if(!fakeClock_set) {
         UDate real = getUTCtime_real();
         const char *fake_start = getenv("U_FAKETIME_START");
-        if(fake_start!=NULL) {
+        if((fake_start!=NULL) && (fake_start[0]!=0)) {
             sscanf(fake_start,"%lf",&fakeClock_t0);
+            fakeClock_dt = fakeClock_t0 - real;
+            fprintf(stderr,"U_DEBUG_FAKETIME was set at compile time, so the ICU clock will start at a preset value\n"
+                    "env variable U_FAKETIME_START=%.0f (%s) for an offset of %.0f ms from the current time %.0f\n",
+                    fakeClock_t0, fake_start, fakeClock_dt, real);
+        } else {
+          fakeClock_dt = 0;
+            fprintf(stderr,"U_DEBUG_FAKETIME was set at compile time, but U_FAKETIME_START was not set.\n"
+                    "Set U_FAKETIME_START to the number of milliseconds since 1/1/1970 to set the ICU clock.\n");
         }
-        fakeClock_dt = fakeClock_t0 - real;
-        fprintf(stderr,"U_DEBUG_FAKETIME was set at compile time, so the ICU clock will start at a preset value\n"
-                       "U_FAKETIME_START=%.0f (%s) for an offset of %.0f ms from the current time %.0f\n",
-                            fakeClock_t0, fake_start, fakeClock_dt, real);
         fakeClock_set = TRUE;
     }
     umtx_unlock(&fakeClockMutex);
