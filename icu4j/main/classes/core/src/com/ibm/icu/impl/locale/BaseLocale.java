@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,17 +12,17 @@ public final class BaseLocale {
 
     private static final boolean JDKIMPL = false;
 
+    public static final String SEP = "_";
+
+    private static final Cache CACHE = new Cache();
+    public static final BaseLocale ROOT = BaseLocale.getInstance("", "", "", "");
+
     private String _language = "";
     private String _script = "";
     private String _region = "";
     private String _variant = "";
 
     private transient volatile int _hash = 0;
-
-    private static final LocaleObjectCache<Key, BaseLocale> BASELOCALE_CACHE
-        = new LocaleObjectCache<Key, BaseLocale>();
-
-    public static final BaseLocale ROOT = BaseLocale.getInstance("", "", "", "");
 
     private BaseLocale(String language, String script, String region, String variant) {
         if (language != null) {
@@ -56,11 +56,7 @@ public final class BaseLocale {
             }
         }
         Key key = new Key(language, script, region, variant);
-        BaseLocale baseLocale = BASELOCALE_CACHE.get(key);
-        if (baseLocale == null) {
-            baseLocale = new BaseLocale(language, script, region, variant);
-            baseLocale = BASELOCALE_CACHE.put(baseLocale.createKey(), baseLocale);
-        }
+        BaseLocale baseLocale = CACHE.get(key);
         return baseLocale;
     }
 
@@ -78,6 +74,21 @@ public final class BaseLocale {
 
     public String getVariant() {
         return _variant;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof BaseLocale)) {
+            return false;
+        }
+        BaseLocale other = (BaseLocale)obj;
+        return hashCode() == other.hashCode()
+                && _language.equals(other._language)
+                && _script.equals(other._script)
+                && _region.equals(other._region)
+                && _variant.equals(other._variant);
     }
 
     public String toString() {
@@ -129,10 +140,6 @@ public final class BaseLocale {
             _hash = h;
         }
         return h;
-    }
-
-    private Key createKey() {
-        return new Key(_language, _script, _region, _variant);
     }
 
     private static class Key implements Comparable<Key> {
@@ -217,5 +224,34 @@ public final class BaseLocale {
             }
             return h;
         }
+
+        public static Key normalize(Key key) {
+            String lang = AsciiUtil.toLowerString(key._lang).intern();
+            String scrt = AsciiUtil.toTitleString(key._scrt).intern();
+            String regn = AsciiUtil.toUpperString(key._regn).intern();
+            String vart;
+            if (JDKIMPL) {
+                // preserve upper/lower cases
+                vart = key._vart.intern();
+            } else {
+                vart = AsciiUtil.toUpperString(key._vart).intern();
+            }
+            return new Key(lang, scrt, regn, vart);
+        }
+    }
+
+    private static class Cache extends LocaleObjectCache<Key, BaseLocale> {
+
+        public Cache() {
+        }
+
+        protected Key normalizeKey(Key key) {
+            return Key.normalize(key);
+        }
+
+        protected BaseLocale createObject(Key key) {
+            return new BaseLocale(key._lang, key._scrt, key._regn, key._vart);
+        }
+
     }
 }

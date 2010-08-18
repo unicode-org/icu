@@ -1,77 +1,82 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl.locale;
 
-import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LocaleObjectCache<K, V> {
-
-    private ConcurrentHashMap<K, WeakValueRef<V>> _map = new ConcurrentHashMap<K, WeakValueRef<V>>();
-    private ReferenceQueue<V> _rq = new ReferenceQueue<V>();
+public abstract class LocaleObjectCache<K, V> {
+    private ConcurrentHashMap<K, CacheEntry<K, V>> _map;
+    private ReferenceQueue<V> _queue = new ReferenceQueue<V>();
 
     public LocaleObjectCache() {
+        this(16, 0.75f, 16);
     }
 
-    public V get(Object key) {
-        expungeStaleEntries();
-        WeakValueRef<V> ref = _map.get(key);
-        if (ref != null) {
-            return ref.get();
+    public LocaleObjectCache(int initialCapacity, float loadFactor, int concurrencyLevel) {
+        _map = new ConcurrentHashMap<K, CacheEntry<K, V>>(initialCapacity, loadFactor, concurrencyLevel);
+    }
+
+    public V get(K key) {
+        V value = null;
+
+        cleanStaleEntries();
+        CacheEntry<K, V> entry = _map.get(key);
+        if (entry != null) {
+            value = entry.get();
         }
-        return null;
-    }
+        if (value == null) {
+            key = normalizeKey(key);
+            V newVal = createObject(key);
+            if (key == null || newVal == null) {
+                // subclass must return non-null key/value object
+                return null;
+            }
 
-    /*
-     * Unlike Map#put, this method returns non-null value actually
-     * in the cache, even no values for the key was not available
-     * before.
-     */
-    public V put(K key, V value) {
-        expungeStaleEntries();
-        WeakValueRef<V> ref = _map.get(key);
-        if (ref != null) {
-            // Make sure if another thread put the new value
-            V valInCache = ref.get();
-            if (valInCache != null) {
-                return valInCache;
+            CacheEntry<K, V> newEntry = new CacheEntry<K, V>(key, newVal, _queue);
+
+            while (value == null) {
+                cleanStaleEntries();
+                entry = _map.putIfAbsent(key, newEntry);
+                if (entry == null) {
+                    value = newVal;
+                    break;
+                } else {
+                    value = entry.get();
+                }
             }
         }
-        // We do not synchronize the internal map here.
-        // In the worst case, another thread may put the new
-        // value with the same contents, but it should not cause
-        // any serious problem.
-        _map.put(key, new WeakValueRef<V>(key, value, _rq));
         return value;
     }
 
-    private void expungeStaleEntries() {
-        Reference<? extends V> val;
-        while ((val = _rq.poll()) != null) {
-            Object key = ((WeakValueRef<?>)val).getKey();
-            _map.remove(key);
+    @SuppressWarnings("unchecked")
+    private void cleanStaleEntries() {
+        CacheEntry<K, V> entry;
+        while ((entry = (CacheEntry<K, V>)_queue.poll()) != null) {
+            _map.remove(entry.getKey());
         }
     }
 
-    private static class WeakValueRef<V> extends WeakReference<V> {
-        private Object _key;
+    protected abstract V createObject(K key);
 
-        public WeakValueRef(Object key, V value, ReferenceQueue<V> rq) {
-            super(value, rq);
+    protected K normalizeKey(K key) {
+        return key;
+    }
+
+    private static class CacheEntry<K, V> extends SoftReference<V> {
+        private K _key;
+
+        CacheEntry(K key, V value, ReferenceQueue<V> queue) {
+            super(value, queue);
             _key = key;
         }
 
-        public V get() {
-            return super.get();
-        }
-
-        public Object getKey() {
+        K getKey() {
             return _key;
         }
     }

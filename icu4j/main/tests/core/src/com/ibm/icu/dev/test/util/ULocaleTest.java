@@ -13,9 +13,11 @@ package com.ibm.icu.dev.test.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -24,15 +26,15 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.ULocale.Builder;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -3719,25 +3721,26 @@ public class ULocaleTest extends TestFmwk {
             {"sr_Latn_SR",  "sr-Latn-SR"},
             {"en_US_POSIX@ca=japanese", "en-US-u-ca-japanese-va-posix"},
             {"en__POSIX",   "en-u-va-posix"},
-            // {"en_POSIX",    "en"}, /* ICU4J locale parser successfully parse en_POSIX as language:en/variant:POSIX */
+            {"en_US_POSIX_VAR", "en-US-posix-x-lvariant-var"},  // variant POSIX_VAR is processed as regular variant
+            {"en_US_VAR_POSIX", "en-US-x-lvariant-var-posix"},  // variant VAR_POSIX is processed as regular variant
+            {"en_US_POSIX@va=posix2",   "en-US-u-va-posix2"},   // if keyword va=xxx already exists, variant POSIX is simply dropped
             {"und_555",     "und-555"},
             {"123",         "und"},
             {"%$#&",        "und"},
             {"_Latn",       "und-Latn"},
             {"_DE",         "und-DE"},
             {"und_FR",      "und-FR"},
-            {"th_TH_TH",    "th-TH-x-variant-th"},
+            {"th_TH_TH",    "th-TH-x-lvariant-th"},
             {"bogus",       "bogus"},
             {"foooobarrr",  "und"},
-            //{"az_AZ_CYRL",  "az-cyrl-az"}, /* ICU4J does not have this specia locale mapping */
-            {"aa_BB_CYRL",  "aa-BB-x-variant-cyrl"},
+            {"aa_BB_CYRL",  "aa-BB-x-lvariant-cyrl"},
             {"en_US_1234",  "en-US-1234"},
             {"en_US_VARIANTA_VARIANTB", "en-US-varianta-variantb"},
             {"en_US_VARIANTB_VARIANTA", "en-US-variantb-varianta"},
             {"ja__9876_5432",   "ja-9876-5432"},
-            {"zh_Hant__VAR",    "zh-Hant-x-variant-var"},
+            {"zh_Hant__VAR",    "zh-Hant-x-lvariant-var"},
             {"es__BADVARIANT_GOODVAR",  "es"},
-            {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-variant-bad"},
+            {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-lvariant-bad"},
             {"en@calendar=gregorian",   "en-u-ca-gregory"},
             {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk"},
             {"th@numbers=thai;z=extz;x=priv-use;a=exta",   "th-a-exta-u-nu-thai-z-extz-x-priv-use"},
@@ -3778,7 +3781,7 @@ public class ULocaleTest extends TestFmwk {
             {"zh-cmn-CH",           "cmn_CH",               NOERROR},
             {"xxx-yy",              "xxx_YY",               NOERROR},
             {"fr-234",              "fr_234",               NOERROR},
-            {"i-default",           "",                     NOERROR},
+            {"i-default",           "en@x=i-default",       NOERROR},
             {"i-test",              "",                     Integer.valueOf(0)},
             {"ja-jp-jp",            "ja_JP",                Integer.valueOf(6)},
             {"bogus",               "bogus",                NOERROR},
@@ -3789,10 +3792,14 @@ public class ULocaleTest extends TestFmwk {
             {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
             {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
             {"en-us-u-va-posix",    "en_US_POSIX",          NOERROR},
+            {"en-us-u-ca-gregory-va-posix", "en_US_POSIX@calendar=gregorian",   NOERROR},
+            {"en-us-posix-u-va-posix",  "en_US_POSIX@va=posix", NOERROR},
+            {"en-us-u-va-posix2",   "en_US@va=posix2",      NOERROR},
+            {"en-us-vari1-u-va-posix",   "en_US_VARI1@va=posix",  NOERROR},
             {"ar-x-1-2-3",          "ar@x=1-2-3",           NOERROR},
             {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", NOERROR},
             {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   NOERROR},
-            {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      Integer.valueOf(15)},
+            {"ja-u-cu-jpy-ca-jp",   "ja@calendar=true;currency=jpy;jp=true",  NOERROR},
             {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      NOERROR},
             {"und-a-abc-def",       "@a=abc-def",           NOERROR},
             {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
@@ -3886,6 +3893,126 @@ public class ULocaleTest extends TestFmwk {
                 ULocale fallback = chain[i-1].getFallback();
                 assertEquals("ULocale(" + chain[i-1] + ").getFallback()", chain[i], fallback);
             }
+        }
+    }
+
+    public void TestExtension() {
+        String[][] TESTCASES = {
+                // {"<langtag>", "<ext key1>", "<ext val1>", "<ext key2>", "<ext val2>", ....},
+                {"en"},
+                {"en-a-exta-b-extb", "a", "exta", "b", "extb"},
+                {"en-b-extb-a-exta", "a", "exta", "b", "extb"},
+                {"de-x-a-bc-def", "x", "a-bc-def"},
+                {"ja-JP-u-cu-jpy-ca-japanese-x-java", "u", "ca-japanese-cu-jpy", "x", "java"},
+        };
+
+        for (String[] testcase : TESTCASES) {
+            ULocale loc = ULocale.forLanguageTag(testcase[0]);
+
+            int nExtensions = (testcase.length - 1) / 2;
+
+            Set<Character> keys = loc.getExtensionKeys();
+            if (keys.size() != nExtensions) {
+                errln("Incorrect number of extensions: returned="
+                        + keys.size() + ", expected=" + nExtensions
+                        + ", locale=" + testcase[0]);
+            }
+
+            for (int i = 0; i < nExtensions; i++) {
+                String kstr = testcase[i/2 + 1];
+                String ext = loc.getExtension(Character.valueOf(kstr.charAt(0)));
+                if (ext == null || !ext.equals(testcase[i/2 + 2])) {
+                    errln("Incorrect extension value: key=" 
+                            + kstr + ", returned=" + ext + ", expected=" + testcase[i/2 + 2]
+                            + ", locale=" + testcase[0]);
+                }
+            }
+        }
+
+        // Exception handling
+        boolean sawException = false;
+        try {
+            ULocale l = ULocale.forLanguageTag("en-US-a-exta");
+            l.getExtension('$');
+        } catch (IllegalArgumentException e) {
+            sawException = true;
+        }
+        if (!sawException) {
+            errln("getExtension must throw an exception on illegal input key");
+        }
+    }
+
+    public void TestUnicodeLocaleExtension() {
+        String[][] TESTCASES = {
+                //"<langtag>", "<attr1>,<attr2>,...", "<key1>,<key2>,...", "<type1>", "<type2>", ...},
+                {"en", null, null},
+                {"en-a-ext1-x-privuse", null, null},
+                {"en-u-attr1-attr2", "attr1,attr2", null},
+                {"ja-u-ca-japanese-cu-jpy", null, "ca,cu", "japanese", "jpy"},
+                {"th-TH-u-number-attr-nu-thai-ca-buddhist", "attr,number", "ca,nu", "buddhist", "thai"},
+        };
+
+        for (String[] testcase : TESTCASES) {
+            ULocale loc = ULocale.forLanguageTag(testcase[0]);
+
+            Set<String> expectedAttributes = new HashSet<String>();
+            if (testcase[1] != null) {
+                String[] attrs = testcase[1].split(",");
+                for (String s : attrs) {
+                    expectedAttributes.add(s);
+                }
+            }
+
+            Map<String, String> expectedKeywords = new HashMap<String, String>();
+            if (testcase[2] != null) {
+                String[] ukeys = testcase[2].split(",");
+                for (int i = 0; i < ukeys.length; i++) {
+                    expectedKeywords.put(ukeys[i], testcase[i + 3]);
+                }
+            }
+
+            // Check attributes
+            Set<String> attributes = loc.getUnicodeLocaleAttributes();
+            if (attributes.size() != expectedAttributes.size()) {
+                errln("Incorrect number for Unicode locale attributes: returned=" 
+                        + attributes.size() + ", expected=" + expectedAttributes.size()
+                        + ", locale=" + testcase[0]);
+            }
+            if (!attributes.containsAll(expectedAttributes) || !expectedAttributes.containsAll(attributes)) {
+                errln("Incorrect set of attributes for locale " + testcase[0]);
+            }
+
+            // Check keywords
+            Set<String> keys = loc.getUnicodeLocaleKeys();
+            Set<String> expectedKeys = expectedKeywords.keySet();
+            if (keys.size() != expectedKeys.size()) {
+                errln("Incorrect number for Unicode locale keys: returned=" 
+                        + keys.size() + ", expected=" + expectedKeys.size()
+                        + ", locale=" + testcase[0]);
+            }
+
+            for (String expKey : expectedKeys) {
+                String type = loc.getUnicodeLocaleType(expKey);
+                String expType = expectedKeywords.get(expKey);
+
+                if (type == null || !expType.equals(type)) {
+                    errln("Incorrect Unicode locale type: key=" 
+                            + expKey + ", returned=" + type + ", expected=" + expType
+                            + ", locale=" + testcase[0]);
+                }
+            }
+        }
+
+        // Exception handling
+        boolean sawException = false;
+        try {
+            ULocale l = ULocale.forLanguageTag("en-US-u-ca-gregory");
+            l.getUnicodeLocaleType("$%");
+        } catch (IllegalArgumentException e) {
+            sawException = true;
+        }
+        if (!sawException) {
+            errln("getUnicodeLocaleType must throw an exception on illegal input key");
         }
     }
 }
