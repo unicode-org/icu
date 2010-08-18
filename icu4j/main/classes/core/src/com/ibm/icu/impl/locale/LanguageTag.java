@@ -12,12 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 
 public class LanguageTag {
-
     private static final boolean JDKIMPL = false;
 
     //
@@ -26,33 +22,19 @@ public class LanguageTag {
     public static final String SEP = "-";
     public static final String PRIVATEUSE = "x";
     public static String UNDETERMINED = "und";
-
-    private static final String JAVAVARIANT = "variant";
-    private static final String JAVASEP = "_";
-
-    private static final SortedMap<Character, Extension> EMPTY_EXTENSION_MAP = new TreeMap<Character, Extension>();
-
-    private static final UnicodeLocaleExtension VA_POSIX = new UnicodeLocaleExtension().put("va", "posix");
-
-    //
-    // Language tag parser instances
-    //
-    public static final Parser DEFAULT_PARSER = new Parser(false);
-    public static final Parser JAVA_VARIANT_COMPATIBLE_PARSER = new Parser(true);
+    public static final String PRIVUSE_VARIANT_PREFIX = "lvariant";
 
     //
     // Language subtag fields
     //
-    private String _grandfathered = ""; // grandfathered tag
     private String _language = "";      // language subtag
     private String _script = "";        // script subtag
     private String _region = "";        // region subtag
-    private String _privateuse = "";    // privateuse, not including leading "x-"
+    private String _privateuse = "";    // privateuse
+
     private List<String> _extlangs = Collections.emptyList();   // extlang subtags
     private List<String> _variants = Collections.emptyList();   // variant subtags
-    private SortedMap<Character, Extension> _extensions = EMPTY_EXTENSION_MAP;  // extension key/value pairs
-
-    private boolean _javaCompatVariants = false;
+    private List<String> _extensions = Collections.emptyList(); // extensions
 
     // Map contains grandfathered tags and its preferred mappings from
     // http://www.ietf.org/rfc/rfc5646.txt
@@ -94,16 +76,16 @@ public class LanguageTag {
         final String[][] entries = {
           //{"tag",         "preferred"},
             {"art-lojban",  "jbo"},
-            {"cel-gaulish", "cel-gaulish"}, // gaulish is parsed as a variant
-            {"en-GB-oed",   "en-GB"},       // oed (Oxford English Dictionary spelling) is ignored
+            {"cel-gaulish", "xtg-x-cel-gaulish"},   // fallback
+            {"en-GB-oed",   "en-GB-x-oed"},         // fallback
             {"i-ami",       "ami"},
             {"i-bnn",       "bnn"},
-            {"i-default",   UNDETERMINED},  // fallback
-            {"i-enochian",  UNDETERMINED},  // fallback
+            {"i-default",   "en-x-i-default"},      // fallback
+            {"i-enochian",  "und-x-i-enochian"},    // fallback
             {"i-hak",       "hak"},
             {"i-klingon",   "tlh"},
             {"i-lux",       "lb"},
-            {"i-mingo",     UNDETERMINED},  // fallback
+            {"i-mingo",     "see-x-i-mingo"},       // fallback
             {"i-navajo",    "nv"},
             {"i-pwn",       "pwn"},
             {"i-tao",       "tao"},
@@ -116,7 +98,7 @@ public class LanguageTag {
             {"sgn-CH-DE",   "sgg"},
             {"zh-guoyu",    "cmn"},
             {"zh-hakka",    "hak"},
-            {"zh-min",      "zh"},          // fallback
+            {"zh-min",      "nan-x-zh-min"},        // fallback
             {"zh-min-nan",  "nan"},
             {"zh-xiang",    "hsn"},
         };
@@ -126,6 +108,411 @@ public class LanguageTag {
     }
 
     private LanguageTag() {
+    }
+
+    /*
+     * BNF in RFC5464
+     *  
+     * Language-Tag  = langtag             ; normal language tags
+     *               / privateuse          ; private use tag
+     *               / grandfathered       ; grandfathered tags
+     *
+     * 
+     * langtag       = language
+     *                 ["-" script]
+     *                 ["-" region]
+     *                 *("-" variant)
+     *                 *("-" extension)
+     *                 ["-" privateuse]
+     * 
+     * language      = 2*3ALPHA            ; shortest ISO 639 code
+     *                 ["-" extlang]       ; sometimes followed by
+     *                                     ; extended language subtags
+     *               / 4ALPHA              ; or reserved for future use
+     *               / 5*8ALPHA            ; or registered language subtag
+     * 
+     * extlang       = 3ALPHA              ; selected ISO 639 codes
+     *                 *2("-" 3ALPHA)      ; permanently reserved
+     * 
+     * script        = 4ALPHA              ; ISO 15924 code
+     * 
+     * region        = 2ALPHA              ; ISO 3166-1 code
+     *               / 3DIGIT              ; UN M.49 code
+     * 
+     * variant       = 5*8alphanum         ; registered variants
+     *               / (DIGIT 3alphanum)
+     * 
+     * extension     = singleton 1*("-" (2*8alphanum))
+     * 
+     *                                     ; Single alphanumerics
+     *                                     ; "x" reserved for private use
+     * singleton     = DIGIT               ; 0 - 9
+     *               / %x41-57             ; A - W
+     *               / %x59-5A             ; Y - Z
+     *               / %x61-77             ; a - w
+     *               / %x79-7A             ; y - z
+     * 
+     * privateuse    = "x" 1*("-" (1*8alphanum))
+     * 
+     */
+    public static LanguageTag parse(String languageTag, ParseStatus sts) {
+        if (sts == null) {
+            sts = new ParseStatus();
+        } else {
+            sts.reset();
+        }
+
+        StringTokenIterator itr;
+
+        // Check if the tag is grandfathered
+        String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(languageTag));
+        if (gfmap != null) {
+            // use preferred mapping
+            itr = new StringTokenIterator(gfmap[1], SEP);
+        } else {
+            itr = new StringTokenIterator(languageTag, SEP);
+        }
+
+        LanguageTag tag = new LanguageTag();
+
+        // langtag must start with either language or privateuse
+        if (tag.parseLanguage(itr, sts)) {
+            tag.parseExtlangs(itr, sts);
+            tag.parseScript(itr, sts);
+            tag.parseRegion(itr, sts);
+            tag.parseVariants(itr, sts);
+            tag.parseExtensions(itr, sts);
+        }
+        tag.parsePrivateuse(itr, sts);
+
+        if (!itr.isDone() && !sts.isError()) {
+            String s = itr.current();
+            sts._errorIndex = itr.currentStart();
+            if (s.length() == 0) {
+                sts._errorMsg = "Empty subtag";
+            } else {
+                sts._errorMsg = "Invalid subtag: " + s; 
+            }
+        }
+
+        return tag;
+    }
+
+    //
+    // Language subtag parsers
+    //
+
+    private boolean parseLanguage(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        String s = itr.current();
+        if (isLanguage(s)) {
+            found = true;
+            _language = s;
+            sts._parseLength = itr.currentEnd();
+            itr.next();
+        }
+
+        return found;
+    }
+
+    private boolean parseExtlangs(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        while (!itr.isDone()) {
+            String s = itr.current();
+            if (!isExtlang(s)) {
+                break;
+            }
+            found = true;
+            if (_extlangs.isEmpty()) {
+                _extlangs = new ArrayList<String>(3);
+            }
+            _extlangs.add(s);
+            sts._parseLength = itr.currentEnd();
+            itr.next();
+
+            if (_extlangs.size() == 3) {
+                // Maximum 3 extlangs
+                break;
+            }
+        }
+
+        return found;
+    }
+
+    private boolean parseScript(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        String s = itr.current();
+        if (isScript(s)) {
+            found = true;
+            _script = s;
+            sts._parseLength = itr.currentEnd();
+            itr.next();
+        }
+
+        return found;
+    }
+
+    private boolean parseRegion(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        String s = itr.current();
+        if (isRegion(s)) {
+            found = true;
+            _region = s;
+            sts._parseLength = itr.currentEnd();
+            itr.next();
+        }
+
+        return found;
+    }
+
+    private boolean parseVariants(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        while (!itr.isDone()) {
+            String s = itr.current();
+            if (!isVariant(s)) {
+                break;
+            }
+            found = true;
+            if (_variants.isEmpty()) {
+                _variants = new ArrayList<String>(3);
+            }
+            _variants.add(s);
+            sts._parseLength = itr.currentEnd();
+            itr.next();
+        }
+
+        return found;
+    }
+
+    private boolean parseExtensions(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        while (!itr.isDone()) {
+            String s = itr.current();
+            if (isExtensionSingleton(s)) {
+                int start = itr.currentStart();
+                String singleton = s;
+                StringBuilder sb = new StringBuilder(singleton);
+
+                itr.next();
+                while (!itr.isDone()) {
+                    s = itr.current();
+                    if (isExtensionSubtag(s)) {
+                        sb.append(SEP).append(s);
+                        sts._parseLength = itr.currentEnd();
+                    } else {
+                        break;
+                    }
+                    itr.next();
+                }
+
+                if (sts._parseLength <= start) {
+                    sts._errorIndex = start;
+                    sts._errorMsg = "Incomplete extension '" + singleton + "'";
+                    break;
+                }
+
+                if (_extensions.size() == 0) {
+                    _extensions = new ArrayList<String>(4);
+                }
+                _extensions.add(sb.toString());
+                found = true;
+            } else {
+                break;
+            }
+        }
+        return found;
+    }
+
+    private boolean parsePrivateuse(StringTokenIterator itr, ParseStatus sts) {
+        if (itr.isDone() || sts.isError()) {
+            return false;
+        }
+
+        boolean found = false;
+
+        String s = itr.current();
+        if (isPrivateusePrefix(s)) {
+            int start = itr.currentStart();
+            StringBuilder sb = new StringBuilder(s);
+
+            itr.next();
+            while (!itr.isDone()) {
+                s = itr.current();
+                if (!isPrivateuseSubtag(s)) {
+                    break;
+                }
+                sb.append(SEP).append(s);
+                sts._parseLength = itr.currentEnd();
+
+                itr.next();
+            }
+
+            if (sts._parseLength <= start) {
+                // need at least 1 private subtag
+                sts._errorIndex = start;
+                sts._errorMsg = "Incomplete privateuse";
+            } else {
+                _privateuse = sb.toString();
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
+    public static LanguageTag parseLocale(BaseLocale baseLocale, LocaleExtensions localeExtensions) {
+        LanguageTag tag = new LanguageTag();
+
+        String language = baseLocale.getLanguage();
+        String script = baseLocale.getScript();
+        String region = baseLocale.getRegion();
+        String variant = baseLocale.getVariant();
+
+        String privuseVar = null;   // store ill-formed variant subtags
+
+        if (language.length() == 0 || !isLanguage(language)) {
+            tag._language = UNDETERMINED;
+        } else {
+            // Convert a deprecated language code used by Java to
+            // a new code
+            if (language.equals("iw")) {
+                language = "he";
+            } else if (language.equals("ji")) {
+                language = "yi";
+            } else if (language.equals("in")) {
+                language = "id";
+            }
+            tag._language = language;
+        }
+
+        if (script.length() > 0 && isScript(script)) {
+            tag._script = canonicalizeScript(script);
+        }
+
+        if (region.length() > 0 && isRegion(region)) {
+            tag._region = canonicalizeRegion(region);
+        }
+
+        if (JDKIMPL) {
+            // Special handling for no_NO_NY - use nn_NO for language tag
+            if (tag._language.equals("no") && tag._region.equals("NO") && variant.equals("NY")) {
+                tag._language = "nn";
+                variant = "";
+            }
+        }
+
+        if (variant.length() > 0) {
+            List<String> variants = null;
+            StringTokenIterator varitr = new StringTokenIterator(variant, BaseLocale.SEP);
+            while (!varitr.isDone()) {
+                String var = varitr.current();
+                if (!isVariant(var)) {
+                    break;
+                }
+                if (variants == null) {
+                    variants = new ArrayList<String>();
+                }
+                if (JDKIMPL) {
+                    variants.add(var);  // Do not canonicalize!
+                } else {
+                    variants.add(canonicalizeVariant(var));
+                }
+                varitr.next();
+            }
+            if (variants != null) {
+                tag._variants = variants;
+            }
+            if (!varitr.isDone()) {
+                // ill-formed variant subtags
+                StringBuilder buf = new StringBuilder();
+                while (!varitr.isDone()) {
+                    String prvv = varitr.current();
+                    if (!isPrivateuseSubtag(prvv)) {
+                        // cannot use private use subtag - truncated
+                        break;
+                    }
+                    if (buf.length() > 0) {
+                        buf.append(SEP);
+                    }
+                    if (!JDKIMPL) {
+                        prvv = AsciiUtil.toLowerString(prvv);
+                    }
+                    buf.append(prvv);
+                    varitr.next();
+                }
+                if (buf.length() > 0) {
+                    privuseVar = buf.toString();
+                }
+            }
+        }
+
+        List<String> extensions = null;
+        String privateuse = null;
+
+        Set<Character> locextKeys = localeExtensions.getKeys();
+        for (Character locextKey : locextKeys) {
+            Extension ext = localeExtensions.getExtension(locextKey);
+            if (isPrivateusePrefixChar(locextKey.charValue())) {
+                privateuse = ext.getValue();
+            } else {
+                if (extensions == null) {
+                    extensions = new ArrayList<String>();
+                }
+                extensions.add(locextKey.toString() + SEP + ext.getValue());
+            }
+        }
+
+        if (extensions != null) {
+            tag._extensions = extensions;
+        }
+
+        // append ill-formed variant subtags to private use
+        if (privuseVar != null) {
+            if (privateuse == null) {
+                privateuse = PRIVUSE_VARIANT_PREFIX + SEP + privuseVar;
+            } else {
+                privateuse = privateuse + SEP + PRIVUSE_VARIANT_PREFIX + SEP + privuseVar.replace(BaseLocale.SEP, SEP);
+            }
+        }
+
+        if (privateuse != null) {
+            tag._privateuse = privateuse;
+        } else if (tag._language.length() == 0) {
+            // use "und" if neither language nor privateuse is available
+            tag._language = UNDETERMINED;
+        }
+
+        return tag;
     }
 
     //
@@ -152,193 +539,12 @@ public class LanguageTag {
         return Collections.unmodifiableList(_variants);
     }
 
-    public SortedMap<Character, Extension> getExtensions() {
-        return Collections.unmodifiableSortedMap(_extensions);
+    public List<String> getExtensions() {
+        return Collections.unmodifiableList(_extensions);
     }
 
     public String getPrivateuse() {
         return _privateuse;
-    }
-
-    public String getGrandfathered() {
-        return _grandfathered;
-    }
-
-    private String getJavaVariant() {
-        StringBuilder buf = new StringBuilder();
-        for (String var : _variants) {
-            if (buf.length() > 0) {
-                buf.append(JAVASEP);
-            }
-            buf.append(var);
-        }
-        if (_javaCompatVariants) {
-            return getJavaCompatibleVariant(buf.toString(), _privateuse);
-        }
-
-        return buf.toString();
-    }
-
-    private String getJavaPrivateuse() {
-        if (_javaCompatVariants) {
-            return getJavaCompatiblePrivateuse(_privateuse);
-        }
-        return _privateuse;
-    }
-
-    static String getJavaCompatibleVariant(String bcpVariants, String bcpPrivuse) {
-        StringBuilder buf = new StringBuilder(bcpVariants);
-        if (bcpPrivuse.length() > 0) {
-            int idx = -1;
-            if (bcpPrivuse.startsWith(JAVAVARIANT + SEP)) {
-                idx = (JAVAVARIANT + SEP).length();
-            } else {
-                idx = bcpPrivuse.indexOf(SEP + JAVAVARIANT + SEP);
-                if (idx != -1) {
-                    idx += (SEP + JAVAVARIANT + SEP).length();
-                }
-            }
-            if (idx != -1) {
-                if (buf.length() != 0) {
-                    buf.append(JAVASEP);
-                }
-                buf.append(bcpPrivuse.substring(idx).replace(SEP, JAVASEP));
-            }
-        }
-        return buf.toString();
-    }
-
-    static String getJavaCompatiblePrivateuse(String bcpPrivuse) {
-        if (bcpPrivuse.length() > 0) {
-            int idx = -1;
-            if (bcpPrivuse.startsWith(JAVAVARIANT + SEP)) {
-                idx = 0;
-            } else {
-                idx = bcpPrivuse.indexOf(SEP + JAVAVARIANT + SEP);
-            }
-            if (idx != -1) {
-                return bcpPrivuse.substring(0, idx);
-            }
-        }
-        return bcpPrivuse;
-    }
-
-    public BaseLocale getBaseLocale() {
-        String lang = _language;
-        if (_extlangs.size() > 0) {
-            // Extended language subtags are used for various historical
-            // and compatibility reasons.  Each extended language subtag
-            // has a "Preferred-Value', that is exactly same with the extended
-            // language subtag itself.  For example,
-            //
-            // Type: extlang
-            // Subtag: aao
-            // Description: Algerian Saharan Arabic
-            // Added: 2009-07-29
-            // Preferred-Value: aao
-            // Prefix: ar
-            // Macrolanguage: ar
-            //
-            // For example, language tag "ar-aao-DZ" is equivalent to
-            // "aao-DZ".
-            //
-            // Strictly speaking, the mapping requires prefix validation 
-            // (e.g. primary language must be "ar" in the example above).
-            // However, this implementation does not check the prefix
-            // and simply use the first extlang value as locale's language.
-            lang = _extlangs.get(0);
-        }
-        if (lang.equals(UNDETERMINED)) {
-            lang = "";
-        }
-        return BaseLocale.getInstance(lang, _script, _region, getJavaVariant());
-    }
-
-    public LocaleExtensions getLocaleExtensions() {
-        String javaPrivuse = getJavaPrivateuse();
-        if (_extensions == null && javaPrivuse.length() == 0) {
-            return LocaleExtensions.EMPTY_EXTENSIONS;
-        }
-        SortedMap<Character, Extension> exts = new TreeMap<Character, Extension>();
-        if (_extensions != null) {
-            exts.putAll(_extensions);
-        }
-        if (javaPrivuse.length() > 0) {
-            PrivateuseExtension pext = new PrivateuseExtension(javaPrivuse);
-            exts.put(Character.valueOf(PrivateuseExtension.SINGLETON), pext);
-        }
-        return LocaleExtensions.getInstance(exts);
-    }
-
-    public String getID() {
-        boolean putPosixExtension = false;
-        if (_grandfathered.length() > 0) {
-            return _grandfathered;
-        }
-        StringBuilder buf = new StringBuilder();
-        if (_language.length() > 0) {
-            buf.append(_language);
-            if (_extlangs.size() > 0) {
-                for (String el : _extlangs) {
-                    buf.append(SEP);
-                    buf.append(el);
-                }
-            }
-            if (_script.length() > 0) {
-                buf.append(SEP);
-                buf.append(_script);
-            }
-            if (_region.length() > 0) {
-                buf.append(SEP);
-                buf.append(_region);
-            }
-            if (_variants.size() > 0) {
-                for (String var : _variants) {
-                    // Special handling of the POSIX variant - treat it as a unicode locale extension                    
-                    if ( var.equals("posix")) {
-                        if (_extensions.containsKey(UnicodeLocaleExtension.SINGLETON)){
-                            UnicodeLocaleExtension uext = (UnicodeLocaleExtension) _extensions.get(UnicodeLocaleExtension.SINGLETON);
-                            uext.put("va","posix");
-                            _extensions.put(UnicodeLocaleExtension.SINGLETON, uext);
-                        } else {
-                            _extensions.put(UnicodeLocaleExtension.SINGLETON, VA_POSIX);
-                            putPosixExtension = true;
-                        }
-                    } else {
-                        buf.append(SEP);
-                        buf.append(var);
-                    }
-                }
-            }
-            if (_extensions.size() > 0) {
-                Set<Entry<Character, Extension>> exts = _extensions.entrySet();
-                for (Entry<Character, Extension> ext : exts) {
-                    buf.append(SEP);
-                    buf.append(ext.getKey());
-                    buf.append(SEP);
-                    buf.append(ext.getValue().getValue());
-                }
-            }
-            
-            // If we added the POSIX extension explicitly, need to remove it here
-            // otherwise it will hang around until the next call.
-            if ( putPosixExtension ) {
-                _extensions.remove(UnicodeLocaleExtension.SINGLETON);
-            }
-        }
-        if (_privateuse.length() > 0) {
-            if (buf.length() > 0) {
-                buf.append(SEP);
-            }
-            buf.append(PRIVATEUSE);
-            buf.append(SEP);
-            buf.append(_privateuse);
-        }
-        return buf.toString();
-    }
-
-    public String toString() {
-        return getID();
     }
 
     //
@@ -400,15 +606,23 @@ public class LanguageTag {
                 && !AsciiUtil.caseIgnoreMatch(PRIVATEUSE, s);
     }
 
+    public static boolean isExtensionSingletonChar(char c) {
+        return isExtensionSingleton(String.valueOf(c));
+    }
+
     public static boolean isExtensionSubtag(String s) {
         // extension     = singleton 1*("-" (2*8alphanum))
         return (s.length() >= 2) && (s.length() <= 8) && AsciiUtil.isAlphaNumericString(s);
     }
 
-    public static boolean isPrivateuseSingleton(String s) {
+    public static boolean isPrivateusePrefix(String s) {
         // privateuse    = "x" 1*("-" (1*8alphanum))
         return (s.length() == 1)
                 && AsciiUtil.caseIgnoreMatch(PRIVATEUSE, s);
+    }
+
+    public static boolean isPrivateusePrefixChar(char c) {
+        return (AsciiUtil.caseIgnoreMatch(PRIVATEUSE, String.valueOf(c)));
     }
 
     public static boolean isPrivateuseSubtag(String s) {
@@ -440,6 +654,10 @@ public class LanguageTag {
         return AsciiUtil.toLowerString(s);
     }
 
+    public static String canonicalizeExtension(String s) {
+        return AsciiUtil.toLowerString(s);
+    }
+
     public static String canonicalizeExtensionSingleton(String s) {
         return AsciiUtil.toLowerString(s);
     }
@@ -448,471 +666,47 @@ public class LanguageTag {
         return AsciiUtil.toLowerString(s);
     }
 
+    public static String canonicalizePrivateuse(String s) {
+        return AsciiUtil.toLowerString(s);
+    }
+
     public static String canonicalizePrivateuseSubtag(String s) {
         return AsciiUtil.toLowerString(s);
     }
 
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-    public static LanguageTag parse(String str, boolean javaCompatVar) {
-        LanguageTag tag = new LanguageTag();
-        tag.parseString(str, javaCompatVar);
-        return tag;
-    }
-
-    public static LanguageTag parseStrict(String str, boolean javaCompatVar) throws LocaleSyntaxException {
-        LanguageTag tag = new LanguageTag();
-        ParseStatus sts = tag.parseString(str, javaCompatVar);
-        if (sts.isError()) {
-            throw new LocaleSyntaxException(sts.errorMsg, sts.errorIndex);
-        }
-        return tag;
-    }
-
-    public static LanguageTag parseLocale(BaseLocale base, LocaleExtensions locExts) {
-        LanguageTag tag = new LanguageTag();
-        tag._javaCompatVariants = true;
-
-        String language = base.getLanguage();
-        String script = base.getScript();
-        String region = base.getRegion();
-        String variant = base.getVariant();
-
-        String privuseVar = null;   // store ill-formed variant subtags
-
-        if (language.length() > 0 && isLanguage(language)) {
-            // Convert a deprecated language code used by Java to
-            // a new code
-            language = canonicalizeLanguage(language);
-            if (language.equals("iw")) {
-                language = "he";
-            } else if (language.equals("ji")) {
-                language = "yi";
-            } else if (language.equals("in")) {
-                language = "id";
-            }
-            tag._language = language;
-        }
-        if (script.length() > 0 && isScript(script)) {
-            tag._script = canonicalizeScript(script);
-        }
-        if (region.length() > 0 && isRegion(region)) {
-            tag._region = canonicalizeRegion(region);
-        }
-        if (variant.length() > 0) {
-            List<String> variants = null;
-            StringTokenIterator varitr = new StringTokenIterator(variant, JAVASEP);
-            while (!varitr.isDone()) {
-                String var = varitr.current();
-                if (!isVariant(var)) {
-                    break;
-                }
-                if (variants == null) {
-                    variants = new ArrayList<String>();
-                }
-                if (JDKIMPL) {
-                    variants.add(var);  // Do not canonicalize!
-                } else {
-                    variants.add(canonicalizeVariant(var));
-                }
-                varitr.next();
-            }
-            if (variants != null) {
-                tag._variants = variants;
-            }
-            if (!varitr.isDone()) {
-                // ill-formed variant subtags
-                StringBuilder buf = new StringBuilder();
-                while (!varitr.isDone()) {
-                    String prvv = varitr.current();
-                    if (!isPrivateuseSubtag(prvv)) {
-                        // cannot use private use subtag - truncated
-                        break;
-                    }
-                    if (buf.length() > 0) {
-                        buf.append(SEP);
-                    }
-                    if (!JDKIMPL) {
-                        prvv = AsciiUtil.toLowerString(prvv);
-                    }
-                    buf.append(prvv);
-                    varitr.next();
-                }
-                if (buf.length() > 0) {
-                    privuseVar = buf.toString();
-                }
-            }
-        }
-
-        TreeMap<Character, Extension> extensions = null;
-        String privateuse = null;
-
-        Set<Character> locextKeys = locExts.getKeys();
-        for (Character locextKey : locextKeys) {
-            Extension ext = locExts.getExtension(locextKey);
-            if (ext instanceof PrivateuseExtension) {
-                privateuse = ext.getValue();
-            } else {
-                if (extensions == null) {
-                    extensions = new TreeMap<Character, Extension>();
-                }
-                extensions.put(locextKey, ext);
-            }
-        }
-
-        if (extensions != null) {
-            tag._extensions = extensions;
-        }
-
-        // append ill-formed variant subtags to private use
-        if (privuseVar != null) {
-            if (privateuse == null) {
-                privateuse = JAVAVARIANT + SEP + privuseVar;
-            } else {
-                privateuse = privateuse + SEP + JAVAVARIANT + SEP + privuseVar.replace(JAVASEP, SEP);
-            }
-        }
-
-        if (privateuse != null) {
-            tag._privateuse = privateuse;
-        } else if (tag._language.length() == 0) {
-            // use "und" if neither language nor privateuse is available
-            tag._language = UNDETERMINED;
-        }
-
-        return tag;
-    }
-
-    private ParseStatus parseString(String str, boolean javaCompatVar) {
-        // Check if the tag is grandfathered
-        String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(str));
-        ParseStatus sts;
-        if (gfmap != null) {
-            _grandfathered = gfmap[0];
-            sts = parseLanguageTag(gfmap[1], javaCompatVar);
-            sts.parseLength = str.length();
-        } else {
-            _grandfathered = "";
-            sts = parseLanguageTag(str, javaCompatVar);
-        }
-        return sts;
-    }
-
-    /*
-     * Parse Language-Tag, except grandfathered.
-     * 
-     * BNF in RFC5464
-     *  
-     * Language-Tag  = langtag             ; normal language tags
-     *               / privateuse          ; private use tag
-     *               / grandfathered       ; grandfathered tags
-     *
-     * 
-     * langtag       = language
-     *                 ["-" script]
-     *                 ["-" region]
-     *                 *("-" variant)
-     *                 *("-" extension)
-     *                 ["-" privateuse]
-     * 
-     * language      = 2*3ALPHA            ; shortest ISO 639 code
-     *                 ["-" extlang]       ; sometimes followed by
-     *                                     ; extended language subtags
-     *               / 4ALPHA              ; or reserved for future use
-     *               / 5*8ALPHA            ; or registered language subtag
-     * 
-     * extlang       = 3ALPHA              ; selected ISO 639 codes
-     *                 *2("-" 3ALPHA)      ; permanently reserved
-     * 
-     * script        = 4ALPHA              ; ISO 15924 code
-     * 
-     * region        = 2ALPHA              ; ISO 3166-1 code
-     *               / 3DIGIT              ; UN M.49 code
-     * 
-     * variant       = 5*8alphanum         ; registered variants
-     *               / (DIGIT 3alphanum)
-     * 
-     * extension     = singleton 1*("-" (2*8alphanum))
-     * 
-     *                                     ; Single alphanumerics
-     *                                     ; "x" reserved for private use
-     * singleton     = DIGIT               ; 0 - 9
-     *               / %x41-57             ; A - W
-     *               / %x59-5A             ; Y - Z
-     *               / %x61-77             ; a - w
-     *               / %x79-7A             ; y - z
-     * 
-     * privateuse    = "x" 1*("-" (1*8alphanum))
-     * 
-     */
-    private ParseStatus parseLanguageTag(String langtag, boolean javaCompat) {
-        ParseStatus sts = new ParseStatus();
-        StringTokenIterator itr = new StringTokenIterator(langtag, SEP);
-        Parser parser = javaCompat ? JAVA_VARIANT_COMPATIBLE_PARSER : DEFAULT_PARSER;
-
-        _javaCompatVariants = javaCompat;
-
-        // langtag must start with either language or privateuse
-        _language = parser.parseLanguage(itr, sts);
         if (_language.length() > 0) {
-            _extlangs = parser.parseExtlangs(itr, sts);
-            _script = parser.parseScript(itr, sts);
-            _region = parser.parseRegion(itr, sts);
-            _variants = parser.parseVariants(itr, sts);
-            _extensions = parser.parseExtensions(itr, sts);
-        }
-        _privateuse = parser.parsePrivateuse(itr, sts);
+            sb.append(_language);
 
-        if (!itr.isDone() && !sts.isError()) {
-            String s = itr.current();
-            sts.errorIndex = itr.currentStart();
-            if (s.length() == 0) {
-                sts.errorMsg = "Empty subtag";
-            } else {
-                sts.errorMsg = "Invalid subtag: " + s; 
+            for (String extlang : _extlangs) {
+                sb.append(SEP).append(extlang);
+            }
+
+            if (_script.length() > 0) {
+                sb.append(SEP).append(_script);
+            }
+
+            if (_region.length() > 0) {
+                sb.append(SEP).append(_region);
+            }
+
+            for (String variant : _extlangs) {
+                sb.append(SEP).append(variant);
+            }
+
+            for (String extension : _extensions) {
+                sb.append(SEP).append(extension);
             }
         }
-
-        return sts;
-    }
-
-    public static class ParseStatus {
-        int parseLength = 0;
-        int errorIndex = -1;
-        String errorMsg = null;
-
-        public void reset() {
-            parseLength = 0;
-            errorIndex = -1;
-            errorMsg = null;
+        if (_privateuse.length() > 0) {
+            if (sb.length() > 0) {
+                sb.append(SEP);
+            }
+            sb.append(_privateuse);
         }
 
-        boolean isError() {
-            return (errorIndex >= 0);
-        }
-    }
-
-    static class Parser {
-        private boolean _javaCompatVar;
-
-        Parser(boolean javaCompatVar) {
-            _javaCompatVar = javaCompatVar;
-        }
-
-        //
-        // Language subtag parsers
-        //
-
-        public String parseLanguage(StringTokenIterator itr, ParseStatus sts) {
-            String language = "";
-
-            if (itr.isDone() || sts.isError()) {
-                return language;
-            }
-
-            String s = itr.current();
-            if (isLanguage(s)) {
-                language = canonicalizeLanguage(s);
-                sts.parseLength = itr.currentEnd();
-                itr.next();
-            }
-            return language;
-        }
-
-        public List<String> parseExtlangs(StringTokenIterator itr, ParseStatus sts) {
-            List<String> extlangs = null;
-
-            if (itr.isDone() || sts.isError()) {
-                return Collections.emptyList();
-            }
-
-            while (!itr.isDone()) {
-                String s = itr.current();
-                if (!isExtlang(s)) {
-                    break;
-                }
-                if (extlangs == null) {
-                    extlangs = new ArrayList<String>(3);
-                }
-                extlangs.add(canonicalizeExtlang(s));
-                sts.parseLength = itr.currentEnd();
-                itr.next();
-
-                if (extlangs.size() == 3) {
-                    // Maximum 3 extlangs
-                    break;
-                }
-            }
-
-            if (extlangs == null) {
-                return Collections.emptyList();
-            }
-
-            return extlangs;
-        }
-
-        public String parseScript(StringTokenIterator itr, ParseStatus sts) {
-            String script = "";
-
-            if (itr.isDone() || sts.isError()) {
-                return script;
-            }
-
-            String s = itr.current();
-            if (isScript(s)) {
-                script = canonicalizeScript(s);
-                sts.parseLength = itr.currentEnd();
-                itr.next();
-            }
-
-            return script;
-        }
-
-        public String parseRegion(StringTokenIterator itr, ParseStatus sts) {
-            String region = "";
-
-            if (itr.isDone() || sts.isError()) {
-                return region;
-            }
-
-            String s = itr.current();
-            if (isRegion(s)) {
-                region = canonicalizeRegion(s);
-                sts.parseLength = itr.currentEnd();
-                itr.next();
-            }
-
-            return region;
-        }
-
-        public List<String> parseVariants(StringTokenIterator itr, ParseStatus sts) {
-            List<String> variants = null;
-
-            if (itr.isDone() || sts.isError()) {
-                return Collections.emptyList();
-            }
-
-            while (!itr.isDone()) {
-                String s = itr.current();
-                if (!isVariant(s)) {
-                    break;
-                }
-                if (variants == null) {
-                    variants = new ArrayList<String>(3);
-                }
-                if (_javaCompatVar) {
-                    // preserve casing when Java compatibility option
-                    // is enabled
-                    variants.add(s);
-                } else {
-                    variants.add(canonicalizeVariant(s));
-                }
-                sts.parseLength = itr.currentEnd();
-                itr.next();
-            }
-
-            if (variants == null) {
-                return Collections.emptyList();
-            }
-
-            return variants;
-        }
-
-        public SortedMap<Character, Extension> parseExtensions(StringTokenIterator itr, ParseStatus sts) {
-            SortedMap<Character, Extension> extensionMap = null;
-
-            if (itr.isDone() || sts.isError()) {
-                return EMPTY_EXTENSION_MAP;
-            }
-
-            while (!itr.isDone()) {
-                String s = itr.current();
-                if (!isExtensionSingleton(s)) {
-                    break;
-                }
-                if (!itr.hasNext()) {
-                    sts.errorIndex = itr.currentStart();
-                    sts.errorMsg = "Missing extension subtag for extension :" + s;
-                    break;
-                }
-
-                if (extensionMap == null) {
-                    extensionMap = new TreeMap<Character, Extension>();
-                }
-
-                String singletonStr = canonicalizeExtensionSingleton(s);
-                Character singleton = Character.valueOf(singletonStr.charAt(0));
-
-                if (extensionMap.containsKey(singleton)) {
-                    sts.errorIndex = itr.currentStart();
-                    sts.errorMsg = "Duplicated extension: " + s;
-                    break;
-                }
-
-                itr.next();
-                Extension ext = Extension.create(singleton.charValue(), itr, sts);
-                if (ext != null) {
-                    extensionMap.put(singleton, ext);
-                }
-                if (sts.isError()) {
-                    break;
-                }
-            }
-
-            if (extensionMap == null || extensionMap.size() == 0) {
-                return EMPTY_EXTENSION_MAP;
-            }
-
-            return extensionMap;
-        }
-
-        public String parsePrivateuse(StringTokenIterator itr, ParseStatus sts) {
-            String privateuse = "";
-
-            if (itr.isDone() || sts.isError()) {
-                return privateuse;
-            }
-
-            String s = itr.current();
-            if (isPrivateuseSingleton(s)) {
-                StringBuilder buf = new StringBuilder();
-                int singletonOffset = itr.currentStart();
-                boolean preserveCasing = false;
-                itr.next();
-
-                while (!itr.isDone()) {
-                    s = itr.current();
-                    if (!isPrivateuseSubtag(s)) {
-                        break;
-                    }
-                    if (buf.length() != 0) {
-                         buf.append(SEP);
-                    }
-                    if (!preserveCasing) {
-                        s = canonicalizePrivateuseSubtag(s);
-                    }
-                    buf.append(s);
-                    sts.parseLength = itr.currentEnd();
-
-                    if (_javaCompatVar && s.equals(JAVAVARIANT)) {
-                        // preserve casing after the special
-                        // java reserved private use subtag
-                        // when java compatibility variant option
-                        // is enabled.
-                        preserveCasing = true;
-                    }
-                    itr.next();
-                }
-
-                if (buf.length() == 0) {
-                    // need at least 1 private subtag
-                    sts.errorIndex = singletonOffset;
-                    sts.errorMsg = "Incomplete privateuse";
-                } else {
-                    privateuse = buf.toString();
-                }
-            }
-
-            return privateuse;
-        }
+        return sb.toString();
     }
 }
