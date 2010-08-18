@@ -7,7 +7,7 @@
 
 package com.ibm.icu.util;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class to store version numbers of the form major.minor.milli.micro.
@@ -238,7 +238,10 @@ public final class VersionInfo implements Comparable<VersionInfo>
         VersionInfo  result  = MAP_.get(key);
         if (result == null) {
             result = new VersionInfo(version);
-            MAP_.put(key, result);
+            VersionInfo tmpvi = MAP_.putIfAbsent(key, result);
+            if (tmpvi != null) {
+                result = tmpvi;
+            }
         }
         return result;
     }
@@ -434,7 +437,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Map of singletons
      */
-    private static final HashMap<Integer, VersionInfo> MAP_ = new HashMap<Integer, VersionInfo>();
+    private static final ConcurrentHashMap<Integer, VersionInfo> MAP_ = new ConcurrentHashMap<Integer, VersionInfo>();
     /**
      * Last byte mask
      */
