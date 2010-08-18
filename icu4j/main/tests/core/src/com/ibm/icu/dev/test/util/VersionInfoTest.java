@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2009, International Business Machines Corporation and    *
+* Copyright (C) 1996-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -342,4 +342,56 @@ public final class VersionInfoTest extends TestFmwk
         "2.1.255.0",
         "3.1.255.100"    
     };
+
+    /*
+     * Test case for multi-threading problem reported by ticket#7880
+     */
+    public void TestMultiThread() {
+        final int numThreads = 20;
+        GetInstanceWorker[] workers = new GetInstanceWorker[numThreads];
+        VersionInfo[][] results = new VersionInfo[numThreads][255];
+
+        // Create workers
+        for (int i = 0; i < workers.length; i++) {
+            workers[i] = new GetInstanceWorker(i, results[i]);
+        }
+
+        // Start workers
+        for (int i = 0; i < workers.length; i++) {
+            workers[i].start();
+        }
+
+        // Wait for the completion
+        for (int i = 0; i < workers.length; i++) {
+            try {
+                workers[i].join();
+            } catch (InterruptedException e) {
+                errln("A problem in thread execution. " + e.getMessage());
+            }
+        }
+
+        // Check if singleton for each
+        for (int i = 1; i < results.length; i++) {
+            for (int j = 0; j < results[0].length; j++) {
+                if (results[0][j] != results[i][j]) {
+                    errln("Different instance at index " + j + " Thread#" + i);
+                }
+            }
+        }
+    }
+
+    private class GetInstanceWorker extends Thread {
+        private VersionInfo[] results;
+
+        GetInstanceWorker(int serialNumber, VersionInfo[] results) {
+            super("GetInstnaceWorker#" + serialNumber);
+            this.results = results;
+        }
+
+        public void run() {
+            for (int i = 0; i < results.length; i++) {
+                results[i] = VersionInfo.getInstance(i);
+            }
+        }
+    }
 }
