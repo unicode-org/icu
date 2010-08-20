@@ -1001,7 +1001,8 @@ public class SimpleDateFormat extends DateFormat {
                 }
             } else {
                 // long form, localized GMT pattern
-                appendGMT(currentNumberFormat,buf, cal);
+                result = formatData.getTimeZoneFormat().format(tz, date, TimeZone.LONG_GMT);
+                buf.append(result);
             }
             break;
 
@@ -1234,48 +1235,6 @@ public class SimpleDateFormat extends DateFormat {
     private static final char MINUS = '-';
     private static final char COLON = ':';
 
-    private void appendGMT(NumberFormat currentNumberFormat,StringBuffer buf, Calendar cal) {
-        int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
-
-        if (isDefaultGMTFormat()) {
-            formatGMTDefault(currentNumberFormat,buf, offset);
-        } else {
-            int sign = DateFormatSymbols.OFFSET_POSITIVE;
-            if (offset < 0) {
-                offset = -offset;
-                sign = DateFormatSymbols.OFFSET_NEGATIVE;
-            }
-            int width = offset%(60*1000) == 0
-                ? DateFormatSymbols.OFFSET_HM
-                : DateFormatSymbols.OFFSET_HMS;
-
-            MessageFormat fmt = getGMTFormatter(sign, width);
-            fmt.format(new Object[] {new Long(offset)}, buf, null);
-        }
-    }
-
-    private void formatGMTDefault(NumberFormat currentNumberFormat,StringBuffer buf, int offset) {
-        buf.append(STR_GMT);
-        if (offset >= 0) {
-            buf.append(PLUS);
-        } else {
-            buf.append(MINUS);
-            offset = -offset;
-        }
-        offset /= 1000; // now in seconds
-        int sec = offset % 60;
-        offset /= 60;
-        int min = offset % 60;
-        int hour = offset / 60;
-
-        zeroPaddingNumber(currentNumberFormat,buf, hour, 2, 2);
-        buf.append(COLON);
-        zeroPaddingNumber(currentNumberFormat,buf, min, 2, 2);
-        if (sec != 0) {
-            buf.append(COLON);
-            zeroPaddingNumber(currentNumberFormat,buf, sec, 2, 2);
-        }
-    }
 
     private Integer parseGMT(String text, ParsePosition pos, NumberFormat currentNumberFormat) {
         if (!isDefaultGMTFormat()) {
