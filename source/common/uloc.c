@@ -527,6 +527,17 @@ static const VariantMap VARIANT_MAP[] = {
     { "STROKE", "collation", "stroke" }  /* Solaris variant */
 };
 
+/* ### BCP47 Conversion *******************************************/
+/* Test if the locale id has BCP47 u extension and does not have '@' */
+#define _hasBCP47Extension(id) (id && uprv_strstr(id, "-u-") != NULL && uprv_strstr(id, "@") == NULL)
+/* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
+#define _ConvertBCP47(finalID, id, buffer, length,err) \
+        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || U_FAILURE(*err)) { \
+            finalID=id; \
+        } else { \
+            finalID=buffer; \
+        }
+
 /* ### Keywords **************************************************/
 
 #define ULOC_KEYWORD_BUFFER_LEN 25
@@ -794,8 +805,16 @@ uloc_getKeywordValue(const char* localeID,
     int32_t result = 0;
 
     if(status && U_SUCCESS(*status) && localeID) {
+      char tempBuffer[ULOC_FULLNAME_CAPACITY];
+      const char* tmpLocaleID;
+
+      if (_hasBCP47Extension(localeID)) {
+          _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), status);
+      } else {
+          tmpLocaleID=localeID;
+      }
     
-      const char* startSearchHere = uprv_strchr(localeID, '@'); /* TODO: REVISIT: shouldn't this be locale_getKeywordsStart ? */
+      const char* startSearchHere = uprv_strchr(tmpLocaleID, '@'); /* TODO: REVISIT: shouldn't this be locale_getKeywordsStart ? */
       if(startSearchHere == NULL) {
           /* no keywords, return at once */
           return 0;
@@ -1504,36 +1523,44 @@ uloc_openKeywords(const char* localeID,
     int32_t i=0;
     char keywords[256];
     int32_t keywordsCapacity = 256;
+    char tempBuffer[ULOC_FULLNAME_CAPACITY];
+    const char* tmpLocaleID;
+
     if(status==NULL || U_FAILURE(*status)) {
         return 0;
     }
     
-    if(localeID==NULL) {
-        localeID=uloc_getDefault();
+    if (_hasBCP47Extension(localeID)) {
+        _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), status);
+    } else {
+        if (localeID==NULL) {
+           localeID=uloc_getDefault();
+        }
+        tmpLocaleID=localeID;
     }
 
     /* Skip the language */
-    ulocimp_getLanguage(localeID, NULL, 0, &localeID);
-    if(_isIDSeparator(*localeID)) {
+    ulocimp_getLanguage(tmpLocaleID, NULL, 0, &tmpLocaleID);
+    if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(localeID+1, NULL, 0, &scriptID);
-        if(scriptID != localeID+1) {
+        ulocimp_getScript(tmpLocaleID+1, NULL, 0, &scriptID);
+        if(scriptID != tmpLocaleID+1) {
             /* Found optional script */
-            localeID = scriptID;
+            tmpLocaleID = scriptID;
         }
         /* Skip the Country */
-        if (_isIDSeparator(*localeID)) {
-            ulocimp_getCountry(localeID+1, NULL, 0, &localeID);
-            if(_isIDSeparator(*localeID)) {
-                _getVariant(localeID+1, *localeID, NULL, 0);
+        if (_isIDSeparator(*tmpLocaleID)) {
+            ulocimp_getCountry(tmpLocaleID+1, NULL, 0, &tmpLocaleID);
+            if(_isIDSeparator(*tmpLocaleID)) {
+                _getVariant(tmpLocaleID+1, *tmpLocaleID, NULL, 0);
             }
         }
     }
 
     /* keywords are located after '@' */
-    if((localeID = locale_getKeywordsStart(localeID)) != NULL) {
-        i=locale_getKeywords(localeID+1, '@', keywords, keywordsCapacity, NULL, 0, NULL, FALSE, status);
+    if((tmpLocaleID = locale_getKeywordsStart(tmpLocaleID)) != NULL) {
+        i=locale_getKeywords(tmpLocaleID+1, '@', keywords, keywordsCapacity, NULL, 0, NULL, FALSE, status);
     }
 
     if(i) {
@@ -1568,7 +1595,9 @@ _canonicalize(const char* localeID,
               UErrorCode* err) {
     int32_t j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
+    char tempBuffer[ULOC_FULLNAME_CAPACITY];
     const char* origLocaleID;
+    const char* tmpLocaleID;
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
     const char* addKeyword = NULL;
@@ -1580,10 +1609,16 @@ _canonicalize(const char* localeID,
         return 0;
     }
     
-    if (localeID==NULL) {
-        localeID=uloc_getDefault();
+    if (_hasBCP47Extension(localeID)) {
+        _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), err);
+    } else {
+        if (localeID==NULL) {
+           localeID=uloc_getDefault();
+        }
+        tmpLocaleID=localeID;
     }
-    origLocaleID=localeID;
+
+    origLocaleID=tmpLocaleID;
 
     /* if we are doing a full canonicalization, then put results in
        localeBuffer, if necessary; otherwise send them to result. */
@@ -1597,7 +1632,7 @@ _canonicalize(const char* localeID,
     }
 
     /* get all pieces, one after another, and separate with '_' */
-    len=ulocimp_getLanguage(localeID, name, nameCapacity, &localeID);
+    len=ulocimp_getLanguage(tmpLocaleID, name, nameCapacity, &tmpLocaleID);
 
     if(len == I_DEFAULT_LENGTH && uprv_strncmp(origLocaleID, i_default, len) == 0) {
         const char *d = uloc_getDefault();
@@ -1607,7 +1642,7 @@ _canonicalize(const char* localeID,
         if (name != NULL) {
             uprv_strncpy(name, d, len);
         }
-    } else if(_isIDSeparator(*localeID)) {
+    } else if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
 
         ++fieldCount;
@@ -1616,13 +1651,13 @@ _canonicalize(const char* localeID,
         }
         ++len;
 
-        scriptSize=ulocimp_getScript(localeID+1, name+len, nameCapacity-len, &scriptID);
+        scriptSize=ulocimp_getScript(tmpLocaleID+1, name+len, nameCapacity-len, &scriptID);
         if(scriptSize > 0) {
             /* Found optional script */
-            localeID = scriptID;
+            tmpLocaleID = scriptID;
             ++fieldCount;
             len+=scriptSize;
-            if (_isIDSeparator(*localeID)) {
+            if (_isIDSeparator(*tmpLocaleID)) {
                 /* If there is something else, then we add the _ */
                 if(len<nameCapacity) {
                     name[len]='_';
@@ -1631,15 +1666,15 @@ _canonicalize(const char* localeID,
             }
         }
 
-        if (_isIDSeparator(*localeID)) {
+        if (_isIDSeparator(*tmpLocaleID)) {
             const char *cntryID;
-            int32_t cntrySize = ulocimp_getCountry(localeID+1, name+len, nameCapacity-len, &cntryID);
+            int32_t cntrySize = ulocimp_getCountry(tmpLocaleID+1, name+len, nameCapacity-len, &cntryID);
             if (cntrySize > 0) {
                 /* Found optional country */
-                localeID = cntryID;
+                tmpLocaleID = cntryID;
                 len+=cntrySize;
             }
-            if(_isIDSeparator(*localeID)) {
+            if(_isIDSeparator(*tmpLocaleID)) {
                 /* If there is something else, then we add the _  if we found country before.*/
                 if (cntrySize > 0) {
                     ++fieldCount;
@@ -1649,21 +1684,21 @@ _canonicalize(const char* localeID,
                     ++len;
                 }
 
-                variantSize = _getVariant(localeID+1, *localeID, name+len, nameCapacity-len);
+                variantSize = _getVariant(tmpLocaleID+1, *tmpLocaleID, name+len, nameCapacity-len);
                 if (variantSize > 0) {
                     variant = name+len;
                     len += variantSize;
-                    localeID += variantSize + 1; /* skip '_' and variant */
+                    tmpLocaleID += variantSize + 1; /* skip '_' and variant */
                 }
             }
         }
     }
 
     /* Copy POSIX-style charset specifier, if any [mr.utf8] */
-    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && *localeID == '.') {
+    if (!OPTION_SET(options, _ULOC_CANONICALIZE) && *tmpLocaleID == '.') {
         UBool done = FALSE;
         do {
-            char c = *localeID;
+            char c = *tmpLocaleID;
             switch (c) {
             case 0:
             case '@':
@@ -1674,24 +1709,24 @@ _canonicalize(const char* localeID,
                     name[len] = c;
                 }
                 ++len;
-                ++localeID;
+                ++tmpLocaleID;
                 break;
             }
         } while (!done);
     }
 
     /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';'
-       After this, localeID either points to '@' or is NULL */
-    if ((localeID=locale_getKeywordsStart(localeID))!=NULL) {
-        keywordAssign = uprv_strchr(localeID, '=');
-        separatorIndicator = uprv_strchr(localeID, ';');
+       After this, tmpLocaleID either points to '@' or is NULL */
+    if ((tmpLocaleID=locale_getKeywordsStart(tmpLocaleID))!=NULL) {
+        keywordAssign = uprv_strchr(tmpLocaleID, '=');
+        separatorIndicator = uprv_strchr(tmpLocaleID, ';');
     }
 
     /* Copy POSIX-style variant, if any [mr@FOO] */
     if (!OPTION_SET(options, _ULOC_CANONICALIZE) &&
-        localeID != NULL && keywordAssign == NULL) {
+        tmpLocaleID != NULL && keywordAssign == NULL) {
         for (;;) {
-            char c = *localeID;
+            char c = *tmpLocaleID;
             if (c == 0) {
                 break;
             }
@@ -1699,13 +1734,13 @@ _canonicalize(const char* localeID,
                 name[len] = c;
             }
             ++len;
-            ++localeID;
+            ++tmpLocaleID;
         }
     }
 
     if (OPTION_SET(options, _ULOC_CANONICALIZE)) {
         /* Handle @FOO variant if @ is present and not followed by = */
-        if (localeID!=NULL && keywordAssign==NULL) {
+        if (tmpLocaleID!=NULL && keywordAssign==NULL) {
             int32_t posixVariantSize;
             /* Add missing '_' if needed */
             if (fieldCount < 2 || (fieldCount < 3 && scriptSize > 0)) {
@@ -1717,7 +1752,7 @@ _canonicalize(const char* localeID,
                     ++fieldCount;
                 } while(fieldCount<2);
             }
-            posixVariantSize = _getVariantEx(localeID+1, '@', name+len, nameCapacity-len,
+            posixVariantSize = _getVariantEx(tmpLocaleID+1, '@', name+len, nameCapacity-len,
                                              (UBool)(variantSize > 0));
             if (posixVariantSize > 0) {
                 if (variant == NULL) {
@@ -1754,7 +1789,7 @@ _canonicalize(const char* localeID,
             const char* id = CANONICALIZE_MAP[j].id;
             int32_t n = (int32_t)uprv_strlen(id);
             if (len == n && uprv_strncmp(name, id, n) == 0) {
-                if (n == 0 && localeID != NULL) {
+                if (n == 0 && tmpLocaleID != NULL) {
                     break; /* Don't remap "" if keywords present */
                 }
                 len = _copyCount(name, nameCapacity, CANONICALIZE_MAP[j].canonicalID);
@@ -1768,14 +1803,14 @@ _canonicalize(const char* localeID,
     }
 
     if (!OPTION_SET(options, _ULOC_STRIP_KEYWORDS)) {
-        if (localeID!=NULL && keywordAssign!=NULL &&
+        if (tmpLocaleID!=NULL && keywordAssign!=NULL &&
             (!separatorIndicator || separatorIndicator > keywordAssign)) {
             if(len<nameCapacity) {
                 name[len]='@';
             }
             ++len;
             ++fieldCount;
-            len += _getKeywords(localeID+1, '@', name+len, nameCapacity-len, NULL, 0, NULL, TRUE,
+            len += _getKeywords(tmpLocaleID+1, '@', name+len, nameCapacity-len, NULL, 0, NULL, TRUE,
                                 addKeyword, addValue, err);
         } else if (addKeyword != NULL) {
             U_ASSERT(addValue != NULL);
@@ -1908,40 +1943,47 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err) 
 {
+    char tempBuffer[ULOC_FULLNAME_CAPACITY];
+    const char* tmpLocaleID;
     int32_t i=0;
     
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
     }
     
-    if(localeID==NULL) {
-        localeID=uloc_getDefault();
+    if (_hasBCP47Extension(localeID)) {
+        _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), err);
+    } else {
+        if (localeID==NULL) {
+           localeID=uloc_getDefault();
+        }
+        tmpLocaleID=localeID;
     }
     
     /* Skip the language */
-    ulocimp_getLanguage(localeID, NULL, 0, &localeID);
-    if(_isIDSeparator(*localeID)) {
+    ulocimp_getLanguage(tmpLocaleID, NULL, 0, &tmpLocaleID);
+    if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(localeID+1, NULL, 0, &scriptID);
-        if(scriptID != localeID+1) {
+        ulocimp_getScript(tmpLocaleID+1, NULL, 0, &scriptID);
+        if(scriptID != tmpLocaleID+1) {
             /* Found optional script */
-            localeID = scriptID;
+            tmpLocaleID = scriptID;
         }
         /* Skip the Country */
-        if (_isIDSeparator(*localeID)) {
+        if (_isIDSeparator(*tmpLocaleID)) {
             const char *cntryID;
-            ulocimp_getCountry(localeID+1, NULL, 0, &cntryID);
-            if (cntryID != localeID+1) {
+            ulocimp_getCountry(tmpLocaleID+1, NULL, 0, &cntryID);
+            if (cntryID != tmpLocaleID+1) {
                 /* Found optional country */
-                localeID = cntryID;
+                tmpLocaleID = cntryID;
             }
-            if(_isIDSeparator(*localeID)) {
+            if(_isIDSeparator(*tmpLocaleID)) {
                 /* If there was no country ID, skip a possible extra IDSeparator */
-                if (localeID != cntryID && _isIDSeparator(localeID[1])) {
-                    localeID++;
+                if (tmpLocaleID != cntryID && _isIDSeparator(tmpLocaleID[1])) {
+                    tmpLocaleID++;
                 }
-                i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
+                i=_getVariant(tmpLocaleID+1, *tmpLocaleID, variant, variantCapacity);
             }
         }
     }

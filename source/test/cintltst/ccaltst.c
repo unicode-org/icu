@@ -71,6 +71,7 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { "ja_JP@calendar=japanese", UCAL_DEFAULT,   "japanese"  },
     { "th_TH",                   UCAL_GREGORIAN, "gregorian" },
     { "th_TH",                   UCAL_DEFAULT,   "buddhist"  },
+    { "th-TH-u-ca-gregory",      UCAL_DEFAULT,   "gregorian" },
     { "ja_JP@calendar=japanese", UCAL_GREGORIAN, "gregorian" },
     { "",                        UCAL_GREGORIAN, "gregorian" },
     { NULL,                      UCAL_GREGORIAN, "gregorian" },

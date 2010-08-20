@@ -108,6 +108,7 @@ IntlCalendarTest::TestTypes()
                             "th_TH",    // Default calendar for th_TH is buddhist
                             "th",       // th's default region is TH and buddhist is used as default for TH
                             "en_TH",    // Default calendar for any locales with region TH is buddhist
+                            "en-TH-u-ca-gregory",
                             NULL };
   const char *types[40] = { "gregorian", 
                             "japanese",
@@ -121,6 +122,7 @@ IntlCalendarTest::TestTypes()
                             "buddhist",           
                             "buddhist",           
                             "buddhist",           
+                            "gregorian",
                             NULL };
 
   for(j=0;locs[j];j++) {
