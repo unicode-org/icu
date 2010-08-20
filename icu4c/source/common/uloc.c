@@ -798,6 +798,7 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 { 
+    const char* startSearchHere = NULL;
     const char* nextSeparator = NULL;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
@@ -814,7 +815,7 @@ uloc_getKeywordValue(const char* localeID,
           tmpLocaleID=localeID;
       }
     
-      const char* startSearchHere = uprv_strchr(tmpLocaleID, '@'); /* TODO: REVISIT: shouldn't this be locale_getKeywordsStart ? */
+      startSearchHere = uprv_strchr(tmpLocaleID, '@'); /* TODO: REVISIT: shouldn't this be locale_getKeywordsStart ? */
       if(startSearchHere == NULL) {
           /* no keywords, return at once */
           return 0;
