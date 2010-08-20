@@ -694,7 +694,9 @@ static const char* testCases[][2]= {
     {"gl_ES_PREEURO", "1.150\\u00A0\\u20A7" },
     {"it_IT_PREEURO", "IT\\u20A4\\u00A01.150" },
     {"pt_PT_PREEURO", "1,150$50\\u00A0Esc."},
-    {"en_US@currency=JPY", "\\u00A51,150"}
+    {"en_US@currency=JPY", "\\u00A51,150"},
+    {"en_US@currency=jpy", "\\u00A51,150"},
+    {"en-US-u-cu-jpy", "\\u00A51,150"}
 };
 /**
  * Test localized currency patterns.
