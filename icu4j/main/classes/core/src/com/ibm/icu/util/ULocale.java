@@ -829,10 +829,17 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        String name = nameCache.get(localeID);
+        String tmpLocaleID;
+        // Convert BCP47 id if necessary
+        if (localeID != null && localeID.contains("-u-") && !localeID.contains("@")) {
+            tmpLocaleID = forLanguageTag(localeID).getName();
+        } else {
+            tmpLocaleID = localeID;
+        }
+        String name = nameCache.get(tmpLocaleID);
         if (name == null) {
-            name = new LocaleIDParser(localeID).getName();
-            nameCache.put(localeID, name);
+            name = new LocaleIDParser(tmpLocaleID).getName();
+            nameCache.put(tmpLocaleID, name);
         }
         return name;
     }

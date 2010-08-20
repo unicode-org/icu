@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2009, International Business Machines
+ * Copyright (c) 2002-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -217,6 +217,7 @@ public class CurrencyTest extends TestFmwk {
             { "eo_AO", "1979-12-29", "AOK" },
             { "eo_AO", "1969-12-31" },
             { "eo_DE@currency=DEM", "2000-12-23", "EUR", "DEM" },
+            { "eo-DE-u-cu-dem", "2000-12-23", "EUR", "DEM" },
             { "en_US", null, "USD" },
             { "en_US_PREEURO", null, "USD" },
             { "en_US_Q", null, "USD" },
