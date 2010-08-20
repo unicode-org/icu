@@ -361,6 +361,8 @@ ucurr_forLocale(const char* locale,
             if ((resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus))) {
                 // there is a currency keyword. Try to see if it's valid
                 if(buffCapacity > resLen) {
+                    /* Normalize the currency keyword value to upper case. */
+                    T_CString_toUpperCase(id);
                     u_charsToUChars(id, buff, resLen);
                 }
             } else {
@@ -514,7 +516,10 @@ ucurr_getName(const UChar* currency,
 
     char buf[ISO_COUNTRY_CODE_LENGTH+1];
     myUCharsToChars(buf, currency);
-
+    
+    /* Normalize the keyword value to uppercase */
+    T_CString_toUpperCase(buf);
+    
     const UChar* s = NULL;
     ec2 = U_ZERO_ERROR;
     UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc, &ec2);
