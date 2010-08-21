@@ -435,7 +435,7 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString 
         if ( u_charDigitValue(sym) == 0 ) {
             for ( int8_t i = 1 ; i<= 9 ; i++ ) {
                 sym++;
-                fSymbols[kOneDigitSymbol+i-1] = UnicodeString(sym);
+                fSymbols[(int)kOneDigitSymbol+i-1] = UnicodeString(sym);
             }
         }
     }
