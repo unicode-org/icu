@@ -19,7 +19,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.Index;
+import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
@@ -28,7 +28,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
-public class IndexTest extends TestFmwk {
+public class AlphabeticIndexTest extends TestFmwk {
     public static Set<String> KEY_LOCALES = new LinkedHashSet(Arrays.asList(
             "en", "es", "de", "fr", "ja", "it", "tr", "pt", "zh", "nl", 
             "pl", "ar", "ru", "zh_Hant", "ko", "th", "sv", "fi", "da", 
@@ -147,11 +147,11 @@ public class IndexTest extends TestFmwk {
             
     };
     public static void main(String[] args) throws Exception{
-        new IndexTest().run(args);
+        new AlphabeticIndexTest().run(args);
     }
     
     public void TestFirstCharacters() {
-        Index indexCharacters = new Index(ULocale.ENGLISH);
+        AlphabeticIndex indexCharacters = new AlphabeticIndex(ULocale.ENGLISH);
         RuleBasedCollator collator = indexCharacters.getCollator();
         collator.setStrength(Collator.IDENTICAL);
         List<String> firsts = indexCharacters.getFirstScriptCharacters();
@@ -184,39 +184,39 @@ public class IndexTest extends TestFmwk {
                 //"吉田", "山田", "佐々木", "山口", "松本", "井上", "木村", "林", "清水"
                 };
         ULocale additionalLocale = ULocale.ENGLISH;            
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder UI = new StringBuilder();
 
         for (String[] pair : localeAndIndexCharactersLists) {
             ULocale desiredLocale = new ULocale(pair[0]);
             
             // Create a simple index where the values for the strings are Integers, and add the strings
-            Index<Integer> index = new Index<Integer>(desiredLocale, additionalLocale);
+            AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(desiredLocale).addIndexCharacters(additionalLocale);
             int counter = 0;
             for (String item : test) {
                 index.add(item, counter++); 
             }
 
             logln(desiredLocale + "\t" + desiredLocale.getDisplayName(ULocale.ENGLISH) + " - " + desiredLocale.getDisplayName(desiredLocale) + "\t");
-            buffer.setLength(0);
-            buffer.append(desiredLocale + "\t");
+            UI.setLength(0);
+            UI.append(desiredLocale + "\t");
             boolean showAll = true;
             
             // Show index at top. We could skip or gray out empty buckets
-            for (Index.Bucket<Integer> bucket : index) {
+            for (AlphabeticIndex.Bucket<Integer> bucket : index) {
                 if (showAll || bucket.size() != 0) {
-                    showLabelAtTopInUI(buffer, bucket.getLabel());
+                    showLabelAtTop(UI, bucket.getLabel());
                 }
             }
-            logln(buffer.toString());
+            logln(UI.toString());
 
             // Show the buckets with their contents, skipping empty buckets
-            for (Index.Bucket<Integer> bucket : index) {
+            for (AlphabeticIndex.Bucket<Integer> bucket : index) {
                 if (bucket.size() != 0) {
-                    showLabelInUIList(buffer, bucket.getLabel());
-                    for (Index.Record<Integer> item : bucket) {
-                        showIndexedItemInUI(buffer, item.getKey(), item.getValue());
+                    showLabelInList(UI, bucket.getLabel());
+                    for (AlphabeticIndex.Record<Integer> item : bucket) {
+                        showIndexedItem(UI, item.getKey(), item.getValue());
                     }
-                    logln(buffer.toString());
+                    logln(UI.toString());
                     if (bucket.getLabel().equals("E")) {
                         Map<String, Integer> keys = getKeys(bucket);
                         Integer count = keys.get("edgar");
@@ -237,22 +237,22 @@ public class IndexTest extends TestFmwk {
         }
     }
 
-    private void showLabelAtTopInUI(StringBuilder buffer, String label) {
+    private void showLabelAtTop(StringBuilder buffer, String label) {
         buffer.append(label + " ");
     }
 
-    private void showIndexedItemInUI(StringBuilder buffer, CharSequence key, Integer value) {
+    private void showIndexedItem(StringBuilder buffer, CharSequence key, Integer value) {
         buffer.append("\t " + key + "→" + value);
     }
 
-    private void showLabelInUIList(StringBuilder buffer, String label) {
+    private void showLabelInList(StringBuilder buffer, String label) {
         buffer.setLength(0);
         buffer.append(label);
     }
 
-    private Map<String,Integer> getKeys(Index.Bucket<Integer> entry) {
+    private Map<String,Integer> getKeys(AlphabeticIndex.Bucket<Integer> entry) {
         Map<String,Integer> keys = new LinkedHashMap<String,Integer>();
-        for (Index.Record x : entry) {
+        for (AlphabeticIndex.Record x : entry) {
             String key = x.getKey().toString();
             Integer old = keys.get(key);
             keys.put(key, old == null ? 1 : old + 1);
@@ -264,7 +264,7 @@ public class IndexTest extends TestFmwk {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
             String expectedIndexCharacters = localeAndIndexCharacters[1];
-            Collection<String> indexCharacters = new Index(locale).getLabels();
+            Collection<String> indexCharacters = new AlphabeticIndex(locale).getLabels();
 
             // Join the elements of the list to a string with delimiter ":"
             StringBuilder sb = new StringBuilder();
@@ -310,7 +310,7 @@ public class IndexTest extends TestFmwk {
                 if (locale.getCountry().length() != 0) {
                     continue;
                 }
-                Index indexCharacters = new Index(locale);
+                AlphabeticIndex indexCharacters = new AlphabeticIndex(locale);
                 final Collection mainChars = indexCharacters.getLabels();
                 String mainCharString = mainChars.toString();
                 if (mainCharString.length() > 500) {
