@@ -93,8 +93,6 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * <p>
  * <b>Important Notes:</b>
  * <ul>
- * <li>For Chinese, the results are not yet optimal, and it is probably best best not to use these index characters. The
- * class can still be used to get the correct sorting order, but the index characters should be suppressed.</li>
  * <li>Additional collation parameters can be passed in as part of the locale name. For example, German plus numeric
  * sorting would be "de@kn-true".
  * <li>In the initial version, a limit of 100 buckets is placed on these lists. This may change or become configureable in
@@ -159,7 +157,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         comparator = (RuleBasedCollator) collator;
         comparator.setStrength(Collator.PRIMARY);
         firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS;
-        addIndexCharacters(exemplarChars);
+        addLabels(exemplarChars);
     }
     
     /**
@@ -169,7 +167,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> addIndexCharacters(UnicodeSet additions) {
+    public AlphabeticIndex<V> addLabels(UnicodeSet additions) {
         initialLabels.addAll(additions);
         indexCharacters = null;
         return this;
@@ -182,7 +180,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> addIndexCharacters(ULocale... additions) {
+    public AlphabeticIndex<V> addLabels(ULocale... additions) {
         for (ULocale addition : additions) {
             initialLabels.addAll(getIndexExemplars(addition));
         }
@@ -201,6 +199,18 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     }
 
     /**
+     * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z …
+     * 
+     * @return underflow label
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getUnderflowLabel() {
+        return underflowLabel; // TODO get localized version
+    }
+
+
+    /**
      * Set the underflowLabel label
      * @param underflowLabel see class description
      * @return this, for chaining
@@ -209,6 +219,18 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         this.underflowLabel = underflowLabel;
         return this;
     }
+
+    /**
+     * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: … A B C
+     * 
+     * @return overflow label
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getOverflowLabel() {
+        return overflowLabel; // TODO get localized version
+    }
+
 
     /**
      * Set the inflowLabel label
@@ -220,12 +242,51 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         return this;
     }
 
+    /**
+     * Get the default label used for abbreviated buckets <i>between</i> other labels. For example, consider the labels
+     * for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
+     * 
+     * @return inflow label
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getInflowLabel() {
+        return inflowLabel; // TODO get localized version
+    }
+
+
+    /**
+     * Get the limit on the number of labels in the index. The number of buckets can be slightly larger: see getBucketCount().
+     * 
+     * @return maxLabelCount maximum number of labels.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getMaxLabelCount() {
+        return maxLabelCount;
+    }
+
+    /**
+     * Set a limit on the number of labels in the index. The number of buckets can be slightly larger: see
+     * getBucketCount().
+     * 
+     * @return maxLabelCount label Set the maximum number of labels. Currently, if the number is exceeded, then every
+     *         nth item is removed to bring the count down. A more sophisticated mechanism may be available in the
+     *         future.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public AlphabeticIndex<V> setMaxLabelCount(int maxLabelCount) {
+        this.maxLabelCount = maxLabelCount;
+        return this;
+    }
+
     private void initLabels() {
         UnicodeSet exemplars = new UnicodeSet(initialLabels);
 
-        // first sort them, with an "best" ordering among items that are the same according
-        // to the collator
-        // The JDK inexplicably didn't make Collators be Comparator<String>!
+        // First sort them, with an "best" ordering among items that are the same according
+        // to the collator.
+        // Re the warning: the JDK inexplicably didn't make Collators be Comparator<String>!
         Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparator, PREFERENCE_COMPARATOR));
         exemplars.addAllTo(preferenceSorting);
 
@@ -260,13 +321,13 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         // if the result is still too large, cut down to maxCount elements, by removing every nth element
 
         final int size = indexCharacterSet.size() - 1;
-        if (size > maxCount) {
+        if (size > maxLabelCount) {
             int count = 0;
             int old = -1;
             for (Iterator<String> it = indexCharacterSet.iterator(); it.hasNext();) {
                 ++count;
                 it.next();
-                final int bump = count * maxCount / size;
+                final int bump = count * maxLabelCount / size;
                 if (bump == old) {
                     it.remove();
                 } else {
@@ -344,7 +405,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     /**
      * Get the labels.
      * 
-     * @return A collection including the labels
+     * @return A collection listing the labels, after processing.
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -371,41 +432,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         }
     }
 
-    /**
-     * Get the default label used for abbreviated buckets <i>between</i> other labels. For example, consider the labels
-     * for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
-     * 
-     * @return inflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    public String getInflowLabel() {
-        return inflowLabel; // TODO get localized version
-    }
-
-    /**
-     * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: … A B C
-     * 
-     * @return overflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    public String getOverflowLabel() {
-        return overflowLabel; // TODO get localized version
-    }
-
-    /**
-     * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z …
-     * 
-     * @return underflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    public String getUnderflowLabel() {
-        return underflowLabel; // TODO get localized version
-    }
-
-    /**
+        /**
      * Add a record (key and value) to the index.
      * 
      * @param key Key, such as a name
@@ -414,7 +441,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> add(CharSequence key, V value) {
+    public AlphabeticIndex<V> addRecord(CharSequence key, V value) {
         buckets = null; // invalidate old bucketlist
         inputList.add(new Record<V>(key, value));
         return this;
@@ -427,20 +454,20 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> clear() {
+    public AlphabeticIndex<V> clearRecords() {
         buckets = null;
         inputList.clear();
         return this;
     }
 
     /**
-     * Return the number of buckets in the index.
+     * Return the number of buckets in the index. This will be the same as the number of labels, plus buckets for the underflow, overflow, and inflow(s).
      * 
      * @return number of buckets
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public int size() {
+    public int getBucketCount() {
         if (buckets == null) {
             buckets = getIndexBuckets();
         }
@@ -448,7 +475,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     }
 
     /**
-     * Return the number of buckets in the index.
+     * Return the number of records in the index: that is, the number of distinct <key,value> pairs added with addRecord(...)
      * 
      * @return total number of records in buckets
      * @draft ICU 4.6
@@ -665,7 +692,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     }
 
     private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
-    private int maxCount = 99;
+    private int maxLabelCount = 99;
 
     /**
      * Comparator that returns "better" strings first, where shorter NFKD is better, and otherwise NFKD binary order is
@@ -794,7 +821,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         }
 
         /**
-         * Is an underflow, overflow, or inflow bucket
+         * Is a normal, underflow, overflow, or inflow bucket
          * 
          * @return is an underflow, overflow, or inflow bucket
          * @draft ICU 4.6
@@ -820,6 +847,18 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
          */
         public Iterator<Record<V>> iterator() {
             return values.iterator();
+        }
+        
+        @Override
+        public String toString() {
+            return "{" +
+            "labelType=" + labelType
+            + ", " +
+            "lowerBoundary=" + lowerBoundary
+            + ", " +
+            "label=" + label
+            + "}"
+            ;
         }
     }
 
