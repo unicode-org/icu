@@ -190,10 +190,10 @@ public class AlphabeticIndexTest extends TestFmwk {
             ULocale desiredLocale = new ULocale(pair[0]);
             
             // Create a simple index where the values for the strings are Integers, and add the strings
-            AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(desiredLocale).addIndexCharacters(additionalLocale);
+            AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(desiredLocale).addLabels(additionalLocale);
             int counter = 0;
             for (String item : test) {
-                index.add(item, counter++); 
+                index.addRecord(item, counter++); 
             }
 
             logln(desiredLocale + "\t" + desiredLocale.getDisplayName(ULocale.ENGLISH) + " - " + desiredLocale.getDisplayName(desiredLocale) + "\t");
