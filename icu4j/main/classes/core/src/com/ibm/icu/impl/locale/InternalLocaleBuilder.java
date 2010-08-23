@@ -87,7 +87,7 @@ public final class InternalLocaleBuilder {
         if (attribute == null || !UnicodeLocaleExtension.isAttribute(attribute)) {
             throw new LocaleSyntaxException("Ill-formed Unicode locale attribute: " + attribute);
         }
-        // to lower case to prevent duplication
+        // Use case insensitive string to prevent duplication
         if (_uattributes == null) {
             _uattributes = new HashSet<CaseInsensitiveString>(4);
         }
@@ -306,6 +306,7 @@ public final class InternalLocaleBuilder {
      * Reset Builder's internal state with the given language tag
      */
     public InternalLocaleBuilder setLanguageTag(LanguageTag langtag) {
+        clear();
         if (langtag.getExtlangs().size() > 0) {
             _language = langtag.getExtlangs().get(0);
         } else {
@@ -504,7 +505,7 @@ public final class InternalLocaleBuilder {
         // because no subtags after "lvariant".
 
         int prefixStart = -1;
-        boolean sawPrivuseVar = false;;
+        boolean sawPrivuseVar = false;
         while (!itr.isDone()) {
             if (prefixStart != -1) {
                 // Note: privateuse value "abc-lvariant" is unchanged
