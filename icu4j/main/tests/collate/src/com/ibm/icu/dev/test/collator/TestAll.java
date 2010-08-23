@@ -46,7 +46,7 @@ public class TestAll extends TestGroup {
                   "UCAConformanceTest",
                   // don't test Search API twice!
                   //"com.ibm.icu.dev.test.search.SearchTest"
-                  "IndexTest"
+                  "AlphabeticIndexTest"
               },
               "All Collation Tests"
               );
