@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,27 +60,27 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * <pre>
  * // Create a simple index where the values for the strings are Integers, and add the strings
  * 
- * Index<Integer> index = new Index<Integer>(desiredLocale, additionalLocale);
+ * AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(desiredLocale).addLabels(additionalLocale);
  * int counter = 0;
  * for (String item : test) {
- *     index.add(item, counter++); 
+ *     index.addRecord(item, counter++); 
  * }
  * ...
  * // Show index at top. We could skip or gray out empty buckets
  * 
- * for (Index.Bucket<Integer> bucket : index) {
+ * for (AlphabeticIndex.Bucket<Integer> bucket : index) {
  *     if (showAll || bucket.size() != 0) {
- *         showLabelAtTopInUI(buffer, bucket.getLabel());
+ *         showLabelAtTop(UI, bucket.getLabel());
  *     }
  * }
  *  ...
  * // Show the buckets with their contents, skipping empty buckets
  * 
- * for (Index.Bucket<Integer> bucket : index) {
+ * for (AlphabeticIndex.Bucket<Integer> bucket : index) {
  *     if (bucket.size() != 0) {
- *         showLabelInUIList(buffer, bucket.getLabel());
- *         for (Index.Record<Integer> item : bucket) {
- *             showIndexedItemInUI(buffer, item.getKey(), item.getValue());
+ *         showLabelInList(UI, bucket.getLabel());
+ *         for (AlphabeticIndex.Record<Integer> item : bucket) {
+ *             showIndexedItem(UI, item.getKey(), item.getValue());
  *         }
  * </pre>
  * 
@@ -91,19 +92,16 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * </pre>
  * 
  * <p>
- * <b>Important Notes:</b>
+ * <b>Notes:</b>
  * <ul>
  * <li>Additional collation parameters can be passed in as part of the locale name. For example, German plus numeric
  * sorting would be "de@kn-true".
- * <li>In the initial version, a limit of 100 buckets is placed on these lists. This may change or become configureable in
- * the future. When the limit is reached, then every nth value is removed to bring the list down below the limit.</li>
- * </ul>
  * 
  * @author markdavis
  * @draft ICU 4.6
  * @provisional This API might change or be removed in a future release.
  */
-public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<Bucket<V>> {
+public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     /**
      * Internals
@@ -111,7 +109,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet(
-            "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
+    "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
     private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
 
@@ -124,18 +122,19 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     private final List<String> notAlphabetic = new ArrayList<String>();
 
     // We accumulate these as we build up the input parameters
-    
+
     private final UnicodeSet initialLabels = new UnicodeSet();
     private final Collection<Record<V>> inputList = new ArrayList<Record<V>>();
 
     // Lazy evaluated: null means that we have not built yet.
-    
+
     private List<String> indexCharacters;
     private BucketList buckets;
 
     private String overflowLabel = "\u2026";
     private String underflowLabel = "\u2026";
     private String inflowLabel = "\u2026";
+    private LangType langType;
 
     /**
      * Create the index object.
@@ -146,7 +145,43 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex(ULocale locale) {
-        this(locale, (RuleBasedCollator) Collator.getInstance(locale), getIndexExemplars(locale));
+        this(locale, null, getIndexExemplars(locale));
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+     */
+    public enum LangType { 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+         */
+        NORMAL, 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+         */
+        SIMPLIFIED,
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+         */
+        TRADITIONAL;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+         */
+        public static LangType fromLocale(ULocale locale) {
+            String lang = locale.getLanguage();
+            if (lang.equals("zh")) {
+                if ("Hant".equals(locale.getScript()) || "TW".equals(locale.getCountry())) {
+                    return TRADITIONAL;
+                }
+                return SIMPLIFIED;
+            }
+            return NORMAL;
+        }
     }
 
     /**
@@ -154,12 +189,17 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
      */
     public AlphabeticIndex(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars) {
-        comparator = (RuleBasedCollator) collator;
+        langType = LangType.fromLocale(locale);
+        // HACK because we have to know the type of the collation for Chinese
+        if (langType != LangType.NORMAL) {
+            locale = locale.setKeywordValue("collation", langType == LangType.TRADITIONAL ? "stroke" : "pinyin");
+        }
+        comparator = collator != null ? (RuleBasedCollator) collator : (RuleBasedCollator) Collator.getInstance(locale);
         comparator.setStrength(Collator.PRIMARY);
         firstScriptCharacters = FIRST_CHARS_IN_SCRIPTS;
         addLabels(exemplarChars);
     }
-    
+
     /**
      * Add more index characters (aside from what are in the locale)
      * @param additions additional characters to add to the index, such as A-Z.
@@ -335,7 +375,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
                 }
             }
         }
-        
+
         indexCharacters = Collections.unmodifiableList(new ArrayList<String>(indexCharacterSet));
         // firstStringsInScript(comparator);
 
@@ -350,7 +390,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         }
 
         // Synthesize the index exemplars
-        
+
         exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
 
         // get the exemplars, and handle special cases
@@ -374,7 +414,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
                 }
             }
         }
-        
+
         UnicodeSet uppercased = new UnicodeSet();
         for (String item : exemplars) {
             uppercased.add(UCharacter.toUpperCase(locale, item));
@@ -432,21 +472,95 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         }
     }
 
-        /**
-     * Add a record (key and value) to the index.
+    /**
+     * Add a record (key and value) to the index. The key will be used to sort the items into buckets, and to sort
+     * within the bucket. Two records may have the same key. When they do, the sort order is according to the order added:
+     * the first added comes first.
      * 
-     * @param key Key, such as a name
-     * @param value Value, such as an address or link
+     * @param key
+     *            Key, such as a name
+     * @param value
+     *            Value, such as an address or link
      * @return this, for chaining
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex<V> addRecord(CharSequence key, V value) {
         buckets = null; // invalidate old bucketlist
-        inputList.add(new Record<V>(key, value));
+        inputList.add(new Record<V>(key, value, inputList.size()));
         return this;
     }
 
+    private static UnicodeSet UNIHAN = new UnicodeSet("[:script=Hani:]");
+    
+    /**
+     * @param key
+     * @return
+     */
+    public static CharSequence hackKey(CharSequence key, Comparator comparator) {
+        if (!UNIHAN.contains(Character.codePointAt(key, 0))) {
+            return null;
+        }
+        int index = Arrays.binarySearch(PINYIN_LOOKUP, key, comparator);
+        if (index < 0) {
+            index = -index - 2;
+        }
+        //if (true) return index + "";
+        return "ABCDEFGHJKLMNOPQRSTWXYZ".substring(index, index + 1);
+    }
+
+    private static String[] PINYIN_LOOKUP = {
+//        "呵", // a
+//        "㭭", // b
+//        "䃰", // c
+//        "㙮", // d
+//        "䋪", // e
+//        "发", // f
+//        "旮", // g
+//        "哈", // h
+//        "㚻", // i = j
+//        "㚻", // j
+//        "䘔", // k
+//        "㕇", // l
+//        "呒", // m
+//        "唔", // n
+//        "喔", // o
+//        "䔤", // p
+//        "㠌", // q
+//        "儿", // r
+//        "仨", // s
+//        "㯚", // t
+//        "䨟", // u = w
+//        "䨟", // v = w
+//        "䨟", // w
+//        "㓾", // x
+//        "㝞", // y
+//        "㞉", // z
+        "",     //A
+        "八",    //B
+        "嚓",    //C
+        "咑",    //D
+        "妸",    //E
+        "发",    //F
+        "猤",    //G
+        "妎",    //H
+        "丌",    //J
+        "咔",    //K
+        "垃",    //L
+        "嘸",    //M
+        "拿",    //N
+        "噢",    //O
+        "妑",    //P
+        "七",    //Q
+        "呥",    //R
+        "仨",    //S
+        "他",    //T
+        "屲",    //W
+        "夕",    //X
+        "丫",    //Y
+        "帀",    //Z
+        };
+    
     /**
      * Clear the index.
      * 
@@ -518,14 +632,32 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         comparator.setStrength(Collator.TERTIARY);
         Comparator<Record<V>> fullComparator = new Comparator<Record<V>>() {
             public int compare(Record<V> o1, Record<V> o2) {
-                CharSequence key1 = o1.getKey();
-                CharSequence key2 = o2.getKey();
+                CharSequence key1 = o1.substitute;
+                CharSequence key2 = o2.substitute;
+                if (key1 == null) {
+                    key1 = o1.getKey();
+                }
+                if (key2 == null) {
+                    key2 = o2.getKey();
+                }
                 int result = comparator.compare(key1, key2);
-                if (result != 0)
+                if (result != 0) {
                     return result;
-                return o1.getValue().compareTo(o2.getValue());
+                }
+                if (o1.substitute != null || o2.substitute != null) {
+                    result = comparator.compare(o1.getKey(), o2.getKey());
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return o1.counter - o2.counter;
             }
         };
+        if (langType == LangType.SIMPLIFIED) {
+            for (Record<V> key : inputList) {
+                key.substitute = hackKey(key.key, comparator);
+            }
+        }
         TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
         sortedInput.addAll(inputList);
         comparator.setStrength(Collator.PRIMARY); // used for bucketing
@@ -536,7 +668,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         String upperBoundary = nextBucket.lowerBoundary; // there is always at least one
         boolean atEnd = false;
         for (Record<V> s : sortedInput) {
-            while (!atEnd && comparator.compare(s.getKey(), upperBoundary) >= 0) {
+            while (!atEnd && s.isGreater(comparator, upperBoundary)) {
                 currentBucket = nextBucket;
                 // now reset nextChar
                 if (bucketIterator.hasNext()) {
@@ -624,7 +756,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
     }
 
     private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet(
-            "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
+    "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
     private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
     private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator
@@ -730,12 +862,24 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
      * @provisional This API might change or be removed in a future release.
      */
     public static class Record<V> {
+        private CharSequence substitute;
         private CharSequence key;
         private V value;
+        private int counter;
 
-        private Record(CharSequence key, V value) {
+        private Record(CharSequence key, V value, int counter) {
             this.key = key;
             this.value = value;
+            this.counter = counter;
+            this.substitute = substitute;
+        }
+
+        /**
+         * @param upperBoundary
+         * @return
+         */
+        public boolean isGreater(Comparator comparator, String upperBoundary) {
+            return comparator.compare(substitute == null ? key : substitute, upperBoundary) >= 0;
         }
 
         /**
@@ -848,7 +992,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
         public Iterator<Record<V>> iterator() {
             return values.iterator();
         }
-        
+
         @Override
         public String toString() {
             return "{" +
@@ -876,7 +1020,7 @@ public final class AlphabeticIndex<V extends Comparable<V>> implements Iterable<
             String last = indexCharacters.get(0);
             bucketList.add(new Bucket<V>(last, last, Bucket.LabelType.NORMAL));
             UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
-            
+
             for (int i = 1; i < indexCharacters.size(); ++i) {
                 String current = indexCharacters.get(i);
                 UnicodeSet set = getScriptSet(current).removeAll(IGNORE_SCRIPTS);

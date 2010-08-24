@@ -13,9 +13,9 @@ package com.ibm.icu.impl;
  * @version 1.0
  */
 
-final public class Differ {
+final public class Differ<T> {
 //    public static final String copyright =
-//      "Copyright (C) 2000, International Business Machines Corporation and others. All Rights Reserved.";
+//      "Copyright (C) 2010, International Business Machines Corporation and others. All Rights Reserved.";
 
     /**
      * @param stackSize The size of the largest difference you expect.
@@ -24,21 +24,21 @@ final public class Differ {
     public Differ(int stackSize, int matchCount) {
         this.STACKSIZE = stackSize;
         this.EQUALSIZE = matchCount;
-        a = new Object[stackSize+matchCount];
-        b = new Object[stackSize+matchCount];
+        a = (T[]) new Object[stackSize+matchCount];
+        b = (T[]) new Object[stackSize+matchCount];
     }
 
-    public void add (Object aStr, Object bStr) {
+    public void add (T aStr, T bStr) {
         addA(aStr);
         addB(bStr);
     }
 
-    public void addA (Object aStr) {
+    public void addA (T aStr) {
         flush();
         a[aCount++] = aStr;
     }
 
-    public void addB (Object bStr) {
+    public void addB (T bStr) {
         flush();
         b[bCount++] = bStr;
     }
@@ -47,7 +47,7 @@ final public class Differ {
         return aLine + maxSame + offset;
     }
 
-    public Object getA(int offset) {
+    public T getA(int offset) {
         if (offset < 0) return last;
         if (offset > aTop-maxSame) return next;
         return a[offset];
@@ -65,7 +65,7 @@ final public class Differ {
         return bLine + maxSame + offset;
     }
 
-    public Object getB(int offset) {
+    public T getB(int offset) {
         if (offset < 0) return last;
         if (offset > bTop-maxSame) return next;
         return b[offset];
@@ -83,12 +83,12 @@ final public class Differ {
         maxSame = i;
         aTop = bTop = maxSame;
         if (maxSame > 0) last = a[maxSame-1];
-        next = "";
+        next = null;
 
         if (finalPass) {
             aTop = aCount;
             bTop = bCount;
-            next = "";
+            next = null;
             return;
         }
 
@@ -113,7 +113,7 @@ final public class Differ {
             // flush some of them
             aCount = (aCount + maxSame) / 2;
             bCount = (bCount + maxSame) / 2;
-            next = "";
+            next = null;
         }
     }
 
@@ -122,7 +122,7 @@ final public class Differ {
      * @return -1 if not found, otherwise start position in b
      */
 
-    public int find (Object[] aArr, int aStart, int aEnd, Object[] bArr, int bStart, int bEnd) {
+    public int find (T[] aArr, int aStart, int aEnd, T[] bArr, int bStart, int bEnd) {
         int len = aEnd - aStart;
         int bEndMinus = bEnd - len;
         tryA:
@@ -158,10 +158,10 @@ final public class Differ {
     private int STACKSIZE;
     private int EQUALSIZE;
 
-    private Object [] a;
-    private Object [] b;
-    private Object last = "";
-    private Object next = "";
+    private T [] a;
+    private T [] b;
+    private T last = null;
+    private T next = null;
     private int aCount = 0;
     private int bCount = 0;
     private int aLine = 1;
