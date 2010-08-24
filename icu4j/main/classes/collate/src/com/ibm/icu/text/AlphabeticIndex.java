@@ -106,6 +106,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * Internals
      */
+    static final boolean HACK_CODED_FIRSTS = true;
+
     private static final char CGJ = '\u034F';
     private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet(
@@ -492,7 +494,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     private static UnicodeSet UNIHAN = new UnicodeSet("[:script=Hani:]");
-    
+
     /**
      * @param key
      * @return
@@ -506,36 +508,36 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             index = -index - 2;
         }
         //if (true) return index + "";
-        return "ABCDEFGHJKLMNOPQRSTWXYZ".substring(index, index + 1);
+        return "ābcdēfghjklmnōpqrstwxyz".substring(index, index + 1);
     }
 
     private static String[] PINYIN_LOOKUP = {
-//        "呵", // a
-//        "㭭", // b
-//        "䃰", // c
-//        "㙮", // d
-//        "䋪", // e
-//        "发", // f
-//        "旮", // g
-//        "哈", // h
-//        "㚻", // i = j
-//        "㚻", // j
-//        "䘔", // k
-//        "㕇", // l
-//        "呒", // m
-//        "唔", // n
-//        "喔", // o
-//        "䔤", // p
-//        "㠌", // q
-//        "儿", // r
-//        "仨", // s
-//        "㯚", // t
-//        "䨟", // u = w
-//        "䨟", // v = w
-//        "䨟", // w
-//        "㓾", // x
-//        "㝞", // y
-//        "㞉", // z
+        //        "呵", // a
+        //        "㭭", // b
+        //        "䃰", // c
+        //        "㙮", // d
+        //        "䋪", // e
+        //        "发", // f
+        //        "旮", // g
+        //        "哈", // h
+        //        "㚻", // i = j
+        //        "㚻", // j
+        //        "䘔", // k
+        //        "㕇", // l
+        //        "呒", // m
+        //        "唔", // n
+        //        "喔", // o
+        //        "䔤", // p
+        //        "㠌", // q
+        //        "儿", // r
+        //        "仨", // s
+        //        "㯚", // t
+        //        "䨟", // u = w
+        //        "䨟", // v = w
+        //        "䨟", // w
+        //        "㓾", // x
+        //        "㝞", // y
+        //        "㞉", // z
         "",     //A
         "八",    //B
         "嚓",    //C
@@ -559,8 +561,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         "夕",    //X
         "丫",    //Y
         "帀",    //Z
-        };
-    
+    };
+
     /**
      * Clear the index.
      * 
@@ -759,293 +761,307 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
     private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
-    private static final List<String> FIRST_CHARS_IN_SCRIPTS = firstStringsInScript((RuleBasedCollator) Collator
-            .getInstance(ULocale.ROOT));
-
-    /**
-     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
-     * collation.
-     * 
-     * @param ruleBasedCollator
-     *            TODO
-     * @param comparator
-     * @param lowerLimit
-     * @param testScript
-     * 
-     * @return
-     */
-
-    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
-        String[] results = new String[UScript.CODE_LIMIT];
-        for (String current : TO_TRY) {
-            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
-                // symbols.
-                continue;
-            }
-            int script = UScript.getScript(current.codePointAt(0));
-            if (results[script] == null) {
-                results[script] = current;
-            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-                results[script] = current;
-            }
-        }
-
-        try {
-            UnicodeSet extras = new UnicodeSet();
-            UnicodeSet expansions = new UnicodeSet();
-            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
-            extras.addAll(expansions).removeAll(TO_TRY);
-            if (extras.size() != 0) {
-                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
-                for (String current : extras) {
-                    if (!TO_TRY.containsAll(current))
-                        continue;
-                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
-                        continue;
-                    }
-                    int script = UScript.getScript(current.codePointAt(0));
-                    if (results[script] == null) {
-                        results[script] = current;
-                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-                        results[script] = current;
-                    }
-                }
-            }
-        } catch (Exception e) {
-        } // why have a checked exception???
-
-        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
-        for (int i = 0; i < results.length; ++i) {
-            if (results[i] != null) {
-                sorted.add(results[i]);
-            }
-        }
-        return Collections.unmodifiableList(new ArrayList<String>(sorted));
-    }
-
-    private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
-    private int maxLabelCount = 99;
-
-    /**
-     * Comparator that returns "better" strings first, where shorter NFKD is better, and otherwise NFKD binary order is
-     * better, and otherwise binary order is better.
-     */
-    private static class PreferenceComparator implements Comparator<Object> {
-        static final Comparator<String> binary = new UTF16.StringComparator(true, false, 0);
-
-        public int compare(Object o1, Object o2) {
-            return compare((String) o1, (String) o2);
-        }
-
-        public int compare(String s1, String s2) {
-            if (s1 == s2) {
-                return 0;
-            }
-            String n1 = Normalizer.decompose(s1, true);
-            String n2 = Normalizer.decompose(s2, true);
-            int result = n1.length() - n2.length();
-            if (result != 0) {
-                return result;
-            }
-            result = binary.compare(n1, n2);
-            if (result != 0) {
-                return result;
-            }
-            return binary.compare(s1, s2);
-        }
-    }
-
-    /**
-     * A record to be sorted into buckets with getIndexBucketCharacters.
-     * 
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static class Record<V> {
-        private CharSequence substitute;
-        private CharSequence key;
-        private V value;
-        private int counter;
-
-        private Record(CharSequence key, V value, int counter) {
-            this.key = key;
-            this.value = value;
-            this.counter = counter;
-            this.substitute = substitute;
-        }
+    private static final List<String> FIRST_CHARS_IN_SCRIPTS = 
+        HACK_CODED_FIRSTS ? Arrays.asList(new String[] { "a",
+                "α", "ⲁ", "а", "ⰰ", "ა", "ա", "א", "𐤀", "ࠀ", "ء", "ܐ", "ހ", "ߊ", "ⴰ", "ሀ", "ॐ", "অ", "ੴ", "ૐ", "ଅ", "ௐ",
+                "అ", "ಅ", "അ", "අ", "ꯀ", "ꠀ", "ꢂ", "𑂃", "ᮃ", "𐨀", "ก", "ກ", "ꪀ", "ཀ", "ᰀ", "ꡀ", "ᤀ", "ᜀ", "ᜠ", "ᝀ", "ᝠ",
+                "ᨀ", "ꤰ", "ꤊ", "က", "ក", "ᥐ", "ᦀ", "ᨠ", "ꨀ", "ᬅ", "ꦄ", "ᢀ", "ᱚ", "Ꭰ", "ᐁ", "ᚁ", "ᚠ", "𐰀", "ꔀ", "ꚠ", "ᄀ",
+                "ぁ", "ァ", "ㄅ", "ꀀ", "ꓸ", "𐊀", "𐊠", "𐤠", "𐌀", "𐌰", "𐐨", "𐑐", "𐒀", "𐀀", "𐠀", "𐩠", "𐬀", "𐡀",
+                "𐭀", "𐭠", "𐎀", "𐎠", "𒀀", "𓀀", "一"})
+                : firstStringsInScript((RuleBasedCollator) Collator
+                        .getInstance(ULocale.ROOT));
 
         /**
-         * @param upperBoundary
+         * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
+         * collation.
+         * 
+         * @param ruleBasedCollator
+         *            TODO
+         * @param comparator
+         * @param lowerLimit
+         * @param testScript
+         * 
          * @return
          */
-        public boolean isGreater(Comparator comparator, String upperBoundary) {
-            return comparator.compare(substitute == null ? key : substitute, upperBoundary) >= 0;
-        }
 
-        /**
-         * Get the key
-         * 
-         * @return the key
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public CharSequence getKey() {
-            return key;
-        }
+        private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
+            String[] results = new String[UScript.CODE_LIMIT];
+            for (String current : TO_TRY) {
+                if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
+                    // symbols.
+                    continue;
+                }
+                int script = UScript.getScript(current.codePointAt(0));
+                if (results[script] == null) {
+                    results[script] = current;
+                } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+                    results[script] = current;
+                }
+            }
 
-        /**
-         * Get the value
-         * 
-         * @return the value
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public V getValue() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            return key + "=" + value;
-        }
-    }
-
-    /**
-     * A "bucket", containing records sorted under an index string by getIndexBucketCharacters. Is created by the
-     * addBucket method in BucketList. A typical implementation will provide methods getLabel(), getSpecial(), and
-     * getValues().<br>
-     * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
-     * 
-     * @param <V>
-     *            Value type
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static class Bucket<V> implements Iterable<Record<V>> {
-        private final String label;
-        private final String lowerBoundary;
-        private final LabelType labelType;
-        private final List<Record<V>> values = new ArrayList<Record<V>>();
-
-        /**
-         * Type of the label
-         * 
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public enum LabelType {
-            NORMAL, UNDERFLOW, INFLOW, OVERFLOW
-        }
-
-        /**
-         * Set up the bucket.
-         * 
-         * @param label
-         *            label for the bucket
-         * @param labelType
-         *            is an underflow, overflow, or inflow bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        private Bucket(String label, String lowerBoundary, LabelType labelType) {
-            this.label = label;
-            this.lowerBoundary = lowerBoundary;
-            this.labelType = labelType;
-        }
-
-        /**
-         * Get the label
-         * 
-         * @return label for the bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public String getLabel() {
-            return label;
-        }
-
-        /**
-         * Is a normal, underflow, overflow, or inflow bucket
-         * 
-         * @return is an underflow, overflow, or inflow bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public LabelType getLabelType() {
-            return labelType;
-        }
-
-        /**
-         * Get the number of records in the bucket.
-         * 
-         * @return number of records in bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
-         */
-        public int size() {
-            return values.size();
-        }
-
-        /**
-         * Iterator over the records in the bucket
-         */
-        public Iterator<Record<V>> iterator() {
-            return values.iterator();
-        }
-
-        @Override
-        public String toString() {
-            return "{" +
-            "labelType=" + labelType
-            + ", " +
-            "lowerBoundary=" + lowerBoundary
-            + ", " +
-            "label=" + label
-            + "}"
-            ;
-        }
-    }
-
-    private class BucketList implements Iterable<Bucket<V>> {
-        private ArrayList<Bucket<V>> bucketList = new ArrayList<Bucket<V>>();
-
-        BucketList() {
-            // initialize indexCharacters;
-            getLabels();
-
-            bucketList.add(new Bucket<V>(getUnderflowLabel(), "", Bucket.LabelType.UNDERFLOW));
-
-            // fix up the list, adding underflow, additions, overflow
-            // insert infix labels as needed, using \uFFFF.
-            String last = indexCharacters.get(0);
-            bucketList.add(new Bucket<V>(last, last, Bucket.LabelType.NORMAL));
-            UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
-
-            for (int i = 1; i < indexCharacters.size(); ++i) {
-                String current = indexCharacters.get(i);
-                UnicodeSet set = getScriptSet(current).removeAll(IGNORE_SCRIPTS);
-                if (lastSet.containsNone(set)) {
-                    // check for adjacent
-                    String overflowComparisonString = getOverflowComparisonString(last);
-                    if (comparator.compare(overflowComparisonString, current) < 0) {
-                        bucketList.add(new Bucket<V>(getInflowLabel(), overflowComparisonString,
-                                Bucket.LabelType.INFLOW));
-                        i++;
-                        lastSet = set;
+            try {
+                UnicodeSet extras = new UnicodeSet();
+                UnicodeSet expansions = new UnicodeSet();
+                ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
+                extras.addAll(expansions).removeAll(TO_TRY);
+                if (extras.size() != 0) {
+                    Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
+                    for (String current : extras) {
+                        if (!TO_TRY.containsAll(current))
+                            continue;
+                        if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+                            continue;
+                        }
+                        int script = UScript.getScript(current.codePointAt(0));
+                        if (results[script] == null) {
+                            results[script] = current;
+                        } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+                            results[script] = current;
+                        }
                     }
                 }
-                bucketList.add(new Bucket<V>(current, current, Bucket.LabelType.NORMAL));
-                last = current;
-                lastSet = set;
+            } catch (Exception e) {
+            } // why have a checked exception???
+
+            TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
+            for (int i = 0; i < results.length; ++i) {
+                if (results[i] != null) {
+                    sorted.add(results[i]);
+                }
             }
-            String limitString = getOverflowComparisonString(last);
-            bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final,
-            // overflow
-            // bucket
+            if (true) {
+                for (String s : sorted) {
+                    System.out.println("\"" + s + "\",");
+                }
+            }
+
+            List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
+            return result;
         }
 
-        public Iterator<Bucket<V>> iterator() {
-            return bucketList.iterator();
+        private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
+        private int maxLabelCount = 99;
+
+        /**
+         * Comparator that returns "better" strings first, where shorter NFKD is better, and otherwise NFKD binary order is
+         * better, and otherwise binary order is better.
+         */
+        private static class PreferenceComparator implements Comparator<Object> {
+            static final Comparator<String> binary = new UTF16.StringComparator(true, false, 0);
+
+            public int compare(Object o1, Object o2) {
+                return compare((String) o1, (String) o2);
+            }
+
+            public int compare(String s1, String s2) {
+                if (s1 == s2) {
+                    return 0;
+                }
+                String n1 = Normalizer.decompose(s1, true);
+                String n2 = Normalizer.decompose(s2, true);
+                int result = n1.length() - n2.length();
+                if (result != 0) {
+                    return result;
+                }
+                result = binary.compare(n1, n2);
+                if (result != 0) {
+                    return result;
+                }
+                return binary.compare(s1, s2);
+            }
         }
-    }
+
+        /**
+         * A record to be sorted into buckets with getIndexBucketCharacters.
+         * 
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static class Record<V> {
+            private CharSequence substitute;
+            private CharSequence key;
+            private V value;
+            private int counter;
+
+            private Record(CharSequence key, V value, int counter) {
+                this.key = key;
+                this.value = value;
+                this.counter = counter;
+                this.substitute = substitute;
+            }
+
+            /**
+             * @param upperBoundary
+             * @return
+             */
+            public boolean isGreater(Comparator comparator, String upperBoundary) {
+                return comparator.compare(substitute == null ? key : substitute, upperBoundary) >= 0;
+            }
+
+            /**
+             * Get the key
+             * 
+             * @return the key
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public CharSequence getKey() {
+                return key;
+            }
+
+            /**
+             * Get the value
+             * 
+             * @return the value
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public V getValue() {
+                return value;
+            }
+
+            @Override
+            public String toString() {
+                return key + "=" + value;
+            }
+        }
+
+        /**
+         * A "bucket", containing records sorted under an index string by getIndexBucketCharacters. Is created by the
+         * addBucket method in BucketList. A typical implementation will provide methods getLabel(), getSpecial(), and
+         * getValues().<br>
+         * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
+         * 
+         * @param <V>
+         *            Value type
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static class Bucket<V> implements Iterable<Record<V>> {
+            private final String label;
+            private final String lowerBoundary;
+            private final LabelType labelType;
+            private final List<Record<V>> values = new ArrayList<Record<V>>();
+
+            /**
+             * Type of the label
+             * 
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public enum LabelType {
+                NORMAL, UNDERFLOW, INFLOW, OVERFLOW
+            }
+
+            /**
+             * Set up the bucket.
+             * 
+             * @param label
+             *            label for the bucket
+             * @param labelType
+             *            is an underflow, overflow, or inflow bucket
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            private Bucket(String label, String lowerBoundary, LabelType labelType) {
+                this.label = label;
+                this.lowerBoundary = lowerBoundary;
+                this.labelType = labelType;
+            }
+
+            /**
+             * Get the label
+             * 
+             * @return label for the bucket
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public String getLabel() {
+                return label;
+            }
+
+            /**
+             * Is a normal, underflow, overflow, or inflow bucket
+             * 
+             * @return is an underflow, overflow, or inflow bucket
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public LabelType getLabelType() {
+                return labelType;
+            }
+
+            /**
+             * Get the number of records in the bucket.
+             * 
+             * @return number of records in bucket
+             * @draft ICU 4.6
+             * @provisional This API might change or be removed in a future release.
+             */
+            public int size() {
+                return values.size();
+            }
+
+            /**
+             * Iterator over the records in the bucket
+             */
+            public Iterator<Record<V>> iterator() {
+                return values.iterator();
+            }
+
+            @Override
+            public String toString() {
+                return "{" +
+                "labelType=" + labelType
+                + ", " +
+                "lowerBoundary=" + lowerBoundary
+                + ", " +
+                "label=" + label
+                + "}"
+                ;
+            }
+        }
+
+        private class BucketList implements Iterable<Bucket<V>> {
+            private ArrayList<Bucket<V>> bucketList = new ArrayList<Bucket<V>>();
+
+            BucketList() {
+                // initialize indexCharacters;
+                getLabels();
+
+                bucketList.add(new Bucket<V>(getUnderflowLabel(), "", Bucket.LabelType.UNDERFLOW));
+
+                // fix up the list, adding underflow, additions, overflow
+                // insert infix labels as needed, using \uFFFF.
+                String last = indexCharacters.get(0);
+                bucketList.add(new Bucket<V>(last, last, Bucket.LabelType.NORMAL));
+                UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
+
+                for (int i = 1; i < indexCharacters.size(); ++i) {
+                    String current = indexCharacters.get(i);
+                    UnicodeSet set = getScriptSet(current).removeAll(IGNORE_SCRIPTS);
+                    if (lastSet.containsNone(set)) {
+                        // check for adjacent
+                        String overflowComparisonString = getOverflowComparisonString(last);
+                        if (comparator.compare(overflowComparisonString, current) < 0) {
+                            bucketList.add(new Bucket<V>(getInflowLabel(), overflowComparisonString,
+                                    Bucket.LabelType.INFLOW));
+                            i++;
+                            lastSet = set;
+                        }
+                    }
+                    bucketList.add(new Bucket<V>(current, current, Bucket.LabelType.NORMAL));
+                    last = current;
+                    lastSet = set;
+                }
+                String limitString = getOverflowComparisonString(last);
+                bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final,
+                // overflow
+                // bucket
+            }
+
+            public Iterator<Bucket<V>> iterator() {
+                return bucketList.iterator();
+            }
+        }
 }
