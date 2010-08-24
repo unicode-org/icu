@@ -2558,6 +2558,7 @@ icu4j/main/tests/collate/collate-tests-build.launch -text
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_SHORT.txt svneol=native#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_SHORT.txt svneol=native#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/data/riwords.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/Counter.java -text svneol=unset#text/plain
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
