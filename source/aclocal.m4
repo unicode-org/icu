@@ -59,7 +59,8 @@ powerpc*-*-linux*)
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
-*-*-beos|*-*-haiku)	icu_cv_host_frag=mh-beos ;;
+*-*-beos)       icu_cv_host_frag=mh-beos ;; 
+*-*-haiku)      icu_cv_host_frag=mh-haiku ;; 
 *-*-irix*)	icu_cv_host_frag=mh-irix ;;
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
