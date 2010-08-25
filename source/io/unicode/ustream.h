@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007 International Business Machines
+*   Copyright (C) 2001-2010 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.h
@@ -11,7 +11,7 @@
 *   06/25/2001  grhoten     Move iostream from unistr.h
 ******************************************************************************
 */
-   
+
 #ifndef USTREAM_H
 #define USTREAM_H
 
@@ -27,8 +27,12 @@
  */
 
 #if U_IOSTREAM_SOURCE >= 199711
+#if (__GNUC__ == 2)
+#include <iostream>
+#else
 #include <istream>
 #include <ostream>
+#endif
 
 U_NAMESPACE_BEGIN
 
