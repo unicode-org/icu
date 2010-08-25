@@ -1230,8 +1230,7 @@ ICUDATA_CHAR=$U_ENDIAN_CHAR
 # set ICUDATA_CHAR to 'e' for any EBCDIC (which should be big endian) platform.
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
-	*-*-linux*) 	platform=U_LINUX ;;
-	*-pc-gnu) 	platform=U_HURD ;;
+	*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu)        platform=U_LINUX ;;
 	*-*-*bsd*|*-*-dragonfly*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=U_AIX ;;
 	*-*-hpux*) 	platform=U_HPUX ;;
