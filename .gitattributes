@@ -51,6 +51,7 @@ README text !eol
 icu4c/icu4c.css -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
+icu4c/source/config/mh-haiku -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/invuca.icu -text
 icu4c/source/data/in/coll/ucadata.icu -text
