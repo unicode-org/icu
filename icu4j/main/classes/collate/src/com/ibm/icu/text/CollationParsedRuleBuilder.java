@@ -47,6 +47,7 @@ final class CollationParsedRuleBuilder {
      *                thrown when argument rules have an invalid syntax
      */
     CollationParsedRuleBuilder(String rules) throws ParseException {
+        m_nfcImpl_.getFCDTrie();  // initialize the optional FCD trie 
         m_parser_ = new CollationRuleParser(rules);
         m_parser_.assembleTokenList();
         m_utilColEIter_ = RuleBasedCollator.UCA_
