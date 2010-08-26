@@ -85,19 +85,6 @@ timezoneTypes:table(nofallback){
             "Pacific:Pohnpei"{"Pacific/Ponape"}
             "Pacific:Samoa"{"Pacific/Pago_Pago"}
             "Pacific:Yap"{"Pacific/Truk"}
-            "SystemV:AST4"{"Etc/GMT+4"}
-            "SystemV:AST4ADT"{"America/Halifax"}
-            "SystemV:CST6"{"Etc/GMT+6"}
-            "SystemV:CST6CDT"{"CST6CDT"}
-            "SystemV:EST5"{"Etc/GMT+5"}
-            "SystemV:EST5EDT"{"EST5EDT"}
-            "SystemV:HST10"{"Etc/GMT+10"}
-            "SystemV:MST7"{"Etc/GMT+7"}
-            "SystemV:MST7MDT"{"MST7MDT"}
-            "SystemV:PST8"{"Etc/GMT+8"}
-            "SystemV:PST8PDT"{"PST8PDT"}
-            "SystemV:YST9"{"Etc/GMT+9"}
-            "SystemV:YST9YDT"{"America/Anchorage"}
             "US:Alaska"{"America/Anchorage"}
             "US:Aleutian"{"America/Adak"}
             "US:Arizona"{"America/Phoenix"}
