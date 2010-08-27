@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,7 +23,14 @@ import com.ibm.icu.text.UnicodeSetIterator;
  */
 public final class CollectionUtilities {
 
-    public static String join(Object[] array, String separator) {
+    /**
+     * Join an array of items.
+     * @param <T>
+     * @param array
+     * @param separator
+     * @return string
+     */
+    public static <T> String join(T[] array, String separator) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < array.length; ++i) {
             if (i != 0) result.append(separator);
@@ -32,7 +39,16 @@ public final class CollectionUtilities {
         return result.toString();
     }
 
-    public static String join(Collection collection, String separator) {
+    /**
+     * Join a collection of items.
+     * @param <T>
+     * @param collection 
+     * @param <U> 
+     * @param array
+     * @param separator
+     * @return string
+     */
+    public static <T, U extends Collection<T>>String join(U collection, String separator) {
         StringBuffer result = new StringBuffer();
         boolean first = true;
         for (Iterator it = collection.iterator(); it.hasNext();) {
@@ -45,8 +61,13 @@ public final class CollectionUtilities {
 
     /**
      * Utility like Arrays.asList()
+     * @param source 
+     * @param target 
+     * @param reverse 
+     * @param <T> 
+     * @return 
      */
-    public static Map asMap(Object[][] source, Map target, boolean reverse) {
+    public static <T> Map<T,T> asMap(T[][] source, Map<T,T> target, boolean reverse) {
         int from = 0, to = 1;
         if (reverse) {
             from = 1; to = 0;
@@ -57,13 +78,26 @@ public final class CollectionUtilities {
         return target;
     }
 
-    public static Collection addAll(Iterator source, Collection target) {
+    /**
+     * Add all items in iterator to target collection
+     * @param <T>
+     * @param <U>
+     * @param source
+     * @param target
+     * @return
+     */
+    public static <T, U extends Collection<T>> U addAll(Iterator<T> source, U target) {
         while (source.hasNext()) {
             target.add(source.next());
         }
         return target; // for chaining
     }
 
+    /**
+     * Get the size of an iterator (number of items in it).
+     * @param source
+     * @return
+     */
     public static int size(Iterator source) {
         int result = 0;
         while (source.hasNext()) {
@@ -74,14 +108,24 @@ public final class CollectionUtilities {
     }
 
 
-    public static Map asMap(Object[][] source) {
-        return asMap(source, new HashMap(), false);
+    /**
+     * @param <T>
+     * @param source
+     * @return
+     */
+    public static <T> Map<T,T> asMap(T[][] source) {
+        return asMap(source, new HashMap<T,T>(), false);
     }
 
     /**
      * Utility that ought to be on Map
+     * @param m 
+     * @param itemsToRemove 
+     * @param <K> 
+     * @param <V> 
+     * @return map passed in
      */
-    public static Map removeAll(Map m, Collection itemsToRemove) {
+    public static <K,V> Map<K,V> removeAll(Map<K,V> m, Collection<K> itemsToRemove) {
         for (Iterator it = itemsToRemove.iterator(); it.hasNext();) {
             Object item = it.next();
             m.remove(item);
@@ -89,19 +133,35 @@ public final class CollectionUtilities {
         return m;
     }
 
-    public Object getFirst(Collection c) {
-        Iterator it = c.iterator();
+    /**
+     * Get first item in collection, or null if there is none.
+     * @param <T>
+     * @param <U>
+     * @param c
+     * @return first item
+     */
+    public <T, U extends Collection<T>> T getFirst(U c) {
+        Iterator<T> it = c.iterator();
         if (!it.hasNext()) return null;
         return it.next();
     }
 
-    public static Object getBest(Collection c, Comparator comp, int direction) {
-        Iterator it = c.iterator();
+    /**
+     * Get the "best" in collection. That is the least if direction is < 0, otherwise the greatest. The first is chosen if there are multiples.
+     * @param <T>
+     * @param <U>
+     * @param c
+     * @param comp
+     * @param direction
+     * @return
+     */
+    public static <T, U extends Collection<T>> T getBest(U c, Comparator<T> comp, int direction) {
+        Iterator<T> it = c.iterator();
         if (!it.hasNext()) return null;
-        Object bestSoFar = it.next();
+        T bestSoFar = it.next();
         if (direction < 0) {
             while (it.hasNext()) {
-                Object item = it.next();
+                T item = it.next();
                 int compValue = comp.compare(item, bestSoFar);
                 if (compValue < 0) {
                     bestSoFar = item;
@@ -109,7 +169,7 @@ public final class CollectionUtilities {
             }
         } else {
             while (it.hasNext()) {
-                Object item = it.next();
+                T item = it.next();
                 int compValue = comp.compare(item, bestSoFar);
                 if (compValue > 0) {
                     bestSoFar = item;
@@ -119,40 +179,75 @@ public final class CollectionUtilities {
         return bestSoFar;
     }
 
-    public interface ObjectMatcher {
+    /**
+     * Matches item.
+     * @param <T>
+     */
+    public interface ObjectMatcher<T> {
         /**
          * Must handle null, never throw exception
+         * @param o 
+         * @return 
          */
-        boolean matches(Object o);
+        boolean matches(T o);
     }
 
-    public static class InverseMatcher implements ObjectMatcher {
-        ObjectMatcher other;
+    /**
+     * Reverse a match
+     * @param <T>
+     */
+    public static class InverseMatcher<T> implements ObjectMatcher<T> {
+        ObjectMatcher<T> other;
+        /**
+         * @param toInverse
+         * @return
+         */
         public ObjectMatcher set(ObjectMatcher toInverse) {
             other = toInverse;
             return this;
         }
-        public boolean matches(Object value) {
+        public boolean matches(T value) {
             return !other.matches(value);
         }
     }
 
-    public static Collection removeAll(Collection c, ObjectMatcher f) {
-        for (Iterator it = c.iterator(); it.hasNext();) {
-            Object item = it.next();
+    /**
+     * Remove matching items
+     * @param <T>
+     * @param <U>
+     * @param c
+     * @param f
+     * @return
+     */
+    public static <T, U extends Collection<T>> U removeAll(U c, ObjectMatcher<T> f) {
+        for (Iterator<T> it = c.iterator(); it.hasNext();) {
+            T item = it.next();
             if (f.matches(item)) it.remove();
         }
         return c;
     }
 
-    public static Collection retainAll(Collection c, ObjectMatcher f) {
-        for (Iterator it = c.iterator(); it.hasNext();) {
-            Object item = it.next();
+    /**
+     * Retain matching items
+     * @param <T>
+     * @param <U>
+     * @param c
+     * @param f
+     * @return
+     */
+    public static <T, U extends Collection<T>> U retainAll(U c, ObjectMatcher<T> f) {
+        for (Iterator<T> it = c.iterator(); it.hasNext();) {
+            T item = it.next();
             if (!f.matches(item)) it.remove();
         }
         return c;
     }
 
+    /**
+     * @param a
+     * @param b
+     * @return
+     */
     public static boolean containsSome(Collection a, Collection b) {
         // fast paths
         if (a.size() == 0 || b.size() == 0) return false;

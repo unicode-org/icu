@@ -80,7 +80,7 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  *     if (bucket.size() != 0) {
  *         showLabelInList(UI, bucket.getLabel());
  *         for (AlphabeticIndex.Record<Integer> item : bucket) {
- *             showIndexedItem(UI, item.getKey(), item.getValue());
+ *             showIndexedItem(UI, item.getName(), item.getValue());
  *         }
  * </pre>
  * 
@@ -117,7 +117,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
     private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
 
-    private final RuleBasedCollator comparator;
+    private final RuleBasedCollator collatorOriginal;
+    private final RuleBasedCollator collatorPrimaryOnly;
+    private RuleBasedCollator collatorExternal;
 
     // for testing
     private final LinkedHashMap<String, Set<String>> alreadyIn = new LinkedHashMap<String, Set<String>>();
@@ -197,8 +199,14 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (langType != LangType.NORMAL) {
             locale = locale.setKeywordValue("collation", langType == LangType.TRADITIONAL ? "stroke" : "pinyin");
         }
-        comparator = collator != null ? (RuleBasedCollator) collator : (RuleBasedCollator) Collator.getInstance(locale);
-        comparator.setStrength(Collator.PRIMARY);
+        collatorOriginal = collator != null ? (RuleBasedCollator) collator : (RuleBasedCollator) Collator.getInstance(locale);
+        try {
+            collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
+        } catch (CloneNotSupportedException e) {
+            // should never happen
+            throw new IllegalArgumentException("Collator cannot be cloned", e);
+        }
+        collatorPrimaryOnly.setStrength(Collator.PRIMARY);
         addLabels(exemplarChars);
     }
 
@@ -329,10 +337,10 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         // First sort them, with an "best" ordering among items that are the same according
         // to the collator.
         // Re the warning: the JDK inexplicably didn't make Collators be Comparator<String>!
-        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparator, PREFERENCE_COMPARATOR));
+        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(collatorPrimaryOnly, PREFERENCE_COMPARATOR));
         exemplars.addAllTo(preferenceSorting);
 
-        TreeSet<String> indexCharacterSet = new TreeSet<String>(comparator);
+        TreeSet<String> indexCharacterSet = new TreeSet<String>(collatorPrimaryOnly);
 
         // We nw make a sorted array of elements
         // Some of the input may, however, be redundant.
@@ -342,7 +350,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         for (String item : preferenceSorting) {
             if (indexCharacterSet.contains(item)) {
                 for (String itemAlreadyIn : indexCharacterSet) {
-                    if (comparator.compare(item, itemAlreadyIn) == 0) {
+                    if (collatorPrimaryOnly.compare(item, itemAlreadyIn) == 0) {
                         Set<String> targets = alreadyIn.get(itemAlreadyIn);
                         if (targets == null) {
                             alreadyIn.put(itemAlreadyIn, targets = new LinkedHashSet<String>());
@@ -351,7 +359,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                         break;
                     }
                 }
-            } else if (UTF16.countCodePoint(item) > 1 && comparator.compare(item, separated(item)) == 0) {
+            } else if (UTF16.countCodePoint(item) > 1 && collatorPrimaryOnly.compare(item, separated(item)) == 0) {
                 noDistinctSorting.add(item);
             } else if (!ALPHABETIC.containsSome(item)) {
                 notAlphabetic.add(item);
@@ -379,9 +387,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
 
         indexCharacters = Collections.unmodifiableList(new ArrayList<String>(indexCharacterSet));
-        // firstStringsInScript(comparator);
-
-        buckets = new BucketList();
     }
 
     private static UnicodeSet getIndexExemplars(ULocale locale) {
@@ -455,7 +460,14 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (indexCharacters == null) {
             initLabels();
         }
-        return indexCharacters;
+        if (buckets == null) {
+            buckets = getIndexBuckets();
+        }
+        ArrayList<String> result = new ArrayList<String>();
+        for (Bucket<V> bucket : this) {
+            result.add(bucket.getLabel());
+        }
+        return result;
     }
 
     /**
@@ -466,30 +478,33 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedCollator getCollator() {
-        try {
-            return (RuleBasedCollator) (comparator.clone());
-        } catch (CloneNotSupportedException e) {
-            // should never happen
-            throw new IllegalArgumentException("Collator cannot be cloned", e);
+        if (collatorExternal == null) {
+            try {
+                collatorExternal = (RuleBasedCollator) (collatorOriginal.clone());
+            } catch (CloneNotSupportedException e) {
+                // should never happen
+                throw new IllegalArgumentException("Collator cannot be cloned", e);
+            }
         }
+        return collatorExternal;
     }
 
     /**
-     * Add a record (key and value) to the index. The key will be used to sort the items into buckets, and to sort
-     * within the bucket. Two records may have the same key. When they do, the sort order is according to the order added:
+     * Add a record (name and info) to the index. The name will be used to sort the items into buckets, and to sort
+     * within the bucket. Two records may have the same name. When they do, the sort order is according to the order added:
      * the first added comes first.
      * 
-     * @param key
-     *            Key, such as a name
-     * @param value
-     *            Value, such as an address or link
+     * @param name
+     *            Name, such as a name
+     * @param info
+     *            Info, such as an address or link
      * @return this, for chaining
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> addRecord(CharSequence key, V value) {
+    public AlphabeticIndex<V> addRecord(CharSequence name, V info) {
         buckets = null; // invalidate old bucketlist
-        inputList.add(new Record<V>(key, value, inputList.size()));
+        inputList.add(new Record<V>(name, info, inputList.size()));
         return this;
     }
 
@@ -521,7 +536,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Return the number of records in the index: that is, the number of distinct <key,value> pairs added with addRecord(...)
+     * Return the number of records in the index: that is, the total number of distinct <name,info> pairs added with addRecord(...), over all the buckets.
      * 
      * @return total number of records in buckets
      * @draft ICU 4.6
@@ -560,24 +575,23 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     private BucketList getIndexBuckets() {
         BucketList output = new BucketList();
 
-        // Set up an array of sorted intput key/value pairs
-        comparator.setStrength(Collator.TERTIARY);
+        // Set up an array of sorted intput name/info pairs
         Comparator<Record<V>> fullComparator = new Comparator<Record<V>>() {
             public int compare(Record<V> o1, Record<V> o2) {
-                CharSequence key1 = o1.substitute;
-                CharSequence key2 = o2.substitute;
-                if (key1 == null) {
-                    key1 = o1.getKey();
+                CharSequence name1 = o1.substitute;
+                CharSequence name2 = o2.substitute;
+                if (name1 == null) {
+                    name1 = o1.getName();
                 }
-                if (key2 == null) {
-                    key2 = o2.getKey();
+                if (name2 == null) {
+                    name2 = o2.getName();
                 }
-                int result = comparator.compare(key1, key2);
+                int result = collatorOriginal.compare(name1, name2);
                 if (result != 0) {
                     return result;
                 }
                 if (o1.substitute != null || o2.substitute != null) {
-                    result = comparator.compare(o1.getKey(), o2.getKey());
+                    result = collatorOriginal.compare(o1.getName(), o2.getName());
                     if (result != 0) {
                         return result;
                     }
@@ -586,13 +600,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         };
         if (langType == LangType.SIMPLIFIED) {
-            for (Record<V> key : inputList) {
-                key.substitute = hackKey(key.key, comparator);
+            for (Record<V> name : inputList) {
+                name.substitute = hackName(name.name, collatorOriginal);
             }
         }
         TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
         sortedInput.addAll(inputList);
-        comparator.setStrength(Collator.PRIMARY); // used for bucketing
 
         Iterator<Bucket<V>> bucketIterator = output.iterator();
         Bucket<V> currentBucket = bucketIterator.next();
@@ -600,7 +613,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         String upperBoundary = nextBucket.lowerBoundary; // there is always at least one
         boolean atEnd = false;
         for (Record<V> s : sortedInput) {
-            while (!atEnd && s.isGreater(comparator, upperBoundary)) {
+            while (!atEnd && s.isGreater(collatorOriginal, upperBoundary)) {
                 currentBucket = nextBucket;
                 // now reset nextChar
                 if (bucketIterator.hasNext()) {
@@ -613,7 +626,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     atEnd = true;
                 }
             }
-            currentBucket.values.add(s);
+            currentBucket.records.add(s);
         }
         return output;
     }
@@ -633,7 +646,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     public String getOverflowComparisonString(String lowerLimit) {
         // TODO Use collator method instead of this hack
         for (String s : HACK_FIRST_CHARS_IN_SCRIPTS) {
-            if (comparator.compare(s, lowerLimit) > 0) {
+            if (collatorPrimaryOnly.compare(s, lowerLimit) > 0) {
                 return s;
             }
         }
@@ -800,13 +813,13 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public static class Record<V> {
         private CharSequence substitute;
-        private CharSequence key;
-        private V value;
+        private CharSequence name;
+        private V info;
         private int counter;
 
-        private Record(CharSequence key, V value, int counter) {
-            this.key = key;
-            this.value = value;
+        private Record(CharSequence name, V info, int counter) {
+            this.name = name;
+            this.info = info;
             this.counter = counter;
         }
 
@@ -815,34 +828,34 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * @return
          */
         private boolean isGreater(Comparator comparator, String upperBoundary) {
-            return comparator.compare(substitute == null ? key : substitute, upperBoundary) >= 0;
+            return comparator.compare(substitute == null ? name : substitute, upperBoundary) >= 0;
         }
 
         /**
-         * Get the key
+         * Get the name
          * 
-         * @return the key
+         * @return the name
          * @draft ICU 4.6
          * @provisional This API might change or be removed in a future release.
          */
-        public CharSequence getKey() {
-            return key;
+        public CharSequence getName() {
+            return name;
         }
 
         /**
-         * Get the value
+         * Get the info
          * 
-         * @return the value
+         * @return the info
          * @draft ICU 4.6
          * @provisional This API might change or be removed in a future release.
          */
-        public V getValue() {
-            return value;
+        public V getInfo() {
+            return info;
         }
 
         @Override
         public String toString() {
-            return key + "=" + value;
+            return name + "=" + info;
         }
     }
 
@@ -853,7 +866,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
      * 
      * @param <V>
-     *            Value type
+     *            Info type
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -861,7 +874,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         private final String label;
         private final String lowerBoundary;
         private final LabelType labelType;
-        private final List<Record<V>> values = new ArrayList<Record<V>>();
+        private final List<Record<V>> records = new ArrayList<Record<V>>();
 
         /**
          * Type of the label
@@ -919,14 +932,14 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * @provisional This API might change or be removed in a future release.
          */
         public int size() {
-            return values.size();
+            return records.size();
         }
 
         /**
          * Iterator over the records in the bucket
          */
         public Iterator<Record<V>> iterator() {
-            return values.iterator();
+            return records.iterator();
         }
 
         @Override
@@ -947,7 +960,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         BucketList() {
             // initialize indexCharacters;
-            getLabels();
+            initLabels();
 
             bucketList.add(new Bucket<V>(getUnderflowLabel(), "", Bucket.LabelType.UNDERFLOW));
 
@@ -963,7 +976,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 if (lastSet.containsNone(set)) {
                     // check for adjacent
                     String overflowComparisonString = getOverflowComparisonString(last);
-                    if (comparator.compare(overflowComparisonString, current) < 0) {
+                    if (collatorPrimaryOnly.compare(overflowComparisonString, current) < 0) {
                         bucketList.add(new Bucket<V>(getInflowLabel(), overflowComparisonString,
                                 Bucket.LabelType.INFLOW));
                         i++;
@@ -988,11 +1001,11 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * HACKS
      */
-    private static CharSequence hackKey(CharSequence key, Comparator comparator) {
-        if (!UNIHAN.contains(Character.codePointAt(key, 0))) {
+    private static CharSequence hackName(CharSequence name, Comparator comparator) {
+        if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
-        int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, key, comparator);
+        int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
         if (index < 0) {
             index = -index - 2;
         }
