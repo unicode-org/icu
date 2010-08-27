@@ -2870,6 +2870,7 @@ icu4j/main/tests/framework/.project -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/framework/manifest.stub -text
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
+icu4j/main/tests/framework/src/com/ibm/icu/dev/test/util/CollectionUtilities.java -text
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text

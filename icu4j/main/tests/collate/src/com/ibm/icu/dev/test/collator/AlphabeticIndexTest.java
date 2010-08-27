@@ -15,12 +15,15 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.AlphabeticIndex.Bucket;
+import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -180,6 +183,50 @@ public class AlphabeticIndexTest extends TestFmwk {
             checkBuckets(pair[0], SimpleTests, additionalLocale, "E", "edgar", "Effron", "Effron");
         }
     }
+    
+    public void TestInflow() {
+        Object[][] tests = {
+                {0, ULocale.ENGLISH},
+                {0, ULocale.ENGLISH, new ULocale("el")},
+                {1, ULocale.ENGLISH, new ULocale("ru")},
+                {0, ULocale.ENGLISH, new ULocale("el"), new UnicodeSet("[\u2C80]"), new ULocale("ru")},
+                {0, ULocale.ENGLISH},
+                {2, ULocale.ENGLISH, new ULocale("ru"), ULocale.JAPANESE},
+        };
+        for (Object[] test : tests) {
+            int expected = (Integer) test[0];
+            AlphabeticIndex<Double> indexCharacters = new AlphabeticIndex((ULocale)test[1]);
+            for (int i = 2; i < test.length; ++i) {
+                if (test[i] instanceof ULocale) {
+                    indexCharacters.addLabels((ULocale)test[i]);
+                } else {
+                    indexCharacters.addLabels((UnicodeSet)test[i]);
+                }
+            }
+            Counter<AlphabeticIndex.Bucket.LabelType> counter = new Counter();
+            for (Bucket<Double> bucket : indexCharacters) {
+                LabelType labelType = bucket.getLabelType();
+                counter.add(labelType, 1);
+            }
+            String printList = Arrays.asList(test).toString();
+            assertEquals(LabelType.UNDERFLOW + "\t" + printList, 1, counter.get(LabelType.UNDERFLOW));
+            assertEquals(LabelType.INFLOW + "\t" + printList, expected, counter.get(LabelType.INFLOW));
+            if (expected != counter.get(LabelType.INFLOW)) {
+                // for debugging
+                AlphabeticIndex<Double> indexCharacters2 = new AlphabeticIndex((ULocale)test[1]);
+                for (int i = 2; i < test.length; ++i) {
+                    if (test[i] instanceof ULocale) {
+                        indexCharacters2.addLabels((ULocale)test[i]);
+                    } else {
+                        indexCharacters2.addLabels((UnicodeSet)test[i]);
+                    }
+                }
+                List<Bucket<Double>> buckets = CollectionUtilities.addAll(indexCharacters.iterator(), new ArrayList<Bucket<Double>>());
+                logln(buckets.toString());
+            }
+            assertEquals(LabelType.OVERFLOW + "\t" + printList, 1, counter.get(LabelType.OVERFLOW));
+        }
+    }
 
     private void checkBuckets(String localeString, String[] test, ULocale additionalLocale, String testBucket, String... items) {
         StringBuilder UI = new StringBuilder();
@@ -226,7 +273,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             if (bucket.size() != 0) {
                 showLabelInList(UI, bucket.getLabel());
                 for (AlphabeticIndex.Record<Integer> item : bucket) {
-                    showIndexedItem(UI, item.getKey(), item.getValue());
+                    showIndexedItem(UI, item.getName(), item.getInfo());
                 }
                 logln(UI.toString());
             }
@@ -250,7 +297,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     private Counter<String> getKeys(AlphabeticIndex.Bucket<Integer> entry) {
         Counter<String> keys = new Counter<String>();
         for (AlphabeticIndex.Record x : entry) {
-            String key = x.getKey().toString();
+            String key = x.getName().toString();
             keys.add(key, 1);
         }
         return keys;
@@ -259,7 +306,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     public void TestIndexCharactersList() {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
-            String expectedIndexCharacters = localeAndIndexCharacters[1];
+            String expectedIndexCharacters = "\u2026:" + localeAndIndexCharacters[1] + ":\u2026";
             Collection<String> indexCharacters = new AlphabeticIndex(locale).getLabels();
 
             // Join the elements of the list to a string with delimiter ":"
@@ -350,7 +397,16 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
     public void TestZZZ() {
-        int x = 3;
+//            int x = 3;
+//            AlphabeticIndex index = new AlphabeticIndex(ULocale.ENGLISH);
+//            UnicodeSet additions = new UnicodeSet();
+//            additions.add(0x410).add(0x415);  // Cyrillic
+//            // additions.add(0x391).add(0x393);     // Greek
+//            index.addLabels(additions);
+//            int lc = index.getLabels().size();
+//            List  labels = index.getLabels();
+//            System.out.println("Label Count = " + lc + "\t" + labels);
+//            System.out.println("Bucket Count =" + index.getBucketCount());
     }
 
     public void TestSimplified() {
