@@ -13,9 +13,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CollectionUtilities;
+import com.ibm.icu.impl.Row;
+import com.ibm.icu.impl.Row.R3;
+import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
@@ -23,6 +27,7 @@ import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
+import com.ibm.icu.text.AlphabeticIndex.Record;
 import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.util.ULocale;
 
@@ -183,7 +188,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             checkBuckets(pair[0], SimpleTests, additionalLocale, "E", "edgar", "Effron", "Effron");
         }
     }
-    
+
     public void TestInflow() {
         Object[][] tests = {
                 {0, ULocale.ENGLISH},
@@ -311,7 +316,7 @@ public class AlphabeticIndexTest extends TestFmwk {
 
             // Join the elements of the list to a string with delimiter ":"
             StringBuilder sb = new StringBuilder();
-            Iterator iter = indexCharacters.iterator();
+            Iterator<String> iter = indexCharacters.iterator();
             while (iter.hasNext()) {
                 sb.append(iter.next());
                 if (!iter.hasNext()) {
@@ -396,17 +401,71 @@ public class AlphabeticIndexTest extends TestFmwk {
             }
         }
     }
+
+    public void TestClientSupport() {
+        for (String localeString : new String[] {"zh"}) { // KEY_LOCALES
+            ULocale ulocale = new ULocale(localeString);
+            AlphabeticIndex<Double> indexCharacters = new AlphabeticIndex<Double>(ulocale).addLabels(ULocale.ENGLISH);
+            RuleBasedCollator collator = indexCharacters.getCollator();
+            for (String name : SimpleTests) {
+                indexCharacters.addRecord(name, (double)name.length());
+            }
+            // make my own copy
+            List<String> myBucketLabels = indexCharacters.getLabels();
+            ArrayList<Set<R4>> myBucketContents = new ArrayList<Set<R4>>(myBucketLabels.size());
+            for (int i = 0; i < myBucketLabels.size(); ++i) {
+                myBucketContents.add(new TreeSet<R4>());
+            }
+            int counter = 0;
+            for (String name : SimpleTests) {
+                int bucketIndex = indexCharacters.getBucketIndex(name);
+                Set<R4> myBucket = myBucketContents.get(bucketIndex);
+                myBucket.add(Row.of(collator.getRawCollationKey(name, null), name, name.length(), (double) counter++));
+            }
+            // now compare
+            int index = 0;
+            for (AlphabeticIndex.Bucket<Double> bucket : indexCharacters) {
+                String bucketLabel = bucket.getLabel();
+                String myLabel = myBucketLabels.get(index);
+                if (!bucketLabel.equals(myLabel)) {
+                    assertEquals(ulocale + "\tBucket Labels (" + index + ")", bucketLabel, myLabel);
+                }
+                Set<R4> myBucket = myBucketContents.get(index);
+                Iterator<R4> myBucketIterator = myBucket.iterator();
+                int recordIndex = 0;
+                for (Record<Double> record : bucket) {
+                    String myName = null;
+                    if (myBucketIterator.hasNext()) {
+                        R4 myRecord = myBucketIterator.next();
+                        myName = (String) myRecord.get1();
+                    }
+                    if (!record.getName().equals(myName)) {
+                        assertEquals(ulocale + "\t" + bucketLabel + "\t" + 
+                        		"Record Names (" + recordIndex++ + ":)", record.getName(), myName);
+                    }
+                }
+                while (myBucketIterator.hasNext()) {
+                    R4 myRecord = myBucketIterator.next();
+                    String myName = (String) myRecord.get1();
+                    assertEquals(ulocale + "\t" + bucketLabel + "\t" +
+                    		"Record Names (" + recordIndex++ + ":)", null, myName);
+                }
+                index++;
+            }
+        }
+    }
+
     public void TestZZZ() {
-//            int x = 3;
-//            AlphabeticIndex index = new AlphabeticIndex(ULocale.ENGLISH);
-//            UnicodeSet additions = new UnicodeSet();
-//            additions.add(0x410).add(0x415);  // Cyrillic
-//            // additions.add(0x391).add(0x393);     // Greek
-//            index.addLabels(additions);
-//            int lc = index.getLabels().size();
-//            List  labels = index.getLabels();
-//            System.out.println("Label Count = " + lc + "\t" + labels);
-//            System.out.println("Bucket Count =" + index.getBucketCount());
+        //            int x = 3;
+        //            AlphabeticIndex index = new AlphabeticIndex(ULocale.ENGLISH);
+        //            UnicodeSet additions = new UnicodeSet();
+        //            additions.add(0x410).add(0x415);  // Cyrillic
+        //            // additions.add(0x391).add(0x393);     // Greek
+        //            index.addLabels(additions);
+        //            int lc = index.getLabels().size();
+        //            List  labels = index.getLabels();
+        //            System.out.println("Label Count = " + lc + "\t" + labels);
+        //            System.out.println("Bucket Count =" + index.getBucketCount());
     }
 
     public void TestSimplified() {

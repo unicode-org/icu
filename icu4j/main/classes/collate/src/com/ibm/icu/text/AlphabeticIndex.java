@@ -509,6 +509,52 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
+     * Get the bucket number for the given name. This routine permits callers to implement their own bucket handling
+     * mechanisms, including client-server handling. For example, when a new name is created on the client, it can ask
+     * the server for the bucket for that name, and the sortkey (using getCollator). Once the client has that
+     * information, it can put the name into the right bucket, and sort it within that bucket, without having access to
+     * the index or collator.
+     * <p>
+     * Note that the bucket number (and sort key) are only valid for the settings of the current AlphabeticIndex; if
+     * those are changed, then the bucket number and sort key must be regenerated.
+     * 
+     * @param name
+     *            Name, such as a name
+     * @param info
+     *            Info, such as an address or link
+     * @return this, for chaining
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getBucketIndex(CharSequence name) {
+        if (buckets == null) {
+            buckets = getIndexBuckets();
+        }
+        if (langType == LangType.SIMPLIFIED) {
+            String hackPrefix = hackName(name, collatorPrimaryOnly);
+            if (hackPrefix != null) {
+                name = hackPrefix + name;
+            }
+        }
+
+        // TODO use a binary search
+        int result = -1;
+        for (Bucket<V> bucket : this) {
+            if (bucket.lowerBoundary == null) { // last bucket
+                return result;
+            }
+            int comp = collatorPrimaryOnly.compare(name, bucket.lowerBoundary);
+            if (comp < 0) { // the first boundary is always "", and so -1 will never be returned
+                return result;
+            } else if (comp == 0) {
+                return result + 1;
+            }
+            result++;
+        }
+        return result;
+    }
+
+    /**
      * Clear the index.
      * 
      * @return this, for chaining
@@ -705,73 +751,73 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
     private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
-//    /**
-//     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
-//     * collation.
-//     * 
-//     * @param ruleBasedCollator
-//     *            TODO
-//     * @param comparator
-//     * @param lowerLimit
-//     * @param testScript
-//     * 
-//     * @return
-//     */
-//
-//    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
-//        String[] results = new String[UScript.CODE_LIMIT];
-//        for (String current : TO_TRY) {
-//            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
-//                // symbols.
-//                continue;
-//            }
-//            int script = UScript.getScript(current.codePointAt(0));
-//            if (results[script] == null) {
-//                results[script] = current;
-//            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-//                results[script] = current;
-//            }
-//        }
-//
-//        try {
-//            UnicodeSet extras = new UnicodeSet();
-//            UnicodeSet expansions = new UnicodeSet();
-//            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
-//            extras.addAll(expansions).removeAll(TO_TRY);
-//            if (extras.size() != 0) {
-//                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
-//                for (String current : extras) {
-//                    if (!TO_TRY.containsAll(current))
-//                        continue;
-//                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
-//                        continue;
-//                    }
-//                    int script = UScript.getScript(current.codePointAt(0));
-//                    if (results[script] == null) {
-//                        results[script] = current;
-//                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-//                        results[script] = current;
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//        } // why have a checked exception???
-//
-//        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
-//        for (int i = 0; i < results.length; ++i) {
-//            if (results[i] != null) {
-//                sorted.add(results[i]);
-//            }
-//        }
-//        if (true) {
-//            for (String s : sorted) {
-//                System.out.println("\"" + s + "\",");
-//            }
-//        }
-//
-//        List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
-//        return result;
-//    }
+    //    /**
+    //     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
+    //     * collation.
+    //     * 
+    //     * @param ruleBasedCollator
+    //     *            TODO
+    //     * @param comparator
+    //     * @param lowerLimit
+    //     * @param testScript
+    //     * 
+    //     * @return
+    //     */
+    //
+    //    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
+    //        String[] results = new String[UScript.CODE_LIMIT];
+    //        for (String current : TO_TRY) {
+    //            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
+    //                // symbols.
+    //                continue;
+    //            }
+    //            int script = UScript.getScript(current.codePointAt(0));
+    //            if (results[script] == null) {
+    //                results[script] = current;
+    //            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+    //                results[script] = current;
+    //            }
+    //        }
+    //
+    //        try {
+    //            UnicodeSet extras = new UnicodeSet();
+    //            UnicodeSet expansions = new UnicodeSet();
+    //            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
+    //            extras.addAll(expansions).removeAll(TO_TRY);
+    //            if (extras.size() != 0) {
+    //                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
+    //                for (String current : extras) {
+    //                    if (!TO_TRY.containsAll(current))
+    //                        continue;
+    //                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+    //                        continue;
+    //                    }
+    //                    int script = UScript.getScript(current.codePointAt(0));
+    //                    if (results[script] == null) {
+    //                        results[script] = current;
+    //                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+    //                        results[script] = current;
+    //                    }
+    //                }
+    //            }
+    //        } catch (Exception e) {
+    //        } // why have a checked exception???
+    //
+    //        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
+    //        for (int i = 0; i < results.length; ++i) {
+    //            if (results[i] != null) {
+    //                sorted.add(results[i]);
+    //            }
+    //        }
+    //        if (true) {
+    //            for (String s : sorted) {
+    //                System.out.println("\"" + s + "\",");
+    //            }
+    //        }
+    //
+    //        List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
+    //        return result;
+    //    }
 
     private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
     private int maxLabelCount = 99;
@@ -1001,7 +1047,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * HACKS
      */
-    private static CharSequence hackName(CharSequence name, Comparator comparator) {
+    private static String hackName(CharSequence name, Comparator comparator) {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
