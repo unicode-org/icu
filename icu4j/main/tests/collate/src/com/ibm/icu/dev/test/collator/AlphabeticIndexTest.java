@@ -24,6 +24,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
@@ -36,6 +37,11 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class AlphabeticIndexTest extends TestFmwk {
+    /**
+     * 
+     */
+    private static final String ARROW = "\u2192";
+    private static final boolean DEBUG = false;
     public static Set<String> KEY_LOCALES = new LinkedHashSet(Arrays.asList(
             "en", "es", "de", "fr", "ja", "it", "tr", "pt", "zh", "nl", 
             "pl", "ar", "ru", "zh_Hant", "ko", "th", "sv", "fi", "da", 
@@ -285,13 +291,47 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    public <T> void showIndex(AlphabeticIndex<T> index, boolean showEmpty) {
+        StringBuilder UI = new StringBuilder();
+        for (AlphabeticIndex.Bucket<T> bucket : index) {
+            if (showEmpty || bucket.size() != 0) {
+                showLabelInList(UI, bucket.getLabel());
+                for (AlphabeticIndex.Record<T> item : bucket) {
+                    showIndexedItem(UI, item.getName(), item.getInfo());
+                }
+                logln(UI.toString());
+            }
+        }
+    }
+
+    /**
+     * @param myBucketLabels
+     * @param myBucketContents
+     * @param b
+     */
+    private void showIndex(List<String> myBucketLabels, ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents, boolean showEmpty) {
+        StringBuilder UI = new StringBuilder();
+
+        for (int i = 0; i < myBucketLabels.size(); ++i) {
+            Set<R4<RawCollationKey, String, Integer, Double>> bucket = myBucketContents.get(i);
+            if (!showEmpty && bucket.size() == 0) {
+                continue;
+            }
+            UI.setLength(0);
+            UI.append("*").append(myBucketLabels.get(i));
+            for (R4<RawCollationKey, String, Integer, Double> item : bucket) {
+                UI.append("\t ").append(item.get1().toString()).append(ARROW).append(item.get3().toString());
+            }
+            logln(UI.toString());
+        }
+    }
 
     private void showLabelAtTop(StringBuilder buffer, String label) {
         buffer.append(label + " ");
     }
 
-    private void showIndexedItem(StringBuilder buffer, CharSequence key, Integer value) {
-        buffer.append("\t " + key + "\u2192" + value);
+    private <T> void showIndexedItem(StringBuilder buffer, CharSequence key, T value) {
+        buffer.append("\t " + key + ARROW + value);
     }
 
     private void showLabelInList(StringBuilder buffer, String label) {
@@ -403,54 +443,75 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public void TestClientSupport() {
-        for (String localeString : new String[] {"zh"}) { // KEY_LOCALES
+        for (String localeString : KEY_LOCALES) { // KEY_LOCALES, new String[] {"zh"}
             ULocale ulocale = new ULocale(localeString);
             AlphabeticIndex<Double> indexCharacters = new AlphabeticIndex<Double>(ulocale).addLabels(ULocale.ENGLISH);
             RuleBasedCollator collator = indexCharacters.getCollator();
-            for (String name : SimpleTests) {
-                indexCharacters.addRecord(name, (double)name.length());
+            String [][] tests;
+
+            if (!localeString.equals("zh") ) {
+                tests = new String[][] {SimpleTests};
+            } else {
+                tests = new String[][] {SimpleTests, hackPinyin, simplifiedNames};
             }
-            // make my own copy
-            List<String> myBucketLabels = indexCharacters.getLabels();
-            ArrayList<Set<R4>> myBucketContents = new ArrayList<Set<R4>>(myBucketLabels.size());
-            for (int i = 0; i < myBucketLabels.size(); ++i) {
-                myBucketContents.add(new TreeSet<R4>());
-            }
-            int counter = 0;
-            for (String name : SimpleTests) {
-                int bucketIndex = indexCharacters.getBucketIndex(name);
-                Set<R4> myBucket = myBucketContents.get(bucketIndex);
-                myBucket.add(Row.of(collator.getRawCollationKey(name, null), name, name.length(), (double) counter++));
-            }
-            // now compare
-            int index = 0;
-            for (AlphabeticIndex.Bucket<Double> bucket : indexCharacters) {
-                String bucketLabel = bucket.getLabel();
-                String myLabel = myBucketLabels.get(index);
-                if (!bucketLabel.equals(myLabel)) {
-                    assertEquals(ulocale + "\tBucket Labels (" + index + ")", bucketLabel, myLabel);
+
+            for (String [] shortTest : tests) {
+                double testValue = 100;
+                indexCharacters.clearRecords();
+                for (String name : shortTest) {
+                    indexCharacters.addRecord(name, testValue++);
                 }
-                Set<R4> myBucket = myBucketContents.get(index);
-                Iterator<R4> myBucketIterator = myBucket.iterator();
-                int recordIndex = 0;
-                for (Record<Double> record : bucket) {
-                    String myName = null;
-                    if (myBucketIterator.hasNext()) {
-                        R4 myRecord = myBucketIterator.next();
-                        myName = (String) myRecord.get1();
+
+                if (DEBUG) showIndex(indexCharacters, false);
+
+                // make my own copy
+                testValue = 100;
+                List<String> myBucketLabels = indexCharacters.getLabels();
+                ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents = new ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>>(myBucketLabels.size());
+                for (int i = 0; i < myBucketLabels.size(); ++i) {
+                    myBucketContents.add(new TreeSet<R4<RawCollationKey, String, Integer, Double>>());
+                }
+                for (String name : shortTest) {
+                    int bucketIndex = indexCharacters.getBucketIndex(name);
+                    Set<R4<RawCollationKey, String, Integer, Double>> myBucket = myBucketContents.get(bucketIndex);
+                    R4<RawCollationKey, String, Integer, Double> row = Row.of(collator.getRawCollationKey(name, null), name, name.length(), testValue++);
+                    myBucket.add(row);
+                }
+                if (DEBUG) showIndex(myBucketLabels, myBucketContents, false);
+
+                // now compare
+                int index = 0;
+                boolean gotError = false;
+                for (AlphabeticIndex.Bucket<Double> bucket : indexCharacters) {
+                    String bucketLabel = bucket.getLabel();
+                    String myLabel = myBucketLabels.get(index);
+                    if (!bucketLabel.equals(myLabel)) {
+                        gotError |= !assertEquals(ulocale + "\tBucket Labels (" + index + ")", bucketLabel, myLabel);
                     }
-                    if (!record.getName().equals(myName)) {
-                        assertEquals(ulocale + "\t" + bucketLabel + "\t" + 
-                        		"Record Names (" + recordIndex++ + ":)", record.getName(), myName);
+                    Set<R4<RawCollationKey, String, Integer, Double>> myBucket = myBucketContents.get(index);
+                    Iterator<R4<RawCollationKey, String, Integer, Double>> myBucketIterator = myBucket.iterator();
+                    int recordIndex = 0;
+                    for (Record<Double> record : bucket) {
+                        String myName = null;
+                        if (myBucketIterator.hasNext()) {
+                            R4<RawCollationKey, String, Integer, Double> myRecord = myBucketIterator.next();
+                            myName = (String) myRecord.get1();
+                        }
+                        if (!record.getName().equals(myName)) {
+                            gotError |= !assertEquals(ulocale + "\t" + bucketLabel + "\t" + "Record Names (" + index + "." + recordIndex++ + ")", record.getName(), myName);
+                        }
                     }
+                    while (myBucketIterator.hasNext()) {
+                        R4<RawCollationKey, String, Integer, Double> myRecord = myBucketIterator.next();
+                        String myName = (String) myRecord.get1();
+                        gotError |= !assertEquals(ulocale + "\t" + bucketLabel + "\t" + "Record Names (" + index + "." + recordIndex++ + ")", null, myName);
+                    }
+                    index++;
                 }
-                while (myBucketIterator.hasNext()) {
-                    R4 myRecord = myBucketIterator.next();
-                    String myName = (String) myRecord.get1();
-                    assertEquals(ulocale + "\t" + bucketLabel + "\t" +
-                    		"Record Names (" + recordIndex++ + ":)", null, myName);
+                if (gotError) {
+                    showIndex(myBucketLabels, myBucketContents, false);
+                    showIndex(indexCharacters, false);
                 }
-                index++;
             }
         }
     }
@@ -476,7 +537,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     static final String[] SimpleTests = { "$", "\u00a3", "12", "2", 
-        "Edgar", "edgar", "Abbot", "Effron", "Zach", "Effron", "\u01b5", "\u0130stanbul", "Istanbul", "istanbul", "\u0131stanbul",
+        "Davis", "Davis", "Abbot", "\u1D05avis", "Zach", "\u1D05avis", "\u01b5", "\u0130stanbul", "Istanbul", "istanbul", "\u0131stanbul",
         "\u00deor", "\u00c5berg", "\u00d6stlund",
         "\u1f2d\u03c1\u03b1", "\u1f08\u03b8\u03b7\u03bd\u1fb6", "\u0396\u03b5\u03cd\u03c2", "\u03a0\u03bf\u03c3\u03b5\u03b9\u03b4\u1f63\u03bd", "\u1f0d\u03b9\u03b4\u03b7\u03c2", "\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1", "\u1f19\u03c3\u03c4\u03b9\u03ac", 
         //"\u1f08\u03c0\u03cc\u03bb\u03bb\u03c9\u03bd", "\u1f0c\u03c1\u03c4\u03b5\u03bc\u03b9\u03c2", "\u1f19\u03c1\u03bc\u1f23\u03c2", "\u1f0c\u03c1\u03b7\u03c2", "\u1f08\u03c6\u03c1\u03bf\u03b4\u03af\u03c4\u03b7", "\u1f2d\u03c6\u03b1\u03b9\u03c3\u03c4\u03bf\u03c2", "\u0394\u03b9\u03cc\u03bd\u03c5\u03c3\u03bf\u03c2",
@@ -485,11 +546,29 @@ public class AlphabeticIndexTest extends TestFmwk {
     };
 
     static final String[] hackPinyin = { 
-        "\u5416", "\u58ba", "\u516b", "b", "\u62d4", "\u8500", "\u5693", "c", "\u7938", "\u9e7e", "\u5491", "d", "\u8fcf", "\u964a", "\u59b8", "e",
-        "\u92e8", "\u834b", "\u53d1", "f", "\u9197", "\u99a5", "\u7324", "g", "\u91d3", "\u8142", "\u598e", "h", "\u927f", "\u593b", "\u4e0c", "j", "\u6785", "\u9d58", "\u5494", "k", "\u958b",
-        "\u7a52", "\u5783", "l", "\u62c9", "\u9ba5", "\u5638", "m", "\u9ebb", "\u65c0", "\u62ff", "n", "\u80ad", "\u685b", "\u5662", "o", "\u6bee", "\u8bb4", "\u5991", "p", "\u8019", "\u8c31",
-        "\u4e03", "q", "\u6053", "\u7f56", "\u5465", "r", "\u72aa", "\u6e03", "\u4ee8", "s", "\u9491", "\u93c1", "\u4ed6", "t", "\u9248", "\u67dd", "\u5c72", "w", "\u5558", "\u5a7a", "\u5915",
-        "x", "\u5438", "\u6bbe", "\u4e2b", "y", "\u82bd", "\u8574", "\u5e00", "z", "\u707d", "\u5c0a"
+        "\u0101", "\u5416", "\u58ba", //
+        "b", "\u516b", "\u62d4", "\u8500", //
+        "c", "\u5693", "\u7938", "\u9e7e", //
+        "d", "\u5491", "\u8fcf", "\u964a", //
+        "\u0113","\u59b8", "\u92e8", "\u834b", //
+        "f", "\u53d1", "\u9197", "\u99a5", //
+        "g", "\u7324", "\u91d3", "\u8142", //
+        "h", "\u598e", "\u927f", "\u593b", //
+        "j", "\u4e0c", "\u6785", "\u9d58", //
+        "k", "\u5494", "\u958b", "\u7a52", //
+        "l", "\u5783", "\u62c9", "\u9ba5", //
+        "m", "\u5638", "\u9ebb", "\u65c0", //
+        "n", "\u62ff", "\u80ad", "\u685b", //
+        "\u014D", "\u5662", "\u6bee", "\u8bb4", //
+        "p", "\u5991", "\u8019", "\u8c31", //
+        "q", "\u4e03", "\u6053", "\u7f56", //
+        "r", "\u5465", "\u72aa", "\u6e03", //
+        "s", "\u4ee8", "\u9491", "\u93c1", //
+        "t", "\u4ed6", "\u9248", "\u67dd", //
+        "w", "\u5c72", "\u5558", "\u5a7a", //
+        "x", "\u5915", "\u5438", "\u6bbe", //
+        "y", "\u4e2b", "\u82bd", "\u8574", //
+        "z", "\u5e00", "\u707d", "\u5c0a"
     };
 
     static final String[] simplifiedNames = { 

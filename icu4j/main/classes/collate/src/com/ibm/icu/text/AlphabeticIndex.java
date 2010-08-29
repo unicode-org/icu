@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -133,7 +134,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     // Lazy evaluated: null means that we have not built yet.
 
-    private List<String> indexCharacters;
     private BucketList buckets;
 
     private String overflowLabel = "\u2026";
@@ -219,7 +219,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> addLabels(UnicodeSet additions) {
         initialLabels.addAll(additions);
-        indexCharacters = null;
+        buckets = null;
         return this;
     }
 
@@ -234,7 +234,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         for (ULocale addition : additions) {
             initialLabels.addAll(getIndexExemplars(addition));
         }
-        indexCharacters = null;
+        buckets = null;
         return this;
     }
 
@@ -331,7 +331,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         return this;
     }
 
-    private void initLabels() {
+    /**
+     * Determine the best labels to use. This is based on the exemplars, but we also process to make sure that they are unique,
+     * and sort differently, and that the overall list is small enough.
+     * @return 
+     */
+    private ArrayList<String> initLabels() {
         UnicodeSet exemplars = new UnicodeSet(initialLabels);
 
         // First sort them, with an "best" ordering among items that are the same according
@@ -386,9 +391,15 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         }
 
-        indexCharacters = Collections.unmodifiableList(new ArrayList<String>(indexCharacterSet));
+        return new ArrayList<String>(indexCharacterSet);
     }
 
+    /**
+     * This method is called to get the index exemplars. Normally these come from the locale directly,
+     * but if they aren't available, we have to synthesize them.
+     * @param locale
+     * @return
+     */
     private static UnicodeSet getIndexExemplars(ULocale locale) {
         UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
 
@@ -430,8 +441,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         return uppercased;
     }
 
-    /*
+    /**
      * Return the string with interspersed CGJs. Input must have more than 2 codepoints.
+     * <p>This is used to test whether contractions sort differently from their components.
      */
     private String separated(String item) {
         StringBuilder result = new StringBuilder();
@@ -457,14 +469,11 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public List<String> getLabels() {
-        if (indexCharacters == null) {
-            initLabels();
-        }
         if (buckets == null) {
-            buckets = getIndexBuckets();
+            initBuckets();
         }
         ArrayList<String> result = new ArrayList<String>();
-        for (Bucket<V> bucket : this) {
+        for (Bucket<V> bucket : buckets) {
             result.add(bucket.getLabel());
         }
         return result;
@@ -503,6 +512,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex<V> addRecord(CharSequence name, V info) {
+        // TODO instead of invalidating, just add to unprocessed list.
         buckets = null; // invalidate old bucketlist
         inputList.add(new Record<V>(name, info, inputList.size()));
         return this;
@@ -528,7 +538,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public int getBucketIndex(CharSequence name) {
         if (buckets == null) {
-            buckets = getIndexBuckets();
+            initBuckets();
         }
         if (langType == LangType.SIMPLIFIED) {
             String hackPrefix = hackName(name, collatorPrimaryOnly);
@@ -536,10 +546,13 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 name = hackPrefix + name;
             }
         }
+        return rawGetBucketIndex(name);
+    }
 
+    private int rawGetBucketIndex(CharSequence name) {
         // TODO use a binary search
         int result = -1;
-        for (Bucket<V> bucket : this) {
+        for (Bucket<V> bucket : buckets) {
             if (bucket.lowerBoundary == null) { // last bucket
                 return result;
             }
@@ -576,7 +589,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public int getBucketCount() {
         if (buckets == null) {
-            buckets = getIndexBuckets();
+            initBuckets();
         }
         return buckets.bucketList.size();
     }
@@ -601,7 +614,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public Iterator<Bucket<V>> iterator() {
         if (buckets == null) {
-            buckets = getIndexBuckets();
+            initBuckets();
         }
         return buckets.iterator();
     }
@@ -618,50 +631,63 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    private BucketList getIndexBuckets() {
-        BucketList output = new BucketList();
+    private void initBuckets() {
+        buckets = new BucketList();
 
-        // Set up an array of sorted intput name/info pairs
+        // Make a collator for records. Do this so that the Records can be static classes, and not know about the collators.
+        // TODO make this a member of the class.
         Comparator<Record<V>> fullComparator = new Comparator<Record<V>>() {
             public int compare(Record<V> o1, Record<V> o2) {
-                CharSequence name1 = o1.substitute;
-                CharSequence name2 = o2.substitute;
-                if (name1 == null) {
-                    name1 = o1.getName();
-                }
-                if (name2 == null) {
-                    name2 = o2.getName();
-                }
-                int result = collatorOriginal.compare(name1, name2);
+                int result = collatorOriginal.compare(o1.name, o2.name);
                 if (result != 0) {
                     return result;
-                }
-                if (o1.substitute != null || o2.substitute != null) {
-                    result = collatorOriginal.compare(o1.getName(), o2.getName());
-                    if (result != 0) {
-                        return result;
-                    }
                 }
                 return o1.counter - o2.counter;
             }
         };
+        
+        // If we have Pinyin, then we have a special hack to bucket items with ASCII.
         if (langType == LangType.SIMPLIFIED) {
+            Map<String,Bucket<V>> rebucketMap = new HashMap();
             for (Record<V> name : inputList) {
-                name.substitute = hackName(name.name, collatorOriginal);
+                 String key = hackName(name.name, collatorOriginal);
+                 if (key == null) continue;
+                 Bucket<V> bucket = rebucketMap.get(key);
+                 if (bucket == null) {
+                     int index = rawGetBucketIndex(key);
+                     bucket = buckets.bucketList.get(index);
+                 }
+                 rebucketMap.put(key, bucket);
+                 name.rebucket = bucket;
             }
         }
+        
+        // Set up a sorted list of the input
         TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
         sortedInput.addAll(inputList);
 
-        Iterator<Bucket<V>> bucketIterator = output.iterator();
+        // Now, we traverse all of the input, which is now sorted.
+        // If the item doesn't go in the current bucket, we find the next bucket that contains it.
+        // This makes the process order n*log(n), since we just sort the list and then do a linear process.
+        // However, if the user adds item at a time and then gets the buckets, this isn't efficient, so
+        // we need to improve it for that case.
+        
+        Iterator<Bucket<V>> bucketIterator = buckets.iterator();
         Bucket<V> currentBucket = bucketIterator.next();
         Bucket<V> nextBucket = bucketIterator.next();
-        String upperBoundary = nextBucket.lowerBoundary; // there is always at least one
+        String upperBoundary = nextBucket.lowerBoundary; // there is always at least one bucket, so this is safe
         boolean atEnd = false;
         for (Record<V> s : sortedInput) {
-            while (!atEnd && s.isGreater(collatorOriginal, upperBoundary)) {
+            // special hack for pinyin
+            if (s.rebucket != null) {
+                s.rebucket.records.add(s);
+                continue;
+            }
+            // if the current bucket isn't the right one, find the one that is
+            // We have a special flag for the last bucket so that we don't look any further
+            while (!atEnd && collatorPrimaryOnly.compare(s.name, upperBoundary) >= 0) {
                 currentBucket = nextBucket;
-                // now reset nextChar
+                // now reset the boundary that we compare against
                 if (bucketIterator.hasNext()) {
                     nextBucket = bucketIterator.next();
                     upperBoundary = nextBucket.lowerBoundary;
@@ -672,9 +698,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     atEnd = true;
                 }
             }
+            // now put the record into the bucket.
             currentBucket.records.add(s);
         }
-        return output;
     }
 
     /**
@@ -858,7 +884,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public static class Record<V> {
-        private CharSequence substitute;
+        private Bucket<V> rebucket = null; // special hack for Pinyin
         private CharSequence name;
         private V info;
         private int counter;
@@ -867,14 +893,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             this.name = name;
             this.info = info;
             this.counter = counter;
-        }
-
-        /**
-         * @param upperBoundary
-         * @return
-         */
-        private boolean isGreater(Comparator comparator, String upperBoundary) {
-            return comparator.compare(substitute == null ? name : substitute, upperBoundary) >= 0;
         }
 
         /**
@@ -901,7 +919,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         @Override
         public String toString() {
-            return name + "=" + info;
+            return name + "=" + info + (rebucket == null ? "" : "{" + rebucket.label + "}");
         }
     }
 
@@ -1006,8 +1024,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         BucketList() {
             // initialize indexCharacters;
-            initLabels();
+            List<String> indexCharacters = initLabels();
 
+            // underflow bucket
             bucketList.add(new Bucket<V>(getUnderflowLabel(), "", Bucket.LabelType.UNDERFLOW));
 
             // fix up the list, adding underflow, additions, overflow
@@ -1033,10 +1052,10 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 last = current;
                 lastSet = set;
             }
+            // overflow bucket
             String limitString = getOverflowComparisonString(last);
             bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final,
-            // overflow
-            // bucket
+            
         }
 
         public Iterator<Bucket<V>> iterator() {
@@ -1047,7 +1066,14 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * HACKS
      */
-    private static String hackName(CharSequence name, Comparator comparator) {
+    
+    private static String STROKE = "\u5283";
+    private static String PINYIN_LOWER_BOUNDS = "\u0101bcd\u0113fghjklmn\u014Dpqrstwxyz";
+    
+    /**
+     * HACKS
+     */
+    private String hackName(CharSequence name, Comparator comparator) {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
@@ -1055,8 +1081,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (index < 0) {
             index = -index - 2;
         }
-        //if (true) return index + "";
-        return "ābcdēfghjklmnōpqrstwxyz".substring(index, index + 1);
+        return PINYIN_LOWER_BOUNDS.substring(index, index + 1);
     }
 
     /**
