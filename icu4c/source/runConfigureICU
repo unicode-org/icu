@@ -140,6 +140,8 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXFLAGS='-g -O0'
         ;;
     Solaris)
         THE_OS=SOLARIS
@@ -223,6 +225,8 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXFLAGS='-g -O0'
         ;;
     Cygwin)
         THE_OS="Cygwin"
@@ -269,12 +273,16 @@ case $platform in
         THE_COMP="the GNU C++"
         RELEASE_CFLAGS='-O2'
         RELEASE_CXXFLAGS='-O2'
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXXFLAGS='-g -O0'
         ;;
     *BSD)
         THE_OS="BSD"
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXFLAGS='-g -O0'
         ;;
     TRU64V5.1/CXX)
         THE_OS="OSF1"
