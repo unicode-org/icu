@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.MultiComparator;
+import com.ibm.icu.impl.Row;
+import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -30,7 +32,9 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
 
 /**
- * A class that supports the creation of a UI index appropriate for a given language, such as:
+ * AlphabeticIndex supports the creation of a UI index appropriate for a given language. It can support either direct
+ * use, or use with a client that doesn't support localized collation. The following is an example of what an index
+ * might look like in a UI:
  * 
  * <pre>
  *  <b>… A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å …</b>
@@ -53,10 +57,10 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * The class also supports having buckets for strings before the first (underflow), after the last (overflow), and
  * between scripts (inflow). For example, if the index is constructed with labels for Russian and English, Greek
  * characters would fall into an inflow bucket between the other two scripts.
- * <p>
- * <i>Example</i>
- * <p>
- * The "show..." methods below are just to illustrate usage.
+ * 
+ * <h2>Direct Use</h2>
+ * <p>The following shows an example of building an index directly.
+ *  The "show..." methods below are just to illustrate usage.
  * 
  * <pre>
  * // Create a simple index where the values for the strings are Integers, and add the strings
@@ -81,7 +85,7 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  *     if (bucket.size() != 0) {
  *         showLabelInList(UI, bucket.getLabel());
  *         for (AlphabeticIndex.Record<Integer> item : bucket) {
- *             showIndexedItem(UI, item.getName(), item.getValue());
+ *             showIndexedItem(UI, item.getName(), item.getData());
  *         }
  * </pre>
  * 
@@ -91,6 +95,24 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * <pre>
  * <b>… A-F G-N O-Z …</b>
  * </pre>
+ * 
+ * <h2>Client Support</h2>
+ * <p>
+ * Callers can also use the AlphabeticIndex to support sorting on a client that doesn't support collation.
+ * <ul>
+ * <li>getLabels() can be used to get a list of the labels, such as "…", "A", "B",..., and send that list to the client.
+ * </li>
+ * <li>When the client has a new name, it sends that name to the server. The server needs to call the following methods,
+ * and communicate the bucketIndex and collationKey back to the client.
+ * 
+ * <pre>
+ * int bucketIndex = indexCharacters.getBucketIndex(name);
+ * RawCollationKey collationKey = collator.getRawCollationKey(name, null);
+ * </pre>
+ * 
+ * <li>The client would put the name (and associated information) into its bucket for bucketIndex. The collationKey is a
+ * sequence of bytes that can be compared with a binary compare, and produce the right localized result.</li>
+ * </ul>
  * 
  * <p>
  * <b>Notes:</b>
@@ -468,7 +490,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public List<String> getLabels() {
+    public List<String> getBucketLabels() {
         if (buckets == null) {
             initBuckets();
         }
@@ -499,22 +521,22 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Add a record (name and info) to the index. The name will be used to sort the items into buckets, and to sort
+     * Add a record (name and data) to the index. The name will be used to sort the items into buckets, and to sort
      * within the bucket. Two records may have the same name. When they do, the sort order is according to the order added:
      * the first added comes first.
      * 
      * @param name
      *            Name, such as a name
-     * @param info
-     *            Info, such as an address or link
+     * @param data
+     *            Data, such as an address or link
      * @return this, for chaining
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
-    public AlphabeticIndex<V> addRecord(CharSequence name, V info) {
+    public AlphabeticIndex<V> addRecord(CharSequence name, V data) {
         // TODO instead of invalidating, just add to unprocessed list.
         buckets = null; // invalidate old bucketlist
-        inputList.add(new Record<V>(name, info, inputList.size()));
+        inputList.add(new Record<V>(name, data, inputList.size()));
         return this;
     }
 
@@ -530,8 +552,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param name
      *            Name, such as a name
-     * @param info
-     *            Info, such as an address or link
+     * @param data
+     *            Data, such as an address or link
      * @return this, for chaining
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
@@ -595,7 +617,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Return the number of records in the index: that is, the total number of distinct <name,info> pairs added with addRecord(...), over all the buckets.
+     * Return the number of records in the index: that is, the total number of distinct <name,data> pairs added with addRecord(...), over all the buckets.
      * 
      * @return total number of records in buckets
      * @draft ICU 4.6
@@ -886,12 +908,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     public static class Record<V> {
         private Bucket<V> rebucket = null; // special hack for Pinyin
         private CharSequence name;
-        private V info;
+        private V data;
         private int counter;
 
-        private Record(CharSequence name, V info, int counter) {
+        private Record(CharSequence name, V data, int counter) {
             this.name = name;
-            this.info = info;
+            this.data = data;
             this.counter = counter;
         }
 
@@ -907,19 +929,19 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
 
         /**
-         * Get the info
+         * Get the data
          * 
-         * @return the info
+         * @return the data
          * @draft ICU 4.6
          * @provisional This API might change or be removed in a future release.
          */
-        public V getInfo() {
-            return info;
+        public V getData() {
+            return data;
         }
 
         @Override
         public String toString() {
-            return name + "=" + info + (rebucket == null ? "" : "{" + rebucket.label + "}");
+            return name + "=" + data + (rebucket == null ? "" : "{" + rebucket.label + "}");
         }
     }
 
@@ -930,7 +952,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
      * 
      * @param <V>
-     *            Info type
+     *            Data type
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */

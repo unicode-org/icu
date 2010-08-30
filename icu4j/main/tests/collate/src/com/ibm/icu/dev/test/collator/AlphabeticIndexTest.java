@@ -284,7 +284,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             if (bucket.size() != 0) {
                 showLabelInList(UI, bucket.getLabel());
                 for (AlphabeticIndex.Record<Integer> item : bucket) {
-                    showIndexedItem(UI, item.getName(), item.getInfo());
+                    showIndexedItem(UI, item.getName(), item.getData());
                 }
                 logln(UI.toString());
             }
@@ -297,7 +297,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             if (showEmpty || bucket.size() != 0) {
                 showLabelInList(UI, bucket.getLabel());
                 for (AlphabeticIndex.Record<T> item : bucket) {
-                    showIndexedItem(UI, item.getName(), item.getInfo());
+                    showIndexedItem(UI, item.getName(), item.getData());
                 }
                 logln(UI.toString());
             }
@@ -352,7 +352,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
             String expectedIndexCharacters = "\u2026:" + localeAndIndexCharacters[1] + ":\u2026";
-            Collection<String> indexCharacters = new AlphabeticIndex(locale).getLabels();
+            Collection<String> indexCharacters = new AlphabeticIndex(locale).getBucketLabels();
 
             // Join the elements of the list to a string with delimiter ":"
             StringBuilder sb = new StringBuilder();
@@ -399,7 +399,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                     continue;
                 }
                 AlphabeticIndex indexCharacters = new AlphabeticIndex(locale);
-                final Collection mainChars = indexCharacters.getLabels();
+                final Collection mainChars = indexCharacters.getBucketLabels();
                 String mainCharString = mainChars.toString();
                 if (mainCharString.length() > 500) {
                     mainCharString = mainCharString.substring(0,500) + "...";
@@ -466,7 +466,7 @@ public class AlphabeticIndexTest extends TestFmwk {
 
                 // make my own copy
                 testValue = 100;
-                List<String> myBucketLabels = indexCharacters.getLabels();
+                List<String> myBucketLabels = indexCharacters.getBucketLabels();
                 ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents = new ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>>(myBucketLabels.size());
                 for (int i = 0; i < myBucketLabels.size(); ++i) {
                     myBucketContents.add(new TreeSet<R4<RawCollationKey, String, Integer, Double>>());
@@ -474,7 +474,8 @@ public class AlphabeticIndexTest extends TestFmwk {
                 for (String name : shortTest) {
                     int bucketIndex = indexCharacters.getBucketIndex(name);
                     Set<R4<RawCollationKey, String, Integer, Double>> myBucket = myBucketContents.get(bucketIndex);
-                    R4<RawCollationKey, String, Integer, Double> row = Row.of(collator.getRawCollationKey(name, null), name, name.length(), testValue++);
+                    RawCollationKey rawCollationKey = collator.getRawCollationKey(name, null);
+                    R4<RawCollationKey, String, Integer, Double> row = Row.of(rawCollationKey, name, name.length(), testValue++);
                     myBucket.add(row);
                 }
                 if (DEBUG) showIndex(myBucketLabels, myBucketContents, false);
