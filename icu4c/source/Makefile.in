@@ -42,8 +42,11 @@ DOCZIP = icu-docs.zip
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
+ALL_PKGCONFIG_SUFFIX=uc i18n io le lx
+ALL_PKGCONFIG_FILES=$(ALL_PKGCONFIG_SUFFIX:%=$(top_builddir)/config/icu-%.pc)
+
 ## Files built (autoconfed) and installed
-INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%) $(top_builddir)/config/icu.pc.out $(top_builddir)/config/icu.pc
+INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%) $(ALL_PKGCONFIG_FILES)
 
 ## Files built (autoconfed) but not installed
 LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk
@@ -145,7 +148,7 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_SCRIPT) $(top_srcdir)/install-sh $(DESTDIR)$(pkgdatadir)/install-sh
 	@$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/pkgconfig
-	$(INSTALL_DATA) $(top_builddir)/config/icu.pc.out $(DESTDIR)$(libdir)/pkgconfig/icu.pc
+	$(INSTALL_DATA) $(ALL_PKGCONFIG_FILES) $(DESTDIR)$(libdir)/pkgconfig/
 	$(INSTALL_DATA) $(top_srcdir)/../license.html $(DESTDIR)$(pkgdatadir)/license.html
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
@@ -176,10 +179,11 @@ clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	-$(RMV) "test-*.xml"
 	-$(RMV) "perf-*.xml"
+	-$(RMV) $(ALL_PKGCONFIG_FILES)
 	$(RMV) Doxyfile doc $(DOCZIP)
 
 distclean-local: clean-local
-	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config $(top_builddir)/config/icu.pc $(top_builddir)/config/icu.pc.out
+	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config $(top_builddir)/config/icu.pc $(ALL_PKGCONFIG_FILES)
 	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk autom4te.cache
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 	-$(RMV) dist
@@ -217,12 +221,46 @@ config/icu.pc: $(srcdir)/config/icu.pc.in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-config/icu.pc.out: config/icu.pc config/icu-config
+config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
-	@echo "Libs:" '-L$${libdir}' $(shell config/icu-config --noverify --ldflags-libsonly) >> $@
-	@echo "Libs.private: " $(shell config/icu-config --noverify --ldflags-system) >> $@
-#	@echo "Cflags: " $(shell config/icu-config --noverify --cppflags) >> $@
+	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
+	@echo "Name: $(PACKAGE)-uc" >> $@
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
+	@echo "Libs.private:" '$${baselibs}' >> $@
 	@echo $@ updated.
+
+config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
+	@cat config/icu.pc > $@
+	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Internationalization library" >> $@
+	@echo "Name: $(PACKAGE)-i18n" >> $@
+	@echo "Requires: icu-uc" >> $@
+	@echo "Libs:" "${ICULIBS_I18N}" >> $@
+	@echo $@ updated.
+
+config/icu-io.pc: config/icu.pc Makefile icudefs.mk
+	@cat config/icu.pc > $@
+	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Stream and I/O Library" >> $@
+	@echo "Name: $(PACKAGE)-io" >> $@
+	@echo "Requires: icu-i18n" >> $@
+	@echo "Libs:" "${ICULIBS_IO}" >> $@
+	@echo $@ updated.
+
+config/icu-le.pc: config/icu.pc Makefile icudefs.mk
+	@cat config/icu.pc > $@
+	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Layout library" >> $@
+	@echo "Name: $(PACKAGE)-le" >> $@
+	@echo "Requires: icu-uc" >> $@
+	@echo "Libs:" "${ICULIBS_LE}" >> $@
+	@echo $@ updated.
+
+config/icu-lx.pc: config/icu.pc Makefile icudefs.mk
+	@cat config/icu.pc > $@
+	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Paragraph Layout library" >> $@
+	@echo "Name: $(PACKAGE)-lx" >> $@
+	@echo "Requires: icu-le" >> $@
+	@echo "Libs:" "${ICULIBS_LX}" >> $@
+	@echo $@ updated.
+
 
 Makefile: $(srcdir)/Makefile.in icudefs.mk $(top_builddir)/config.status
 	cd $(top_builddir) \

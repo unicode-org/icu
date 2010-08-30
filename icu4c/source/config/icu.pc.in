@@ -2,31 +2,30 @@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-bindir = @bindir@
+#bindir = @bindir@
 libdir = @libdir@
 includedir = @includedir@
-datarootdir = @datarootdir@
-datadir = @datadir@
-sbindir = @sbindir@
-mandir = @mandir@
-sysconfdir = @sysconfdir@
+baselibs = @LIBS@
+#datarootdir = @datarootdir@
+#datadir = @datadir@
+#sbindir = @sbindir@
+#mandir = @mandir@
+#sysconfdir = @sysconfdir@
 CFLAGS = @CFLAGS@ 
-CXXFLAGS = @CXXFLAGS@ 
+#CXXFLAGS = @CXXFLAGS@ 
 DEFS = @DEFS@ 
 UNICODE_VERSION=@UNICODE_VERSION@
 ICUPREFIX=icu
 ICULIBSUFFIX=@ICULIBSUFFIX@
 LIBICU=lib${ICUPREFIX}
-SHAREDLIBCFLAGS=-fPIC
+#SHAREDLIBCFLAGS=-fPIC
 pkglibdir=${libdir}/@PACKAGE@${ICULIBSUFFIX}/@VERSION@
-pkgdatadir=${datadir}/@PACKAGE@${ICULIBSUFFIX}/@VERSION@
+#pkgdatadir=${datadir}/@PACKAGE@${ICULIBSUFFIX}/@VERSION@
 ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
-ICUPKGDATA_DIR=@libdir@
-ICUDATA_DIR=${pkgdatadir}
+#ICUPKGDATA_DIR=@libdir@
+#ICUDATA_DIR=${pkgdatadir}
+ICUDESC=International Components for Unicode
 
-Name: @PACKAGE@
-Description: International Components for Unicode
-URL: http://icu-project.org
 Version: @VERSION@
-# end of icu.pc.in
 Cflags: -I${includedir}
+# end of icu.pc.in
