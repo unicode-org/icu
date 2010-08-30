@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2007-2009 International Business Machines
+﻿// Copyright (c) 2007-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 format:table(nofallback) {
     Info {
@@ -406,6 +406,36 @@ format:table(nofallback) {
                     "MILLIS=3076424179200000",
                     "Friday, Heshvan 3, 103217 12:00:00 AM GMT-08:00"
                },
+            }    
+        }
+        TestMoreDateParse {
+            Info {
+                Description { "Additional date parse tests (may not
+               round/trip to format.)" }
+            }
+            Settings {
+                // options: 'format', or 'parse'.  One can be omitted if this is a 1 way test.
+                {
+                    Type { "date_parse" }
+                },
+            }
+            Headers { "locale","spec", "date", "str"}
+            // locale: locale including calendar type
+            // spec:   either 'PATTERN=y mm h' etc, or 'DATE=SHORT,TIME=LONG'
+            // date:   either 'MILLIS=####' where #### is millis,
+            //        or a calendar spec ERA=0,YEAR=1, etc.. applied to the calendar type specified by the locale
+            //        or RELATIVE_MILLIS=### where ### is a signed value which is added to the current millis
+            //        or RELATIVE_ADD:DATE=1  which means that the field "DATE" will be added by +1 relative to current time
+            // str:   the expected unicode string
+            
+            Cases { 
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=YYYYHHmmssEEEww",
+                    "YEAR=1999,HOUR_OF_DAY=4,MINUTE=5,SECOND=6,DAY_OF_WEEK=2,WEEK_OF_YEAR=4",
+               // won't roundtrip.
+                    "1998040506MON56"
+               }
             }    
         }
     }        
