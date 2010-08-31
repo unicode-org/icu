@@ -286,7 +286,7 @@ main(int argc, const char *argv[]) {
     // output
     UChar32 prevStart=0, c=0;
     Status prevStatus=DISALLOWED_STD3_VALID, status;
-    icu::UnicodeString prevMapping;
+    icu::UnicodeString prevMapping, decomposition;
     UVersionInfo prevAge={ 1, 1, 0, 0 }, age;
 
     icu::UnicodeSetIterator iter(disallowedSet);
@@ -306,7 +306,13 @@ main(int argc, const char *argv[]) {
             } else if(disallowedSTD3Set.contains(c)) {
                 status=DISALLOWED_STD3_VALID;
             } else if(validSet.contains(c)) {
-                status=VALID;
+                if( nfd->getDecomposition(c, decomposition) &&
+                    disallowedSTD3Set.containsSome(decomposition)
+                ) {
+                    status=DISALLOWED_STD3_VALID;
+                } else {
+                    status=VALID;
+                }
             } else if(mappedSet.contains(c)) {
                 cString.setTo(c);
                 nfkc_cf->normalize(cString, mapping, errorCode);
