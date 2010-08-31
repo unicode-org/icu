@@ -21,7 +21,6 @@ public final class InternalLocaleBuilder {
     private String _region = "";
     private String _variant = "";
 
-    private static final String LOCALESEP = "_";
     private static final CaseInsensitiveChar PRIVUSE_KEY = new CaseInsensitiveChar(LanguageTag.PRIVATEUSE.charAt(0));
 
     private HashMap<CaseInsensitiveChar, String> _extensions;
@@ -73,8 +72,8 @@ public final class InternalLocaleBuilder {
             _variant = "";
         } else {
             // normalize separators to "_"
-            String var = variant.replaceAll(LanguageTag.SEP, LOCALESEP);
-            int errIdx = checkVariants(var, LOCALESEP);
+            String var = variant.replaceAll(LanguageTag.SEP, BaseLocale.SEP);
+            int errIdx = checkVariants(var, BaseLocale.SEP);
             if (errIdx != -1) {
                 throw new LocaleSyntaxException("Ill-formed variant: " + variant, errIdx);
             }
@@ -119,7 +118,7 @@ public final class InternalLocaleBuilder {
         } else {
             if (type.length() != 0) {
                 // normalize separator to "-"
-                String tp = type.replaceAll(LOCALESEP, LanguageTag.SEP);
+                String tp = type.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
                 // validate
                 StringTokenIterator itr = new StringTokenIterator(tp, LanguageTag.SEP);
                 while (!itr.isDone()) {
@@ -164,7 +163,7 @@ public final class InternalLocaleBuilder {
             }
         } else {
             // validate value
-            String val = value.replaceAll(LOCALESEP, LanguageTag.SEP);
+            String val = value.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
             StringTokenIterator itr = new StringTokenIterator(val, LanguageTag.SEP);
             while (!itr.isDone()) {
                 String s = itr.current();
@@ -200,7 +199,7 @@ public final class InternalLocaleBuilder {
             clearExtensions();
             return this;
         }
-        subtags = subtags.replaceAll(LOCALESEP, LanguageTag.SEP);
+        subtags = subtags.replaceAll(BaseLocale.SEP, LanguageTag.SEP);
         StringTokenIterator itr = new StringTokenIterator(subtags, LanguageTag.SEP);
 
         List<String> extensions = null;
@@ -322,7 +321,7 @@ public final class InternalLocaleBuilder {
         if (bcpVariants.size() > 0) {
             StringBuilder var = new StringBuilder(bcpVariants.get(0));
             for (int i = 1; i < bcpVariants.size(); i++) {
-                var.append(LOCALESEP).append(bcpVariants.get(i));
+                var.append(BaseLocale.SEP).append(bcpVariants.get(i));
             }
             _variant = var.toString();
         }
@@ -380,7 +379,7 @@ public final class InternalLocaleBuilder {
         }
 
         if (variant.length() > 0) {
-            int errIdx = checkVariants(variant, LOCALESEP);
+            int errIdx = checkVariants(variant, BaseLocale.SEP);
             if (errIdx != -1) {
                 throw new LocaleSyntaxException("Ill-formed variant: " + variant, errIdx);
             }
@@ -473,9 +472,9 @@ public final class InternalLocaleBuilder {
                 if (privVarStart != -1) {
                     StringBuilder sb = new StringBuilder(variant);
                     if (sb.length() != 0) {
-                        sb.append(LOCALESEP);
+                        sb.append(BaseLocale.SEP);
                     }
-                    sb.append(privuse.substring(privVarStart).replaceAll(LanguageTag.SEP, LOCALESEP));
+                    sb.append(privuse.substring(privVarStart).replaceAll(LanguageTag.SEP, BaseLocale.SEP));
                     variant = sb.toString();
                 }
             }
@@ -621,19 +620,6 @@ public final class InternalLocaleBuilder {
 
             itr.next();
         }
-    }
-
-    /*
-     * Private helper function for checking Unicode locale keyword type
-     */
-    private boolean isUnicodeLocaleType(String key, String type) {
-        if (_ukeywords != null) {
-            String t = _ukeywords.get(new CaseInsensitiveString(key));
-            if (t != null) {
-                return AsciiUtil.caseIgnoreMatch(t, type);
-            }
-        }
-        return false;
     }
 
     static class CaseInsensitiveString {
