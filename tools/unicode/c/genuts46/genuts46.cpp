@@ -244,9 +244,7 @@ main(int argc, const char *argv[]) {
             icu::UnicodeSetIterator iter(validSet);
             while(iter.next()) {
                 UChar32 c=iter.getCodepoint();
-                cString.setTo(c);
-                nfd->normalize(cString, nfdString, errorCode);
-                if(!validSet.containsAll(nfdString)) {
+                if(nfd->getDecomposition(c, nfdString) && !validSet.containsAll(nfdString)) {
                     fprintf(stderr, "U+%04lX valid -> disallowed: NFD not wholly valid\n", (long)c);
                     disallowedSet.add(c);
                     removeSet.add(c);
@@ -286,7 +284,7 @@ main(int argc, const char *argv[]) {
     // output
     UChar32 prevStart=0, c=0;
     Status prevStatus=DISALLOWED_STD3_VALID, status;
-    icu::UnicodeString prevMapping, decomposition;
+    icu::UnicodeString prevMapping;
     UVersionInfo prevAge={ 1, 1, 0, 0 }, age;
 
     icu::UnicodeSetIterator iter(disallowedSet);
@@ -306,8 +304,8 @@ main(int argc, const char *argv[]) {
             } else if(disallowedSTD3Set.contains(c)) {
                 status=DISALLOWED_STD3_VALID;
             } else if(validSet.contains(c)) {
-                if( nfd->getDecomposition(c, decomposition) &&
-                    disallowedSTD3Set.containsSome(decomposition)
+                if( nfd->getDecomposition(c, nfdString) &&
+                    disallowedSTD3Set.containsSome(nfdString)
                 ) {
                     status=DISALLOWED_STD3_VALID;
                 } else {
