@@ -301,12 +301,14 @@ main(int argc, const char *argv[]) {
                 nfkc_cf->normalize(cString, mapping, errorCode);
             } else if(ignoredSet.contains(c)) {
                 status=IGNORED;
-            } else if(disallowedSTD3Set.contains(c)) {
-                status=DISALLOWED_STD3_VALID;
             } else if(validSet.contains(c)) {
-                if( nfd->getDecomposition(c, nfdString) &&
+                if(disallowedSTD3Set.contains(c)) {
+                    fprintf(stderr, "U+%04lX valid -> disallowed_STD3_valid: itself not STD3\n", (long)c);
+                    status=DISALLOWED_STD3_VALID;
+                } else if( nfd->getDecomposition(c, nfdString) &&
                     disallowedSTD3Set.containsSome(nfdString)
                 ) {
+                    fprintf(stderr, "U+%04lX valid -> disallowed_STD3_valid: NFD not wholly STD3\n", (long)c);
                     status=DISALLOWED_STD3_VALID;
                 } else {
                     status=VALID;
@@ -315,6 +317,7 @@ main(int argc, const char *argv[]) {
                 cString.setTo(c);
                 nfkc_cf->normalize(cString, mapping, errorCode);
                 if(disallowedSTD3Set.containsSome(mapping)) {
+                    fprintf(stderr, "U+%04lX mapped -> disallowed_STD3_mapped\n", (long)c);
                     status=DISALLOWED_STD3_MAPPED;
                 } else {
                     status=MAPPED;
