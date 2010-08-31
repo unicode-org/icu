@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/errorcode.h"
 #include "unicode/normalizer2.h"
@@ -78,9 +79,13 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
     }
 }
 
-enum Status { DISALLOWED, IGNORED, MAPPED, DEVIATION, VALID };
+enum Status {
+    DISALLOWED, IGNORED, MAPPED, DEVIATION, VALID,
+    DISALLOWED_STD3_VALID, DISALLOWED_STD3_MAPPED
+};
 static const char *const statusNames[]={
-    "disallowed", "ignored", "mapped", "deviation", "valid"
+    "disallowed", "ignored", "mapped", "deviation", "valid",
+    "disallowed_STD3_valid", "disallowed_STD3_mapped"
 };
 
 static void
@@ -105,6 +110,20 @@ printLine(UChar32 start, UChar32 end, Status status, const icu::UnicodeString &m
     puts("");
 }
 
+static void
+getAgeIfAssigned(UChar32 c, UVersionInfo age) {
+    if(u_isdefined(c)) {
+        u_charAge(c, age);
+    } else if(U_IS_UNICODE_NONCHAR(c)) {
+        age[0]=0;
+        age[1]=0;
+        age[2]=0;
+        age[3]=1;
+    } else {
+        memset(age, 0, 4);
+    }
+}
+
 extern int
 main(int argc, const char *argv[]) {
     ExitingErrorCode errorCode("genuts46");
@@ -120,11 +139,15 @@ main(int argc, const char *argv[]) {
     mappedSet.removeAll(labelSeparators);  // simplifies checking of mapped characters
 
     icu::UnicodeSet baseValidSet(icu::UnicodeString(
-        "[[[:^Changes_When_NFKC_Casefolded:]"
+        "[[[[:^Changes_When_NFKC_Casefolded:]"
         "-[:C:]-[:Z:]"
-        "-[:Block=Ideographic_Description_Characters:]"
-        "-[:ascii:]]"
-        "[\\u002Da-zA-Z0-9]]", -1, US_INV), errorCode);
+        "-[:Block=Ideographic_Description_Characters:]]"
+        "[:ascii:]]-[.]]", -1, US_INV), errorCode);
+
+    // Characters that are disallowed when STD3 rules are applied,
+    // but valid when STD3 rules are not applied.
+    icu::UnicodeSet disallowedSTD3Set(icu::UnicodeString(
+        "[[:ascii:]-[\\u002D.a-zA-Z0-9]]", -1, US_INV), errorCode);
 
     icu::UnicodeSet deviationSet(
         UNICODE_STRING_SIMPLE("[\\u00DF\\u03C2\\u200C\\u200D]"), errorCode);
@@ -258,11 +281,13 @@ main(int argc, const char *argv[]) {
     ignoredSet.freeze();
     validSet.freeze();
     mappedSet.freeze();
+    disallowedSTD3Set.freeze();
 
     // output
     UChar32 prevStart=0, c=0;
-    Status prevStatus=DISALLOWED, status;
+    Status prevStatus=DISALLOWED_STD3_VALID, status;
     icu::UnicodeString prevMapping;
+    UVersionInfo prevAge={ 1, 1, 0, 0 }, age;
 
     icu::UnicodeSetIterator iter(disallowedSet);
     while(iter.nextRange()) {
@@ -278,20 +303,32 @@ main(int argc, const char *argv[]) {
                 nfkc_cf->normalize(cString, mapping, errorCode);
             } else if(ignoredSet.contains(c)) {
                 status=IGNORED;
+            } else if(disallowedSTD3Set.contains(c)) {
+                status=DISALLOWED_STD3_VALID;
             } else if(validSet.contains(c)) {
                 status=VALID;
             } else if(mappedSet.contains(c)) {
-                status=MAPPED;
                 cString.setTo(c);
                 nfkc_cf->normalize(cString, mapping, errorCode);
+                if(disallowedSTD3Set.containsSome(mapping)) {
+                    status=DISALLOWED_STD3_MAPPED;
+                } else {
+                    status=MAPPED;
+                }
             } else {
                 fprintf(stderr, "*** undetermined status of U+%04lX\n", (long)c);
             }
-            if(prevStart<c && status!=prevStatus || mapping!=prevMapping) {
+            // Print a new line where the status, the mapping or
+            // the character age change.
+            getAgeIfAssigned(c, age);
+            if( prevStart<c &&
+                (status!=prevStatus || mapping!=prevMapping || 0!=memcmp(prevAge, age, 4))
+            ) {
                 printLine(prevStart, c-1, prevStatus, prevMapping);
                 prevStart=c;
                 prevStatus=status;
                 prevMapping=mapping;
+                memcpy(prevAge, age, 4);
             }
             ++c;
         }
@@ -302,7 +339,16 @@ main(int argc, const char *argv[]) {
         prevStart=c;
         prevStatus=DISALLOWED;
         prevMapping.remove();
-        c=iter.getCodepointEnd()+1;
+        getAgeIfAssigned(c, prevAge);
+        UChar32 end=iter.getCodepointEnd();
+        while(++c<=end) {
+            getAgeIfAssigned(c, age);
+            if(prevStart<c && 0!=memcmp(prevAge, age, 4)) {
+                printLine(prevStart, c-1, prevStatus, prevMapping);
+                prevStart=c;
+                memcpy(prevAge, age, 4);
+            }
+        }
     }
     if(prevStart<c) {
         printLine(prevStart, c-1, prevStatus, prevMapping);
