@@ -124,7 +124,7 @@ static const int8_t kDateFieldsCount = 13;
 
 static const UDateFormatField kTimeFields[] = {
     UDAT_HOUR_OF_DAY1_FIELD,
-    UDAT_HOUR_OF_DAY1_FIELD,
+    UDAT_HOUR_OF_DAY0_FIELD,
     UDAT_MINUTE_FIELD,
     UDAT_SECOND_FIELD,
     UDAT_FRACTIONAL_SECOND_FIELD,
