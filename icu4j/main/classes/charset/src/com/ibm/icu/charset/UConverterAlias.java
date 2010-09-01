@@ -50,14 +50,22 @@ final class UConverterAlias {
     static byte[] gNormalizedStringTable = null;
 
     static final String GET_STRING(int idx) {
-        return new String(gStringTable, 2 * idx, strlen(gStringTable, 2 * idx));
+        return extractString(gStringTable, 2 * idx);
     }
 
     private static final String GET_NORMALIZED_STRING(int idx) {
-        return new String(gNormalizedStringTable, 2 * idx, strlen(gNormalizedStringTable, 2 * idx));
+        return extractString(gNormalizedStringTable, 2 * idx);
     }
 
-    public static final int strlen(byte[] sArray, int sBegin)
+    private static final String extractString(byte[] sArray, int sBegin) {
+        char[] buf = new char[strlen(sArray, sBegin)];
+        for (int i = 0; i < buf.length; i++) {
+           buf[i] = (char)(sArray[sBegin + i] & 0xff);
+        }
+        return new String(buf);
+    }
+
+    private static final int strlen(byte[] sArray, int sBegin)
     {
         int i = sBegin;
         while(i < sArray.length && sArray[i++] != 0) {}
