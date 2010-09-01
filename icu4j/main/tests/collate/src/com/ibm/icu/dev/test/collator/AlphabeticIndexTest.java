@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -164,10 +165,10 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public void TestFirstCharacters() {
-        AlphabeticIndex indexCharacters = new AlphabeticIndex(ULocale.ENGLISH);
-        RuleBasedCollator collator = indexCharacters.getCollator();
+        AlphabeticIndex alphabeticIndex = new AlphabeticIndex(Locale.ENGLISH);
+        RuleBasedCollator collator = alphabeticIndex.getCollator();
         collator.setStrength(Collator.IDENTICAL);
-        List<String> firsts = indexCharacters.getFirstScriptCharacters();
+        List<String> firsts = alphabeticIndex.getFirstScriptCharacters();
         // Verify that they are all in order, and that each script is represented exactly once.
         UnicodeSet missingScripts = new UnicodeSet("[^[:sc=inherited:][:sc=unknown:][:sc=common:][:Script=Braille:]]");
         String last = "";
@@ -206,16 +207,16 @@ public class AlphabeticIndexTest extends TestFmwk {
         };
         for (Object[] test : tests) {
             int expected = (Integer) test[0];
-            AlphabeticIndex<Double> indexCharacters = new AlphabeticIndex((ULocale)test[1]);
+            AlphabeticIndex<Double> alphabeticIndex = new AlphabeticIndex((ULocale)test[1]);
             for (int i = 2; i < test.length; ++i) {
                 if (test[i] instanceof ULocale) {
-                    indexCharacters.addLabels((ULocale)test[i]);
+                    alphabeticIndex.addLabels((ULocale)test[i]);
                 } else {
-                    indexCharacters.addLabels((UnicodeSet)test[i]);
+                    alphabeticIndex.addLabels((UnicodeSet)test[i]);
                 }
             }
             Counter<AlphabeticIndex.Bucket.LabelType> counter = new Counter();
-            for (Bucket<Double> bucket : indexCharacters) {
+            for (Bucket<Double> bucket : alphabeticIndex) {
                 LabelType labelType = bucket.getLabelType();
                 counter.add(labelType, 1);
             }
@@ -232,7 +233,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                         indexCharacters2.addLabels((UnicodeSet)test[i]);
                     }
                 }
-                List<Bucket<Double>> buckets = CollectionUtilities.addAll(indexCharacters.iterator(), new ArrayList<Bucket<Double>>());
+                List<Bucket<Double>> buckets = CollectionUtilities.addAll(alphabeticIndex.iterator(), new ArrayList<Bucket<Double>>());
                 logln(buckets.toString());
             }
             assertEquals(LabelType.OVERFLOW + "\t" + printList, 1, counter.get(LabelType.OVERFLOW));
@@ -352,11 +353,11 @@ public class AlphabeticIndexTest extends TestFmwk {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
             String expectedIndexCharacters = "\u2026:" + localeAndIndexCharacters[1] + ":\u2026";
-            Collection<String> indexCharacters = new AlphabeticIndex(locale).getBucketLabels();
+            Collection<String> alphabeticIndex = new AlphabeticIndex(locale).getBucketLabels();
 
             // Join the elements of the list to a string with delimiter ":"
             StringBuilder sb = new StringBuilder();
-            Iterator<String> iter = indexCharacters.iterator();
+            Iterator<String> iter = alphabeticIndex.iterator();
             while (iter.hasNext()) {
                 sb.append(iter.next());
                 if (!iter.hasNext()) {
@@ -398,8 +399,8 @@ public class AlphabeticIndexTest extends TestFmwk {
                 if (locale.getCountry().length() != 0) {
                     continue;
                 }
-                AlphabeticIndex indexCharacters = new AlphabeticIndex(locale);
-                final Collection mainChars = indexCharacters.getBucketLabels();
+                AlphabeticIndex alphabeticIndex = new AlphabeticIndex(locale);
+                final Collection mainChars = alphabeticIndex.getBucketLabels();
                 String mainCharString = mainChars.toString();
                 if (mainCharString.length() > 500) {
                     mainCharString = mainCharString.substring(0,500) + "...";
@@ -409,9 +410,9 @@ public class AlphabeticIndexTest extends TestFmwk {
                 if (mainChars.size() > 100) {
                     errln("Index character set too large");
                 }
-                showIfNotEmpty("A sequence sorting the same is already present", indexCharacters.getAlreadyIn());
-                showIfNotEmpty("A sequence sorts the same as components", indexCharacters.getNoDistinctSorting());
-                showIfNotEmpty("A sequence has only Marks or Nonalphabetics", indexCharacters.getNotAlphabetic());
+                showIfNotEmpty("A sequence sorting the same is already present", alphabeticIndex.getAlreadyIn());
+                showIfNotEmpty("A sequence sorts the same as components", alphabeticIndex.getNoDistinctSorting());
+                showIfNotEmpty("A sequence has only Marks or Nonalphabetics", alphabeticIndex.getNotAlphabetic());
             }
         }
     }
@@ -445,8 +446,8 @@ public class AlphabeticIndexTest extends TestFmwk {
     public void TestClientSupport() {
         for (String localeString : KEY_LOCALES) { // KEY_LOCALES, new String[] {"zh"}
             ULocale ulocale = new ULocale(localeString);
-            AlphabeticIndex<Double> indexCharacters = new AlphabeticIndex<Double>(ulocale).addLabels(ULocale.ENGLISH);
-            RuleBasedCollator collator = indexCharacters.getCollator();
+            AlphabeticIndex<Double> alphabeticIndex = new AlphabeticIndex<Double>(ulocale).addLabels(ULocale.ENGLISH);
+            RuleBasedCollator collator = alphabeticIndex.getCollator();
             String [][] tests;
 
             if (!localeString.equals("zh") ) {
@@ -457,22 +458,22 @@ public class AlphabeticIndexTest extends TestFmwk {
 
             for (String [] shortTest : tests) {
                 double testValue = 100;
-                indexCharacters.clearRecords();
+                alphabeticIndex.clearRecords();
                 for (String name : shortTest) {
-                    indexCharacters.addRecord(name, testValue++);
+                    alphabeticIndex.addRecord(name, testValue++);
                 }
 
-                if (DEBUG) showIndex(indexCharacters, false);
+                if (DEBUG) showIndex(alphabeticIndex, false);
 
                 // make my own copy
                 testValue = 100;
-                List<String> myBucketLabels = indexCharacters.getBucketLabels();
+                List<String> myBucketLabels = alphabeticIndex.getBucketLabels();
                 ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents = new ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>>(myBucketLabels.size());
                 for (int i = 0; i < myBucketLabels.size(); ++i) {
                     myBucketContents.add(new TreeSet<R4<RawCollationKey, String, Integer, Double>>());
                 }
                 for (String name : shortTest) {
-                    int bucketIndex = indexCharacters.getBucketIndex(name);
+                    int bucketIndex = alphabeticIndex.getBucketIndex(name);
                     Set<R4<RawCollationKey, String, Integer, Double>> myBucket = myBucketContents.get(bucketIndex);
                     RawCollationKey rawCollationKey = collator.getRawCollationKey(name, null);
                     R4<RawCollationKey, String, Integer, Double> row = Row.of(rawCollationKey, name, name.length(), testValue++);
@@ -483,7 +484,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 // now compare
                 int index = 0;
                 boolean gotError = false;
-                for (AlphabeticIndex.Bucket<Double> bucket : indexCharacters) {
+                for (AlphabeticIndex.Bucket<Double> bucket : alphabeticIndex) {
                     String bucketLabel = bucket.getLabel();
                     String myLabel = myBucketLabels.get(index);
                     if (!bucketLabel.equals(myLabel)) {
@@ -511,7 +512,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
                 if (gotError) {
                     showIndex(myBucketLabels, myBucketContents, false);
-                    showIndex(indexCharacters, false);
+                    showIndex(alphabeticIndex, false);
                 }
             }
         }
