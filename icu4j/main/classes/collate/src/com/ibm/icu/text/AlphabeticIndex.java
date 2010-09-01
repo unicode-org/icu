@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -52,11 +53,13 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * character sequences) that allow the user to see a segment (bucket) of a larger "target" list. That is, each label
  * corresponds to a bucket in the target list, where everything in the bucket is greater than or equal to the character
  * (according to the locale's collation). Strings can be added to the index; they will be in sorted order in the right
- * bucket.
+ * bucket.</p>
  * <p>
  * The class also supports having buckets for strings before the first (underflow), after the last (overflow), and
  * between scripts (inflow). For example, if the index is constructed with labels for Russian and English, Greek
- * characters would fall into an inflow bucket between the other two scripts.
+ * characters would fall into an inflow bucket between the other two scripts.</p>
+ * 
+ * <p><em>Note:</em> If you expect to have a lot of ASCII or Latin characters as well as characters from the user's language, then it is a good idea to call addLabels(ULocale.English).</p>
  * 
  * <h2>Direct Use</h2>
  * <p>The following shows an example of building an index directly.
@@ -106,7 +109,7 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket;
  * and communicate the bucketIndex and collationKey back to the client.
  * 
  * <pre>
- * int bucketIndex = indexCharacters.getBucketIndex(name);
+ * int bucketIndex = alphabeticIndex.getBucketIndex(name);
  * RawCollationKey collationKey = collator.getRawCollationKey(name, null);
  * </pre>
  * 
@@ -173,6 +176,18 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex(ULocale locale) {
         this(locale, null, getIndexExemplars(locale));
+    }
+
+    /**
+     * Create the index object.
+     * 
+     * @param locale
+     *            The locale for the index.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public AlphabeticIndex(Locale locale) {
+        this(ULocale.forLocale(locale));
     }
 
     /**
@@ -255,6 +270,21 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     public AlphabeticIndex<V> addLabels(ULocale... additions) {
         for (ULocale addition : additions) {
             initialLabels.addAll(getIndexExemplars(addition));
+        }
+        buckets = null;
+        return this;
+    }
+
+    /**
+     * Add more index characters (aside from what are in the locale)
+     * @param additions additional characters to add to the index, such as those in Swedish.
+     * @return this, for chaining
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public AlphabeticIndex<V> addLabels(Locale... additions) {
+        for (Locale addition : additions) {
+            initialLabels.addAll(getIndexExemplars(ULocale.forLocale(addition)));
         }
         buckets = null;
         return this;
@@ -502,7 +532,11 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Get a clone of the collator used internally
+     * Get a clone of the collator used internally. Note that for performance reasons, the clone is only done once, and
+     * then stored. The next time it is accessed, the same instance is returned.
+     * <p>
+     * <b><i>Don't use this method across threads if you are changing the settings on the collator, at least not without
+     * synchronizing.</i></b>
      * 
      * @return a clone of the collator used internally
      * @draft ICU 4.6
