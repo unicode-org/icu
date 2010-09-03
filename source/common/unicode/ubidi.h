@@ -416,9 +416,9 @@ typedef uint8_t UBiDiLevel;
  * @stable ICU 2.0
  */
 enum UBiDiDirection {
-    /** All left-to-right text. This is a 0 value. @stable ICU 2.0 */
+    /** left-to-right text. This is a 0 value. @stable ICU 2.0 */
     UBIDI_LTR,
-    /** All right-to-left text. This is a 1 value. @stable ICU 2.0 */
+    /** right-to-left text. This is a 1 value. @stable ICU 2.0 */
     UBIDI_RTL,
     /** Mixed-directional text. @stable ICU 2.0 */
     UBIDI_MIXED,

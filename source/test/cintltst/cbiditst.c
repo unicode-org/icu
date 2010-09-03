@@ -1168,7 +1168,11 @@ static void testGetBaseDirection(void) {
 /*All weak L (English Digits)*/
     stringAllEnglishDigits[]={0x31, 0x32, 0x33, 0},
 /*All weak AL (Arabic Digits)*/
-    stringAllArabicDigits[]={0x0663, 0x0664, 0x0665, 0};
+    stringAllArabicDigits[]={0x0663, 0x0664, 0x0665, 0},
+/*Fist L (English) others are R (Hebrew etc.) */
+    stringFistL[] = {0x71, 0x0590, 0x05D5, 0x05EA, 0x05F1, 0},
+/*Last R (Hebrew etc.) others are weak L (English Digits)*/
+    stringLastR[] = {0x31, 0x32, 0x33, 0x05F1, 0};
 
     static const struct {
         const UChar *s;
@@ -1186,7 +1190,9 @@ static void testGetBaseDirection(void) {
         STRING_TEST_CASE(stringSurrogateChar),
         STRING_TEST_CASE(stringInvalidUchar),
         STRING_TEST_CASE(stringAllEnglishDigits),
-        STRING_TEST_CASE(stringAllArabicDigits)
+        STRING_TEST_CASE(stringAllArabicDigits),
+        STRING_TEST_CASE(stringFistL),
+        STRING_TEST_CASE(stringLastR),
     };
 
 /* Expected results */
@@ -1195,7 +1201,7 @@ static void testGetBaseDirection(void) {
         UBIDI_RTL, UBIDI_RTL, UBIDI_LTR,
         UBIDI_LTR, UBIDI_RTL, UBIDI_NEUTRAL,
         UBIDI_LTR, UBIDI_NEUTRAL, UBIDI_NEUTRAL,
-        UBIDI_NEUTRAL
+        UBIDI_NEUTRAL, UBIDI_LTR, UBIDI_RTL
     };
 
     log_verbose("testGetBaseDirection() with %u test cases ---\n",
