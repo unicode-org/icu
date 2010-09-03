@@ -1332,11 +1332,14 @@ static const mac_lc_rec mac_lc_recs[] = {
 #endif
 
 #if U_POSIX_LOCALE
-/* Return just the POSIX id, whatever happens to be in it */
-static const char *uprv_getPOSIXID(void)
+/* A helper function used by uprv_getPOSIXIDForDefaultLocale and
+ * uprv_getPOSIXIDForDefaultCodepage. Returns the posix locale id for
+ * LC_CTYPE and LC_MESSAGES. It doesn't support other locale categories.
+ */
+static const char *uprv_getPOSIXIDForCategory(int category)
 {
-    static const char* posixID = NULL;
-    if (posixID == 0) {
+    const char* posixID = NULL;
+    if (category == LC_MESSAGES || category == LC_CTYPE) {
         /*
         * On Solaris two different calls to setlocale can result in
         * different values. Only get this value once.
@@ -1355,7 +1358,7 @@ static const char *uprv_getPOSIXID(void)
         * Do not call setlocale(LC_*, "")! Using an empty string instead
         * of NULL, will modify the libc behavior.
         */
-        posixID = setlocale(LC_CTYPE, NULL);
+        posixID = setlocale(category, NULL);
         if ((posixID == 0)
             || (uprv_strcmp("C", posixID) == 0)
             || (uprv_strcmp("POSIX", posixID) == 0))
@@ -1363,22 +1366,44 @@ static const char *uprv_getPOSIXID(void)
             /* Maybe we got some garbage.  Try something more reasonable */
             posixID = getenv("LC_ALL");
             if (posixID == 0) {
-                posixID = getenv("LC_CTYPE");
+                posixID = getenv(category == LC_MESSAGES ? "LC_MESSAGES" : "LC_CTYPE");
                 if (posixID == 0) {
                     posixID = getenv("LANG");
                 }
             }
         }
-
-        if ((posixID==0)
-            || (uprv_strcmp("C", posixID) == 0)
-            || (uprv_strcmp("POSIX", posixID) == 0))
-        {
-            /* Nothing worked.  Give it a nice POSIX default value. */
-            posixID = "en_US_POSIX";
-        }
     }
+    if ((posixID==0)
+        || (uprv_strcmp("C", posixID) == 0)
+        || (uprv_strcmp("POSIX", posixID) == 0))
+    {
+        /* Nothing worked.  Give it a nice POSIX default value. */
+        posixID = "en_US_POSIX";
+    }
+    return posixID;
+}
 
+/* Return just the POSIX id for the default locale, whatever happens to be in
+ * it. It gets the value from LC_MESSAGES and indirectly from LC_ALL and LANG.
+ */
+static const char *uprv_getPOSIXIDForDefaultLocale(void)
+{
+    static const char* posixID = NULL;
+    if (posixID == 0) {
+        posixID = uprv_getPOSIXIDForCategory(LC_MESSAGES);
+    }
+    return posixID;
+}
+
+/* Return just the POSIX id for the default codepage, whatever happens to be in
+ * it. It gets the value from LC_CTYPE and indirectly from LC_ALL and LANG.
+ */
+static const char *uprv_getPOSIXIDForDefaultCodepage(void)
+{
+    static const char* posixID = NULL;
+    if (posixID == 0) {
+        posixID = uprv_getPOSIXIDForCategory(LC_CTYPE);
+    }
     return posixID;
 }
 #endif
@@ -1411,7 +1436,7 @@ The 'rightmost' variant (@xxx) wins.
 The leftmost codepage (.xxx) wins.
 */
     char *correctedPOSIXLocale = 0;
-    const char* posixID = uprv_getPOSIXID();
+    const char* posixID = uprv_getPOSIXIDForDefaultLocale();
     const char *p;
     const char *q;
     int32_t len;
@@ -1770,6 +1795,11 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
          */
         name = "UTF-8";
     }
+    /*
+     * Linux returns ANSI_X3.4-1968 for C/POSIX, but the call site takes care of
+     * it by falling back to 'US-ASCII' when NULL is returned from this
+     * function. So, we don't have to worry about it here.
+     */
 #endif
     /* return NULL when "" is passed in */
     if (*name == 0) {
@@ -1847,24 +1877,9 @@ int_getDefaultCodepage()
     const char *name = NULL;
 
     uprv_memset(codesetName, 0, sizeof(codesetName));
-
-    /* Use setlocale in a nice way, and then check some environment variables.
-       Maybe the application used setlocale already.
-    */
-    localeName = uprv_getPOSIXID();
-    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
-    if (name) {
-        /* if we can find the codeset name from setlocale, return that. */
-        return name;
-    }
-    /* else "C" was probably returned. That's underspecified. */
-
 #if U_HAVE_NL_LANGINFO_CODESET
-    if (*codesetName) {
-        uprv_memset(codesetName, 0, sizeof(codesetName));
-    }
-    /* When available, check nl_langinfo because it usually gives more
-       useful names. It depends on LC_CTYPE and not LANG or LC_ALL.
+    /* When available, check nl_langinfo first because it usually gives more
+       useful names. It depends on LC_CTYPE.
        nl_langinfo may use the same buffer as setlocale. */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
@@ -1888,6 +1903,17 @@ int_getDefaultCodepage()
         }
     }
 #endif
+
+    /* Use setlocale in a nice way, and then check some environment variables.
+       Maybe the application used setlocale already.
+    */
+    uprv_memset(codesetName, 0, sizeof(codesetName));
+    localeName = uprv_getPOSIXIDForDefaultCodepage();
+    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    if (name) {
+        /* if we can find the codeset name from setlocale, return that. */
+        return name;
+    }
 
     if (*codesetName == 0)
     {
