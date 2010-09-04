@@ -1876,6 +1876,7 @@ int_getDefaultCodepage()
     const char *localeName = NULL;
     const char *name = NULL;
 
+    localeName = uprv_getPOSIXIDForDefaultCodepage();
     uprv_memset(codesetName, 0, sizeof(codesetName));
 #if U_HAVE_NL_LANGINFO_CODESET
     /* When available, check nl_langinfo first because it usually gives more
@@ -1908,7 +1909,6 @@ int_getDefaultCodepage()
        Maybe the application used setlocale already.
     */
     uprv_memset(codesetName, 0, sizeof(codesetName));
-    localeName = uprv_getPOSIXIDForDefaultCodepage();
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
