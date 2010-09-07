@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/impl
+Specification-Title: ICU for Java Language Data
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Language Data
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@
