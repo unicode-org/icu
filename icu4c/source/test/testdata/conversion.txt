@@ -149,6 +149,13 @@ conversion:table(nofallback) {
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
         {
+          "ISO-2022-CN-CNS",
+          :bin{ 411b2429470e21702541256f0f },
+          "A\u00a7\u03c4\u02c7",
+          :intvector{ 0,6,8,10 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
           "HZ",
           :bin{ 417e7b4141af4142affe41437e7d5a },
           "A\u4eae\\xAF\u8c05\\xAF\\xFE\u64a9Z",

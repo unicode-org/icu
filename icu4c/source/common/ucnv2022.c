@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv2022.c
@@ -565,11 +565,15 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
             cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
             uprv_strcpy(myConverterData->locale,"cn");
 
-            if (version==1){
-                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
-            }else{
+            if (version==0){
                 myConverterData->version = 0;
                 (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
+            }else if (version==1){
+                myConverterData->version = 1;
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
+            }else {
+                myConverterData->version = 2;
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=2");
             }
         }
         else{
@@ -2972,7 +2976,7 @@ getTrail:
                         }
 
                         choiceCount = 2;
-                    } else {
+                    } else if (converterData->version == 1) {
                         /* ISO-2022-CN-EXT */
 
                         /* try one of the other converters */
@@ -2992,6 +2996,9 @@ getTrail:
                         }
 
                         choiceCount = 3;
+                    } else {
+                        choices[0] = (int8_t)CNS_11643_1;
+                        choices[1] = (int8_t)GB2312_1;
                     }
                 }
 
