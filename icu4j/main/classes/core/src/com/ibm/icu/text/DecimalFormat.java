@@ -1699,7 +1699,7 @@ public class DecimalFormat extends NumberFormat {
                 return null;
             }
         } else {
-            if (!subparse(text, parsePosition, digitList, false, status, currency, negPrefixPattern,
+            if (!subparse(text, parsePosition, digitList, status, currency, negPrefixPattern,
                           negSuffixPattern, posPrefixPattern, posSuffixPattern,
                           Currency.SYMBOL_NAME)) {
                 parsePosition.setIndex(backup);
@@ -1797,11 +1797,11 @@ public class DecimalFormat extends NumberFormat {
         DigitList tmpDigitList = new DigitList();
         boolean found;
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
-            found = subparse(text, tmpPos, tmpDigitList, false, tmpStatus, currency,
+            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
                              negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
                              Currency.LONG_NAME);
         } else {
-            found = subparse(text, tmpPos, tmpDigitList, false, tmpStatus, currency,
+            found = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
                              negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
                              Currency.SYMBOL_NAME);
         }
@@ -1820,7 +1820,7 @@ public class DecimalFormat extends NumberFormat {
             tmpStatus = new boolean[STATUS_LENGTH];
             tmpPos = new ParsePosition(origPos);
             tmpDigitList = new DigitList();
-            boolean result = subparse(text, tmpPos, tmpDigitList, false, tmpStatus, currency,
+            boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
                                       affix.getNegPrefix(), affix.getNegSuffix(),
                                       affix.getPosPrefix(), affix.getPosSuffix(),
                                       affix.getPatternType());
@@ -1848,7 +1848,7 @@ public class DecimalFormat extends NumberFormat {
         // set currencySignCount to 0 so that compareAffix function will fall to
         // compareSimpleAffix path, not compareComplexAffix path.
         currencySignCount = 0;
-        boolean result = subparse(text, tmpPos, tmpDigitList, false, tmpStatus, currency,
+        boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
                                   negativePrefix, negativeSuffix, positivePrefix, positiveSuffix,
                                   Currency.SYMBOL_NAME);
         currencySignCount = savedCurrencySignCount;
@@ -2056,8 +2056,6 @@ public class DecimalFormat extends NumberFormat {
      * @param parsePosition the position at which to being parsing. Upon return, the first
      * unparseable character.
      * @param digits the DigitList to set to the parsed value.
-     * @param isExponent If true, parse an exponent. This means no infinite values and
-     * integer only.
      * @param status Upon return contains boolean status flags indicating whether the
      * value was infinite and whether it was positive.
      * @param currency return value for parsed currency, for generic currency parsing
@@ -2070,7 +2068,7 @@ public class DecimalFormat extends NumberFormat {
      * @param type type of currency to parse against, LONG_NAME only or not.
      */
     private final boolean subparse(
-        String text, ParsePosition parsePosition, DigitList digits, boolean isExponent,
+        String text, ParsePosition parsePosition, DigitList digits,
         boolean status[], Currency currency[], String negPrefix, String negSuffix, String posPrefix,
         String posSuffix, int type) {
 
@@ -2108,7 +2106,7 @@ public class DecimalFormat extends NumberFormat {
 
         // process digits or Inf, find decimal position
         status[STATUS_INFINITE] = false;
-        if (!isExponent && text.regionMatches(position, symbols.getInfinity(), 0,
+        if (text.regionMatches(position, symbols.getInfinity(), 0,
                                               symbols.getInfinity().length())) {
             position += symbols.getInfinity().length();
             status[STATUS_INFINITE] = true;
@@ -2205,7 +2203,7 @@ public class DecimalFormat extends NumberFormat {
                     // Handle leading zeros
                     if (digits.count == 0) {
                         if (!sawDecimal) {
-                            if (strictParse && !isExponent) {
+                            if (strictParse) {
                                 // Allow leading zeros in exponents
                                 // Count leading zeros for checking later
                                 if (!strictLeadingZero)
@@ -2244,7 +2242,7 @@ public class DecimalFormat extends NumberFormat {
 
                     // Cancel out backup setting (see grouping handler below)
                     backup = -1;
-                } else if (!isExponent && ch == decimal) {
+                } else if (ch == decimal) {
                     if (strictParse) {
                         if (backup != -1 ||
                             (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
@@ -2259,7 +2257,7 @@ public class DecimalFormat extends NumberFormat {
                     }
                     digits.decimalAt = digitCount; // Not digits.count!
                     sawDecimal = true;
-                } else if (!isExponent && isGroupingUsed() && ch == grouping) {
+                } else if (isGroupingUsed() && ch == grouping) {
                     if (sawDecimal) {
                         break;
                     }
@@ -2275,7 +2273,7 @@ public class DecimalFormat extends NumberFormat {
                     // them.
                     backup = position;
                     sawGrouping = true;
-                } else if (!isExponent && !sawDecimal && decimalEquiv.contains(ch)) {
+                } else if (!sawDecimal && decimalEquiv.contains(ch)) {
                     if (strictParse) {
                         if (backup != -1 ||
                             (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
@@ -2292,8 +2290,7 @@ public class DecimalFormat extends NumberFormat {
                     // decimal separator character from then on.
                     decimal = ch;
                     sawDecimal = true;
-                } else if (!isExponent && isGroupingUsed() && !sawGrouping &&
-                           groupEquiv.contains(ch)) {
+                } else if (isGroupingUsed() && !sawGrouping && groupEquiv.contains(ch)) {
                     if (sawDecimal) {
                         break;
                     }
@@ -2313,8 +2310,7 @@ public class DecimalFormat extends NumberFormat {
                     // them.
                     backup = position;
                     sawGrouping = true;
-                } else if (!isExponent && !sawExponent
-                        && text.regionMatches(position, exponentSep, 0, exponentSep.length())) {
+                } else if (!sawExponent && text.regionMatches(position, exponentSep, 0, exponentSep.length())) {
                     // Parse sign, if present
                     boolean negExp = false;
                     int pos = position + exponentSep.length();
