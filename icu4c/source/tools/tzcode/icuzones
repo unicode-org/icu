@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (C) 2007-2008, International Business Machines
+# Copyright (C) 2007-2010, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # This is an ICU-specific file with the same format as regular
@@ -14,25 +14,23 @@
 # Zone	NAME		GMTOFF	RULES	FORMAT
 Zone	Etc/Unknown	0	-	Unknown
 
-# Add SystemV/XXX time zones as aliases according to CLDR.
+# SystemV time zones.
 # The Olson systemv file has these commented out.
-# An alternative to making these aliases according to CLDR would be
-# to copy and un-comment the data from the systemv file.
 
-# Link canonical alias
-Link America/Halifax SystemV/AST4ADT
-Link America/New_York SystemV/EST5EDT
-Link America/Chicago SystemV/CST6CDT
-Link America/Denver SystemV/MST7MDT
-Link America/Los_Angeles SystemV/PST8PDT
-Link America/Anchorage SystemV/YST9YDT
-Link Etc/GMT+4 SystemV/AST4
-Link Etc/GMT+5 SystemV/EST5
-Link Etc/GMT+6 SystemV/CST6
-Link Etc/GMT+7 SystemV/MST7
-Link Etc/GMT+8 SystemV/PST8
-Link Etc/GMT+9 SystemV/YST9
-Link Etc/GMT+10 SystemV/HST10
+# Zone	NAME		GMTOFF	RULES/SAVE	FORMAT	[UNTIL]
+Zone	SystemV/AST4ADT	-4:00	SystemV		A%sT
+Zone	SystemV/EST5EDT	-5:00	SystemV		E%sT
+Zone	SystemV/CST6CDT	-6:00	SystemV		C%sT
+Zone	SystemV/MST7MDT	-7:00	SystemV		M%sT
+Zone	SystemV/PST8PDT	-8:00	SystemV		P%sT
+Zone	SystemV/YST9YDT	-9:00	SystemV		Y%sT
+Zone	SystemV/AST4	-4:00	-		AST
+Zone	SystemV/EST5	-5:00	-		EST
+Zone	SystemV/CST6	-6:00	-		CST
+Zone	SystemV/MST7	-7:00	-		MST
+Zone	SystemV/PST8	-8:00	-		PST
+Zone	SystemV/YST9	-9:00	-		YST
+Zone	SystemV/HST10	-10:00	-		HST
 
 
 # The list below is for supporting legacy ICU zone aliases.
