@@ -66,7 +66,7 @@ windowsZones:table(nofallback){
             001{"Asia/Almaty"}
         }
         Central Brazilian Standard Time{
-            001{"America/Campo_Grande"}
+            001{"America/Cuiaba"}
         }
         Central Europe Standard Time{
             001{"Europe/Budapest"}
@@ -123,7 +123,7 @@ windowsZones:table(nofallback){
             001{"Europe/Istanbul"}
         }
         Georgian Standard Time{
-            001{"Etc/GMT-3"}
+            001{"Asia/Tbilisi"}
         }
         Greenland Standard Time{
             001{"America/Godthab"}
@@ -210,7 +210,7 @@ windowsZones:table(nofallback){
             001{"America/Los_Angeles"}
         }
         Pacific Standard Time (Mexico){
-            001{"America/Tijuana"}
+            001{"America/Santa_Isabel"}
         }
         Pakistan Standard Time{
             001{"Asia/Karachi"}
@@ -248,6 +248,9 @@ windowsZones:table(nofallback){
         Sri Lanka Standard Time{
             001{"Asia/Colombo"}
         }
+        Syria Standard Time{
+            001{"Asia/Damascus"}
+        }
         Taipei Standard Time{
             001{"Asia/Taipei"}
         }
@@ -268,6 +271,15 @@ windowsZones:table(nofallback){
         }
         UTC{
             001{"Etc/GMT"}
+        }
+        UTC+12{
+            001{"Etc/GMT-12"}
+        }
+        UTC-02{
+            001{"Etc/GMT+2"}
+        }
+        UTC-11{
+            001{"Etc/GMT+11"}
         }
         Ulaanbaatar Standard Time{
             001{"Asia/Ulaanbaatar"}
