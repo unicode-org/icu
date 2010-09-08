@@ -954,6 +954,7 @@ ISO_2022,locale=ko,version=0    ISO-2022-KR { IANA* MIME* JAVA* } csISO2022KR { 
 ISO_2022,locale=ko,version=1    ibm-25546 { IBM* }
 ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* JAVA* } csISO2022CN { JAVA } x-ISO-2022-CN-GB { JAVA }
 ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* }
+ISO_2022,locale=zh,version=2    ISO-2022-CN-CNS x-ISO-2022-CN-CNS { JAVA }
 HZ                              HZ-GB-2312 { IANA* }
 
 ISCII,version=0         x-ISCII91 { JAVA } x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev ibm-4902 { IBM* } # ibm-806 contains non-standard box drawing symbols.
