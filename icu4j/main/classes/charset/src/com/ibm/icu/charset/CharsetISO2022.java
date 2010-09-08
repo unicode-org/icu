@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2344,7 +2344,7 @@ class CharsetISO2022 extends CharsetICU {
                                 }
                                 
                                 choiceCount = 2;
-                            } else {
+                            } else if (myConverterData.version == 1) {
                                 /* ISO-2022-CN-EXT */
                                 
                                 /* try one of the other converters */
@@ -2364,6 +2364,12 @@ class CharsetISO2022 extends CharsetICU {
                                 }
                                 
                                 choiceCount = 3;
+                            } else {
+                                /* ISO-2022-CN-CNS */
+                                choices[0] = CNS_11643_1;
+                                choices[1] = GB2312_1;
+                                
+                                choiceCount = 2;
                             }
                         }
                         

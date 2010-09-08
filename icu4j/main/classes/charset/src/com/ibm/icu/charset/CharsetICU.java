@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -154,6 +154,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("ISO_2022,locale=ja,version=4",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=zh,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=zh,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=zh,version=2",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=ko,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=ko,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
         }
