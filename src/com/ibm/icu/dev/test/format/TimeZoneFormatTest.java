@@ -118,6 +118,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 boolean bFailure = false;
                                 if ((tz instanceof BasicTimeZone) && (outtz instanceof BasicTimeZone)) {
                                     bFailure = !(canonicalID.indexOf('/') == -1)
+                                                && !(canonicalID.startsWith("SystemV/")) // SystemV/* is not associated with a location
                                                 && !((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high);
                                 }
                                 if (bFailure) {
