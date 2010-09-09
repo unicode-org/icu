@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2009, Google, International Business Machines
+ * Copyright (c) 2002-2010, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -11,7 +11,7 @@ package com.ibm.icu.impl;
 import com.ibm.icu.util.Freezable;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
                                         Freezable<Row<C0, C1, C2, C3, C4>>{
     protected Object[] items;

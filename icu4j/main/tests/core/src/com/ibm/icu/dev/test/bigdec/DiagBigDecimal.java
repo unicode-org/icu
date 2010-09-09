@@ -918,14 +918,16 @@ public class DiagBigDecimal extends TestFmwk {
         (new Test("cuc002")).ok = (com.ibm.icu.math.BigDecimal.ONE.toString()).equals("1");
         (new Test("cuc003")).ok = (com.ibm.icu.math.BigDecimal.TEN.toString()).equals("10");
 
-        (new Test("cuc010")).ok = com.ibm.icu.math.BigDecimal.ROUND_CEILING == com.ibm.icu.math.MathContext.ROUND_CEILING;
-        (new Test("cuc011")).ok = com.ibm.icu.math.BigDecimal.ROUND_DOWN == com.ibm.icu.math.MathContext.ROUND_DOWN;
-        (new Test("cuc012")).ok = com.ibm.icu.math.BigDecimal.ROUND_FLOOR == com.ibm.icu.math.MathContext.ROUND_FLOOR;
-        (new Test("cuc013")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN == com.ibm.icu.math.MathContext.ROUND_HALF_DOWN;
-        (new Test("cuc014")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN == com.ibm.icu.math.MathContext.ROUND_HALF_EVEN;
-        (new Test("cuc015")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_UP == com.ibm.icu.math.MathContext.ROUND_HALF_UP;
-        (new Test("cuc016")).ok = com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY == com.ibm.icu.math.MathContext.ROUND_UNNECESSARY;
-        (new Test("cuc017")).ok = com.ibm.icu.math.BigDecimal.ROUND_UP == com.ibm.icu.math.MathContext.ROUND_UP;
+        @SuppressWarnings("unused")
+        int constantVal; // workaround for "Comparing identical expressions" warnings
+        (new Test("cuc010")).ok = com.ibm.icu.math.BigDecimal.ROUND_CEILING == (constantVal = com.ibm.icu.math.MathContext.ROUND_CEILING);
+        (new Test("cuc011")).ok = com.ibm.icu.math.BigDecimal.ROUND_DOWN == (constantVal = com.ibm.icu.math.MathContext.ROUND_DOWN);
+        (new Test("cuc012")).ok = com.ibm.icu.math.BigDecimal.ROUND_FLOOR == (constantVal = com.ibm.icu.math.MathContext.ROUND_FLOOR);
+        (new Test("cuc013")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN == (constantVal = com.ibm.icu.math.MathContext.ROUND_HALF_DOWN);
+        (new Test("cuc014")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN == (constantVal = com.ibm.icu.math.MathContext.ROUND_HALF_EVEN);
+        (new Test("cuc015")).ok = com.ibm.icu.math.BigDecimal.ROUND_HALF_UP == (constantVal = com.ibm.icu.math.MathContext.ROUND_HALF_UP);
+        (new Test("cuc016")).ok = com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY == (constantVal = com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
+        (new Test("cuc017")).ok = com.ibm.icu.math.BigDecimal.ROUND_UP == (constantVal = com.ibm.icu.math.MathContext.ROUND_UP);
 
         (new Test("cuc020")).ok = (com.ibm.icu.math.MathContext.DEFAULT.getDigits()) == 9;
         (new Test("cuc021")).ok = (com.ibm.icu.math.MathContext.DEFAULT.getForm()) == com.ibm.icu.math.MathContext.SCIENTIFIC;

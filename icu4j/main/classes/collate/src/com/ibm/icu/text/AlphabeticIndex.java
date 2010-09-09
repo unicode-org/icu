@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,15 +21,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.MultiComparator;
-import com.ibm.icu.impl.Row;
-import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.Normalizer2.Mode;
+import com.ibm.icu.text.AlphabeticIndex.Bucket;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.text.AlphabeticIndex.Bucket;
 
 /**
  * AlphabeticIndex supports the creation of a UI index appropriate for a given language. It can support either direct
@@ -236,7 +232,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (langType != LangType.NORMAL) {
             locale = locale.setKeywordValue("collation", langType == LangType.TRADITIONAL ? "stroke" : "pinyin");
         }
-        collatorOriginal = collator != null ? (RuleBasedCollator) collator : (RuleBasedCollator) Collator.getInstance(locale);
+        collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
             collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
         } catch (CloneNotSupportedException e) {
@@ -394,6 +390,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         // First sort them, with an "best" ordering among items that are the same according
         // to the collator.
         // Re the warning: the JDK inexplicably didn't make Collators be Comparator<String>!
+        @SuppressWarnings("unchecked")
         Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(collatorPrimaryOnly, PREFERENCE_COMPARATOR));
         exemplars.addAllTo(preferenceSorting);
 
@@ -586,8 +583,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param name
      *            Name, such as a name
-     * @param data
-     *            Data, such as an address or link
      * @return this, for chaining
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
@@ -682,8 +677,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param inputList
      *            List of strings to be sorted and bucketed according to the labels.
-     * @return List of buckets, where each bucket has a label (typically an index character) and the strings in order in
-     *         that bucket.
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -704,7 +697,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         
         // If we have Pinyin, then we have a special hack to bucket items with ASCII.
         if (langType == LangType.SIMPLIFIED) {
-            Map<String,Bucket<V>> rebucketMap = new HashMap();
+            Map<String,Bucket<V>> rebucketMap = new HashMap<String, Bucket<V>>();
             for (Record<V> name : inputList) {
                  String key = hackName(name.name, collatorOriginal);
                  if (key == null) continue;
@@ -831,7 +824,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet(
     "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
-    private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
+    //private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
 
     //    /**
     //     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
@@ -1123,16 +1116,17 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * HACKS
      */
     
-    private static String STROKE = "\u5283";
+    //private static String STROKE = "\u5283";
     private static String PINYIN_LOWER_BOUNDS = "\u0101bcd\u0113fghjklmn\u014Dpqrstwxyz";
     
     /**
      * HACKS
      */
-    private String hackName(CharSequence name, Comparator comparator) {
+    private String hackName(CharSequence name, @SuppressWarnings("rawtypes") Comparator comparator) {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
+        @SuppressWarnings("unchecked")
         int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
         if (index < 0) {
             index = -index - 2;
