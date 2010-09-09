@@ -708,7 +708,7 @@ public class TestIDNA extends TestFmwk {
     public void TestUnicode32Norm() {
         // This test fails - is this because of the new Noramlizer implementation?
         // Revisit this after 4.4.
-        if (skipIfBeforeICU(4,5,1)) {
+        if (skipIfBeforeICU(4,5,2)) {
             logln("Skipping TestUnicode32Norm");
             return;
         }
