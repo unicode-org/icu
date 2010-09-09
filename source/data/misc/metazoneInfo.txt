@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2009 International Business Machines
+// * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metazoneInfo.xml
@@ -667,6 +667,23 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Brasilia",
                 "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Bahia_Banderas"{
+            mz0{
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1970-01-01 08:00",
+            }
+            mz1{
+                "America_Mountain",
+                "1970-01-01 08:00",
+                "2010-04-04 09:00",
+            }
+            mz2{
+                "America_Central",
+                "2010-04-04 09:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1359,6 +1376,13 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Matamoros"{
+            mz0{
+                "America_Central",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:Mazatlan"{
             mz0{
                 "America_Pacific",
@@ -1535,6 +1559,18 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Ojinaga"{
+            mz0{
+                "America_Central",
+                "1970-01-01 00:00",
+                "1998-04-05 09:00",
+            }
+            mz1{
+                "America_Mountain",
+                "1998-04-05 09:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:Panama"{
             mz0{
                 "America_Eastern",
@@ -1680,6 +1716,13 @@ metazoneInfo:table(nofallback){
             mz1{
                 "Amazon",
                 "2008-06-24 05:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Santa_Isabel"{
+            mz0{
+                "America_Pacific",
+                "1970-01-01 00:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1890,6 +1933,11 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Australia_Western",
                 "1970-01-01 00:00",
+                "2009-10-17 18:00",
+            }
+            mz1 {
+                "Australia_Western",
+                "2010-03-04 15:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1905,6 +1953,13 @@ metazoneInfo:table(nofallback){
                 "DumontDUrville",
                 "1970-01-01 00:00",
                 "9999-12-31 23:59",
+            }
+        }
+        "Antarctica:Macquarie"{
+            mz0{
+                "Australia_Eastern",
+                "1970-01-01 00:00",
+                "2010-04-03 16:00",
             }
         }
         "Antarctica:Mawson"{
@@ -2400,6 +2455,18 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Europe_Eastern",
                 "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Asia:Novokuznetsk"{
+            mz0{
+                "Krasnoyarsk",
+                "1970-01-01 00:00",
+                "2010-03-27 19:00",
+            }
+            mz1{
+                "Novosibirsk",
+                "2010-03-27 19:00",
                 "9999-12-31 23:59",
             }
         }
