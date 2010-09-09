@@ -21,6 +21,7 @@ final public class Differ<T> {
      * @param stackSize The size of the largest difference you expect.
      * @param matchCount The number of items that have to be the same to count as a match
      */
+    @SuppressWarnings("unchecked")
     public Differ(int stackSize, int matchCount) {
         this.STACKSIZE = stackSize;
         this.EQUALSIZE = matchCount;

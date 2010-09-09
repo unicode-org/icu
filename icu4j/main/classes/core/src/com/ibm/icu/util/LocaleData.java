@@ -18,7 +18,7 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public final class LocaleData {
     
-    private static final String EXEMPLAR_CHARS      = "ExemplarCharacters";
+//    private static final String EXEMPLAR_CHARS      = "ExemplarCharacters";
     private static final String MEASUREMENT_SYSTEM  = "MeasurementSystem";
     private static final String PAPER_SIZE          = "PaperSize";
     private static final String LOCALE_DISPLAY_PATTERN  = "localeDisplayPattern";

@@ -19,18 +19,17 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.impl.Row;
-import com.ibm.icu.impl.Row.R3;
 import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
+import com.ibm.icu.text.AlphabeticIndex.Bucket;
+import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
+import com.ibm.icu.text.AlphabeticIndex.Record;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.AlphabeticIndex.Bucket;
-import com.ibm.icu.text.AlphabeticIndex.Record;
-import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -433,15 +432,15 @@ public class AlphabeticIndexTest extends TestFmwk {
     //        displayPairs(false);
     //    }
 
-    private void displayPairs(boolean in) {
-        for (String[] pair : localeAndIndexCharactersLists) {
-            if (KEY_LOCALES.contains(pair[0]) == in) {
-                logln("\t"
-                        + "/* " + ULocale.getDisplayName(pair[0], "en") + "*/\t"
-                        + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
-            }
-        }
-    }
+//    private void displayPairs(boolean in) {
+//        for (String[] pair : localeAndIndexCharactersLists) {
+//            if (KEY_LOCALES.contains(pair[0]) == in) {
+//                logln("\t"
+//                        + "/* " + ULocale.getDisplayName(pair[0], "en") + "*/\t"
+//                        + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
+//            }
+//        }
+//    }
 
     public void TestClientSupport() {
         for (String localeString : KEY_LOCALES) { // KEY_LOCALES, new String[] {"zh"}
