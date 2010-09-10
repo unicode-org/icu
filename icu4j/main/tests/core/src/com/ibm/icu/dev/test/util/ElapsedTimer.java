@@ -99,8 +99,7 @@ public final class ElapsedTimer {
         }
         synchronized(fmt) {
             long age = end - start;
-            double diff = (double)age;
-            diff = diff/(double)1000.0; // millis per second
+            long diff = age/1000; // millis per second. Workaround ticket:7936 by using whole number seconds.
             return fmt.format(diff);
         }
     }    
