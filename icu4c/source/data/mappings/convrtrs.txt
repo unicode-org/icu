@@ -945,8 +945,8 @@ ibm-1133_P100-1997 { UTR22* }   ibm-1133 { IBM* }                               
 # Language-specific variants of ISO-2022 continue to be available as listed below.
 # ISO_2022                         ISO-2022
 
-ISO_2022,locale=ja,version=0    ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { IANA JAVA } x-windows-iso2022jp { JAVA }
-ISO_2022,locale=ja,version=1    ISO-2022-JP-1 { MIME* } JIS_Encoding { IANA* } csJISEncoding { IANA } ibm-5054 { IBM* } JIS
+ISO_2022,locale=ja,version=0    ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { IANA JAVA } x-windows-iso2022jp { JAVA } x-windows-50220 { JAVA }
+ISO_2022,locale=ja,version=1    ISO-2022-JP-1 { MIME* } JIS_Encoding { IANA* } csJISEncoding { IANA } ibm-5054 { IBM* } JIS x-windows-50221 { JAVA }
 ISO_2022,locale=ja,version=2    ISO-2022-JP-2 { IANA* MIME* } csISO2022JP2 { IANA }
 ISO_2022,locale=ja,version=3    JIS7
 ISO_2022,locale=ja,version=4    JIS8
