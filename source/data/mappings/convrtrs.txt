@@ -745,7 +745,8 @@ ibm-949_P11A-1999 { UTR22* }
                         ibm-949 # Leave untagged because this isn't the default
                         cp949c { JAVA* }
                         ibm-949_VSUB_VPUA
-                        x-IBM949C
+                        x-IBM949C { JAVA }
+                        IBM-949C { JAVA }
 
 # Korean EUC.
 #
