@@ -224,7 +224,13 @@ public final class CharsetProviderICU extends CharsetProvider{
                 if (!gettingJavaCanonicalName) {
                     gettingJavaCanonicalName = true;
                     if (Charset.isSupported(cName)) {
-                        cName = Charset.forName(cName).name();
+                        String testName = Charset.forName(cName).name();
+                        /* Ensure that the java canonical name works in ICU */
+                        if (!testName.equals(cName)) {
+                            if (getICUCanonicalName(testName).length() > 0) {
+                                cName = testName;
+                            }
+                        }
                     }
                     gettingJavaCanonicalName = false;
                 }
