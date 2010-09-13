@@ -444,22 +444,22 @@ public class CollationServiceTest extends TestFmwk {
     
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
-            {"und",             "standard"},
-            {"en_US",           "standard"},
-            {"en_029",          "standard"},
-            {"de_DE",           "standard", "phonebook"},
-            {"de_Latn_DE",      "standard", "phonebook"},
-            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan"},
-            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan"},
-            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan"},
-            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan"},
-            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan"},
-            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan"},
-            {"es_ES",           "standard", "traditional"},
-            {"es__TRADITIONAL", "traditional", "standard"},
-            {"und@collation=phonebook",     "standard"},
-            {"de_DE@collation=big5han",     "standard", "phonebook"},
-            {"zzz@collation=xxx",           "standard"},
+            {"und",             "standard", "search"},
+            {"en_US",           "standard", "search"},
+            {"en_029",          "standard", "search"},
+            {"de_DE",           "standard", "phonebook", "search"},
+            {"de_Latn_DE",      "standard", "phonebook", "search"},
+            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
+            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
+            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
+            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search"},
+            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search"},
+            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
+            {"es_ES",           "standard", "traditional", "search"},
+            {"es__TRADITIONAL", "traditional", "standard", "search"},
+            {"und@collation=phonebook",     "standard", "search"},
+            {"de_DE@collation=big5han",     "standard", "phonebook", "search"},
+            {"zzz@collation=xxx",           "standard", "search"},
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {
