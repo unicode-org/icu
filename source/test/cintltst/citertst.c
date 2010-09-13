@@ -786,7 +786,7 @@ static void TestMaxExpansion()
     UChar               ch     = 0;
     UChar32             unassigned = 0xEFFFD;
     UChar               supplementary[2];
-    uint32_t            index = 0;
+    uint32_t            stringOffset = 0;
     UBool               isError = FALSE;
     uint32_t            sorder = 0;
     UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
@@ -858,7 +858,7 @@ static void TestMaxExpansion()
                   ch, 3);
       }
 
-      U16_APPEND(supplementary, index, 2, unassigned, isError);
+      U16_APPEND(supplementary, stringOffset, 2, unassigned, isError);
       ucol_setText(iter, supplementary, 2, &status);
       sorder = ucol_previous(iter, &status);
 
@@ -1498,6 +1498,24 @@ static void TestCEBufferOverflow()
 /**
 * Checking collation element validity.
 */
+#define MAX_CODEPOINTS_TO_SHOW 10
+static void showCodepoints(const UChar *codepoints, int length, char * codepointText) {
+    int i, lengthToUse = length;
+    if (lengthToUse > MAX_CODEPOINTS_TO_SHOW) {
+        lengthToUse = MAX_CODEPOINTS_TO_SHOW;
+    }
+    for (i = 0; i < lengthToUse; ++i) {
+        int bytesWritten = sprintf(codepointText, " %04X", *codepoints++);
+        if (bytesWritten <= 0) {
+            break;
+        }
+        codepointText += bytesWritten;
+    }
+    if (i < length) {
+        sprintf(codepointText, " ...");
+    }
+}
+
 static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                              int length)
 {
@@ -1506,10 +1524,17 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                                                   &status);
     UBool result = FALSE;
     UBool primaryDone = FALSE, secondaryDone = FALSE, tertiaryDone = FALSE;
+    const char * collLocale;
+    char codepointText[5*MAX_CODEPOINTS_TO_SHOW + 5];
 
     if (U_FAILURE(status)) {
         log_err("Error creating iterator for testing validity\n");
         return FALSE;
+    }
+    collLocale = ucol_getLocale(coll, ULOC_VALID_LOCALE, &status);
+    if (U_FAILURE(status) || collLocale==NULL) {
+        status = U_ZERO_ERROR;
+        collLocale = "?";
     }
 
     for (;;) {
@@ -1578,7 +1603,8 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                 break;
             }
             if (tertiary <= 2) {
-                log_err("Tertiary byte of %08lX out of range\n", (long)ce);
+                showCodepoints(codepoints, length, codepointText);
+                log_err("Tertiary byte of %08lX out of range: locale %s, codepoints %s\n", (long)ce, collLocale, codepointText);
                 break;
             }
             tertiaryDone = FALSE;
@@ -1630,7 +1656,8 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
             if (tertiary == 0) {
                 tertiaryDone = TRUE;
             } else if (tertiary <= 2) {
-                log_err("Tertiary byte of %08lX out of range\n", (long)ce);
+                showCodepoints(codepoints, length, codepointText);
+                log_err("Tertiary byte of %08lX out of range: locale %s, codepoints %s\n", (long)ce, collLocale, codepointText);
                 break;
             }
         }
@@ -1806,7 +1833,7 @@ static UBool checkSortKeyValidity(UCollator *coll,
                                       UCOL_TERTIARY, UCOL_QUATERNARY,
                                       UCOL_IDENTICAL};
     int        strengthlen = 5;
-    int        index       = 0;
+    int        strengthIndex = 0;
     int        caselevel   = 0;
 
     while (caselevel < 1) {
@@ -1817,16 +1844,16 @@ static UBool checkSortKeyValidity(UCollator *coll,
             ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &status);
         }
 
-        while (index < strengthlen) {
+        while (strengthIndex < strengthlen) {
             int        count01 = 0;
             uint32_t   count   = 0;
             uint8_t    sortkey[128];
             uint32_t   sklen;
 
-            ucol_setStrength(coll, strength[index]);
+            ucol_setStrength(coll, strength[strengthIndex]);
             sklen = ucol_getSortKey(coll, codepoints, length, sortkey, 128);
             while (sortkey[count] != 0) {
-                if (sortkey[count] == 2 || (sortkey[count] == 3 && count01 > 0 && index != 4)) {
+                if (sortkey[count] == 2 || (sortkey[count] == 3 && count01 > 0 && strengthIndex != 4)) {
                     printSortKeyError(codepoints, length, sortkey, sklen);
                     return FALSE;
                 }
@@ -1836,11 +1863,11 @@ static UBool checkSortKeyValidity(UCollator *coll,
                 count ++;
             }
 
-            if (count + 1 != sklen || (count01 != index + caselevel)) {
+            if (count + 1 != sklen || (count01 != strengthIndex + caselevel)) {
                 printSortKeyError(codepoints, length, sortkey, sklen);
                 return FALSE;
             }
-            index ++;
+            strengthIndex ++;
         }
         caselevel ++;
     }
