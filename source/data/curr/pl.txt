@@ -1244,5 +1244,5 @@ pl{
     CurrencyUnitPatterns{
         one{"{0} {1}"}
     }
-    Version{"2.0.49.64"}
+    Version{"2.0.49.97"}
 }

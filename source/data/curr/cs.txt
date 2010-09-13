@@ -1024,5 +1024,5 @@ cs{
             "Dolar zimbabwský",
         }
     }
-    Version{"2.0.49.25"}
+    Version{"2.0.49.93"}
 }

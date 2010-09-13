@@ -21,10 +21,6 @@ en_IE{
                 "a.m.",
                 "p.m.",
             }
-            DateTimeElements:intvector{
-                1,
-                4,
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",

@@ -10,10 +10,10 @@
  *  ICU <specials> source: <path>/xml/collation/te.xml
  */
 te{
-    Version{"2.0.41.26"}
+    Version{"2.0.50.32"}
     collations{
         standard{
-            Sequence{" [normalization on ]&హ<ఁ<ం<ః<్"}
+            Sequence{" [normalization on ]&ఔ<ఁ<ం<ః"}
             Version{"1.8.99.1"}
         }
     }

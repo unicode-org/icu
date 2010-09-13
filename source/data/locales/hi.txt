@@ -46,7 +46,7 @@ hi{
             }
         }
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.30"}
     calendar{
         ethiopic{
             monthNames{

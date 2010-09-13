@@ -12,8 +12,8 @@
 ee{
     AuxExemplarCharacters{"[c j q]"}
     ExemplarCharacters{
-        "[a b d {dz} ɖ e ɛ f ƒ g {gb} ɣ h i k {kp} l m n {ny} ŋ o ɔ p r s t {ts} u v "
-        "ʋ w x y z]"
+        "[a à á ã b d ɖ e è é ẽ ɛ {ɛ\u0301} {ɛ\u0300} {ɛ\u0303} f ƒ g ɣ h i ì í ĩ k l"
+        " m n ŋ o ò ó õ ɔ {ɔ\u0301} {ɔ\u0300} {ɔ\u0303} p r s t u ù ú ũ v ʋ w x y z]"
     }
     ExemplarCharactersIndex{"[A B C D Ɖ E Ɛ F Ƒ G Ɣ H I J K L M N Ŋ O Ɔ P Q R S T U V Ʋ W X Y Z]"}
     LocaleScript{
@@ -26,7 +26,7 @@ ee{
             }
         }
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.50.34"}
     calendar{
         gregorian{
             AmPmMarkers{

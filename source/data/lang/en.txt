@@ -716,7 +716,7 @@ en{
             islamic-civil{"Islamic-Civil Calendar"}
             japanese{"Japanese Calendar"}
             persian{"Persian Calendar"}
-            roc{"Republic of China Calendar"}
+            roc{"Minguo Calendar"}
         }
         collation{
             big5han{"Traditional Chinese Sort Order - Big5"}
@@ -724,6 +724,7 @@ en{
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
             pinyin{"Simplified Chinese Pinyin Sort Order"}
+            search{"General-Purpose Search"}
             stroke{"Traditional Chinese Stroke Sort Order"}
             traditional{"Traditional Sort Order"}
         }
@@ -805,7 +806,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.49.71"}
+    Version{"2.0.50.16"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

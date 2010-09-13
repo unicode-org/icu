@@ -31,7 +31,7 @@ hr{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.18"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -92,32 +92,32 @@ hr{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                MEd{"E, d.M."}
+                MEd{"E, d. M."}
                 MMM{"LLL."}
-                MMMEd{"E, d.MMM."}
+                MMMEd{"E, d. MMM."}
                 MMMMEd{"E, d. MMMM"}
                 MMMMd{"d. MMMM"}
                 MMMMdd{"dd. MMMM"}
-                MMMd{"d.MMM."}
-                MMdd{"dd.MM."}
-                Md{"d.M."}
+                MMMd{"d. MMM."}
+                MMdd{"dd. MM."}
+                Md{"d. M."}
                 d{"d."}
                 h{"hh a"}
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y."}
-                yM{"M.yyyy."}
-                yMEd{"EEE, d.M.y."}
-                yMMM{"MMM.y."}
-                yMMMEd{"EEE, d.MMM.y."}
+                yM{"M. yyyy."}
+                yMEd{"EEE, d. M. y."}
+                yMMM{"MMM. y."}
+                yMMMEd{"EEE, d. MMM. y."}
                 yMMMM{"MMMM y."}
                 yQ{"Q. yyyy."}
                 yQQQ{"QQQ y."}
-                yyMMMEEEd{"EEE, d.MMM.yy."}
+                yyMMMEEEd{"EEE, d. MMM. yy."}
                 yyQ{"Q yy."}
                 yyQQQQ{"QQQQ yy."}
-                yyyyMM{"MM.yyyy."}
+                yyyyMM{"MM. yyyy."}
                 yyyyMMMM{"MMMM y."}
             }
             dayNames{
