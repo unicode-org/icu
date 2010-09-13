@@ -1801,6 +1801,7 @@ icu4c/source/data/xml/collation/as.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/be.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/bg.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/bn.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/bs.xml -text
 icu4c/source/data/xml/collation/ca.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/cs.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/cy.xml svneol=native#text/xml
@@ -1879,6 +1880,7 @@ icu4c/source/data/xml/main/az_Latn.xml svneol=native#text/xml
 icu4c/source/data/xml/main/be.xml svneol=native#text/xml
 icu4c/source/data/xml/main/bg.xml svneol=native#text/xml
 icu4c/source/data/xml/main/bn.xml svneol=native#text/xml
+icu4c/source/data/xml/main/bs.xml -text
 icu4c/source/data/xml/main/ca.xml svneol=native#text/xml
 icu4c/source/data/xml/main/cs.xml svneol=native#text/xml
 icu4c/source/data/xml/main/cy.xml svneol=native#text/xml
