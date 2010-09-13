@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/fil.xml
  */
 fil{
-    Version{"2.0.49.43"}
+    Version{"2.0.50.61"}
     collations{
         standard{
             Sequence{"&N<ñ<<<Ñ<ng<<<Ng<<<NG"}

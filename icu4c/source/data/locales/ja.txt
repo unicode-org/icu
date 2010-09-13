@@ -87,7 +87,7 @@ ja{
             }
         }
     }
-    Version{"2.0.49.83"}
+    Version{"2.0.50.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -774,48 +774,48 @@ ja{
     }
     units{
         day{
-            other{"{0} 日"}
+            other{"{0}日"}
         }
         hour{
-            other{"{0} 時間"}
+            other{"{0}時間"}
         }
         minute{
-            other{"{0} 分"}
+            other{"{0}分"}
         }
         month{
-            other{"{0} か月"}
+            other{"{0}か月"}
         }
         second{
-            other{"{0} 秒"}
+            other{"{0}秒"}
         }
         week{
-            other{"{0} 週"}
+            other{"{0}週"}
         }
         year{
-            other{"{0} 年"}
+            other{"{0}年"}
         }
     }
     unitsShort{
         day{
-            other{"{0} 日"}
+            other{"{0}日"}
         }
         hour{
-            other{"{0} 時間"}
+            other{"{0}時間"}
         }
         minute{
-            other{"{0} 分"}
+            other{"{0}分"}
         }
         month{
-            other{"{0} か月"}
+            other{"{0}か月"}
         }
         second{
-            other{"{0} 秒"}
+            other{"{0}秒"}
         }
         week{
-            other{"{0} 週"}
+            other{"{0}週"}
         }
         year{
-            other{"{0} 年"}
+            other{"{0}年"}
         }
     }
 }

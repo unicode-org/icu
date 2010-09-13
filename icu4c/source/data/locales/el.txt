@@ -36,7 +36,7 @@ el{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.43"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -98,18 +98,17 @@ el{
                 y{"y"}
                 yM{"M/yyyy"}
                 yMEd{"EEE, d/M/yyyy"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"EEE, d MMM y"}
-                yMMMM{"LLLL y"}
                 yQ{"y Q"}
                 yQQQ{"y QQQ"}
                 yyMM{"MM/yy"}
-                yyMMM{"MMM yy"}
+                yyMMM{"LLL yy"}
                 yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
                 yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM y"}
+                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{
@@ -385,7 +384,7 @@ el{
                 MMMMd{"d MMMM"}
                 Md{"d/M"}
                 yyyyM{"MM/yy GGGGG"}
-                yyyyMMM{"MMM yy GGGGG"}
+                yyyyMMM{"LLL yy GGGGG"}
                 yyyyQ{"yy GGGGG Q"}
             }
         }
@@ -413,7 +412,7 @@ el{
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
                 yyyyMEd{"EEE, d/M/y G"}
-                yyyyMMM{"MMM, y G"}
+                yyyyMMM{"LLL, y G"}
                 yyyyMMMEd{"EEE, d MMM, y G"}
                 yyyyQ{"y G Q"}
                 yyyyQQQ{"QQQ y G"}

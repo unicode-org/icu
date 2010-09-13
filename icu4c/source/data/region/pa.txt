@@ -13,5 +13,5 @@ pa{
     Countries{
         IN{"ਭਾਰਤ"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.50.30"}
 }

@@ -39,8 +39,56 @@ tr{
             }
         }
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.50.45"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM y G EEEE",
+                "dd MMMM y G",
+                "dd MMM y G",
+                "dd.MM.yyyy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"dd/MM E"}
+                MMM{"LLL"}
+                MMMEd{"dd MMM E"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"y G"}
+                yM{"M/y G"}
+                yMEd{"dd.MM.y G EEE"}
+                yMMM{"MMM y G"}
+                yMMMEd{"dd MMM y G EEE"}
+                yMMMM{"MMMM y G"}
+                yMMMd{"dd MMM y G"}
+                yQ{"Q y G"}
+                yQQQ{"QQQ y G"}
+                yyMM{"MM/yy G"}
+                yyMMM{"MMM yy G"}
+                yyQ{"Q yy G"}
+                yyQQQQ{"QQQQ yy G"}
+                yyyy{"y G"}
+            }
+        }
         coptic{
             monthNames{
                 format{
@@ -413,6 +461,51 @@ tr{
             }
         }
         islamic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM y G EEEE",
+                "dd MMMM y G",
+                "dd MMM y G",
+                "dd.MM.yyyy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"dd/MM E"}
+                MMM{"LLL"}
+                MMMEd{"dd MMM E"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                yyMM{"MM/yy G"}
+                yyMMM{"MMM yy G"}
+                yyQ{"Q yy G"}
+                yyQQQQ{"QQQQ yy G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"dd MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
+            }
             monthNames{
                 format{
                     wide{
@@ -430,6 +523,53 @@ tr{
                         "Zilhicce",
                     }
                 }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM y G EEEE",
+                "dd MMMM y G",
+                "dd MMM y G",
+                "dd.MM.yyyy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"dd/MM E"}
+                MMM{"LLL"}
+                MMMEd{"dd MMM E"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                yyMM{"MM/yy G"}
+                yyMMM{"MMM yy G"}
+                yyQ{"Q yy G"}
+                yyQQQQ{"QQQQ yy G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"dd MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
             }
         }
         persian{
@@ -450,6 +590,53 @@ tr{
                         "Esfend",
                     }
                 }
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM y G EEEE",
+                "dd MMMM y G",
+                "dd MMM y G",
+                "dd.MM.yyyy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"dd/MM E"}
+                MMM{"LLL"}
+                MMMEd{"dd MMM E"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                yyMM{"MM/yy G"}
+                yyMMM{"MMM yy G"}
+                yyQ{"Q yy G"}
+                yyQQQQ{"QQQQ yy G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"dd MMM y G"}
+                yyyyQ{"Q y G"}
+                yyyyQQQ{"QQQ y G"}
             }
         }
     }

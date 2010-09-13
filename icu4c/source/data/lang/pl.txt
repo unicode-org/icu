@@ -707,7 +707,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.49.64"}
+    Version{"2.0.49.97"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

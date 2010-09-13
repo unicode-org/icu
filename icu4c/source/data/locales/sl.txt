@@ -42,7 +42,7 @@ sl{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.61"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -56,7 +56,7 @@ sl{
                 "HH:mm",
                 "EEEE, dd. MMMM y",
                 "dd. MMMM y",
-                "d. MMM. yyyy",
+                "d. MMM yyyy",
                 "d. MM. yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -65,14 +65,19 @@ sl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E., d."}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                MMMMd{"d. MMMM"}
-                MMMMdd{"dd. MMMM"}
+                MEd{"E., d. MM."}
+                MMMEd{"E., d. MMM"}
+                MMMd{"d. MMM"}
                 Md{"d. M."}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
+                yMEd{"E., d. M. y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E., d. MMM y"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -251,18 +256,18 @@ sl{
             monthNames{
                 format{
                     abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
+                        "jan.",
+                        "feb.",
+                        "mar.",
+                        "apr.",
                         "maj",
-                        "jun",
-                        "jul",
-                        "avg",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
+                        "jun.",
+                        "jul.",
+                        "avg.",
+                        "sep.",
+                        "okt.",
+                        "nov.",
+                        "dec.",
                     }
                     wide{
                         "januar",
@@ -280,6 +285,20 @@ sl{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
                     narrow{
                         "j",
                         "f",
