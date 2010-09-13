@@ -10,16 +10,13 @@
  *  ICU <specials> source: <path>/xml/collation/ml.xml
  */
 ml{
-    Version{"2.0.42.63"}
+    Version{"2.0.50.37"}
     collations{
         standard{
             Sequence{
                 "&ഃ<<ഽ"
                 "&ോ<ൗ"
                 "&ൗ<<<ൌ"
-                "&ഹ'\u0020'<ള"
-                "&ള'\u0020'<ഴ"
-                "&ഴ'\u0020'<റ"
                 "&ക്<<ക്'\u200D'&ക്'\u200D'<<<ൿ"
                 "&ണ്<<ണ്'\u200D\u0020'&ണ്'\u200D\u0020'<<<ൺ"
                 "&ന്<<ന്'\u200D'&ന്'\u200D'<<<ൻ"

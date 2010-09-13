@@ -46,7 +46,7 @@ th{
             }
         }
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.45"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1036,6 +1036,29 @@ th{
                     "ช",
                     "ฮ",
                 }
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "H นาฬิกา m นาที ss วินาที zzzz",
+                "H นาฬิกา m นาที ss วินาที z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEEที่ d MMMM ปีGที่ y",
+                "d MMMM ปีG y",
+                "d MMM G y",
+                "d/M/yy",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                yyyy{"GGG yy"}
+                yyyyM{"M/GGGGG yy"}
+                yyyyMMM{"MMM GGGGG yy"}
+                yyyyQ{"Q GGGGG yy"}
             }
         }
     }

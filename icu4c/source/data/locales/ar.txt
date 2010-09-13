@@ -52,7 +52,7 @@ ar{
             }
         }
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.30"}
     calendar{
         buddhist{
             DateTimePatterns{

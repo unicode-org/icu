@@ -10,14 +10,14 @@
  *  ICU <specials> source: <path>/xml/collation/si.xml
  */
 si{
-    Version{"2.0.41.26"}
+    Version{"2.0.50.23"}
     collations{
         dictionary{
-            Sequence{" [normalization on ]&෴<අ&ඖ<ං<ඃ&ෳ<්&ෘ<ෲ<ෟ<ෳ&ජ්ඤ<<ඥ"}
+            Sequence{" [normalization on ]&ඖ<ං<ඃ&ජ්ඤ<<ඥ"}
             Version{"1.8.99.1"}
         }
         standard{
-            Sequence{" [normalization on ]&෴<අ&ඖ<ං<ඃ&ෳ<්&ෘ<ෲ<ෟ<ෳ&ඥ<ඤ"}
+            Sequence{" [normalization on ]&ඖ<ං<ඃ&ඥ<ඤ"}
             Version{"1.8.99.1"}
         }
     }

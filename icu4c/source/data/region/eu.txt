@@ -11,10 +11,18 @@
  */
 eu{
     Countries{
-        AC{"AC"}
+        002{"Afrika"}
+        019{"Amerika"}
+        029{"Karibea"}
+        053{"Australia eta Zeelanda Berria"}
+        150{"Europa"}
+        419{"Latinoamerika"}
+        AC{"Ascension Uhartea"}
+        AD{"Andorra"}
         AE{"Arabiar Emirrerri Batuak"}
         AF{"Afganistan"}
         AG{"Antigua eta Barbuda"}
+        AI{"Angila"}
         AL{"Albania"}
         AM{"Armenia"}
         AN{"Holandarren Antillak"}
@@ -66,7 +74,7 @@ eu{
         DM{"Dominika"}
         DO{"Dominikar Errepublika"}
         DZ{"Aljeria"}
-        EA{"EA"}
+        EA{"Ceuta eta Melilla"}
         EC{"Ekuador"}
         EE{"Estonia"}
         EG{"Egipto"}
@@ -85,9 +93,11 @@ eu{
         GF{"Guyana Frantsesa"}
         GG{"Guernsey"}
         GH{"Ghana"}
+        GI{"Gibraltar"}
         GL{"Groenlandia"}
         GM{"Gambia"}
         GN{"Ginea"}
+        GP{"Guadalupe"}
         GQ{"Ekuatore Ginea"}
         GR{"Grezia"}
         GS{"Hegoaldeko Georgia eta Hegoaldeko Sandwich uharteak"}
@@ -98,7 +108,7 @@ eu{
         HR{"Kroazia"}
         HT{"Haiti"}
         HU{"Hungaria"}
-        IC{"IC"}
+        IC{"Kanariak"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -146,6 +156,7 @@ eu{
         MN{"Mongolia"}
         MO{"Makau"}
         MP{"Iparraldeko Mariana uharteak"}
+        MQ{"Martinika"}
         MR{"Mauritania"}
         MU{"Maurizio"}
         MV{"Maldivak"}
@@ -195,6 +206,7 @@ eu{
         SO{"Somalia"}
         SR{"Surinam"}
         ST{"Sao Tomé eta Principe"}
+        SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swazilandia"}
         TA{"TA"}
@@ -220,7 +232,7 @@ eu{
         US{"Ameriketako Estatu Batuak"}
         UY{"Uruguai"}
         UZ{"Uzbekistan"}
-        VA{"Vatikano"}
+        VA{"Vatikano Hiria"}
         VC{"Saint Vincent eta Grenadinak"}
         VE{"Venezuela"}
         VG{"Birjina uharte britainiarrak"}
@@ -235,5 +247,5 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"ZZ"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.48"}
 }

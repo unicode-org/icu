@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/cs.xml
  */
 cs{
-    Version{"2.0.49.25"}
+    Version{"2.0.49.93"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}

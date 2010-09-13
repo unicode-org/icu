@@ -25,6 +25,7 @@ eu{
         bg{"bulgariera"}
         bh{"bihariera"}
         bn{"bengalera"}
+        bo{"tibetera"}
         br{"bretoiera"}
         bs{"bosniera"}
         ca{"katalana"}
@@ -32,29 +33,37 @@ eu{
         cy{"galesera"}
         da{"daniera"}
         de{"alemana"}
+        de_AT{"alemana (Austria)"}
         el{"greziera"}
-        en{"ingelera"}
+        en{"ingelesa"}
         en_AU{"ingelesa (Australia)"}
+        en_CA{"ingelesa (Kanada)"}
         en_GB{"ingelesa (Erresuma Batua)"}
         en_US{"ingelesa (AEB)"}
         eo{"esperantoa"}
-        es{"espainiera"}
+        es{"gaztelania"}
         et{"estoniera"}
         eu{"euskara"}
         fa{"pertsiera"}
         fi{"finlandiera"}
         fil{"tagalo"}
+        fj{"fijiera"}
         fo{"faroera"}
         fr{"frantsesa"}
-        fy{"frisiarra"}
+        fr_CA{"frantsesa (Kanada)"}
+        fr_CH{"frantsesa (Suitza)"}
+        fy{"frisiera"}
         ga{"gaelikoa"}
-        gd{"eskoziar gaelikoa"}
-        gl{"galegoa"}
+        gd{"eskoziako gaelikoa"}
+        gl{"galiziera"}
         gn{"guaraniera"}
+        gsw{"alemana (Suitza)"}
         gu{"gujaratera"}
+        haw{"hawaiiera"}
         he{"hebreera"}
         hi{"hindia"}
         hr{"kroaziera"}
+        ht{"haitiera"}
         hu{"hungariera"}
         hy{"armeniera"}
         ia{"interlingua"}
@@ -65,38 +74,45 @@ eu{
         ja{"japoniera"}
         jv{"javera"}
         ka{"georgiera"}
+        kk{"kazakhera"}
         km{"khemerera"}
         kn{"kannada"}
         ko{"koreera"}
         ku{"kurduera"}
         ky{"kirgizera"}
         la{"latina"}
+        lb{"luxenburgera"}
         ln{"lingala"}
         lo{"laosera"}
         lt{"lituaniera"}
         lv{"letoniera"}
+        mi{"maoriera"}
         mk{"mazedoniera"}
         ml{"malayalamera"}
         mn{"mongoliera"}
         mr{"marathera"}
         ms{"malaysiera"}
         mt{"maltera"}
+        mul{"Hizkuntza Anitzak"}
         ne{"nepalera"}
         nl{"nederlandera"}
-        nn{"norvegiera berria"}
+        nl_BE{"flandriera"}
+        nn{"nynorsk norvegiera"}
         no{"norvegiera"}
         oc{"okzitaniera"}
         or{"oriya"}
+        os{"osetiera"}
         pa{"punjabera"}
         pl{"poloniera"}
         ps{"paxtuera"}
-        pt{"portugalera"}
+        pt{"portugesa"}
         pt_BR{"portugesa (Brasil)"}
         pt_PT{"portugesa (Potugal)"}
         ro{"errumaniera"}
         ru{"errusiera"}
         sa{"sanskritoa"}
         sd{"sindhia"}
+        se{"Iparraldeko samiera"}
         sh{"serbokroaziera"}
         si{"sinhala"}
         sk{"eslovakiera"}
@@ -104,13 +120,14 @@ eu{
         so{"somaliera"}
         sq{"albaniera"}
         sr{"serbiera"}
-        st{"sesothoera"}
+        st{"hegoaldeko sothoera"}
         su{"sundanera"}
         sv{"suediera"}
         sw{"swahili"}
         swb{"swb"}
         ta{"tamilera"}
         te{"telugua"}
+        tg{"tajikistanera"}
         th{"thailandiera"}
         ti{"tigrinya"}
         tk{"turkmeniera"}
@@ -118,6 +135,7 @@ eu{
         tlh{"klingonera"}
         tr{"turkiera"}
         tw{"twia"}
+        ty{"tahitiera"}
         ug{"uigurrera"}
         uk{"ukrainera"}
         ur{"urdu"}
@@ -244,7 +262,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.48"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

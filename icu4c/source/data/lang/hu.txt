@@ -709,7 +709,7 @@ hu{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.26"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

@@ -647,7 +647,7 @@ zh_Hant{
             islamic{"伊斯蘭曆法"}
             islamic-civil{"伊斯蘭城市曆法"}
             japanese{"日本曆法"}
-            roc{"中華民國曆"}
+            roc{"民國曆"}
         }
         collation{
             big5han{"繁體中文排序 - Big5"}
@@ -672,7 +672,7 @@ zh_Hant{
         SAAHO{"SAAHO"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.16"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

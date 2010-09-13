@@ -40,7 +40,7 @@ cs{
             }
         }
     }
-    Version{"2.0.49.25"}
+    Version{"2.0.49.93"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -63,23 +63,26 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE, d."}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d. MMM"}
-                MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M"}
+                d{"d."}
                 yM{"M.y"}
                 yMEd{"EEE, d.M.y"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"EEE, d. MMM y"}
                 yMd{"d.M.y"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
                 yyyy{"y"}
                 yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM y"}
+                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{

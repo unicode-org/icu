@@ -652,7 +652,7 @@ zh{
             islamic{"伊斯兰日历"}
             islamic-civil{"伊斯兰希吉来历"}
             japanese{"日本日历"}
-            roc{"中华民国日历"}
+            roc{"民国日历"}
         }
         collation{
             big5han{"繁体中文(Big5)"}
@@ -677,7 +677,7 @@ zh{
         SAAHO{"萨霍"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.16"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

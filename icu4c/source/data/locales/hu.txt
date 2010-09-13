@@ -44,7 +44,7 @@ hu{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.26"}
     calendar{
         buddhist{
             eras{
@@ -74,18 +74,22 @@ hu{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d., E"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"M. d., E"}
                 MMM{"LLL"}
+                MMMEd{"MMM d., E"}
                 MMMMd{"MMMM d."}
                 MMMd{"MMM d."}
                 MMdd{"MM.dd."}
                 Md{"M. d."}
                 d{"d"}
                 mmss{"mm:ss"}
+                yMEd{"yyyy.MM.dd., E"}
+                yMMMEd{"y. MMM d., E"}
                 yyQ{"yy/Q"}
                 yyyyMM{"yyyy.MM"}
                 yyyyMMMM{"y. MMMM"}
