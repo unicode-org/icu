@@ -1,5 +1,5 @@
 #!/bin/cat
-# Copyright (c) 2009 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2009-2010 IBM Corp. and Others. All Rights Reserved
 #
 
  This directory contains pieces of the 'MultiIcu' feature, which contains
@@ -29,3 +29,21 @@ to the top level directory here, 'multi/'.
                        (See individual readmes under each project.)
  multi/proj/chello/  C "hello world" against multiple ICUs
  multi/proj/jhello/  J "hello world" against multiple ICUs
+
+--
+HOW TO USE
+
+1. Copy some ICU source files into multi/packages/
+
+2. in "multi/c"  run "make iicus" - this will take a while.
+
+3.To verify the ICU build, in "multi/proj/chello",  run "make check".
+
+   You should see output like this:
+
+       out/3_8_1.txt:  ICU 3.8.1
+       out/4_2_0_1.txt:  ICU 4.2
+       out/4_4_1.txt:  ICU 4.4.1
+
+4. The 'Provider' project is more complex. To see its information, see
+the readme in that directory. 
