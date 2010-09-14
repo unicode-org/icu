@@ -2557,6 +2557,10 @@ icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Han_Pinyi
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_English.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/resources/Transliterator_Kanji_OnRomaji.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/thai_test.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/eclipse-build/misc/about_icu.html svneol=native#text/html
+icu4j/eclipse-build/misc/about_icu_base.html svneol=native#text/html
+icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
