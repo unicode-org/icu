@@ -286,6 +286,8 @@ icu4c/source/tools/pkgdata/pkgdata.vcxproj.filters -text
 icu4c/source/tools/toolutil/toolutil.vcxproj -text
 icu4j/build.properties -text
 icu4j/demos/manifest.stub -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
