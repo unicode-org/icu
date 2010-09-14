@@ -1,4 +1,4 @@
-# Copyright (c) 2009 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2009-2010 IBM Corp. and Others. All Rights Reserved
 # multicu/c makefile
 
 all:
@@ -31,9 +31,6 @@ APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVER
 
 tehprecious:
 	echo $(APRECIOUS)
-	
-$(M_TMP):
-	-mkdir $(M_TMP)
 
 $(M_TMP) $(BLD) $(INS):
 	mkdir $(M_TMP)
@@ -55,7 +52,7 @@ $(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
 $(BLD)/%/$(S_BLD): $(BLD)/%/$(S_SRC)
 	-mkdir -p $(INS)
 	-chmod a+rx $(BLD)/$*/icu/source/configure $(BLD)/$*/icu/source/runConfigureICU
-	( cd $(BLD)/$*/icu/source ; `ICU_VER="$*" $(ICUCONF)` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
+	( cd $(BLD)/$*/icu/source ; `$(ICUCONF) "$(BLD)/$*/icu/source" "$*"` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
 	touch -c $@
 
 $(INS)/%/bin/$(TARGET): $(INS)/%/$(S_INS) $(SRCS)
@@ -76,6 +73,6 @@ allicus: $(BLD) $(ALLICUS)
 
 
 all-icus: iicus
-	
+
 iicus: $(BLD) $(IICUS)
 
