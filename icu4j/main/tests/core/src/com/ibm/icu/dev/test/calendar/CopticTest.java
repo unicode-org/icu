@@ -217,26 +217,25 @@ public class CopticTest extends CalendarTest
      */
     public void Test6379()
     {
-        int i;
-        Calendar cal = Calendar.getInstance();
-        cal.set(2007, Calendar.JANUARY, 1);
-        CopticCalendar coptic = new CopticCalendar();
+        CopticCalendar copticCal = new CopticCalendar();
+        copticCal.clear();
 
-        // first twelve months have 30 days      
-        for (i = 0; i < 12; i++)
-        {
-            coptic.set(Calendar.MONTH, i);
-            if (30 != coptic.getActualMaximum(Calendar.DAY_OF_MONTH))
-            {
-                errln("30 days not returned for month " + (i + 1));
+        for (int year = 1725; year < 1735; year++) {    // Coptic 1725-01-01 = Gregorian 2008-09-11
+            boolean isLeap = ((year % 4) == 3);
+            copticCal.set(Calendar.YEAR, year);
+
+            int maxMonth = copticCal.getActualMaximum(Calendar.MONTH);
+
+            for (int month = 0; month <= maxMonth; month++) {
+                copticCal.set(Calendar.MONTH, month);
+                int maxDayOfMonth = copticCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+                int expected = (month != maxMonth) ? 30 : (isLeap ? 6 : 5);
+                if (maxDayOfMonth != expected) {
+                    errln("FAIL: Expected maximum " + expected + " days for month #" 
+                            + (month + 1) + " - returned:" + maxDayOfMonth); 
+                }
             }
-        }
-
-        // test month 13
-        coptic.set(Calendar.MONTH, i);
-        if (5 != coptic.getActualMaximum(Calendar.DAY_OF_MONTH))
-        {
-            errln("5 days not returned for month " + (i + 1));
         }
     }    
 
