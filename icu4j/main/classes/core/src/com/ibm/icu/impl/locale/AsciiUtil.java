@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -167,6 +167,9 @@ public final class AsciiUtil {
         }
 
         public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
             if (o instanceof CaseInsensitiveKey) {
                 return AsciiUtil.caseIgnoreMatch(_key, ((CaseInsensitiveKey)o)._key);
             }
