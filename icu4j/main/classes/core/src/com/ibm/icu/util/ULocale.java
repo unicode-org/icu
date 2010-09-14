@@ -1642,6 +1642,21 @@ public final class ULocale implements Serializable {
                         }
                         return availableLocales[j];
                     }
+                    // compare to scriptless alias, so locales such as
+                    // zh_TW, zh_CN are considered as available locales - see #7190
+                    if (aLocale.getScript().length() == 0
+                            && availableLocales[j].getScript().length() > 0
+                            && availableLocales[j].getLanguage().equals(aLocale.getLanguage())
+                            && availableLocales[j].getCountry().equals(aLocale.getCountry())
+                            && availableLocales[j].getVariant().equals(aLocale.getVariant())) {
+                        ULocale minAvail = ULocale.minimizeSubtags(availableLocales[j]);
+                        if (minAvail.getScript().length() == 0) {
+                            if(setFallback != null) {
+                                setFallback[0] = false; // not a fallback.
+                            }
+                            return aLocale;
+                        }
+                    }
                 }
                 Locale loc = aLocale.toLocale();
                 Locale parent = LocaleUtility.fallback(loc);
