@@ -277,25 +277,32 @@ public final class InternalLocaleBuilder {
      * BCP47 extensions are already validated and well-formed, but may contain duplicates
      */
     private InternalLocaleBuilder setExtensions(List<String> bcpExtensions, String privateuse) {
-        try {
-            if (bcpExtensions != null && bcpExtensions.size() > 0) {
-                HashSet<CaseInsensitiveChar> processedExntensions = new HashSet<CaseInsensitiveChar>(bcpExtensions.size());
-                for (String bcpExt : bcpExtensions) {
-                    CaseInsensitiveChar key = new CaseInsensitiveChar(bcpExt.charAt(0));
-                    // ignore duplicates
-                    if (!processedExntensions.contains(key)) {
-                        // each extension string contains singleton, e.g. "a-abc-def"
-                        setExtension(key.value(), bcpExt.substring(2));
+        clearExtensions();
+
+        if (bcpExtensions != null && bcpExtensions.size() > 0) {
+            HashSet<CaseInsensitiveChar> processedExtensions = new HashSet<CaseInsensitiveChar>(bcpExtensions.size());
+            for (String bcpExt : bcpExtensions) {
+                CaseInsensitiveChar key = new CaseInsensitiveChar(bcpExt.charAt(0));
+                // ignore duplicates
+                if (!processedExtensions.contains(key)) {
+                    // each extension string contains singleton, e.g. "a-abc-def"
+                    if (UnicodeLocaleExtension.isSingletonChar(key.value())) {
+                        setUnicodeLocaleExtension(bcpExt.substring(2));
+                    } else {
+                        if (_extensions == null) {
+                            _extensions = new HashMap<CaseInsensitiveChar, String>(4);
+                        }
+                        _extensions.put(key, bcpExt.substring(2));
                     }
                 }
             }
-            if (privateuse != null && privateuse.length() > 0) {
-                // privateuse string contains prefix, e.g. "x-abc-def"
-                setExtension(privateuse.charAt(0), privateuse.substring(2));
+        }
+        if (privateuse != null && privateuse.length() > 0) {
+            // privateuse string contains prefix, e.g. "x-abc-def"
+            if (_extensions == null) {
+                _extensions = new HashMap<CaseInsensitiveChar, String>(1);
             }
-        } catch (LocaleSyntaxException lse) {
-            // should never happen...
-            throw new RuntimeException(lse);
+            _extensions.put(new CaseInsensitiveChar(privateuse.charAt(0)), privateuse.substring(2));
         }
 
         return this;
