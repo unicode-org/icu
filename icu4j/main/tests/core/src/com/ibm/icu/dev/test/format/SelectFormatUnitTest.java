@@ -26,8 +26,6 @@ public class SelectFormatUnitTest extends TestFmwk {
      * Unit tests for pattern syntax
      */
     public void TestPatternSyntax() {
-        log("Inside TestPatternSyntax");
-
         String checkSyntaxData[] = {
             "odd{foo} odd{bar} other{foobar}",
             "odd{foo} other{bar} other{foobar}",
@@ -55,22 +53,18 @@ public class SelectFormatUnitTest extends TestFmwk {
         };
 
         //Test SelectFormat pattern syntax
-        try {
-            SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
-            for (int i=0; i<checkSyntaxData.length; ++i) {
-                try {
-                    selFmt.applyPattern(checkSyntaxData[i]);
-                    errln("\nERROR: Unexpected result - SelectFormat Unit Test failed "
-                          + "to detect syntax error with pattern: "+checkSyntaxData[i]);
-                } catch (IllegalArgumentException e){
-                    assertEquals("Error:TestPatternSyntax failed with unexpected"
-                                 + " error message for pattern: " + checkSyntaxData[i] ,
-                                 expectedErrorMsgs[i], e.getMessage() );
-                    continue;
-                }
+        SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
+        for (int i=0; i<checkSyntaxData.length; ++i) {
+            try {
+                selFmt.applyPattern(checkSyntaxData[i]);
+                errln("\nERROR: Unexpected result - SelectFormat Unit Test failed "
+                      + "to detect syntax error with pattern: "+checkSyntaxData[i]);
+            } catch (IllegalArgumentException e){
+                assertEquals("Error:TestPatternSyntax failed with unexpected"
+                             + " error message for pattern: " + checkSyntaxData[i] ,
+                             expectedErrorMsgs[i], e.getMessage() );
+                continue;
             }
-        } catch (Exception e){
-            errln("Exception encountered in TestPatternSyntax ");
         }
     }
 
@@ -79,8 +73,6 @@ public class SelectFormatUnitTest extends TestFmwk {
      */
     public void TestInvalidKeyword() {
         //Test formatting with invalid keyword
-        log("Inside TestInvalidKeyword");
-
         String keywords[] = {
             "9Keyword-_",       //Starts with a digit
             "-Keyword-_",       //Starts with a hyphen
@@ -102,9 +94,6 @@ public class SelectFormatUnitTest extends TestFmwk {
                             +"error message for keyword: " + keywords[i] 
                             , expected , e.getMessage() );
                 continue;
-            } catch (Exception e){
-                errln("ERROR:TestInvalidKeyword failed with an invalid keyword: "
-                     + keywords[i] + " with exception: " + e.getMessage() );
             }
         }
 
@@ -115,8 +104,6 @@ public class SelectFormatUnitTest extends TestFmwk {
      */
     public void TestApplyFormat() {
         //Test applying and formatting with various pattern
-        log("Inside TestApplyFormat");
-
         String patternTestData[] = {
             "fem {femValue} other{even}",
             "other{odd or even}",
@@ -159,7 +146,7 @@ public class SelectFormatUnitTest extends TestFmwk {
         for (int i=0; i<patternTestData.length; ++i) {
             try {
                 selFmt.applyPattern(patternTestData[i]);
-            } catch (Exception e){
+            } catch (IllegalArgumentException e){
                 errln("ERROR: SelectFormat Unit Test failed to apply pattern- "
                      + patternTestData[i] );
                 continue;
