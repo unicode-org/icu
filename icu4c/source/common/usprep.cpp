@@ -374,19 +374,27 @@ usprep_getProfile(const char* path,
             return NULL;
         }
 
-        /* initialize the key members */
-        key->name = keyName.orphan();
-        uprv_strcpy(key->name, name);
-        if(path != NULL){
-            key->path = keyPath.orphan();
-            uprv_strcpy(key->path, path);
-        }        
-
-        profile = newProfile.orphan();
         umtx_lock(&usprepMutex);
-        /* add the data object to the cache */
-        profile->refCount = 1;
-        uhash_put(SHARED_DATA_HASHTABLE, key.orphan(), profile, status);
+        // If another thread already inserted the same key/value, refcount and cleanup our thread data
+        profile = (UStringPrepProfile*) (uhash_get(SHARED_DATA_HASHTABLE,&stackKey));
+        if(profile != NULL) {
+            profile->refCount++;
+            usprep_unload(newProfile.getAlias());
+        }
+        else {
+            /* initialize the key members */
+            key->name = keyName.orphan();
+            uprv_strcpy(key->name, name);
+            if(path != NULL){
+                key->path = keyPath.orphan();
+                uprv_strcpy(key->path, path);
+            }        
+            profile = newProfile.orphan();
+    
+            /* add the data object to the cache */
+            profile->refCount = 1;
+            uhash_put(SHARED_DATA_HASHTABLE, key.orphan(), profile, status);
+        }
         umtx_unlock(&usprepMutex);
     }
 
