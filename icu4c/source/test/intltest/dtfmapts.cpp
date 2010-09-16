@@ -323,6 +323,7 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
         sdf.format((UDate)0, str);
         sdf.parse(str, status);
         sdf.parse(str, ppos);
+        sdf.getNumberFormat();
     }
 
     // NumberFormat calling Format API
