@@ -536,6 +536,8 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
     char datFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
     char checkLibFile[LARGE_BUFFER_MAX_SIZE] = "";
 
+    initializePkgDataFlags(o);
+
     if (mode == MODE_FILES) {
         /* Copy the raw data to the installation directory. */
         if (o->install != NULL) {
@@ -573,8 +575,6 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             fprintf(stderr,"Error writing package dat file.\n");
             return result;
         }
-
-        initializePkgDataFlags(o);
 
         if (mode == MODE_COMMON) {
             char targetFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
