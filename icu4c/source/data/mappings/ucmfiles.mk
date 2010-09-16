@@ -112,5 +112,9 @@ windows-950-2000.ucm\
 jisx-212.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm\
 ibm-5478_P100-1995.ucm\
-icu-internal-25546.ucm lmb-excp.ucm
-
+icu-internal-25546.ucm lmb-excp.ucm \
+icu-internal-compound-d1.ucm icu-internal-compound-d2.ucm icu-internal-compound-d3.ucm icu-internal-compound-d4.ucm\
+icu-internal-compound-d5.ucm icu-internal-compound-d6.ucm icu-internal-compound-d7.ucm \
+icu-internal-compound-s1.ucm icu-internal-compound-s2.ucm icu-internal-compound-s3.ucm icu-internal-compound-s4.ucm \
+icu-internal-compound-s5.ucm icu-internal-compound-s6.ucm icu-internal-compound-s7.ucm icu-internal-compound-s8.ucm \
+icu-internal-compound-t.ucm \
