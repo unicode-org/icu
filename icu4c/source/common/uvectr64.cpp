@@ -7,6 +7,7 @@
 
 #include "uvectr64.h"
 #include "cmemory.h"
+#include "putilimp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -47,6 +48,9 @@ void UVector64::_init(int32_t initialCapacity, UErrorCode &status) {
     }
     if (maxCapacity>0 && maxCapacity<initialCapacity) {
         initialCapacity = maxCapacity;
+    }
+    if (initialCapacity > INT32_MAX / sizeof(int64_t)) {
+        initialCapacity = uprv_min(DEFAULT_CAPACITY, maxCapacity);
     }
     elements = (int64_t *)uprv_malloc(sizeof(int64_t)*initialCapacity);
     if (elements == 0) {
@@ -110,11 +114,19 @@ void UVector64::removeAllElements(void) {
 }
 
 UBool UVector64::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
+    if (minimumCapacity < 1) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
     if (capacity >= minimumCapacity) {
         return TRUE;
     }
     if (maxCapacity>0 && minimumCapacity>maxCapacity) {
         status = U_BUFFER_OVERFLOW_ERROR;
+        return FALSE;
+    }
+    if (capacity > (INT32_MAX - 1) / 2) {  // integer overflow check
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
     int32_t newCap = capacity * 2;
@@ -123,6 +135,11 @@ UBool UVector64::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
     }
     if (maxCapacity > 0 && newCap > maxCapacity) {
         newCap = maxCapacity;
+    }
+    if (newCap > INT32_MAX / sizeof(int64_t)) {  // integer overflow check
+        // We keep the original memory contents on bad minimumCapacity/maxCapacity.
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
     }
     int64_t* newElems = (int64_t *)uprv_realloc(elements, sizeof(int64_t)*newCap);
     if (newElems == NULL) {
@@ -137,10 +154,14 @@ UBool UVector64::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
 
 void UVector64::setMaxCapacity(int32_t limit) {
     U_ASSERT(limit >= 0);
-    maxCapacity = limit;
-    if (maxCapacity < 0) {
-        maxCapacity = 0;
+    if (limit < 0) {
+        limit = 0;
     }
+    if (limit > INT32_MAX / sizeof(int64_t)) {  // integer overflow check for realloc
+        //  Something is very wrong, don't realloc, leave capacity and maxCapacity unchanged
+        return;
+    }
+    maxCapacity = limit;
     if (capacity <= maxCapacity || maxCapacity == 0) {
         // Current capacity is within the new limit.
         return;
