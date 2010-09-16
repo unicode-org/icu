@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -211,7 +211,7 @@ public:
 // UVector32 inlines
 
 inline UBool UVector32::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (capacity >= minimumCapacity) {
+    if ((minimumCapacity > 0) && (capacity >= minimumCapacity)) {
         return TRUE;
     } else {
         return expandCapacity(minimumCapacity, status);
