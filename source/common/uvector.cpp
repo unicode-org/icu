@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2009, International Business Machines Corporation and   *
+* Copyright (C) 1999-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *   Date        Name        Description
@@ -14,7 +14,7 @@
 
 U_NAMESPACE_BEGIN
 
-#define DEFUALT_CAPACITY 8
+#define DEFAULT_CAPACITY 8
 
 /*
  * Constants for hinting whether a key is an integer
@@ -33,7 +33,7 @@ UVector::UVector(UErrorCode &status) :
     deleter(0),
     comparer(0)
 {
-    _init(DEFUALT_CAPACITY, status);
+    _init(DEFAULT_CAPACITY, status);
 }
 
 UVector::UVector(int32_t initialCapacity, UErrorCode &status) :
@@ -53,7 +53,7 @@ UVector::UVector(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status) :
     deleter(d),
     comparer(c)
 {
-    _init(DEFUALT_CAPACITY, status);
+    _init(DEFAULT_CAPACITY, status);
 }
 
 UVector::UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status) :
@@ -70,9 +70,9 @@ void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    // Fix bogus initialCapacity values; avoid malloc(0)
-    if (initialCapacity < 1) {
-        initialCapacity = DEFUALT_CAPACITY;
+    // Fix bogus initialCapacity values; avoid malloc(0) and integer overflow
+    if ((initialCapacity < 1) || (initialCapacity > INT32_MAX / sizeof(UHashTok))) {
+        initialCapacity = DEFAULT_CAPACITY;
     }
     elements = (UHashTok *)uprv_malloc(sizeof(UHashTok)*initialCapacity);
     if (elements == 0) {
@@ -326,14 +326,27 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex, int8_t hint) const {
 }
 
 UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
+	if (minimumCapacity < 1) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+	}
     if (capacity < minimumCapacity) {
+        if (capacity > (INT32_MAX - 1) / 2) {        	// integer overflow check
+        	status = U_ILLEGAL_ARGUMENT_ERROR;
+        	return FALSE;
+        }
         int32_t newCap = capacity * 2;
         if (newCap < minimumCapacity) {
             newCap = minimumCapacity;
         }
+        if (newCap > INT32_MAX / sizeof(UHashTok)) {	// integer overflow check
+        	// We keep the original memory contents on bad minimumCapacity.
+        	status = U_ILLEGAL_ARGUMENT_ERROR;
+        	return FALSE;
+        }
         UHashTok* newElems = (UHashTok *)uprv_realloc(elements, sizeof(UHashTok)*newCap);
         if (newElems == NULL) {
-            // We keep the original contents on the memory failure on realloc.
+            // We keep the original contents on the memory failure on realloc or bad minimumCapacity.
             status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
