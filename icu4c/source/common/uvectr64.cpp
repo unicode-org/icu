@@ -114,7 +114,7 @@ void UVector64::removeAllElements(void) {
 }
 
 UBool UVector64::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (minimumCapacity < 1) {
+    if (minimumCapacity < 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
