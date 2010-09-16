@@ -141,24 +141,6 @@ static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t
 //
 //---------------------------------------------------------------------------
 
-static const char * dump_hex(UChar32 *s, int32_t len) {
-  static char buf[512];
-  int32_t i;
-  for(i=0;i<len;i++) {
-    sprintf(buf+(i*3), "%04x ", s[i]);
-  }
-  return buf;
-}
-
-static const char * dump_hex(UChar *s, int32_t len) {
-  static char buf[512];
-  int32_t i;
-  for(i=0;i<len;i++) {
-    sprintf(buf+(i*3), "%04x ", s[i]);
-  }
-  return buf;
-}
-
 static void utextToPrintable(char *buf, int32_t bufLen, UText *text) {
   int64_t oldIndex = utext_getNativeIndex(text);
   utext_setNativeIndex(text, 0);
@@ -193,7 +175,7 @@ static void utextToPrintable(char *buf, int32_t bufLen, UText *text) {
 #define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
                                                               __FILE__, __LINE__, u_errorName(status)); return;}}
 
-#define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: RegexTest failure \n", __FILE__, __LINE__);};}
+#define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr);};}
 
 #define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
 if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=%s, got %s", \
