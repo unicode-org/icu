@@ -196,7 +196,7 @@ int32_t UVector32::indexOf(int32_t key, int32_t startIndex) const {
 
 
 UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (minimumCapacity < 1) {
+    if (minimumCapacity < 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
