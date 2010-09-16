@@ -1,0 +1,46 @@
+# *******************************************************************************
+# *
+# *   Copyright (C) 2010, International Business Machines
+# *   Corporation and others.  All Rights Reserved.
+# *
+# *******************************************************************************
+#
+# File created by JDKConverter2UCM.java
+#
+<code_set_name>               icu-internal-compound-s6
+<char_name_mask>              "AXXXX"
+<subchar>                     \x3f
+<uconv_class>                 "SBCS"
+
+CHARMAP
+<U003F> \x3F |0
+<U05D0> \xE0 |0
+<U05D1> \xE1 |0
+<U05D2> \xE2 |0
+<U05D3> \xE3 |0
+<U05D4> \xE4 |0
+<U05D5> \xE5 |0
+<U05D6> \xE6 |0
+<U05D7> \xE7 |0
+<U05D8> \xE8 |0
+<U05D9> \xE9 |0
+<U05DA> \xEA |0
+<U05DB> \xEB |0
+<U05DC> \xEC |0
+<U05DD> \xED |0
+<U05DE> \xEE |0
+<U05DF> \xEF |0
+<U05E0> \xF0 |0
+<U05E1> \xF1 |0
+<U05E2> \xF2 |0
+<U05E3> \xF3 |0
+<U05E4> \xF4 |0
+<U05E5> \xF5 |0
+<U05E6> \xF6 |0
+<U05E7> \xF7 |0
+<U05E8> \xF8 |0
+<U05E9> \xF9 |0
+<U05EA> \xFA |0
+<U2017> \xDF |0
+<U203E> \xAF |1
+END CHARMAP
