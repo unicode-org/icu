@@ -52,7 +52,7 @@ void UVector32::_init(int32_t initialCapacity, UErrorCode &status) {
     if (maxCapacity>0 && maxCapacity<initialCapacity) {
         initialCapacity = maxCapacity;
     }
-    if (initialCapacity > INT32_MAX / sizeof(int32_t)) {
+    if (initialCapacity > (int32_t)(INT32_MAX / sizeof(int32_t))) {
         initialCapacity = uprv_min(DEFAULT_CAPACITY, maxCapacity);
     }
     elements = (int32_t *)uprv_malloc(sizeof(int32_t)*initialCapacity);
@@ -218,7 +218,7 @@ UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
     if (maxCapacity > 0 && newCap > maxCapacity) {
         newCap = maxCapacity;
     }
-    if (newCap > INT32_MAX / sizeof(int32_t)) {  // integer overflow check
+    if (newCap > (int32_t)(INT32_MAX / sizeof(int32_t))) {  // integer overflow check
         // We keep the original memory contents on bad minimumCapacity/maxCapacity.
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
@@ -239,7 +239,7 @@ void UVector32::setMaxCapacity(int32_t limit) {
     if (limit < 0) {
         limit = 0;
     }
-    if (limit > INT32_MAX / sizeof(int32_t)) {  // integer overflow check for realloc
+    if (limit > (int32_t)(INT32_MAX / sizeof(int32_t))) {  // integer overflow check for realloc
         //  Something is very wrong, don't realloc, leave capacity and maxCapacity unchanged
         return;
     }

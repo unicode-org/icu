@@ -211,7 +211,7 @@ public:
 // UVector32 inlines
 
 inline UBool UVector32::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if ((minimumCapacity > 0) && (capacity >= minimumCapacity)) {
+    if ((minimumCapacity >= 0) && (capacity >= minimumCapacity)) {
         return TRUE;
     } else {
         return expandCapacity(minimumCapacity, status);
