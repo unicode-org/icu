@@ -157,6 +157,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("ISO_2022,locale=zh,version=2",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=ko,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("ISO_2022,locale=ko,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("x11-compound-text",                          "com.ibm.icu.charset.CharsetCompoundText" );
         }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
