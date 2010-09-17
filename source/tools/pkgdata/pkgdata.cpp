@@ -98,7 +98,6 @@ U_CDECL_END
 #endif
 
 #define LARGE_BUFFER_MAX_SIZE 2048
-#define MEDIUM_BUFFER_MAX_SIZE 1024
 #define SMALL_BUFFER_MAX_SIZE 512
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
@@ -756,7 +755,7 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
     pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
     if (pkgDataFlags != NULL) {
         for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-            pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * MEDIUM_BUFFER_MAX_SIZE);
+            pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * LARGE_BUFFER_MAX_SIZE);
             if (pkgDataFlags[i] != NULL) {
                 pkgDataFlags[i][0] = 0;
             } else {
@@ -778,7 +777,7 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
     if(o->verbose) {
       fprintf(stdout, "# Reading options file %s\n", o->options);
     }
-    parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
+    parseFlagsFile(o->options, pkgDataFlags, LARGE_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
     if (U_FAILURE(status)) {
         fprintf(stderr,"Unable to open or read \"%s\" option file. status = %s\n", o->options, u_errorName(status));
         return -1;
@@ -868,8 +867,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) {
     int32_t result = 0;
     char cmd[LARGE_BUFFER_MAX_SIZE];
-	char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
-	char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
+    char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
+    char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
 
 #ifndef USING_CYGWIN
     /* No symbolic link to make. */
