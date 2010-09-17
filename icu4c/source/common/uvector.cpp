@@ -71,7 +71,7 @@ void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
         return;
     }
     // Fix bogus initialCapacity values; avoid malloc(0) and integer overflow
-    if ((initialCapacity < 1) || (initialCapacity > INT32_MAX / sizeof(UHashTok))) {
+    if ((initialCapacity < 1) || (initialCapacity > (int32_t)(INT32_MAX / sizeof(UHashTok)))) {
         initialCapacity = DEFAULT_CAPACITY;
     }
     elements = (UHashTok *)uprv_malloc(sizeof(UHashTok)*initialCapacity);
@@ -339,7 +339,7 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
         if (newCap < minimumCapacity) {
             newCap = minimumCapacity;
         }
-        if (newCap > INT32_MAX / sizeof(UHashTok)) {	// integer overflow check
+        if (newCap > (int32_t)(INT32_MAX / sizeof(UHashTok))) {	// integer overflow check
         	// We keep the original memory contents on bad minimumCapacity.
         	status = U_ILLEGAL_ARGUMENT_ERROR;
         	return FALSE;
