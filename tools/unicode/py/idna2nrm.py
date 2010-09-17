@@ -17,25 +17,22 @@ __author__ = "Markus Scherer"
 import re
 
 replacements = [
-  # Pass through disallowed ASCII characters: Handled in code.
-  (re.compile(r"0000..002C    ; disallowed"), "# 0000..002C (allow ASCII)"),
-  (re.compile(r"002F          ; disallowed"), "# 002F       (allow ASCII)"),
-  (re.compile(r"003A..0040    ; disallowed"), "# 003A..0040 (allow ASCII)"),
-  (re.compile(r"005B..0060    ; disallowed"), "# 005B..0060 (allow ASCII)"),
-  (re.compile(r"007B..00A0    ; disallowed                                 #"),
-   "0080..00A0    >FFFD  # (allow ASCII)"),
   # Several versions of avoiding circular FFFD>FFFD mappings,
   # depending on the version of the input file.
   (re.compile(r"FFFD          ; disallowed"), "# FFFD (avoid circular mapping)"),
   (re.compile(r"\.\.FFFD"), "..FFFC"),
   (re.compile(r"(FFF[^E])\.\.FFFF"), "\1..FFFC"),
+  # Since we switch between checking and not checking for STD3 character
+  # restrictions at runtime, checking the non-LDH ASCII characters in code,
+  # we treat these values here like their regular siblings.
+  (re.compile(r"^([^;]+)  ; disallowed_STD3_valid"), r"# \1disallowed_STD3_valid"),
+  (re.compile(r"; disallowed_STD3_mapped +; "), ">"),
   # Normal transformations.
-  (re.compile(r"; disallowed   "), ">FFFD"),
-  (re.compile(r"; ignored      "), ">"),
+  (re.compile(r"; disallowed"), ">FFFD"),
+  (re.compile(r"; ignored"), ">"),
   (re.compile(r"^([^;]+)  ; valid"), r"# \1valid"),
-  (re.compile(r"; mapped     ; "), ">"),
-  (re.compile(r"^([^;]+)  ; deviation"), r"# \1deviation"),
-  (re.compile(r"   +(\#  [^\#]+)$"), r"  \1")
+  (re.compile(r"; mapped +; "), ">"),
+  (re.compile(r"^([^;]+)  ; deviation +; "), r"# \1deviation >")
 ]
 
 in_file = open("IdnaMappingTable.txt", "r")
@@ -50,26 +47,41 @@ for line in in_file:
 # ================================================
 # This file has been reformatted into syntax for the
 # gennorm2 Normalizer2 data generator tool.
-# Reformatting via regular expressions:
-#   s/; disallowed   />FFFD/
-#   s/; ignored      />/
-#   s/^([^;]+)  ; valid/# \1valid/
-#   s/; mapped     ; />/
-#   s/^([^;]+)  ; deviation/# \1deviation/
-#   s/   +(\#  [^\#]+)$/  \1/
 #
-# Except: Disallowed ASCII characters are passed through;
+# "valid", "disallowed_STD3_valid" and "deviation" lines are commented out.
+# "mapped" and "disallowed_STD3_mapped" are changed to use the ">" mapping syntax.
+# "disallowed" lines map to U+FFFD.
+# "ignored" lines map to an empty string.
+#
+# Characters disallowed under STD3 rules are treated as valid or mapped;
 # they are handled in code.
 # Deviation characters are also handled in code.
-#
-# A circular mapping FFFD>FFFD is avoided by
-# rewriting the line that contains FFFD.
 #
 # Use this file as the second gennorm2 input file after nfc.txt.
 # ================================================
 """)
     continue
+  if line[0] in "#\r\n":
+    out_file.write(line)
+    continue
   for rep in replacements: line = rep[0].sub(rep[1], line)
+  # Align inline comments at column 40.
+  comment_pos = line.find("#", 1)
+  if comment_pos < 40:
+    line = line[:comment_pos] + ((40 - comment_pos) * ' ') + line[comment_pos:]
+  elif comment_pos > 40:
+    space_pos = comment_pos
+    while space_pos > 0 and line[space_pos - 1] == ' ':
+      space_pos = space_pos - 1
+    if space_pos < 40:
+      # Fewer than 40 characters before the comment:
+      # Align comments at column 40.
+      line = line[:40] + line[comment_pos:]
+    else:
+      # 40 or more characters before the comment:
+      # Keep one space between contents and comment.
+      line = line[:space_pos] + " " + line[comment_pos:]
+  # Write the modified line.
   out_file.write(line)
   if "..FFFF" in orig_line and "..FFFC" in line:
     out_file.write("FFFE..FFFF    >FFFD\n");
