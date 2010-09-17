@@ -957,7 +957,7 @@ ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* JAVA* } csISO2022CN { JAVA }
 ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* }
 ISO_2022,locale=zh,version=2    ISO-2022-CN-CNS x-ISO-2022-CN-CNS { JAVA }
 HZ                              HZ-GB-2312 { IANA* }
-x11-compound-text               x-compound-text { JAVA }
+x11-compound-text               COMPOUND_TEXT x-compound-text { JAVA }
 
 ISCII,version=0         x-ISCII91 { JAVA } x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev ibm-4902 { IBM* } # ibm-806 contains non-standard box drawing symbols.
 ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
