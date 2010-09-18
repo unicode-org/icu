@@ -341,8 +341,7 @@ U_CAPI UText * U_EXPORT2
 uregex_patternUText(const URegularExpression *regexp2,
                           UErrorCode         *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
-    (void)status;
-    return regexp->fPat->patternText();
+    return regexp->fPat->patternText(*status);
 }
 
 
@@ -479,7 +478,7 @@ uregex_getUText(URegularExpression *regexp2,
     if (validateRE(regexp, status, FALSE) == FALSE) {
         return dest;
     }
-    return regexp->fMatcher->getInput(dest);
+    return regexp->fMatcher->getInput(dest, *status);
 }
 
 
@@ -490,8 +489,15 @@ uregex_getUText(URegularExpression *regexp2,
 //------------------------------------------------------------------------------
 U_CAPI UBool U_EXPORT2 
 uregex_matches(URegularExpression *regexp2,
-                int32_t            startIndex,
-                UErrorCode        *status)  {
+               int32_t            startIndex,
+               UErrorCode        *status)  {
+    return uregex_matches64( regexp2, (int64_t)startIndex, status);
+}
+
+U_CAPI UBool U_EXPORT2 
+uregex_matches64(URegularExpression *regexp2,
+                 int64_t            startIndex,
+                 UErrorCode        *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
@@ -506,7 +512,6 @@ uregex_matches(URegularExpression *regexp2,
 }
 
 
-
 //------------------------------------------------------------------------------
 //
 //    uregex_lookingAt
@@ -516,6 +521,13 @@ U_CAPI UBool U_EXPORT2
 uregex_lookingAt(URegularExpression *regexp2,
                  int32_t             startIndex,
                  UErrorCode         *status)  {
+    return uregex_lookingAt64( regexp2, (int64_t)startIndex, status);
+}
+
+U_CAPI UBool U_EXPORT2 
+uregex_lookingAt64(URegularExpression *regexp2,
+                   int64_t             startIndex,
+                   UErrorCode         *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
@@ -540,6 +552,13 @@ U_CAPI UBool U_EXPORT2
 uregex_find(URegularExpression *regexp2,
             int32_t             startIndex, 
             UErrorCode         *status)  {
+    return uregex_find64( regexp2, (int64_t)startIndex, status);
+}
+
+U_CAPI UBool U_EXPORT2 
+uregex_find64(URegularExpression *regexp2,
+              int64_t             startIndex, 
+              UErrorCode         *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
@@ -553,6 +572,7 @@ uregex_find(URegularExpression *regexp2,
     }
     return result;
 }
+
 
 //------------------------------------------------------------------------------
 //
@@ -609,7 +629,7 @@ uregex_group(URegularExpression *regexp2,
     
     if (destCapacity == 0 || regexp->fText != NULL) {
         // If preflighting or if we already have the text as UChars,
-        // this is a little cheaper than going through uregex_groupUText()
+        // this is a little cheaper than going through uregex_groupUTextDeep()
         
         //
         // Pick up the range of characters from the matcher
@@ -642,7 +662,7 @@ uregex_group(URegularExpression *regexp2,
         }
         return fullLength;
     } else {
-        UText *groupText = uregex_groupUText(regexp2, groupNum, NULL, status);
+        UText *groupText = uregex_groupUTextDeep(regexp2, groupNum, NULL, status);
         int32_t result = utext_extract(groupText, 0, utext_nativeLength(groupText), dest, destCapacity, status);
         utext_close(groupText);
         return result;
@@ -657,6 +677,26 @@ uregex_group(URegularExpression *regexp2,
 //------------------------------------------------------------------------------
 U_CAPI UText * U_EXPORT2 
 uregex_groupUText(URegularExpression *regexp2,
+                  int32_t             groupNum,
+                  UText              *dest,
+                  int64_t            *groupLength,
+                  UErrorCode         *status)  {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, status) == FALSE) {
+        UErrorCode emptyTextStatus = U_ZERO_ERROR;
+        return (dest ? dest : utext_openUChars(NULL, NULL, 0, &emptyTextStatus));
+    }
+
+    return regexp->fMatcher->group(groupNum, dest, *groupLength, *status);
+}
+
+//------------------------------------------------------------------------------
+//
+//    uregex_groupUTextDeep
+//
+//------------------------------------------------------------------------------
+U_CAPI UText * U_EXPORT2 
+uregex_groupUTextDeep(URegularExpression *regexp2,
                   int32_t             groupNum,
                   UText              *dest,
                   UErrorCode         *status)  {
@@ -693,7 +733,6 @@ uregex_groupUText(URegularExpression *regexp2,
     }
 }
 
-
 //------------------------------------------------------------------------------
 //
 //    uregex_start
@@ -703,6 +742,13 @@ U_CAPI int32_t U_EXPORT2
 uregex_start(URegularExpression *regexp2,
              int32_t             groupNum,
              UErrorCode          *status)  {
+    return (int32_t)uregex_start64( regexp2, groupNum, status);
+}
+
+U_CAPI int64_t U_EXPORT2 
+uregex_start64(URegularExpression *regexp2,
+               int32_t             groupNum,
+               UErrorCode          *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return 0;
@@ -710,7 +756,6 @@ uregex_start(URegularExpression *regexp2,
     int32_t result = regexp->fMatcher->start(groupNum, *status);
     return result;
 }
-
 
 //------------------------------------------------------------------------------
 //
@@ -721,6 +766,13 @@ U_CAPI int32_t U_EXPORT2
 uregex_end(URegularExpression   *regexp2,
            int32_t               groupNum,
            UErrorCode           *status)  {
+    return (int32_t)uregex_end64( regexp2, groupNum, status);
+}
+
+U_CAPI int64_t U_EXPORT2 
+uregex_end64(URegularExpression   *regexp2,
+             int32_t               groupNum,
+             UErrorCode           *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return 0;
@@ -738,6 +790,13 @@ U_CAPI void U_EXPORT2
 uregex_reset(URegularExpression    *regexp2,
              int32_t               index,
              UErrorCode            *status)  {
+    uregex_reset64( regexp2, (int64_t)index, status);
+}
+
+U_CAPI void U_EXPORT2 
+uregex_reset64(URegularExpression    *regexp2,
+               int64_t               index,
+               UErrorCode            *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return;
@@ -756,6 +815,14 @@ uregex_setRegion(URegularExpression   *regexp2,
                  int32_t               regionStart,
                  int32_t               regionLimit,
                  UErrorCode           *status)  {
+    uregex_setRegion64( regexp2, (int64_t)regionStart, (int64_t)regionLimit, status);
+}
+
+U_CAPI void U_EXPORT2 
+uregex_setRegion64(URegularExpression   *regexp2,
+                   int64_t               regionStart,
+                   int64_t               regionLimit,
+                   UErrorCode           *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return;
@@ -766,12 +833,36 @@ uregex_setRegion(URegularExpression   *regexp2,
 
 //------------------------------------------------------------------------------
 //
+//    uregex_setRegionAndStart
+//
+//------------------------------------------------------------------------------
+U_DRAFT void U_EXPORT2 
+uregex_setRegionAndStart(URegularExpression   *regexp2,
+                 int64_t               regionStart,
+                 int64_t               regionLimit,
+                 int64_t               startIndex,
+                 UErrorCode           *status)  {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, status) == FALSE) {
+        return;
+    }
+    regexp->fMatcher->region(regionStart, regionLimit, startIndex, *status);
+}
+
+//------------------------------------------------------------------------------
+//
 //    uregex_regionStart
 //
 //------------------------------------------------------------------------------
 U_CAPI int32_t U_EXPORT2 
 uregex_regionStart(const  URegularExpression   *regexp2,
                           UErrorCode           *status)  {
+    return (int32_t)uregex_regionStart64(regexp2, status);
+}
+
+U_CAPI int64_t U_EXPORT2 
+uregex_regionStart64(const  URegularExpression   *regexp2,
+                            UErrorCode           *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return 0;
@@ -788,6 +879,12 @@ uregex_regionStart(const  URegularExpression   *regexp2,
 U_CAPI int32_t U_EXPORT2 
 uregex_regionEnd(const  URegularExpression   *regexp2,
                         UErrorCode           *status)  {
+    return (int32_t)uregex_regionEnd64(regexp2, status);
+}
+
+U_CAPI int64_t U_EXPORT2 
+uregex_regionEnd64(const  URegularExpression   *regexp2,
+                          UErrorCode           *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, status) == FALSE) {
         return 0;
@@ -1602,9 +1699,10 @@ uregex_appendTail(URegularExpression    *regexp2,
 //
 U_CAPI UText * U_EXPORT2 
 uregex_appendTailUText(URegularExpression    *regexp2,
-                       UText                 *dest)  {
+                       UText                 *dest,
+                       UErrorCode            *status)  {
     RegularExpression *regexp = (RegularExpression*)regexp2;
-    return regexp->fMatcher->appendTail(dest);
+    return regexp->fMatcher->appendTail(dest, *status);
 }
 
 

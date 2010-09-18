@@ -158,9 +158,9 @@ uregex_open( const  UChar          *pattern,
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives error detected by this function.
   *
-  * @internal ICU 4.4 technology preview
+  * @draft ICU 4.4
   */
-U_INTERNAL URegularExpression *  U_EXPORT2
+U_DRAFT URegularExpression *  U_EXPORT2
 uregex_openUText(UText          *pattern,
                  uint32_t        flags,
                  UParseError    *pe,
@@ -280,9 +280,9 @@ uregex_pattern(const URegularExpression *regexp,
  * @return the pattern text.  The storage for the text is owned by the regular expression
  *                   object, and must not be altered or deleted.
  *
- * @internal ICU 4.4 technology preview
+ * @draft ICU 4.4
  */
-U_INTERNAL UText * U_EXPORT2 
+U_DRAFT UText * U_EXPORT2 
 uregex_patternUText(const URegularExpression *regexp,
                           UErrorCode         *status);
 
@@ -341,9 +341,9 @@ uregex_setText(URegularExpression *regexp,
   * @param text       The subject text string.
   * @param status     Receives errors detected by this function.
   *
-  * @internal ICU 4.4 technology preview
+  * @draft ICU 4.4
   */
-U_INTERNAL void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_setUText(URegularExpression *regexp,
                 UText              *text,
                 UErrorCode         *status);
@@ -388,9 +388,9 @@ uregex_getText(URegularExpression *regexp,
   * @return            The subject text currently associated with this regular expression.
   *                    If a pre-allocated UText was provided, it will always be used and returned.
   *
-  * @internal ICU 4.4 technology preview
+  * @draft ICU 4.4
   */
-U_INTERNAL UText * U_EXPORT2 
+U_DRAFT UText * U_EXPORT2 
 uregex_getUText(URegularExpression *regexp,
                 UText              *dest,
                 UErrorCode         *status);
@@ -409,7 +409,7 @@ uregex_getUText(URegularExpression *regexp,
   *   Matcher.matches() in Java
   *
   *    @param  regexp      The compiled regular expression.
-  *    @param  startIndex  The input string index at which to begin matching, or -1
+  *    @param  startIndex  The input string (native) index at which to begin matching, or -1
   *                        to match the input Region.
   *    @param  status      Receives errors detected by this function.
   *    @return             TRUE if there is a match
@@ -419,6 +419,15 @@ U_STABLE UBool U_EXPORT2
 uregex_matches(URegularExpression *regexp,
                 int32_t            startIndex,
                 UErrorCode        *status);
+
+/**
+  *   64bit version of uregex_matches.
+  *   @draft ICU 4.6
+  */
+U_DRAFT UBool U_EXPORT2 
+uregex_matches64(URegularExpression *regexp,
+                 int64_t            startIndex,
+                 UErrorCode        *status);
 
 /**
   *   Attempts to match the input string, starting from the specified index, against the pattern.
@@ -437,7 +446,7 @@ uregex_matches(URegularExpression *regexp,
   *    and <code>uregexp_group()</code> functions.</p>
   *
   *    @param   regexp      The compiled regular expression.
-  *    @param   startIndex  The input string index at which to begin matching, or
+  *    @param   startIndex  The input string (native) index at which to begin matching, or
   *                         -1 to match the Input Region
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @return  TRUE if there is a match.
@@ -447,6 +456,15 @@ U_STABLE UBool U_EXPORT2
 uregex_lookingAt(URegularExpression *regexp,
                  int32_t             startIndex,
                  UErrorCode         *status);
+
+/**
+  *   64bit version of uregex_lookingAt.
+  *   @draft ICU 4.6
+  */
+U_DRAFT UBool U_EXPORT2 
+uregex_lookingAt64(URegularExpression *regexp,
+                   int64_t             startIndex,
+                   UErrorCode         *status);
 
 /**
   *   Find the first matching substring of the input string that matches the pattern.
@@ -461,7 +479,7 @@ uregex_lookingAt(URegularExpression *regexp,
   *   <code>uregex_group()</code> will provide more information regarding the match.
   *
   *   @param   regexp      The compiled regular expression.
-  *   @param   startIndex  The position in the input string to begin the search, or
+  *   @param   startIndex  The position (native) in the input string to begin the search, or
   *                        -1 to search within the Input Region.
   *   @param   status      A reference to a UErrorCode to receive any errors.
   *   @return              TRUE if a match is found.
@@ -471,6 +489,15 @@ U_STABLE UBool U_EXPORT2
 uregex_find(URegularExpression *regexp,
             int32_t             startIndex, 
             UErrorCode         *status);
+
+/**
+  *   64bit version of uregex_find.
+  *   @draft ICU 4.6
+  */
+U_DRAFT UBool U_EXPORT2 
+uregex_find64(URegularExpression *regexp,
+              int64_t             startIndex, 
+              UErrorCode         *status);
 
 /**
   *  Find the next pattern match in the input string.  Begin searching 
@@ -523,6 +550,37 @@ uregex_group(URegularExpression *regexp,
              int32_t             destCapacity,
              UErrorCode          *status);
 
+
+/** Returns a shallow immutable clone of the entire input string.  The returned UText current native index
+  *   is set to the beginning of the requested capture group.  The capture group length is also
+  *   returned via groupLength.
+  * Group #0 is the complete string of matched text.
+  * Group #1 is the text matched by the first set of capturing parentheses.
+  *
+  *   @param   regexp       The compiled regular expression.
+  *   @param   groupNum     The capture group to extract.  Group 0 is the complete
+  *                         match.  The value of this parameter must be
+  *                         less than or equal to the number of capture groups in
+  *                         the pattern.
+  *   @param   dest         A mutable UText in which to store the current input.
+  *                         If NULL, a new UText will be created as an immutable shallow clone
+  *                         of the entire input string.
+  *   @param   groupLength  The group length of the desired capture group.
+  *   @param   status       A reference to a UErrorCode to receive any errors.
+  *   @return               The subject text currently associated with this regular expression.
+  *                         If a pre-allocated UText was provided, it will always be used and returned.
+
+  *
+  *   @draft ICU 4.6
+  */
+U_DRAFT UText * U_EXPORT2 
+uregex_groupUText(URegularExpression *regexp,
+                  int32_t             groupNum,
+                  UText              *dest,
+                  int64_t            *groupLength,
+                  UErrorCode         *status);
+
+
 /** Extract the string for the specified matching expression or subexpression.
   * Group #0 is the complete string of matched text.
   * Group #1 is the text matched by the first set of capturing parentheses.
@@ -541,11 +599,10 @@ uregex_group(URegularExpression *regexp,
   *   @internal ICU 4.4 technology preview
   */
 U_INTERNAL UText * U_EXPORT2 
-uregex_groupUText(URegularExpression *regexp,
+uregex_groupUTextDeep(URegularExpression *regexp,
                   int32_t             groupNum,
                   UText              *dest,
                   UErrorCode         *status);
-
 
 /**
   *   Returns the index in the input string of the start of the text matched by the
@@ -557,7 +614,7 @@ uregex_groupUText(URegularExpression *regexp,
   *    @param   regexp      The compiled regular expression.
   *    @param   groupNum    The capture group number
   *    @param   status      A reference to a UErrorCode to receive any errors.
-  *    @return              the starting position in the input of the text matched 
+  *    @return              the starting (native) position in the input of the text matched 
   *                         by the specified group.
   *    @stable ICU 3.0
   */
@@ -565,6 +622,15 @@ U_STABLE int32_t U_EXPORT2
 uregex_start(URegularExpression *regexp,
              int32_t             groupNum,
              UErrorCode          *status);
+
+/**
+  *   64bit version of uregex_start.
+  *   @draft ICU 4.6
+  */
+U_DRAFT int64_t U_EXPORT2 
+uregex_start64(URegularExpression *regexp,
+               int32_t             groupNum,
+               UErrorCode          *status);
 
 /**
   *   Returns the index in the input string of the position following the end
@@ -576,13 +642,22 @@ uregex_start(URegularExpression *regexp,
   *    @param   regexp      The compiled regular expression.
   *    @param   groupNum    The capture group number
   *    @param   status      A reference to a UErrorCode to receive any errors.
-  *    @return              the index of the position following the last matched character.
+  *    @return              the (native) index of the position following the last matched character.
   *    @stable ICU 3.0
   */
 U_STABLE int32_t U_EXPORT2 
 uregex_end(URegularExpression   *regexp,
            int32_t               groupNum,
            UErrorCode           *status);
+
+/**
+  *   64bit version of uregex_end.
+  *   @draft ICU 4.6
+  */
+U_DRAFT int64_t U_EXPORT2 
+uregex_end64(URegularExpression *regexp,
+             int32_t               groupNum,
+             UErrorCode           *status);
 
 /**
   *  Reset any saved state from the previous match.  Has the effect of
@@ -592,7 +667,7 @@ uregex_end(URegularExpression   *regexp,
   *  match region that may have been set.
   *
   *    @param   regexp      The compiled regular expression.
-  *    @param   index       The position in the text at which a
+  *    @param   index       The position (native) in the text at which a
   *                         uregex_findNext() should begin searching.
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @stable ICU 3.0
@@ -602,7 +677,15 @@ uregex_reset(URegularExpression    *regexp,
              int32_t               index,
              UErrorCode            *status);
              
-             
+/**
+  *   64bit version of uregex_reset.
+  *   @draft ICU 4.6
+  */
+U_DRAFT void U_EXPORT2 
+uregex_reset64(URegularExpression  *regexp,
+               int64_t               index,
+               UErrorCode            *status);
+
 /** Sets the limits of the matching region for this URegularExpression.
   * The region is the part of the input string that will be considered when matching.
   * Invoking this method resets any saved state from the previous match, 
@@ -617,8 +700,8 @@ uregex_reset(URegularExpression    *regexp,
   *  is less than zero or greater than the length of the string being matched.
   *
   * @param regexp The compiled regular expression.
-  * @param regionStart  The index to begin searches at.
-  * @param regionLimit  The index to end searches at (exclusive).
+  * @param regionStart  The (native) index to begin searches at.
+  * @param regionLimit  The (native) index to end searches at (exclusive).
   * @param status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   */
@@ -629,19 +712,47 @@ uregex_setRegion(URegularExpression   *regexp,
                  UErrorCode           *status);
 
 /**
+  *   64bit version of uregex_setRegion.
+  *   @draft ICU 4.6
+  */
+U_DRAFT void U_EXPORT2 
+uregex_setRegion64(URegularExpression *regexp,
+                 int64_t               regionStart,
+                 int64_t               regionLimit,
+                 UErrorCode           *status);
+
+/**
+  *   Variation on uregex_setRegion to set the region without resetting the start index
+  *     without resetting the position for subsequent matches.
+  *   @draft ICU 4.6
+  */
+U_DRAFT void U_EXPORT2 
+uregex_setRegionAndStart(URegularExpression *regexp,
+                 int64_t               regionStart,
+                 int64_t               regionLimit,
+                 int64_t               startIndex,
+                 UErrorCode           *status);
+
+/**
   * Reports the start index of the matching region. Any matches found are limited to
   * to the region bounded by regionStart (inclusive) and regionEnd (exclusive).
   *
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @return The starting index of this matcher's region.
+  * @return The starting (native) index of this matcher's region.
   * @stable ICU 4.0
   */
 U_STABLE int32_t U_EXPORT2
 uregex_regionStart(const  URegularExpression   *regexp,
                           UErrorCode           *status);
 
-
+/**
+  *   64bit version of uregex_regionStart.
+  *   @draft ICU 4.6
+  */
+U_DRAFT int64_t U_EXPORT2 
+uregex_regionStart64(const  URegularExpression   *regexp,
+                            UErrorCode           *status);
 
 /**
   * Reports the end index (exclusive) of the matching region for this URegularExpression.
@@ -650,12 +761,20 @@ uregex_regionStart(const  URegularExpression   *regexp,
   *
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @return The ending point of this matcher's region.
+  * @return The ending point (native) of this matcher's region.
   * @stable ICU 4.0
   */
 U_STABLE int32_t U_EXPORT2
 uregex_regionEnd(const  URegularExpression   *regexp,
                         UErrorCode           *status);
+
+/**
+  *   64bit version of uregex_regionEnd.
+  *   @draft ICU 4.6
+  */
+U_DRAFT int64_t U_EXPORT2 
+uregex_regionEnd64(const  URegularExpression   *regexp,
+                          UErrorCode           *status);
 
 /**
   * Queries the transparency of region bounds for this URegularExpression.
@@ -813,9 +932,9 @@ uregex_replaceAll(URegularExpression    *regexp,
   *    @return                 A UText containing the results of the find and replace.
   *                             If a pre-allocated UText was provided, it will always be used and returned.
   *
-  *    @internal ICU 4.4 technology preview
+  *    @draft ICU 4.4
   */
-U_INTERNAL UText * U_EXPORT2 
+U_DRAFT UText * U_EXPORT2 
 uregex_replaceAllUText(URegularExpression *regexp,
                        UText              *replacement,
                        UText              *dest,
@@ -872,9 +991,9 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *    @return                 A UText containing the results of the find and replace.
   *                             If a pre-allocated UText was provided, it will always be used and returned.
   *
-  *    @internal ICU 4.4 technology preview
+  *    @draft ICU 4.4
   */
-U_INTERNAL UText * U_EXPORT2 
+U_DRAFT UText * U_EXPORT2 
 uregex_replaceFirstUText(URegularExpression *regexp,
                          UText              *replacement,
                          UText              *dest,
@@ -956,9 +1075,9 @@ uregex_appendReplacement(URegularExpression    *regexp,
   *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
   *   @param   status      A reference to a UErrorCode to receive any errors. 
   *
-  *   @internal ICU 4.4 technology preview
+  *   @draft ICU 4.4
   */
-U_INTERNAL void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_appendReplacementUText(URegularExpression    *regexp,
                               UText                 *replacementText,
                               UText                 *dest,
@@ -1009,11 +1128,12 @@ uregex_appendTail(URegularExpression    *regexp,
   *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
   *   @return              The destination UText.
   *
-  *   @internal ICU 4.4 technology preview
+  *   @draft ICU 4.6
   */
-U_INTERNAL UText * U_EXPORT2 
+U_DRAFT UText * U_EXPORT2 
 uregex_appendTailUText(URegularExpression    *regexp,
-                       UText                 *dest);
+                       UText                 *dest,
+                       UErrorCode            *status);
 
 
 
@@ -1105,9 +1225,9 @@ uregex_split(   URegularExpression      *regexp,
    * @param status  A reference to a UErrorCode to receive any errors.
    * @return        The number of fields into which the input string was split.
    *
-   * @internal ICU 4.4 technology preview
+   * @draft ICU 4.4
    */
-U_INTERNAL int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_splitUText(URegularExpression    *regexp,
                   UText                 *destFields[],
                   int32_t                destFieldsCapacity,
@@ -1257,10 +1377,21 @@ uregex_getMatchCallback(const URegularExpression    *regexp,
 
 
 /**
- * Function pointer for a regular expression find/findNext callback function.
- * When set, a callback function will be called during a find operation after each
- * attempt at a match.  If the call back function returns FALSE, the find
- * operation will be terminated early.
+ * Function pointer for a regular expression find callback function.
+ * 
+ * When set, a callback function will be called during a find operation
+ * and for operations that depend on find, such as findNext, split and some replace
+ * operations like replaceFirst.
+ * The callback will usually be called after each attempt at a match, but this is not a
+ * guarantee that the callback will be invoked at each character.  For finds where the
+ * match engine is invoked at each character, this may be close to true, but less likely
+ * for more optimized loops where the pattern is known to only start, and the match
+ * engine invoked, at certain characters.
+ * When invoked, this callback will specify the index at which a match operation is about
+ * to be attempted, giving the application the opportunity to terminate a long-running
+ * find operation.
+ * 
+ * If the call back function returns FALSE, the find operation will be terminated early.
  *
  * Note:  the callback function must not call other functions on this
  *        URegularExpression
@@ -1282,9 +1413,7 @@ typedef UBool U_CALLCONV URegexFindProgressCallback (
 U_CDECL_END
 
 /**
- * During find operations, this callback will be invoked after each return from a
- * match attempt, specifying the next index at which a match operation is about to be attempted,
- * giving the application the opportunity to terminate a long-running find operation.
+ *  Set the find progress callback function for this URegularExpression.
  *
  * @param   regexp      The compiled regular expression.
  * @param   callback    A pointer to the user-supplied callback function.
@@ -1302,7 +1431,7 @@ uregex_setFindProgressCallback(URegularExpression              *regexp,
 
 
 /**
- *  Get the callback function for this URegularExpression.
+ *  Get the find progress callback function for this URegularExpression.
  *
  * @param   regexp      The compiled regular expression.
  * @param   callback    Out paramater, receives a pointer to the user-supplied 
