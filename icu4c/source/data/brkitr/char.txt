@@ -1,12 +1,12 @@
 #
-#   Copyright (C) 2002-2009, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2010, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char.txt 
 #
 #   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
 #      See Unicode Standard Annex #29.
-#      These rules are based on TR29 Revision 13, for Unicode Version 5.1
+#      These rules are based on TR29 Revision 16, for Unicode Version 6.0
 #
 
 #

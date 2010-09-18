@@ -1,14 +1,16 @@
-# Copyright (c) 2002-2009  International Business Machines Corporation and
+# Copyright (c) 2002-2010  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
-#         Unicode Standard Annex #14 Revision 24 for Unicode 5.2
+#         Unicode Standard Annex #14 Revision 24 for Unicode 6.0
 #         http://www.unicode.org/reports/tr14/
-
-
+#
+#         TODO:  Rule LB 8 remains as it was in Unicode 5.2
+#         This is only because of a limitation of ICU break engine implementation,
+#         not because the older behavior is desirable.
 
 #
 #  Character Classes defined by TR 14.
@@ -214,6 +216,9 @@ $CM+          [$SP $ZW];
 
 #
 # LB 8         Break after zero width space
+#              TODO:  ZW SP* <break>
+#              An engine change is required to write the reverse rule for this.
+#              For now, leave the Unicode 5.2 rule, ZW <break>
 #
 $LB8Breaks    = [$LB4Breaks $ZW];
 $LB8NonBreaks = [[$LB4NonBreaks] - [$ZW]];
@@ -452,8 +457,10 @@ $LF $CR;
 [$SP $ZW] [$LB4NonBreaks-$CM];
 [$SP $ZW] $CM+ $CAN_CM;
 
-# LB 8 Break after zero width space
-
+# LB 8 ZW SP* <break>
+#     TODO: to implement this, we need more than one look-ahead hard break in play at a time.
+#           Requires an engine enhancement.
+#   / $SP* $ZW
 
 # LB 9,10  Combining marks.
 #    X   $CM needs to behave like X, where X is not $SP or controls.
