@@ -1731,21 +1731,47 @@ static void TestUTextAPI(void) {
 
         /*  Capture Group 0, the full match.  Should succeed.  */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUText(re, 0, NULL, &status);
+        actual = uregex_groupUTextDeep(re, 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_UTEXT(str_abcinteriordef, actual);
         utext_close(actual);
 
+        /*  Capture Group 0 with shallow clone API.  Should succeed.  */
+        status = U_ZERO_ERROR;
+        {
+            int64_t      group_len;
+            int32_t      len16;
+            UErrorCode   shallowStatus = U_ZERO_ERROR;
+            int64_t      nativeIndex;
+
+            actual = uregex_groupUText(re, 0, NULL, &group_len, &status);
+            TEST_ASSERT_SUCCESS(status);
+
+            nativeIndex = utext_getNativeIndex(actual);
+            /*  Following returns U_INDEX_OUTOFBOUNDS_ERROR... looks like a bug in ucstrFuncs UTextFuncs [utext.cpp]  */
+            /*  len16 = utext_extract(actual, nativeIndex, nativeIndex + group_len, NULL, 0, &shallowStatus);  */
+            len16 = group_len;
+            
+            UChar *groupChars = (UChar *)malloc(sizeof(UChar)*(len16+1));
+            utext_extract(actual, nativeIndex, nativeIndex + group_len, groupChars, len16+1, &shallowStatus);
+            UText groupText = UTEXT_INITIALIZER;
+            utext_openUChars(&groupText, groupChars, len16, &shallowStatus);
+            
+            TEST_ASSERT_UTEXT(str_abcinteriordef, &groupText);
+            utext_close(&groupText);
+        }
+        utext_close(actual);
+
         /*  Capture group #1.  Should succeed. */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUText(re, 1, NULL, &status);
+        actual = uregex_groupUTextDeep(re, 1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_UTEXT(str_interior, actual);
         utext_close(actual);
 
         /*  Capture group out of range.  Error. */
         status = U_ZERO_ERROR;
-        actual = uregex_groupUText(re, 2, NULL, &status);
+        actual = uregex_groupUTextDeep(re, 2, NULL, &status);
         TEST_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         TEST_ASSERT(utext_nativeLength(actual) == 0);
         utext_close(actual);

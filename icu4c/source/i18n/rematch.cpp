@@ -471,7 +471,7 @@ UnicodeString &RegexMatcher::appendTail(UnicodeString &dest) {
     utext_openUnicodeString(&resultText, &dest, &status);
     
     if (U_SUCCESS(status)) {
-        appendTail(&resultText);
+        appendTail(&resultText, status);
         utext_close(&resultText);
     }
     
@@ -481,9 +481,25 @@ UnicodeString &RegexMatcher::appendTail(UnicodeString &dest) {
 //
 //   appendTail, UText mode
 //
-UText *RegexMatcher::appendTail(UText *dest) {
+UText *RegexMatcher::appendTail(UText *dest, UErrorCode &status) {
+    UBool bailOut = FALSE;
+    if (U_FAILURE(status)) {
+        bailOut = TRUE;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        bailOut = TRUE;
+    }
+    
+    if (bailOut) {
+        //  dest must not be NULL
+        if (dest) {
+            utext_replace(dest, utext_nativeLength(dest), utext_nativeLength(dest), NULL, 0, &status);
+            return dest;
+        }
+    }
+    
     if (fInputLength > fAppendPosition) {
-        UErrorCode status = U_ZERO_ERROR;
         if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
             int64_t destLen = utext_nativeLength(dest);
             utext_replace(dest, destLen, destLen, fInputText->chunkContents+fAppendPosition, 
@@ -522,9 +538,11 @@ int32_t RegexMatcher::end(UErrorCode &err) const {
     return end(0, err);
 }
 
+int64_t RegexMatcher::end64(UErrorCode &err) const {
+    return end64(0, err);
+}
 
-
-int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
+int64_t RegexMatcher::end64(int32_t group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
         return -1;
     }
@@ -548,13 +566,11 @@ int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
         e = fFrame->fExtra[groupOffset + 1];
     }
     
-    if (e == -1 || UTEXT_USES_U16(fInputText)) {
-        return (int32_t)e;
-    } else {
-        // !!!: Would like a better way to do this!
-        UErrorCode status = U_ZERO_ERROR;
-        return utext_extract(fInputText, 0, e, NULL, 0, &status);
-    }
+        return e;
+}
+
+int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
+    return (int32_t)end64(group, err);
 }
 
 
@@ -650,7 +666,7 @@ UBool RegexMatcher::find() {
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
             //   runs with startPos == testStartLimit the last time through.
-            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                 return FALSE;
         }
         U_ASSERT(FALSE);
@@ -698,7 +714,7 @@ UBool RegexMatcher::find() {
                     return FALSE;
                 }
                 startPos = pos;
-                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
             }
         }
@@ -731,7 +747,7 @@ UBool RegexMatcher::find() {
                     return FALSE;
                 }
                 startPos = pos;
-                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
            }
         }
@@ -779,7 +795,7 @@ UBool RegexMatcher::find() {
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
                     //   runs with startPos == testStartLimit the last time through.
-                    if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+		            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                         return FALSE;
                 }
             } else {
@@ -809,7 +825,7 @@ UBool RegexMatcher::find() {
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
                     //   runs with startPos == testStartLimit the last time through.
-                    if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+		            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                         return FALSE;
                 }
             }
@@ -825,7 +841,7 @@ UBool RegexMatcher::find() {
 
 
 
-UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
+UBool RegexMatcher::find(int64_t start, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -840,25 +856,8 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
         return FALSE;
     }
     
-    UBool couldFindStart = TRUE;
-    int64_t nativeStart;
-    if (UTEXT_USES_U16(fInputText)) {
-        nativeStart = start;
-    } else {
-        UTEXT_SETNATIVEINDEX(fInputText, 0);
-        int32_t i = 0;
-        while (i < start) {
-            UChar32 c = UTEXT_NEXT32(fInputText);
-            if (c != U_SENTINEL) {
-                i += U16_LENGTH(c);
-            } else {
-                couldFindStart = FALSE;
-                break;
-            }
-        }
-        nativeStart = UTEXT_GETNATIVEINDEX(fInputText);
-    }
-    if (!couldFindStart || nativeStart < fActiveStart || nativeStart > fActiveLimit) {
+    int64_t nativeStart = start;
+    if (nativeStart < fActiveStart || nativeStart > fActiveLimit) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -944,7 +943,7 @@ UBool RegexMatcher::findUsingChunk() {
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
             //   runs with startPos == testLen the last time through.
-            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                 return FALSE;
         }
         U_ASSERT(FALSE);
@@ -985,7 +984,7 @@ UBool RegexMatcher::findUsingChunk() {
                 fHitEnd = TRUE;
                 return FALSE;
             }
-            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                 return FALSE;
         }
     }
@@ -1014,7 +1013,7 @@ UBool RegexMatcher::findUsingChunk() {
                 fHitEnd = TRUE;
                 return FALSE;
             }
-            if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                 return FALSE;
         }
     }
@@ -1055,7 +1054,7 @@ UBool RegexMatcher::findUsingChunk() {
                 // Note that it's perfectly OK for a pattern to have a zero-length
                 //   match at the end of a string, so we must make sure that the loop
                 //   runs with startPos == testLen the last time through.
-                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
             }
         } else {
@@ -1083,7 +1082,7 @@ UBool RegexMatcher::findUsingChunk() {
                 // Note that it's perfectly OK for a pattern to have a zero-length
                 //   match at the end of a string, so we must make sure that the loop
                 //   runs with startPos == testLen the last time through.
-                if (ReportFindProgress(startPos, fDeferredStatus) == FALSE)
+	            if  (REGEXFINDPROGRESS_INTERRUPT(startPos, fDeferredStatus))
                     return FALSE;
             }
         }
@@ -1108,11 +1107,59 @@ UnicodeString RegexMatcher::group(UErrorCode &status) const {
     return group(0, status);
 }
 
-UText *RegexMatcher::group(UText *dest, MatcherDestIsUTextFlag /*flag*/, UErrorCode &status) const {
-    return group(0, dest, status);
+//  Return immutable shallow clone
+UText *RegexMatcher::group(UText *dest, int64_t &group_len, UErrorCode &status) const {
+    return group(0, dest, group_len, status);
 }
 
+//  Return immutable shallow clone
+UText *RegexMatcher::group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const {
+    group_len = 0;
+    UBool bailOut = FALSE;
+    if (U_FAILURE(status)) {
+        return dest;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        bailOut = TRUE;
+    }
+    if (fMatch == FALSE) {
+        status = U_REGEX_INVALID_STATE;
+        bailOut = TRUE;
+    }
+    if (groupNum < 0 || groupNum > fPattern->fGroupMap->size()) {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+        bailOut = TRUE;
+    }
+    
+    if (bailOut) {
+        return (dest) ? dest : utext_openUChars(NULL, NULL, 0, &status);
+    }
+    
+    int64_t s, e;
+    if (groupNum == 0) {
+        s = fMatchStart;
+        e = fMatchEnd;
+    } else {
+        int32_t groupOffset = fPattern->fGroupMap->elementAti(groupNum-1);
+        U_ASSERT(groupOffset < fPattern->fFrameSize);
+        U_ASSERT(groupOffset >= 0);
+        s = fFrame->fExtra[groupOffset];
+        e = fFrame->fExtra[groupOffset+1];
+    }
 
+    if (s < 0) {
+        // A capture group wasn't part of the match
+        return utext_clone(dest, fInputText, FALSE, TRUE, &status);
+    }
+    U_ASSERT(s <= e);
+    group_len = e - s;
+    
+    dest = utext_clone(dest, fInputText, FALSE, TRUE, &status);
+    if (dest)
+        UTEXT_SETNATIVEINDEX(dest, s);
+    return dest;
+}
 
 UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
     UnicodeString result;
@@ -1127,6 +1174,9 @@ UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
 }
 
 
+//  Return deep (mutable) clone
+//		Technology Preview (as an API), but note that the UnicodeString API is implemented
+//		using this function.
 UText *RegexMatcher::group(int32_t groupNum, UText *dest, UErrorCode &status) const {
     UBool bailOut = FALSE;
     if (U_FAILURE(status)) {
@@ -1372,8 +1422,25 @@ UText *RegexMatcher::inputText() const {
 //  getInput() -- like inputText(), but makes a clone or copies into another UText
 //
 //--------------------------------------------------------------------------------
-UText *RegexMatcher::getInput (UText *dest) const {
-    UErrorCode status = U_ZERO_ERROR; // ignored
+UText *RegexMatcher::getInput (UText *dest, UErrorCode &status) const {
+    UBool bailOut = FALSE;
+    if (U_FAILURE(status)) {
+        return dest;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        bailOut = TRUE;
+    }
+    
+    if (bailOut) {
+        if (dest) {
+            utext_replace(dest, 0, utext_nativeLength(dest), NULL, 0, &status);
+            return dest;
+        } else {
+            return utext_clone(NULL, fInputText, FALSE, TRUE, &status);
+        }
+    }
+    
     if (dest) {
         if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
             utext_replace(dest, 0, utext_nativeLength(dest), fInputText->chunkContents, (int32_t)fInputLength, &status);
@@ -1462,7 +1529,7 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
 }
 
 
-UBool RegexMatcher::lookingAt(int32_t start, UErrorCode &status) {
+UBool RegexMatcher::lookingAt(int64_t start, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -1485,24 +1552,8 @@ UBool RegexMatcher::lookingAt(int32_t start, UErrorCode &status) {
     }
 
     int64_t nativeStart;
-    UBool couldFindStart = TRUE;
-    if (UTEXT_USES_U16(fInputText)) {
-        nativeStart = start;
-    } else {
-        UTEXT_SETNATIVEINDEX(fInputText, 0);
-        int32_t i = 0;
-        while (i < start) {
-            UChar32 c = UTEXT_NEXT32(fInputText);
-            if (c != U_SENTINEL) {
-                i += U16_LENGTH(c);
-            } else {
-                couldFindStart = FALSE;
-                break;
-            }
-        }
-        nativeStart = UTEXT_GETNATIVEINDEX(fInputText);
-    }
-    if (!couldFindStart || nativeStart < fActiveStart || nativeStart > fActiveLimit) {
+    nativeStart = start;
+    if (nativeStart < fActiveStart || nativeStart > fActiveLimit) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -1550,7 +1601,7 @@ UBool RegexMatcher::matches(UErrorCode &status) {
 }
 
 
-UBool RegexMatcher::matches(int32_t start, UErrorCode &status) {
+UBool RegexMatcher::matches(int64_t start, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -1573,24 +1624,8 @@ UBool RegexMatcher::matches(int32_t start, UErrorCode &status) {
     }
 
     int64_t nativeStart;
-    UBool couldFindStart = TRUE;
-    if (UTEXT_USES_U16(fInputText)) {
-        nativeStart = start;
-    } else {
-        UTEXT_SETNATIVEINDEX(fInputText, 0);
-        int32_t i = 0;
-        while (i < start) {
-            UChar32 c = UTEXT_NEXT32(fInputText);
-            if (c != U_SENTINEL) {
-                i += U16_LENGTH(c);
-            } else {
-                couldFindStart = FALSE;
-                break;
-            }
-        }
-        nativeStart = UTEXT_GETNATIVEINDEX(fInputText);
-    }
-    if (!couldFindStart || nativeStart < fActiveStart || nativeStart > fActiveLimit) {
+    nativeStart = start;
+    if (nativeStart < fActiveStart || nativeStart > fActiveLimit) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -1621,65 +1656,38 @@ const RegexPattern &RegexMatcher::pattern() const {
 //    region
 //
 //--------------------------------------------------------------------------------
-RegexMatcher &RegexMatcher::region(int32_t start, int32_t limit, UErrorCode &status) {
+RegexMatcher &RegexMatcher::region(int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return *this;
     }
     
-    if (start>limit || start<0 || limit<0) {
+    if (regionStart>regionLimit || regionStart<0 || regionLimit<0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
         
-    int64_t nativeStart;
-    int32_t i = 0;
-    UBool couldFindStart = TRUE;
-    if (UTEXT_USES_U16(fInputText)) {
-        nativeStart = start;
-        couldFindStart = (nativeStart <= fInputLength);
-    } else {
-        UTEXT_SETNATIVEINDEX(fInputText, 0);
-        while (i < start) {
-            UChar32 c = UTEXT_NEXT32(fInputText);
-            if (c != U_SENTINEL) {
-                i += U16_LENGTH(c);
-            } else {
-                couldFindStart = FALSE;
-                break;
-            }
-        }
-        nativeStart = UTEXT_GETNATIVEINDEX(fInputText);
-    }
-    int64_t nativeLimit = nativeStart;
-    
-    if (!couldFindStart) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    } else {
-        UBool couldFindLimit = TRUE;
-        if (UTEXT_USES_U16(fInputText)) {
-            nativeLimit = limit;
-            couldFindLimit = (nativeLimit <= fInputLength);
-        } else {
-            while (i < limit) {
-                UChar32 c = UTEXT_NEXT32(fInputText);
-                if (c != U_SENTINEL) {
-                    i += U16_LENGTH(c);
-                } else {
-                    couldFindLimit = FALSE;
-                    break;
-                }
-            }
-            nativeLimit = UTEXT_GETNATIVEINDEX(fInputText);
-        }
-        if (!couldFindLimit) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+    int64_t nativeStart = regionStart;
+    int64_t nativeLimit = regionLimit;
+    if (nativeStart > fInputLength || nativeLimit > fInputLength) {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
-    this->reset();
+    if (startIndex == -1)
+      this->reset();
+    else
+      resetPreserveRegion();    
+    
     fRegionStart = nativeStart;
     fRegionLimit = nativeLimit;
     fActiveStart = nativeStart;
     fActiveLimit = nativeLimit;
+
+    if (startIndex != -1) {
+      if (startIndex < fActiveStart || startIndex > fActiveLimit) {
+          status = U_INDEX_OUTOFBOUNDS_ERROR;
+      }
+      fMatchEnd = startIndex;  
+    }
+
     if (!fTransparentBounds) {
         fLookStart = nativeStart;
         fLookLimit = nativeLimit;
@@ -1691,7 +1699,9 @@ RegexMatcher &RegexMatcher::region(int32_t start, int32_t limit, UErrorCode &sta
     return *this;
 }
 
-
+RegexMatcher &RegexMatcher::region(int64_t start, int64_t limit, UErrorCode &status) {
+  return region(start, limit, -1, status);
+}
 
 //--------------------------------------------------------------------------------
 //
@@ -1699,15 +1709,12 @@ RegexMatcher &RegexMatcher::region(int32_t start, int32_t limit, UErrorCode &sta
 //
 //--------------------------------------------------------------------------------
 int32_t RegexMatcher::regionEnd() const {
-    if (UTEXT_USES_U16(fInputText)) {
-        return (int32_t)fRegionLimit;
-    } else {
-        // !!!: Would like a better way to do this!
-        UErrorCode status = U_ZERO_ERROR;
-        return utext_extract(fInputText, 0, fRegionLimit, NULL, 0, &status);
-    }
+    return (int32_t)fRegionLimit;
 }
 
+int64_t RegexMatcher::regionEnd64() const {
+    return fRegionLimit;
+}
 
 //--------------------------------------------------------------------------------
 //
@@ -1715,13 +1722,11 @@ int32_t RegexMatcher::regionEnd() const {
 //
 //--------------------------------------------------------------------------------
 int32_t RegexMatcher::regionStart() const {
-    if (UTEXT_USES_U16(fInputText)) {
-        return (int32_t)fRegionStart;
-    } else {
-        // !!!: Would like a better way to do this!
-        UErrorCode status = U_ZERO_ERROR;
-        return utext_extract(fInputText, 0, fRegionStart, NULL, 0, &status);
-    }
+    return (int32_t)fRegionStart;
+}
+
+int64_t RegexMatcher::regionStart64() const {
+    return fRegionStart;
 }
 
 
@@ -1779,7 +1784,7 @@ UText *RegexMatcher::replaceAll(UText *replacement, UText *dest, UErrorCode &sta
                 break;
             }
         }
-        appendTail(dest);
+        appendTail(dest, status);
     }
     
     return dest;
@@ -1821,7 +1826,7 @@ UText *RegexMatcher::replaceFirst(UText *replacement, UText *dest, UErrorCode &s
 
     reset();
     if (!find()) {
-        return getInput(dest);
+        return getInput(dest, status);
     }
     
     if (dest == NULL) {
@@ -1834,7 +1839,7 @@ UText *RegexMatcher::replaceFirst(UText *replacement, UText *dest, UErrorCode &s
     }
     
     appendReplacement(dest, replacement, status);
-    appendTail(dest);
+    appendTail(dest, status);
     
     return dest;
 }
@@ -1936,7 +1941,7 @@ RegexMatcher &RegexMatcher::reset(UText *input) {
     return *this;
 }*/
 
-RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {
+RegexMatcher &RegexMatcher::reset(int64_t position, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -1948,24 +1953,8 @@ RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {
     }
 
     int64_t nativePos;
-    UBool couldFindStart = TRUE;
-    if (UTEXT_USES_U16(fInputText)) {
-        nativePos = position;
-    } else {
-        UTEXT_SETNATIVEINDEX(fInputText, 0);
-        int32_t i = 0;
-        while (i < position) {
-            UChar32 c = UTEXT_NEXT32(fInputText);
-            if (c != U_SENTINEL) {
-                i += U16_LENGTH(c);
-            } else {
-                couldFindStart = FALSE;
-                break;
-            }
-        }
-        nativePos = UTEXT_GETNATIVEINDEX(fInputText);
-    }
-    if (!couldFindStart || nativePos < fActiveStart || nativePos >= fActiveLimit) {
+    nativePos = position;
+    if (nativePos < fActiveStart || nativePos >= fActiveLimit) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return *this;
     }
@@ -2224,15 +2213,17 @@ int32_t RegexMatcher::start(UErrorCode &status) const {
     return start(0, status);
 }
 
-
-
+int64_t RegexMatcher::start64(UErrorCode &status) const {
+    return start64(0, status);
+}
 
 //--------------------------------------------------------------------------------
 //
 //     start(int32_t group, UErrorCode &status)
 //
 //--------------------------------------------------------------------------------
-int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
+
+int64_t RegexMatcher::start64(int32_t group, UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return -1;
     }
@@ -2258,16 +2249,13 @@ int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
         s = fFrame->fExtra[groupOffset];
     }
     
-    if (s == -1 || UTEXT_USES_U16(fInputText)) {
-        return (int32_t)s;
-    } else {
-        // !!!: Would like a better way to do this!
-        UErrorCode status = U_ZERO_ERROR;
-        return utext_extract(fInputText, 0, s, NULL, 0, &status);
-    }
+    return s;
 }
 
 
+int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
+    return (int32_t)start64(group, status);
+}
 
 //--------------------------------------------------------------------------------
 //

@@ -581,11 +581,13 @@ UnicodeString RegexPattern::pattern() const {
 //   patternText
 //
 //---------------------------------------------------------------------
-UText *RegexPattern::patternText() const {
+UText *RegexPattern::patternText(UErrorCode      &status) const {
+    if (U_FAILURE(status)) {return NULL;}
+    status = U_ZERO_ERROR;
+
     if (fPattern != NULL) {
         return fPattern;
     } else {
-        UErrorCode status = U_ZERO_ERROR;
         RegexStaticSets::initGlobals(&status);
         return RegexStaticSets::gStaticSets->fEmptyText;
     }
