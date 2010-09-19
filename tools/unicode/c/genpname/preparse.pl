@@ -658,17 +658,25 @@ sub merge_PropertyValueAliases {
                 $n = $name; 
             } else {
                 # iterate (slow)
+iterateAliases:
                 for my $a (keys %$pva) {
                     # case-insensitive match
                     # & case-insensitive reverse match
-                    if ($a =~ /^$name$/i ||
-                        $pva->{$a} =~ /^$name$/i) {
+                    if ($a =~ /^$name$/i) {
                         $n = $a;
                         last;
+                    } else {
+                        my @aliases = split(/\|/, $pva->{$a});
+                        for (@aliases) {
+                            if (/^$name$/i) {
+                                $n = $a;
+                                last iterateAliases;
+                            }
+                        }
                     }
                 }
             }
-                
+
             # For blocks, do a loose match from Blocks.txt pseudo-name
             # to PropertyValueAliases long name.
             if (!$n && $prop eq 'blk') {
@@ -683,7 +691,7 @@ sub merge_PropertyValueAliases {
                     }
                 }
             }
-            
+
             die "Error: Property value $prop:$name not found" unless ($n);
 
             my $l = $n;
@@ -1187,7 +1195,9 @@ sub read_uchar {
         }
 
         elsif ($mode eq 'UJoiningGroup') {
-            if (/^\s*(U_JG_(\w+))/) {
+            # Ignore aliases like U_JG_HAMZA_ON_HEH_GOAL=U_JG_TEH_MARBUTA_GOAL.
+            # (They have an = sign rather than a comma after the constant name.)
+            if (/^\s*(U_JG_(\w+))\s*,/) {
                 addDatum($hash, 'jg', $1, $2) unless ($2 eq 'COUNT');
             }
         }
