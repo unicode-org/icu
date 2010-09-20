@@ -160,7 +160,7 @@ static const SingleEnum sentenceBreakSingleEnum={
 static const SingleEnum lineBreakSingleEnum={
     "LineBreak", "line break",
     UCHAR_LINE_BREAK,
-    UPROPS_LB_VWORD, UPROPS_LB_SHIFT, UPROPS_LB_MASK
+    2, UPROPS_LB_SHIFT, UPROPS_LB_MASK
 };
 
 static const SingleEnum eawSingleEnum={
