@@ -105,10 +105,10 @@ def CopyAndStripAndMerge(s, t):
   CopyAndStripWithOptionalMerge(s, t, True)
 
 
-_unidata_files = {
+_files = {
   # Simply copy these files.
   "BidiMirroring.txt": shutil.copy,
-  "BidiTest.txt": shutil.copy,
+  "BidiTest.txt": (shutil.copy, "testdata"),
   "Blocks.txt": shutil.copy,
   "CaseFolding.txt": shutil.copy,
   "DerivedAge.txt": shutil.copy,
@@ -116,13 +116,17 @@ _unidata_files = {
   "DerivedJoiningGroup.txt": shutil.copy,
   "DerivedJoiningType.txt": shutil.copy,
   "DerivedNumericValues.txt": shutil.copy,
+  "GraphemeBreakTest.txt": (shutil.copy, "testdata"),
+  "LineBreakTest.txt": (shutil.copy, "testdata"),
   "NameAliases.txt": shutil.copy,
   "NormalizationCorrections.txt": shutil.copy,
   "PropertyAliases.txt": shutil.copy,
   "PropertyValueAliases.txt": shutil.copy,
+  "SentenceBreakTest.txt": (shutil.copy, "testdata"),
   "ScriptExtensions.txt": shutil.copy,
   "SpecialCasing.txt": shutil.copy,
   "UnicodeData.txt": shutil.copy,
+  "WordBreakTest.txt": (shutil.copy, "testdata"),
 
   # Copy these files and remove comments behind data lines but not in others.
   "DerivedCoreProperties.txt": CopyAndStrip,
@@ -157,13 +161,21 @@ def main():
     if match:
       basename = match.group(1) + match.group(2)
       print basename
-    if basename in _unidata_files:
+    if basename in _files:
       if basename in files_processed:
         print "duplicate file basename %s!" % basename
         sys.exit(1)
       files_processed.add(basename)
-      dest_file = os.path.join(dest_root, basename)
-      _unidata_files[basename](source_file, dest_file)
+      action = _files[basename]
+      if isinstance(action, tuple):
+        dest_folder = action[1]
+        action = action[0]
+      else:
+        dest_folder = "unidata"
+      dest_path = os.path.join(dest_root, dest_folder)
+      if not os.path.exists(dest_path): os.makedirs(dest_path)
+      dest_file = os.path.join(dest_path, basename)
+      action(source_file, dest_file)
 
 
 if __name__ == "__main__":
