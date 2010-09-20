@@ -3242,7 +3242,31 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     fWeekendCease = UCAL_SUNDAY;
     fWeekendCeaseMillis = 86400000; // 24*60*60*1000
 
-    CalendarData calData(desiredLocale, type, status);
+    // Since week and weekend data is territory based instead of language based,
+    // we may need to tweak the locale that we are using to try to get the appropriate
+    // values, using the following logic:
+    // 1). If the locale has a language but no territory, use the territory as defined by 
+    //     the likely subtags.
+    // 2). If the locale has a script designation then we ignore it,
+    //     then remove it ( i.e. "en_Latn_US" becomes "en_US" )
+ 
+    char minLocaleID[ULOC_FULLNAME_CAPACITY];
+    UErrorCode myStatus = U_ZERO_ERROR;
+    uloc_minimizeSubtags(desiredLocale.getName(),minLocaleID,ULOC_FULLNAME_CAPACITY,&myStatus);
+    Locale min = Locale::createFromName(minLocaleID);
+    Locale useLocale;
+    if ( uprv_strlen(desiredLocale.getCountry()) == 0 || 
+         uprv_strlen(desiredLocale.getScript()) > 0 && uprv_strlen(min.getScript()) == 0 ) {
+        char maxLocaleID[ULOC_FULLNAME_CAPACITY];
+        myStatus = U_ZERO_ERROR;
+        uloc_addLikelySubtags(desiredLocale.getName(),maxLocaleID,ULOC_FULLNAME_CAPACITY,&myStatus);
+        Locale max = Locale::createFromName(maxLocaleID);
+        useLocale = Locale(max.getLanguage(),max.getCountry());
+    } else {
+        useLocale = Locale(desiredLocale);
+    }
+ 
+    CalendarData calData(useLocale, type, status);
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
     UResourceBundle *dateTimeElements = calData.getByKey(gDateTimeElements, status);

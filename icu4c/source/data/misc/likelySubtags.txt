@@ -93,9 +93,11 @@ likelySubtags:table(nofallback){
     ig{"ig_Latn_NG"}
     ii{"ii_Yiii_CN"}
     ilo{"ilo_Latn_PH"}
+    in{"in_Latn_ID"}
     inh{"inh_Cyrl_RU"}
     is{"is_Latn_IS"}
     it{"it_Latn_IT"}
+    iw{"iw_Hebr_IL"}
     ja{"ja_Jpan_JP"}
     jmc{"jmc_Latn_TZ"}
     jv{"jv_Latn_ID"}
