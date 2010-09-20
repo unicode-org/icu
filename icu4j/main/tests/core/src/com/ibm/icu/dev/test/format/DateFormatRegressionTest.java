@@ -901,17 +901,17 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         final PatternAndResult[] tests = {
             new PatternAndResult( "dd MMM yyyy GGG",   "02 Jul 2008 AD" ),
             new PatternAndResult( "dd MMM yyyy GGGGG", "02 Jul 2008 A" ),
-            new PatternAndResult( "e dd MMM yyyy",     "3 02 Jul 2008" ),
-            new PatternAndResult( "ee dd MMM yyyy",    "03 02 Jul 2008" ),
-            new PatternAndResult( "c dd MMM yyyy",     "3 02 Jul 2008" ),
-            new PatternAndResult( "cc dd MMM yyyy",    "3 02 Jul 2008" ),
+            new PatternAndResult( "e dd MMM yyyy",     "4 02 Jul 2008" ),
+            new PatternAndResult( "ee dd MMM yyyy",    "04 02 Jul 2008" ),
+            new PatternAndResult( "c dd MMM yyyy",     "4 02 Jul 2008" ),
+            new PatternAndResult( "cc dd MMM yyyy",    "4 02 Jul 2008" ),
             new PatternAndResult( "eee dd MMM yyyy",   "Wed 02 Jul 2008" ),
             new PatternAndResult( "EEE dd MMM yyyy",   "Wed 02 Jul 2008" ),
             new PatternAndResult( "EE dd MMM yyyy",    "Wed 02 Jul 2008" ),
             new PatternAndResult( "eeee dd MMM yyyy",  "Wednesday 02 Jul 2008" ),
             new PatternAndResult( "eeeee dd MMM yyyy", "W 02 Jul 2008" ),
-            new PatternAndResult( "e ww YYYY",         "3 27 2008" ),
-            new PatternAndResult( "c ww YYYY",         "3 27 2008" ),
+            new PatternAndResult( "e ww YYYY",         "4 27 2008" ),
+            new PatternAndResult( "c ww YYYY",         "4 27 2008" ),
         };
         ULocale loc = ULocale.ENGLISH;
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
