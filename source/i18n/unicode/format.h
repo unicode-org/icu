@@ -279,7 +279,7 @@ public:
      *
      * @see #setLenient
      * @return Lenient parse mode status: TRUE if on, FALSE if off.
-     * @stable ICU 2.0
+     * @draft ICU 4.6
      */
     virtual UBool isLenient(void) const;
 
