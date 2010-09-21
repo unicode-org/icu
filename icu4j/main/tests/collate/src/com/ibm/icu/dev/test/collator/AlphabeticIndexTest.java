@@ -164,6 +164,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public void TestFirstCharacters() {
+
         AlphabeticIndex alphabeticIndex = new AlphabeticIndex(Locale.ENGLISH);
         RuleBasedCollator collator = alphabeticIndex.getCollator();
         collator.setStrength(Collator.IDENTICAL);
@@ -183,12 +184,14 @@ public class AlphabeticIndexTest extends TestFmwk {
             missingScripts.removeAll(s);
         }
         if (missingScripts.size() != 0) {
-            errln("Missing character from: " + missingScripts);
+            if (!skipIfBeforeICU(4,5,2)) { // ticket#7968
+                errln("Missing character from: " + missingScripts);
+            }
         }
     }
 
     public void TestBuckets() {
-        ULocale additionalLocale = ULocale.ENGLISH;            
+        ULocale additionalLocale = ULocale.ENGLISH;
 
         for (String[] pair : localeAndIndexCharactersLists) {
             checkBuckets(pair[0], SimpleTests, additionalLocale, "E", "edgar", "Effron", "Effron");
