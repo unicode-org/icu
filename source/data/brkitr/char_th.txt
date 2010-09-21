@@ -15,8 +15,7 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [\p{Grapheme_Cluster_Break = Control}];
-$Extend      = [\p{Grapheme_Cluster_Break = Extend} - [\u0E30 \u0E32 \u0E45 \u0EB0 \u0EB2]];
-$SpacingMark = [\p{Grapheme_Cluster_Break = SpacingMark}];
+$Extend      = [\p{Grapheme_Cluster_Break = Extend} + [\u0E33 \u0EB3]];
 
 #
 # Korean Syllable Definitions
@@ -42,9 +41,6 @@ $L ($L | $V | $LV | $LVT);
 
 [^$Control $CR $LF] $Extend;
 
-[^$Control $CR $LF] $SpacingMark;
-
-
 ## -------------------------------------------------
 
 !!reverse;
@@ -54,7 +50,6 @@ $LF $CR;
 $T ($LVT | $T);
 
 $Extend      [^$Control $CR $LF];
-$SpacingMark [^$Control $CR $LF];
 
 
 ## -------------------------------------------------

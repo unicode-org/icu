@@ -12,7 +12,7 @@
     <identity>
         <version number="$Revision: 1.1 $"/>
         <generation date="$Date: 2006/04/21 00:54:07 $"/>
-        <language type="el"/> 
+        <language type="th"/> 
     </identity>
     <special xmlns:icu="http://www.icu-project.org/">
         <icu:breakIteratorData>

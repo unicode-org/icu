@@ -1965,10 +1965,6 @@ void RBBITest::TestTailoredBreaks() {
         UErrorCode status = U_ZERO_ERROR;
         switch (tbItemPtr->type) {
             case UBRK_CHARACTER:
-// TODO(andy): Match Thai grapheme break behavior to Unicode 6.0 and remove this time bomb.
-{ UVersionInfo icu453 = { 4, 5, 3, 0 };
-  if (!isICUVersionAtLeast(icu453)) continue;
-}
                 tailoredBrkiter = BreakIterator::createCharacterInstance(testLocale, status);
                 rootBrkiter = BreakIterator::createCharacterInstance(rootLocale, status);
                 break;
