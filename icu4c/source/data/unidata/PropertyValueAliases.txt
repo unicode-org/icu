@@ -1,8 +1,8 @@
-# PropertyValueAliases-5.2.0.txt
-# Date: 2009-08-24, 03:27:01 GMT [MD]
+# PropertyValueAliases-6.0.0.txt
+# Date: 2010-07-17, 22:44:06 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
@@ -73,6 +73,7 @@ age; n/a       ; 4.1
 age; n/a       ; 5.0
 age; n/a       ; 5.1
 age; n/a       ; 5.2
+age; n/a       ; 6.0
 age; n/a       ; unassigned
 
 # Alphabetic (Alpha)
@@ -119,6 +120,7 @@ Bidi_M; Y      ; Yes                              ; T                           
 # Block (blk)
 
 blk; n/a       ; Aegean_Numbers
+blk; n/a       ; Alchemical_Symbols
 blk; n/a       ; Alphabetic_Presentation_Forms
 blk; n/a       ; Ancient_Greek_Musical_Notation
 blk; n/a       ; Ancient_Greek_Numbers
@@ -132,12 +134,15 @@ blk; n/a       ; Arrows
 blk; n/a       ; Avestan
 blk; n/a       ; Balinese
 blk; n/a       ; Bamum
+blk; n/a       ; Bamum_Supplement
 blk; n/a       ; Basic_Latin                      ; ASCII
+blk; n/a       ; Batak
 blk; n/a       ; Bengali
 blk; n/a       ; Block_Elements
 blk; n/a       ; Bopomofo
 blk; n/a       ; Bopomofo_Extended
 blk; n/a       ; Box_Drawing
+blk; n/a       ; Brahmi
 blk; n/a       ; Braille_Patterns
 blk; n/a       ; Buginese
 blk; n/a       ; Buhid
@@ -156,6 +161,7 @@ blk; n/a       ; CJK_Unified_Ideographs
 blk; n/a       ; CJK_Unified_Ideographs_Extension_A
 blk; n/a       ; CJK_Unified_Ideographs_Extension_B
 blk; n/a       ; CJK_Unified_Ideographs_Extension_C
+blk; n/a       ; CJK_Unified_Ideographs_Extension_D
 blk; n/a       ; Combining_Diacritical_Marks
 blk; n/a       ; Combining_Diacritical_Marks_For_Symbols; Combining_Marks_For_Symbols
 blk; n/a       ; Combining_Diacritical_Marks_Supplement
@@ -178,12 +184,14 @@ blk; n/a       ; Devanagari_Extended
 blk; n/a       ; Dingbats
 blk; n/a       ; Domino_Tiles
 blk; n/a       ; Egyptian_Hieroglyphs
+blk; n/a       ; Emoticons
 blk; n/a       ; Enclosed_Alphanumeric_Supplement
 blk; n/a       ; Enclosed_Alphanumerics
 blk; n/a       ; Enclosed_CJK_Letters_And_Months
 blk; n/a       ; Enclosed_Ideographic_Supplement
 blk; n/a       ; Ethiopic
 blk; n/a       ; Ethiopic_Extended
+blk; n/a       ; Ethiopic_Extended_A
 blk; n/a       ; Ethiopic_Supplement
 blk; n/a       ; General_Punctuation
 blk; n/a       ; Geometric_Shapes
@@ -213,6 +221,7 @@ blk; n/a       ; Inscriptional_Parthian
 blk; n/a       ; IPA_Extensions
 blk; n/a       ; Javanese
 blk; n/a       ; Kaithi
+blk; n/a       ; Kana_Supplement
 blk; n/a       ; Kanbun
 blk; n/a       ; Kangxi_Radicals
 blk; n/a       ; Kannada
@@ -240,6 +249,7 @@ blk; n/a       ; Lycian
 blk; n/a       ; Lydian
 blk; n/a       ; Mahjong_Tiles
 blk; n/a       ; Malayalam
+blk; n/a       ; Mandaic
 blk; n/a       ; Mathematical_Alphanumeric_Symbols
 blk; n/a       ; Mathematical_Operators
 blk; n/a       ; Meetei_Mayek
@@ -247,6 +257,7 @@ blk; n/a       ; Miscellaneous_Mathematical_Symbols_A
 blk; n/a       ; Miscellaneous_Mathematical_Symbols_B
 blk; n/a       ; Miscellaneous_Symbols
 blk; n/a       ; Miscellaneous_Symbols_And_Arrows
+blk; n/a       ; Miscellaneous_Symbols_And_Pictographs
 blk; n/a       ; Miscellaneous_Technical
 blk; n/a       ; Modifier_Tone_Letters
 blk; n/a       ; Mongolian
@@ -271,6 +282,7 @@ blk; n/a       ; Phaistos_Disc
 blk; n/a       ; Phoenician
 blk; n/a       ; Phonetic_Extensions
 blk; n/a       ; Phonetic_Extensions_Supplement
+blk; n/a       ; Playing_Cards
 blk; n/a       ; Private_Use_Area                 ; Private_Use
 blk; n/a       ; Rejang
 blk; n/a       ; Rumi_Numeral_Symbols
@@ -305,6 +317,7 @@ blk; n/a       ; Thaana
 blk; n/a       ; Thai
 blk; n/a       ; Tibetan
 blk; n/a       ; Tifinagh
+blk; n/a       ; Transport_And_Map_Symbols
 blk; n/a       ; Ugaritic
 blk; n/a       ; Unified_Canadian_Aboriginal_Syllabics; Canadian_Syllabics
 blk; n/a       ; Unified_Canadian_Aboriginal_Syllabics_Extended
@@ -675,7 +688,6 @@ jg ; n/a       ; Final_Semkath
 jg ; n/a       ; Gaf
 jg ; n/a       ; Gamal
 jg ; n/a       ; Hah
-jg ; n/a       ; Hamza_On_Heh_Goal
 jg ; n/a       ; He
 jg ; n/a       ; Heh
 jg ; n/a       ; Heh_Goal
@@ -707,6 +719,7 @@ jg ; n/a       ; Syriac_Waw
 jg ; n/a       ; Tah
 jg ; n/a       ; Taw
 jg ; n/a       ; Teh_Marbuta
+jg ; n/a       ; Teh_Marbuta_Goal                 ; Hamza_On_Heh_Goal
 jg ; n/a       ; Teth
 jg ; n/a       ; Waw
 jg ; n/a       ; Yeh
@@ -908,8 +921,10 @@ sc ; Armn      ; Armenian
 sc ; Avst      ; Avestan
 sc ; Bali      ; Balinese
 sc ; Bamu      ; Bamum
+sc ; Batk      ; Batak
 sc ; Beng      ; Bengali
 sc ; Bopo      ; Bopomofo
+sc ; Brah      ; Brahmi
 sc ; Brai      ; Braille
 sc ; Bugi      ; Buginese
 sc ; Buhd      ; Buhid
@@ -953,6 +968,7 @@ sc ; Linb      ; Linear_B
 sc ; Lisu      ; Lisu
 sc ; Lyci      ; Lycian
 sc ; Lydi      ; Lydian
+sc ; Mand      ; Mandaic
 sc ; Mlym      ; Malayalam
 sc ; Mong      ; Mongolian
 sc ; Mtei      ; Meetei_Mayek

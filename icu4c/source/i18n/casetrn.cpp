@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -88,12 +88,9 @@ UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(CaseMapTransliterator)
  */
 CaseMapTransliterator::CaseMapTransliterator(const UnicodeString &id, UCaseMapFull *map) : 
     Transliterator(id, 0),
-    fCsp(NULL),
+    fCsp(ucase_getSingleton()),
     fMap(map)
 {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    fCsp = ucase_getSingleton(&errorCode); // expect to get NULL if failure
-
     // TODO test incremental mode with context-sensitive text (e.g. greek sigma)
     // TODO need to call setMaximumContextLength()?!
 }

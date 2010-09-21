@@ -1,6 +1,9 @@
 # Fractional UCA Table, generated from standard UCA
 # 2009-10-24, 00:18:26 GMT [MD]
-# VERSION: UCA=5.2.0, UCD=5.2.0
+
+# Markus 2010-08-18: This is really the 5.2 version, but for testing with
+# UCD 6.0 I need the version numbers here to be 6.0 as well.
+# VERSION: UCA=6.0.0, UCD=6.0.0
 
 # Generated processed version, as described in ICU design document.
 # NOTES
@@ -17,7 +20,7 @@
 #  - Differs from previous version in that MAX value was introduced at 1F.
 #    All tertiary values are shifted down by 1, filling the gap at 7!
 
-[UCA version = 5.2.0]
+[UCA version = 6.0.0]
 
 0000; [,,]
 0001; [,,]

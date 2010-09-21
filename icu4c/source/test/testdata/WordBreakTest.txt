@@ -1,9 +1,8 @@
-﻿# Note: Please make sure that this utf-8 file contains a BOM.
-# WordBreakTest-5.2.0.txt
-# Date: 2009-05-28, 20:38:06 GMT [MD]
+# WordBreakTest-6.0.0.txt
+# Date: 2010-08-19, 01:19:54 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
@@ -16,7 +15,7 @@
 #	× wherever there is not.
 #  <comment> the format can change, but currently it shows:
 #	- the sample character name
-#	- (x) the line_break property* for the sample character
+#	- (x) the Word_Break property* for the sample character
 #	- [x] the rule that determines whether there is a break or not
 #
 # These samples may be extended or changed in the future.
@@ -999,4 +998,4 @@
 ÷ 2060 ÷ 0061 × 2060 × 0062 × 2060 × 00AD × 2060 × 0062 × 2060 × 0079 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) ÷ [999.0] LATIN SMALL LETTER A (ALetter) × [4.0] WORD JOINER (Format_FE) × [5.0] LATIN SMALL LETTER B (ALetter) × [4.0] WORD JOINER (Format_FE) × [4.0] SOFT HYPHEN (Format_FE) × [4.0] WORD JOINER (Format_FE) × [5.0] LATIN SMALL LETTER B (ALetter) × [4.0] WORD JOINER (Format_FE) × [5.0] LATIN SMALL LETTER Y (ALetter) × [4.0] WORD JOINER (Format_FE) × [4.0] WORD JOINER (Format_FE) ÷ [0.3]
 ÷ 2060 ÷ 0061 × 2060 ÷ 0024 × 2060 ÷ 002D × 2060 ÷ 0033 × 2060 × 0034 × 2060 × 002C × 2060 × 0035 × 2060 × 0036 × 2060 × 0037 × 2060 × 002E × 2060 × 0031 × 2060 × 0034 × 2060 ÷ 0025 × 2060 ÷ 0062 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) ÷ [999.0] LATIN SMALL LETTER A (ALetter) × [4.0] WORD JOINER (Format_FE) ÷ [999.0] DOLLAR SIGN (Other) × [4.0] WORD JOINER (Format_FE) ÷ [999.0] HYPHEN-MINUS (Other) × [4.0] WORD JOINER (Format_FE) ÷ [999.0] DIGIT THREE (Numeric) × [4.0] WORD JOINER (Format_FE) × [8.0] DIGIT FOUR (Numeric) × [4.0] WORD JOINER (Format_FE) × [12.0] COMMA (MidNum) × [4.0] WORD JOINER (Format_FE) × [11.0] DIGIT FIVE (Numeric) × [4.0] WORD JOINER (Format_FE) × [8.0] DIGIT SIX (Numeric) × [4.0] WORD JOINER (Format_FE) × [8.0] DIGIT SEVEN (Numeric) × [4.0] WORD JOINER (Format_FE) × [12.0] FULL STOP (MidNumLet) × [4.0] WORD JOINER (Format_FE) × [11.0] DIGIT ONE (Numeric) × [4.0] WORD JOINER (Format_FE) × [8.0] DIGIT FOUR (Numeric) × [4.0] WORD JOINER (Format_FE) ÷ [999.0] PERCENT SIGN (Other) × [4.0] WORD JOINER (Format_FE) ÷ [999.0] LATIN SMALL LETTER B (ALetter) × [4.0] WORD JOINER (Format_FE) × [4.0] WORD JOINER (Format_FE) ÷ [0.3]
 ÷ 2060 ÷ 0033 × 2060 × 0061 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) ÷ [999.0] DIGIT THREE (Numeric) × [4.0] WORD JOINER (Format_FE) × [10.0] LATIN SMALL LETTER A (ALetter) × [4.0] WORD JOINER (Format_FE) × [4.0] WORD JOINER (Format_FE) ÷ [0.3]
-# Lines: 968
+# Lines: 978

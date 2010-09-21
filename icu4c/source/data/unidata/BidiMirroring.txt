@@ -1,18 +1,19 @@
-# BidiMirroring-5.2.0.txt
-# Date: 2009-05-22, 12:44:00 PDT [KW]
+# BidiMirroring-6.0.0.txt
+# Date: 2010-06-21, 12:09:00 PDT [KW]
 #
 # Bidi_Mirroring_Glyph Property
 # 
 # This file is an informative contributory data file in the
 # Unicode Character Database.
 #
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 #
-# This data file lists characters that have the mirrored property
-# where there is another Unicode character that typically has a glyph
+# This data file lists characters that have the Bidi_Mirrored=True property
+# value, for which there is another Unicode character that typically has a glyph
 # that is the mirror image of the original character's glyph.
-# The repertoire covered by the file is Unicode 5.2.0.
+#
+# The repertoire covered by the file is Unicode 6.0.0.
 # 
 # The file contains a list of lines with mappings from one code point
 # to another one for character-based mirroring.
@@ -25,14 +26,22 @@
 # variable-length hexadecimal value with 4 to 6 digits.
 # A comment indicates where the characters are "BEST FIT" mirroring.
 # 
-# Code points with the "mirrored" property but no appropriate mirrors are
+# Code points for which Bidi_Mirrored=True, but for which no appropriate 
+# characters exist with mirrored glyphs, are
 # listed as comments at the end of the file.
+#
+# Formally, the default value of the Bidi_Mirroring_Glyph property
+# for each code point is the code point itself, unless a mapping to
+# some other character is specified in this data file. When a code
+# point has the default value for the Bidi_Mirroring_Glyph property,
+# that means that no other character exists whose glyph is suitable
+# for character-based mirroring.
 # 
 # For information on bidi mirroring, see UAX #9: Bidirectional Algorithm,
 # at http://www.unicode.org/unicode/reports/tr9/
 # 
 # This file was originally created by Markus Scherer.
-# Extended for Unicode 3.2, 4.0, 4.1, 5.0, 5.1, and 5.2 by Ken Whistler.
+# Extended for Unicode 3.2, 4.0, 4.1, 5.0, 5.1, 5.2, and 6.0 by Ken Whistler.
 # 
 # ############################################################
 
@@ -464,8 +473,8 @@ FF63; FF62 # [BEST FIT] HALFWIDTH RIGHT CORNER BRACKET
 # 22FF; Z NOTATION BAG MEMBERSHIP
 # 2320; TOP HALF INTEGRAL
 # 2321; BOTTOM HALF INTEGRAL
-# 27CC; LONG DIVISION
 # 27C0; THREE DIMENSIONAL ANGLE
+# 27CC; LONG DIVISION
 # 27D3; LOWER RIGHT CORNER WITH DOT
 # 27D4; UPPER LEFT CORNER WITH DOT
 # 27DC; LEFT MULTIMAP

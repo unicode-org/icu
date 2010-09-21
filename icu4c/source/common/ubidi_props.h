@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,8 +24,6 @@
 #include "uset_imp.h"
 #include "udataswp.h"
 
-#define UBIDI_HARDCODE_DATA 1
-
 U_CDECL_BEGIN
 
 /* library API -------------------------------------------------------------- */
@@ -33,28 +31,8 @@ U_CDECL_BEGIN
 struct UBiDiProps;
 typedef struct UBiDiProps UBiDiProps;
 
-U_CFUNC UBiDiProps *
-ubidi_openProps(UErrorCode *pErrorCode);
-
-U_CFUNC UBiDiProps *
-ubidi_openBinary(const uint8_t *bin, int32_t length, UErrorCode *pErrorCode);
-
-U_CFUNC void
-ubidi_closeProps(UBiDiProps *bdp);
-
-
 U_CFUNC const UBiDiProps *
-ubidi_getSingleton(UErrorCode *pErrorCode);
-
-#if !UBIDI_HARDCODE_DATA
-/**
- * Get a singleton dummy object, one that works with no real data.
- * This can be used when the real data is not available.
- * Using the dummy can reduce checks for available data after an initial failure.
- */
-U_CAPI const UBiDiProps *
-ubidi_getDummy(UErrorCode *pErrorCode);
-#endif
+ubidi_getSingleton(void);
 
 U_CAPI int32_t
 ubidi_swap(const UDataSwapper *ds,

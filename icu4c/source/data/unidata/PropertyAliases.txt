@@ -1,8 +1,8 @@
-# PropertyAliases-5.2.0.txt
-# Date: 2009-08-24, 03:26:46 GMT [MD]
+# PropertyAliases-6.0.0.txt
+# Date: 2010-05-18, 00:49:38 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
