@@ -359,7 +359,12 @@ free(result);
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
     }
 
-    if(d1!=462.12345)
+    /*
+     * Note: "for strict standard conformance all operations and constants are now supposed to be evaluated in precision of long double".  So,  we assign a1 before comparing to a double. Bug #7932.
+     */
+    a1 = 462.12345;
+
+    if(d1!=a1)
         log_err("Fail: Error in parsing\n");
     else
         log_verbose("Pass: parsing successful\n");
