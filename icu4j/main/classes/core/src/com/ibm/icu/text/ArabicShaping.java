@@ -7,9 +7,6 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacterDirection;
 
@@ -851,15 +848,7 @@ public final class ArabicShaping {
                                                 int length,
                                                 char digitBase,
                                                 boolean lastStrongWasAL) {
-        UBiDiProps bdp;
-        try {
-            bdp=UBiDiProps.getSingleton();
-        } catch (IOException e) {
-            ///CLOVER:OFF
-            // This is dependent on the UBiDiProps object
-            throw new MissingResourceException(e.getMessage(), "(BidiProps)", "");
-            ///CLOVER:ON
-        }
+        UBiDiProps bdp=UBiDiProps.INSTANCE;
         digitBase -= '0'; // move common adjustment out of loop
 
         for(int i = start + length; --i >= start;) {

@@ -66,8 +66,8 @@ public class RoundTripTest extends TestFmwk {
     A bug has been filed to remind us to do this: #1979.
      */
 
-    static String KATAKANA = "[[[:katakana:][\u30A1-\u30FA\u30FC]]-[\u30FF\u31F0-\u31FF]]";
-    static String HIRAGANA = "[[[:hiragana:][\u3040-\u3094]]-[\u3095-\u3096\u309F-\u30A0\\U0001F200-\\U0001F2FF]]";
+    static String KATAKANA = "[[[:katakana:][\u30A1-\u30FA\u30FC]]-[\u30FF\u31F0-\u31FF]-[:^age=5.2:]]";
+    static String HIRAGANA = "[[[:hiragana:][\u3040-\u3094]]-[\u3095-\u3096\u309F-\u30A0\\U0001F200-\\U0001F2FF]-[:^age=5.2:]]";
     static String LENGTH = "[\u30FC]";
     static String HALFWIDTH_KATAKANA = "[\uFF65-\uFF9D]";
     static String KATAKANA_ITERATION = "[\u30FD\u30FE]";

@@ -308,7 +308,7 @@ public final class StringPrep {
         b.close();
         
         if(checkBiDi) {
-            bdp=UBiDiProps.getSingleton();
+            bdp=UBiDiProps.INSTANCE;
         }
     }
  

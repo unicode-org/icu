@@ -23,12 +23,12 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 
 public final class UCaseProps {
@@ -44,12 +44,6 @@ public final class UCaseProps {
         is.close();
     }
 
-    private UCaseProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
-        indexes=new int[IX_TOP];
-        indexes[0]=IX_TOP;
-        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
-    }
-
     private final void readData(InputStream is) throws IOException {
         DataInputStream inputStream=new DataInputStream(is);
 
@@ -59,7 +53,7 @@ public final class UCaseProps {
         // read indexes[]
         int i, count;
         count=inputStream.readInt();
-        if(count<IX_INDEX_TOP) {
+        if(count<IX_TOP) {
             throw new IOException("indexes[0] too small in "+DATA_FILE_NAME);
         }
         indexes=new int[count];
@@ -70,7 +64,14 @@ public final class UCaseProps {
         }
 
         // read the trie
-        trie=new CharTrie(inputStream, null);
+        trie=Trie2_16.createFromSerialized(inputStream);
+        int expectedTrieLength=indexes[IX_TRIE_SIZE];
+        int trieLength=trie.getSerializedLength();
+        if(trieLength>expectedTrieLength) {
+            throw new IOException(DATA_FILE_NAME+": not enough bytes for the trie");
+        }
+        // skip padding after trie bytes
+        inputStream.skipBytes(expectedTrieLength-trieLength);
 
         // read exceptions[]
         count=indexes[IX_EXC_LENGTH];
@@ -93,53 +94,20 @@ public final class UCaseProps {
 
     // implement ICUBinary.Authenticate
     private final class IsAcceptable implements ICUBinary.Authenticate {
+        // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==1 &&
-                   version[2]==Trie.INDEX_STAGE_1_SHIFT_ && version[3]==Trie.INDEX_STAGE_2_SHIFT_;
+            return version[0]==2;
         }
-    }
-
-    // port of ucase_getSingleton()
-    //
-    // Note: Do we really need this API?
-    public static UCaseProps getSingleton() throws IOException {
-        if (FULL_INSTANCE == null) {
-            synchronized (UCaseProps.class) {
-                if (FULL_INSTANCE == null) {
-                    FULL_INSTANCE = new UCaseProps();
-                }
-            }
-        }
-        return FULL_INSTANCE;
-    }
-
-    /**
-     * Get a singleton dummy object, one that works with no real data.
-     * This can be used when the real data is not available.
-     * Using the dummy can reduce checks for available data after an initial failure.
-     * Port of ucase_getDummy().
-     */
-    // Note: do we really need this API?
-    public static UCaseProps getDummy() {
-        if (DUMMY_INSTANCE == null) {
-            synchronized (UCaseProps.class) {
-                if (DUMMY_INSTANCE == null) {
-                    DUMMY_INSTANCE = new UCaseProps(true);
-                }
-            }
-        }
-        return DUMMY_INSTANCE;
     }
 
     // set of property starts for UnicodeSet ------------------------------- ***
 
     public final void addPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of the trie */
-        TrieIterator iter=new TrieIterator(trie);
-        RangeValueIterator.Element element=new RangeValueIterator.Element();
-
-        while(iter.next(element)){
-            set.add(element.start);
+        Iterator<Trie2.Range> trieIterator=trie.iterator();
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+            set.add(range.startCodePoint);
         }
 
         /* add code points with hardcoded properties, plus the ones following them */
@@ -227,7 +195,7 @@ public final class UCaseProps {
     // simple case mappings ------------------------------------------------ ***
 
     public final int tolower(int c) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)>=UPPER) {
                 c+=getDelta(props);
@@ -243,7 +211,7 @@ public final class UCaseProps {
     }
 
     public final int toupper(int c) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)==LOWER) {
                 c+=getDelta(props);
@@ -259,7 +227,7 @@ public final class UCaseProps {
     }
 
     public final int totitle(int c) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)==LOWER) {
                 c+=getDelta(props);
@@ -318,7 +286,7 @@ public final class UCaseProps {
             break;
         }
 
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)!=NONE) {
                 /* add the one simple case mapping, no matter what type it is */
@@ -497,12 +465,12 @@ public final class UCaseProps {
 
     /** @return NONE, LOWER, UPPER, TITLE */
     public final int getType(int c) {
-        return getTypeFromProps(trie.getCodePointValue(c));
+        return getTypeFromProps(trie.get(c));
     }
 
     /** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
     public final int getTypeOrIgnorable(int c) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         int type=getTypeFromProps(props);
         if(propsHasException(props)) {
             if((exceptions[getExceptionsOffset(props)]&EXC_CASE_IGNORABLE)!=0) {
@@ -516,7 +484,7 @@ public final class UCaseProps {
 
     /** @return NO_DOT, SOFT_DOTTED, ABOVE, OTHER_ACCENT */
     public final int getDotType(int c) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             return props&DOT_MASK;
         } else {
@@ -529,7 +497,7 @@ public final class UCaseProps {
     }
 
     public final boolean isCaseSensitive(int c) {
-        return (trie.getCodePointValue(c)&SENSITIVE)!=0;
+        return (trie.get(c)&SENSITIVE)!=0;
     }
 
     // string casing ------------------------------------------------------- ***
@@ -862,7 +830,7 @@ public final class UCaseProps {
         int result, props;
 
         result=c;
-        props=trie.getCodePointValue(c);
+        props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)>=UPPER) {
                 result=c+getDelta(props);
@@ -1010,7 +978,7 @@ public final class UCaseProps {
         int props;
 
         result=c;
-        props=trie.getCodePointValue(c);
+        props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)==LOWER) {
                 result=c+getDelta(props);
@@ -1159,7 +1127,7 @@ public final class UCaseProps {
     
     /* return the simple case folding mapping for c */
     public final int fold(int c, int options) {
-        int props=trie.getCodePointValue(c);
+        int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)>=UPPER) {
                 c+=getDelta(props);
@@ -1222,7 +1190,7 @@ public final class UCaseProps {
         int props;
 
         result=c;
-        props=trie.getCodePointValue(c);
+        props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)>=UPPER) {
                 result=c+getDelta(props);
@@ -1355,7 +1323,7 @@ public final class UCaseProps {
     private char exceptions[];
     private char unfold[];
 
-    private CharTrie trie;
+    private Trie2_16 trie;
 
     // data format constants ----------------------------------------------- ***
     private static final String DATA_NAME="ucase";
@@ -1366,9 +1334,9 @@ public final class UCaseProps {
     private static final byte FMT[]={ 0x63, 0x41, 0x53, 0x45 };
 
     /* indexes into indexes[] */
-    private static final int IX_INDEX_TOP=0;
+    //private static final int IX_INDEX_TOP=0;
     //private static final int IX_LENGTH=1;
-    //private static final int IX_TRIE_SIZE=2;
+    private static final int IX_TRIE_SIZE=2;
     private static final int IX_EXC_LENGTH=3;
     private static final int IX_UNFOLD_LENGTH=4;
 
@@ -1464,27 +1432,18 @@ public final class UCaseProps {
     private static final int UNFOLD_ROW_WIDTH=1;
     private static final int UNFOLD_STRING_WIDTH=2;
 
-
     /*
      * public singleton instance
      */
     public static final UCaseProps INSTANCE;
 
-    private static volatile UCaseProps FULL_INSTANCE;
-    private static volatile UCaseProps DUMMY_INSTANCE;
-
     // This static initializer block must be placed after
     // other static member initialization
     static {
-        UCaseProps cp;
         try {
-            cp = new UCaseProps();
-            FULL_INSTANCE = cp;
+            INSTANCE = new UCaseProps();
         } catch (IOException e) {
-            // creating dummy
-            cp = new UCaseProps(true);
-            DUMMY_INSTANCE = cp;
+            throw new RuntimeException(e);
         }
-        INSTANCE = cp;
     }
 }

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.lang;
@@ -215,9 +215,10 @@ public class UnicodeSetTest extends TestFmwk {
 
         s.clear();
         s.applyPropertyAlias("nv", "0.5");
-        expectToPattern(s, "[\\u00BD\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176\\U00010E7B]", null);
+        expectToPattern(s, "[\\u00BD\\u0B73\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176\\U00010E7B]", null);
         // Unicode 5.1 adds Malayalam 1/2 (\u0D74)
         // Unicode 5.2 adds U+A831 NORTH INDIC FRACTION ONE HALF and U+10E7B RUMI FRACTION ONE HALF
+        // Unicode 6.0 adds U+0B73 ORIYA FRACTION ONE HALF
 
         s.clear();
         s.applyPropertyAlias("gc", "Lu");
@@ -1134,6 +1135,16 @@ public class UnicodeSetTest extends TestFmwk {
                 "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
                 "\\u0888\\uFDD3\\uFFFE\\U00050005",
 
+                // Script_Extensions, new in Unicode 6.0
+                "[:scx=Arab:]",
+                "\\u061E\\u061F\\u0620\\u0621\\u063F\\u0640\\u0650\\u065E\\uFDF1\\uFDF2\\uFDF3",
+                "\\u061D\\u065F\\uFDEF\\uFDFE",
+
+                // U+FDF2 has Script=Arabic and also Arab in its Script_Extensions,
+                // so scx-sc is missing U+FDF2.
+                "[[:Script_Extensions=Arabic:]-[:Arab:]]",
+                "\\u0640\\u064B\\u0650\\u0655\\uFDFD",
+                "\\uFDF2"
         };
 
         for (int i=0; i<DATA.length; i+=3) {  

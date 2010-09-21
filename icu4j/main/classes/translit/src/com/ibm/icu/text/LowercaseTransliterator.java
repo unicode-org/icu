@@ -6,8 +6,6 @@
  */
 package com.ibm.icu.text;
 
-import java.io.IOException;
-
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.util.ULocale;
 
@@ -51,11 +49,7 @@ class LowercaseTransliterator extends Transliterator{
     public LowercaseTransliterator(ULocale loc) {
         super(_ID, null);
         locale = loc;
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            csp=null;
-        }
+        csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
         result = new StringBuffer();
         locCache = new int[1];

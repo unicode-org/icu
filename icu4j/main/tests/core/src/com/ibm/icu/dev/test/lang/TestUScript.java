@@ -7,6 +7,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import java.util.BitSet;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -318,6 +319,81 @@ public class TestUScript extends TestFmwk {
            errln("UScript.getScript failed.");
         }
     }
+
+    public void TestGetScriptOfCharsWithScriptExtensions() {
+        /* test characters which have Script_Extensions */
+        if(!(
+            UScript.COMMON==UScript.getScript(0x0640) &&
+            UScript.INHERITED==UScript.getScript(0x0650) &&
+            UScript.ARABIC==UScript.getScript(0xfdf2))
+        ) {
+            errln("UScript.getScript(character with Script_Extensions) failed");
+        }
+    }
+
+    public void TestHasScript() {
+        if(!(
+            !UScript.hasScript(0x063f, UScript.COMMON) &&
+            UScript.hasScript(0x063f, UScript.ARABIC) &&  /* main Script value */
+            !UScript.hasScript(0x063f, UScript.SYRIAC) &&
+            !UScript.hasScript(0x063f, UScript.THAANA))
+        ) {
+            errln("UScript.hasScript(U+063F, ...) is wrong\n");
+        }
+        if(!(
+            UScript.hasScript(0x0640, UScript.COMMON) &&  /* main Script value */
+            UScript.hasScript(0x0640, UScript.ARABIC) &&
+            UScript.hasScript(0x0640, UScript.SYRIAC) &&
+            !UScript.hasScript(0x0640, UScript.THAANA))
+        ) {
+            errln("UScript.hasScript(U+0640, ...) is wrong\n");
+        }
+        if(!(
+            UScript.hasScript(0x0650, UScript.INHERITED) &&  /* main Script value */
+            UScript.hasScript(0x0650, UScript.ARABIC) &&
+            UScript.hasScript(0x0650, UScript.SYRIAC) &&
+            !UScript.hasScript(0x0650, UScript.THAANA))
+        ) {
+            errln("UScript.hasScript(U+0650, ...) is wrong\n");
+        }
+        if(!(
+            UScript.hasScript(0x0660, UScript.COMMON) &&  /* main Script value */
+            UScript.hasScript(0x0660, UScript.ARABIC) &&
+            !UScript.hasScript(0x0660, UScript.SYRIAC) &&
+            UScript.hasScript(0x0660, UScript.THAANA))
+        ) {
+            errln("UScript.hasScript(U+0660, ...) is wrong\n");
+        }
+        if(!(
+            !UScript.hasScript(0xfdf2, UScript.COMMON) &&
+            UScript.hasScript(0xfdf2, UScript.ARABIC) &&  /* main Script value */
+            !UScript.hasScript(0xfdf2, UScript.SYRIAC) &&
+            UScript.hasScript(0xfdf2, UScript.THAANA))
+        ) {
+            errln("UScript.hasScript(U+FDF2, ...) is wrong\n");
+        }
+    }
+
+    public void TestGetScriptExtensions() {
+        BitSet scripts=new BitSet(UScript.CODE_LIMIT);
+
+        /* normal usage */
+        if(!UScript.getScriptExtensions(0x063f, scripts).isEmpty()) {
+            errln("UScript.getScriptExtensions(U+063F) is not empty");
+        }
+        if(UScript.getScriptExtensions(0x0640, scripts).cardinality()!=2 || !scripts.get(UScript.ARABIC) || !scripts.get(UScript.SYRIAC)) {
+            errln("UScript.getScriptExtensions(U+0640) failed");
+        }
+        UScript.getScriptExtensions(0xfdf2, scripts);
+        if(scripts.cardinality()!=2 || !scripts.get(UScript.ARABIC) || !scripts.get(UScript.THAANA)) {
+            errln("UScript.getScriptExtensions(U+FDF2) failed");
+        }
+        UScript.getScriptExtensions(0xff65, scripts);
+        if(scripts.cardinality()!=6 || !scripts.get(UScript.BOPOMOFO) || !scripts.get(UScript.YI)) {
+            errln("UScript.getScriptExtensions(U+FF65) failed");
+        }
+    }
+
     public void TestScriptNames(){
         for(int i=0; i<UScript.CODE_LIMIT;i++){
             String name = UScript.getName(i);
@@ -360,9 +436,9 @@ public class TestUScript extends TestFmwk {
          * Whenever this happens, the long script names here need to be updated.
          */
         String[] expectedLong = new String[]{
-            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
+            "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
             "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
+            "Lepcha", "Lina", "Mandaic", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
             "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
             "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
@@ -374,6 +450,9 @@ public class TestUScript extends TestFmwk {
             "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
+            /* new in ICU 4.6 */
+            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
+            "Narb", "Nbat", "Palm", "Sind", "Wara",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -389,6 +468,9 @@ public class TestUScript extends TestFmwk {
             "Samr", "Tavt", "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamu", "Lisu", "Nkgb", "Sarb", 
+            /* new in ICU 4.6 */
+            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
+            "Narb", "Nbat", "Palm", "Sind", "Wara",
         };
         if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
             errln("need to add new script codes in lang.TestUScript.java!");

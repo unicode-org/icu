@@ -27,11 +27,9 @@ package com.ibm.icu.text;
 
 import java.awt.font.NumericShaper;
 import java.awt.font.TextAttribute;
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.AttributedCharacterIterator;
 import java.util.Arrays;
-import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacter;
@@ -1157,14 +1155,7 @@ public class Bidi {
         direction = 0;
         */
         /* get Bidi properties */
-        try {
-            bdp = UBiDiProps.getSingleton();
-        }
-        catch (IOException e) {
-            ///CLOVER:OFF
-            throw new MissingResourceException(e.getMessage(), "(BidiProps)", "");
-            ///CLOVER:ON
-        }
+        bdp = UBiDiProps.INSTANCE;
 
         /* allocate memory for arrays as requested */
         if (maxLength > 0) {
