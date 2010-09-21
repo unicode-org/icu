@@ -1743,6 +1743,8 @@ static void TestUTextAPI(void) {
             int32_t      len16;
             UErrorCode   shallowStatus = U_ZERO_ERROR;
             int64_t      nativeIndex;
+            UChar *groupChars;
+            UText groupText = UTEXT_INITIALIZER;
 
             actual = uregex_groupUText(re, 0, NULL, &group_len, &status);
             TEST_ASSERT_SUCCESS(status);
@@ -1752,9 +1754,9 @@ static void TestUTextAPI(void) {
             /*  len16 = utext_extract(actual, nativeIndex, nativeIndex + group_len, NULL, 0, &shallowStatus);  */
             len16 = group_len;
             
-            UChar *groupChars = (UChar *)malloc(sizeof(UChar)*(len16+1));
+            groupChars = (UChar *)malloc(sizeof(UChar)*(len16+1));
             utext_extract(actual, nativeIndex, nativeIndex + group_len, groupChars, len16+1, &shallowStatus);
-            UText groupText = UTEXT_INITIALIZER;
+
             utext_openUChars(&groupText, groupChars, len16, &shallowStatus);
             
             TEST_ASSERT_UTEXT(str_abcinteriordef, &groupText);
