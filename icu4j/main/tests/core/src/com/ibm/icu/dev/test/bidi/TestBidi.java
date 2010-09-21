@@ -519,6 +519,53 @@ public class TestBidi extends BidiTest {
         bidi.setReorderingMode(Bidi.REORDER_RUNS_ONLY);
         bidi.setPara("a \u05d0 b \u05d1 c \u05d2 d ", Bidi.LTR, null);
         assertEquals("\nWrong number of runs #4", 14, bidi.countRuns());
+        
+        /* test testGetBaseDirection to verify fast string direction detection function */
+        /* mixed start with L */
+        String mixedEnglishFirst = "\u0061\u0627\u0032\u06f3\u0061\u0034";
+        assertEquals("\nWrong direction through fast detection #1", Bidi.LTR, Bidi.getBaseDirection(mixedEnglishFirst));
+        /* mixed start with AL */
+        String mixedArabicFirst = "\u0661\u0627\u0662\u06f3\u0061\u0664";
+        assertEquals("\nWrong direction through fast detection #2", Bidi.RTL, Bidi.getBaseDirection(mixedArabicFirst));
+        /* mixed Start with R */
+        String mixedHebrewFirst = "\u05EA\u0627\u0662\u06f3\u0061\u0664";
+        assertEquals("\nWrong direction through fast detection #3", Bidi.RTL, Bidi.getBaseDirection(mixedHebrewFirst));
+        /* all AL (Arabic. Persian) */
+        String persian = "\u0698\u067E\u0686\u06AF";
+        assertEquals("\nWrong direction through fast detection #4", Bidi.RTL, Bidi.getBaseDirection(persian));
+        /* all R (Hebrew etc.) */
+        String hebrew = "\u0590\u05D5\u05EA\u05F1";
+        assertEquals("\nWrong direction through fast detection #5", Bidi.RTL, Bidi.getBaseDirection(hebrew));
+        /* all L (English) */
+        String english = "\u0071\u0061\u0066";
+        assertEquals("\nWrong direction through fast detection #6", Bidi.LTR, Bidi.getBaseDirection(english));
+        /* mixed start with weak AL an then L */
+        String startWeakAL = "\u0663\u0071\u0061\u0066";
+        assertEquals("\nWrong direction through fast detection #7", Bidi.LTR, Bidi.getBaseDirection(startWeakAL));
+        /* mixed start with weak L and then AL */
+        String startWeakL = "\u0031\u0698\u067E\u0686\u06AF";
+        assertEquals("\nWrong direction through fast detection #8", Bidi.RTL, Bidi.getBaseDirection(startWeakL));
+        /* empty */
+        String empty = "";
+        assertEquals("\nWrong direction through fast detection #9", Bidi.NEUTRAL, Bidi.getBaseDirection(empty));
+        /* surrogate character */
+        String surrogateChar = "\uD800\uDC00";
+        assertEquals("\nWrong direction through fast detection #10", Bidi.LTR, Bidi.getBaseDirection(surrogateChar));
+        /* all weak L (English digits) */
+        String allEnglishDigits = "\u0031\u0032\u0033";
+        assertEquals("\nWrong direction through fast detection #11", Bidi.NEUTRAL, Bidi.getBaseDirection(allEnglishDigits));
+        /* all weak AL (Arabic digits) */
+        String allArabicDigits = "\u0663\u0664\u0665";
+        assertEquals("\nWrong direction through fast detection #12", Bidi.NEUTRAL, Bidi.getBaseDirection(allArabicDigits));
+        /* null string */
+        String nullString = null;
+        assertEquals("\nWrong direction through fast detection #13", Bidi.NEUTRAL, Bidi.getBaseDirection(nullString));   
+        /* first L (English) others are R (Hebrew etc.) */
+        String startEnglishOthersHebrew = "\u0071\u0590\u05D5\u05EA\u05F1";
+        assertEquals("\nWrong direction through fast detection #14", Bidi.LTR, Bidi.getBaseDirection(startEnglishOthersHebrew));
+        /* last R (Hebrew etc.) others are weak L (English Digits) */
+        String lastHebrewOthersEnglishDigit = "\u0031\u0032\u0033\u05F1";
+        assertEquals("\nWrong direction through fast detection #15", Bidi.RTL, Bidi.getBaseDirection(lastHebrewOthersEnglishDigit));
     }
 
 
