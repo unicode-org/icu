@@ -72,6 +72,8 @@ static void testFailureRecovery(void);
 
 static void testMultipleParagraphs(void);
 
+static void testGetBaseDirection(void);
+
 /* new BIDI API */
 static void testReorderingMode(void);
 static void testReorderRunsOnly(void);
@@ -122,6 +124,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
+    addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
 }
 
 static void
@@ -1131,6 +1134,125 @@ _testReordering(UBiDi *pBiDi, int testNumber) {
         log_err("\nbad errorCode %d at %s\n", errorCode, (x));  \
         return;     \
     }               \
+
+#define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
+
+static void testGetBaseDirection(void) {
+    UBiDiDirection dir;
+    int i;
+
+/* Test Data */
+    static const UChar
+/*Mixed Start with L*/
+    stringMixedEnglishFirst[]={ 0x61, 0x627, 0x32, 0x6f3, 0x61, 0x34, 0 },
+/*Mixed Start with AL*/
+    stringMixedArabicFirst[]={ 0x661, 0x627, 0x662, 0x6f3, 0x61, 0x664, 0 },
+/*Mixed Start with R*/
+    stringMixedHebrewFirst[]={ 0x05EA, 0x627, 0x662, 0x6f3, 0x61, 0x664, 0 },
+/*All AL (Arabic. Persian)*/
+    stringPersian[]={0x0698, 0x067E, 0x0686, 0x06AF, 0},
+/*All R (Hebrew etc.)*/
+    stringHebrew[]={0x0590, 0x05D5, 0x05EA, 0x05F1, 0},
+/*All L (English)*/
+    stringEnglish[]={0x71, 0x61, 0x66, 0},
+/*Mixed Start with weak AL an then L*/
+    stringStartWeakAL[]={ 0x0663, 0x71, 0x61, 0x66, 0},
+/*Mixed Start with weak L and then AL*/
+    stringStartWeakL[]={0x31, 0x0698, 0x067E, 0x0686, 0x06AF, 0},
+/*Empty*/
+    stringEmpty[]={0},
+/*Surrogate Char.*/
+    stringSurrogateChar[]={0xD800, 0xDC00, 0},
+/*Invalid UChar*/
+    stringInvalidUchar[]={-1},
+/*All weak L (English Digits)*/
+    stringAllEnglishDigits[]={0x31, 0x32, 0x33, 0},
+/*All weak AL (Arabic Digits)*/
+    stringAllArabicDigits[]={0x0663, 0x0664, 0x0665, 0},
+/*First L (English) others are R (Hebrew etc.) */
+    stringFirstL[] = {0x71, 0x0590, 0x05D5, 0x05EA, 0x05F1, 0},
+/*Last R (Hebrew etc.) others are weak L (English Digits)*/
+    stringLastR[] = {0x31, 0x32, 0x33, 0x05F1, 0};
+
+    static const struct {
+        const UChar *s;
+        int32_t length;
+    } testCases[]={
+        STRING_TEST_CASE(stringMixedEnglishFirst),
+        STRING_TEST_CASE(stringMixedArabicFirst),
+        STRING_TEST_CASE(stringMixedHebrewFirst),
+        STRING_TEST_CASE(stringPersian),
+        STRING_TEST_CASE(stringHebrew),
+        STRING_TEST_CASE(stringEnglish),
+        STRING_TEST_CASE(stringStartWeakAL),
+        STRING_TEST_CASE(stringStartWeakL),
+        STRING_TEST_CASE(stringEmpty),
+        STRING_TEST_CASE(stringSurrogateChar),
+        STRING_TEST_CASE(stringInvalidUchar),
+        STRING_TEST_CASE(stringAllEnglishDigits),
+        STRING_TEST_CASE(stringAllArabicDigits),
+        STRING_TEST_CASE(stringFirstL),
+        STRING_TEST_CASE(stringLastR),
+    };
+
+/* Expected results */
+    static const UBiDiDirection expectedDir[] ={
+        UBIDI_LTR, UBIDI_RTL, UBIDI_RTL,
+        UBIDI_RTL, UBIDI_RTL, UBIDI_LTR,
+        UBIDI_LTR, UBIDI_RTL, UBIDI_NEUTRAL,
+        UBIDI_LTR, UBIDI_NEUTRAL, UBIDI_NEUTRAL,
+        UBIDI_NEUTRAL, UBIDI_LTR, UBIDI_RTL
+    };
+
+    log_verbose("testGetBaseDirection() with %u test cases ---\n",
+    LENGTHOF(testCases));
+/* Run Tests */
+     for(i=0; i<LENGTHOF(testCases); ++i) {
+        dir = ubidi_getBaseDirection(testCases[i].s, testCases[i].length );
+        log_verbose("Testing case %d\tReceived dir %d\n", i, dir);
+        if (dir != expectedDir[i]) 
+            log_err("\nFailed getBaseDirection case %d Expected  %d \tReceived %d\n", 
+            i, expectedDir[i], dir);
+    }
+
+/* Misc. tests */
+/* NULL string */
+    dir = ubidi_getBaseDirection(NULL, 3);
+    if (dir != UBIDI_NEUTRAL )
+        log_err("\nFailed getBaseDirection for NULL string " ,
+        "\nExpected  %d \nReceived %d", UBIDI_NEUTRAL, dir);
+/*All L- English string and length=-3 */
+    dir = ubidi_getBaseDirection( stringEnglish, -3);
+    if (dir != UBIDI_NEUTRAL )
+        log_err("\nFailed getBaseDirection for string w length= -3 ",
+        "\nExpected  %d \nReceived %d", UBIDI_NEUTRAL, dir);
+/*All L- English string and length=-1 */
+    dir = ubidi_getBaseDirection( stringEnglish, -1);
+    if (dir != UBIDI_LTR )
+        log_err("\nFailed getBaseDirection for English string w length= -1 ",
+        "\nExpected  %d \nReceived %d", UBIDI_LTR, dir);
+/*All AL- Persian string and length=-1 */
+    dir = ubidi_getBaseDirection( stringPersian, -1);
+    if (dir != UBIDI_RTL )
+        log_err("\nFailed getBaseDirection for Persian string w length= -1 ",
+        "\nExpected  %d \nReceived %d", UBIDI_RTL, dir);
+/*All R- Hebrew string and length=-1 */
+    dir = ubidi_getBaseDirection( stringHebrew, -1);
+    if (dir != UBIDI_RTL )
+        log_err("\nFailed getBaseDirection for Hebrew string w length= -1 ",
+        "\nExpected  %d \nReceived %d", UBIDI_RTL, dir);
+/*All weak L- English digits string and length=-1 */
+    dir = ubidi_getBaseDirection(stringAllEnglishDigits, -1);
+    if (dir != UBIDI_NEUTRAL )
+        log_err("\nFailed getBaseDirection for English digits string w length= -1 ",
+        "\nExpected  %d \nReceived %d", UBIDI_NEUTRAL, dir);
+/*All weak AL- Arabic digits string and length=-1 */
+    dir = ubidi_getBaseDirection(stringAllArabicDigits, -1);
+    if (dir != UBIDI_NEUTRAL )
+        log_err("\nFailed getBaseDirection for Arabic string w length= -1 ",
+        "\nExpected  %d \nReceived %d", UBIDI_NEUTRAL, dir);
+
+}
 
 
 static void doMisc(void) {
