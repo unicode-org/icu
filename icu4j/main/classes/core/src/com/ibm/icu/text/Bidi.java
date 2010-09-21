@@ -4880,9 +4880,9 @@ public class Bidi {
      * needed and no further bidi processing of the text is needed.
      * @param paragraph the text whose paragraph level direction is needed.
      * @return LTR, RTL, NEUTRAL
-     * @see LTR
-     * @see RTL
-     * @see NEUTRAL
+     * @see #LTR
+     * @see #RTL
+     * @see #NEUTRAL
      * @draft ICU 4.6
      */
     public static byte getBaseDirection(CharSequence paragraph) {
