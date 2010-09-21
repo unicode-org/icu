@@ -325,6 +325,34 @@ ubidi_getReorderingOptions(UBiDi *pBiDi) {
     }
 }
 
+U_CAPI UBiDiDirection U_EXPORT2
+ubidi_getBaseDirection(const UChar *text,
+int32_t length){
+
+    int32_t i;
+    UChar32 uchar;
+    UCharDirection dir;
+    
+    if( text==NULL || length<-1 ){
+        return UBIDI_NEUTRAL;
+    }
+
+    if(length==-1) {
+        length=u_strlen(text);
+    }
+
+    for( i = 0 ; i < length; ) {
+        /* i is incremented by U16_NEXT */
+        U16_NEXT(text, i, length, uchar);
+        dir = u_charDirection(uchar);
+        if( dir == U_LEFT_TO_RIGHT )
+                return UBIDI_LTR;
+        if( dir == U_RIGHT_TO_LEFT || dir ==U_RIGHT_TO_LEFT_ARABIC )
+                return UBIDI_RTL;
+    }
+    return UBIDI_NEUTRAL;
+}
+
 /* perform (P2)..(P3) ------------------------------------------------------- */
 
 /*
