@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,11 +15,15 @@ import com.ibm.icu.util.VersionInfo;
 public abstract class AbstractTestLog implements TestLog {
 
     public static boolean dontSkipForVersion = false;
+    /**
+     * Returns true if the current ICU version is before, or equal to, the specified major.minor.micro version.
+     * TODO: Why is this called "before" when it returns true for "before or equal"? Can we fix it?
+     */
     public boolean skipIfBeforeICU(int major, int minor, int micro) {
         if (dontSkipForVersion || VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor, micro)) > 0) {
             return false;
         } 
-        logln("Test skipped before ICU release " + major + "." + minor);
+        logln("Test skipped before ICU release " + major + "." + minor + "." + micro);
         return true;
     }
 

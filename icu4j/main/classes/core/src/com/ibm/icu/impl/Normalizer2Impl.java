@@ -385,23 +385,19 @@ public final class Normalizer2Impl {
 
     public Normalizer2Impl() {}
 
-    private static final class Reader implements ICUBinary.Authenticate {
+    private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==1;
         }
-        public VersionInfo readHeader(InputStream data) throws IOException {
-            byte[] dataVersion=ICUBinary.readHeader(data, DATA_FORMAT, this);
-            return VersionInfo.getInstance(dataVersion[0], dataVersion[1],
-                                           dataVersion[2], dataVersion[3]);
-        }
-        private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
     }
-    private static final Reader READER=new Reader();
+    private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
+    private static final byte DATA_FORMAT[] = { 0x4e, 0x72, 0x6d, 0x32  };  // "Nrm2"
+
     public Normalizer2Impl load(InputStream data) {
         try {
             BufferedInputStream bis=new BufferedInputStream(data);
-            dataVersion=READER.readHeader(bis);
+            dataVersion=ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
             DataInputStream ds=new DataInputStream(bis);
             int indexesLength=ds.readInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
             if(indexesLength<=IX_MIN_MAYBE_YES) {

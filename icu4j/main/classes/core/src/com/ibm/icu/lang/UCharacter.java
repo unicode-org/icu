@@ -9,12 +9,14 @@ package com.ibm.icu.lang;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
+import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterName;
@@ -996,10 +998,37 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 4.4 */
         public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C_ID = 197; /*[2A700]*/
 
+        /* New blocks in Unicode 6.0 */
+
+        /** @stable ICU 4.6 */
+        public static final int MANDAIC_ID = 198; /*[0840]*/
+        /** @stable ICU 4.6 */
+        public static final int BATAK_ID = 199; /*[1BC0]*/
+        /** @stable ICU 4.6 */
+        public static final int ETHIOPIC_EXTENDED_A_ID = 200; /*[AB00]*/
+        /** @stable ICU 4.6 */
+        public static final int BRAHMI_ID = 201; /*[11000]*/
+        /** @stable ICU 4.6 */
+        public static final int BAMUM_SUPPLEMENT_ID = 202; /*[16800]*/
+        /** @stable ICU 4.6 */
+        public static final int KANA_SUPPLEMENT_ID = 203; /*[1B000]*/
+        /** @stable ICU 4.6 */
+        public static final int PLAYING_CARDS_ID = 204; /*[1F0A0]*/
+        /** @stable ICU 4.6 */
+        public static final int MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS_ID = 205; /*[1F300]*/
+        /** @stable ICU 4.6 */
+        public static final int EMOTICONS_ID = 206; /*[1F600]*/
+        /** @stable ICU 4.6 */
+        public static final int TRANSPORT_AND_MAP_SYMBOLS_ID = 207; /*[1F680]*/
+        /** @stable ICU 4.6 */
+        public static final int ALCHEMICAL_SYMBOLS_ID = 208; /*[1F700]*/
+        /** @stable ICU 4.6 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D_ID = 209; /*[2B740]*/
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 198;
+        public static final int COUNT = 210;
 
         // blocks objects ---------------------------------------------------
 
@@ -2042,6 +2071,47 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C",
                              CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C_ID); /*[2A700]*/
 
+        /* New blocks in Unicode 6.0 */
+
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock MANDAIC =
+            new UnicodeBlock("MANDAIC", MANDAIC_ID); /*[0840]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock BATAK =
+            new UnicodeBlock("BATAK", BATAK_ID); /*[1BC0]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock ETHIOPIC_EXTENDED_A =
+            new UnicodeBlock("ETHIOPIC_EXTENDED_A", ETHIOPIC_EXTENDED_A_ID); /*[AB00]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock BRAHMI =
+            new UnicodeBlock("BRAHMI", BRAHMI_ID); /*[11000]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock BAMUM_SUPPLEMENT =
+            new UnicodeBlock("BAMUM_SUPPLEMENT", BAMUM_SUPPLEMENT_ID); /*[16800]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock KANA_SUPPLEMENT =
+            new UnicodeBlock("KANA_SUPPLEMENT", KANA_SUPPLEMENT_ID); /*[1B000]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock PLAYING_CARDS =
+            new UnicodeBlock("PLAYING_CARDS", PLAYING_CARDS_ID); /*[1F0A0]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS =
+            new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS",
+                             MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS_ID); /*[1F300]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock EMOTICONS =
+            new UnicodeBlock("EMOTICONS", EMOTICONS_ID); /*[1F600]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock TRANSPORT_AND_MAP_SYMBOLS =
+            new UnicodeBlock("TRANSPORT_AND_MAP_SYMBOLS", TRANSPORT_AND_MAP_SYMBOLS_ID); /*[1F680]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock ALCHEMICAL_SYMBOLS =
+            new UnicodeBlock("ALCHEMICAL_SYMBOLS", ALCHEMICAL_SYMBOLS_ID); /*[1F700]*/
+        /** @stable ICU 4.6 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D =
+            new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D",
+                             CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D_ID); /*[2B740]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -2089,22 +2159,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return INVALID_CODE;
             }
 
-            return UnicodeBlock.getInstance((UCharacterProperty.INSTANCE.getAdditional(ch, 0)
-                         & BLOCK_MASK_) >> BLOCK_SHIFT_);
-        }
-
-        /*
-         * Internal function returning of(ch).getID().
-         *
-         * @param ch
-         * @return numeric block value
-         */
-        static int idOf(int ch) {
-            if (ch < 0 || ch > MAX_VALUE) {
-                return -1;
-            }
-
-            return (UCharacterProperty.INSTANCE.getAdditional(ch, 0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
+            return UnicodeBlock.getInstance(
+                UCharacterProperty.INSTANCE.getIntPropertyValue(ch, UProperty.BLOCK));
         }
 
         /**
@@ -2411,10 +2467,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4
          */
         public static final int HAH = 13;
+        /** @stable ICU 4.6 */
+        public static final int TEH_MARBUTA_GOAL = 14;
         /**
          * @stable ICU 2.4
          */
-        public static final int HAMZA_ON_HEH_GOAL = 14;
+        public static final int HAMZA_ON_HEH_GOAL = TEH_MARBUTA_GOAL;
         /**
          * @stable ICU 2.4
          */
@@ -3140,7 +3198,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             int value = digit(ch);
             if (value < 0) {
                 // ch is not a decimal digit, try latin letters
-                value = getEuropeanDigit(ch);
+                value = UCharacterProperty.getEuropeanDigit(ch);
             }
             return (value < radix) ? value : -1;
         } else {
@@ -3163,13 +3221,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int digit(int ch)
     {
-        int props = getProperty(ch);
-        int value = getNumericTypeValue(props) - NTV_DECIMAL_START_;
-        if(value<=9) {
-            return value;
-        } else {
-            return -1;
-        }
+        return UCharacterProperty.INSTANCE.digit(ch);
     }
 
     /**
@@ -3188,41 +3240,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getNumericValue(int ch)
     {
-        // slightly pruned version of getUnicodeNumericValue(), plus getEuropeanDigit()
-        int props = UCharacterProperty.INSTANCE.getProperty(ch);
-        int ntv = getNumericTypeValue(props);
-
-        if(ntv==NTV_NONE_) {
-            return getEuropeanDigit(ch);
-        } else if(ntv<NTV_DIGIT_START_) {
-            /* decimal digit */
-            return ntv-NTV_DECIMAL_START_;
-        } else if(ntv<NTV_NUMERIC_START_) {
-            /* other digit */
-            return ntv-NTV_DIGIT_START_;
-        } else if(ntv<NTV_FRACTION_START_) {
-            /* small integer */
-            return ntv-NTV_NUMERIC_START_;
-        } else if(ntv<NTV_LARGE_START_) {
-            /* fraction */
-            return -2;
-        } else if(ntv<NTV_RESERVED_START_) {
-            /* large, single-significant-digit integer */
-            int mant=(ntv>>5)-14;
-            int exp=(ntv&0x1f)+2;
-            if(exp<9 || (exp==9 && mant<=2)) {
-                int numValue=mant;
-                do {
-                    numValue*=10;
-                } while(--exp>0);
-                return numValue;
-            } else {
-                return -2;
-            }
-        } else {
-            /* reserved */
-            return -2;
-        }
+        return UCharacterProperty.INSTANCE.getNumericValue(ch);
     }
 
     /**
@@ -3243,58 +3261,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static double getUnicodeNumericValue(int ch)
     {
-        // equivalent to c version double u_getNumericValue(UChar32 c)
-        int props = UCharacterProperty.INSTANCE.getProperty(ch);
-        int ntv = getNumericTypeValue(props);
-
-        if(ntv==NTV_NONE_) {
-            return NO_NUMERIC_VALUE;
-        } else if(ntv<NTV_DIGIT_START_) {
-            /* decimal digit */
-            return ntv-NTV_DECIMAL_START_;
-        } else if(ntv<NTV_NUMERIC_START_) {
-            /* other digit */
-            return ntv-NTV_DIGIT_START_;
-        } else if(ntv<NTV_FRACTION_START_) {
-            /* small integer */
-            return ntv-NTV_NUMERIC_START_;
-        } else if(ntv<NTV_LARGE_START_) {
-            /* fraction */
-            int numerator=(ntv>>4)-12;
-            int denominator=(ntv&0xf)+1;
-            return (double)numerator/denominator;
-        } else if(ntv<NTV_RESERVED_START_) {
-            /* large, single-significant-digit integer */
-            double numValue;
-            int mant=(ntv>>5)-14;
-            int exp=(ntv&0x1f)+2;
-            numValue=mant;
-
-            /* multiply by 10^exp without math.h */
-            while(exp>=4) {
-                numValue*=10000.;
-                exp-=4;
-            }
-            switch(exp) {
-            case 3:
-                numValue*=1000.;
-                break;
-            case 2:
-                numValue*=100.;
-                break;
-            case 1:
-                numValue*=10.;
-                break;
-            case 0:
-            default:
-                break;
-            }
-
-            return numValue;
-        } else {
-            /* reserved */
-            return NO_NUMERIC_VALUE;
-        }
+        return UCharacterProperty.INSTANCE.getUnicodeNumericValue(ch);
     }
 
     /**
@@ -3328,7 +3295,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getType(int ch)
     {
-        return getProperty(ch) & UCharacterProperty.TYPE_MASK;
+        return UCharacterProperty.INSTANCE.getType(ch);
     }
 
     /**
@@ -5098,7 +5065,41 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static RangeValueIterator getTypeIterator()
     {
-        return new UCharacterTypeIterator(UCharacterProperty.INSTANCE);
+        return new UCharacterTypeIterator();
+    }
+
+    private static final class UCharacterTypeIterator implements RangeValueIterator {
+        UCharacterTypeIterator() {
+            reset();
+        }
+
+        // implements RangeValueIterator
+        public boolean next(Element element) {
+            if(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+                element.start=range.startCodePoint;
+                element.limit=range.endCodePoint+1;
+                element.value=range.value;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // implements RangeValueIterator
+        public void reset() {
+            trieIterator=UCharacterProperty.INSTANCE.m_trie_.iterator(MASK_TYPE);
+        }
+
+        private Iterator<Trie2.Range> trieIterator;
+        private Trie2.Range range;
+
+        private static final class MaskType implements Trie2.ValueMapper {
+            // Extracts the general category ("character type") from the trie value.
+            public int map(int value) {
+                return value & UCharacterProperty.TYPE_MASK;
+            }
+        }
+        private static final MaskType MASK_TYPE=new MaskType();
     }
 
     /**
@@ -5276,27 +5277,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
     }
 
-    /*
-     * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
-     * Hangul_Syllable_Type is fully redundant with a subset of Grapheme_Cluster_Break.
-     */
-    private static final int /* UHangulSyllableType */ gcbToHst[]={
-        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_OTHER */
-        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_CONTROL */
-        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_CR */
-        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_EXTEND */
-        HangulSyllableType.LEADING_JAMO,     /* U_GCB_L */
-        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_LF */
-        HangulSyllableType.LV_SYLLABLE,      /* U_GCB_LV */
-        HangulSyllableType.LVT_SYLLABLE,     /* U_GCB_LVT */
-        HangulSyllableType.TRAILING_JAMO,    /* U_GCB_T */
-        HangulSyllableType.VOWEL_JAMO        /* U_GCB_V */
-        /*
-         * Omit GCB values beyond what we need for hst.
-         * The code below checks for the array length.
-         */
-    };
-
     /**
      * {@icu} <p>Returns the property value for an Unicode property type of a code point.
      * Also returns binary and mask property values.</p>
@@ -5338,78 +5318,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getIntPropertyValue(int ch, int type)
     {
-        if (type < UProperty.BINARY_START) {
-            return 0; // undefined
-        }
-        else if (type < UProperty.BINARY_LIMIT) {
-            return hasBinaryProperty(ch, type) ? 1 : 0;
-        }
-        else if (type < UProperty.INT_START) {
-            return 0; // undefined
-        }
-        else if (type < UProperty.INT_LIMIT) {
-            switch (type) {
-                case UProperty.BIDI_CLASS:
-                    return getDirection(ch);
-                case UProperty.BLOCK:
-                    return UnicodeBlock.idOf(ch);
-                case UProperty.CANONICAL_COMBINING_CLASS:
-                    return getCombiningClass(ch);
-                case UProperty.DECOMPOSITION_TYPE:
-                    return UCharacterProperty.INSTANCE.getAdditional(ch, 2)
-                & DECOMPOSITION_TYPE_MASK_;
-                case UProperty.EAST_ASIAN_WIDTH:
-                    return (UCharacterProperty.INSTANCE.getAdditional(ch, 0)
-                & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
-                case UProperty.GENERAL_CATEGORY:
-                    return getType(ch);
-                case UProperty.JOINING_GROUP:
-                    return UBiDiProps.INSTANCE.getJoiningGroup(ch);
-                case UProperty.JOINING_TYPE:
-                    return UBiDiProps.INSTANCE.getJoiningType(ch);
-                case UProperty.LINE_BREAK:
-                    return (UCharacterProperty.INSTANCE
-                            .getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
-                case UProperty.NUMERIC_TYPE:
-                    return ntvGetType(getNumericTypeValue(UCharacterProperty
-                                                          .INSTANCE.getProperty(ch)));
-                case UProperty.SCRIPT:
-                    return UScript.getScript(ch);
-                case UProperty.HANGUL_SYLLABLE_TYPE: {
-                    /* see comments on gcbToHst[] above */
-                    int gcb=(UCharacterProperty.INSTANCE.getAdditional(ch, 2)&GCB_MASK)>>GCB_SHIFT;
-                    if(gcb<gcbToHst.length) {
-                        return gcbToHst[gcb];
-                    } else {
-                        return HangulSyllableType.NOT_APPLICABLE;
-                    }
-                }
-                case UProperty.NFD_QUICK_CHECK:
-                case UProperty.NFKD_QUICK_CHECK:
-                case UProperty.NFC_QUICK_CHECK:
-                case UProperty.NFKC_QUICK_CHECK:
-                    return Norm2AllModes.getN2WithImpl(type-UProperty.NFD_QUICK_CHECK).getQuickCheck(ch);
-                case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-                    return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(ch)>>8;
-                case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                    return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(ch)&0xff;
-                case UProperty.GRAPHEME_CLUSTER_BREAK:
-                    return (UCharacterProperty.INSTANCE.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
-                case UProperty.SENTENCE_BREAK:
-                    return (UCharacterProperty.INSTANCE.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
-                case UProperty.WORD_BREAK:
-                    return (UCharacterProperty.INSTANCE.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
-                /* Values were tested for variable type from Integer.MIN_VALUE
-                 * to UProperty.INT_LIMIT and none would not reach the default case.
-                 */
-                ///CLOVER:OFF
-                default: return 0; /* undefined */
-                ///CLOVER:ON
-                }
-            } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
-                return UCharacterProperty.getMask(getType(ch));
-            }
-        return 0; // undefined
+        return UCharacterProperty.INSTANCE.getIntPropertyValue(ch, type);
     }
     /**
      * {@icu} Returns a string version of the property value.
@@ -5501,66 +5410,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getIntPropertyMaxValue(int type)
     {
-        if (type < UProperty.BINARY_START) {
-            return -1; // undefined
-        }
-        else if (type < UProperty.BINARY_LIMIT) {
-            return 1; // maximum TRUE for all binary properties
-        }
-        else if (type < UProperty.INT_START) {
-            return -1; // undefined
-        }
-        else if (type < UProperty.INT_LIMIT) {
-            switch (type) {
-                case UProperty.BIDI_CLASS:
-                case UProperty.JOINING_GROUP:
-                case UProperty.JOINING_TYPE:
-                    return UBiDiProps.INSTANCE.getMaxValue(type);
-                case UProperty.BLOCK:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(0) & BLOCK_MASK_)
-                        >> BLOCK_SHIFT_;
-                case UProperty.CANONICAL_COMBINING_CLASS:
-                case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-                case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                    return 0xff; // TODO do we need to be more precise,
-                                 // getting the actual maximum?
-                case UProperty.DECOMPOSITION_TYPE:
-                    return UCharacterProperty.INSTANCE.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
-                case UProperty.EAST_ASIAN_WIDTH:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(0) & EAST_ASIAN_MASK_)
-                        >> EAST_ASIAN_SHIFT_;
-                case UProperty.GENERAL_CATEGORY:
-                    return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
-                case UProperty.LINE_BREAK:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(LB_VWORD) & LB_MASK)
-                        >> LB_SHIFT;
-                case UProperty.NUMERIC_TYPE:
-                    return NumericType.COUNT - 1;
-                case UProperty.SCRIPT:
-                    return UCharacterProperty.INSTANCE.getMaxValues(0) & SCRIPT_MASK_;
-                case UProperty.HANGUL_SYLLABLE_TYPE:
-                    return HangulSyllableType.COUNT-1;
-                case UProperty.NFD_QUICK_CHECK:
-                case UProperty.NFKD_QUICK_CHECK:
-                    return 1; // YES -- these are never "maybe", only "no" or "yes"
-                case UProperty.NFC_QUICK_CHECK:
-                case UProperty.NFKC_QUICK_CHECK:
-                    return 2; // MAYBE
-                case UProperty.GRAPHEME_CLUSTER_BREAK:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(2) & GCB_MASK) >> GCB_SHIFT;
-                case UProperty.SENTENCE_BREAK:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
-                case UProperty.WORD_BREAK:
-                    return (UCharacterProperty.INSTANCE.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
-                /* Values were tested for variable type from Integer.MIN_VALUE
-                 * to UProperty.INT_LIMIT and none would not reach the default case.
-                 */
-                ///CLOVER:OFF
-                default: return -1; // undefined
-                ///CLOVER:ON
-            }
-        }
-        return -1; // undefined
+        return UCharacterProperty.INSTANCE.getIntPropertyMaxValue(type);
     }
 
     /**
@@ -6189,29 +6039,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Delete code point
      */
     private static final int DELETE_ = 0x007F;
-    /**
-     * Numeric types and values in the main properties words.
-     */
-    private static final int NUMERIC_TYPE_VALUE_SHIFT_ = 6;
-    private static final int getNumericTypeValue(int props) {
-        return props >> NUMERIC_TYPE_VALUE_SHIFT_;
-    }
-    /* constants for the storage form of numeric types and values */
-    private static final int NTV_NONE_ = 0;
-    private static final int NTV_DECIMAL_START_ = 1;
-    private static final int NTV_DIGIT_START_ = 11;
-    private static final int NTV_NUMERIC_START_ = 21;
-    private static final int NTV_FRACTION_START_ = 0xb0;
-    private static final int NTV_LARGE_START_ = 0x1e0;
-    private static final int NTV_RESERVED_START_ = 0x300;
-
-    private static final int ntvGetType(int ntv) {
-        return
-            (ntv==NTV_NONE_) ? NumericType.NONE :
-            (ntv<NTV_DIGIT_START_) ?  NumericType.DECIMAL :
-            (ntv<NTV_NUMERIC_START_) ? NumericType.DIGIT :
-            NumericType.NUMERIC;
-    }
 
     /**
      * Han digit characters
@@ -6235,82 +6062,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int CJK_IDEOGRAPH_TEN_THOUSAND_     = 0x824c;
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_  = 0x5104;
 
-//    /**
-//     * Zero Width Non Joiner.
-//     * Equivalent to icu4c ZWNJ.
-//     */
-//    private static final int ZERO_WIDTH_NON_JOINER_ = 0x200c;
-//    /**
-//     * Zero Width Joiner
-//     * Equivalent to icu4c ZWJ.
-//     */
-//    private static final int ZERO_WIDTH_JOINER_ = 0x200d;
-
-    /*
-     * Properties in vector word 2
-     * Bits
-     * 31..26   reserved
-     * 25..20   Line Break
-     * 19..15   Sentence Break
-     * 14..10   Word Break
-     *  9.. 5   Grapheme Cluster Break
-     *  4.. 0   Decomposition Type
-     */
-    private static final int LB_MASK          = 0x03f00000;
-    private static final int LB_SHIFT         = 20;
-    private static final int LB_VWORD         = 2;
-
-    private static final int SB_MASK          = 0x000f8000;
-    private static final int SB_SHIFT         = 15;
-
-    private static final int WB_MASK          = 0x00007c00;
-    private static final int WB_SHIFT         = 10;
-
-    private static final int GCB_MASK         = 0x000003e0;
-    private static final int GCB_SHIFT        = 5;
-
-    /**
-     * Integer properties mask for decomposition type.
-     * Equivalent to icu4c UPROPS_DT_MASK.
-     */
-    private static final int DECOMPOSITION_TYPE_MASK_ = 0x0000001f;
-
-    /*
-     * Properties in vector word 0
-     * Bits
-     * 31..24   DerivedAge version major/minor one nibble each
-     * 23..20   reserved
-     * 19..17   East Asian Width
-     * 16.. 8   UBlockCode
-     *  7.. 0   UScriptCode
-     */
-
-    /**
-     * Integer properties mask and shift values for East Asian cell width.
-     * Equivalent to icu4c UPROPS_EA_MASK
-     */
-    private static final int EAST_ASIAN_MASK_ = 0x000e0000;
-    /**
-     * Integer properties mask and shift values for East Asian cell width.
-     * Equivalent to icu4c UPROPS_EA_SHIFT
-     */
-    private static final int EAST_ASIAN_SHIFT_ = 17;
-    /**
-     * Integer properties mask and shift values for blocks.
-     * Equivalent to icu4c UPROPS_BLOCK_MASK
-     */
-    private static final int BLOCK_MASK_ = 0x0001ff00;
-    /**
-     * Integer properties mask and shift values for blocks.
-     * Equivalent to icu4c UPROPS_BLOCK_SHIFT
-     */
-    private static final int BLOCK_SHIFT_ = 8;
-    /**
-     * Integer properties mask and shift values for scripts.
-     * Equivalent to icu4c UPROPS_SHIFT_MASK
-     */
-    static final int SCRIPT_MASK_ = 0x000000ff;
-
     // private constructor -----------------------------------------------
     ///CLOVER:OFF
     /**
@@ -6320,85 +6071,4 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
     }
     ///CLOVER:ON
-    // private methods ---------------------------------------------------
-
-    /**
-     * Returns the digit values of characters like 'A' - 'Z', normal,
-     * half-width and full-width. This method assumes that the other digit
-     * characters are checked by the calling method.
-     * @param ch character to test
-     * @return -1 if ch is not a character of the form 'A' - 'Z', otherwise
-     *         its corresponding digit will be returned.
-     */
-    private static int getEuropeanDigit(int ch) {
-        if ((ch > 0x7a && ch < 0xff21)
-            || ch < 0x41 || (ch > 0x5a && ch < 0x61)
-            || ch > 0xff5a || (ch > 0xff3a && ch < 0xff41)) {
-            return -1;
-        }
-        if (ch <= 0x7a) {
-            // ch >= 0x41 or ch < 0x61
-            return ch + 10 - ((ch <= 0x5a) ? 0x41 : 0x61);
-        }
-        // ch >= 0xff21
-        if (ch <= 0xff3a) {
-            return ch + 10 - 0xff21;
-        }
-        // ch >= 0xff41 && ch <= 0xff5a
-        return ch + 10 - 0xff41;
-    }
-
-    /**
-     * Returns the property value at the index.
-     * This is optimized.
-     * Note this is alittle different from CharTrie the index m_trieData_
-     * is never negative.
-     * This is a duplicate of UCharacterProperty.getProperty. For optimization
-     * purposes, this method calls the trie data directly instead of through
-     * UCharacterProperty.getProperty.
-     * @param ch code point whose property value is to be retrieved
-     * @return property value of code point
-     * @stable ICU 2.6
-     */
-    private static final int getProperty(int ch)
-    {
-        if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE
-            || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE
-                && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
-            // BMP codepoint 0000..D7FF or DC00..FFFF
-            try { // using try for ch < 0 is faster than using an if statement
-                return UCharacterProperty.INSTANCE.m_trieData_[
-                              (UCharacterProperty.INSTANCE.m_trieIndex_[ch >> 5] << 2)
-                              + (ch & 0x1f)];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                // TODO: Tested all the values from 0 ... UTF16.LEAD_SURROGATE_MIN_VALUE
-                // and UTF16.LEAD_SURROGATE_MAX_VALUE ... UTF16.SUPPLEMENTARY_MIN_VALUE
-                // but it never results into the catch section of the try-catch
-                ///CLOVER:OFF
-                return UCharacterProperty.INSTANCE.m_trieInitialValue_;
-                ///CLOVER:ON
-            }
-        }
-        if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-            // lead surrogate D800..DBFF
-            return UCharacterProperty.INSTANCE.m_trieData_[
-                              (UCharacterProperty.INSTANCE.m_trieIndex_[(0x2800 >> 5) +
-                                                                        (ch >> 5)] << 2)
-                              + (ch & 0x1f)];
-        }
-        // for optimization
-        if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
-            // supplementary code point 10000..10FFFF
-            // look at the construction of supplementary characters
-            // trail forms the ends of it.
-            return UCharacterProperty.INSTANCE.m_trie_.getSurrogateValue(
-                                      UTF16.getLeadSurrogate(ch),
-                                      (char)(ch & 0x3ff));
-        }
-        // return m_dataOffset_ if there is an error, in this case we return
-        // the default value: m_initialValue_
-        // we cannot assume that m_initialValue_ is at offset 0
-        // this is for optimization.
-        return UCharacterProperty.INSTANCE.m_trieInitialValue_;
-    }
 }

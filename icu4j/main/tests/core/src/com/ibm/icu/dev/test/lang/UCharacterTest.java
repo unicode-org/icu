@@ -15,8 +15,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.UBiDiProps;
-import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
@@ -48,7 +46,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.2.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.0.0.0");
 
     // constructor ===================================================
 
@@ -399,7 +397,7 @@ public final class UCharacterTest extends TestFmwk
     public void TestVersion()
     {
         if (!UCharacter.getUnicodeVersion().equals(VERSION_))
-            errln("FAIL expected: " + VERSION_ + "got: " + UCharacter.getUnicodeVersion());
+            errln("FAIL expected: " + VERSION_ + " got: " + UCharacter.getUnicodeVersion());
     }
 
     /**
@@ -1815,7 +1813,6 @@ public final class UCharacterTest extends TestFmwk
             { 0x072A, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.DALATH_RISH },
             { 0x0647, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HEH },
             { 0x06C1, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HEH_GOAL },
-            { 0x06C3, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HAMZA_ON_HEH_GOAL },
 
             { 0x200C, UProperty.JOINING_TYPE, UCharacter.JoiningType.NON_JOINING },
             { 0x200D, UProperty.JOINING_TYPE, UCharacter.JoiningType.JOIN_CAUSING },
@@ -1947,6 +1944,11 @@ public final class UCharacterTest extends TestFmwk
             { 0xa6e6,  UProperty.SCRIPT, UScript.BAMUM },
             { 0xa4d0,  UProperty.SCRIPT, UScript.LISU },
             { 0x10a7f,  UProperty.SCRIPT, UScript.OLD_SOUTH_ARABIAN },
+
+            { -1, 0x600, 0 }, /* version break for Unicode 6.0 */
+
+            /* value changed in Unicode 6.0 */
+            { 0x06C3, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.TEH_MARBUTA_GOAL },
 
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },
@@ -2253,19 +2255,11 @@ public final class UCharacterTest extends TestFmwk
                                         String a_name, String b_name,
                                         boolean expect,
                                         boolean diffIsError){
-        int i, start, end, length;
-        boolean equal;
-        equal=true;
-        i=0;
-        for(;;) {
+        int i, start, end;
+        boolean equal=true;
+        for(i=0; i < a.getRangeCount(); ++i) {
             start  = a.getRangeStart(i);
-            length = (i < a.getRangeCount()) ? 0 : a.getRangeCount();
             end    = a.getRangeEnd(i);
-
-            if(length!=0) {
-                return equal; /* done with code points, got a string or -1 */
-            }
-
             if(expect!=b.contains(start, end)) {
                 equal=false;
                 while(start<=end) {
@@ -2287,9 +2281,8 @@ public final class UCharacterTest extends TestFmwk
                     ++start;
                 }
             }
-
-            ++i;
         }
+        return equal;
     }
     private boolean showAMinusB(UnicodeSet a, UnicodeSet b,
                                         String a_name, String b_name,
@@ -2332,7 +2325,7 @@ public final class UCharacterTest extends TestFmwk
         *
         * Unicode 4 changed 00AD Soft Hyphen to Cf and removed it from Dash
         * but not from Hyphen.
-        * UTC 94 (2003mar) decided to leave it that way and to changed UCD.html.
+        * UTC 94 (2003mar) decided to leave it that way and to change UCD.html.
         * Therefore, do not show errors when testing the Hyphen property.
         */
        logln("Starting with Unicode 4, inconsistencies with [:Hyphen:] are\n"
@@ -2442,20 +2435,6 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
-    public void TestCasePropsDummy() {
-        // code coverage for UCaseProps.getDummy() 
-        if(UCaseProps.getDummy().tolower(0x41)!=0x41) {
-            errln("UCaseProps.getDummy().tolower(0x41)!=0x41");
-        }
-    }
-
-    public void TestBiDiPropsDummy() {
-        // code coverage for UBiDiProps.getDummy() 
-        if(UBiDiProps.getDummy().getClass(0x20)!=0) {
-            errln("UBiDiProps.getDummy().getClass(0x20)!=0");
-        }
-    }
-    
     public void TestBlockData()
     {
         Class ubc = UCharacter.UnicodeBlock.class;
@@ -2510,30 +2489,6 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
-    /*
-     * The following method tests
-     *      static int idOf(int ch)
-     */
-    public void TestIDOf(){
-        int[] invalid_test = {-2, -1, UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
-        
-        for(int i=0; i < invalid_test.length; i++){
-            int result = UCharacter.getIntPropertyValue(invalid_test[i], UProperty.BLOCK);
-            if(result != -1){
-                errln("UCharacter.UnicodeBlock.idOf() was suppose to return -1. Got " + result);
-            }
-        }
-        
-        int[] valid_test = {0, 1, UTF16.CODEPOINT_MAX_VALUE, UTF16.CODEPOINT_MAX_VALUE-1};
-        
-        for(int i=0; i < valid_test.length; i++){
-            int result = UCharacter.getIntPropertyValue(valid_test[i], UProperty.BLOCK);
-            if(result == -1){
-                errln("UCharacter.UnicodeBlock.idOf() was not suppose to return -1. Got " + result);
-            }
-        }
-    }
-    
     /*
      * The following method tests
      *      public static final UnicodeBlock forName(String blockName)

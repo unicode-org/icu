@@ -5,8 +5,6 @@
  */
 package com.ibm.icu.text;
 
-import java.io.IOException;
-
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.util.ULocale;
 
@@ -49,11 +47,7 @@ class TitlecaseTransliterator extends Transliterator {
         locale = loc;
         // Need to look back 2 characters in the case of "can't"
         setMaximumContextLength(2);
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            csp=null;
-        }
+        csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
         result = new StringBuffer();
         locCache = new int[1];

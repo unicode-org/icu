@@ -1,12 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation     *
- * and others. All Rights Reserved.                                            *
+ * Copyright (C) 2009-2010, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
-
-import java.io.IOException;
 
 import com.ibm.icu.impl.UCaseProps;
 
@@ -46,11 +44,7 @@ class CaseFoldTransliterator extends Transliterator{
 
     public CaseFoldTransliterator() {
         super(_ID, null);
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            csp=null;
-        }
+        csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
         result = new StringBuffer();
     }

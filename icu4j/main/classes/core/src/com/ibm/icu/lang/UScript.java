@@ -7,6 +7,7 @@
 
 package com.ibm.icu.lang;
 
+import java.util.BitSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -474,9 +475,14 @@ public final class UScript {
     public static final int LINEAR_A                      = 83; /* Lina */
     /**
      * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int MANDAIC                       = 84; /* Mand */
+    /**
+     * ISO 15924 script code
      * @stable ICU 3.6
      */
-    public static final int MANDAEAN                      = 84; /* Mand */
+    public static final int MANDAEAN                      = MANDAIC;
     /**
      * ISO 15924 script code
      * @stable ICU 3.6
@@ -484,9 +490,14 @@ public final class UScript {
     public static final int MAYAN_HIEROGLYPHS             = 85; /* Maya */
     /**
      * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int MEROITIC_HIEROGLYPHS          = 86; /* Mero */
+    /**
+     * ISO 15924 script code
      * @stable ICU 3.6
      */
-    public static final int MEROITIC                      = 86; /* Mero */
+    public static final int MEROITIC                      = MEROITIC_HIEROGLYPHS;
     /**
      * ISO 15924 script code
      * @stable ICU 3.6
@@ -741,10 +752,78 @@ public final class UScript {
     public static final int OLD_SOUTH_ARABIAN             = 133;/* Sarb */
 
     /**
-     * Limit
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int BASSA_VAH                     = 134;/* Bass */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int DUPLOYAN_SHORTAND             = 135;/* Dupl */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int ELBASAN                       = 136;/* Elba */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int GRANTHA                       = 137;/* Gran */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int KPELLE                        = 138;/* Kpel */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int LOMA                          = 139;/* Loma */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int MENDE                         = 140;/* Mend */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int MEROITIC_CURSIVE              = 141;/* Merc */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int OLD_NORTH_ARABIAN             = 142;/* Narb */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int NABATAEAN                     = 143;/* Nbat */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int PALMYRENE                     = 144;/* Palm */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int SINDHI                        = 145;/* Sind */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.6
+     */
+    public static final int WARANG_CITI                   = 146;/* Wara */
+
+    /**
+     * One higher than the last ISO 15924 script code integer.
+     * This value will increase as ISO 15924 adds script codes
+     * for which integer constants are added above.
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 134;
+    public static final int CODE_LIMIT   = 147;
 
     private static final String kLocaleScript = "LocaleScript";
     
@@ -870,10 +949,96 @@ public final class UScript {
      */
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
-            return (UCharacterProperty.INSTANCE.getAdditional(codepoint,0) & UCharacter.SCRIPT_MASK_);
+            int scriptX=UCharacterProperty.INSTANCE.getAdditional(codepoint, 0)&UCharacterProperty.SCRIPT_X_MASK;
+            if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
+                return scriptX;
+            } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_INHERITED) {
+                return UScript.COMMON;
+            } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_OTHER) {
+                return UScript.INHERITED;
+            } else {
+                return UCharacterProperty.INSTANCE.m_scriptExtensions_[scriptX&UCharacterProperty.SCRIPT_MASK_];
+            }
         }else{
             throw new IllegalArgumentException(Integer.toString(codepoint));
         }
+    }
+
+    /**
+     * Is code point c used in script sc?
+     * That is, does code point c have the Script property value sc,
+     * or do code point c's Script_Extensions include script code sc?
+     *
+     * Some characters are commonly used in multiple scripts.
+     * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+     *
+     * The Script_Extensions property is provisional. It may be modified or removed
+     * in future versions of the Unicode Standard, and thus in ICU.
+     * @param c code point
+     * @param sc script code
+     * @return true if Script(c)==sc or sc is in Script_Extensions(c)
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final boolean hasScript(int c, int sc) {
+        int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
+        if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
+            return sc==scriptX;
+        }
+
+        char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
+        int scx=scriptX&UCharacterProperty.SCRIPT_MASK_;  // index into scriptExtensions
+        int script;
+        if(scriptX<UCharacterProperty.SCRIPT_X_WITH_INHERITED) {
+            script=UScript.COMMON;
+        } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_OTHER) {
+            script=UScript.INHERITED;
+        } else {
+            script=scriptExtensions[scx];
+            scx=scriptExtensions[scx+1];
+        }
+        if(sc==script) {
+            return true;
+        }
+        while(sc>scriptExtensions[scx]) {
+            ++scx;
+        }
+        return sc==(scriptExtensions[scx]&0x7fff);
+    }
+
+    /**
+     * Sets code point c's Script_Extensions as script code integers into the output BitSet.
+     *
+     * Some characters are commonly used in multiple scripts.
+     * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+     *
+     * The Script_Extensions property is provisional. It may be modified or removed
+     * in future versions of the Unicode Standard, and thus in ICU.
+     * @param c code point
+     * @param set set of script code integers; will be cleared, then bits are set
+     *            corresponding to c's Script_Extensions
+     * @return set
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final BitSet getScriptExtensions(int c, BitSet set) {
+        set.clear();
+        int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
+        if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
+            return set;
+        }
+
+        char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
+        int scx=scriptX&UCharacterProperty.SCRIPT_MASK_;  // index into scriptExtensions
+        if(scriptX>=UCharacterProperty.SCRIPT_X_WITH_OTHER) {
+            scx=scriptExtensions[scx+1];
+        }
+        int sx;
+        do {
+            sx=scriptExtensions[scx++];
+            set.set(sx&0x7fff);
+        } while(sx<0x8000);
+        return set;
     }
 
     /**

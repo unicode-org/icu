@@ -8,16 +8,20 @@
 package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.lang.UCharacter.HangulSyllableType;
+import com.ibm.icu.lang.UCharacter.NumericType;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -44,34 +48,10 @@ public final class UCharacterProperty
      */
     public static final UCharacterProperty INSTANCE;
 
-    static {
-        try {
-            INSTANCE = new UCharacterProperty();
-        }
-        catch (IOException e) {
-            throw new MissingResourceException(e.getMessage(),"","");
-        }
-    }
-
     /**
     * Trie data
     */
-    public CharTrie m_trie_;
-    /**
-     * Optimization
-     * CharTrie index array
-     */
-    public char[] m_trieIndex_;
-    /**
-     * Optimization
-     * CharTrie data array
-     */
-    public char[] m_trieData_;
-    /**
-     * Optimization
-     * CharTrie data offset
-     */
-    public int m_trieInitialValue_;
+    public Trie2_16 m_trie_;
     /**
     * Unicode version
     */
@@ -125,63 +105,13 @@ public final class UCharacterProperty
     // public methods ----------------------------------------------------
 
     /**
-     * Java friends implementation
-     */
-    public void setIndexData(CharTrie.FriendAgent friendagent)
-    {
-        m_trieIndex_ = friendagent.getPrivateIndex();
-        m_trieData_ = friendagent.getPrivateData();
-        m_trieInitialValue_ = friendagent.getPrivateInitialValue();
-    }
-
-    /**
-    * Gets the property value at the index.
-    * This is optimized.
-    * Note this is a little different from CharTrie the index m_trieData_
-    * is never negative.
+    * Gets the main property value for code point ch.
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point
     */
     public final int getProperty(int ch)
     {
-        if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE
-            || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE
-                && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
-            // BMP codepoint 0000..D7FF or DC00..FFFF
-            // optimized
-            try { // using try for ch < 0 is faster than using an if statement
-                return m_trieData_[
-                    (m_trieIndex_[ch >> Trie.INDEX_STAGE_1_SHIFT_]
-                          << Trie.INDEX_STAGE_2_SHIFT_)
-                    + (ch & Trie.INDEX_STAGE_3_MASK_)];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return m_trieInitialValue_;
-            }
-        }
-        if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-            // lead surrogate D800..DBFF
-            return m_trieData_[
-                    (m_trieIndex_[Trie.LEAD_INDEX_OFFSET_
-                                  + (ch >> Trie.INDEX_STAGE_1_SHIFT_)]
-                          << Trie.INDEX_STAGE_2_SHIFT_)
-                    + (ch & Trie.INDEX_STAGE_3_MASK_)];
-        }
-        if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
-            // supplementary code point 10000..10FFFF
-            // look at the construction of supplementary characters
-            // trail forms the ends of it.
-            return m_trie_.getSurrogateValue(
-                                          UTF16.getLeadSurrogate(ch),
-                                          (char)(ch & Trie.SURROGATE_MASK_));
-        }
-        // ch is out of bounds
-        // return m_dataOffset_ if there is an error, in this case we return
-        // the default value: m_initialValue_
-        // we cannot assume that m_initialValue_ is at offset 0
-        // this is for optimization.
-        return m_trieInitialValue_;
-
-        // this all is an inlined form of return m_trie_.getCodePointValue(ch);
+        return m_trie_.get(ch);
     }
 
     /**
@@ -199,8 +129,7 @@ public final class UCharacterProperty
            if (column < 0 || column >= m_additionalColumnsCount_) {
            return 0;
        }
-       return m_additionalVectors_[
-                     m_additionalTrie_.getCodePointValue(codepoint) + column];
+       return m_additionalVectors_[m_additionalTrie_.get(codepoint) + column];
        }
 
     static final int MY_MASK = UCharacterProperty.TYPE_MASK
@@ -255,284 +184,420 @@ public final class UCharacterProperty
                ==0;
     }
 
-    private static final class BinaryProperties{
-       int column;
-       int mask;
-       public BinaryProperties(int column, int mask) {
-           this.column = column;
-           this.mask  = mask;
-       }
-   }
-   BinaryProperties[] binProps={
-       /*
-        * column and mask values for binary properties from u_getUnicodeProperties().
-        * Must be in order of corresponding UProperty,
-        * and there must be exactly one entry per binary UProperty.
-        */
-       new BinaryProperties(  1,                (  1 << ALPHABETIC_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << ASCII_HEX_DIGIT_PROPERTY_) ),
-       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_BIDI_CONTROL */
-       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_BIDI_MIRRORED */
-       new BinaryProperties(  1,                (  1 << DASH_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << DEPRECATED_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << DIACRITIC_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << EXTENDER_PROPERTY_) ),
-       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_FULL_COMPOSITION_EXCLUSION */
-       new BinaryProperties(  1,                (  1 << GRAPHEME_BASE_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << GRAPHEME_EXTEND_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << GRAPHEME_LINK_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << HEX_DIGIT_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << HYPHEN_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << ID_CONTINUE_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << ID_START_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << IDEOGRAPHIC_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << IDS_BINARY_OPERATOR_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << IDS_TRINARY_OPERATOR_PROPERTY_) ),
-       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_JOIN_CONTROL */
-       new BinaryProperties(  1,                (  1 << LOGICAL_ORDER_EXCEPTION_PROPERTY_) ),
-       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_LOWERCASE */
-       new BinaryProperties(  1,                (  1 << MATH_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << NONCHARACTER_CODE_POINT_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << QUOTATION_MARK_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << RADICAL_PROPERTY_) ),
-       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_SOFT_DOTTED */
-       new BinaryProperties(  1,                (  1 << TERMINAL_PUNCTUATION_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << UNIFIED_IDEOGRAPH_PROPERTY_) ),
-       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_UPPERCASE */
-       new BinaryProperties(  1,                (  1 << WHITE_SPACE_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << XID_CONTINUE_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << XID_START_PROPERTY_) ),
-       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_CASE_SENSITIVE */
-       new BinaryProperties(  1,                (  1 << S_TERM_PROPERTY_) ),
-       new BinaryProperties(  1,                (  1 << VARIATION_SELECTOR_PROPERTY_) ),
-       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFD_INERT */
-       new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKD_INERT */
-       new BinaryProperties( SRC_NFC,    0 ),                                       /* UCHAR_NFC_INERT */
-       new BinaryProperties( SRC_NFKC,   0 ),                                       /* UCHAR_NFKC_INERT */
-       new BinaryProperties( SRC_NFC_CANON_ITER, 0 ),                               /* UCHAR_SEGMENT_STARTER */
-       new BinaryProperties(  1,                (  1 << PATTERN_SYNTAX) ),
-       new BinaryProperties(  1,                (  1 << PATTERN_WHITE_SPACE) ),
-       new BinaryProperties( SRC_CHAR_AND_PROPSVEC,  0 ),                           /* UCHAR_POSIX_ALNUM */
-       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_BLANK */
-       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_GRAPH */
-       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_PRINT */
-       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_XDIGIT */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CASED */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CASE_IGNORABLE */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_LOWERCASED */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_UPPERCASED */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_TITLECASED */
-       new BinaryProperties( SRC_CASE_AND_NORM,  0 ),                               /* UCHAR_CHANGES_WHEN_CASEFOLDED */
-       new BinaryProperties( SRC_CASE,  0 ),                                        /* UCHAR_CHANGES_WHEN_CASEMAPPED */
-       new BinaryProperties( SRC_NFKC_CF, 0 ),                                      /* UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED */
-   };
+    // binary properties --------------------------------------------------- ***
 
+    private class BinaryProperty {
+        int column;  // SRC_PROPSVEC column, or "source" if mask==0
+        int mask;
+        BinaryProperty(int column, int mask) {
+            this.column=column;
+            this.mask=mask;
+        }
+        BinaryProperty(int source) {
+            this.column=source;
+            this.mask=0;
+        }
+        final int getSource() {
+            return mask==0 ? column : SRC_PROPSVEC;
+        }
+        boolean contains(int c) {
+            // systematic, directly stored properties
+            return (getAdditional(c, column)&mask)!=0;
+        }
+    }
 
-    /**
-     * <p>Check a binary Unicode property for a code point.</p>
-     * <p>Unicode, especially in version 3.2, defines many more properties
-     * than the original set in UnicodeData.txt.</p>
-     * <p>This API is intended to reflect Unicode properties as defined in
-     * the Unicode Character Database (UCD) and Unicode Technical Reports
-     * (UTR).</p>
-     * <p>For details about the properties see
-     * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
-     * <p>For names of Unicode properties see the UCD file
-     * PropertyAliases.txt.</p>
-     * <p>This API does not check the validity of the codepoint.</p>
-     * <p>Important: If ICU is built with UCD files from Unicode versions
-     * below 3.2, then properties marked with "new" are not or
-     * not fully available.</p>
-     * @param c Code point to test.
-     * @param which selector constant from com.ibm.icu.lang.UProperty,
-     *        identifies which binary property to check.
-     * @return true or false according to the binary Unicode property value
-     *         for ch. Also false if property is out of bounds or if the
-     *         Unicode version does not have data for the property at all, or
-     *         not for this code point.
-     * @see com.ibm.icu.lang.UProperty
-     */
+    private class CaseBinaryProperty extends BinaryProperty {  // case mapping properties
+        int which;
+        CaseBinaryProperty(int which) {
+            super(SRC_CASE);
+            this.which=which;
+        }
+        boolean contains(int c) {
+            return UCaseProps.INSTANCE.hasBinaryProperty(c, which);
+        }
+    }
+
+    private class NormInertBinaryProperty extends BinaryProperty {  // UCHAR_NF*_INERT properties
+        int which;
+        NormInertBinaryProperty(int source, int which) {
+            super(source);
+            this.which=which;
+        }
+        boolean contains(int c) {
+            return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
+        }
+    }
+
+    BinaryProperty[] binProps={
+        /*
+         * Binary-property implementations must be in order of corresponding UProperty,
+         * and there must be exactly one entry per binary UProperty.
+         */
+        new BinaryProperty(1, (1<<ALPHABETIC_PROPERTY_)),
+        new BinaryProperty(1, (1<<ASCII_HEX_DIGIT_PROPERTY_)),
+        new BinaryProperty(SRC_BIDI) {  // UCHAR_BIDI_CONTROL
+            boolean contains(int c) {
+                return UBiDiProps.INSTANCE.isBidiControl(c);
+            }
+        },
+        new BinaryProperty(SRC_BIDI) {  // UCHAR_BIDI_MIRRORED
+            boolean contains(int c) {
+                return UBiDiProps.INSTANCE.isMirrored(c);
+            }
+        },
+        new BinaryProperty(1, (1<<DASH_PROPERTY_)),
+        new BinaryProperty(1, (1<<DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_)),
+        new BinaryProperty(1, (1<<DEPRECATED_PROPERTY_)),
+        new BinaryProperty(1, (1<<DIACRITIC_PROPERTY_)),
+        new BinaryProperty(1, (1<<EXTENDER_PROPERTY_)),
+        new BinaryProperty(SRC_NFC) {  // UCHAR_FULL_COMPOSITION_EXCLUSION
+            boolean contains(int c) {
+                // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
+                Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl;
+                return impl.isCompNo(impl.getNorm16(c));
+            }
+        },
+        new BinaryProperty(1, (1<<GRAPHEME_BASE_PROPERTY_)),
+        new BinaryProperty(1, (1<<GRAPHEME_EXTEND_PROPERTY_)),
+        new BinaryProperty(1, (1<<GRAPHEME_LINK_PROPERTY_)),
+        new BinaryProperty(1, (1<<HEX_DIGIT_PROPERTY_)),
+        new BinaryProperty(1, (1<<HYPHEN_PROPERTY_)),
+        new BinaryProperty(1, (1<<ID_CONTINUE_PROPERTY_)),
+        new BinaryProperty(1, (1<<ID_START_PROPERTY_)),
+        new BinaryProperty(1, (1<<IDEOGRAPHIC_PROPERTY_)),
+        new BinaryProperty(1, (1<<IDS_BINARY_OPERATOR_PROPERTY_)),
+        new BinaryProperty(1, (1<<IDS_TRINARY_OPERATOR_PROPERTY_)),
+        new BinaryProperty(SRC_BIDI) {  // UCHAR_JOIN_CONTROL
+            boolean contains(int c) {
+                return UBiDiProps.INSTANCE.isJoinControl(c);
+            }
+        },
+        new BinaryProperty(1, (1<<LOGICAL_ORDER_EXCEPTION_PROPERTY_)),
+        new CaseBinaryProperty(UProperty.LOWERCASE),
+        new BinaryProperty(1, (1<<MATH_PROPERTY_)),
+        new BinaryProperty(1, (1<<NONCHARACTER_CODE_POINT_PROPERTY_)),
+        new BinaryProperty(1, (1<<QUOTATION_MARK_PROPERTY_)),
+        new BinaryProperty(1, (1<<RADICAL_PROPERTY_)),
+        new CaseBinaryProperty(UProperty.SOFT_DOTTED),
+        new BinaryProperty(1, (1<<TERMINAL_PUNCTUATION_PROPERTY_)),
+        new BinaryProperty(1, (1<<UNIFIED_IDEOGRAPH_PROPERTY_)),
+        new CaseBinaryProperty(UProperty.UPPERCASE),
+        new BinaryProperty(1, (1<<WHITE_SPACE_PROPERTY_)),
+        new BinaryProperty(1, (1<<XID_CONTINUE_PROPERTY_)),
+        new BinaryProperty(1, (1<<XID_START_PROPERTY_)),
+        new CaseBinaryProperty(UProperty.CASE_SENSITIVE),
+        new BinaryProperty(1, (1<<S_TERM_PROPERTY_)),
+        new BinaryProperty(1, (1<<VARIATION_SELECTOR_PROPERTY_)),
+        new NormInertBinaryProperty(SRC_NFC, UProperty.NFD_INERT),
+        new NormInertBinaryProperty(SRC_NFKC, UProperty.NFKD_INERT),
+        new NormInertBinaryProperty(SRC_NFC, UProperty.NFC_INERT),
+        new NormInertBinaryProperty(SRC_NFKC, UProperty.NFKC_INERT),
+        new BinaryProperty(SRC_NFC_CANON_ITER) {  // UCHAR_SEGMENT_STARTER
+            boolean contains(int c) {
+                return Norm2AllModes.getNFCInstance().impl.
+                    ensureCanonIterData().isCanonSegmentStarter(c);
+            }
+        },
+        new BinaryProperty(1, (1<<PATTERN_SYNTAX)),
+        new BinaryProperty(1, (1<<PATTERN_WHITE_SPACE)),
+        new BinaryProperty(SRC_CHAR_AND_PROPSVEC) {  // UCHAR_POSIX_ALNUM
+            boolean contains(int c) {
+                return UCharacter.isUAlphabetic(c) || UCharacter.isDigit(c);
+            }
+        },
+        new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_BLANK
+            boolean contains(int c) {
+                // "horizontal space"
+                if(c<=0x9f) {
+                    return c==9 || c==0x20; /* TAB or SPACE */
+                } else {
+                    /* Zs */
+                    return UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR;
+                }
+            }
+        },
+        new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_GRAPH
+            boolean contains(int c) {
+                return isgraphPOSIX(c);
+            }
+        },
+        new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_PRINT
+            boolean contains(int c) {
+                /*
+                 * Checks if codepoint is in \p{graph}\p{blank} - \p{cntrl}.
+                 *
+                 * The only cntrl character in graph+blank is TAB (in blank).
+                 * Here we implement (blank-TAB)=Zs instead of calling u_isblank().
+                 */
+                return (UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR) || isgraphPOSIX(c);
+            }
+        },
+        new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_XDIGIT
+            boolean contains(int c) {
+                /* check ASCII and Fullwidth ASCII a-fA-F */
+                if(
+                    (c<=0x66 && c>=0x41 && (c<=0x46 || c>=0x61)) ||
+                    (c>=0xff21 && c<=0xff46 && (c<=0xff26 || c>=0xff41))
+                ) {
+                    return true;
+                }
+                return UCharacter.getType(c)==UCharacter.DECIMAL_DIGIT_NUMBER;
+            }
+        },
+        new CaseBinaryProperty(UProperty.CASED),
+        new CaseBinaryProperty(UProperty.CASE_IGNORABLE),
+        new CaseBinaryProperty(UProperty.CHANGES_WHEN_LOWERCASED),
+        new CaseBinaryProperty(UProperty.CHANGES_WHEN_UPPERCASED),
+        new CaseBinaryProperty(UProperty.CHANGES_WHEN_TITLECASED),
+        new BinaryProperty(SRC_CASE_AND_NORM) {  // UCHAR_CHANGES_WHEN_CASEFOLDED
+            boolean contains(int c) {
+                String nfd=Norm2AllModes.getNFCInstance().impl.getDecomposition(c);
+                if(nfd!=null) {
+                    /* c has a decomposition */
+                    c=nfd.codePointAt(0);
+                    if(Character.charCount(c)!=nfd.length()) {
+                        /* multiple code points */
+                        c=-1;
+                    }
+                } else if(c<0) {
+                    return false;  /* protect against bad input */
+                }
+                if(c>=0) {
+                    /* single code point */
+                    UCaseProps csp=UCaseProps.INSTANCE;
+                    UCaseProps.dummyStringBuffer.setLength(0);
+                    return csp.toFullFolding(c, UCaseProps.dummyStringBuffer,
+                                             UCharacter.FOLD_CASE_DEFAULT)>=0;
+                } else {
+                    String folded=UCharacter.foldCase(nfd, true);
+                    return !folded.equals(nfd);
+                }
+            }
+        },
+        new CaseBinaryProperty(UProperty.CHANGES_WHEN_CASEMAPPED),
+        new BinaryProperty(SRC_NFKC_CF) {  // UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
+            boolean contains(int c) {
+                Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstance().impl;
+                String src=UTF16.valueOf(c);
+                StringBuilder dest=new StringBuilder();
+                // Small destCapacity for NFKC_CF(c).
+                Normalizer2Impl.ReorderingBuffer buffer=new Normalizer2Impl.ReorderingBuffer(kcf, dest, 5);
+                kcf.compose(src, 0, src.length(), false, true, buffer);
+                return !Normalizer2Impl.UTF16Plus.equal(dest, src);
+            }
+        },
+    };
 
     public boolean hasBinaryProperty(int c, int which) {
          if(which<UProperty.BINARY_START || UProperty.BINARY_LIMIT<=which) {
             // not a known binary property
             return false;
         } else {
-            int mask=binProps[which].mask;
-            int column=binProps[which].column;
-            if(mask!=0) {
-                // systematic, directly stored properties
-                return (getAdditional(c, column) & mask)!=0;
-            } else {
-                if(column==SRC_CASE) {
-                    /* case mapping properties */
-                    try {
-                        return UCaseProps.getSingleton().hasBinaryProperty(c, which);
-                    } catch (IOException e) {
-                        return false;
-                    }
-                } else if(column==SRC_NFC) {
-                    /* normalization properties from nfc.nrm */
-                    switch(which) {
-                    case UProperty.FULL_COMPOSITION_EXCLUSION: {
-                        // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
-                        Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl;
-                        return impl.isCompNo(impl.getNorm16(c));
-                    }
-                    default:
-                        // UCHAR_NF[CD]_INERT properties
-                        return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
-                    }
-                } else if(column==SRC_NFKC) {
-                    /* normalization properties from nfkc.nrm */
-                    // UCHAR_NFK[CD]_INERT properties
-                    return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
-                } else if(column==SRC_NFKC_CF) {
-                    // currently only for UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
-                    Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstance().impl;
-                    String src=UTF16.valueOf(c);
-                    StringBuilder dest=new StringBuilder();
-                    // Small destCapacity for NFKC_CF(c).
-                    Normalizer2Impl.ReorderingBuffer buffer=new Normalizer2Impl.ReorderingBuffer(kcf, dest, 5);
-                    kcf.compose(src, 0, src.length(), false, true, buffer);
-                    return !Normalizer2Impl.UTF16Plus.equal(dest, src);
-                } else if(column==SRC_NFC_CANON_ITER) {
-                    /* normalization properties from nfc.nrm canonical iterator data */
-                    // SEGMENT_STARTER
-                    return Norm2AllModes.getNFCInstance().impl.
-                        ensureCanonIterData().isCanonSegmentStarter(c);
-                } else if(column==SRC_BIDI) {
-                    /* bidi/shaping properties */
-                    UBiDiProps bdp;
-                    try {
-                        bdp = UBiDiProps.getSingleton();
-                    } catch (IOException e) {
-                        return false;
-                    }
-                    switch(which) {
-                    case UProperty.BIDI_MIRRORED:
-                        return bdp.isMirrored(c);
-                    case UProperty.BIDI_CONTROL:
-                        return bdp.isBidiControl(c);
-                    case UProperty.JOIN_CONTROL:
-                        return bdp.isJoinControl(c);
-                    default:
-                        break;
-                    }
-                } else if(column==SRC_CHAR) {
-                    switch(which) {
-                    case UProperty.POSIX_BLANK:
-                        // "horizontal space"
-                        if(c<=0x9f) {
-                            return c==9 || c==0x20; /* TAB or SPACE */
-                        } else {
-                            /* Zs */
-                            return UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR;
-                        }
-                    case UProperty.POSIX_GRAPH:
-                        return isgraphPOSIX(c);
-                    case UProperty.POSIX_PRINT:
-                        /*
-                         * Checks if codepoint is in \p{graph}\p{blank} - \p{cntrl}.
-                         *
-                         * The only cntrl character in graph+blank is TAB (in blank).
-                         * Here we implement (blank-TAB)=Zs instead of calling u_isblank().
-                         */
-                        return (UCharacter.getType(c)==UCharacter.SPACE_SEPARATOR) || isgraphPOSIX(c);
-                    case UProperty.POSIX_XDIGIT:
-                        /* check ASCII and Fullwidth ASCII a-fA-F */
-                        if(
-                            (c<=0x66 && c>=0x41 && (c<=0x46 || c>=0x61)) ||
-                            (c>=0xff21 && c<=0xff46 && (c<=0xff26 || c>=0xff41))
-                        ) {
-                            return true;
-                        }
-    
-                        return UCharacter.getType(c)==UCharacter.DECIMAL_DIGIT_NUMBER;
-                    default:
-                        break;
-                    }
-                } else if(column==SRC_CHAR_AND_PROPSVEC) {
-                    switch(which) {
-                    case UProperty.POSIX_ALNUM:
-                        return UCharacter.isUAlphabetic(c) || UCharacter.isDigit(c);
-                    default:
-                        break;
-                    }
-                } else if(column==SRC_CASE_AND_NORM) {
-                    String nfd;
-                    switch(which) {
-                    case UProperty.CHANGES_WHEN_CASEFOLDED:
-                        nfd=Norm2AllModes.getNFCInstance().impl.getDecomposition(c);
-                        if(nfd!=null) {
-                            /* c has a decomposition */
-                            c=nfd.codePointAt(0);
-                            if(Character.charCount(c)!=nfd.length()) {
-                                /* multiple code points */
-                                c=-1;
-                            }
-                        } else if(c<0) {
-                            return false;  /* protect against bad input */
-                        }
-                        if(c>=0) {
-                            /* single code point */
-                            try {
-                                UCaseProps csp=UCaseProps.getSingleton();
-                                UCaseProps.dummyStringBuffer.setLength(0);
-                                return csp.toFullFolding(c, UCaseProps.dummyStringBuffer,
-                                                         UCharacter.FOLD_CASE_DEFAULT)>=0;
-                            } catch (IOException e) {
-                                return false;
-                            }
-                        } else {
-                            String folded=UCharacter.foldCase(nfd, true);
-                            return !folded.equals(nfd);
-                        }
-                    default:
-                        break;
-                    }
+            return binProps[which].contains(c);
+        }
+    }
+
+    // int-value and enumerated properties --------------------------------- ***
+
+    public int getType(int c) {
+        return getProperty(c)&TYPE_MASK;
+    }
+
+    /*
+     * Map some of the Grapheme Cluster Break values to Hangul Syllable Types.
+     * Hangul_Syllable_Type is fully redundant with a subset of Grapheme_Cluster_Break.
+     */
+    private static final int /* UHangulSyllableType */ gcbToHst[]={
+        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_OTHER */
+        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_CONTROL */
+        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_CR */
+        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_EXTEND */
+        HangulSyllableType.LEADING_JAMO,     /* U_GCB_L */
+        HangulSyllableType.NOT_APPLICABLE,   /* U_GCB_LF */
+        HangulSyllableType.LV_SYLLABLE,      /* U_GCB_LV */
+        HangulSyllableType.LVT_SYLLABLE,     /* U_GCB_LVT */
+        HangulSyllableType.TRAILING_JAMO,    /* U_GCB_T */
+        HangulSyllableType.VOWEL_JAMO        /* U_GCB_V */
+        /*
+         * Omit GCB values beyond what we need for hst.
+         * The code below checks for the array length.
+         */
+    };
+
+    private class IntProperty {
+        int column;  // SRC_PROPSVEC column, or "source" if mask==0
+        int mask;
+        int shift;
+        IntProperty(int column, int mask, int shift) {
+            this.column=column;
+            this.mask=mask;
+            this.shift=shift;
+        }
+        IntProperty(int source) {
+            this.column=source;
+            this.mask=0;
+        }
+        final int getSource() {
+            return mask==0 ? column : SRC_PROPSVEC;
+        }
+        int getValue(int c) {
+            // systematic, directly stored properties
+            return (getAdditional(c, column)&mask)>>>shift;
+        }
+        int getMaxValue(int which) {
+            return (getMaxValues(column)&mask)>>>shift;
+        }
+    }
+
+    private class BiDiIntProperty extends IntProperty {
+        BiDiIntProperty() {
+            super(SRC_BIDI);
+        }
+        int getMaxValue(int which) {
+            return UBiDiProps.INSTANCE.getMaxValue(which);
+        }
+    }
+
+    private class CombiningClassIntProperty extends IntProperty {
+        CombiningClassIntProperty(int source) {
+            super(source);
+        }
+        int getMaxValue(int which) {
+            return 0xff;
+        }
+    }
+
+    private class NormQuickCheckIntProperty extends IntProperty {  // UCHAR_NF*_QUICK_CHECK properties
+        int which;
+        int max;
+        NormQuickCheckIntProperty(int source, int which, int max) {
+            super(source);
+            this.which=which;
+            this.max=max;
+        }
+        int getValue(int c) {
+            return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_QUICK_CHECK).getQuickCheck(c);
+        }
+        int getMaxValue(int which) {
+            return max;
+        }
+    }
+
+    IntProperty intProps[]={
+        new BiDiIntProperty() {  // BIDI_CLASS
+            int getValue(int c) {
+                return UBiDiProps.INSTANCE.getClass(c);
+            }
+        },
+        new IntProperty(0, BLOCK_MASK_, BLOCK_SHIFT_),
+        new CombiningClassIntProperty(SRC_NFC) {  // CANONICAL_COMBINING_CLASS
+            int getValue(int c) {
+                Normalizer2Impl impl = Norm2AllModes.getNFCInstance().impl;
+                return impl.getCC(impl.getNorm16(c));
+            }
+        },
+        new IntProperty(2, DECOMPOSITION_TYPE_MASK_, 0),
+        new IntProperty(0, EAST_ASIAN_MASK_, EAST_ASIAN_SHIFT_),
+        new IntProperty(SRC_CHAR) {  // GENERAL_CATEGORY
+            int getValue(int c) {
+                return getType(c);
+            }
+            int getMaxValue(int which) {
+                return UCharacterCategory.CHAR_CATEGORY_COUNT-1;
+            }
+        },
+        new BiDiIntProperty() {  // JOINING_GROUP
+            int getValue(int c) {
+                return UBiDiProps.INSTANCE.getJoiningGroup(c);
+            }
+        },
+        new BiDiIntProperty() {  // JOINING_TYPE
+            int getValue(int c) {
+                return UBiDiProps.INSTANCE.getJoiningType(c);
+            }
+        },
+        new IntProperty(2, LB_MASK, LB_SHIFT),  // LINE_BREAK
+        new IntProperty(SRC_CHAR) {  // NUMERIC_TYPE
+            int getValue(int c) {
+                return ntvGetType(getNumericTypeValue(getProperty(c)));
+            }
+            int getMaxValue(int which) {
+                return NumericType.COUNT-1;
+            }
+        },
+        new IntProperty(0, SCRIPT_MASK_, 0) {
+            int getValue(int c) {
+                return UScript.getScript(c);
+            }
+        },
+        new IntProperty(SRC_PROPSVEC) {  // HANGUL_SYLLABLE_TYPE
+            int getValue(int c) {
+                /* see comments on gcbToHst[] above */
+                int gcb=(getAdditional(c, 2)&GCB_MASK)>>>GCB_SHIFT;
+                if(gcb<gcbToHst.length) {
+                    return gcbToHst[gcb];
+                } else {
+                    return HangulSyllableType.NOT_APPLICABLE;
                 }
             }
+            int getMaxValue(int which) {
+                return HangulSyllableType.COUNT-1;
+            }
+        },
+        // max=1=YES -- these are never "maybe", only "no" or "yes"
+        new NormQuickCheckIntProperty(SRC_NFC, UProperty.NFD_QUICK_CHECK, 1),
+        new NormQuickCheckIntProperty(SRC_NFKC, UProperty.NFKD_QUICK_CHECK, 1),
+        // max=2=MAYBE
+        new NormQuickCheckIntProperty(SRC_NFC, UProperty.NFC_QUICK_CHECK, 2),
+        new NormQuickCheckIntProperty(SRC_NFKC, UProperty.NFKC_QUICK_CHECK, 2),
+        new CombiningClassIntProperty(SRC_NFC) {  // LEAD_CANONICAL_COMBINING_CLASS
+            int getValue(int c) {
+                return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(c)>>8;
+            }
+        },
+        new CombiningClassIntProperty(SRC_NFC) {  // TRAIL_CANONICAL_COMBINING_CLASS
+            int getValue(int c) {
+                return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(c)&0xff;
+            }
+        },
+        new IntProperty(2, GCB_MASK, GCB_SHIFT),  // GRAPHEME_CLUSTER_BREAK
+        new IntProperty(2, SB_MASK, SB_SHIFT),  // SENTENCE_BREAK
+        new IntProperty(2, WB_MASK, WB_SHIFT),  // WORD_BREAK
+    };
+
+    public int getIntPropertyValue(int c, int which) {
+        if(which<UProperty.INT_START) {
+            if(UProperty.BINARY_START<=which && which<UProperty.BINARY_LIMIT) {
+                return binProps[which].contains(c) ? 1 : 0;
+            }
+        } else if(which<UProperty.INT_LIMIT) {
+            return intProps[which-UProperty.INT_START].getValue(c);
+        } else if (which == UProperty.GENERAL_CATEGORY_MASK) {
+            return getMask(getType(c));
         }
-        return false;
+        return 0; // undefined
+    }
+
+    public int getIntPropertyMaxValue(int which) {
+        if(which<UProperty.INT_START) {
+            if(UProperty.BINARY_START<=which && which<UProperty.BINARY_LIMIT) {
+                return 1;  // maximum TRUE for all binary properties
+            }
+        } else if(which<UProperty.INT_LIMIT) {
+            return intProps[which-UProperty.INT_START].getMaxValue(which);
+        }
+        return -1; // undefined
     }
 
     public final int getSource(int which) {
         if(which<UProperty.BINARY_START) {
             return SRC_NONE; /* undefined */
         } else if(which<UProperty.BINARY_LIMIT) {
-            if(binProps[which].mask!=0) {
-                return SRC_PROPSVEC;
-            } else {
-                return binProps[which].column;
-            }
+            return binProps[which].getSource();
         } else if(which<UProperty.INT_START) {
             return SRC_NONE; /* undefined */
         } else if(which<UProperty.INT_LIMIT) {
-            switch(which) {
-            case UProperty.GENERAL_CATEGORY:
-            case UProperty.NUMERIC_TYPE:
-                return SRC_CHAR;
-
-            case UProperty.CANONICAL_COMBINING_CLASS:
-            case UProperty.NFD_QUICK_CHECK:
-            case UProperty.NFC_QUICK_CHECK:
-            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
-            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
-                return SRC_NFC;
-            case UProperty.NFKD_QUICK_CHECK:
-            case UProperty.NFKC_QUICK_CHECK:
-                return SRC_NFKC;
-
-            case UProperty.BIDI_CLASS:
-            case UProperty.JOINING_GROUP:
-            case UProperty.JOINING_TYPE:
-                return SRC_BIDI;
-
-            default:
-                return SRC_PROPSVEC;
-            }
+            return intProps[which-UProperty.INT_START].getSource();
         } else if(which<UProperty.STRING_START) {
             switch(which) {
             case UProperty.GENERAL_CATEGORY_MASK:
@@ -569,7 +634,12 @@ public final class UCharacterProperty
                 return SRC_NONE;
             }
         } else {
-            return SRC_NONE; /* undefined */
+            switch(which) {
+            case UProperty.SCRIPT_EXTENSIONS:
+                return SRC_PROPSVEC;
+            default:
+                return SRC_NONE; /* undefined */
+            }
         }
     }
 
@@ -709,12 +779,139 @@ public final class UCharacterProperty
         return 1 << type;
     }
 
+
+    /**
+     * Returns the digit values of characters like 'A' - 'Z', normal,
+     * half-width and full-width. This method assumes that the other digit
+     * characters are checked by the calling method.
+     * @param ch character to test
+     * @return -1 if ch is not a character of the form 'A' - 'Z', otherwise
+     *         its corresponding digit will be returned.
+     */
+    public static int getEuropeanDigit(int ch) {
+        if ((ch > 0x7a && ch < 0xff21)
+            || ch < 0x41 || (ch > 0x5a && ch < 0x61)
+            || ch > 0xff5a || (ch > 0xff3a && ch < 0xff41)) {
+            return -1;
+        }
+        if (ch <= 0x7a) {
+            // ch >= 0x41 or ch < 0x61
+            return ch + 10 - ((ch <= 0x5a) ? 0x41 : 0x61);
+        }
+        // ch >= 0xff21
+        if (ch <= 0xff3a) {
+            return ch + 10 - 0xff21;
+        }
+        // ch >= 0xff41 && ch <= 0xff5a
+        return ch + 10 - 0xff41;
+    }
+
+    public int digit(int c) {
+        int value = getNumericTypeValue(getProperty(c)) - NTV_DECIMAL_START_;
+        if(value<=9) {
+            return value;
+        } else {
+            return -1;
+        }
+    }
+
+    public int getNumericValue(int c) {
+        // slightly pruned version of getUnicodeNumericValue(), plus getEuropeanDigit()
+        int ntv = getNumericTypeValue(getProperty(c));
+
+        if(ntv==NTV_NONE_) {
+            return getEuropeanDigit(c);
+        } else if(ntv<NTV_DIGIT_START_) {
+            /* decimal digit */
+            return ntv-NTV_DECIMAL_START_;
+        } else if(ntv<NTV_NUMERIC_START_) {
+            /* other digit */
+            return ntv-NTV_DIGIT_START_;
+        } else if(ntv<NTV_FRACTION_START_) {
+            /* small integer */
+            return ntv-NTV_NUMERIC_START_;
+        } else if(ntv<NTV_LARGE_START_) {
+            /* fraction */
+            return -2;
+        } else if(ntv<NTV_RESERVED_START_) {
+            /* large, single-significant-digit integer */
+            int mant=(ntv>>5)-14;
+            int exp=(ntv&0x1f)+2;
+            if(exp<9 || (exp==9 && mant<=2)) {
+                int numValue=mant;
+                do {
+                    numValue*=10;
+                } while(--exp>0);
+                return numValue;
+            } else {
+                return -2;
+            }
+        } else {
+            /* reserved */
+            return -2;
+        }
+    }
+
+    public double getUnicodeNumericValue(int c) {
+        // equivalent to c version double u_getNumericValue(UChar32 c)
+        int ntv = getNumericTypeValue(getProperty(c));
+
+        if(ntv==NTV_NONE_) {
+            return UCharacter.NO_NUMERIC_VALUE;
+        } else if(ntv<NTV_DIGIT_START_) {
+            /* decimal digit */
+            return ntv-NTV_DECIMAL_START_;
+        } else if(ntv<NTV_NUMERIC_START_) {
+            /* other digit */
+            return ntv-NTV_DIGIT_START_;
+        } else if(ntv<NTV_FRACTION_START_) {
+            /* small integer */
+            return ntv-NTV_NUMERIC_START_;
+        } else if(ntv<NTV_LARGE_START_) {
+            /* fraction */
+            int numerator=(ntv>>4)-12;
+            int denominator=(ntv&0xf)+1;
+            return (double)numerator/denominator;
+        } else if(ntv<NTV_RESERVED_START_) {
+            /* large, single-significant-digit integer */
+            double numValue;
+            int mant=(ntv>>5)-14;
+            int exp=(ntv&0x1f)+2;
+            numValue=mant;
+
+            /* multiply by 10^exp without math.h */
+            while(exp>=4) {
+                numValue*=10000.;
+                exp-=4;
+            }
+            switch(exp) {
+            case 3:
+                numValue*=1000.;
+                break;
+            case 2:
+                numValue*=100.;
+                break;
+            case 1:
+                numValue*=10.;
+                break;
+            case 0:
+            default:
+                break;
+            }
+
+            return numValue;
+        } else {
+            /* reserved */
+            return UCharacter.NO_NUMERIC_VALUE;
+        }
+    }
+
     // protected variables -----------------------------------------------
 
     /**
      * Extra property trie
      */
-    CharTrie m_additionalTrie_;
+    Trie2_16 m_additionalTrie_;
     /**
      * Extra property vectors, 1st column for age and second for binary
      * properties.
@@ -734,6 +931,12 @@ public final class UCharacterProperty
      * 0
      */
      int m_maxJTGValue_;
+
+    /**
+     * Script_Extensions data
+     */
+    public char[] m_scriptExtensions_;
+
     // private variables -------------------------------------------------
 
     /**
@@ -751,7 +954,7 @@ public final class UCharacterProperty
     */
     private static final int LEAD_SURROGATE_SHIFT_ = 10;
     /**
-    * Offset to add to combined surrogate pair to avoid msking.
+    * Offset to add to combined surrogate pair to avoid masking.
     */
     private static final int SURROGATE_OFFSET_ =
                            UTF16.SUPPLEMENTARY_MIN_VALUE -
@@ -760,7 +963,82 @@ public final class UCharacterProperty
                            UTF16.TRAIL_SURROGATE_MIN_VALUE;
 
 
-    // additional properties ----------------------------------------------
+    // property data constants -------------------------------------------------
+
+    /**
+     * Numeric types and values in the main properties words.
+     */
+    private static final int NUMERIC_TYPE_VALUE_SHIFT_ = 6;
+    private static final int getNumericTypeValue(int props) {
+        return props >> NUMERIC_TYPE_VALUE_SHIFT_;
+    }
+    /* constants for the storage form of numeric types and values */
+    private static final int NTV_NONE_ = 0;
+    private static final int NTV_DECIMAL_START_ = 1;
+    private static final int NTV_DIGIT_START_ = 11;
+    private static final int NTV_NUMERIC_START_ = 21;
+    private static final int NTV_FRACTION_START_ = 0xb0;
+    private static final int NTV_LARGE_START_ = 0x1e0;
+    private static final int NTV_RESERVED_START_ = 0x300;
+
+    private static final int ntvGetType(int ntv) {
+        return
+            (ntv==NTV_NONE_) ? NumericType.NONE :
+            (ntv<NTV_DIGIT_START_) ?  NumericType.DECIMAL :
+            (ntv<NTV_NUMERIC_START_) ? NumericType.DIGIT :
+            NumericType.NUMERIC;
+    }
+
+    /*
+     * Properties in vector word 0
+     * Bits
+     * 31..24   DerivedAge version major/minor one nibble each
+     * 23..22   3..1: Bits 7..0 = Script_Extensions index
+     *             3: Script value from Script_Extensions
+     *             2: Script=Inherited
+     *             1: Script=Common
+     *             0: Script=bits 7..0
+     * 21..20   reserved
+     * 19..17   East Asian Width
+     * 16.. 8   UBlockCode
+     *  7.. 0   UScriptCode
+     */
+
+    /**
+     * Script_Extensions: mask includes Script
+     */
+    public static final int SCRIPT_X_MASK = 0x00c000ff;
+    //private static final int SCRIPT_X_SHIFT = 22;
+    /**
+     * Integer properties mask and shift values for East Asian cell width.
+     * Equivalent to icu4c UPROPS_EA_MASK
+     */
+    private static final int EAST_ASIAN_MASK_ = 0x000e0000;
+    /**
+     * Integer properties mask and shift values for East Asian cell width.
+     * Equivalent to icu4c UPROPS_EA_SHIFT
+     */
+    private static final int EAST_ASIAN_SHIFT_ = 17;
+    /**
+     * Integer properties mask and shift values for blocks.
+     * Equivalent to icu4c UPROPS_BLOCK_MASK
+     */
+    private static final int BLOCK_MASK_ = 0x0001ff00;
+    /**
+     * Integer properties mask and shift values for blocks.
+     * Equivalent to icu4c UPROPS_BLOCK_SHIFT
+     */
+    private static final int BLOCK_SHIFT_ = 8;
+    /**
+     * Integer properties mask and shift values for scripts.
+     * Equivalent to icu4c UPROPS_SHIFT_MASK
+     */
+    public static final int SCRIPT_MASK_ = 0x000000ff;
+
+    /* SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions. */
+    public static final int SCRIPT_X_WITH_COMMON = 0x400000;
+    public static final int SCRIPT_X_WITH_INHERITED = 0x800000;
+    public static final int SCRIPT_X_WITH_OTHER = 0xc00000;
 
     /**
      * Additional properties used in internal trie data
@@ -808,6 +1086,34 @@ public final class UCharacterProperty
     private static final int PATTERN_SYNTAX = 29;                   /* new in ICU 3.4 and Unicode 4.1 */
     private static final int PATTERN_WHITE_SPACE = 30;
 
+    /*
+     * Properties in vector word 2
+     * Bits
+     * 31..26   reserved
+     * 25..20   Line Break
+     * 19..15   Sentence Break
+     * 14..10   Word Break
+     *  9.. 5   Grapheme Cluster Break
+     *  4.. 0   Decomposition Type
+     */
+    private static final int LB_MASK          = 0x03f00000;
+    private static final int LB_SHIFT         = 20;
+
+    private static final int SB_MASK          = 0x000f8000;
+    private static final int SB_SHIFT         = 15;
+
+    private static final int WB_MASK          = 0x00007c00;
+    private static final int WB_SHIFT         = 10;
+
+    private static final int GCB_MASK         = 0x000003e0;
+    private static final int GCB_SHIFT        = 5;
+
+    /**
+     * Integer properties mask for decomposition type.
+     * Equivalent to icu4c UPROPS_DT_MASK.
+     */
+    private static final int DECOMPOSITION_TYPE_MASK_ = 0x0000001f;
+
     /**
      * First nibble shift
      */
@@ -825,20 +1131,89 @@ public final class UCharacterProperty
     // private constructors --------------------------------------------------
 
     /**
-    * Constructor
-    * @exception IOException thrown when data reading fails or data corrupted
-    */
+     * Constructor
+     * @exception IOException thrown when data reading fails or data corrupted
+     */
     private UCharacterProperty() throws IOException
     {
+        // consistency check
+        if(binProps.length!=UProperty.BINARY_LIMIT) {
+            throw new RuntimeException("binProps.length!=UProperty.BINARY_LIMIT");
+        }
+        if(intProps.length!=(UProperty.INT_LIMIT-UProperty.INT_START)) {
+            throw new RuntimeException("intProps.length!=(UProperty.INT_LIMIT-UProperty.INT_START)");
+        }
+
         // jar access
         InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME_);
-        BufferedInputStream b = new BufferedInputStream(is, DATA_BUFFER_SIZE_);
-        UCharacterPropertyReader reader = new UCharacterPropertyReader(b);
-        reader.read(this);
-        b.close();
+        BufferedInputStream bis = new BufferedInputStream(is, DATA_BUFFER_SIZE_);
+        m_unicodeVersion_ = ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, new IsAcceptable());
+        DataInputStream ds = new DataInputStream(bis);
+        // Read or skip the 16 indexes.
+        int propertyOffset = ds.readInt();
+        /* exceptionOffset = */ ds.readInt();
+        /* caseOffset = */ ds.readInt();
+        int additionalOffset = ds.readInt();
+        int additionalVectorsOffset = ds.readInt();
+        m_additionalColumnsCount_ = ds.readInt();
+        int scriptExtensionsOffset = ds.readInt();
+        int reservedOffset7 = ds.readInt();
+        /* reservedOffset8 = */ ds.readInt();
+        /* dataTopOffset = */ ds.readInt();
+        m_maxBlockScriptValue_ = ds.readInt();
+        m_maxJTGValue_ = ds.readInt();
+        ds.skipBytes((16 - 12) << 2);
 
-        m_trie_.putIndexData(this);
+        // read the main properties trie
+        m_trie_ = Trie2_16.createFromSerialized(ds);
+        int expectedTrieLength = (propertyOffset - 16) * 4;
+        int trieLength = m_trie_.getSerializedLength();
+        if(trieLength > expectedTrieLength) {
+            throw new IOException("uprops.icu: not enough bytes for main trie");
+        }
+        // skip padding after trie bytes
+        ds.skipBytes(expectedTrieLength - trieLength);
+
+        // skip unused intervening data structures
+        ds.skipBytes((additionalOffset - propertyOffset) * 4);
+
+        if(m_additionalColumnsCount_ > 0) {
+            // reads the additional property block
+            m_additionalTrie_ = Trie2_16.createFromSerialized(ds);
+            expectedTrieLength = (additionalVectorsOffset-additionalOffset)*4;
+            trieLength = m_additionalTrie_.getSerializedLength();
+            if(trieLength > expectedTrieLength) {
+                throw new IOException("uprops.icu: not enough bytes for additional-properties trie");
+            }
+            // skip padding after trie bytes
+            ds.skipBytes(expectedTrieLength - trieLength);
+
+            // additional properties
+            int size = scriptExtensionsOffset - additionalVectorsOffset;
+            m_additionalVectors_ = new int[size];
+            for (int i = 0; i < size; i ++) {
+                m_additionalVectors_[i] = ds.readInt();
+            }
+        }
+
+        // Script_Extensions
+        int numChars = (reservedOffset7 - scriptExtensionsOffset) * 2;
+        if(numChars > 0) {
+            m_scriptExtensions_ = new char[numChars];
+            for(int i = 0; i < numChars; ++i) {
+                m_scriptExtensions_[i] = ds.readChar();
+            }
+        }
+        is.close();
     }
+
+    private static final class IsAcceptable implements ICUBinary.Authenticate {
+        // @Override when we switch to Java 6
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0] == 7;
+        }
+    }
+    private static final byte DATA_FORMAT[] = { 0x55, 0x50, 0x72, 0x6F };  // "UPro"
 
     // private methods -------------------------------------------------------
 
@@ -888,10 +1263,10 @@ public final class UCharacterProperty
 
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
         /* add the start code point of each same-value range of the main trie */
-        TrieIterator propsIter = new TrieIterator(m_trie_);
-        RangeValueIterator.Element propsResult = new RangeValueIterator.Element();
-          while(propsIter.next(propsResult)){
-            set.add(propsResult.start);
+        Iterator<Trie2.Range> trieIterator = m_trie_.iterator();
+        Trie2.Range range;
+        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+            set.add(range.startCodePoint);
         }
 
         /* add code points with hardcoded properties, plus the ones following them */
@@ -982,11 +1357,22 @@ public final class UCharacterProperty
         /* add the start code point of each same-value range of the properties vectors trie */
         if(m_additionalColumnsCount_>0) {
             /* if m_additionalColumnsCount_==0 then the properties vectors trie may not be there at all */
-            TrieIterator propsVectorsIter = new TrieIterator(m_additionalTrie_);
-            RangeValueIterator.Element propsVectorsResult = new RangeValueIterator.Element();
-            while(propsVectorsIter.next(propsVectorsResult)){
-                set.add(propsVectorsResult.start);
+            Iterator<Trie2.Range> trieIterator = m_additionalTrie_.iterator();
+            Trie2.Range range;
+            while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
+                set.add(range.startCodePoint);
             }
+        }
+    }
+
+    // This static initializer block must be placed after
+    // other static member initialization
+    static {
+        try {
+            INSTANCE = new UCharacterProperty();
+        }
+        catch (IOException e) {
+            throw new MissingResourceException(e.getMessage(),"","");
         }
     }
 

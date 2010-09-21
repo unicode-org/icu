@@ -21,6 +21,8 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
@@ -424,15 +426,18 @@ public class CollationAPITest extends TestFmwk {
         logln("Test ctors : ");
         Collator col = Collator.getInstance(Locale.ENGLISH);
 
-    
         logln("Test getVersion");
-        VersionInfo expectedVersion = VersionInfo.getInstance(0x31, 0xC0, 0x00, 0x05);
-        doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
-        
+        // Check for a version greater than some value rather than equality
+        // so that we need not update the expected version each time.
+        VersionInfo expectedVersion = VersionInfo.getInstance(0x31, 0xC0, 0x00, 0x05);  // from ICU 4.4/UCA 5.2
+        doAssert(col.getVersion().compareTo(expectedVersion) >= 0, "Expected minimum version "+expectedVersion.toString()+" got "+col.getVersion().toString());
+
         logln("Test getUCAVersion");
-        VersionInfo expectedUCAVersion = VersionInfo.getInstance(5, 2, 0, 0);
-        doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
-        
+        // Assume that the UCD and UCA versions are the same,
+        // rather than hardcoding (and updating each time) a particular UCA version.
+        VersionInfo ucdVersion = UCharacter.getUnicodeVersion();
+        doAssert(col.getUCAVersion().equals(ucdVersion), "Expected UCA version "+ucdVersion.toString()+" got "+col.getUCAVersion().toString());
+
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
         doAssert((col.compare("ab", "AB") < 0), "ab < AB comparison failed");
         doAssert((col.compare("blackbird", "black-bird") > 0), "black-bird > blackbird comparison failed");
@@ -998,21 +1003,26 @@ public class CollationAPITest extends TestFmwk {
         }
     }    
 
-    private void
+    private boolean
     doSetsTest(UnicodeSet ref, UnicodeSet set, String inSet, String outSet) {
-        
+        boolean ok = true;
         set.clear();
         set.applyPattern(inSet);
         
         if(!ref.containsAll(set)) {
-            err("Some stuff from "+inSet+" is not present in the set\n");            
+            err("Some stuff from "+inSet+" is not present in the set.\nMissing:"+
+                set.removeAll(ref).toPattern(true)+"\n");
+            ok = false;
         }
-        
+
         set.clear();
         set.applyPattern(outSet);
         if(!ref.containsNone(set)) {
-            err("Some stuff from "+outSet+" is present in the set\n");
+            err("Some stuff from "+outSet+" is present in the set.\nUnexpected:"+
+                set.retainAll(ref).toPattern(true)+"\n");
+            ok = false;
         }
+        return ok;
     }
     
     public void TestGetContractions()throws Exception {
@@ -1074,11 +1084,19 @@ public class CollationAPITest extends TestFmwk {
             logln("Testing locale: "+ tests[i][0]);
             coll = (RuleBasedCollator)Collator.getInstance(new ULocale(tests[i][0]));
             coll.getContractionsAndExpansions(conts, exp, true);
+            boolean ok = true;
             logln("Contractions "+conts.size()+":\n"+conts.toPattern(true));
-            doSetsTest(conts, set, tests[i][1], tests[i][2]);
+            ok &= doSetsTest(conts, set, tests[i][1], tests[i][2]);
             logln("Expansions "+exp.size()+":\n"+exp.toPattern(true));
-            doSetsTest(exp, set, tests[i][3], tests[i][4]);
-            
+            ok &= doSetsTest(exp, set, tests[i][3], tests[i][4]);
+            if(!ok) {
+                // In case of failure, log the rule string for better diagnostics.
+                String rules = coll.getRules(false);
+                logln("Collation rules (getLocale()="+
+                        coll.getLocale(ULocale.ACTUAL_LOCALE).toString()+"): "+
+                        Utility.escape(rules));
+            }
+
             // No unsafe set in ICU4J
             //noConts = ucol_getUnsafeSet(coll, conts, &status);
             //doSetsTest(conts, set, tests[i][5], tests[i][6]);

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import com.ibm.icu.util.VersionInfo;
+
 public final class ICUBinary 
 {    
     // public inner interface ------------------------------------------------
@@ -131,7 +133,19 @@ public final class ICUBinary
         }
         return unicodeVersion;
     }
-     
+
+    /**
+     * Same as readHeader(), but returns a VersionInfo rather than a byte[].
+     */
+    public static final VersionInfo readHeaderAndDataVersion(InputStream inputStream,
+                                                             byte dataFormatIDExpected[],
+                                                             Authenticate authenticate)
+                                                                throws IOException {
+        byte[] dataVersion = readHeader(inputStream, dataFormatIDExpected, authenticate);
+        return VersionInfo.getInstance(dataVersion[0], dataVersion[1],
+                                       dataVersion[2], dataVersion[3]);
+    }
+
     // private variables -------------------------------------------------
   
     /**

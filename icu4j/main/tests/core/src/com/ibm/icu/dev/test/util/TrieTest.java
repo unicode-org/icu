@@ -14,7 +14,6 @@ import com.ibm.icu.impl.IntTrieBuilder;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.TrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 
@@ -473,41 +472,6 @@ public final class TrieTest extends TestFmwk
                          checkRanges2.length); 
         _testTrieRanges4(setRanges3, setRanges3.length, checkRanges3, 
                          checkRanges3.length);
-    }
-    
-    public void TestCharValues()
-    {
-        CharTrie trie = null;
-        try {
-             trie = UCharacterProperty.INSTANCE.m_trie_;
-        } catch (Exception e) {
-            warnln("Error creating ucharacter trie");
-            return;
-        }
-        
-        for (int i = 0; i < 0xFFFF; i ++) {
-            if (i < 0xFF 
-                && trie.getBMPValue((char)i) 
-                    != trie.getLatin1LinearValue((char)i)) {
-                errln("For latin 1 codepoint, getBMPValue should be the same " +
-                       "as getLatin1LinearValue");
-            }
-            if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
-                errln("For BMP codepoint, getBMPValue should be the same " +
-                       "as getCodepointValue");
-            }
-        }
-        for (int i = 0x10000; i < 0x10ffff; i ++) {
-            char lead = UTF16.getLeadSurrogate(i);
-            char trail = UTF16.getTrailSurrogate(i);
-            char value = trie.getCodePointValue(i);
-            if (value != trie.getSurrogateValue(lead, trail) ||
-                value != trie.getTrailValue(trie.getLeadValue(lead), 
-                                            trail)) {
-                errln("For Non-BMP codepoints, getSurrogateValue should be "
-                      + "the same s getCodepointValue and getTrailValue");
-            }        
-        }
     }
 
     private static class DummyGetFoldingOffset implements Trie.DataManipulate {
