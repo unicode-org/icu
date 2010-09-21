@@ -1,9 +1,8 @@
-﻿# Note: Please make sure that this utf-8 file contains a BOM.
-# GraphemeBreakTest-5.2.0.txt
-# Date: 2009-05-28, 20:37:56 GMT [MD]
+# GraphemeBreakTest-6.0.0.txt
+# Date: 2010-05-18, 00:49:27 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
@@ -16,7 +15,7 @@
 #	× wherever there is not.
 #  <comment> the format can change, but currently it shows:
 #	- the sample character name
-#	- (x) the line_break property* for the sample character
+#	- (x) the Grapheme_Break property* for the sample character
 #	- [x] the rule that determines whether there is a break or not
 #
 # These samples may be extended or changed in the future.

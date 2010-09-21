@@ -3903,8 +3903,8 @@ GC_Done:
                 // Test input against a literal string.
                 // Strings require two slots in the compiled pattern, one for the
                 //   offset to the string text, and one for the length.
-                const UCaseProps *csp = ucase_getSingleton(&status);
-                if (U_SUCCESS(status)) {
+                const UCaseProps *csp = ucase_getSingleton();
+                {
                     int32_t stringStartIdx, stringLen;
                     stringStartIdx = opValue;
 
@@ -5580,8 +5580,8 @@ GC_Done:
                 // Test input against a literal string.
                 // Strings require two slots in the compiled pattern, one for the
                 //   offset to the string text, and one for the length.
-                const UCaseProps *csp = ucase_getSingleton(&status);
-                if (U_SUCCESS(status)) {
+                const UCaseProps *csp = ucase_getSingleton();
+                {
                     int32_t stringStartIdx, stringLen;
                     stringStartIdx = opValue;
                     

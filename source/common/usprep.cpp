@@ -348,17 +348,13 @@ usprep_getProfile(const char* path,
         if(!loadData(newProfile.getAlias(), path, name, _SPREP_DATA_TYPE, status) || U_FAILURE(*status) ){
             return NULL;
         }
-        
+
         /* get the options */
         newProfile->doNFKC = (UBool)((newProfile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
         newProfile->checkBiDi = (UBool)((newProfile->indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
 
         if(newProfile->checkBiDi) {
-            newProfile->bdp = ubidi_getSingleton(status);
-            if(U_FAILURE(*status)) {
-                usprep_unload(newProfile.getAlias());
-                return NULL;
-            }
+            newProfile->bdp = ubidi_getSingleton();
         }
 
         LocalMemory<UStringPrepKey> key;

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2009, International Business Machines
+ *   Copyright (C) 1997-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -45,7 +45,7 @@
  */
 typedef enum UScriptCode {
       USCRIPT_INVALID_CODE = -1,
-      USCRIPT_COMMON       =  0 , /* Zyyy */
+      USCRIPT_COMMON       =  0,  /* Zyyy */
       USCRIPT_INHERITED    =  1,  /* Zinh */ /* "Code for inherited script", for non-spacing combining marks; also Qaai */
       USCRIPT_ARABIC       =  2,  /* Arab */
       USCRIPT_ARMENIAN     =  3,  /* Armn */
@@ -107,7 +107,7 @@ typedef enum UScriptCode {
 
       /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
       USCRIPT_KATAKANA_OR_HIRAGANA = 54,/*Hrkt */
-      
+
       /* New scripts in Unicode 4.1 @stable ICU 3.4 */
       USCRIPT_BUGINESE      = 55, /* Bugi */
       USCRIPT_GLAGOLITIC    = 56, /* Glag */
@@ -140,9 +140,15 @@ typedef enum UScriptCode {
       USCRIPT_LATIN_GAELIC                  = 81, /* Latg */
       USCRIPT_LEPCHA                        = 82, /* Lepc */
       USCRIPT_LINEAR_A                      = 83, /* Lina */
-      USCRIPT_MANDAEAN                      = 84, /* Mand */
+      /** @stable ICU 4.6 */
+      USCRIPT_MANDAIC                       = 84, /* Mand */
+      /** @stable ICU 3.6 */
+      USCRIPT_MANDAEAN                      = USCRIPT_MANDAIC,
       USCRIPT_MAYAN_HIEROGLYPHS             = 85, /* Maya */
-      USCRIPT_MEROITIC                      = 86, /* Mero */
+      /** @stable ICU 4.6 */
+      USCRIPT_MEROITIC_HIEROGLYPHS          = 86, /* Mero */
+      /** @stable ICU 3.6 */
+      USCRIPT_MEROITIC                      = USCRIPT_MEROITIC_HIEROGLYPHS,
       USCRIPT_NKO                           = 87, /* Nkoo */
       USCRIPT_ORKHON                        = 88, /* Orkh */
       USCRIPT_OLD_PERMIC                    = 89, /* Perm */
@@ -191,14 +197,29 @@ typedef enum UScriptCode {
       USCRIPT_MATHEMATICAL_NOTATION         = 128,/* Zmth */
       USCRIPT_SYMBOLS                       = 129,/* Zsym */
 
-      /* New script codes from ISO 15924 @draft ICU 4.4 */
+      /* New script codes from ISO 15924 @stable ICU 4.4 */
       USCRIPT_BAMUM                         = 130,/* Bamu */
       USCRIPT_LISU                          = 131,/* Lisu */
       USCRIPT_NAKHI_GEBA                    = 132,/* Nkgb */
       USCRIPT_OLD_SOUTH_ARABIAN             = 133,/* Sarb */
 
-      /* Private use codes from Qaaa - Qabx are not supported*/
-      USCRIPT_CODE_LIMIT    = 134
+      /* New script codes from ISO 15924 @stable ICU 4.6 */
+      USCRIPT_BASSA_VAH                     = 134,/* Bass */
+      USCRIPT_DUPLOYAN_SHORTAND             = 135,/* Dupl */
+      USCRIPT_ELBASAN                       = 136,/* Elba */
+      USCRIPT_GRANTHA                       = 137,/* Gran */
+      USCRIPT_KPELLE                        = 138,/* Kpel */
+      USCRIPT_LOMA                          = 139,/* Loma */
+      USCRIPT_MENDE                         = 140,/* Mend */
+      USCRIPT_MEROITIC_CURSIVE              = 141,/* Merc */
+      USCRIPT_OLD_NORTH_ARABIAN             = 142,/* Narb */
+      USCRIPT_NABATAEAN                     = 143,/* Nbat */
+      USCRIPT_PALMYRENE                     = 144,/* Palm */
+      USCRIPT_SINDHI                        = 145,/* Sind */
+      USCRIPT_WARANG_CITI                   = 146,/* Wara */
+
+      /* Private use codes from Qaaa - Qabx are not supported */
+      USCRIPT_CODE_LIMIT    = 147
 } UScriptCode;
 
 /**
@@ -244,7 +265,7 @@ uscript_getName(UScriptCode scriptCode);
 U_STABLE const char*  U_EXPORT2 
 uscript_getShortName(UScriptCode scriptCode);
 
-/** 
+/**
  * Gets the script code associated with the given codepoint.
  * Returns USCRIPT_MALAYALAM given 0x0D02 
  * @param codepoint UChar32 codepoint
@@ -255,6 +276,51 @@ uscript_getShortName(UScriptCode scriptCode);
 U_STABLE UScriptCode  U_EXPORT2 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
+/**
+ * Is code point c used in script sc?
+ * That is, does code point c have the Script property value sc,
+ * or do code point c's Script_Extensions include script code sc?
+ *
+ * Some characters are commonly used in multiple scripts.
+ * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+ *
+ * The Script_Extensions property is provisional. It may be modified or removed
+ * in future versions of the Unicode Standard, and thus in ICU.
+ * @param c code point
+ * @param sc script code
+ * @return TRUE if Script(c)==sc or sc is in Script_Extensions(c)
+ * @draft ICU 4.6
+ */
+U_DRAFT UBool U_EXPORT2
+uscript_hasScript(UChar32 c, UScriptCode sc);
+
+/**
+ * Writes code point c's Script_Extensions as a list of UScriptCode values
+ * to the output scripts array.
+ *
+ * Some characters are commonly used in multiple scripts.
+ * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+ *
+ * If there are more than capacity script codes to be written, then
+ * U_BUFFER_OVERFLOW_ERROR is set and the number of Script_Extensions is returned.
+ * (Usual ICU buffer handling behavior.)
+ *
+ * The Script_Extensions property is provisional. It may be modified or removed
+ * in future versions of the Unicode Standard, and thus in ICU.
+ * @param c code point
+ * @param scripts output script code array
+ * @param capacity capacity of the scripts array
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return number of script codes in c's Script_Extensions,
+ *         written to scripts unless U_BUFFER_OVERFLOW_ERROR indicates insufficient capacity
+ * @draft ICU 4.6
+ */
+U_DRAFT int32_t U_EXPORT2
+uscript_getScriptExtensions(UChar32 c,
+                            UScriptCode *scripts, int32_t capacity,
+                            UErrorCode *pErrorCode);
+
 #endif
-
-

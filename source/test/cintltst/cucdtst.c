@@ -182,6 +182,8 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
+    addTest(root, &TestHasScript, "tsutil/cucdtst/TestHasScript");
+    addTest(root, &TestGetScriptExtensions, "tsutil/cucdtst/TestGetScriptExtensions");
     addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
@@ -2344,7 +2346,6 @@ TestAdditionalProperties() {
         { 0x072A, UCHAR_JOINING_GROUP, U_JG_DALATH_RISH },
         { 0x0647, UCHAR_JOINING_GROUP, U_JG_HEH },
         { 0x06C1, UCHAR_JOINING_GROUP, U_JG_HEH_GOAL },
-        { 0x06C3, UCHAR_JOINING_GROUP, U_JG_HAMZA_ON_HEH_GOAL },
 
         { 0x200C, UCHAR_JOINING_TYPE, U_JT_NON_JOINING },
         { 0x200D, UCHAR_JOINING_TYPE, U_JT_JOIN_CAUSING },
@@ -2476,6 +2477,11 @@ TestAdditionalProperties() {
         { 0xa6e6,  UCHAR_SCRIPT, USCRIPT_BAMUM },
         { 0xa4d0,  UCHAR_SCRIPT, USCRIPT_LISU },
         { 0x10a7f,  UCHAR_SCRIPT, USCRIPT_OLD_SOUTH_ARABIAN },
+
+        { -1, 0x600, 0 }, /* version break for Unicode 6.0 */
+
+        /* value changed in Unicode 6.0 */
+        { 0x06C3, UCHAR_JOINING_GROUP, U_JG_TEH_MARBUTA_GOAL },
 
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },
@@ -2919,7 +2925,7 @@ TestConsistency() {
      *
      * Unicode 4 changed 00AD Soft Hyphen to Cf and removed it from Dash
      * but not from Hyphen.
-     * UTC 94 (2003mar) decided to leave it that way and to changed UCD.html.
+     * UTC 94 (2003mar) decided to leave it that way and to change UCD.html.
      * Therefore, do not show errors when testing the Hyphen property.
      */
     log_verbose("Starting with Unicode 4, inconsistencies with [:Hyphen:] are\n"

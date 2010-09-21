@@ -1,8 +1,8 @@
-# DerivedJoiningGroup-5.2.0.txt
-# Date: 2009-05-22, 18:51:25 GMT [MD]
+# DerivedJoiningGroup-6.0.0.txt
+# Date: 2010-07-17, 22:46:14 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 
@@ -126,7 +126,7 @@
 
 # ================================================
 
-06C3          ; Hamza_On_Heh_Goal # Lo       ARABIC LETTER TEH MARBUTA GOAL
+06C3          ; Teh_Marbuta_Goal # Lo       ARABIC LETTER TEH MARBUTA GOAL
 
 # Total code points: 1
 
@@ -343,13 +343,14 @@
 
 # ================================================
 
+0620          ; Yeh # Lo       ARABIC LETTER KASHMIRI YEH
 0626          ; Yeh # Lo       ARABIC LETTER YEH WITH HAMZA ABOVE
 0649..064A    ; Yeh # Lo   [2] ARABIC LETTER ALEF MAKSURA..ARABIC LETTER YEH
 0678          ; Yeh # Lo       ARABIC LETTER HIGH HAMZA YEH
 06D0..06D1    ; Yeh # Lo   [2] ARABIC LETTER E..ARABIC LETTER YEH WITH THREE DOTS BELOW
 0777          ; Yeh # Lo       ARABIC LETTER FARSI YEH WITH EXTENDED ARABIC-INDIC DIGIT FOUR BELOW
 
-# Total code points: 7
+# Total code points: 8
 
 # ================================================
 

@@ -583,21 +583,18 @@ utext_caseCompare(UText *s1, int32_t length1,
     /* current code points */
     UChar32 c1, c2;
     uint8_t cLength1, cLength2;
-    
+
     /* argument checking */
-    if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
     if(s1==NULL || s2==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
-    }    
-    
-    csp=ucase_getSingleton(pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
     }
-    
+
+    csp=ucase_getSingleton();
+
     /* for variable-length strings */
     if(length1 < 0) {
         length1 = INT32_MIN;
@@ -709,21 +706,18 @@ utext_caseCompareNativeLimit(UText *s1, int64_t limit1,
     
     /* native indexes into s1 and s2 */
     int64_t index1, index2;
-    
+
     /* argument checking */
-    if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
     if(s1==NULL || s2==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
-    }    
-    
-    csp=ucase_getSingleton(pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
     }
-    
+
+    csp=ucase_getSingleton();
+
     /* initialize */
     index1 = (limit1 >= 0 ? UTEXT_GETNATIVEINDEX(s1) : 0);
     index2 = (limit2 >= 0 ? UTEXT_GETNATIVEINDEX(s2) : 0);

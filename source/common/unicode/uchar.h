@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "5.2"
+#define U_UNICODE_VERSION "6.0"
 
 /**
  * \file
@@ -392,21 +392,21 @@ typedef enum UProperty {
         See the uchar.h file documentation.
         @stable ICU 3.4 */
     UCHAR_POSIX_XDIGIT=48,
-    /** Binary property Cased. For Lowercase, Uppercase and Titlecase characters. @draft ICU 4.4 */
+    /** Binary property Cased. For Lowercase, Uppercase and Titlecase characters. @stable ICU 4.4 */
     UCHAR_CASED=49,
-    /** Binary property Case_Ignorable. Used in context-sensitive case mappings. @draft ICU 4.4 */
+    /** Binary property Case_Ignorable. Used in context-sensitive case mappings. @stable ICU 4.4 */
     UCHAR_CASE_IGNORABLE=50,
-    /** Binary property Changes_When_Lowercased. @draft ICU 4.4 */
+    /** Binary property Changes_When_Lowercased. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_LOWERCASED=51,
-    /** Binary property Changes_When_Uppercased. @draft ICU 4.4 */
+    /** Binary property Changes_When_Uppercased. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_UPPERCASED=52,
-    /** Binary property Changes_When_Titlecased. @draft ICU 4.4 */
+    /** Binary property Changes_When_Titlecased. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_TITLECASED=53,
-    /** Binary property Changes_When_Casefolded. @draft ICU 4.4 */
+    /** Binary property Changes_When_Casefolded. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_CASEFOLDED=54,
-    /** Binary property Changes_When_Casemapped. @draft ICU 4.4 */
+    /** Binary property Changes_When_Casemapped. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_CASEMAPPED=55,
-    /** Binary property Changes_When_NFKC_Casefolded. @draft ICU 4.4 */
+    /** Binary property Changes_When_NFKC_Casefolded. @stable ICU 4.4 */
     UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED=56,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT=57,
@@ -559,6 +559,20 @@ typedef enum UProperty {
     UCHAR_UPPERCASE_MAPPING=0x400C,
     /** One more than the last constant for string Unicode properties. @stable ICU 2.4 */
     UCHAR_STRING_LIMIT=0x400D,
+
+    /** Provisional property Script_Extensions (new in Unicode 6.0).
+        As a provisional property, it may be modified or removed
+        in future versions of the Unicode Standard, and thus in ICU.
+        Some characters are commonly used in multiple scripts.
+        For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+        Corresponds to uscript_hasScript and uscript_getScriptExtensions in uscript.h.
+        @draft ICU 4.6 */
+    UCHAR_SCRIPT_EXTENSIONS=0x7000,
+    /** First constant for Unicode properties with unusual value types. @draft ICU 4.6 */
+    UCHAR_OTHER_PROPERTY_START=UCHAR_SCRIPT_EXTENSIONS,
+    /** One more than the last constant for Unicode properties with unusual value types.
+     * @draft ICU 4.6 */
+    UCHAR_OTHER_PROPERTY_LIMIT=0x7001,
 
     /** Represents a nonexistent or invalid property or property value. @stable ICU 2.4 */
     UCHAR_INVALID_CODE = -1
@@ -1287,61 +1301,88 @@ enum UBlockCode {
 
     /* New blocks in Unicode 5.2 */
 
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_SAMARITAN = 172, /*[0800]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED = 173, /*[18B0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_TAI_THAM = 174, /*[1A20]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_VEDIC_EXTENSIONS = 175, /*[1CD0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_LISU = 176, /*[A4D0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_BAMUM = 177, /*[A6A0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_COMMON_INDIC_NUMBER_FORMS = 178, /*[A830]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_DEVANAGARI_EXTENDED = 179, /*[A8E0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_HANGUL_JAMO_EXTENDED_A = 180, /*[A960]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_JAVANESE = 181, /*[A980]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_MYANMAR_EXTENDED_A = 182, /*[AA60]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_TAI_VIET = 183, /*[AA80]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_MEETEI_MAYEK = 184, /*[ABC0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_HANGUL_JAMO_EXTENDED_B = 185, /*[D7B0]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_IMPERIAL_ARAMAIC = 186, /*[10840]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_OLD_SOUTH_ARABIAN = 187, /*[10A60]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_AVESTAN = 188, /*[10B00]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_INSCRIPTIONAL_PARTHIAN = 189, /*[10B40]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_INSCRIPTIONAL_PAHLAVI = 190, /*[10B60]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_OLD_TURKIC = 191, /*[10C00]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_RUMI_NUMERAL_SYMBOLS = 192, /*[10E60]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_KAITHI = 193, /*[11080]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_EGYPTIAN_HIEROGLYPHS = 194, /*[13000]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT = 195, /*[1F100]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT = 196, /*[1F200]*/
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C = 197, /*[2A700]*/
 
+    /* New blocks in Unicode 6.0 */
+
+    /** @stable ICU 4.6 */
+    UBLOCK_MANDAIC = 198, /*[0840]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_BATAK = 199, /*[1BC0]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_ETHIOPIC_EXTENDED_A = 200, /*[AB00]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_BRAHMI = 201, /*[11000]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_BAMUM_SUPPLEMENT = 202, /*[16800]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_KANA_SUPPLEMENT = 203, /*[1B000]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_PLAYING_CARDS = 204, /*[1F0A0]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS = 205, /*[1F300]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_EMOTICONS = 206, /*[1F600]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_TRANSPORT_AND_MAP_SYMBOLS = 207, /*[1F680]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_ALCHEMICAL_SYMBOLS = 208, /*[1F700]*/
+    /** @stable ICU 4.6 */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D = 209, /*[2B740]*/
+
     /** @stable ICU 2.0 */
-    UBLOCK_COUNT = 198,
+    UBLOCK_COUNT = 210,
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1
@@ -1386,7 +1427,7 @@ typedef enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
     U_EXTENDED_CHAR_NAME,
-    U_CHAR_NAME_ALIAS,          /**< Corrected name from NameAliases.txt. @draft ICU 4.4 */
+    U_CHAR_NAME_ALIAS,          /**< Corrected name from NameAliases.txt. @stable ICU 4.4 */
     U_CHAR_NAME_CHOICE_COUNT
 } UCharNameChoice;
 
@@ -1474,7 +1515,8 @@ typedef enum UJoiningGroup {
     U_JG_GAF,
     U_JG_GAMAL,
     U_JG_HAH,
-    U_JG_HAMZA_ON_HEH_GOAL,
+    U_JG_TEH_MARBUTA_GOAL,  /**< @stable ICU 4.6 */
+    U_JG_HAMZA_ON_HEH_GOAL=U_JG_TEH_MARBUTA_GOAL,
     U_JG_HE,
     U_JG_HEH,
     U_JG_HEH_GOAL,
@@ -1515,8 +1557,8 @@ typedef enum UJoiningGroup {
     U_JG_KHAPH,     /**< @stable ICU 2.6 */
     U_JG_ZHAIN,     /**< @stable ICU 2.6 */
     U_JG_BURUSHASKI_YEH_BARREE, /**< @stable ICU 4.0 */
-    U_JG_FARSI_YEH, /**< @draft ICU 4.4 */
-    U_JG_NYA,       /**< @draft ICU 4.4 */
+    U_JG_FARSI_YEH, /**< @stable ICU 4.4 */
+    U_JG_NYA,       /**< @stable ICU 4.4 */
     U_JG_COUNT
 } UJoiningGroup;
 

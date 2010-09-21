@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -31,7 +31,7 @@
 #include "utrie2.h"
 #include "utrie2_impl.h"
 
-#include "utrie.h" /* for utrie2_fromUTrie() */
+#include "utrie.h" /* for utrie2_fromUTrie() and utrie_swap() */
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -1444,4 +1444,26 @@ utrie2_serialize(UTrie2 *trie,
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
     return trie->length;
+}
+
+/*
+ * This is here to avoid a dependency from utrie2.cpp on utrie.c.
+ * This file already depends on utrie.c.
+ * Otherwise, this should be in utrie2.cpp right after utrie2_swap().
+ */
+U_CAPI int32_t U_EXPORT2
+utrie2_swapAnyVersion(const UDataSwapper *ds,
+                      const void *inData, int32_t length, void *outData,
+                      UErrorCode *pErrorCode) {
+    if(U_SUCCESS(*pErrorCode)) {
+        switch(utrie2_getVersion(inData, length, TRUE)) {
+        case 1:
+            return utrie_swap(ds, inData, length, outData, pErrorCode);
+        case 2:
+            return utrie2_swap(ds, inData, length, outData, pErrorCode);
+        default:
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return 0;
+        }
+    }
 }
