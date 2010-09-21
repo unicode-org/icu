@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
+ * Copyright (c) 1997-2010, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -293,7 +293,7 @@ void TestUScriptCodeAPI(){
             }
         }
     }
-                
+
     {
         /*
          * These script codes were originally added to ICU pre-3.6, so that ICU would
@@ -304,9 +304,9 @@ void TestUScriptCodeAPI(){
          * Whenever this happens, the long script names here need to be updated.
          */
         static const char* expectedLong[] = {
-            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
+            "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
             "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
+            "Lepcha", "Lina", "Mandaic", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
             "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
             "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
@@ -317,6 +317,9 @@ void TestUScriptCodeAPI(){
             "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
+            /* new in ICU 4.6 */
+            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
+            "Narb", "Nbat", "Palm", "Sind", "Wara",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -332,6 +335,9 @@ void TestUScriptCodeAPI(){
             "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamu", "Lisu", "Nkgb", "Sarb",
+            /* new in ICU 4.6 */
+            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
+            "Narb", "Nbat", "Palm", "Sind", "Wara",
         };
         int32_t j = 0;
         if(LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
@@ -363,6 +369,123 @@ void TestUScriptCodeAPI(){
                 log_err("uscript_getCode did not return expected code for script %s. EXPECTED: %i GOT: %i\n", expectedShort[i], (USCRIPT_BALINESE+i), fillIn[0] );
             }
         }
+    }
+
+    {
+        /* test characters which have Script_Extensions */
+        UErrorCode errorCode=U_ZERO_ERROR;
+        if(!(
+                USCRIPT_COMMON==uscript_getScript(0x0640, &errorCode) &&
+                USCRIPT_INHERITED==uscript_getScript(0x0650, &errorCode) &&
+                USCRIPT_ARABIC==uscript_getScript(0xfdf2, &errorCode)) ||
+            U_FAILURE(errorCode)
+        ) {
+            log_err("uscript_getScript(character with Script_Extensions) failed\n");
+        }
+    }
+}
+
+void TestHasScript() {
+    if(!(
+        !uscript_hasScript(0x063f, USCRIPT_COMMON) &&
+        uscript_hasScript(0x063f, USCRIPT_ARABIC) &&  /* main Script value */
+        !uscript_hasScript(0x063f, USCRIPT_SYRIAC) &&
+        !uscript_hasScript(0x063f, USCRIPT_THAANA))
+    ) {
+        log_err("uscript_hasScript(U+063F, ...) is wrong\n");
+    }
+    if(!(
+        uscript_hasScript(0x0640, USCRIPT_COMMON) &&  /* main Script value */
+        uscript_hasScript(0x0640, USCRIPT_ARABIC) &&
+        uscript_hasScript(0x0640, USCRIPT_SYRIAC) &&
+        !uscript_hasScript(0x0640, USCRIPT_THAANA))
+    ) {
+        log_err("uscript_hasScript(U+0640, ...) is wrong\n");
+    }
+    if(!(
+        uscript_hasScript(0x0650, USCRIPT_INHERITED) &&  /* main Script value */
+        uscript_hasScript(0x0650, USCRIPT_ARABIC) &&
+        uscript_hasScript(0x0650, USCRIPT_SYRIAC) &&
+        !uscript_hasScript(0x0650, USCRIPT_THAANA))
+    ) {
+        log_err("uscript_hasScript(U+0650, ...) is wrong\n");
+    }
+    if(!(
+        uscript_hasScript(0x0660, USCRIPT_COMMON) &&  /* main Script value */
+        uscript_hasScript(0x0660, USCRIPT_ARABIC) &&
+        !uscript_hasScript(0x0660, USCRIPT_SYRIAC) &&
+        uscript_hasScript(0x0660, USCRIPT_THAANA))
+    ) {
+        log_err("uscript_hasScript(U+0660, ...) is wrong\n");
+    }
+    if(!(
+        !uscript_hasScript(0xfdf2, USCRIPT_COMMON) &&
+        uscript_hasScript(0xfdf2, USCRIPT_ARABIC) &&  /* main Script value */
+        !uscript_hasScript(0xfdf2, USCRIPT_SYRIAC) &&
+        uscript_hasScript(0xfdf2, USCRIPT_THAANA))
+    ) {
+        log_err("uscript_hasScript(U+FDF2, ...) is wrong\n");
+    }
+}
+
+void TestGetScriptExtensions() {
+    UScriptCode scripts[20];
+    int32_t length;
+    UErrorCode errorCode;
+
+    /* errors and overflows */
+    errorCode=U_PARSE_ERROR;
+    length=uscript_getScriptExtensions(0x0640, scripts, LENGTHOF(scripts), &errorCode);
+    if(errorCode!=U_PARSE_ERROR) {
+        log_err("uscript_getScriptExtensions(U_PARSE_ERROR) did not preserve the UErrorCode - %s\n",
+              u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x0640, NULL, LENGTHOF(scripts), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_getScriptExtensions(NULL) did not set U_ILLEGAL_ARGUMENT_ERROR - %s\n",
+              u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x0640, scripts, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_getScriptExtensions(capacity<0) did not set U_ILLEGAL_ARGUMENT_ERROR - %s\n",
+              u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x0640, scripts, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=2) {
+        log_err("uscript_getScriptExtensions(capacity=0: pure preflighting)=%d != 2 - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x0640, scripts, 1, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=2) {
+        log_err("uscript_getScriptExtensions(capacity=1: preflighting)=%d != 2 - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+
+    /* normal usage */
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x063f, scripts, 0, &errorCode);
+    if(U_FAILURE(errorCode) || length!=0) {
+        log_err("uscript_getScriptExtensions(U+063F, capacity=0)=%d != 0 - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+    length=uscript_getScriptExtensions(0x0640, scripts, LENGTHOF(scripts), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_SYRIAC) {
+        log_err("uscript_getScriptExtensions(U+0640)=%d failed - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+    length=uscript_getScriptExtensions(0xfdf2, scripts, LENGTHOF(scripts), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_THAANA) {
+        log_err("uscript_getScriptExtensions(U+FDF2)=%d failed - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+    length=uscript_getScriptExtensions(0xff65, scripts, LENGTHOF(scripts), &errorCode);
+    if(U_FAILURE(errorCode) || length!=6 || scripts[0]!=USCRIPT_BOPOMOFO || scripts[5]!=USCRIPT_YI) {
+        log_err("uscript_getScriptExtensions(U+FF65)=%d failed - %s\n",
+              (int)length, u_errorName(errorCode));
     }
 }
 

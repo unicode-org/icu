@@ -104,9 +104,8 @@ CollationAPITest::TestProperty(/* char* par */)
      * needs to be adjusted.
      * Same in cintltst/capitst.c.
      */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x05, 0x2A};
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x05, 0x2A};  // from ICU 4.4/UCA 5.2
     UVersionInfo versionArray;
-    int i = 0;
 
     logln("The property tests begin : ");
     logln("Test ctors : ");
@@ -124,12 +123,14 @@ CollationAPITest::TestProperty(/* char* par */)
     delete kwEnum;
 
     col->getVersion(versionArray);
-    for (i=0; i<4; ++i) {
-      if (versionArray[i] != currVersionArray[i]) {
-        errln("Testing Collator::getVersion() - unexpected result: %02x.%02x.%02x.%02x",
+    // Check for a version greater than some value rather than equality
+    // so that we need not update the expected version each time.
+    if (uprv_memcmp(versionArray, currVersionArray, 4)<0) {
+      errln("Testing Collator::getVersion() - unexpected result: %02x.%02x.%02x.%02x",
             versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-        break;
-      }
+    } else {
+      logln("Collator::getVersion() result: %02x.%02x.%02x.%02x",
+            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
     }
 
     doAssert((col->compare("ab", "abc") == Collator::LESS), "ab < abc comparison failed");

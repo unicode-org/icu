@@ -482,6 +482,9 @@ utrie2_swap(const UDataSwapper *ds,
     return size;
 }
 
+// utrie2_swapAnyVersion() should be defined here but lives in utrie2_builder.c
+// to avoid a dependency from utrie2.cpp on utrie.c.
+
 /* enumeration -------------------------------------------------------------- */
 
 #define MIN(a, b) ((a)<(b) ? (a) : (b))

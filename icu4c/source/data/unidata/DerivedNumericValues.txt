@@ -1,8 +1,8 @@
-# DerivedNumericValues-5.2.0.txt
-# Date: 2009-08-22, 04:58:28 GMT [MD]
+# DerivedNumericValues-6.0.0.txt
+# Date: 2010-08-19, 00:48:14 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 
@@ -76,6 +76,7 @@ F9B2          ; 0.0 ; ; 0 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9B2
 FF10          ; 0.0 ; ; 0 # Nd       FULLWIDTH DIGIT ZERO
 1018A         ; 0.0 ; ; 0 # No       GREEK ZERO SIGN
 104A0         ; 0.0 ; ; 0 # Nd       OSMANYA DIGIT ZERO
+11066         ; 0.0 ; ; 0 # Nd       BRAHMI DIGIT ZERO
 1D7CE         ; 0.0 ; ; 0 # Nd       MATHEMATICAL BOLD DIGIT ZERO
 1D7D8         ; 0.0 ; ; 0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT ZERO
 1D7E2         ; 0.0 ; ; 0 # Nd       MATHEMATICAL SANS-SERIF DIGIT ZERO
@@ -83,14 +84,15 @@ FF10          ; 0.0 ; ; 0 # Nd       FULLWIDTH DIGIT ZERO
 1D7F6         ; 0.0 ; ; 0 # Nd       MATHEMATICAL MONOSPACE DIGIT ZERO
 1F100..1F101  ; 0.0 ; ; 0 # No   [2] DIGIT ZERO FULL STOP..DIGIT ZERO COMMA
 
-# Total code points: 55
+# Total code points: 56
 
 # ================================================
 
 09F4          ; 0.0625 ; ; 1/16 # No       BENGALI CURRENCY NUMERATOR ONE
+0B75          ; 0.0625 ; ; 1/16 # No       ORIYA FRACTION ONE SIXTEENTH
 A833          ; 0.0625 ; ; 1/16 # No       NORTH INDIC FRACTION ONE SIXTEENTH
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
 
@@ -107,11 +109,12 @@ A833          ; 0.0625 ; ; 1/16 # No       NORTH INDIC FRACTION ONE SIXTEENTH
 # ================================================
 
 09F5          ; 0.125 ; ; 1/8 # No       BENGALI CURRENCY NUMERATOR TWO
+0B76          ; 0.125 ; ; 1/8 # No       ORIYA FRACTION ONE EIGHTH
 215B          ; 0.125 ; ; 1/8 # No       VULGAR FRACTION ONE EIGHTH
 A834          ; 0.125 ; ; 1/8 # No       NORTH INDIC FRACTION ONE EIGHTH
 1245F         ; 0.125 ; ; 1/8 # Nl       CUNEIFORM NUMERIC SIGN ONE EIGHTH ASH
 
-# Total code points: 4
+# Total code points: 5
 
 # ================================================
 
@@ -129,9 +132,10 @@ A834          ; 0.125 ; ; 1/8 # No       NORTH INDIC FRACTION ONE EIGHTH
 # ================================================
 
 09F6          ; 0.1875 ; ; 3/16 # No       BENGALI CURRENCY NUMERATOR THREE
+0B77          ; 0.1875 ; ; 3/16 # No       ORIYA FRACTION THREE SIXTEENTHS
 A835          ; 0.1875 ; ; 3/16 # No       NORTH INDIC FRACTION THREE SIXTEENTHS
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
 
@@ -143,6 +147,7 @@ A835          ; 0.1875 ; ; 3/16 # No       NORTH INDIC FRACTION THREE SIXTEENTHS
 
 00BC          ; 0.25 ; ; 1/4 # No       VULGAR FRACTION ONE QUARTER
 09F7          ; 0.25 ; ; 1/4 # No       BENGALI CURRENCY NUMERATOR FOUR
+0B72          ; 0.25 ; ; 1/4 # No       ORIYA FRACTION ONE QUARTER
 0D73          ; 0.25 ; ; 1/4 # No       MALAYALAM FRACTION ONE QUARTER
 A830          ; 0.25 ; ; 1/4 # No       NORTH INDIC FRACTION ONE QUARTER
 10140         ; 0.25 ; ; 1/4 # Nl       GREEK ACROPHONIC ATTIC ONE QUARTER
@@ -150,7 +155,7 @@ A830          ; 0.25 ; ; 1/4 # No       NORTH INDIC FRACTION ONE QUARTER
 12460         ; 0.25 ; ; 1/4 # Nl       CUNEIFORM NUMERIC SIGN ONE QUARTER ASH
 12462         ; 0.25 ; ; 1/4 # Nl       CUNEIFORM NUMERIC SIGN OLD ASSYRIAN ONE QUARTER
 
-# Total code points: 8
+# Total code points: 9
 
 # ================================================
 
@@ -176,6 +181,7 @@ A830          ; 0.25 ; ; 1/4 # No       NORTH INDIC FRACTION ONE QUARTER
 # ================================================
 
 00BD          ; 0.5 ; ; 1/2 # No       VULGAR FRACTION ONE HALF
+0B73          ; 0.5 ; ; 1/2 # No       ORIYA FRACTION ONE HALF
 0D74          ; 0.5 ; ; 1/2 # No       MALAYALAM FRACTION ONE HALF
 0F2A          ; 0.5 ; ; 1/2 # No       TIBETAN DIGIT HALF ONE
 2CFD          ; 0.5 ; ; 1/2 # No       COPTIC FRACTION ONE HALF
@@ -184,7 +190,7 @@ A831          ; 0.5 ; ; 1/2 # No       NORTH INDIC FRACTION ONE HALF
 10175..10176  ; 0.5 ; ; 1/2 # No   [2] GREEK ONE HALF SIGN..GREEK ONE HALF SIGN ALTERNATE FORM
 10E7B         ; 0.5 ; ; 1/2 # No       RUMI FRACTION ONE HALF
 
-# Total code points: 9
+# Total code points: 10
 
 # ================================================
 
@@ -212,11 +218,12 @@ A831          ; 0.5 ; ; 1/2 # No       NORTH INDIC FRACTION ONE HALF
 
 00BE          ; 0.75 ; ; 3/4 # No       VULGAR FRACTION THREE QUARTERS
 09F8          ; 0.75 ; ; 3/4 # No       BENGALI CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+0B74          ; 0.75 ; ; 3/4 # No       ORIYA FRACTION THREE QUARTERS
 0D75          ; 0.75 ; ; 3/4 # No       MALAYALAM FRACTION THREE QUARTERS
 A832          ; 0.75 ; ; 3/4 # No       NORTH INDIC FRACTION THREE QUARTERS
 10178         ; 0.75 ; ; 3/4 # No       GREEK THREE QUARTERS SIGN
 
-# Total code points: 5
+# Total code points: 6
 
 # ================================================
 
@@ -266,7 +273,7 @@ A832          ; 0.75 ; ; 3/4 # No       NORTH INDIC FRACTION THREE QUARTERS
 1811          ; 1.0 ; ; 1 # Nd       MONGOLIAN DIGIT ONE
 1947          ; 1.0 ; ; 1 # Nd       LIMBU DIGIT ONE
 19D1          ; 1.0 ; ; 1 # Nd       NEW TAI LUE DIGIT ONE
-19DA          ; 1.0 ; ; 1 # Nd       NEW TAI LUE THAM DIGIT ONE
+19DA          ; 1.0 ; ; 1 # No       NEW TAI LUE THAM DIGIT ONE
 1A81          ; 1.0 ; ; 1 # Nd       TAI THAM HORA DIGIT ONE
 1A91          ; 1.0 ; ; 1 # Nd       TAI THAM THAM DIGIT ONE
 1B51          ; 1.0 ; ; 1 # Nd       BALINESE DIGIT ONE
@@ -314,6 +321,8 @@ FF11          ; 1.0 ; ; 1 # Nd       FULLWIDTH DIGIT ONE
 10B58         ; 1.0 ; ; 1 # No       INSCRIPTIONAL PARTHIAN NUMBER ONE
 10B78         ; 1.0 ; ; 1 # No       INSCRIPTIONAL PAHLAVI NUMBER ONE
 10E60         ; 1.0 ; ; 1 # No       RUMI DIGIT ONE
+11052         ; 1.0 ; ; 1 # No       BRAHMI NUMBER ONE
+11067         ; 1.0 ; ; 1 # Nd       BRAHMI DIGIT ONE
 12415         ; 1.0 ; ; 1 # Nl       CUNEIFORM NUMERIC SIGN ONE GESH2
 1241E         ; 1.0 ; ; 1 # Nl       CUNEIFORM NUMERIC SIGN ONE GESHU
 1242C         ; 1.0 ; ; 1 # Nl       CUNEIFORM NUMERIC SIGN ONE SHARU
@@ -329,7 +338,7 @@ FF11          ; 1.0 ; ; 1 # Nd       FULLWIDTH DIGIT ONE
 1F102         ; 1.0 ; ; 1 # No       DIGIT ONE COMMA
 2092A         ; 1.0 ; ; 1 # Lo       CJK UNIFIED IDEOGRAPH-2092A
 
-# Total code points: 91
+# Total code points: 93
 
 # ================================================
 
@@ -413,6 +422,8 @@ FF12          ; 2.0 ; ; 2 # Nd       FULLWIDTH DIGIT TWO
 10B59         ; 2.0 ; ; 2 # No       INSCRIPTIONAL PARTHIAN NUMBER TWO
 10B79         ; 2.0 ; ; 2 # No       INSCRIPTIONAL PAHLAVI NUMBER TWO
 10E61         ; 2.0 ; ; 2 # No       RUMI DIGIT TWO
+11053         ; 2.0 ; ; 2 # No       BRAHMI NUMBER TWO
+11068         ; 2.0 ; ; 2 # Nd       BRAHMI DIGIT TWO
 12400         ; 2.0 ; ; 2 # Nl       CUNEIFORM NUMERIC SIGN TWO ASH
 12416         ; 2.0 ; ; 2 # Nl       CUNEIFORM NUMERIC SIGN TWO GESH2
 1241F         ; 2.0 ; ; 2 # Nl       CUNEIFORM NUMERIC SIGN TWO GESHU
@@ -431,7 +442,7 @@ FF12          ; 2.0 ; ; 2 # Nd       FULLWIDTH DIGIT TWO
 1F103         ; 2.0 ; ; 2 # No       DIGIT TWO COMMA
 22390         ; 2.0 ; ; 2 # Lo       CJK UNIFIED IDEOGRAPH-22390
 
-# Total code points: 94
+# Total code points: 96
 
 # ================================================
 
@@ -509,6 +520,8 @@ FF13          ; 3.0 ; ; 3 # Nd       FULLWIDTH DIGIT THREE
 10B5A         ; 3.0 ; ; 3 # No       INSCRIPTIONAL PARTHIAN NUMBER THREE
 10B7A         ; 3.0 ; ; 3 # No       INSCRIPTIONAL PAHLAVI NUMBER THREE
 10E62         ; 3.0 ; ; 3 # No       RUMI DIGIT THREE
+11054         ; 3.0 ; ; 3 # No       BRAHMI NUMBER THREE
+11069         ; 3.0 ; ; 3 # Nd       BRAHMI DIGIT THREE
 12401         ; 3.0 ; ; 3 # Nl       CUNEIFORM NUMERIC SIGN THREE ASH
 12408         ; 3.0 ; ; 3 # Nl       CUNEIFORM NUMERIC SIGN THREE DISH
 12417         ; 3.0 ; ; 3 # Nl       CUNEIFORM NUMERIC SIGN THREE GESH2
@@ -531,7 +544,7 @@ FF13          ; 3.0 ; ; 3 # Nd       FULLWIDTH DIGIT THREE
 22998         ; 3.0 ; ; 3 # Lo       CJK UNIFIED IDEOGRAPH-22998
 23B1B         ; 3.0 ; ; 3 # Lo       CJK UNIFIED IDEOGRAPH-23B1B
 
-# Total code points: 96
+# Total code points: 98
 
 # ================================================
 
@@ -603,6 +616,8 @@ FF14          ; 4.0 ; ; 4 # Nd       FULLWIDTH DIGIT FOUR
 10B5B         ; 4.0 ; ; 4 # No       INSCRIPTIONAL PARTHIAN NUMBER FOUR
 10B7B         ; 4.0 ; ; 4 # No       INSCRIPTIONAL PAHLAVI NUMBER FOUR
 10E63         ; 4.0 ; ; 4 # No       RUMI DIGIT FOUR
+11055         ; 4.0 ; ; 4 # No       BRAHMI NUMBER FOUR
+1106A         ; 4.0 ; ; 4 # Nd       BRAHMI DIGIT FOUR
 12402         ; 4.0 ; ; 4 # Nl       CUNEIFORM NUMERIC SIGN FOUR ASH
 12409         ; 4.0 ; ; 4 # Nl       CUNEIFORM NUMERIC SIGN FOUR DISH
 1240F         ; 4.0 ; ; 4 # Nl       CUNEIFORM NUMERIC SIGN FOUR U
@@ -625,7 +640,7 @@ FF14          ; 4.0 ; ; 4 # Nd       FULLWIDTH DIGIT FOUR
 200E2         ; 4.0 ; ; 4 # Lo       CJK UNIFIED IDEOGRAPH-200E2
 2626D         ; 4.0 ; ; 4 # Lo       CJK UNIFIED IDEOGRAPH-2626D
 
-# Total code points: 87
+# Total code points: 89
 
 # ================================================
 
@@ -700,6 +715,8 @@ FF15          ; 5.0 ; ; 5 # Nd       FULLWIDTH DIGIT FIVE
 10321         ; 5.0 ; ; 5 # No       OLD ITALIC NUMERAL FIVE
 104A5         ; 5.0 ; ; 5 # Nd       OSMANYA DIGIT FIVE
 10E64         ; 5.0 ; ; 5 # No       RUMI DIGIT FIVE
+11056         ; 5.0 ; ; 5 # No       BRAHMI NUMBER FIVE
+1106B         ; 5.0 ; ; 5 # Nd       BRAHMI DIGIT FIVE
 12403         ; 5.0 ; ; 5 # Nl       CUNEIFORM NUMERIC SIGN FIVE ASH
 1240A         ; 5.0 ; ; 5 # Nl       CUNEIFORM NUMERIC SIGN FIVE DISH
 12410         ; 5.0 ; ; 5 # Nl       CUNEIFORM NUMERIC SIGN FIVE U
@@ -719,7 +736,7 @@ FF15          ; 5.0 ; ; 5 # Nd       FULLWIDTH DIGIT FIVE
 1F106         ; 5.0 ; ; 5 # No       DIGIT FIVE COMMA
 20121         ; 5.0 ; ; 5 # Lo       CJK UNIFIED IDEOGRAPH-20121
 
-# Total code points: 84
+# Total code points: 86
 
 # ================================================
 
@@ -790,6 +807,8 @@ FF16          ; 6.0 ; ; 6 # Nd       FULLWIDTH DIGIT SIX
 1010C         ; 6.0 ; ; 6 # No       AEGEAN NUMBER SIX
 104A6         ; 6.0 ; ; 6 # Nd       OSMANYA DIGIT SIX
 10E65         ; 6.0 ; ; 6 # No       RUMI DIGIT SIX
+11057         ; 6.0 ; ; 6 # No       BRAHMI NUMBER SIX
+1106C         ; 6.0 ; ; 6 # Nd       BRAHMI DIGIT SIX
 12404         ; 6.0 ; ; 6 # Nl       CUNEIFORM NUMERIC SIGN SIX ASH
 1240B         ; 6.0 ; ; 6 # Nl       CUNEIFORM NUMERIC SIGN SIX DISH
 12411         ; 6.0 ; ; 6 # Nl       CUNEIFORM NUMERIC SIGN SIX U
@@ -806,7 +825,7 @@ FF16          ; 6.0 ; ; 6 # Nd       FULLWIDTH DIGIT SIX
 1F107         ; 6.0 ; ; 6 # No       DIGIT SIX COMMA
 20AEA         ; 6.0 ; ; 6 # Lo       CJK UNIFIED IDEOGRAPH-20AEA
 
-# Total code points: 76
+# Total code points: 78
 
 # ================================================
 
@@ -875,6 +894,8 @@ FF17          ; 7.0 ; ; 7 # Nd       FULLWIDTH DIGIT SEVEN
 1010D         ; 7.0 ; ; 7 # No       AEGEAN NUMBER SEVEN
 104A7         ; 7.0 ; ; 7 # Nd       OSMANYA DIGIT SEVEN
 10E66         ; 7.0 ; ; 7 # No       RUMI DIGIT SEVEN
+11058         ; 7.0 ; ; 7 # No       BRAHMI NUMBER SEVEN
+1106D         ; 7.0 ; ; 7 # Nd       BRAHMI DIGIT SEVEN
 12405         ; 7.0 ; ; 7 # Nl       CUNEIFORM NUMERIC SIGN SEVEN ASH
 1240C         ; 7.0 ; ; 7 # Nl       CUNEIFORM NUMERIC SIGN SEVEN DISH
 12412         ; 7.0 ; ; 7 # Nl       CUNEIFORM NUMERIC SIGN SEVEN U
@@ -890,7 +911,7 @@ FF17          ; 7.0 ; ; 7 # Nd       FULLWIDTH DIGIT SEVEN
 1F108         ; 7.0 ; ; 7 # No       DIGIT SEVEN COMMA
 20001         ; 7.0 ; ; 7 # Lo       CJK UNIFIED IDEOGRAPH-20001
 
-# Total code points: 75
+# Total code points: 77
 
 # ================================================
 
@@ -957,6 +978,8 @@ FF18          ; 8.0 ; ; 8 # Nd       FULLWIDTH DIGIT EIGHT
 1010E         ; 8.0 ; ; 8 # No       AEGEAN NUMBER EIGHT
 104A8         ; 8.0 ; ; 8 # Nd       OSMANYA DIGIT EIGHT
 10E67         ; 8.0 ; ; 8 # No       RUMI DIGIT EIGHT
+11059         ; 8.0 ; ; 8 # No       BRAHMI NUMBER EIGHT
+1106E         ; 8.0 ; ; 8 # Nd       BRAHMI DIGIT EIGHT
 12406         ; 8.0 ; ; 8 # Nl       CUNEIFORM NUMERIC SIGN EIGHT ASH
 1240D         ; 8.0 ; ; 8 # Nl       CUNEIFORM NUMERIC SIGN EIGHT DISH
 12413         ; 8.0 ; ; 8 # Nl       CUNEIFORM NUMERIC SIGN EIGHT U
@@ -971,7 +994,7 @@ FF18          ; 8.0 ; ; 8 # Nd       FULLWIDTH DIGIT EIGHT
 1D7FE         ; 8.0 ; ; 8 # Nd       MATHEMATICAL MONOSPACE DIGIT EIGHT
 1F109         ; 8.0 ; ; 8 # No       DIGIT EIGHT COMMA
 
-# Total code points: 71
+# Total code points: 73
 
 # ================================================
 
@@ -1039,6 +1062,8 @@ FF19          ; 9.0 ; ; 9 # Nd       FULLWIDTH DIGIT NINE
 1010F         ; 9.0 ; ; 9 # No       AEGEAN NUMBER NINE
 104A9         ; 9.0 ; ; 9 # Nd       OSMANYA DIGIT NINE
 10E68         ; 9.0 ; ; 9 # No       RUMI DIGIT NINE
+1105A         ; 9.0 ; ; 9 # No       BRAHMI NUMBER NINE
+1106F         ; 9.0 ; ; 9 # Nd       BRAHMI DIGIT NINE
 12407         ; 9.0 ; ; 9 # Nl       CUNEIFORM NUMERIC SIGN NINE ASH
 1240E         ; 9.0 ; ; 9 # Nl       CUNEIFORM NUMERIC SIGN NINE DISH
 12414         ; 9.0 ; ; 9 # Nl       CUNEIFORM NUMERIC SIGN NINE U
@@ -1054,7 +1079,7 @@ FF19          ; 9.0 ; ; 9 # Nd       FULLWIDTH DIGIT NINE
 1F10A         ; 9.0 ; ; 9 # No       DIGIT NINE COMMA
 2F890         ; 9.0 ; ; 9 # Lo       CJK COMPATIBILITY IDEOGRAPH-2F890
 
-# Total code points: 75
+# Total code points: 77
 
 # ================================================
 
@@ -1091,9 +1116,10 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10B5C         ; 10.0 ; ; 10 # No       INSCRIPTIONAL PARTHIAN NUMBER TEN
 10B7C         ; 10.0 ; ; 10 # No       INSCRIPTIONAL PAHLAVI NUMBER TEN
 10E69         ; 10.0 ; ; 10 # No       RUMI NUMBER TEN
+1105B         ; 10.0 ; ; 10 # No       BRAHMI NUMBER TEN
 1D369         ; 10.0 ; ; 10 # No       COUNTING ROD TENS DIGIT ONE
 
-# Total code points: 38
+# Total code points: 39
 
 # ================================================
 
@@ -1202,9 +1228,10 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10B5D         ; 20.0 ; ; 20 # No       INSCRIPTIONAL PARTHIAN NUMBER TWENTY
 10B7D         ; 20.0 ; ; 20 # No       INSCRIPTIONAL PAHLAVI NUMBER TWENTY
 10E6A         ; 20.0 ; ; 20 # No       RUMI NUMBER TWENTY
+1105C         ; 20.0 ; ; 20 # No       BRAHMI NUMBER TWENTY
 1D36A         ; 20.0 ; ; 20 # No       COUNTING ROD TENS DIGIT TWO
 
-# Total code points: 17
+# Total code points: 18
 
 # ================================================
 
@@ -1269,10 +1296,11 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10112         ; 30.0 ; ; 30 # No       AEGEAN NUMBER THIRTY
 10165         ; 30.0 ; ; 30 # Nl       GREEK ACROPHONIC THESPIAN THIRTY
 10E6B         ; 30.0 ; ; 30 # No       RUMI NUMBER THIRTY
+1105D         ; 30.0 ; ; 30 # No       BRAHMI NUMBER THIRTY
 1D36B         ; 30.0 ; ; 30 # No       COUNTING ROD TENS DIGIT THREE
 20983         ; 30.0 ; ; 30 # Lo       CJK UNIFIED IDEOGRAPH-20983
 
-# Total code points: 9
+# Total code points: 10
 
 # ================================================
 
@@ -1335,11 +1363,12 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 534C          ; 40.0 ; ; 40 # Lo       CJK UNIFIED IDEOGRAPH-534C
 10113         ; 40.0 ; ; 40 # No       AEGEAN NUMBER FORTY
 10E6C         ; 40.0 ; ; 40 # No       RUMI NUMBER FORTY
+1105E         ; 40.0 ; ; 40 # No       BRAHMI NUMBER FORTY
 1D36C         ; 40.0 ; ; 40 # No       COUNTING ROD TENS DIGIT FOUR
 2098C         ; 40.0 ; ; 40 # Lo       CJK UNIFIED IDEOGRAPH-2098C
 2099C         ; 40.0 ; ; 40 # Lo       CJK UNIFIED IDEOGRAPH-2099C
 
-# Total code points: 8
+# Total code points: 9
 
 # ================================================
 
@@ -1411,36 +1440,40 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10323         ; 50.0 ; ; 50 # No       OLD ITALIC NUMERAL FIFTY
 10A7E         ; 50.0 ; ; 50 # No       OLD SOUTH ARABIAN NUMBER FIFTY
 10E6D         ; 50.0 ; ; 50 # No       RUMI NUMBER FIFTY
+1105F         ; 50.0 ; ; 50 # No       BRAHMI NUMBER FIFTY
 1D36D         ; 50.0 ; ; 50 # No       COUNTING ROD TENS DIGIT FIVE
 
-# Total code points: 18
+# Total code points: 19
 
 # ================================================
 
 1377          ; 60.0 ; ; 60 # No       ETHIOPIC NUMBER SIXTY
 10115         ; 60.0 ; ; 60 # No       AEGEAN NUMBER SIXTY
 10E6E         ; 60.0 ; ; 60 # No       RUMI NUMBER SIXTY
+11060         ; 60.0 ; ; 60 # No       BRAHMI NUMBER SIXTY
 1D36E         ; 60.0 ; ; 60 # No       COUNTING ROD TENS DIGIT SIX
 
-# Total code points: 4
+# Total code points: 5
 
 # ================================================
 
 1378          ; 70.0 ; ; 70 # No       ETHIOPIC NUMBER SEVENTY
 10116         ; 70.0 ; ; 70 # No       AEGEAN NUMBER SEVENTY
 10E6F         ; 70.0 ; ; 70 # No       RUMI NUMBER SEVENTY
+11061         ; 70.0 ; ; 70 # No       BRAHMI NUMBER SEVENTY
 1D36F         ; 70.0 ; ; 70 # No       COUNTING ROD TENS DIGIT SEVEN
 
-# Total code points: 4
+# Total code points: 5
 
 # ================================================
 
 1379          ; 80.0 ; ; 80 # No       ETHIOPIC NUMBER EIGHTY
 10117         ; 80.0 ; ; 80 # No       AEGEAN NUMBER EIGHTY
 10E70         ; 80.0 ; ; 80 # No       RUMI NUMBER EIGHTY
+11062         ; 80.0 ; ; 80 # No       BRAHMI NUMBER EIGHTY
 1D370         ; 80.0 ; ; 80 # No       COUNTING ROD TENS DIGIT EIGHT
 
-# Total code points: 4
+# Total code points: 5
 
 # ================================================
 
@@ -1448,9 +1481,10 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10118         ; 90.0 ; ; 90 # No       AEGEAN NUMBER NINETY
 10341         ; 90.0 ; ; 90 # Nl       GOTHIC LETTER NINETY
 10E71         ; 90.0 ; ; 90 # No       RUMI NUMBER NINETY
+11063         ; 90.0 ; ; 90 # No       BRAHMI NUMBER NINETY
 1D371         ; 90.0 ; ; 90 # No       COUNTING ROD TENS DIGIT NINE
 
-# Total code points: 5
+# Total code points: 6
 
 # ================================================
 
@@ -1473,8 +1507,9 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10B5E         ; 100.0 ; ; 100 # No       INSCRIPTIONAL PARTHIAN NUMBER ONE HUNDRED
 10B7E         ; 100.0 ; ; 100 # No       INSCRIPTIONAL PAHLAVI NUMBER ONE HUNDRED
 10E72         ; 100.0 ; ; 100 # No       RUMI NUMBER ONE HUNDRED
+11064         ; 100.0 ; ; 100 # No       BRAHMI NUMBER ONE HUNDRED
 
-# Total code points: 19
+# Total code points: 20
 
 # ================================================
 
@@ -1557,8 +1592,9 @@ F9FD          ; 10.0 ; ; 10 # Lo       CJK COMPATIBILITY IDEOGRAPH-F9FD
 10A47         ; 1000.0 ; ; 1000 # No       KHAROSHTHI NUMBER ONE THOUSAND
 10B5F         ; 1000.0 ; ; 1000 # No       INSCRIPTIONAL PARTHIAN NUMBER ONE THOUSAND
 10B7F         ; 1000.0 ; ; 1000 # No       INSCRIPTIONAL PAHLAVI NUMBER ONE THOUSAND
+11065         ; 1000.0 ; ; 1000 # No       BRAHMI NUMBER ONE THOUSAND
 
-# Total code points: 16
+# Total code points: 17
 
 # ================================================
 

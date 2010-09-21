@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -145,11 +145,7 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
     uprv_memset(pBiDi, 0, sizeof(UBiDi));
 
     /* get BiDi properties */
-    pBiDi->bdp=ubidi_getSingleton(pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        uprv_free(pBiDi);
-        return NULL;
-    }
+    pBiDi->bdp=ubidi_getSingleton();
 
     /* allocate memory for arrays as requested */
     if(maxLength>0) {

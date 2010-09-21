@@ -1,8 +1,8 @@
-# GraphemeBreakProperty-5.2.0.txt
-# Date: 2009-06-09, 21:40:09 GMT [MD]
+# GraphemeBreakProperty-6.0.0.txt
+# Date: 2010-09-01, 18:48:17 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 
@@ -65,10 +65,9 @@ E0020..E007F  ; Control
 05C4..05C5    ; Extend
 05C7          ; Extend
 0610..061A    ; Extend
-064B..065E    ; Extend
+064B..065F    ; Extend
 0670          ; Extend
 06D6..06DC    ; Extend
-06DE          ; Extend
 06DF..06E4    ; Extend
 06E7..06E8    ; Extend
 06EA..06ED    ; Extend
@@ -80,11 +79,13 @@ E0020..E007F  ; Control
 081B..0823    ; Extend
 0825..0827    ; Extend
 0829..082D    ; Extend
+0859..085B    ; Extend
 0900..0902    ; Extend
+093A          ; Extend
 093C          ; Extend
 0941..0948    ; Extend
 094D          ; Extend
-0951..0955    ; Extend
+0951..0957    ; Extend
 0962..0963    ; Extend
 0981          ; Extend
 09BC          ; Extend
@@ -143,15 +144,10 @@ E0020..E007F  ; Control
 0DD2..0DD4    ; Extend
 0DD6          ; Extend
 0DDF          ; Extend
-0E30          ; Extend
 0E31          ; Extend
-0E32..0E33    ; Extend
 0E34..0E3A    ; Extend
-0E45          ; Extend
 0E47..0E4E    ; Extend
-0EB0          ; Extend
 0EB1          ; Extend
-0EB2..0EB3    ; Extend
 0EB4..0EB9    ; Extend
 0EBB..0EBC    ; Extend
 0EC8..0ECD    ; Extend
@@ -162,7 +158,7 @@ E0020..E007F  ; Control
 0F71..0F7E    ; Extend
 0F80..0F84    ; Extend
 0F86..0F87    ; Extend
-0F90..0F97    ; Extend
+0F8D..0F97    ; Extend
 0F99..0FBC    ; Extend
 0FC6          ; Extend
 102D..1030    ; Extend
@@ -176,7 +172,7 @@ E0020..E007F  ; Control
 1085..1086    ; Extend
 108D          ; Extend
 109D          ; Extend
-135F          ; Extend
+135D..135F    ; Extend
 1712..1714    ; Extend
 1732..1734    ; Extend
 1752..1753    ; Extend
@@ -208,6 +204,10 @@ E0020..E007F  ; Control
 1B80..1B81    ; Extend
 1BA2..1BA5    ; Extend
 1BA8..1BA9    ; Extend
+1BE6          ; Extend
+1BE8..1BE9    ; Extend
+1BED          ; Extend
+1BEF..1BF1    ; Extend
 1C2C..1C33    ; Extend
 1C36..1C37    ; Extend
 1CD0..1CD2    ; Extend
@@ -215,7 +215,7 @@ E0020..E007F  ; Control
 1CE2..1CE8    ; Extend
 1CED          ; Extend
 1DC0..1DE6    ; Extend
-1DFD..1DFF    ; Extend
+1DFC..1DFF    ; Extend
 200C..200D    ; Extend
 20D0..20DC    ; Extend
 20DD..20E0    ; Extend
@@ -223,6 +223,7 @@ E0020..E007F  ; Control
 20E2..20E4    ; Extend
 20E5..20F0    ; Extend
 2CEF..2CF1    ; Extend
+2D7F          ; Extend
 2DE0..2DFF    ; Extend
 302A..302F    ; Extend
 3099..309A    ; Extend
@@ -265,6 +266,8 @@ FF9E..FF9F    ; Extend
 10A0C..10A0F  ; Extend
 10A38..10A3A  ; Extend
 10A3F         ; Extend
+11001         ; Extend
+11038..11046  ; Extend
 11080..11081  ; Extend
 110B3..110B6  ; Extend
 110B9..110BA  ; Extend
@@ -277,7 +280,7 @@ FF9E..FF9F    ; Extend
 1D242..1D244  ; Extend
 E0100..E01EF  ; Extend
 
-# Total code points: 1205
+# Total code points: 1234
 
 # ================================================
 
@@ -292,9 +295,10 @@ AABB..AABC    ; Prepend
 # ================================================
 
 0903          ; SpacingMark
+093B          ; SpacingMark
 093E..0940    ; SpacingMark
 0949..094C    ; SpacingMark
-094E          ; SpacingMark
+094E..094F    ; SpacingMark
 0982..0983    ; SpacingMark
 09BF..09C0    ; SpacingMark
 09C7..09C8    ; SpacingMark
@@ -329,6 +333,11 @@ AABB..AABC    ; Prepend
 0DD0..0DD1    ; SpacingMark
 0DD8..0DDE    ; SpacingMark
 0DF2..0DF3    ; SpacingMark
+0E30          ; SpacingMark
+0E32..0E33    ; SpacingMark
+0E45          ; SpacingMark
+0EB0          ; SpacingMark
+0EB2..0EB3    ; SpacingMark
 0F3E..0F3F    ; SpacingMark
 0F7F          ; SpacingMark
 102B..102C    ; SpacingMark
@@ -366,6 +375,10 @@ AABB..AABC    ; Prepend
 1BA1          ; SpacingMark
 1BA6..1BA7    ; SpacingMark
 1BAA          ; SpacingMark
+1BE7          ; SpacingMark
+1BEA..1BEC    ; SpacingMark
+1BEE          ; SpacingMark
+1BF2..1BF3    ; SpacingMark
 1C24..1C2B    ; SpacingMark
 1C34..1C35    ; SpacingMark
 1CE1          ; SpacingMark
@@ -387,13 +400,15 @@ ABE3..ABE4    ; SpacingMark
 ABE6..ABE7    ; SpacingMark
 ABE9..ABEA    ; SpacingMark
 ABEC          ; SpacingMark
+11000         ; SpacingMark
+11002         ; SpacingMark
 11082         ; SpacingMark
 110B0..110B2  ; SpacingMark
 110B7..110B8  ; SpacingMark
 1D166         ; SpacingMark
 1D16D         ; SpacingMark
 
-# Total code points: 257
+# Total code points: 275
 
 # ================================================
 

@@ -210,7 +210,7 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 if(U_SUCCESS(status)) {
                     impl->addPropertyStarts(&sa, status);
                 }
-                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
+                ucase_addPropertyStarts(ucase_getSingleton(), &sa, &status);
                 break;
             }
             case UPROPS_SRC_NFC: {
@@ -243,10 +243,10 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
             }
 #endif
             case UPROPS_SRC_CASE:
-                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
+                ucase_addPropertyStarts(ucase_getSingleton(), &sa, &status);
                 break;
             case UPROPS_SRC_BIDI:
-                ubidi_addPropertyStarts(ubidi_getSingleton(&status), &sa, &status);
+                ubidi_addPropertyStarts(ubidi_getSingleton(), &sa, &status);
                 break;
             default:
                 status = U_INTERNAL_PROGRAM_ERROR;
@@ -929,9 +929,10 @@ static UBool generalCategoryMaskFilter(UChar32 ch, void* context) {
 }
 
 static UBool versionFilter(UChar32 ch, void* context) {
-    UVersionInfo v, none = { 0, 0, 0, 0};
-    UVersionInfo* version = (UVersionInfo*)context;
+    static const UVersionInfo none = { 0, 0, 0, 0 };
+    UVersionInfo v;
     u_charAge(ch, v);
+    UVersionInfo* version = (UVersionInfo*)context;
     return uprv_memcmp(&v, &none, sizeof(v)) > 0 && uprv_memcmp(&v, version, sizeof(v)) <= 0;
 }
 
@@ -945,6 +946,9 @@ static UBool intPropertyFilter(UChar32 ch, void* context) {
     return u_getIntPropertyValue((UChar32) ch, c->prop) == c->value;
 }
 
+static UBool scriptExtensionsFilter(UChar32 ch, void* context) {
+    return uscript_hasScript(ch, *(UScriptCode*)context);
+}
 
 /**
  * Generic filter-based scanning code for UCD property UnicodeSets.
@@ -953,20 +957,17 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
                              void* context,
                              int32_t src,
                              UErrorCode &status) {
-    // Walk through all Unicode characters, noting the start
+    if (U_FAILURE(status)) return;
+
+    // Logically, walk through all Unicode characters, noting the start
     // and end of each range for which filter.contain(c) is
     // true.  Add each range to a set.
     //
-    // To improve performance, use the INCLUSIONS set, which
+    // To improve performance, use an inclusions set which
     // encodes information about character ranges that are known
-    // to have identical properties. INCLUSIONS contains
-    // only the first characters of such ranges.
-    //
-    // TODO Where possible, instead of scanning over code points,
-    // use internal property data to initialize UnicodeSets for
-    // those properties.  Scanning code points is slow.
-    if (U_FAILURE(status)) return;
-
+    // to have identical properties.
+    // getInclusions(src) contains exactly the first characters of
+    // same-value ranges for the given properties "source".
     const UnicodeSet* inclusions = getInclusions(src, status);
     if (U_FAILURE(status)) {
         return;
@@ -1034,6 +1035,9 @@ UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec)
 
     if (prop == UCHAR_GENERAL_CATEGORY_MASK) {
         applyFilter(generalCategoryMaskFilter, &value, UPROPS_SRC_CHAR, ec);
+    } else if (prop == UCHAR_SCRIPT_EXTENSIONS) {
+        UScriptCode script = (UScriptCode)value;
+        applyFilter(scriptExtensionsFilter, &script, UPROPS_SRC_PROPSVEC, ec);
     } else {
         IntPropertyContext c = {prop, value};
         applyFilter(intPropertyFilter, &c, uprops_getSource(prop), ec);
@@ -1146,6 +1150,13 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     return *this;
                 }
                 break;
+            case UCHAR_SCRIPT_EXTENSIONS:
+                v = u_getPropertyValueEnum(UCHAR_SCRIPT, vname.data());
+                if (v == UCHAR_INVALID_CODE) {
+                    FAIL(ec);
+                }
+                // fall through to calling applyIntPropertyValue()
+                break;
             default:
                 // p is a non-binary, non-enumerated property that we
                 // don't support (yet).
@@ -1183,7 +1194,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
             }
         }
     }
-    
+
     applyIntPropertyValue(p, v, ec);
     if(invert) {
         complement();
@@ -1395,9 +1406,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
         return *this;
     }
     if (attribute & (USET_CASE_INSENSITIVE | USET_ADD_CASE_MAPPINGS)) {
-        UErrorCode status = U_ZERO_ERROR;
-        const UCaseProps *csp = ucase_getSingleton(&status);
-        if (U_SUCCESS(status)) {
+        const UCaseProps *csp = ucase_getSingleton();
+        {
             UnicodeSet foldSet(*this);
             UnicodeString str;
             USetAdder sa = {
@@ -1460,6 +1470,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 } else {
                     Locale root("");
 #if !UCONFIG_NO_BREAK_ITERATION
+                    UErrorCode status = U_ZERO_ERROR;
                     BreakIterator *bi = BreakIterator::createWordInstance(root, status);
 #endif
                     if (U_SUCCESS(status)) {

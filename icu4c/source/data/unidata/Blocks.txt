@@ -1,8 +1,8 @@
-# Blocks-5.2.0.txt
-# Date: 2009-05-19, 16:21:00 PDT [KW]
+# Blocks-6.0.0.txt
+# Date: 2010-06-04, 11:12:00 PDT [KW]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2009 Unicode, Inc.
+# Copyright (c) 1991-2010 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
@@ -45,6 +45,7 @@
 0780..07BF; Thaana
 07C0..07FF; NKo
 0800..083F; Samaritan
+0840..085F; Mandaic
 0900..097F; Devanagari
 0980..09FF; Bengali
 0A00..0A7F; Gurmukhi
@@ -82,6 +83,7 @@
 1A20..1AAF; Tai Tham
 1B00..1B7F; Balinese
 1B80..1BBF; Sundanese
+1BC0..1BFF; Batak
 1C00..1C4F; Lepcha
 1C50..1C7F; Ol Chiki
 1CD0..1CFF; Vedic Extensions
@@ -159,6 +161,7 @@ A980..A9DF; Javanese
 AA00..AA5F; Cham
 AA60..AA7F; Myanmar Extended-A
 AA80..AADF; Tai Viet
+AB00..AB2F; Ethiopic Extended-A
 ABC0..ABFF; Meetei Mayek
 AC00..D7AF; Hangul Syllables
 D7B0..D7FF; Hangul Jamo Extended-B
@@ -203,10 +206,13 @@ FFF0..FFFF; Specials
 10B60..10B7F; Inscriptional Pahlavi
 10C00..10C4F; Old Turkic
 10E60..10E7F; Rumi Numeral Symbols
+11000..1107F; Brahmi
 11080..110CF; Kaithi
 12000..123FF; Cuneiform
 12400..1247F; Cuneiform Numbers and Punctuation
 13000..1342F; Egyptian Hieroglyphs
+16800..16A3F; Bamum Supplement
+1B000..1B0FF; Kana Supplement
 1D000..1D0FF; Byzantine Musical Symbols
 1D100..1D1FF; Musical Symbols
 1D200..1D24F; Ancient Greek Musical Notation
@@ -215,10 +221,16 @@ FFF0..FFFF; Specials
 1D400..1D7FF; Mathematical Alphanumeric Symbols
 1F000..1F02F; Mahjong Tiles
 1F030..1F09F; Domino Tiles
+1F0A0..1F0FF; Playing Cards
 1F100..1F1FF; Enclosed Alphanumeric Supplement
 1F200..1F2FF; Enclosed Ideographic Supplement
+1F300..1F5FF; Miscellaneous Symbols And Pictographs
+1F600..1F64F; Emoticons
+1F680..1F6FF; Transport And Map Symbols
+1F700..1F77F; Alchemical Symbols
 20000..2A6DF; CJK Unified Ideographs Extension B
 2A700..2B73F; CJK Unified Ideographs Extension C
+2B740..2B81F; CJK Unified Ideographs Extension D
 2F800..2FA1F; CJK Compatibility Ideographs Supplement
 E0000..E007F; Tags
 E0100..E01EF; Variation Selectors Supplement

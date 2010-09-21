@@ -29,6 +29,7 @@
 #include "capitst.h"
 #include "ccolltst.h"
 #include "putilimp.h"
+#include "cmemory.h"
 #include "cstring.h"
 
 static void TestAttribute(void);
@@ -279,7 +280,7 @@ void TestProperty()
 {
     UCollator *col, *ruled;
     UChar *disName;
-    int32_t len = 0, i = 0;
+    int32_t len = 0;
     UChar *source, *target;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
@@ -293,10 +294,10 @@ void TestProperty()
      * needs to be adjusted.
      * Same in intltest/apicoll.cpp.
      */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x05, 0x2A};
-    UVersionInfo currUCAVersionArray = {5, 2, 0, 0};
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x05, 0x2A};  /* from ICU 4.4/UCA 5.2 */
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
+    UVersionInfo versionUCDArray = {0, 0, 0, 0};
 
     log_verbose("The property tests begin : \n");
     log_verbose("Test ucol_strcoll : \n");
@@ -307,21 +308,23 @@ void TestProperty()
     }
 
     ucol_getVersion(col, versionArray);
-    for (i=0; i<4; ++i) {
-      if (versionArray[i] != currVersionArray[i]) {
-        log_err("Testing ucol_getVersion() - unexpected result: %hu.%hu.%hu.%hu\n",
-            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-        break;
-      }
+    /* Check for a version greater than some value rather than equality
+     * so that we need not update the expected version each time. */
+    if (uprv_memcmp(versionArray, currVersionArray, 4)<0) {
+      log_err("Testing ucol_getVersion() - unexpected result: %02x.%02x.%02x.%02x\n",
+              versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+    } else {
+      log_verbose("ucol_getVersion() result: %02x.%02x.%02x.%02x\n",
+                  versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
     }
 
+    /* Assume that the UCD and UCA versions are the same,
+     * rather than hardcoding (and updating each time) a particular UCA version. */
+    u_getUnicodeVersion(versionUCDArray);
     ucol_getUCAVersion(col, versionUCAArray);
-    for (i=0; i<4; ++i) {
-      if (versionUCAArray[i] != currUCAVersionArray[i]) {
-        log_err("Testing ucol_getUCAVersion() - unexpected result: %hu.%hu.%hu.%hu\n",
-            versionUCAArray[0], versionUCAArray[1], versionUCAArray[2], versionUCAArray[3]);
-        break;
-      }
+    if (0!=uprv_memcmp(versionUCAArray, versionUCDArray, 4)) {
+      log_err("Testing ucol_getUCAVersion() - unexpected result: %hu.%hu.%hu.%hu\n",
+              versionUCAArray[0], versionUCAArray[1], versionUCAArray[2], versionUCAArray[3]);
     }
 
     source=(UChar*)malloc(sizeof(UChar) * 12);

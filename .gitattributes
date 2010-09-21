@@ -2452,7 +2452,6 @@ icu4c/source/test/testdata/CollationTest_SHIFTED_SHORT.txt svneol=native#text/pl
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/DataDrivenCollationTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/GraphemeBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/test/testdata/GraphemeClusterBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/LineBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/NormalizationTest-3.2.0.txt svneol=native#text/plain
 icu4c/source/test/testdata/NumberFormatTestCases.txt svneol=native#text/plain%3Bcharset%3Dutf-8

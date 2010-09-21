@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2009, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,7 +45,7 @@ ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode) {
     }
     uprv_memset(csm, 0, sizeof(UCaseMap));
 
-    csm->csp=ucase_getSingleton(pErrorCode);
+    csm->csp=ucase_getSingleton();
     ucasemap_setLocale(csm, locale, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         uprv_free(csm);

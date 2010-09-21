@@ -35,7 +35,13 @@ enum {
     UPROPS_ADDITIONAL_VECTORS_INDEX,
     UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX,
 
-    UPROPS_RESERVED_INDEX, /* 6 */
+    UPROPS_SCRIPT_EXTENSIONS_INDEX,
+
+    UPROPS_RESERVED_INDEX_7,
+    UPROPS_RESERVED_INDEX_8,
+
+    /* size of the data file (number of 32-bit units after the header) */
+    UPROPS_DATA_TOP_INDEX,
 
     /* maximum values for code values in vector word 0 */
     UPROPS_MAX_VALUES_INDEX=10,
@@ -83,15 +89,24 @@ enum {
  * Properties in vector word 0
  * Bits
  * 31..24   DerivedAge version major/minor one nibble each
- * 23..20   reserved
+ * 23..22   3..1: Bits 7..0 = Script_Extensions index
+ *             3: Script value from Script_Extensions
+ *             2: Script=Inherited
+ *             1: Script=Common
+ *             0: Script=bits 7..0
+ * 21..20   reserved
  * 19..17   East Asian Width
  * 16.. 8   UBlockCode
- *  7.. 0   UScriptCode
+ *  7.. 0   UScriptCode, or index to Script_Extensions
  */
 
 /* derived age: one nibble each for major and minor version numbers */
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
+
+/* Script_Extensions: mask includes Script */
+#define UPROPS_SCRIPT_X_MASK    0x00c000ff
+#define UPROPS_SCRIPT_X_SHIFT   22
 
 #define UPROPS_EA_MASK          0x000e0000
 #define UPROPS_EA_SHIFT         17
@@ -100,6 +115,11 @@ enum {
 #define UPROPS_BLOCK_SHIFT      8
 
 #define UPROPS_SCRIPT_MASK      0x000000ff
+
+/* UPROPS_SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions. */
+#define UPROPS_SCRIPT_X_WITH_COMMON     0x400000
+#define UPROPS_SCRIPT_X_WITH_INHERITED  0x800000
+#define UPROPS_SCRIPT_X_WITH_OTHER      0xc00000
 
 /*
  * Properties in vector word 1
@@ -160,7 +180,6 @@ enum {
  */
 #define UPROPS_LB_MASK          0x03f00000
 #define UPROPS_LB_SHIFT         20
-#define UPROPS_LB_VWORD         2
 
 #define UPROPS_SB_MASK          0x000f8000
 #define UPROPS_SB_SHIFT         15

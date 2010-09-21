@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,31 +31,8 @@ U_CDECL_BEGIN
 struct UCaseProps;
 typedef struct UCaseProps UCaseProps;
 
-U_CAPI UCaseProps * U_EXPORT2
-ucase_open(UErrorCode *pErrorCode);
-
-U_CAPI UCaseProps * U_EXPORT2
-ucase_openBinary(const uint8_t *bin, int32_t length, UErrorCode *pErrorCode);
-
-U_CAPI void U_EXPORT2
-ucase_close(UCaseProps *csp);
-
-
 U_CAPI const UCaseProps * U_EXPORT2
-ucase_getSingleton(UErrorCode *pErrorCode);
-
-#define UCASE_HARDCODE_DATA 1
-
-#if !UCASE_HARDCODE_DATA
-/**
- * Get a singleton dummy object, one that works with no real data.
- * This can be used when the real data is not available.
- * Using the dummy can reduce checks for available data after an initial failure.
- */
-U_CAPI const UCaseProps * U_EXPORT2
-ucase_getDummy(UErrorCode *pErrorCode);
-#endif
-
+ucase_getSingleton(void);
 
 U_CAPI int32_t U_EXPORT2
 ucase_swap(const UDataSwapper *ds,
