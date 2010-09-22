@@ -256,7 +256,7 @@ public:
      * @param propogateDigits If false, setting the zero digit will not automatically set 1-9.
      *     The default behavior is to automatically set 1-9 if zero is being set and the value
      *     it is being set to corresponds to a known Unicode zero digit.
-     * @draft ICU 4.6
+     * @stable ICU 2.0
      */
     void setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value, const UBool propogateDigits);
 
