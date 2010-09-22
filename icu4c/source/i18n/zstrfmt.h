@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and    *
+* Copyright (C) 2007-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -297,6 +297,13 @@ private:
     UResourceBundle *fMetazoneItem;
     UResourceBundle *fZoneItem;
 
+	UBool			 fIsFullyLoaded;
+
+	void loadZone(const UnicodeString &utzid, UErrorCode &status);
+	void addSingleZone(UnicodeString &utzid, UErrorCode &status);
+	void loadFull(UErrorCode &status);
+
+
     /*
      * Private method to get a zone string except generic partial location types.
      */
@@ -344,6 +351,8 @@ private:
      */
     const ZoneStringInfo* find(const UnicodeString &text, int32_t start, int32_t types,
         int32_t &matchLength, UErrorCode &status) const;
+	const ZoneStringInfo* subFind(const UnicodeString &text, int32_t start, int32_t types,
+                       int32_t &matchLength, UErrorCode &status) const;
 
     UnicodeString& getRegion(UnicodeString &region) const;
 
