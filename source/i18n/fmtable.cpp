@@ -439,10 +439,10 @@ Formattable::getInt64(UErrorCode& status) const
     case Formattable::kInt64: 
         return fValue.fInt64;
     case Formattable::kDouble:
-        if (fValue.fDouble > U_INT64_MAX) {
+        if (fValue.fDouble >= U_INT64_MAX) {
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MAX;
-        } else if (fValue.fDouble < U_INT64_MIN) {
+        } else if (fValue.fDouble <= U_INT64_MIN) {
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
         } else {
