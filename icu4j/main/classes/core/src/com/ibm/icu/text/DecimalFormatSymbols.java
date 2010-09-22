@@ -171,6 +171,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Returns the array of characters used as digits, in order from 0 through 9
      * @return The array
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public char[] getDigits() {
         if ( digits != null ) {
