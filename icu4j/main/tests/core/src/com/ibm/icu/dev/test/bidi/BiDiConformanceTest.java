@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.bidi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacterDirection;

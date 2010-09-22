@@ -15,11 +15,11 @@ import java.util.Iterator;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacter.HangulSyllableType;
+import com.ibm.icu.lang.UCharacter.NumericType;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.lang.UCharacter.HangulSyllableType;
-import com.ibm.icu.lang.UCharacter.NumericType;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.VersionInfo;

@@ -1,14 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.impl.data;
 
-import com.ibm.icu.util.*;
 import java.util.ListResourceBundle;
+
+import com.ibm.icu.util.HebrewHoliday;
+import com.ibm.icu.util.Holiday;
 
 public class HolidayBundle_iw_IL extends ListResourceBundle {
     static private final Holiday[] fHolidays = {

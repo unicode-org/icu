@@ -10,9 +10,9 @@ import java.text.Collator;
 import java.util.EventListener;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.Map.Entry;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
