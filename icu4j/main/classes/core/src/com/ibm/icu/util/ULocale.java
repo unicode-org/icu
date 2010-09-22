@@ -820,6 +820,36 @@ public final class ULocale implements Serializable {
     public String getName() {
         return localeID; // always normalized
     }
+    
+    /**
+     * Gets the shortest length subtag's size.
+     *
+     * @param localeID
+     * @return The size of the shortest length subtag
+     **/
+    private static int getShortestSubtagLength(String localeID) {
+        int localeIDLength = localeID.length();
+        int length = localeIDLength;
+        boolean reset = true;
+        int tmpLength = 0;
+        
+        for (int i = 0; i < localeIDLength; i++) {
+            if (localeID.charAt(i) != '_' && localeID.charAt(i) != '-') {
+                if (reset) {
+                    reset = false;
+                    tmpLength = 0;
+                }
+                tmpLength++;
+            } else {
+                if (tmpLength != 0 && tmpLength < length) {
+                    length = tmpLength;
+                }
+                reset = true;
+            }
+        }
+        
+        return length;
+    }
 
     /**
      * {@icu} Returns the (normalized) full name for the specified locale.
@@ -831,8 +861,11 @@ public final class ULocale implements Serializable {
     public static String getName(String localeID){
         String tmpLocaleID;
         // Convert BCP47 id if necessary
-        if (localeID != null && localeID.contains("-u-") && !localeID.contains("@")) {
+        if (localeID != null && !localeID.contains("@") && getShortestSubtagLength(localeID) == 1) {
             tmpLocaleID = forLanguageTag(localeID).getName();
+            if (tmpLocaleID.length() == 0) {
+                tmpLocaleID = localeID;
+            }
         } else {
             tmpLocaleID = localeID;
         }
