@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.ChoiceFormat;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -728,12 +729,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
                     return false;
                 }
             }
-        } else {
-            for (int i = 0 ; i < 10 ; i++) {
-                if (digits[i] != other.digits[i]) {
+        } else if (!Arrays.equals(digits,other.digits)) {
                     return false;
-                }
-            }
         }
 
         return (
