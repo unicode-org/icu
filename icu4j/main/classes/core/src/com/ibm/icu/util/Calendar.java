@@ -4255,7 +4255,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 useLocale = min;
             } else {
                 ULocale max = ULocale.addLikelySubtags(min);
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 buf.append(min.getLanguage());
                 if ( min.getScript().length() > 0) {
                     buf.append("_"+min.getScript());
