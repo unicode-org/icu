@@ -4246,22 +4246,27 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // values, using the following logic:
             // 1). If the locale has a language but no territory, use the territory as defined by 
             //     the likely subtags.
-            // 2). If the locale has a script designation then we ignore it,
-            //     then remove it ( i.e. "en_Latn_US" becomes "en_US" )
+            // 2). If the locale has an unnecessary script designation then we ignore it,
+            //     ( i.e. "en_Latn_US" becomes "en_US" )
  
             ULocale useLocale;
             ULocale min = ULocale.minimizeSubtags(locale);
-            if ( locale.getCountry().length() == 0 || 
-                 locale.getScript().length() > 0 && min.getScript().length() == 0 ) {
-                ULocale max = ULocale.addLikelySubtags(locale);
-                ULocale.Builder builder = new ULocale.Builder();
-                builder.setLocale(max);
-                if (min.getScript().length() == 0) {
-                    builder.setScript(null);
-                }
-                useLocale = builder.build();
+            if ( min.getCountry().length() > 0 ) {
+                useLocale = min;
             } else {
-                useLocale = locale;
+                ULocale max = ULocale.addLikelySubtags(min);
+                StringBuffer buf = new StringBuffer();
+                buf.append(min.getLanguage());
+                if ( min.getScript().length() > 0) {
+                    buf.append("_"+min.getScript());
+                }
+                if ( max.getCountry().length() > 0) {
+                    buf.append("_"+max.getCountry());
+                }
+                if ( min.getVariant().length() > 0) {
+                    buf.append("_"+min.getVariant());
+                }
+                useLocale = new ULocale(buf.toString());                
             }
  
             CalendarData calData = new CalendarData(locale, getType());
