@@ -79,9 +79,7 @@ public final class DateNumberFormat extends NumberFormat {
         }
         
         digits = new char[10];
-        for ( int i = 0 ; i < 10 ; i++ ) {
-           digits[i] = elems[i]; 
-        }
+        System.arraycopy(elems, 0, digits, 0, 10);
         minusSign = elems[10];
     }
 
