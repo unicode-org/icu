@@ -53,7 +53,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestTextAttributeCrash);
     TESTCASE(TestRBNFFormat);
     TESTCASE(TestNBSPInPattern);
-	TESTCASE(TestInt64Parse);
+    TESTCASE(TestInt64Parse);
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -95,44 +95,44 @@ static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_
 static void TestInt64Parse()
 {
 
-	UErrorCode st = U_ZERO_ERROR;
-	UErrorCode* status = &st;
-	
-	char* st1 = "009223372036854775808";
-	const int size = 21;
-	const int textLength = size;
-	UChar text[21];
+    UErrorCode st = U_ZERO_ERROR;
+    UErrorCode* status = &st;
+    
+    char* st1 = "009223372036854775808";
+    const int size = 21;
+    const int textLength = size;
+    UChar text[21];
+    
 	
     UNumberFormat* nf;
 
-	int64_t a;
+    int64_t a;
 
+    u_charsToUChars(st1, text, size);
+    nf = unum_open(UNUM_DEFAULT, NULL, -1, NULL, NULL, status);
 
-	u_charsToUChars(st1, text, size);
-	nf = unum_open(UNUM_DEFAULT, NULL, -1, NULL, NULL, status);
+    if(U_FAILURE(*status))
+    {
+        log_err("Error in unum_open() %s \n", myErrorName(*status));
+        return;
+    }
 
-	if(U_FAILURE(*status))
-	{
-		log_err("Error in unum_open() %s \n", myErrorName(*status));
-		return;
-	}
+    log_verbose("About to test unum_parseInt64() with out of range number\n");
 
-	log_verbose("About to test unum_parseInt64() with out of range number\n");
-
-	a = unum_parseInt64(nf, text, size, 0, status);
+    a = unum_parseInt64(nf, text, size, 0, status);
 	
 
     if(!U_FAILURE(*status))
     {
         log_err("Error in unum_parseInt64(): %s \n", myErrorName(*status));
     }
-	else
-	{
-		log_verbose("unum_parseInt64() successful\n");
-	}
+    else
+    {
+        log_verbose("unum_parseInt64() successful\n");
+    }
 
-	unum_close(nf);
-	return;
+    unum_close(nf);
+    return;
 }
 
 /* test Number Format API */
