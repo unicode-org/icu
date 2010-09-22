@@ -529,7 +529,7 @@ static const VariantMap VARIANT_MAP[] = {
 
 /* ### BCP47 Conversion *******************************************/
 /* Test if the locale id has BCP47 u extension and does not have '@' */
-#define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getMinimumSubtagLength(localeID) == 1)
+#define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
 #define _ConvertBCP47(finalID, id, buffer, length,err) \
         if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || U_FAILURE(*err)) { \
@@ -538,35 +538,25 @@ static const VariantMap VARIANT_MAP[] = {
             finalID=buffer; \
         }
 /* Gets the size of the shortest subtag in the given localeID. */
-static int32_t getMinimumSubtagLength(const char *localeID) {
-    const char *pTag;
-    const char *pNextTag;
+static int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = uprv_strlen(localeID);
     int32_t length = localeIDLength;
     int32_t tmpLength = 0;
+    int32_t i;
+    UBool reset = TRUE;
 
-    pTag = localeID;
-
-    for (;;) {
-        if (pTag[0] == 0) {
-            /* Usually the case if localeID ends in a '-' or '_' */
-            break;
-        }
-        if ((!(pNextTag = uprv_strstr(pTag, "-")) && !(pNextTag = uprv_strstr(pTag, "_")))) {
-            /* Get the length of the last subtag */
-            tmpLength = localeIDLength - (pTag - localeID);
+    for (i = 0; i < localeIDLength; i++) {
+        if (localeID[i] != '_' && localeID[i] != '-') {
+            if (reset) {
+                tmpLength = 0;
+                reset = FALSE;
+            }
+            tmpLength++;
         } else {
-            tmpLength = pNextTag - pTag;
-            /* Move the pointer to character after the '-' or '_' character */
-            pTag = pNextTag+1;
-        }
-
-        if (tmpLength != 0 && tmpLength < length) {
-            length = tmpLength;
-        }
-
-        if (!pNextTag) {
-            break;
+            if (tmpLength != 0 && tmpLength < length) {
+                length = tmpLength;
+            }
+            reset = TRUE;
         }
     }
 
