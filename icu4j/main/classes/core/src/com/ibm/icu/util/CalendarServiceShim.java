@@ -11,10 +11,10 @@ import java.util.Set;
 
 import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.util.Calendar.CalendarFactory;

@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.ZoneStringFormat;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 

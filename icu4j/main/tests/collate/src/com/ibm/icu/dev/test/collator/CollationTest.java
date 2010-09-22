@@ -13,8 +13,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.dev.test.ModuleTest;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;

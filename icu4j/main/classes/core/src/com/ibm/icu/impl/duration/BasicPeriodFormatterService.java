@@ -1,16 +1,16 @@
 /*
  ******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and   *
+ * Copyright (C) 2007-2010, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
 
 package com.ibm.icu.impl.duration;
 
+import java.util.Collection;
+
 import com.ibm.icu.impl.duration.impl.PeriodFormatterDataService;
 import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
-
-import java.util.Collection;
 
 /**
  * An implementation of PeriodFormatterService that constructs a

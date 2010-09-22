@@ -1,17 +1,17 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl.duration;
 
+import java.util.TimeZone;
+
 import com.ibm.icu.impl.duration.impl.DataRecord;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterDataService;
-
-import java.util.TimeZone;
 
 /**
  * Default implementation of PeriodBuilderFactory.  This creates builders that

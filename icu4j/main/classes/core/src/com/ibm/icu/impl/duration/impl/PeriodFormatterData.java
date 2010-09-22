@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and   *
+* Copyright (C) 2009-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,8 +8,17 @@
 package com.ibm.icu.impl.duration.impl;
 
 import com.ibm.icu.impl.duration.TimeUnit;
-
-import com.ibm.icu.impl.duration.impl.DataRecord.*;
+import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
+import com.ibm.icu.impl.duration.impl.DataRecord.EDecimalHandling;
+import com.ibm.icu.impl.duration.impl.DataRecord.EFractionHandling;
+import com.ibm.icu.impl.duration.impl.DataRecord.EGender;
+import com.ibm.icu.impl.duration.impl.DataRecord.EHalfPlacement;
+import com.ibm.icu.impl.duration.impl.DataRecord.EHalfSupport;
+import com.ibm.icu.impl.duration.impl.DataRecord.ENumberSystem;
+import com.ibm.icu.impl.duration.impl.DataRecord.EPluralization;
+import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
+import com.ibm.icu.impl.duration.impl.DataRecord.EZeroHandling;
+import com.ibm.icu.impl.duration.impl.DataRecord.ScopeData;
 
 
 /**

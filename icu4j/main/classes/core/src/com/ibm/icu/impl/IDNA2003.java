@@ -6,7 +6,6 @@
 */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.Punycode;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;

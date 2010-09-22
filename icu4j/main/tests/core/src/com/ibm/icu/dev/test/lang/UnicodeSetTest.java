@@ -25,15 +25,15 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.UnicodeSet.ComparisonStyle;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 /**
  * @test

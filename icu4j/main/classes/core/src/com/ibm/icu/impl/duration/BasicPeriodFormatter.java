@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,8 +8,11 @@
 package com.ibm.icu.impl.duration;
 
 import com.ibm.icu.impl.duration.BasicPeriodFormatterFactory.Customizations;
-
-import com.ibm.icu.impl.duration.impl.DataRecord.*;
+import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
+import com.ibm.icu.impl.duration.impl.DataRecord.EMilliSupport;
+import com.ibm.icu.impl.duration.impl.DataRecord.ESeparatorVariant;
+import com.ibm.icu.impl.duration.impl.DataRecord.ETimeDirection;
+import com.ibm.icu.impl.duration.impl.DataRecord.ETimeLimit;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 
 /**

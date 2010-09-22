@@ -1,18 +1,18 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2010, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl.duration.impl;
 
-import  com.ibm.icu.impl.duration.DateFormatter;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import com.ibm.icu.impl.duration.DateFormatter;
 
 /**
  * A DateFormatter that formats the requested date fields.
