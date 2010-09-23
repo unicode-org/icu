@@ -22,10 +22,10 @@ BLD=$(C_BLD)
 INS=$(C_INS)
 SRC=$(C_SRC)
 
-ALLICUS=$(ICUVERS:%=$(BLD)/%/$(S_BLD))
-IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS))
+ALLICUS=$(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(BLD)/r%/$(S_BLD))
+IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS)) $(ICUVERS:%=$(INS)/r%/$(S_INS))
 
-APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS))
+APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS)) $(ICUVERS:%=$(BLD)/r%/$(S_BLD)) $(ICUVERS:%=$(INS)/r%/$(S_INS))
 
 .PRECIOUS: $(APRECIOUS)
 
@@ -41,6 +41,19 @@ $(INS)/%/$(S_INS): $(BLD)/%/$(S_BLD)
 	( make $(MAKE_OPTS) -C $(BLD)/$*/icu/source 2>&1 all install | tee $(BLD)/$*/build.log ) || ( mv $(BLD)/$*/build.log $(BLD)/$*/build.err ; false )
 	touch -c $@
 
+$(INS)/r%/$(S_INS): $(BLD)/r%/$(S_BLD)
+	@if [ -f $(BLD)/r$*/build.err ]; then echo '###' Error for $* stored in $(BLD)/r$*/build.err - remove if you want me to retry; false;  fi
+	( make $(MAKE_OPTS) -C $(BLD)/r$*/icu/source 2>&1 all install | tee $(BLD)/r$*/build.log ) || ( mv $(BLD)/r$*/build.log $(BLD)/r$*/build.err ; false )
+	touch -c $@
+
+$(BLD)/r%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
+	-mv $(BLD)/r$* $(BLD)/r$*.old
+	-( rm -rf ./$(BLD)/r$*.old& )
+	mkdir -p $(BLD)/r$*
+	( cd $(BLD)/r$* ; gunzip -d < $^ | tar xfp - )
+	([ -f $(DOT)/patch/$* ] && patch -d $(BLD)/r$* -p1 < $(DOT)/patch/$*) || true
+	touch -c $@
+
 $(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
 	-mv $(BLD)/$* $(BLD)/$*.old
 	-( rm -rf ./$(BLD)/$*.old& )
@@ -49,11 +62,19 @@ $(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
 	([ -f $(DOT)/patch/$* ] && patch -d $(BLD)/$* -p1 < $(DOT)/patch/$*) || true
 	touch -c $@
 
+
+$(BLD)/r%/$(S_BLD): $(BLD)/r%/$(S_SRC)
+	-mkdir -p $(INS)
+	-chmod a+rx $(BLD)/r$*/icu/source/configure $(BLD)/r$*/icu/source/runConfigureICU
+	( cd $(BLD)/r$*/icu/source ; `$(ICUCONF) "$(BLD)/r$*/icu/source" "$*"` --enable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/r$* )
+	touch -c $@
+
 $(BLD)/%/$(S_BLD): $(BLD)/%/$(S_SRC)
 	-mkdir -p $(INS)
 	-chmod a+rx $(BLD)/$*/icu/source/configure $(BLD)/$*/icu/source/runConfigureICU
 	( cd $(BLD)/$*/icu/source ; `$(ICUCONF) "$(BLD)/$*/icu/source" "$*"` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
 	touch -c $@
+
 
 $(INS)/%/bin/$(TARGET): $(INS)/%/$(S_INS) $(SRCS)
 	-rm -rf ./$(BLD)/$*/tmp
