@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 IBM Corporation and Others, All Rights Reserved.
+# Copyright (C) 2010 IBM Corporation and Others, All Rights Reserved.
 #
 
 ## configuration
@@ -73,13 +73,13 @@ ICU_CONFIG_CXX=--cxx $(ICU_CONFIG_COMMON) --cxxflags
 ii: $(GLOUT_ICU)
 
 # Don't delete these files
-.PRECIOUS: $(INST_ICU) $(BUILD_ICU) $(SRC_ICU) BUILD_ICU=$(ICU_TARBALLS_VERS:%=$(BUILD)/%/config.status)
+.PRECIOUS: $(INST_ICU) $(BUILD_ICU) $(SRC_ICU) $(ICU_TARBALLS_VERS:%=$(BUILD)/%/config.status) $(ICU_TARBALLS_VERS:%=$(GLOUT)/%/obj-$(OK))  $(ICU_TARBALLS_VERS:%=$(BUILD)/%/config/$(ICU_CONFIG))
 
 # cleanup
 clean:
 	-rm -rf $(ALLDIRS)
 	-mkdir $(ALLDIRS)
-	
+
 # create all empty work dirs
 $(ALLDIRS):
 	-mkdir -p $(@)
@@ -91,7 +91,7 @@ $(GLOUT)/%/obj-$(OK): $(GLOUT) glurens $(INST)/%/$(OK)  $(BUILD)/%/config/$(ICU_
 #	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$* -o $(GLOUT)/$*/gl_be_cxx_$*.o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
 	-rm -rf $(GLOUT)/$*/include
 	mkdir -p $(GLOUT)/$*/include/icuglue/include
-	# for each version..  build all OTHER FE files
+# for each version..  build all OTHER FE files
 	for ver in $(ICU_TARBALLS_VERS) ; \
 	do \
 		echo building $$ver for $* ; \
@@ -103,10 +103,11 @@ $(GLOUT)/%/obj-$(OK): $(GLOUT) glurens $(INST)/%/$(OK)  $(BUILD)/%/config/$(ICU_
 			echo " GLUE_VER( $$ver ) " >> $(GLOUT)/$*/include/icuglue/glver.h; \
 		fi \
 	done
-	# build 'this version' FE files
+# build 'this version' FE files
+	@echo Building FE for $*
 	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -I$(GLOUT)/$*/include -c -o $(GLOUT)/$*/gl_fe_c_$*.o $(GL_FE_C:%.c=$(GLUE)/%.c) $(XOPTS)
 	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$*/include -c -o $(GLOUT)/$*/gl_fe_cxx_$*.o $(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp) $(XOPTS)
-	# build 'this version' BE files (disabled for now)
+# build 'this version' BE files (disabled for now)
 #	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$* -o $(GLOUT)/$*/gl_be_c_$*.o $(GL_BE_C:%.c=$(GLUE)/%.c)
 #	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$* -o $(GLOUT)/$*/gl_be_cxx_$*.o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
 	touch $@
@@ -120,8 +121,31 @@ PROVIDER=provider
 LIBPROVIDER=lib$(PROVIDER).a
 
 libs: $(ICU_TARBALLS_VERS:%=$(OUT)/%/lib/$(LIBPROVIDER))
-	
+PLUGVERS=4_4_1
 #GLOUT_ICU=$(ICU_TARBALLS_VERS:%=$(GLOUT)/%/$(OK))
+
+aplug:
+	echo $(OUT)/$(PLUGVERS)/lib/plug.dylib:
+
+plugs: $(PLUGVERS:%=$(OUT)/%/lib/plug.dylib)
+
+TESTPROG=coldiff
+
+testprog: $(PLUGVERS:%=$(OUT)/%/bin/$(TESTPROG))
+
+test-check: testprog
+	ICU_PLUGINS=. DYLD_LIBRARY_PATH=$(C_INS)/r4_4_1/lib out/4_4_1/bin/coldiff
+
+#	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX))
+
+$(OUT)/%/bin/$(TESTPROG): $(TESTPROG).cpp
+	-mkdir $(OUT)/$*/bin
+	g++ -I$(C_INS)/r$*/include -o $@ $^ -L$(C_INS)/r$*/lib -licuuc -licui18n -licudata
+
+#$(GLOUT)/$%/obj-$(OK)
+$(OUT)/%/lib/plug.dylib: 
+	g++ -dynamiclib -exported_symbols_list export.txt -dynamic -o $@ $(GLOUT)/$*/*.o $(BUILD)/3_8_1/[ci]*/*.ao  $(BUILD)/3_8_1/data/out/tmp/*.o  $(BUILD)/4_2_0_1/[ci]*/*.ao $(BUILD)/4_2_0_1/data/out/tmp/*.o -L$(C_INS)/r$*/lib -licuuc -licui18n -licudata
+
 $(OUT)/%/lib/$(LIBPROVIDER):  $(GLOUT)/%/obj-$(OK)
 	-mkdir -p $(OUT)/$*/lib
 	echo copy includes

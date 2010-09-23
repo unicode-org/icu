@@ -1,8 +1,8 @@
-# Copyright (c) 2008-2009 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2008-2010 IBM Corp. and Others. All Rights Reserved
 
 include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
-C_GOOD:=$(shell [ -d $(C_INS) ] && (cd $(C_INS) ; ls -d */$(S_INS) | cut -d/ -f1))
+C_GOOD:=$(shell [ -d $(C_INS) ] && (cd $(C_INS) ; ls -d */$(S_INS) 2>/dev/null | cut -d/ -f1))
 
 C_CLEAN_TARGET=$(C_GOOD:%=$(C_INS)/%/bin/$(TARGET))
 
