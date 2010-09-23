@@ -453,7 +453,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT,
      * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
-    private synchronized String _getDisplayName(boolean daylight, boolean daylightRequested, int style, ULocale locale) {
+    private String _getDisplayName(boolean daylight, boolean daylightRequested, int style, ULocale locale) {
         if (locale == null) {
             throw new NullPointerException("locale is null");
         }
@@ -466,7 +466,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
             cachedLocaleData.put(locale, tzf);
         }
 
-        
         String result;
         if ( daylightRequested ) {
             result = tzf.format(this, style, daylight);
