@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and
+* Copyright (C) 2007-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -606,7 +606,6 @@ AndConstraint::updateRepeatLimit(int32_t maxLimit) {
     }
     else {
         if ( rangeHigh == -1 ) {
-            return(rangeLow>maxLimit? rangeLow : maxLimit);
             return uprv_max(rangeLow, maxLimit);
         }
         else{
