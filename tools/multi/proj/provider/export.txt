@@ -1,0 +1,2 @@
+# Copyright (C) 2010 International Business Machines Corporation and Others. All Rights Reserved. 
+_coll_provider_plugin
