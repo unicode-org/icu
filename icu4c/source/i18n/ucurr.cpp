@@ -1839,7 +1839,6 @@ ucurr_countCurrencies(const char* locale,
 {
     int32_t currCount = 0;
     int32_t resLen = 0;
-    const UChar* s = NULL;
 
     if (ec != NULL && U_SUCCESS(*ec)) 
     {
@@ -1876,7 +1875,6 @@ ucurr_countCurrencies(const char* locale,
             {
                 // get the currency resource
                 UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
-                s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
 
                 // get the from date
                 int32_t fromLength = 0;
